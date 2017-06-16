@@ -3,18 +3,17 @@ package org.mifos.mobilewallet.auth.domain.model;
 import android.support.annotation.NonNull;
 
 /**
- * Created by naman on 16/6/17.
+ * Created by naman on 17/6/17.
  */
 
-public class UserLogin {
-
+public class LoginModel {
     @NonNull
     private final String mUserName;
 
     @NonNull
     private final String mPassword;
 
-    public UserLogin(@NonNull String username, @NonNull String password) {
+    public LoginModel(@NonNull String username, @NonNull String password) {
         this.mUserName = username;
         this.mPassword = password;
     }
@@ -28,4 +27,5 @@ public class UserLogin {
     public String getmUserName() {
         return mUserName;
     }
+
 }

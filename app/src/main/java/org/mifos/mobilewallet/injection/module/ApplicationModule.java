@@ -5,7 +5,10 @@ import android.content.Context;
 
 import org.mifos.mobilewallet.core.UseCaseHandler;
 import org.mifos.mobilewallet.core.UseCaseThreadPoolScheduler;
+import org.mifos.mobilewallet.data.api.BaseApiManager;
 import org.mifos.mobilewallet.injection.ApplicationContext;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -34,5 +37,11 @@ public class ApplicationModule {
     @Provides
     UseCaseHandler provideUsecaseHandler() {
         return new UseCaseHandler(new UseCaseThreadPoolScheduler());
+    }
+
+    @Provides
+    @Singleton
+    BaseApiManager provideApiManager() {
+        return new BaseApiManager();
     }
 }

@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.auth;
 
+import org.mifos.mobilewallet.auth.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.core.BasePresenter;
 import org.mifos.mobilewallet.core.BaseView;
 
@@ -18,7 +19,7 @@ public interface AuthContract {
 
     interface LoginPresenter extends BasePresenter {
 
-
+        void authenticateUser(AuthenticateUser authenticateUser);
     }
 
 
