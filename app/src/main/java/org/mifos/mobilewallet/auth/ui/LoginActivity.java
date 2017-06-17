@@ -1,15 +1,20 @@
 package org.mifos.mobilewallet.auth.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.auth.presenter.LoginPresenter;
 import org.mifos.mobilewallet.core.BaseActivity;
+import org.mifos.mobilewallet.home.ui.HomeActivity;
+import org.mifos.mobilewallet.utils.Utils;
 
 import javax.inject.Inject;
 
@@ -53,7 +58,25 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
 
     @OnClick(R.id.btn_login)
     public void onLoginClicked() {
-
+        Utils.hideSoftKeyboard(this);
+        showProgressDialog("Logging in..");
         mLoginPresenter.authenticateUser(etUsername.getText().toString(), etPassword.getText().toString());
+    }
+
+    @Override
+    public void loginSuccess() {
+        hideProgressDialog();
+        Utils.hideSoftKeyboard(this);
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void loginFail(String message) {
+        Utils.hideSoftKeyboard(this);
+        hideProgressDialog();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 }

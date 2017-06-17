@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.auth.domain.usecase;
 
-import android.util.Log;
-
 import org.mifos.mobilewallet.auth.domain.model.User;
 import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.data.repository.ApiRepository;
@@ -39,7 +37,7 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues, Au
 
                     @Override
                     public void onError(Throwable e) {
-
+                       getUseCaseCallback().onError("Error logging in");
                     }
 
                     @Override

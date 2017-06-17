@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.auth.presenter;
 
 import android.util.Log;
 
+import org.mifos.mobilewallet.auth.domain.model.User;
 import org.mifos.mobilewallet.auth.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.core.BaseView;
 import org.mifos.mobilewallet.auth.AuthContract;
@@ -42,12 +43,13 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
         mUsecaseHandler.execute(authenticateUser, requestValue, new UseCase.UseCaseCallback<AuthenticateUser.ResponseValue>() {
             @Override
             public void onSuccess(AuthenticateUser.ResponseValue response) {
-                Log.e("username",response.getUser().getFirstname());
+                User user = response.getUser();
+                mLoginView.loginSuccess();
             }
 
             @Override
-            public void onError() {
-
+            public void onError(String message) {
+                mLoginView.loginFail(message);
             }
         });
     }

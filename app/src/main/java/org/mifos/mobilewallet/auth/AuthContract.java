@@ -15,6 +15,8 @@ public interface AuthContract {
 
     interface LoginView extends BaseView<LoginPresenter> {
 
+        void loginSuccess();
+        void loginFail(String message);
     }
 
     interface LoginPresenter extends BasePresenter {

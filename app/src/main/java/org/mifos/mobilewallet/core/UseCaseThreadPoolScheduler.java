@@ -55,7 +55,7 @@ public class UseCaseThreadPoolScheduler implements UseCaseScheduler {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                useCaseCallback.onError();
+                useCaseCallback.onError("");
             }
         });
     }

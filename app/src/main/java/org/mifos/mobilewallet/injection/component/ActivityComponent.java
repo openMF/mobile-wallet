@@ -2,6 +2,8 @@ package org.mifos.mobilewallet.injection.component;
 
 import org.mifos.mobilewallet.auth.ui.LandingActivity;
 import org.mifos.mobilewallet.auth.ui.LoginActivity;
+import org.mifos.mobilewallet.home.ui.HomeActivity;
+import org.mifos.mobilewallet.home.ui.HomeFragment;
 import org.mifos.mobilewallet.injection.PerActivity;
 import org.mifos.mobilewallet.injection.module.ActivityModule;
 
@@ -15,6 +17,9 @@ public interface ActivityComponent {
 
     void inject(LoginActivity loginActivity);
 
+    void inject(HomeActivity homeActivity);
+
+    void inject(HomeFragment homeFragment);
 
 
 }

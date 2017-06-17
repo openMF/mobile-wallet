@@ -17,6 +17,7 @@ import javax.inject.Singleton;
 public class PreferencesHelper {
 
     private static final String TOKEN = "preferences_token";
+    private static final String NAME = "preferences_name";
 
 
     private SharedPreferences sharedPreferences;
@@ -65,6 +66,14 @@ public class PreferencesHelper {
 
     public String getToken() {
         return getString(TOKEN, "");
+    }
+
+    public void saveFullName(String name) {
+        putString(NAME, name);
+    }
+
+    public String getFullName() {
+        return getString(NAME, "");
     }
 
 

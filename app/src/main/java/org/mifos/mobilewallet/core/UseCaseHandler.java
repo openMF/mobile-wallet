@@ -55,7 +55,7 @@ public class UseCaseHandler {
         }
 
         @Override
-        public void onError() {
+        public void onError(String message) {
             mUseCaseHandler.notifyError(mCallback);
         }
     }

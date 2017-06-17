@@ -26,6 +26,11 @@
         <activity android:name=".auth.ui.SignupActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity android:name=".home.ui.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
     </application>
 
 </manifest>

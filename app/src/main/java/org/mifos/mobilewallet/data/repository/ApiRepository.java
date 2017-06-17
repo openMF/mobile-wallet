@@ -45,6 +45,7 @@ public class ApiRepository {
                 return baseApiManager.getAuthenticationApi().getUserDetails(userEntity.getUserId()).map(new Func1<UserDetailsEntity, User>() {
                     @Override
                     public User call(UserDetailsEntity userDetailsEntity) {
+                        saveUserDetails(userDetailsEntity);
                         return userEntityMapper.transform(userDetailsEntity);
                     }
                 });
@@ -55,5 +56,9 @@ public class ApiRepository {
     private void saveAuthenticationTokenForSession(String authToken) {
         preferencesHelper.saveToken(authToken);
         BaseApiManager.createService(preferencesHelper.getToken());
+    }
+
+    private void saveUserDetails(UserDetailsEntity userDetailsEntity) {
+        preferencesHelper.saveFullName(userDetailsEntity.getFirstname()+ " " + userDetailsEntity.getLastname());
     }
 }

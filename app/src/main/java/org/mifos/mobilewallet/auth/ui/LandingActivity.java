@@ -28,8 +28,9 @@ public class LandingActivity extends BaseActivity implements AuthContract.Landin
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_landing);
         getActivityComponent().inject(this);
+
+        setContentView(R.layout.activity_landing);
 
         ButterKnife.bind(LandingActivity.this);
         mPresenter.attachView(this);
