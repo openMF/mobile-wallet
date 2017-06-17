@@ -20,6 +20,9 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     private final UseCaseHandler mUsecaseHandler;
 
     @Inject
+    AuthenticateUser authenticateUser;
+
+    @Inject
     public LoginPresenter(UseCaseHandler useCaseHandler){
         this.mUsecaseHandler = useCaseHandler;
     }
@@ -31,8 +34,9 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     }
 
 
-    public void authenticateUser(AuthenticateUser authenticateUser) {
+    public void authenticateUser(String username, String password) {
 
+        authenticateUser.setRequestValues(new AuthenticateUser.RequestValues(username, password));
         AuthenticateUser.RequestValues requestValue = authenticateUser.getRequestValues();
 
         mUsecaseHandler.execute(authenticateUser, requestValue, new UseCase.UseCaseCallback<AuthenticateUser.ResponseValue>() {

@@ -11,9 +11,8 @@ import java.util.List;
 
 public class User {
     private long userId;
-    private boolean authenticated;
     private String username;
-    private String base64EncodedAuthenticationKey;
+    private String authenticationKey;
     private List<String> permissions = new ArrayList<String>();
 
     public String getUserName() {
@@ -32,21 +31,12 @@ public class User {
         this.userId = userId;
     }
 
-    public boolean isAuthenticated() {
-        return authenticated;
+    public String getAuthenticationKey() {
+        return authenticationKey;
     }
 
-    public void setAuthenticated(boolean authenticated) {
-        this.authenticated = authenticated;
-    }
-
-
-    public String getBase64EncodedAuthenticationKey() {
-        return base64EncodedAuthenticationKey;
-    }
-
-    public void setBase64EncodedAuthenticationKey(String base64EncodedAuthenticationKey) {
-        this.base64EncodedAuthenticationKey = base64EncodedAuthenticationKey;
+    public void setAuthenticationKey(String authenticationKey) {
+        this.authenticationKey = authenticationKey;
     }
 
     public List<String> getPermissions() {

@@ -19,7 +19,7 @@ public interface AuthContract {
 
     interface LoginPresenter extends BasePresenter {
 
-        void authenticateUser(AuthenticateUser authenticateUser);
+        void authenticateUser(String username, String password);
     }
 
 

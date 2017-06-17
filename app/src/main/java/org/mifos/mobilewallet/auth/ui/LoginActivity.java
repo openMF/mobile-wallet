@@ -2,7 +2,6 @@ package org.mifos.mobilewallet.auth.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 
 import org.mifos.mobilewallet.R;
@@ -10,7 +9,6 @@ import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.auth.presenter.LoginPresenter;
 import org.mifos.mobilewallet.core.BaseActivity;
-import org.mifos.mobilewallet.data.api.BaseApiManager;
 
 import javax.inject.Inject;
 
@@ -26,9 +24,6 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
 
     @Inject
     LoginPresenter mPresenter;
-
-    @Inject
-    AuthenticateUser authenticateUser;
 
     AuthContract.LoginPresenter mLoginPresenter;
 
@@ -57,7 +52,6 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     @OnClick(R.id.btn_login)
     public void onLoginClicked() {
 
-        authenticateUser.setRequestValues(new AuthenticateUser.RequestValues(etUsername.getText().toString(), etPassword.getText().toString()));
-        mLoginPresenter.authenticateUser(authenticateUser);
+        mLoginPresenter.authenticateUser(etUsername.getText().toString(), etPassword.getText().toString());
     }
 }
