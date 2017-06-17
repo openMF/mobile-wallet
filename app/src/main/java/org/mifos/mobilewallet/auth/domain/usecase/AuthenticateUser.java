@@ -1,7 +1,9 @@
 package org.mifos.mobilewallet.auth.domain.usecase;
 
+import android.util.Log;
+
+import org.mifos.mobilewallet.auth.domain.model.User;
 import org.mifos.mobilewallet.core.UseCase;
-import org.mifos.mobilewallet.data.entity.UserEntity;
 import org.mifos.mobilewallet.data.repository.ApiRepository;
 
 import javax.inject.Inject;
@@ -29,7 +31,7 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues, Au
 
         apiRepository.login(requestValues.username, requestValues.password).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<UserEntity>() {
+                .subscribe(new Subscriber<User>() {
                     @Override
                     public void onCompleted() {
 
@@ -41,8 +43,8 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues, Au
                     }
 
                     @Override
-                    public void onNext(UserEntity userEntity) {
-                        getUseCaseCallback().onSuccess(null);
+                    public void onNext(User user) {
+                        getUseCaseCallback().onSuccess(new ResponseValue(user));
                     }
                 });
 
@@ -59,5 +61,15 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues, Au
     }
 
     public static final class ResponseValue implements UseCase.ResponseValue {
+
+        private final User user;
+
+        public ResponseValue(User user) {
+            this.user = user;
+        }
+
+        public User getUser() {
+            return user;
+        }
     }
 }

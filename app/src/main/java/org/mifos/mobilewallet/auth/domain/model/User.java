@@ -12,8 +12,11 @@ import java.util.List;
 public class User {
     private long userId;
     private String username;
-    private String authenticationKey;
-    private List<String> permissions = new ArrayList<String>();
+    private String firstname;
+    private String lastname;
+    private String email;
+
+    public User() {}
 
     public String getUserName() {
         return username;
@@ -31,21 +34,28 @@ public class User {
         this.userId = userId;
     }
 
-    public String getAuthenticationKey() {
-        return authenticationKey;
+
+    public String getLastname() {
+        return lastname;
     }
 
-    public void setAuthenticationKey(String authenticationKey) {
-        this.authenticationKey = authenticationKey;
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 
-    public List<String> getPermissions() {
-        return permissions;
+    public String getFirstname() {
+        return firstname;
     }
 
-    public void setPermissions(List<String> permissions) {
-        this.permissions = permissions;
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
     }
 
+    public String getEmail() {
+        return email;
+    }
 
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }

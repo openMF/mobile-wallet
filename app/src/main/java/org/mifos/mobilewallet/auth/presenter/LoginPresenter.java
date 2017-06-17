@@ -42,7 +42,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
         mUsecaseHandler.execute(authenticateUser, requestValue, new UseCase.UseCaseCallback<AuthenticateUser.ResponseValue>() {
             @Override
             public void onSuccess(AuthenticateUser.ResponseValue response) {
-                Log.e("lol","login success");
+                Log.e("username",response.getUser().getFirstname());
             }
 
             @Override

@@ -6,6 +6,7 @@ import android.content.Context;
 import org.mifos.mobilewallet.core.UseCaseHandler;
 import org.mifos.mobilewallet.core.UseCaseThreadPoolScheduler;
 import org.mifos.mobilewallet.data.api.BaseApiManager;
+import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.injection.ApplicationContext;
 
 import javax.inject.Singleton;
@@ -44,4 +45,11 @@ public class ApplicationModule {
     BaseApiManager provideApiManager() {
         return new BaseApiManager();
     }
+
+    @Provides
+    @Singleton
+    PreferencesHelper providePrefManager(@ApplicationContext Context context) {
+        return new PreferencesHelper(context);
+    }
+
 }

@@ -1,9 +1,12 @@
 package org.mifos.mobilewallet.data.api.services;
 
 import org.mifos.mobilewallet.data.api.ApiEndPoints;
+import org.mifos.mobilewallet.data.entity.UserDetailsEntity;
 import org.mifos.mobilewallet.data.entity.UserEntity;
 
+import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -16,4 +19,7 @@ public interface AuthenticationService {
     @POST(ApiEndPoints.AUTHENTICATION)
     Observable<UserEntity> authenticate(@Query("username") String username,
                                         @Query("password") String password);
+
+    @GET(ApiEndPoints.USERS + "/{userid}")
+    Observable<UserDetailsEntity> getUserDetails(@Path("userid") long userid);
 }
