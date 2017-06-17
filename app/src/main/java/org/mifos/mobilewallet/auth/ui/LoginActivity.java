@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.auth.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 import org.mifos.mobilewallet.R;
@@ -42,6 +43,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
 
         ButterKnife.bind(this);
         mPresenter.attachView(this);
+
     }
 
     @Override

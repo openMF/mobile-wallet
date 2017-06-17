@@ -33,6 +33,7 @@ public class LandingActivity extends BaseActivity implements AuthContract.Landin
 
         ButterKnife.bind(LandingActivity.this);
         mPresenter.attachView(this);
+
     }
 
     @Override
