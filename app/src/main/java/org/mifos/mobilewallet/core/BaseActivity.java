@@ -49,6 +49,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityCallb
     @Override
     public void showSwipeProgress() {
         if (swipeLayout!= null) {
+            swipeLayout.setEnabled(true);
             swipeLayout.setRefreshing(true);
         }
     }
@@ -56,6 +57,7 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityCallb
     @Override
     public void hideSwipeProgress() {
         if (swipeLayout!= null) {
+            swipeLayout.setEnabled(false);
             swipeLayout.setRefreshing(false);
         }
     }

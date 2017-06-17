@@ -33,6 +33,7 @@ public class HomePresenter implements HomeContract.HomePresenter {
         mHomeView.setPresenter(this);
     }
 
+    @Override
     public void fetchUserData() {
         mUsecaseHandler.execute(fetchUserData, null, new UseCase.UseCaseCallback<FetchUserData.ResponseValue>() {
             @Override
@@ -45,5 +46,10 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
             }
         });
+    }
+
+    @Override
+    public void fetchWalletBalance() {
+        mHomeView.showWalletBalance(0);
     }
 }

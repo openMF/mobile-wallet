@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <group android:id="@+id/group1"
            android:checkableBehavior="single">
@@ -9,6 +10,20 @@
             android:checked="true"
             android:icon="@drawable/ic_home"
             android:title="Home"/>
+
+
+        <item
+            android:id="@+id/item_wallet"
+            android:checked="true"
+            android:icon="@drawable/ic_account_balance_wallet"
+            android:title="Wallet"
+            app:actionLayout="@layout/textview_counter"/>
+
+        <item
+            android:id="@+id/item_qr"
+            android:checked="true"
+            android:icon="@drawable/qrcode"
+            android:title="My QR Code"/>
 
 
     </group>

@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -20,6 +21,7 @@ import org.mifos.mobilewallet.core.BaseActivity;
 import org.mifos.mobilewallet.home.HomeContract;
 import org.mifos.mobilewallet.home.HomePresenter;
 import org.mifos.mobilewallet.home.domain.model.UserDetails;
+import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
 import org.mifos.mobilewallet.utils.TextDrawable;
 
 import javax.inject.Inject;
@@ -64,8 +66,9 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
 
         setToolbarTitle("Home");
 
-        replaceFragment(HomeFragment.newInstance(),false, R.id.container);
+        replaceFragment(InvoiceFragment.newInstance(),false, R.id.container);
         setupDrawerContent(navigationView);
+        swipeLayout.setEnabled(false);
     }
 
 
@@ -106,6 +109,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
                     }
                 });
         setupHeaderView(navigationView.getHeaderView(0));
+        mHomePresenter.fetchWalletBalance();
 
     }
 
@@ -127,6 +131,13 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
     }
 
     @Override
+    public void showWalletBalance(int amount) {
+        TextView counterText = (TextView) ((FrameLayout) navigationView.getMenu().findItem(R.id.item_wallet).getActionView()).getChildAt(0);
+        counterText.setText("₹" + String.valueOf(amount));
+
+    }
+
+    @Override
     public void setPresenter(HomeContract.HomePresenter presenter) {
         mHomePresenter = presenter;
     }
@@ -137,6 +148,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
         TextDrawable drawable = TextDrawable.builder()
                 .buildRound(userDetails.getName().substring(0,1), R.color.colorPrimary);
         ivUserImage.setImageDrawable(drawable);
+        tvUseremail.setText(userDetails.getEmail());
 
     }
 }

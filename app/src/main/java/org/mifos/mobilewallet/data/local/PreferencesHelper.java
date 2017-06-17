@@ -18,6 +18,7 @@ public class PreferencesHelper {
 
     private static final String TOKEN = "preferences_token";
     private static final String NAME = "preferences_name";
+    private static final String EMAIL = "preferences_email";
 
 
     private SharedPreferences sharedPreferences;
@@ -74,6 +75,14 @@ public class PreferencesHelper {
 
     public String getFullName() {
         return getString(NAME, "");
+    }
+
+    public void saveEmail(String email) {
+        putString(EMAIL, email);
+    }
+
+    public String getEmail() {
+        return getString(EMAIL, "");
     }
 
 

@@ -23,8 +23,7 @@ public class LocalRepository {
     public UserDetails getUserDetails() {
         UserDetails details = new UserDetails();
         details.setName(preferencesHelper.getFullName());
-        details.setEmail("");
-        details.setEmail("");
+        details.setEmail(preferencesHelper.getEmail());
 
         return details;
     }

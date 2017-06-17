@@ -60,5 +60,6 @@ public class ApiRepository {
 
     private void saveUserDetails(UserDetailsEntity userDetailsEntity) {
         preferencesHelper.saveFullName(userDetailsEntity.getFirstname()+ " " + userDetailsEntity.getLastname());
+        preferencesHelper.saveEmail(userDetailsEntity.getEmail());
     }
 }
