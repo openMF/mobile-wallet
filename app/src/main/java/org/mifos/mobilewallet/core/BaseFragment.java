@@ -1,9 +1,9 @@
 package org.mifos.mobilewallet.core;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 /**
  * Created by naman on 17/6/17.

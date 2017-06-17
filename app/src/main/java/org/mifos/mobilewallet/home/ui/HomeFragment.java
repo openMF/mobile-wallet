@@ -21,7 +21,7 @@ public class HomeFragment extends BaseFragment {
     View rootView;
 
 
-    public static HomeFragment newInstance(Long clientId) {
+    public static HomeFragment newInstance() {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
@@ -41,6 +41,7 @@ public class HomeFragment extends BaseFragment {
         setToolbarTitle("Home");
         ButterKnife.bind(this, rootView);
 
+        showProgress();
         return rootView;
     }
 }

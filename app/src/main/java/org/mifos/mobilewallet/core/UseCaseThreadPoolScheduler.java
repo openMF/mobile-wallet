@@ -50,12 +50,12 @@ public class UseCaseThreadPoolScheduler implements UseCaseScheduler {
     }
 
     @Override
-    public <V extends UseCase.ResponseValue> void onError(
+    public <V extends UseCase.ResponseValue> void onError(final String message,
             final UseCase.UseCaseCallback<V> useCaseCallback) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {
-                useCaseCallback.onError("");
+                useCaseCallback.onError(message);
             }
         });
     }

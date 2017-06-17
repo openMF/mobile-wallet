@@ -64,6 +64,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
 
         setToolbarTitle("Home");
 
+        replaceFragment(HomeFragment.newInstance(),false, R.id.container);
         setupDrawerContent(navigationView);
     }
 
