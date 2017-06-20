@@ -1,62 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorPrimary"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary">
+    android:layout_width="match_parent"
+    android:orientation="vertical">
 
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:textSize="40sp"
+        android:layout_marginTop="@dimen/value_100dp"
+        android:textColor="@android:color/white"
+        android:textStyle="bold"
+        android:text="Pixie Pay"/>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:layout_marginTop="@dimen/value_30dp"
+        android:textColor="@android:color/white"
+        android:text="@string/complete_payment_solution"/>
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textColor="@android:color/white"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:text="@string/all_size_business"/>
+
+    <Button
+        android:id="@+id/btn_signup"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="@string/sign_up"
+        android:textAllCaps="false"
+        android:clickable="true"
+        android:background="@drawable/button_round_white"
+        android:layout_marginTop="@dimen/value_70dp"
+        android:typeface="sans"
+        android:layout_gravity="center_vertical|center_horizontal"/>
+
+    <Button
+        android:id="@+id/btn_login"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:text="@string/login"
+        android:textAllCaps="false"
+        android:typeface="sans"
+        android:textColor="@android:color/white"
+        android:background="@drawable/button_round_stroke"
+        android:layout_marginTop="@dimen/value_20dp"
+        android:layout_gravity="center_vertical|center_horizontal"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pixie Pay"
-            android:textSize="35sp"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse"/>
-
-        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="A complete payment solution for all size business"
-            android:paddingTop="15dp"
-            android:layout_margin="10dp"
-            android:gravity="center_horizontal"
             android:textColor="@android:color/white"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"/>
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/powered_by"/>
 
-
-        <Button
-            android:id="@+id/btn_signup"
-            android:layout_width="match_parent"
+        <TextView
             android:layout_height="wrap_content"
-            android:text="Sign Up"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/button_round_white"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
-
-        <Button
-            android:id="@+id/btn_login"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Login"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/button_round_stroke"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"/>
+            android:layout_width="wrap_content"
+            android:textColor="@android:color/white"
+            android:textStyle="bold"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:text="@string/rbl_bank"/>
 
     </LinearLayout>
-    </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

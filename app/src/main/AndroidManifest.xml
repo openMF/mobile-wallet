@@ -26,6 +26,19 @@
         <activity android:name=".auth.ui.SignupActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity android:name=".auth.ui.AddAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".auth.ui.BusinessDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".auth.ui.BankAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".auth.ui.SetupCompleteActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+
         <activity android:name=".home.ui.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateAlwaysHidden">

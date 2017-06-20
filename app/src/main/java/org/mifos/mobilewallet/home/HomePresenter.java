@@ -38,7 +38,8 @@ public class HomePresenter implements HomeContract.HomePresenter {
         mUsecaseHandler.execute(fetchUserData, null, new UseCase.UseCaseCallback<FetchUserData.ResponseValue>() {
             @Override
             public void onSuccess(FetchUserData.ResponseValue response) {
-                mHomeView.showUserDetailsHeader(response.getUserDetails());
+                if(!response.getUserDetails().getName().equals(""))
+                    mHomeView.showUserDetailsHeader(response.getUserDetails());
             }
 
             @Override

@@ -31,7 +31,6 @@
             android:layout_marginLeft="20dp"
             android:ellipsize="end"
             android:lines="1"
-            android:text="App admisnistratoe"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/white"
             android:textSize="15sp"/>
@@ -43,7 +42,6 @@
             android:layout_marginLeft="20dp"
             android:ellipsize="end"
             android:layout_marginTop="3dp"
-            android:text="nnasamdm@gmail.com"
             android:lines="1"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/white"

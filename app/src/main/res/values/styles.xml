@@ -20,4 +20,9 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="TextAppearance.App.TextInputLayout.Primary" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
 </resources>

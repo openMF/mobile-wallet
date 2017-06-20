@@ -4,4 +4,21 @@
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
 
+    <string name="complete_payment_solution">A complete payments solution for</string>
+    <string name="all_size_business">all size business</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="login">Login</string>
+    <string name="powered_by">Powered By &#160;</string>
+    <string name="rbl_bank">RBL BANK</string>
+    <string name="verify_mobile_number">Verify Mobile Number</string>
+    <string name="confirm_mobile_number_message">To confirm your mobile number \n we need to send an SMS from \n your phone*</string>
+    <string name="choose_your_sim">Please choose your SIM</string>
+    <string name="sim_provider">VODAFONE_IN</string>
+    <string name="or">or</string>
+    <string name="regular_charges_will_apply">*Regular charges will apply</string>
+    <string name="send_sms">Send SMS</string>
+    <string name="already_have_account">Already have an account? &#160;</string>
+    <string name="sign_in">Sign In</string>
+
+
 </resources>

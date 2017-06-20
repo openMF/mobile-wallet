@@ -34,7 +34,12 @@ public class SignupPresenter implements AuthContract.SignupPresenter {
     }
 
     @Override
-    public void createUser(String firstname, String lastname, String username, String email) {
+    public void onVerifyNumber() {
+        mSignupView.openAddDetails();
+    }
 
+    @Override
+    public void navigateLogin() {
+        mSignupView.openLoginScreen();
     }
 }
