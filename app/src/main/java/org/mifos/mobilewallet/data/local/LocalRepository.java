@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.data.local;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.domain.model.Bank;
-import org.mifos.mobilewallet.data.api.BaseApiManager;
+import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
 import org.mifos.mobilewallet.home.domain.model.UserDetails;
 
 import java.util.ArrayList;
@@ -57,5 +57,15 @@ public class LocalRepository {
         banks.add(new Bank("RBL Bank", R.drawable.logo_rbl,1));
         banks.add(new Bank("SBI Bank", R.drawable.logo_sbi, 1));
         return banks;
+    }
+
+    public List<PaymentMethod> getPaymentMethods() {
+        List<PaymentMethod> paymentMethods = new ArrayList<>();
+        paymentMethods.add(new PaymentMethod("Aadhar Pay", R.drawable.aadharpay,1));
+        paymentMethods.add(new PaymentMethod("UPI", R.drawable.bhim,1));
+        paymentMethods.add(new PaymentMethod("Credit/Debit card", R.drawable.debitcard,2));
+        paymentMethods.add(new PaymentMethod("Net Banking", R.drawable.netbanking,1));
+        paymentMethods.add(new PaymentMethod("Paytm", R.drawable.paytm,3));
+        return paymentMethods;
     }
 }

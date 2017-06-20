@@ -11,6 +11,7 @@ import org.mifos.mobilewallet.home.ui.HomeActivity;
 import org.mifos.mobilewallet.home.ui.HomeFragment;
 import org.mifos.mobilewallet.injection.PerActivity;
 import org.mifos.mobilewallet.injection.module.ActivityModule;
+import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
 
 import dagger.Component;
 
@@ -35,6 +36,8 @@ public interface ActivityComponent {
     void inject(HomeActivity homeActivity);
 
     void inject(HomeFragment homeFragment);
+
+    void inject(InvoiceFragment invoiceFragment);
 
 
 }

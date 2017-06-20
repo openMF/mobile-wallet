@@ -57,13 +57,12 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:layout_margin="30dp"/>
 
-        <View
-            android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/view_stroke_primary"/>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:id="@+id/rv_payment_methods"
+            android:paddingLeft="20dp"
+            android:clipToPadding="false"/>
 
 
         <TextView
