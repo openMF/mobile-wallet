@@ -30,8 +30,8 @@
 
                 <View
                     android:layout_gravity="center"
-                    android:layout_height="150dp"
-                    android:layout_width="150dp"
+                    android:layout_height="130dp"
+                    android:layout_width="130dp"
                     android:layout_marginTop="@dimen/value_20dp"
                     android:layout_marginBottom="@dimen/value_20dp"
                     android:background="@drawable/congratulations"/>

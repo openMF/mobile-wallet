@@ -45,7 +45,9 @@
                         <LinearLayout
                             android:layout_height="wrap_content"
                             android:layout_width="match_parent"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true">
 
                             <org.mifos.mobilewallet.utils.widgets.DiscreteSlider
                                 android:id="@+id/discrete_slider"
@@ -66,11 +68,9 @@
 
                             <EditText
                                 android:background="@drawable/bg_et_round_border"
-                                android:drawableLeft="@drawable/ic_search"
+                                android:drawableLeft="@drawable/et_search"
                                 android:drawablePadding="10dp"
-                                android:drawableStart="@drawable/ic_search"
-                                android:focusable="false"
-                                android:focusableInTouchMode="true"
+                                android:drawableStart="@drawable/et_search"
                                 android:hint="Search Text"
                                 android:inputType="text"
                                 android:layout_height="48dp"

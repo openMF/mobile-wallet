@@ -2,6 +2,7 @@ package org.mifos.mobilewallet;
 
 import android.app.Application;
 import android.content.Context;
+import android.support.v7.app.AppCompatDelegate;
 
 import org.mifos.mobilewallet.injection.component.ApplicationComponent;
 import org.mifos.mobilewallet.injection.component.DaggerApplicationComponent;
@@ -21,6 +22,10 @@ public class MifosWalletApp extends Application {
 
     public static MifosWalletApp get(Context context) {
         return (MifosWalletApp) context.getApplicationContext();
+    }
+
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
     public static Context getContext() {

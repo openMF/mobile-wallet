@@ -23,4 +23,6 @@
     <dimen name="value_16sp">16sp</dimen>
     <dimen name="value_25sp">25sp</dimen>
 
+    <dimen name="appBarTopMargin">0dp</dimen>
+
 </resources>
