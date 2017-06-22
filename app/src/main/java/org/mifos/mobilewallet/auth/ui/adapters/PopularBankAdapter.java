@@ -41,13 +41,14 @@ public class PopularBankAdapter extends RecyclerView.Adapter<PopularBankAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.ivPopularBank.setImageDrawable(ContextCompat.getDrawable(context,popularBanks.get(position).getImage()));
+        holder.ivPopularBank.setImageDrawable(ContextCompat
+                        .getDrawable(context, popularBanks.get(position).getImage()));
         holder.tvPopularBank.setText(popularBanks.get(position).getName());
     }
 
     @Override
     public int getItemCount() {
-        if(popularBanks!= null)
+        if (popularBanks != null)
             return popularBanks.size();
         else return 0;
     }

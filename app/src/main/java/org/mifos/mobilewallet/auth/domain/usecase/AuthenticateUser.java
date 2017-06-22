@@ -14,7 +14,8 @@ import rx.schedulers.Schedulers;
  * Created by naman on 16/6/17.
  */
 
-public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues, AuthenticateUser.ResponseValue> {
+public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
+        AuthenticateUser.ResponseValue> {
 
     private final ApiRepository apiRepository;
 
@@ -27,7 +28,8 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues, Au
     @Override
     protected void executeUseCase(RequestValues requestValues) {
 
-        apiRepository.login(requestValues.username, requestValues.password).observeOn(AndroidSchedulers.mainThread())
+        apiRepository.login(requestValues.username,
+                requestValues.password).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<User>() {
                     @Override
@@ -37,7 +39,7 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues, Au
 
                     @Override
                     public void onError(Throwable e) {
-                       getUseCaseCallback().onError("Error logging in");
+                        getUseCaseCallback().onError("Error logging in");
                     }
 
                     @Override

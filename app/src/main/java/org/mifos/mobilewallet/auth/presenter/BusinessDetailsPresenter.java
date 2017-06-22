@@ -17,7 +17,7 @@ public class BusinessDetailsPresenter implements AuthContract.BusinessDetailsPre
 
 
     @Inject
-    public BusinessDetailsPresenter(UseCaseHandler useCaseHandler){
+    public BusinessDetailsPresenter(UseCaseHandler useCaseHandler) {
         this.mUsecaseHandler = useCaseHandler;
     }
 

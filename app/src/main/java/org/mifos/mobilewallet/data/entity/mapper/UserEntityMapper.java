@@ -20,7 +20,7 @@ public class UserEntityMapper {
     public User transform(UserDetailsEntity userEntity) {
         User user = new User();
 
-        if (userEntity!= null) {
+        if (userEntity != null) {
             user.setUserId(userEntity.getUserId());
             user.setUserName(userEntity.getUserName());
             user.setEmail(userEntity.getEmail());

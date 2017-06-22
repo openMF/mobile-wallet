@@ -89,24 +89,27 @@ public class AddAccountActivity extends BaseActivity implements AuthContract.Add
         rvOtherBanks.setHasFixedSize(true);
         otherBankAdapter.setContext(this);
         rvOtherBanks.setAdapter(otherBankAdapter);
-        rvOtherBanks.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
+        rvOtherBanks.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL));
 
-        rvPopularBanks.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.SimpleOnItemClickListener() {
-            @Override
-            public void onItemClick(View childView, int position) {
-                Bank bank = popularBankAdapter.getBank(position);
-                mAddAccountPresenter.bankSelected(bank);
-            }
-        }));
+        rvPopularBanks.addOnItemTouchListener(new RecyclerItemClickListener(this,
+                new RecyclerItemClickListener.SimpleOnItemClickListener() {
+                    @Override
+                    public void onItemClick(View childView, int position) {
+                        Bank bank = popularBankAdapter.getBank(position);
+                        mAddAccountPresenter.bankSelected(bank);
+                    }
+                }));
 
-        rvOtherBanks.addOnItemTouchListener(new RecyclerItemClickListener(this, new RecyclerItemClickListener.SimpleOnItemClickListener() {
-            @Override
-            public void onItemClick(View childView, int position) {
-                Bank bank = otherBankAdapter.getBank(position);
-                mAddAccountPresenter.bankSelected(bank);
+        rvOtherBanks.addOnItemTouchListener(new RecyclerItemClickListener(this,
+                new RecyclerItemClickListener.SimpleOnItemClickListener() {
+                    @Override
+                    public void onItemClick(View childView, int position) {
+                        Bank bank = otherBankAdapter.getBank(position);
+                        mAddAccountPresenter.bankSelected(bank);
 
-            }
-        }));
+                    }
+                }));
     }
 
     @Override

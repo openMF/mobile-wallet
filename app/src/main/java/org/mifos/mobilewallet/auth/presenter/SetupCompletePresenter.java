@@ -17,7 +17,7 @@ public class SetupCompletePresenter implements AuthContract.SetupCompletePresent
 
 
     @Inject
-    public SetupCompletePresenter(UseCaseHandler useCaseHandler){
+    public SetupCompletePresenter(UseCaseHandler useCaseHandler) {
         this.mUsecaseHandler = useCaseHandler;
     }
 

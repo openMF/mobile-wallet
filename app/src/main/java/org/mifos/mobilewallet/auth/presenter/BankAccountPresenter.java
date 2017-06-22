@@ -17,7 +17,7 @@ public class BankAccountPresenter implements AuthContract.BankAccountPresenter {
 
 
     @Inject
-    public BankAccountPresenter(UseCaseHandler useCaseHandler){
+    public BankAccountPresenter(UseCaseHandler useCaseHandler) {
         this.mUsecaseHandler = useCaseHandler;
     }
 

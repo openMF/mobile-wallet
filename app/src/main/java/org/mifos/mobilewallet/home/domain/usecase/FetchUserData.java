@@ -11,7 +11,8 @@ import javax.inject.Inject;
  * Created by naman on 17/6/17.
  */
 
-public class FetchUserData extends UseCase<FetchUserData.RequestValues, FetchUserData.ResponseValue>{
+public class FetchUserData extends UseCase<FetchUserData.RequestValues,
+        FetchUserData.ResponseValue> {
 
     private final LocalRepository localRepository;
 

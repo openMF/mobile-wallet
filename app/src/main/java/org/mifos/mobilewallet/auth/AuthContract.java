@@ -37,8 +37,8 @@ public interface AuthContract {
 
     interface SignupPresenter extends BasePresenter {
 
-         void onVerifyNumber();
-         void navigateLogin();
+        void onVerifyNumber();
+        void navigateLogin();
 
     }
 

@@ -2,9 +2,6 @@ package org.mifos.mobilewallet.core;
 
 import android.os.Handler;
 
-import org.mifos.mobilewallet.core.UseCase;
-import org.mifos.mobilewallet.core.UseCaseScheduler;
-
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -40,7 +37,8 @@ public class UseCaseThreadPoolScheduler implements UseCaseScheduler {
 
     @Override
     public <V extends UseCase.ResponseValue> void notifyResponse(final V response,
-                                                                 final UseCase.UseCaseCallback<V> useCaseCallback) {
+                                                                 final UseCase.UseCaseCallback<V>
+                                                                         useCaseCallback) {
         mHandler.post(new Runnable() {
             @Override
             public void run() {

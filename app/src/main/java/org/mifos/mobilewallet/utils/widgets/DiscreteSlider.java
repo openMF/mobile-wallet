@@ -31,13 +31,14 @@ public class DiscreteSlider extends FrameLayout {
     private float backdropStrokeWidth;
     private Drawable thumb;
     private Drawable progressDrawable;
-    private com.etiennelawlor.discreteslider.library.ui.DiscreteSlider.OnDiscreteSliderChangeListener onDiscreteSliderChangeListener;
+    private com.etiennelawlor.discreteslider.library.ui.DiscreteSlider
+            .OnDiscreteSliderChangeListener onDiscreteSliderChangeListener;
     private int discreteSeekBarLeftPadding = DisplayUtility.dp2px(this.getContext(), 32);
     private int discreteSeekBarRightPadding = DisplayUtility.dp2px(this.getContext(), 32);
 
     public DiscreteSlider(Context context) {
         super(context);
-        this.init(context, (AttributeSet)null);
+        this.init(context, (AttributeSet) null);
     }
 
     public DiscreteSlider(Context context, AttributeSet attrs) {
@@ -54,22 +55,37 @@ public class DiscreteSlider extends FrameLayout {
         TypedArray attributeArray = context.obtainStyledAttributes(attrs, styleable.DiscreteSlider);
 
         try {
-            this.tickMarkCount = attributeArray.getInteger(styleable.DiscreteSlider_tickMarkCount, 5);
-            this.tickMarkRadius = attributeArray.getDimension(styleable.DiscreteSlider_tickMarkRadius, 8.0F);
-            this.position = attributeArray.getInteger(styleable.DiscreteSlider_position, 0);
-            this.horizontalBarThickness = attributeArray.getDimension(styleable.DiscreteSlider_horizontalBarThickness, 4.0F);
-            this.backdropFillColor = attributeArray.getColor(styleable.DiscreteSlider_backdropFillColor, -7829368);
-            this.backdropStrokeColor = attributeArray.getColor(styleable.DiscreteSlider_backdropStrokeColor, -7829368);
-            this.backdropStrokeWidth = attributeArray.getDimension(styleable.DiscreteSlider_backdropStrokeWidth, 1.0F);
+            this.tickMarkCount =
+                    attributeArray.getInteger(styleable.DiscreteSlider_tickMarkCount,
+                            5);
+            this.tickMarkRadius =
+                    attributeArray.getDimension(styleable.DiscreteSlider_tickMarkRadius,
+                            8.0F);
+            this.position = attributeArray.getInteger(styleable.DiscreteSlider_position,
+                    0);
+            this.horizontalBarThickness =
+                    attributeArray.getDimension(styleable.DiscreteSlider_horizontalBarThickness,
+                            4.0F);
+            this.backdropFillColor =
+                    attributeArray.getColor(styleable.DiscreteSlider_backdropFillColor,
+                            -7829368);
+            this.backdropStrokeColor =
+                    attributeArray.getColor(styleable.DiscreteSlider_backdropStrokeColor,
+                            -7829368);
+            this.backdropStrokeWidth =
+                    attributeArray.getDimension(styleable.DiscreteSlider_backdropStrokeWidth,
+                            1.0F);
             this.thumb = attributeArray.getDrawable(styleable.DiscreteSlider_thumb);
-            this.progressDrawable = attributeArray.getDrawable(styleable.DiscreteSlider_progressDrawable);
+            this.progressDrawable =
+                    attributeArray.getDrawable(styleable.DiscreteSlider_progressDrawable);
         } finally {
             attributeArray.recycle();
         }
 
         View view = inflate(context, layout.discrete_slider, this);
-        this.discreteSliderBackdrop = (DiscreteSliderBackdrop)view.findViewById(id.discrete_slider_backdrop);
-        this.discreteSeekBar = (DiscreteSeekBar)view.findViewById(id.discrete_seek_bar);
+        this.discreteSliderBackdrop = (DiscreteSliderBackdrop)
+                view.findViewById(id.discrete_slider_backdrop);
+        this.discreteSeekBar = (DiscreteSeekBar) view.findViewById(id.discrete_seek_bar);
         this.setTickMarkCount(this.tickMarkCount);
         this.setTickMarkRadius(this.tickMarkRadius);
         this.setHorizontalBarThickness(this.horizontalBarThickness);
@@ -79,17 +95,20 @@ public class DiscreteSlider extends FrameLayout {
         this.setPosition(this.position);
         this.setThumb(this.thumb);
         this.setProgressDrawable(this.progressDrawable);
-        this.discreteSeekBar.setPadding(this.discreteSeekBarLeftPadding, 0, this.discreteSeekBarRightPadding, 0);
+        this.discreteSeekBar.setPadding(this.discreteSeekBarLeftPadding, 0,
+                this.discreteSeekBarRightPadding, 0);
 
-        this.discreteSeekBar.setOnDiscreteSeekBarChangeListener(new OnDiscreteSeekBarChangeListener() {
-            public void onPositionChanged(int position) {
-                if(DiscreteSlider.this.onDiscreteSliderChangeListener != null) {
-                    DiscreteSlider.this.onDiscreteSliderChangeListener.onPositionChanged(position);
-                    DiscreteSlider.this.setPosition(position);
-                }
+        this.discreteSeekBar.setOnDiscreteSeekBarChangeListener(
+                new OnDiscreteSeekBarChangeListener() {
+                    public void onPositionChanged(int position) {
+                        if (DiscreteSlider.this.onDiscreteSliderChangeListener != null) {
+                            DiscreteSlider.this.onDiscreteSliderChangeListener
+                                    .onPositionChanged(position);
+                            DiscreteSlider.this.setPosition(position);
+                        }
 
-            }
-        });
+                    }
+                });
     }
 
     public void setTickMarkCount(int tickMarkCount) {
@@ -107,9 +126,9 @@ public class DiscreteSlider extends FrameLayout {
     }
 
     public void setPosition(int position) {
-        if(position < 0) {
+        if (position < 0) {
             this.position = 0;
-        } else if(position > this.tickMarkCount - 1) {
+        } else if (position > this.tickMarkCount - 1) {
             this.position = this.tickMarkCount - 1;
         } else {
             this.position = position;
@@ -139,7 +158,7 @@ public class DiscreteSlider extends FrameLayout {
     }
 
     public void setThumb(Drawable thumb) {
-        if(thumb != null) {
+        if (thumb != null) {
             this.discreteSeekBar.setThumb(thumb);
             this.discreteSeekBar.invalidate();
         }
@@ -147,14 +166,17 @@ public class DiscreteSlider extends FrameLayout {
     }
 
     public void setProgressDrawable(Drawable progressDrawable) {
-        if(progressDrawable != null) {
+        if (progressDrawable != null) {
             this.discreteSeekBar.setProgressDrawable(progressDrawable);
             this.discreteSeekBar.invalidate();
         }
 
     }
 
-    public void setOnDiscreteSliderChangeListener(com.etiennelawlor.discreteslider.library.ui.DiscreteSlider.OnDiscreteSliderChangeListener onDiscreteSliderChangeListener) {
+    public void setOnDiscreteSliderChangeListener(com.etiennelawlor.discreteslider
+                                                          .library.ui.DiscreteSlider
+                                                          .OnDiscreteSliderChangeListener
+                                                          onDiscreteSliderChangeListener) {
         this.onDiscreteSliderChangeListener = onDiscreteSliderChangeListener;
     }
 

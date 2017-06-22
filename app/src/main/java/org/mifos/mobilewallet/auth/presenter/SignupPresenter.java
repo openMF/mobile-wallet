@@ -22,7 +22,7 @@ public class SignupPresenter implements AuthContract.SignupPresenter {
     CreateUser createUser;
 
     @Inject
-    public SignupPresenter(UseCaseHandler useCaseHandler){
+    public SignupPresenter(UseCaseHandler useCaseHandler) {
         this.mUsecaseHandler = useCaseHandler;
     }
 

@@ -1,8 +1,5 @@
 package org.mifos.mobilewallet.home;
 
-import org.mifos.mobilewallet.auth.AuthContract;
-import org.mifos.mobilewallet.auth.domain.usecase.AuthenticateUser;
-import org.mifos.mobilewallet.core.BasePresenter;
 import org.mifos.mobilewallet.core.BaseView;
 import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.core.UseCaseHandler;
@@ -23,7 +20,7 @@ public class HomePresenter implements HomeContract.HomePresenter {
     FetchUserData fetchUserData;
 
     @Inject
-    public HomePresenter(UseCaseHandler useCaseHandler){
+    public HomePresenter(UseCaseHandler useCaseHandler) {
         this.mUsecaseHandler = useCaseHandler;
     }
 
@@ -35,18 +32,19 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void fetchUserData() {
-        mUsecaseHandler.execute(fetchUserData, null, new UseCase.UseCaseCallback<FetchUserData.ResponseValue>() {
-            @Override
-            public void onSuccess(FetchUserData.ResponseValue response) {
-                if(!response.getUserDetails().getName().equals(""))
-                    mHomeView.showUserDetailsHeader(response.getUserDetails());
-            }
+        mUsecaseHandler.execute(fetchUserData, null,
+                new UseCase.UseCaseCallback<FetchUserData.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchUserData.ResponseValue response) {
+                        if (!response.getUserDetails().getName().equals(""))
+                            mHomeView.showUserDetailsHeader(response.getUserDetails());
+                    }
 
-            @Override
-            public void onError(String message) {
+                    @Override
+                    public void onError(String message) {
 
-            }
-        });
+                    }
+                });
     }
 
     @Override

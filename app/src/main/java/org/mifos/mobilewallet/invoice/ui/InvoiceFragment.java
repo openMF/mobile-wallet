@@ -77,18 +77,21 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
     }
 
     private void setupPaymentRecyclerview() {
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(),
+                LinearLayoutManager.HORIZONTAL,
+                false);
         rvPaymentMethods.setLayoutManager(llm);
         rvPaymentMethods.setHasFixedSize(true);
         paymentMethodAdpater.setContext(getActivity());
         rvPaymentMethods.setAdapter(paymentMethodAdpater);
 
-        rvPaymentMethods.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.SimpleOnItemClickListener() {
-            @Override
-            public void onItemClick(View childView, int position) {
-                paymentMethodAdpater.setFocused(position);
-            }
-        }));
+        rvPaymentMethods.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
+                new RecyclerItemClickListener.SimpleOnItemClickListener() {
+                    @Override
+                    public void onItemClick(View childView, int position) {
+                        paymentMethodAdpater.setFocused(position);
+                    }
+                }));
     }
 
     @Override
@@ -99,6 +102,6 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
     @Override
     public void showPaymentMethods(List<PaymentMethod> methods) {
         paymentMethodAdpater.setData(methods);
-        rvPaymentMethods.scrollBy(Utils.dp2px(getActivity(), 120),0);
+        rvPaymentMethods.scrollBy(Utils.dp2px(getActivity(), 120), 0);
     }
 }

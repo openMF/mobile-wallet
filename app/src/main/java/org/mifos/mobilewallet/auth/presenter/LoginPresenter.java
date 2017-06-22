@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.auth.presenter;
 
-import android.util.Log;
-
 import org.mifos.mobilewallet.auth.domain.model.User;
 import org.mifos.mobilewallet.auth.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.core.BaseView;
@@ -24,7 +22,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     AuthenticateUser authenticateUser;
 
     @Inject
-    public LoginPresenter(UseCaseHandler useCaseHandler){
+    public LoginPresenter(UseCaseHandler useCaseHandler) {
         this.mUsecaseHandler = useCaseHandler;
     }
 
@@ -40,17 +38,18 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
         authenticateUser.setRequestValues(new AuthenticateUser.RequestValues(username, password));
         AuthenticateUser.RequestValues requestValue = authenticateUser.getRequestValues();
 
-        mUsecaseHandler.execute(authenticateUser, requestValue, new UseCase.UseCaseCallback<AuthenticateUser.ResponseValue>() {
-            @Override
-            public void onSuccess(AuthenticateUser.ResponseValue response) {
-                User user = response.getUser();
-                mLoginView.loginSuccess();
-            }
+        mUsecaseHandler.execute(authenticateUser, requestValue,
+                new UseCase.UseCaseCallback<AuthenticateUser.ResponseValue>() {
+                    @Override
+                    public void onSuccess(AuthenticateUser.ResponseValue response) {
+                        User user = response.getUser();
+                        mLoginView.loginSuccess();
+                    }
 
-            @Override
-            public void onError(String message) {
-                mLoginView.loginFail(message);
-            }
-        });
+                    @Override
+                    public void onError(String message) {
+                        mLoginView.loginFail(message);
+                    }
+                });
     }
 }

@@ -34,23 +34,26 @@ public class ApiRepository {
     }
 
     public Observable<User> login(String username, String password) {
-        return baseApiManager.getAuthenticationApi().authenticate(username, password).flatMap(new Func1<UserEntity, Observable<User>>() {
-            @Override
-            public Observable<User> call(UserEntity userEntity) {
-
-                final String authToken = Constants.BASIC +
-                        userEntity.getBase64EncodedAuthenticationKey();
-
-                saveAuthenticationTokenForSession(authToken);
-                return baseApiManager.getAuthenticationApi().getUserDetails(userEntity.getUserId()).map(new Func1<UserDetailsEntity, User>() {
+        return baseApiManager.getAuthenticationApi().authenticate(username, password)
+                .flatMap(new Func1<UserEntity, Observable<User>>() {
                     @Override
-                    public User call(UserDetailsEntity userDetailsEntity) {
-                        saveUserDetails(userDetailsEntity);
-                        return userEntityMapper.transform(userDetailsEntity);
+                    public Observable<User> call(UserEntity userEntity) {
+
+                        final String authToken = Constants.BASIC +
+                                userEntity.getBase64EncodedAuthenticationKey();
+
+                        saveAuthenticationTokenForSession(authToken);
+                        return baseApiManager.getAuthenticationApi()
+                                .getUserDetails(userEntity.getUserId())
+                                .map(new Func1<UserDetailsEntity, User>() {
+                                    @Override
+                                    public User call(UserDetailsEntity userDetailsEntity) {
+                                        saveUserDetails(userDetailsEntity);
+                                        return userEntityMapper.transform(userDetailsEntity);
+                                    }
+                                });
                     }
                 });
-            }
-        });
     }
 
     private void saveAuthenticationTokenForSession(String authToken) {
@@ -59,7 +62,8 @@ public class ApiRepository {
     }
 
     private void saveUserDetails(UserDetailsEntity userDetailsEntity) {
-        preferencesHelper.saveFullName(userDetailsEntity.getFirstname()+ " " + userDetailsEntity.getLastname());
+        preferencesHelper.saveFullName(userDetailsEntity.getFirstname()
+                + " " + userDetailsEntity.getLastname());
         preferencesHelper.saveEmail(userDetailsEntity.getEmail());
     }
 }

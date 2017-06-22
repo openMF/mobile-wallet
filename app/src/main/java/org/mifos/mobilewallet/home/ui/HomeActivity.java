@@ -66,7 +66,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
 
         setToolbarTitle("Home");
 
-        replaceFragment(InvoiceFragment.newInstance(),false, R.id.container);
+        replaceFragment(InvoiceFragment.newInstance(), false, R.id.container);
         setupDrawerContent(navigationView);
         swipeLayout.setEnabled(false);
     }
@@ -132,7 +132,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
 
     @Override
     public void showWalletBalance(int amount) {
-        TextView counterText = (TextView) ((FrameLayout) navigationView.getMenu().findItem(R.id.item_wallet).getActionView()).getChildAt(0);
+        TextView counterText = (TextView) ((FrameLayout)
+                navigationView.getMenu().findItem(R.id.item_wallet).getActionView()).getChildAt(0);
         counterText.setText("₹" + String.valueOf(amount));
 
     }
@@ -146,7 +147,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
     public void showUserDetailsHeader(UserDetails userDetails) {
         tvUsername.setText(userDetails.getName());
         TextDrawable drawable = TextDrawable.builder()
-                .buildRound(userDetails.getName().substring(0,1), R.color.colorPrimary);
+                .buildRound(userDetails.getName().substring(0, 1), R.color.colorPrimary);
         ivUserImage.setImageDrawable(drawable);
         tvUseremail.setText(userDetails.getEmail());
 

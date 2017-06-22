@@ -60,7 +60,8 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     public void onLoginClicked() {
         Utils.hideSoftKeyboard(this);
         showProgressDialog("Logging in..");
-        mLoginPresenter.authenticateUser(etUsername.getText().toString(), etPassword.getText().toString());
+        mLoginPresenter.authenticateUser(etUsername.getText().toString(),
+                etPassword.getText().toString());
     }
 
     @Override
@@ -68,7 +69,8 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         hideProgressDialog();
         Utils.hideSoftKeyboard(this);
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
     }

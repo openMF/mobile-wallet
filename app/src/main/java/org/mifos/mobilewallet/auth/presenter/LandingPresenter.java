@@ -17,7 +17,7 @@ public class LandingPresenter implements AuthContract.LandingPresenter {
 
 
     @Inject
-    public LandingPresenter(UseCaseHandler useCaseHandler){
+    public LandingPresenter(UseCaseHandler useCaseHandler) {
         this.mUsecaseHandler = useCaseHandler;
     }
 

@@ -24,7 +24,8 @@ public class FetchBanks extends UseCase<FetchBanks.RequestValues, FetchBanks.Res
 
     @Override
     protected void executeUseCase(FetchBanks.RequestValues requestValues) {
-        getUseCaseCallback().onSuccess(new ResponseValue(localRepository.getPopularBanks(), localRepository.getOtherBanks()));
+        getUseCaseCallback().onSuccess(new ResponseValue(localRepository.getPopularBanks(),
+                localRepository.getOtherBanks()));
     }
 
     public static final class RequestValues implements UseCase.RequestValues {

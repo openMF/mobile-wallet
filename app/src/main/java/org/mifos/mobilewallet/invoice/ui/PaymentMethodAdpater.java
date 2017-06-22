@@ -46,7 +46,7 @@ public class PaymentMethodAdpater extends RecyclerView.Adapter<PaymentMethodAdpa
                 ContextCompat.getDrawable(context, paymentMethods.get(position).getImage()));
         holder.tvMethodName.setText(paymentMethods.get(position).getTitle());
 
-        if(position == currentPosition) {
+        if (position == currentPosition) {
             holder.parentView.setBackgroundResource(R.drawable.bg_layout_stroke);
         } else {
             holder.parentView.setBackgroundResource(R.drawable.bg_layout_stroke_grey);
@@ -55,7 +55,7 @@ public class PaymentMethodAdpater extends RecyclerView.Adapter<PaymentMethodAdpa
 
     @Override
     public int getItemCount() {
-        if(paymentMethods != null) return paymentMethods.size();
+        if (paymentMethods != null) return paymentMethods.size();
         else return 0;
     }
 

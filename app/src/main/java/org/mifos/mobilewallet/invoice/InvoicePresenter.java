@@ -22,7 +22,7 @@ public class InvoicePresenter implements InvoiceContract.InvoicePresenter {
     FetchPaymentMethods fetchPaymentMethods;
 
     @Inject
-    public InvoicePresenter(UseCaseHandler useCaseHandler){
+    public InvoicePresenter(UseCaseHandler useCaseHandler) {
         this.mUsecaseHandler = useCaseHandler;
     }
 
@@ -34,16 +34,17 @@ public class InvoicePresenter implements InvoiceContract.InvoicePresenter {
 
     @Override
     public void fetchPaymentMethods() {
-        mUsecaseHandler.execute(fetchPaymentMethods, null, new UseCase.UseCaseCallback<FetchPaymentMethods.ResponseValue>() {
-            @Override
-            public void onSuccess(FetchPaymentMethods.ResponseValue response) {
-                mInvoiceView.showPaymentMethods(response.getPaymentMethods());
-            }
+        mUsecaseHandler.execute(fetchPaymentMethods, null,
+                new UseCase.UseCaseCallback<FetchPaymentMethods.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchPaymentMethods.ResponseValue response) {
+                        mInvoiceView.showPaymentMethods(response.getPaymentMethods());
+                    }
 
-            @Override
-            public void onError(String message) {
+                    @Override
+                    public void onError(String message) {
 
-            }
-        });
+                    }
+                });
     }
 }

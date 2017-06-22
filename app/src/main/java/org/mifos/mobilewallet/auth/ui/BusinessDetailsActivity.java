@@ -22,7 +22,8 @@ import butterknife.OnClick;
  * Created by naman on 20/6/17.
  */
 
-public class BusinessDetailsActivity extends BaseActivity implements AuthContract.BusinessDetailsView {
+public class BusinessDetailsActivity extends BaseActivity
+        implements AuthContract.BusinessDetailsView {
 
 
     @Inject

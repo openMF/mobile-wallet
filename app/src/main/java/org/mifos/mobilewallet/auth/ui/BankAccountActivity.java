@@ -46,17 +46,17 @@ public class BankAccountActivity extends BaseActivity implements AuthContract.Ba
     }
 
     @OnClick(R.id.btn_set_up_pin)
-    public void setupPINClicked(){
+    public void setupPINClicked() {
         mBankAccountPresenter.setUPIPin();
     }
 
     @OnClick(R.id.btn_have_pin)
-    public void havePINClicked(){
+    public void havePINClicked() {
         mBankAccountPresenter.setUPIPin();
     }
 
     @OnClick(R.id.btn_later_pin)
-    public void setupLaterPINClicked(){
+    public void setupLaterPINClicked() {
         mBankAccountPresenter.setUPIPin();
     }
 

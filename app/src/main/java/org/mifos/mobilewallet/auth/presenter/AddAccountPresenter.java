@@ -22,7 +22,7 @@ public class AddAccountPresenter implements AuthContract.AddAcountPresenter {
     FetchBanks fetchBanks;
 
     @Inject
-    public AddAccountPresenter(UseCaseHandler useCaseHandler){
+    public AddAccountPresenter(UseCaseHandler useCaseHandler) {
         this.mUsecaseHandler = useCaseHandler;
     }
 
@@ -36,17 +36,19 @@ public class AddAccountPresenter implements AuthContract.AddAcountPresenter {
     @Override
     public void loadBankData() {
 
-        mUsecaseHandler.execute(fetchBanks, null, new UseCase.UseCaseCallback<FetchBanks.ResponseValue>() {
-            @Override
-            public void onSuccess(FetchBanks.ResponseValue response) {
-                mAddAccountView.showBanks(response.getPopularBanks(), response.getOtherBanks());
-            }
+        mUsecaseHandler.execute(fetchBanks, null,
+                new UseCase.UseCaseCallback<FetchBanks.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchBanks.ResponseValue response) {
+                        mAddAccountView.showBanks(response.getPopularBanks(),
+                                response.getOtherBanks());
+                    }
 
-            @Override
-            public void onError(String message) {
+                    @Override
+                    public void onError(String message) {
 
-            }
-        });
+                    }
+                });
     }
 
     @Override

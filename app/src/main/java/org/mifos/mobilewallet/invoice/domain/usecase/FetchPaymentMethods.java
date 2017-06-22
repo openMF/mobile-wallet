@@ -14,7 +14,8 @@ import javax.inject.Inject;
  * Created by naman on 20/6/17.
  */
 
-public class FetchPaymentMethods extends UseCase<FetchPaymentMethods.RequestValues, FetchPaymentMethods.ResponseValue> {
+public class FetchPaymentMethods extends UseCase<FetchPaymentMethods.RequestValues,
+        FetchPaymentMethods.ResponseValue> {
 
     private final LocalRepository localRepository;
 
@@ -26,7 +27,8 @@ public class FetchPaymentMethods extends UseCase<FetchPaymentMethods.RequestValu
 
     @Override
     protected void executeUseCase(FetchPaymentMethods.RequestValues requestValues) {
-        getUseCaseCallback().onSuccess(new FetchPaymentMethods.ResponseValue(localRepository.getPaymentMethods()));
+        getUseCaseCallback().onSuccess(new
+                FetchPaymentMethods.ResponseValue(localRepository.getPaymentMethods()));
     }
 
     public static final class RequestValues implements UseCase.RequestValues {
