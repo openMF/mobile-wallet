@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.data.api;
+package org.mifos.mobilewallet.data.fineract.api;
 
 import android.text.TextUtils;
 

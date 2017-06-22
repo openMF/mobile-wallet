@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.data.entity;
+package org.mifos.mobilewallet.data.fineract.entity;
 
 import java.util.ArrayList;
 import java.util.List;

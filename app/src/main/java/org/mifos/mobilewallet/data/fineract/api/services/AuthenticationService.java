@@ -1,8 +1,8 @@
-package org.mifos.mobilewallet.data.api.services;
+package org.mifos.mobilewallet.data.fineract.api.services;
 
-import org.mifos.mobilewallet.data.api.ApiEndPoints;
-import org.mifos.mobilewallet.data.entity.UserDetailsEntity;
-import org.mifos.mobilewallet.data.entity.UserEntity;
+import org.mifos.mobilewallet.data.fineract.api.ApiEndPoints;
+import org.mifos.mobilewallet.data.fineract.entity.UserDetailsEntity;
+import org.mifos.mobilewallet.data.fineract.entity.UserEntity;
 
 import retrofit2.http.GET;
 import retrofit2.http.POST;

@@ -1,6 +1,6 @@
-package org.mifos.mobilewallet.data.api;
+package org.mifos.mobilewallet.data.fineract.api;
 
-import org.mifos.mobilewallet.data.api.services.AuthenticationService;
+import org.mifos.mobilewallet.data.fineract.api.services.AuthenticationService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * Created by naman on 17/6/17.
  */
 
-public class BaseApiManager {
+public class FineractApiManager {
 
     private static BaseURL baseUrl = new BaseURL();
     private static final String BASE_URL = baseUrl.getUrl();
@@ -20,7 +20,7 @@ public class BaseApiManager {
     private static Retrofit retrofit;
     private static AuthenticationService authenticationApi;
 
-    public BaseApiManager() {
+    public FineractApiManager() {
         String authToken = "";
         createService(authToken);
     }

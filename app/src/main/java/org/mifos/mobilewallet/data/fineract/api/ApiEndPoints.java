@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.data.api;
+package org.mifos.mobilewallet.data.fineract.api;
 
 /**
  * Created by naman on 17/6/17.
