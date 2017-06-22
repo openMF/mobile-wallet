@@ -55,8 +55,11 @@ public class PaymentMethodAdpater extends RecyclerView.Adapter<PaymentMethodAdpa
 
     @Override
     public int getItemCount() {
-        if (paymentMethods != null) return paymentMethods.size();
-        else return 0;
+        if (paymentMethods != null) {
+            return paymentMethods.size();
+        } else {
+            return 0;
+        }
     }
 
     public void setContext(Context context) {

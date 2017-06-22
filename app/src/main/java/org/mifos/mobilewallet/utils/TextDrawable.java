@@ -33,18 +33,18 @@ public class TextDrawable extends ShapeDrawable {
 
         // shape properties
         shape = builder.shape;
-        height = builder.height;
-        width = builder.width;
+        height = builder.mHeight;
+        width = builder.mWidth;
         radius = builder.radius;
 
         // text and color
-        text = builder.toUpperCase ? builder.text.toUpperCase() : builder.text;
+        text = builder.mToUpperCase ? builder.text.toUpperCase() : builder.text;
         color = builder.color;
 
         // text paint settings
-        fontSize = builder.fontSize;
+        fontSize = builder.mFontSize;
         textPaint = new Paint();
-        textPaint.setColor(builder.textColor);
+        textPaint.setColor(builder.mTextColor);
         textPaint.setAntiAlias(true);
         textPaint.setFakeBoldText(builder.isBold);
         textPaint.setStyle(Paint.Style.FILL);
@@ -147,50 +147,50 @@ public class TextDrawable extends ShapeDrawable {
 
         private int borderThickness;
 
-        private int width;
+        private int mWidth;
 
-        private int height;
+        private int mHeight;
 
         private Typeface font;
 
         private RectShape shape;
 
-        public int textColor;
+        public int mTextColor;
 
-        private int fontSize;
+        private int mFontSize;
 
         private boolean isBold;
 
-        private boolean toUpperCase;
+        private boolean mToUpperCase;
 
         public float radius;
 
         private Builder() {
             text = "";
             color = Color.GRAY;
-            textColor = Color.WHITE;
+            mTextColor = Color.WHITE;
             borderThickness = 0;
-            width = -1;
-            height = -1;
+            mWidth = -1;
+            mHeight = -1;
             shape = new RectShape();
             font = Typeface.create("sans-serif-light", Typeface.NORMAL);
-            fontSize = -1;
+            mFontSize = -1;
             isBold = false;
-            toUpperCase = false;
+            mToUpperCase = false;
         }
 
         public IConfigBuilder width(int width) {
-            this.width = width;
+            this.mWidth = width;
             return this;
         }
 
         public IConfigBuilder height(int height) {
-            this.height = height;
+            this.mHeight = height;
             return this;
         }
 
         public IConfigBuilder textColor(int color) {
-            this.textColor = color;
+            this.mTextColor = color;
             return this;
         }
 
@@ -205,7 +205,7 @@ public class TextDrawable extends ShapeDrawable {
         }
 
         public IConfigBuilder fontSize(int size) {
-            this.fontSize = size;
+            this.mFontSize = size;
             return this;
         }
 
@@ -215,7 +215,7 @@ public class TextDrawable extends ShapeDrawable {
         }
 
         public IConfigBuilder toUpperCase() {
-            this.toUpperCase = true;
+            this.mToUpperCase = true;
             return this;
         }
 

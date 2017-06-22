@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
+
 import com.etiennelawlor.discreteslider.library.R.id;
 import com.etiennelawlor.discreteslider.library.R.layout;
 import com.etiennelawlor.discreteslider.library.R.styleable;

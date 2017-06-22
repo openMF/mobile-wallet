@@ -18,7 +18,7 @@ public interface HomeContract {
 
     interface HomePresenter extends BasePresenter {
 
-        void fetchUserData();
+        void fetchUserDetails();
         void fetchWalletBalance();
     }
 }

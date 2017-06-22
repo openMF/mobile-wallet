@@ -1,8 +1,6 @@
 package org.mifos.mobilewallet.auth;
 
 import org.mifos.mobilewallet.auth.domain.model.Bank;
-import org.mifos.mobilewallet.auth.domain.model.NewUser;
-import org.mifos.mobilewallet.auth.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.core.BasePresenter;
 import org.mifos.mobilewallet.core.BaseView;
 
@@ -25,7 +23,7 @@ public interface AuthContract {
 
     interface LoginPresenter extends BasePresenter {
 
-        void authenticateUser(String username, String password);
+        void loginUser(String username, String password);
     }
 
 

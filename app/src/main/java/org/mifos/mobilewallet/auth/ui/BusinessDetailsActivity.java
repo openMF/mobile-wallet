@@ -8,7 +8,6 @@ import android.widget.Button;
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.presenter.BusinessDetailsPresenter;
-import org.mifos.mobilewallet.auth.presenter.LandingPresenter;
 import org.mifos.mobilewallet.core.BaseActivity;
 import org.mifos.mobilewallet.utils.widgets.DiscreteSlider;
 

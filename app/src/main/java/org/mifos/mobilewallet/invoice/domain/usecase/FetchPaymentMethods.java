@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.invoice.domain.usecase;
 
-import org.mifos.mobilewallet.auth.domain.model.Bank;
-import org.mifos.mobilewallet.auth.domain.usecase.FetchBanks;
 import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;

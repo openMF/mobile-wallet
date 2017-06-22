@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import org.mifos.mobilewallet.core.BaseActivity;
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.presenter.LandingPresenter;
+import org.mifos.mobilewallet.core.BaseActivity;
 
 import javax.inject.Inject;
 

@@ -48,9 +48,11 @@ public class PopularBankAdapter extends RecyclerView.Adapter<PopularBankAdapter.
 
     @Override
     public int getItemCount() {
-        if (popularBanks != null)
+        if (popularBanks != null) {
             return popularBanks.size();
-        else return 0;
+        } else {
+            return 0;
+        }
     }
 
     public void setContext(Context context) {

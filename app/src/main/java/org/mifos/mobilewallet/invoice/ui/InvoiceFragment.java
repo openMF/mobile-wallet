@@ -2,7 +2,6 @@ package org.mifos.mobilewallet.invoice.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,10 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.mifos.mobilewallet.R;
-import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.core.BaseActivity;
 import org.mifos.mobilewallet.core.BaseFragment;
-import org.mifos.mobilewallet.home.ui.HomeFragment;
 import org.mifos.mobilewallet.invoice.InvoiceContract;
 import org.mifos.mobilewallet.invoice.InvoicePresenter;
 import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
@@ -71,7 +68,7 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
         mPresenter.attachView(this);
         setupPaymentRecyclerview();
 
-        mPresenter.fetchPaymentMethods();
+        mPresenter.getPaymentMethods();
 
         return rootView;
     }

@@ -3,11 +3,9 @@ package org.mifos.mobilewallet.auth.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.AuthContract;
-import org.mifos.mobilewallet.auth.presenter.AddAccountPresenter;
 import org.mifos.mobilewallet.auth.presenter.SignupPresenter;
 import org.mifos.mobilewallet.core.BaseActivity;
 

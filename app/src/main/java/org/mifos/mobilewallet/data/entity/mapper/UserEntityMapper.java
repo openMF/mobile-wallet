@@ -2,7 +2,6 @@ package org.mifos.mobilewallet.data.entity.mapper;
 
 import org.mifos.mobilewallet.auth.domain.model.User;
 import org.mifos.mobilewallet.data.entity.UserDetailsEntity;
-import org.mifos.mobilewallet.data.entity.UserEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

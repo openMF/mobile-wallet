@@ -2,8 +2,8 @@ package org.mifos.mobilewallet.data.local;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.domain.model.Bank;
-import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
 import org.mifos.mobilewallet.home.domain.model.UserDetails;
+import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
 
 import java.util.ArrayList;
 import java.util.List;

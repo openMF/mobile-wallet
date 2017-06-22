@@ -3,8 +3,6 @@ package org.mifos.mobilewallet.invoice;
 import org.mifos.mobilewallet.core.BaseView;
 import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.core.UseCaseHandler;
-import org.mifos.mobilewallet.home.HomeContract;
-import org.mifos.mobilewallet.home.domain.usecase.FetchUserData;
 import org.mifos.mobilewallet.invoice.domain.usecase.FetchPaymentMethods;
 
 import javax.inject.Inject;
@@ -33,7 +31,7 @@ public class InvoicePresenter implements InvoiceContract.InvoicePresenter {
     }
 
     @Override
-    public void fetchPaymentMethods() {
+    public void getPaymentMethods() {
         mUsecaseHandler.execute(fetchPaymentMethods, null,
                 new UseCase.UseCaseCallback<FetchPaymentMethods.ResponseValue>() {
                     @Override

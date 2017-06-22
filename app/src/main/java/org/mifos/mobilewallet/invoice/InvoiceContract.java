@@ -19,6 +19,6 @@ public interface InvoiceContract {
 
     interface InvoicePresenter extends BasePresenter {
 
-        void fetchPaymentMethods();
+        void getPaymentMethods();
     }
 }

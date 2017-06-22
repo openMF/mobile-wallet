@@ -1,6 +1,5 @@
 package org.mifos.mobilewallet.auth.domain.usecase;
 
-import org.mifos.mobilewallet.auth.domain.model.User;
 import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.data.repository.ApiRepository;
 

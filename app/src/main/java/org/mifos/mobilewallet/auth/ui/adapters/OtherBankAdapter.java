@@ -48,8 +48,11 @@ public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.View
 
     @Override
     public int getItemCount() {
-        if (otherBanks != null) return otherBanks.size();
-        else return 0;
+        if (otherBanks != null) {
+            return otherBanks.size();
+        } else {
+            return 0;
+        }
     }
 
     public void setContext(Context context) {

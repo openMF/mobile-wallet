@@ -1,10 +1,5 @@
 package org.mifos.mobilewallet.auth.domain.model;
 
-import android.support.annotation.NonNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * Created by naman on 16/6/17.
  */

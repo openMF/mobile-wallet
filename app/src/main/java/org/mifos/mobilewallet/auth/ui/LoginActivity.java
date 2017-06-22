@@ -3,14 +3,11 @@ package org.mifos.mobilewallet.auth.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.AuthContract;
-import org.mifos.mobilewallet.auth.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.auth.presenter.LoginPresenter;
 import org.mifos.mobilewallet.core.BaseActivity;
 import org.mifos.mobilewallet.home.ui.HomeActivity;
@@ -60,7 +57,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     public void onLoginClicked() {
         Utils.hideSoftKeyboard(this);
         showProgressDialog("Logging in..");
-        mLoginPresenter.authenticateUser(etUsername.getText().toString(),
+        mLoginPresenter.loginUser(etUsername.getText().toString(),
                 etPassword.getText().toString());
     }
 

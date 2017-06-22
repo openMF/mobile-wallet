@@ -6,7 +6,7 @@ package org.mifos.mobilewallet.core;
  */
 public class UseCaseHandler {
 
-    private static UseCaseHandler INSTANCE;
+    private static UseCaseHandler instance;
 
     private final UseCaseScheduler mUseCaseScheduler;
 
@@ -61,9 +61,9 @@ public class UseCaseHandler {
     }
 
     public static UseCaseHandler getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new UseCaseHandler(new UseCaseThreadPoolScheduler());
+        if (instance == null) {
+            instance = new UseCaseHandler(new UseCaseThreadPoolScheduler());
         }
-        return INSTANCE;
+        return instance;
     }
 }

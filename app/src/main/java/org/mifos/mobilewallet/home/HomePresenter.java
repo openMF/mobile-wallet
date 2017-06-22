@@ -31,7 +31,7 @@ public class HomePresenter implements HomeContract.HomePresenter {
     }
 
     @Override
-    public void fetchUserData() {
+    public void fetchUserDetails() {
         mUsecaseHandler.execute(fetchUserData, null,
                 new UseCase.UseCaseCallback<FetchUserData.ResponseValue>() {
                     @Override

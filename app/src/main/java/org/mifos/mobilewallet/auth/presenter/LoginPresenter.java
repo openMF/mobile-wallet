@@ -1,9 +1,9 @@
 package org.mifos.mobilewallet.auth.presenter;
 
+import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.domain.model.User;
 import org.mifos.mobilewallet.auth.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.core.BaseView;
-import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.core.UseCaseHandler;
 
@@ -33,7 +33,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     }
 
 
-    public void authenticateUser(String username, String password) {
+    public void loginUser(String username, String password) {
 
         authenticateUser.setRequestValues(new AuthenticateUser.RequestValues(username, password));
         AuthenticateUser.RequestValues requestValue = authenticateUser.getRequestValues();

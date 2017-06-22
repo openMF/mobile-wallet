@@ -28,6 +28,11 @@ android {
         cruncherEnabled = false
     }
 
+    lintOptions {
+        abortOnError false
+        disable 'InvalidPackage'
+    }
+
     compileOptions.incremental = false
 }
 

@@ -1,15 +1,11 @@
 package org.mifos.mobilewallet.home.ui;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -45,9 +41,6 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
 
     @BindView(R.id.drawer)
     DrawerLayout drawerLayout;
-
-    @BindView(R.id.swipe_layout)
-    SwipeRefreshLayout swipeLayout;
 
     private TextView tvUsername;
     private ImageView ivUserImage;
@@ -126,7 +119,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
         tvUseremail = (TextView) headerView.findViewById(R.id.tv_user_email);
         ivUserImage = (ImageView) headerView.findViewById(R.id.iv_user_image);
 
-        mHomePresenter.fetchUserData();
+        mHomePresenter.fetchUserDetails();
 
     }
 
@@ -134,7 +127,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
     public void showWalletBalance(int amount) {
         TextView counterText = (TextView) ((FrameLayout)
                 navigationView.getMenu().findItem(R.id.item_wallet).getActionView()).getChildAt(0);
-        counterText.setText("₹" + String.valueOf(amount));
+        counterText.setText("₹" + amount);
 
     }
 

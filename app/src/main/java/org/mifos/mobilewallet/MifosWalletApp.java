@@ -35,7 +35,9 @@ public class MifosWalletApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        instance = this;
+        if (MifosWalletApp.instance == null) {
+            MifosWalletApp.instance = this;
+        }
         ButterKnife.setDebug(true);
     }
 
