@@ -1,10 +1,7 @@
 package org.mifos.mobilewallet.user.domain.usecase;
 
 import org.mifos.mobilewallet.core.UseCase;
-import org.mifos.mobilewallet.data.local.LocalRepository;
-import org.mifos.mobilewallet.data.rbl.entity.PanVerify;
 import org.mifos.mobilewallet.data.rbl.repository.RblRepository;
-import org.mifos.mobilewallet.home.domain.model.UserDetails;
 
 import javax.inject.Inject;
 
@@ -23,7 +20,7 @@ public class VerifyPanDetails extends UseCase<VerifyPanDetails.RequestValues,
 
     @Inject
     public VerifyPanDetails(RblRepository rblRepository) {
-        this.rblRepository= rblRepository;
+        this.rblRepository = rblRepository;
     }
 
 
@@ -33,7 +30,7 @@ public class VerifyPanDetails extends UseCase<VerifyPanDetails.RequestValues,
         rblRepository.verifyPanNumber(requestValues.number)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<PanVerify>() {
+                .subscribe(new Subscriber<Boolean>() {
                     @Override
                     public void onCompleted() {
 
@@ -45,8 +42,8 @@ public class VerifyPanDetails extends UseCase<VerifyPanDetails.RequestValues,
                     }
 
                     @Override
-                    public void onNext(PanVerify panVerify) {
-                        getUseCaseCallback().onSuccess(new VerifyPanDetails.ResponseValue(true));
+                    public void onNext(Boolean status) {
+                        getUseCaseCallback().onSuccess(new VerifyPanDetails.ResponseValue(status));
                     }
                 });
     }

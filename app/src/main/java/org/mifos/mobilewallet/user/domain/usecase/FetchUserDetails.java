@@ -24,7 +24,8 @@ public class FetchUserDetails extends UseCase<FetchUserDetails.RequestValues,
     @Override
     protected void executeUseCase(FetchUserDetails.RequestValues requestValues) {
 
-        getUseCaseCallback().onSuccess(new FetchUserDetails.ResponseValue(localRepository.getUserDetails()));
+        getUseCaseCallback().onSuccess(new
+                FetchUserDetails.ResponseValue(localRepository.getUserDetails()));
     }
 
     public static final class RequestValues implements UseCase.RequestValues {

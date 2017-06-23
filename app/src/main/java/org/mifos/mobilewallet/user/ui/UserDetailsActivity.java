@@ -3,6 +3,8 @@ package org.mifos.mobilewallet.user.ui;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -30,6 +32,9 @@ public class UserDetailsActivity extends BaseActivity implements UserContract.Us
     UserDetailsPresenter mPresenter;
 
     UserContract.UserDetailsPresenter mUserDetailsPresenter;
+
+    @BindView(R.id.root_layout)
+    CoordinatorLayout rootLayout;
 
     @BindView(R.id.iv_user_image)
     ImageView ivUserImage;
@@ -66,7 +71,7 @@ public class UserDetailsActivity extends BaseActivity implements UserContract.Us
             @Override
             public void onClick(View v) {
                 VerifyPanDialog panDialog = new VerifyPanDialog();
-                panDialog.show(getSupportFragmentManager(),"Pan dialog");
+                panDialog.show(getSupportFragmentManager(), "Pan dialog");
             }
         });
 
@@ -89,9 +94,20 @@ public class UserDetailsActivity extends BaseActivity implements UserContract.Us
 
     @Override
     public void showPanStatus(boolean status) {
-        if (pDialog!= null) {
+        if (pDialog != null) {
             pDialog.hide();
         }
+        Snackbar snackbar = Snackbar
+                .make(rootLayout, "", Snackbar.LENGTH_SHORT);
+
+        if (status) {
+            snackbar.setText("PAN number successfully verified");
+        } else {
+            snackbar.setText("Invalid PAN number");
+        }
+
+        snackbar.show();
+
     }
 
     public void verifyPan(String number) {

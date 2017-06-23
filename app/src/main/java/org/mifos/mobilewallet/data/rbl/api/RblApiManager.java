@@ -1,6 +1,5 @@
 package org.mifos.mobilewallet.data.rbl.api;
 
-import org.mifos.mobilewallet.data.fineract.api.ApiInterceptor;
 import org.mifos.mobilewallet.data.rbl.api.services.PanService;
 
 import okhttp3.OkHttpClient;
@@ -23,8 +22,7 @@ public class RblApiManager {
     private static PanService panApi;
 
     public RblApiManager() {
-        String authToken = "";
-        createService(authToken);
+        createService();
     }
 
     private static void init() {
@@ -35,14 +33,14 @@ public class RblApiManager {
         return retrofit.create(clazz);
     }
 
-    public static void createService(String authToken) {
+    public static void createService() {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken))
+                .addInterceptor(new ApiInterceptor())
                 .build();
 
         retrofit = new Retrofit.Builder()

@@ -56,15 +56,15 @@ public class UserDetailsPresenter implements UserContract.UserDetailsPresenter {
     public void verifyPanDetails(String number) {
         mUsecaseHandler.execute(verifyPanDetails, new VerifyPanDetails.RequestValues(number),
                 new UseCase.UseCaseCallback<VerifyPanDetails.ResponseValue>() {
-            @Override
-            public void onSuccess(VerifyPanDetails.ResponseValue response) {
-                mUserDetailsView.showPanStatus(response.getStatus());
-            }
+                    @Override
+                    public void onSuccess(VerifyPanDetails.ResponseValue response) {
+                        mUserDetailsView.showPanStatus(response.getStatus());
+                    }
 
-            @Override
-            public void onError(String message) {
+                    @Override
+                    public void onError(String message) {
 
-            }
-        });
+                    }
+                });
     }
 }
