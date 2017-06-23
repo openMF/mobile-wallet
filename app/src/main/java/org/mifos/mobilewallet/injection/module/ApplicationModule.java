@@ -7,6 +7,7 @@ import org.mifos.mobilewallet.core.UseCaseHandler;
 import org.mifos.mobilewallet.core.UseCaseThreadPoolScheduler;
 import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
+import org.mifos.mobilewallet.data.rbl.api.RblApiManager;
 import org.mifos.mobilewallet.injection.ApplicationContext;
 
 import javax.inject.Singleton;
@@ -44,6 +45,12 @@ public class ApplicationModule {
     @Singleton
     FineractApiManager provideFineractApiManager() {
         return new FineractApiManager();
+    }
+
+    @Provides
+    @Singleton
+    RblApiManager provideRblApiManager() {
+        return new RblApiManager();
     }
 
     @Provides
