@@ -65,7 +65,7 @@ public class VerifyPanDetails extends UseCase<VerifyPanDetails.RequestValues,
             this.status = status;
         }
 
-        public boolean getStatus() {
+        public boolean isStatus() {
             return status;
         }
     }

@@ -19,6 +19,6 @@ public interface UserContract {
     interface UserDetailsPresenter extends BasePresenter {
 
         void getUserDetails();
-        void verifyPanDetails(String number);
+        void verifyPan(String number);
     }
 }

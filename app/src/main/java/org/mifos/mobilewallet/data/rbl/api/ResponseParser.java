@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.data.rbl.api;
 
+import android.util.Log;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,7 +31,7 @@ public class ResponseParser {
                 }
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("ResponseParser", e.getMessage());
             return false;
         }
         return false;

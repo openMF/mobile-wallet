@@ -2,6 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply from: '../config/quality/quality.gradle'
 
+def RBL_CLIENT_ID = '"' + RblClientIdProp + '"' ?: '"Define Rbl client id"';
+def RBL_CLIENT_SECRET = '"' + RblClientSecretProp + '"' ?: '"Define Rbl client secret"';
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -16,12 +18,16 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
 
+        buildConfigField 'String', 'RBL_CLIENT_ID', RBL_CLIENT_ID
+        buildConfigField 'String', 'RBL_CLIENT_SECRET', RBL_CLIENT_SECRET
     }
     buildTypes {
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
     }
 
     aaptOptions {

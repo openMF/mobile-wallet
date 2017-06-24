@@ -117,6 +117,6 @@ public class UserDetailsActivity extends BaseActivity implements UserContract.Us
         pDialog.setMessage("Verifying PAN...");
         pDialog.show();
 
-        mUserDetailsPresenter.verifyPanDetails(number);
+        mUserDetailsPresenter.verifyPan(number);
     }
 }

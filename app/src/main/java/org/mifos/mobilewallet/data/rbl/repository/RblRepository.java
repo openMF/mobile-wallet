@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.data.rbl.repository;
 
+import android.util.Log;
+
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.data.rbl.api.RblApiManager;
 import org.mifos.mobilewallet.data.rbl.api.ResponseParser;
@@ -58,7 +60,7 @@ public class RblRepository {
                             return ResponseParser
                                     .parsePanInquiryResponse(responseBodyResponse.body().string());
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            Log.e("RblRespository", e.getMessage());
                             return false;
                         }
                     }

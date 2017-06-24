@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.data.rbl.api;
 
-import android.text.TextUtils;
-
 import java.io.IOException;
 
 import okhttp3.Interceptor;

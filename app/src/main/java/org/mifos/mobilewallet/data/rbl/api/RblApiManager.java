@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.data.rbl.api;
 
+import org.mifos.mobilewallet.BuildConfig;
 import org.mifos.mobilewallet.data.rbl.api.services.PanService;
 
 import okhttp3.OkHttpClient;
@@ -15,8 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class RblApiManager {
 
     private static final String BASE_URL = "https://api.us.apiconnect.ibmcloud.com/rbl/rblhackathon/";
-    public static final String CLIENT_ID = "";
-    public static final String CLIENT_SECRET = "";
+    public static final String CLIENT_ID = BuildConfig.RBL_CLIENT_ID;
+    public static final String CLIENT_SECRET = BuildConfig.RBL_CLIENT_SECRET;
 
     private static Retrofit retrofit;
     private static PanService panApi;
