@@ -8,6 +8,7 @@ import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.presenter.SignupPresenter;
 import org.mifos.mobilewallet.core.BaseActivity;
+import org.mifos.mobilewallet.user.ui.VerifyPanDialog;
 
 import javax.inject.Inject;
 
@@ -39,7 +40,10 @@ public class SignupActivity extends BaseActivity implements AuthContract.SignupV
 
     @OnClick(R.id.btn_send_sms)
     public void sendSms() {
-        mSignupPresenter.onVerifyNumber();
+        SmsOtpDialog otpDialog = new SmsOtpDialog();
+        otpDialog.show(getSupportFragmentManager(), "Otp dialog");
+
+//        mSignupPresenter.onVerifyNumber();
     }
 
     @OnClick(R.id.txt_signin)

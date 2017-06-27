@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.core.BaseActivity;
@@ -37,6 +38,9 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
 
     @BindView(R.id.rv_payment_methods)
     RecyclerView rvPaymentMethods;
+
+    @BindView(R.id.et_invoice_total)
+    EditText etInvoiceTotal;
 
     @Inject
     PaymentMethodAdpater paymentMethodAdpater;
@@ -86,9 +90,37 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
                 new RecyclerItemClickListener.SimpleOnItemClickListener() {
                     @Override
                     public void onItemClick(View childView, int position) {
-                        paymentMethodAdpater.setFocused(position);
+
+                        showPaymentMethod(position);
                     }
                 }));
+    }
+
+    private void showPaymentMethod(int position) {
+        PaymentMethod method = paymentMethodAdpater.getPaymentMethod(position);
+
+        switch (method.getId()){
+            case 1:
+                paymentMethodAdpater.setFocused(position);
+                AadharPaymentFragment aadharPaymentFragment = AadharPaymentFragment.newInstance();
+                getChildFragmentManager().beginTransaction().replace(R.id.container, aadharPaymentFragment).commit();
+                break;
+            case 2:
+                paymentMethodAdpater.setFocused(position);
+                UpiPaymentFragment upiPaymentFragment = UpiPaymentFragment.newInstance();
+                getChildFragmentManager().beginTransaction().replace(R.id.container, upiPaymentFragment).commit();
+                break;
+            case 3:
+                paymentMethodAdpater.setFocused(position);
+                CardPaymentFragment cardPaymentFragment = CardPaymentFragment.newInstance();
+                getChildFragmentManager().beginTransaction().replace(R.id.container, cardPaymentFragment).commit();
+                break;
+
+        }
+    }
+
+    public int getInvoiceAmount() {
+        return Integer.parseInt(etInvoiceTotal.getText().toString());
     }
 
     @Override
@@ -100,5 +132,6 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
     public void showPaymentMethods(List<PaymentMethod> methods) {
         paymentMethodAdpater.setData(methods);
         rvPaymentMethods.scrollBy(Utils.dp2px(getActivity(), 120), 0);
+        showPaymentMethod(1);
     }
 }

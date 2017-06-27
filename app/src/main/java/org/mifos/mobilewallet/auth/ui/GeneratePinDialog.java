@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.user.ui;
+package org.mifos.mobilewallet.auth.ui;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -9,28 +9,30 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.mifos.mobilewallet.R;
-import org.mifos.mobilewallet.auth.ui.BusinessDetailsActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by naman on 22/6/17.
+ * Created by naman on 27/6/17.
  */
 
-public class VerifyPanDialog extends BottomSheetDialogFragment {
-
-
-    @BindView(R.id.et_pan_number)
-    EditText etPanNumber;
+public class GeneratePinDialog extends BottomSheetDialogFragment {
 
     @BindView(R.id.btn_verify)
     Button btnVerify;
 
     @BindView(R.id.btn_cancel)
     Button btnCancel;
+
+    @BindView(R.id.et_pin)
+    EditText etPin;
+
+    @BindView(R.id.et_pin_confirm)
+    EditText etPinConfirm;
 
     private BottomSheetBehavior mBehavior;
 
@@ -43,7 +45,7 @@ public class VerifyPanDialog extends BottomSheetDialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
 
-        View view = View.inflate(getContext(), R.layout.dialog_add_pan, null);
+        View view = View.inflate(getContext(), R.layout.dialog_generate_pin, null);
 
         dialog.setContentView(view);
         mBehavior = BottomSheetBehavior.from((View) view.getParent());
@@ -60,21 +62,22 @@ public class VerifyPanDialog extends BottomSheetDialogFragment {
         btnVerify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verifyPan();
+                createPin();
             }
         });
+
 
         return dialog;
     }
 
-    private void verifyPan() {
-        dismiss();
-        if (getActivity() instanceof UserDetailsActivity) {
-            ((UserDetailsActivity) getActivity()).verifyPan(etPanNumber.getText().toString());
-        } else if (getActivity() instanceof BusinessDetailsActivity) {
-            ((BusinessDetailsActivity) getActivity()).verifyPan(etPanNumber.getText().toString());
+   private void createPin() {
+        if (etPin.getText().toString().equals(etPinConfirm.getText().toString())) {
+            ((BankAccountActivity) getActivity()).setupComplete();
+        } else {
+            Toast.makeText(getActivity(), "PIN does not match", Toast.LENGTH_SHORT).show();
         }
-    }
+   }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -83,3 +86,4 @@ public class VerifyPanDialog extends BottomSheetDialogFragment {
 
 
 }
+

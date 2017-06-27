@@ -62,10 +62,15 @@ public class LocalRepository {
     public List<PaymentMethod> getPaymentMethods() {
         List<PaymentMethod> paymentMethods = new ArrayList<>();
         paymentMethods.add(new PaymentMethod("Aadhar Pay", R.drawable.aadharpay, 1));
-        paymentMethods.add(new PaymentMethod("UPI", R.drawable.bhim, 1));
-        paymentMethods.add(new PaymentMethod("Credit/Debit card", R.drawable.debitcard, 2));
-        paymentMethods.add(new PaymentMethod("Net Banking", R.drawable.netbanking, 1));
-        paymentMethods.add(new PaymentMethod("Paytm", R.drawable.paytm, 3));
+        paymentMethods.add(new PaymentMethod("UPI", R.drawable.upi, 2));
+        paymentMethods.add(new PaymentMethod("Credit/Debit card", R.drawable.debitcard, 3));
+        paymentMethods.add(new PaymentMethod("Net Banking", R.drawable.netbanking, 4));
+        paymentMethods.add(new PaymentMethod("Wallet/PG", R.drawable.wallet_blue, 5));
+        paymentMethods.add(new PaymentMethod("QR Code", R.drawable.qrcode_blue, 6));
+        paymentMethods.add(new PaymentMethod("NEFT/RTGS", R.drawable.nefticon, 7));
+        paymentMethods.add(new PaymentMethod("NACH", R.drawable.nach, 8));
+        paymentMethods.add(new PaymentMethod("Virtual Account", R.drawable.virtualaccount, 9));
+
         return paymentMethods;
     }
 }

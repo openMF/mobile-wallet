@@ -1,14 +1,22 @@
 package org.mifos.mobilewallet.auth.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.presenter.BusinessDetailsPresenter;
 import org.mifos.mobilewallet.core.BaseActivity;
+import org.mifos.mobilewallet.user.ui.VerifyPanDialog;
 import org.mifos.mobilewallet.utils.widgets.DiscreteSlider;
 
 import javax.inject.Inject;
@@ -39,6 +47,21 @@ public class BusinessDetailsActivity extends BaseActivity
     @BindView(R.id.btn_agent)
     Button btnAgent;
 
+    @BindView(R.id.btn_add_pan)
+    Button btnAddPan;
+
+    @BindView(R.id.tv_pan)
+    TextView tvPan;
+
+    @BindView(R.id.root_layout)
+    RelativeLayout rootLayout;
+
+    @BindView(R.id.iv_pan_status)
+    ImageView ivPanStatus;
+
+    private ProgressDialog pDialog;
+    private String panNumber;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,11 +71,19 @@ public class BusinessDetailsActivity extends BaseActivity
 
         ButterKnife.bind(BusinessDetailsActivity.this);
 
-        setToolbarTitle("Business/Shop details");
+        setToolbarTitle("Business details");
         showBackButton();
         mPresenter.attachView(this);
 
         slider.getSeekBar().setEnabled(false);
+
+        btnAddPan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                VerifyPanDialog panDialog = new VerifyPanDialog();
+                panDialog.show(getSupportFragmentManager(), "Pan dialog");
+            }
+        });
 
 
     }
@@ -88,5 +119,38 @@ public class BusinessDetailsActivity extends BaseActivity
     @Override
     public void openAddAccount() {
         startActivity(new Intent(this, AddAccountActivity.class));
+    }
+
+    @Override
+    public void showPanStatus(boolean status) {
+        if (pDialog != null) {
+            pDialog.hide();
+        }
+        Snackbar snackbar = Snackbar
+                .make(rootLayout, "", Snackbar.LENGTH_SHORT);
+
+        if (status) {
+            snackbar.setText("PAN number successfully verified");
+            ivPanStatus.setBackgroundResource(R.drawable.ic_done_green);
+            tvPan.setText(panNumber);
+        } else {
+            snackbar.setText("Invalid PAN number");
+            ivPanStatus.setBackgroundResource(R.drawable.ic_close);
+            tvPan.setText(panNumber);
+        }
+
+        snackbar.show();
+
+    }
+
+    public void verifyPan(String number) {
+        if (pDialog == null) {
+            pDialog = new ProgressDialog(this);
+        }
+        pDialog.setMessage("Verifying PAN...");
+        pDialog.show();
+
+        this.panNumber = number;
+        mBusinessDetailsPresenter.verifyPan(number);
     }
 }

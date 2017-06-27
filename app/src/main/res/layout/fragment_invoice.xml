@@ -34,14 +34,32 @@
                 android:layout_marginRight="30dp"
                 android:layout_alignParentRight="true">
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="right">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="₹"
                     android:textStyle="bold"
-                    android:text="₹1250"
-                    android:layout_gravity="right"
                     android:textSize="30sp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+                <EditText
+                    android:id="@+id/et_invoice_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="0"
+                    android:inputType="number"
+                    android:textSize="30sp"
+                    android:background="@android:color/transparent"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+                </LinearLayout>
 
                 <View
                     android:layout_width="150dp"
@@ -65,37 +83,12 @@
             android:clipToPadding="false"/>
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="VPA (Virtual Payment Address)"
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"/>
-
-
-        <EditText android:id="@+id/et_vpa"
-            android:layout_width="match_parent"
-            android:layout_marginLeft="30dp"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="5dp"
-            android:layout_height="wrap_content"
-            android:hint="example@mifos"
-            android:textSize="16sp"/>
-
-        <Button
-            android:id="@+id/btn_request"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Request"
-            android:layout_marginTop="40dp"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
-            android:layout_marginBottom="30dp"
-            android:textColor="@android:color/white"
-            android:background="@drawable/button_round_primary"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"/>
+            android:id="@+id/container"
+            android:layout_marginTop="@dimen/value_15dp"/>
+
 
 
     </LinearLayout>

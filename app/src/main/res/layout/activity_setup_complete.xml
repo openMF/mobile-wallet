@@ -94,7 +94,7 @@
                             android:layout_marginStart="@dimen/value_10dp"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:text="Nayan Ambali"
+                            android:text="Devang Mehta"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
 
@@ -124,7 +124,7 @@
                             android:layout_marginStart="@dimen/value_10dp"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:text="RuPie"
+                            android:text="Pixie Pay Pvt Ltd"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
 
@@ -185,7 +185,7 @@
                             android:layout_marginStart="@dimen/value_10dp"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:text="001"
+                            android:text="007"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
 
