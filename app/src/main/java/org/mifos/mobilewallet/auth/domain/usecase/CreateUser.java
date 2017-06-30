@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.auth.domain.usecase;
 
 import org.mifos.mobilewallet.core.UseCase;
-import org.mifos.mobilewallet.data.repository.ApiRepository;
+import org.mifos.mobilewallet.data.fineract.repository.FineractRepository;
 
 import javax.inject.Inject;
 
@@ -11,10 +11,10 @@ import javax.inject.Inject;
 
 public class CreateUser extends UseCase<CreateUser.RequestValues, CreateUser.ResponseValue> {
 
-    private final ApiRepository apiRepository;
+    private final FineractRepository apiRepository;
 
     @Inject
-    public CreateUser(ApiRepository apiRepository) {
+    public CreateUser(FineractRepository apiRepository) {
         this.apiRepository = apiRepository;
     }
 

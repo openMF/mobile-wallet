@@ -1,10 +1,10 @@
-package org.mifos.mobilewallet.data.repository;
+package org.mifos.mobilewallet.data.fineract.repository;
 
 import org.mifos.mobilewallet.auth.domain.model.User;
-import org.mifos.mobilewallet.data.api.BaseApiManager;
-import org.mifos.mobilewallet.data.entity.UserDetailsEntity;
-import org.mifos.mobilewallet.data.entity.UserEntity;
-import org.mifos.mobilewallet.data.entity.mapper.UserEntityMapper;
+import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
+import org.mifos.mobilewallet.data.fineract.entity.UserDetailsEntity;
+import org.mifos.mobilewallet.data.fineract.entity.UserEntity;
+import org.mifos.mobilewallet.data.fineract.entity.mapper.UserEntityMapper;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.utils.Constants;
 
@@ -19,22 +19,23 @@ import rx.functions.Func1;
  */
 
 @Singleton
-public class ApiRepository {
+public class FineractRepository {
 
-    private final BaseApiManager baseApiManager;
+    private final FineractApiManager fineractApiManager;
     private final PreferencesHelper preferencesHelper;
 
     @Inject
     UserEntityMapper userEntityMapper;
 
     @Inject
-    public ApiRepository(BaseApiManager baseApiManager, PreferencesHelper preferencesHelper) {
-        this.baseApiManager = baseApiManager;
+    public FineractRepository(FineractApiManager fineractApiManager,
+                              PreferencesHelper preferencesHelper) {
+        this.fineractApiManager = fineractApiManager;
         this.preferencesHelper = preferencesHelper;
     }
 
     public Observable<User> login(String username, String password) {
-        return baseApiManager.getAuthenticationApi().authenticate(username, password)
+        return fineractApiManager.getAuthenticationApi().authenticate(username, password)
                 .flatMap(new Func1<UserEntity, Observable<User>>() {
                     @Override
                     public Observable<User> call(UserEntity userEntity) {
@@ -43,7 +44,7 @@ public class ApiRepository {
                                 userEntity.getBase64EncodedAuthenticationKey();
 
                         saveAuthenticationTokenForSession(authToken);
-                        return baseApiManager.getAuthenticationApi()
+                        return fineractApiManager.getAuthenticationApi()
                                 .getUserDetails(userEntity.getUserId())
                                 .map(new Func1<UserDetailsEntity, User>() {
                                     @Override
@@ -58,7 +59,7 @@ public class ApiRepository {
 
     private void saveAuthenticationTokenForSession(String authToken) {
         preferencesHelper.saveToken(authToken);
-        BaseApiManager.createService(preferencesHelper.getToken());
+        FineractApiManager.createService(preferencesHelper.getToken());
     }
 
     private void saveUserDetails(UserDetailsEntity userDetailsEntity) {

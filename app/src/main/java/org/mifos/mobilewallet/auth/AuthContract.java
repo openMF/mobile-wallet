@@ -69,11 +69,13 @@ public interface AuthContract {
     interface BusinessDetailsView extends BaseView<BusinessDetailsPresenter> {
 
         void openAddAccount();
+        void showPanStatus(boolean status);
     }
 
     interface BusinessDetailsPresenter extends BasePresenter {
 
         void registerDetails();
+        void verifyPan(String number);
     }
 
     interface BankAccountView extends BaseView<BankAccountPresenter> {

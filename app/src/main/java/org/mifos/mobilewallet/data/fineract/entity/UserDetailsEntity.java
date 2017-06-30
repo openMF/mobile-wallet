@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.data.entity;
+package org.mifos.mobilewallet.data.fineract.entity;
 
 /**
  * Created by naman on 17/6/17.

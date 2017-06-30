@@ -43,7 +43,10 @@ public class BankAccountActivity extends BaseActivity implements AuthContract.Ba
 
     @OnClick(R.id.btn_set_up_pin)
     public void setupPINClicked() {
-        mBankAccountPresenter.setUPIPin();
+        GeneratePinDialog pinDialog = new GeneratePinDialog();
+        pinDialog.show(getSupportFragmentManager(), "Generate pin");
+
+//        mBankAccountPresenter.setUPIPin();
     }
 
     @OnClick(R.id.btn_have_pin)

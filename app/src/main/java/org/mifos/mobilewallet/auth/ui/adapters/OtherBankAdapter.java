@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.auth.ui.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -44,6 +45,10 @@ public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.View
         holder.ivPopularBank.setImageDrawable(
                 ContextCompat.getDrawable(context, otherBanks.get(position).getImage()));
         holder.tvPopularBank.setText(otherBanks.get(position).getName());
+
+        if (!otherBanks.get(position).getName().contains("RBL")) {
+            holder.tvPopularBank.setTextColor(Color.LTGRAY);
+        }
     }
 
     @Override

@@ -60,14 +60,13 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/value_5dp"
                                 android:layout_width="match_parent"
-                                android:text="XXXXXXXXXX004434"
+                                android:text="XXXXXXXXXXXX1234"
                                 android:textColor="@color/grey_900"/>
 
                             <TextView
                                 android:layout_gravity="bottom"
                                 android:layout_height="wrap_content"
                                 android:layout_width="match_parent"
-
                                 android:text="RBL Bank"
                                 android:textColor="@color/grey_900"/>
 
@@ -97,7 +96,7 @@
                                 android:id="@+id/txt_name"
                                 android:layout_height="wrap_content"
                                 android:layout_width="wrap_content"
-                                android:text="Nayan Ambali"
+                                android:text="Devang Mehta"
                                 android:textColor="@android:color/black"
                                 android:textStyle="bold"
                                 android:layout_marginLeft="100dp"
@@ -125,7 +124,7 @@
                             android:id="@+id/txt_account_type"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:text="Savings"
+                            android:text="Current"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"
                             android:layout_marginLeft="100dp"
@@ -235,7 +234,7 @@
                 android:paddingLeft="@dimen/value_15dp"
                 android:paddingRight="@dimen/value_15dp"
                 android:textColor="@color/colorPrimary"
-                android:text="I\ʼLL SET LATER"/>
+                android:text="IʼLL SET LATER"/>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

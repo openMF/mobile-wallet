@@ -1,6 +1,7 @@
-package org.mifos.mobilewallet.data.api;
+package org.mifos.mobilewallet.data.rbl.api;
 
-import org.mifos.mobilewallet.data.api.services.AuthenticationService;
+import org.mifos.mobilewallet.BuildConfig;
+import org.mifos.mobilewallet.data.rbl.api.services.PanService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -9,38 +10,38 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by naman on 17/6/17.
+ * Created by naman on 22/6/17.
  */
 
-public class BaseApiManager {
+public class RblApiManager {
 
-    private static BaseURL baseUrl = new BaseURL();
-    private static final String BASE_URL = baseUrl.getUrl();
+    private static final String BASE_URL = "https://api.us.apiconnect.ibmcloud.com/rbl/rblhackathon/";
+    public static final String CLIENT_ID = BuildConfig.RBL_CLIENT_ID;
+    public static final String CLIENT_SECRET = BuildConfig.RBL_CLIENT_SECRET;
 
     private static Retrofit retrofit;
-    private static AuthenticationService authenticationApi;
+    private static PanService panApi;
 
-    public BaseApiManager() {
-        String authToken = "";
-        createService(authToken);
+    public RblApiManager() {
+        createService();
     }
 
     private static void init() {
-        authenticationApi = createApi(AuthenticationService.class);
+        panApi = createApi(PanService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
         return retrofit.create(clazz);
     }
 
-    public static void createService(String authToken) {
+    public static void createService() {
 
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken))
+                .addInterceptor(new ApiInterceptor())
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -52,8 +53,8 @@ public class BaseApiManager {
         init();
     }
 
-    public AuthenticationService getAuthenticationApi() {
-        return authenticationApi;
+    public PanService getPanApi() {
+        return panApi;
     }
 
 }

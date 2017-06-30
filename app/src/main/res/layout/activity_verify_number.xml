@@ -67,7 +67,7 @@
             android:layout_marginLeft="@dimen/value_30dp"
             android:layout_marginStart="@dimen/value_30dp"
             android:layout_width="wrap_content"
-            android:text="@string/sim_provider"
+            android:text="AIRTEL_IN"
             android:textColor="@color/colorPrimary"/>
 
     </LinearLayout>

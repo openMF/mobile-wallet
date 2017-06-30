@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.home.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -18,6 +19,7 @@ import org.mifos.mobilewallet.home.HomeContract;
 import org.mifos.mobilewallet.home.HomePresenter;
 import org.mifos.mobilewallet.home.domain.model.UserDetails;
 import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
+import org.mifos.mobilewallet.user.ui.UserDetailsActivity;
 import org.mifos.mobilewallet.utils.TextDrawable;
 
 import javax.inject.Inject;
@@ -118,6 +120,13 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
         tvUsername = (TextView) headerView.findViewById(R.id.tv_user_name);
         tvUseremail = (TextView) headerView.findViewById(R.id.tv_user_email);
         ivUserImage = (ImageView) headerView.findViewById(R.id.iv_user_image);
+
+        headerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(HomeActivity.this, UserDetailsActivity.class));
+            }
+        });
 
         mHomePresenter.fetchUserDetails();
 
