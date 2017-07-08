@@ -15,6 +15,7 @@ import org.mifos.mobilewallet.invoice.ui.AadharPaymentFragment;
 import org.mifos.mobilewallet.invoice.ui.CardPaymentFragment;
 import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
 import org.mifos.mobilewallet.invoice.ui.UpiPaymentFragment;
+import org.mifos.mobilewallet.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.user.ui.UserDetailsActivity;
 
 import dagger.Component;
@@ -40,6 +41,8 @@ public interface ActivityComponent {
     void inject(HomeActivity homeActivity);
 
     void inject(UserDetailsActivity userDetailsActivity);
+
+    void inject(ShowQrActivity showQrActivity);
 
     void inject(HomeFragment homeFragment);
 
