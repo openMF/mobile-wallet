@@ -4,15 +4,12 @@ package org.mifos.mobilewallet.home.domain.model;
  * Created by naman on 17/6/17.
  */
 
-public class UserDetails {
+public class ClientDetails {
 
     private String name;
-    private String email;
     private String image;
-
-    public String getEmail() {
-        return email;
-    }
+    private String externalId;
+    private int clientId;
 
     public String getImage() {
         return image;
@@ -22,15 +19,27 @@ public class UserDetails {
         return name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public void setImage(String image) {
         this.image = image;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
+    public int getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
     }
 }

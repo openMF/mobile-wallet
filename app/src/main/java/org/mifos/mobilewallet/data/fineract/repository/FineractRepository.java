@@ -2,11 +2,13 @@ package org.mifos.mobilewallet.data.fineract.repository;
 
 import org.mifos.mobilewallet.auth.domain.model.User;
 import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
-import org.mifos.mobilewallet.data.fineract.entity.UserDetailsEntity;
+import org.mifos.mobilewallet.data.fineract.entity.Page;
 import org.mifos.mobilewallet.data.fineract.entity.UserEntity;
+import org.mifos.mobilewallet.data.fineract.entity.client.Client;
+import org.mifos.mobilewallet.data.fineract.entity.mapper.ClientDetailsMapper;
 import org.mifos.mobilewallet.data.fineract.entity.mapper.UserEntityMapper;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
-import org.mifos.mobilewallet.utils.Constants;
+import org.mifos.mobilewallet.home.domain.model.ClientDetails;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -22,49 +24,41 @@ import rx.functions.Func1;
 public class FineractRepository {
 
     private final FineractApiManager fineractApiManager;
-    private final PreferencesHelper preferencesHelper;
 
     @Inject
     UserEntityMapper userEntityMapper;
 
     @Inject
+    ClientDetailsMapper clientDetailsMapper;
+
+    @Inject
     public FineractRepository(FineractApiManager fineractApiManager,
                               PreferencesHelper preferencesHelper) {
         this.fineractApiManager = fineractApiManager;
-        this.preferencesHelper = preferencesHelper;
     }
 
     public Observable<User> login(String username, String password) {
         return fineractApiManager.getAuthenticationApi().authenticate(username, password)
-                .flatMap(new Func1<UserEntity, Observable<User>>() {
+                .map(new Func1<UserEntity, User>() {
                     @Override
-                    public Observable<User> call(UserEntity userEntity) {
-
-                        final String authToken = Constants.BASIC +
-                                userEntity.getBase64EncodedAuthenticationKey();
-
-                        saveAuthenticationTokenForSession(authToken);
-                        return fineractApiManager.getAuthenticationApi()
-                                .getUserDetails(userEntity.getUserId())
-                                .map(new Func1<UserDetailsEntity, User>() {
-                                    @Override
-                                    public User call(UserDetailsEntity userDetailsEntity) {
-                                        saveUserDetails(userDetailsEntity);
-                                        return userEntityMapper.transform(userDetailsEntity);
-                                    }
-                                });
+                    public User call(UserEntity userEntity) {
+                        return userEntityMapper.transform(userEntity);
                     }
                 });
     }
 
-    private void saveAuthenticationTokenForSession(String authToken) {
-        preferencesHelper.saveToken(authToken);
-        FineractApiManager.createService(preferencesHelper.getToken());
+    public Observable<ClientDetails> getClientDetails() {
+        return fineractApiManager.getClientsApi().getClients().flatMap(new Func1<Page<Client>, Observable<ClientDetails>>() {
+            @Override
+            public Observable<ClientDetails> call(Page<Client> clientPage) {
+                return fineractApiManager.getClientsApi().getClientForId(clientPage.getPageItems().get(0).getId()).map(new Func1<Client, ClientDetails>() {
+                    @Override
+                    public ClientDetails call(Client client) {
+                        return clientDetailsMapper.transform(client);
+                    }
+                });
+            }
+        });
     }
 
-    private void saveUserDetails(UserDetailsEntity userDetailsEntity) {
-        preferencesHelper.saveFullName(userDetailsEntity.getFirstname()
-                + " " + userDetailsEntity.getLastname());
-        preferencesHelper.saveEmail(userDetailsEntity.getEmail());
-    }
 }

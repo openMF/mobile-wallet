@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.data.local;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.domain.model.Bank;
-import org.mifos.mobilewallet.home.domain.model.UserDetails;
+import org.mifos.mobilewallet.home.domain.model.ClientDetails;
 import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
 
 import java.util.ArrayList;
@@ -25,10 +25,9 @@ public class LocalRepository {
         this.preferencesHelper = preferencesHelper;
     }
 
-    public UserDetails getUserDetails() {
-        UserDetails details = new UserDetails();
+    public ClientDetails getUserDetails() {
+        ClientDetails details = new ClientDetails();
         details.setName(preferencesHelper.getFullName());
-        details.setEmail(preferencesHelper.getEmail());
 
         return details;
     }

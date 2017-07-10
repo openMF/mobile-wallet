@@ -7,6 +7,7 @@ import org.mifos.mobilewallet.core.UseCaseHandler;
 import org.mifos.mobilewallet.core.UseCaseThreadPoolScheduler;
 import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
+import org.mifos.mobilewallet.data.pixiepay.api.PixiePayApiManager;
 import org.mifos.mobilewallet.data.rbl.api.RblApiManager;
 import org.mifos.mobilewallet.injection.ApplicationContext;
 
@@ -51,6 +52,12 @@ public class ApplicationModule {
     @Singleton
     RblApiManager provideRblApiManager() {
         return new RblApiManager();
+    }
+
+    @Provides
+    @Singleton
+    PixiePayApiManager providePixiePayApiManager() {
+        return new PixiePayApiManager();
     }
 
     @Provides

@@ -17,7 +17,7 @@ import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.core.BaseActivity;
 import org.mifos.mobilewallet.home.HomeContract;
 import org.mifos.mobilewallet.home.HomePresenter;
-import org.mifos.mobilewallet.home.domain.model.UserDetails;
+import org.mifos.mobilewallet.home.domain.model.ClientDetails;
 import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
 import org.mifos.mobilewallet.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.user.ui.UserDetailsActivity;
@@ -132,7 +132,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
             }
         });
 
-        mHomePresenter.fetchUserDetails();
+        mHomePresenter.fetchClientDetails();
 
     }
 
@@ -150,12 +150,11 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
     }
 
     @Override
-    public void showUserDetailsHeader(UserDetails userDetails) {
-        tvUsername.setText(userDetails.getName());
+    public void showUserDetailsHeader(ClientDetails clientDetails) {
+        tvUsername.setText(clientDetails.getName());
         TextDrawable drawable = TextDrawable.builder()
-                .buildRound(userDetails.getName().substring(0, 1), R.color.colorPrimary);
+                .buildRound(clientDetails.getName().substring(0, 1), R.color.colorPrimary);
         ivUserImage.setImageDrawable(drawable);
-        tvUseremail.setText(userDetails.getEmail());
 
     }
 }

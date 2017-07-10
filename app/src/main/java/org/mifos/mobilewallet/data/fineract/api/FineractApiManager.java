@@ -1,6 +1,8 @@
 package org.mifos.mobilewallet.data.fineract.api;
 
 import org.mifos.mobilewallet.data.fineract.api.services.AuthenticationService;
+import org.mifos.mobilewallet.data.fineract.api.services.ClientService;
+import org.mifos.mobilewallet.data.fineract.api.services.SavingAccountsListService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -19,6 +21,8 @@ public class FineractApiManager {
 
     private static Retrofit retrofit;
     private static AuthenticationService authenticationApi;
+    private static ClientService clientsApi;
+    private static SavingAccountsListService savingAccountsListApi;
 
     public FineractApiManager() {
         String authToken = "";
@@ -27,6 +31,8 @@ public class FineractApiManager {
 
     private static void init() {
         authenticationApi = createApi(AuthenticationService.class);
+        clientsApi = createApi(ClientService.class);
+        savingAccountsListApi = createApi(SavingAccountsListService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
@@ -54,6 +60,14 @@ public class FineractApiManager {
 
     public AuthenticationService getAuthenticationApi() {
         return authenticationApi;
+    }
+
+    public ClientService getClientsApi() {
+        return clientsApi;
+    }
+
+    public SavingAccountsListService getSavingAccountsListApi() {
+        return savingAccountsListApi;
     }
 
 }
