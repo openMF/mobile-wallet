@@ -19,6 +19,7 @@ import javax.inject.Inject;
 
 public class GenerateQr extends UseCase<GenerateQr.RequestValues, GenerateQr.ResponseValue> {
 
+    private static final String BASE_URL = "http://139.59.14.31:80/invoice/pay";
     private static int WHITE = 0xFFFFFFFF;
     private static int BLACK = 0xFF000000;
     private final static int WIDTH = 500;
