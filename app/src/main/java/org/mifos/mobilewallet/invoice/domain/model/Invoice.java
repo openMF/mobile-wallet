@@ -6,16 +6,21 @@ package org.mifos.mobilewallet.invoice.domain.model;
 
 public class Invoice {
 
-    private int invoiceId;
+    private String invoiceId = "12345555";
     private int merchantId;
-    private int amount;
+    private double amount;
     private PaymentMethod paymentMethod;
+    private String date;
 
-    public int getInvoiceId() {
+    //0 - pending, 1 - paid
+    private int status;
+
+
+    public String getInvoiceId() {
         return invoiceId;
     }
 
-    public void setInvoiceId(int invoiceId) {
+    public void setInvoiceId(String invoiceId) {
         this.invoiceId = invoiceId;
     }
 
@@ -27,11 +32,11 @@ public class Invoice {
         this.merchantId = merchantId;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -41,5 +46,21 @@ public class Invoice {
 
     public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
     }
 }

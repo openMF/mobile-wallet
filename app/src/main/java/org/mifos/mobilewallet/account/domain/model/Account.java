@@ -9,6 +9,7 @@ public class Account {
     private String image;
     private String name;
     private String number;
+    private long id;
 
     public String getImage() {
         return image;
@@ -32,5 +33,13 @@ public class Account {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

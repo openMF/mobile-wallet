@@ -15,6 +15,7 @@ import org.mifos.mobilewallet.injection.module.ActivityModule;
 import org.mifos.mobilewallet.invoice.ui.AadharPaymentFragment;
 import org.mifos.mobilewallet.invoice.ui.CardPaymentFragment;
 import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
+import org.mifos.mobilewallet.invoice.ui.RecentInvoicesFragment;
 import org.mifos.mobilewallet.invoice.ui.UpiPaymentFragment;
 import org.mifos.mobilewallet.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.user.ui.UserDetailsActivity;
@@ -48,6 +49,8 @@ public interface ActivityComponent {
     void inject(HomeFragment homeFragment);
 
     void inject(InvoiceFragment invoiceFragment);
+
+    void inject(RecentInvoicesFragment recentInvoicesFragment);
 
     void inject(AccountsFragment accountsFragment);
 

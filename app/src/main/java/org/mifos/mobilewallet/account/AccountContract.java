@@ -15,6 +15,7 @@ public interface AccountContract {
     interface AccountsView extends BaseView<AccountsPresenter> {
 
         void showAccounts(List<Account> accounts);
+        void showError(String message);
     }
 
     interface AccountsPresenter extends BasePresenter {

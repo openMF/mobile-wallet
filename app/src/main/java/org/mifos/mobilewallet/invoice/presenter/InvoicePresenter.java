@@ -1,8 +1,9 @@
-package org.mifos.mobilewallet.invoice;
+package org.mifos.mobilewallet.invoice.presenter;
 
 import org.mifos.mobilewallet.core.BaseView;
 import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.core.UseCaseHandler;
+import org.mifos.mobilewallet.invoice.InvoiceContract;
 import org.mifos.mobilewallet.invoice.domain.usecase.FetchPaymentMethods;
 
 import javax.inject.Inject;

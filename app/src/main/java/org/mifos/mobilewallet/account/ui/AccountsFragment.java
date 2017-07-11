@@ -2,11 +2,13 @@ package org.mifos.mobilewallet.account.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.account.AccountContract;
@@ -77,6 +79,7 @@ public class AccountsFragment extends BaseFragment implements AccountContract.Ac
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rvAccounts.setLayoutManager(llm);
         rvAccounts.setHasFixedSize(true);
+        rvAccounts.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         accountsAdapter.setContext(getActivity());
         rvAccounts.setAdapter(accountsAdapter);
 
@@ -98,6 +101,12 @@ public class AccountsFragment extends BaseFragment implements AccountContract.Ac
     public void showAccounts(List<Account> accounts) {
         accountsAdapter.setData(accounts);
         hideProgress();
+    }
+
+    @Override
+    public void showError(String message) {
+        hideProgress();
+        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -42,7 +42,7 @@ public class AccountsPresenter implements AccountContract.AccountsPresenter {
 
             @Override
             public void onError(String message) {
-
+                maccountsView.showError(message);
             }
         });
     }

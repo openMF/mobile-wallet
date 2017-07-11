@@ -8,14 +8,20 @@
         <item
             android:id="@+id/item_home"
             android:checked="true"
-            android:icon="@drawable/ic_home"
-            android:title="Home"/>
+            android:icon="@drawable/ic_create"
+            android:title="Create Invoice"/>
 
         <item
             android:id="@+id/item_accounts"
             android:checked="true"
             android:icon="@drawable/ic_account_balance"
             android:title="Accounts"/>
+
+        <item
+            android:id="@+id/item_recent_invoices"
+            android:checked="true"
+            android:icon="@drawable/ic_repeat"
+            android:title="Recent Invoices"/>
 
         <item
             android:id="@+id/item_wallet"

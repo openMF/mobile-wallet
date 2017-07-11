@@ -5,13 +5,16 @@ import org.mifos.mobilewallet.auth.domain.model.User;
 import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.data.fineract.entity.Page;
 import org.mifos.mobilewallet.data.fineract.entity.UserEntity;
+import org.mifos.mobilewallet.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.data.fineract.entity.client.Client;
 import org.mifos.mobilewallet.data.fineract.entity.client.ClientAccounts;
 import org.mifos.mobilewallet.data.fineract.entity.mapper.AccountMapper;
 import org.mifos.mobilewallet.data.fineract.entity.mapper.ClientDetailsMapper;
+import org.mifos.mobilewallet.data.fineract.entity.mapper.InvoiceMapper;
 import org.mifos.mobilewallet.data.fineract.entity.mapper.UserEntityMapper;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.home.domain.model.ClientDetails;
+import org.mifos.mobilewallet.invoice.domain.model.Invoice;
 import org.mifos.mobilewallet.utils.Constants;
 
 import java.util.List;
@@ -40,6 +43,9 @@ public class FineractRepository {
 
     @Inject
     AccountMapper accountMapper;
+
+    @Inject
+    InvoiceMapper invoiceMapper;
 
     @Inject
     public FineractRepository(FineractApiManager fineractApiManager,
@@ -81,6 +87,18 @@ public class FineractRepository {
                 return accountMapper.transform(clientAccounts);
             }
         });
+    }
+
+    public Observable<List<Invoice>> getAccountTransactions(long accountId) {
+        return fineractApiManager
+                .getSavingAccountsListApi().getSavingsWithAssociations(accountId,
+                        Constants.TRANSACTIONS).map(new Func1<SavingsWithAssociations,
+                        List<Invoice>>() {
+                    @Override
+                    public List<Invoice> call(SavingsWithAssociations savingsWithAssociations) {
+                        return invoiceMapper.transformInvoiceList(savingsWithAssociations);
+                    }
+                });
     }
 
 }

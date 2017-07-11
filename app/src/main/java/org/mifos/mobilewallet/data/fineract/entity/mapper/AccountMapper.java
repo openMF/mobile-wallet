@@ -32,6 +32,7 @@ public class AccountMapper {
                 Account account = new Account();
                 account.setName(savingAccount.getProductName());
                 account.setNumber(savingAccount.getAccountNo());
+                account.setId(savingAccount.getId());
 
                 accountList.add(account);
             }

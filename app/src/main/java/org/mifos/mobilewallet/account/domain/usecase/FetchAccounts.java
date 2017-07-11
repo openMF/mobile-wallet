@@ -49,7 +49,11 @@ public class FetchAccounts extends UseCase<FetchAccounts.RequestValues,
 
                     @Override
                     public void onNext(List<Account> accounts) {
-                        getUseCaseCallback().onSuccess(new FetchAccounts.ResponseValue(accounts));
+                        if (accounts != null && accounts.size() != 0) {
+                            getUseCaseCallback().onSuccess(new FetchAccounts.ResponseValue(accounts));
+                        } else {
+                            getUseCaseCallback().onError("No accounts found");
+                        }
                     }
                 });
     }

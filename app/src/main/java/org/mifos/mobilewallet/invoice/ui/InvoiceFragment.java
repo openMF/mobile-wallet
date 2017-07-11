@@ -13,7 +13,7 @@ import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.core.BaseActivity;
 import org.mifos.mobilewallet.core.BaseFragment;
 import org.mifos.mobilewallet.invoice.InvoiceContract;
-import org.mifos.mobilewallet.invoice.InvoicePresenter;
+import org.mifos.mobilewallet.invoice.presenter.InvoicePresenter;
 import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
 import org.mifos.mobilewallet.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.utils.Utils;
