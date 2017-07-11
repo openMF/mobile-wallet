@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.injection.component;
 
+import org.mifos.mobilewallet.account.ui.AccountsFragment;
 import org.mifos.mobilewallet.auth.ui.AddAccountActivity;
 import org.mifos.mobilewallet.auth.ui.BankAccountActivity;
 import org.mifos.mobilewallet.auth.ui.BusinessDetailsActivity;
@@ -47,6 +48,8 @@ public interface ActivityComponent {
     void inject(HomeFragment homeFragment);
 
     void inject(InvoiceFragment invoiceFragment);
+
+    void inject(AccountsFragment accountsFragment);
 
     void inject(UpiPaymentFragment upiPaymentFragment);
 

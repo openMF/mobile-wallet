@@ -11,6 +11,7 @@ public class Constants {
     public static final String INVOICE_AMOUNT = "invoice_amount";
     public static final String INVOICE_PAYMENT_UPI_VPA = "invoice_amount_upi_vpa";
     public static final String RUPEE = "₹";
+    public static final String SAVINGS = "savingsAccounts";
 
 
 }

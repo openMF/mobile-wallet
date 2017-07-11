@@ -11,6 +11,11 @@
             android:icon="@drawable/ic_home"
             android:title="Home"/>
 
+        <item
+            android:id="@+id/item_accounts"
+            android:checked="true"
+            android:icon="@drawable/ic_account_balance"
+            android:title="Accounts"/>
 
         <item
             android:id="@+id/item_wallet"

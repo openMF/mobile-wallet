@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.R;
+import org.mifos.mobilewallet.account.ui.AccountsFragment;
 import org.mifos.mobilewallet.core.BaseActivity;
 import org.mifos.mobilewallet.home.HomeContract;
 import org.mifos.mobilewallet.home.HomePresenter;
@@ -114,10 +115,15 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
         switch (item.getItemId()) {
             case R.id.item_home:
                 break;
+            case R.id.item_accounts:
+                replaceFragment(AccountsFragment.newInstance(), false, R.id.container);
+                break;
             case R.id.item_qr:
                 startActivity(new Intent(this, ShowQrActivity.class));
                 break;
         }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
     }
 
     private void setupHeaderView(View headerView) {
