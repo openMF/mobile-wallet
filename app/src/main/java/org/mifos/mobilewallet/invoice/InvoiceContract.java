@@ -17,11 +17,13 @@ public interface InvoiceContract {
     interface InvoiceView extends BaseView<InvoicePresenter> {
 
         void showPaymentMethods(List<PaymentMethod> methods);
+        void invoiceCreated(Invoice invoice);
     }
 
     interface InvoicePresenter extends BasePresenter {
 
         void getPaymentMethods();
+        void createInvoice(Invoice invoice);
     }
 
     interface RecentInvoiceView extends BaseView<RecentInvoicePresenter> {

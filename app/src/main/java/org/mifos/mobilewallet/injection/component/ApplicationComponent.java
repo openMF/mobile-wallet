@@ -5,6 +5,7 @@ import android.content.Context;
 
 import org.mifos.mobilewallet.core.UseCaseHandler;
 import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
+import org.mifos.mobilewallet.data.local.DatabaseHelper;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.data.fineract.repository.FineractRepository;
@@ -38,6 +39,7 @@ public interface ApplicationComponent {
     PixiePayRepository pixiePayRepository();
     PreferencesHelper prefManager();
     LocalRepository localRepository();
+    DatabaseHelper databasehelper();
 
 
 }

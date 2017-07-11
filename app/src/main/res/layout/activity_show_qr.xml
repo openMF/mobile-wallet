@@ -47,12 +47,6 @@
             android:id="@+id/tv_qr_data"
             android:layout_marginTop="@dimen/value_20dp"/>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tv_qr_amount"
-            android:layout_marginTop="@dimen/value_10dp"/>
-
         </LinearLayout>
     </LinearLayout>
 

@@ -13,6 +13,7 @@ import org.mifos.mobilewallet.auth.ui.AddAccountActivity;
 import org.mifos.mobilewallet.core.BaseActivity;
 import org.mifos.mobilewallet.qr.QrContract;
 import org.mifos.mobilewallet.qr.presenter.ShowQrPresenter;
+import org.mifos.mobilewallet.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -36,9 +37,6 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
     @BindView(R.id.tv_qr_data)
     TextView tvQrData;
 
-    @BindView(R.id.tv_qr_amount)
-    TextView tvQrAmount;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,9 +50,10 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
         showBackButton();
         mPresenter.attachView(this);
 
-        mShowQrPresenter.generateQr("Test data", 100);
-        tvQrData.setText("Test data");
-        tvQrAmount.setText(String.valueOf(100));
+        String qrData = getIntent().getStringExtra(Constants.QR_DATA);
+
+        mShowQrPresenter.generateQr(qrData);
+        tvQrData.setText(qrData);
 
     }
 

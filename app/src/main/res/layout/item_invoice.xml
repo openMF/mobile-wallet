@@ -31,6 +31,12 @@
                     android:textColor="@color/grey_900"/>
 
                 <TextView
+                    android:id="@+id/tv_invoice_date"
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:textColor="@color/grey_900"/>
+
+                <TextView
                     android:id="@+id/tv_invoice_status"
                     android:layout_gravity="bottom"
                     android:layout_height="wrap_content"
