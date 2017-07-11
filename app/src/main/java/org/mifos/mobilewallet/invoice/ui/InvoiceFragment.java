@@ -167,7 +167,7 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
         invoice.setDate(DateHelper.getDateAsStringFromLong(System.currentTimeMillis()));
         invoice.setInvoiceId(String.valueOf(System.currentTimeMillis()));
         invoice.setMerchantId(preferencesHelper.getClientId());
-        invoice.setAccountId(123);
+        invoice.setAccountId(923);
         mPresenter.createInvoice(invoice);
     }
 

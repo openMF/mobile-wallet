@@ -23,6 +23,7 @@ import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
 import org.mifos.mobilewallet.invoice.ui.RecentInvoicesFragment;
 import org.mifos.mobilewallet.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.user.ui.UserDetailsActivity;
+import org.mifos.mobilewallet.utils.Constants;
 import org.mifos.mobilewallet.utils.TextDrawable;
 
 import javax.inject.Inject;
@@ -124,7 +125,9 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
                 replaceFragment(RecentInvoicesFragment.newInstance(), false, R.id.container);
                 break;
             case R.id.item_qr:
-                startActivity(new Intent(this, ShowQrActivity.class));
+                Intent intent = new Intent(this, ShowQrActivity.class);
+                intent.putExtra(Constants.QR_DATA, "PixiePay");
+                startActivity(intent);
                 break;
         }
 

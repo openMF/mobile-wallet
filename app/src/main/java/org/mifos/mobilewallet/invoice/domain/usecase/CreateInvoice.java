@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.invoice.domain.usecase;
 
 import org.mifos.mobilewallet.core.UseCase;
-import org.mifos.mobilewallet.data.local.DatabaseHelper;
+import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
 
 import javax.inject.Inject;
@@ -17,17 +17,17 @@ import rx.schedulers.Schedulers;
 public class CreateInvoice extends UseCase<CreateInvoice.RequestValues,
         CreateInvoice.ResponseValue> {
 
-    private final DatabaseHelper databaseHelper;
+    private final LocalRepository localRepository;
 
     @Inject
-    public CreateInvoice(DatabaseHelper databaseHelper) {
-        this.databaseHelper = databaseHelper;
+    public CreateInvoice(LocalRepository localRepository) {
+        this.localRepository= localRepository;
     }
 
 
     @Override
     protected void executeUseCase(CreateInvoice.RequestValues requestValues) {
-        databaseHelper.saveInvoice(requestValues.getInvoice())
+        localRepository.saveInvoice(requestValues.getInvoice())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<Invoice>() {

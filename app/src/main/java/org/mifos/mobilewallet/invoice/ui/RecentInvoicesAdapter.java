@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.R;
@@ -41,12 +42,14 @@ public class RecentInvoicesAdapter extends RecyclerView.Adapter<RecentInvoicesAd
     @Override
     public void onBindViewHolder(RecentInvoicesAdapter.ViewHolder holder, int position) {
         holder.tvInvoiceAmount.setText(Constants.RUPEE + invoices.get(position).getAmount());
-        holder.tvInvoiceId.setText(String.valueOf(invoices.get(position).getInvoiceId()));
+        holder.tvInvoiceId.setText("Invoice ID : " + String.valueOf(invoices.get(position).getInvoiceId()));
         holder.tvInvoiceDate.setText(invoices.get(position).getDate());
         if (invoices.get(position).getStatus() == 0) {
             holder.tvInvoiceStatus.setText("Pending");
+            holder.ivInvoiceStatus.setImageResource(R.drawable.ic_invoice_pending);
         } else {
             holder.tvInvoiceStatus.setText("Paid");
+            holder.ivInvoiceStatus.setImageResource(R.drawable.ic_invoice_paid);
         }
     }
 
@@ -76,6 +79,9 @@ public class RecentInvoicesAdapter extends RecyclerView.Adapter<RecentInvoicesAd
 
         @BindView(R.id.tv_invoice_date)
         TextView tvInvoiceDate;
+
+        @BindView(R.id.iv_invoice_status)
+        ImageView ivInvoiceStatus;
 
         public ViewHolder(View v) {
             super(v);

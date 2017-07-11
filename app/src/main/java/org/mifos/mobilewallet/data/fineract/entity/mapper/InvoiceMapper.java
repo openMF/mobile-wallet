@@ -42,6 +42,7 @@ public class InvoiceMapper {
         if (transactions != null ) {
 
           invoice.setAmount(transactions.getAmount());
+          invoice.setStatus(1);
 
           if (transactions.getPaymentDetailData() != null) {
               invoice.setInvoiceId(transactions.getPaymentDetailData().getReceiptNumber());

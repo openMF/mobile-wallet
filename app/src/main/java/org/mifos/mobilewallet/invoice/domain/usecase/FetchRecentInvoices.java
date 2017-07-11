@@ -1,13 +1,11 @@
 package org.mifos.mobilewallet.invoice.domain.usecase;
 
-import org.mifos.mobilewallet.account.domain.model.Account;
-import org.mifos.mobilewallet.account.domain.usecase.FetchAccounts;
 import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
-import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -34,7 +32,36 @@ public class FetchRecentInvoices extends UseCase<FetchRecentInvoices.RequestValu
 
 
     @Override
-    protected void executeUseCase(FetchRecentInvoices.RequestValues requestValues) {
+    protected void executeUseCase(final FetchRecentInvoices.RequestValues requestValues) {
+        localRepository.getInvoiceList()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<List<Invoice>>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        fetchRemoteTransactions(new ArrayList<Invoice>(), requestValues);
+                        getUseCaseCallback().onError("Error fetching account transactions");
+                    }
+
+                    @Override
+                    public void onNext(List<Invoice> invoices) {
+                        if (invoices != null && invoices.size() != 0) {
+                            fetchRemoteTransactions(invoices, requestValues);
+                        } else {
+                            invoices = new ArrayList<>();
+                            fetchRemoteTransactions(invoices, requestValues);
+                        }
+                    }
+                });
+
+    }
+
+    private void fetchRemoteTransactions(final List<Invoice> localList, RequestValues requestValues) {
         fineractRepository.getAccountTransactions(requestValues.accountId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -46,18 +73,34 @@ public class FetchRecentInvoices extends UseCase<FetchRecentInvoices.RequestValu
 
                     @Override
                     public void onError(Throwable e) {
-                        getUseCaseCallback().onError("Error fetching account transactions");
+                        getUseCaseCallback().onSuccess(new ResponseValue(localList));
+                        getUseCaseCallback().onError("Error fetching remote account transactions");
                     }
 
                     @Override
                     public void onNext(List<Invoice> invoices) {
                         if (invoices != null && invoices.size() != 0) {
-                            getUseCaseCallback().onSuccess(new FetchRecentInvoices.ResponseValue(invoices));
+                            for (Invoice invoice : invoices) {
+                                for (int i=0; i < localList.size(); i++) {
+                                    if (invoice.getInvoiceId().equals(localList.get(i).getInvoiceId())) {
+                                        //transaction exists on remote for this invoiceid
+                                        //which means that invoice has been paid
+                                        //remove this invoice from local database
+                                        localRepository.removeInvoice(localList.get(i));
+                                        localList.remove(i);
+                                    }
+
+                                }
+                            }
+
+                            localList.addAll(invoices);
+                            getUseCaseCallback().onSuccess(new ResponseValue(localList));
                         } else {
-                            getUseCaseCallback().onError("No recent transactions found");
+                           getUseCaseCallback().onSuccess(new ResponseValue(localList));
                         }
                     }
                 });
+
 
     }
 
