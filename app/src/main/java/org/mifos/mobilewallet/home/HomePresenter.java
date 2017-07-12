@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.home;
 import org.mifos.mobilewallet.core.BaseView;
 import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.core.UseCaseHandler;
-import org.mifos.mobilewallet.home.domain.usecase.FetchUserData;
+import org.mifos.mobilewallet.home.domain.usecase.FetchClientData;
 
 import javax.inject.Inject;
 
@@ -17,7 +17,7 @@ public class HomePresenter implements HomeContract.HomePresenter {
     private final UseCaseHandler mUsecaseHandler;
 
     @Inject
-    FetchUserData fetchUserData;
+    FetchClientData fetchClientData;
 
     @Inject
     public HomePresenter(UseCaseHandler useCaseHandler) {
@@ -31,11 +31,11 @@ public class HomePresenter implements HomeContract.HomePresenter {
     }
 
     @Override
-    public void fetchUserDetails() {
-        mUsecaseHandler.execute(fetchUserData, null,
-                new UseCase.UseCaseCallback<FetchUserData.ResponseValue>() {
+    public void fetchClientDetails() {
+        mUsecaseHandler.execute(fetchClientData, null,
+                new UseCase.UseCaseCallback<FetchClientData.ResponseValue>() {
                     @Override
-                    public void onSuccess(FetchUserData.ResponseValue response) {
+                    public void onSuccess(FetchClientData.ResponseValue response) {
                         if (!response.getUserDetails().getName().equals(""))
                             mHomeView.showUserDetailsHeader(response.getUserDetails());
                     }

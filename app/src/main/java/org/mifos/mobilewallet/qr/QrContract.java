@@ -18,6 +18,6 @@ public interface QrContract {
 
     interface ShowQrPresenter extends BasePresenter {
 
-        void generateQr(String data, int amount);
+        void generateQr(String data);
     }
 }

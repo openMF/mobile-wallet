@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.core.BaseActivity;
-import org.mifos.mobilewallet.home.domain.model.UserDetails;
+import org.mifos.mobilewallet.home.domain.model.ClientDetails;
 import org.mifos.mobilewallet.user.UserContract;
 import org.mifos.mobilewallet.user.presenter.UserDetailsPresenter;
 import org.mifos.mobilewallet.utils.TextDrawable;
@@ -83,13 +83,12 @@ public class UserDetailsActivity extends BaseActivity implements UserContract.Us
     }
 
     @Override
-    public void showUserDetails(UserDetails userDetails) {
-        ivUserName.setText(userDetails.getName());
-        tvUserDetailsName.setText(userDetails.getName());
+    public void showUserDetails(ClientDetails clientDetails) {
+        ivUserName.setText(clientDetails.getName());
+        tvUserDetailsName.setText(clientDetails.getName());
         TextDrawable drawable = TextDrawable.builder()
-                .buildRound(userDetails.getName().substring(0, 1), R.color.purple_200);
+                .buildRound(clientDetails.getName().substring(0, 1), R.color.purple_200);
         ivUserImage.setImageDrawable(drawable);
-        tvUserDetailsEmail.setText(userDetails.getEmail());
     }
 
     @Override

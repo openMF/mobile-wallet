@@ -2,7 +2,10 @@ package org.mifos.mobilewallet.auth.domain.usecase;
 
 import org.mifos.mobilewallet.auth.domain.model.User;
 import org.mifos.mobilewallet.core.UseCase;
+import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.data.local.PreferencesHelper;
+import org.mifos.mobilewallet.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -18,10 +21,12 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
         AuthenticateUser.ResponseValue> {
 
     private final FineractRepository apiRepository;
+    private final PreferencesHelper preferencesHelper;
 
     @Inject
-    public AuthenticateUser(FineractRepository apiRepository) {
+    public AuthenticateUser(FineractRepository apiRepository, PreferencesHelper preferencesHelper) {
         this.apiRepository = apiRepository;
+        this.preferencesHelper = preferencesHelper;
     }
 
 
@@ -44,9 +49,24 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
 
                     @Override
                     public void onNext(User user) {
+                        saveUserDetails(user);
                         getUseCaseCallback().onSuccess(new ResponseValue(user));
                     }
                 });
+
+    }
+
+    private void saveUserDetails(User user) {
+        final String userName = user.getUserName();
+        final long userID = user.getUserId();
+        final String authToken = Constants.BASIC +
+                user.getAuthenticationKey();
+
+        preferencesHelper.saveUsername(userName);
+        preferencesHelper.setUserId(userID);
+        preferencesHelper.saveToken(authToken);
+
+        FineractApiManager.createService(preferencesHelper.getToken());
 
     }
 

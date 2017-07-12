@@ -39,7 +39,6 @@ public class UserEntity {
                 ", userId=" + userId +
                 ", base64EncodedAuthenticationKey='" + base64EncodedAuthenticationKey + '\'' +
                 ", authenticated=" + authenticated +
-                ", permissions=" + permissions +
                 '}';
     }
 }

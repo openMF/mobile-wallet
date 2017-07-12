@@ -31,25 +31,16 @@ public class GenerateQr extends UseCase<GenerateQr.RequestValues, GenerateQr.Res
     protected void executeUseCase(GenerateQr.RequestValues requestValues) {
 
         try {
-            JSONObject qrData = new JSONObject();
-            qrData.put("data", requestValues.data);
-            qrData.put("amount", requestValues.amount);
+            Bitmap bitmap = encodeAsBitmap(requestValues.data);
 
-            try {
-                Bitmap bitmap = encodeAsBitmap(qrData.toString());
-
-                if (bitmap != null) {
-                    getUseCaseCallback().onSuccess(new ResponseValue(bitmap));
-                } else {
-                    getUseCaseCallback().onError("Error occurred");
-                }
-
-            } catch (WriterException e) {
-               getUseCaseCallback().onError("Failed to write data to qr");
+            if (bitmap != null) {
+                getUseCaseCallback().onSuccess(new ResponseValue(bitmap));
+            } else {
+                getUseCaseCallback().onError("Error occurred");
             }
 
-        } catch (JSONException e) {
-            getUseCaseCallback().onError("Failed to create json data");
+        } catch (WriterException e) {
+            getUseCaseCallback().onError("Failed to write data to qr");
         }
     }
 
@@ -78,11 +69,9 @@ public class GenerateQr extends UseCase<GenerateQr.RequestValues, GenerateQr.Res
     public static final class RequestValues implements UseCase.RequestValues {
 
         private final String data;
-        private final int amount;
 
-        public RequestValues(String data, int amount) {
-          this.data = data;
-          this.amount = amount;
+        public RequestValues(String data) {
+            this.data = data;
         }
     }
 

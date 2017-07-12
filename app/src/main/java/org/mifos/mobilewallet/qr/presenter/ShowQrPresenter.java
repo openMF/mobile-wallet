@@ -33,9 +33,9 @@ public class ShowQrPresenter implements QrContract.ShowQrPresenter {
     }
 
     @Override
-    public void generateQr(String data, int amount) {
+    public void generateQr(String data) {
 
-        mUsecaseHandler.execute(generateQr, new GenerateQr.RequestValues(data, amount), new UseCase.UseCaseCallback<GenerateQr.ResponseValue>() {
+        mUsecaseHandler.execute(generateQr, new GenerateQr.RequestValues(data), new UseCase.UseCaseCallback<GenerateQr.ResponseValue>() {
             @Override
             public void onSuccess(GenerateQr.ResponseValue response) {
                 mShowQrView.showGeneratedQr(response.getBitmap());

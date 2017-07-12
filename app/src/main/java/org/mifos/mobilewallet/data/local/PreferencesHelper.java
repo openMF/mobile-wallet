@@ -18,7 +18,10 @@ public class PreferencesHelper {
 
     private static final String TOKEN = "preferences_token";
     private static final String NAME = "preferences_name";
+    private static final String USERNAME = "preferences_user_name";
     private static final String EMAIL = "preferences_email";
+    private static final String CLIENT_ID = "preferences_client";
+    private static final String USER_ID = "preferences_user_id";
 
 
     private SharedPreferences sharedPreferences;
@@ -77,12 +80,36 @@ public class PreferencesHelper {
         return getString(NAME, "");
     }
 
+    public void saveUsername(String name) {
+        putString(USERNAME, name);
+    }
+
+    public String getUsername() {
+        return getString(USERNAME, "");
+    }
+
     public void saveEmail(String email) {
         putString(EMAIL, email);
     }
 
     public String getEmail() {
         return getString(EMAIL, "");
+    }
+
+    public long getUserId() {
+        return getLong(USER_ID, -1);
+    }
+
+    public void setUserId(long id) {
+        putLong(USER_ID, id);
+    }
+
+    public void setClientId(long clientId) {
+        putLong(CLIENT_ID, clientId);
+    }
+
+    public long getClientId() {
+        return getLong(CLIENT_ID, 1);
     }
 
 

@@ -12,9 +12,12 @@ import android.widget.EditText;
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.core.BaseActivity;
 import org.mifos.mobilewallet.core.BaseFragment;
+import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.invoice.InvoiceContract;
-import org.mifos.mobilewallet.invoice.InvoicePresenter;
+import org.mifos.mobilewallet.invoice.domain.model.Invoice;
+import org.mifos.mobilewallet.invoice.presenter.InvoicePresenter;
 import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
+import org.mifos.mobilewallet.utils.DateHelper;
 import org.mifos.mobilewallet.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.utils.Utils;
 
@@ -45,7 +48,11 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
     @Inject
     PaymentMethodAdpater paymentMethodAdpater;
 
+    @Inject
+    PreferencesHelper preferencesHelper;
+
     View rootView;
+    InvoiceCallback invoiceCallback;
 
     public static InvoiceFragment newInstance() {
         InvoiceFragment fragment = new InvoiceFragment();
@@ -66,7 +73,7 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
                              @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_invoice, container, false);
 
-        setToolbarTitle("Invoice");
+        setToolbarTitle("Create Invoice");
         ButterKnife.bind(this, rootView);
 
         mPresenter.attachView(this);
@@ -103,17 +110,29 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
             case 1:
                 paymentMethodAdpater.setFocused(position);
                 AadharPaymentFragment aadharPaymentFragment = AadharPaymentFragment.newInstance();
-                getChildFragmentManager().beginTransaction().replace(R.id.container, aadharPaymentFragment).commit();
+                getChildFragmentManager().beginTransaction().replace(R.id.container,
+                        aadharPaymentFragment).commit();
                 break;
             case 2:
                 paymentMethodAdpater.setFocused(position);
                 UpiPaymentFragment upiPaymentFragment = UpiPaymentFragment.newInstance();
-                getChildFragmentManager().beginTransaction().replace(R.id.container, upiPaymentFragment).commit();
+                getChildFragmentManager().beginTransaction().replace(R.id.container,
+                        upiPaymentFragment).commit();
                 break;
             case 3:
                 paymentMethodAdpater.setFocused(position);
                 CardPaymentFragment cardPaymentFragment = CardPaymentFragment.newInstance();
-                getChildFragmentManager().beginTransaction().replace(R.id.container, cardPaymentFragment).commit();
+                getChildFragmentManager().beginTransaction().replace(R.id.container,
+                        cardPaymentFragment).commit();
+                break;
+            case 4:
+            case 5:
+            case 6:
+                paymentMethodAdpater.setFocused(position);
+                ExternalPaymentFragment externalPaymentFragment =
+                        ExternalPaymentFragment.newInstance();
+                getChildFragmentManager().beginTransaction().replace(R.id.container,
+                        externalPaymentFragment).commit();
                 break;
 
         }
@@ -129,9 +148,32 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
     }
 
     @Override
+    public void invoiceCreated(Invoice invoice) {
+        invoiceCallback.invoiceCreated(invoice);
+    }
+
+    @Override
     public void showPaymentMethods(List<PaymentMethod> methods) {
         paymentMethodAdpater.setData(methods);
         rvPaymentMethods.scrollBy(Utils.dp2px(getActivity(), 120), 0);
         showPaymentMethod(1);
+    }
+
+    public void createInvoice(InvoiceCallback invoiceCallback) {
+        this.invoiceCallback = invoiceCallback;
+        Invoice invoice = new Invoice();
+        invoice.setAmount(getInvoiceAmount());
+        invoice.setStatus(0);
+        invoice.setDate(DateHelper.getDateAsStringFromLong(System.currentTimeMillis()));
+        invoice.setInvoiceId(String.valueOf(System.currentTimeMillis()));
+        invoice.setMerchantId(preferencesHelper.getClientId());
+        invoice.setAccountId(923);
+        mPresenter.createInvoice(invoice);
+    }
+
+
+    public interface InvoiceCallback {
+
+        void invoiceCreated(Invoice invoice);
     }
 }

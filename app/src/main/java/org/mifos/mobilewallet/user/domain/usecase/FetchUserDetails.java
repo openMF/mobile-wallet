@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.user.domain.usecase;
 
 import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.data.local.LocalRepository;
-import org.mifos.mobilewallet.home.domain.model.UserDetails;
+import org.mifos.mobilewallet.home.domain.model.ClientDetails;
 
 import javax.inject.Inject;
 
@@ -38,13 +38,13 @@ public class FetchUserDetails extends UseCase<FetchUserDetails.RequestValues,
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private final UserDetails user;
+        private final ClientDetails user;
 
-        public ResponseValue(UserDetails user) {
+        public ResponseValue(ClientDetails user) {
             this.user = user;
         }
 
-        public UserDetails getUserDetails() {
+        public ClientDetails getUserDetails() {
             return user;
         }
     }

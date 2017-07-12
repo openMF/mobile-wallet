@@ -7,9 +7,7 @@ package org.mifos.mobilewallet.auth.domain.model;
 public class User {
     private long userId;
     private String username;
-    private String firstname;
-    private String lastname;
-    private String email;
+    private String authenticationKey;
 
     public User() {}
 
@@ -29,28 +27,11 @@ public class User {
         this.userId = userId;
     }
 
-
-    public String getLastname() {
-        return lastname;
+    public String getAuthenticationKey() {
+        return authenticationKey;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
+    public void setAuthenticationKey(String authenticationKey) {
+        this.authenticationKey = authenticationKey;
     }
 }

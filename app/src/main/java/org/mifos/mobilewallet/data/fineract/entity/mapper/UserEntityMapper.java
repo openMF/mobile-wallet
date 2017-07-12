@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.data.fineract.entity.mapper;
 
 import org.mifos.mobilewallet.auth.domain.model.User;
-import org.mifos.mobilewallet.data.fineract.entity.UserDetailsEntity;
+import org.mifos.mobilewallet.data.fineract.entity.UserEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -16,15 +16,13 @@ public class UserEntityMapper {
     @Inject
     public UserEntityMapper() {}
 
-    public User transform(UserDetailsEntity userEntity) {
+    public User transform(UserEntity userEntity) {
         User user = new User();
 
         if (userEntity != null) {
             user.setUserId(userEntity.getUserId());
             user.setUserName(userEntity.getUserName());
-            user.setEmail(userEntity.getEmail());
-            user.setFirstname(userEntity.getFirstname());
-            user.setLastname(userEntity.getLastname());
+            user.setAuthenticationKey(userEntity.getBase64EncodedAuthenticationKey());
 
         }
         return user;
