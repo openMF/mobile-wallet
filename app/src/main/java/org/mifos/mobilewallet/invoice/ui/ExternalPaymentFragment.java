@@ -81,12 +81,12 @@ public class ExternalPaymentFragment extends Fragment {
     private String createQRStringData(Invoice invoice) {
         Uri.Builder builder = new Uri.Builder();
         builder.scheme("http")
-                .encodedAuthority("139.59.14.31:80")
+                .encodedAuthority("139.59.14.31")
                 .appendPath("invoice")
-                .appendPath("pay")
                 .appendQueryParameter("invoiceid", invoice.getInvoiceId())
-                .appendQueryParameter("accountid", String.valueOf(invoice.getAccountId()))
-                .appendQueryParameter("merchantid", String.valueOf(invoice.getMerchantId())) ;
+                .appendQueryParameter("merchantid", String.valueOf(invoice.getMerchantId()))
+                .appendQueryParameter("amount", String.valueOf(Math.round(invoice.getAmount())))
+                .appendQueryParameter("accountid", String.valueOf(invoice.getAccountId()));
        return builder.build().toString();
     }
 }
