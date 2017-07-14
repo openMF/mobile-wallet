@@ -36,7 +36,7 @@ ext {
     buildToolsVersion = '25.0.2'
 
     // App dependencies
-    supportLibraryVersion = '25.3.1'
+    supportLibraryVersion = '25.4.0'
     daggerVersion = '2.11'
     retrofitVersion = '2.2.0'
     okHttp3Version = '3.6.0'
