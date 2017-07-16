@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.data.rbl.api;
 
 import org.mifos.mobilewallet.BuildConfig;
+import org.mifos.mobilewallet.data.rbl.api.services.AadharService;
 import org.mifos.mobilewallet.data.rbl.api.services.PanService;
 
 import okhttp3.OkHttpClient;
@@ -21,6 +22,7 @@ public class RblApiManager {
 
     private static Retrofit retrofit;
     private static PanService panApi;
+    private static AadharService aadharApi;
 
     public RblApiManager() {
         createService();
@@ -28,6 +30,7 @@ public class RblApiManager {
 
     private static void init() {
         panApi = createApi(PanService.class);
+        aadharApi = createApi(AadharService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
@@ -55,6 +58,10 @@ public class RblApiManager {
 
     public PanService getPanApi() {
         return panApi;
+    }
+
+    public AadharService getAadharApi() {
+        return aadharApi;
     }
 
 }

@@ -70,12 +70,18 @@ public interface AuthContract {
 
         void openAddAccount();
         void showPanStatus(boolean status);
+        void showAadharOtpSent();
+        void showAadharStatus(boolean status);
+        void showAadharValid(boolean status);
     }
 
     interface BusinessDetailsPresenter extends BasePresenter {
 
         void registerDetails();
         void verifyPan(String number);
+        void verifyAadhar(String number);
+        void generateAadharOtp();
+        void verifyAadharOtp(String otp);
     }
 
     interface BankAccountView extends BaseView<BankAccountPresenter> {

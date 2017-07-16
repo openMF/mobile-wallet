@@ -4,9 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -50,8 +48,14 @@ public class BusinessDetailsActivity extends BaseActivity
     @BindView(R.id.btn_add_pan)
     Button btnAddPan;
 
+    @BindView(R.id.btn_add_aadhar)
+    Button btnAadhar;
+
     @BindView(R.id.tv_pan)
     TextView tvPan;
+
+    @BindView(R.id.tv_aadhar)
+    TextView tvAadhar;
 
     @BindView(R.id.root_layout)
     RelativeLayout rootLayout;
@@ -59,8 +63,12 @@ public class BusinessDetailsActivity extends BaseActivity
     @BindView(R.id.iv_pan_status)
     ImageView ivPanStatus;
 
+    @BindView(R.id.iv_aadhar_status)
+    ImageView ivAadharStatus;
+
     private ProgressDialog pDialog;
     private String panNumber;
+    private String aadharNumber;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -76,15 +84,6 @@ public class BusinessDetailsActivity extends BaseActivity
         mPresenter.attachView(this);
 
         slider.getSeekBar().setEnabled(false);
-
-        btnAddPan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                VerifyPanDialog panDialog = new VerifyPanDialog();
-                panDialog.show(getSupportFragmentManager(), "Pan dialog");
-            }
-        });
-
 
     }
 
@@ -109,6 +108,18 @@ public class BusinessDetailsActivity extends BaseActivity
     @OnClick(R.id.btn_next)
     public void nextClicked() {
         mBusinessDetailsPresenter.registerDetails();
+    }
+
+    @OnClick(R.id.btn_add_pan)
+    public void addPanClicked(){
+        VerifyPanDialog panDialog = new VerifyPanDialog();
+        panDialog.show(getSupportFragmentManager(), "Pan dialog");
+    }
+
+    @OnClick(R.id.btn_add_aadhar)
+    public void addAadharClicked() {
+        VerifyAadharDialog aadharDialog = new VerifyAadharDialog();
+        aadharDialog.show(getSupportFragmentManager(), "Aadhar dialog");
     }
 
     @Override
@@ -143,6 +154,61 @@ public class BusinessDetailsActivity extends BaseActivity
 
     }
 
+    @Override
+    public void showAadharOtpSent() {
+        if (pDialog != null) {
+            pDialog.hide();
+        }
+        SmsOtpDialog otpDialog = new SmsOtpDialog();
+        otpDialog.show(getSupportFragmentManager(), "Otp dialog");
+
+        tvAadhar.setText(aadharNumber);
+        ivAadharStatus.setBackgroundResource(R.drawable.ic_done_green);
+    }
+
+    @Override
+    public void showAadharValid(boolean status) {
+        if (status) {
+            if (pDialog != null) {
+                pDialog.setMessage("Sending OTP to the mobile number linked with this Aadhar");
+            }
+            mBusinessDetailsPresenter.generateAadharOtp();
+        } else {
+            if (pDialog != null) {
+                pDialog.hide();
+            }
+            Snackbar snackbar = Snackbar
+                    .make(rootLayout, "", Snackbar.LENGTH_SHORT);
+            snackbar.setText("Invalid Aadhar number");
+            ivAadharStatus.setBackgroundResource(R.drawable.ic_close);
+            tvAadhar.setText(aadharNumber);
+            snackbar.show();
+
+        }
+    }
+
+
+    @Override
+    public void showAadharStatus(boolean status) {
+        if (pDialog != null) {
+            pDialog.hide();
+        }
+        Snackbar snackbar = Snackbar
+                .make(rootLayout, "", Snackbar.LENGTH_SHORT);
+
+        if (status) {
+            snackbar.setText("Aadhar number successfully verified");
+            ivAadharStatus.setBackgroundResource(R.drawable.ic_done_green);
+            tvAadhar.setText(aadharNumber);
+        } else {
+            snackbar.setText("Unable to verify Aadhar number.");
+            ivAadharStatus.setBackgroundResource(R.drawable.ic_close);
+            tvAadhar.setText(aadharNumber);
+        }
+
+        snackbar.show();
+    }
+
     public void verifyPan(String number) {
         if (pDialog == null) {
             pDialog = new ProgressDialog(this);
@@ -152,5 +218,19 @@ public class BusinessDetailsActivity extends BaseActivity
 
         this.panNumber = number;
         mBusinessDetailsPresenter.verifyPan(number);
+    }
+
+    public void verifyAadhar(String number) {
+        if (pDialog == null) {
+            pDialog = new ProgressDialog(this);
+        }
+
+        pDialog.setMessage("Verifying Aadhar number");
+        pDialog.show();
+
+        this.aadharNumber = number;
+        mBusinessDetailsPresenter.verifyAadhar(number);
+
+
     }
 }

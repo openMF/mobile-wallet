@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.auth.presenter;
 
 import org.mifos.mobilewallet.auth.AuthContract;
+import org.mifos.mobilewallet.auth.domain.usecase.VerifyAadharDetails;
 import org.mifos.mobilewallet.core.BaseView;
 import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.core.UseCaseHandler;
@@ -19,6 +20,9 @@ public class BusinessDetailsPresenter implements AuthContract.BusinessDetailsPre
 
     @Inject
     VerifyPanDetails verifyPanDetails;
+
+    @Inject
+    VerifyAadharDetails verifyAadharDetails;
 
     @Inject
     public BusinessDetailsPresenter(UseCaseHandler useCaseHandler) {
@@ -44,6 +48,54 @@ public class BusinessDetailsPresenter implements AuthContract.BusinessDetailsPre
                     @Override
                     public void onSuccess(VerifyPanDetails.ResponseValue response) {
                         mBusinessDetailsView.showPanStatus(response.isStatus());
+                    }
+
+                    @Override
+                    public void onError(String message) {
+
+                    }
+                });
+    }
+
+    @Override
+    public void verifyAadhar(String number) {
+        mUsecaseHandler.execute(verifyAadharDetails, new VerifyAadharDetails.RequestValues(number, 0),
+                new UseCase.UseCaseCallback<VerifyAadharDetails.ResponseValue>() {
+            @Override
+            public void onSuccess(VerifyAadharDetails.ResponseValue response) {
+                mBusinessDetailsView.showAadharValid(response.isStatus());
+            }
+
+            @Override
+            public void onError(String message) {
+
+            }
+        });
+    }
+
+    @Override
+    public void generateAadharOtp() {
+        mUsecaseHandler.execute(verifyAadharDetails, new VerifyAadharDetails.RequestValues("", 1),
+                new UseCase.UseCaseCallback<VerifyAadharDetails.ResponseValue>() {
+                    @Override
+                    public void onSuccess(VerifyAadharDetails.ResponseValue response) {
+                        mBusinessDetailsView.showAadharOtpSent();
+                    }
+
+                    @Override
+                    public void onError(String message) {
+
+                    }
+                });
+    }
+
+    @Override
+    public void verifyAadharOtp(String otp) {
+        mUsecaseHandler.execute(verifyAadharDetails, new VerifyAadharDetails.RequestValues(otp, 2),
+                new UseCase.UseCaseCallback<VerifyAadharDetails.ResponseValue>() {
+                    @Override
+                    public void onSuccess(VerifyAadharDetails.ResponseValue response) {
+                        mBusinessDetailsView.showAadharStatus(response.isStatus());
                     }
 
                     @Override

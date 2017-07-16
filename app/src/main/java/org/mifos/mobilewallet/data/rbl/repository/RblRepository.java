@@ -16,6 +16,7 @@ import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
+import rx.Observable;
 import rx.functions.Func1;
 
 /**
@@ -65,6 +66,19 @@ public class RblRepository {
                         }
                     }
                 });
+    }
+
+    //TODO Implement aadhar apis from rbl
+    public rx.Observable<Boolean> verifyAadharNumber(String number) {
+        return rx.Observable.just(true);
+    }
+
+    public rx.Observable<Boolean> generateAadharOtp() {
+        return rx.Observable.just(true);
+    }
+
+    public Observable<Boolean> verifyAadharOtp(String otp) {
+        return Observable.just(true);
     }
 
     private String createTranId() {

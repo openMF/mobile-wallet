@@ -45,6 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tv_qr_data"
+            android:autoLink="web"
             android:layout_marginTop="@dimen/value_20dp"/>
 
         </LinearLayout>
