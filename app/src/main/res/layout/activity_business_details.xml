@@ -215,6 +215,53 @@
                 </android.support.v7.widget.CardView>
 
 
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="1dp"
+                    app:cardUseCompatPadding="true">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/value_10dp"
+                        android:layout_marginRight="@dimen/value_10dp"
+                        android:layout_marginTop="@dimen/value_15dp"
+                        android:layout_marginBottom="@dimen/value_15dp">
+
+                        <TextView
+                            android:id="@+id/tv_aadhar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Aadhar numbeer"
+                            android:focusable="true"
+                            android:layout_alignParentLeft="true"
+                            android:focusableInTouchMode="true"
+                            android:layout_centerVertical="true"/>
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/iv_aadhar_status"
+                            android:layout_toRightOf="@id/tv_aadhar"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="@dimen/value_15dp"/>
+
+                        <Button
+                            android:id="@+id/btn_add_aadhar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="35dp"
+                            android:text="Add"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="@dimen/value_10dp"
+                            android:background="@color/colorPrimary"
+                            android:textColor="@android:color/white"
+                            android:textSize="13sp"/>
+
+                    </RelativeLayout>
+                </android.support.v7.widget.CardView>
+
+
                 <Button
                     android:id="@+id/btn_next"
                     android:background="@drawable/button_round_primary"
