@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import org.mifos.mobilewallet.R;
-import org.mifos.mobilewallet.core.BaseActivity;
-import org.mifos.mobilewallet.core.BaseFragment;
+import org.mifos.mobilewallet.base.BaseActivity;
+import org.mifos.mobilewallet.base.BaseFragment;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.invoice.InvoiceContract;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;

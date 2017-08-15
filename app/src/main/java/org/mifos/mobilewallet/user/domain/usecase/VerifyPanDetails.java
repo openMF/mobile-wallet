@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.user.domain.usecase;
 
-import org.mifos.mobilewallet.core.UseCase;
+import org.mifos.mobilewallet.base.UseCase;
 import org.mifos.mobilewallet.data.rbl.repository.RblRepository;
 
 import javax.inject.Inject;

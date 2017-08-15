@@ -1,8 +1,8 @@
 package org.mifos.mobilewallet.user.presenter;
 
-import org.mifos.mobilewallet.core.BaseView;
-import org.mifos.mobilewallet.core.UseCase;
-import org.mifos.mobilewallet.core.UseCaseHandler;
+import org.mifos.mobilewallet.base.BaseView;
+import org.mifos.mobilewallet.base.UseCase;
+import org.mifos.mobilewallet.base.UseCaseHandler;
 import org.mifos.mobilewallet.user.UserContract;
 import org.mifos.mobilewallet.user.domain.usecase.FetchUserDetails;
 import org.mifos.mobilewallet.user.domain.usecase.VerifyPanDetails;

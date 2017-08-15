@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.auth.domain.usecase;
 
-import org.mifos.mobilewallet.core.UseCase;
+import org.mifos.mobilewallet.base.UseCase;
 import org.mifos.mobilewallet.data.fineract.repository.FineractRepository;
 
 import javax.inject.Inject;

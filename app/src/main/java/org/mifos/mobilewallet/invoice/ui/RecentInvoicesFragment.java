@@ -15,8 +15,8 @@ import android.widget.Toast;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.account.domain.model.Account;
-import org.mifos.mobilewallet.core.BaseActivity;
-import org.mifos.mobilewallet.core.BaseFragment;
+import org.mifos.mobilewallet.base.BaseActivity;
+import org.mifos.mobilewallet.base.BaseFragment;
 import org.mifos.mobilewallet.invoice.InvoiceContract;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
 import org.mifos.mobilewallet.invoice.presenter.RecentInvoicePresenter;

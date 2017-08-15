@@ -58,5 +58,4 @@ public class MifosWalletApp extends Application {
     public void setComponent(ApplicationComponent applicationComponent) {
         this.applicationComponent = applicationComponent;
     }
-
 }

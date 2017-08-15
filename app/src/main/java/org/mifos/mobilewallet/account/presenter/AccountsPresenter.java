@@ -2,9 +2,9 @@ package org.mifos.mobilewallet.account.presenter;
 
 import org.mifos.mobilewallet.account.AccountContract;
 import org.mifos.mobilewallet.account.domain.usecase.FetchAccounts;
-import org.mifos.mobilewallet.core.BaseView;
-import org.mifos.mobilewallet.core.UseCase;
-import org.mifos.mobilewallet.core.UseCaseHandler;
+import org.mifos.mobilewallet.base.BaseView;
+import org.mifos.mobilewallet.base.UseCase;
+import org.mifos.mobilewallet.base.UseCaseHandler;
 
 import javax.inject.Inject;
 

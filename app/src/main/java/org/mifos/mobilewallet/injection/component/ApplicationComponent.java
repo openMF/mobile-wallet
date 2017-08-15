@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.injection.component;
 import android.app.Application;
 import android.content.Context;
 
-import org.mifos.mobilewallet.core.UseCaseHandler;
+import org.mifos.mobilewallet.base.UseCaseHandler;
 import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;

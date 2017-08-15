@@ -1,8 +1,8 @@
 package org.mifos.mobilewallet.invoice;
 
 import org.mifos.mobilewallet.account.domain.model.Account;
-import org.mifos.mobilewallet.core.BasePresenter;
-import org.mifos.mobilewallet.core.BaseView;
+import org.mifos.mobilewallet.base.BasePresenter;
+import org.mifos.mobilewallet.base.BaseView;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
 import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
 

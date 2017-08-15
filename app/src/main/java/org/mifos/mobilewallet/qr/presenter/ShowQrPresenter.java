@@ -1,8 +1,8 @@
 package org.mifos.mobilewallet.qr.presenter;
 
-import org.mifos.mobilewallet.core.BaseView;
-import org.mifos.mobilewallet.core.UseCase;
-import org.mifos.mobilewallet.core.UseCaseHandler;
+import org.mifos.mobilewallet.base.BaseView;
+import org.mifos.mobilewallet.base.UseCase;
+import org.mifos.mobilewallet.base.UseCaseHandler;
 import org.mifos.mobilewallet.qr.QrContract;
 import org.mifos.mobilewallet.qr.domain.usecase.GenerateQr;
 

@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.R;
-import org.mifos.mobilewallet.core.BaseActivity;
+import org.mifos.mobilewallet.base.BaseActivity;
 import org.mifos.mobilewallet.home.domain.model.ClientDetails;
 import org.mifos.mobilewallet.user.UserContract;
 import org.mifos.mobilewallet.user.presenter.UserDetailsPresenter;

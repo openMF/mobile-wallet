@@ -1,14 +1,10 @@
 package org.mifos.mobilewallet.home.domain.usecase;
 
-import org.mifos.mobilewallet.auth.domain.model.User;
-import org.mifos.mobilewallet.auth.domain.usecase.AuthenticateUser;
-import org.mifos.mobilewallet.core.UseCase;
-import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
+import org.mifos.mobilewallet.base.UseCase;
 import org.mifos.mobilewallet.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.home.domain.model.ClientDetails;
-import org.mifos.mobilewallet.utils.Constants;
 
 import javax.inject.Inject;
 

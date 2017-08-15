@@ -2,8 +2,8 @@ package org.mifos.mobilewallet.qr;
 
 import android.graphics.Bitmap;
 
-import org.mifos.mobilewallet.core.BasePresenter;
-import org.mifos.mobilewallet.core.BaseView;
+import org.mifos.mobilewallet.base.BasePresenter;
+import org.mifos.mobilewallet.base.BaseView;
 
 /**
  * Created by naman on 8/7/17.

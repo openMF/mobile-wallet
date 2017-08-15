@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.auth.domain.usecase;
 
 import org.mifos.mobilewallet.auth.domain.model.User;
-import org.mifos.mobilewallet.core.UseCase;
+import org.mifos.mobilewallet.base.UseCase;
 import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;

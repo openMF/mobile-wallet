@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import org.mifos.mobilewallet.R;
-import org.mifos.mobilewallet.core.BaseActivity;
+import org.mifos.mobilewallet.base.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

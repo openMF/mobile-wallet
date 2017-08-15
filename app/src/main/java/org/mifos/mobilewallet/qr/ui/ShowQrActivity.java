@@ -7,10 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.R;
-import org.mifos.mobilewallet.auth.AuthContract;
-import org.mifos.mobilewallet.auth.presenter.AddAccountPresenter;
-import org.mifos.mobilewallet.auth.ui.AddAccountActivity;
-import org.mifos.mobilewallet.core.BaseActivity;
+import org.mifos.mobilewallet.base.BaseActivity;
 import org.mifos.mobilewallet.qr.QrContract;
 import org.mifos.mobilewallet.qr.presenter.ShowQrPresenter;
 import org.mifos.mobilewallet.utils.Constants;

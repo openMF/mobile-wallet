@@ -3,8 +3,8 @@ package org.mifos.mobilewallet.injection.module;
 import android.app.Application;
 import android.content.Context;
 
-import org.mifos.mobilewallet.core.UseCaseHandler;
-import org.mifos.mobilewallet.core.UseCaseThreadPoolScheduler;
+import org.mifos.mobilewallet.base.UseCaseHandler;
+import org.mifos.mobilewallet.base.UseCaseThreadPoolScheduler;
 import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.data.pixiepay.api.PixiePayApiManager;

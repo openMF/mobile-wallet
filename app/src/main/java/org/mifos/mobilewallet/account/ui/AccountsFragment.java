@@ -14,8 +14,8 @@ import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.account.AccountContract;
 import org.mifos.mobilewallet.account.domain.model.Account;
 import org.mifos.mobilewallet.account.presenter.AccountsPresenter;
-import org.mifos.mobilewallet.core.BaseActivity;
-import org.mifos.mobilewallet.core.BaseFragment;
+import org.mifos.mobilewallet.base.BaseActivity;
+import org.mifos.mobilewallet.base.BaseFragment;
 import org.mifos.mobilewallet.utils.RecyclerItemClickListener;
 
 import java.util.List;
