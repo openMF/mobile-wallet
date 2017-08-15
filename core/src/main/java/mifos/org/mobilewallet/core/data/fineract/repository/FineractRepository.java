@@ -8,15 +8,19 @@ import javax.inject.Singleton;
 import mifos.org.mobilewallet.core.data.fineract.api.FineractApiManager;
 import mifos.org.mobilewallet.core.data.fineract.entity.Page;
 import mifos.org.mobilewallet.core.data.fineract.entity.UserEntity;
+import mifos.org.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import mifos.org.mobilewallet.core.data.fineract.entity.client.Client;
 import mifos.org.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
 import mifos.org.mobilewallet.core.data.fineract.entity.mapper.AccountMapper;
 import mifos.org.mobilewallet.core.data.fineract.entity.mapper.ClientDetailsMapper;
+import mifos.org.mobilewallet.core.data.fineract.entity.mapper.TransactionMapper;
 import mifos.org.mobilewallet.core.data.fineract.entity.mapper.UserEntityMapper;
 import mifos.org.mobilewallet.core.data.local.PreferencesHelper;
 import mifos.org.mobilewallet.core.domain.model.Account;
 import mifos.org.mobilewallet.core.domain.model.ClientDetails;
+import mifos.org.mobilewallet.core.domain.model.Transaction;
 import mifos.org.mobilewallet.core.domain.model.User;
+import mifos.org.mobilewallet.core.injection.PerActivity;
 import mifos.org.mobilewallet.core.utils.Constants;
 import rx.Observable;
 import rx.functions.Func1;
@@ -40,8 +44,8 @@ public class FineractRepository {
     @Inject
     AccountMapper accountMapper;
 
-//    @Inject
-//    InvoiceMapper invoiceMapper;
+    @Inject
+    TransactionMapper transactionMapper;
 
     @Inject
     public FineractRepository(FineractApiManager fineractApiManager,
@@ -85,16 +89,16 @@ public class FineractRepository {
         });
     }
 
-//    public Observable<List<Invoice>> getAccountTransactions(long accountId) {
-//        return fineractApiManager
-//                .getSavingAccountsListApi().getSavingsWithAssociations(accountId,
-//                        Constants.TRANSACTIONS).map(new Func1<SavingsWithAssociations,
-//                        List<Invoice>>() {
-//                    @Override
-//                    public List<Invoice> call(SavingsWithAssociations savingsWithAssociations) {
-//                        return invoiceMapper.transformInvoiceList(savingsWithAssociations);
-//                    }
-//                });
-//    }
+    public Observable<List<Transaction>> getAccountTransactions(long accountId) {
+        return fineractApiManager
+                .getSavingAccountsListApi().getSavingsWithAssociations(accountId,
+                        Constants.TRANSACTIONS).map(new Func1<SavingsWithAssociations,
+                        List<Transaction>>() {
+                    @Override
+                    public List<Transaction> call(SavingsWithAssociations savingsWithAssociations) {
+                        return transactionMapper.transformTransactionList(savingsWithAssociations);
+                    }
+                });
+    }
 
 }

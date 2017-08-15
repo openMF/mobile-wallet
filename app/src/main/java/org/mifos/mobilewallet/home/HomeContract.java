@@ -2,7 +2,8 @@ package org.mifos.mobilewallet.home;
 
 import org.mifos.mobilewallet.base.BasePresenter;
 import org.mifos.mobilewallet.base.BaseView;
-import org.mifos.mobilewallet.home.domain.model.ClientDetails;
+
+import mifos.org.mobilewallet.core.domain.model.ClientDetails;
 
 /**
  * Created by naman on 17/6/17.

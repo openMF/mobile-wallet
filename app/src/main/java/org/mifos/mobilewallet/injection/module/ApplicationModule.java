@@ -3,11 +3,7 @@ package org.mifos.mobilewallet.injection.module;
 import android.app.Application;
 import android.content.Context;
 
-import org.mifos.mobilewallet.base.UseCaseHandler;
-import org.mifos.mobilewallet.base.UseCaseThreadPoolScheduler;
-import org.mifos.mobilewallet.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
-import org.mifos.mobilewallet.data.pixiepay.api.PixiePayApiManager;
 import org.mifos.mobilewallet.data.rbl.api.RblApiManager;
 import org.mifos.mobilewallet.injection.ApplicationContext;
 
@@ -15,6 +11,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import mifos.org.mobilewallet.core.base.UseCaseHandler;
+import mifos.org.mobilewallet.core.base.UseCaseThreadPoolScheduler;
+import mifos.org.mobilewallet.core.data.fineract.api.FineractApiManager;
 
 
 @Module
@@ -28,6 +27,12 @@ public class ApplicationModule {
 
     @Provides
     Application provideApplication() {
+        return application;
+    }
+
+    @Provides
+    @mifos.org.mobilewallet.core.injection.ApplicationContext
+    Context provideLibraryContext() {
         return application;
     }
 
@@ -48,16 +53,11 @@ public class ApplicationModule {
         return new FineractApiManager();
     }
 
+
     @Provides
     @Singleton
     RblApiManager provideRblApiManager() {
         return new RblApiManager();
-    }
-
-    @Provides
-    @Singleton
-    PixiePayApiManager providePixiePayApiManager() {
-        return new PixiePayApiManager();
     }
 
     @Provides

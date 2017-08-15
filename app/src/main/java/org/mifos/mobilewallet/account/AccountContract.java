@@ -1,10 +1,11 @@
 package org.mifos.mobilewallet.account;
 
-import org.mifos.mobilewallet.account.domain.model.Account;
 import org.mifos.mobilewallet.base.BasePresenter;
 import org.mifos.mobilewallet.base.BaseView;
 
 import java.util.List;
+
+import mifos.org.mobilewallet.core.domain.model.Account;
 
 /**
  * Created by naman on 11/7/17.

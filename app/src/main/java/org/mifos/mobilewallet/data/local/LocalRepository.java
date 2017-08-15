@@ -4,7 +4,6 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.domain.model.Bank;
-import org.mifos.mobilewallet.home.domain.model.ClientDetails;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
 import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
 
@@ -14,6 +13,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import mifos.org.mobilewallet.core.domain.model.ClientDetails;
+import mifos.org.mobilewallet.core.injection.PerActivity;
+import mifos.org.mobilewallet.core.injection.UserScope;
 import rx.Observable;
 import rx.functions.Func0;
 
@@ -21,7 +23,7 @@ import rx.functions.Func0;
  * Created by naman on 17/6/17.
  */
 
-@Singleton
+@PerActivity
 public class LocalRepository {
 
     private final PreferencesHelper preferencesHelper;

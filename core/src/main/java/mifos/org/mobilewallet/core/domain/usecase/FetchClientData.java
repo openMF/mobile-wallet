@@ -1,13 +1,12 @@
-package org.mifos.mobilewallet.home.domain.usecase;
-
-import org.mifos.mobilewallet.base.UseCase;
-import org.mifos.mobilewallet.data.fineract.repository.FineractRepository;
-import org.mifos.mobilewallet.data.local.LocalRepository;
-import org.mifos.mobilewallet.data.local.PreferencesHelper;
-import org.mifos.mobilewallet.home.domain.model.ClientDetails;
+package mifos.org.mobilewallet.core.domain.usecase;
 
 import javax.inject.Inject;
 
+import mifos.org.mobilewallet.core.base.UseCase;
+import mifos.org.mobilewallet.core.data.fineract.repository.FineractRepository;
+import mifos.org.mobilewallet.core.data.local.LocalRepository;
+import mifos.org.mobilewallet.core.data.local.PreferencesHelper;
+import mifos.org.mobilewallet.core.domain.model.ClientDetails;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

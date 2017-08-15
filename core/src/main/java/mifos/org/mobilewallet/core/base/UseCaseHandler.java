@@ -1,6 +1,8 @@
 package mifos.org.mobilewallet.core.base;
 
 
+import javax.inject.Inject;
+
 /**
  * Runs {@link UseCase}s using a {@link UseCaseScheduler}.
  */

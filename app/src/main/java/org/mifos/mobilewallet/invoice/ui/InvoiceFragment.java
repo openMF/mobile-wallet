@@ -17,7 +17,6 @@ import org.mifos.mobilewallet.invoice.InvoiceContract;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
 import org.mifos.mobilewallet.invoice.presenter.InvoicePresenter;
 import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
-import org.mifos.mobilewallet.utils.DateHelper;
 import org.mifos.mobilewallet.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.utils.Utils;
 
@@ -27,6 +26,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import mifos.org.mobilewallet.core.utils.DateHelper;
 
 /**
  * Created by naman on 17/6/17.

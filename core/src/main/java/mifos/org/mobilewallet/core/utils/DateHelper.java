@@ -1,6 +1,7 @@
-package org.mifos.mobilewallet.utils;
+package mifos.org.mobilewallet.core.utils;
 
 import android.util.Log;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

@@ -1,11 +1,12 @@
 package org.mifos.mobilewallet.home;
 
 import org.mifos.mobilewallet.base.BaseView;
-import org.mifos.mobilewallet.base.UseCase;
-import org.mifos.mobilewallet.base.UseCaseHandler;
-import org.mifos.mobilewallet.home.domain.usecase.FetchClientData;
 
 import javax.inject.Inject;
+
+import mifos.org.mobilewallet.core.base.UseCase;
+import mifos.org.mobilewallet.core.base.UseCaseHandler;
+import mifos.org.mobilewallet.core.domain.usecase.FetchClientData;
 
 /**
  * Created by naman on 17/6/17.

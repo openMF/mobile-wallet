@@ -18,7 +18,6 @@ import org.mifos.mobilewallet.account.ui.AccountsFragment;
 import org.mifos.mobilewallet.base.BaseActivity;
 import org.mifos.mobilewallet.home.HomeContract;
 import org.mifos.mobilewallet.home.HomePresenter;
-import org.mifos.mobilewallet.home.domain.model.ClientDetails;
 import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
 import org.mifos.mobilewallet.invoice.ui.RecentInvoicesFragment;
 import org.mifos.mobilewallet.qr.ui.ShowQrActivity;
@@ -30,6 +29,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import mifos.org.mobilewallet.core.domain.model.ClientDetails;
 
 /**
  * Created by naman on 17/6/17.

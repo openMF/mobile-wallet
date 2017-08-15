@@ -4,10 +4,11 @@ import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.domain.model.Bank;
 import org.mifos.mobilewallet.auth.domain.usecase.FetchBanks;
 import org.mifos.mobilewallet.base.BaseView;
-import org.mifos.mobilewallet.base.UseCase;
-import org.mifos.mobilewallet.base.UseCaseHandler;
 
 import javax.inject.Inject;
+
+import mifos.org.mobilewallet.core.base.UseCase;
+import mifos.org.mobilewallet.core.base.UseCaseHandler;
 
 /**
  * Created by naman on 20/6/17.

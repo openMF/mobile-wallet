@@ -12,6 +12,7 @@ import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import mifos.org.mobilewallet.core.injection.UserScope;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;

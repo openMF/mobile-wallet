@@ -4,6 +4,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import mifos.org.mobilewallet.core.domain.model.ClientDetails;
+import mifos.org.mobilewallet.core.injection.PerActivity;
 
 /**
  * Created by naman on 17/6/17.
