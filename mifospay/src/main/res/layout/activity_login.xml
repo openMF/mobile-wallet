@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="45dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mifos Pay"
+            android:textSize="35sp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColorHint="@android:color/black"
+            android:layout_marginTop="55dp"
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+            <EditText android:id="@+id/et_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Username"
+                android:theme="@style/Theme.AppCompat.Light"
+                android:inputType="textEmailAddress"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="#000000"
+            android:textColorHint="@android:color/black"
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+            <EditText android:id="@+id/et_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:theme="@style/Theme.AppCompat.Light"
+                android:inputType="textPassword"/>
+        </android.support.design.widget.TextInputLayout>
+
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_login"
+        android:text="Login"
+        android:textColor="@color/white"
+        android:layout_marginTop="45dp"
+        android:background="@drawable/button_round_black"/>
+
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_signup"
+            android:text="Signup"
+            android:textColor="@color/white"
+            android:layout_marginTop="45dp"
+            android:background="@drawable/button_round_black"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

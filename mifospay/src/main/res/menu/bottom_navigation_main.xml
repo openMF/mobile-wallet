@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_favorites"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="Wallet"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_schedules"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="Send"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_music"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="Request"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_music2"
+        android:enabled="true"
+        android:icon="@drawable/ic_home"
+        android:title="Profile"
+        app:showAsAction="always" />
+
+</menu>
