@@ -19,6 +19,9 @@ import mifos.org.mobilewallet.core.injection.PerActivity;
 public class AccountMapper {
 
     @Inject
+    CurrencyMapper currencyMapper;
+
+    @Inject
     public AccountMapper() {}
 
     public List<Account> transform(ClientAccounts clientAccounts) {
@@ -32,6 +35,8 @@ public class AccountMapper {
                 account.setName(savingAccount.getProductName());
                 account.setNumber(savingAccount.getAccountNo());
                 account.setId(savingAccount.getId());
+                account.setBalance(savingAccount.getAccountBalance());
+                account.setCurrency(currencyMapper.transform(savingAccount.getCurrency()));
 
                 accountList.add(account);
             }

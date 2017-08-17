@@ -9,7 +9,9 @@ public class Account {
     private String image;
     private String name;
     private String number;
+    private double balance;
     private long id;
+    private Currency currency;
 
     public String getImage() {
         return image;
@@ -41,5 +43,21 @@ public class Account {
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
     }
 }

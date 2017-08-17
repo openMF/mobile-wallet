@@ -11,7 +11,13 @@
         android:layout_width="match_parent"
         android:orientation="vertical">
 
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <include layout="@layout/toolbar"/>
+
+        </android.support.design.widget.AppBarLayout>
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_layout"
@@ -32,6 +38,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
+        app:itemIconTint="@color/black"
+        app:itemTextColor="@color/black"
+        app:theme="@style/Theme.AppCompat.Light"
         app:headerLayout="@layout/nav_drawer_header"
         app:menu="@menu/menu_nav_drawer"/>
 </android.support.v4.widget.DrawerLayout>

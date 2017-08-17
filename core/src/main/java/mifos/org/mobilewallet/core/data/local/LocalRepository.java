@@ -27,4 +27,12 @@ public class LocalRepository {
         return details;
     }
 
+    public long getCurrentClientId() {
+        return preferencesHelper.getClientId();
+    }
+
+    public long getCurrentUserId() {
+        return preferencesHelper.getUserId();
+    }
+
 }

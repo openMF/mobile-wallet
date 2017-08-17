@@ -8,4 +8,11 @@
 
     <color name="white">@android:color/white</color>
     <color name="black">@android:color/black</color>
+
+    <color name="gray">#ffdfdfdf</color>
+    <color name="grey_50">#fafafa</color>
+    <color name="grey_100">#f5f5f5</color>
+    <color name="grey_200">#eeeeee</color>
+    <color name="grey_300">#e0e0e0</color>
+    <color name="grey_900">#212121</color>
 </resources>

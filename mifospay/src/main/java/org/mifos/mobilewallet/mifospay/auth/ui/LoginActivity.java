@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.auth.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.EditText;
@@ -8,6 +9,7 @@ import android.widget.Toast;
 import org.mifos.mobilewallet.mifospay.auth.AuthContract;
 import org.mifos.mobilewallet.mifospay.auth.presenter.LoginPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
+import org.mifos.mobilewallet.mifospay.home.ui.HomeActivity;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import javax.inject.Inject;
@@ -40,7 +42,6 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         super.onCreate(savedInstanceState);
         getActivityComponent().inject(this);
         setContentView(R.layout.activity_login);
-        setToolbarTitle("Mifos Pay");
         ButterKnife.bind(this);
         mPresenter.attachView(this);
 
@@ -62,12 +63,12 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     @Override
     public void loginSuccess() {
         hideProgressDialog();
-//        Utils.hideSoftKeyboard(this);
-//        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-//                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//        startActivity(intent);
-//        finish();
+       Utils.hideSoftKeyboard(this);
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     @Override

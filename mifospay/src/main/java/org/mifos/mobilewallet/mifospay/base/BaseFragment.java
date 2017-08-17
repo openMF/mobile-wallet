@@ -30,6 +30,10 @@ public class BaseFragment extends Fragment {
         callback.hideSwipeProgress();
     }
 
+    protected void replaceFragment(Fragment fragment, int containerId) {
+
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);

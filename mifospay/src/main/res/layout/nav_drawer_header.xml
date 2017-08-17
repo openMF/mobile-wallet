@@ -31,8 +31,8 @@
             android:ellipsize="end"
             android:lines="1"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/white"
-            android:textSize="15sp"/>
+            android:textColor="@color/black"
+            android:textSize="17sp"/>
 
         <TextView
             android:id="@+id/tv_user_email"
@@ -43,7 +43,7 @@
             android:layout_marginTop="3dp"
             android:lines="1"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/white"
+            android:textColor="@color/black"
             android:textSize="11sp"/>
 
     </LinearLayout>

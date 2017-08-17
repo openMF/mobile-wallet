@@ -3,29 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_favorites"
+        android:id="@+id/action_wallet"
         android:enabled="true"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_account_balance_wallet"
         android:title="Wallet"
-        app:showAsAction="always" />
+        app:showAsAction="always|withText" />
     <item
-        android:id="@+id/action_schedules"
+        android:id="@+id/action_send"
         android:enabled="true"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_send"
         android:title="Send"
-        app:showAsAction="always" />
-    <item
-        android:id="@+id/action_music"
-        android:enabled="true"
-        android:icon="@drawable/ic_home"
-        android:title="Request"
-        app:showAsAction="always" />
+        app:showAsAction="always|withText" />
+    <!--<item-->
+        <!--android:id="@+id/action_request"-->
+        <!--android:enabled="true"-->
+        <!--android:icon="@drawable/ic_request"-->
+        <!--android:title="Request"-->
+        <!--app:showAsAction="always|withText" />-->
 
     <item
-        android:id="@+id/action_music2"
+        android:id="@+id/action_profile"
         android:enabled="true"
-        android:icon="@drawable/ic_home"
+        android:icon="@drawable/ic_person"
         android:title="Profile"
-        app:showAsAction="always" />
+        app:showAsAction="always|withText" />
 
 </menu>
