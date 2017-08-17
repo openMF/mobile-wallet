@@ -15,6 +15,8 @@ import mifos.org.mobilewallet.core.data.fineract.entity.mapper.AccountMapper;
 import mifos.org.mobilewallet.core.data.fineract.entity.mapper.ClientDetailsMapper;
 import mifos.org.mobilewallet.core.data.fineract.entity.mapper.TransactionMapper;
 import mifos.org.mobilewallet.core.data.fineract.entity.mapper.UserEntityMapper;
+import mifos.org.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
+import mifos.org.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import mifos.org.mobilewallet.core.data.local.PreferencesHelper;
 import mifos.org.mobilewallet.core.domain.model.Account;
 import mifos.org.mobilewallet.core.domain.model.ClientDetails;
@@ -22,6 +24,7 @@ import mifos.org.mobilewallet.core.domain.model.Transaction;
 import mifos.org.mobilewallet.core.domain.model.User;
 import mifos.org.mobilewallet.core.injection.PerActivity;
 import mifos.org.mobilewallet.core.utils.Constants;
+import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.functions.Func1;
 
@@ -63,6 +66,15 @@ public class FineractRepository {
                     }
                 });
     }
+
+    public Observable<ResponseBody> registerUser(RegisterPayload registerPayload) {
+        return fineractApiManager.getRegistrationAPi().registerUser(registerPayload);
+    }
+
+    public Observable<ResponseBody> verifyUser(UserVerify userVerify) {
+        return fineractApiManager.getRegistrationAPi().verifyUser(userVerify);
+    }
+
 
     public Observable<ClientDetails> getClientDetails() {
         return fineractApiManager.getClientsApi().getClients().flatMap(new Func1<Page<Client>, Observable<ClientDetails>>() {
