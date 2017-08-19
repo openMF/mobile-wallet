@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import mifos.org.mobilewallet.core.base.UseCase;
 import mifos.org.mobilewallet.core.data.fineract.repository.FineractRepository;
-import mifos.org.mobilewallet.core.data.local.PreferencesHelper;
 import mifos.org.mobilewallet.core.domain.model.Account;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -20,19 +19,17 @@ public class FetchAccounts extends UseCase<FetchAccounts.RequestValues,
         FetchAccounts.ResponseValue> {
 
     private final FineractRepository fineractRepository;
-    private final PreferencesHelper preferencesHelper;
 
     @Inject
-    public FetchAccounts(FineractRepository fineractRepository, PreferencesHelper preferencesHelper) {
+    public FetchAccounts(FineractRepository fineractRepository) {
         this.fineractRepository = fineractRepository;
-        this.preferencesHelper = preferencesHelper;
     }
 
 
     @Override
     protected void executeUseCase(FetchAccounts.RequestValues requestValues) {
 
-        fineractRepository.getAccounts()
+        fineractRepository.getAccounts(requestValues.clientId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<List<Account>>() {
@@ -60,9 +57,10 @@ public class FetchAccounts extends UseCase<FetchAccounts.RequestValues,
 
     public static final class RequestValues implements UseCase.RequestValues {
 
+        private final long clientId;
 
-        public RequestValues() {
-
+        public RequestValues(long clientId) {
+            this.clientId = clientId;
         }
     }
 

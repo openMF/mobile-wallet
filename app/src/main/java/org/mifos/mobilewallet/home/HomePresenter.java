@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.home;
 
 import org.mifos.mobilewallet.base.BaseView;
+import org.mifos.mobilewallet.data.local.LocalRepository;
 
 import javax.inject.Inject;
 
@@ -17,12 +18,15 @@ public class HomePresenter implements HomeContract.HomePresenter {
     private HomeContract.HomeView mHomeView;
     private final UseCaseHandler mUsecaseHandler;
 
+    private final LocalRepository localRepository;
+
     @Inject
     FetchClientData fetchClientData;
 
     @Inject
-    public HomePresenter(UseCaseHandler useCaseHandler) {
+    public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
         this.mUsecaseHandler = useCaseHandler;
+        this.localRepository = localRepository;
     }
 
     @Override
@@ -33,12 +37,14 @@ public class HomePresenter implements HomeContract.HomePresenter {
 
     @Override
     public void fetchClientDetails() {
-        mUsecaseHandler.execute(fetchClientData, null,
+        mUsecaseHandler.execute(fetchClientData,
+                new FetchClientData.RequestValues(localRepository.getClientDetails().getClientId()),
                 new UseCase.UseCaseCallback<FetchClientData.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchClientData.ResponseValue response) {
+                        localRepository.saveClientData(response.getUserDetails());
                         if (!response.getUserDetails().getName().equals(""))
-                            mHomeView.showUserDetailsHeader(response.getUserDetails());
+                            mHomeView.showClientDetails(response.getUserDetails());
                     }
 
                     @Override

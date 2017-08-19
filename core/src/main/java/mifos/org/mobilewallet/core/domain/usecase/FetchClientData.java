@@ -4,8 +4,6 @@ import javax.inject.Inject;
 
 import mifos.org.mobilewallet.core.base.UseCase;
 import mifos.org.mobilewallet.core.data.fineract.repository.FineractRepository;
-import mifos.org.mobilewallet.core.data.local.LocalRepository;
-import mifos.org.mobilewallet.core.data.local.PreferencesHelper;
 import mifos.org.mobilewallet.core.domain.model.ClientDetails;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -18,22 +16,18 @@ import rx.schedulers.Schedulers;
 public class FetchClientData extends UseCase<FetchClientData.RequestValues,
         FetchClientData.ResponseValue> {
 
-    private final LocalRepository localRepository;
     private final FineractRepository fineractRepository;
-    private final PreferencesHelper preferencesHelper;
 
     @Inject
-    public FetchClientData(LocalRepository localRepository, FineractRepository fineractRepository, PreferencesHelper preferencesHelper) {
-        this.localRepository = localRepository;
+    public FetchClientData(FineractRepository fineractRepository) {
         this.fineractRepository = fineractRepository;
-        this.preferencesHelper = preferencesHelper;
     }
 
 
     @Override
     protected void executeUseCase(RequestValues requestValues) {
 
-        fineractRepository.getClientDetails()
+        fineractRepository.getClientDetails(requestValues.clientid)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<ClientDetails>() {
@@ -49,22 +43,19 @@ public class FetchClientData extends UseCase<FetchClientData.RequestValues,
 
                     @Override
                     public void onNext(ClientDetails clientDetails) {
-                        saveClientDetails(clientDetails);
                         getUseCaseCallback().onSuccess(new ResponseValue(clientDetails));
                     }
                 });
     }
 
-    private void saveClientDetails(ClientDetails clientDetails) {
-        preferencesHelper.saveFullName(clientDetails.getName());
-        preferencesHelper.setClientId(clientDetails.getClientId());
-    }
+
 
     public static final class RequestValues implements UseCase.RequestValues {
 
+        private final long clientid;
 
-        public RequestValues() {
-
+        public RequestValues(long clientid) {
+            this.clientid = clientid;
         }
     }
 

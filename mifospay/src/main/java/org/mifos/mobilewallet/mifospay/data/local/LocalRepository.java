@@ -1,10 +1,9 @@
-package mifos.org.mobilewallet.core.data.local;
+package org.mifos.mobilewallet.mifospay.data.local;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import mifos.org.mobilewallet.core.domain.model.ClientDetails;
-import mifos.org.mobilewallet.core.injection.PerActivity;
 
 /**
  * Created by naman on 17/6/17.
@@ -20,19 +19,18 @@ public class LocalRepository {
         this.preferencesHelper = preferencesHelper;
     }
 
-    public ClientDetails getUserDetails() {
+    public ClientDetails getClientDetails() {
         ClientDetails details = new ClientDetails();
         details.setName(preferencesHelper.getFullName());
+        details.setClientId(preferencesHelper.getClientId());
 
         return details;
     }
 
-    public long getCurrentClientId() {
-        return preferencesHelper.getClientId();
+    public void saveClientData(ClientDetails clientDetails) {
+        preferencesHelper.saveFullName(clientDetails.getName());
+        preferencesHelper.setClientId(clientDetails.getClientId());
     }
 
-    public long getCurrentUserId() {
-        return preferencesHelper.getUserId();
-    }
 
 }

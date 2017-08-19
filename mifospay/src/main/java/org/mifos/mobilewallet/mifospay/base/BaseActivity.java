@@ -59,8 +59,14 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityCallb
     @Override
     public void hideSwipeProgress() {
         if (swipeLayout != null) {
-            swipeLayout.setEnabled(false);
             swipeLayout.setRefreshing(false);
+        }
+    }
+
+    @Override
+    public void setSwipeRefreshEnabled(boolean enabled) {
+        if (swipeLayout != null) {
+            swipeLayout.setEnabled(enabled);
         }
     }
 

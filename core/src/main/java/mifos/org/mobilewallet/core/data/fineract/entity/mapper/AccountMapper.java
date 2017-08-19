@@ -9,7 +9,6 @@ import javax.inject.Singleton;
 import mifos.org.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
 import mifos.org.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
 import mifos.org.mobilewallet.core.domain.model.Account;
-import mifos.org.mobilewallet.core.injection.PerActivity;
 
 /**
  * Created by naman on 11/7/17.

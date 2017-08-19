@@ -13,5 +13,6 @@ public class ApiEndPoints {
     public static final String CLIENTS = "clients";
     public static final String SAVINGS_ACCOUNTS = "savingsaccounts";
     public static final String RECURRING_ACCOUNTS = "recurringdepositaccounts";
+    public static final String SEARCH = "search";
 
 }

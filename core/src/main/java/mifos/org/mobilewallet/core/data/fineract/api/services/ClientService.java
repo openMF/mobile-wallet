@@ -18,6 +18,9 @@ public interface ClientService {
     @GET(ApiEndPoints.CLIENTS)
     Observable<Page<Client>> getClients();
 
+    @GET(ApiEndPoints.CLIENTS)
+    Observable<Page<Client>> searchClient(@Query("externalId") String query);
+
     @GET(ApiEndPoints.CLIENTS + "/{clientId}")
     Observable<Client> getClientForId(@Path(CLIENT_ID) long clientId);
 

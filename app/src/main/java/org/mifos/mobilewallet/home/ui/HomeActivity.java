@@ -164,7 +164,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
     }
 
     @Override
-    public void showUserDetailsHeader(ClientDetails clientDetails) {
+    public void showClientDetails(ClientDetails clientDetails) {
         tvUsername.setText(clientDetails.getName());
         TextDrawable drawable = TextDrawable.builder()
                 .buildRound(clientDetails.getName().substring(0, 1), R.color.colorPrimary);

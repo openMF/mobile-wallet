@@ -31,12 +31,6 @@ public class ApplicationModule {
     }
 
     @Provides
-    @mifos.org.mobilewallet.core.injection.ApplicationContext
-    Context provideLibraryContext() {
-        return application;
-    }
-
-    @Provides
     @ApplicationContext
     Context provideContext() {
         return application;

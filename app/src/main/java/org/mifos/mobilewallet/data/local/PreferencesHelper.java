@@ -9,13 +9,11 @@ import org.mifos.mobilewallet.injection.ApplicationContext;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import mifos.org.mobilewallet.core.injection.PerActivity;
-
 /**
  * Created by naman on 17/6/17.
  */
 
-@PerActivity
+@Singleton
 public class PreferencesHelper {
 
     private static final String TOKEN = "preferences_token";

@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.mifospay.home.presenter;
 
 import org.mifos.mobilewallet.mifospay.base.BaseView;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 
 import javax.inject.Inject;
@@ -18,12 +19,15 @@ public class WalletPresenter implements HomeContract.WalletPresenter {
     private HomeContract.WalletView mWalletView;
     private final UseCaseHandler mUsecaseHandler;
 
+    private final LocalRepository localRepository;
+
     @Inject
     FetchAccounts fetchAccounts;
 
     @Inject
-    public WalletPresenter(UseCaseHandler useCaseHandler) {
+    public WalletPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
         this.mUsecaseHandler = useCaseHandler;
+        this.localRepository = localRepository;
     }
 
     @Override
@@ -34,7 +38,8 @@ public class WalletPresenter implements HomeContract.WalletPresenter {
 
     @Override
     public void fetchWallets() {
-        mUsecaseHandler.execute(fetchAccounts, new FetchAccounts.RequestValues(),
+        mUsecaseHandler.execute(fetchAccounts, new FetchAccounts.RequestValues(
+                localRepository.getClientDetails().getClientId()),
                 new UseCase.UseCaseCallback<FetchAccounts.ResponseValue>() {
             @Override
             public void onSuccess(FetchAccounts.ResponseValue response) {

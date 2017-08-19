@@ -3,6 +3,9 @@ package org.mifos.mobilewallet.mifospay.injection.module;
 import android.app.Application;
 import android.content.Context;
 
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
+import org.mifos.mobilewallet.mifospay.injection.ApplicationContext;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -10,8 +13,6 @@ import dagger.Provides;
 import mifos.org.mobilewallet.core.base.UseCaseHandler;
 import mifos.org.mobilewallet.core.base.UseCaseThreadPoolScheduler;
 import mifos.org.mobilewallet.core.data.fineract.api.FineractApiManager;
-import mifos.org.mobilewallet.core.injection.ApplicationContext;
-
 
 @Module
 public class ApplicationModule {
@@ -28,13 +29,7 @@ public class ApplicationModule {
     }
 
     @Provides
-    @mifos.org.mobilewallet.core.injection.ApplicationContext
-    Context provideLibraryContext() {
-        return application;
-    }
-
-    @Provides
-    @org.mifos.mobilewallet.mifospay.injection.ApplicationContext
+    @ApplicationContext
     Context provideContext() {
         return application;
     }
@@ -48,6 +43,12 @@ public class ApplicationModule {
     @Singleton
     FineractApiManager provideFineractApiManager() {
         return new FineractApiManager();
+    }
+
+    @Provides
+    @Singleton
+    PreferencesHelper providePrefManager(@ApplicationContext Context context) {
+        return new PreferencesHelper(context);
     }
 
 

@@ -19,36 +19,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_account_number"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:textColor="@color/black"
+                android:textSize="@dimen/value_18sp"
                 android:layout_alignParentLeft="true"
-                android:layout_margin="@dimen/value_20dp">
+                android:layout_margin="@dimen/value_20dp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Personal Wallet"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/value_20sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="MI20178881"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/value_18sp"
-                    android:layout_marginTop="@dimen/value_15dp"/>
-            </LinearLayout>
 
             <TextView
+                android:id="@+id/tv_account_balance"
                 android:layout_margin="@dimen/value_20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:text="600"
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 android:textSize="@dimen/value_25sp"/>
@@ -58,16 +45,17 @@
 
     </android.support.design.widget.AppBarLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/value_20dp"
-            android:text="Recent Transactions"/>
+            android:id="@+id/swipe_layout">
 
         <android.support.v7.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/rv_transactions"/>
+
+        </android.support.v4.widget.SwipeRefreshLayout>
 
 
     </LinearLayout>

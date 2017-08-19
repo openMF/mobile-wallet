@@ -14,8 +14,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import mifos.org.mobilewallet.core.domain.model.ClientDetails;
-import mifos.org.mobilewallet.core.injection.PerActivity;
-import mifos.org.mobilewallet.core.injection.UserScope;
 import rx.Observable;
 import rx.functions.Func0;
 
@@ -23,7 +21,7 @@ import rx.functions.Func0;
  * Created by naman on 17/6/17.
  */
 
-@PerActivity
+@Singleton
 public class LocalRepository {
 
     private final PreferencesHelper preferencesHelper;
@@ -33,13 +31,18 @@ public class LocalRepository {
         this.preferencesHelper = preferencesHelper;
     }
 
-    public ClientDetails getUserDetails() {
+    public ClientDetails getClientDetails() {
         ClientDetails details = new ClientDetails();
         details.setName(preferencesHelper.getFullName());
+        details.setClientId(preferencesHelper.getClientId());
 
         return details;
     }
 
+    public void saveClientData(ClientDetails clientDetails) {
+        preferencesHelper.saveFullName(clientDetails.getName());
+        preferencesHelper.setClientId(clientDetails.getClientId());
+    }
 
     //only pending invoices are stored in the database, once a invoice has been paid,
     // a new deposit transaction is added to the account and the pending invoice is

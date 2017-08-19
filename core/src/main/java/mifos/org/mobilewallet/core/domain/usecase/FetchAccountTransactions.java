@@ -6,7 +6,6 @@ import javax.inject.Inject;
 
 import mifos.org.mobilewallet.core.base.UseCase;
 import mifos.org.mobilewallet.core.data.fineract.repository.FineractRepository;
-import mifos.org.mobilewallet.core.data.local.LocalRepository;
 import mifos.org.mobilewallet.core.domain.model.Transaction;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -19,12 +18,10 @@ import rx.schedulers.Schedulers;
 public class FetchAccountTransactions extends UseCase<FetchAccountTransactions.RequestValues,
         FetchAccountTransactions.ResponseValue> {
 
-    private final LocalRepository localRepository;
     private final FineractRepository fineractRepository;
 
     @Inject
-    public FetchAccountTransactions(LocalRepository localRepository, FineractRepository fineractRepository) {
-        this.localRepository = localRepository;
+    public FetchAccountTransactions(FineractRepository fineractRepository) {
         this.fineractRepository = fineractRepository;
     }
 

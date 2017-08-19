@@ -1,13 +1,13 @@
-package mifos.org.mobilewallet.core.data.local;
+package org.mifos.mobilewallet.mifospay.data.local;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import org.mifos.mobilewallet.mifospay.injection.ApplicationContext;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import mifos.org.mobilewallet.core.injection.ApplicationContext;
 
 /**
  * Created by naman on 17/6/17.
@@ -111,6 +111,5 @@ public class PreferencesHelper {
     public long getClientId() {
         return getLong(CLIENT_ID, 1);
     }
-
 
 }

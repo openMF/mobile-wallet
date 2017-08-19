@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 
 /**
  * Created by naman on 17/6/17.
@@ -50,5 +51,21 @@ public class BaseFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         callback = null;
+    }
+
+    public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {
+        String backStateName = fragment.getClass().getName();
+        boolean fragmentPopped = getChildFragmentManager().popBackStackImmediate(backStateName,
+                0);
+
+        if (!fragmentPopped && getChildFragmentManager().findFragmentByTag(backStateName) ==
+                null) {
+            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+            transaction.replace(containerId, fragment, backStateName);
+            if (addToBackStack) {
+                transaction.addToBackStack(backStateName);
+            }
+            transaction.commit();
+        }
     }
 }

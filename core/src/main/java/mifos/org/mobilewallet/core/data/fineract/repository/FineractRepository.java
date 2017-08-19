@@ -17,12 +17,10 @@ import mifos.org.mobilewallet.core.data.fineract.entity.mapper.TransactionMapper
 import mifos.org.mobilewallet.core.data.fineract.entity.mapper.UserEntityMapper;
 import mifos.org.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import mifos.org.mobilewallet.core.data.fineract.entity.register.UserVerify;
-import mifos.org.mobilewallet.core.data.local.PreferencesHelper;
 import mifos.org.mobilewallet.core.domain.model.Account;
 import mifos.org.mobilewallet.core.domain.model.ClientDetails;
 import mifos.org.mobilewallet.core.domain.model.Transaction;
 import mifos.org.mobilewallet.core.domain.model.User;
-import mifos.org.mobilewallet.core.injection.PerActivity;
 import mifos.org.mobilewallet.core.utils.Constants;
 import okhttp3.ResponseBody;
 import rx.Observable;
@@ -36,7 +34,6 @@ import rx.functions.Func1;
 public class FineractRepository {
 
     private final FineractApiManager fineractApiManager;
-    private final PreferencesHelper preferencesHelper;
 
     @Inject
     UserEntityMapper userEntityMapper;
@@ -51,10 +48,8 @@ public class FineractRepository {
     TransactionMapper transactionMapper;
 
     @Inject
-    public FineractRepository(FineractApiManager fineractApiManager,
-                              PreferencesHelper preferencesHelper) {
+    public FineractRepository(FineractApiManager fineractApiManager) {
         this.fineractApiManager = fineractApiManager;
-        this.preferencesHelper = preferencesHelper;
     }
 
     public Observable<User> login(String username, String password) {
@@ -75,24 +70,25 @@ public class FineractRepository {
         return fineractApiManager.getRegistrationAPi().verifyUser(userVerify);
     }
 
-
-    public Observable<ClientDetails> getClientDetails() {
-        return fineractApiManager.getClientsApi().getClients().flatMap(new Func1<Page<Client>, Observable<ClientDetails>>() {
+    public Observable<List<ClientDetails>> searchClient(String query) {
+        return fineractApiManager.getClientsApi().searchClient(query).map(new Func1<Page<Client>, List<ClientDetails>>() {
             @Override
-            public Observable<ClientDetails> call(Page<Client> clientPage) {
-                return fineractApiManager.getClientsApi().getClientForId(clientPage.getPageItems().get(0).getId()).map(new Func1<Client, ClientDetails>() {
-                    @Override
-                    public ClientDetails call(Client client) {
-                        return clientDetailsMapper.transform(client);
-                    }
-                });
+            public List<ClientDetails> call(Page<Client> clientPage) {
+                return clientDetailsMapper.transformList(clientPage.getPageItems());
             }
         });
     }
 
+    public Observable<ClientDetails> getClientDetails(long clientId) {
+        return fineractApiManager.getClientsApi().getClientForId(clientId).map(new Func1<Client, ClientDetails>() {
+            @Override
+            public ClientDetails call(Client client) {
+                return clientDetailsMapper.transform(client);
+            }
+        });
+    }
     //TODO get datatables for savings account where we will be storing external data
-    public Observable<List<Account>> getAccounts() {
-        long clientId = this.preferencesHelper.getClientId();
+    public Observable<List<Account>> getAccounts(long clientId) {
         return fineractApiManager.getClientsApi().getAccounts(clientId, Constants.SAVINGS).map(new Func1<ClientAccounts, List<Account>>() {
             @Override
             public List<Account> call(ClientAccounts clientAccounts) {

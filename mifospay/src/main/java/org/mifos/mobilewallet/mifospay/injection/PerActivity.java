@@ -1,4 +1,4 @@
-package mifos.org.mobilewallet.core.injection;
+package org.mifos.mobilewallet.mifospay.injection;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

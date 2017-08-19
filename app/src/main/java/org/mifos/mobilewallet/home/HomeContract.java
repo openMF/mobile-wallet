@@ -13,7 +13,7 @@ public interface HomeContract {
 
     interface HomeView extends BaseView<HomePresenter> {
 
-        void showUserDetailsHeader(ClientDetails clientDetails);
+        void showClientDetails(ClientDetails clientDetails);
         void showWalletBalance(int amount);
     }
 

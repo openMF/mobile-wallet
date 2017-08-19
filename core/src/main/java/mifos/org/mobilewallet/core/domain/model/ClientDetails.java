@@ -1,15 +1,18 @@
 package mifos.org.mobilewallet.core.domain.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by naman on 17/6/17.
  */
 
-public class ClientDetails {
+public class ClientDetails implements Parcelable {
 
     private String name;
     private String image;
     private String externalId;
-    private int clientId;
+    private long clientId;
 
     public String getImage() {
         return image;
@@ -35,11 +38,46 @@ public class ClientDetails {
         this.externalId = externalId;
     }
 
-    public int getClientId() {
+    public long getClientId() {
         return clientId;
     }
 
-    public void setClientId(int clientId) {
+    public void setClientId(long clientId) {
         this.clientId = clientId;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.name);
+        dest.writeString(this.image);
+        dest.writeString(this.externalId);
+        dest.writeLong(this.clientId);
+    }
+
+    public ClientDetails() {
+    }
+
+    protected ClientDetails(Parcel in) {
+        this.name = in.readString();
+        this.image = in.readString();
+        this.externalId = in.readString();
+        this.clientId = in.readLong();
+    }
+
+    public static final Parcelable.Creator<ClientDetails> CREATOR = new Parcelable.Creator<ClientDetails>() {
+        @Override
+        public ClientDetails createFromParcel(Parcel source) {
+            return new ClientDetails(source);
+        }
+
+        @Override
+        public ClientDetails[] newArray(int size) {
+            return new ClientDetails[size];
+        }
+    };
 }

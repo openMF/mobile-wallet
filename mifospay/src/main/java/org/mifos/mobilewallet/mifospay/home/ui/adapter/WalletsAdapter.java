@@ -40,7 +40,7 @@ public class WalletsAdapter extends RecyclerView.Adapter<WalletsAdapter.ViewHold
     @Override
     public void onBindViewHolder(WalletsAdapter.ViewHolder holder, int position) {
         holder.tvAccountName.setText(accounts.get(position).getName());
-        holder.tvAccountBalance.setText(accounts.get(position).getCurrency().getDisplaySymbol() +
+        holder.tvAccountBalance.setText(accounts.get(position).getCurrency().getCode() + " " +
                 accounts.get(position).getBalance());
 
     }
