@@ -27,7 +27,7 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
     @Override
     protected void executeUseCase(RequestValues requestValues) {
 
-        apiRepository.login(requestValues.username,
+        apiRepository.loginSelf(requestValues.username,
                 requestValues.password).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<User>() {

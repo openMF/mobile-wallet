@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.auth.AuthContract;
 import org.mifos.mobilewallet.mifospay.auth.presenter.LoginPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -17,7 +18,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import org.mifos.mobilewallet.mifospay.R;
 
 /**
  * Created by naman on 16/6/17.

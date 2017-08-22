@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.mifospay.auth.presenter;
 
-import android.util.Log;
-
 import org.mifos.mobilewallet.mifospay.auth.AuthContract;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
@@ -74,24 +72,8 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
 
     }
 
-    private void searchClients() {
-        mUsecaseHandler.execute(searchClient, new SearchClient.RequestValues("123322"),
-                new UseCase.UseCaseCallback<SearchClient.ResponseValue>() {
-            @Override
-            public void onSuccess(SearchClient.ResponseValue response) {
-                Log.e("lol",response.getClients().get(0).getExternalId());
-            }
-
-            @Override
-            public void onError(String message) {
-
-            }
-        });
-    }
-
     private void fetchClientData() {
-        mUsecaseHandler.execute(fetchClientData ,
-                new FetchClientData.RequestValues(preferencesHelper.getClientId()),
+        mUsecaseHandler.execute(fetchClientData , null,
                 new UseCase.UseCaseCallback<FetchClientData.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchClientData.ResponseValue response) {
@@ -99,7 +81,6 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
 
                         if (!response.getUserDetails().getName().equals("")) {
                             mLoginView.loginSuccess();
-                            searchClients();
                         }
                     }
 
@@ -116,7 +97,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                 user.getAuthenticationKey();
 
         preferencesHelper.saveToken(authToken);
-        FineractApiManager.createService(preferencesHelper.getToken());
+        FineractApiManager.createSelfService(preferencesHelper.getToken());
 
     }
 

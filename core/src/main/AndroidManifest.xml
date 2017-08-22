@@ -1,2 +1,1 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="mifos.org.mobilewallet.core" />
+<manifest package="mifos.org.mobilewallet.core" />

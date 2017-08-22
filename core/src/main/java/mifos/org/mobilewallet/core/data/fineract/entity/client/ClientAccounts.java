@@ -3,7 +3,6 @@ package mifos.org.mobilewallet.core.data.fineract.entity.client;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-
 import java.util.ArrayList;
 import java.util.List;
 

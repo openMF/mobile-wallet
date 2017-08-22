@@ -5,8 +5,11 @@ import mifos.org.mobilewallet.core.data.fineract.api.ApiEndPoints;
 import mifos.org.mobilewallet.core.data.fineract.entity.Page;
 import mifos.org.mobilewallet.core.data.fineract.entity.client.Client;
 import mifos.org.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
+import mifos.org.mobilewallet.core.data.fineract.entity.payload.UpdateVpaPayload;
 import okhttp3.ResponseBody;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -18,11 +21,11 @@ public interface ClientService {
     @GET(ApiEndPoints.CLIENTS)
     Observable<Page<Client>> getClients();
 
-    @GET(ApiEndPoints.CLIENTS)
-    Observable<Page<Client>> searchClient(@Query("externalId") String query);
-
     @GET(ApiEndPoints.CLIENTS + "/{clientId}")
     Observable<Client> getClientForId(@Path(CLIENT_ID) long clientId);
+
+    @PUT(ApiEndPoints.CLIENTS + "/{clientId}")
+    Observable<ResponseBody> updateClientVpa(@Path(CLIENT_ID) long clientId, @Body UpdateVpaPayload payload);
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/images")
     Observable<ResponseBody> getClientImage(@Path(CLIENT_ID) long clientId);

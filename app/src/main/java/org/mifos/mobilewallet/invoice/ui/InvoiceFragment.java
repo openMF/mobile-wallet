@@ -15,8 +15,8 @@ import org.mifos.mobilewallet.base.BaseFragment;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.invoice.InvoiceContract;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
-import org.mifos.mobilewallet.invoice.presenter.InvoicePresenter;
 import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
+import org.mifos.mobilewallet.invoice.presenter.InvoicePresenter;
 import org.mifos.mobilewallet.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.utils.Utils;
 

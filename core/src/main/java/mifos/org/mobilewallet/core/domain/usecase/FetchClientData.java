@@ -27,25 +27,51 @@ public class FetchClientData extends UseCase<FetchClientData.RequestValues,
     @Override
     protected void executeUseCase(RequestValues requestValues) {
 
-        fineractRepository.getClientDetails(requestValues.clientid)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<ClientDetails>() {
-                    @Override
-                    public void onCompleted() {
+        if (requestValues != null) {
+            fineractRepository.getClientDetails(requestValues.clientid)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Subscriber<ClientDetails>() {
+                        @Override
+                        public void onCompleted() {
 
-                    }
+                        }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        getUseCaseCallback().onError("Error fetching client data");
-                    }
+                        @Override
+                        public void onError(Throwable e) {
+                            getUseCaseCallback().onError("Error fetching client data");
+                        }
 
-                    @Override
-                    public void onNext(ClientDetails clientDetails) {
-                        getUseCaseCallback().onSuccess(new ResponseValue(clientDetails));
-                    }
-                });
+                        @Override
+                        public void onNext(ClientDetails clientDetails) {
+                            getUseCaseCallback().onSuccess(new ResponseValue(clientDetails));
+                        }
+                    });
+        } else {
+            fineractRepository.getClientDetails()
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Subscriber<ClientDetails>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            getUseCaseCallback().onError("Error fetching client data");
+                        }
+
+                        @Override
+                        public void onNext(ClientDetails clientDetails) {
+                            if (clientDetails != null) {
+                                getUseCaseCallback().onSuccess(new ResponseValue(clientDetails));
+                            } else {
+                                getUseCaseCallback().onError("No client found");
+                            }
+                        }
+                    });
+        }
     }
 
 

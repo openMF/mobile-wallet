@@ -1,11 +1,8 @@
 package org.mifos.mobilewallet.invoice.ui;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.AnimatedVectorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;

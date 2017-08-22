@@ -6,16 +6,23 @@ package mifos.org.mobilewallet.core.data.fineract.api;
 
 public class BaseURL {
 
-    public static final String API_ENDPOINT = "demo.openmf.org";
-    public static final String API_PATH = "/fineract-provider/api/v1/";
     public static final String PROTOCOL_HTTPS = "https://";
 
-    private String url;
+    public static final String API_ENDPOINT = "demo.openmf.org";
+    public static final String API_PATH = "/fineract-provider/api/v1/";
+
+    //self service url
+    public static final String API_ENDPOINT_SELF = "mobile.openmf.org";
+    public static final String API_PATH_SELF = "/fineract-provider/api/v1/self/";
+
+
 
     public String getUrl() {
-        if (url == null) {
             return PROTOCOL_HTTPS + API_ENDPOINT + API_PATH;
-        }
-        return url;
+
+    }
+
+    public String getSelfServiceUrl() {
+        return PROTOCOL_HTTPS + API_ENDPOINT_SELF + API_PATH_SELF;
     }
 }

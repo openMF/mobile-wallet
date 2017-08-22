@@ -3,7 +3,6 @@ package org.mifos.mobilewallet.invoice.domain.usecase;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;

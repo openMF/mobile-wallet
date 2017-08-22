@@ -18,16 +18,18 @@ public class ApiInterceptor implements Interceptor {
     public static final String HEADER_TENANT = "Fineract-Platform-TenantId";
     public static final String HEADER_AUTH = "Authorization";
     private String authToken;
+    private String headerTenant;
 
-    public ApiInterceptor(String authToken) {
+    public ApiInterceptor(String authToken, String headerTenant) {
         this.authToken = authToken;
+        this.headerTenant = headerTenant;
     }
 
     @Override
     public Response intercept(Chain chain) throws IOException {
         Request chainRequest = chain.request();
         Builder builder = chainRequest.newBuilder()
-                .header(HEADER_TENANT, "default");
+                .header(HEADER_TENANT, headerTenant);
 
         if (!TextUtils.isEmpty(authToken)) {
             builder.header(HEADER_AUTH, authToken);

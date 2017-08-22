@@ -2,14 +2,12 @@ package org.mifos.mobilewallet.mifospay.home.presenter;
 
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 
 import javax.inject.Inject;
 
 import mifos.org.mobilewallet.core.base.UseCase;
 import mifos.org.mobilewallet.core.base.UseCaseHandler;
-import mifos.org.mobilewallet.core.domain.model.ClientDetails;
 import mifos.org.mobilewallet.core.domain.usecase.FetchClientData;
 
 /**

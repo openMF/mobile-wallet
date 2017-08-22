@@ -10,11 +10,8 @@
         android:supportsRtl="true" android:theme="@style/AppTheme">
         <activity android:name="org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity android:name=".home.ui.HomeActivity"
@@ -22,6 +19,16 @@
 
         <activity android:name=".wallet.ui.WalletDetailActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".common.ui.SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
     </application>
 
 </manifest>

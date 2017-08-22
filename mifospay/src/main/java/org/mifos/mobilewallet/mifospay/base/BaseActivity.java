@@ -10,11 +10,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import org.mifos.mobilewallet.mifospay.MifosPayApp;
-import org.mifos.mobilewallet.mifospay.injection.component.DaggerActivityComponent;
-import org.mifos.mobilewallet.mifospay.injection.component.ActivityComponent;
-import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
-
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.injection.component.ActivityComponent;
+import org.mifos.mobilewallet.mifospay.injection.component.DaggerActivityComponent;
+import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
 
 /**
  * Created by naman on 16/6/17.

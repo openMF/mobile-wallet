@@ -1,12 +1,9 @@
 package mifos.org.mobilewallet.core.data.fineract.api;
 
-import android.util.Base64;
-
 import mifos.org.mobilewallet.core.data.fineract.api.services.AuthenticationService;
 import mifos.org.mobilewallet.core.data.fineract.api.services.ClientService;
 import mifos.org.mobilewallet.core.data.fineract.api.services.RegistrationService;
 import mifos.org.mobilewallet.core.data.fineract.api.services.SavingAccountsListService;
-import mifos.org.mobilewallet.core.data.fineract.api.services.SearchService;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -14,30 +11,23 @@ import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
- * Created by naman on 17/6/17.
+ * Created by naman on 20/8/17.
  */
 
-public class FineractApiManager {
+public class SelfServiceApiManager {
 
     private static BaseURL baseUrl = new BaseURL();
-    private static final String BASE_URL = baseUrl.getUrl();
+    private static final String BASE_URL = baseUrl.getSelfServiceUrl();
 
     private static Retrofit retrofit;
     private static AuthenticationService authenticationApi;
     private static ClientService clientsApi;
     private static SavingAccountsListService savingAccountsListApi;
     private static RegistrationService registrationAPi;
-    private static SearchService searchApi;
 
-    private static SelfServiceApiManager sSelfInstance;
-
-    public FineractApiManager() {
-        String authToken = "Basic " + Base64.encodeToString("mifospay:password1".getBytes(), Base64.NO_WRAP);
+    public SelfServiceApiManager() {
+        String authToken = "";
         createService(authToken);
-
-        if (sSelfInstance == null) {
-            sSelfInstance = new SelfServiceApiManager();
-        }
     }
 
     private static void init() {
@@ -45,7 +35,6 @@ public class FineractApiManager {
         clientsApi = createApi(ClientService.class);
         savingAccountsListApi = createApi(SavingAccountsListService.class);
         registrationAPi = createApi(RegistrationService.class);
-        searchApi = createApi(SearchService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
@@ -59,7 +48,7 @@ public class FineractApiManager {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken, "default"))
+                .addInterceptor(new ApiInterceptor(authToken, "mobile"))
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -69,11 +58,6 @@ public class FineractApiManager {
                 .client(okHttpClient)
                 .build();
         init();
-
-    }
-
-    public static void createSelfService(String authToken) {
-        SelfServiceApiManager.createService(authToken);
     }
 
     public AuthenticationService getAuthenticationApi() {
@@ -92,11 +76,4 @@ public class FineractApiManager {
         return registrationAPi;
     }
 
-    public SearchService getSearchApi() {
-        return searchApi;
-    }
-
-    public static SelfServiceApiManager getSelfApiManager() {
-        return sSelfInstance;
-    }
 }
