@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import mifos.org.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.base.UseCase;
 
 /**
  * Created by naman on 20/6/17.

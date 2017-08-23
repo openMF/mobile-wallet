@@ -9,7 +9,7 @@ import com.google.zxing.common.BitMatrix;
 
 import javax.inject.Inject;
 
-import mifos.org.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.base.UseCase;
 
 /**
  * Created by naman on 8/7/17.

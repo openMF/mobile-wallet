@@ -21,7 +21,7 @@ import org.mifos.mobilewallet.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.user.ui.UserDetailsActivity;
 
 import dagger.Component;
-import mifos.org.mobilewallet.core.injection.PerActivity;
+import org.mifos.mobilewallet.core.injection.PerActivity;
 
 @PerActivity
 @Component(dependencies = {ApplicationComponent.class},

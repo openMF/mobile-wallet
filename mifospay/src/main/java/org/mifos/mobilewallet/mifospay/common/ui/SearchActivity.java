@@ -20,7 +20,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnTextChanged;
-import mifos.org.mobilewallet.core.domain.model.SearchResult;
+import org.mifos.mobilewallet.core.domain.model.SearchResult;
 
 /**
  * Created by naman on 21/8/17.

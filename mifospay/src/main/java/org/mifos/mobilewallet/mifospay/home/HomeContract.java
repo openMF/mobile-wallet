@@ -5,8 +5,8 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 
 import java.util.List;
 
-import mifos.org.mobilewallet.core.domain.model.Account;
-import mifos.org.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.Account;
+import org.mifos.mobilewallet.core.domain.model.ClientDetails;
 
 /**
  * Created by naman on 17/6/17.

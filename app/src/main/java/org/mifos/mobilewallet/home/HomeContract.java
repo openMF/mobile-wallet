@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.home;
 import org.mifos.mobilewallet.base.BasePresenter;
 import org.mifos.mobilewallet.base.BaseView;
 
-import mifos.org.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.ClientDetails;
 
 /**
  * Created by naman on 17/6/17.

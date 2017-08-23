@@ -11,9 +11,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import mifos.org.mobilewallet.core.base.UseCaseHandler;
-import mifos.org.mobilewallet.core.base.UseCaseThreadPoolScheduler;
-import mifos.org.mobilewallet.core.data.fineract.api.FineractApiManager;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.base.UseCaseThreadPoolScheduler;
+import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 
 
 @Module

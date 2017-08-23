@@ -6,8 +6,8 @@ import org.mifos.mobilewallet.qr.domain.usecase.GenerateQr;
 
 import javax.inject.Inject;
 
-import mifos.org.mobilewallet.core.base.UseCase;
-import mifos.org.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 /**
  * Created by naman on 8/7/17.

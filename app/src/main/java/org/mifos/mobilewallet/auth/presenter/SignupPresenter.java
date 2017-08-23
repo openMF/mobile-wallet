@@ -5,8 +5,8 @@ import org.mifos.mobilewallet.base.BaseView;
 
 import javax.inject.Inject;
 
-import mifos.org.mobilewallet.core.base.UseCaseHandler;
-import mifos.org.mobilewallet.core.domain.usecase.CreateUser;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.domain.usecase.CreateUser;
 
 /**
  * Created by naman on 16/6/17.

@@ -7,8 +7,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import mifos.org.mobilewallet.core.base.UseCase;
-import mifos.org.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

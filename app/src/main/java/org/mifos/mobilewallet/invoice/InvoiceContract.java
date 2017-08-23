@@ -7,7 +7,7 @@ import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
 
 import java.util.List;
 
-import mifos.org.mobilewallet.core.domain.model.Account;
+import org.mifos.mobilewallet.core.domain.model.Account;
 
 /**
  * Created by naman on 20/6/17.

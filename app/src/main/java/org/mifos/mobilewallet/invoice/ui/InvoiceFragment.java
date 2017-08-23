@@ -26,7 +26,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import mifos.org.mobilewallet.core.utils.DateHelper;
+import org.mifos.mobilewallet.core.utils.DateHelper;
 
 /**
  * Created by naman on 17/6/17.

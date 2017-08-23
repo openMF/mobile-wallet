@@ -5,9 +5,9 @@ import org.mifos.mobilewallet.data.local.LocalRepository;
 
 import javax.inject.Inject;
 
-import mifos.org.mobilewallet.core.base.UseCase;
-import mifos.org.mobilewallet.core.base.UseCaseHandler;
-import mifos.org.mobilewallet.core.domain.usecase.FetchClientData;
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
 
 /**
  * Created by naman on 17/6/17.

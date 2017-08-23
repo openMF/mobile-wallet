@@ -6,15 +6,15 @@ import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 
 import javax.inject.Inject;
 
-import mifos.org.mobilewallet.core.base.UseCase;
-import mifos.org.mobilewallet.core.base.UseCaseHandler;
-import mifos.org.mobilewallet.core.data.fineract.api.FineractApiManager;
-import mifos.org.mobilewallet.core.domain.model.ClientDetails;
-import mifos.org.mobilewallet.core.domain.model.User;
-import mifos.org.mobilewallet.core.domain.usecase.AuthenticateUser;
-import mifos.org.mobilewallet.core.domain.usecase.FetchClientData;
-import mifos.org.mobilewallet.core.domain.usecase.SearchClient;
-import mifos.org.mobilewallet.core.utils.Constants;
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
+import org.mifos.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.User;
+import org.mifos.mobilewallet.core.domain.usecase.AuthenticateUser;
+import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
+import org.mifos.mobilewallet.core.domain.usecase.SearchClient;
+import org.mifos.mobilewallet.core.utils.Constants;
 
 /**
  * Created by naman on 16/6/17.

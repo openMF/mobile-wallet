@@ -6,9 +6,9 @@ import org.mifos.mobilewallet.user.domain.usecase.VerifyPanDetails;
 
 import javax.inject.Inject;
 
-import mifos.org.mobilewallet.core.base.UseCase;
-import mifos.org.mobilewallet.core.base.UseCaseHandler;
-import mifos.org.mobilewallet.core.domain.usecase.FetchUserDetails;
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.domain.usecase.FetchUserDetails;
 
 /**
  * Created by naman on 22/6/17.

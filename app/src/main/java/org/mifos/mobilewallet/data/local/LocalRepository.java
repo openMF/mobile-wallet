@@ -13,7 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import mifos.org.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.ClientDetails;
 import rx.Observable;
 import rx.functions.Func0;
 

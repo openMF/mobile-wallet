@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import mifos.org.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.domain.model.Transaction;
 
 /**
  * Created by naman on 17/8/17.

@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.mifospay.data.local;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import mifos.org.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.ClientDetails;
 
 /**
  * Created by naman on 17/6/17.

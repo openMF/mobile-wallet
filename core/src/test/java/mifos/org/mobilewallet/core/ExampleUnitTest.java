@@ -1,4 +1,4 @@
-package mifos.org.mobilewallet.core;
+package org.mifos.mobilewallet.core;
 
 import org.junit.Test;
 

@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import mifos.org.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.ClientDetails;
 
 /**
  * Created by naman on 17/6/17.
