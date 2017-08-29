@@ -3,8 +3,10 @@ package org.mifos.mobilewallet.core.domain.usecase;
 import javax.inject.Inject;
 
 import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.data.fineract.entity.Page;
+import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
+import org.mifos.mobilewallet.core.data.fineract.entity.mapper.ClientDetailsMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
-import org.mifos.mobilewallet.core.domain.model.ClientDetails;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -19,6 +21,9 @@ public class FetchClientData extends UseCase<FetchClientData.RequestValues,
     private final FineractRepository fineractRepository;
 
     @Inject
+    ClientDetailsMapper clientDetailsMapper;
+
+    @Inject
     public FetchClientData(FineractRepository fineractRepository) {
         this.fineractRepository = fineractRepository;
     }
@@ -28,10 +33,10 @@ public class FetchClientData extends UseCase<FetchClientData.RequestValues,
     protected void executeUseCase(RequestValues requestValues) {
 
         if (requestValues != null) {
-            fineractRepository.getClientDetails(requestValues.clientid)
+            fineractRepository.getSelfClientDetails(requestValues.clientid)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribe(new Subscriber<ClientDetails>() {
+                    .subscribe(new Subscriber<Client>() {
                         @Override
                         public void onCompleted() {
 
@@ -43,15 +48,15 @@ public class FetchClientData extends UseCase<FetchClientData.RequestValues,
                         }
 
                         @Override
-                        public void onNext(ClientDetails clientDetails) {
-                            getUseCaseCallback().onSuccess(new ResponseValue(clientDetails));
+                        public void onNext(Client client) {
+                            getUseCaseCallback().onSuccess(new ResponseValue(clientDetailsMapper.transform(client)));
                         }
                     });
         } else {
-            fineractRepository.getClientDetails()
+            fineractRepository.getSelfClientDetails()
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribe(new Subscriber<ClientDetails>() {
+                    .subscribe(new Subscriber<Page<Client>>() {
                         @Override
                         public void onCompleted() {
 
@@ -63,11 +68,11 @@ public class FetchClientData extends UseCase<FetchClientData.RequestValues,
                         }
 
                         @Override
-                        public void onNext(ClientDetails clientDetails) {
-                            if (clientDetails != null) {
-                                getUseCaseCallback().onSuccess(new ResponseValue(clientDetails));
+                        public void onNext(Page<Client> client) {
+                            if (client != null && client.getPageItems() != null && client.getPageItems().size() != 0) {
+                                getUseCaseCallback().onSuccess(new ResponseValue(clientDetailsMapper.transform(client.getPageItems().get(0))));
                             } else {
-                                getUseCaseCallback().onError("No client found");
+                               getUseCaseCallback().onError("No client found");
                             }
                         }
                     });
@@ -87,13 +92,13 @@ public class FetchClientData extends UseCase<FetchClientData.RequestValues,
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private final ClientDetails user;
+        private final org.mifos.mobilewallet.core.domain.model.Client user;
 
-        public ResponseValue(ClientDetails user) {
+        public ResponseValue(org.mifos.mobilewallet.core.domain.model.Client user) {
             this.user = user;
         }
 
-        public ClientDetails getUserDetails() {
+        public org.mifos.mobilewallet.core.domain.model.Client getUserDetails() {
             return user;
         }
     }

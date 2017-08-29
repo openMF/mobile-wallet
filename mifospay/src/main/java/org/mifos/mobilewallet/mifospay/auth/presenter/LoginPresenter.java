@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
-import org.mifos.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.Client;
 import org.mifos.mobilewallet.core.domain.model.User;
 import org.mifos.mobilewallet.core.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
@@ -110,8 +110,8 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
 
     }
 
-    private void saveClientDetails(ClientDetails clientDetails) {
-        preferencesHelper.saveFullName(clientDetails.getName());
-        preferencesHelper.setClientId(clientDetails.getClientId());
+    private void saveClientDetails(Client client) {
+        preferencesHelper.saveFullName(client.getName());
+        preferencesHelper.setClientId(client.getClientId());
     }
 }

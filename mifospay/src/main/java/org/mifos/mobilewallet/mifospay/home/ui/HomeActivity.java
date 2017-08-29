@@ -21,7 +21,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.Client;
 
 /**
  * Created by naman on 17/6/17.
@@ -136,10 +136,10 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
     }
 
     @Override
-    public void showClientDetails(ClientDetails clientDetails) {
-        tvUsername.setText(clientDetails.getName());
+    public void showClientDetails(Client client) {
+        tvUsername.setText(client.getName());
         TextDrawable drawable = TextDrawable.builder()
-                .buildRound(clientDetails.getName().substring(0, 1), R.color.colorPrimary);
+                .buildRound(client.getName().substring(0, 1), R.color.colorPrimary);
         ivUserImage.setImageDrawable(drawable);
     }
 }

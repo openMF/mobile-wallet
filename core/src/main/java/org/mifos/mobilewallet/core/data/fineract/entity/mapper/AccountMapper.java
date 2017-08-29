@@ -36,6 +36,7 @@ public class AccountMapper {
                 account.setId(savingAccount.getId());
                 account.setBalance(savingAccount.getAccountBalance());
                 account.setCurrency(currencyMapper.transform(savingAccount.getCurrency()));
+                account.setProductId(savingAccount.getProductId());
 
                 accountList.add(account);
             }

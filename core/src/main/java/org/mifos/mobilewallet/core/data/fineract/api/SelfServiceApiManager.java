@@ -1,9 +1,12 @@
 package org.mifos.mobilewallet.core.data.fineract.api;
 
 import org.mifos.mobilewallet.core.data.fineract.api.services.AuthenticationService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.BeneficiaryService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SavingAccountsListService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.ThirdPartyTransferService;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -24,6 +27,8 @@ public class SelfServiceApiManager {
     private static ClientService clientsApi;
     private static SavingAccountsListService savingAccountsListApi;
     private static RegistrationService registrationAPi;
+    private static BeneficiaryService beneficiaryApi;
+    private static ThirdPartyTransferService thirdPartyTransferApi;
 
     public SelfServiceApiManager() {
         String authToken = "";
@@ -35,6 +40,8 @@ public class SelfServiceApiManager {
         clientsApi = createApi(ClientService.class);
         savingAccountsListApi = createApi(SavingAccountsListService.class);
         registrationAPi = createApi(RegistrationService.class);
+        beneficiaryApi = createApi(BeneficiaryService.class);
+        thirdPartyTransferApi = createApi(ThirdPartyTransferService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
@@ -48,7 +55,7 @@ public class SelfServiceApiManager {
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken, "mobile"))
+                .addInterceptor(new ApiInterceptor(authToken, "default"))
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -74,6 +81,14 @@ public class SelfServiceApiManager {
 
     public RegistrationService getRegistrationAPi() {
         return registrationAPi;
+    }
+
+    public BeneficiaryService getBeneficiaryApi() {
+        return beneficiaryApi;
+    }
+
+    public ThirdPartyTransferService getThirdPartyTransferApi() {
+        return thirdPartyTransferApi;
     }
 
 }

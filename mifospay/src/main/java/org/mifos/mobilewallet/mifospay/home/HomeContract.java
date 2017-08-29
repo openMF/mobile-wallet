@@ -6,7 +6,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 import java.util.List;
 
 import org.mifos.mobilewallet.core.domain.model.Account;
-import org.mifos.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.Client;
 
 /**
  * Created by naman on 17/6/17.
@@ -16,7 +16,7 @@ public interface HomeContract {
 
     interface HomeView extends BaseView<HomePresenter> {
 
-        void showClientDetails(ClientDetails clientDetails);
+        void showClientDetails(Client client);
     }
 
     interface HomePresenter extends BasePresenter {

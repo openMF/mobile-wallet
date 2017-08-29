@@ -6,9 +6,8 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.ClientPayload;
-import org.mifos.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.Client;
 import org.mifos.mobilewallet.core.domain.model.NewClient;
 import org.mifos.mobilewallet.core.utils.DateHelper;
 
@@ -22,21 +21,21 @@ public class ClientDetailsMapper {
     @Inject
     public ClientDetailsMapper() {}
 
-    public List<ClientDetails> transformList(List<Client> clients) {
+    public List<Client> transformList(List<org.mifos.mobilewallet.core.data.fineract.entity.client.Client> clients) {
 
-        List<ClientDetails> clientDetailsList = new ArrayList<>();
+        List<Client> clientList = new ArrayList<>();
 
         if (clients != null && clients.size() != 0) {
-            for (Client client : clients) {
-                clientDetailsList.add(transform(client));
+            for (org.mifos.mobilewallet.core.data.fineract.entity.client.Client client : clients) {
+                clientList.add(transform(client));
             }
 
         }
-        return clientDetailsList;
+        return clientList;
     }
 
-    public ClientDetails transform(Client client) {
-        ClientDetails clientDetails = new ClientDetails();
+    public Client transform(org.mifos.mobilewallet.core.data.fineract.entity.client.Client client) {
+        Client clientDetails = new Client();
 
         if (client != null) {
             clientDetails.setName(client.getDisplayName());

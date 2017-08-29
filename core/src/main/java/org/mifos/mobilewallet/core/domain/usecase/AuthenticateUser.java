@@ -3,6 +3,8 @@ package org.mifos.mobilewallet.core.domain.usecase;
 import javax.inject.Inject;
 
 import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity;
+import org.mifos.mobilewallet.core.data.fineract.entity.mapper.UserEntityMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.domain.model.User;
 import rx.Subscriber;
@@ -19,6 +21,9 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
     private final FineractRepository apiRepository;
 
     @Inject
+    UserEntityMapper userEntityMapper;
+
+    @Inject
     public AuthenticateUser(FineractRepository apiRepository) {
         this.apiRepository = apiRepository;
     }
@@ -30,7 +35,7 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
         apiRepository.loginSelf(requestValues.username,
                 requestValues.password).observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<User>() {
+                .subscribe(new Subscriber<UserEntity>() {
                     @Override
                     public void onCompleted() {
 
@@ -42,8 +47,8 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
                     }
 
                     @Override
-                    public void onNext(final User user) {
-                        getUseCaseCallback().onSuccess(new ResponseValue(user));
+                    public void onNext(final UserEntity user) {
+                        getUseCaseCallback().onSuccess(new ResponseValue(userEntityMapper.transform(user)));
                     }
                 });
 

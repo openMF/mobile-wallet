@@ -5,6 +5,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
+import org.mifos.mobilewallet.core.data.fineract.entity.mapper.TransactionMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import rx.Subscriber;
@@ -21,6 +23,10 @@ public class FetchAccountTransactions extends UseCase<FetchAccountTransactions.R
     private final FineractRepository fineractRepository;
 
     @Inject
+    TransactionMapper transactionMapper;
+
+
+    @Inject
     public FetchAccountTransactions(FineractRepository fineractRepository) {
         this.fineractRepository = fineractRepository;
     }
@@ -29,10 +35,10 @@ public class FetchAccountTransactions extends UseCase<FetchAccountTransactions.R
     @Override
     protected void executeUseCase(final FetchAccountTransactions.RequestValues requestValues) {
 
-        fineractRepository.getAccountTransactions(requestValues.accountId)
+        fineractRepository.getSelfAccountTransactions(requestValues.accountId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<List<Transaction>>() {
+                .subscribe(new Subscriber<SavingsWithAssociations>() {
                     @Override
                     public void onCompleted() {
 
@@ -44,8 +50,8 @@ public class FetchAccountTransactions extends UseCase<FetchAccountTransactions.R
                     }
 
                     @Override
-                    public void onNext(List<Transaction> transactions) {
-                        getUseCaseCallback().onSuccess(new ResponseValue(transactions));
+                    public void onNext(SavingsWithAssociations transactions) {
+                        getUseCaseCallback().onSuccess(new ResponseValue(transactionMapper.transformTransactionList(transactions)));
                     }
                 });
 

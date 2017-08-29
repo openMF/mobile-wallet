@@ -166,6 +166,14 @@ public class Client implements Parcelable {
         this.externalId = externalId;
     }
 
+    public String getOfficeName() {
+        return officeName;
+    }
+
+    public Integer getOfficeId() {
+        return officeId;
+    }
+
     @Override
     public String toString() {
         return "Client{" +

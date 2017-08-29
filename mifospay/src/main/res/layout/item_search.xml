@@ -7,6 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/tv_search_result"
+        android:textSize="@dimen/value_18sp"
+        android:paddingLeft="@dimen/value_15dp"
         android:layout_margin="@dimen/value_10dp"/>
 
 </LinearLayout>

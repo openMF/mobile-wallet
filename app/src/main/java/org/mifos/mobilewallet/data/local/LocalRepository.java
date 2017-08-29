@@ -13,7 +13,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import org.mifos.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.Client;
 import rx.Observable;
 import rx.functions.Func0;
 
@@ -31,17 +31,17 @@ public class LocalRepository {
         this.preferencesHelper = preferencesHelper;
     }
 
-    public ClientDetails getClientDetails() {
-        ClientDetails details = new ClientDetails();
+    public Client getClientDetails() {
+        Client details = new Client();
         details.setName(preferencesHelper.getFullName());
         details.setClientId(preferencesHelper.getClientId());
 
         return details;
     }
 
-    public void saveClientData(ClientDetails clientDetails) {
-        preferencesHelper.saveFullName(clientDetails.getName());
-        preferencesHelper.setClientId(clientDetails.getClientId());
+    public void saveClientData(Client client) {
+        preferencesHelper.saveFullName(client.getName());
+        preferencesHelper.setClientId(client.getClientId());
     }
 
     //only pending invoices are stored in the database, once a invoice has been paid,

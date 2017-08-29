@@ -20,7 +20,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.domain.model.ClientDetails;
+import org.mifos.mobilewallet.core.domain.model.Client;
 
 /**
  * Created by naman on 22/6/17.
@@ -83,11 +83,11 @@ public class UserDetailsActivity extends BaseActivity implements UserContract.Us
     }
 
     @Override
-    public void showUserDetails(ClientDetails clientDetails) {
-        ivUserName.setText(clientDetails.getName());
-        tvUserDetailsName.setText(clientDetails.getName());
+    public void showUserDetails(Client client) {
+        ivUserName.setText(client.getName());
+        tvUserDetailsName.setText(client.getName());
         TextDrawable drawable = TextDrawable.builder()
-                .buildRound(clientDetails.getName().substring(0, 1), R.color.purple_200);
+                .buildRound(client.getName().substring(0, 1), R.color.purple_200);
         ivUserImage.setImageDrawable(drawable);
     }
 

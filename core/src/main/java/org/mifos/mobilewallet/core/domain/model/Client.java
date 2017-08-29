@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * Created by naman on 17/6/17.
  */
 
-public class ClientDetails implements Parcelable {
+public class Client implements Parcelable {
 
     private String name;
     private String image;
@@ -59,25 +59,25 @@ public class ClientDetails implements Parcelable {
         dest.writeLong(this.clientId);
     }
 
-    public ClientDetails() {
+    public Client() {
     }
 
-    protected ClientDetails(Parcel in) {
+    protected Client(Parcel in) {
         this.name = in.readString();
         this.image = in.readString();
         this.externalId = in.readString();
         this.clientId = in.readLong();
     }
 
-    public static final Parcelable.Creator<ClientDetails> CREATOR = new Parcelable.Creator<ClientDetails>() {
+    public static final Parcelable.Creator<Client> CREATOR = new Parcelable.Creator<Client>() {
         @Override
-        public ClientDetails createFromParcel(Parcel source) {
-            return new ClientDetails(source);
+        public Client createFromParcel(Parcel source) {
+            return new Client(source);
         }
 
         @Override
-        public ClientDetails[] newArray(int size) {
-            return new ClientDetails[size];
+        public Client[] newArray(int size) {
+            return new Client[size];
         }
     };
 }

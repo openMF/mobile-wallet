@@ -5,6 +5,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
+import org.mifos.mobilewallet.core.data.fineract.entity.mapper.AccountMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.domain.model.Account;
 import rx.Subscriber;
@@ -21,6 +23,9 @@ public class FetchAccounts extends UseCase<FetchAccounts.RequestValues,
     private final FineractRepository fineractRepository;
 
     @Inject
+    AccountMapper accountMapper;
+
+    @Inject
     public FetchAccounts(FineractRepository fineractRepository) {
         this.fineractRepository = fineractRepository;
     }
@@ -32,7 +37,7 @@ public class FetchAccounts extends UseCase<FetchAccounts.RequestValues,
         fineractRepository.getAccounts(requestValues.clientId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<List<Account>>() {
+                .subscribe(new Subscriber<ClientAccounts>() {
                     @Override
                     public void onCompleted() {
 
@@ -44,9 +49,9 @@ public class FetchAccounts extends UseCase<FetchAccounts.RequestValues,
                     }
 
                     @Override
-                    public void onNext(List<Account> accounts) {
-                        if (accounts != null && accounts.size() != 0) {
-                            getUseCaseCallback().onSuccess(new FetchAccounts.ResponseValue(accounts));
+                    public void onNext(ClientAccounts accounts) {
+                        if (accounts != null) {
+                            getUseCaseCallback().onSuccess(new FetchAccounts.ResponseValue(accountMapper.transform(accounts)));
                         } else {
                             getUseCaseCallback().onError("No accounts found");
                         }

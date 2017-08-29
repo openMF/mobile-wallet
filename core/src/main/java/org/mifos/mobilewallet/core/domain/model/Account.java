@@ -14,6 +14,7 @@ public class Account implements Parcelable {
     private String number;
     private double balance;
     private long id;
+    private long productId;
     private Currency currency;
 
     public String getImage() {
@@ -64,6 +65,14 @@ public class Account implements Parcelable {
         this.currency = currency;
     }
 
+    public long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(long productId) {
+        this.productId = productId;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -76,6 +85,7 @@ public class Account implements Parcelable {
         dest.writeString(this.number);
         dest.writeDouble(this.balance);
         dest.writeLong(this.id);
+        dest.writeLong(this.productId);
         dest.writeParcelable(this.currency, flags);
     }
 
@@ -88,6 +98,7 @@ public class Account implements Parcelable {
         this.number = in.readString();
         this.balance = in.readDouble();
         this.id = in.readLong();
+        this.productId = in.readLong();
         this.currency = in.readParcelable(Currency.class.getClassLoader());
     }
 

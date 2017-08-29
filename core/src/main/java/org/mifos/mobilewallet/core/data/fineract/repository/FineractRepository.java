@@ -11,21 +11,17 @@ import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
+import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary;
+import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPayload;
+import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUpdatePayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
-import org.mifos.mobilewallet.core.data.fineract.entity.mapper.AccountMapper;
-import org.mifos.mobilewallet.core.data.fineract.entity.mapper.ClientDetailsMapper;
-import org.mifos.mobilewallet.core.data.fineract.entity.mapper.SearchedEntitiesMapper;
-import org.mifos.mobilewallet.core.data.fineract.entity.mapper.TransactionMapper;
-import org.mifos.mobilewallet.core.data.fineract.entity.mapper.UserEntityMapper;
+import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.UpdateVpaPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
-import org.mifos.mobilewallet.core.domain.model.Account;
-import org.mifos.mobilewallet.core.domain.model.ClientDetails;
-import org.mifos.mobilewallet.core.domain.model.SearchResult;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.model.User;
+import org.mifos.mobilewallet.core.data.fineract.entity.templates.account.AccountOptionsTemplate;
+import org.mifos.mobilewallet.core.data.fineract.entity.templates.beneficiary.BeneficiaryTemplate;
 import org.mifos.mobilewallet.core.utils.Constants;
 import okhttp3.ResponseBody;
 import rx.Observable;
@@ -42,46 +38,10 @@ public class FineractRepository {
     private final SelfServiceApiManager selfApiManager;
 
     @Inject
-    UserEntityMapper userEntityMapper;
-
-    @Inject
-    ClientDetailsMapper clientDetailsMapper;
-
-    @Inject
-    AccountMapper accountMapper;
-
-    @Inject
-    TransactionMapper transactionMapper;
-
-    @Inject
-    SearchedEntitiesMapper searchedEntitiesMapper;
-
-    @Inject
     public FineractRepository(FineractApiManager fineractApiManager) {
         this.fineractApiManager = fineractApiManager;
         this.selfApiManager = FineractApiManager.getSelfApiManager();
     }
-
-    public Observable<User> login(String username, String password) {
-        return fineractApiManager.getAuthenticationApi().authenticate(username, password)
-                .map(new Func1<UserEntity, User>() {
-                    @Override
-                    public User call(UserEntity userEntity) {
-                        return userEntityMapper.transform(userEntity);
-                    }
-                });
-    }
-
-    public Observable<User> loginSelf(String username, String password) {
-        return selfApiManager.getAuthenticationApi().authenticate(username, password)
-                .map(new Func1<UserEntity, User>() {
-                    @Override
-                    public User call(UserEntity userEntity) {
-                        return userEntityMapper.transform(userEntity);
-                    }
-                });
-    }
-
 
     public Observable<ResponseBody> registerUser(RegisterPayload registerPayload) {
         return fineractApiManager.getRegistrationAPi().registerUser(registerPayload);
@@ -91,41 +51,15 @@ public class FineractRepository {
         return fineractApiManager.getRegistrationAPi().verifyUser(userVerify);
     }
 
-    public Observable<List<SearchResult>> searchResources(String query, String resources,
+    public Observable<List<SearchedEntity>> searchResources(String query, String resources,
                                                           Boolean exactMatch) {
-        return fineractApiManager.getSearchApi().searchResources(query, resources, exactMatch)
-                .map(new Func1<List<SearchedEntity>, List<SearchResult>>() {
-            @Override
-            public List<SearchResult> call(List<SearchedEntity> searchedEntities) {
-                return searchedEntitiesMapper.transformList(searchedEntities);
-            }
-        });
-    }
-
-    public Observable<ClientDetails> getClientDetails(long clientId) {
-        return selfApiManager.getClientsApi().getClientForId(clientId).map(new Func1<Client, ClientDetails>() {
-            @Override
-            public ClientDetails call(Client client) {
-                return clientDetailsMapper.transform(client);
-            }
-        });
-    }
-    public Observable<ClientDetails> getClientDetails() {
-        return selfApiManager.getClientsApi().getClients().map(new Func1<Page<Client>, ClientDetails>() {
-            @Override
-            public ClientDetails call(Page<Client> client) {
-                if (client != null && client.getPageItems() != null && client.getPageItems().size() != 0) {
-                    return clientDetailsMapper.transform(client.getPageItems().get(0));
-                } else {
-                    return null;
-                }
-            }
-        });
+        return fineractApiManager.getSearchApi().searchResources(query, resources, exactMatch);
     }
 
 
     public Observable<ResponseBody> updateClientVpa(long clientId, UpdateVpaPayload payload) {
-        return fineractApiManager.getClientsApi().updateClientVpa(clientId, payload).map(new Func1<ResponseBody, ResponseBody>() {
+        return fineractApiManager.getClientsApi().updateClientVpa(clientId, payload)
+                .map(new Func1<ResponseBody, ResponseBody>() {
             @Override
             public ResponseBody call(ResponseBody responseBody) {
                 return responseBody;
@@ -133,26 +67,67 @@ public class FineractRepository {
         });
     }
 
-    //TODO get datatables for savings account where we will be storing external data
-    public Observable<List<Account>> getAccounts(long clientId) {
-        return selfApiManager.getClientsApi().getAccounts(clientId, Constants.SAVINGS).map(new Func1<ClientAccounts, List<Account>>() {
-            @Override
-            public List<Account> call(ClientAccounts clientAccounts) {
-                return accountMapper.transform(clientAccounts);
-            }
-        });
+    public Observable<ClientAccounts> getAccounts(long clientId) {
+        return fineractApiManager.getClientsApi().getAccounts(clientId, Constants.SAVINGS);
     }
 
-    public Observable<List<Transaction>> getAccountTransactions(long accountId) {
+    public Observable<Client> getClientDetails(long clientId) {
+        return fineractApiManager.getClientsApi().getClientForId(clientId);
+    }
+
+    //self user apis
+
+    public Observable<UserEntity> loginSelf(String username, String password) {
+        return selfApiManager.getAuthenticationApi().authenticate(username, password);
+    }
+
+    public Observable<Client> getSelfClientDetails(long clientId) {
+        return selfApiManager.getClientsApi().getClientForId(clientId);
+    }
+
+    public Observable<Page<Client>> getSelfClientDetails() {
+        return selfApiManager.getClientsApi().getClients();
+    }
+
+
+    public Observable<SavingsWithAssociations> getSelfAccountTransactions(long accountId) {
         return selfApiManager
                 .getSavingAccountsListApi().getSavingsWithAssociations(accountId,
-                        Constants.TRANSACTIONS).map(new Func1<SavingsWithAssociations,
-                        List<Transaction>>() {
-                    @Override
-                    public List<Transaction> call(SavingsWithAssociations savingsWithAssociations) {
-                        return transactionMapper.transformTransactionList(savingsWithAssociations);
-                    }
-                });
+                        Constants.TRANSACTIONS);
     }
+
+    public Observable<ClientAccounts> getSelfAccounts(long clientId) {
+        return selfApiManager.getClientsApi().getAccounts(clientId, Constants.SAVINGS);
+    }
+
+    public Observable<List<Beneficiary>> getBeneficiaryList() {
+        return selfApiManager.getBeneficiaryApi().getBeneficiaryList();
+    }
+
+    public Observable<BeneficiaryTemplate> getBeneficiaryTemplate() {
+        return selfApiManager.getBeneficiaryApi().getBeneficiaryTemplate();
+    }
+
+    public Observable<ResponseBody> createBeneficiary(BeneficiaryPayload beneficiaryPayload) {
+        return selfApiManager.getBeneficiaryApi().createBeneficiary(beneficiaryPayload);
+    }
+
+    public Observable<ResponseBody> updateBeneficiary(long beneficiaryId,
+                                                      BeneficiaryUpdatePayload payload) {
+        return selfApiManager.getBeneficiaryApi().updateBeneficiary(beneficiaryId, payload);
+    }
+
+    public Observable<ResponseBody> deleteBeneficiary(long beneficiaryId) {
+        return selfApiManager.getBeneficiaryApi().deleteBeneficiary(beneficiaryId);
+    }
+
+    public Observable<AccountOptionsTemplate> getThirdPartyTransferTemplate() {
+        return selfApiManager.getThirdPartyTransferApi().getAccountTransferTemplate();
+    }
+
+    public Observable<ResponseBody> makeThirdPartyTransfer(TransferPayload transferPayload) {
+        return selfApiManager.getThirdPartyTransferApi().makeTransfer(transferPayload);
+    }
+
 
 }

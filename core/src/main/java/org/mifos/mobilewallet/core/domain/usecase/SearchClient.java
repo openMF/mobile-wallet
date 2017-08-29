@@ -5,6 +5,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
+import org.mifos.mobilewallet.core.data.fineract.entity.mapper.SearchedEntitiesMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.domain.model.SearchResult;
 import rx.Subscriber;
@@ -20,6 +22,9 @@ public class SearchClient extends UseCase<SearchClient.RequestValues, SearchClie
     private final FineractRepository apiRepository;
 
     @Inject
+    SearchedEntitiesMapper searchedEntitiesMapper;
+
+    @Inject
     public SearchClient(FineractRepository apiRepository) {
         this.apiRepository = apiRepository;
     }
@@ -31,7 +36,7 @@ public class SearchClient extends UseCase<SearchClient.RequestValues, SearchClie
         apiRepository.searchResources(requestValues.externalId, "clients", false)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<List<SearchResult>>() {
+                .subscribe(new Subscriber<List<SearchedEntity>>() {
                     @Override
                     public void onCompleted() {
 
@@ -43,9 +48,9 @@ public class SearchClient extends UseCase<SearchClient.RequestValues, SearchClie
                     }
 
                     @Override
-                    public void onNext(List<SearchResult> results) {
+                    public void onNext(List<SearchedEntity> results) {
                         if (results != null && (results.size() != 0)){
-                            getUseCaseCallback().onSuccess(new ResponseValue(results));
+                            getUseCaseCallback().onSuccess(new ResponseValue(searchedEntitiesMapper.transformList(results)));
                         } else {
                             getUseCaseCallback().onError("No clients found");
                         }
