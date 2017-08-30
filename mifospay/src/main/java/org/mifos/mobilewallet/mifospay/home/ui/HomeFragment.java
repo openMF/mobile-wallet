@@ -68,11 +68,15 @@ public class HomeFragment extends BaseFragment {
                             case R.id.action_wallet:
 
                                 replaceFragment(WalletFragment
-                                                .newInstance(localRepository.getClientDetails().getClientId()), false,
+                                                .newInstance(localRepository.getClientDetails()
+                                                        .getClientId()), false,
                                         R.id.bottom_navigation_fragment_container);
                                 break;
 
-                            case R.id.action_send:
+                            case R.id.action_transfer:
+                                replaceFragment(new TransferFragment(), false,
+                                        R.id.bottom_navigation_fragment_container);
+                                break;
 
                             case R.id.action_profile:
 

@@ -18,7 +18,9 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:minHeight="270dp"
+        android:layout_marginTop="@dimen/value_10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -31,31 +33,47 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_margin="@dimen/value_20dp">
+                android:layout_marginTop="@dimen/value_20dp"
+                android:layout_marginBottom="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_20dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Sending to"
+                    android:textSize="@dimen/value_15sp"
                     android:textColor="@color/primaryDarkBlue"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_client_name"
-                    android:textSize="@dimen/value_18sp"/>
+                    android:textSize="@dimen/value_20sp"
+                    android:paddingTop="@dimen/value_10dp"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_client_vpa"
+                    android:textSize="@dimen/value_18sp"
+                    android:paddingTop="@dimen/value_5dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Amount"
+                    android:textSize="@dimen/value_15sp"
+                    android:paddingTop="@dimen/value_20dp"
                     android:textColor="@color/primaryDarkBlue"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_amount"
-                    android:textSize="@dimen/value_18sp"/>
+                    android:textSize="@dimen/value_20sp"
+                    android:textColor="@android:color/black"
+                    android:paddingTop="@dimen/value_10dp"/>
 
             </LinearLayout>
 
@@ -108,7 +126,7 @@
             android:layout_width="130dp"
             android:layout_marginTop="@dimen/value_20dp"
             android:layout_marginBottom="@dimen/value_20dp"
-            android:background="@drawable/transfer_success"/>
+            android:background="@drawable/transfer_failure"/>
 
         <ProgressBar
             android:layout_width="wrap_content"

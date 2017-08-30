@@ -9,7 +9,7 @@
         android:title="Wallet"
         app:showAsAction="always|withText" />
     <item
-        android:id="@+id/action_send"
+        android:id="@+id/action_transfer"
         android:enabled="true"
         android:icon="@drawable/ic_swap_horiz"
         android:title="Transfer"

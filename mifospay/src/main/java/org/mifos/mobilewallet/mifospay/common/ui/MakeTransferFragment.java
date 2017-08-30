@@ -53,6 +53,9 @@ public class MakeTransferFragment extends BottomSheetDialogFragment implements T
     @BindView(R.id.tv_client_name)
     TextView tvClientName;
 
+    @BindView(R.id.tv_client_vpa)
+    TextView tvClientVpa;
+
     @BindView(R.id.tv_transfer_status)
     TextView tvTransferStatus;
 
@@ -131,8 +134,9 @@ public class MakeTransferFragment extends BottomSheetDialogFragment implements T
     public void showToClientDetails(long clientId, String name, String externalId) {
         this.toClientId = clientId;
 
-        tvClientName.setText(name + "\n" + externalId);
+        tvClientName.setText(name);
         tvAmount.setText(Constants.RUPEE + " " + amount);
+        tvClientVpa.setText(externalId);
 
         contentView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);

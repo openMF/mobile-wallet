@@ -5,16 +5,22 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter;
+import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.TransferPresenter;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by naman on 30/8/17.
@@ -26,6 +32,15 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     TransferPresenter mPresenter;
 
     HomeContract.TransferPresenter mTransferPresenter;
+
+    @BindView(R.id.et_amount)
+    EditText etAmount;
+
+    @BindView(R.id.et_vpa)
+    EditText etVpa;
+
+    @BindView(R.id.btn_transfer)
+    Button btnTransfer;
 
 
     @Override
@@ -42,11 +57,20 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         View rootView = inflater.inflate(R.layout.fragment_transfer, container,
                 false);
         ButterKnife.bind(this, rootView);
+
+        setToolbarTitle("Transfer");
         mPresenter.attachView(this);
 
-        showProgress();
 
         return rootView;
+    }
+
+    @OnClick(R.id.btn_transfer)
+    public void transferClicked() {
+        String externalId = etVpa.getText().toString();
+        double amount = Double.parseDouble(etAmount.getText().toString());
+        MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
+        fragment.show(getChildFragmentManager(), "Make Transfer Fragment");
     }
 
     @Override
