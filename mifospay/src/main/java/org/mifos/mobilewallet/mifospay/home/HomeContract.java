@@ -27,14 +27,29 @@ public interface HomeContract {
 
     interface WalletView extends BaseView<WalletPresenter> {
 
-        void showWallets(List<Account> accounts);
+        void showWallet(Account account);
 
     }
 
     interface WalletPresenter extends BasePresenter {
 
-        void fetchWallets();
+        void fetchWallet();
 
     }
+
+
+    interface TransferView extends BaseView<TransferPresenter> {
+
+
+
+    }
+
+    interface TransferPresenter extends BasePresenter {
+
+
+
+    }
+
+
 
 }

@@ -9,7 +9,6 @@ import org.mifos.mobilewallet.core.domain.model.Currency;
  * Created by naman on 17/8/17.
  */
 
-@Singleton
 public class CurrencyMapper {
 
     @Inject

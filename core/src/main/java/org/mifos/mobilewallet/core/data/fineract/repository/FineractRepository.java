@@ -20,8 +20,6 @@ import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.UpdateVpaPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
-import org.mifos.mobilewallet.core.data.fineract.entity.templates.account.AccountOptionsTemplate;
-import org.mifos.mobilewallet.core.data.fineract.entity.templates.beneficiary.BeneficiaryTemplate;
 import org.mifos.mobilewallet.core.utils.Constants;
 import okhttp3.ResponseBody;
 import rx.Observable;
@@ -104,10 +102,6 @@ public class FineractRepository {
         return selfApiManager.getBeneficiaryApi().getBeneficiaryList();
     }
 
-    public Observable<BeneficiaryTemplate> getBeneficiaryTemplate() {
-        return selfApiManager.getBeneficiaryApi().getBeneficiaryTemplate();
-    }
-
     public Observable<ResponseBody> createBeneficiary(BeneficiaryPayload beneficiaryPayload) {
         return selfApiManager.getBeneficiaryApi().createBeneficiary(beneficiaryPayload);
     }
@@ -115,14 +109,6 @@ public class FineractRepository {
     public Observable<ResponseBody> updateBeneficiary(long beneficiaryId,
                                                       BeneficiaryUpdatePayload payload) {
         return selfApiManager.getBeneficiaryApi().updateBeneficiary(beneficiaryId, payload);
-    }
-
-    public Observable<ResponseBody> deleteBeneficiary(long beneficiaryId) {
-        return selfApiManager.getBeneficiaryApi().deleteBeneficiary(beneficiaryId);
-    }
-
-    public Observable<AccountOptionsTemplate> getThirdPartyTransferTemplate() {
-        return selfApiManager.getThirdPartyTransferApi().getAccountTransferTemplate();
     }
 
     public Observable<ResponseBody> makeThirdPartyTransfer(TransferPayload transferPayload) {

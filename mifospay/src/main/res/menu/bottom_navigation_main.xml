@@ -11,15 +11,9 @@
     <item
         android:id="@+id/action_send"
         android:enabled="true"
-        android:icon="@drawable/ic_send"
-        android:title="Send"
+        android:icon="@drawable/ic_swap_horiz"
+        android:title="Transfer"
         app:showAsAction="always|withText" />
-    <!--<item-->
-        <!--android:id="@+id/action_request"-->
-        <!--android:enabled="true"-->
-        <!--android:icon="@drawable/ic_request"-->
-        <!--android:title="Request"-->
-        <!--app:showAsAction="always|withText" />-->
 
     <item
         android:id="@+id/action_profile"

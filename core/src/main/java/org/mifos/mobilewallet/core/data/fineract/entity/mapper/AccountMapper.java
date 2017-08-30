@@ -14,7 +14,6 @@ import org.mifos.mobilewallet.core.domain.model.Account;
  * Created by naman on 11/7/17.
  */
 
-@Singleton
 public class AccountMapper {
 
     @Inject

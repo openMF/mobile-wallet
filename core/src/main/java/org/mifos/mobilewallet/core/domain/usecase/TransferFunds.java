@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.core.domain.usecase;
 
-import android.text.format.DateUtils;
-
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary;
@@ -171,6 +169,7 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
                             }
                             if (walletAccount != null) {
                                 toAccount = walletAccount;
+                                checkBeneficiary();
                             } else {
                                 getUseCaseCallback().onError("No wallet found");
                             }

@@ -10,7 +10,6 @@ import org.mifos.mobilewallet.core.domain.model.User;
  * Created by naman on 17/6/17.
  */
 
-@Singleton
 public class UserEntityMapper {
 
     @Inject

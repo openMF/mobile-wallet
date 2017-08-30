@@ -16,7 +16,6 @@ import org.mifos.mobilewallet.core.utils.DateHelper;
  * Created by naman on 15/8/17.
  */
 
-@Singleton
 public class TransactionMapper {
 
     @Inject

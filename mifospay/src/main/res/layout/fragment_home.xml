@@ -15,9 +15,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        app:itemBackground="@color/colorPrimaryDark"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
+        android:background="@android:color/white"
+        app:elevation="25dp"
+        app:itemIconTint="@drawable/bottomview_selector"
+        app:itemTextColor="@drawable/bottomview_selector"
         app:menu="@menu/bottom_navigation_main" />
 
 </RelativeLayout>

@@ -13,7 +13,6 @@ import org.mifos.mobilewallet.core.domain.model.SearchResult;
  * Created by naman on 19/8/17.
  */
 
-@Singleton
 public class SearchedEntitiesMapper {
 
     @Inject

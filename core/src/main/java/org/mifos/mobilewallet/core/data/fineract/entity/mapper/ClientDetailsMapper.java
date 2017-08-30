@@ -15,7 +15,6 @@ import org.mifos.mobilewallet.core.utils.DateHelper;
  * Created by naman on 10/7/17.
  */
 
-@Singleton
 public class ClientDetailsMapper {
 
     @Inject
