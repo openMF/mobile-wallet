@@ -26,7 +26,7 @@ import rx.schedulers.Schedulers;
  */
 
 public class TransferFunds extends UseCase<TransferFunds.RequestValues,
-       TransferFunds.ResponseValue> {
+        TransferFunds.ResponseValue> {
 
     private final FineractRepository apiRepository;
 
@@ -114,7 +114,7 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
 
                     @Override
                     public void onError(Throwable e) {
-                        getUseCaseCallback().onError("Error fetching accounts");
+                        getUseCaseCallback().onError("Error fetching from account");
                     }
 
                     @Override
@@ -123,7 +123,8 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
                         if (accounts != null && accounts.size() != 0) {
                             SavingAccount walletAccount = null;
                             for (SavingAccount account : accounts) {
-                                if (account.getProductId() == Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
+                                if (account.getProductId() ==
+                                        Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
                                     walletAccount = account;
                                     break;
                                 }
@@ -135,7 +136,7 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
                                 getUseCaseCallback().onError("No wallet found");
                             }
                         } else {
-                            getUseCaseCallback().onError("Error fetching accounts");
+                            getUseCaseCallback().onError("Error fetching from account");
                         }
                     }
                 });
@@ -153,7 +154,7 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
 
                     @Override
                     public void onError(Throwable e) {
-                        getUseCaseCallback().onError("Error fetching accounts");
+                        getUseCaseCallback().onError("Error fetching to account");
                     }
 
                     @Override
@@ -162,7 +163,8 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
                         if (accounts != null && accounts.size() != 0) {
                             SavingAccount walletAccount = null;
                             for (SavingAccount account : accounts) {
-                                if (account.getProductId() == Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
+                                if (account.getProductId() ==
+                                        Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
                                     walletAccount = account;
                                     break;
                                 }
@@ -174,7 +176,7 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
                                 getUseCaseCallback().onError("No wallet found");
                             }
                         } else {
-                            getUseCaseCallback().onError("Error fetching accounts");
+                            getUseCaseCallback().onError("Error fetching to account");
                         }
                     }
                 });
@@ -200,7 +202,8 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
                         if (beneficiaries != null) {
                             boolean exists = false;
                             for (Beneficiary beneficiary : beneficiaries) {
-                                if (beneficiary.getAccountNumber().equals(toAccount.getAccountNo())) {
+                                if (beneficiary.getAccountNumber()
+                                        .equals(toAccount.getAccountNo())) {
                                     exists = true;
                                     if (beneficiary.getTransferLimit() >= requestValues.amount) {
                                         makeTransfer();
@@ -243,7 +246,7 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
 
                     @Override
                     public void onNext(ResponseBody responseBody) {
-                      makeTransfer();
+                        makeTransfer();
                     }
                 });
     }
@@ -275,14 +278,15 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
     private void makeTransfer() {
         TransferPayload transferPayload = new TransferPayload();
         transferPayload.setFromAccountId((int) fromAccount.getId());
-        transferPayload.setFromClientId((long)fromClient.getId());
+        transferPayload.setFromClientId((long) fromClient.getId());
         transferPayload.setFromAccountType(2);
         transferPayload.setFromOfficeId(fromClient.getOfficeId());
         transferPayload.setToOfficeId(toClient.getOfficeId());
         transferPayload.setToAccountId((int) toAccount.getId());
         transferPayload.setToClientId((long) toClient.getId());
         transferPayload.setToAccountType(2);
-        transferPayload.setTransferDate(DateHelper.getDateAsStringFromLong(System.currentTimeMillis()));
+        transferPayload.setTransferDate(DateHelper
+                .getDateAsStringFromLong(System.currentTimeMillis()));
         transferPayload.setTransferAmount(requestValues.amount);
         transferPayload.setTransferDescription("Wallet transfer");
 

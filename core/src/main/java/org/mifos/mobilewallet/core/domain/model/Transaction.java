@@ -106,10 +106,12 @@ public class Transaction implements Parcelable {
         this.date = in.readString();
         this.currency = in.readParcelable(Currency.class.getClassLoader());
         int tmpTransactionType = in.readInt();
-        this.transactionType = tmpTransactionType == -1 ? null : TransactionType.values()[tmpTransactionType];
+        this.transactionType = tmpTransactionType == -1 ? null :
+                TransactionType.values()[tmpTransactionType];
     }
 
-    public static final Parcelable.Creator<Transaction> CREATOR = new Parcelable.Creator<Transaction>() {
+    public static final Parcelable.Creator<Transaction> CREATOR = new
+            Parcelable.Creator<Transaction>() {
         @Override
         public Transaction createFromParcel(Parcel source) {
             return new Transaction(source);

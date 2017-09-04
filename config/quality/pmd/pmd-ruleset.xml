@@ -25,7 +25,9 @@
         <exclude name="IfStmtsMustUseBraces" />
     </rule>
     <rule ref="rulesets/java/strings.xml" />
-    <rule ref="rulesets/java/basic.xml" />
+    <rule ref="rulesets/java/basic.xml" >
+	<exclude name="AvoidUsingHardCodedIP" />
+     </rule>
     <rule ref="rulesets/java/naming.xml">
         <exclude name="AbstractNaming" />
         <exclude name="LongVariable" />

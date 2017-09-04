@@ -18,7 +18,7 @@ public class BaseURL {
 
 
     public String getUrl() {
-            return PROTOCOL_HTTPS + API_ENDPOINT + API_PATH;
+        return PROTOCOL_HTTPS + API_ENDPOINT + API_PATH;
 
     }
 

@@ -36,15 +36,15 @@ public class SearchPresenter implements SearchContract.SearchPresenter {
     public void performSearch(String query) {
         mUsecaseHandler.execute(searchClient, new SearchClient.RequestValues(query),
                 new UseCase.UseCaseCallback<SearchClient.ResponseValue>() {
-            @Override
-            public void onSuccess(SearchClient.ResponseValue response) {
-                mSearchView.showSearchResult(response.getResults());
-            }
+                    @Override
+                    public void onSuccess(SearchClient.ResponseValue response) {
+                        mSearchView.showSearchResult(response.getResults());
+                    }
 
-            @Override
-            public void onError(String message) {
+                    @Override
+                    public void onError(String message) {
 
-            }
-        });
+                    }
+                });
     }
 }

@@ -1,7 +1,6 @@
 package org.mifos.mobilewallet.core.domain.usecase;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity;
@@ -49,7 +48,8 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
 
                     @Override
                     public void onNext(final UserEntity user) {
-                        getUseCaseCallback().onSuccess(new ResponseValue(userEntityMapper.transform(user)));
+                        getUseCaseCallback().onSuccess(new
+                                ResponseValue(userEntityMapper.transform(user)));
                     }
                 });
 

@@ -49,8 +49,9 @@ public class SearchClient extends UseCase<SearchClient.RequestValues, SearchClie
 
                     @Override
                     public void onNext(List<SearchedEntity> results) {
-                        if (results != null && (results.size() != 0)){
-                            getUseCaseCallback().onSuccess(new ResponseValue(searchedEntitiesMapper.transformList(results)));
+                        if (results != null && (results.size() != 0)) {
+                            getUseCaseCallback().onSuccess(new
+                                    ResponseValue(searchedEntitiesMapper.transformList(results)));
                         } else {
                             getUseCaseCallback().onError("No clients found");
                         }

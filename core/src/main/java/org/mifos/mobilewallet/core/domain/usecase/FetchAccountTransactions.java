@@ -51,7 +51,9 @@ public class FetchAccountTransactions extends UseCase<FetchAccountTransactions.R
 
                     @Override
                     public void onNext(SavingsWithAssociations transactions) {
-                        getUseCaseCallback().onSuccess(new ResponseValue(transactionMapper.transformTransactionList(transactions)));
+                        getUseCaseCallback().onSuccess(new
+                                ResponseValue(transactionMapper
+                                .transformTransactionList(transactions)));
                     }
                 });
 

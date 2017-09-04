@@ -28,7 +28,8 @@ import butterknife.ButterKnife;
  * Created by naman on 30/8/17.
  */
 
-public class MakeTransferFragment extends BottomSheetDialogFragment implements TransferContract.TransferView {
+public class MakeTransferFragment extends BottomSheetDialogFragment
+        implements TransferContract.TransferView {
 
     @Inject
     MakeTransferPresenter mPresenter;

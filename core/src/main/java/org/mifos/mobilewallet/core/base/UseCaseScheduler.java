@@ -12,5 +12,6 @@ public interface UseCaseScheduler {
                                                                   useCaseCallback);
 
     <V extends UseCase.ResponseValue> void onError(final String message,
-                                                   final UseCase.UseCaseCallback<V> useCaseCallback);
+                                                   final UseCase.UseCaseCallback<V>
+                                                           useCaseCallback);
 }

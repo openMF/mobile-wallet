@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions;
@@ -24,7 +23,8 @@ public class TransactionMapper {
     @Inject
     public TransactionMapper() {}
 
-    public List<Transaction> transformTransactionList(SavingsWithAssociations savingsWithAssociations) {
+    public List<Transaction> transformTransactionList(SavingsWithAssociations
+                                                              savingsWithAssociations) {
         List<Transaction> transactionList = new ArrayList<>();
 
         if (savingsWithAssociations != null && savingsWithAssociations.getTransactions() != null
@@ -47,7 +47,8 @@ public class TransactionMapper {
             transaction.setAmount(transactions.getAmount());
 
             if (transactions.getPaymentDetailData() != null) {
-                transaction.setTransactionId(transactions.getPaymentDetailData().getReceiptNumber());
+                transaction.setTransactionId(transactions
+                        .getPaymentDetailData().getReceiptNumber());
             }
 
             if (transactions.getSubmittedOnDate() != null) {

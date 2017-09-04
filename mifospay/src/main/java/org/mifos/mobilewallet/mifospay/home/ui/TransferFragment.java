@@ -11,7 +11,6 @@ import android.widget.EditText;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
-import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.TransferPresenter;

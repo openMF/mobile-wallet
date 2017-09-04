@@ -4,9 +4,6 @@ import android.app.Application;
 import android.content.Context;
 import android.support.v7.app.AppCompatDelegate;
 
-import com.raizlabs.android.dbflow.config.FlowConfig;
-import com.raizlabs.android.dbflow.config.FlowManager;
-
 import org.mifos.mobilewallet.mifospay.injection.component.ApplicationComponent;
 import org.mifos.mobilewallet.mifospay.injection.component.DaggerApplicationComponent;
 import org.mifos.mobilewallet.mifospay.injection.module.ApplicationModule;
@@ -41,7 +38,6 @@ public class MifosPayApp extends Application {
         if (MifosPayApp.instance == null) {
             MifosPayApp.instance = this;
         }
-        FlowManager.init(new FlowConfig.Builder(this).build());
         ButterKnife.setDebug(true);
     }
 

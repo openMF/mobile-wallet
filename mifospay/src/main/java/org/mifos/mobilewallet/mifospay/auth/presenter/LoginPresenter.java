@@ -13,7 +13,6 @@ import org.mifos.mobilewallet.core.domain.model.Client;
 import org.mifos.mobilewallet.core.domain.model.User;
 import org.mifos.mobilewallet.core.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
-import org.mifos.mobilewallet.core.domain.usecase.SearchClient;
 import org.mifos.mobilewallet.core.utils.Constants;
 
 /**
@@ -28,13 +27,11 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     private final PreferencesHelper preferencesHelper;
 
     @Inject
-    AuthenticateUser authenticateUser;
+    AuthenticateUser authenticateUserUseCase;
 
     @Inject
-    FetchClientData fetchClientData;
+    FetchClientData fetchClientDataUseCase;
 
-    @Inject
-    SearchClient searchClient;
 
     @Inject
     public LoginPresenter(UseCaseHandler useCaseHandler, PreferencesHelper preferencesHelper) {
@@ -51,10 +48,12 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
 
     public void loginUser(String username, String password) {
 
-        authenticateUser.setRequestValues(new AuthenticateUser.RequestValues(username, password));
-        final AuthenticateUser.RequestValues requestValue = authenticateUser.getRequestValues();
+        authenticateUserUseCase.setRequestValues(new
+                AuthenticateUser.RequestValues(username, password));
+        final AuthenticateUser.RequestValues requestValue =
+                authenticateUserUseCase.getRequestValues();
 
-        mUsecaseHandler.execute(authenticateUser, requestValue,
+        mUsecaseHandler.execute(authenticateUserUseCase, requestValue,
                 new UseCase.UseCaseCallback<AuthenticateUser.ResponseValue>() {
                     @Override
                     public void onSuccess(AuthenticateUser.ResponseValue response) {
@@ -73,7 +72,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     }
 
     private void fetchClientData() {
-        mUsecaseHandler.execute(fetchClientData , null,
+        mUsecaseHandler.execute(fetchClientDataUseCase , null,
                 new UseCase.UseCaseCallback<FetchClientData.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchClientData.ResponseValue response) {

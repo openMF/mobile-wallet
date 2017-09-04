@@ -56,7 +56,8 @@ public class FetchWallet extends UseCase<FetchWallet.RequestValues,
                         if (accounts != null && accounts.size() != 0) {
                             Account walletAccount = null;
                             for (Account account : accounts) {
-                                if (account.getProductId() == Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
+                                if (account.getProductId() ==
+                                        Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
                                     walletAccount = account;
                                     break;
                                 }

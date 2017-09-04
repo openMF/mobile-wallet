@@ -49,7 +49,8 @@ public class FetchClientData extends UseCase<FetchClientData.RequestValues,
 
                         @Override
                         public void onNext(Client client) {
-                            getUseCaseCallback().onSuccess(new ResponseValue(clientDetailsMapper.transform(client)));
+                            getUseCaseCallback().onSuccess(new
+                                    ResponseValue(clientDetailsMapper.transform(client)));
                         }
                     });
         } else {
@@ -69,10 +70,13 @@ public class FetchClientData extends UseCase<FetchClientData.RequestValues,
 
                         @Override
                         public void onNext(Page<Client> client) {
-                            if (client != null && client.getPageItems() != null && client.getPageItems().size() != 0) {
-                                getUseCaseCallback().onSuccess(new ResponseValue(clientDetailsMapper.transform(client.getPageItems().get(0))));
+                            if (client != null && client.getPageItems() != null
+                                    && client.getPageItems().size() != 0) {
+                                getUseCaseCallback().onSuccess(new
+                                        ResponseValue(clientDetailsMapper
+                                        .transform(client.getPageItems().get(0))));
                             } else {
-                               getUseCaseCallback().onError("No client found");
+                                getUseCaseCallback().onError("No client found");
                             }
                         }
                     });

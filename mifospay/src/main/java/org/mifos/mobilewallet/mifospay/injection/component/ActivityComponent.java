@@ -1,7 +1,6 @@
 package org.mifos.mobilewallet.mifospay.injection.component;
 
 
-import org.mifos.mobilewallet.core.domain.usecase.TransferFunds;
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.SearchActivity;

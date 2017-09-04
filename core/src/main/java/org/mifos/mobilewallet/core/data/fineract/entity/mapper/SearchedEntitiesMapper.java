@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
 import org.mifos.mobilewallet.core.domain.model.SearchResult;
@@ -22,9 +21,9 @@ public class SearchedEntitiesMapper {
         List<SearchResult> searchResults = new ArrayList<>();
 
         if (searchedEntities != null && searchedEntities.size() != 0) {
-             for (SearchedEntity entity : searchedEntities) {
-                 searchResults.add(transform(entity));
-             }
+            for (SearchedEntity entity : searchedEntities) {
+                searchResults.add(transform(entity));
+            }
         }
 
         return searchResults;

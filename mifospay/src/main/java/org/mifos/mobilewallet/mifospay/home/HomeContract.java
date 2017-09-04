@@ -3,8 +3,6 @@ package org.mifos.mobilewallet.mifospay.home;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
-import java.util.List;
-
 import org.mifos.mobilewallet.core.domain.model.Account;
 import org.mifos.mobilewallet.core.domain.model.Client;
 

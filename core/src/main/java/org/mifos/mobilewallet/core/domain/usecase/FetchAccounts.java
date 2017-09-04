@@ -51,7 +51,8 @@ public class FetchAccounts extends UseCase<FetchAccounts.RequestValues,
                     @Override
                     public void onNext(ClientAccounts accounts) {
                         if (accounts != null) {
-                            getUseCaseCallback().onSuccess(new FetchAccounts.ResponseValue(accountMapper.transform(accounts)));
+                            getUseCaseCallback().onSuccess(new
+                                    FetchAccounts.ResponseValue(accountMapper.transform(accounts)));
                         } else {
                             getUseCaseCallback().onError("No accounts found");
                         }

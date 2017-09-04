@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.ClientPayload;
 import org.mifos.mobilewallet.core.domain.model.Client;
@@ -20,7 +19,8 @@ public class ClientDetailsMapper {
     @Inject
     public ClientDetailsMapper() {}
 
-    public List<Client> transformList(List<org.mifos.mobilewallet.core.data.fineract.entity.client.Client> clients) {
+    public List<Client> transformList(List<org.mifos.mobilewallet.core.data
+            .fineract.entity.client.Client> clients) {
 
         List<Client> clientList = new ArrayList<>();
 

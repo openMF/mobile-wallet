@@ -25,6 +25,11 @@ android {
             minifyEnabled false
         }
     }
+
+    lintOptions {
+        abortOnError false
+        disable 'InvalidPackage'
+    }
 }
 
 dependencies {

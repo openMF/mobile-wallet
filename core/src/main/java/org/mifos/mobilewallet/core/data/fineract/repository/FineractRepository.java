@@ -50,7 +50,7 @@ public class FineractRepository {
     }
 
     public Observable<List<SearchedEntity>> searchResources(String query, String resources,
-                                                          Boolean exactMatch) {
+                                                            Boolean exactMatch) {
         return fineractApiManager.getSearchApi().searchResources(query, resources, exactMatch);
     }
 
@@ -58,11 +58,11 @@ public class FineractRepository {
     public Observable<ResponseBody> updateClientVpa(long clientId, UpdateVpaPayload payload) {
         return fineractApiManager.getClientsApi().updateClientVpa(clientId, payload)
                 .map(new Func1<ResponseBody, ResponseBody>() {
-            @Override
-            public ResponseBody call(ResponseBody responseBody) {
-                return responseBody;
-            }
-        });
+                    @Override
+                    public ResponseBody call(ResponseBody responseBody) {
+                        return responseBody;
+                    }
+                });
     }
 
     public Observable<ClientAccounts> getAccounts(long clientId) {

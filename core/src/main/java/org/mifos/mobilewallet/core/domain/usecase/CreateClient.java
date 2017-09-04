@@ -29,7 +29,7 @@ public class CreateClient extends UseCase<CreateClient.RequestValues, CreateClie
         private final NewClient client;
 
         public RequestValues(NewClient client) {
-           this.client = client;
+            this.client = client;
         }
     }
 

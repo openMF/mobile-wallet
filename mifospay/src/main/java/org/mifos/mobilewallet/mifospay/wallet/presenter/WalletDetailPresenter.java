@@ -37,15 +37,15 @@ public class WalletDetailPresenter implements WalletContract.WalletDetailPresent
         mUsecaseHandler.execute(fetchAccountTransactions,
                 new FetchAccountTransactions.RequestValues(accountId),
                 new UseCase.UseCaseCallback<FetchAccountTransactions.ResponseValue>() {
-            @Override
-            public void onSuccess(FetchAccountTransactions.ResponseValue response) {
-                mWalletDetailView.showWalletTransactions(response.getTransactions());
-            }
+                    @Override
+                    public void onSuccess(FetchAccountTransactions.ResponseValue response) {
+                        mWalletDetailView.showWalletTransactions(response.getTransactions());
+                    }
 
-            @Override
-            public void onError(String message) {
+                    @Override
+                    public void onError(String message) {
 
-            }
-        });
+                    }
+                });
     }
 }

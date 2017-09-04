@@ -1,4 +1,4 @@
-package or.mifos.mobilewallet.mifoswallet;
+package org.mifos.mobilewallet.mifospay;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

@@ -25,7 +25,8 @@ public interface ClientService {
     Observable<Client> getClientForId(@Path(CLIENT_ID) long clientId);
 
     @PUT(ApiEndPoints.CLIENTS + "/{clientId}")
-    Observable<ResponseBody> updateClientVpa(@Path(CLIENT_ID) long clientId, @Body UpdateVpaPayload payload);
+    Observable<ResponseBody> updateClientVpa(@Path(CLIENT_ID) long clientId,
+                                             @Body UpdateVpaPayload payload);
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/images")
     Observable<ResponseBody> getClientImage(@Path(CLIENT_ID) long clientId);

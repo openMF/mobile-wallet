@@ -23,7 +23,8 @@ import org.mifos.mobilewallet.core.domain.model.Transaction;
  * Created by naman on 17/8/17.
  */
 
-public class WalletTransactionsAdapter extends RecyclerView.Adapter<WalletTransactionsAdapter.ViewHolder> {
+public class WalletTransactionsAdapter
+        extends RecyclerView.Adapter<WalletTransactionsAdapter.ViewHolder> {
 
     private Context context;
     private List<Transaction> transactions;
