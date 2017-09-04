@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import org.mifos.mobilewallet.R;
-import org.mifos.mobilewallet.core.BaseFragment;
+import org.mifos.mobilewallet.base.BaseFragment;
 
 import butterknife.ButterKnife;
 

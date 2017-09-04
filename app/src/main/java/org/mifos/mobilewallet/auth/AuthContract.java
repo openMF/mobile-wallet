@@ -1,8 +1,8 @@
 package org.mifos.mobilewallet.auth;
 
 import org.mifos.mobilewallet.auth.domain.model.Bank;
-import org.mifos.mobilewallet.core.BasePresenter;
-import org.mifos.mobilewallet.core.BaseView;
+import org.mifos.mobilewallet.base.BasePresenter;
+import org.mifos.mobilewallet.base.BaseView;
 
 import java.util.List;
 

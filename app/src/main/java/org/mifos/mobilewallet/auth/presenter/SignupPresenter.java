@@ -1,11 +1,12 @@
 package org.mifos.mobilewallet.auth.presenter;
 
 import org.mifos.mobilewallet.auth.AuthContract;
-import org.mifos.mobilewallet.auth.domain.usecase.CreateUser;
-import org.mifos.mobilewallet.core.BaseView;
-import org.mifos.mobilewallet.core.UseCaseHandler;
+import org.mifos.mobilewallet.base.BaseView;
 
 import javax.inject.Inject;
+
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.domain.usecase.CreateUser;
 
 /**
  * Created by naman on 16/6/17.

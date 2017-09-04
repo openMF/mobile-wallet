@@ -15,7 +15,7 @@ import org.mifos.mobilewallet.auth.domain.model.Bank;
 import org.mifos.mobilewallet.auth.presenter.AddAccountPresenter;
 import org.mifos.mobilewallet.auth.ui.adapters.OtherBankAdapter;
 import org.mifos.mobilewallet.auth.ui.adapters.PopularBankAdapter;
-import org.mifos.mobilewallet.core.BaseActivity;
+import org.mifos.mobilewallet.base.BaseActivity;
 import org.mifos.mobilewallet.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.utils.widgets.DiscreteSlider;
 

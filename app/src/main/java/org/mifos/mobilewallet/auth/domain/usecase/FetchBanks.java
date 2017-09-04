@@ -1,12 +1,13 @@
 package org.mifos.mobilewallet.auth.domain.usecase;
 
 import org.mifos.mobilewallet.auth.domain.model.Bank;
-import org.mifos.mobilewallet.core.UseCase;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 
 import java.util.List;
 
 import javax.inject.Inject;
+
+import org.mifos.mobilewallet.core.base.UseCase;
 
 /**
  * Created by naman on 20/6/17.

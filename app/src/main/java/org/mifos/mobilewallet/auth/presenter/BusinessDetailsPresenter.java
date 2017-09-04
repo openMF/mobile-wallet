@@ -2,12 +2,13 @@ package org.mifos.mobilewallet.auth.presenter;
 
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.domain.usecase.VerifyAadharDetails;
-import org.mifos.mobilewallet.core.BaseView;
-import org.mifos.mobilewallet.core.UseCase;
-import org.mifos.mobilewallet.core.UseCaseHandler;
+import org.mifos.mobilewallet.base.BaseView;
 import org.mifos.mobilewallet.user.domain.usecase.VerifyPanDetails;
 
 import javax.inject.Inject;
+
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 /**
  * Created by naman on 20/6/17.

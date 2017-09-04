@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_wallet"
+        android:enabled="true"
+        android:icon="@drawable/ic_account_balance_wallet"
+        android:title="Wallet"
+        app:showAsAction="always|withText" />
+    <item
+        android:id="@+id/action_transfer"
+        android:enabled="true"
+        android:icon="@drawable/ic_swap_horiz"
+        android:title="Transfer"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/action_profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_person"
+        android:title="Profile"
+        app:showAsAction="always|withText" />
+
+</menu>

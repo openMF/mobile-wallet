@@ -12,7 +12,6 @@ import org.mifos.mobilewallet.injection.component.DaggerApplicationComponent;
 import org.mifos.mobilewallet.injection.module.ApplicationModule;
 
 import butterknife.ButterKnife;
-
 /**
  * Created by naman on 16/6/17.
  */
@@ -58,5 +57,4 @@ public class MifosWalletApp extends Application {
     public void setComponent(ApplicationComponent applicationComponent) {
         this.applicationComponent = applicationComponent;
     }
-
 }

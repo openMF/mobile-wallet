@@ -9,7 +9,7 @@ import android.widget.Toast;
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.presenter.LoginPresenter;
-import org.mifos.mobilewallet.core.BaseActivity;
+import org.mifos.mobilewallet.base.BaseActivity;
 import org.mifos.mobilewallet.home.ui.HomeActivity;
 import org.mifos.mobilewallet.utils.Utils;
 

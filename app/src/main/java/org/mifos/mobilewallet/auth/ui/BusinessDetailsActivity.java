@@ -13,7 +13,7 @@ import android.widget.TextView;
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.presenter.BusinessDetailsPresenter;
-import org.mifos.mobilewallet.core.BaseActivity;
+import org.mifos.mobilewallet.base.BaseActivity;
 import org.mifos.mobilewallet.user.ui.VerifyPanDialog;
 import org.mifos.mobilewallet.utils.widgets.DiscreteSlider;
 

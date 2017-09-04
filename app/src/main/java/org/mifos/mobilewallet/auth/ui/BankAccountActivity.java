@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.presenter.BankAccountPresenter;
-import org.mifos.mobilewallet.core.BaseActivity;
+import org.mifos.mobilewallet.base.BaseActivity;
 
 import javax.inject.Inject;
 

@@ -15,10 +15,9 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.account.ui.AccountsFragment;
-import org.mifos.mobilewallet.core.BaseActivity;
+import org.mifos.mobilewallet.base.BaseActivity;
 import org.mifos.mobilewallet.home.HomeContract;
 import org.mifos.mobilewallet.home.HomePresenter;
-import org.mifos.mobilewallet.home.domain.model.ClientDetails;
 import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
 import org.mifos.mobilewallet.invoice.ui.RecentInvoicesFragment;
 import org.mifos.mobilewallet.qr.ui.ShowQrActivity;
@@ -30,6 +29,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import org.mifos.mobilewallet.core.domain.model.Client;
 
 /**
  * Created by naman on 17/6/17.
@@ -164,10 +164,10 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
     }
 
     @Override
-    public void showUserDetailsHeader(ClientDetails clientDetails) {
-        tvUsername.setText(clientDetails.getName());
+    public void showClientDetails(Client client) {
+        tvUsername.setText(client.getName());
         TextDrawable drawable = TextDrawable.builder()
-                .buildRound(clientDetails.getName().substring(0, 1), R.color.colorPrimary);
+                .buildRound(client.getName().substring(0, 1), R.color.colorPrimary);
         ivUserImage.setImageDrawable(drawable);
 
     }

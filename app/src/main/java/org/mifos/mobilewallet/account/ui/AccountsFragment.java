@@ -12,10 +12,9 @@ import android.widget.Toast;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.account.AccountContract;
-import org.mifos.mobilewallet.account.domain.model.Account;
 import org.mifos.mobilewallet.account.presenter.AccountsPresenter;
-import org.mifos.mobilewallet.core.BaseActivity;
-import org.mifos.mobilewallet.core.BaseFragment;
+import org.mifos.mobilewallet.base.BaseActivity;
+import org.mifos.mobilewallet.base.BaseFragment;
 import org.mifos.mobilewallet.utils.RecyclerItemClickListener;
 
 import java.util.List;
@@ -24,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import org.mifos.mobilewallet.core.domain.model.Account;
 
 /**
  * Created by naman on 11/7/17.
