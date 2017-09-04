@@ -19,7 +19,7 @@ public class AccountsPresenter implements AccountContract.AccountsPresenter {
     private final UseCaseHandler mUsecaseHandler;
 
     @Inject
-    FetchAccounts fetchAccounts;
+    FetchAccounts fetchAccountsUseCase;
 
     @Inject
     public AccountsPresenter(UseCaseHandler useCaseHandler) {
@@ -35,7 +35,8 @@ public class AccountsPresenter implements AccountContract.AccountsPresenter {
     @Override
     public void fetchAccounts() {
 
-        mUsecaseHandler.execute(fetchAccounts, null, new UseCase.UseCaseCallback<FetchAccounts.ResponseValue>() {
+        mUsecaseHandler.execute(fetchAccountsUseCase, null, new
+                UseCase.UseCaseCallback<FetchAccounts.ResponseValue>() {
             @Override
             public void onSuccess(FetchAccounts.ResponseValue response) {
                 maccountsView.showAccounts(response.getAccountList());

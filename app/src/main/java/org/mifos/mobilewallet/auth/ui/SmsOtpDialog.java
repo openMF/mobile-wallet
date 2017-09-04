@@ -71,7 +71,7 @@ public class SmsOtpDialog extends BottomSheetDialogFragment {
             }
         });
 
-       autoDetectOtp();
+        autoDetectOtp();
 
         return dialog;
     }
@@ -81,7 +81,7 @@ public class SmsOtpDialog extends BottomSheetDialogFragment {
         tvAutoDetect.setText("Verifying OTP");
         btnVerify.setText("Verifying..");
 
-        Handler handler= new Handler();
+        Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -90,7 +90,7 @@ public class SmsOtpDialog extends BottomSheetDialogFragment {
                     ((SignupActivity) getActivity()).openAddDetails();
                 }
             }
-        },1500);
+        },  1500);
 
     }
 

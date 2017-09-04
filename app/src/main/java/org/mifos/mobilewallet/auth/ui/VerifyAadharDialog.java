@@ -69,7 +69,8 @@ public class VerifyAadharDialog extends BottomSheetDialogFragment {
     private void verifyAadhar() {
         dismiss();
         if (getActivity() instanceof BusinessDetailsActivity) {
-            ((BusinessDetailsActivity) getActivity()).verifyAadhar(etAadharNumber.getText().toString());
+            ((BusinessDetailsActivity) getActivity()).verifyAadhar(etAadharNumber
+                    .getText().toString());
         }
     }
     @Override

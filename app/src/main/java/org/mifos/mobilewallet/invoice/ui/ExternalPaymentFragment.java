@@ -87,6 +87,6 @@ public class ExternalPaymentFragment extends Fragment {
                 .appendQueryParameter("merchantid", String.valueOf(invoice.getMerchantId()))
                 .appendQueryParameter("amount", String.valueOf(Math.round(invoice.getAmount())))
                 .appendQueryParameter("accountid", String.valueOf(invoice.getAccountId()));
-       return builder.build().toString();
+        return builder.build().toString();
     }
 }

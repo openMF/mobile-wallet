@@ -106,7 +106,7 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
     private void showPaymentMethod(int position) {
         PaymentMethod method = paymentMethodAdpater.getPaymentMethod(position);
 
-        switch (method.getId()){
+        switch (method.getId()) {
             case 1:
                 paymentMethodAdpater.setFocused(position);
                 AadharPaymentFragment aadharPaymentFragment = AadharPaymentFragment.newInstance();

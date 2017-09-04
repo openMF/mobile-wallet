@@ -62,10 +62,13 @@ public class AadharPaymentFragment extends Fragment {
         return rootView;
     }
 
-    @OnTextChanged(value = R.id.et_aadhar_number, callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+    @OnTextChanged(value = R.id.et_aadhar_number, callback =
+            OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     protected void onCardNumberTextChanged(Editable s) {
-        if (!isInputCorrect(s, AADHAR_NUMBER_TOTAL_SYMBOLS, AADHAR_NUMBER_DIVIDER_MODULO, AADHAR_NUMBER_DIVIDER)) {
-            s.replace(0, s.length(), concatString(getDigitArray(s, AADHAR_NUMBER_TOTAL_DIGITS), AADHAR_NUMBER_DIVIDER_POSITION, AADHAR_NUMBER_DIVIDER));
+        if (!isInputCorrect(s, AADHAR_NUMBER_TOTAL_SYMBOLS, AADHAR_NUMBER_DIVIDER_MODULO,
+                AADHAR_NUMBER_DIVIDER)) {
+            s.replace(0, s.length(), concatString(getDigitArray(s, AADHAR_NUMBER_TOTAL_DIGITS),
+                    AADHAR_NUMBER_DIVIDER_POSITION, AADHAR_NUMBER_DIVIDER));
         }
     }
 

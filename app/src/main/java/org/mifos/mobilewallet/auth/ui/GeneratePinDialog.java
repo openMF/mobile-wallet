@@ -70,13 +70,13 @@ public class GeneratePinDialog extends BottomSheetDialogFragment {
         return dialog;
     }
 
-   private void createPin() {
+    private void createPin() {
         if (etPin.getText().toString().equals(etPinConfirm.getText().toString())) {
             ((BankAccountActivity) getActivity()).setupComplete();
         } else {
             Toast.makeText(getActivity(), "PIN does not match", Toast.LENGTH_SHORT).show();
         }
-   }
+    }
 
     @Override
     public void onStart() {

@@ -45,7 +45,8 @@ public class VerifyAadharDetails extends UseCase<VerifyAadharDetails.RequestValu
 
                             @Override
                             public void onNext(Boolean status) {
-                                getUseCaseCallback().onSuccess(new VerifyAadharDetails.ResponseValue(status));
+                                getUseCaseCallback().onSuccess(new
+                                        VerifyAadharDetails.ResponseValue(status));
                             }
                         });
                 break;
@@ -66,7 +67,8 @@ public class VerifyAadharDetails extends UseCase<VerifyAadharDetails.RequestValu
 
                             @Override
                             public void onNext(Boolean status) {
-                                getUseCaseCallback().onSuccess(new VerifyAadharDetails.ResponseValue(status));
+                                getUseCaseCallback().onSuccess(new
+                                        VerifyAadharDetails.ResponseValue(status));
                             }
                         });
                 break;
@@ -87,7 +89,8 @@ public class VerifyAadharDetails extends UseCase<VerifyAadharDetails.RequestValu
 
                             @Override
                             public void onNext(Boolean status) {
-                                getUseCaseCallback().onSuccess(new VerifyAadharDetails.ResponseValue(status));
+                                getUseCaseCallback().onSuccess(new
+                                        VerifyAadharDetails.ResponseValue(status));
                             }
                         });
                 break;

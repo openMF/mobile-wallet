@@ -17,9 +17,9 @@ import org.mifos.mobilewallet.core.base.UseCase;
 
 public class GenerateQr extends UseCase<GenerateQr.RequestValues, GenerateQr.ResponseValue> {
 
-    private static int WHITE = 0xFFFFFFFF;
-    private static int BLACK = 0xFF000000;
-    private final static int WIDTH = 500;
+    private static final int WHITE = 0xFFFFFFFF;
+    private static final int BLACK = 0xFF000000;
+    private static final int WIDTH = 500;
 
     @Inject
     public GenerateQr() {

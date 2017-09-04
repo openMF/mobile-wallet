@@ -60,10 +60,14 @@ public class ScanFPDialog extends BottomSheetDialogFragment {
         ButterKnife.bind(this, view);
 
         backgroundColor = ContextCompat.getColor(getActivity(), R.color.circle_default);
-        showFingerprint = AnimatedVectorDrawableCompat.create(getActivity(), R.drawable.show_fingerprint);
-        scanFingerprint = AnimatedVectorDrawableCompat.create(getActivity(), R.drawable.scan_fingerprint);
-        fingerprintToTick = AnimatedVectorDrawableCompat.create(getActivity(), R.drawable.fingerprint_to_tick);
-        fingerprintToCross = AnimatedVectorDrawableCompat.create(getActivity(), R.drawable.fingerprint_to_cross);
+        showFingerprint = AnimatedVectorDrawableCompat.create(getActivity(),
+                R.drawable.show_fingerprint);
+        scanFingerprint = AnimatedVectorDrawableCompat.create(getActivity(),
+                R.drawable.scan_fingerprint);
+        fingerprintToTick = AnimatedVectorDrawableCompat.create(getActivity(),
+                R.drawable.fingerprint_to_tick);
+        fingerprintToCross = AnimatedVectorDrawableCompat.create(getActivity(),
+                R.drawable.fingerprint_to_cross);
 
         setCircleColor(ContextCompat.getColor(getActivity(), R.color.circle_default));
 
@@ -90,7 +94,8 @@ public class ScanFPDialog extends BottomSheetDialogFragment {
 
     private void setCircleColor(int to) {
 
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), backgroundColor, to);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(),
+                backgroundColor, to);
         final GradientDrawable ivDrawable = (GradientDrawable) ivFingerprint.getBackground();
 
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {

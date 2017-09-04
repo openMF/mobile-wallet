@@ -19,7 +19,7 @@ public class ShowQrPresenter implements QrContract.ShowQrPresenter {
     private final UseCaseHandler mUsecaseHandler;
 
     @Inject
-    GenerateQr generateQr;
+    GenerateQr generateQrUseCase;
 
     @Inject
     public ShowQrPresenter(UseCaseHandler useCaseHandler) {
@@ -36,16 +36,17 @@ public class ShowQrPresenter implements QrContract.ShowQrPresenter {
     @Override
     public void generateQr(String data) {
 
-        mUsecaseHandler.execute(generateQr, new GenerateQr.RequestValues(data), new UseCase.UseCaseCallback<GenerateQr.ResponseValue>() {
-            @Override
-            public void onSuccess(GenerateQr.ResponseValue response) {
-                mShowQrView.showGeneratedQr(response.getBitmap());
-            }
+        mUsecaseHandler.execute(generateQrUseCase, new GenerateQr.RequestValues(data),
+                new UseCase.UseCaseCallback<GenerateQr.ResponseValue>() {
+                    @Override
+                    public void onSuccess(GenerateQr.ResponseValue response) {
+                        mShowQrView.showGeneratedQr(response.getBitmap());
+                    }
 
-            @Override
-            public void onError(String message) {
+                    @Override
+                    public void onError(String message) {
 
-            }
-        });
+                    }
+                });
     }
 }

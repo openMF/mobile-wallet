@@ -79,7 +79,8 @@ public class AccountsFragment extends BaseFragment implements AccountContract.Ac
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rvAccounts.setLayoutManager(llm);
         rvAccounts.setHasFixedSize(true);
-        rvAccounts.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        rvAccounts.addItemDecoration(new DividerItemDecoration(getActivity(),
+                DividerItemDecoration.VERTICAL));
         accountsAdapter.setContext(getActivity());
         rvAccounts.setAdapter(accountsAdapter);
 

@@ -34,7 +34,8 @@ import org.mifos.mobilewallet.core.domain.model.Account;
  * Created by naman on 11/7/17.
  */
 
-public class RecentInvoicesFragment extends BaseFragment implements InvoiceContract.RecentInvoiceView{
+public class RecentInvoicesFragment extends BaseFragment
+        implements InvoiceContract.RecentInvoiceView {
 
     @Inject
     RecentInvoicePresenter mPresenter;
@@ -87,7 +88,8 @@ public class RecentInvoicesFragment extends BaseFragment implements InvoiceContr
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rvRecentInvoices.setLayoutManager(llm);
         rvRecentInvoices.setHasFixedSize(true);
-        rvRecentInvoices.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
+        rvRecentInvoices.addItemDecoration(new DividerItemDecoration(getActivity(),
+                DividerItemDecoration.VERTICAL));
         recentInvoicesAdapter.setContext(getActivity());
         rvRecentInvoices.setAdapter(recentInvoicesAdapter);
 

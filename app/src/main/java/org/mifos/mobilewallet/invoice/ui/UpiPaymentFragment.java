@@ -58,7 +58,7 @@ public class UpiPaymentFragment extends Fragment {
 
     @OnClick(R.id.btn_request)
     public void requestClicked() {
-        int total = ((InvoiceFragment)getParentFragment()).getInvoiceAmount();
+        int total = ((InvoiceFragment) getParentFragment()).getInvoiceAmount();
         String vpa = etVpa.getText().toString();
 
         Intent intent = new Intent(getActivity(), PaymentSuccessActivity.class);

@@ -30,7 +30,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     AuthenticateUser authenticateUser;
 
     @Inject
-    FetchClientData fetchClientData;
+    FetchClientData fetchClientDataUseCase;
 
     @Inject
     public LoginPresenter(UseCaseHandler useCaseHandler, PreferencesHelper preferencesHelper) {
@@ -69,7 +69,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     }
 
     private void fetchClientData() {
-        mUsecaseHandler.execute(fetchClientData ,
+        mUsecaseHandler.execute(fetchClientDataUseCase ,
                 new FetchClientData.RequestValues(preferencesHelper.getClientId()),
                 new UseCase.UseCaseCallback<FetchClientData.ResponseValue>() {
                     @Override

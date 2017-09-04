@@ -24,7 +24,8 @@ public class FetchLocalInvoices extends UseCase<FetchLocalInvoices.RequestValues
     private final FineractRepository fineractRepository;
 
     @Inject
-    public FetchLocalInvoices(LocalRepository localRepository, FineractRepository fineractRepository) {
+    public FetchLocalInvoices(LocalRepository localRepository,
+                              FineractRepository fineractRepository) {
         this.localRepository = localRepository;
         this.fineractRepository = fineractRepository;
     }
@@ -54,48 +55,6 @@ public class FetchLocalInvoices extends UseCase<FetchLocalInvoices.RequestValues
 
     }
 
-//    private void fetchRemoteTransactions(final List<Invoice> localList, RequestValues requestValues) {
-//        fineractRepository.getAccountTransactions(requestValues.accountId)
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .subscribeOn(Schedulers.io())
-//                .subscribe(new Subscriber<List<Invoice>>() {
-//                    @Override
-//                    public void onCompleted() {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable e) {
-//                        getUseCaseCallback().onSuccess(new ResponseValue(localList));
-//                        getUseCaseCallback().onError("Error fetching remote account transactions");
-//                    }
-//
-//                    @Override
-//                    public void onNext(List<Invoice> invoices) {
-//                        if (invoices != null && invoices.size() != 0) {
-//                            for (Invoice invoice : invoices) {
-//                                for (int i=0; i < localList.size(); i++) {
-//                                    if (invoice.getInvoiceId().equals(localList.get(i).getInvoiceId())) {
-//                                        //transaction exists on remote for this invoiceid
-//                                        //which means that invoice has been paid
-//                                        //remove this invoice from local database
-//                                        localRepository.removeInvoice(localList.get(i));
-//                                        localList.remove(i);
-//                                    }
-//
-//                                }
-//                            }
-//
-//                            localList.addAll(invoices);
-//                            getUseCaseCallback().onSuccess(new ResponseValue(localList));
-//                        } else {
-//                           getUseCaseCallback().onSuccess(new ResponseValue(localList));
-//                        }
-//                    }
-//                });
-//
-//
-//    }
 
     public static final class RequestValues implements UseCase.RequestValues {
 

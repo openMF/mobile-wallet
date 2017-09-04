@@ -60,18 +60,19 @@ public class BusinessDetailsPresenter implements AuthContract.BusinessDetailsPre
 
     @Override
     public void verifyAadhar(String number) {
-        mUsecaseHandler.execute(verifyAadharDetails, new VerifyAadharDetails.RequestValues(number, 0),
+        mUsecaseHandler.execute(verifyAadharDetails, new VerifyAadharDetails.RequestValues(number,
+                        0),
                 new UseCase.UseCaseCallback<VerifyAadharDetails.ResponseValue>() {
-            @Override
-            public void onSuccess(VerifyAadharDetails.ResponseValue response) {
-                mBusinessDetailsView.showAadharValid(response.isStatus());
-            }
+                    @Override
+                    public void onSuccess(VerifyAadharDetails.ResponseValue response) {
+                        mBusinessDetailsView.showAadharValid(response.isStatus());
+                    }
 
-            @Override
-            public void onError(String message) {
+                    @Override
+                    public void onError(String message) {
 
-            }
-        });
+                    }
+                });
     }
 
     @Override

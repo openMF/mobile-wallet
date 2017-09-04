@@ -21,7 +21,7 @@ public class CreateInvoice extends UseCase<CreateInvoice.RequestValues,
 
     @Inject
     public CreateInvoice(LocalRepository localRepository) {
-        this.localRepository= localRepository;
+        this.localRepository = localRepository;
     }
 
 

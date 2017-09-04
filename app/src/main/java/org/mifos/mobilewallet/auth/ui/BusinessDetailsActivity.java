@@ -111,7 +111,7 @@ public class BusinessDetailsActivity extends BaseActivity
     }
 
     @OnClick(R.id.btn_add_pan)
-    public void addPanClicked(){
+    public void addPanClicked() {
         VerifyPanDialog panDialog = new VerifyPanDialog();
         panDialog.show(getSupportFragmentManager(), "Pan dialog");
     }

@@ -10,6 +10,7 @@ import org.mifos.mobilewallet.auth.ui.SetupCompleteActivity;
 import org.mifos.mobilewallet.auth.ui.SignupActivity;
 import org.mifos.mobilewallet.home.ui.HomeActivity;
 import org.mifos.mobilewallet.home.ui.HomeFragment;
+import org.mifos.mobilewallet.injection.PerActivity;
 import org.mifos.mobilewallet.injection.module.ActivityModule;
 import org.mifos.mobilewallet.invoice.ui.AadharPaymentFragment;
 import org.mifos.mobilewallet.invoice.ui.CardPaymentFragment;
@@ -21,7 +22,6 @@ import org.mifos.mobilewallet.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.user.ui.UserDetailsActivity;
 
 import dagger.Component;
-import org.mifos.mobilewallet.core.injection.PerActivity;
 
 @PerActivity
 @Component(dependencies = {ApplicationComponent.class},

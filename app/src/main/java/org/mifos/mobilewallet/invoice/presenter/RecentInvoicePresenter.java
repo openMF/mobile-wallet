@@ -33,7 +33,7 @@ public class RecentInvoicePresenter implements InvoiceContract.RecentInvoicePres
     FetchAccountTransactions fetchAccountTransactions;
 
     @Inject
-    FetchAccounts fetchAccounts;
+    FetchAccounts fetchAccountsUseCase;
 
     @Inject
     LocalRepository localRepository;
@@ -54,20 +54,20 @@ public class RecentInvoicePresenter implements InvoiceContract.RecentInvoicePres
         mUsecaseHandler.execute(fetchLocalInvoices,
                 new FetchLocalInvoices.RequestValues(accountId),
                 new UseCase.UseCaseCallback<FetchLocalInvoices.ResponseValue>() {
-            @Override
-            public void onSuccess(FetchLocalInvoices.ResponseValue response) {
-                if (response.getInvoices() != null) {
-                    fetchRemoteTransactions(accountId, response.getInvoices());
-                } else{
-                    fetchRemoteTransactions(accountId, new ArrayList<Invoice>());
-                }
-            }
+                    @Override
+                    public void onSuccess(FetchLocalInvoices.ResponseValue response) {
+                        if (response.getInvoices() != null) {
+                            fetchRemoteTransactions(accountId, response.getInvoices());
+                        } else {
+                            fetchRemoteTransactions(accountId, new ArrayList<Invoice>());
+                        }
+                    }
 
-            @Override
-            public void onError(String message) {
-                fetchRemoteTransactions(accountId, new ArrayList<Invoice>());
-            }
-        });
+                    @Override
+                    public void onError(String message) {
+                        fetchRemoteTransactions(accountId, new ArrayList<Invoice>());
+                    }
+                });
     }
 
     private void fetchRemoteTransactions(long accountId, final List<Invoice> localList) {
@@ -82,8 +82,9 @@ public class RecentInvoicePresenter implements InvoiceContract.RecentInvoicePres
 
                         if (invoices != null && invoices.size() != 0) {
                             for (Invoice invoice : invoices) {
-                                for (int i=0; i < localList.size(); i++) {
-                                    if (invoice.getInvoiceId().equals(localList.get(i).getInvoiceId())) {
+                                for (int i = 0; i < localList.size(); i++) {
+                                    if (invoice.getInvoiceId().equals(localList
+                                            .get(i).getInvoiceId())) {
                                         //transaction exists on remote for this invoiceid
                                         //which means that invoice has been paid
                                         //remove this invoice from local database
@@ -131,18 +132,18 @@ public class RecentInvoicePresenter implements InvoiceContract.RecentInvoicePres
 
     @Override
     public void fetchAccounts() {
-        mUsecaseHandler.execute(fetchAccounts, null,
+        mUsecaseHandler.execute(fetchAccountsUseCase, null,
                 new UseCase.UseCaseCallback<FetchAccounts.ResponseValue>() {
-            @Override
-            public void onSuccess(FetchAccounts.ResponseValue response) {
-                mInvoiceView.showAccounts(response.getAccountList());
-            }
+                    @Override
+                    public void onSuccess(FetchAccounts.ResponseValue response) {
+                        mInvoiceView.showAccounts(response.getAccountList());
+                    }
 
-            @Override
-            public void onError(String message) {
-                mInvoiceView.showError(message);
-            }
-        });
+                    @Override
+                    public void onError(String message) {
+                        mInvoiceView.showError(message);
+                    }
+                });
     }
 }
 

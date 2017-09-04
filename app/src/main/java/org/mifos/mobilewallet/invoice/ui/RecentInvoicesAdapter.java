@@ -42,7 +42,8 @@ public class RecentInvoicesAdapter extends RecyclerView.Adapter<RecentInvoicesAd
     @Override
     public void onBindViewHolder(RecentInvoicesAdapter.ViewHolder holder, int position) {
         holder.tvInvoiceAmount.setText(Constants.RUPEE + invoices.get(position).getAmount());
-        holder.tvInvoiceId.setText("Invoice ID : " + String.valueOf(invoices.get(position).getInvoiceId()));
+        holder.tvInvoiceId.setText("Invoice ID : " +
+                invoices.get(position).getInvoiceId());
         holder.tvInvoiceDate.setText(invoices.get(position).getDate());
         if (invoices.get(position).getStatus() == 0) {
             holder.tvInvoiceStatus.setText("Pending");
