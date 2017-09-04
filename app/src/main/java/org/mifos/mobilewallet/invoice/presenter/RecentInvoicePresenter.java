@@ -132,7 +132,8 @@ public class RecentInvoicePresenter implements InvoiceContract.RecentInvoicePres
 
     @Override
     public void fetchAccounts() {
-        mUsecaseHandler.execute(fetchAccountsUseCase, null,
+        mUsecaseHandler.execute(fetchAccountsUseCase,
+                new FetchAccounts.RequestValues(localRepository.getClientDetails().getClientId()),
                 new UseCase.UseCaseCallback<FetchAccounts.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchAccounts.ResponseValue response) {

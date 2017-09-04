@@ -94,7 +94,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                 user.getAuthenticationKey();
 
         preferencesHelper.saveToken(authToken);
-        FineractApiManager.createService(preferencesHelper.getToken());
+        FineractApiManager.createSelfService(preferencesHelper.getToken());
 
     }
 
