@@ -10,6 +10,8 @@ import org.mifos.mobilewallet.mifospay.home.ui.TransferFragment;
 import org.mifos.mobilewallet.mifospay.home.ui.WalletFragment;
 import org.mifos.mobilewallet.mifospay.injection.PerActivity;
 import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
+import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
+import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.mifospay.wallet.ui.WalletDetailActivity;
 
 import dagger.Component;
@@ -31,6 +33,10 @@ public interface ActivityComponent {
     void inject(WalletDetailActivity walletDetailActivity);
 
     void inject(SearchActivity searchActivity);
+
+    void inject(ShowQrActivity showQrActivity);
+
+    void inject(ReadQrActivity readQrActivity);
 
     void inject(TransferFragment transferFragment);
 

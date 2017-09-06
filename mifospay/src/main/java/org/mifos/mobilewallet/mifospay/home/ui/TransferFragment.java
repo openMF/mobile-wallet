@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -7,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -14,6 +17,9 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.TransferPresenter;
+import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
+import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -41,6 +47,18 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     @BindView(R.id.btn_transfer)
     Button btnTransfer;
 
+    @BindView(R.id.tv_client_vpa)
+    TextView tvClientVpa;
+
+    @BindView(R.id.btn_show_qr)
+    TextView btnShowQr;
+
+    @BindView(R.id.btn_scan_qr)
+    TextView btnScanQr;
+
+    private String vpa;
+
+    private final int SCAN_QR_REQUEST_CODE = 666;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +78,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         setToolbarTitle("Transfer");
         mPresenter.attachView(this);
 
+        mPresenter.fetchVpa();
 
         return rootView;
     }
@@ -72,8 +91,44 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         fragment.show(getChildFragmentManager(), "Make Transfer Fragment");
     }
 
+    @OnClick(R.id.btn_show_qr)
+    public void showQrClicked() {
+        Intent intent = new Intent(getActivity(), ShowQrActivity.class);
+        intent.putExtra(Constants.QR_DATA, vpa);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btn_scan_qr)
+    public void scanQrClicked() {
+        Intent i = new Intent(getActivity(), ReadQrActivity.class);
+        startActivityForResult(i, SCAN_QR_REQUEST_CODE);
+    }
+
+    @Override
+    public void showVpa(String vpa) {
+        this.vpa = vpa;
+        tvClientVpa.setText(vpa);
+        btnShowQr.setClickable(true);
+    }
+
     @Override
     public void setPresenter(HomeContract.TransferPresenter presenter) {
         this.mTransferPresenter = presenter;
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == SCAN_QR_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                String qrData = data.getStringExtra(Constants.QR_DATA);
+                etVpa.setText(qrData);
+                String externalId = etVpa.getText().toString();
+                double amount = Double.parseDouble(etAmount.getText().toString());
+                MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
+                fragment.show(getChildFragmentManager(), "Make Transfer Fragment");
+
+            }
+        }
     }
 }

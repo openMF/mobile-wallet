@@ -3,6 +3,7 @@
     package="org.mifos.mobilewallet.mifospay">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:name=".MifosPayApp" android:allowBackup="true" android:icon="@mipmap/ic_launcher"
@@ -27,6 +28,11 @@
         <activity android:name=".common.ui.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
 
+        <activity android:name=".qr.ui.ShowQrActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".qr.ui.ReadQrActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

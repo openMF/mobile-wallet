@@ -34,5 +34,8 @@ public class TransferPresenter implements HomeContract.TransferPresenter {
         mTransferView.setPresenter(this);
     }
 
-
+    @Override
+    public void fetchVpa() {
+        mTransferView.showVpa(localRepository.getClientDetails().getExternalId());
+    }
 }

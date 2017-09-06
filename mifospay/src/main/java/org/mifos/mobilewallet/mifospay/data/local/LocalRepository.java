@@ -23,6 +23,7 @@ public class LocalRepository {
         Client details = new Client();
         details.setName(preferencesHelper.getFullName());
         details.setClientId(preferencesHelper.getClientId());
+        details.setExternalId(preferencesHelper.getClientVpa());
 
         return details;
     }
@@ -30,6 +31,7 @@ public class LocalRepository {
     public void saveClientData(Client client) {
         preferencesHelper.saveFullName(client.getName());
         preferencesHelper.setClientId(client.getClientId());
+        preferencesHelper.setClientVpa(client.getExternalId());
     }
 
 

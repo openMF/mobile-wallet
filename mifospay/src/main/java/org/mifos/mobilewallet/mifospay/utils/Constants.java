@@ -14,6 +14,8 @@ public class Constants {
     public static final String TO_EXTERNAL_ID = "to_external_id";
     public static final String AMOUNT = "amount";
     public static final String RUPEE = "₹";
+    public static final String QR_DATA = "qr_data";
+
 
 
 

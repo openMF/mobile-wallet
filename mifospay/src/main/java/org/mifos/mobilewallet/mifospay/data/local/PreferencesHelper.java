@@ -22,6 +22,7 @@ public class PreferencesHelper {
     private static final String EMAIL = "preferences_email";
     private static final String CLIENT_ID = "preferences_client";
     private static final String USER_ID = "preferences_user_id";
+    private static final String CLIENT_VPA = "preferences_client_vpa";
 
 
     private SharedPreferences sharedPreferences;
@@ -110,6 +111,14 @@ public class PreferencesHelper {
 
     public long getClientId() {
         return getLong(CLIENT_ID, 1);
+    }
+
+    public void setClientVpa(String vpa) {
+        putString(CLIENT_VPA, vpa);
+    }
+
+    public String getClientVpa() {
+        return getString(CLIENT_VPA, "");
     }
 
 }

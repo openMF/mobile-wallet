@@ -38,13 +38,13 @@ public interface HomeContract {
 
     interface TransferView extends BaseView<TransferPresenter> {
 
-
+        void showVpa(String vpa);
 
     }
 
     interface TransferPresenter extends BasePresenter {
 
-
+        void fetchVpa();
 
     }
 
