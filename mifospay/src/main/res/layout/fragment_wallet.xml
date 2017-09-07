@@ -63,4 +63,59 @@
 
     </android.support.v7.widget.CardView>
 
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/value_20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/value_20dp"
+            android:layout_marginBottom="@dimen/value_20dp">
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_repeat"
+                android:text="History"
+                android:gravity="center"
+                android:drawablePadding="@dimen/value_10dp"
+                android:id="@+id/btn_history"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_send"
+                android:text="Send"
+                android:gravity="center"
+                android:drawablePadding="@dimen/value_10dp"
+                android:id="@+id/btn_send"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_request"
+                android:text="Request"
+                android:gravity="center"
+                android:drawablePadding="@dimen/value_10dp"
+                android:id="@+id/btn_request"/>
+
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/qrcode_black"
+                android:text="QR code"
+                android:gravity="center"
+                android:id="@+id/btn_show_qr"
+                android:drawablePadding="@dimen/value_10dp"/>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
 </LinearLayout>

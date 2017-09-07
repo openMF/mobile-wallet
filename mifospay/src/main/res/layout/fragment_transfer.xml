@@ -109,40 +109,40 @@
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/value_30dp">
 
-        <LinearLayout
-            android:layout_width="@dimen/value_100dp"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="1"
-            android:layout_marginLeft="@dimen/value_20dp"
-            android:layout_gravity="center_vertical|center_horizontal">
+            <LinearLayout
+                android:layout_width="@dimen/value_100dp"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="1"
+                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_gravity="center_vertical|center_horizontal">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Virtual Payment Address (VPA)" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_client_vpa"
+                    android:textSize="@dimen/value_18sp"
+                    android:textColor="@android:color/black" />
+
+            </LinearLayout>
 
 
             <TextView
+                android:id="@+id/btn_show_qr"
+                android:text="Show code"
+                android:layout_weight="0.8"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Virtual Payment Address (VPA)" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tv_client_vpa"
-                android:textSize="@dimen/value_18sp"
-                android:textColor="@android:color/black" />
-
-        </LinearLayout>
-
-
-        <TextView
-            android:id="@+id/btn_show_qr"
-            android:text="Show code"
-            android:layout_weight="0.8"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center_horizontal|center_vertical"
-            android:drawableTop="@drawable/qrcode_blue"
-            android:textColor="@color/primaryDarkBlue"/>
+                android:layout_gravity="center_vertical"
+                android:gravity="center_horizontal|center_vertical"
+                android:drawableTop="@drawable/qrcode_blue"
+                android:textColor="@color/primaryDarkBlue"/>
 
         </LinearLayout>
 

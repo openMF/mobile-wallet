@@ -20,15 +20,21 @@ public class BaseFragment extends Fragment {
     }
 
     protected void setToolbarTitle(String title) {
-        callback.setToolbarTitle(title);
+        if (callback != null) {
+            callback.setToolbarTitle(title);
+        }
     }
 
     protected void showProgress() {
-        callback.showSwipeProgress();
+        if (callback !=  null) {
+            callback.showSwipeProgress();
+        }
     }
 
     protected void hideProgress() {
-        callback.hideSwipeProgress();
+        if (callback != null) {
+            callback.hideSwipeProgress();
+        }
     }
 
     protected void replaceFragment(Fragment fragment, int containerId) {

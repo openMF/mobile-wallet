@@ -48,6 +48,18 @@ public interface HomeContract {
 
     }
 
+    interface ProfileView extends BaseView<ProfilePresenter> {
+
+        void showProfile(Client client);
+
+    }
+
+    interface ProfilePresenter extends BasePresenter {
+
+        void fetchprofile();
+
+    }
+
 
 
 }

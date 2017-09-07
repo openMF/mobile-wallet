@@ -11,8 +11,10 @@ import android.widget.TextView;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.WalletPresenter;
+import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
@@ -79,6 +81,28 @@ public class WalletFragment extends BaseFragment implements HomeContract.WalletV
         Intent intent = new Intent(getActivity(), WalletDetailActivity.class);
         intent.putExtra(Constants.ACCOUNT, account);
         startActivity(intent);
+    }
+
+    @OnClick(R.id.btn_history)
+    public void historyClicked() {
+        Intent intent = new Intent(getActivity(), WalletDetailActivity.class);
+        intent.putExtra(Constants.ACCOUNT, account);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btn_send)
+    public void sendClicked() {
+        ((HomeFragment) getParentFragment()).navigateFragment(R.id.action_transfer, true);
+    }
+
+    @OnClick(R.id.btn_request)
+    public void requestClicked() {
+        ((HomeFragment) getParentFragment()).navigateFragment(R.id.action_transfer, true);
+    }
+
+    @OnClick(R.id.btn_show_qr)
+    public void showQrClicked() {
+        ((HomeFragment) getParentFragment()).navigateFragment(R.id.action_transfer, true);
     }
 
     @Override

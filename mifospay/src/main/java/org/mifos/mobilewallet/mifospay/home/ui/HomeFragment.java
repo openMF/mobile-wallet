@@ -66,28 +66,40 @@ public class HomeFragment extends BaseFragment {
                 new BottomNavigationView.OnNavigationItemSelectedListener() {
                     @Override
                     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.action_wallet:
-
-                                replaceFragment(WalletFragment
-                                                .newInstance(localRepository.getClientDetails()
-                                                        .getClientId()), false,
-                                        R.id.bottom_navigation_fragment_container);
-                                break;
-
-                            case R.id.action_transfer:
-                                replaceFragment(new TransferFragment(), false,
-                                        R.id.bottom_navigation_fragment_container);
-                                break;
-
-                            case R.id.action_profile:
-
-                        }
+                        navigateFragment(item.getItemId(), false);
                         return true;
                     }
                 });
 
 
         return rootView;
+    }
+
+    public void navigateFragment(int id, boolean shouldSelect) {
+
+        if (shouldSelect) {
+            bottomNavigationView.setSelectedItemId(id);
+        } else {
+            switch (id) {
+                case R.id.action_wallet:
+
+                    replaceFragment(WalletFragment
+                                    .newInstance(localRepository.getClientDetails()
+                                            .getClientId()), false,
+                            R.id.bottom_navigation_fragment_container);
+                    break;
+
+                case R.id.action_transfer:
+                    replaceFragment(new TransferFragment(), false,
+                            R.id.bottom_navigation_fragment_container);
+                    break;
+
+                case R.id.action_profile:
+                    replaceFragment(new ProfileFragment(), false,
+                            R.id.bottom_navigation_fragment_container);
+                    break;
+
+            }
+        }
     }
 }

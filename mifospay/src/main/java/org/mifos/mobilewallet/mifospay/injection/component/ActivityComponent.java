@@ -6,6 +6,7 @@ import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.SearchActivity;
 import org.mifos.mobilewallet.mifospay.home.ui.HomeActivity;
 import org.mifos.mobilewallet.mifospay.home.ui.HomeFragment;
+import org.mifos.mobilewallet.mifospay.home.ui.ProfileFragment;
 import org.mifos.mobilewallet.mifospay.home.ui.TransferFragment;
 import org.mifos.mobilewallet.mifospay.home.ui.WalletFragment;
 import org.mifos.mobilewallet.mifospay.injection.PerActivity;
@@ -39,6 +40,8 @@ public interface ActivityComponent {
     void inject(ReadQrActivity readQrActivity);
 
     void inject(TransferFragment transferFragment);
+
+    void inject(ProfileFragment profileFragment);
 
     void inject(MakeTransferFragment transferFragment);
 
