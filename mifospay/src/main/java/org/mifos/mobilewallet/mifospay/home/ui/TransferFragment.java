@@ -76,6 +76,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         ButterKnife.bind(this, rootView);
 
         setToolbarTitle("Transfer");
+        setSwipeEnabled(false);
         mPresenter.attachView(this);
 
         mPresenter.fetchVpa();

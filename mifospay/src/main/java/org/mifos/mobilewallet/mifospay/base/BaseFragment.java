@@ -37,6 +37,12 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    protected void setSwipeEnabled(boolean enabled) {
+        if (callback != null) {
+            callback.setSwipeRefreshEnabled(enabled);
+        }
+    }
+
     protected void replaceFragment(Fragment fragment, int containerId) {
 
     }

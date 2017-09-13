@@ -70,7 +70,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
 
     private void fetchClientData() {
         mUsecaseHandler.execute(fetchClientDataUseCase ,
-                new FetchClientData.RequestValues(preferencesHelper.getClientId()),
+                null,
                 new UseCase.UseCaseCallback<FetchClientData.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchClientData.ResponseValue response) {
