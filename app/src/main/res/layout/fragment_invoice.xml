@@ -19,7 +19,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total"
+                android:text="@string/total_txt"
                 android:layout_alignParentLeft="true"
                 android:layout_marginLeft="30dp"
                 android:textColor="@android:color/black"
@@ -43,7 +43,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="₹"
+                    android:text="@string/rupee_sign"
                     android:textStyle="bold"
                     android:textSize="30sp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large" />
@@ -53,7 +53,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textStyle="bold"
-                    android:text="0"
+                    android:text="@string/zero"
                     android:inputType="number"
                     android:textSize="30sp"
                     android:background="@android:color/transparent"
@@ -71,7 +71,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pay using"
+            android:text="@string/pay_using_message"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:layout_margin="30dp"/>
 

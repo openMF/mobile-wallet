@@ -33,7 +33,7 @@
                     android:id="@+id/tv_account_number"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-                    android:text="XXXXXXXXXXXX1234"
+                    android:text="@string/account_number"
                     android:textColor="@color/grey_900"/>
 
                 <TextView
@@ -41,7 +41,7 @@
                     android:layout_gravity="bottom"
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
-                    android:text="RBL Bank"
+                    android:text="@string/rbl_bank"
                     android:textColor="@color/grey_900"/>
 
             </LinearLayout>

@@ -14,7 +14,7 @@
         android:layout_marginTop="@dimen/value_100dp"
         android:textColor="@android:color/white"
         android:textStyle="bold"
-        android:text="Pixie Pay"/>
+        android:text="@string/pixie_pay_txt"/>
 
     <TextView
         android:layout_height="wrap_content"

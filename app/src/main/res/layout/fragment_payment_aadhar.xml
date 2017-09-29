@@ -8,14 +8,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Customer\'s Aadhar number"
+        android:text="@string/customer_aadhar_no"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:layout_marginTop="20dp" />
 
 
     <EditText
         android:id="@+id/et_aadhar_number"
-        android:hint="Aadhar number"
+        android:hint="@string/aadhar_number_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:digits="0123456789 -"
@@ -29,7 +29,7 @@
         android:layout_height="48dp"
         android:layout_width="match_parent"
         android:layout_gravity="bottom"
-        android:text="Scan fingerprint of customer"
+        android:text="@string/scan_fingerprint"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:typeface="sans"

@@ -7,7 +7,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Scan customer\'s fingerprint"
+        android:text=""
         android:textStyle="bold"
         android:textColor="@android:color/black"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
@@ -18,7 +18,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Scan customer\'s fingerprint to authorise the transaction"
+        android:text="@string/scan_fingerprint_message"
         android:textColor="@android:color/black"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
         android:focusable="true"
@@ -43,7 +43,7 @@
         android:layout_marginRight="@dimen/value_30dp"
         android:layout_marginTop="@dimen/value_30dp"
         android:layout_marginBottom="@dimen/value_30dp"
-        android:text="Waiting for fingerprint scanner to be connected"/>
+        android:text="@string/wait_fingerprint_message"/>
 
 
     <LinearLayout
@@ -59,7 +59,7 @@
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cancel"
+            android:text="@string/cancel_txt"
             android:background="@color/grey_900"
             android:textColor="@android:color/white" />
 
@@ -67,7 +67,7 @@
             android:id="@+id/btn_verify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Done"
+            android:text="@string/done_txt"
             android:layout_gravity="right"
             android:paddingLeft="@dimen/value_10dp"
             android:paddingRight="@dimen/value_10dp"

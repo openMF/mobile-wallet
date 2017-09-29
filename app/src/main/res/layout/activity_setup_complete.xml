@@ -46,7 +46,7 @@
                     android:paddingBottom="@dimen/value_15dp"
                     android:paddingLeft="@dimen/value_15dp"
                     android:paddingRight="@dimen/value_15dp"
-                    android:text="Congratulations!"
+                    android:text="@string/congo_txt"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
                     android:textStyle="bold"/>
@@ -62,7 +62,7 @@
                     android:paddingBottom="@dimen/value_15dp"
                     android:paddingLeft="@dimen/value_15dp"
                     android:paddingRight="@dimen/value_15dp"
-                    android:text="You can start accepting payments"
+                    android:text="@string/accept_payment_message"
                     android:textSize="@dimen/value_16sp"/>
 
 
@@ -85,7 +85,7 @@
                             android:layout_marginRight="@dimen/value_10dp"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:text="User name"
+                            android:text="@string/username_txt"
                             android:textColor="@android:color/black"/>
 
                         <TextView
@@ -94,7 +94,7 @@
                             android:layout_marginStart="@dimen/value_10dp"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:text="Devang Mehta"
+                            android:text="@string/account_holder_name"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
 
@@ -115,7 +115,7 @@
                             android:layout_marginRight="@dimen/value_10dp"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:text="Business name"
+                            android:text="@string/business_name_txt"
                             android:textColor="@android:color/black"/>
 
                         <TextView
@@ -124,7 +124,7 @@
                             android:layout_marginStart="@dimen/value_10dp"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:text="Pixie Pay Pvt Ltd"
+                            android:text="@string/pixie_company_name"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
 
@@ -145,7 +145,7 @@
                             android:layout_marginRight="@dimen/value_10dp"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:text="Merchant ID"
+                            android:text="@string/merchant_id_txt"
                             android:textColor="@android:color/black"/>
 
                         <TextView
@@ -154,7 +154,7 @@
                             android:layout_marginStart="@dimen/value_10dp"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:text="20001212"
+                            android:text="@string/merchant_id"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
 
@@ -176,7 +176,7 @@
                             android:layout_marginRight="@dimen/value_10dp"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:text="Terminal ID"
+                            android:text="@string/terminal_id_txt"
                             android:textColor="@android:color/black"/>
 
                         <TextView
@@ -185,7 +185,7 @@
                             android:layout_marginStart="@dimen/value_10dp"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
-                            android:text="007"
+                            android:text="@string/terminal_id"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"/>
 
@@ -204,7 +204,7 @@
                     android:layout_marginLeft="@dimen/value_20dp"
                     android:layout_marginRight="@dimen/value_20dp"
                     android:layout_width="match_parent"
-                    android:text="Start accepting payments"
+                    android:text="@string/start_accept_message"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:typeface="sans"/>
@@ -219,7 +219,7 @@
                     android:layout_marginRight="@dimen/value_20dp"
                     android:layout_marginTop="@dimen/value_10dp"
                     android:layout_width="match_parent"
-                    android:text="Configure Payment Types"
+                    android:text="@string/config_payment"
                     android:textAllCaps="false"
                     android:textColor="@color/colorPrimary"
                     android:typeface="sans"/>
