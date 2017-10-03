@@ -8,8 +8,7 @@
     android:orientation="vertical"
     android:visibility="visible">
 
-    <include
-        layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nested_scroll"
@@ -60,14 +59,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/value_5dp"
                                 android:layout_width="match_parent"
-                                android:text="XXXXXXXXXXXX1234"
+                                android:text="@string/account_number"
                                 android:textColor="@color/grey_900"/>
 
                             <TextView
                                 android:layout_gravity="bottom"
                                 android:layout_height="wrap_content"
                                 android:layout_width="match_parent"
-                                android:text="RBL Bank"
+                                android:text="@string/rbl_bank"
                                 android:textColor="@color/grey_900"/>
 
                         </LinearLayout>
@@ -89,14 +88,14 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="@dimen/value_2dp"
                                 android:layout_width="wrap_content"
-                                android:text="Name"
+                                android:text="@string/name_txt"
                                 android:layout_centerVertical="true"/>
 
                             <TextView
                                 android:id="@+id/txt_name"
                                 android:layout_height="wrap_content"
                                 android:layout_width="wrap_content"
-                                android:text="Devang Mehta"
+                                android:text="@string/account_holder_name"
                                 android:textColor="@android:color/black"
                                 android:textStyle="bold"
                                 android:layout_marginLeft="100dp"
@@ -117,7 +116,7 @@
                             android:layout_marginBottom="@dimen/value_2dp"
                             android:layout_marginTop="@dimen/value_10dp"
                             android:layout_width="wrap_content"
-                            android:text="Account Type"
+                            android:text="@string/account_type_txt"
                             android:layout_centerVertical="true"/>
 
                         <TextView
@@ -144,14 +143,14 @@
                             android:layout_marginBottom="@dimen/value_2dp"
                             android:layout_marginTop="@dimen/value_10dp"
                             android:layout_width="wrap_content"
-                            android:text="Branch"
+                            android:text="@string/branch_txt"
                             android:layout_centerVertical="true"/>
 
                         <TextView
                             android:id="@+id/txt_branch"
                             android:layout_height="wrap_content"
                             android:layout_width="wrap_content"
-                            android:text="Lower Parel, Mumbai"
+                            android:text="@string/branch"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"
                             android:layout_marginLeft="100dp"
@@ -176,7 +175,7 @@
                 android:paddingBottom="@dimen/value_15dp"
                 android:paddingLeft="@dimen/value_15dp"
                 android:paddingRight="@dimen/value_15dp"
-                android:text="You need to set UPI PIN to securley do transaction from yout bank account"
+                android:text="@string/upi_pin_suggestion"
                 android:textColor="@android:color/black" />
 
             <TextView
@@ -190,7 +189,7 @@
                 android:paddingBottom="@dimen/value_15dp"
                 android:paddingLeft="@dimen/value_15dp"
                 android:paddingRight="@dimen/value_15dp"
-                android:text="Set UPI PIN easily using your \n debit / ATM card"/>
+                android:text="@string/upi_pin_debit_credit_card"/>
 
             <Button
                 android:background="@drawable/button_round_primary"
@@ -201,7 +200,7 @@
                 android:layout_marginLeft="@dimen/value_20dp"
                 android:layout_marginRight="@dimen/value_20dp"
                 android:layout_width="match_parent"
-                android:text="Set Up PIN"
+                android:text="@string/upi_pin_set"
                 android:textAllCaps="true"
                 android:textColor="@android:color/white"
                 android:typeface="sans"/>
@@ -215,7 +214,7 @@
                 android:layout_marginRight="@dimen/value_20dp"
                 android:layout_marginTop="@dimen/value_15dp"
                 android:layout_width="match_parent"
-                android:text="I HAVE UPI PIN"
+                android:text="@string/upi_pin_already"
                 android:textAllCaps="false"
                 android:textColor="@color/colorPrimary"
                 android:typeface="sans"/>
@@ -234,7 +233,7 @@
                 android:paddingLeft="@dimen/value_15dp"
                 android:paddingRight="@dimen/value_15dp"
                 android:textColor="@color/colorPrimary"
-                android:text="IʼLL SET LATER"/>
+                android:text="@string/upi_pin_later"/>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

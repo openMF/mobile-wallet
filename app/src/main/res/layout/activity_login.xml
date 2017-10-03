@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pixie Pay"
+            android:text="@string/pixie_pay_txt"
             android:textSize="35sp"
             android:textAppearance="@style/TextAppearance.AppCompat.Large.Inverse"/>
 
@@ -32,7 +32,7 @@
             <EditText android:id="@+id/et_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Username"
+                android:hint="@string/username_txt"
                 android:theme="@style/Theme.AppCompat"
                 android:inputType="textEmailAddress"/>
         </android.support.design.widget.TextInputLayout>
@@ -50,7 +50,7 @@
             <EditText android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Password"
+                android:hint="@string/password_txt"
                 android:theme="@style/Theme.AppCompat"
                 android:inputType="textPassword"/>
         </android.support.design.widget.TextInputLayout>
@@ -60,7 +60,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/btn_login"
-        android:text="Login"
+        android:text="@string/login"
         android:layout_marginTop="45dp"
         android:background="@drawable/button_round_white"/>
 

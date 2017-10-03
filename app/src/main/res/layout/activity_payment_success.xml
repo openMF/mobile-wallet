@@ -46,7 +46,7 @@
                     android:paddingBottom="@dimen/value_15dp"
                     android:paddingLeft="@dimen/value_15dp"
                     android:paddingRight="@dimen/value_15dp"
-                    android:text="Success!"
+                    android:text="@string/success_txt"
                     android:textColor="@android:color/black"
                     android:textSize="24sp"
                     android:textStyle="bold"/>

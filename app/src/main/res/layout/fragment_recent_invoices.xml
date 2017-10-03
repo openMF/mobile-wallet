@@ -19,7 +19,7 @@
                 android:layout_gravity="center_vertical"
                 android:textSize="@dimen/value_15sp"
                 android:textStyle="bold"
-                android:text="Select account"
+                android:text="@string/select_acc"
                 android:layout_marginLeft="@dimen/value_10dp"/>
 
             <Spinner

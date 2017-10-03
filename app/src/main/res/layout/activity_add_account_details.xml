@@ -71,7 +71,7 @@
                                 android:drawableLeft="@drawable/et_search"
                                 android:drawablePadding="10dp"
                                 android:drawableStart="@drawable/et_search"
-                                android:hint="Search Text"
+                                android:hint="@string/search_text"
                                 android:inputType="text"
                                 android:layout_height="48dp"
                                 android:layout_width="match_parent"
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:padding="@dimen/value_15dp"
-                    android:text="Popular Banks"
+                    android:text="@string/popular_banks"
                     android:textColor="@android:color/black"/>
 
                 <android.support.v7.widget.CardView
@@ -111,7 +111,7 @@
                     android:layout_height="wrap_content"
                     android:layout_width="match_parent"
                     android:padding="@dimen/value_15dp"
-                    android:text="Other Banks"
+                    android:text="@string/other_banks"
                     android:textColor="@android:color/black"/>
 
                 <android.support.v7.widget.CardView
@@ -133,7 +133,7 @@
                     android:layout_height="48dp"
                     android:layout_width="match_parent"
                     android:layout_alignBottom="@+id/ll_parent"
-                    android:text="Add Bank Account"
+                    android:text="@string/add_bank_account"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:typeface="sans"
