@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
 apply from: '../config/quality/quality.gradle'
 
 def RBL_CLIENT_ID = '"' + RblClientIdProp + '"' ?: '"Define Rbl client id"';
@@ -60,14 +59,12 @@ dependencies {
     compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
 
     compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
-    apt "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
     compile 'com.github.lawloretienne:discreteslider:0.0.9'
 
     compile 'com.google.dagger:dagger:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
-    apt 'com.google.dagger:dagger-compiler:2.11'
 
     compile ("com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion") {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
@@ -83,7 +80,7 @@ dependencies {
 
     compile 'com.google.zxing:core:3.2.1'
 
-    apt "com.github.Raizlabs.DBFlow:dbflow-processor:$rootProject.dbflowVersion"
+    annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:$rootProject.dbflowVersion"
     compile "com.github.Raizlabs.DBFlow:dbflow-core:$rootProject.dbflowVersion"
     compile "com.github.Raizlabs.DBFlow:dbflow:$rootProject.dbflowVersion"
 
