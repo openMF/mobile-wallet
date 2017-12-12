@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -87,9 +88,14 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     @OnClick(R.id.btn_transfer)
     public void transferClicked() {
         String externalId = etVpa.getText().toString();
-        double amount = Double.parseDouble(etAmount.getText().toString());
-        MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
-        fragment.show(getChildFragmentManager(), "Make Transfer Fragment");
+        String eamount = etAmount.getText().toString();
+        if(eamount.equals("") || externalId.equals("")) {
+            Toast.makeText(getActivity(),"Please enter all the fields",Toast.LENGTH_SHORT).show();
+        } else {
+            double amount = Double.parseDouble(eamount);
+            MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
+            fragment.show(getChildFragmentManager(), "Make Transfer Fragment");
+        }
     }
 
     @OnClick(R.id.btn_show_qr)
