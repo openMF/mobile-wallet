@@ -14,6 +14,7 @@ import dagger.Provides;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.base.UseCaseThreadPoolScheduler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
+import org.mifos.mobilewallet.utils.SessionManager;
 
 
 @Module
@@ -58,6 +59,12 @@ public class ApplicationModule {
     @Singleton
     PreferencesHelper providePrefManager(@ApplicationContext Context context) {
         return new PreferencesHelper(context);
+    }
+
+    @Provides
+    @Singleton
+    SessionManager provideSessionManager(PreferencesHelper preferencesHelper) {
+        return new SessionManager(preferencesHelper);
     }
 
 }
