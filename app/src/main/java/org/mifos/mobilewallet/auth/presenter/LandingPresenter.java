@@ -6,6 +6,7 @@ import org.mifos.mobilewallet.base.BaseView;
 import javax.inject.Inject;
 
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.utils.SessionManager;
 
 /**
  * Created by naman on 16/6/17.
@@ -16,6 +17,8 @@ public class LandingPresenter implements AuthContract.LandingPresenter {
     private AuthContract.LandingView mLandingView;
     private final UseCaseHandler mUsecaseHandler;
 
+    @Inject
+    SessionManager mSessionManager;
 
     @Inject
     public LandingPresenter(UseCaseHandler useCaseHandler) {
@@ -38,5 +41,12 @@ public class LandingPresenter implements AuthContract.LandingPresenter {
     @Override
     public void navigateSignup() {
         mLandingView.openSignupScreen();
+    }
+
+    @Override
+    public void checkLoginStatus() {
+        if (mSessionManager.isLoggedIn()) {
+            mLandingView.openHomeScreen();
+        }
     }
 }

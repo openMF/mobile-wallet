@@ -40,18 +40,18 @@ public interface AuthContract {
 
     }
 
-
     interface LandingView extends BaseView<LandingPresenter> {
 
         void openLoginScreen();
         void openSignupScreen();
+        void openHomeScreen();
     }
 
     interface LandingPresenter extends BasePresenter {
 
         void navigateLogin();
         void navigateSignup();
-
+        void checkLoginStatus();
     }
 
     interface AddAccountView extends BaseView<AddAcountPresenter> {

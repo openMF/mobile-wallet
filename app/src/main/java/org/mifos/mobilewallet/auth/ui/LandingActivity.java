@@ -8,6 +8,7 @@ import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.auth.presenter.LandingPresenter;
 import org.mifos.mobilewallet.base.BaseActivity;
+import org.mifos.mobilewallet.home.ui.HomeActivity;
 
 import javax.inject.Inject;
 
@@ -34,7 +35,7 @@ public class LandingActivity extends BaseActivity implements AuthContract.Landin
 
         ButterKnife.bind(LandingActivity.this);
         mPresenter.attachView(this);
-
+        mPresenter.checkLoginStatus();
     }
 
     @Override
@@ -51,6 +52,14 @@ public class LandingActivity extends BaseActivity implements AuthContract.Landin
     @Override
     public void openSignupScreen() {
         Intent intent = new Intent(LandingActivity.this, SignupActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void openHomeScreen() {
+        Intent intent = new Intent(LandingActivity.this, HomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
