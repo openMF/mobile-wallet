@@ -14,6 +14,7 @@ import org.mifos.mobilewallet.core.domain.model.User;
 import org.mifos.mobilewallet.core.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
 import org.mifos.mobilewallet.core.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.SessionManager;
 
 /**
  * Created by naman on 16/6/17.
@@ -31,6 +32,9 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
 
     @Inject
     FetchClientData fetchClientDataUseCase;
+
+    @Inject
+    SessionManager sessionManager;
 
 
     @Inject
@@ -112,5 +116,12 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     private void saveClientDetails(Client client) {
         preferencesHelper.saveFullName(client.getName());
         preferencesHelper.setClientId(client.getClientId());
+    }
+
+    @Override
+    public void checkLoginStatus() {
+        if (sessionManager.isLoggedIn()) {
+            mLoginView.openHomeScreen();
+        }
     }
 }

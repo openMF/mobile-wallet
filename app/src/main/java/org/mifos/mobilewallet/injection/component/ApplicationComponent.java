@@ -16,6 +16,7 @@ import dagger.Component;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.utils.SessionManager;
 
 @Singleton
 @Component(modules = {ApplicationModule.class})
@@ -34,6 +35,7 @@ public interface ApplicationComponent {
     FineractRepository fineractRepository();
     PreferencesHelper prefManager();
     LocalRepository localRepository();
+    SessionManager sessionManager();
 
 
 

@@ -22,6 +22,7 @@ public class PreferencesHelper {
     private static final String EMAIL = "preferences_email";
     private static final String CLIENT_ID = "preferences_client";
     private static final String USER_ID = "preferences_user_id";
+    private static final String LAST_ACTIVITY_TIME = "preferences_last_activity_time";
 
 
     private SharedPreferences sharedPreferences;
@@ -112,5 +113,11 @@ public class PreferencesHelper {
         return getLong(CLIENT_ID, 1);
     }
 
+    public void setLastActivityTime(long lastActivityTime) {
+        putLong(LAST_ACTIVITY_TIME, lastActivityTime);
+    }
 
+    public long getLastActivityTime() {
+        return getLong(LAST_ACTIVITY_TIME, 0);
+    }
 }

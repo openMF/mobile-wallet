@@ -23,6 +23,7 @@ public class PreferencesHelper {
     private static final String CLIENT_ID = "preferences_client";
     private static final String USER_ID = "preferences_user_id";
     private static final String CLIENT_VPA = "preferences_client_vpa";
+    private static final String LAST_ACTIVITY_TIME = "preferences_last_activity_time";
 
 
     private SharedPreferences sharedPreferences;
@@ -119,6 +120,14 @@ public class PreferencesHelper {
 
     public String getClientVpa() {
         return getString(CLIENT_VPA, "");
+    }
+
+    public void setLastActivityTime(long lastActivityTime) {
+        putLong(LAST_ACTIVITY_TIME, lastActivityTime);
+    }
+
+    public long getLastActivityTime() {
+        return getLong(LAST_ACTIVITY_TIME, 0);
     }
 
 }

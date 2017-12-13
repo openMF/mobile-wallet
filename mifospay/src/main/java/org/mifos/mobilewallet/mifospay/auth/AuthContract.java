@@ -16,11 +16,13 @@ public interface AuthContract {
 
         void loginSuccess();
         void loginFail(String message);
+        void openHomeScreen();
     }
 
     interface LoginPresenter extends BasePresenter {
 
         void loginUser(String username, String password);
+        void checkLoginStatus();
     }
 
 

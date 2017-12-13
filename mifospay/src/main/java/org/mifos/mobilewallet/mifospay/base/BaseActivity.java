@@ -14,6 +14,9 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.injection.component.ActivityComponent;
 import org.mifos.mobilewallet.mifospay.injection.component.DaggerActivityComponent;
 import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
+import org.mifos.mobilewallet.mifospay.utils.SessionManager;
+
+import javax.inject.Inject;
 
 /**
  * Created by naman on 16/6/17.
@@ -26,6 +29,9 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityCallb
     public Toolbar toolbar;
     public SwipeRefreshLayout swipeLayout;
     public ProgressDialog progressDialog;
+
+    @Inject
+    SessionManager mSessionManager;
 
     public ActivityComponent getActivityComponent() {
         if (activityComponent == null) {
@@ -138,4 +144,9 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityCallb
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSessionManager.setLastActivityTime();
+    }
 }
