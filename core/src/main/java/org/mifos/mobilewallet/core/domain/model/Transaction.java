@@ -110,8 +110,8 @@ public class Transaction implements Parcelable {
                 TransactionType.values()[tmpTransactionType];
     }
 
-    public static final Parcelable.Creator<Transaction> CREATOR = new
-            Parcelable.Creator<Transaction>() {
+    public static final Creator<Transaction> CREATOR = new
+            Creator<Transaction>() {
         @Override
         public Transaction createFromParcel(Parcel source) {
             return new Transaction(source);

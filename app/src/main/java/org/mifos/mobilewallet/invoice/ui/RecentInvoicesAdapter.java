@@ -33,14 +33,14 @@ public class RecentInvoicesAdapter extends RecyclerView.Adapter<RecentInvoicesAd
     }
 
     @Override
-    public RecentInvoicesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_invoice, parent, false);
-        return new RecentInvoicesAdapter.ViewHolder(v);
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(RecentInvoicesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         holder.tvInvoiceAmount.setText(Constants.RUPEE + invoices.get(position).getAmount());
         holder.tvInvoiceId.setText("Invoice ID : " +
                 invoices.get(position).getInvoiceId());

@@ -11,7 +11,9 @@
     <string name="powered_by">Powered By &#160;</string>
     <string name="rbl_bank">RBL BANK</string>
     <string name="verify_mobile_number">Verify Mobile Number</string>
-    <string name="confirm_mobile_number_message">To confirm your mobile number \n we need to send an SMS from \n your phone*</string>
+    <string name="confirm_mobile_number_message">To confirm your mobile number \n we need to send an
+        SMS from \n your phone*
+    </string>
     <string name="choose_your_sim">Please choose your SIM</string>
     <string name="sim_provider">VODAFONE_IN</string>
     <string name="sim_airtel">AIRTEL_IN</string>
@@ -30,8 +32,11 @@
     <string name="account_type_txt">Account Type</string>
     <string name="branch_txt">Branch</string>
     <string name="branch">Lower Parel, Mumbai</string>
-    <string name="upi_pin_suggestion">You need to set UPI PIN to securely do transaction from your bank account</string>
-    <string name="upi_pin_debit_credit_card">Set UPI PIN easily using your \n debit / ATM card</string>
+    <string name="upi_pin_suggestion">You need to set UPI PIN to securely do transaction from your
+        bank account
+    </string>
+    <string name="upi_pin_debit_credit_card">Set UPI PIN easily using your \n debit / ATM card
+    </string>
     <string name="upi_pin_set">Set Up PIN</string>
     <string name="upi_pin_already">I HAVE UPI PIN</string>
     <string name="upi_pin_later">IʼLL SET LATER</string>
@@ -73,7 +78,9 @@
     <string name="reEnter_pin">Re enter the pin</string>
     <string name="create_pin">Create PIN</string>
     <string name="scan_fingerprint">Scan customer\'s fingerprint</string>
-    <string name="scan_fingerprint_message">Scan customer\'s fingerprint to authorise the transaction</string>
+    <string name="scan_fingerprint_message">Scan customer\'s fingerprint to authorise the
+        transaction
+    </string>
     <string name="wait_fingerprint_message">Waiting for fingerprint scanner to be connected</string>
     <string name="done_txt">Done</string>
     <string name="auto_otp_message">Auto detecting one time password</string>
@@ -90,6 +97,22 @@
     <string name="enter_vpa">Enter the vpa</string>
     <string name="request_txt">Request</string>
     <string name="select_acc">Select Account</string>
+    <string name="cvv">CVV</string>
 
+
+    <string-array name="months_array">
+        <item>01</item>
+        <item>02</item>
+        <item>03</item>
+        <item>04</item>
+        <item>05</item>
+        <item>06</item>
+        <item>07</item>
+        <item>08</item>
+        <item>09</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
 
 </resources>

@@ -16,6 +16,6 @@ public interface SearchService {
 
     @GET(ApiEndPoints.SEARCH)
     Observable<List<SearchedEntity>> searchResources(@Query("query") String query,
-                                                     @Query("resource") String resources,
-                                                     @Query("exactMatch") Boolean exactMatch);
+            @Query("resource") String resources,
+            @Query("exactMatch") Boolean exactMatch);
 }
