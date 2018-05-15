@@ -37,15 +37,20 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    protected void showProgressDialog(String message) {
+        callback.showProgressDialog(message);
+    }
+
+    protected void hideProgressDialog() {
+        callback.hideProgressDialog();
+    }
+
     protected void setSwipeEnabled(boolean enabled) {
         if (callback != null) {
             callback.setSwipeRefreshEnabled(enabled);
         }
     }
 
-    protected void replaceFragment(Fragment fragment, int containerId) {
-
-    }
 
     @Override
     public void onAttach(Context context) {
@@ -63,6 +68,23 @@ public class BaseFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         callback = null;
+    }
+
+    public void replaceFragmentUsingFragmentManager(Fragment fragment, boolean addToBackStack,
+            int containerId) {
+        String backStateName = fragment.getClass().getName();
+        boolean fragmentPopped = getFragmentManager().popBackStackImmediate(backStateName,
+                0);
+
+        if (!fragmentPopped && getFragmentManager().findFragmentByTag(backStateName) ==
+                null) {
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            transaction.replace(containerId, fragment, backStateName);
+            if (addToBackStack) {
+                transaction.addToBackStack(backStateName);
+            }
+            transaction.commit();
+        }
     }
 
     public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {

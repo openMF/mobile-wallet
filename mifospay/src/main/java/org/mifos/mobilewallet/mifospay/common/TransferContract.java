@@ -9,7 +9,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 
 public interface TransferContract {
 
-    interface TransferView extends BaseView<TransferContract.TransferPresenter> {
+    interface TransferView extends BaseView<TransferPresenter> {
 
         void showToClientDetails(long clientId, String name, String externalId);
 

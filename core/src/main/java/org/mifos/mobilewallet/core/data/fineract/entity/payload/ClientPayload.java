@@ -267,8 +267,8 @@ public class ClientPayload implements Parcelable {
         this.locale = in.readString();
     }
 
-    public static final Parcelable.Creator<ClientPayload> CREATOR =
-            new Parcelable.Creator<ClientPayload>() {
+    public static final Creator<ClientPayload> CREATOR =
+            new Creator<ClientPayload>() {
         @Override
         public ClientPayload createFromParcel(Parcel source) {
             return new ClientPayload(source);

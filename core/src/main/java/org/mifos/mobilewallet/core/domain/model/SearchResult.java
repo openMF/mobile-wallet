@@ -58,8 +58,8 @@ public class SearchResult implements Parcelable {
         this.resultType = in.readString();
     }
 
-    public static final Parcelable.Creator<SearchResult> CREATOR = new
-            Parcelable.Creator<SearchResult>() {
+    public static final Creator<SearchResult> CREATOR = new
+            Creator<SearchResult>() {
         @Override
         public SearchResult createFromParcel(Parcel source) {
             return new SearchResult(source);
