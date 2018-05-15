@@ -6,7 +6,6 @@ def RBL_CLIENT_SECRET = '"' + RblClientSecretProp + '"' ?: '"Define Rbl client s
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
         applicationId "org.mifos.mobilewallet"
@@ -44,47 +43,48 @@ android {
 
     compileOptions.incremental = false
 
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
 
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    compile "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-    compile "com.android.support:design:$rootProject.supportLibraryVersion"
-    compile "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
-    compile "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
 
-    compile "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
+    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
-    compile 'com.github.lawloretienne:discreteslider:0.0.9'
+    implementation 'com.github.lawloretienne:discreteslider:0.0.9'
 
-    compile 'com.google.dagger:dagger:2.11'
+    implementation 'com.google.dagger:dagger:2.11'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
 
-    compile ("com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion") {
+    implementation ("com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion") {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
         exclude module: 'okhttp'
     }
-    compile "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
-    compile "com.squareup.retrofit2:adapter-rxjava:$rootProject.retrofitVersion"
-    compile "com.squareup.okhttp3:okhttp:$rootProject.okHttp3Version"
-    compile "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttp3Version"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava:$rootProject.retrofitVersion"
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.okHttp3Version"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttp3Version"
 
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.4'
+    implementation 'io.reactivex:rxandroid:1.1.0'
+    implementation 'io.reactivex:rxjava:1.1.4'
 
-    compile 'com.google.zxing:core:3.2.1'
+    implementation 'com.google.zxing:core:3.2.1'
 
     annotationProcessor "com.github.Raizlabs.DBFlow:dbflow-processor:$rootProject.dbflowVersion"
-    compile "com.github.Raizlabs.DBFlow:dbflow-core:$rootProject.dbflowVersion"
-    compile "com.github.Raizlabs.DBFlow:dbflow:$rootProject.dbflowVersion"
+    implementation "com.github.Raizlabs.DBFlow:dbflow-core:$rootProject.dbflowVersion"
+    implementation "com.github.Raizlabs.DBFlow:dbflow:$rootProject.dbflowVersion"
 
-    testCompile 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.12'
 
     implementation project(':core')
 
