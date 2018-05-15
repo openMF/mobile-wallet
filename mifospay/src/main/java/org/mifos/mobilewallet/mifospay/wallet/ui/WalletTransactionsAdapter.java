@@ -34,14 +34,14 @@ public class WalletTransactionsAdapter
     }
 
     @Override
-    public WalletTransactionsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_wallet_transaction, parent, false);
-        return new WalletTransactionsAdapter.ViewHolder(v);
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(WalletTransactionsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         Transaction transaction = transactions.get(position);
 
         holder.tvTransactionAmount.setText(transaction.getCurrency().getCode() + " " +

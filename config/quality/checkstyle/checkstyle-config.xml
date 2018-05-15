@@ -32,14 +32,15 @@
             <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
         </module>
 
-        <module name="EmptyBlock">
+        <!-- <module name="EmptyBlock">
             <property name="option" value="TEXT"/>
-            <property name="tokens" value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH"/>
+            <property name="tokens" value="LITERAL_TRY, LITERAL_FINALLY, LITERAL_IF, LITERAL_ELSE, LITERAL_SWITCH, LITERAL_CATCH"/>
         </module>
-
-        <module name="EmptyCatchBlock">
-            <property name="exceptionVariableName" value="expected"/>
-        </module>
+ -->
+        <!-- Ignore the EmptyCatchBlock -->
+        <!--  <module name="EmptyCatchBlock">
+             <property name="exceptionVariableName" value="expected|ignore"/>
+         </module> -->
 
         <module name="LeftCurly">
             <property name="maxLineLength" value="100"/>
@@ -116,40 +117,39 @@
                      value="Package name ''{0}'' must match pattern ''{1}''."/>
         </module>
 
-        <module name="MethodName">
+        <!-- <module name="MethodName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
             <message key="name.invalidPattern"
                      value="Method name ''{0}'' must match pattern ''{1}''."/>
-        </module>
+        </module> -->
 
         <module name="TypeName">
             <message key="name.invalidPattern"
                      value="Type name ''{0}'' must match pattern ''{1}''."/>
         </module>
 
-        <!--//TODO Need Discussion, about the naming convention of member Variable -->
-        <!--<module name="MemberName">
+        <!-- <module name="MemberName">
             <property name="applyToPublic" value="false" />
             <property name="applyToPackage" value="false" />
             <property name="applyToProtected" value="false" />
             <property name="format" value="^m[A-Z][a-z0-9][a-zA-Z0-9]*$"/>
             <message key="name.invalidPattern"
                      value="Member name ''{0}'' must match pattern ''{1}''."/>
-        </module>-->
+        </module> -->
 
-        <module name="ParameterName">
+        <!-- <module name="ParameterName">
             <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
             <message key="name.invalidPattern"
                      value="Parameter name ''{0}'' must match pattern ''{1}''."/>
-        </module>
+        </module> -->
 
-        <module name="LocalVariableName">
+        <!-- <module name="LocalVariableName">
             <property name="tokens" value="VARIABLE_DEF"/>
             <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
             <property name="allowOneCharVarInForLoop" value="true"/>
             <message key="name.invalidPattern"
                      value="Local variable name ''{0}'' must match pattern ''{1}''."/>
-        </module>
+        </module> -->
 
         <module name="ClassTypeParameterName">
             <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>

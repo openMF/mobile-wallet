@@ -26,7 +26,7 @@ public class GenerateQr extends UseCase<GenerateQr.RequestValues, GenerateQr.Res
     }
 
     @Override
-    protected void executeUseCase(GenerateQr.RequestValues requestValues) {
+    protected void executeUseCase(RequestValues requestValues) {
 
         try {
             Bitmap bitmap = encodeAsBitmap(requestValues.data);

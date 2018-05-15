@@ -37,7 +37,7 @@ public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.View
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_other_banks, parent, false);
-        return new OtherBankAdapter.ViewHolder(v);
+        return new ViewHolder(v);
     }
 
     @Override
