@@ -36,6 +36,9 @@
 
         <activity android:name=".passcode.ui.PassCodeActivity"
                   android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".kyc.ui.KYCActivity"
+                  android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

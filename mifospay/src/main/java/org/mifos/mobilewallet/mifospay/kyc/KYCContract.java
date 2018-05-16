@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.mifospay.kyc;
 
 import android.content.Intent;
+import android.net.Uri;
 
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
@@ -10,14 +11,14 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
  */
 
 public interface KYCContract {
-    interface KYCPresenter extends BasePresenter{
+    interface KYCPresenter extends BasePresenter {
 
         void browseDocs();
 
-        void uploadDocs();
+        void uploadDocs(Uri uri);
     }
 
-    interface KYCView extends BaseView<KYCPresenter>{
+    interface KYCView extends BaseView<KYCPresenter> {
 
         void startDocChooseActivity(Intent intent);
     }

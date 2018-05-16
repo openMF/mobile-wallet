@@ -1,11 +1,13 @@
 package org.mifos.mobilewallet.mifospay.kyc.presenter;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
+import android.util.Log;
 
+import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.AuthenticateUser;
-import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
+import org.mifos.mobilewallet.core.domain.usecase.UploadKYCDocs;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
@@ -21,6 +23,9 @@ public class KYCPresenter implements KYCContract.KYCPresenter {
     private final UseCaseHandler mUsecaseHandler;
 
     private final PreferencesHelper preferencesHelper;
+
+    @Inject
+    UploadKYCDocs uploadKYCDocsUseCase;
 
     @Inject
     public KYCPresenter(UseCaseHandler useCaseHandler, PreferencesHelper preferencesHelper) {
@@ -58,7 +63,25 @@ public class KYCPresenter implements KYCContract.KYCPresenter {
     }
 
     @Override
-    public void uploadDocs() {
+    public void uploadDocs(Uri uri) {
+        Log.d("qxz", "uploadDocs: " + preferencesHelper.getClientId() + " " + uri);
 
+        uploadKYCDocsUseCase.setRequestValues(new UploadKYCDocs.RequestValues(
+                preferencesHelper.getClientId(), uri));
+
+        final UploadKYCDocs.RequestValues requestValues = uploadKYCDocsUseCase.getRequestValues();
+
+        mUsecaseHandler.execute(uploadKYCDocsUseCase, requestValues,
+                new UseCase.UseCaseCallback<UploadKYCDocs.ResponseValue>() {
+                    @Override
+                    public void onSuccess(UploadKYCDocs.ResponseValue response) {
+                        Log.d("qxz ", "onSuccess: ");
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        Log.d("qxz ", "onError: " + message);
+                    }
+                });
     }
 }

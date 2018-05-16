@@ -61,8 +61,8 @@ public class KYCActivity extends BaseActivity implements KYCContract.KYCView {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 Uri uri = data.getData();
-                Log.d("debug.uri: ",uri.toString());
-//                mKYCPresenter.sendDoc(uri);
+                Log.d("qxz uri chosen: ",uri.toString());
+                mKYCPresenter.uploadDocs(uri);
             }
         }
     }
