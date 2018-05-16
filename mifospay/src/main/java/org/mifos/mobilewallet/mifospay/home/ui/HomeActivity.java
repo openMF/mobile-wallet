@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -11,17 +12,18 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.mifos.mobilewallet.core.domain.model.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.HomePresenter;
+import org.mifos.mobilewallet.mifospay.kyc.ui.KYCActivity;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.domain.model.Client;
 
 /**
  * Created by naman on 17/6/17.
@@ -60,6 +62,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
         replaceFragment(HomeFragment.newInstance(), false, R.id.container);
         setupDrawerContent(navigationView);
         swipeLayout.setEnabled(false);
+
+        startActivity(new Intent(HomeActivity.this, KYCActivity.class));
     }
 
 

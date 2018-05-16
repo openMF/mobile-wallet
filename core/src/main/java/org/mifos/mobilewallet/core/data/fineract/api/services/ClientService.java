@@ -1,14 +1,18 @@
 package org.mifos.mobilewallet.core.data.fineract.api.services;
 
 
+import android.net.Uri;
+
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.UpdateVpaPayload;
+
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -26,7 +30,7 @@ public interface ClientService {
 
     @PUT(ApiEndPoints.CLIENTS + "/{clientId}")
     Observable<ResponseBody> updateClientVpa(@Path(CLIENT_ID) long clientId,
-                                             @Body UpdateVpaPayload payload);
+            @Body UpdateVpaPayload payload);
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/images")
     Observable<ResponseBody> getClientImage(@Path(CLIENT_ID) long clientId);
@@ -36,6 +40,10 @@ public interface ClientService {
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
     Observable<ClientAccounts> getAccounts(@Path(CLIENT_ID) long clientId,
-                                           @Query("fields") String accountType);
+            @Query("fields") String accountType);
+
+    @POST(ApiEndPoints.CLIENTS + "/{clientId}/images")
+    Observable<ResponseBody> uploadKYCDocs(@Path(CLIENT_ID) long clientId,
+            @Body Uri uri);
 
 }

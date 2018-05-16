@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.support.v7.app.AppCompatDelegate;
 
+import com.mifos.mobile.passcode.utils.ForegroundChecker;
+
 import org.mifos.mobilewallet.mifospay.injection.component.ApplicationComponent;
 import org.mifos.mobilewallet.mifospay.injection.component.DaggerApplicationComponent;
 import org.mifos.mobilewallet.mifospay.injection.module.ApplicationModule;
@@ -39,6 +41,9 @@ public class MifosPayApp extends Application {
             MifosPayApp.instance = this;
         }
         ButterKnife.setDebug(true);
+
+        //Initialize ForegroundChecker
+        ForegroundChecker.init(this);
     }
 
     public ApplicationComponent component() {
