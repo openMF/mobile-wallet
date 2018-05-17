@@ -2,7 +2,6 @@ package org.mifos.mobilewallet.core.data.fineract.repository;
 
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager;
-import org.mifos.mobilewallet.core.data.fineract.entity.KYCDocsEnity;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity;
@@ -23,6 +22,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.functions.Func1;
@@ -75,8 +75,9 @@ public class FineractRepository {
         return fineractApiManager.getClientsApi().getClientForId(clientId);
     }
 
-    public Observable<ResponseBody> uploadKYCDocs(long clientId, KYCDocsEnity kycDocsEnity) {
-        return fineractApiManager.getClientsApi().uploadKYCDocs(clientId, kycDocsEnity.getUri())
+    public Observable<ResponseBody> uploadKYCDocs(String entityType, long entityId, String name,
+            String desc, MultipartBody.Part file) {
+        return fineractApiManager.getDocumentApi().createDocument(entityType, entityId, name, desc, file)
                 .map(new Func1<ResponseBody, ResponseBody>() {
                     @Override
                     public ResponseBody call(ResponseBody responseBody) {

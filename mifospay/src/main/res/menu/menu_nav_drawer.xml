@@ -11,6 +11,12 @@
             android:title="Home"/>
 
 
+        <item
+            android:id="@+id/item_kyc"
+            android:checked="true"
+            android:title="Complete KYC"/>
+
+
     </group>
 
 

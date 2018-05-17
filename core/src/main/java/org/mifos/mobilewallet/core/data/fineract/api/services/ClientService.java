@@ -42,8 +42,4 @@ public interface ClientService {
     Observable<ClientAccounts> getAccounts(@Path(CLIENT_ID) long clientId,
             @Query("fields") String accountType);
 
-    @POST(ApiEndPoints.CLIENTS + "/{clientId}/images")
-    Observable<ResponseBody> uploadKYCDocs(@Path(CLIENT_ID) long clientId,
-            @Body Uri uri);
-
 }

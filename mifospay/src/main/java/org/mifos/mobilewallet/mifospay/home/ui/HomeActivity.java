@@ -63,7 +63,6 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
         setupDrawerContent(navigationView);
         swipeLayout.setEnabled(false);
 
-        startActivity(new Intent(HomeActivity.this, KYCActivity.class));
     }
 
 
@@ -113,6 +112,12 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
             case R.id.item_home:
                 replaceFragment(HomeFragment.newInstance(), false, R.id.container);
                 break;
+
+            case R.id.item_kyc:
+                Intent intent = new Intent(HomeActivity.this, KYCActivity.class);
+                startActivity(intent);
+                break;
+
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);

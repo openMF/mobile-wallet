@@ -1,15 +1,12 @@
 package org.mifos.mobilewallet.core.domain.usecase;
 
-import android.net.Uri;
-
 import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.data.fineract.entity.KYCDocsEnity;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 
 import javax.inject.Inject;
 
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
-import rx.Scheduler;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -30,9 +27,8 @@ public class UploadKYCDocs extends UseCase<UploadKYCDocs.RequestValues,
 
     @Override
     protected void executeUseCase(UploadKYCDocs.RequestValues requestValues) {
-        KYCDocsEnity kycDocsEnity = new KYCDocsEnity();
-        kycDocsEnity.setUri(requestValues.uri);
-        apiRepository.uploadKYCDocs(requestValues.clientId, kycDocsEnity)
+        apiRepository.uploadKYCDocs(requestValues.entitytype, requestValues.clientId,
+                requestValues.docname, requestValues.identityType, requestValues.file)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<ResponseBody>() {
@@ -54,12 +50,19 @@ public class UploadKYCDocs extends UseCase<UploadKYCDocs.RequestValues,
     }
 
     public static final class RequestValues implements UseCase.RequestValues {
-        private final Uri uri;
+        public final String entitytype;
         private final long clientId;
+        private final String docname;
+        private final String identityType;
+        private final MultipartBody.Part file;
 
-        public RequestValues(long clientId, Uri uri) {
+        public RequestValues(String entitytype, long clientId, String docname,
+                String identityType, MultipartBody.Part file) {
+            this.entitytype = entitytype;
             this.clientId = clientId;
-            this.uri = uri;
+            this.docname = docname;
+            this.identityType = identityType;
+            this.file = file;
         }
     }
 

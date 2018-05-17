@@ -13,6 +13,5 @@ public class Constants {
 
     public static final int WALLET_ACCOUNT_SAVINGS_PRODUCT_ID = 165;
 
-
-
+    public static final String ENTITY_TYPE_CLIENTS = "clients";
 }
