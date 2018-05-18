@@ -75,37 +75,36 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
     public void uploadDocs(int requestCode, int resultCode, Intent data) {
 
         Uri uri = null;
-        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                uri = data.getData();
-            } else {
-                // throw an error
-                return;
-            }
+        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+
+            uri = data.getData();
+            File file = new File(uri.getPath());
+            Log.d("qxz", "uploadDocs: " + preferencesHelper.getClientId() + " " + uri);
+
+            uploadKYCDocsUseCase.setRequestValues(
+                    new UploadKYCDocs.RequestValues(Constants.ENTITY_TYPE_CLIENTS,
+                            preferencesHelper.getClientId(), file.getName(), "identity type",
+                            getRequestFileBody(file)));
+
+            final UploadKYCDocs.RequestValues requestValues =
+                    uploadKYCDocsUseCase.getRequestValues();
+
+            mUseCaseHandler.execute(uploadKYCDocsUseCase, requestValues,
+                    new UseCase.UseCaseCallback<UploadKYCDocs.ResponseValue>() {
+                        @Override
+                        public void onSuccess(UploadKYCDocs.ResponseValue response) {
+                            Log.d("qxz ", "onSuccess: ");
+                        }
+
+                        @Override
+                        public void onError(String message) {
+                            Log.d("qxz ", "onError: " + message);
+                        }
+                    });
+
         }
 
-        File file = new File(uri.getPath());
-        Log.d("qxz", "uploadDocs: " + preferencesHelper.getClientId() + " " + uri);
 
-        uploadKYCDocsUseCase.setRequestValues(
-                new UploadKYCDocs.RequestValues(Constants.ENTITY_TYPE_CLIENTS,
-                        preferencesHelper.getClientId(), file.getName(), "identity type",
-                        getRequestFileBody(file)));
-
-        final UploadKYCDocs.RequestValues requestValues = uploadKYCDocsUseCase.getRequestValues();
-
-        mUseCaseHandler.execute(uploadKYCDocsUseCase, requestValues,
-                new UseCase.UseCaseCallback<UploadKYCDocs.ResponseValue>() {
-                    @Override
-                    public void onSuccess(UploadKYCDocs.ResponseValue response) {
-                        Log.d("qxz ", "onSuccess: ");
-                    }
-
-                    @Override
-                    public void onError(String message) {
-                        Log.d("qxz ", "onError: " + message);
-                    }
-                });
     }
 
     private MultipartBody.Part getRequestFileBody(File file) {
