@@ -1,10 +1,5 @@
 package org.mifos.mobilewallet.core.data.fineract.repository;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
@@ -21,6 +16,13 @@ import org.mifos.mobilewallet.core.data.fineract.entity.payload.UpdateVpaPayload
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.utils.Constants;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.functions.Func1;
@@ -50,7 +52,7 @@ public class FineractRepository {
     }
 
     public Observable<List<SearchedEntity>> searchResources(String query, String resources,
-                                                            Boolean exactMatch) {
+            Boolean exactMatch) {
         return fineractApiManager.getSearchApi().searchResources(query, resources, exactMatch);
     }
 
@@ -71,6 +73,17 @@ public class FineractRepository {
 
     public Observable<Client> getClientDetails(long clientId) {
         return fineractApiManager.getClientsApi().getClientForId(clientId);
+    }
+
+    public Observable<ResponseBody> uploadKYCDocs(String entityType, long entityId, String name,
+            String desc, MultipartBody.Part file) {
+        return fineractApiManager.getDocumentApi().createDocument(entityType, entityId, name, desc, file)
+                .map(new Func1<ResponseBody, ResponseBody>() {
+                    @Override
+                    public ResponseBody call(ResponseBody responseBody) {
+                        return responseBody;
+                    }
+                });
     }
 
     //self user apis
@@ -107,13 +120,12 @@ public class FineractRepository {
     }
 
     public Observable<ResponseBody> updateBeneficiary(long beneficiaryId,
-                                                      BeneficiaryUpdatePayload payload) {
+            BeneficiaryUpdatePayload payload) {
         return selfApiManager.getBeneficiaryApi().updateBeneficiary(beneficiaryId, payload);
     }
 
     public Observable<ResponseBody> makeThirdPartyTransfer(TransferPayload transferPayload) {
         return selfApiManager.getThirdPartyTransferApi().makeTransfer(transferPayload);
     }
-
 
 }

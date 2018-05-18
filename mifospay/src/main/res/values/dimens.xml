@@ -24,5 +24,6 @@
     <dimen name="value_25sp">25sp</dimen>
 
     <dimen name="appBarTopMargin">0dp</dimen>
+    <dimen name="value_50dp">50dp</dimen>
 
 </resources>

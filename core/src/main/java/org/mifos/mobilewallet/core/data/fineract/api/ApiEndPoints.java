@@ -18,5 +18,5 @@ public class ApiEndPoints {
     public static final  String ACCOUNT_TRANSFER = "accounttransfers";
 
 
-
+    public static final String DOCUMENTS = "documents";
 }
