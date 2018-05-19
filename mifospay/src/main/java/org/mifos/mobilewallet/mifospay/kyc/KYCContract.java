@@ -32,13 +32,17 @@ public interface KYCContract {
     interface KYCLevel2View extends BaseView<KYCLevel2Presenter> {
 
         void startDocChooseActivity(Intent intent, int READ_REQUEST_CODE);
+
+        void setFilename(String absolutePath);
     }
 
     interface KYCLevel2Presenter extends BasePresenter {
 
         void browseDocs();
 
-        void uploadDocs(int requestCode, int resultCode, Intent data);
+        void updateFile(int requestCode, int resultCode, Intent data);
+
+        void uploadKYCDocs(String s);
     }
 
     interface KYCLevel3View extends BaseView<KYCLevel3Presenter> {

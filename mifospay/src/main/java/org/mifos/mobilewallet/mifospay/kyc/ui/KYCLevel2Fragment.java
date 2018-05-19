@@ -1,15 +1,14 @@
 package org.mifos.mobilewallet.mifospay.kyc.ui;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -36,6 +35,15 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
 
     @BindView(R.id.btn_browse)
     Button btnBrowse;
+
+    @BindView(R.id.btn_submit)
+    Button btnSubmit;
+
+    @BindView(R.id.tv_filename)
+    TextView tvFilename;
+
+    @BindView(R.id.et_idname)
+    EditText etIdname;
 
     @Override
     public void setPresenter(KYCContract.KYCLevel2Presenter presenter) {
@@ -75,15 +83,25 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
         mKYCLevel2Presenter.browseDocs();
     }
 
+    @OnClick(R.id.btn_submit)
+    public void onSubmitClicked() {
+        mKYCLevel2Presenter.uploadKYCDocs(etIdname.getText().toString());
+    }
+
     @Override
     public void startDocChooseActivity(Intent intent, int READ_REQUEST_CODE) {
         startActivityForResult(Intent.createChooser(intent, "Choose File"), READ_REQUEST_CODE);
     }
 
     @Override
+    public void setFilename(String absolutePath) {
+        tvFilename.setText(absolutePath);
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        mKYCLevel2Presenter.uploadDocs(requestCode, resultCode, data);
+        mKYCLevel2Presenter.updateFile(requestCode, resultCode, data);
     }
 }

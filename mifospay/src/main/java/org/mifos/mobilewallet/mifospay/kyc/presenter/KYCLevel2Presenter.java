@@ -29,6 +29,7 @@ import okhttp3.RequestBody;
 public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
 
     private static final int READ_REQUEST_CODE = 42;
+    private File file;
 
     private KYCContract.KYCLevel2View mKYCLevel1View;
     private final UseCaseHandler mUseCaseHandler;
@@ -72,18 +73,21 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
     }
 
     @Override
-    public void uploadDocs(int requestCode, int resultCode, Intent data) {
+    public void updateFile(int requestCode, int resultCode, Intent data) {
 
-        Uri uri = null;
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            Uri uri = data.getData();
+            file = new File(uri.getPath());
+            mKYCLevel1View.setFilename(file.getAbsolutePath());
+        }
+    }
 
-            uri = data.getData();
-            File file = new File(uri.getPath());
-            Log.d("qxz", "uploadDocs: " + preferencesHelper.getClientId() + " " + uri);
-
+    @Override
+    public void uploadKYCDocs(String identityType) {
+        if (file != null) {
             uploadKYCDocsUseCase.setRequestValues(
                     new UploadKYCDocs.RequestValues(Constants.ENTITY_TYPE_CLIENTS,
-                            preferencesHelper.getClientId(), file.getName(), "identity type",
+                            preferencesHelper.getClientId(), file.getName(), identityType,
                             getRequestFileBody(file)));
 
             final UploadKYCDocs.RequestValues requestValues =
@@ -101,10 +105,9 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
                             Log.d("qxz ", "onError: " + message);
                         }
                     });
-
+        } else {
+            // choose a file first
         }
-
-
     }
 
     private MultipartBody.Part getRequestFileBody(File file) {
