@@ -16,11 +16,13 @@ import android.widget.TextView;
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.account.ui.AccountsFragment;
 import org.mifos.mobilewallet.base.BaseActivity;
+import org.mifos.mobilewallet.core.domain.model.Client;
 import org.mifos.mobilewallet.home.HomeContract;
 import org.mifos.mobilewallet.home.HomePresenter;
 import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
 import org.mifos.mobilewallet.invoice.ui.RecentInvoicesFragment;
 import org.mifos.mobilewallet.qr.ui.ShowQrActivity;
+import org.mifos.mobilewallet.savedcards.ui.CardsActivity;
 import org.mifos.mobilewallet.user.ui.UserDetailsActivity;
 import org.mifos.mobilewallet.utils.Constants;
 import org.mifos.mobilewallet.utils.TextDrawable;
@@ -29,7 +31,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.domain.model.Client;
 
 /**
  * Created by naman on 17/6/17.
@@ -123,6 +124,9 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
                 break;
             case R.id.item_recent_invoices:
                 replaceFragment(RecentInvoicesFragment.newInstance(), false, R.id.container);
+                break;
+            case R.id.item_savedcards:
+                startActivity(new Intent(HomeActivity.this, CardsActivity.class));
                 break;
             case R.id.item_qr:
                 Intent intent = new Intent(this, ShowQrActivity.class);
