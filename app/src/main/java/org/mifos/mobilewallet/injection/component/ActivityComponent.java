@@ -19,7 +19,7 @@ import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
 import org.mifos.mobilewallet.invoice.ui.RecentInvoicesFragment;
 import org.mifos.mobilewallet.invoice.ui.UpiPaymentFragment;
 import org.mifos.mobilewallet.qr.ui.ShowQrActivity;
-import org.mifos.mobilewallet.savedcards.ui.CardsActivity;
+import org.mifos.mobilewallet.savedcards.ui.CardsFragment;
 import org.mifos.mobilewallet.user.ui.UserDetailsActivity;
 
 import dagger.Component;
@@ -66,6 +66,6 @@ public interface ActivityComponent {
 
     void inject(ExternalPaymentFragment externalPaymentFragment);
 
-    void inject(CardsActivity cardsActivity);
+    void inject(CardsFragment cardsFragment);
 
 }

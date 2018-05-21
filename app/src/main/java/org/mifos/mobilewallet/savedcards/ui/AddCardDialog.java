@@ -8,9 +8,12 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import org.mifos.mobilewallet.R;
+import org.mifos.mobilewallet.savedcards.CardsContract;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,6 +21,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by ankur on 19/May/2018
@@ -26,11 +30,30 @@ import butterknife.ButterKnife;
 public class AddCardDialog extends BottomSheetDialogFragment {
     private BottomSheetBehavior mBottomSheetBehavior;
 
+    @BindView(R.id.et_card_number)
+    EditText etCardNumber;
+
+    @BindView(R.id.et_cvv)
+    EditText etCVV;
+
     @BindView(R.id.spn_mm)
     Spinner spnMM;
 
     @BindView(R.id.spn_yy)
     Spinner spnYY;
+
+    @BindView(R.id.btn_add)
+    Button btnAdd;
+
+    @BindView(R.id.btn_cancel)
+    Button btnCancel;
+
+    CardsContract.CardsPresenter mCardsPresenter;
+
+    public void setCardsPresenter(
+            CardsContract.CardsPresenter cardsPresenter) {
+        mCardsPresenter = cardsPresenter;
+    }
 
     @Override
     public void onDismiss(DialogInterface dialog) {
@@ -67,7 +90,18 @@ public class AddCardDialog extends BottomSheetDialogFragment {
     public void onStart() {
         super.onStart();
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-
         // make swipe-able up and parameters to edit text to num only and do backend
+    }
+
+    @OnClick(R.id.btn_cancel)
+    public void onCancelClicked() {
+        dismiss();
+    }
+
+    @OnClick(R.id.btn_add)
+    public void onAddClicked() {
+        mCardsPresenter.addCard(etCardNumber.getText().toString(),
+                etCVV.getText().toString(),
+                (String) spnMM.getSelectedItem() + (String) spnYY.getSelectedItem());
     }
 }

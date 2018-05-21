@@ -22,7 +22,7 @@ import org.mifos.mobilewallet.home.HomePresenter;
 import org.mifos.mobilewallet.invoice.ui.InvoiceFragment;
 import org.mifos.mobilewallet.invoice.ui.RecentInvoicesFragment;
 import org.mifos.mobilewallet.qr.ui.ShowQrActivity;
-import org.mifos.mobilewallet.savedcards.ui.CardsActivity;
+import org.mifos.mobilewallet.savedcards.ui.CardsFragment;
 import org.mifos.mobilewallet.user.ui.UserDetailsActivity;
 import org.mifos.mobilewallet.utils.Constants;
 import org.mifos.mobilewallet.utils.TextDrawable;
@@ -126,7 +126,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
                 replaceFragment(RecentInvoicesFragment.newInstance(), false, R.id.container);
                 break;
             case R.id.item_savedcards:
-                startActivity(new Intent(HomeActivity.this, CardsActivity.class));
+                replaceFragment(CardsFragment.newInstance(), false, R.id.container);
                 break;
             case R.id.item_qr:
                 Intent intent = new Intent(this, ShowQrActivity.class);

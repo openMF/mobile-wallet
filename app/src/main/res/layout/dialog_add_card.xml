@@ -17,7 +17,8 @@
             android:id="@+id/et_card_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Credit Card Number"/>
+            android:hint="Credit Card Number"
+            android:inputType="number"/>
     </android.support.design.widget.TextInputLayout>
 
     <TextView
@@ -54,6 +55,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/cvv"
+            android:inputType="numberPassword"
+            android:maxLength="3"
             android:minWidth="@dimen/value_70dp"/>
     </android.support.design.widget.TextInputLayout>
 
