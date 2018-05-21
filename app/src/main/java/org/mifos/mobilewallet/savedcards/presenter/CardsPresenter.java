@@ -5,6 +5,8 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.savedcards.CardsContract;
 
+import javax.inject.Inject;
+
 /**
  * Created by ankur on 19/May/2018
  */
@@ -14,10 +16,9 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
 
     private final UseCaseHandler mUseCaseHandler;
 
-
-    public CardsPresenter(UseCaseHandler useCaseHandler) {
-        mUseCaseHandler = useCaseHandler;
-
+    @Inject
+    public CardsPresenter(UseCaseHandler useCaseHandler){
+        mUseCaseHandler=useCaseHandler;
     }
 
     @Override
