@@ -7,6 +7,8 @@ import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.Card;
 import org.mifos.mobilewallet.core.domain.usecase.AddCard;
+import org.mifos.mobilewallet.core.domain.usecase.DeleteCard;
+import org.mifos.mobilewallet.core.domain.usecase.EditCard;
 import org.mifos.mobilewallet.core.domain.usecase.FetchSavedCards;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.savedcards.CardsContract;
@@ -24,10 +26,19 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
     private final LocalRepository mLocalRepository;
 
     private final UseCaseHandler mUseCaseHandler;
+
     @Inject
     AddCard addCardUseCase;
+
     @Inject
     FetchSavedCards fetchSavedCardsUseCase;
+
+    @Inject
+    EditCard editCardUseCase;
+
+    @Inject
+    DeleteCard deleteCardUseCase;
+
     private CardsContract.CardsView mCardsView;
 
     @Inject
@@ -46,6 +57,7 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
     @Override
     public void fetchSavedCards() {
         List<Card> cards = new ArrayList<>();
+//        cards.add(new Card("6433131", "545", "11"));
 
         fetchSavedCardsUseCase.setRequestValues(
                 new FetchSavedCards.RequestValues(
@@ -71,10 +83,10 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
     }
 
     @Override
-    public void addCard(String s, String s1, String s2) {
+    public void addCard(Card card) {
         addCardUseCase.setRequestValues(
                 new AddCard.RequestValues(mLocalRepository.getClientDetails().getClientId(),
-                        new Card(s, s1, s2)));
+                        card));
 
         final AddCard.RequestValues requestValues = addCardUseCase.getRequestValues();
 
@@ -88,6 +100,44 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                     @Override
                     public void onError(String message) {
                         Log.d("qxz", "onError: " + message);
+                    }
+                });
+    }
+
+    @Override
+    public void editCard(Card card) {
+        editCardUseCase.setRequestValues(new EditCard.RequestValues(1, card));
+        final EditCard.RequestValues requestValues = editCardUseCase.getRequestValues();
+
+        mUseCaseHandler.execute(editCardUseCase, requestValues,
+                new UseCase.UseCaseCallback<EditCard.ResponseValue>() {
+                    @Override
+                    public void onSuccess(EditCard.ResponseValue response) {
+                        // update cardslist
+                    }
+
+                    @Override
+                    public void onError(String message) {
+
+                    }
+                });
+    }
+
+    @Override
+    public void deleteCard(int position) {
+        deleteCardUseCase.setRequestValues(new DeleteCard.RequestValues(1));
+        final DeleteCard.RequestValues requestValues = deleteCardUseCase.getRequestValues();
+
+        mUseCaseHandler.execute(deleteCardUseCase, requestValues,
+                new UseCase.UseCaseCallback<DeleteCard.ResponseValue>() {
+                    @Override
+                    public void onSuccess(DeleteCard.ResponseValue response) {
+
+                    }
+
+                    @Override
+                    public void onError(String message) {
+
                     }
                 });
     }

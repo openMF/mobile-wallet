@@ -87,6 +87,14 @@ public class FineractRepository {
         return fineractApiManager.getSavedCardsApi().getSavedCards((int) userId);
     }
 
+    public Observable<GenericResponse> editSavedCard(int cardId, Card card) {
+        return fineractApiManager.getSavedCardsApi().updateCard(cardId, card);
+    }
+
+    public Observable<GenericResponse> deleteSavedCard(int cardId) {
+        return fineractApiManager.getSavedCardsApi().deleteCard(cardId);
+    }
+
     //self user apis
 
     public Observable<UserEntity> loginSelf(String username, String password) {

@@ -11,6 +11,15 @@ import com.google.gson.annotations.SerializedName;
 
 public class Card implements Parcelable {
 
+    @SerializedName("cardNumber")
+    String cardNumber;
+
+    @SerializedName("cvv")
+    String cvv;
+
+    @SerializedName("expiryDate")
+    String expiryDate;
+
     public static final Creator<Card> CREATOR = new Creator<Card>() {
         @Override
         public Card createFromParcel(Parcel source) {
@@ -22,12 +31,6 @@ public class Card implements Parcelable {
             return new Card[size];
         }
     };
-    @SerializedName("cardNumber")
-    String cardNumber;
-    @SerializedName("cvv")
-    String cvv;
-    @SerializedName("expiryDate")
-    String expiryDate;
 
     public Card() {
     }
@@ -38,11 +41,8 @@ public class Card implements Parcelable {
         this.expiryDate = expiryDate;
     }
 
-    protected Card(Parcel in) {
-        this.cardNumber = in.readString();
-        this.cvv = in.readString();
-        this.expiryDate = in.readString();
-    }
+    @SerializedName("bankName")
+    String bankName;
 
     public String getCardNumber() {
         return cardNumber;
@@ -68,9 +68,24 @@ public class Card implements Parcelable {
         this.expiryDate = expiryDate;
     }
 
+    protected Card(Parcel in) {
+        this.cardNumber = in.readString();
+        this.cvv = in.readString();
+        this.expiryDate = in.readString();
+        this.bankName = in.readString();
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
     }
 
     @Override
@@ -78,22 +93,7 @@ public class Card implements Parcelable {
         dest.writeString(this.cardNumber);
         dest.writeString(this.cvv);
         dest.writeString(this.expiryDate);
+        dest.writeString(this.bankName);
     }
 
-    //
-//    private String cardNumber;
-//    private String cvv;
-//
-//    public Card(String cardNumber, String cvv) {
-//        this.cardNumber = cardNumber;
-//        this.cvv = cvv;
-//    }
-//
-//    public String getCardNumber() {
-//        return cardNumber;
-//    }
-//
-//    public String getCvv() {
-//        return cvv;
-//    }
 }

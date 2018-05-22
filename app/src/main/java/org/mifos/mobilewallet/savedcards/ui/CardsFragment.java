@@ -6,9 +6,11 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.PopupMenu;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.base.BaseActivity;
@@ -16,6 +18,7 @@ import org.mifos.mobilewallet.base.BaseFragment;
 import org.mifos.mobilewallet.core.domain.model.Card;
 import org.mifos.mobilewallet.savedcards.CardsContract;
 import org.mifos.mobilewallet.savedcards.presenter.CardsPresenter;
+import org.mifos.mobilewallet.utils.RecyclerItemClickListener;
 
 import java.util.List;
 
@@ -82,17 +85,48 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         rvCards.setHasFixedSize(true);
         rvCards.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL));
-        mCardsAdapter.setContext(getActivity());
         rvCards.setAdapter(mCardsAdapter);
 
-//        rvCards.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
-//                new RecyclerItemClickListener.SimpleOnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View childView, int position) {
-//
-//                        showAccountDetail(position);
-//                    }
-//                }));
+        rvCards.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(final View childView, final int position) {
+
+                        PopupMenu savedCardMenu = new PopupMenu(getContext(), childView);
+                        savedCardMenu.getMenuInflater().inflate(R.menu.menu_saved_card,
+                                savedCardMenu.getMenu());
+                        savedCardMenu.setOnMenuItemClickListener(
+                                new PopupMenu.OnMenuItemClickListener() {
+                                    @Override
+                                    public boolean onMenuItemClick(MenuItem item) {
+                                        switch (item.getItemId()) {
+                                            case R.id.edit_card:
+                                                AddCardDialog addCardDialog = new AddCardDialog();
+                                                addCardDialog.forEdit = true;
+                                                addCardDialog.editCard =
+                                                        mCardsAdapter.getCards().get(position);
+                                                addCardDialog.setCardsPresenter(mCardsPresenter);
+                                                addCardDialog.show(getFragmentManager(),
+                                                        "Edit Card Dialog");
+                                                break;
+                                            case R.id.delete_card:
+                                                mCardsPresenter.deleteCard(position);
+                                                break;
+                                            case R.id.cancel:
+                                                break;
+                                        }
+                                        return true;
+                                    }
+                                });
+
+                        savedCardMenu.show();
+                    }
+
+                    @Override
+                    public void onItemLongPress(View childView, int position) {
+
+                    }
+                }));
     }
 
     @Override
@@ -103,6 +137,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     @OnClick(R.id.btn_add_card)
     public void onClickAddCard() {
         AddCardDialog addCardDialog = new AddCardDialog();
+        addCardDialog.forEdit = false;
         addCardDialog.setCardsPresenter(mCardsPresenter);
         addCardDialog.show(getFragmentManager(), "Add Card Dialog");
     }

@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 
 import org.mifos.mobilewallet.R;
+import org.mifos.mobilewallet.core.domain.model.Card;
 import org.mifos.mobilewallet.savedcards.CardsContract;
 
 import java.util.ArrayList;
@@ -29,6 +30,8 @@ import butterknife.OnClick;
 
 public class AddCardDialog extends BottomSheetDialogFragment {
     private BottomSheetBehavior mBottomSheetBehavior;
+    boolean forEdit;
+    Card editCard;
 
     @BindView(R.id.et_card_number)
     EditText etCardNumber;
@@ -91,6 +94,11 @@ public class AddCardDialog extends BottomSheetDialogFragment {
         super.onStart();
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
         // make swipe-able up and parameters to edit text to num only and do backend
+
+        if (forEdit) {
+            etCardNumber.setText(editCard.getCardNumber());
+            btnAdd.setText("Update");
+        }
     }
 
     @OnClick(R.id.btn_cancel)
@@ -100,8 +108,14 @@ public class AddCardDialog extends BottomSheetDialogFragment {
 
     @OnClick(R.id.btn_add)
     public void onAddClicked() {
-        mCardsPresenter.addCard(etCardNumber.getText().toString(),
+        Card card = new Card(etCardNumber.getText().toString(),
                 etCVV.getText().toString(),
                 (String) spnMM.getSelectedItem() + (String) spnYY.getSelectedItem());
+
+        if (forEdit) {
+            mCardsPresenter.editCard(card);
+        } else {
+            mCardsPresenter.addCard(card);
+        }
     }
 }

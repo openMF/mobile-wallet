@@ -18,5 +18,5 @@ public class ApiEndPoints {
     public static final  String ACCOUNT_TRANSFER = "accounttransfers";
 
 
-    public static final String SAVED_CARD = "datatables";
+    public static final String SAVED_CARD = "datatables/saved_cards";
 }

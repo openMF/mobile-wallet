@@ -20,6 +20,10 @@ public interface CardsContract {
 
         void fetchSavedCards();
 
-        void addCard(String s, String s1, String s2);
+        void addCard(Card card);
+
+        void editCard(Card card);
+
+        void deleteCard(int position);
     }
 }

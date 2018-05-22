@@ -1,6 +1,5 @@
 package org.mifos.mobilewallet.savedcards.ui;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,12 +22,10 @@ import butterknife.ButterKnife;
 
 public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> {
 
-    private Context context;
     private List<Card> cards;
 
     @Inject
     public CardsAdapter() {
-
     }
 
     @Override
@@ -39,10 +36,10 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         holder.tvCardNumber.setText(cards.get(position).getCardNumber());
-        holder.tvExpiryDate.setText("expiry date");
-        holder.tvCVV.setText(cards.get(position).getCvv());
+        holder.tvExpirayDate.setText("svjzvjsbdszd sadasd");
+        holder.tvBankName.setText("ABC BANK");
     }
 
     @Override
@@ -52,10 +49,6 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
         } else {
             return 0;
         }
-    }
-
-    public void setContext(Context context) {
-        this.context = context;
     }
 
     public List<Card> getCards() {
@@ -69,14 +62,14 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        @BindView(R.id.tv_bank_name)
+        TextView tvBankName;
+
         @BindView(R.id.tv_card_number)
         TextView tvCardNumber;
 
-        @BindView(R.id.tv_cvv)
-        TextView tvCVV;
-
         @BindView(R.id.tv_expiry_date)
-        TextView tvExpiryDate;
+        TextView tvExpirayDate;
 
         public ViewHolder(View itemView) {
             super(itemView);
