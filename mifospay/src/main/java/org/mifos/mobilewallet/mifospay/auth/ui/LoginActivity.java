@@ -6,11 +6,14 @@ import android.support.annotation.Nullable;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.mifos.mobile.passcode.utils.PassCodeConstants;
+import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper;
+
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.auth.AuthContract;
 import org.mifos.mobilewallet.mifospay.auth.presenter.LoginPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.home.ui.HomeActivity;
+import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import javax.inject.Inject;
@@ -45,6 +48,11 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         ButterKnife.bind(this);
         mPresenter.attachView(this);
 
+        PasscodePreferencesHelper pref = new PasscodePreferencesHelper(getApplicationContext());
+        if (!pref.getPassCode().isEmpty()) {
+            startPassCodeActivity();
+        }
+
     }
 
     @Override
@@ -64,11 +72,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     public void loginSuccess() {
         hideProgressDialog();
         Utils.hideSoftKeyboard(this);
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        startPassCodeActivity();
     }
 
     @Override
@@ -76,5 +80,15 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         Utils.hideSoftKeyboard(this);
         hideProgressDialog();
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * Starts {@link PassCodeActivity} with {@code Constans.INTIAL_LOGIN} as true
+     */
+    private void startPassCodeActivity() {
+        Intent intent = new Intent(LoginActivity.this, PassCodeActivity.class);
+        intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true);
+        startActivity(intent);
+        finish();
     }
 }

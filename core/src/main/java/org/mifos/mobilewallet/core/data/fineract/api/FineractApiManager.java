@@ -5,8 +5,10 @@ import android.util.Base64;
 import org.mifos.mobilewallet.core.data.fineract.api.services.AuthenticationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.SavedCardsService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SavingAccountsListService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SearchService;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -28,6 +30,7 @@ public class FineractApiManager {
     private static SavingAccountsListService savingAccountsListApi;
     private static RegistrationService registrationAPi;
     private static SearchService searchApi;
+    private static SavedCardsService savedCardsApi;
 
     private static SelfServiceApiManager sSelfInstance;
 
@@ -47,6 +50,8 @@ public class FineractApiManager {
         savingAccountsListApi = createApi(SavingAccountsListService.class);
         registrationAPi = createApi(RegistrationService.class);
         searchApi = createApi(SearchService.class);
+
+        savedCardsApi = createApi(SavedCardsService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
@@ -99,5 +104,9 @@ public class FineractApiManager {
 
     public static SelfServiceApiManager getSelfApiManager() {
         return sSelfInstance;
+    }
+
+    public SavedCardsService getSavedCardsApi() {
+        return savedCardsApi;
     }
 }
