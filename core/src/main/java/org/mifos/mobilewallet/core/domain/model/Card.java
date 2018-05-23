@@ -20,6 +20,15 @@ public class Card implements Parcelable {
     @SerializedName("expiryDate")
     String expiryDate;
 
+    @SerializedName("firstName")
+    String firstName;
+
+    @SerializedName("lastName")
+    String lastName;
+
+    @SerializedName("id")
+    int id;
+
     public static final Creator<Card> CREATOR = new Creator<Card>() {
         @Override
         public Card createFromParcel(Parcel source) {
@@ -32,17 +41,14 @@ public class Card implements Parcelable {
         }
     };
 
-    public Card() {
-    }
-
-    public Card(String cardNumber, String cvv, String expiryDate) {
+    public Card(String cardNumber, String cvv, String expiryDate, String firstName,
+            String lastName) {
         this.cardNumber = cardNumber;
         this.cvv = cvv;
         this.expiryDate = expiryDate;
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
-
-    @SerializedName("bankName")
-    String bankName;
 
     public String getCardNumber() {
         return cardNumber;
@@ -72,11 +78,33 @@ public class Card implements Parcelable {
         this.cardNumber = in.readString();
         this.cvv = in.readString();
         this.expiryDate = in.readString();
-        this.bankName = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.id = in.readInt();
     }
 
-    public String getBankName() {
-        return bankName;
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
@@ -84,16 +112,24 @@ public class Card implements Parcelable {
         return 0;
     }
 
-    public void setBankName(String bankName) {
-        this.bankName = bankName;
-    }
-
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.cardNumber);
         dest.writeString(this.cvv);
         dest.writeString(this.expiryDate);
-        dest.writeString(this.bankName);
+        dest.writeString(this.firstName);
+        dest.writeString(this.lastName);
     }
 
+    @Override
+    public String toString() {
+        return "Card{" +
+                "cardNumber='" + cardNumber + '\'' +
+                ", cvv='" + cvv + '\'' +
+                ", expiryDate='" + expiryDate + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", id=" + id +
+                '}';
+    }
 }

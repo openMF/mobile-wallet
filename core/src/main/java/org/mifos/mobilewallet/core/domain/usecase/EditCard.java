@@ -29,7 +29,7 @@ public class EditCard extends UseCase<EditCard.RequestValues, EditCard.ResponseV
     @Override
     protected void executeUseCase(RequestValues requestValues) {
 
-        mFineractRepository.editSavedCard(requestValues.cardId, requestValues.card)
+        mFineractRepository.editSavedCard(requestValues.clientId, requestValues.card)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<GenericResponse>() {
@@ -40,12 +40,13 @@ public class EditCard extends UseCase<EditCard.RequestValues, EditCard.ResponseV
 
                     @Override
                     public void onError(Throwable e) {
-
+                        getUseCaseCallback().onError(e.toString());
                     }
 
                     @Override
                     public void onNext(GenericResponse genericResponse) {
                         Log.d("qxz", "onNext: card updated");
+                        getUseCaseCallback().onSuccess(new EditCard.ResponseValue());
                     }
                 });
 
@@ -53,11 +54,11 @@ public class EditCard extends UseCase<EditCard.RequestValues, EditCard.ResponseV
 
     public static final class RequestValues implements UseCase.RequestValues {
 
-        private final int cardId;
+        private final int clientId;
         private final Card card;
 
-        public RequestValues(int cardId, Card card) {
-            this.cardId = cardId;
+        public RequestValues(int clientId, Card card) {
+            this.clientId = clientId;
             this.card = card;
         }
     }

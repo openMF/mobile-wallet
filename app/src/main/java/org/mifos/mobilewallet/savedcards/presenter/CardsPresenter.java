@@ -23,8 +23,8 @@ import javax.inject.Inject;
  */
 
 public class CardsPresenter implements CardsContract.CardsPresenter {
-    private final LocalRepository mLocalRepository;
 
+    private final LocalRepository mLocalRepository;
     private final UseCaseHandler mUseCaseHandler;
 
     @Inject
@@ -56,8 +56,6 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
 
     @Override
     public void fetchSavedCards() {
-        List<Card> cards = new ArrayList<>();
-//        cards.add(new Card("6433131", "545", "11"));
 
         fetchSavedCardsUseCase.setRequestValues(
                 new FetchSavedCards.RequestValues(
@@ -70,20 +68,35 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                 new UseCase.UseCaseCallback<FetchSavedCards.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchSavedCards.ResponseValue response) {
-                        Log.d("qxz", "fetch cards onSuccess: " + response);
+
+                        final List<Card> cards = new ArrayList<>();
+                        Log.d("qxz", "fetch cards onSuccess: " + response.getCardList().size());
+                        for (Card c : response.getCardList()) {
+                            Log.d("qxz", "fetch cards onSuccess: " + c.toString());
+                        }
+                        cards.addAll(response.getCardList());
+                        mCardsView.showSavedCards(cards);
                     }
 
                     @Override
                     public void onError(String message) {
                         Log.d("qxz", "fetch cards onError: " + message);
+                        mCardsView.showToast("Error fetching cards.");
                     }
                 });
-
-        mCardsView.showSavedCards(cards);
     }
 
     @Override
     public void addCard(Card card) {
+
+        mCardsView.showProgressDialog("Adding Card..");
+
+        if (!validateCreditCardNumber(card.getCardNumber())) {
+            mCardsView.showToast("Invalid Credit Card Number");
+            mCardsView.hideProgressDialog();
+            return;
+        }
+
         addCardUseCase.setRequestValues(
                 new AddCard.RequestValues(mLocalRepository.getClientDetails().getClientId(),
                         card));
@@ -94,38 +107,68 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                 new UseCase.UseCaseCallback<AddCard.ResponseValue>() {
                     @Override
                     public void onSuccess(AddCard.ResponseValue response) {
-                        Log.d("qxz", "onSuccess: card presenter.");
+
+                        Log.d("qxz", "onSuccess: card presenter. ");
+                        mCardsView.hideProgressDialog();
+                        mCardsView.showToast("Card added successfully.");
+                        fetchSavedCards();
                     }
 
                     @Override
                     public void onError(String message) {
+
                         Log.d("qxz", "onError: " + message);
+                        mCardsView.hideProgressDialog();
+                        mCardsView.showToast("Error adding card.");
                     }
                 });
     }
 
     @Override
     public void editCard(Card card) {
-        editCardUseCase.setRequestValues(new EditCard.RequestValues(1, card));
+
+        mCardsView.showProgressDialog("Updating Card..");
+
+        if (!validateCreditCardNumber(card.getCardNumber())) {
+            mCardsView.showToast("Invalid Credit Card Number");
+            mCardsView.hideProgressDialog();
+            return;
+        }
+
+        editCardUseCase.setRequestValues(
+                new EditCard.RequestValues((int) mLocalRepository.getClientDetails().getClientId(),
+                        card));
         final EditCard.RequestValues requestValues = editCardUseCase.getRequestValues();
 
         mUseCaseHandler.execute(editCardUseCase, requestValues,
                 new UseCase.UseCaseCallback<EditCard.ResponseValue>() {
                     @Override
                     public void onSuccess(EditCard.ResponseValue response) {
-                        // update cardslist
+
+                        Log.d("qxz", "onSuccess: card presenter. ");
+                        mCardsView.hideProgressDialog();
+                        mCardsView.showToast("Card updated successfully.");
+                        fetchSavedCards();
                     }
 
                     @Override
                     public void onError(String message) {
 
+                        Log.d("qxz", "onError: " + message);
+                        mCardsView.hideProgressDialog();
+                        mCardsView.showToast("Error updating card.");
                     }
                 });
     }
 
     @Override
-    public void deleteCard(int position) {
-        deleteCardUseCase.setRequestValues(new DeleteCard.RequestValues(1));
+    public void deleteCard(int cardId) {
+        mCardsView.showProgressDialog("Deleting Card..");
+
+        deleteCardUseCase.setRequestValues(
+                new DeleteCard.RequestValues(
+                        (int) mLocalRepository.getClientDetails().getClientId(),
+                        cardId));
         final DeleteCard.RequestValues requestValues = deleteCardUseCase.getRequestValues();
 
         mUseCaseHandler.execute(deleteCardUseCase, requestValues,
@@ -133,16 +176,33 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                     @Override
                     public void onSuccess(DeleteCard.ResponseValue response) {
 
+                        mCardsView.hideProgressDialog();
+                        mCardsView.showToast("Card deleted successfully.");
+                        fetchSavedCards();
                     }
 
                     @Override
                     public void onError(String message) {
 
+                        Log.d("qxz", "onError: " + message);
+                        mCardsView.hideProgressDialog();
+                        mCardsView.showToast("Error deleting card.");
                     }
                 });
     }
 
+
+    /* Luhn Algorithm for validating Credit Card Number
+     * src: https://www.journaldev.com/1443/java-credit-card-validation-luhn-algorithm-java*/
     private boolean validateCreditCardNumber(String str) {
+
+        if (true) {
+            return true; // for backend testing. remove after testing.
+        }
+
+        if (str.length() == 0) {
+            return false;
+        }
 
         int[] ints = new int[str.length()];
         for (int i = 0; i < str.length(); i++) {

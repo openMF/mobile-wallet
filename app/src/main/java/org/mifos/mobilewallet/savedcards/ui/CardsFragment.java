@@ -19,6 +19,7 @@ import org.mifos.mobilewallet.core.domain.model.Card;
 import org.mifos.mobilewallet.savedcards.CardsContract;
 import org.mifos.mobilewallet.savedcards.presenter.CardsPresenter;
 import org.mifos.mobilewallet.utils.RecyclerItemClickListener;
+import org.mifos.mobilewallet.utils.Toaster;
 
 import java.util.List;
 
@@ -73,8 +74,8 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         mPresenter.attachView(this);
         setupCardsRecyclerView();
 
-        mCardsPresenter.fetchSavedCards();
         showProgress();
+        mCardsPresenter.fetchSavedCards();
 
         return rootView;
     }
@@ -95,6 +96,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                         PopupMenu savedCardMenu = new PopupMenu(getContext(), childView);
                         savedCardMenu.getMenuInflater().inflate(R.menu.menu_saved_card,
                                 savedCardMenu.getMenu());
+
                         savedCardMenu.setOnMenuItemClickListener(
                                 new PopupMenu.OnMenuItemClickListener() {
                                     @Override
@@ -102,15 +104,21 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                                         switch (item.getItemId()) {
                                             case R.id.edit_card:
                                                 AddCardDialog addCardDialog = new AddCardDialog();
+
                                                 addCardDialog.forEdit = true;
+
                                                 addCardDialog.editCard =
                                                         mCardsAdapter.getCards().get(position);
+
                                                 addCardDialog.setCardsPresenter(mCardsPresenter);
+
                                                 addCardDialog.show(getFragmentManager(),
                                                         "Edit Card Dialog");
                                                 break;
                                             case R.id.delete_card:
-                                                mCardsPresenter.deleteCard(position);
+                                                mCardsPresenter.deleteCard(
+                                                        mCardsAdapter.getCards().get(
+                                                                position).getId());
                                                 break;
                                             case R.id.cancel:
                                                 break;
@@ -147,4 +155,20 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         mCardsAdapter.setCards(cards);
         hideProgress();
     }
+
+    @Override
+    public void showToast(String message) {
+        Toaster.show(getView(), message);
+    }
+
+    @Override
+    public void showProgressDialog(String message) {
+        super.showProgressDialog(message);
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        super.hideProgressDialog();
+    }
+
 }

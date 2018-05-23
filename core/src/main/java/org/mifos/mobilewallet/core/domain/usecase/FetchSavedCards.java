@@ -1,9 +1,5 @@
 package org.mifos.mobilewallet.core.domain.usecase;
 
-import android.util.Log;
-
-import com.google.gson.JsonArray;
-
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.domain.model.Card;
@@ -32,33 +28,38 @@ public class FetchSavedCards extends UseCase<FetchSavedCards.RequestValues,
 
     @Override
     protected void executeUseCase(FetchSavedCards.RequestValues requestValues) {
-        mFineractRepository.fetchSavedCards(requestValues.userId)
+        mFineractRepository.fetchSavedCards(requestValues.clientId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<JsonArray>() {
+                .subscribe(new Subscriber<List<Card>>() {
                     @Override
                     public void onCompleted() {
-
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Log.d("qxz", "onError: " + e.toString());
+                        getUseCaseCallback().onError(
+                                "qxz Error fetching accounts: " + e.toString());
                     }
 
                     @Override
-                    public void onNext(JsonArray jsonElements) {
-                        Log.d("qxz", "onNext: " + jsonElements);
+                    public void onNext(List<Card> cards) {
+                        if (cards != null) {
+                            getUseCaseCallback().onSuccess(new
+                                    FetchSavedCards.ResponseValue(cards));
+                        } else {
+                            getUseCaseCallback().onError("qxz No cards found");
+                        }
                     }
                 });
     }
 
     public static final class RequestValues implements UseCase.RequestValues {
 
-        private final long userId;
+        private final long clientId;
 
-        public RequestValues(long userId) {
-            this.userId = userId;
+        public RequestValues(long clientId) {
+            this.clientId = clientId;
         }
     }
 

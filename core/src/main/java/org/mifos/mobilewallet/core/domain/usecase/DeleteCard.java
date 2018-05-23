@@ -27,7 +27,8 @@ public class DeleteCard extends UseCase<DeleteCard.RequestValues, DeleteCard.Res
 
     @Override
     protected void executeUseCase(RequestValues requestValues) {
-        mFineractRepository.deleteSavedCard(requestValues.cardId)
+
+        mFineractRepository.deleteSavedCard(requestValues.clientId, requestValues.cardId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<GenericResponse>() {
@@ -38,21 +39,24 @@ public class DeleteCard extends UseCase<DeleteCard.RequestValues, DeleteCard.Res
 
                     @Override
                     public void onError(Throwable e) {
-
+                        getUseCaseCallback().onError(e.toString());
                     }
 
                     @Override
                     public void onNext(GenericResponse genericResponse) {
                         Log.d("qxz", "onNext: card deleted.");
+                        getUseCaseCallback().onSuccess(new DeleteCard.ResponseValue());
                     }
                 });
     }
 
     public static final class RequestValues implements UseCase.RequestValues {
 
+        private final int clientId;
         private final int cardId;
 
-        public RequestValues(int cardId) {
+        public RequestValues(int clientId, int cardId) {
+            this.clientId = clientId;
             this.cardId = cardId;
         }
     }

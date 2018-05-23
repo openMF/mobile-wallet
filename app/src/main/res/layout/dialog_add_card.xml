@@ -14,6 +14,30 @@
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/et_fName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="First Name"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/value_5dp">
+
+        <EditText
+            android:id="@+id/et_lName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Last Name"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/value_10dp">
+
+        <EditText
             android:id="@+id/et_card_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

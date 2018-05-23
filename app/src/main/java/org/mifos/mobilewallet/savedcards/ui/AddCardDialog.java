@@ -29,9 +29,11 @@ import butterknife.OnClick;
  */
 
 public class AddCardDialog extends BottomSheetDialogFragment {
+
     private BottomSheetBehavior mBottomSheetBehavior;
     boolean forEdit;
     Card editCard;
+
 
     @BindView(R.id.et_card_number)
     EditText etCardNumber;
@@ -44,6 +46,12 @@ public class AddCardDialog extends BottomSheetDialogFragment {
 
     @BindView(R.id.spn_yy)
     Spinner spnYY;
+
+    @BindView(R.id.et_fName)
+    EditText etFname;
+
+    @BindView(R.id.et_lName)
+    EditText etLname;
 
     @BindView(R.id.btn_add)
     Button btnAdd;
@@ -96,6 +104,8 @@ public class AddCardDialog extends BottomSheetDialogFragment {
         // make swipe-able up and parameters to edit text to num only and do backend
 
         if (forEdit) {
+            etFname.setText(editCard.getFirstName());
+            etLname.setText(editCard.getLastName());
             etCardNumber.setText(editCard.getCardNumber());
             btnAdd.setText("Update");
         }
@@ -108,14 +118,18 @@ public class AddCardDialog extends BottomSheetDialogFragment {
 
     @OnClick(R.id.btn_add)
     public void onAddClicked() {
-        Card card = new Card(etCardNumber.getText().toString(),
-                etCVV.getText().toString(),
-                (String) spnMM.getSelectedItem() + (String) spnYY.getSelectedItem());
+
+        Card card = new Card(etCardNumber.getText().toString(), etCVV.getText().toString(),
+                (String) spnMM.getSelectedItem() + "/" + (String) spnYY.getSelectedItem(),
+                etFname.getText().toString(), etLname.getText().toString());
 
         if (forEdit) {
+            card.setId(editCard.getId());
             mCardsPresenter.editCard(card);
         } else {
             mCardsPresenter.addCard(card);
         }
+
+        dismiss();
     }
 }

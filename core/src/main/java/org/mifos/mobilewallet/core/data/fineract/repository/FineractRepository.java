@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.core.data.fineract.repository;
 
-import com.google.gson.JsonArray;
-
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager;
@@ -78,21 +76,21 @@ public class FineractRepository {
         return fineractApiManager.getClientsApi().getClientForId(clientId);
     }
 
-    public Observable<GenericResponse> addSavedCards(long userId,
+    public Observable<GenericResponse> addSavedCards(long clientId,
             Card card) {
-        return fineractApiManager.getSavedCardsApi().addSavedCard((int) userId, card);
+        return fineractApiManager.getSavedCardsApi().addSavedCard((int) clientId, card);
     }
 
-    public Observable<JsonArray> fetchSavedCards(long userId) {
-        return fineractApiManager.getSavedCardsApi().getSavedCards((int) userId);
+    public Observable<List<Card>> fetchSavedCards(long clientId) {
+        return fineractApiManager.getSavedCardsApi().getSavedCards((int) clientId);
     }
 
-    public Observable<GenericResponse> editSavedCard(int cardId, Card card) {
-        return fineractApiManager.getSavedCardsApi().updateCard(cardId, card);
+    public Observable<GenericResponse> editSavedCard(int clientId, Card card) {
+        return fineractApiManager.getSavedCardsApi().updateCard(clientId, card.getId(), card);
     }
 
-    public Observable<GenericResponse> deleteSavedCard(int cardId) {
-        return fineractApiManager.getSavedCardsApi().deleteCard(cardId);
+    public Observable<GenericResponse> deleteSavedCard(int clientId, int cardId) {
+        return fineractApiManager.getSavedCardsApi().deleteCard(clientId, cardId);
     }
 
     //self user apis

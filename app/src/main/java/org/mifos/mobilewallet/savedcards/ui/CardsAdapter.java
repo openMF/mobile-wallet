@@ -37,9 +37,10 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        holder.tvFname.setText(cards.get(position).getFirstName());
+        holder.tvLname.setText(cards.get(position).getLastName());
         holder.tvCardNumber.setText(cards.get(position).getCardNumber());
-        holder.tvExpirayDate.setText("svjzvjsbdszd sadasd");
-        holder.tvBankName.setText("ABC BANK");
+        holder.tvExpirayDate.setText(cards.get(position).getExpiryDate());
     }
 
     @Override
@@ -62,8 +63,11 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tv_bank_name)
-        TextView tvBankName;
+        @BindView(R.id.tv_fName)
+        TextView tvFname;
+
+        @BindView(R.id.tv_lName)
+        TextView tvLname;
 
         @BindView(R.id.tv_card_number)
         TextView tvCardNumber;

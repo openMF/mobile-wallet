@@ -14,6 +14,12 @@ public interface CardsContract {
     interface CardsView extends BaseView<CardsPresenter> {
 
         void showSavedCards(List<Card> cards);
+
+        void showToast(String message);
+
+        void showProgressDialog(String message);
+
+        void hideProgressDialog();
     }
 
     interface CardsPresenter extends BasePresenter {

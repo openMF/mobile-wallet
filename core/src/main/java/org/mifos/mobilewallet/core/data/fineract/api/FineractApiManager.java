@@ -35,7 +35,7 @@ public class FineractApiManager {
     private static SelfServiceApiManager sSelfInstance;
 
     public FineractApiManager() {
-        String authToken = "Basic " + Base64.encodeToString("mifospayadmin:password1".getBytes(),
+        String authToken = "Basic " + Base64.encodeToString("mifos:password".getBytes(),
                 Base64.NO_WRAP);
         createService(authToken);
 
