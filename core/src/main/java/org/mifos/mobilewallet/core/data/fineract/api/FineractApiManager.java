@@ -4,9 +4,9 @@ import android.util.Base64;
 
 import org.mifos.mobilewallet.core.data.fineract.api.services.AuthenticationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.DataTablesService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.DocumentService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.SavedCardsService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SavingAccountsListService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SearchService;
 
@@ -31,7 +31,7 @@ public class FineractApiManager {
     private static SavingAccountsListService savingAccountsListApi;
     private static RegistrationService registrationAPi;
     private static SearchService searchApi;
-    private static SavedCardsService savedCardsApi;
+    private static DataTablesService dataTablesService;
     private static DocumentService documentApi;
 
     private static SelfServiceApiManager sSelfInstance;
@@ -53,7 +53,7 @@ public class FineractApiManager {
         registrationAPi = createApi(RegistrationService.class);
         searchApi = createApi(SearchService.class);
 
-        savedCardsApi = createApi(SavedCardsService.class);
+        dataTablesService = createApi(DataTablesService.class);
         documentApi = createApi(DocumentService.class);
     }
 
@@ -113,7 +113,7 @@ public class FineractApiManager {
         return documentApi;
     }
 
-    public SavedCardsService getSavedCardsApi() {
-        return savedCardsApi;
+    public DataTablesService getDatatablesApi() {
+        return dataTablesService;
     }
 }

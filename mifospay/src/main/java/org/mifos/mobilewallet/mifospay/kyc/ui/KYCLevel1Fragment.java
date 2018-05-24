@@ -1,8 +1,10 @@
 package org.mifos.mobilewallet.mifospay.kyc.ui;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,8 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCLevel1Presenter;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
+import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -79,7 +83,7 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
 
         myCalendar = Calendar.getInstance();
 
-         date = new DatePickerDialog.OnDateSetListener() {
+        date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -128,10 +132,34 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
         String dob = etDOB.getText().toString();
 
         mKYCLevel1Presenter.submitData(fname, lname, address1, address2, phonecode, phoneno, dob);
+        Utils.hideSoftKeyboard(getActivity());
     }
 
     @Override
     public void setPresenter(KYCContract.KYCLevel1Presenter presenter) {
         mKYCLevel1Presenter = presenter;
+    }
+
+    @Override
+    public void showToast(String s) {
+        Toaster.show(getView(), s);
+    }
+
+    @Override
+    public void showProgressDialog(String message) {
+        super.showProgressDialog(message);
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        super.hideProgressDialog();
+    }
+
+    @Override
+    public void goBack() {
+        Log.d("qxz", "goBack: ");
+        Intent intent = getActivity().getIntent();
+        getActivity().finish();
+        startActivity(intent);
     }
 }

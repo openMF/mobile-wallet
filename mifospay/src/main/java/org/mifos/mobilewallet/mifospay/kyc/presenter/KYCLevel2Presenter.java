@@ -13,6 +13,7 @@ import org.mifos.mobilewallet.core.utils.Constants;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
+import org.mifos.mobilewallet.mifospay.utils.FilePath;
 
 import java.io.File;
 
@@ -31,7 +32,7 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
     private static final int READ_REQUEST_CODE = 42;
     private File file;
 
-    private KYCContract.KYCLevel2View mKYCLevel1View;
+    private KYCContract.KYCLevel2View mKYCLevel2View;
     private final UseCaseHandler mUseCaseHandler;
     private final PreferencesHelper preferencesHelper;
 
@@ -46,8 +47,8 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
 
     @Override
     public void attachView(BaseView baseView) {
-        mKYCLevel1View = (KYCContract.KYCLevel2View) baseView;
-        mKYCLevel1View.setPresenter(this);
+        mKYCLevel2View = (KYCContract.KYCLevel2View) baseView;
+        mKYCLevel2View.setPresenter(this);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
             }
             intent.setType(mimeTypesStr.substring(0, mimeTypesStr.length() - 1));
         }
-        mKYCLevel1View.startDocChooseActivity(intent, READ_REQUEST_CODE);
+        mKYCLevel2View.startDocChooseActivity(intent, READ_REQUEST_CODE);
     }
 
     @Override
@@ -77,14 +78,17 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
 
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             Uri uri = data.getData();
-            file = new File(uri.getPath());
-            mKYCLevel1View.setFilename(file.getAbsolutePath());
+            file = new File(FilePath.getPath(mKYCLevel2View.getContext(), uri));
+            mKYCLevel2View.setFilename(file.getPath());
         }
     }
 
     @Override
     public void uploadKYCDocs(String identityType) {
         if (file != null) {
+
+            Log.d("qxz", "uploadKYCDocs: " + file.getPath());
+
             uploadKYCDocsUseCase.setRequestValues(
                     new UploadKYCDocs.RequestValues(Constants.ENTITY_TYPE_CLIENTS,
                             preferencesHelper.getClientId(), file.getName(), identityType,
@@ -117,4 +121,23 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
         // MultipartBody.Part is used to send also the actual file name
         return MultipartBody.Part.createFormData("file", file.getName(), requestFile);
     }
+
+//
+//    public String getRealPathFromURI(Uri contentUri) {
+//        String[] proj = {MediaStore.Images.Media.DATA};
+//
+//        //This method was deprecated in API level 11
+//        //Cursor cursor = managedQuery(contentUri, proj, null, null, null);
+//
+//        CursorLoader cursorLoader = new CursorLoader(
+//                mKYCLevel2View.getContext(),
+//                contentUri, proj, null, null, null);
+//        Cursor cursor = cursorLoader.loadInBackground();
+//
+//        int column_index =
+//                cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//        cursor.moveToFirst();
+//        return cursor.getString(column_index);
+//    }
+
 }

@@ -1,6 +1,5 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -17,7 +16,8 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.HomePresenter;
-import org.mifos.mobilewallet.mifospay.kyc.ui.KYCActivity;
+import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionFragment;
+import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsFragment;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 
 import javax.inject.Inject;
@@ -112,10 +112,11 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
             case R.id.item_home:
                 replaceFragment(HomeFragment.newInstance(), false, R.id.container);
                 break;
-
             case R.id.item_kyc:
-                Intent intent = new Intent(HomeActivity.this, KYCActivity.class);
-                startActivity(intent);
+                replaceFragment(KYCDescriptionFragment.newInstance(), true, R.id.container);
+                break;
+            case R.id.item_saved_cards:
+                replaceFragment(CardsFragment.newInstance(), true, R.id.container);
                 break;
 
         }

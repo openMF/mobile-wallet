@@ -11,7 +11,6 @@ import org.mifos.mobilewallet.mifospay.home.ui.TransferFragment;
 import org.mifos.mobilewallet.mifospay.home.ui.WalletFragment;
 import org.mifos.mobilewallet.mifospay.injection.PerActivity;
 import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
-import org.mifos.mobilewallet.mifospay.kyc.ui.KYCActivity;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionFragment;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCLevel1Fragment;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCLevel2Fragment;
@@ -19,6 +18,7 @@ import org.mifos.mobilewallet.mifospay.kyc.ui.KYCLevel3Fragment;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
+import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsFragment;
 import org.mifos.mobilewallet.mifospay.wallet.ui.WalletDetailActivity;
 
 import dagger.Component;
@@ -53,8 +53,6 @@ public interface ActivityComponent {
 
     void inject(PassCodeActivity passCodeActivity);
 
-    void inject(KYCActivity kycActivity);
-
     void inject(KYCDescriptionFragment kycDescriptionFragment);
 
     void inject(KYCLevel1Fragment kycLevel1Fragment);
@@ -62,5 +60,7 @@ public interface ActivityComponent {
     void inject(KYCLevel2Fragment kycLevel2Fragment);
 
     void inject(KYCLevel3Fragment kycLevel3Fragment);
+
+    void inject(CardsFragment cardsFragment);
 
 }
