@@ -17,6 +17,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.payload.UpdateVpaPayload
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.domain.model.Card;
+import org.mifos.mobilewallet.core.domain.model.KYCLevel1Details;
 import org.mifos.mobilewallet.core.utils.Constants;
 
 import java.util.List;
@@ -25,12 +26,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import okhttp3.MultipartBody;
-
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.functions.Func1;
@@ -85,30 +80,46 @@ public class FineractRepository {
 
     public Observable<GenericResponse> addSavedCards(long clientId,
             Card card) {
-        return fineractApiManager.getSavedCardsApi().addSavedCard((int) clientId, card);
+        return fineractApiManager.getDatatablesApi().addSavedCard((int) clientId, card);
     }
 
     public Observable<List<Card>> fetchSavedCards(long clientId) {
-        return fineractApiManager.getSavedCardsApi().getSavedCards((int) clientId);
+        return fineractApiManager.getDatatablesApi().getSavedCards((int) clientId);
     }
 
     public Observable<GenericResponse> editSavedCard(int clientId, Card card) {
-        return fineractApiManager.getSavedCardsApi().updateCard(clientId, card.getId(), card);
+        return fineractApiManager.getDatatablesApi().updateCard(clientId, card.getId(), card);
     }
 
     public Observable<GenericResponse> deleteSavedCard(int clientId, int cardId) {
-        return fineractApiManager.getSavedCardsApi().deleteCard(clientId, cardId);
+        return fineractApiManager.getDatatablesApi().deleteCard(clientId, cardId);
     }
 
-    public Observable<ResponseBody> uploadKYCDocs(String entityType, long entityId, String name,
+    public Observable<GenericResponse> uploadKYCDocs(String entityType, long entityId, String name,
             String desc, MultipartBody.Part file) {
-        return fineractApiManager.getDocumentApi().createDocument(entityType, entityId, name, desc, file)
-                .map(new Func1<ResponseBody, ResponseBody>() {
-                    @Override
-                    public ResponseBody call(ResponseBody responseBody) {
-                        return responseBody;
-                    }
-                });
+
+        return fineractApiManager.getDocumentApi().createDocument(entityType, entityId, name, desc,
+                file);
+
+//        return fineractApiManager.getDocumentApi().createDocument(entityType, entityId, name,
+// desc,
+//                file)
+//                .map(new Func1<ResponseBody, ResponseBody>() {
+//                    @Override
+//                    public ResponseBody call(ResponseBody responseBody) {
+//                        return responseBody;
+//                    }
+//                });
+    }
+
+    public Observable<GenericResponse> uploadKYCLevel1Details(int clientId,
+            KYCLevel1Details kycLevel1Details) {
+        return fineractApiManager.getDatatablesApi().addKYCLevel1Details(clientId,
+                kycLevel1Details);
+    }
+
+    public Observable<List<KYCLevel1Details>> fetchKYCLevel1Details(int clientId) {
+        return fineractApiManager.getDatatablesApi().fetchKYCLevel1Details(clientId);
     }
 
     //self user apis
@@ -152,5 +163,4 @@ public class FineractRepository {
     public Observable<ResponseBody> makeThirdPartyTransfer(TransferPayload transferPayload) {
         return selfApiManager.getThirdPartyTransferApi().makeTransfer(transferPayload);
     }
-
 }

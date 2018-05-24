@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.api.services;
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
+import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.entity.noncore.Document;
 
 import java.util.List;
@@ -36,7 +37,8 @@ public interface DocumentService {
      */
     @POST("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS)
     @Multipart
-    Observable<ResponseBody> createDocument(@Path("entityType") String entityType,
+    Observable<GenericResponse> createDocument(
+            @Path("entityType") String entityType,
             @Path("entityId") long entityId,
             @Part("name") String nameOfDocument,
             @Part("description") String description,
