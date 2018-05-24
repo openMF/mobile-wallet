@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.repository;
 
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
+import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
@@ -15,6 +16,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.UpdateVpaPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
+import org.mifos.mobilewallet.core.domain.model.Card;
 import org.mifos.mobilewallet.core.utils.Constants;
 
 import java.util.List;
@@ -23,6 +25,12 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import okhttp3.MultipartBody;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.functions.Func1;
@@ -73,6 +81,23 @@ public class FineractRepository {
 
     public Observable<Client> getClientDetails(long clientId) {
         return fineractApiManager.getClientsApi().getClientForId(clientId);
+    }
+
+    public Observable<GenericResponse> addSavedCards(long clientId,
+            Card card) {
+        return fineractApiManager.getSavedCardsApi().addSavedCard((int) clientId, card);
+    }
+
+    public Observable<List<Card>> fetchSavedCards(long clientId) {
+        return fineractApiManager.getSavedCardsApi().getSavedCards((int) clientId);
+    }
+
+    public Observable<GenericResponse> editSavedCard(int clientId, Card card) {
+        return fineractApiManager.getSavedCardsApi().updateCard(clientId, card.getId(), card);
+    }
+
+    public Observable<GenericResponse> deleteSavedCard(int clientId, int cardId) {
+        return fineractApiManager.getSavedCardsApi().deleteCard(clientId, cardId);
     }
 
     public Observable<ResponseBody> uploadKYCDocs(String entityType, long entityId, String name,

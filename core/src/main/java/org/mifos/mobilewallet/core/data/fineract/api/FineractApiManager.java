@@ -6,6 +6,7 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.AuthenticationServ
 import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.DocumentService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.SavedCardsService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SavingAccountsListService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SearchService;
 
@@ -30,12 +31,13 @@ public class FineractApiManager {
     private static SavingAccountsListService savingAccountsListApi;
     private static RegistrationService registrationAPi;
     private static SearchService searchApi;
+    private static SavedCardsService savedCardsApi;
     private static DocumentService documentApi;
 
     private static SelfServiceApiManager sSelfInstance;
 
     public FineractApiManager() {
-        String authToken = "Basic " + Base64.encodeToString("mifospayadmin:password1".getBytes(),
+        String authToken = "Basic " + Base64.encodeToString("mifos:password".getBytes(),
                 Base64.NO_WRAP);
         createService(authToken);
 
@@ -50,6 +52,8 @@ public class FineractApiManager {
         savingAccountsListApi = createApi(SavingAccountsListService.class);
         registrationAPi = createApi(RegistrationService.class);
         searchApi = createApi(SearchService.class);
+
+        savedCardsApi = createApi(SavedCardsService.class);
         documentApi = createApi(DocumentService.class);
     }
 
@@ -107,5 +111,9 @@ public class FineractApiManager {
 
     public DocumentService getDocumentApi() {
         return documentApi;
+    }
+
+    public SavedCardsService getSavedCardsApi() {
+        return savedCardsApi;
     }
 }

@@ -19,4 +19,5 @@ public class ApiEndPoints {
 
 
     public static final String DOCUMENTS = "documents";
+    public static final String SAVED_CARD = "datatables/saved_cards";
 }
