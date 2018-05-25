@@ -48,4 +48,9 @@ public interface DataTablesService {
     @GET(ApiEndPoints.DATATABLES + "/kyc_level1_details/{clientId}")
     Observable<List<KYCLevel1Details>> fetchKYCLevel1Details(@Path("clientId") int clientId);
 
+    @PUT(ApiEndPoints.DATATABLES + "/kyc_level1_details/{clientId}/")
+    Observable<GenericResponse> updateKYCLevel1Details(
+            @Path("clientId") int clientId,
+            @Body KYCLevel1Details kycLevel1Details);
+
 }

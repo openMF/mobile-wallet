@@ -19,6 +19,7 @@ import org.mifos.mobilewallet.mifospay.kyc.ui.KYCLevel3Fragment;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
+import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsFragment;
 import org.mifos.mobilewallet.mifospay.wallet.ui.WalletDetailActivity;
 
 import dagger.Component;
@@ -62,5 +63,7 @@ public interface ActivityComponent {
     void inject(KYCLevel2Fragment kycLevel2Fragment);
 
     void inject(KYCLevel3Fragment kycLevel3Fragment);
+
+    void inject(CardsFragment cardsFragment);
 
 }

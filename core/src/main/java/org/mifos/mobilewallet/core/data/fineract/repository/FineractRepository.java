@@ -97,7 +97,6 @@ public class FineractRepository {
 
     public Observable<GenericResponse> uploadKYCDocs(String entityType, long entityId, String name,
             String desc, MultipartBody.Part file) {
-
         return fineractApiManager.getDocumentApi().createDocument(entityType, entityId, name, desc,
                 file);
 
@@ -120,6 +119,12 @@ public class FineractRepository {
 
     public Observable<List<KYCLevel1Details>> fetchKYCLevel1Details(int clientId) {
         return fineractApiManager.getDatatablesApi().fetchKYCLevel1Details(clientId);
+    }
+
+    public Observable<GenericResponse> updateKYCLevel1Details(int clientId,
+            KYCLevel1Details kycLevel1Details) {
+        return fineractApiManager.getDatatablesApi().updateKYCLevel1Details(clientId,
+                kycLevel1Details);
     }
 
     //self user apis

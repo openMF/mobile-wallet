@@ -10,11 +10,14 @@
             android:icon="@drawable/ic_home"
             android:title="Home"/>
 
-
         <item
             android:id="@+id/item_kyc"
-            android:checked="true"
             android:title="Complete KYC"/>
+
+        <item
+            android:id="@+id/item_saved_cards"
+            android:checked="false"
+            android:title="Saved Cards"/>
 
 
     </group>
