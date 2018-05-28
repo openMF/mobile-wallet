@@ -31,6 +31,24 @@ public interface KYCContract {
         void fetchCurrentLevel();
     }
 
+    interface KYCDescriptionView extends BaseView<KYCDescriptionPresenter> {
+
+        void onFetchLevelSuccess(KYCLevel1Details kycLevel1Details);
+
+        void showToast(String s);
+
+        void gotoHome();
+
+        void showProgressDialog(String s);
+
+        void hideProgressDialog();
+    }
+
+    interface KYCDescriptionPresenter extends BasePresenter {
+
+        void fetchCurrentLevel();
+    }
+
     interface KYCLevel1View extends BaseView<KYCLevel1Presenter> {
 
         void showToast(String message);

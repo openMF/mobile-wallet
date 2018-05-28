@@ -23,6 +23,7 @@
             app:cardCornerRadius="@dimen/value_10dp">
 
             <LinearLayout
+                android:id="@+id/ll_lvl1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/cardview_round_blue"
@@ -61,6 +62,7 @@
             app:cardCornerRadius="@dimen/value_10dp">
 
             <LinearLayout
+                android:id="@+id/ll_lvl2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/cardview_round_blue"
@@ -99,6 +101,7 @@
             app:cardCornerRadius="@dimen/value_10dp">
 
             <LinearLayout
+                android:id="@+id/ll_lvl3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/cardview_round_blue"
