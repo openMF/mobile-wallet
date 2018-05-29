@@ -20,7 +20,7 @@ public class CreateClient extends UseCase<CreateClient.RequestValues, CreateClie
     }
 
     @Override
-    protected void executeUseCase(CreateClient.RequestValues requestValues) {
+    protected void executeUseCase(RequestValues requestValues) {
 
     }
 

@@ -69,7 +69,7 @@ public class Client implements Parcelable {
         this.clientId = in.readLong();
     }
 
-    public static final Parcelable.Creator<Client> CREATOR = new Parcelable.Creator<Client>() {
+    public static final Creator<Client> CREATOR = new Creator<Client>() {
         @Override
         public Client createFromParcel(Parcel source) {
             return new Client(source);

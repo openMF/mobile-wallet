@@ -34,7 +34,7 @@ public class FetchWallet extends UseCase<FetchWallet.RequestValues,
 
 
     @Override
-    protected void executeUseCase(FetchWallet.RequestValues requestValues) {
+    protected void executeUseCase(RequestValues requestValues) {
 
         fineractRepository.getSelfAccounts(requestValues.clientId)
                 .observeOn(AndroidSchedulers.mainThread())

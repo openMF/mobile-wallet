@@ -11,17 +11,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.mifos.mobilewallet.core.domain.model.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.HomePresenter;
+import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionFragment;
+import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsFragment;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.domain.model.Client;
 
 /**
  * Created by naman on 17/6/17.
@@ -60,6 +62,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
         replaceFragment(HomeFragment.newInstance(), false, R.id.container);
         setupDrawerContent(navigationView);
         swipeLayout.setEnabled(false);
+
     }
 
 
@@ -109,6 +112,13 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
             case R.id.item_home:
                 replaceFragment(HomeFragment.newInstance(), false, R.id.container);
                 break;
+            case R.id.item_kyc:
+                replaceFragment(KYCDescriptionFragment.newInstance(), true, R.id.container);
+                break;
+            case R.id.item_saved_cards:
+                replaceFragment(CardsFragment.newInstance(), true, R.id.container);
+                break;
+
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
