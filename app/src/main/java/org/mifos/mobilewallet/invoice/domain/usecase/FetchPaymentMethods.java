@@ -25,9 +25,9 @@ public class FetchPaymentMethods extends UseCase<FetchPaymentMethods.RequestValu
 
 
     @Override
-    protected void executeUseCase(FetchPaymentMethods.RequestValues requestValues) {
+    protected void executeUseCase(RequestValues requestValues) {
         getUseCaseCallback().onSuccess(new
-                FetchPaymentMethods.ResponseValue(localRepository.getPaymentMethods()));
+                ResponseValue(localRepository.getPaymentMethods()));
     }
 
     public static final class RequestValues implements UseCase.RequestValues {

@@ -102,7 +102,7 @@ public class Account implements Parcelable {
         this.currency = in.readParcelable(Currency.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Account> CREATOR = new Parcelable.Creator<Account>() {
+    public static final Creator<Account> CREATOR = new Creator<Account>() {
         @Override
         public Account createFromParcel(Parcel source) {
             return new Account(source);

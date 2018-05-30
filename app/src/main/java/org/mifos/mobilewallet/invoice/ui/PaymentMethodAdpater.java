@@ -34,14 +34,14 @@ public class PaymentMethodAdpater extends RecyclerView.Adapter<PaymentMethodAdpa
     }
 
     @Override
-    public PaymentMethodAdpater.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_payment_method, parent, false);
-        return new PaymentMethodAdpater.ViewHolder(v);
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(PaymentMethodAdpater.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         holder.ivMethodImage.setImageDrawable(
                 ContextCompat.getDrawable(context, paymentMethods.get(position).getImage()));
         holder.tvMethodName.setText(paymentMethods.get(position).getTitle());

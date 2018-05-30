@@ -32,7 +32,7 @@ public class FetchAccounts extends UseCase<FetchAccounts.RequestValues,
 
 
     @Override
-    protected void executeUseCase(FetchAccounts.RequestValues requestValues) {
+    protected void executeUseCase(RequestValues requestValues) {
 
         fineractRepository.getAccounts(requestValues.clientId)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -52,7 +52,7 @@ public class FetchAccounts extends UseCase<FetchAccounts.RequestValues,
                     public void onNext(ClientAccounts accounts) {
                         if (accounts != null) {
                             getUseCaseCallback().onSuccess(new
-                                    FetchAccounts.ResponseValue(accountMapper.transform(accounts)));
+                                    ResponseValue(accountMapper.transform(accounts)));
                         } else {
                             getUseCaseCallback().onError("No accounts found");
                         }

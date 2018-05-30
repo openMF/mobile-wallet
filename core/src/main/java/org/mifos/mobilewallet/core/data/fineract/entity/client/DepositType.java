@@ -60,8 +60,7 @@ public class DepositType implements Parcelable {
         this.value = in.readString();
     }
 
-    public static final Parcelable.Creator<DepositType> CREATOR = new Parcelable
-            .Creator<DepositType>() {
+    public static final Creator<DepositType> CREATOR = new Creator<DepositType>() {
         public DepositType createFromParcel(Parcel source) {
             return new DepositType(source);
         }

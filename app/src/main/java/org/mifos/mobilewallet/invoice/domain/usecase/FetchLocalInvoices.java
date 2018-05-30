@@ -32,7 +32,7 @@ public class FetchLocalInvoices extends UseCase<FetchLocalInvoices.RequestValues
 
 
     @Override
-    protected void executeUseCase(final FetchLocalInvoices.RequestValues requestValues) {
+    protected void executeUseCase(final RequestValues requestValues) {
         localRepository.getInvoiceList()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

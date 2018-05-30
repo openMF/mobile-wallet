@@ -18,7 +18,7 @@ public interface PanService {
 
     @POST(ApiEndPoints.PAN_VERIFICATION)
     Observable<Response<ResponseBody>> verifyPan(@Query("client_id") String clientId,
-                                                @Query("client_secret") String clientSecret,
-                                                @Body RequestBody body);
+            @Query("client_secret") String clientSecret,
+            @Body RequestBody body);
 
 }

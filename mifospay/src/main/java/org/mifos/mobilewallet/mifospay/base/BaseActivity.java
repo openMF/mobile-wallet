@@ -5,21 +5,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+
+import com.mifos.mobile.passcode.BasePassCodeActivity;
 
 import org.mifos.mobilewallet.mifospay.MifosPayApp;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.injection.component.ActivityComponent;
 import org.mifos.mobilewallet.mifospay.injection.component.DaggerActivityComponent;
 import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
+import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 
 /**
  * Created by naman on 16/6/17.
  */
 
-public class BaseActivity extends AppCompatActivity implements BaseActivityCallback {
+public class BaseActivity extends BasePassCodeActivity implements BaseActivityCallback {
 
     private ActivityComponent activityComponent;
 
@@ -138,4 +140,8 @@ public class BaseActivity extends AppCompatActivity implements BaseActivityCallb
         }
     }
 
+    @Override
+    public Class getPassCodeClass() {
+        return PassCodeActivity.class;
+    }
 }

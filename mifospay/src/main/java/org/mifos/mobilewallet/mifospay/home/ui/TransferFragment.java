@@ -71,7 +71,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_transfer, container,
                 false);
         ButterKnife.bind(this, rootView);
@@ -89,8 +89,8 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     public void transferClicked() {
         String externalId = etVpa.getText().toString();
         String eamount = etAmount.getText().toString();
-        if(eamount.equals("") || externalId.equals("")) {
-            Toast.makeText(getActivity(),"Please enter all the fields",Toast.LENGTH_SHORT).show();
+        if (eamount.equals("") || externalId.equals("")) {
+            Toast.makeText(getActivity(), "Please enter all the fields", Toast.LENGTH_SHORT).show();
         } else {
             double amount = Double.parseDouble(eamount);
             MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
@@ -126,16 +126,15 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == SCAN_QR_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                String qrData = data.getStringExtra(Constants.QR_DATA);
-                etVpa.setText(qrData);
-                String externalId = etVpa.getText().toString();
-                double amount = Double.parseDouble(etAmount.getText().toString());
-                MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
-                fragment.show(getChildFragmentManager(), "Make Transfer Fragment");
+        if (requestCode == SCAN_QR_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            String qrData = data.getStringExtra(Constants.QR_DATA);
+            etVpa.setText(qrData);
+            String externalId = etVpa.getText().toString();
+            double amount = Double.parseDouble(etAmount.getText().toString());
+            MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId,
+                    amount);
+            fragment.show(getChildFragmentManager(), "Make Transfer Fragment");
 
-            }
         }
     }
 }

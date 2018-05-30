@@ -26,7 +26,7 @@ public class VerifyUser extends UseCase<VerifyUser.RequestValues,
 
 
     @Override
-    protected void executeUseCase(VerifyUser.RequestValues requestValues) {
+    protected void executeUseCase(RequestValues requestValues) {
 
         apiRepository.verifyUser(requestValues.userVerify)
                 .observeOn(AndroidSchedulers.mainThread())

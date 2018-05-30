@@ -41,7 +41,7 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
 
 
     @Override
-    protected void executeUseCase(final TransferFunds.RequestValues requestValues) {
+    protected void executeUseCase(final RequestValues requestValues) {
 
         /*
          * - get fromClient head office name

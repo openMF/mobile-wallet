@@ -30,6 +30,14 @@ public class BaseFragment extends Fragment {
         callback.hideSwipeProgress();
     }
 
+    protected void showProgressDialog(String message) {
+        callback.showProgressDialog(message);
+    }
+
+    protected void hideProgressDialog() {
+        callback.hideProgressDialog();
+    }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
