@@ -26,7 +26,7 @@ public class RegisterUser extends UseCase<RegisterUser.RequestValues,
 
 
     @Override
-    protected void executeUseCase(RegisterUser.RequestValues requestValues) {
+    protected void executeUseCase(RequestValues requestValues) {
 
         apiRepository.registerUser(requestValues.registerPayload)
                 .observeOn(AndroidSchedulers.mainThread())

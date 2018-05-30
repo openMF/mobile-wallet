@@ -14,6 +14,6 @@ public interface AuthenticationService {
 
     @POST(ApiEndPoints.AUTHENTICATION)
     Observable<UserEntity> authenticate(@Query("username") String username,
-                                        @Query("password") String password);
+            @Query("password") String password);
 
 }

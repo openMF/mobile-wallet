@@ -121,8 +121,7 @@ public class SearchedEntity implements Parcelable {
         this.parentName = in.readString();
     }
 
-    public static final Parcelable.Creator<SearchedEntity> CREATOR = new Parcelable
-            .Creator<SearchedEntity>() {
+    public static final Creator<SearchedEntity> CREATOR = new Creator<SearchedEntity>() {
         @Override
         public SearchedEntity createFromParcel(Parcel source) {
             return new SearchedEntity(source);

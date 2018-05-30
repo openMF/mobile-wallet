@@ -71,8 +71,8 @@ public class DataTablePayload  implements Parcelable {
         this.data = (HashMap<String, Object>) in.readSerializable();
     }
 
-    public static final Parcelable.Creator<DataTablePayload> CREATOR = new
-            Parcelable.Creator<DataTablePayload>() {
+    public static final Creator<DataTablePayload> CREATOR = new
+            Creator<DataTablePayload>() {
         @Override
         public DataTablePayload createFromParcel(Parcel source) {
             return new DataTablePayload(source);

@@ -37,7 +37,7 @@ public class PopularBankAdapter extends RecyclerView.Adapter<PopularBankAdapter.
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_popular_banks, parent, false);
-        return new PopularBankAdapter.ViewHolder(v);
+        return new ViewHolder(v);
     }
 
     @Override

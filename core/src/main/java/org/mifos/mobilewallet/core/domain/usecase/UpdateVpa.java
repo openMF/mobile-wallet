@@ -26,7 +26,7 @@ public class UpdateVpa extends UseCase<UpdateVpa.RequestValues,
 
 
     @Override
-    protected void executeUseCase(UpdateVpa.RequestValues requestValues) {
+    protected void executeUseCase(RequestValues requestValues) {
 
         UpdateVpaPayload vpaPayload = new UpdateVpaPayload();
         vpaPayload.setExternalId(requestValues.vpa);
