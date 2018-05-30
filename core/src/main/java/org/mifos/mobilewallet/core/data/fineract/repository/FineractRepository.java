@@ -1,11 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.repository;
 
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
+import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
@@ -20,7 +16,14 @@ import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.UpdateVpaPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
+import org.mifos.mobilewallet.core.domain.model.Card;
 import org.mifos.mobilewallet.core.utils.Constants;
+
+import java.util.List;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import okhttp3.ResponseBody;
 import rx.Observable;
 import rx.functions.Func1;
@@ -50,7 +53,7 @@ public class FineractRepository {
     }
 
     public Observable<List<SearchedEntity>> searchResources(String query, String resources,
-                                                            Boolean exactMatch) {
+            Boolean exactMatch) {
         return fineractApiManager.getSearchApi().searchResources(query, resources, exactMatch);
     }
 
@@ -71,6 +74,23 @@ public class FineractRepository {
 
     public Observable<Client> getClientDetails(long clientId) {
         return fineractApiManager.getClientsApi().getClientForId(clientId);
+    }
+
+    public Observable<GenericResponse> addSavedCards(long clientId,
+            Card card) {
+        return fineractApiManager.getSavedCardsApi().addSavedCard((int) clientId, card);
+    }
+
+    public Observable<List<Card>> fetchSavedCards(long clientId) {
+        return fineractApiManager.getSavedCardsApi().getSavedCards((int) clientId);
+    }
+
+    public Observable<GenericResponse> editSavedCard(int clientId, Card card) {
+        return fineractApiManager.getSavedCardsApi().updateCard(clientId, card.getId(), card);
+    }
+
+    public Observable<GenericResponse> deleteSavedCard(int clientId, int cardId) {
+        return fineractApiManager.getSavedCardsApi().deleteCard(clientId, cardId);
     }
 
     //self user apis
@@ -107,13 +127,12 @@ public class FineractRepository {
     }
 
     public Observable<ResponseBody> updateBeneficiary(long beneficiaryId,
-                                                      BeneficiaryUpdatePayload payload) {
+            BeneficiaryUpdatePayload payload) {
         return selfApiManager.getBeneficiaryApi().updateBeneficiary(beneficiaryId, payload);
     }
 
     public Observable<ResponseBody> makeThirdPartyTransfer(TransferPayload transferPayload) {
         return selfApiManager.getThirdPartyTransferApi().makeTransfer(transferPayload);
     }
-
 
 }
