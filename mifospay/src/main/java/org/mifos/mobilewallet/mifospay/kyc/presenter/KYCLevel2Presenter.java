@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.util.Log;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
@@ -87,7 +86,7 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
     public void uploadKYCDocs(String identityType) {
         if (file != null) {
 
-            Log.d("qxz", "uploadKYCDocs: " + file.getPath());
+            mKYCLevel2View.showProgressDialog("Please wait..");
 
             uploadKYCDocsUseCase.setRequestValues(
                     new UploadKYCDocs.RequestValues(Constants.ENTITY_TYPE_CLIENTS,
@@ -101,16 +100,22 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
                     new UseCase.UseCaseCallback<UploadKYCDocs.ResponseValue>() {
                         @Override
                         public void onSuccess(UploadKYCDocs.ResponseValue response) {
-                            Log.d("qxz ", "onSuccess: ");
+
+                            mKYCLevel2View.hideProgressDialog();
+                            mKYCLevel2View.showToast("KYC Level 2 documents added successfully.");
+                            mKYCLevel2View.goBack();
                         }
 
                         @Override
                         public void onError(String message) {
-                            Log.d("qxz ", "onError: " + message);
+
+                            mKYCLevel2View.hideProgressDialog();
+                            mKYCLevel2View.showToast("Error uploading docs.");
                         }
                     });
         } else {
             // choose a file first
+            mKYCLevel2View.showToast("Choose a file to upload.");
         }
     }
 
@@ -122,22 +127,5 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
         return MultipartBody.Part.createFormData("file", file.getName(), requestFile);
     }
 
-//
-//    public String getRealPathFromURI(Uri contentUri) {
-//        String[] proj = {MediaStore.Images.Media.DATA};
-//
-//        //This method was deprecated in API level 11
-//        //Cursor cursor = managedQuery(contentUri, proj, null, null, null);
-//
-//        CursorLoader cursorLoader = new CursorLoader(
-//                mKYCLevel2View.getContext(),
-//                contentUri, proj, null, null, null);
-//        Cursor cursor = cursorLoader.loadInBackground();
-//
-//        int column_index =
-//                cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-//        cursor.moveToFirst();
-//        return cursor.getString(column_index);
-//    }
 
 }
