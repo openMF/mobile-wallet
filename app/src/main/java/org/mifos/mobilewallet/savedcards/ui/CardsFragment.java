@@ -15,7 +15,7 @@ import android.widget.PopupMenu;
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.base.BaseActivity;
 import org.mifos.mobilewallet.base.BaseFragment;
-import org.mifos.mobilewallet.core.domain.model.Card;
+import org.mifos.mobilewallet.core.data.fineract.entity.saved_cards.Card;
 import org.mifos.mobilewallet.savedcards.CardsContract;
 import org.mifos.mobilewallet.savedcards.presenter.CardsPresenter;
 import org.mifos.mobilewallet.utils.RecyclerItemClickListener;

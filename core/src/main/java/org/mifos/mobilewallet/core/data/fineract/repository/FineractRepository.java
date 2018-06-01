@@ -12,12 +12,14 @@ import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPa
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUpdatePayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
+import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.UpdateVpaPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
-import org.mifos.mobilewallet.core.domain.model.Card;
-import org.mifos.mobilewallet.core.domain.model.KYCLevel1Details;
+import org.mifos.mobilewallet.core.data.fineract.entity.saved_cards.Card;
+import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken;
+import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod;
 import org.mifos.mobilewallet.core.utils.Constants;
 
 import java.util.List;
@@ -125,6 +127,18 @@ public class FineractRepository {
             KYCLevel1Details kycLevel1Details) {
         return fineractApiManager.getDatatablesApi().updateKYCLevel1Details(clientId,
                 kycLevel1Details);
+    }
+
+    public Observable<List<DeliveryMethod>> getDeliveryMethods() {
+        return fineractApiManager.getTwoFactorAuthApi().getDeliveryMethods();
+    }
+
+    public Observable<String> requestOTP(String deliveryMethod) {
+        return fineractApiManager.getTwoFactorAuthApi().requestOTP(deliveryMethod);
+    }
+
+    public Observable<AccessToken> validateToken(String token) {
+        return fineractApiManager.getTwoFactorAuthApi().validateToken(token);
     }
 
     //self user apis
