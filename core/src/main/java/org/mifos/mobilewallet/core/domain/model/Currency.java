@@ -58,7 +58,7 @@ public class Currency implements Parcelable {
         this.displayLabel = in.readString();
     }
 
-    public static final Parcelable.Creator<Currency> CREATOR = new Parcelable.Creator<Currency>() {
+    public static final Creator<Currency> CREATOR = new Creator<Currency>() {
         @Override
         public Currency createFromParcel(Parcel source) {
             return new Currency(source);

@@ -18,18 +18,18 @@ public interface AadharService {
 
     @POST(ApiEndPoints.AADHAR_VERIFY)
     Observable<Response<ResponseBody>> verifyAadhar(@Query("client_id") String clientId,
-                                                 @Query("client_secret") String clientSecret,
-                                                 @Body RequestBody body);
+            @Query("client_secret") String clientSecret,
+            @Body RequestBody body);
 
     @POST(ApiEndPoints.AADHAR_GENERATE_OTP)
     Observable<Response<ResponseBody>> generateAadharOtp(@Query("client_id") String clientId,
-                                                    @Query("client_secret") String clientSecret,
-                                                    @Body RequestBody body);
+            @Query("client_secret") String clientSecret,
+            @Body RequestBody body);
 
     @POST(ApiEndPoints.AADHAR_VERIFY_OTP)
     Observable<Response<ResponseBody>> verifyAadharOtp(@Query("client_id") String clientId,
-                                                    @Query("client_secret") String clientSecret,
-                                                    @Body RequestBody body);
+            @Query("client_secret") String clientSecret,
+            @Body RequestBody body);
 
 
 }

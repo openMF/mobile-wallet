@@ -33,14 +33,14 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.ViewHo
     }
 
     @Override
-    public AccountsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_account, parent, false);
-        return new AccountsAdapter.ViewHolder(v);
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(AccountsAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         holder.ivAccountImage.setImageDrawable(
                 ContextCompat.getDrawable(context, R.drawable.ic_account_balance_wallet));
         holder.tvAccountNumber.setText(accounts.get(position).getNumber());

@@ -33,7 +33,7 @@ public class FetchAccountTransactions extends UseCase<FetchAccountTransactions.R
 
 
     @Override
-    protected void executeUseCase(final FetchAccountTransactions.RequestValues requestValues) {
+    protected void executeUseCase(final RequestValues requestValues) {
 
         fineractRepository.getSelfAccountTransactions(requestValues.accountId)
                 .observeOn(AndroidSchedulers.mainThread())

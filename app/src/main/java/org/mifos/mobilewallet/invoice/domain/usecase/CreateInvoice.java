@@ -26,7 +26,7 @@ public class CreateInvoice extends UseCase<CreateInvoice.RequestValues,
 
 
     @Override
-    protected void executeUseCase(CreateInvoice.RequestValues requestValues) {
+    protected void executeUseCase(RequestValues requestValues) {
         localRepository.saveInvoice(requestValues.getInvoice())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

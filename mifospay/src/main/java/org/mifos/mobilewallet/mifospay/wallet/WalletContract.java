@@ -13,7 +13,7 @@ import org.mifos.mobilewallet.core.domain.model.Transaction;
 
 public interface WalletContract {
 
-    interface WalletDetailView extends BaseView<WalletContract.WalletDetailPresenter> {
+    interface WalletDetailView extends BaseView<WalletDetailPresenter> {
 
         void showWalletTransactions(List<Transaction> transactions);
     }

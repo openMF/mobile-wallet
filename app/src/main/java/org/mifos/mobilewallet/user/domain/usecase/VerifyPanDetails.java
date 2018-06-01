@@ -25,7 +25,7 @@ public class VerifyPanDetails extends UseCase<VerifyPanDetails.RequestValues,
 
 
     @Override
-    protected void executeUseCase(VerifyPanDetails.RequestValues requestValues) {
+    protected void executeUseCase(RequestValues requestValues) {
 
         rblRepository.verifyPanNumber(requestValues.number)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -43,7 +43,7 @@ public class VerifyPanDetails extends UseCase<VerifyPanDetails.RequestValues,
 
                     @Override
                     public void onNext(Boolean status) {
-                        getUseCaseCallback().onSuccess(new VerifyPanDetails.ResponseValue(status));
+                        getUseCaseCallback().onSuccess(new ResponseValue(status));
                     }
                 });
     }

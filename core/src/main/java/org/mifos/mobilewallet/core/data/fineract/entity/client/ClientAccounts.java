@@ -71,8 +71,8 @@ public class ClientAccounts implements Parcelable {
         dest.writeList(this.savingsAccounts);
     }
 
-    public static final Parcelable.Creator<ClientAccounts> CREATOR = new Parcelable
-            .Creator<ClientAccounts>() {
+    public static final Creator<ClientAccounts> CREATOR = new Creator<ClientAccounts>() {
+
         @Override
         public ClientAccounts createFromParcel(Parcel source) {
             return new ClientAccounts(source);

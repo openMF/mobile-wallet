@@ -8,23 +8,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.mifos.mobilewallet.core.domain.model.Account;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
-import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.WalletPresenter;
-import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.wallet.ui.WalletDetailActivity;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
-import org.mifos.mobilewallet.core.domain.model.Account;
-import org.mifos.mobilewallet.mifospay.wallet.ui.WalletDetailActivity;
 
 /**
  * Created by naman on 17/8/17.
@@ -64,7 +61,7 @@ public class WalletFragment extends BaseFragment implements HomeContract.WalletV
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_wallet, container, false);
         ButterKnife.bind(this, rootView);
