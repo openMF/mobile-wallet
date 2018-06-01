@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.mifospay.savedcards;
 
 
-import org.mifos.mobilewallet.core.domain.model.Card;
+import org.mifos.mobilewallet.core.data.fineract.entity.saved_cards.Card;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 

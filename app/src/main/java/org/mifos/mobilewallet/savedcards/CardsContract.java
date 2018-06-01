@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.savedcards;
 
 import org.mifos.mobilewallet.base.BasePresenter;
 import org.mifos.mobilewallet.base.BaseView;
-import org.mifos.mobilewallet.core.domain.model.Card;
+import org.mifos.mobilewallet.core.data.fineract.entity.saved_cards.Card;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.mifos.mobilewallet.core.domain.model.Card;
+import org.mifos.mobilewallet.core.data.fineract.entity.saved_cards.Card;
 import org.mifos.mobilewallet.mifospay.R;
 
 import java.util.List;

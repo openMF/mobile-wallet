@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
-import org.mifos.mobilewallet.core.domain.model.Card;
+import org.mifos.mobilewallet.core.data.fineract.entity.saved_cards.Card;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
 

@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.core.domain.model;
+package org.mifos.mobilewallet.core.data.fineract.entity.saved_cards;
 
 import android.os.Parcel;
 import android.os.Parcelable;

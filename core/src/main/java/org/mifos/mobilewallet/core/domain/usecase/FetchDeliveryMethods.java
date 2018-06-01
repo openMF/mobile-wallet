@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.core.domain.usecase;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
-import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
+import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod;
 
 import java.util.List;
 
@@ -13,26 +13,25 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by ankur on 24/May/2018
+ * Created by ankur on 01/June/2018
  */
 
-public class FetchKYCLevel1Details extends
-        UseCase<FetchKYCLevel1Details.RequestValues, FetchKYCLevel1Details.ResponseValue> {
+public class FetchDeliveryMethods extends
+        UseCase<FetchDeliveryMethods.RequestValues, FetchDeliveryMethods.ResponseValue> {
 
     private final FineractRepository mFineractRepository;
 
     @Inject
-    public FetchKYCLevel1Details(FineractRepository fineractRepository) {
+    public FetchDeliveryMethods(FineractRepository fineractRepository) {
         mFineractRepository = fineractRepository;
     }
 
     @Override
     protected void executeUseCase(RequestValues requestValues) {
-
-        mFineractRepository.fetchKYCLevel1Details(requestValues.clientId)
+        mFineractRepository.getDeliveryMethods()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<List<KYCLevel1Details>>() {
+                .subscribe(new Subscriber<List<DeliveryMethod>>() {
                     @Override
                     public void onCompleted() {
 
@@ -44,35 +43,30 @@ public class FetchKYCLevel1Details extends
                     }
 
                     @Override
-                    public void onNext(List<KYCLevel1Details> kycLevel1Details) {
-                        getUseCaseCallback().onSuccess(
-                                new ResponseValue(kycLevel1Details));
+                    public void onNext(List<DeliveryMethod> deliveryMethods) {
+                        getUseCaseCallback().onSuccess(new ResponseValue(deliveryMethods));
                     }
                 });
-
-
     }
 
     public static final class RequestValues implements UseCase.RequestValues {
 
-        private final int clientId;
+        public RequestValues() {
 
-        public RequestValues(int clientId) {
-            this.clientId = clientId;
         }
     }
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        protected final List<KYCLevel1Details> mKYCLevel1DetailsList;
+        private final List<DeliveryMethod> deliveryMethodList;
 
         public ResponseValue(
-                List<KYCLevel1Details> kycLevel1Details) {
-            mKYCLevel1DetailsList = kycLevel1Details;
+                List<DeliveryMethod> deliveryMethodList) {
+            this.deliveryMethodList = deliveryMethodList;
         }
 
-        public List<KYCLevel1Details> getKYCLevel1DetailsList() {
-            return mKYCLevel1DetailsList;
+        public List<DeliveryMethod> getDeliveryMethodList() {
+            return deliveryMethodList;
         }
     }
 }
