@@ -9,6 +9,7 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.DocumentService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SavingAccountsListService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SearchService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.TwoFactorAuthService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -33,6 +34,7 @@ public class FineractApiManager {
     private static SearchService searchApi;
     private static DataTablesService dataTablesService;
     private static DocumentService documentApi;
+    private static TwoFactorAuthService twoFactorAuthApi;
 
     private static SelfServiceApiManager sSelfInstance;
 
@@ -55,6 +57,7 @@ public class FineractApiManager {
 
         dataTablesService = createApi(DataTablesService.class);
         documentApi = createApi(DocumentService.class);
+        twoFactorAuthApi = createApi(TwoFactorAuthService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
@@ -115,5 +118,9 @@ public class FineractApiManager {
 
     public DataTablesService getDatatablesApi() {
         return dataTablesService;
+    }
+
+    public static TwoFactorAuthService getTwoFactorAuthApi() {
+        return twoFactorAuthApi;
     }
 }

@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.mifospay.kyc;
 import android.content.Context;
 import android.content.Intent;
 
-import org.mifos.mobilewallet.core.domain.model.KYCLevel1Details;
+import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
@@ -55,6 +55,14 @@ public interface KYCContract {
         void setFilename(String absolutePath);
 
         Context getContext();
+
+        void showToast(String s);
+
+        void goBack();
+
+        void hideProgressDialog();
+
+        void showProgressDialog(String s);
     }
 
     interface KYCLevel2Presenter extends BasePresenter {

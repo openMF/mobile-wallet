@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.core.domain.model;
+package org.mifos.mobilewallet.core.data.fineract.entity.kyc;
 
 import android.os.Parcel;
 import android.os.Parcelable;

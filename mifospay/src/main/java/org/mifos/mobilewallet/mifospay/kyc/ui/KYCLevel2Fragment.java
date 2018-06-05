@@ -1,8 +1,13 @@
 package org.mifos.mobilewallet.mifospay.kyc.ui;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +20,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCLevel2Presenter;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
 
@@ -27,6 +33,8 @@ import butterknife.OnClick;
  */
 
 public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLevel2View {
+
+    private static final int REQUEST_READ_EXTERNAL_STORAGE = 1;
 
     @Inject
     KYCLevel2Presenter mPresenter;
@@ -80,7 +88,18 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
 
     @OnClick(R.id.btn_browse)
     public void onBrowseClicked() {
-        mKYCLevel2Presenter.browseDocs();
+
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_READ_EXTERNAL_STORAGE);
+        } else {
+
+            // Permission has already been granted
+            mKYCLevel2Presenter.browseDocs();
+        }
     }
 
     @OnClick(R.id.btn_submit)
@@ -104,5 +123,52 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
         super.onActivityResult(requestCode, resultCode, data);
 
         mKYCLevel2Presenter.updateFile(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_READ_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // storage-related task you need to do.
+
+                    mKYCLevel2Presenter.browseDocs();
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    showToast("Need external storage permission to browse documents.");
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
+    @Override
+    public void showToast(String s) {
+        Toaster.show(getView(), s);
+    }
+
+    @Override
+    public void showProgressDialog(String message) {
+        super.showProgressDialog(message);
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        super.hideProgressDialog();
+    }
+
+    @Override
+    public void goBack() {
+        Intent intent = getActivity().getIntent();
+        getActivity().finish();
+        startActivity(intent);
     }
 }
