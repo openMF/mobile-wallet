@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.wallet.ui;
+package org.mifos.mobilewallet.mifospay.transactions.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -9,34 +9,35 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
 
 /**
  * Created by naman on 17/8/17.
  */
 
-public class WalletTransactionsAdapter
-        extends RecyclerView.Adapter<WalletTransactionsAdapter.ViewHolder> {
+public class TransactionsAdapter
+        extends RecyclerView.Adapter<TransactionsAdapter.ViewHolder> {
 
     private Context context;
     private List<Transaction> transactions;
 
     @Inject
-    public WalletTransactionsAdapter() {
+    public TransactionsAdapter() {
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.item_wallet_transaction, parent, false);
+                R.layout.item_transaction, parent, false);
         return new ViewHolder(v);
     }
 
@@ -78,6 +79,19 @@ public class WalletTransactionsAdapter
         this.context = context;
     }
 
+    public void setData(List<Transaction> transactions) {
+        this.transactions = transactions;
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<Transaction> getTransactions() {
+        return (ArrayList<Transaction>) transactions;
+    }
+
+    public Transaction getTransaction(int position) {
+        return transactions.get(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_transaction_id)
@@ -99,15 +113,6 @@ public class WalletTransactionsAdapter
             super(v);
             ButterKnife.bind(this, v);
         }
-    }
-
-    public void setData(List<Transaction> transactions) {
-        this.transactions = transactions;
-        notifyDataSetChanged();
-    }
-
-    public Transaction getTransaction(int position) {
-        return transactions.get(position);
     }
 
 }

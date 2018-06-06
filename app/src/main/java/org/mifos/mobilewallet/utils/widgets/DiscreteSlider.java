@@ -112,32 +112,6 @@ public class DiscreteSlider extends FrameLayout {
                 });
     }
 
-    public void setTickMarkCount(int tickMarkCount) {
-        this.tickMarkCount = tickMarkCount;
-        this.discreteSliderBackdrop.setTickMarkCount(tickMarkCount);
-        this.discreteSliderBackdrop.invalidate();
-        this.discreteSeekBar.setTickMarkCount(tickMarkCount);
-        this.discreteSeekBar.invalidate();
-    }
-
-    public void setTickMarkRadius(float tickMarkRadius) {
-        this.tickMarkRadius = tickMarkRadius;
-        this.discreteSliderBackdrop.setTickMarkRadius(tickMarkRadius);
-        this.discreteSliderBackdrop.invalidate();
-    }
-
-    public void setPosition(int position) {
-        if (position < 0) {
-            this.position = 0;
-        } else if (position > this.tickMarkCount - 1) {
-            this.position = this.tickMarkCount - 1;
-        } else {
-            this.position = position;
-        }
-
-        this.discreteSeekBar.setPosition(this.position);
-    }
-
     public void setHorizontalBarThickness(float horizontalBarThickness) {
         this.discreteSliderBackdrop.setHorizontalBarThickness(horizontalBarThickness);
         this.discreteSliderBackdrop.invalidate();
@@ -175,9 +149,9 @@ public class DiscreteSlider extends FrameLayout {
     }
 
     public void setOnDiscreteSliderChangeListener(com.etiennelawlor.discreteslider
-                                                          .library.ui.DiscreteSlider
-                                                          .OnDiscreteSliderChangeListener
-                                                          onDiscreteSliderChangeListener) {
+            .library.ui.DiscreteSlider
+            .OnDiscreteSliderChangeListener
+            onDiscreteSliderChangeListener) {
         this.onDiscreteSliderChangeListener = onDiscreteSliderChangeListener;
     }
 
@@ -185,12 +159,38 @@ public class DiscreteSlider extends FrameLayout {
         return this.tickMarkCount;
     }
 
+    public void setTickMarkCount(int tickMarkCount) {
+        this.tickMarkCount = tickMarkCount;
+        this.discreteSliderBackdrop.setTickMarkCount(tickMarkCount);
+        this.discreteSliderBackdrop.invalidate();
+        this.discreteSeekBar.setTickMarkCount(tickMarkCount);
+        this.discreteSeekBar.invalidate();
+    }
+
     public float getTickMarkRadius() {
         return this.tickMarkRadius;
     }
 
+    public void setTickMarkRadius(float tickMarkRadius) {
+        this.tickMarkRadius = tickMarkRadius;
+        this.discreteSliderBackdrop.setTickMarkRadius(tickMarkRadius);
+        this.discreteSliderBackdrop.invalidate();
+    }
+
     public int getPosition() {
         return this.position;
+    }
+
+    public void setPosition(int position) {
+        if (position < 0) {
+            this.position = 0;
+        } else if (position > this.tickMarkCount - 1) {
+            this.position = this.tickMarkCount - 1;
+        } else {
+            this.position = position;
+        }
+
+        this.discreteSeekBar.setPosition(this.position);
     }
 
     public DiscreteSeekBar getSeekBar() {

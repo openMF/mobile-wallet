@@ -11,26 +11,45 @@ import com.google.gson.annotations.SerializedName;
 
 public class AccountOption implements Parcelable {
 
+    public static final Creator<AccountOption> CREATOR =
+            new Creator<AccountOption>() {
+                @Override
+                public AccountOption createFromParcel(Parcel source) {
+                    return new AccountOption(source);
+                }
+
+                @Override
+                public AccountOption[] newArray(int size) {
+                    return new AccountOption[size];
+                }
+            };
     @SerializedName("accountId")
     Integer accountId;
-
     @SerializedName("accountNo")
     String accountNo;
-
     @SerializedName("accountType")
     AccountType accountType;
-
     @SerializedName("clientId")
     Long clientId;
-
     @SerializedName("clientName")
     String clientName;
-
     @SerializedName("officeId")
     Integer officeId;
-
     @SerializedName("officeName")
     String officeName;
+
+    public AccountOption() {
+    }
+
+    protected AccountOption(Parcel in) {
+        this.accountId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.accountNo = in.readString();
+        this.accountType = in.readParcelable(AccountType.class.getClassLoader());
+        this.clientId = (Long) in.readValue(Long.class.getClassLoader());
+        this.clientName = in.readString();
+        this.officeId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.officeName = in.readString();
+    }
 
     public Integer getAccountId() {
         return accountId;
@@ -103,30 +122,4 @@ public class AccountOption implements Parcelable {
         dest.writeValue(this.officeId);
         dest.writeString(this.officeName);
     }
-
-    public AccountOption() {
-    }
-
-    protected AccountOption(Parcel in) {
-        this.accountId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.accountNo = in.readString();
-        this.accountType = in.readParcelable(AccountType.class.getClassLoader());
-        this.clientId = (Long) in.readValue(Long.class.getClassLoader());
-        this.clientName = in.readString();
-        this.officeId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.officeName = in.readString();
-    }
-
-    public static final Creator<AccountOption> CREATOR =
-            new Creator<AccountOption>() {
-                @Override
-                public AccountOption createFromParcel(Parcel source) {
-                    return new AccountOption(source);
-                }
-
-                @Override
-                public AccountOption[] newArray(int size) {
-                    return new AccountOption[size];
-                }
-            };
 }

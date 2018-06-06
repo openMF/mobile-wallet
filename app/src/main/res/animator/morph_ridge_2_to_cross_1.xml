@@ -20,19 +20,19 @@
     android:ordering="together">
 
     <objectAnimator
+        android:duration="500"
+        android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="pathData"
         android:valueFrom="@string/path_ridge_2"
         android:valueTo="@string/path_cross_1"
-        android:valueType="pathType"
-        android:duration="500"
-        android:interpolator="@android:interpolator/fast_out_slow_in" />
+        android:valueType="pathType"/>
 
     <objectAnimator
+        android:duration="500"
+        android:interpolator="@android:interpolator/fast_out_slow_in"
         android:propertyName="strokeWidth"
         android:valueFrom="@integer/fingerprint_stroke_width"
         android:valueTo="@integer/tick_cross_stroke_width"
-        android:valueType="floatType"
-        android:duration="500"
-        android:interpolator="@android:interpolator/fast_out_slow_in" />
+        android:valueType="floatType"/>
 
 </set>

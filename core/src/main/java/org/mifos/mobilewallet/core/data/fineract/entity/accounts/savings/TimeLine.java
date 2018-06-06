@@ -14,41 +14,62 @@ import java.util.List;
 
 public class TimeLine implements Parcelable {
 
+    public static final Creator<TimeLine> CREATOR = new Creator<TimeLine>() {
+        @Override
+        public TimeLine createFromParcel(Parcel source) {
+            return new TimeLine(source);
+        }
+
+        @Override
+        public TimeLine[] newArray(int size) {
+            return new TimeLine[size];
+        }
+    };
     @SerializedName("submittedOnDate")
     List<Integer> submittedOnDate = new ArrayList<>();
-
     @SerializedName("submittedByUsername")
     String submittedByUsername;
-
     @SerializedName("submittedByFirstname")
     String submittedByFirstname;
-
     @SerializedName("submittedByLastname")
     String submittedByLastname;
-
     @SerializedName("approvedOnDate")
     List<Integer> approvedOnDate = new ArrayList<>();
-
     @SerializedName("approvedByUsername")
     String approvedByUsername;
-
     @SerializedName("approvedByFirstname")
     String approvedByFirstname;
-
     @SerializedName("approvedByLastname")
     String approvedByLastname;
-
     @SerializedName("activatedOnDate")
     List<Integer> activatedOnDate;
-
     @SerializedName("activatedByUsername")
     String activatedByUsername;
-
     @SerializedName("activatedByFirstname")
     String activatedByFirstname;
-
     @SerializedName("activatedByLastname")
     String activatedByLastname;
+
+    public TimeLine() {
+    }
+
+    protected TimeLine(Parcel in) {
+        this.submittedOnDate = new ArrayList<Integer>();
+        in.readList(this.submittedOnDate, Integer.class.getClassLoader());
+        this.submittedByUsername = in.readString();
+        this.submittedByFirstname = in.readString();
+        this.submittedByLastname = in.readString();
+        this.approvedOnDate = new ArrayList<Integer>();
+        in.readList(this.approvedOnDate, Integer.class.getClassLoader());
+        this.approvedByUsername = in.readString();
+        this.approvedByFirstname = in.readString();
+        this.approvedByLastname = in.readString();
+        this.activatedOnDate = new ArrayList<Integer>();
+        in.readList(this.activatedOnDate, Integer.class.getClassLoader());
+        this.activatedByUsername = in.readString();
+        this.activatedByFirstname = in.readString();
+        this.activatedByLastname = in.readString();
+    }
 
     public List<Integer> getSubmittedOnDate() {
         return submittedOnDate;
@@ -166,37 +187,4 @@ public class TimeLine implements Parcelable {
         dest.writeString(this.activatedByFirstname);
         dest.writeString(this.activatedByLastname);
     }
-
-    public TimeLine() {
-    }
-
-    protected TimeLine(Parcel in) {
-        this.submittedOnDate = new ArrayList<Integer>();
-        in.readList(this.submittedOnDate, Integer.class.getClassLoader());
-        this.submittedByUsername = in.readString();
-        this.submittedByFirstname = in.readString();
-        this.submittedByLastname = in.readString();
-        this.approvedOnDate = new ArrayList<Integer>();
-        in.readList(this.approvedOnDate, Integer.class.getClassLoader());
-        this.approvedByUsername = in.readString();
-        this.approvedByFirstname = in.readString();
-        this.approvedByLastname = in.readString();
-        this.activatedOnDate = new ArrayList<Integer>();
-        in.readList(this.activatedOnDate, Integer.class.getClassLoader());
-        this.activatedByUsername = in.readString();
-        this.activatedByFirstname = in.readString();
-        this.activatedByLastname = in.readString();
-    }
-
-    public static final Creator<TimeLine> CREATOR = new Creator<TimeLine>() {
-        @Override
-        public TimeLine createFromParcel(Parcel source) {
-            return new TimeLine(source);
-        }
-
-        @Override
-        public TimeLine[] newArray(int size) {
-            return new TimeLine[size];
-        }
-    };
 }

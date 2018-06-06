@@ -13,9 +13,9 @@ import javax.inject.Inject;
 
 public class KYCLevel3Presenter implements KYCContract.KYCLevel3Presenter {
 
-    private KYCContract.KYCLevel3View mKYCLevel1View;
     private final UseCaseHandler mUseCaseHandler;
     private final LocalRepository mLocalRepository;
+    private KYCContract.KYCLevel3View mKYCLevel1View;
 
     @Inject
     public KYCLevel3Presenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {

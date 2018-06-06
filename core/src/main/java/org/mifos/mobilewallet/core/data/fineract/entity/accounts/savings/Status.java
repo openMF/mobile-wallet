@@ -7,44 +7,58 @@ import com.google.gson.annotations.SerializedName;
 
 public class Status implements Parcelable {
 
+    public static final Creator<Status> CREATOR = new Creator<Status>() {
+        @Override
+        public Status createFromParcel(Parcel source) {
+            return new Status(source);
+        }
+
+        @Override
+        public Status[] newArray(int size) {
+            return new Status[size];
+        }
+    };
     @SerializedName("id")
     Integer id;
-
     @SerializedName("code")
     String code;
-
     @SerializedName("value")
     String value;
-
     @SerializedName("submittedAndPendingApproval")
     Boolean submittedAndPendingApproval;
-
     @SerializedName("approved")
     Boolean approved;
-
     @SerializedName("rejected")
     Boolean rejected;
-
     @SerializedName("withdrawnByApplicant")
     Boolean withdrawnByApplicant;
-
     @SerializedName("active")
     Boolean active;
-
     @SerializedName("closed")
     Boolean closed;
-
     @SerializedName("prematureClosed")
     Boolean prematureClosed;
-
     @SerializedName("transferInProgress")
     Boolean transferInProgress;
-
     @SerializedName("transferOnHold")
     Boolean transferOnHold;
-
     @SerializedName("matured")
     Boolean matured;
+
+    public Status() {
+    }
+
+    protected Status(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.code = in.readString();
+        this.value = in.readString();
+        this.submittedAndPendingApproval = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.approved = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.rejected = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.withdrawnByApplicant = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.active = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.closed = (Boolean) in.readValue(Boolean.class.getClassLoader());
+    }
 
     public Integer getId() {
         return id;
@@ -178,7 +192,6 @@ public class Status implements Parcelable {
                 '}';
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -196,31 +209,4 @@ public class Status implements Parcelable {
         dest.writeValue(this.active);
         dest.writeValue(this.closed);
     }
-
-    public Status() {
-    }
-
-    protected Status(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.code = in.readString();
-        this.value = in.readString();
-        this.submittedAndPendingApproval = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.approved = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.rejected = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.withdrawnByApplicant = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.active = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.closed = (Boolean) in.readValue(Boolean.class.getClassLoader());
-    }
-
-    public static final Creator<Status> CREATOR = new Creator<Status>() {
-        @Override
-        public Status createFromParcel(Parcel source) {
-            return new Status(source);
-        }
-
-        @Override
-        public Status[] newArray(int size) {
-            return new Status[size];
-        }
-    };
 }

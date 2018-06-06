@@ -43,7 +43,7 @@ public class PopularBankAdapter extends RecyclerView.Adapter<PopularBankAdapter.
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.ivPopularBank.setImageDrawable(ContextCompat
-                        .getDrawable(context, popularBanks.get(position).getImage()));
+                .getDrawable(context, popularBanks.get(position).getImage()));
         holder.tvPopularBank.setText(popularBanks.get(position).getName());
 
         if (!popularBanks.get(position).getName().contains("RBL")) {
@@ -64,6 +64,15 @@ public class PopularBankAdapter extends RecyclerView.Adapter<PopularBankAdapter.
         this.context = context;
     }
 
+    public void setData(List<Bank> banks) {
+        this.popularBanks = banks;
+        notifyDataSetChanged();
+    }
+
+    public Bank getBank(int position) {
+        return popularBanks.get(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.iv_popular_bank)
@@ -76,14 +85,5 @@ public class PopularBankAdapter extends RecyclerView.Adapter<PopularBankAdapter.
             super(v);
             ButterKnife.bind(this, v);
         }
-    }
-
-    public void setData(List<Bank> banks) {
-        this.popularBanks = banks;
-        notifyDataSetChanged();
-    }
-
-    public Bank getBank(int position) {
-        return popularBanks.get(position);
     }
 }

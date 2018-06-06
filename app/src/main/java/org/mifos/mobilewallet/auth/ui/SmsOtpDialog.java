@@ -90,7 +90,7 @@ public class SmsOtpDialog extends BottomSheetDialogFragment {
                     ((SignupActivity) getActivity()).openAddDetails();
                 }
             }
-        },  1500);
+        }, 1500);
 
     }
 

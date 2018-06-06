@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.base;
 
+import android.support.v4.widget.SwipeRefreshLayout;
+
 public interface BaseActivityCallback {
 
     void showSwipeProgress();
@@ -13,4 +15,10 @@ public interface BaseActivityCallback {
     void setToolbarTitle(String title);
 
     void setSwipeRefreshEnabled(boolean enabled);
+
+    void showBackButton();
+
+    void hideBackButton();
+
+    SwipeRefreshLayout getSwipeRefreshLayout();
 }

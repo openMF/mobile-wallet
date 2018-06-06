@@ -27,11 +27,6 @@ public class KYCLevel3Fragment extends BaseFragment implements KYCContract.KYCLe
 
     KYCContract.KYCLevel3Presenter mKYCLevel3Presenter;
 
-    @Override
-    public void setPresenter(KYCContract.KYCLevel3Presenter presenter) {
-        mKYCLevel3Presenter = presenter;
-    }
-
     public static KYCLevel3Fragment newInstance() {
 
         Bundle args = new Bundle();
@@ -39,6 +34,11 @@ public class KYCLevel3Fragment extends BaseFragment implements KYCContract.KYCLe
         KYCLevel3Fragment fragment = new KYCLevel3Fragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void setPresenter(KYCContract.KYCLevel3Presenter presenter) {
+        mKYCLevel3Presenter = presenter;
     }
 
     @Override

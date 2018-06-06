@@ -1,8 +1,8 @@
 package org.mifos.mobilewallet.core.domain.usecase;
 
 import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
+import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 
 import java.util.List;
 
@@ -64,7 +64,7 @@ public class FetchKYCLevel1Details extends
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        protected final List<KYCLevel1Details> mKYCLevel1DetailsList;
+        private final List<KYCLevel1Details> mKYCLevel1DetailsList;
 
         public ResponseValue(
                 List<KYCLevel1Details> kycLevel1Details) {

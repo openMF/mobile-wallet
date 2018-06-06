@@ -3,23 +3,34 @@ package org.mifos.mobilewallet.core.data.fineract.entity.client;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
-
 public class ClientAccounts implements Parcelable {
 
-    private List<SavingAccount> savingsAccounts = new ArrayList<>();
+    public static final Creator<ClientAccounts> CREATOR = new Creator<ClientAccounts>() {
 
+        @Override
+        public ClientAccounts createFromParcel(Parcel source) {
+            return new ClientAccounts(source);
+        }
+
+        @Override
+        public ClientAccounts[] newArray(int size) {
+            return new ClientAccounts[size];
+        }
+    };
+    private List<SavingAccount> savingsAccounts = new ArrayList<>();
 
     public ClientAccounts() {
     }
 
+
     protected ClientAccounts(Parcel in) {
         this.savingsAccounts = new ArrayList<SavingAccount>();
     }
-
 
     public List<SavingAccount> getSavingsAccounts() {
         return savingsAccounts;
@@ -70,17 +81,4 @@ public class ClientAccounts implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeList(this.savingsAccounts);
     }
-
-    public static final Creator<ClientAccounts> CREATOR = new Creator<ClientAccounts>() {
-
-        @Override
-        public ClientAccounts createFromParcel(Parcel source) {
-            return new ClientAccounts(source);
-        }
-
-        @Override
-        public ClientAccounts[] newArray(int size) {
-            return new ClientAccounts[size];
-        }
-    };
 }

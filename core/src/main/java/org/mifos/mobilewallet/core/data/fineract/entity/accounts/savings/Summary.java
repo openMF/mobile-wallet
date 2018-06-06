@@ -14,32 +14,51 @@ import java.util.List;
 
 public class Summary implements Parcelable {
 
+    public static final Creator<Summary> CREATOR = new Creator<Summary>() {
+        @Override
+        public Summary createFromParcel(Parcel source) {
+            return new Summary(source);
+        }
+
+        @Override
+        public Summary[] newArray(int size) {
+            return new Summary[size];
+        }
+    };
     @SerializedName("currency")
     Currency currency;
-
     @SerializedName("totalDeposits")
     Double totalDeposits;
-
     @SerializedName("totalWithdrawals")
     Double totalWithdrawals;
-
     @SerializedName("totalInterestEarned")
     Double totalInterestEarned;
-
     @SerializedName("totalInterestPosted")
     Double totalInterestPosted;
-
     @SerializedName("accountBalance")
     Double accountBalance;
-
     @SerializedName("totalOverdraftInterestDerived")
     Double totalOverdraftInterestDerived;
-
     @SerializedName("interestNotPosted")
     Double interestNotPosted;
-
     @SerializedName("lastInterestCalculationDate")
     List<Integer> lastInterestCalculationDate;
+
+    public Summary() {
+    }
+
+    protected Summary(Parcel in) {
+        this.currency = in.readParcelable(Currency.class.getClassLoader());
+        this.totalDeposits = (Double) in.readValue(Double.class.getClassLoader());
+        this.totalWithdrawals = (Double) in.readValue(Double.class.getClassLoader());
+        this.totalInterestEarned = (Double) in.readValue(Double.class.getClassLoader());
+        this.totalInterestPosted = (Double) in.readValue(Double.class.getClassLoader());
+        this.accountBalance = (Double) in.readValue(Double.class.getClassLoader());
+        this.totalOverdraftInterestDerived = (Double) in.readValue(Double.class.getClassLoader());
+        this.interestNotPosted = (Double) in.readValue(Double.class.getClassLoader());
+        this.lastInterestCalculationDate = new ArrayList<Integer>();
+        in.readList(this.lastInterestCalculationDate, Integer.class.getClassLoader());
+    }
 
     public Currency getCurrency() {
         return currency;
@@ -130,32 +149,4 @@ public class Summary implements Parcelable {
         dest.writeValue(this.interestNotPosted);
         dest.writeList(this.lastInterestCalculationDate);
     }
-
-    public Summary() {
-    }
-
-    protected Summary(Parcel in) {
-        this.currency = in.readParcelable(Currency.class.getClassLoader());
-        this.totalDeposits = (Double) in.readValue(Double.class.getClassLoader());
-        this.totalWithdrawals = (Double) in.readValue(Double.class.getClassLoader());
-        this.totalInterestEarned = (Double) in.readValue(Double.class.getClassLoader());
-        this.totalInterestPosted = (Double) in.readValue(Double.class.getClassLoader());
-        this.accountBalance = (Double) in.readValue(Double.class.getClassLoader());
-        this.totalOverdraftInterestDerived = (Double) in.readValue(Double.class.getClassLoader());
-        this.interestNotPosted = (Double) in.readValue(Double.class.getClassLoader());
-        this.lastInterestCalculationDate = new ArrayList<Integer>();
-        in.readList(this.lastInterestCalculationDate, Integer.class.getClassLoader());
-    }
-
-    public static final Creator<Summary> CREATOR = new Creator<Summary>() {
-        @Override
-        public Summary createFromParcel(Parcel source) {
-            return new Summary(source);
-        }
-
-        @Override
-        public Summary[] newArray(int size) {
-            return new Summary[size];
-        }
-    };
 }

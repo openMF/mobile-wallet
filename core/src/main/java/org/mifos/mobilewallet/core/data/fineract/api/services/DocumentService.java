@@ -28,12 +28,12 @@ public interface DocumentService {
             @Path("entityId") int entityId);
 
     /**
-     * @param entityType              - Type for which document is being uploaded (Client, Loan
-     *                                or Savings etc)
-     * @param entityId                - Id of Entity
-     * @param nameOfDocument          - Document Name
-     * @param description             - Mandatory - Document Description
-     * @param typedFile               - Mandatory
+     * @param entityType     - Type for which document is being uploaded (Client, Loan
+     *                       or Savings etc)
+     * @param entityId       - Id of Entity
+     * @param nameOfDocument - Document Name
+     * @param description    - Mandatory - Document Description
+     * @param typedFile      - Mandatory
      */
     @POST("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS)
     @Multipart
@@ -51,10 +51,10 @@ public interface DocumentService {
      * https://demo.openmf.org/fineract-provider/api/v1/{entityType}/{entityId}/documents/
      * {documentId}/attachment
      *
-     * @param entityType    - Type for which document is being uploaded (Client, Loan
-     *                                or Savings etc)
-     * @param entityId      - Id of Entity
-     * @param documentId    - Document Id
+     * @param entityType - Type for which document is being uploaded (Client, Loan
+     *                   or Savings etc)
+     * @param entityId   - Id of Entity
+     * @param documentId - Document Id
      * @return ResponseBody
      */
     @GET("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS + "/{documentId}/attachment")
@@ -68,11 +68,10 @@ public interface DocumentService {
      * https://demo.openmf.org/fineract-provider/api/v1/{entityType}/{entityId}/documents/
      * {documentId}
      *
-     * @param entityType    - Type for which document is being uploaded (Client, Loan
-     *                                or Savings etc)
-     * @param entityId      - Id of Entity
-     * @param documentId    - Document Id
-     * @return
+     * @param entityType - Type for which document is being uploaded (Client, Loan
+     *                   or Savings etc)
+     * @param entityId   - Id of Entity
+     * @param documentId - Document Id
      */
     @DELETE("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS + "/{documentId}")
     Observable<ResponseBody> removeDocument(@Path("entityType") String entityType,
@@ -86,13 +85,13 @@ public interface DocumentService {
      * https://demo.openmf.org/fineract-provider/api/v1/{entityType}/{entityId}/documents/
      * {documentId}
      *
-     * @param entityType              - Type for which document is being uploaded (Client, Loan
-     *                                or Savings etc)
-     * @param entityId                - Id of Entity
-     * @param documentId              - Id of document
-     * @param nameOfDocument          - Document Name
-     * @param description             - Mandatory - Document Description
-     * @param typedFile               - Mandatory
+     * @param entityType     - Type for which document is being uploaded (Client, Loan
+     *                       or Savings etc)
+     * @param entityId       - Id of Entity
+     * @param documentId     - Id of document
+     * @param nameOfDocument - Document Name
+     * @param description    - Mandatory - Document Description
+     * @param typedFile      - Mandatory
      */
     @PUT("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS + "/{documentId}")
     @Multipart

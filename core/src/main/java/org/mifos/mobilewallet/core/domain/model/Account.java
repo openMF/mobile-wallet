@@ -9,6 +9,17 @@ import android.os.Parcelable;
 
 public class Account implements Parcelable {
 
+    public static final Creator<Account> CREATOR = new Creator<Account>() {
+        @Override
+        public Account createFromParcel(Parcel source) {
+            return new Account(source);
+        }
+
+        @Override
+        public Account[] newArray(int size) {
+            return new Account[size];
+        }
+    };
     private String image;
     private String name;
     private String number;
@@ -16,6 +27,19 @@ public class Account implements Parcelable {
     private long id;
     private long productId;
     private Currency currency;
+
+    public Account() {
+    }
+
+    protected Account(Parcel in) {
+        this.image = in.readString();
+        this.name = in.readString();
+        this.number = in.readString();
+        this.balance = in.readDouble();
+        this.id = in.readLong();
+        this.productId = in.readLong();
+        this.currency = in.readParcelable(Currency.class.getClassLoader());
+    }
 
     public String getImage() {
         return image;
@@ -88,29 +112,4 @@ public class Account implements Parcelable {
         dest.writeLong(this.productId);
         dest.writeParcelable(this.currency, flags);
     }
-
-    public Account() {
-    }
-
-    protected Account(Parcel in) {
-        this.image = in.readString();
-        this.name = in.readString();
-        this.number = in.readString();
-        this.balance = in.readDouble();
-        this.id = in.readLong();
-        this.productId = in.readLong();
-        this.currency = in.readParcelable(Currency.class.getClassLoader());
-    }
-
-    public static final Creator<Account> CREATOR = new Creator<Account>() {
-        @Override
-        public Account createFromParcel(Parcel source) {
-            return new Account(source);
-        }
-
-        @Override
-        public Account[] newArray(int size) {
-            return new Account[size];
-        }
-    };
 }

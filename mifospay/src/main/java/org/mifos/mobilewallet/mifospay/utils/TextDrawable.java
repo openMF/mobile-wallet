@@ -16,9 +16,9 @@ import android.graphics.drawable.shapes.RoundRectShape;
 
 public class TextDrawable extends ShapeDrawable {
 
+    private static final float SHADE_FACTOR = 0.9f;
     private final Paint textPaint;
     private final Paint borderPaint;
-    private static final float SHADE_FACTOR = 0.9f;
     private final String text;
     private final int color;
     private final RectShape shape;
@@ -63,6 +63,10 @@ public class TextDrawable extends ShapeDrawable {
         Paint paint = getPaint();
         paint.setColor(color);
 
+    }
+
+    public static IShapeBuilder builder() {
+        return new Builder();
     }
 
     private int getDarkerShade(int color) {
@@ -135,35 +139,62 @@ public class TextDrawable extends ShapeDrawable {
         return height;
     }
 
-    public static IShapeBuilder builder() {
-        return new Builder();
+    public interface IConfigBuilder {
+        public IConfigBuilder width(int width);
+
+        public IConfigBuilder height(int height);
+
+        public IConfigBuilder textColor(int color);
+
+        public IConfigBuilder withBorder(int thickness);
+
+        public IConfigBuilder useFont(Typeface font);
+
+        public IConfigBuilder fontSize(int size);
+
+        public IConfigBuilder bold();
+
+        public IConfigBuilder toUpperCase();
+
+        public IShapeBuilder endConfig();
+    }
+
+    public static interface IBuilder {
+
+        public TextDrawable build(String text, int color);
+    }
+
+    public static interface IShapeBuilder {
+
+        public IConfigBuilder beginConfig();
+
+        public IBuilder rect();
+
+        public IBuilder round();
+
+        public IBuilder roundRect(int radius);
+
+        public TextDrawable buildRect(String text, int color);
+
+        public TextDrawable buildRoundRect(String text, int color, int radius);
+
+        public TextDrawable buildRound(String text, int color);
     }
 
     public static class Builder implements IConfigBuilder, IShapeBuilder, IBuilder {
 
-        private String text;
-
-        private int color;
-
-        private int borderThickness;
-
-        private int mWidth;
-
-        private int mHeight;
-
-        private Typeface font;
-
-        private RectShape shape;
-
         public int mTextColor;
-
-        private int mFontSize;
-
-        private boolean isBold;
-
-        private boolean mToUpperCase;
-
         public float radius;
+        private String text;
+        private int color;
+        private int borderThickness;
+        private int mWidth;
+        private int mHeight;
+        private Typeface font;
+        private RectShape shape;
+        private int mFontSize;
+        private boolean isBold;
+        private boolean mToUpperCase;
 
         private Builder() {
             text = "";
@@ -273,47 +304,5 @@ public class TextDrawable extends ShapeDrawable {
             this.text = text;
             return new TextDrawable(this);
         }
-    }
-
-    public interface IConfigBuilder {
-        public IConfigBuilder width(int width);
-
-        public IConfigBuilder height(int height);
-
-        public IConfigBuilder textColor(int color);
-
-        public IConfigBuilder withBorder(int thickness);
-
-        public IConfigBuilder useFont(Typeface font);
-
-        public IConfigBuilder fontSize(int size);
-
-        public IConfigBuilder bold();
-
-        public IConfigBuilder toUpperCase();
-
-        public IShapeBuilder endConfig();
-    }
-
-    public static interface IBuilder {
-
-        public TextDrawable build(String text, int color);
-    }
-
-    public static interface IShapeBuilder {
-
-        public IConfigBuilder beginConfig();
-
-        public IBuilder rect();
-
-        public IBuilder round();
-
-        public IBuilder roundRect(int radius);
-
-        public TextDrawable buildRect(String text, int color);
-
-        public TextDrawable buildRoundRect(String text, int color, int radius);
-
-        public TextDrawable buildRound(String text, int color);
     }
 }

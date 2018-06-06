@@ -9,14 +9,30 @@ import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
 
 public class DepositType implements Parcelable {
 
+    public static final Creator<DepositType> CREATOR = new Creator<DepositType>() {
+        public DepositType createFromParcel(Parcel source) {
+            return new DepositType(source);
+        }
+
+        public DepositType[] newArray(int size) {
+            return new DepositType[size];
+        }
+    };
     @SerializedName("id")
     Integer id;
-
     @SerializedName("code")
     String code;
-
     @SerializedName("value")
     String value;
+
+    public DepositType() {
+    }
+
+    private DepositType(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.code = in.readString();
+        this.value = in.readString();
+    }
 
     public Integer getId() {
         return id;
@@ -50,25 +66,6 @@ public class DepositType implements Parcelable {
                 ", value='" + value + '\'' +
                 '}';
     }
-
-    public DepositType() {
-    }
-
-    private DepositType(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.code = in.readString();
-        this.value = in.readString();
-    }
-
-    public static final Creator<DepositType> CREATOR = new Creator<DepositType>() {
-        public DepositType createFromParcel(Parcel source) {
-            return new DepositType(source);
-        }
-
-        public DepositType[] newArray(int size) {
-            return new DepositType[size];
-        }
-    };
 
     @Override
     public int describeContents() {

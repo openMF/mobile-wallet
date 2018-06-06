@@ -23,11 +23,10 @@ import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 
 public class BaseActivity extends BasePassCodeActivity implements BaseActivityCallback {
 
-    private ActivityComponent activityComponent;
-
     public Toolbar toolbar;
     public SwipeRefreshLayout swipeLayout;
     public ProgressDialog progressDialog;
+    private ActivityComponent activityComponent;
 
     public ActivityComponent getActivityComponent() {
         if (activityComponent == null) {
@@ -97,11 +96,25 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
-    protected void showBackButton() {
+    @Override
+    public void showBackButton() {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    public void hideBackButton() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
+
+    @Override
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return swipeLayout;
     }
 
     @Override

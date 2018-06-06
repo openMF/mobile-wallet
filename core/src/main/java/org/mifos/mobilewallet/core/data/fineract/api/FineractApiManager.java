@@ -2,14 +2,20 @@ package org.mifos.mobilewallet.core.data.fineract.api;
 
 import android.util.Base64;
 
+import org.mifos.mobilewallet.core.data.fineract.api.services.AccountTransfersService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.AuthenticationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.DataTablesService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.DocumentService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.InvoiceService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.KYCLevel1Service;
 import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.RunReportService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.SavedCardService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SavingAccountsListService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SearchService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.ThirdPartyTransferService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.TwoFactorAuthService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.UserService;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -32,9 +38,15 @@ public class FineractApiManager {
     private static SavingAccountsListService savingAccountsListApi;
     private static RegistrationService registrationAPi;
     private static SearchService searchApi;
-    private static DataTablesService dataTablesService;
+    private static SavedCardService savedCardApi;
     private static DocumentService documentApi;
     private static TwoFactorAuthService twoFactorAuthApi;
+    private static AccountTransfersService accountTransfersApi;
+    private static RunReportService runReportApi;
+    private static KYCLevel1Service kycLevel1Api;
+    private static InvoiceService invoiceApi;
+    private static UserService userApi;
+    private static ThirdPartyTransferService thirdPartyTransferApi;
 
     private static SelfServiceApiManager sSelfInstance;
 
@@ -55,9 +67,15 @@ public class FineractApiManager {
         registrationAPi = createApi(RegistrationService.class);
         searchApi = createApi(SearchService.class);
 
-        dataTablesService = createApi(DataTablesService.class);
+        savedCardApi = createApi(SavedCardService.class);
         documentApi = createApi(DocumentService.class);
         twoFactorAuthApi = createApi(TwoFactorAuthService.class);
+        accountTransfersApi = createApi(AccountTransfersService.class);
+        runReportApi = createApi(RunReportService.class);
+        kycLevel1Api = createApi(KYCLevel1Service.class);
+        invoiceApi = createApi(InvoiceService.class);
+        userApi = createApi(UserService.class);
+        thirdPartyTransferApi = createApi(ThirdPartyTransferService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
@@ -88,6 +106,10 @@ public class FineractApiManager {
         SelfServiceApiManager.createService(authToken);
     }
 
+    public static SelfServiceApiManager getSelfApiManager() {
+        return sSelfInstance;
+    }
+
     public AuthenticationService getAuthenticationApi() {
         return authenticationApi;
     }
@@ -108,19 +130,39 @@ public class FineractApiManager {
         return searchApi;
     }
 
-    public static SelfServiceApiManager getSelfApiManager() {
-        return sSelfInstance;
-    }
-
     public DocumentService getDocumentApi() {
         return documentApi;
     }
 
-    public DataTablesService getDatatablesApi() {
-        return dataTablesService;
+    public RunReportService getRunReportApi() {
+        return runReportApi;
     }
 
-    public static TwoFactorAuthService getTwoFactorAuthApi() {
+    public TwoFactorAuthService getTwoFactorAuthApi() {
         return twoFactorAuthApi;
+    }
+
+    public AccountTransfersService getAccountTransfersApi() {
+        return accountTransfersApi;
+    }
+
+    public SavedCardService getSavedCardApi() {
+        return savedCardApi;
+    }
+
+    public KYCLevel1Service getKycLevel1Api() {
+        return kycLevel1Api;
+    }
+
+    public InvoiceService getInvoiceApi() {
+        return invoiceApi;
+    }
+
+    public UserService getUserApi() {
+        return userApi;
+    }
+
+    public ThirdPartyTransferService getThirdPartyTransferApi() {
+        return thirdPartyTransferApi;
     }
 }

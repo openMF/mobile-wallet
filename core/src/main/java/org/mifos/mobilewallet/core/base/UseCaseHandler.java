@@ -14,6 +14,13 @@ public class UseCaseHandler {
         mUseCaseScheduler = useCaseScheduler;
     }
 
+    public static UseCaseHandler getInstance() {
+        if (instance == null) {
+            instance = new UseCaseHandler(new UseCaseThreadPoolScheduler());
+        }
+        return instance;
+    }
+
     public <T extends UseCase.RequestValues, R extends UseCase.ResponseValue> void execute(
             final UseCase<T, R> useCase, T values, UseCase.UseCaseCallback<R> callback) {
         useCase.setRequestValues(values);
@@ -58,12 +65,5 @@ public class UseCaseHandler {
         public void onError(String message) {
             mUseCaseHandler.notifyError(message, mCallback);
         }
-    }
-
-    public static UseCaseHandler getInstance() {
-        if (instance == null) {
-            instance = new UseCaseHandler(new UseCaseThreadPoolScheduler());
-        }
-        return instance;
     }
 }

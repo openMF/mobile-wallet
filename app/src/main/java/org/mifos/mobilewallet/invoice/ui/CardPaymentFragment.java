@@ -36,7 +36,7 @@ public class CardPaymentFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_payment_card, container, false);
 
         ButterKnife.bind(this, rootView);

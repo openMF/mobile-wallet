@@ -1,10 +1,11 @@
 package org.mifos.mobilewallet.core.domain.usecase;
 
-import javax.inject.Inject;
-
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.UpdateVpaPayload;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+
+import javax.inject.Inject;
+
 import okhttp3.ResponseBody;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -65,7 +66,8 @@ public class UpdateVpa extends UseCase<UpdateVpa.RequestValues,
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        public ResponseValue() {}
+        public ResponseValue() {
+        }
 
     }
 }

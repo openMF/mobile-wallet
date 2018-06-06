@@ -81,6 +81,7 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                     @Override
                     public void onError(String message) {
                         Log.d("qxz", "fetch cards onError: " + message);
+                        mCardsView.hideSwipeProgress();
                         mCardsView.showToast("Error fetching cards.");
                     }
                 });

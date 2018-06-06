@@ -39,8 +39,6 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
     @Override
     public void fetchCurrentLevel() {
 
-        mKYCDescriptionView.showProgressDialog("Please wait..");
-
         fetchKYCLevel1DetailsUseCase.setRequestValues(new FetchKYCLevel1Details.RequestValues(
                 (int) mLocalRepository.getClientDetails().getClientId()));
 
@@ -51,11 +49,11 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
                 new UseCase.UseCaseCallback<FetchKYCLevel1Details.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchKYCLevel1Details.ResponseValue response) {
-                        Log.d("qxz", "onSuccess: " + response.getKYCLevel1DetailsList());
-                        mKYCDescriptionView.hideProgressDialog();
                         if (response.getKYCLevel1DetailsList().size() == 1) {
                             mKYCDescriptionView.onFetchLevelSuccess(
                                     response.getKYCLevel1DetailsList().get(0));
+                        } else {
+                            mKYCDescriptionView.hideProgressDialog();
                         }
                     }
 

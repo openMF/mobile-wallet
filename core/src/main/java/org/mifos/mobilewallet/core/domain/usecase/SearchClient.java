@@ -1,14 +1,15 @@
 package org.mifos.mobilewallet.core.domain.usecase;
 
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.SearchedEntitiesMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.domain.model.SearchResult;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

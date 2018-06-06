@@ -1,14 +1,14 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.mapper;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.ClientPayload;
 import org.mifos.mobilewallet.core.domain.model.Client;
 import org.mifos.mobilewallet.core.domain.model.NewClient;
 import org.mifos.mobilewallet.core.utils.DateHelper;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 /**
  * Created by naman on 10/7/17.
@@ -17,7 +17,8 @@ import org.mifos.mobilewallet.core.utils.DateHelper;
 public class ClientDetailsMapper {
 
     @Inject
-    public ClientDetailsMapper() {}
+    public ClientDetailsMapper() {
+    }
 
     public List<Client> transformList(List<org.mifos.mobilewallet.core.data
             .fineract.entity.client.Client> clients) {

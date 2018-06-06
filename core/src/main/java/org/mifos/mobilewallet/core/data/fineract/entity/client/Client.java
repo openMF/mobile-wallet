@@ -5,70 +5,90 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.mifos.mobilewallet.core.data.fineract.entity.Timeline;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import org.mifos.mobilewallet.core.data.fineract.entity.Timeline;
-
 public class Client implements Parcelable {
 
+    public static final Creator<Client> CREATOR = new Creator<Client>() {
+        @Override
+        public Client createFromParcel(Parcel source) {
+            return new Client(source);
+        }
+
+        @Override
+        public Client[] newArray(int size) {
+            return new Client[size];
+        }
+    };
     @SerializedName("id")
     private int id;
-
     @SerializedName("accountNo")
     private String accountNo;
-
     @SerializedName("status")
     private Status status;
-
     @SerializedName("active")
     private Boolean active;
-
     @SerializedName("activationDate")
     private List<Integer> activationDate = new ArrayList<>();
-
     @SerializedName("dobDate")
     private List<Integer> dobDate = new ArrayList<>();
-
     @SerializedName("firstname")
     private String firstname;
-
     @SerializedName("middlename")
     private String middlename;
-
     @SerializedName("lastname")
     private String lastname;
-
     @SerializedName("displayName")
     private String displayName;
-
     @SerializedName("fullname")
     private String fullname;
-
     @SerializedName("officeId")
     private Integer officeId;
-
     @SerializedName("officeName")
     private String officeName;
-
     @SerializedName("staffId")
     private Integer staffId;
-
     @SerializedName("staffName")
     private String staffName;
-
     @SerializedName("timeline")
     private Timeline timeline;
-
     @SerializedName("imageId")
     private int imageId;
-
     @SerializedName("imagePresent")
     private boolean imagePresent;
-
     @SerializedName("externalId")
     private String externalId;
 
+    public Client() {
+    }
+
+    protected Client(Parcel in) {
+        this.id = in.readInt();
+        this.accountNo = in.readString();
+        this.status = in.readParcelable(Status.class.getClassLoader());
+        this.active = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.activationDate = new ArrayList<Integer>();
+        in.readList(this.activationDate, Integer.class.getClassLoader());
+        this.dobDate = new ArrayList<Integer>();
+        in.readList(this.dobDate, Integer.class.getClassLoader());
+        this.firstname = in.readString();
+        this.middlename = in.readString();
+        this.lastname = in.readString();
+        this.displayName = in.readString();
+        this.fullname = in.readString();
+        this.officeId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.officeName = in.readString();
+        this.staffId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.staffName = in.readString();
+        this.timeline = in.readParcelable(Timeline.class.getClassLoader());
+        this.fullname = in.readString();
+        this.imageId = in.readInt();
+        this.imagePresent = in.readByte() != 0;
+        this.externalId = in.readString();
+    }
 
     public List<Integer> getDobDate() {
         return dobDate;
@@ -188,7 +208,6 @@ public class Client implements Parcelable {
                 '}';
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -213,44 +232,4 @@ public class Client implements Parcelable {
         dest.writeString(this.staffName);
         dest.writeString(this.externalId);
     }
-
-    public Client() {
-    }
-
-    protected Client(Parcel in) {
-        this.id = in.readInt();
-        this.accountNo = in.readString();
-        this.status = in.readParcelable(Status.class.getClassLoader());
-        this.active = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.activationDate = new ArrayList<Integer>();
-        in.readList(this.activationDate, Integer.class.getClassLoader());
-        this.dobDate = new ArrayList<Integer>();
-        in.readList(this.dobDate, Integer.class.getClassLoader());
-        this.firstname = in.readString();
-        this.middlename = in.readString();
-        this.lastname = in.readString();
-        this.displayName = in.readString();
-        this.fullname = in.readString();
-        this.officeId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.officeName = in.readString();
-        this.staffId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.staffName = in.readString();
-        this.timeline = in.readParcelable(Timeline.class.getClassLoader());
-        this.fullname = in.readString();
-        this.imageId = in.readInt();
-        this.imagePresent = in.readByte() != 0;
-        this.externalId = in.readString();
-    }
-
-    public static final Creator<Client> CREATOR = new Creator<Client>() {
-        @Override
-        public Client createFromParcel(Parcel source) {
-            return new Client(source);
-        }
-
-        @Override
-        public Client[] newArray(int size) {
-            return new Client[size];
-        }
-    };
 }

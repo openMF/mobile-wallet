@@ -1,6 +1,9 @@
 package org.mifos.mobilewallet.core.domain.usecase;
 
+import android.util.Log;
+
 import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.data.fineract.entity.TPTResponse;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPayload;
@@ -171,7 +174,7 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
                             }
                             if (walletAccount != null) {
                                 toAccount = walletAccount;
-                                checkBeneficiary();
+                                makeTransfer();
                             } else {
                                 getUseCaseCallback().onError("No wallet found");
                             }
@@ -290,10 +293,12 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
         transferPayload.setTransferAmount(requestValues.amount);
         transferPayload.setTransferDescription("Wallet transfer");
 
+        Log.d("qxz", "makeTransfer: " + transferPayload);
+
         apiRepository.makeThirdPartyTransfer(transferPayload)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<ResponseBody>() {
+                .subscribe(new Subscriber<TPTResponse>() {
                     @Override
                     public void onCompleted() {
 
@@ -302,10 +307,11 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
                     @Override
                     public void onError(Throwable e) {
                         getUseCaseCallback().onError("Error making transfer");
+                        Log.d("qxz", "onError: " + e.toString());
                     }
 
                     @Override
-                    public void onNext(ResponseBody responseBody) {
+                    public void onNext(TPTResponse responseBody) {
                         getUseCaseCallback().onSuccess(new ResponseValue());
                     }
                 });

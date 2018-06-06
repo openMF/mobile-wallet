@@ -22,6 +22,8 @@
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:hint="First Name"
+                      android:nextFocusForward="@id/et_lname"
+                      android:singleLine="true"
                       android:theme="@style/Theme.AppCompat.Light"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -36,6 +38,8 @@
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:hint="Last Name"
+                      android:nextFocusForward="@id/et_address1"
+                      android:singleLine="true"
                       android:theme="@style/Theme.AppCompat.Light"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -51,6 +55,8 @@
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:hint="Address Line 1"
+                      android:nextFocusForward="@id/et_address2"
+                      android:singleLine="true"
                       android:theme="@style/Theme.AppCompat.Light"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -65,6 +71,8 @@
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       android:hint="Address Line 2"
+                      android:nextFocusForward="@id/et_phonecode"
+                      android:singleLine="true"
                       android:theme="@style/Theme.AppCompat.Light"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -87,8 +95,11 @@
                     android:layout_height="wrap_content"
                     android:hint="Code"
                     android:inputType="phone"
-                    android:minWidth="@dimen/value_50dp"
+                    android:nextFocusForward="@id/et_phoneno"
+                    android:nextFocusRight="@id/et_phoneno"
+                    android:singleLine="true"
                     android:maxLength="4"
+                    android:minWidth="@dimen/value_50dp"
                     android:theme="@style/Theme.AppCompat.Light"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -106,6 +117,8 @@
                     android:hint="Phone Number"
                     android:inputType="phone"
                     android:maxLength="10"
+                    android:nextFocusDown="@id/et_dob"
+                    android:singleLine="true"
                     android:theme="@style/Theme.AppCompat.Light"/>
             </android.support.design.widget.TextInputLayout>
 

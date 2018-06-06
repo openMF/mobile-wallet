@@ -31,7 +31,7 @@ public class RblRepository {
 
     @Inject
     public RblRepository(RblApiManager rblApiManager,
-                         PreferencesHelper preferencesHelper) {
+            PreferencesHelper preferencesHelper) {
         this.rblApiManager = rblApiManager;
         this.preferencesHelper = preferencesHelper;
     }
@@ -83,7 +83,7 @@ public class RblRepository {
     private String createTranId() {
         Random random = new Random();
         StringBuilder sb = new StringBuilder(15);
-        for (int i = 0; i < 15; i++ ) {
+        for (int i = 0; i < 15; i++) {
             sb.append((char) ('0' + random.nextInt(10)));
         }
         return sb.toString();

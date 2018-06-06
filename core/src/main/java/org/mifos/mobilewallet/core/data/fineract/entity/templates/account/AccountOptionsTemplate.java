@@ -13,11 +13,30 @@ import java.util.List;
  */
 public class AccountOptionsTemplate implements Parcelable {
 
+    public static final Creator<AccountOptionsTemplate> CREATOR =
+            new Creator<AccountOptionsTemplate>() {
+                @Override
+                public AccountOptionsTemplate createFromParcel(Parcel source) {
+                    return new AccountOptionsTemplate(source);
+                }
+
+                @Override
+                public AccountOptionsTemplate[] newArray(int size) {
+                    return new AccountOptionsTemplate[size];
+                }
+            };
     @SerializedName("fromAccountOptions")
     List<AccountOption> fromAccountOptions = new ArrayList<>();
-
     @SerializedName("toAccountOptions")
     List<AccountOption> toAccountOptions = new ArrayList<>();
+
+    public AccountOptionsTemplate() {
+    }
+
+    protected AccountOptionsTemplate(Parcel in) {
+        this.fromAccountOptions = in.createTypedArrayList(AccountOption.CREATOR);
+        this.toAccountOptions = in.createTypedArrayList(AccountOption.CREATOR);
+    }
 
     public List<AccountOption> getFromAccountOptions() {
         return fromAccountOptions;
@@ -47,25 +66,4 @@ public class AccountOptionsTemplate implements Parcelable {
         dest.writeTypedList(this.fromAccountOptions);
         dest.writeTypedList(this.toAccountOptions);
     }
-
-    public AccountOptionsTemplate() {
-    }
-
-    protected AccountOptionsTemplate(Parcel in) {
-        this.fromAccountOptions = in.createTypedArrayList(AccountOption.CREATOR);
-        this.toAccountOptions = in.createTypedArrayList(AccountOption.CREATOR);
-    }
-
-    public static final Creator<AccountOptionsTemplate> CREATOR =
-            new Creator<AccountOptionsTemplate>() {
-                @Override
-                public AccountOptionsTemplate createFromParcel(Parcel source) {
-                    return new AccountOptionsTemplate(source);
-                }
-
-                @Override
-                public AccountOptionsTemplate[] newArray(int size) {
-                    return new AccountOptionsTemplate[size];
-                }
-            };
 }

@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,6 +122,8 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
 
     @OnClick(R.id.btn_submit)
     public void onClickSubmit() {
+        showProgressDialog("Please wait..");
+
         String fname = etFname.getText().toString();
         String lname = etLname.getText().toString();
         String address1 = etAddress1.getText().toString();
@@ -157,7 +158,6 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
 
     @Override
     public void goBack() {
-        Log.d("qxz", "goBack: ");
         Intent intent = getActivity().getIntent();
         getActivity().finish();
         startActivity(intent);

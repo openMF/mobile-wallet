@@ -75,6 +75,7 @@ public class VerifyPanDialog extends BottomSheetDialogFragment {
             ((BusinessDetailsActivity) getActivity()).verifyPan(etPanNumber.getText().toString());
         }
     }
+
     @Override
     public void onStart() {
         super.onStart();

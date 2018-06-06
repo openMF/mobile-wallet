@@ -16,14 +16,12 @@ import javax.inject.Inject;
 
 public class MakeTransferPresenter implements TransferContract.TransferPresenter {
 
-    private TransferContract.TransferView mTransferView;
     private final UseCaseHandler mUsecaseHandler;
-
     @Inject
     TransferFunds transferFunds;
-
     @Inject
     SearchClient searchClient;
+    private TransferContract.TransferView mTransferView;
 
     @Inject
     public MakeTransferPresenter(UseCaseHandler useCaseHandler) {
@@ -49,7 +47,7 @@ public class MakeTransferPresenter implements TransferContract.TransferPresenter
 
                     @Override
                     public void onError(String message) {
-
+                        mTransferView.showToast("Error fetching receiver");
                     }
                 });
     }

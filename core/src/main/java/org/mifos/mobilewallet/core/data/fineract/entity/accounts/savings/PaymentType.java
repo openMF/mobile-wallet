@@ -11,11 +11,30 @@ import com.google.gson.annotations.SerializedName;
 
 public class PaymentType implements Parcelable {
 
+    public static final Creator<PaymentType> CREATOR =
+            new Creator<PaymentType>() {
+                @Override
+                public PaymentType createFromParcel(Parcel source) {
+                    return new PaymentType(source);
+                }
+
+                @Override
+                public PaymentType[] newArray(int size) {
+                    return new PaymentType[size];
+                }
+            };
     @SerializedName("id")
     Integer id;
-
     @SerializedName("name")
     String name;
+
+    public PaymentType() {
+    }
+
+    protected PaymentType(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.name = in.readString();
+    }
 
     public Integer getId() {
         return id;
@@ -43,25 +62,4 @@ public class PaymentType implements Parcelable {
         dest.writeValue(this.id);
         dest.writeString(this.name);
     }
-
-    public PaymentType() {
-    }
-
-    protected PaymentType(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.name = in.readString();
-    }
-
-    public static final Creator<PaymentType> CREATOR =
-            new Creator<PaymentType>() {
-                @Override
-                public PaymentType createFromParcel(Parcel source) {
-                    return new PaymentType(source);
-                }
-
-                @Override
-                public PaymentType[] newArray(int size) {
-                    return new PaymentType[size];
-                }
-            };
 }

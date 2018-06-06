@@ -1,11 +1,11 @@
 package org.mifos.mobilewallet.invoice.domain.usecase;
 
+import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
 
 import javax.inject.Inject;
 
-import org.mifos.mobilewallet.core.base.UseCase;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

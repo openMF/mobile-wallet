@@ -11,14 +11,33 @@ import com.google.gson.annotations.SerializedName;
 
 public class AccountTypeOption implements Parcelable {
 
+    public static final Creator<AccountTypeOption> CREATOR =
+            new Creator<AccountTypeOption>() {
+                @Override
+                public AccountTypeOption createFromParcel(Parcel source) {
+                    return new AccountTypeOption(source);
+                }
+
+                @Override
+                public AccountTypeOption[] newArray(int size) {
+                    return new AccountTypeOption[size];
+                }
+            };
     @SerializedName("id")
     private Integer id;
-
     @SerializedName("code")
     private String code;
-
     @SerializedName("value")
     private String value;
+
+    public AccountTypeOption() {
+    }
+
+    protected AccountTypeOption(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.code = in.readString();
+        this.value = in.readString();
+    }
 
     public Integer getId() {
         return id;
@@ -55,26 +74,4 @@ public class AccountTypeOption implements Parcelable {
         dest.writeString(this.code);
         dest.writeString(this.value);
     }
-
-    public AccountTypeOption() {
-    }
-
-    protected AccountTypeOption(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.code = in.readString();
-        this.value = in.readString();
-    }
-
-    public static final Creator<AccountTypeOption> CREATOR =
-            new Creator<AccountTypeOption>() {
-        @Override
-        public AccountTypeOption createFromParcel(Parcel source) {
-            return new AccountTypeOption(source);
-        }
-
-        @Override
-        public AccountTypeOption[] newArray(int size) {
-            return new AccountTypeOption[size];
-        }
-    };
 }

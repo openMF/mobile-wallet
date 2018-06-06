@@ -11,14 +11,32 @@ import com.google.gson.annotations.SerializedName;
 
 public class Status implements Parcelable {
 
+    public static final Creator<Status> CREATOR = new Creator<Status>() {
+        @Override
+        public Status createFromParcel(Parcel source) {
+            return new Status(source);
+        }
+
+        @Override
+        public Status[] newArray(int size) {
+            return new Status[size];
+        }
+    };
     @SerializedName("id")
     private Integer id;
-
     @SerializedName("code")
     private String code;
-
     @SerializedName("value")
     private String value;
+
+    public Status() {
+    }
+
+    protected Status(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.code = in.readString();
+        this.value = in.readString();
+    }
 
     public Integer getId() {
         return id;
@@ -44,7 +62,6 @@ public class Status implements Parcelable {
         this.value = value;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -56,25 +73,4 @@ public class Status implements Parcelable {
         dest.writeString(this.code);
         dest.writeString(this.value);
     }
-
-    public Status() {
-    }
-
-    protected Status(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.code = in.readString();
-        this.value = in.readString();
-    }
-
-    public static final Creator<Status> CREATOR = new Creator<Status>() {
-        @Override
-        public Status createFromParcel(Parcel source) {
-            return new Status(source);
-        }
-
-        @Override
-        public Status[] newArray(int size) {
-            return new Status[size];
-        }
-    };
 }

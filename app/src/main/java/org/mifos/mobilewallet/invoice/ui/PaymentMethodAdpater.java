@@ -66,6 +66,20 @@ public class PaymentMethodAdpater extends RecyclerView.Adapter<PaymentMethodAdpa
         this.context = context;
     }
 
+    public void setData(List<PaymentMethod> methods) {
+        this.paymentMethods = methods;
+        notifyDataSetChanged();
+    }
+
+    public PaymentMethod getPaymentMethod(int position) {
+        return paymentMethods.get(position);
+    }
+
+    public void setFocused(int position) {
+        this.currentPosition = position;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
 
@@ -82,19 +96,5 @@ public class PaymentMethodAdpater extends RecyclerView.Adapter<PaymentMethodAdpa
             super(v);
             ButterKnife.bind(this, v);
         }
-    }
-
-    public void setData(List<PaymentMethod> methods) {
-        this.paymentMethods = methods;
-        notifyDataSetChanged();
-    }
-
-    public PaymentMethod getPaymentMethod(int position) {
-        return paymentMethods.get(position);
-    }
-
-    public void setFocused(int position) {
-        this.currentPosition = position;
-        notifyDataSetChanged();
     }
 }
