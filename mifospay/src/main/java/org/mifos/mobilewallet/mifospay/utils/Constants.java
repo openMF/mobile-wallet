@@ -17,6 +17,4 @@ public class Constants {
     public static final String QR_DATA = "qr_data";
 
 
-
-
 }

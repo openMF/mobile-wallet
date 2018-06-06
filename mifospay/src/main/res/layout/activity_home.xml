@@ -1,10 +1,7 @@
-<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/drawer"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fitsSystemWindows="true">
-
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_height="match_parent"
@@ -32,15 +29,4 @@
 
         </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/navigation_view"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        app:itemIconTint="@color/black"
-        app:itemTextColor="@color/black"
-        app:theme="@style/Theme.AppCompat.Light"
-        app:headerLayout="@layout/nav_drawer_header"
-        app:menu="@menu/menu_nav_drawer"/>
-</android.support.v4.widget.DrawerLayout>
+</RelativeLayout>

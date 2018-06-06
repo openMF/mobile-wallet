@@ -65,12 +65,13 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
         setToolbarTitle("Profile");
+        hideBackButton();
 
         mProfilePresenter.fetchprofile();
 

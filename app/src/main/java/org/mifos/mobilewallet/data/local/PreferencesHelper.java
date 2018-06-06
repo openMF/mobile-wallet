@@ -104,12 +104,12 @@ public class PreferencesHelper {
         putLong(USER_ID, id);
     }
 
-    public void setClientId(long clientId) {
-        putLong(CLIENT_ID, clientId);
-    }
-
     public long getClientId() {
         return getLong(CLIENT_ID, 1);
+    }
+
+    public void setClientId(long clientId) {
+        putLong(CLIENT_ID, clientId);
     }
 
 

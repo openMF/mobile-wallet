@@ -2,11 +2,10 @@ package org.mifos.mobilewallet.auth.presenter;
 
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.base.BaseView;
-
-import javax.inject.Inject;
-
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.usecase.CreateUser;
+
+import javax.inject.Inject;
 
 /**
  * Created by naman on 16/6/17.
@@ -14,12 +13,10 @@ import org.mifos.mobilewallet.core.domain.usecase.CreateUser;
 
 public class SignupPresenter implements AuthContract.SignupPresenter {
 
-    private AuthContract.SignupView mSignupView;
     private final UseCaseHandler mUsecaseHandler;
-
-
     @Inject
     CreateUser createUser;
+    private AuthContract.SignupView mSignupView;
 
     @Inject
     public SignupPresenter(UseCaseHandler useCaseHandler) {

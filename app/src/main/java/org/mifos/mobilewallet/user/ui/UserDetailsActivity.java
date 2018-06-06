@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.base.BaseActivity;
+import org.mifos.mobilewallet.core.domain.model.Client;
 import org.mifos.mobilewallet.user.UserContract;
 import org.mifos.mobilewallet.user.presenter.UserDetailsPresenter;
 import org.mifos.mobilewallet.utils.TextDrawable;
@@ -20,7 +21,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.domain.model.Client;
 
 /**
  * Created by naman on 22/6/17.

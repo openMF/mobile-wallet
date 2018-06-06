@@ -13,4 +13,8 @@ public interface BaseActivityCallback {
     void setToolbarTitle(String title);
 
     void setSwipeRefreshEnabled(boolean enabled);
+
+    void showBackButton();
+
+    void hideBackButton();
 }

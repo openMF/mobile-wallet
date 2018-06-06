@@ -73,6 +73,7 @@ public class VerifyAadharDialog extends BottomSheetDialogFragment {
                     .getText().toString());
         }
     }
+
     @Override
     public void onStart() {
         super.onStart();

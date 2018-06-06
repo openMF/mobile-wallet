@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.R;
+import org.mifos.mobilewallet.core.domain.model.Account;
 
 import java.util.List;
 
@@ -17,7 +18,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.domain.model.Account;
 
 /**
  * Created by naman on 11/7/17.
@@ -61,6 +61,15 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.ViewHo
         this.context = context;
     }
 
+    public void setData(List<Account> accounts) {
+        this.accounts = accounts;
+        notifyDataSetChanged();
+    }
+
+    public Account getAccount(int position) {
+        return accounts.get(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.iv_account_image)
@@ -76,14 +85,5 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.ViewHo
             super(v);
             ButterKnife.bind(this, v);
         }
-    }
-
-    public void setData(List<Account> accounts) {
-        this.accounts = accounts;
-        notifyDataSetChanged();
-    }
-
-    public Account getAccount(int position) {
-        return accounts.get(position);
     }
 }

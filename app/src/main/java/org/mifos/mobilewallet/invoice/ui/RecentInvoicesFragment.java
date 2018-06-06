@@ -16,6 +16,7 @@ import android.widget.Toast;
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.base.BaseActivity;
 import org.mifos.mobilewallet.base.BaseFragment;
+import org.mifos.mobilewallet.core.domain.model.Account;
 import org.mifos.mobilewallet.invoice.InvoiceContract;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
 import org.mifos.mobilewallet.invoice.presenter.RecentInvoicePresenter;
@@ -28,7 +29,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.domain.model.Account;
 
 /**
  * Created by naman on 11/7/17.
@@ -69,7 +69,7 @@ public class RecentInvoicesFragment extends BaseFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_recent_invoices, container, false);
 
         setToolbarTitle("Recent Invoices");

@@ -1,9 +1,9 @@
 package org.mifos.mobilewallet.mifospay.data.local;
 
+import org.mifos.mobilewallet.core.domain.model.Client;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
-
-import org.mifos.mobilewallet.core.domain.model.Client;
 
 /**
  * Created by naman on 17/6/17.

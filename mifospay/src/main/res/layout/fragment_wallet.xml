@@ -3,12 +3,12 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    <android.support.v7.widget.CardView
+        xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/value_20dp">
-
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -16,7 +16,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:text="Wallet Balance"
+                android:text="Balance"
                 android:layout_height="wrap_content"
                 android:layout_width="match_parent"
                 android:textColor="@color/grey_900"
@@ -46,7 +46,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="VIEW DETAILS"
+                    android:text="VIEW TRANSACTION HISTORY"
                     android:textStyle="bold"
                     android:paddingBottom="@dimen/value_20dp"
                     android:paddingLeft="@dimen/value_20dp"
@@ -114,6 +114,51 @@
                 android:gravity="center"
                 android:id="@+id/btn_show_qr"
                 android:drawablePadding="@dimen/value_10dp"/>
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/value_20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/value_20dp"
+            android:layout_marginTop="@dimen/value_20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/btn_addBankAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="@dimen/value_10dp"
+                android:drawableTop="@drawable/ic_bank"
+                android:gravity="center"
+                android:text="Add Bank Account"/>
+
+            <TextView
+                android:id="@+id/btn_kyc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="@dimen/value_10dp"
+                android:drawableTop="@drawable/ic_account_balance_wallet"
+                android:gravity="center"
+                android:text="Complete KYC"/>
+
+            <TextView
+                android:id="@+id/btn_cards"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:drawablePadding="@dimen/value_10dp"
+                android:drawableTop="@drawable/ic_saved_cards"
+                android:gravity="center"
+                android:text="Saved Cards"/>
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

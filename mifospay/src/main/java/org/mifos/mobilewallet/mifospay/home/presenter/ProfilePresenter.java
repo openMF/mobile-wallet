@@ -13,10 +13,9 @@ import javax.inject.Inject;
 
 public class ProfilePresenter implements HomeContract.ProfilePresenter {
 
-    private HomeContract.ProfileView mProfileView;
     private final UseCaseHandler mUsecaseHandler;
-
     private final LocalRepository localRepository;
+    private HomeContract.ProfileView mProfileView;
 
     @Inject
     public ProfilePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {

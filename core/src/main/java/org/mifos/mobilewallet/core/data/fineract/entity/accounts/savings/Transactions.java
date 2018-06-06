@@ -38,6 +38,9 @@ public class Transactions implements Parcelable {
     @SerializedName("amount")
     Double amount;
 
+    @SerializedName("transfer")
+    Transfer transfer;
+
     @SerializedName("runningBalance")
     Double runningBalance;
 
@@ -116,6 +119,27 @@ public class Transactions implements Parcelable {
         this.amount = amount;
     }
 
+    protected Transactions(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.transactionType = in.readParcelable(TransactionType.class.getClassLoader());
+        this.accountId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.accountNo = in.readString();
+        this.date = new ArrayList<Integer>();
+        in.readList(this.date, Integer.class.getClassLoader());
+        this.currency = in.readParcelable(Currency.class.getClassLoader());
+        this.paymentDetailData = in.readParcelable(PaymentDetailData.class.getClassLoader());
+        this.amount = (Double) in.readValue(Double.class.getClassLoader());
+        this.transfer = in.readParcelable(Transfer.class.getClassLoader());
+        this.runningBalance = (Double) in.readValue(Double.class.getClassLoader());
+        this.reversed = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.submittedOnDate = new ArrayList<Integer>();
+        in.readList(this.submittedOnDate, Integer.class.getClassLoader());
+        this.interestedPostedAsOn = (Boolean) in.readValue(Boolean.class.getClassLoader());
+    }
+
+    public Transactions() {
+    }
+
     public Double getRunningBalance() {
         return runningBalance;
     }
@@ -153,6 +177,15 @@ public class Transactions implements Parcelable {
         return 0;
     }
 
+    public Transfer getTransfer() {
+        return transfer;
+    }
+
+    public void setTransfer(
+            Transfer transfer) {
+        this.transfer = transfer;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(this.id);
@@ -163,30 +196,11 @@ public class Transactions implements Parcelable {
         dest.writeParcelable(this.currency, flags);
         dest.writeParcelable(this.paymentDetailData, flags);
         dest.writeValue(this.amount);
+        dest.writeParcelable(this.transfer, flags);
         dest.writeValue(this.runningBalance);
         dest.writeValue(this.reversed);
         dest.writeList(this.submittedOnDate);
         dest.writeValue(this.interestedPostedAsOn);
-    }
-
-    public Transactions() {
-    }
-
-    protected Transactions(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.transactionType = in.readParcelable(TransactionType.class.getClassLoader());
-        this.accountId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.accountNo = in.readString();
-        this.date = new ArrayList<Integer>();
-        in.readList(this.date, Integer.class.getClassLoader());
-        this.currency = in.readParcelable(Currency.class.getClassLoader());
-        this.paymentDetailData = in.readParcelable(PaymentDetailData.class.getClassLoader());
-        this.amount = (Double) in.readValue(Double.class.getClassLoader());
-        this.runningBalance = (Double) in.readValue(Double.class.getClassLoader());
-        this.reversed = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.submittedOnDate = new ArrayList<Integer>();
-        in.readList(this.submittedOnDate, Integer.class.getClassLoader());
-        this.interestedPostedAsOn = (Boolean) in.readValue(Boolean.class.getClassLoader());
     }
 
     public static final Creator<Transactions> CREATOR =
@@ -201,4 +215,13 @@ public class Transactions implements Parcelable {
                     return new Transactions[size];
                 }
             };
+
+    @Override
+    public String toString() {
+        return "Transactions{" +
+                "id=" + id +
+                ", paymentDetailData=" + paymentDetailData +
+                ", transfer=" + transfer +
+                '}';
+    }
 }

@@ -12,22 +12,23 @@ import org.mifos.mobilewallet.injection.component.DaggerApplicationComponent;
 import org.mifos.mobilewallet.injection.module.ApplicationModule;
 
 import butterknife.ButterKnife;
+
 /**
  * Created by naman on 16/6/17.
  */
 
 public class MifosWalletApp extends Application {
 
-    ApplicationComponent applicationComponent;
-
     private static MifosWalletApp instance;
-
-    public static MifosWalletApp get(Context context) {
-        return (MifosWalletApp) context.getApplicationContext();
-    }
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
+    ApplicationComponent applicationComponent;
+
+    public static MifosWalletApp get(Context context) {
+        return (MifosWalletApp) context.getApplicationContext();
     }
 
     public static Context getContext() {

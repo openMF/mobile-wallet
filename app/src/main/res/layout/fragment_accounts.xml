@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+             android:layout_width="match_parent" android:layout_height="match_parent"
+             android:orientation="vertical">
 
 
     <android.support.v7.widget.RecyclerView
@@ -14,20 +14,20 @@
 
     <Button
         android:id="@+id/btn_add_bank_account"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="@dimen/value_30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="@dimen/value_30dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="@dimen/value_20dp"
         android:background="@drawable/button_round_primary"
         android:clickable="true"
-        android:layout_height="48dp"
-        android:layout_width="match_parent"
-        android:layout_gravity="bottom"
         android:text="@string/add_bank_account"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
-        android:typeface="sans"
-        android:layout_marginTop="@dimen/value_20dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="@dimen/value_30dp"
-        android:layout_marginRight="@dimen/value_30dp"
-        android:layout_marginLeft="30dp"/>
+        android:typeface="sans"/>
 
 </FrameLayout>

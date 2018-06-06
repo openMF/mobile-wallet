@@ -2,10 +2,6 @@ package org.mifos.mobilewallet.auth.presenter;
 
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.base.BaseView;
-import org.mifos.mobilewallet.data.local.PreferencesHelper;
-
-import javax.inject.Inject;
-
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
@@ -14,6 +10,9 @@ import org.mifos.mobilewallet.core.domain.model.User;
 import org.mifos.mobilewallet.core.domain.usecase.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
 import org.mifos.mobilewallet.core.utils.Constants;
+import org.mifos.mobilewallet.data.local.PreferencesHelper;
+
+import javax.inject.Inject;
 
 /**
  * Created by naman on 16/6/17.
@@ -21,16 +20,13 @@ import org.mifos.mobilewallet.core.utils.Constants;
 
 public class LoginPresenter implements AuthContract.LoginPresenter {
 
-    private AuthContract.LoginView mLoginView;
     private final UseCaseHandler mUsecaseHandler;
-
     private final PreferencesHelper preferencesHelper;
-
     @Inject
     AuthenticateUser authenticateUser;
-
     @Inject
     FetchClientData fetchClientDataUseCase;
+    private AuthContract.LoginView mLoginView;
 
     @Inject
     public LoginPresenter(UseCaseHandler useCaseHandler, PreferencesHelper preferencesHelper) {
@@ -69,7 +65,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     }
 
     private void fetchClientData() {
-        mUsecaseHandler.execute(fetchClientDataUseCase ,
+        mUsecaseHandler.execute(fetchClientDataUseCase,
                 null,
                 new UseCase.UseCaseCallback<FetchClientData.ResponseValue>() {
                     @Override

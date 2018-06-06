@@ -3,6 +3,8 @@ package org.mifos.mobilewallet.core.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
+
 /**
  * Created by naman on 15/8/17.
  */
@@ -22,6 +24,21 @@ public class Transaction implements Parcelable {
     Currency currency;
 
     TransactionType transactionType;
+
+    public static final Creator<Transaction> CREATOR = new
+            Creator<Transaction>() {
+                @Override
+                public Transaction createFromParcel(Parcel source) {
+                    return new Transaction(source);
+                }
+
+                @Override
+                public Transaction[] newArray(int size) {
+                    return new Transaction[size];
+                }
+            };
+    long transferId;
+    TransferDetail transferDetail;
 
     public String getTransactionId() {
         return transactionId;
@@ -79,24 +96,7 @@ public class Transaction implements Parcelable {
         this.transactionType = transactionType;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.transactionId);
-        dest.writeLong(this.clientId);
-        dest.writeLong(this.accountId);
-        dest.writeDouble(this.amount);
-        dest.writeString(this.date);
-        dest.writeParcelable(this.currency, flags);
-        dest.writeInt(this.transactionType == null ? -1 : this.transactionType.ordinal());
-    }
-
-    public Transaction() {
-    }
+    String receiptId;
 
     protected Transaction(Parcel in) {
         this.transactionId = in.readString();
@@ -108,18 +108,65 @@ public class Transaction implements Parcelable {
         int tmpTransactionType = in.readInt();
         this.transactionType = tmpTransactionType == -1 ? null :
                 TransactionType.values()[tmpTransactionType];
+        this.transferId = in.readLong();
+        this.transferDetail = in.readParcelable(TransferDetail.class.getClassLoader());
+        this.receiptId = in.readString();
     }
 
-    public static final Creator<Transaction> CREATOR = new
-            Creator<Transaction>() {
-        @Override
-        public Transaction createFromParcel(Parcel source) {
-            return new Transaction(source);
-        }
+    public Transaction() {
+    }
 
-        @Override
-        public Transaction[] newArray(int size) {
-            return new Transaction[size];
-        }
-    };
+    public long getTransferId() {
+        return transferId;
+    }
+
+    public void setTransferId(long transferId) {
+        this.transferId = transferId;
+    }
+
+    public TransferDetail getTransferDetail() {
+        return transferDetail;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public void setTransferDetail(
+            TransferDetail transferDetail) {
+        this.transferDetail = transferDetail;
+    }
+
+    public String getReceiptId() {
+        return receiptId;
+    }
+
+    public void setReceiptId(String receiptId) {
+        this.receiptId = receiptId;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.transactionId);
+        dest.writeLong(this.clientId);
+        dest.writeLong(this.accountId);
+        dest.writeDouble(this.amount);
+        dest.writeString(this.date);
+        dest.writeParcelable(this.currency, flags);
+        dest.writeInt(this.transactionType == null ? -1 : this.transactionType.ordinal());
+        dest.writeLong(this.transferId);
+        dest.writeParcelable(this.transferDetail, flags);
+        dest.writeString(this.receiptId);
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "transactionId='" + transactionId + '\'' +
+                ", transferId=" + transferId +
+                ", transferDetail=" + transferDetail +
+                ", receiptId=" + receiptId +
+                '}';
+    }
 }

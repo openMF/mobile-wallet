@@ -25,8 +25,20 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    protected void showBackButton() {
+        if (callback != null) {
+            callback.showBackButton();
+        }
+    }
+
+    protected void hideBackButton() {
+        if (callback != null) {
+            callback.hideBackButton();
+        }
+    }
+
     protected void showProgress() {
-        if (callback !=  null) {
+        if (callback != null) {
             callback.showSwipeProgress();
         }
     }

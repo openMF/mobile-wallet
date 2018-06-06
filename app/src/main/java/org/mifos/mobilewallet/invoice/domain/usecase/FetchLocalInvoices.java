@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.invoice.domain.usecase;
 
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
 
@@ -7,8 +9,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -25,7 +25,7 @@ public class FetchLocalInvoices extends UseCase<FetchLocalInvoices.RequestValues
 
     @Inject
     public FetchLocalInvoices(LocalRepository localRepository,
-                              FineractRepository fineractRepository) {
+            FineractRepository fineractRepository) {
         this.localRepository = localRepository;
         this.fineractRepository = fineractRepository;
     }

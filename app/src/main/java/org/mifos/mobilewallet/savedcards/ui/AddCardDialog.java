@@ -30,36 +30,26 @@ import butterknife.OnClick;
 
 public class AddCardDialog extends BottomSheetDialogFragment {
 
-    private BottomSheetBehavior mBottomSheetBehavior;
     boolean forEdit;
     Card editCard;
-
-
     @BindView(R.id.et_card_number)
     EditText etCardNumber;
-
     @BindView(R.id.et_cvv)
     EditText etCVV;
-
     @BindView(R.id.spn_mm)
     Spinner spnMM;
-
     @BindView(R.id.spn_yy)
     Spinner spnYY;
-
     @BindView(R.id.et_fName)
     EditText etFname;
-
     @BindView(R.id.et_lName)
     EditText etLname;
-
     @BindView(R.id.btn_add)
     Button btnAdd;
-
     @BindView(R.id.btn_cancel)
     Button btnCancel;
-
     CardsContract.CardsPresenter mCardsPresenter;
+    private BottomSheetBehavior mBottomSheetBehavior;
 
     public void setCardsPresenter(
             CardsContract.CardsPresenter cardsPresenter) {

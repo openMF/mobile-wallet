@@ -21,11 +21,10 @@ import org.mifos.mobilewallet.injection.module.ActivityModule;
 
 public class BaseActivity extends AppCompatActivity implements BaseActivityCallback {
 
-    private ActivityComponent activityComponent;
-
     public Toolbar toolbar;
     public SwipeRefreshLayout swipeLayout;
     public ProgressDialog progressDialog;
+    private ActivityComponent activityComponent;
 
     public ActivityComponent getActivityComponent() {
         if (activityComponent == null) {

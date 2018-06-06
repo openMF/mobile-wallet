@@ -3,6 +3,9 @@ package org.mifos.mobilewallet.injection.module;
 import android.app.Application;
 import android.content.Context;
 
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.base.UseCaseThreadPoolScheduler;
+import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.data.rbl.api.RblApiManager;
 import org.mifos.mobilewallet.injection.ApplicationContext;
@@ -11,9 +14,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.base.UseCaseThreadPoolScheduler;
-import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 
 
 @Module

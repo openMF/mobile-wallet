@@ -18,16 +18,16 @@ import butterknife.ButterKnife;
 
 public class MifosPayApp extends Application {
 
-    ApplicationComponent applicationComponent;
-
     private static MifosPayApp instance;
-
-    public static MifosPayApp get(Context context) {
-        return (MifosPayApp) context.getApplicationContext();
-    }
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
+
+    ApplicationComponent applicationComponent;
+
+    public static MifosPayApp get(Context context) {
+        return (MifosPayApp) context.getApplicationContext();
     }
 
     public static Context getContext() {

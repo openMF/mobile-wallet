@@ -1,14 +1,13 @@
 package org.mifos.mobilewallet.user.presenter;
 
 import org.mifos.mobilewallet.base.BaseView;
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
 import org.mifos.mobilewallet.user.UserContract;
 import org.mifos.mobilewallet.user.domain.usecase.VerifyPanDetails;
 
 import javax.inject.Inject;
-
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 /**
  * Created by naman on 22/6/17.
@@ -16,14 +15,12 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 public class UserDetailsPresenter implements UserContract.UserDetailsPresenter {
 
-    private UserContract.UserDetailsView mUserDetailsView;
     private final UseCaseHandler mUsecaseHandler;
-
     @Inject
     FetchClientData fetchUserData;
-
     @Inject
     VerifyPanDetails verifyPanDetails;
+    private UserContract.UserDetailsView mUserDetailsView;
 
     @Inject
     public UserDetailsPresenter(UseCaseHandler useCaseHandler) {
@@ -42,8 +39,9 @@ public class UserDetailsPresenter implements UserContract.UserDetailsPresenter {
                 new UseCase.UseCaseCallback<FetchClientData.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchClientData.ResponseValue response) {
-                        if (!response.getUserDetails().getName().equals(""))
+                        if (!response.getUserDetails().getName().equals("")) {
                             mUserDetailsView.showUserDetails(response.getUserDetails());
+                        }
                     }
 
                     @Override

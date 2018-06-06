@@ -14,8 +14,10 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.WalletPresenter;
+import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionFragment;
+import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsFragment;
+import org.mifos.mobilewallet.mifospay.transactions.ui.TransactionsHistoryActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.wallet.ui.WalletDetailActivity;
 
 import javax.inject.Inject;
 
@@ -33,12 +35,25 @@ public class WalletFragment extends BaseFragment implements HomeContract.WalletV
     WalletPresenter mPresenter;
 
     HomeContract.WalletPresenter mWalletPresenter;
-
     @BindView(R.id.tv_account_balance)
-    TextView tvWalletbalance;
-
+    TextView mTvAccountBalance;
     @BindView(R.id.tv_view_details)
-    TextView tvViewDetails;
+    TextView mTvViewDetails;
+    @BindView(R.id.btn_history)
+    TextView mBtnHistory;
+    @BindView(R.id.btn_send)
+    TextView mBtnSend;
+    @BindView(R.id.btn_request)
+    TextView mBtnRequest;
+    @BindView(R.id.btn_show_qr)
+    TextView mBtnShowQr;
+    @BindView(R.id.btn_addBankAccount)
+    TextView mBtnAddBankAccount;
+    @BindView(R.id.btn_kyc)
+    TextView mBtnKyc;
+    @BindView(R.id.btn_cards)
+    TextView mBtnCards;
+
 
     private Account account;
 
@@ -64,8 +79,10 @@ public class WalletFragment extends BaseFragment implements HomeContract.WalletV
             @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_wallet, container, false);
+        setToolbarTitle("Home");
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
+        hideBackButton();
 
         showProgress();
         mWalletPresenter.fetchWallet();
@@ -75,14 +92,14 @@ public class WalletFragment extends BaseFragment implements HomeContract.WalletV
 
     @OnClick(R.id.tv_view_details)
     public void detailsClicked() {
-        Intent intent = new Intent(getActivity(), WalletDetailActivity.class);
+        Intent intent = new Intent(getActivity(), TransactionsHistoryActivity.class);
         intent.putExtra(Constants.ACCOUNT, account);
         startActivity(intent);
     }
 
     @OnClick(R.id.btn_history)
     public void historyClicked() {
-        Intent intent = new Intent(getActivity(), WalletDetailActivity.class);
+        Intent intent = new Intent(getActivity(), TransactionsHistoryActivity.class);
         intent.putExtra(Constants.ACCOUNT, account);
         startActivity(intent);
     }
@@ -110,7 +127,23 @@ public class WalletFragment extends BaseFragment implements HomeContract.WalletV
     @Override
     public void showWallet(Account account) {
         this.account = account;
-        tvWalletbalance.setText(account.getCurrency().getCode() + " " + account.getBalance());
+        mTvAccountBalance.setText(account.getCurrency().getCode() + " " + account.getBalance());
         hideProgress();
+    }
+
+    @OnClick(R.id.btn_addBankAccount)
+    public void onMBtnAddBankAccountClicked() {
+    }
+
+    @OnClick(R.id.btn_kyc)
+    public void onMBtnKycClicked() {
+        ((HomeFragment) getParentFragment()).replaceFragmentUsingFragmentManager(
+                KYCDescriptionFragment.newInstance(), true, R.id.container);
+    }
+
+    @OnClick(R.id.btn_cards)
+    public void onMBtnCardsClicked() {
+        ((HomeFragment) getParentFragment()).replaceFragmentUsingFragmentManager(
+                CardsFragment.newInstance(), true, R.id.container);
     }
 }

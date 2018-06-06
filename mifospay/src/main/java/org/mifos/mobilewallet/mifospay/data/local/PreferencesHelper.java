@@ -105,20 +105,20 @@ public class PreferencesHelper {
         putLong(USER_ID, id);
     }
 
-    public void setClientId(long clientId) {
-        putLong(CLIENT_ID, clientId);
-    }
-
     public long getClientId() {
         return getLong(CLIENT_ID, 1);
     }
 
-    public void setClientVpa(String vpa) {
-        putString(CLIENT_VPA, vpa);
+    public void setClientId(long clientId) {
+        putLong(CLIENT_ID, clientId);
     }
 
     public String getClientVpa() {
         return getString(CLIENT_VPA, "");
+    }
+
+    public void setClientVpa(String vpa) {
+        putString(CLIENT_VPA, vpa);
     }
 
 }

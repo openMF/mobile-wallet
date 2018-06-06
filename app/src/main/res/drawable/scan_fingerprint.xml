@@ -21,6 +21,6 @@
 
     <target
         android:name="scan_clip"
-        android:animation="@animator/scan" />
+        android:animation="@animator/scan"/>
 
 </animated-vector>

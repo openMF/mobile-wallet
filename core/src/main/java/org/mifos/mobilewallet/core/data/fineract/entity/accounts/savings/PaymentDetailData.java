@@ -129,4 +129,12 @@ public class PaymentDetailData implements Parcelable {
                     return new PaymentDetailData[size];
                 }
             };
+
+    @Override
+    public String toString() {
+        return "PaymentDetailData{" +
+                "id=" + id +
+                ", receiptNumber='" + receiptNumber + '\'' +
+                '}';
+    }
 }

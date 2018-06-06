@@ -2,13 +2,12 @@ package org.mifos.mobilewallet.account.presenter;
 
 import org.mifos.mobilewallet.account.AccountContract;
 import org.mifos.mobilewallet.base.BaseView;
-
-import javax.inject.Inject;
-
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.usecase.FetchAccounts;
 import org.mifos.mobilewallet.data.local.LocalRepository;
+
+import javax.inject.Inject;
 
 /**
  * Created by naman on 11/7/17.
@@ -16,13 +15,11 @@ import org.mifos.mobilewallet.data.local.LocalRepository;
 
 public class AccountsPresenter implements AccountContract.AccountsPresenter {
 
-    private AccountContract.AccountsView maccountsView;
     private final UseCaseHandler mUsecaseHandler;
-
     private final LocalRepository localRepository;
-
     @Inject
     FetchAccounts fetchAccountsUseCase;
+    private AccountContract.AccountsView maccountsView;
 
     @Inject
     public AccountsPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {

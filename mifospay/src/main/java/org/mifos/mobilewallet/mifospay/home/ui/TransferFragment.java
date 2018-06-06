@@ -41,33 +41,24 @@ import butterknife.OnClick;
 public class TransferFragment extends BaseFragment implements HomeContract.TransferView {
 
     private static final int REQUEST_CAMERA = 0;
-
+    private final int SCAN_QR_REQUEST_CODE = 666;
     @Inject
     TransferPresenter mPresenter;
-
     HomeContract.TransferPresenter mTransferPresenter;
-
     @BindView(R.id.et_amount)
     EditText etAmount;
-
     @BindView(R.id.et_vpa)
     EditText etVpa;
-
     @BindView(R.id.btn_transfer)
     Button btnTransfer;
-
     @BindView(R.id.tv_client_vpa)
     TextView tvClientVpa;
-
     @BindView(R.id.btn_show_qr)
     TextView btnShowQr;
-
     @BindView(R.id.btn_scan_qr)
     TextView btnScanQr;
 
     private String vpa;
-
-    private final int SCAN_QR_REQUEST_CODE = 666;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -87,6 +78,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         setToolbarTitle("Transfer");
         setSwipeEnabled(false);
         mPresenter.attachView(this);
+        hideBackButton();
 
         mPresenter.fetchVpa();
 
@@ -140,7 +132,6 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     public void setPresenter(HomeContract.TransferPresenter presenter) {
         this.mTransferPresenter = presenter;
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

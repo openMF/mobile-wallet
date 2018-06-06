@@ -12,8 +12,8 @@ import javax.inject.Inject;
 
 public class ReadQrPresenter implements QrContract.ReadQrPresenter {
 
-    private QrContract.ReadQrView mReadQrView;
     private final UseCaseHandler mUsecaseHandler;
+    private QrContract.ReadQrView mReadQrView;
 
 
     @Inject

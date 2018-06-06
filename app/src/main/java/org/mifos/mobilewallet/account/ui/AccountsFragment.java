@@ -15,6 +15,7 @@ import org.mifos.mobilewallet.account.AccountContract;
 import org.mifos.mobilewallet.account.presenter.AccountsPresenter;
 import org.mifos.mobilewallet.base.BaseActivity;
 import org.mifos.mobilewallet.base.BaseFragment;
+import org.mifos.mobilewallet.core.domain.model.Account;
 import org.mifos.mobilewallet.utils.RecyclerItemClickListener;
 
 import java.util.List;
@@ -23,7 +24,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.domain.model.Account;
 
 /**
  * Created by naman on 11/7/17.
@@ -60,7 +60,7 @@ public class AccountsFragment extends BaseFragment implements AccountContract.Ac
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_accounts, container, false);
 
         setToolbarTitle("Accounts");
