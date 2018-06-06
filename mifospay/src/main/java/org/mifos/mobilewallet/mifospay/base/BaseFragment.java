@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.widget.SwipeRefreshLayout;
 
 /**
  * Created by naman on 17/6/17.
@@ -25,13 +26,25 @@ public class BaseFragment extends Fragment {
         }
     }
 
-    protected void showProgress() {
-        if (callback !=  null) {
+    protected void showBackButton() {
+        if (callback != null) {
+            callback.showBackButton();
+        }
+    }
+
+    protected void hideBackButton() {
+        if (callback != null) {
+            callback.hideBackButton();
+        }
+    }
+
+    protected void showSwipeProgress() {
+        if (callback != null) {
             callback.showSwipeProgress();
         }
     }
 
-    protected void hideProgress() {
+    protected void hideSwipeProgress() {
         if (callback != null) {
             callback.hideSwipeProgress();
         }
@@ -49,6 +62,13 @@ public class BaseFragment extends Fragment {
         if (callback != null) {
             callback.setSwipeRefreshEnabled(enabled);
         }
+    }
+
+    protected SwipeRefreshLayout getSwipeRefreshLayout() {
+        if (callback != null) {
+            return callback.getSwipeRefreshLayout();
+        }
+        return null;
     }
 
 

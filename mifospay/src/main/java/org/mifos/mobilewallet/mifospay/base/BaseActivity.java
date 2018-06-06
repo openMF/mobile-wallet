@@ -23,11 +23,10 @@ import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 
 public class BaseActivity extends BasePassCodeActivity implements BaseActivityCallback {
 
-    private ActivityComponent activityComponent;
-
     public Toolbar toolbar;
     public SwipeRefreshLayout swipeLayout;
     public ProgressDialog progressDialog;
+    private ActivityComponent activityComponent;
 
     public ActivityComponent getActivityComponent() {
         if (activityComponent == null) {
@@ -78,6 +77,7 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
             progressDialog.show();
         } else {
             progressDialog = new ProgressDialog(this);
+            progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setMessage(message);
             progressDialog.show();
         }
@@ -97,11 +97,25 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
-    protected void showBackButton() {
+    @Override
+    public void showBackButton() {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
+
+    @Override
+    public void hideBackButton() {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeButtonEnabled(false);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+    }
+
+    @Override
+    public SwipeRefreshLayout getSwipeRefreshLayout() {
+        return swipeLayout;
     }
 
     @Override
@@ -112,6 +126,12 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void addFragment(Fragment fragment, int containerId) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(containerId, fragment);
+        transaction.commit();
     }
 
     public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {

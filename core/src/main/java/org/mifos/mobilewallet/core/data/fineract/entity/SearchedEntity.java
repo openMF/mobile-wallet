@@ -5,12 +5,35 @@ import android.os.Parcelable;
 
 public class SearchedEntity implements Parcelable {
 
+    public static final Creator<SearchedEntity> CREATOR = new Creator<SearchedEntity>() {
+        @Override
+        public SearchedEntity createFromParcel(Parcel source) {
+            return new SearchedEntity(source);
+        }
+
+        @Override
+        public SearchedEntity[] newArray(int size) {
+            return new SearchedEntity[size];
+        }
+    };
     private int entityId;
     private String entityAccountNo;
     private String entityName;
     private String entityType;
     private int parentId;
     private String parentName;
+
+    public SearchedEntity() {
+    }
+
+    protected SearchedEntity(Parcel in) {
+        this.entityId = in.readInt();
+        this.entityAccountNo = in.readString();
+        this.entityName = in.readString();
+        this.entityType = in.readString();
+        this.parentId = in.readInt();
+        this.parentName = in.readString();
+    }
 
     public int getEntityId() {
         return entityId;
@@ -108,28 +131,4 @@ public class SearchedEntity implements Parcelable {
         dest.writeInt(this.parentId);
         dest.writeString(this.parentName);
     }
-
-    public SearchedEntity() {
-    }
-
-    protected SearchedEntity(Parcel in) {
-        this.entityId = in.readInt();
-        this.entityAccountNo = in.readString();
-        this.entityName = in.readString();
-        this.entityType = in.readString();
-        this.parentId = in.readInt();
-        this.parentName = in.readString();
-    }
-
-    public static final Creator<SearchedEntity> CREATOR = new Creator<SearchedEntity>() {
-        @Override
-        public SearchedEntity createFromParcel(Parcel source) {
-            return new SearchedEntity(source);
-        }
-
-        @Override
-        public SearchedEntity[] newArray(int size) {
-            return new SearchedEntity[size];
-        }
-    };
 }

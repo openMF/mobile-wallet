@@ -16,7 +16,6 @@ public class BaseURL {
     public static final String API_PATH_SELF = "/fineract-provider/api/v1/self/";
 
 
-
     public String getUrl() {
         return PROTOCOL_HTTPS + API_ENDPOINT + API_PATH;
 

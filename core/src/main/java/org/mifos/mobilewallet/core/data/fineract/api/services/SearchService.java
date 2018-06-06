@@ -1,9 +1,10 @@
 package org.mifos.mobilewallet.core.data.fineract.api.services;
 
-import java.util.List;
-
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
 import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
+
+import java.util.List;
+
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;

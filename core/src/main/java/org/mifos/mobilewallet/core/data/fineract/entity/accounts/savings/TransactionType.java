@@ -11,56 +11,75 @@ import com.google.gson.annotations.SerializedName;
 
 public class TransactionType implements Parcelable {
 
+    public static final Creator<TransactionType> CREATOR =
+            new Creator<TransactionType>() {
+                @Override
+                public TransactionType createFromParcel(Parcel source) {
+                    return new TransactionType(source);
+                }
+
+                @Override
+                public TransactionType[] newArray(int size) {
+                    return new TransactionType[size];
+                }
+            };
     @SerializedName("id")
     Integer id;
-
     @SerializedName("code")
     String code;
-
     @SerializedName("value")
     String value;
-
     @SerializedName("deposit")
     Boolean deposit;
-
     @SerializedName("dividendPayout")
     Boolean dividendPayout;
-
     @SerializedName("withdrawal")
     Boolean withdrawal;
-
     @SerializedName("interestPosting")
     Boolean interestPosting;
-
     @SerializedName("feeDeduction")
     Boolean feeDeduction;
-
     @SerializedName("initiateTransfer")
     Boolean initiateTransfer;
-
     @SerializedName("approveTransfer")
     Boolean approveTransfer;
-
     @SerializedName("withdrawTransfer")
     Boolean withdrawTransfer;
-
     @SerializedName("rejectTransfer")
     Boolean rejectTransfer;
-
     @SerializedName("overdraftInterest")
     Boolean overdraftInterest;
-
     @SerializedName("writtenoff")
     Boolean writtenoff;
-
     @SerializedName("overdraftFee")
     Boolean overdraftFee;
-
     @SerializedName("withholdTax")
     Boolean withholdTax;
-
     @SerializedName("escheat")
     Boolean escheat;
+
+    public TransactionType() {
+    }
+
+    protected TransactionType(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.code = in.readString();
+        this.value = in.readString();
+        this.deposit = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.dividendPayout = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.withdrawal = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.interestPosting = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.feeDeduction = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.initiateTransfer = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.approveTransfer = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.withdrawTransfer = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.rejectTransfer = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.overdraftInterest = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.writtenoff = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.overdraftFee = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.withholdTax = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.escheat = (Boolean) in.readValue(Boolean.class.getClassLoader());
+    }
 
     public Integer getId() {
         return id;
@@ -223,40 +242,4 @@ public class TransactionType implements Parcelable {
         dest.writeValue(this.withholdTax);
         dest.writeValue(this.escheat);
     }
-
-    public TransactionType() {
-    }
-
-    protected TransactionType(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.code = in.readString();
-        this.value = in.readString();
-        this.deposit = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.dividendPayout = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.withdrawal = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.interestPosting = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.feeDeduction = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.initiateTransfer = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.approveTransfer = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.withdrawTransfer = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.rejectTransfer = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.overdraftInterest = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.writtenoff = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.overdraftFee = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.withholdTax = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.escheat = (Boolean) in.readValue(Boolean.class.getClassLoader());
-    }
-
-    public static final Creator<TransactionType> CREATOR =
-            new Creator<TransactionType>() {
-                @Override
-                public TransactionType createFromParcel(Parcel source) {
-                    return new TransactionType(source);
-                }
-
-                @Override
-                public TransactionType[] newArray(int size) {
-                    return new TransactionType[size];
-                }
-            };
 }

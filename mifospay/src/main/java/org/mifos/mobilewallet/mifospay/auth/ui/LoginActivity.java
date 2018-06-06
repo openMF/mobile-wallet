@@ -2,10 +2,18 @@ package org.mifos.mobilewallet.mifospay.auth.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
 import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper;
 
@@ -14,6 +22,11 @@ import org.mifos.mobilewallet.mifospay.auth.AuthContract;
 import org.mifos.mobilewallet.mifospay.auth.presenter.LoginPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
+import org.mifos.mobilewallet.mifospay.registration.ui.MobileVerificationActivity;
+import org.mifos.mobilewallet.mifospay.registration.ui.SignupMethod;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import javax.inject.Inject;
@@ -39,6 +52,9 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     @BindView(R.id.et_password)
     EditText etPassword;
 
+    private GoogleSignInClient googleSignInClient;
+    private GoogleSignInAccount account;
+    private int mMifosSavingProductId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,7 +68,6 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         if (!pref.getPassCode().isEmpty()) {
             startPassCodeActivity();
         }
-
     }
 
     @Override
@@ -63,9 +78,15 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     @OnClick(R.id.btn_login)
     public void onLoginClicked() {
         Utils.hideSoftKeyboard(this);
-        showProgressDialog("Logging in..");
+        showProgressDialog(Constants.LOGGING_IN);
         mLoginPresenter.loginUser(etUsername.getText().toString(),
                 etPassword.getText().toString());
+    }
+
+    @OnClick(R.id.ll_signup)
+    public void onSignupClicked() {
+        SignupMethod signupMethod = new SignupMethod();
+        signupMethod.show(getSupportFragmentManager(), Constants.CHOOSE_SIGNUP_METHOD);
     }
 
     @Override
@@ -90,5 +111,74 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true);
         startActivity(intent);
         finish();
+    }
+
+    public void signupUsingGoogleAccount(int mifosSavingsProductId) {
+        showProgressDialog(Constants.PLEASE_WAIT);
+
+        mMifosSavingProductId = mifosSavingsProductId;
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
+                GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        googleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+
+        hideProgressDialog();
+        startActivityForResult(signInIntent, 11);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        showProgressDialog(Constants.PLEASE_WAIT);
+        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+        if (requestCode == 11) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                account = task.getResult(ApiException.class);
+                DebugUtil.log(account.toJson().toString(), account.toString());
+                hideProgressDialog();
+                signup(mMifosSavingProductId);
+
+            } catch (Exception e) {
+                // Google Sign In failed, update UI appropriately
+                DebugUtil.log(Constants.GOOGLE_SIGN_IN_FAILED, e.getMessage());
+                Toaster.showToast(this, Constants.GOOGLE_SIGN_IN_FAILED);
+                hideProgressDialog();
+                signup(mMifosSavingProductId);
+            }
+        }
+    }
+
+    public void signup(int mifosSavingsProductId) {
+        showProgressDialog(Constants.PLEASE_WAIT);
+        Intent intent = new Intent(LoginActivity.this, MobileVerificationActivity.class);
+        intent.putExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, mMifosSavingProductId);
+        if (account != null) {
+            intent.putExtra(Constants.GOOGLE_PHOTO_URI, account.getPhotoUrl());
+            intent.putExtra(Constants.GOOGLE_DISPLAY_NAME, account.getDisplayName());
+            intent.putExtra(Constants.GOOGLE_EMAIL, account.getEmail());
+            intent.putExtra(Constants.GOOGLE_FAMILY_NAME, account.getFamilyName());
+            intent.putExtra(Constants.GOOGLE_GIVEN_NAME, account.getGivenName());
+        }
+        hideProgressDialog();
+
+        startActivity(intent);
+
+        if (googleSignInClient != null) {
+            googleSignInClient.signOut().addOnCompleteListener(this,
+                    new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            account = null;
+                        }
+                    });
+        }
     }
 }

@@ -1,9 +1,9 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.accounts;
 
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
 
 public class SavingAccountsListResponse {
 

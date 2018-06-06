@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.core.data.fineract.api.services;
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity;
+
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import rx.Observable;

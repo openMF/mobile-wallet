@@ -10,22 +10,41 @@ import com.google.gson.annotations.SerializedName;
  */
 
 public class BeneficiaryPayload implements Parcelable {
-    String locale = "en_GB";
+    public static final Creator<BeneficiaryPayload> CREATOR =
+            new Creator<BeneficiaryPayload>() {
+                @Override
+                public BeneficiaryPayload createFromParcel(Parcel source) {
+                    return new BeneficiaryPayload(source);
+                }
 
+                @Override
+                public BeneficiaryPayload[] newArray(int size) {
+                    return new BeneficiaryPayload[size];
+                }
+            };
+    String locale = "en_GB";
     @SerializedName("name")
     String name;
-
     @SerializedName("accountNumber")
     String accountNumber;
-
     @SerializedName("accountType")
     int accountType;
-
     @SerializedName("transferLimit")
     int transferLimit;
-
     @SerializedName("officeName")
     String officeName;
+
+    public BeneficiaryPayload() {
+    }
+
+    protected BeneficiaryPayload(Parcel in) {
+        this.locale = in.readString();
+        this.name = in.readString();
+        this.accountNumber = in.readString();
+        this.accountType = in.readInt();
+        this.transferLimit = in.readInt();
+        this.officeName = in.readString();
+    }
 
     public String getName() {
         return name;
@@ -67,7 +86,6 @@ public class BeneficiaryPayload implements Parcelable {
         this.transferLimit = transferLimit;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -82,29 +100,4 @@ public class BeneficiaryPayload implements Parcelable {
         dest.writeInt(this.transferLimit);
         dest.writeString(this.officeName);
     }
-
-    public BeneficiaryPayload() {
-    }
-
-    protected BeneficiaryPayload(Parcel in) {
-        this.locale = in.readString();
-        this.name = in.readString();
-        this.accountNumber = in.readString();
-        this.accountType = in.readInt();
-        this.transferLimit = in.readInt();
-        this.officeName = in.readString();
-    }
-
-    public static final Creator<BeneficiaryPayload> CREATOR =
-            new Creator<BeneficiaryPayload>() {
-        @Override
-        public BeneficiaryPayload createFromParcel(Parcel source) {
-            return new BeneficiaryPayload(source);
-        }
-
-        @Override
-        public BeneficiaryPayload[] newArray(int size) {
-            return new BeneficiaryPayload[size];
-        }
-    };
 }

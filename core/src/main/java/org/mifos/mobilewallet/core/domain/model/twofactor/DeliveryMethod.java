@@ -9,10 +9,26 @@ import android.os.Parcelable;
 
 public class DeliveryMethod implements Parcelable {
 
+    public static final Creator<DeliveryMethod> CREATOR = new Creator<DeliveryMethod>() {
+        @Override
+        public DeliveryMethod createFromParcel(Parcel source) {
+            return new DeliveryMethod(source);
+        }
+
+        @Override
+        public DeliveryMethod[] newArray(int size) {
+            return new DeliveryMethod[size];
+        }
+    };
     private String name;
     private String target;
 
     public DeliveryMethod() {
+    }
+
+    protected DeliveryMethod(Parcel in) {
+        this.name = in.readString();
+        this.target = in.readString();
     }
 
     public String getName() {
@@ -41,23 +57,6 @@ public class DeliveryMethod implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.target);
     }
-
-    protected DeliveryMethod(Parcel in) {
-        this.name = in.readString();
-        this.target = in.readString();
-    }
-
-    public static final Creator<DeliveryMethod> CREATOR = new Creator<DeliveryMethod>() {
-        @Override
-        public DeliveryMethod createFromParcel(Parcel source) {
-            return new DeliveryMethod(source);
-        }
-
-        @Override
-        public DeliveryMethod[] newArray(int size) {
-            return new DeliveryMethod[size];
-        }
-    };
 
     @Override
     public String toString() {

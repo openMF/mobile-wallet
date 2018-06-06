@@ -11,26 +11,45 @@ import com.google.gson.annotations.SerializedName;
 
 public class PaymentDetailData implements Parcelable {
 
+    public static final Creator<PaymentDetailData> CREATOR =
+            new Creator<PaymentDetailData>() {
+                @Override
+                public PaymentDetailData createFromParcel(Parcel source) {
+                    return new PaymentDetailData(source);
+                }
+
+                @Override
+                public PaymentDetailData[] newArray(int size) {
+                    return new PaymentDetailData[size];
+                }
+            };
     @SerializedName("id")
     Integer id;
-
     @SerializedName("paymentType")
     PaymentType paymentType;
-
     @SerializedName("accountNumber")
     String accountNumber;
-
     @SerializedName("checkNumber")
     String checkNumber;
-
     @SerializedName("routingCode")
     String routingCode;
-
     @SerializedName("receiptNumber")
     String receiptNumber;
-
     @SerializedName("bankNumber")
     String bankNumber;
+
+    public PaymentDetailData() {
+    }
+
+    protected PaymentDetailData(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.paymentType = in.readParcelable(PaymentType.class.getClassLoader());
+        this.accountNumber = in.readString();
+        this.checkNumber = in.readString();
+        this.routingCode = in.readString();
+        this.receiptNumber = in.readString();
+        this.bankNumber = in.readString();
+    }
 
     public Integer getId() {
         return id;
@@ -104,29 +123,11 @@ public class PaymentDetailData implements Parcelable {
         dest.writeString(this.bankNumber);
     }
 
-    public PaymentDetailData() {
+    @Override
+    public String toString() {
+        return "PaymentDetailData{" +
+                "id=" + id +
+                ", receiptNumber='" + receiptNumber + '\'' +
+                '}';
     }
-
-    protected PaymentDetailData(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.paymentType = in.readParcelable(PaymentType.class.getClassLoader());
-        this.accountNumber = in.readString();
-        this.checkNumber = in.readString();
-        this.routingCode = in.readString();
-        this.receiptNumber = in.readString();
-        this.bankNumber = in.readString();
-    }
-
-    public static final Creator<PaymentDetailData> CREATOR =
-            new Creator<PaymentDetailData>() {
-                @Override
-                public PaymentDetailData createFromParcel(Parcel source) {
-                    return new PaymentDetailData(source);
-                }
-
-                @Override
-                public PaymentDetailData[] newArray(int size) {
-                    return new PaymentDetailData[size];
-                }
-            };
 }

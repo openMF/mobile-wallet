@@ -11,41 +11,62 @@ import com.google.gson.annotations.SerializedName;
 
 public class TransferPayload implements Parcelable {
 
+    public static final Creator<TransferPayload> CREATOR =
+            new Creator<TransferPayload>() {
+                @Override
+                public TransferPayload createFromParcel(Parcel source) {
+                    return new TransferPayload(source);
+                }
+
+                @Override
+                public TransferPayload[] newArray(int size) {
+                    return new TransferPayload[size];
+                }
+            };
+    public static final String DD_MMMM_YYYY = "dd MMMM yyyy";
     @SerializedName("fromOfficeId")
     Integer fromOfficeId;
-
     @SerializedName("fromClientId")
     Long fromClientId;
-
     @SerializedName("fromAccountType")
     Integer fromAccountType;
-
     @SerializedName("fromAccountId")
     Integer fromAccountId;
-
     @SerializedName("toOfficeId")
     Integer toOfficeId;
-
     @SerializedName("toClientId")
     Long toClientId;
-
     @SerializedName("toAccountType")
     Integer toAccountType;
-
     @SerializedName("toAccountId")
     Integer toAccountId;
-
     @SerializedName("transferDate")
     String transferDate;
-
     @SerializedName("transferAmount")
     Double transferAmount;
-
     @SerializedName("transferDescription")
     String transferDescription;
-
-    String dateFormat = "dd MMMM yyyy";
+    String dateFormat = DD_MMMM_YYYY;
     String locale = "en";
+
+    public TransferPayload() {
+    }
+
+    protected TransferPayload(Parcel in) {
+        this.fromOfficeId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.fromClientId = (Long) in.readValue(Long.class.getClassLoader());
+        this.fromAccountType = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.fromAccountId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.toOfficeId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.toClientId = (Long) in.readValue(Long.class.getClassLoader());
+        this.toAccountType = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.toAccountId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.transferDate = in.readString();
+        this.transferAmount = (Double) in.readValue(Double.class.getClassLoader());
+        this.transferDescription = in.readString();
+        this.dateFormat = in.readString();
+        this.locale = in.readString();
+    }
 
     public Integer getFromOfficeId() {
         return fromOfficeId;
@@ -173,35 +194,22 @@ public class TransferPayload implements Parcelable {
         dest.writeString(this.locale);
     }
 
-    public TransferPayload() {
+    @Override
+    public String toString() {
+        return "TransferPayload{" +
+                "fromOfficeId=" + fromOfficeId +
+                ", fromClientId=" + fromClientId +
+                ", fromAccountType=" + fromAccountType +
+                ", fromAccountId=" + fromAccountId +
+                ", toOfficeId=" + toOfficeId +
+                ", toClientId=" + toClientId +
+                ", toAccountType=" + toAccountType +
+                ", toAccountId=" + toAccountId +
+                ", transferDate='" + transferDate + '\'' +
+                ", transferAmount=" + transferAmount +
+                ", transferDescription='" + transferDescription + '\'' +
+                ", dateFormat='" + dateFormat + '\'' +
+                ", locale='" + locale + '\'' +
+                '}';
     }
-
-    protected TransferPayload(Parcel in) {
-        this.fromOfficeId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.fromClientId = (Long) in.readValue(Long.class.getClassLoader());
-        this.fromAccountType = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.fromAccountId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.toOfficeId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.toClientId = (Long) in.readValue(Long.class.getClassLoader());
-        this.toAccountType = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.toAccountId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.transferDate = in.readString();
-        this.transferAmount = (Double) in.readValue(Double.class.getClassLoader());
-        this.transferDescription = in.readString();
-        this.dateFormat = in.readString();
-        this.locale = in.readString();
-    }
-
-    public static final Creator<TransferPayload> CREATOR =
-            new Creator<TransferPayload>() {
-                @Override
-                public TransferPayload createFromParcel(Parcel source) {
-                    return new TransferPayload(source);
-                }
-
-                @Override
-                public TransferPayload[] newArray(int size) {
-                    return new TransferPayload[size];
-                }
-            };
 }

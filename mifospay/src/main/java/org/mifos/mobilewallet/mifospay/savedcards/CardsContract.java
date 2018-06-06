@@ -21,6 +21,8 @@ public interface CardsContract {
         void showProgressDialog(String message);
 
         void hideProgressDialog();
+
+        void hideSwipeProgress();
     }
 
     interface CardsPresenter extends BasePresenter {

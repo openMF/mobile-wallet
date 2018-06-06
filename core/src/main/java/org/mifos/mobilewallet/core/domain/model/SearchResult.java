@@ -9,9 +9,30 @@ import android.os.Parcelable;
 
 public class SearchResult implements Parcelable {
 
+    public static final Creator<SearchResult> CREATOR = new
+            Creator<SearchResult>() {
+                @Override
+                public SearchResult createFromParcel(Parcel source) {
+                    return new SearchResult(source);
+                }
+
+                @Override
+                public SearchResult[] newArray(int size) {
+                    return new SearchResult[size];
+                }
+            };
     private int resultId;
     private String resultName;
     private String resultType;
+
+    public SearchResult() {
+    }
+
+    protected SearchResult(Parcel in) {
+        this.resultId = in.readInt();
+        this.resultName = in.readString();
+        this.resultType = in.readString();
+    }
 
     public int getResultId() {
         return resultId;
@@ -48,26 +69,4 @@ public class SearchResult implements Parcelable {
         dest.writeString(this.resultName);
         dest.writeString(this.resultType);
     }
-
-    public SearchResult() {
-    }
-
-    protected SearchResult(Parcel in) {
-        this.resultId = in.readInt();
-        this.resultName = in.readString();
-        this.resultType = in.readString();
-    }
-
-    public static final Creator<SearchResult> CREATOR = new
-            Creator<SearchResult>() {
-        @Override
-        public SearchResult createFromParcel(Parcel source) {
-            return new SearchResult(source);
-        }
-
-        @Override
-        public SearchResult[] newArray(int size) {
-            return new SearchResult[size];
-        }
-    };
 }

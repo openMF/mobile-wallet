@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.mifos.mobilewallet.core.domain.model.SearchResult;
 import org.mifos.mobilewallet.mifospay.R;
 
 import java.util.List;
@@ -14,7 +15,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.domain.model.SearchResult;
 
 /**
  * Created by naman on 21/8/17.
@@ -50,17 +50,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.tv_search_result)
-        TextView tvSearchResult;
-
-        public ViewHolder(View v) {
-            super(v);
-            ButterKnife.bind(this, v);
-        }
-    }
-
     public void setData(List<SearchResult> results) {
         this.results = results;
         notifyDataSetChanged();
@@ -73,6 +62,17 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
 
     public List<SearchResult> getResults() {
         return results;
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.tv_search_result)
+        TextView tvSearchResult;
+
+        public ViewHolder(View v) {
+            super(v);
+            ButterKnife.bind(this, v);
+        }
     }
 }
 

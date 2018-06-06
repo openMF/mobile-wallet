@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.savedcards.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.PopupMenu;
+import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.mifospay.R;
@@ -18,6 +20,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
 import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsPresenter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
@@ -41,6 +44,8 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
 
     @BindView(R.id.rv_cards)
     RecyclerView rvCards;
+    @BindView(R.id.tv_placeholder)
+    TextView tvPlaceholder;
 
     @Inject
     CardsAdapter mCardsAdapter;
@@ -48,7 +53,6 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     View rootView;
 
     public static CardsFragment newInstance() {
-
         Bundle args = new Bundle();
 
         CardsFragment fragment = new CardsFragment();
@@ -68,13 +72,16 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
             @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_cards, container, false);
 
-        setToolbarTitle("Saved Cards");
+        setToolbarTitle(Constants.SAVED_CARDS);
         ButterKnife.bind(this, rootView);
+        showBackButton();
 
         mPresenter.attachView(this);
         setupCardsRecyclerView();
 
-        showProgress();
+        setupSwipeLayout();
+
+        showSwipeProgress();
         mCardsPresenter.fetchSavedCards();
 
         return rootView;
@@ -113,7 +120,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                                                 addCardDialog.setCardsPresenter(mCardsPresenter);
 
                                                 addCardDialog.show(getFragmentManager(),
-                                                        "Edit Card Dialog");
+                                                        Constants.EDIT_CARD_DIALOG);
                                                 break;
                                             case R.id.delete_card:
                                                 mCardsPresenter.deleteCard(
@@ -137,6 +144,16 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                 }));
     }
 
+    private void setupSwipeLayout() {
+        setSwipeEnabled(true);
+        getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mCardsPresenter.fetchSavedCards();
+            }
+        });
+    }
+
     @Override
     public void setPresenter(CardsContract.CardsPresenter presenter) {
         mCardsPresenter = presenter;
@@ -147,13 +164,22 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         AddCardDialog addCardDialog = new AddCardDialog();
         addCardDialog.forEdit = false;
         addCardDialog.setCardsPresenter(mCardsPresenter);
-        addCardDialog.show(getFragmentManager(), "Add Card Dialog");
+        addCardDialog.show(getFragmentManager(), Constants.ADD_CARD_DIALOG);
     }
 
     @Override
     public void showSavedCards(List<Card> cards) {
+
+        if (cards == null || cards.size() == 0) {
+            rvCards.setVisibility(View.GONE);
+            tvPlaceholder.setVisibility(View.VISIBLE);
+        } else {
+            rvCards.setVisibility(View.VISIBLE);
+            tvPlaceholder.setVisibility(View.GONE);
+            mCardsAdapter.setCards(cards);
+        }
         mCardsAdapter.setCards(cards);
-        hideProgress();
+        hideSwipeProgress();
     }
 
     @Override
@@ -169,6 +195,11 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     @Override
     public void hideProgressDialog() {
         super.hideProgressDialog();
+    }
+
+    @Override
+    public void hideSwipeProgress() {
+        super.hideSwipeProgress();
     }
 
 }

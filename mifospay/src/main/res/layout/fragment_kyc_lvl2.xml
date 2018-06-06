@@ -18,15 +18,15 @@
             android:id="@+id/et_idname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="ID Type"
+            android:hint="@string/id_type"
             android:theme="@style/Theme.AppCompat.Light"/>
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-    android:layout_marginTop="@dimen/value_20dp">
+        android:layout_marginTop="@dimen/value_20dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_browse"
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="@dimen/value_10dp"
             android:background="@drawable/button_round_gray"
-            android:text="Browse"
+            android:text="@string/browse"
             android:textColor="@color/black"/>
 
         <TextView
@@ -45,13 +45,13 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_submit"
-        android:text="Submit"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/white"
         android:layout_marginTop="@dimen/value_20dp"
-        android:background="@drawable/button_round_black"/>
+        android:background="@drawable/button_round_black"
+        android:text="@string/submit"
+        android:textColor="@color/white"/>
 
 </LinearLayout>

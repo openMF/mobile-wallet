@@ -1,121 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/value_20dp">
+        android:padding="@dimen/value_20dp">
 
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <TextView
-                android:text="Wallet Balance"
-                android:layout_height="wrap_content"
-                android:layout_width="match_parent"
-                android:textColor="@color/grey_900"
-                android:textSize="@dimen/value_18sp"
-                android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_marginTop="@dimen/value_20dp"/>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/value_10dp">
-
-                <TextView
-                    android:id="@+id/tv_account_balance"
-                    android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
-                    android:textColor="@color/grey_900"
-                    android:textSize="@dimen/value_20sp"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="@dimen/value_20dp"
-                    android:layout_marginBottom="@dimen/value_20dp"
-                    android:layout_alignParentLeft="true"/>
-
-
-                <TextView
-                    android:id="@+id/tv_view_details"
-                    android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="VIEW DETAILS"
-                    android:textStyle="bold"
-                    android:paddingBottom="@dimen/value_20dp"
-                    android:paddingLeft="@dimen/value_20dp"
-                    android:layout_marginRight="@dimen/value_20dp"
-                    android:textSize="@dimen/value_14sp"
-                    android:textColor="@color/primaryDarkBlue"
-                    android:gravity="bottom"
-                    android:paddingTop="@dimen/value_5dp"/>
-
-            </RelativeLayout>
-
-        </LinearLayout>
-
-
-    </android.support.v7.widget.CardView>
-
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/value_20dp">
-
-        <LinearLayout
+        <android.support.v7.widget.CardView
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
+            app:cardElevation="1dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/value_20dp"
+                    android:layout_marginTop="@dimen/value_20dp"
+                    android:text="@string/balance"
+                    android:textColor="@color/grey_900"
+                    android:textSize="@dimen/value_18sp"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/value_10dp">
+
+                    <TextView
+                        android:id="@+id/tv_account_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginBottom="@dimen/value_20dp"
+                        android:layout_marginLeft="@dimen/value_20dp"
+                        android:textColor="@color/grey_900"
+                        android:textSize="@dimen/value_20sp"
+                        android:textStyle="bold"/>
+
+
+                    <TextView
+                        android:id="@+id/tv_view_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/value_20dp"
+                        android:layout_toRightOf="@+id/tv_account_balance"
+                        android:foregroundGravity="right|bottom"
+                        android:gravity="right|bottom"
+                        android:paddingBottom="@dimen/value_20dp"
+                        android:paddingLeft="@dimen/value_20dp"
+                        android:paddingTop="@dimen/value_5dp"
+                        android:text="@string/transaction_history"
+                        android:textColor="@color/primaryDarkBlue"
+                        android:textSize="@dimen/value_14sp"
+                        android:textStyle="bold"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/value_20dp"
-            android:layout_marginBottom="@dimen/value_20dp">
+            app:cardElevation="1dp"
+            app:cardUseCompatPadding="true">
 
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_repeat_selector"
-                android:text="History"
-                android:gravity="center"
-                android:drawablePadding="@dimen/value_10dp"
-                android:id="@+id/btn_history"/>
+                android:layout_marginBottom="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_20dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/btn_history"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_repeat"
+                    android:gravity="center"
+                    android:text="History"/>
+
+                <TextView
+                    android:id="@+id/btn_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_send_selector"
+                    android:gravity="center"
+                    android:text="@string/send"/>
+
+                <TextView
+                    android:id="@+id/btn_request"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_request_selector"
+                    android:gravity="center"
+                    android:text="@string/request"/>
+
+                <TextView
+                    android:id="@+id/btn_show_qr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/qrcode_black_selector"
+                    android:gravity="center"
+                    android:text="@string/qr_code"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/value_20dp"
+            app:cardElevation="1dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_send_selector"
-                android:text="Send"
-                android:gravity="center"
-                android:drawablePadding="@dimen/value_10dp"
-                android:id="@+id/btn_send"/>
+                android:layout_marginBottom="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_20dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/btn_addBankAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_bank"
+                    android:gravity="center"
+                    android:text="@string/bank_account"/>
+
+                <TextView
+                    android:id="@+id/btn_kyc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_account_balance_wallet"
+                    android:gravity="center"
+                    android:text="@string/complete_kyc"/>
+
+                <TextView
+                    android:id="@+id/btn_cards"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_saved_cards"
+                    android:gravity="center"
+                    android:text="@string/saved_cards"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/value_20dp"
+            app:cardElevation="1dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_request_selector"
-                android:text="Request"
-                android:gravity="center"
-                android:drawablePadding="@dimen/value_10dp"
-                android:id="@+id/btn_request"/>
+                android:layout_marginBottom="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_20dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/qrcode_black_selector"
-                android:text="QR code"
-                android:gravity="center"
-                android:id="@+id/btn_show_qr"
-                android:drawablePadding="@dimen/value_10dp"/>
+                <TextView
+                    android:id="@+id/btn_merchant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_merchant"
+                    android:gravity="center"
+                    android:text="@string/trusted_merchants"/>
 
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+                <TextView
+                    android:id="@+id/btn_notifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_notification"
+                    android:gravity="center"
+                    android:text="Notifications"/>
 
-</LinearLayout>
+                <TextView
+                    android:id="@+id/btn_invoices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_invoice"
+                    android:gravity="center"
+                    android:text="@string/invoices"/>
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</ScrollView>

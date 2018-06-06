@@ -11,14 +11,32 @@ import com.google.gson.annotations.SerializedName;
 
 public class Type implements Parcelable {
 
+    public static final Creator<Type> CREATOR = new Creator<Type>() {
+        @Override
+        public Type createFromParcel(Parcel source) {
+            return new Type(source);
+        }
+
+        @Override
+        public Type[] newArray(int size) {
+            return new Type[size];
+        }
+    };
     @SerializedName("id")
     Integer id;
-
     @SerializedName("code")
     String code;
-
     @SerializedName("value")
     String value;
+
+    public Type() {
+    }
+
+    protected Type(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.code = in.readString();
+        this.value = in.readString();
+    }
 
     public Integer getId() {
         return id;
@@ -55,25 +73,4 @@ public class Type implements Parcelable {
         dest.writeString(this.code);
         dest.writeString(this.value);
     }
-
-    public Type() {
-    }
-
-    protected Type(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.code = in.readString();
-        this.value = in.readString();
-    }
-
-    public static final Creator<Type> CREATOR = new Creator<Type>() {
-        @Override
-        public Type createFromParcel(Parcel source) {
-            return new Type(source);
-        }
-
-        @Override
-        public Type[] newArray(int size) {
-            return new Type[size];
-        }
-    };
 }

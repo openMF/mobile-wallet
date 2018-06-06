@@ -11,24 +11,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class Card implements Parcelable {
 
-    @SerializedName("cardNumber")
-    String cardNumber;
-
-    @SerializedName("cvv")
-    String cvv;
-
-    @SerializedName("expiryDate")
-    String expiryDate;
-
-    @SerializedName("firstName")
-    String firstName;
-
-    @SerializedName("lastName")
-    String lastName;
-
-    @SerializedName("id")
-    int id;
-
     public static final Creator<Card> CREATOR = new Creator<Card>() {
         @Override
         public Card createFromParcel(Parcel source) {
@@ -40,6 +22,18 @@ public class Card implements Parcelable {
             return new Card[size];
         }
     };
+    @SerializedName("cardNumber")
+    String cardNumber;
+    @SerializedName("cvv")
+    String cvv;
+    @SerializedName("expiryDate")
+    String expiryDate;
+    @SerializedName("firstName")
+    String firstName;
+    @SerializedName("lastName")
+    String lastName;
+    @SerializedName("id")
+    int id;
 
     public Card(String cardNumber, String cvv, String expiryDate, String firstName,
             String lastName) {
@@ -48,6 +42,15 @@ public class Card implements Parcelable {
         this.expiryDate = expiryDate;
         this.firstName = firstName;
         this.lastName = lastName;
+    }
+
+    protected Card(Parcel in) {
+        this.cardNumber = in.readString();
+        this.cvv = in.readString();
+        this.expiryDate = in.readString();
+        this.firstName = in.readString();
+        this.lastName = in.readString();
+        this.id = in.readInt();
     }
 
     public String getCardNumber() {
@@ -72,15 +75,6 @@ public class Card implements Parcelable {
 
     public void setExpiryDate(String expiryDate) {
         this.expiryDate = expiryDate;
-    }
-
-    protected Card(Parcel in) {
-        this.cardNumber = in.readString();
-        this.cvv = in.readString();
-        this.expiryDate = in.readString();
-        this.firstName = in.readString();
-        this.lastName = in.readString();
-        this.id = in.readInt();
     }
 
     public String getFirstName() {

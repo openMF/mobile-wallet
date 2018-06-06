@@ -23,7 +23,8 @@ public class PreferencesHelper {
     private static final String CLIENT_ID = "preferences_client";
     private static final String USER_ID = "preferences_user_id";
     private static final String CLIENT_VPA = "preferences_client_vpa";
-
+    private static final String MOBILE_NO = "preferences_mobile_no";
+    private static final String FIREBASE_REG_ID = "preferences_firebase_reg_id";
 
     private SharedPreferences sharedPreferences;
 
@@ -97,6 +98,14 @@ public class PreferencesHelper {
         return getString(EMAIL, "");
     }
 
+    public void saveMobile(String mobile) {
+        putString(MOBILE_NO, mobile);
+    }
+
+    public String getMobile() {
+        return getString(MOBILE_NO, "");
+    }
+
     public long getUserId() {
         return getLong(USER_ID, -1);
     }
@@ -105,20 +114,28 @@ public class PreferencesHelper {
         putLong(USER_ID, id);
     }
 
+    public long getClientId() {
+        return getLong(CLIENT_ID, 1);
+    }
+
     public void setClientId(long clientId) {
         putLong(CLIENT_ID, clientId);
     }
 
-    public long getClientId() {
-        return getLong(CLIENT_ID, 1);
+    public String getClientVpa() {
+        return getString(CLIENT_VPA, "");
     }
 
     public void setClientVpa(String vpa) {
         putString(CLIENT_VPA, vpa);
     }
 
-    public String getClientVpa() {
-        return getString(CLIENT_VPA, "");
+    public String getFirebaseRegId() {
+        return getString(FIREBASE_REG_ID, "");
+    }
+
+    public void setFirebaseRegId(String firebaseRegId) {
+        putString(FIREBASE_REG_ID, firebaseRegId);
     }
 
 }

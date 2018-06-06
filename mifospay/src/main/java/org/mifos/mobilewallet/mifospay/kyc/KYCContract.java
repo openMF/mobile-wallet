@@ -21,8 +21,6 @@ public interface KYCContract {
 
         void gotoHome();
 
-        void showProgressDialog(String s);
-
         void hideProgressDialog();
     }
 
@@ -35,8 +33,6 @@ public interface KYCContract {
 
         void showToast(String message);
 
-        void showProgressDialog(String message);
-
         void hideProgressDialog();
 
         void goBack();
@@ -45,7 +41,7 @@ public interface KYCContract {
     interface KYCLevel1Presenter extends BasePresenter {
 
         void submitData(String fname, String lname, String address1, String address2,
-                String phonecode, String phoneno, String dob);
+                String phoneno, String dob);
     }
 
     interface KYCLevel2View extends BaseView<KYCLevel2Presenter> {
@@ -62,7 +58,6 @@ public interface KYCContract {
 
         void hideProgressDialog();
 
-        void showProgressDialog(String s);
     }
 
     interface KYCLevel2Presenter extends BasePresenter {

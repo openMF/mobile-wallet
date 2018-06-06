@@ -1,13 +1,13 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.mapper;
 
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
+import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
+import org.mifos.mobilewallet.core.domain.model.Account;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
-import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
-import org.mifos.mobilewallet.core.domain.model.Account;
 
 /**
  * Created by naman on 11/7/17.
@@ -19,7 +19,8 @@ public class AccountMapper {
     CurrencyMapper currencyMapper;
 
     @Inject
-    public AccountMapper() {}
+    public AccountMapper() {
+    }
 
     public List<Account> transform(ClientAccounts clientAccounts) {
         List<Account> accountList = new ArrayList<>();

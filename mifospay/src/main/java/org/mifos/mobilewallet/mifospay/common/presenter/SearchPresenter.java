@@ -1,13 +1,12 @@
 package org.mifos.mobilewallet.mifospay.common.presenter;
 
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.common.SearchContract;
 
 import javax.inject.Inject;
-
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.SearchClient;
 
 /**
  * Created by naman on 21/8/17.
@@ -15,11 +14,10 @@ import org.mifos.mobilewallet.core.domain.usecase.SearchClient;
 
 public class SearchPresenter implements SearchContract.SearchPresenter {
 
-    private SearchContract.SearchView mSearchView;
     private final UseCaseHandler mUsecaseHandler;
-
     @Inject
     SearchClient searchClient;
+    private SearchContract.SearchView mSearchView;
 
     @Inject
     public SearchPresenter(UseCaseHandler useCaseHandler) {

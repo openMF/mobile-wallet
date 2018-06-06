@@ -10,56 +10,75 @@ import java.util.List;
 
 public class ClientPayload implements Parcelable {
 
+    public static final Creator<ClientPayload> CREATOR =
+            new Creator<ClientPayload>() {
+                @Override
+                public ClientPayload createFromParcel(Parcel source) {
+                    return new ClientPayload(source);
+                }
+
+                @Override
+                public ClientPayload[] newArray(int size) {
+                    return new ClientPayload[size];
+                }
+            };
+    public static final String DD_MMMM_YYYY = "dd MMMM YYYY";
     @SerializedName("firstname")
     String firstname;
-
     @SerializedName("lastname")
     String lastname;
-
     @SerializedName("middlename")
     String middlename;
-
     @SerializedName("officeId")
     Integer officeId;
-
     @SerializedName("staffId")
     Integer staffId;
-
     @SerializedName("genderId")
     Integer genderId;
-
     @SerializedName("active")
     Boolean active;
-
     @SerializedName("activationDate")
     String activationDate;
-
     @SerializedName("submittedOnDate")
     String submittedOnDate;
-
     @SerializedName("dateOfBirth")
     String dateOfBirth;
-
     @SerializedName("mobileNo")
     String mobileNo;
-
     @SerializedName("externalId")
     String externalId;
-
     @SerializedName("clientTypeId")
     Integer clientTypeId;
-
     @SerializedName("clientClassificationId")
     Integer clientClassificationId;
-
     @SerializedName("dateFormat")
-    String dateFormat = "dd MMMM YYYY";
-
+    String dateFormat = DD_MMMM_YYYY;
     @SerializedName("locale")
     String locale = "en";
-
     @SerializedName("datatables")
     List<DataTablePayload> datatables = new ArrayList<>();
+
+    public ClientPayload() {
+    }
+
+    protected ClientPayload(Parcel in) {
+        this.firstname = in.readString();
+        this.lastname = in.readString();
+        this.middlename = in.readString();
+        this.officeId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.staffId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.genderId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.active = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.activationDate = in.readString();
+        this.submittedOnDate = in.readString();
+        this.dateOfBirth = in.readString();
+        this.mobileNo = in.readString();
+        this.externalId = in.readString();
+        this.clientTypeId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.clientClassificationId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.dateFormat = in.readString();
+        this.locale = in.readString();
+    }
 
     public List<DataTablePayload> getDatatables() {
         return datatables;
@@ -181,7 +200,6 @@ public class ClientPayload implements Parcelable {
         this.clientClassificationId = clientClassificationId;
     }
 
-
     public String getDateFormat() {
         return dateFormat;
     }
@@ -244,40 +262,5 @@ public class ClientPayload implements Parcelable {
         dest.writeString(this.dateFormat);
         dest.writeString(this.locale);
     }
-
-    public ClientPayload() {
-    }
-
-    protected ClientPayload(Parcel in) {
-        this.firstname = in.readString();
-        this.lastname = in.readString();
-        this.middlename = in.readString();
-        this.officeId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.staffId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.genderId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.active = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.activationDate = in.readString();
-        this.submittedOnDate = in.readString();
-        this.dateOfBirth = in.readString();
-        this.mobileNo = in.readString();
-        this.externalId = in.readString();
-        this.clientTypeId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.clientClassificationId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.dateFormat = in.readString();
-        this.locale = in.readString();
-    }
-
-    public static final Creator<ClientPayload> CREATOR =
-            new Creator<ClientPayload>() {
-        @Override
-        public ClientPayload createFromParcel(Parcel source) {
-            return new ClientPayload(source);
-        }
-
-        @Override
-        public ClientPayload[] newArray(int size) {
-            return new ClientPayload[size];
-        }
-    };
 }
 

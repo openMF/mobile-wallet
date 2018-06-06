@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/toolbar"/>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                          xmlns:app="http://schemas.android.com/apk/res-auto"
+                          android:layout_width="match_parent"
+                          android:layout_height="match_parent"
+                          android:background="@color/grey_50"
+                          android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        app:cardElevation="2dp"
+                        app:contentPadding="@dimen/value_10dp">
+
+                        <EditText
+                            android:id="@+id/et_search_bank"
+                            android:layout_width="match_parent"
+                            android:layout_height="48dp"
+                            android:background="@drawable/bg_et_round_border"
+                            android:drawableLeft="@drawable/et_search"
+                            android:drawablePadding="10dp"
+                            android:drawableStart="@drawable/et_search"
+                            android:hint="Search"
+                            android:inputType="text"
+                            android:paddingLeft="15dp"/>
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>
+
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/value_15dp"
+                    android:text="Popular Banks"
+                    android:textColor="@android:color/black"/>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="2dp"
+                    app:contentPadding="@dimen/value_10dp">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_popular_banks"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="vertical"/>
+
+                </android.support.v7.widget.CardView>
+
+                <TextView
+                    style="@style/TextAppearance.AppCompat.Small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/value_15dp"
+                    android:text="Other Banks"
+                    android:textColor="@android:color/black"/>
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardElevation="2dp">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_other_banks"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
+    </LinearLayout>
+
+</RelativeLayout>

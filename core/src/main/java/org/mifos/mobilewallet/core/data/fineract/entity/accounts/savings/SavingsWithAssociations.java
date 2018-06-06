@@ -5,10 +5,10 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.mifos.mobilewallet.core.data.fineract.entity.client.DepositType;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import org.mifos.mobilewallet.core.data.fineract.entity.client.DepositType;
 
 /**
  * @author Vishwajeet
@@ -17,74 +17,94 @@ import org.mifos.mobilewallet.core.data.fineract.entity.client.DepositType;
 
 public class SavingsWithAssociations implements Parcelable {
 
+    public static final Creator<SavingsWithAssociations> CREATOR =
+            new Creator<SavingsWithAssociations>() {
+                @Override
+                public SavingsWithAssociations createFromParcel(Parcel source) {
+                    return new SavingsWithAssociations(source);
+                }
+
+                @Override
+                public SavingsWithAssociations[] newArray(int size) {
+                    return new SavingsWithAssociations[size];
+                }
+            };
     @SerializedName("id")
     Long id;
-
     @SerializedName("accountNo")
     String accountNo;
-
     @SerializedName("depositType")
     DepositType depositType;
-
     @SerializedName("externalId")
     String externalId;
-
     @SerializedName("clientId")
     Integer clientId;
-
     @SerializedName("clientName")
     String clientName;
-
     @SerializedName("savingsProductId")
     Integer savingsProductId;
-
     @SerializedName("savingsProductName")
     String savingsProductName;
-
     @SerializedName("fieldOfficerId")
     Integer fieldOfficerId;
-
     @SerializedName("status")
     Status status;
-
     @SerializedName("timeline")
     TimeLine timeline;
-
     @SerializedName("currency")
     Currency currency;
-
     @SerializedName("nominalAnnualInterestRate")
     Double nominalAnnualInterestRate;
-
     @SerializedName("minRequiredOpeningBalance")
     Double minRequiredOpeningBalance;
-
     @SerializedName("lockinPeriodFrequency")
     Double lockinPeriodFrequency;
-
     @SerializedName("withdrawalFeeForTransfers")
     Boolean withdrawalFeeForTransfers;
-
     @SerializedName("allowOverdraft")
     Boolean allowOverdraft;
-
     @SerializedName("enforceMinRequiredBalance")
     Boolean enforceMinRequiredBalance;
-
     @SerializedName("withHoldTax")
     Boolean withHoldTax;
-
     @SerializedName("lastActiveTransactionDate")
     List<Integer> lastActiveTransactionDate;
-
     @SerializedName("isDormancyTrackingActive")
     Boolean isDormancyTrackingActive;
-
     @SerializedName("summary")
     Summary summary;
-
     @SerializedName("transactions")
     List<Transactions> transactions = new ArrayList<>();
+
+    public SavingsWithAssociations() {
+    }
+
+    protected SavingsWithAssociations(Parcel in) {
+        this.id = (Long) in.readValue(Long.class.getClassLoader());
+        this.accountNo = in.readString();
+        this.depositType = in.readParcelable(DepositType.class.getClassLoader());
+        this.externalId = in.readString();
+        this.clientId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.clientName = in.readString();
+        this.savingsProductId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.savingsProductName = in.readString();
+        this.fieldOfficerId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.status = in.readParcelable(Status.class.getClassLoader());
+        this.timeline = in.readParcelable(TimeLine.class.getClassLoader());
+        this.currency = in.readParcelable(Currency.class.getClassLoader());
+        this.nominalAnnualInterestRate = (Double) in.readValue(Double.class.getClassLoader());
+        this.minRequiredOpeningBalance = (Double) in.readValue(Double.class.getClassLoader());
+        this.lockinPeriodFrequency = (Double) in.readValue(Double.class.getClassLoader());
+        this.withdrawalFeeForTransfers = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.allowOverdraft = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.enforceMinRequiredBalance = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.withHoldTax = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.lastActiveTransactionDate = new ArrayList<Integer>();
+        in.readList(this.lastActiveTransactionDate, Integer.class.getClassLoader());
+        this.isDormancyTrackingActive = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.summary = in.readParcelable(Summary.class.getClassLoader());
+        this.transactions = in.createTypedArrayList(Transactions.CREATOR);
+    }
 
     public List<Transactions> getTransactions() {
         return transactions;
@@ -279,9 +299,6 @@ public class SavingsWithAssociations implements Parcelable {
         this.id = id;
     }
 
-    public SavingsWithAssociations() {
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -314,43 +331,16 @@ public class SavingsWithAssociations implements Parcelable {
         dest.writeTypedList(this.transactions);
     }
 
-    protected SavingsWithAssociations(Parcel in) {
-        this.id = (Long) in.readValue(Long.class.getClassLoader());
-        this.accountNo = in.readString();
-        this.depositType = in.readParcelable(DepositType.class.getClassLoader());
-        this.externalId = in.readString();
-        this.clientId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.clientName = in.readString();
-        this.savingsProductId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.savingsProductName = in.readString();
-        this.fieldOfficerId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.status = in.readParcelable(Status.class.getClassLoader());
-        this.timeline = in.readParcelable(TimeLine.class.getClassLoader());
-        this.currency = in.readParcelable(Currency.class.getClassLoader());
-        this.nominalAnnualInterestRate = (Double) in.readValue(Double.class.getClassLoader());
-        this.minRequiredOpeningBalance = (Double) in.readValue(Double.class.getClassLoader());
-        this.lockinPeriodFrequency = (Double) in.readValue(Double.class.getClassLoader());
-        this.withdrawalFeeForTransfers = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.allowOverdraft = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.enforceMinRequiredBalance = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.withHoldTax = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.lastActiveTransactionDate = new ArrayList<Integer>();
-        in.readList(this.lastActiveTransactionDate, Integer.class.getClassLoader());
-        this.isDormancyTrackingActive = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.summary = in.readParcelable(Summary.class.getClassLoader());
-        this.transactions = in.createTypedArrayList(Transactions.CREATOR);
+    @Override
+    public String toString() {
+        return "SavingsWithAssociations{" +
+                "id=" + id +
+                ", accountNo='" + accountNo + '\'' +
+                ", externalId='" + externalId + '\'' +
+                ", clientId=" + clientId +
+                ", clientName='" + clientName + '\'' +
+                ", savingsProductId=" + savingsProductId +
+                ", savingsProductName='" + savingsProductName + '\'' +
+                '}';
     }
-
-    public static final Creator<SavingsWithAssociations> CREATOR =
-            new Creator<SavingsWithAssociations>() {
-                @Override
-                public SavingsWithAssociations createFromParcel(Parcel source) {
-                    return new SavingsWithAssociations(source);
-                }
-
-                @Override
-                public SavingsWithAssociations[] newArray(int size) {
-                    return new SavingsWithAssociations[size];
-                }
-            };
 }

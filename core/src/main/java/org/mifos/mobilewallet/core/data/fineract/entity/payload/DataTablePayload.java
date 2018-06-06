@@ -3,22 +3,36 @@ package org.mifos.mobilewallet.core.data.fineract.entity.payload;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.HashMap;
 
-public class DataTablePayload  implements Parcelable {
+public class DataTablePayload implements Parcelable {
 
+    public static final Creator<DataTablePayload> CREATOR = new
+            Creator<DataTablePayload>() {
+                @Override
+                public DataTablePayload createFromParcel(Parcel source) {
+                    return new DataTablePayload(source);
+                }
+
+                @Override
+                public DataTablePayload[] newArray(int size) {
+                    return new DataTablePayload[size];
+                }
+            };
     transient Integer id;
     transient Long clientCreationTime;
-
     transient String dataTableString;
-
-    @SerializedName("registeredTableName")
     String registeredTableName;
-
-    @SerializedName("data")
+    String applicationTableName;
     HashMap<String, Object> data;
+
+    public DataTablePayload() {
+    }
+
+    protected DataTablePayload(Parcel in) {
+        this.registeredTableName = in.readString();
+        this.data = (HashMap<String, Object>) in.readSerializable();
+    }
 
     public Long getClientCreationTime() {
         return clientCreationTime;
@@ -44,6 +58,10 @@ public class DataTablePayload  implements Parcelable {
         this.registeredTableName = registeredTableName;
     }
 
+    public void setApplicationTableName(String applicationTableName) {
+        this.applicationTableName = applicationTableName;
+    }
+
     public HashMap<String, Object> getData() {
         return data;
     }
@@ -62,25 +80,4 @@ public class DataTablePayload  implements Parcelable {
         dest.writeString(this.registeredTableName);
         dest.writeSerializable(this.data);
     }
-
-    public DataTablePayload() {
-    }
-
-    protected DataTablePayload(Parcel in) {
-        this.registeredTableName = in.readString();
-        this.data = (HashMap<String, Object>) in.readSerializable();
-    }
-
-    public static final Creator<DataTablePayload> CREATOR = new
-            Creator<DataTablePayload>() {
-        @Override
-        public DataTablePayload createFromParcel(Parcel source) {
-            return new DataTablePayload(source);
-        }
-
-        @Override
-        public DataTablePayload[] newArray(int size) {
-            return new DataTablePayload[size];
-        }
-    };
 }

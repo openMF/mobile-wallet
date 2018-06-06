@@ -18,6 +18,7 @@ import org.mifos.mobilewallet.mifospay.common.TransferContract;
 import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
 
@@ -122,7 +123,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
             public void onClick(View v) {
                 mTransferPresenter.makeTransfer(localRepository.getClientDetails().getClientId(),
                         toClientId, amount);
-                tvTransferStatus.setText("Sending money...");
+                tvTransferStatus.setText(Constants.SENDING_MONEY);
                 progressBar.setVisibility(View.VISIBLE);
                 contentView.setVisibility(View.GONE);
             }
@@ -146,14 +147,14 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     @Override
     public void transferSuccess() {
-        tvTransferStatus.setText("Transaction successful");
+        tvTransferStatus.setText(Constants.TRANSACTION_SUCCESSFUL);
         progressBar.setVisibility(View.GONE);
         viewTransferSuccess.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void transferFailure() {
-        tvTransferStatus.setText("Unable to process transfer");
+        tvTransferStatus.setText(Constants.UNABLE_TO_PROCESS_TRANSFER);
         progressBar.setVisibility(View.GONE);
         viewTransferFailure.setVisibility(View.VISIBLE);
     }
@@ -168,4 +169,15 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     public void setPresenter(TransferContract.TransferPresenter presenter) {
         this.mTransferPresenter = presenter;
     }
+
+    @Override
+    public void showToast(String message) {
+        Toaster.showToast(getContext(), message);
+    }
+
+    @Override
+    public void showSnackbar(String message) {
+        Toaster.show(getView(), message);
+    }
+
 }

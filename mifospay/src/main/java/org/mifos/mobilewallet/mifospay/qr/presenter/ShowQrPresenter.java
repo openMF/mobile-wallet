@@ -14,11 +14,10 @@ import javax.inject.Inject;
 
 public class ShowQrPresenter implements QrContract.ShowQrPresenter {
 
-    private QrContract.ShowQrView mShowQrView;
     private final UseCaseHandler mUsecaseHandler;
-
     @Inject
     GenerateQr generateQrUseCase;
+    private QrContract.ShowQrView mShowQrView;
 
     @Inject
     public ShowQrPresenter(UseCaseHandler useCaseHandler) {

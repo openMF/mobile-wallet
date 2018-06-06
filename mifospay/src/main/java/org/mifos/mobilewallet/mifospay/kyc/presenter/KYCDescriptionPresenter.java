@@ -1,13 +1,12 @@
 package org.mifos.mobilewallet.mifospay.kyc.presenter;
 
-import android.util.Log;
-
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.FetchKYCLevel1Details;
+import org.mifos.mobilewallet.core.domain.usecase.kyc.FetchKYCLevel1Details;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -39,8 +38,6 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
     @Override
     public void fetchCurrentLevel() {
 
-        mKYCDescriptionView.showProgressDialog("Please wait..");
-
         fetchKYCLevel1DetailsUseCase.setRequestValues(new FetchKYCLevel1Details.RequestValues(
                 (int) mLocalRepository.getClientDetails().getClientId()));
 
@@ -51,18 +48,17 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
                 new UseCase.UseCaseCallback<FetchKYCLevel1Details.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchKYCLevel1Details.ResponseValue response) {
-                        Log.d("qxz", "onSuccess: " + response.getKYCLevel1DetailsList());
-                        mKYCDescriptionView.hideProgressDialog();
                         if (response.getKYCLevel1DetailsList().size() == 1) {
                             mKYCDescriptionView.onFetchLevelSuccess(
                                     response.getKYCLevel1DetailsList().get(0));
+                        } else {
+                            mKYCDescriptionView.hideProgressDialog();
                         }
                     }
 
                     @Override
                     public void onError(String message) {
-                        Log.d("qxz", "onError: " + message);
-                        mKYCDescriptionView.showToast("Please try again later.");
+                        mKYCDescriptionView.showToast(Constants.PLEASE_TRY_AGAIN_LATER);
                         mKYCDescriptionView.hideProgressDialog();
                         mKYCDescriptionView.gotoHome();
                     }

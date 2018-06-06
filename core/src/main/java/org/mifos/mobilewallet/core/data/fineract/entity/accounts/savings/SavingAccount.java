@@ -14,50 +14,73 @@ import org.mifos.mobilewallet.core.data.fineract.entity.client.DepositType;
 
 public class SavingAccount implements Parcelable {
 
+    public static final Creator<SavingAccount> CREATOR =
+            new Creator<SavingAccount>() {
+                @Override
+                public SavingAccount createFromParcel(Parcel source) {
+                    return new SavingAccount(source);
+                }
+
+                @Override
+                public SavingAccount[] newArray(int size) {
+                    return new SavingAccount[size];
+                }
+            };
     @SerializedName("id")
     private long id;
-
     @SerializedName("accountNo")
     private String accountNo;
-
     @SerializedName("productName")
     private String productName;
-
     @SerializedName("productId")
     private Integer productId;
-
     @SerializedName("overdraftLimit")
     private long overdraftLimit;
-
     @SerializedName("minRequiredBalance")
     private long minRequiredBalance;
-
     @SerializedName("accountBalance")
     private double accountBalance;
-
     @SerializedName("totalDeposits")
     private double totalDeposits;
-
     @SerializedName("savingsProductName")
     private String savingsProductName;
-
     @SerializedName("clientName")
     private String clientName;
-
     @SerializedName("savingsProductId")
     private String savingsProductId;
-
     @SerializedName("nominalAnnualInterestRate")
     private double nominalAnnualInterestRate;
-
     @SerializedName("status")
     private Status status;
-
     @SerializedName("currency")
     private Currency currency;
-
     @SerializedName("depositType")
     private DepositType depositType;
+
+    public SavingAccount() {
+    }
+
+    protected SavingAccount(Parcel in) {
+        this.id = in.readLong();
+        this.accountNo = in.readString();
+        this.productName = in.readString();
+        this.productId = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.overdraftLimit = in.readLong();
+        this.minRequiredBalance = in.readLong();
+        this.accountBalance = in.readDouble();
+        this.totalDeposits = in.readDouble();
+        this.savingsProductName = in.readString();
+        this.clientName = in.readString();
+        this.savingsProductId = in.readString();
+        this.nominalAnnualInterestRate = in.readDouble();
+        this.status = in.readParcelable(Status.class.getClassLoader());
+        this.currency = in.readParcelable(Currency.class.getClassLoader());
+        this.depositType = in.readParcelable(DepositType.class.getClassLoader());
+    }
+
+    public static Creator<SavingAccount> getCREATOR() {
+        return CREATOR;
+    }
 
     public Integer getProductId() {
         return productId;
@@ -73,10 +96,6 @@ public class SavingAccount implements Parcelable {
 
     public void setCurrency(Currency currency) {
         this.currency = currency;
-    }
-
-    public static Creator<SavingAccount> getCREATOR() {
-        return CREATOR;
     }
 
     public Status getStatus() {
@@ -187,7 +206,6 @@ public class SavingAccount implements Parcelable {
         this.id = id;
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -211,38 +229,4 @@ public class SavingAccount implements Parcelable {
         dest.writeParcelable(this.currency, flags);
         dest.writeParcelable(this.depositType, flags);
     }
-
-    public SavingAccount() {
-    }
-
-    protected SavingAccount(Parcel in) {
-        this.id = in.readLong();
-        this.accountNo = in.readString();
-        this.productName = in.readString();
-        this.productId = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.overdraftLimit = in.readLong();
-        this.minRequiredBalance = in.readLong();
-        this.accountBalance = in.readDouble();
-        this.totalDeposits = in.readDouble();
-        this.savingsProductName = in.readString();
-        this.clientName = in.readString();
-        this.savingsProductId = in.readString();
-        this.nominalAnnualInterestRate = in.readDouble();
-        this.status = in.readParcelable(Status.class.getClassLoader());
-        this.currency = in.readParcelable(Currency.class.getClassLoader());
-        this.depositType = in.readParcelable(DepositType.class.getClassLoader());
-    }
-
-    public static final Creator<SavingAccount> CREATOR =
-            new Creator<SavingAccount>() {
-                @Override
-                public SavingAccount createFromParcel(Parcel source) {
-                    return new SavingAccount(source);
-                }
-
-                @Override
-                public SavingAccount[] newArray(int size) {
-                    return new SavingAccount[size];
-                }
-            };
 }

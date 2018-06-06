@@ -1,9 +1,11 @@
 package org.mifos.mobilewallet.mifospay.utils;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.mifos.mobilewallet.mifospay.MifosPayApp;
 
@@ -23,7 +25,7 @@ public class Toaster {
         TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
         textView.setTextColor(Color.WHITE);
         textView.setTextSize(12);
-        snackbar.setAction("OK", new View.OnClickListener() {
+        snackbar.setAction(Constants.OK, new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 snackbar.dismiss();
@@ -42,5 +44,11 @@ public class Toaster {
 
     public static void show(View view, int res) {
         show(view, MifosPayApp.getContext().getResources().getString(res));
+    }
+
+    public static void showToast(Context context, String message) {
+        if (context != null) {
+            Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+        }
     }
 }
