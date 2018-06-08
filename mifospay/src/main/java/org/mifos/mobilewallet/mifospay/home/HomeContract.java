@@ -1,10 +1,9 @@
 package org.mifos.mobilewallet.mifospay.home;
 
-import org.mifos.mobilewallet.mifospay.base.BasePresenter;
-import org.mifos.mobilewallet.mifospay.base.BaseView;
-
 import org.mifos.mobilewallet.core.domain.model.Account;
 import org.mifos.mobilewallet.core.domain.model.Client;
+import org.mifos.mobilewallet.mifospay.base.BasePresenter;
+import org.mifos.mobilewallet.mifospay.base.BaseView;
 
 /**
  * Created by naman on 17/6/17.
@@ -39,13 +38,11 @@ public interface HomeContract {
     interface TransferView extends BaseView<TransferPresenter> {
 
         void showVpa(String vpa);
-
     }
 
     interface TransferPresenter extends BasePresenter {
 
         void fetchVpa();
-
     }
 
     interface ProfileView extends BaseView<ProfilePresenter> {
@@ -59,7 +56,6 @@ public interface HomeContract {
         void fetchprofile();
 
     }
-
 
 
 }

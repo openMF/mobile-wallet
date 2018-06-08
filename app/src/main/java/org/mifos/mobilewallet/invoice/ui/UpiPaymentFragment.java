@@ -48,7 +48,7 @@ public class UpiPaymentFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_payment_upi, container, false);
 
         ButterKnife.bind(this, rootView);

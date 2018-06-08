@@ -12,6 +12,7 @@ import android.widget.EditText;
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.base.BaseActivity;
 import org.mifos.mobilewallet.base.BaseFragment;
+import org.mifos.mobilewallet.core.utils.DateHelper;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.invoice.InvoiceContract;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
@@ -26,7 +27,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import org.mifos.mobilewallet.core.utils.DateHelper;
 
 /**
  * Created by naman on 17/6/17.
@@ -70,7 +70,7 @@ public class InvoiceFragment extends BaseFragment implements InvoiceContract.Inv
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_invoice, container, false);
 
         setToolbarTitle("Create Invoice");

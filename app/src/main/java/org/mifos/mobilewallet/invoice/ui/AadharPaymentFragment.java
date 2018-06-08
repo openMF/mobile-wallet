@@ -24,19 +24,16 @@ import butterknife.OnTextChanged;
 
 public class AadharPaymentFragment extends Fragment {
 
-    View rootView;
-
-    @BindView(R.id.et_aadhar_number)
-    EditText etAadhar;
-
-    @BindView(R.id.btn_scan_fp)
-    Button btnScanFp;
-
     private static final int AADHAR_NUMBER_TOTAL_SYMBOLS = 19;
     private static final int AADHAR_NUMBER_TOTAL_DIGITS = 16;
     private static final int AADHAR_NUMBER_DIVIDER_MODULO = 5;
     private static final int AADHAR_NUMBER_DIVIDER_POSITION = AADHAR_NUMBER_DIVIDER_MODULO - 1;
     private static final char AADHAR_NUMBER_DIVIDER = '-';
+    View rootView;
+    @BindView(R.id.et_aadhar_number)
+    EditText etAadhar;
+    @BindView(R.id.btn_scan_fp)
+    Button btnScanFp;
 
     public static AadharPaymentFragment newInstance() {
         AadharPaymentFragment fragment = new AadharPaymentFragment();
@@ -54,7 +51,7 @@ public class AadharPaymentFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_payment_aadhar, container, false);
 
         ButterKnife.bind(this, rootView);

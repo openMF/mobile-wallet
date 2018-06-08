@@ -14,16 +14,13 @@ import javax.inject.Inject;
  * Created by ankur on 15/May/2018
  */
 public class PassCodePresenter implements PassCodeContract.PassCodePresenter {
-    private PassCodeContract.PassCodeView mPassCodeView;
     private final UseCaseHandler mUsecaseHandler;
-
     private final PreferencesHelper preferencesHelper;
-
     @Inject
     AuthenticateUser authenticateUserUseCase;
-
     @Inject
     FetchClientData fetchClientDataUseCase;
+    private PassCodeContract.PassCodeView mPassCodeView;
 
     @Inject
     public PassCodePresenter(UseCaseHandler useCaseHandler, PreferencesHelper preferencesHelper) {

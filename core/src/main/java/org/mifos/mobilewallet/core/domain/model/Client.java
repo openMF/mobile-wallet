@@ -14,6 +14,8 @@ public class Client implements Parcelable {
     private String externalId;
     private long clientId;
 
+    private String displayName;
+
     public String getImage() {
         return image;
     }
@@ -46,9 +48,28 @@ public class Client implements Parcelable {
         this.clientId = clientId;
     }
 
+    protected Client(Parcel in) {
+        this.name = in.readString();
+        this.image = in.readString();
+        this.externalId = in.readString();
+        this.clientId = in.readLong();
+        this.displayName = in.readString();
+    }
+
+    public Client() {
+    }
+
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 
     @Override
@@ -57,16 +78,7 @@ public class Client implements Parcelable {
         dest.writeString(this.image);
         dest.writeString(this.externalId);
         dest.writeLong(this.clientId);
-    }
-
-    public Client() {
-    }
-
-    protected Client(Parcel in) {
-        this.name = in.readString();
-        this.image = in.readString();
-        this.externalId = in.readString();
-        this.clientId = in.readLong();
+        dest.writeString(this.displayName);
     }
 
     public static final Creator<Client> CREATOR = new Creator<Client>() {

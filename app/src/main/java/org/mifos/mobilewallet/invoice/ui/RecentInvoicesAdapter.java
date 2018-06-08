@@ -67,6 +67,15 @@ public class RecentInvoicesAdapter extends RecyclerView.Adapter<RecentInvoicesAd
         this.context = context;
     }
 
+    public void setData(List<Invoice> invoices) {
+        this.invoices = invoices;
+        notifyDataSetChanged();
+    }
+
+    public Invoice getInvoice(int position) {
+        return invoices.get(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_invoice_id)
@@ -88,15 +97,6 @@ public class RecentInvoicesAdapter extends RecyclerView.Adapter<RecentInvoicesAd
             super(v);
             ButterKnife.bind(this, v);
         }
-    }
-
-    public void setData(List<Invoice> invoices) {
-        this.invoices = invoices;
-        notifyDataSetChanged();
-    }
-
-    public Invoice getInvoice(int position) {
-        return invoices.get(position);
     }
 }
 

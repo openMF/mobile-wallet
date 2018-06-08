@@ -50,16 +50,16 @@ public class HomeFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
 
         ButterKnife.bind(this, rootView);
 
-        setToolbarTitle("Wallet");
+        setToolbarTitle("Home");
+        hideBackButton();
 
         replaceFragment(WalletFragment.newInstance(localRepository
-                        .getClientDetails().getClientId()),
-                false,
+                        .getClientDetails().getClientId()), false,
                 R.id.bottom_navigation_fragment_container);
 
         bottomNavigationView.setOnNavigationItemSelectedListener(
@@ -71,7 +71,6 @@ public class HomeFragment extends BaseFragment {
                     }
                 });
 
-
         return rootView;
     }
 
@@ -81,11 +80,9 @@ public class HomeFragment extends BaseFragment {
             bottomNavigationView.setSelectedItemId(id);
         } else {
             switch (id) {
-                case R.id.action_wallet:
-
-                    replaceFragment(WalletFragment
-                                    .newInstance(localRepository.getClientDetails()
-                                            .getClientId()), false,
+                case R.id.action_home:
+                    replaceFragment(WalletFragment.newInstance(localRepository.getClientDetails()
+                                    .getClientId()), false,
                             R.id.bottom_navigation_fragment_container);
                     break;
 

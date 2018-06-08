@@ -17,8 +17,8 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
         android:width="@dimen/fingerprint_width"
         android:height="@dimen/fingerprint_height"
-        android:viewportWidth="@integer/fingerprint_viewport_width"
-        android:viewportHeight="@integer/fingerprint_viewport_height">
+        android:viewportHeight="@integer/fingerprint_viewport_height"
+        android:viewportWidth="@integer/fingerprint_viewport_width">
 
     <group
         android:name="fingerprint">
@@ -28,35 +28,35 @@
             android:pathData="@string/path_ridge_1"
             android:strokeColor="@color/fingerprint_ridge"
             android:strokeLineCap="round"
-            android:strokeWidth="@integer/fingerprint_stroke_width" />
+            android:strokeWidth="@integer/fingerprint_stroke_width"/>
 
         <path
             android:name="ridge_2"
             android:pathData="@string/path_ridge_2"
             android:strokeColor="@color/fingerprint_ridge"
             android:strokeLineCap="round"
-            android:strokeWidth="@integer/fingerprint_stroke_width" />
+            android:strokeWidth="@integer/fingerprint_stroke_width"/>
 
         <path
             android:name="ridge_3"
             android:pathData="@string/path_ridge_3"
             android:strokeColor="@color/fingerprint_ridge"
             android:strokeLineCap="round"
-            android:strokeWidth="@integer/fingerprint_stroke_width" />
+            android:strokeWidth="@integer/fingerprint_stroke_width"/>
 
         <path
             android:name="ridge_4"
             android:pathData="@string/path_ridge_4"
             android:strokeColor="@color/fingerprint_ridge"
             android:strokeLineCap="round"
-            android:strokeWidth="@integer/fingerprint_stroke_width" />
+            android:strokeWidth="@integer/fingerprint_stroke_width"/>
 
         <path
             android:name="ridge_5"
             android:pathData="@string/path_ridge_5"
             android:strokeColor="@color/fingerprint_ridge"
             android:strokeLineCap="round"
-            android:strokeWidth="@integer/fingerprint_stroke_width" />
+            android:strokeWidth="@integer/fingerprint_stroke_width"/>
 
     </group>
 
@@ -67,42 +67,42 @@
 
         <clip-path
             android:name="scan_clip"
-            android:pathData="@string/clip_path_scan_top" />
+            android:pathData="@string/clip_path_scan_top"/>
 
         <path
             android:name="ridge_1"
             android:pathData="@string/path_ridge_1"
             android:strokeColor="@color/fingerprint_ridge_scan"
             android:strokeLineCap="round"
-            android:strokeWidth="@integer/fingerprint_stroke_width" />
+            android:strokeWidth="@integer/fingerprint_stroke_width"/>
 
         <path
             android:name="ridge_2"
             android:pathData="@string/path_ridge_2"
             android:strokeColor="@color/fingerprint_ridge_scan"
             android:strokeLineCap="round"
-            android:strokeWidth="@integer/fingerprint_stroke_width" />
+            android:strokeWidth="@integer/fingerprint_stroke_width"/>
 
         <path
             android:name="ridge_3"
             android:pathData="@string/path_ridge_3"
             android:strokeColor="@color/fingerprint_ridge_scan"
             android:strokeLineCap="round"
-            android:strokeWidth="@integer/fingerprint_stroke_width" />
+            android:strokeWidth="@integer/fingerprint_stroke_width"/>
 
         <path
             android:name="ridge_4"
             android:pathData="@string/path_ridge_4"
             android:strokeColor="@color/fingerprint_ridge_scan"
             android:strokeLineCap="round"
-            android:strokeWidth="@integer/fingerprint_stroke_width" />
+            android:strokeWidth="@integer/fingerprint_stroke_width"/>
 
         <path
             android:name="ridge_5"
             android:pathData="@string/path_ridge_5"
             android:strokeColor="@color/fingerprint_ridge_scan"
             android:strokeLineCap="round"
-            android:strokeWidth="@integer/fingerprint_stroke_width" />
+            android:strokeWidth="@integer/fingerprint_stroke_width"/>
 
     </group>
 

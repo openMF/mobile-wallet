@@ -70,6 +70,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
 
         setToolbarTitle("Saved Cards");
         ButterKnife.bind(this, rootView);
+        showBackButton();
 
         mPresenter.attachView(this);
         setupCardsRecyclerView();

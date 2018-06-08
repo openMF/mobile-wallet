@@ -2,10 +2,9 @@ package org.mifos.mobilewallet.auth.presenter;
 
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.base.BaseView;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 import javax.inject.Inject;
-
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 /**
  * Created by naman on 20/6/17.
@@ -13,8 +12,8 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 public class BankAccountPresenter implements AuthContract.BankAccountPresenter {
 
-    private AuthContract.BankAccountView mAccountView;
     private final UseCaseHandler mUsecaseHandler;
+    private AuthContract.BankAccountView mAccountView;
 
 
     @Inject

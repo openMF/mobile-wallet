@@ -1,14 +1,18 @@
 package org.mifos.mobilewallet.core.domain.usecase;
 
+import android.util.Log;
+
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions;
+import org.mifos.mobilewallet.core.data.fineract.entity.mapper.TransactionMapper;
+import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.domain.model.Transaction;
+
 import java.util.List;
 
 import javax.inject.Inject;
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
-import org.mifos.mobilewallet.core.data.fineract.entity.mapper.TransactionMapper;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -51,12 +55,16 @@ public class FetchAccountTransactions extends UseCase<FetchAccountTransactions.R
 
                     @Override
                     public void onNext(SavingsWithAssociations transactions) {
+
+                        for (Transactions t : transactions.getTransactions()) {
+                            Log.d("qxz", "onNext: " + t.toString());
+                        }
+
                         getUseCaseCallback().onSuccess(new
                                 ResponseValue(transactionMapper
                                 .transformTransactionList(transactions)));
                     }
                 });
-
 
 
     }

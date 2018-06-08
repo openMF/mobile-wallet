@@ -64,6 +64,15 @@ public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.View
         this.context = context;
     }
 
+    public void setData(List<Bank> banks) {
+        this.otherBanks = banks;
+        notifyDataSetChanged();
+    }
+
+    public Bank getBank(int position) {
+        return otherBanks.get(position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.iv_popular_bank)
@@ -76,14 +85,5 @@ public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.View
             super(v);
             ButterKnife.bind(this, v);
         }
-    }
-
-    public void setData(List<Bank> banks) {
-        this.otherBanks = banks;
-        notifyDataSetChanged();
-    }
-
-    public Bank getBank(int position) {
-        return otherBanks.get(position);
     }
 }

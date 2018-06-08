@@ -12,7 +12,7 @@ import org.mifos.mobilewallet.core.utils.Constants;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
-import org.mifos.mobilewallet.mifospay.utils.FilePath;
+import org.mifos.mobilewallet.mifospay.utils.FileUtils;
 
 import java.io.File;
 
@@ -29,14 +29,12 @@ import okhttp3.RequestBody;
 public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
 
     private static final int READ_REQUEST_CODE = 42;
-    private File file;
-
-    private KYCContract.KYCLevel2View mKYCLevel2View;
     private final UseCaseHandler mUseCaseHandler;
     private final PreferencesHelper preferencesHelper;
-
     @Inject
     UploadKYCDocs uploadKYCDocsUseCase;
+    private File file;
+    private KYCContract.KYCLevel2View mKYCLevel2View;
 
     @Inject
     public KYCLevel2Presenter(UseCaseHandler useCaseHandler, PreferencesHelper preferencesHelper) {
@@ -77,7 +75,7 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
 
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             Uri uri = data.getData();
-            file = new File(FilePath.getPath(mKYCLevel2View.getContext(), uri));
+            file = new File(FileUtils.getPath(mKYCLevel2View.getContext(), uri));
             mKYCLevel2View.setFilename(file.getPath());
         }
     }

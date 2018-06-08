@@ -1,13 +1,12 @@
 package org.mifos.mobilewallet.qr.presenter;
 
 import org.mifos.mobilewallet.base.BaseView;
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.qr.QrContract;
 import org.mifos.mobilewallet.qr.domain.usecase.GenerateQr;
 
 import javax.inject.Inject;
-
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 /**
  * Created by naman on 8/7/17.
@@ -15,11 +14,10 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 public class ShowQrPresenter implements QrContract.ShowQrPresenter {
 
-    private QrContract.ShowQrView mShowQrView;
     private final UseCaseHandler mUsecaseHandler;
-
     @Inject
     GenerateQr generateQrUseCase;
+    private QrContract.ShowQrView mShowQrView;
 
     @Inject
     public ShowQrPresenter(UseCaseHandler useCaseHandler) {

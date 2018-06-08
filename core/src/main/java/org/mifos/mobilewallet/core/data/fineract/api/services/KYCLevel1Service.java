@@ -3,12 +3,10 @@ package org.mifos.mobilewallet.core.data.fineract.api.services;
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
-import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 
 import java.util.List;
 
 import retrofit2.http.Body;
-import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -16,29 +14,10 @@ import retrofit2.http.Path;
 import rx.Observable;
 
 /**
- * Created by ankur on 21/May/2018
+ * Created by ankur on 07/June/2018
  */
 
-public interface DataTablesService {
-
-    @POST(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}")
-    Observable<GenericResponse> addSavedCard(
-            @Path("clientId") int clientId,
-            @Body Card card);
-
-    @GET(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}")
-    Observable<List<Card>> getSavedCards(@Path("clientId") int clientId);
-
-    @DELETE(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}/{cardId}")
-    Observable<GenericResponse> deleteCard(@Path("clientId") int clientId,
-            @Path("cardId") int cardId);
-
-    @PUT(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}/{cardId}")
-    Observable<GenericResponse> updateCard(
-            @Path("clientId") int clientId,
-            @Path("cardId") int cardId,
-            @Body Card card);
-
+public interface KYCLevel1Service {
 
     @POST(ApiEndPoints.DATATABLES + "/kyc_level1_details/{clientId}")
     Observable<GenericResponse> addKYCLevel1Details(
@@ -52,5 +31,4 @@ public interface DataTablesService {
     Observable<GenericResponse> updateKYCLevel1Details(
             @Path("clientId") int clientId,
             @Body KYCLevel1Details kycLevel1Details);
-
 }

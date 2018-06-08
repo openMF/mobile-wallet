@@ -18,13 +18,11 @@ import javax.inject.Inject;
 
 public class KYCLevel1Presenter implements KYCContract.KYCLevel1Presenter {
 
-    private KYCContract.KYCLevel1View mKYCLevel1View;
-
     private final UseCaseHandler mUseCaseHandler;
     private final LocalRepository mLocalRepository;
-
     @Inject
     UploadKYCLevel1Details uploadKYCLevel1DetailsUseCase;
+    private KYCContract.KYCLevel1View mKYCLevel1View;
 
     @Inject
     public KYCLevel1Presenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {

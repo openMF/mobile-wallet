@@ -4,7 +4,7 @@ import android.util.Log;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.FetchWallet;
+import org.mifos.mobilewallet.core.domain.usecase.FetchAccount;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
@@ -17,13 +17,11 @@ import javax.inject.Inject;
 
 public class WalletPresenter implements HomeContract.WalletPresenter {
 
-    private HomeContract.WalletView mWalletView;
     private final UseCaseHandler mUsecaseHandler;
-
     private final LocalRepository localRepository;
-
     @Inject
-    FetchWallet fetchWalletUseCase;
+    FetchAccount mFetchAccountUseCase;
+    private HomeContract.WalletView mWalletView;
 
     @Inject
     public WalletPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
@@ -39,12 +37,12 @@ public class WalletPresenter implements HomeContract.WalletPresenter {
 
     @Override
     public void fetchWallet() {
-        mUsecaseHandler.execute(fetchWalletUseCase, new FetchWallet.RequestValues(localRepository
+        mUsecaseHandler.execute(mFetchAccountUseCase, new FetchAccount.RequestValues(localRepository
                         .getClientDetails().getClientId()),
-                new UseCase.UseCaseCallback<FetchWallet.ResponseValue>() {
+                new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {
                     @Override
-                    public void onSuccess(FetchWallet.ResponseValue response) {
-                        mWalletView.showWallet(response.getWalletAccount());
+                    public void onSuccess(FetchAccount.ResponseValue response) {
+                        mWalletView.showWallet(response.getAccount());
                     }
 
                     @Override
