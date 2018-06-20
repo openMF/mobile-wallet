@@ -3,10 +3,14 @@ package org.mifos.mobilewallet.core.data.fineract.repository;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager;
+import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
+import org.mifos.mobilewallet.core.data.fineract.entity.TPTResponse;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity;
+import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUpdatePayload;
@@ -82,50 +86,44 @@ public class FineractRepository {
 
     public Observable<GenericResponse> addSavedCards(long clientId,
             Card card) {
-        return fineractApiManager.getDatatablesApi().addSavedCard((int) clientId, card);
+        return fineractApiManager.getSavedCardApi().addSavedCard((int) clientId, card);
     }
 
     public Observable<List<Card>> fetchSavedCards(long clientId) {
-        return fineractApiManager.getDatatablesApi().getSavedCards((int) clientId);
+        return fineractApiManager.getSavedCardApi().getSavedCards((int) clientId);
     }
 
     public Observable<GenericResponse> editSavedCard(int clientId, Card card) {
-        return fineractApiManager.getDatatablesApi().updateCard(clientId, card.getId(), card);
+        return fineractApiManager.getSavedCardApi().updateCard(clientId, card.getId(), card);
     }
 
     public Observable<GenericResponse> deleteSavedCard(int clientId, int cardId) {
-        return fineractApiManager.getDatatablesApi().deleteCard(clientId, cardId);
+        return fineractApiManager.getSavedCardApi().deleteCard(clientId, cardId);
     }
 
     public Observable<GenericResponse> uploadKYCDocs(String entityType, long entityId, String name,
             String desc, MultipartBody.Part file) {
         return fineractApiManager.getDocumentApi().createDocument(entityType, entityId, name, desc,
                 file);
+    }
 
-//        return fineractApiManager.getDocumentApi().createDocument(entityType, entityId, name,
-// desc,
-//                file)
-//                .map(new Func1<ResponseBody, ResponseBody>() {
-//                    @Override
-//                    public ResponseBody call(ResponseBody responseBody) {
-//                        return responseBody;
-//                    }
-//                });
+    public Observable<TransferDetail> getAccountTransfer(long transferId) {
+        return fineractApiManager.getAccountTransfersApi().getAccountTransfer(transferId);
     }
 
     public Observable<GenericResponse> uploadKYCLevel1Details(int clientId,
             KYCLevel1Details kycLevel1Details) {
-        return fineractApiManager.getDatatablesApi().addKYCLevel1Details(clientId,
+        return fineractApiManager.getKycLevel1Api().addKYCLevel1Details(clientId,
                 kycLevel1Details);
     }
 
     public Observable<List<KYCLevel1Details>> fetchKYCLevel1Details(int clientId) {
-        return fineractApiManager.getDatatablesApi().fetchKYCLevel1Details(clientId);
+        return fineractApiManager.getKycLevel1Api().fetchKYCLevel1Details(clientId);
     }
 
     public Observable<GenericResponse> updateKYCLevel1Details(int clientId,
             KYCLevel1Details kycLevel1Details) {
-        return fineractApiManager.getDatatablesApi().updateKYCLevel1Details(clientId,
+        return fineractApiManager.getKycLevel1Api().updateKYCLevel1Details(clientId,
                 kycLevel1Details);
     }
 
@@ -141,6 +139,41 @@ public class FineractRepository {
         return fineractApiManager.getTwoFactorAuthApi().validateToken(token);
     }
 
+    public Observable<ResponseBody> getTransactionReceipt(String outputType,
+            String transactionId) {
+        return fineractApiManager.getRunReportApi().getTransactionReceipt(outputType,
+                transactionId);
+    }
+
+    public Observable<GenericResponse> addInvoice(String clientId, Invoice invoice) {
+        return fineractApiManager.getInvoiceApi().addInvoice(clientId, invoice);
+    }
+
+    public Observable<List<Invoice>> fetchInvoices(String clientId) {
+        return fineractApiManager.getInvoiceApi().getInvoices(clientId);
+    }
+
+    public Observable<List<Invoice>> fetchInvoice(String clientId, String invoiceId) {
+        return fineractApiManager.getInvoiceApi().getInvoice(clientId, invoiceId);
+    }
+
+
+    public Observable<GenericResponse> editInvoice(String clientId, Invoice invoice) {
+        return fineractApiManager.getInvoiceApi().updateInvoice(clientId, invoice.getId(), invoice);
+    }
+
+    public Observable<GenericResponse> deleteInvoice(String clientId, int invoiceId) {
+        return fineractApiManager.getInvoiceApi().deleteInvoice(clientId, invoiceId);
+    }
+
+    public Observable<List<UserWithRole>> getUsers() {
+        return fineractApiManager.getUserApi().getUsers();
+    }
+
+    public Observable<TPTResponse> makeThirdPartyTransfer(TransferPayload transferPayload) {
+        return fineractApiManager.getThirdPartyTransferApi().makeTransfer(transferPayload);
+    }
+
     //self user apis
 
     public Observable<UserEntity> loginSelf(String username, String password) {
@@ -154,7 +187,6 @@ public class FineractRepository {
     public Observable<Page<Client>> getSelfClientDetails() {
         return selfApiManager.getClientsApi().getClients();
     }
-
 
     public Observable<SavingsWithAssociations> getSelfAccountTransactions(long accountId) {
         return selfApiManager
@@ -177,9 +209,5 @@ public class FineractRepository {
     public Observable<ResponseBody> updateBeneficiary(long beneficiaryId,
             BeneficiaryUpdatePayload payload) {
         return selfApiManager.getBeneficiaryApi().updateBeneficiary(beneficiaryId, payload);
-    }
-
-    public Observable<ResponseBody> makeThirdPartyTransfer(TransferPayload transferPayload) {
-        return selfApiManager.getThirdPartyTransferApi().makeTransfer(transferPayload);
     }
 }

@@ -12,12 +12,12 @@ public abstract class UseCase<Q extends UseCase.RequestValues, P extends UseCase
 
     private UseCaseCallback<P> mUseCaseCallback;
 
-    public void setRequestValues(Q requestValues) {
-        mRequestValues = requestValues;
-    }
-
     public Q getRequestValues() {
         return mRequestValues;
+    }
+
+    public void setRequestValues(Q requestValues) {
+        mRequestValues = requestValues;
     }
 
     public UseCaseCallback<P> getUseCaseCallback() {
@@ -48,6 +48,7 @@ public abstract class UseCase<Q extends UseCase.RequestValues, P extends UseCase
 
     public interface UseCaseCallback<R> {
         void onSuccess(R response);
+
         void onError(String message);
     }
 }

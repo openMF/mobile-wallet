@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.core.domain.usecase;
 
+import android.util.Log;
+
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.AccountMapper;
@@ -19,8 +21,8 @@ import rx.schedulers.Schedulers;
  * Created by naman on 29/8/17.
  */
 
-public class FetchWallet extends UseCase<FetchWallet.RequestValues,
-        FetchWallet.ResponseValue> {
+public class FetchAccount extends UseCase<FetchAccount.RequestValues,
+        FetchAccount.ResponseValue> {
 
     private final FineractRepository fineractRepository;
 
@@ -28,7 +30,7 @@ public class FetchWallet extends UseCase<FetchWallet.RequestValues,
     AccountMapper accountMapper;
 
     @Inject
-    public FetchWallet(FineractRepository fineractRepository) {
+    public FetchAccount(FineractRepository fineractRepository) {
         this.fineractRepository = fineractRepository;
     }
 
@@ -52,6 +54,7 @@ public class FetchWallet extends UseCase<FetchWallet.RequestValues,
 
                     @Override
                     public void onNext(ClientAccounts clientAccounts) {
+                        Log.d("qxz", "onNext: " + " fetchaccount");
                         List<Account> accounts = accountMapper.transform(clientAccounts);
                         if (accounts != null && accounts.size() != 0) {
                             Account walletAccount = null;
@@ -65,10 +68,10 @@ public class FetchWallet extends UseCase<FetchWallet.RequestValues,
                             if (walletAccount != null) {
                                 getUseCaseCallback().onSuccess(new ResponseValue(walletAccount));
                             } else {
-                                getUseCaseCallback().onError("No wallet account found");
+                                getUseCaseCallback().onError("No account found");
                             }
                         } else {
-                            getUseCaseCallback().onError("Error fetching wallet account");
+                            getUseCaseCallback().onError("Error fetching account");
                         }
                     }
                 });
@@ -86,14 +89,14 @@ public class FetchWallet extends UseCase<FetchWallet.RequestValues,
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private final Account walletAccount;
+        private final Account account;
 
         public ResponseValue(Account account) {
-            this.walletAccount = account;
+            this.account = account;
         }
 
-        public Account getWalletAccount() {
-            return walletAccount;
+        public Account getAccount() {
+            return account;
         }
     }
 }

@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.savedcards.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,11 +71,14 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
 
         setToolbarTitle("Saved Cards");
         ButterKnife.bind(this, rootView);
+        showBackButton();
 
         mPresenter.attachView(this);
         setupCardsRecyclerView();
 
-        showProgress();
+        setupSwipeLayout();
+
+        showSwipeProgress();
         mCardsPresenter.fetchSavedCards();
 
         return rootView;
@@ -137,6 +141,16 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                 }));
     }
 
+    private void setupSwipeLayout() {
+        setSwipeEnabled(true);
+        getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mCardsPresenter.fetchSavedCards();
+            }
+        });
+    }
+
     @Override
     public void setPresenter(CardsContract.CardsPresenter presenter) {
         mCardsPresenter = presenter;
@@ -153,7 +167,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     @Override
     public void showSavedCards(List<Card> cards) {
         mCardsAdapter.setCards(cards);
-        hideProgress();
+        hideSwipeProgress();
     }
 
     @Override
@@ -169,6 +183,11 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     @Override
     public void hideProgressDialog() {
         super.hideProgressDialog();
+    }
+
+    @Override
+    public void hideSwipeProgress() {
+        super.hideSwipeProgress();
     }
 
 }

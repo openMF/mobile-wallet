@@ -17,6 +17,8 @@
             android:id="@+id/et_fName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:nextFocusForward="@id/et_lName"
+            android:singleLine="true"
             android:hint="First Name"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -29,6 +31,8 @@
             android:id="@+id/et_lName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:nextFocusForward="@id/et_card_number"
+            android:singleLine="true"
             android:hint="Last Name"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -42,6 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Credit Card Number"
+            android:nextFocusForward="@id/spn_mm"
+            android:singleLine="true"
             android:inputType="number"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -80,6 +86,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/cvv"
             android:inputType="numberPassword"
+            android:nextFocusForward="@id/btn_add"
             android:maxLength="3"
             android:minWidth="@dimen/value_70dp"/>
     </android.support.design.widget.TextInputLayout>

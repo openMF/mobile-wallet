@@ -13,26 +13,45 @@ import org.mifos.mobilewallet.core.data.fineract.entity.templates.account.Accoun
 
 public class Beneficiary implements Parcelable {
 
+    public static final Creator<Beneficiary> CREATOR =
+            new Creator<Beneficiary>() {
+                @Override
+                public Beneficiary createFromParcel(Parcel source) {
+                    return new Beneficiary(source);
+                }
+
+                @Override
+                public Beneficiary[] newArray(int size) {
+                    return new Beneficiary[size];
+                }
+            };
     @SerializedName("id")
     private Integer id;
-
     @SerializedName("name")
     private String name;
-
     @SerializedName("officeName")
     private String officeName;
-
     @SerializedName("clientName")
     private String clientName;
-
     @SerializedName("accountType")
     private AccountType accountType;
-
     @SerializedName("accountNumber")
     private String accountNumber;
-
     @SerializedName("transferLimit")
     private Integer transferLimit;
+
+    public Beneficiary() {
+    }
+
+    protected Beneficiary(Parcel in) {
+        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
+        this.name = in.readString();
+        this.officeName = in.readString();
+        this.clientName = in.readString();
+        this.accountType = in.readParcelable(AccountType.class.getClassLoader());
+        this.accountNumber = in.readString();
+        this.transferLimit = (Integer) in.readValue(Integer.class.getClassLoader());
+    }
 
     public Integer getId() {
         return id;
@@ -105,30 +124,4 @@ public class Beneficiary implements Parcelable {
         dest.writeString(this.accountNumber);
         dest.writeValue(this.transferLimit);
     }
-
-    public Beneficiary() {
-    }
-
-    protected Beneficiary(Parcel in) {
-        this.id = (Integer) in.readValue(Integer.class.getClassLoader());
-        this.name = in.readString();
-        this.officeName = in.readString();
-        this.clientName = in.readString();
-        this.accountType = in.readParcelable(AccountType.class.getClassLoader());
-        this.accountNumber = in.readString();
-        this.transferLimit = (Integer) in.readValue(Integer.class.getClassLoader());
-    }
-
-    public static final Creator<Beneficiary> CREATOR =
-            new Creator<Beneficiary>() {
-        @Override
-        public Beneficiary createFromParcel(Parcel source) {
-            return new Beneficiary(source);
-        }
-
-        @Override
-        public Beneficiary[] newArray(int size) {
-            return new Beneficiary[size];
-        }
-    };
 }

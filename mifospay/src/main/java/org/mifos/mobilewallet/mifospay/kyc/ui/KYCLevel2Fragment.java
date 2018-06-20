@@ -53,11 +53,6 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
     @BindView(R.id.et_idname)
     EditText etIdname;
 
-    @Override
-    public void setPresenter(KYCContract.KYCLevel2Presenter presenter) {
-        mKYCLevel2Presenter = presenter;
-    }
-
     public static KYCLevel2Fragment newInstance() {
 
         Bundle args = new Bundle();
@@ -65,6 +60,11 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
         KYCLevel2Fragment fragment = new KYCLevel2Fragment();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void setPresenter(KYCContract.KYCLevel2Presenter presenter) {
+        mKYCLevel2Presenter = presenter;
     }
 
     @Override
@@ -104,6 +104,7 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
 
     @OnClick(R.id.btn_submit)
     public void onSubmitClicked() {
+        showProgressDialog("Please wait..");
         mKYCLevel2Presenter.uploadKYCDocs(etIdname.getText().toString());
     }
 
@@ -152,12 +153,7 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
 
     @Override
     public void showToast(String s) {
-        Toaster.show(getView(), s);
-    }
-
-    @Override
-    public void showProgressDialog(String message) {
-        super.showProgressDialog(message);
+        Toaster.showToast(getContext(), s);
     }
 
     @Override

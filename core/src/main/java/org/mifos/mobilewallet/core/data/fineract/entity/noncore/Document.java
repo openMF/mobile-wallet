@@ -13,6 +13,17 @@ import android.os.Parcelable;
  */
 public class Document implements Parcelable {
 
+    public static final Creator<Document> CREATOR = new Creator<Document>() {
+        @Override
+        public Document createFromParcel(Parcel source) {
+            return new Document(source);
+        }
+
+        @Override
+        public Document[] newArray(int size) {
+            return new Document[size];
+        }
+    };
     private int id;
     private String parentEntityType;
     private int parentEntityId;
@@ -21,6 +32,20 @@ public class Document implements Parcelable {
     private long size;
     private String type;
     private String description;
+
+    public Document() {
+    }
+
+    protected Document(Parcel in) {
+        this.id = in.readInt();
+        this.parentEntityType = in.readString();
+        this.parentEntityId = in.readInt();
+        this.name = in.readString();
+        this.fileName = in.readString();
+        this.size = in.readLong();
+        this.type = in.readString();
+        this.description = in.readString();
+    }
 
     public int getId() {
         return id;
@@ -102,30 +127,4 @@ public class Document implements Parcelable {
         dest.writeString(this.type);
         dest.writeString(this.description);
     }
-
-    public Document() {
-    }
-
-    protected Document(Parcel in) {
-        this.id = in.readInt();
-        this.parentEntityType = in.readString();
-        this.parentEntityId = in.readInt();
-        this.name = in.readString();
-        this.fileName = in.readString();
-        this.size = in.readLong();
-        this.type = in.readString();
-        this.description = in.readString();
-    }
-
-    public static final Creator<Document> CREATOR = new Creator<Document>() {
-        @Override
-        public Document createFromParcel(Parcel source) {
-            return new Document(source);
-        }
-
-        @Override
-        public Document[] newArray(int size) {
-            return new Document[size];
-        }
-    };
 }

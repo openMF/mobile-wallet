@@ -25,8 +25,8 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-    android:layout_marginTop="@dimen/value_20dp">
+        android:layout_marginTop="@dimen/value_20dp"
+        android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_browse"
@@ -45,13 +45,13 @@
     </LinearLayout>
 
     <Button
+        android:id="@+id/btn_submit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_submit"
-        android:text="Submit"
         android:layout_gravity="center_horizontal"
-        android:textColor="@color/white"
         android:layout_marginTop="@dimen/value_20dp"
-        android:background="@drawable/button_round_black"/>
+        android:background="@drawable/button_round_black"
+        android:text="Submit"
+        android:textColor="@color/white"/>
 
 </LinearLayout>

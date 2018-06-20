@@ -1,12 +1,13 @@
 package org.mifos.mobilewallet.core.domain.usecase;
 
-import javax.inject.Inject;
-
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.ClientDetailsMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+
+import javax.inject.Inject;
+
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -82,7 +83,6 @@ public class FetchClientData extends UseCase<FetchClientData.RequestValues,
                     });
         }
     }
-
 
 
     public static final class RequestValues implements UseCase.RequestValues {

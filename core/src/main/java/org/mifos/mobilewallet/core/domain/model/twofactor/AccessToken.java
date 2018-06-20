@@ -10,6 +10,17 @@ import android.os.Parcelable;
 
 public class AccessToken implements Parcelable {
 
+    public static final Creator<AccessToken> CREATOR = new Creator<AccessToken>() {
+        @Override
+        public AccessToken createFromParcel(Parcel source) {
+            return new AccessToken(source);
+        }
+
+        @Override
+        public AccessToken[] newArray(int size) {
+            return new AccessToken[size];
+        }
+    };
     private String token;
     private Long validFrom;
     private Long validTo;
@@ -58,17 +69,4 @@ public class AccessToken implements Parcelable {
         dest.writeLong(this.validFrom);
         dest.writeLong(this.validTo);
     }
-
-
-    public static final Creator<AccessToken> CREATOR = new Creator<AccessToken>() {
-        @Override
-        public AccessToken createFromParcel(Parcel source) {
-            return new AccessToken(source);
-        }
-
-        @Override
-        public AccessToken[] newArray(int size) {
-            return new AccessToken[size];
-        }
-    };
 }

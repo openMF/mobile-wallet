@@ -14,8 +14,28 @@ import java.util.List;
 
 public class BeneficiaryTemplate implements Parcelable {
 
+    public static final Creator<BeneficiaryTemplate> CREATOR =
+            new Creator<BeneficiaryTemplate>() {
+                @Override
+                public BeneficiaryTemplate createFromParcel(Parcel source) {
+                    return new BeneficiaryTemplate(source);
+                }
+
+                @Override
+                public BeneficiaryTemplate[] newArray(int size) {
+                    return new BeneficiaryTemplate[size];
+                }
+            };
     @SerializedName("accountTypeOptions")
     private List<AccountTypeOption> accountTypeOptions = null;
+
+    public BeneficiaryTemplate() {
+    }
+
+    protected BeneficiaryTemplate(Parcel in) {
+        this.accountTypeOptions = new ArrayList<AccountTypeOption>();
+        in.readList(this.accountTypeOptions, AccountTypeOption.class.getClassLoader());
+    }
 
     public List<AccountTypeOption> getAccountTypeOptions() {
         return accountTypeOptions;
@@ -34,25 +54,4 @@ public class BeneficiaryTemplate implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeList(this.accountTypeOptions);
     }
-
-    public BeneficiaryTemplate() {
-    }
-
-    protected BeneficiaryTemplate(Parcel in) {
-        this.accountTypeOptions = new ArrayList<AccountTypeOption>();
-        in.readList(this.accountTypeOptions, AccountTypeOption.class.getClassLoader());
-    }
-
-    public static final Creator<BeneficiaryTemplate> CREATOR =
-            new Creator<BeneficiaryTemplate>() {
-        @Override
-        public BeneficiaryTemplate createFromParcel(Parcel source) {
-            return new BeneficiaryTemplate(source);
-        }
-
-        @Override
-        public BeneficiaryTemplate[] newArray(int size) {
-            return new BeneficiaryTemplate[size];
-        }
-    };
 }

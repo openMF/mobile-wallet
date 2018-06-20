@@ -18,6 +18,7 @@ public interface AuthContract {
     interface LoginView extends BaseView<LoginPresenter> {
 
         void loginSuccess();
+
         void loginFail(String message);
     }
 
@@ -30,12 +31,14 @@ public interface AuthContract {
     interface SignupView extends BaseView<SignupPresenter> {
 
         void openAddDetails();
+
         void openLoginScreen();
     }
 
     interface SignupPresenter extends BasePresenter {
 
         void onVerifyNumber();
+
         void navigateLogin();
 
     }
@@ -44,12 +47,14 @@ public interface AuthContract {
     interface LandingView extends BaseView<LandingPresenter> {
 
         void openLoginScreen();
+
         void openSignupScreen();
     }
 
     interface LandingPresenter extends BasePresenter {
 
         void navigateLogin();
+
         void navigateSignup();
 
     }
@@ -57,30 +62,40 @@ public interface AuthContract {
     interface AddAccountView extends BaseView<AddAcountPresenter> {
 
         void showBanks(List<Bank> popularBanks, List<Bank> otherBanks);
+
         void openBankAccount();
     }
 
     interface AddAcountPresenter extends BasePresenter {
 
         void loadBankData();
+
         void bankSelected(Bank bank);
     }
 
     interface BusinessDetailsView extends BaseView<BusinessDetailsPresenter> {
 
         void openAddAccount();
+
         void showPanStatus(boolean status);
+
         void showAadharOtpSent();
+
         void showAadharStatus(boolean status);
+
         void showAadharValid(boolean status);
     }
 
     interface BusinessDetailsPresenter extends BasePresenter {
 
         void registerDetails();
+
         void verifyPan(String number);
+
         void verifyAadhar(String number);
+
         void generateAadharOtp();
+
         void verifyAadharOtp(String otp);
     }
 

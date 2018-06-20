@@ -9,9 +9,29 @@ import android.os.Parcelable;
 
 public class Currency implements Parcelable {
 
+    public static final Creator<Currency> CREATOR = new Creator<Currency>() {
+        @Override
+        public Currency createFromParcel(Parcel source) {
+            return new Currency(source);
+        }
+
+        @Override
+        public Currency[] newArray(int size) {
+            return new Currency[size];
+        }
+    };
     private String code;
     private String displaySymbol;
     private String displayLabel;
+
+    public Currency() {
+    }
+
+    protected Currency(Parcel in) {
+        this.code = in.readString();
+        this.displaySymbol = in.readString();
+        this.displayLabel = in.readString();
+    }
 
     public String getCode() {
         return code;
@@ -48,25 +68,4 @@ public class Currency implements Parcelable {
         dest.writeString(this.displaySymbol);
         dest.writeString(this.displayLabel);
     }
-
-    public Currency() {
-    }
-
-    protected Currency(Parcel in) {
-        this.code = in.readString();
-        this.displaySymbol = in.readString();
-        this.displayLabel = in.readString();
-    }
-
-    public static final Creator<Currency> CREATOR = new Creator<Currency>() {
-        @Override
-        public Currency createFromParcel(Parcel source) {
-            return new Currency(source);
-        }
-
-        @Override
-        public Currency[] newArray(int size) {
-            return new Currency[size];
-        }
-    };
 }

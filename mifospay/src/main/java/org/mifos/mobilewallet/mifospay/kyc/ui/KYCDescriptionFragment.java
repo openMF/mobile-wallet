@@ -82,8 +82,11 @@ public class KYCDescriptionFragment extends
         View rootView = inflater.inflate(R.layout.fragment_kyc_desc, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle("KYC Registration");
+        setToolbarTitle("Complete KYC");
+        showBackButton();
+        setSwipeEnabled(false);
 
+        showProgressDialog("Please wait..");
         mKYCDescriptionPresenter.fetchCurrentLevel();
 
         return rootView;
@@ -129,7 +132,7 @@ public class KYCDescriptionFragment extends
 
     @Override
     public void showToast(String message) {
-        Toaster.show(getView(), message);
+        Toaster.showToast(getContext(), message);
     }
 
     @Override
@@ -138,11 +141,6 @@ public class KYCDescriptionFragment extends
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-    }
-
-    @Override
-    public void showProgressDialog(String message) {
-        super.showProgressDialog(message);
     }
 
     @Override

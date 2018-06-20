@@ -16,6 +16,10 @@ public interface TransferContract {
         void transferSuccess();
 
         void transferFailure();
+
+        void showToast(String message);
+
+        void showSnackbar(String message);
     }
 
     interface TransferPresenter extends BasePresenter {

@@ -2,10 +2,9 @@ package org.mifos.mobilewallet.auth.presenter;
 
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.base.BaseView;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 import javax.inject.Inject;
-
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 /**
  * Created by naman on 16/6/17.
@@ -13,8 +12,8 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler;
 
 public class LandingPresenter implements AuthContract.LandingPresenter {
 
-    private AuthContract.LandingView mLandingView;
     private final UseCaseHandler mUsecaseHandler;
+    private AuthContract.LandingView mLandingView;
 
 
     @Inject

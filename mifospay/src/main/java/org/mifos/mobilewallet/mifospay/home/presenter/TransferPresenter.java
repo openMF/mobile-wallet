@@ -14,13 +14,12 @@ import javax.inject.Inject;
 
 public class TransferPresenter implements HomeContract.TransferPresenter {
 
-    private HomeContract.TransferView mTransferView;
     private final UseCaseHandler mUsecaseHandler;
-
     private final LocalRepository localRepository;
-
     @Inject
     FetchClientData fetchClientData;
+
+    private HomeContract.TransferView mTransferView;
 
     @Inject
     public TransferPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {

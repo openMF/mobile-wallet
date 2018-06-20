@@ -7,9 +7,9 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
-import javax.inject.Inject;
-
 import org.mifos.mobilewallet.core.base.UseCase;
+
+import javax.inject.Inject;
 
 /**
  * Created by naman on 8/7/17.

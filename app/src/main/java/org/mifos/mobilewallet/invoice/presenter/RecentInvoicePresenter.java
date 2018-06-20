@@ -1,6 +1,11 @@
 package org.mifos.mobilewallet.invoice.presenter;
 
 import org.mifos.mobilewallet.base.BaseView;
+import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.domain.usecase.FetchAccountTransactions;
+import org.mifos.mobilewallet.core.domain.usecase.FetchAccounts;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.invoice.InvoiceContract;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
@@ -11,32 +16,22 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.usecase.FetchAccountTransactions;
-import org.mifos.mobilewallet.core.domain.usecase.FetchAccounts;
-
 /**
  * Created by naman on 11/7/17.
  */
 
 public class RecentInvoicePresenter implements InvoiceContract.RecentInvoicePresenter {
 
-    private InvoiceContract.RecentInvoiceView mInvoiceView;
     private final UseCaseHandler mUsecaseHandler;
-
     @Inject
     FetchLocalInvoices fetchLocalInvoices;
-
     @Inject
     FetchAccountTransactions fetchAccountTransactions;
-
     @Inject
     FetchAccounts fetchAccountsUseCase;
-
     @Inject
     LocalRepository localRepository;
+    private InvoiceContract.RecentInvoiceView mInvoiceView;
 
     @Inject
     public RecentInvoicePresenter(UseCaseHandler useCaseHandler) {

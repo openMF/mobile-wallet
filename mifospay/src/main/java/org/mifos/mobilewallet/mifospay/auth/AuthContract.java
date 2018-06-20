@@ -15,6 +15,7 @@ public interface AuthContract {
     interface LoginView extends BaseView<LoginPresenter> {
 
         void loginSuccess();
+
         void loginFail(String message);
     }
 
@@ -27,12 +28,14 @@ public interface AuthContract {
     interface SignupView extends BaseView<SignupPresenter> {
 
         void openAddDetails();
+
         void openLoginScreen();
     }
 
     interface SignupPresenter extends BasePresenter {
 
         void onVerifyNumber();
+
         void navigateLogin();
 
     }

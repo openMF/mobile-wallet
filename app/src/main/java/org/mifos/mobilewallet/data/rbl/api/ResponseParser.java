@@ -17,7 +17,7 @@ public class ResponseParser {
         try {
             JSONObject object = new JSONObject(response);
 
-            JSONObject body =  object.getJSONObject("panInquiryResponse").getJSONObject("Body");
+            JSONObject body = object.getJSONObject("panInquiryResponse").getJSONObject("Body");
 
             if (body.has("returncode")
                     && body.getString("returncode") != null

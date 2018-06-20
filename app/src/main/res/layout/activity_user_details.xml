@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/root_layout">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
@@ -17,23 +18,22 @@
 
 
         <ImageView
+            android:id="@+id/iv_user_image"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
-            android:id="@+id/iv_user_image"
-            android:layout_marginTop="10dp"
-            android:layout_gravity="center_horizontal" />
+            android:layout_marginTop="10dp"/>
 
         <TextView
+            android:id="@+id/tv_user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_user_name"
-            android:textColor="@android:color/white"
+            android:layout_marginBottom="@dimen/value_30dp"
             android:layout_marginLeft="@dimen/value_10dp"
             android:layout_marginTop="@dimen/value_15dp"
-            android:layout_marginBottom="@dimen/value_30dp"
-            android:gravity="center_horizontal"/>
-
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white"/>
 
 
     </android.support.design.widget.AppBarLayout>
@@ -41,7 +41,7 @@
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,31 +59,31 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/value_15dp"
                     android:layout_marginLeft="@dimen/value_10dp"
                     android:layout_marginRight="@dimen/value_10dp"
                     android:layout_marginTop="@dimen/value_15dp"
-                    android:layout_marginBottom="@dimen/value_15dp"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/user_details_txt"
-                        android:focusable="true"
                         android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:layout_centerVertical="true"/>
+                        android:text="@string/user_details_txt"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/value_20dp">
+                        android:layout_marginTop="@dimen/value_20dp"
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_person" />
+                            app:srcCompat="@drawable/ic_person"/>
 
                         <TextView
                             android:id="@+id/tv_user_details_name"
@@ -95,14 +95,14 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginTop="@dimen/value_20dp">
+                        android:layout_marginTop="@dimen/value_20dp"
+                        android:orientation="horizontal">
 
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:srcCompat="@drawable/ic_email" />
+                            app:srcCompat="@drawable/ic_email"/>
 
                         <TextView
                             android:id="@+id/tv_user_details_email"
@@ -124,28 +124,28 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/value_15dp"
                     android:layout_marginLeft="@dimen/value_10dp"
                     android:layout_marginRight="@dimen/value_10dp"
-                    android:layout_marginTop="@dimen/value_15dp"
-                    android:layout_marginBottom="@dimen/value_15dp">
+                    android:layout_marginTop="@dimen/value_15dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/vpa_txt"
-                        android:focusable="true"
                         android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:layout_centerVertical="true"/>
+                        android:text="@string/vpa_txt"/>
 
                     <Button
                         android:id="@+id/btn_add_vpa"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
-                        android:text="@string/add_txt"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/value_10dp"
                         android:background="@color/colorPrimary"
+                        android:text="@string/add_txt"
                         android:textColor="@android:color/white"
                         android:textSize="13sp"/>
 
@@ -161,28 +161,28 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/value_15dp"
                     android:layout_marginLeft="@dimen/value_10dp"
                     android:layout_marginRight="@dimen/value_10dp"
-                    android:layout_marginTop="@dimen/value_15dp"
-                    android:layout_marginBottom="@dimen/value_15dp">
+                    android:layout_marginTop="@dimen/value_15dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/pan_txt"
-                        android:focusable="true"
                         android:layout_alignParentLeft="true"
+                        android:layout_centerVertical="true"
+                        android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:layout_centerVertical="true"/>
+                        android:text="@string/pan_txt"/>
 
                     <Button
                         android:id="@+id/btn_add_pan"
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
-                        android:text="@string/add_txt"
                         android:layout_alignParentRight="true"
                         android:layout_marginRight="@dimen/value_10dp"
                         android:background="@color/colorPrimary"
+                        android:text="@string/add_txt"
                         android:textColor="@android:color/white"
                         android:textSize="13sp"/>
 

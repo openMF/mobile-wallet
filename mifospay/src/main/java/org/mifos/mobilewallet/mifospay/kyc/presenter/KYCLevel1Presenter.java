@@ -18,13 +18,11 @@ import javax.inject.Inject;
 
 public class KYCLevel1Presenter implements KYCContract.KYCLevel1Presenter {
 
-    private KYCContract.KYCLevel1View mKYCLevel1View;
-
     private final UseCaseHandler mUseCaseHandler;
     private final LocalRepository mLocalRepository;
-
     @Inject
     UploadKYCLevel1Details uploadKYCLevel1DetailsUseCase;
+    private KYCContract.KYCLevel1View mKYCLevel1View;
 
     @Inject
     public KYCLevel1Presenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
@@ -42,8 +40,6 @@ public class KYCLevel1Presenter implements KYCContract.KYCLevel1Presenter {
     @Override
     public void submitData(String fname, String lname, String address1, String address2,
             String phonecode, String phoneno, String dob) {
-
-        mKYCLevel1View.showProgressDialog("Please wait..");
 
         if (PhoneNumberUtils.isGlobalPhoneNumber(phonecode + phoneno) || true) {
 
