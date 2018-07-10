@@ -10,6 +10,7 @@ import android.widget.TextView;
 import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
 import org.mifos.mobilewallet.core.utils.DateHelper;
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import java.util.List;
 
@@ -45,9 +46,10 @@ public class InvoicesAdapter
         Invoice invoice = mInvoiceList.get(position);
 
         holder.mTvInvoiceId.setText(invoice.getId() + "");
-        holder.mTvInvoiceStatus.setText((invoice.getStatus() == 0) ? "Pending" : "Done");
+        holder.mTvInvoiceStatus.setText(
+                (invoice.getStatus() == 0) ? Constants.PENDING : Constants.DONE);
         holder.mTvInvoiceDate.setText(DateHelper.getDateAsString(invoice.getDate()));
-        holder.mTvInvoiceAmount.setText("INR " + invoice.getAmount());
+        holder.mTvInvoiceAmount.setText(Constants.INR + invoice.getAmount());
     }
 
     @Override

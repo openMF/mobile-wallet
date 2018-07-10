@@ -21,7 +21,7 @@
                 android:background="@android:color/transparent"
                 android:drawableLeft="@drawable/ic_search"
                 android:drawablePadding="@dimen/value_10dp"
-                android:hint="Enter name or vpa"
+                android:hint="@string/enter_name_or_vpa"
                 android:padding="@dimen/value_10dp"/>
 
         </android.support.v7.widget.Toolbar>

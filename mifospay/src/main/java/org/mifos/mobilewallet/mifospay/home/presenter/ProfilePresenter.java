@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.mifospay.home.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.domain.usecase.account.BlockUnblockCommand;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
@@ -16,6 +17,9 @@ public class ProfilePresenter implements HomeContract.ProfilePresenter {
     private final UseCaseHandler mUsecaseHandler;
     private final LocalRepository localRepository;
     private HomeContract.ProfileView mProfileView;
+
+    @Inject
+    BlockUnblockCommand blockUnblockCommandUseCase;
 
     @Inject
     public ProfilePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {

@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.auth.presenter;
 import org.mifos.mobilewallet.auth.AuthContract;
 import org.mifos.mobilewallet.base.BaseView;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.CreateUser;
+import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser;
 
 import javax.inject.Inject;
 

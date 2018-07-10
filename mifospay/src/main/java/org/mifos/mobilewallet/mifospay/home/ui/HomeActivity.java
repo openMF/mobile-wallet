@@ -3,11 +3,12 @@ package org.mifos.mobilewallet.mifospay.home.ui;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import org.mifos.mobilewallet.core.domain.model.Client;
+import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.HomePresenter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -39,7 +40,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
 
         mPresenter.attachView(this);
 
-        setToolbarTitle("Home");
+        setToolbarTitle(Constants.HOME);
         hideBackButton();
 
         replaceFragment(HomeFragment.newInstance(), false, R.id.container);

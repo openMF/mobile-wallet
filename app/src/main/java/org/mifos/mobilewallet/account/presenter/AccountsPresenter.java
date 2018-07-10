@@ -4,7 +4,7 @@ import org.mifos.mobilewallet.account.AccountContract;
 import org.mifos.mobilewallet.base.BaseView;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.FetchAccounts;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccounts;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 
 import javax.inject.Inject;

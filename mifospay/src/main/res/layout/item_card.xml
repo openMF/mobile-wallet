@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:text="Credit Card Number"
+            android:text="@string/credit_card_number"
             android:textColor="@color/grey_900"
             android:textSize="@dimen/value_30sp"
             android:theme="@style/Theme.AppCompat"/>
@@ -55,7 +55,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:text="Expiry Date"
+            android:text="@string/expiry_date"
             android:textColor="@color/grey_900"
             android:theme="@style/Theme.AppCompat"/>
 

@@ -43,7 +43,7 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
 
         ButterKnife.bind(ReadQrActivity.this);
 
-        setToolbarTitle("Scan code");
+        setToolbarTitle(Constants.SCAN_CODE);
         showBackButton();
         mPresenter.attachView(this);
 

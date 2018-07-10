@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.user.presenter;
 import org.mifos.mobilewallet.base.BaseView;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
+import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
 import org.mifos.mobilewallet.user.UserContract;
 import org.mifos.mobilewallet.user.domain.usecase.VerifyPanDetails;
 

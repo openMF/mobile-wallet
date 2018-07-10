@@ -77,6 +77,7 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
             progressDialog.show();
         } else {
             progressDialog = new ProgressDialog(this);
+            progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setMessage(message);
             progressDialog.show();
         }

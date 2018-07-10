@@ -26,29 +26,26 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Invoice details"
+                android:text="@string/invoice_details"
                 android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/tv_merchantId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/value_20dp"
-                android:text="merchant name"/>
+                android:layout_marginTop="@dimen/value_20dp"/>
 
             <TextView
                 android:id="@+id/tv_consumerId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/value_10dp"
-                android:text="consumer name"/>
+                android:layout_marginTop="@dimen/value_10dp"/>
 
             <TextView
                 android:id="@+id/tv_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/value_10dp"
-                android:text="amount"/>
+                android:layout_marginTop="@dimen/value_10dp"/>
 
             <TextView
                 android:id="@+id/tv_itemsBought"
@@ -95,7 +92,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Payment Options (will be fetched from UPI)"
+                android:text="@string/payment_options_will_be_fetched_from_upi"
                 android:textStyle="bold"/>
 
         </LinearLayout>
@@ -114,7 +111,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Unique Payment Link"
+                android:text="@string/unique_payment_link"
                 android:textStyle="bold"/>
 
             <TextView
@@ -146,7 +143,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Unique Receipt Link"
+                android:text="@string/unique_receipt_link"
                 android:textStyle="bold"/>
 
             <TextView

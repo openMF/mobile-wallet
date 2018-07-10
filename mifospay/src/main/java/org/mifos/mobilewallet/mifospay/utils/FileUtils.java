@@ -12,7 +12,8 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.util.Log;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -20,6 +21,21 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class FileUtils {
+
+    public static JSONObject readJson(Context context, String file) {
+        JSONObject jsonObject = null;
+        try {
+            InputStream is = context.getAssets().open(file);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            jsonObject = new JSONObject(new String(buffer, "UTF-8"));
+        } catch (Exception e) {
+            DebugUtil.log(e.toString(), e.getMessage());
+        }
+        return jsonObject;
+    }
 
     /**
      * Method for return file path of Gallery image/ Document / Video / Audio
@@ -167,7 +183,6 @@ public class FileUtils {
             in.close();
             return true;
         } catch (Exception e) {
-            Log.d("qxz", e.getLocalizedMessage());
             return false;
         }
     }

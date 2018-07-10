@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -97,7 +98,7 @@ public class AddCardDialog extends BottomSheetDialogFragment {
             etFname.setText(editCard.getFirstName());
             etLname.setText(editCard.getLastName());
             etCardNumber.setText(editCard.getCardNumber());
-            btnAdd.setText("Update");
+            btnAdd.setText(Constants.UPDATE);
         }
     }
 

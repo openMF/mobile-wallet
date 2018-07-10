@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:nextFocusForward="@id/et_lName"
             android:singleLine="true"
-            android:hint="First Name"/>
+            android:hint="@string/first_name"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:nextFocusForward="@id/et_card_number"
             android:singleLine="true"
-            android:hint="Last Name"/>
+            android:hint="@string/last_name"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -45,7 +45,7 @@
             android:id="@+id/et_card_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Credit Card Number"
+            android:hint="@string/credit_card_number"
             android:nextFocusForward="@id/spn_mm"
             android:singleLine="true"
             android:inputType="number"/>
@@ -55,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/value_10dp"
-        android:text="Expiry Date"/>
+        android:text="@string/expiry_date"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -115,7 +115,7 @@
             android:layout_gravity="right"
             android:layout_marginLeft="@dimen/value_30dp"
             android:background="@color/primaryBlue"
-            android:text="ADD"
+            android:text="@string/add"
             android:textColor="@android:color/white"/>
 
     </LinearLayout>

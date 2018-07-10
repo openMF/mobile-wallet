@@ -4,7 +4,7 @@ import com.raizlabs.android.dbflow.sql.language.SQLite;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.auth.domain.model.Bank;
-import org.mifos.mobilewallet.core.domain.model.Client;
+import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.invoice.domain.model.Invoice;
 import org.mifos.mobilewallet.invoice.domain.model.PaymentMethod;
 

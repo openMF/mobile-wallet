@@ -71,12 +71,47 @@
                     android:scheme="https"/>
             </intent-filter>
         </activity>
-        <activity android:name=".transactions.ui.SpecificTransactionsActivity"
-                  android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".transactions.ui.SpecificTransactionsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".invoice.ui.InvoicesActivity"
-                  android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".invoice.ui.InvoicesActivity"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
+
+        <service android:name=".notification.services.MifosPayMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service android:name=".notification.services.MifosPayInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <activity
+            android:name=".registration.ui.SignupActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".registration.ui.MobileVerificationActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".editprofile.ui.EditProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".settings.ui.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".bank.ui.BankAccountsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".bank.ui.LinkBankAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".bank.ui.BankAccountDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

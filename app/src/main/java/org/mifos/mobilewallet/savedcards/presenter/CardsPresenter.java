@@ -4,10 +4,10 @@ import org.mifos.mobilewallet.base.BaseView;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
-import org.mifos.mobilewallet.core.domain.usecase.AddCard;
-import org.mifos.mobilewallet.core.domain.usecase.DeleteCard;
-import org.mifos.mobilewallet.core.domain.usecase.EditCard;
-import org.mifos.mobilewallet.core.domain.usecase.FetchSavedCards;
+import org.mifos.mobilewallet.core.domain.usecase.savedcards.AddCard;
+import org.mifos.mobilewallet.core.domain.usecase.savedcards.DeleteCard;
+import org.mifos.mobilewallet.core.domain.usecase.savedcards.EditCard;
+import org.mifos.mobilewallet.core.domain.usecase.savedcards.FetchSavedCards;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 import org.mifos.mobilewallet.savedcards.CardsContract;
 

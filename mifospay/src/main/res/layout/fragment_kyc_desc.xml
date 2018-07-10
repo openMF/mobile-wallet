@@ -36,7 +36,7 @@
                     android:layout_marginLeft="@dimen/value_10dp"
                     android:layout_marginRight="@dimen/value_10dp"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 1"
+                    android:text="@string/level_1"
                     android:textColor="@color/white"
                     android:textSize="@dimen/value_25sp"/>
 
@@ -47,7 +47,7 @@
                     android:layout_marginLeft="@dimen/value_10dp"
                     android:layout_marginRight="@dimen/value_10dp"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 1 Description"
+                    android:text="@string/level_1_description"
                     android:textColor="@color/gray"/>
 
             </LinearLayout>
@@ -75,7 +75,7 @@
                     android:layout_marginLeft="@dimen/value_10dp"
                     android:layout_marginRight="@dimen/value_10dp"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 2"
+                    android:text="@string/level_2"
                     android:textColor="@color/white"
                     android:textSize="@dimen/value_25sp"/>
 
@@ -86,7 +86,7 @@
                     android:layout_marginLeft="@dimen/value_10dp"
                     android:layout_marginRight="@dimen/value_10dp"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 2 Description"
+                    android:text="@string/level_2_description"
                     android:textColor="@color/gray"/>
 
             </LinearLayout>
@@ -114,7 +114,7 @@
                     android:layout_marginLeft="@dimen/value_10dp"
                     android:layout_marginRight="@dimen/value_10dp"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 3"
+                    android:text="@string/level_3"
                     android:textColor="@color/white"
                     android:textSize="@dimen/value_25sp"/>
 
@@ -125,7 +125,7 @@
                     android:layout_marginLeft="@dimen/value_10dp"
                     android:layout_marginRight="@dimen/value_10dp"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 3 Description"
+                    android:text="@string/level_3_description"
                     android:textColor="@color/gray"/>
 
             </LinearLayout>

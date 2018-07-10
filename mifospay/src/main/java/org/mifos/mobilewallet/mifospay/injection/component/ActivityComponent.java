@@ -2,8 +2,12 @@ package org.mifos.mobilewallet.mifospay.injection.component;
 
 
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
+import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountDetailActivity;
+import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity;
+import org.mifos.mobilewallet.mifospay.bank.ui.LinkBankAccountActivity;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.SearchActivity;
+import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
 import org.mifos.mobilewallet.mifospay.home.ui.HomeActivity;
 import org.mifos.mobilewallet.mifospay.home.ui.HomeFragment;
 import org.mifos.mobilewallet.mifospay.home.ui.ProfileFragment;
@@ -21,7 +25,10 @@ import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
+import org.mifos.mobilewallet.mifospay.registration.ui.MobileVerificationActivity;
+import org.mifos.mobilewallet.mifospay.registration.ui.SignupActivity;
 import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsFragment;
+import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
 import org.mifos.mobilewallet.mifospay.transactions.ui.SpecificTransactionsActivity;
 import org.mifos.mobilewallet.mifospay.transactions.ui.TransactionDetailDialog;
 import org.mifos.mobilewallet.mifospay.transactions.ui.TransactionsHistoryActivity;
@@ -77,4 +84,18 @@ public interface ActivityComponent {
     void inject(SpecificTransactionsActivity specificTransactionsActivity);
 
     void inject(InvoicesActivity invoicesActivity);
+
+    void inject(SignupActivity signupActivity);
+
+    void inject(MobileVerificationActivity mobileVerificationActivity);
+
+    void inject(EditProfileActivity editProfileActivity);
+
+    void inject(SettingsActivity settingsActivity);
+
+    void inject(BankAccountsActivity bankAccountsActivity);
+
+    void inject(LinkBankAccountActivity linkBankAccountActivity);
+
+    void inject(BankAccountDetailActivity bankAccountDetailActivity);
 }

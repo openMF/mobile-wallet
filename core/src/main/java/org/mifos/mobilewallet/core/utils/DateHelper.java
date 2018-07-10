@@ -19,6 +19,8 @@ public class DateHelper {
     public static final String LOG_TAG = DateHelper.class.getSimpleName();
 
     public static final String FORMAT_dd_MMMM_yyyy = "dd MMMM yyyy";
+    public static final String DD_MMM_YYYY = "dd MMM yyyy";
+    public static final String DD_MM_YYYY = "dd-MM-yyyy";
 
     /**
      * the result string uses the list given in a reverse order ([x, y, z] results in "z y x")
@@ -40,7 +42,7 @@ public class DateHelper {
     }
 
     public static String getDateAsString(List<Integer> integersOfDate, String pattern) {
-        return DateHelper.getFormatConverter("dd MMM yyyy",
+        return DateHelper.getFormatConverter(DD_MMM_YYYY,
                 pattern, DateHelper.getDateAsString(integersOfDate));
 
     }
@@ -53,7 +55,7 @@ public class DateHelper {
      * @return dd MMMM yyyy format date string.
      */
     public static String getSpecificFormat(String format, String dateString) {
-        SimpleDateFormat pickerFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+        SimpleDateFormat pickerFormat = new SimpleDateFormat(DD_MM_YYYY, Locale.ENGLISH);
         SimpleDateFormat finalFormat = new SimpleDateFormat(format, Locale.ENGLISH);
         Date date = null;
         try {
@@ -139,7 +141,7 @@ public class DateHelper {
 
     public static long getDateAsLongFromList(List<Integer> integersOfDate) {
         String dateStr = getDateAsString(integersOfDate);
-        return getDateAsLongFromString(dateStr, "dd MMM yyyy");
+        return getDateAsLongFromString(dateStr, DD_MMM_YYYY);
     }
 
     public static long subtractWeeks(int number) {
@@ -156,7 +158,7 @@ public class DateHelper {
     }
 
     public static String getDateAsStringFromLong(long timeInMillis) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat(DD_MMM_YYYY);
         return sdf.format(new Date(timeInMillis));
     }
 

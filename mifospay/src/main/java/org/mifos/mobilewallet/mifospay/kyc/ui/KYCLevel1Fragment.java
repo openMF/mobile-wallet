@@ -16,6 +16,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCLevel1Presenter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
 
@@ -91,7 +92,7 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
                 myCalendar.set(Calendar.MONTH, monthOfYear);
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
 
-                String myFormat = "dd/MM/yy";
+                String myFormat = Constants.DD_MM_YY;
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat);
 
                 etDOB.setText(sdf.format(myCalendar.getTime()));
@@ -107,7 +108,7 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
         View rootView = inflater.inflate(R.layout.fragment_kyc_lvl1, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle("KYC Registration Level 1");
+        setToolbarTitle(Constants.KYC_REGISTRATION_LEVEL_1);
 
         return rootView;
     }
@@ -122,7 +123,7 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
 
     @OnClick(R.id.btn_submit)
     public void onClickSubmit() {
-        showProgressDialog("Please wait..");
+        showProgressDialog(Constants.PLEASE_WAIT);
 
         String fname = etFname.getText().toString();
         String lname = etLname.getText().toString();

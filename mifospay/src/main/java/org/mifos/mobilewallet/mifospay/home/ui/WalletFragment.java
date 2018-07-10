@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.Account;
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
@@ -81,7 +82,7 @@ public class WalletFragment extends BaseFragment implements HomeContract.WalletV
             @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_wallet, container, false);
-        setToolbarTitle("Home");
+        setToolbarTitle(Constants.HOME);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
         hideBackButton();
@@ -136,7 +137,7 @@ public class WalletFragment extends BaseFragment implements HomeContract.WalletV
 
     @Override
     public void showToast(String message) {
-        Toaster.showToast(getContext(), message);
+        Toaster.showToast(getParentFragment().getContext(), message);
     }
 
     @Override
@@ -158,6 +159,7 @@ public class WalletFragment extends BaseFragment implements HomeContract.WalletV
 
     @OnClick(R.id.btn_addBankAccount)
     public void onMBtnAddBankAccountClicked() {
+        startActivity(new Intent(getActivity(), BankAccountsActivity.class));
     }
 
     @OnClick(R.id.btn_kyc)

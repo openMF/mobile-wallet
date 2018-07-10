@@ -16,6 +16,9 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.SearchService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.ThirdPartyTransferService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.TwoFactorAuthService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.UserService;
+import org.mifos.mobilewallet.core.utils.Constants;
+
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -29,6 +32,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FineractApiManager {
 
+    public static final String DEFAULT = "default";
+    public static final String BASIC = "Basic ";
     private static BaseURL baseUrl = new BaseURL();
     private static final String BASE_URL = baseUrl.getUrl();
 
@@ -51,7 +56,7 @@ public class FineractApiManager {
     private static SelfServiceApiManager sSelfInstance;
 
     public FineractApiManager() {
-        String authToken = "Basic " + Base64.encodeToString("mifos:password".getBytes(),
+        String authToken = BASIC + Base64.encodeToString(Constants.MIFOS_PASSWORD.getBytes(),
                 Base64.NO_WRAP);
         createService(authToken);
 
@@ -88,8 +93,11 @@ public class FineractApiManager {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken, "default"))
+                .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -98,8 +106,8 @@ public class FineractApiManager {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(okHttpClient)
                 .build();
-        init();
 
+        init();
     }
 
     public static void createSelfService(String authToken) {

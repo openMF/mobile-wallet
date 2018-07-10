@@ -20,7 +20,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/value_20dp"
                 android:layout_marginTop="@dimen/value_20dp"
-                android:text="Balance"
+                android:text="@string/balance"
                 android:textColor="@color/grey_900"
                 android:textSize="@dimen/value_18sp"/>
 
@@ -53,7 +53,7 @@
                     android:paddingLeft="@dimen/value_20dp"
                     android:gravity="right|bottom"
                     android:paddingTop="@dimen/value_5dp"
-                    android:text="TRANSACTION HISTORY"
+                    android:text="@string/transaction_history"
                     android:textColor="@color/primaryDarkBlue"
                     android:textSize="@dimen/value_14sp"
                     android:textStyle="bold"/>
@@ -85,7 +85,7 @@
                 android:drawablePadding="@dimen/value_10dp"
                 android:drawableTop="@drawable/ic_invoice"
                 android:gravity="center"
-                android:text="Invoices"/>
+                android:text="@string/invoices"/>
 
             <TextView
                 android:id="@+id/btn_send"
@@ -95,7 +95,7 @@
                 android:drawablePadding="@dimen/value_10dp"
                 android:drawableTop="@drawable/ic_send_selector"
                 android:gravity="center"
-                android:text="Send"/>
+                android:text="@string/send"/>
 
             <TextView
                 android:id="@+id/btn_request"
@@ -105,7 +105,7 @@
                 android:drawablePadding="@dimen/value_10dp"
                 android:drawableTop="@drawable/ic_request_selector"
                 android:gravity="center"
-                android:text="Request"/>
+                android:text="@string/request"/>
 
             <TextView
                 android:id="@+id/btn_show_qr"
@@ -115,7 +115,7 @@
                 android:drawablePadding="@dimen/value_10dp"
                 android:drawableTop="@drawable/qrcode_black_selector"
                 android:gravity="center"
-                android:text="QR code"/>
+                android:text="@string/qr_code"/>
 
         </LinearLayout>
     </android.support.v7.widget.CardView>
@@ -140,7 +140,7 @@
                 android:drawablePadding="@dimen/value_10dp"
                 android:drawableTop="@drawable/ic_bank"
                 android:gravity="center"
-                android:text="Bank Account"/>
+                android:text="@string/bank_account"/>
 
             <TextView
                 android:id="@+id/btn_kyc"
@@ -150,7 +150,7 @@
                 android:drawablePadding="@dimen/value_10dp"
                 android:drawableTop="@drawable/ic_account_balance_wallet"
                 android:gravity="center"
-                android:text="Complete KYC"/>
+                android:text="@string/complete_kyc"/>
 
             <TextView
                 android:id="@+id/btn_cards"
@@ -160,7 +160,7 @@
                 android:drawablePadding="@dimen/value_10dp"
                 android:drawableTop="@drawable/ic_saved_cards"
                 android:gravity="center"
-                android:text="Saved Cards"/>
+                android:text="@string/saved_cards"/>
 
         </LinearLayout>
     </android.support.v7.widget.CardView>

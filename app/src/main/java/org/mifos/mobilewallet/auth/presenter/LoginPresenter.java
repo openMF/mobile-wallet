@@ -5,10 +5,10 @@ import org.mifos.mobilewallet.base.BaseView;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
-import org.mifos.mobilewallet.core.domain.model.Client;
-import org.mifos.mobilewallet.core.domain.model.User;
-import org.mifos.mobilewallet.core.domain.usecase.AuthenticateUser;
-import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
+import org.mifos.mobilewallet.core.domain.model.client.Client;
+import org.mifos.mobilewallet.core.domain.model.user.User;
+import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
+import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.core.utils.Constants;
 import org.mifos.mobilewallet.data.local.PreferencesHelper;
 

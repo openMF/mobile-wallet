@@ -4,10 +4,12 @@ import android.net.Uri;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.FetchInvoices;
+import org.mifos.mobilewallet.core.domain.usecase.invoice.FetchInvoices;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 
 import javax.inject.Inject;
 
@@ -42,13 +44,16 @@ public class InvoicesPresenter implements InvoiceContract.InvoicesPresenter {
                 new UseCase.UseCaseCallback<FetchInvoices.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchInvoices.ResponseValue response) {
+                        DebugUtil.log("ivoices fetched successfully",
+                                response.getInvoiceList().size());
                         mInvoicesView.showInvoices(response.getInvoiceList());
                     }
 
                     @Override
                     public void onError(String message) {
+                        DebugUtil.log("unable to fetvh invoices");
                         mInvoicesView.hideProgress();
-                        mInvoicesView.showToast("Error fetching invoices");
+                        mInvoicesView.showToast(Constants.ERROR_FETCHING_INVOICES);
                     }
                 });
     }
@@ -56,7 +61,7 @@ public class InvoicesPresenter implements InvoiceContract.InvoicesPresenter {
     @Override
     public Uri getUniqueInvoiceLink(long id) {
         Uri data = Uri.parse(
-                "https://invoice.mifospay.com/" + mPreferencesHelper.getClientId() + "/" + id);
+                Constants.INVOICE_DOMAIN + mPreferencesHelper.getClientId() + "/" + id);
         return data;
     }
 }

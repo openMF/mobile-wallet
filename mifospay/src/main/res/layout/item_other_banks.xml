@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="horizontal"
+    android:padding="@dimen/value_10dp">
+
+    <ImageView
+        android:id="@+id/iv_popular_bank"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/value_10dp"
+        app:srcCompat="@drawable/ic_search"/>
+
+    <TextView
+        android:id="@+id/tv_popular_bank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/value_10dp"
+        android:layout_marginStart="40dp"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/value_15sp"/>
+
+</LinearLayout>

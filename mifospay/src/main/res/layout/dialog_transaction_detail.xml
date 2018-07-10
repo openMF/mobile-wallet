@@ -36,14 +36,12 @@
                     android:id="@+id/tv_transaction_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="id"
                     android:textColor="@color/primaryDarkBlue"/>
 
                 <TextView
                     android:id="@+id/tv_transaction_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="date"
                     android:textColor="@color/grey_900"/>
 
                 <TextView
@@ -51,7 +49,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:text="status"
                     android:textColor="@color/grey_900"
                     android:visibility="gone"/>
 
@@ -60,7 +57,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:text="status"
                     android:textColor="@color/grey_900"/>
 
             </LinearLayout>
@@ -72,7 +68,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/value_10dp"
-                android:text="100"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/value_30sp"
                 android:textStyle="bold"/>
@@ -184,7 +179,7 @@
             android:layout_marginTop="@dimen/value_10dp"
             android:foregroundGravity="center"
             android:gravity="center"
-            android:text="View Receipt"
+            android:text="@string/view_receipt"
             android:textColor="@color/primaryDarkBlue"
             android:textStyle="bold"/>
 

@@ -21,7 +21,7 @@
             <EditText android:id="@+id/et_fname"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:hint="First Name"
+                      android:hint="@string/first_name"
                       android:nextFocusForward="@id/et_lname"
                       android:singleLine="true"
                       android:theme="@style/Theme.AppCompat.Light"/>
@@ -37,7 +37,7 @@
             <EditText android:id="@+id/et_lname"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:hint="Last Name"
+                      android:hint="@string/last_name"
                       android:nextFocusForward="@id/et_address1"
                       android:singleLine="true"
                       android:theme="@style/Theme.AppCompat.Light"/>
@@ -54,7 +54,7 @@
             <EditText android:id="@+id/et_address1"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:hint="Address Line 1"
+                      android:hint="@string/address_line_1"
                       android:nextFocusForward="@id/et_address2"
                       android:singleLine="true"
                       android:theme="@style/Theme.AppCompat.Light"/>
@@ -70,7 +70,7 @@
             <EditText android:id="@+id/et_address2"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
-                      android:hint="Address Line 2"
+                      android:hint="@string/address_line_2"
                       android:nextFocusForward="@id/et_phonecode"
                       android:singleLine="true"
                       android:theme="@style/Theme.AppCompat.Light"/>
@@ -93,7 +93,7 @@
                     android:id="@+id/et_phonecode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Code"
+                    android:hint="@string/code"
                     android:inputType="phone"
                     android:nextFocusForward="@id/et_phoneno"
                     android:nextFocusRight="@id/et_phoneno"
@@ -138,7 +138,7 @@
                       android:cursorVisible="false"
                       android:focusable="false"
                       android:focusableInTouchMode="false"
-                      android:hint="Date of Birth"
+                      android:hint="@string/date_of_birth"
                       android:theme="@style/Theme.AppCompat.Light"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -149,7 +149,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="45dp"
             android:background="@drawable/button_round_black"
-            android:text="Submit"
+            android:text="@string/submit"
             android:textColor="@color/white"/>
     </LinearLayout>
 

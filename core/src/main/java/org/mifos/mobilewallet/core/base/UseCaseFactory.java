@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.base;
 
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
-import org.mifos.mobilewallet.core.domain.usecase.FetchAccountTransfer;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer;
 import org.mifos.mobilewallet.core.utils.Constants;
 
 import javax.inject.Inject;

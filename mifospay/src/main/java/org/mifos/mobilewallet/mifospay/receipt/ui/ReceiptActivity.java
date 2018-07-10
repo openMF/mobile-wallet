@@ -21,6 +21,7 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract;
 import org.mifos.mobilewallet.mifospay.receipt.presenter.ReceiptPresenter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.FileUtils;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
@@ -58,7 +59,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         setContentView(R.layout.activity_receipt);
 
         ButterKnife.bind(this);
-        setToolbarTitle("Receipt");
+        setToolbarTitle(Constants.RECEIPT);
         showBackButton();
         mPresenter.attachView(this);
 
@@ -75,10 +76,10 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                 public boolean onLongClick(View v) {
                     ClipboardManager cm = (ClipboardManager) getSystemService(
                             Context.CLIPBOARD_SERVICE);
-                    ClipData clipData = ClipData.newPlainText("Unique Receipt Link",
+                    ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_RECEIPT_LINK,
                             tvReceiptLink.getText().toString());
                     cm.setPrimaryClip(clipData);
-                    showSnackbar("Unique Receipt Link copied to clipboard");
+                    showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
                     return true;
                 }
             });
@@ -93,7 +94,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                         REQUEST_WRITE_EXTERNAL_STORAGE);
             } else {
                 // Permission already granted
-                showProgressDialog("Please Wait..");
+                showProgressDialog(Constants.PLEASE_WAIT);
                 mPresenter.fetchReceipt(transactionId);
             }
         }
@@ -116,7 +117,8 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
     @Override
     public void writeReceipt(ResponseBody responseBody, String filename) {
 
-        File mifosDirectory = new File(Environment.getExternalStorageDirectory(), "mifospay");
+        File mifosDirectory = new File(Environment.getExternalStorageDirectory(),
+                Constants.MIFOSPAY);
         if (!mifosDirectory.exists()) {
             mifosDirectory.mkdirs();
         }
@@ -124,11 +126,11 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         File documentFile = new File(mifosDirectory.getPath(), filename);
         if (!FileUtils.writeInputStreamDataToFile(responseBody.byteStream(), documentFile)) {
             hideProgressDialog();
-            showToast("Error downloading receipt");
+            showToast(Constants.ERROR_DOWNLOADING_RECEIPT);
         } else {
             pdfViewReceipt.fromFile(documentFile).load();
             hideProgressDialog();
-            showSnackbar("Receipt Downloaded Successfully.");
+            showSnackbar(Constants.RECEIPT_DOWNLOADED_SUCCESSFULLY);
         }
     }
 
@@ -143,13 +145,13 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                     // permission was granted, yay! Do the
                     // storage-related task you need to do.
 
-                    showProgressDialog("Please Wait..");
+                    showProgressDialog(Constants.PLEASE_WAIT);
                     mReceiptPresenter.fetchReceipt(transactionId);
 
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    showToast("Need external storage permission to download receipt.");
+                    showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_DOWNLOAD_RECEIPT);
                 }
                 return;
             }

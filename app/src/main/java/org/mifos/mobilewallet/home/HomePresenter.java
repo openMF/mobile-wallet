@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.home;
 import org.mifos.mobilewallet.base.BaseView;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
+import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
 import org.mifos.mobilewallet.data.local.LocalRepository;
 
 import javax.inject.Inject;

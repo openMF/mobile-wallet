@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.R;
 import org.mifos.mobilewallet.base.BaseActivity;
-import org.mifos.mobilewallet.core.domain.model.Client;
+import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.user.UserContract;
 import org.mifos.mobilewallet.user.presenter.UserDetailsPresenter;
 import org.mifos.mobilewallet.utils.TextDrawable;
