@@ -3,6 +3,8 @@ package org.mifos.mobilewallet.core.utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import retrofit2.HttpException;
+
 /**
  * Created by ankur on 26/June/2018
  */
@@ -15,6 +17,17 @@ public class ErrorJsonMessageHelper {
         String userErrorMessage = jsonObject.getJSONArray("errors")
                 .getJSONObject(0).getString("defaultUserMessage");
         return userErrorMessage;
+    }
+
+    public static String getUserMessage(Throwable e) {
+        String message = "Error";
+        try {
+            message = ((HttpException) e).response().errorBody().string();
+            message = getUserMessage(message);
+        } catch (Exception e1) {
+            message = "Error";
+        }
+        return message;
     }
 }
 

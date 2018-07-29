@@ -40,4 +40,41 @@ public interface BankContract {
 
     }
 
+
+    interface DebitCardPresenter extends BasePresenter {
+
+        void verifyDebitCard(String s, String s1, String s2);
+    }
+
+    interface DebitCardView extends BaseView<DebitCardPresenter> {
+
+        void verifyDebitCardSuccess(String otp);
+
+        void verifyDebitCardError(String message);
+    }
+
+    interface UpiPinPresenter extends BasePresenter {
+
+    }
+
+    interface UpiPinView extends BaseView<UpiPinPresenter> {
+
+    }
+
+    interface SetupUpiPinPresenter extends BasePresenter {
+
+        void setupUpiPin(BankAccountDetails bankAccountDetails, String upiPin);
+
+        void requestOtp(BankAccountDetails bankAccountDetails);
+    }
+
+    interface SetupUpiPinView extends BaseView<SetupUpiPinPresenter> {
+
+        void debitCardVerified(String otp);
+
+        void setupUpiPinSuccess(String mSetupUpiPin);
+
+        void setupUpiPinError(String message);
+    }
+
 }

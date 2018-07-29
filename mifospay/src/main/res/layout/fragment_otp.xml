@@ -2,12 +2,10 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/ll_setup_upi_pin"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/value_20dp"
-    android:layout_marginRight="@dimen/value_20dp"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="@dimen/value_20dp">
 
     <TextView
         android:id="@+id/tv_title"
@@ -21,48 +19,22 @@
 
     <com.alimuzaffar.lib.pin.PinEntryEditText
         android:id="@+id/pe_otp"
-        app:pinAnimationType="fromBottom"
-        app:pinLineStroke="2dp"
-        app:pinLineStrokeSelected="4dp"
         android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/value_10dp"
         android:cursorVisible="false"
         android:digits="1234567890"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:gravity="center"
-        android:inputType="numberPassword"
+        android:imeOptions="actionDone"
+        android:inputType="number"
         android:maxLength="4"
         android:textIsSelectable="false"
-        android:textSize="20sp"/>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/value_20dp"
-        android:gravity="center"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/grey_900"
-            android:text="@string/cancel_txt"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"/>
-
-        <Button
-            android:id="@+id/btn_okay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/value_20dp"
-            android:background="@color/primaryBlue"
-            android:text="@string/okay"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"/>
-
-    </LinearLayout>
+        android:textSize="20sp"
+        app:pinAnimationType="fromBottom"
+        app:pinLineStroke="2dp"
+        app:pinLineStrokeSelected="4dp"/>
 
 </LinearLayout>

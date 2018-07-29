@@ -1,7 +1,12 @@
 package org.mifos.mobilewallet.mifospay.bank.ui;
 
+import static org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity.SETUP_UPI_REQUEST_CODE;
+
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -12,6 +17,7 @@ import org.mifos.mobilewallet.mifospay.bank.BankContract;
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountDetailPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
@@ -26,6 +32,9 @@ public class BankAccountDetailActivity extends BaseActivity implements
     @Inject
     BankAccountDetailPresenter mPresenter;
     BankContract.BankAccountDetailPresenter mBankAccountDetailPresenter;
+
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
     @BindView(R.id.tv_bank_name)
     TextView mTvBankName;
     @BindView(R.id.tv_account_holder_name)
@@ -46,6 +55,7 @@ public class BankAccountDetailActivity extends BaseActivity implements
     CardView mCvDeleteBank;
 
     private BankAccountDetails bankAccountDetails;
+    private int index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +67,8 @@ public class BankAccountDetailActivity extends BaseActivity implements
         setToolbarTitle(Constants.BANK_ACCOUNT_DETAILS);
         mPresenter.attachView(this);
 
-        bankAccountDetails = getIntent().getExtras().getParcelable(
-                Constants.BANK_ACCOUNT_DETAILS);
+        bankAccountDetails = getIntent().getExtras().getParcelable(Constants.BANK_ACCOUNT_DETAILS);
+        index = getIntent().getExtras().getInt(Constants.INDEX);
         if (bankAccountDetails != null) {
 
             if (bankAccountDetails.isUpiEnabled()) {
@@ -72,6 +82,9 @@ public class BankAccountDetailActivity extends BaseActivity implements
             mTvBranch.setText(bankAccountDetails.getBranch());
             mTvIfsc.setText(bankAccountDetails.getIfsc());
             mTvType.setText(bankAccountDetails.getType());
+
+        } else {
+            finish();
         }
     }
 
@@ -80,24 +93,64 @@ public class BankAccountDetailActivity extends BaseActivity implements
         mBankAccountDetailPresenter = presenter;
     }
 
-    @OnClick({R.id.cv_change_upi_pin, R.id.cv_forgot_upi_pin, R.id.cv_delete_bank})
-    public void onViewClicked(View view) {
+    @OnClick(R.id.btn_setup_upi_pin)
+    public void onSetupUpiPinClicked() {
+        startSetupActivity(Constants.SETUP, index);
+    }
+
+    @OnClick(R.id.cv_change_upi_pin)
+    public void onChangeUpiPinClicked() {
         if (bankAccountDetails.isUpiEnabled()) {
-            switch (view.getId()) {
-                case R.id.cv_change_upi_pin:
-                    break;
-                case R.id.cv_forgot_upi_pin:
-                    break;
-                case R.id.cv_delete_bank:
-                    break;
-            }
+            startSetupActivity(Constants.CHANGE, index);
         } else {
-            Toaster.showToast(this, "Setup UPI PIN");
+            showToast(Constants.SETUP_UPI_PIN);
         }
     }
 
-    @OnClick(R.id.btn_setup_upi_pin)
-    public void onsetupUpiClicked() {
+    @OnClick(R.id.cv_forgot_upi_pin)
+    public void onForgotUpiPinClicked() {
+        if (bankAccountDetails.isUpiEnabled()) {
+            startSetupActivity(Constants.FORGOT, index);
+        } else {
+            showToast(Constants.SETUP_UPI_PIN);
+        }
+    }
 
+    private void startSetupActivity(String type, int index) {
+        Intent intent = new Intent(BankAccountDetailActivity.this, SetupUpiPinActivity.class);
+        intent.putExtra(Constants.BANK_ACCOUNT_DETAILS, bankAccountDetails);
+        intent.putExtra(Constants.TYPE, type);
+        intent.putExtra(Constants.INDEX, index);
+        startActivityForResult(intent, SETUP_UPI_REQUEST_CODE);
+    }
+
+    public void showToast(String message) {
+        Toaster.showToast(this, message);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        DebugUtil.log("rescode ", resultCode);
+        if (requestCode == SETUP_UPI_REQUEST_CODE && resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            DebugUtil.log("bundle", bundle);
+            if (bundle != null) {
+                bankAccountDetails = bundle.getParcelable(Constants.UPDATED_BANK_ACCOUNT);
+                index = bundle.getInt(Constants.INDEX);
+                if (bankAccountDetails.isUpiEnabled()) {
+                    mBtnSetupUpiPin.setVisibility(View.GONE);
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent();
+        intent.putExtra(Constants.UPDATED_BANK_ACCOUNT, bankAccountDetails);
+        intent.putExtra(Constants.INDEX, index);
+        setResult(Activity.RESULT_OK, intent);
+        super.onBackPressed();
     }
 }

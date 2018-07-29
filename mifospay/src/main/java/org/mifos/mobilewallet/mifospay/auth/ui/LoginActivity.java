@@ -54,6 +54,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
 
     private GoogleSignInClient googleSignInClient;
     private GoogleSignInAccount account;
+    private int mMifosSavingProductId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,8 +113,10 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         finish();
     }
 
-    public void signupUsingGoogleAccount() {
+    public void signupUsingGoogleAccount(int mifosSavingsProductId) {
         showProgressDialog(Constants.PLEASE_WAIT);
+
+        mMifosSavingProductId = mifosSavingsProductId;
 
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(
                 GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -141,21 +144,22 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
                 account = task.getResult(ApiException.class);
                 DebugUtil.log(account.toJson().toString(), account.toString());
                 hideProgressDialog();
-                signup();
+                signup(mMifosSavingProductId);
 
             } catch (Exception e) {
                 // Google Sign In failed, update UI appropriately
                 DebugUtil.log(Constants.GOOGLE_SIGN_IN_FAILED, e.getMessage());
                 Toaster.showToast(this, Constants.GOOGLE_SIGN_IN_FAILED);
                 hideProgressDialog();
-                signup();
+                signup(mMifosSavingProductId);
             }
         }
     }
 
-    public void signup() {
+    public void signup(int mifosSavingsProductId) {
         showProgressDialog(Constants.PLEASE_WAIT);
         Intent intent = new Intent(LoginActivity.this, MobileVerificationActivity.class);
+        intent.putExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, mMifosSavingProductId);
         if (account != null) {
             intent.putExtra(Constants.GOOGLE_PHOTO_URI, account.getPhotoUrl());
             intent.putExtra(Constants.GOOGLE_DISPLAY_NAME, account.getDisplayName());

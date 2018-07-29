@@ -62,6 +62,8 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
     private String firstName, lastName, mobileNumber, email, businessName, addressLine1,
             addressLine2, pincode, city, countryName, username, password, stateId, countryId;
 
+    private int mifosSavingsProductId;
+
     @Inject
     public SignupPresenter(UseCaseHandler useCaseHandler, PreferencesHelper preferencesHelper) {
         mUseCaseHandler = useCaseHandler;
@@ -79,7 +81,7 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
             final String mobileNumber, final String email, final String businessName,
             final String addressline1, final String addressline2, final String pincode,
             final String city, String countryName, final String username, final String password,
-            final String stateId, final String countryId) {
+            final String stateId, final String countryId, int mifosSavingProductId) {
 
         // 0. Unique Mobile Number (checked in MOBILE VERIFICATION ACTIVITY)
         // 1. Check for unique external id and username
@@ -101,6 +103,7 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
         this.stateId = stateId;
         this.countryId = countryId;
         this.mobileNumber = mobileNumber;
+        this.mifosSavingsProductId = mifosSavingProductId;
 
         mUseCaseHandler.execute(searchClientUseCase,
                 new SearchClient.RequestValues(username + "@mifos"),
@@ -140,7 +143,8 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
 
         DebugUtil.log("mob::::: ", mobileNumber);
         NewClient newClient = new NewClient(businessName, username, addressLine1,
-                addressLine2, city, pincode, stateId, countryId, mobileNumber);
+                addressLine2, city, pincode, stateId, countryId, mobileNumber,
+                mifosSavingsProductId);
 
         mUseCaseHandler.execute(createClientUseCase,
                 new CreateClient.RequestValues(newClient),

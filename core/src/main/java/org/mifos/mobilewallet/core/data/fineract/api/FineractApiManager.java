@@ -8,6 +8,7 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.DocumentService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.InvoiceService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.KYCLevel1Service;
+import org.mifos.mobilewallet.core.data.fineract.api.services.NotificationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.RunReportService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SavedCardService;
@@ -52,6 +53,7 @@ public class FineractApiManager {
     private static InvoiceService invoiceApi;
     private static UserService userApi;
     private static ThirdPartyTransferService thirdPartyTransferApi;
+    private static NotificationService notificationApi;
 
     private static SelfServiceApiManager sSelfInstance;
 
@@ -71,7 +73,6 @@ public class FineractApiManager {
         savingAccountsListApi = createApi(SavingAccountsListService.class);
         registrationAPi = createApi(RegistrationService.class);
         searchApi = createApi(SearchService.class);
-
         savedCardApi = createApi(SavedCardService.class);
         documentApi = createApi(DocumentService.class);
         twoFactorAuthApi = createApi(TwoFactorAuthService.class);
@@ -81,6 +82,7 @@ public class FineractApiManager {
         invoiceApi = createApi(InvoiceService.class);
         userApi = createApi(UserService.class);
         thirdPartyTransferApi = createApi(ThirdPartyTransferService.class);
+        notificationApi = createApi(NotificationService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
@@ -172,5 +174,9 @@ public class FineractApiManager {
 
     public ThirdPartyTransferService getThirdPartyTransferApi() {
         return thirdPartyTransferApi;
+    }
+
+    public NotificationService getNotificationApi() {
+        return notificationApi;
     }
 }

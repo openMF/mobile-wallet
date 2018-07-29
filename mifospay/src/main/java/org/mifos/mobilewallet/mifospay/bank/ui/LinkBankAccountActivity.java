@@ -10,6 +10,9 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -19,7 +22,7 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.bank.BankContract;
 import org.mifos.mobilewallet.mifospay.bank.adapters.OtherBankAdapter;
 import org.mifos.mobilewallet.mifospay.bank.adapters.PopularBankAdapter;
-import org.mifos.mobilewallet.mifospay.bank.domain.model.Bank;
+import org.mifos.mobilewallet.mifospay.domain.model.Bank;
 import org.mifos.mobilewallet.mifospay.bank.presenter.LinkBankAccountPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -111,6 +114,25 @@ public class LinkBankAccountActivity extends BaseActivity implements
                         chooseSimDialog.show(getSupportFragmentManager(), "Choose Sim Dialog");
                     }
                 }));
+
+        mEtSearchBank.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d("qxz", "onTextChanged: " + s.toString());
+                mOtherBankAdapter.getFilter().filter(mEtSearchBank.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d("qxz", "afterTextChanged: " + s.toString());
+                mOtherBankAdapter.getFilter().filter(mEtSearchBank.getText().toString());
+            }
+        });
     }
 
     private void setupAdapterData() {

@@ -1,42 +1,43 @@
-package org.mifos.mobilewallet.mifospay.notification;
+package org.mifos.mobilewallet.mifospay.notification.ui;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-
+import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.NotificationUtils;
+import org.mifos.mobilewallet.mifospay.notification.NotificationContract;
+import org.mifos.mobilewallet.mifospay.notification.presenter.NotificationPresenter;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class NotificationActivity extends BaseActivity {
+/**
+ * This activity is to view notifications record.
+ * Notifications Datatable is populated automatically by server when an event happens.
+ * This feature is yet to be implemented on the server side.
+ */
+
+public class NotificationActivity extends BaseActivity implements
+        NotificationContract.NotificationView {
+
+    @Inject
+    NotificationPresenter mPresenter;
+    NotificationContract.NotificationPresenter mNotificationPresenter;
 
     @BindView(R.id.rv_notification)
     RecyclerView mRvNotification;
 
     @Inject
     NotificationAdapter mNotificationAdapter;
-
-    @Inject
-    LocalRepository mLocalRepository;
-
-    private BroadcastReceiver mBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,44 +49,12 @@ public class NotificationActivity extends BaseActivity {
         getActivityComponent().inject(this);
 
         setupRecyclerView();
+        setupSwipeRefreshLayout();
 
-        mBroadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
+        mPresenter.attachView(this);
 
-                // checking for type intent filter
-                if (intent.getAction().equals(Constants.REGISTRATION_COMPLETE)) {
-                    // gcm successfully registered
-                    // now subscribe to `global` topic to receive app wide notifications
-
-                    displayFirebaseRegId();
-
-                } else if (intent.getAction().equals(Constants.PUSH_NOTIFICATION)) {
-                    // new push notification is received
-
-                    String message = intent.getStringExtra("message");
-
-                    Toast.makeText(NotificationActivity.this, "Push notification: " + message,
-                            Toast.LENGTH_LONG).show();
-
-                    mNotificationAdapter.addNotification(message);
-//                    txtMessage.setText(message);
-                }
-
-            }
-        };
-
-        displayFirebaseRegId();
-    }
-
-    // Fetches reg id from shared preferences
-    // and displays on the screen
-    private void displayFirebaseRegId() {
-
-        String regId = mLocalRepository.getPreferencesHelper().getFirebaseRegId();
-
-        Log.e("qxz", "Firebase reg id: " + regId);
-        Log.e("qxz", "Firebase reg id: " + FirebaseInstanceId.getInstance().getToken());
+        showSwipeProgress();
+        mNotificationPresenter.fetchNotifications();
     }
 
     private void setupRecyclerView() {
@@ -95,25 +64,34 @@ public class NotificationActivity extends BaseActivity {
                 DividerItemDecoration.VERTICAL));
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // register GCM registration complete receiver
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,
-                new IntentFilter(Constants.REGISTRATION_COMPLETE));
-
-        // register new push message receiver
-        // by doing this, the activity will be notified each time a new message arrives
-        LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver,
-                new IntentFilter(Constants.PUSH_NOTIFICATION));
-
-        // clear the notification area when the app is opened
-        NotificationUtils.clearNotifications(getApplicationContext());
+    private void setupSwipeRefreshLayout() {
+        setSwipeRefreshEnabled(true);
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mNotificationPresenter.fetchNotifications();
+            }
+        });
     }
 
     @Override
-    protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
-        super.onPause();
+    public void setPresenter(NotificationContract.NotificationPresenter presenter) {
+        mNotificationPresenter = presenter;
+    }
+
+    @Override
+    public void fetchNotificationsSuccess(List<NotificationPayload> notificationPayloadList) {
+        hideSwipeProgress();
+        mNotificationAdapter.setNotificationPayloadList(notificationPayloadList);
+    }
+
+    @Override
+    public void fetchNotificationsError(String message) {
+        hideSwipeProgress();
+        showToast(message);
+    }
+
+    public void showToast(String message) {
+        Toaster.showToast(this, message);
     }
 }

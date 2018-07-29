@@ -128,6 +128,12 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         return super.onOptionsItemSelected(item);
     }
 
+    public void addFragment(Fragment fragment, int containerId) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(containerId, fragment);
+        transaction.commit();
+    }
+
     public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {
         invalidateOptionsMenu();
         String backStateName = fragment.getClass().getName();

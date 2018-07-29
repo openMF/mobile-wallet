@@ -22,12 +22,12 @@ public class NewClient {
     private String dateFormat = "dd MMMM yyyy";
     private String locale = "en";
     private String submittedOnDate;
-    private String savingsProductId = "165";
+    private int savingsProductId;
 //    List<CustomDataTable> datatables = new ArrayList<>();
 
     public NewClient(String fullname, String externalId, String addressLine1,
             String addressLine2, String city, String postalCode, String stateProvinceId,
-            String countryId, String mobileNo) {
+            String countryId, String mobileNo, int mifosSavingsProductId) {
         this.fullname = fullname;
         this.externalId = externalId + "@mifos";
 
@@ -37,6 +37,7 @@ public class NewClient {
 
         activationDate = DateHelper.getDateAsStringFromLong(System.currentTimeMillis());
         submittedOnDate = activationDate;
+        savingsProductId = mifosSavingsProductId;
 
 //        CustomDataTable dataTable = new CustomDataTable();
 //        datatables.add(dataTable);

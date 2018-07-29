@@ -20,6 +20,7 @@ public class WalletPresenter implements HomeContract.WalletPresenter {
     private final LocalRepository localRepository;
     @Inject
     FetchAccount mFetchAccountUseCase;
+
     private HomeContract.WalletView mWalletView;
 
     @Inject
@@ -51,5 +52,4 @@ public class WalletPresenter implements HomeContract.WalletPresenter {
                     }
                 });
     }
-
 }

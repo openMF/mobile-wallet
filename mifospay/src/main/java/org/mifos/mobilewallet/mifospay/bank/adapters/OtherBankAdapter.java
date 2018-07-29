@@ -6,12 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.bank.domain.model.Bank;
+import org.mifos.mobilewallet.mifospay.domain.model.Bank;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -23,10 +26,12 @@ import butterknife.ButterKnife;
  * Created by naman on 20/6/17.
  */
 
-public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.ViewHolder> {
+public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.ViewHolder> implements
+        Filterable {
 
     private Context context;
     private List<Bank> otherBanks;
+    private List<Bank> filteredBanks;
 
     @Inject
     public OtherBankAdapter() {
@@ -67,6 +72,37 @@ public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.View
 
     public Bank getBank(int position) {
         return otherBanks.get(position);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charString = constraint.toString();
+                if (charString.isEmpty()) {
+                    filteredBanks = otherBanks;
+                } else {
+                    List<Bank> filteredList = new ArrayList<>();
+                    for (Bank bank : otherBanks) {
+                        if (bank.getName().toLowerCase().contains(charString.toLowerCase())) {
+                            filteredList.add(bank);
+                        }
+                    }
+                    filteredBanks = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = filteredBanks;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                filteredBanks = (List<Bank>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

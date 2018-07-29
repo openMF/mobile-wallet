@@ -13,6 +13,9 @@ public class Constants {
 
     public static final int WALLET_ACCOUNT_SAVINGS_PRODUCT_ID = 165;
 
+    public static final int MIFOS_MERCHANT_SAVINGS_PRODUCT_ID = 165; // 372
+    public static final int MIFOS_CUSTOMER_SAVINGS_PRODUCT_ID = 165; // 373
+
     public static final String ENTITY_TYPE_CLIENTS = "clients";
 
     public static final String FETCH_ACCOUNT_TRANSFER_USECASE = "FetchAccountTransfer";
@@ -43,4 +46,6 @@ public class Constants {
     public static final String INVOICE_DOES_NOT_EXIST = "Invoice does not exist.";
     public static final String INVALID_UPL = "Invalid UPL";
     public static final String MERCHANT = "merchant";
+    public static final String FETCH_CLIENT_DETAILS_USE_CASE = "Fetch Client Details UseCase";
+    public static final String ERROR_FETCHING_NOTIFICATIONS = "Error fetching notifications";
 }

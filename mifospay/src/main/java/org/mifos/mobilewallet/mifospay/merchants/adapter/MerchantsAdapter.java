@@ -1,14 +1,17 @@
-package org.mifos.mobilewallet.mifospay.home.adapter;
+package org.mifos.mobilewallet.mifospay.merchants.adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.mifospay.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,9 +23,11 @@ import butterknife.ButterKnife;
  * Created by ankur on 11/July/2018
  */
 
-public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.ViewHolder> {
+public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.ViewHolder> implements
+        Filterable {
 
     private List<SavingsWithAssociations> mMerchantsList;
+    private List<SavingsWithAssociations> mMerchantsFilteredList;
 
     @Inject
     public MerchantsAdapter() {
@@ -58,6 +63,41 @@ public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.View
 
     public List<SavingsWithAssociations> getMerchantsList() {
         return mMerchantsList;
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charString = constraint.toString();
+                if (charString.isEmpty()) {
+                    mMerchantsFilteredList = mMerchantsList;
+                } else {
+                    List<SavingsWithAssociations> filteredList = new ArrayList<>();
+                    for (SavingsWithAssociations merchant : mMerchantsList) {
+                        if (merchant.getClientName().toLowerCase().contains(
+                                charString.toLowerCase())
+                                || merchant.getExternalId().toLowerCase().contains(
+                                charString.toLowerCase())) {
+                            filteredList.add(merchant);
+                        }
+                    }
+
+                    mMerchantsFilteredList = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = mMerchantsFilteredList;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                mMerchantsFilteredList = (List<SavingsWithAssociations>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

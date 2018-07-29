@@ -21,13 +21,13 @@ import rx.schedulers.Schedulers;
  * Created by ankur on 11/July/2018
  */
 
-public class FetchSavingsAccounts extends
-        UseCase<FetchSavingsAccounts.RequestValues, FetchSavingsAccounts.ResponseValue> {
+public class FetchMerchantsSavingsAccounts extends
+        UseCase<FetchMerchantsSavingsAccounts.RequestValues, FetchMerchantsSavingsAccounts.ResponseValue> {
 
     private final FineractRepository mFineractRepository;
 
     @Inject
-    public FetchSavingsAccounts(FineractRepository fineractRepository) {
+    public FetchMerchantsSavingsAccounts(FineractRepository fineractRepository) {
         mFineractRepository = fineractRepository;
     }
 

@@ -38,6 +38,7 @@ public class CreateUser extends UseCase<CreateUser.RequestValues, CreateUser.Res
 
                     @Override
                     public void onError(Throwable e) {
+                        ErrorJsonMessageHelper.getUserMessage(e);
                         String message = "Error";
                         try {
                             message = ((HttpException) e).response().errorBody().string();

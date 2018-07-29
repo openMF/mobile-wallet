@@ -50,6 +50,6 @@ public interface RegistrationContract {
         void registerUser(String firstName, String lastName, String mobileNumber, String email,
                 String businessName, String addressline1, String addressline2, String pincode,
                 String city, String countryName, String username, String password,
-                String stateId, String countryId);
+                String stateId, String countryId, int mifosSavingProductId);
     }
 }

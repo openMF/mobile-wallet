@@ -14,12 +14,17 @@
  * limitations under the License.
  */
 
-package org.mifos.mobilewallet.mifospay.notification.services;
+package org.mifos.mobilewallet.mifospay.data.firebase.api.services;
 
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
+
+import javax.inject.Inject;
 
 /**
  * Created by ankur on 20/June/2018
@@ -28,6 +33,9 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 public class MifosPayInstanceIDService extends FirebaseInstanceIdService {
 
     private static final String TAG = "MyFirebaseIIDService";
+
+    @Inject
+    PreferencesHelper mPreferencesHelper;
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -41,10 +49,19 @@ public class MifosPayInstanceIDService extends FirebaseInstanceIdService {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
+        // Saving reg id to shared preferences
+        mPreferencesHelper.setFirebaseRegId(refreshedToken);
+
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
         sendRegistrationToServer(refreshedToken);
+
+        // Notify UI that registration has completed, so the progress indicator can be hidden.
+//        Intent registrationComplete = new Intent(Config.REGISTRATION_COMPLETE);
+//        registrationComplete.putExtra("token", refreshedToken);
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+
     }
     // [END refresh_token]
 

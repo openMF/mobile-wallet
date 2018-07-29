@@ -73,13 +73,13 @@
         <!-- White Space -->
 
         <module name="GenericWhitespace">
-            <message key="ws.followed"
+            <body key="ws.followed"
                      value="GenericWhitespace ''{0}'' is followed by whitespace."/>
-            <message key="ws.preceded"
+            <body key="ws.preceded"
                      value="GenericWhitespace ''{0}'' is preceded with whitespace."/>
-            <message key="ws.illegalFollow"
+            <body key="ws.illegalFollow"
                      value="GenericWhitespace ''{0}'' should followed by whitespace."/>
-            <message key="ws.notPreceded"
+            <body key="ws.notPreceded"
                      value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
         </module>
 
@@ -88,9 +88,9 @@
             <property name="allowEmptyMethods" value="false"/>
             <property name="allowEmptyTypes" value="false"/>
             <property name="allowEmptyLoops" value="false"/>
-            <message key="ws.notFollowed"
+            <body key="ws.notFollowed"
                      value="WhitespaceAround: ''{0}'' is not followed by whitespace. Empty blocks may only be represented as '{}' when not part of a multi-block statement (4.1.3)"/>
-            <message key="ws.notPreceded"
+            <body key="ws.notPreceded"
                      value="WhitespaceAround: ''{0}'' is not preceded with whitespace."/>
             <property name="severity" value="error"/>
         </module>
@@ -113,18 +113,18 @@
 
         <module name="PackageName">
             <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
-            <message key="name.invalidPattern"
+            <body key="name.invalidPattern"
                      value="Package name ''{0}'' must match pattern ''{1}''."/>
         </module>
 
         <!-- <module name="MethodName">
             <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
-            <message key="name.invalidPattern"
+            <body key="name.invalidPattern"
                      value="Method name ''{0}'' must match pattern ''{1}''."/>
         </module> -->
 
         <module name="TypeName">
-            <message key="name.invalidPattern"
+            <body key="name.invalidPattern"
                      value="Type name ''{0}'' must match pattern ''{1}''."/>
         </module>
 
@@ -133,13 +133,13 @@
             <property name="applyToPackage" value="false" />
             <property name="applyToProtected" value="false" />
             <property name="format" value="^m[A-Z][a-z0-9][a-zA-Z0-9]*$"/>
-            <message key="name.invalidPattern"
+            <body key="name.invalidPattern"
                      value="Member name ''{0}'' must match pattern ''{1}''."/>
         </module> -->
 
         <!-- <module name="ParameterName">
             <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
-            <message key="name.invalidPattern"
+            <body key="name.invalidPattern"
                      value="Parameter name ''{0}'' must match pattern ''{1}''."/>
         </module> -->
 
@@ -147,19 +147,19 @@
             <property name="tokens" value="VARIABLE_DEF"/>
             <property name="format" value="^[a-z][a-zA-Z0-9]*$"/>
             <property name="allowOneCharVarInForLoop" value="true"/>
-            <message key="name.invalidPattern"
+            <body key="name.invalidPattern"
                      value="Local variable name ''{0}'' must match pattern ''{1}''."/>
         </module> -->
 
         <module name="ClassTypeParameterName">
             <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
-            <message key="name.invalidPattern"
+            <body key="name.invalidPattern"
                      value="Class type name ''{0}'' must match pattern ''{1}''."/>
         </module>
 
         <module name="MethodTypeParameterName">
             <property name="format" value="(^[A-Z][0-9]?)$|([A-Z][a-zA-Z0-9]*[T]$)"/>
-            <message key="name.invalidPattern"
+            <body key="name.invalidPattern"
                      value="Method type name ''{0}'' must match pattern ''{1}''."/>
         </module>
 

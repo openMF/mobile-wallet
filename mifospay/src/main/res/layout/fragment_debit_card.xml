@@ -11,8 +11,13 @@
         android:id="@+id/et_debit_card_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:hint="Debit Card Number"
-        android:inputType="number"/>
+        android:imeOptions="actionNext"
+        android:inputType="number"
+        android:nextFocusDown="@id/pe_month"
+        android:nextFocusForward="@id/pe_month"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,8 +33,12 @@
             android:digits="1234567890"
             android:gravity="center"
             android:hint="MM"
+            android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="2"
+            android:nextFocusDown="@id/pe_year"
+            android:nextFocusForward="@id/pe_year"
+            android:nextFocusRight="@id/pe_year"
             android:textIsSelectable="false"
             app:pinLineStroke="1dp"
             app:pinLineStrokeSelected="2dp"/>
@@ -52,41 +61,12 @@
             android:cursorVisible="false"
             android:digits="1234567890"
             android:gravity="center"
+            android:imeOptions="actionDone"
             android:inputType="number"
             android:maxLength="4"
-            android:text="YYYY"
             android:textIsSelectable="false"
             app:pinLineStroke="1dp"
             app:pinLineStrokeSelected="2dp"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/value_20dp"
-        android:gravity="right"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/grey_900"
-            android:text="@string/cancel_txt"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"/>
-
-        <Button
-            android:id="@+id/btn_okay"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/value_20dp"
-            android:background="@color/primaryBlue"
-            android:text="Okay"
-            android:textAllCaps="false"
-            android:textColor="@android:color/white"/>
 
     </LinearLayout>
 

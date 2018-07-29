@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.bank.domain.model.Bank;
+import org.mifos.mobilewallet.mifospay.domain.model.Bank;
 
 import java.util.List;
 

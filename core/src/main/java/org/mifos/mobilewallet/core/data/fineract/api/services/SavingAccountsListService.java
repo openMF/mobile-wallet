@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.core.data.fineract.api.services;
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
+import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 
@@ -18,6 +19,10 @@ public interface SavingAccountsListService {
     Observable<SavingsWithAssociations> getSavingsWithAssociations(
             @Path("accountId") long accountId,
             @Query("associations") String associationType);
+
+    @GET(ApiEndPoints.SAVINGS_ACCOUNTS)
+    Observable<Page<SavingsWithAssociations>> getSavingsAccounts(
+            @Query("limit") int limit);
 
     @POST(ApiEndPoints.SAVINGS_ACCOUNTS)
     Observable<GenericResponse> createSavingsAccount(@Body SavingAccount savingAccount);

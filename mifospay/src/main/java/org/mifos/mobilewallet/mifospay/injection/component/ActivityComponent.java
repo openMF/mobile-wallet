@@ -2,9 +2,14 @@ package org.mifos.mobilewallet.mifospay.injection.component;
 
 
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
+import org.mifos.mobilewallet.mifospay.bank.fragment.DebitCardFragment;
+import org.mifos.mobilewallet.mifospay.bank.fragment.OtpFragment;
+import org.mifos.mobilewallet.mifospay.bank.fragment.SetupUpiPinDialog;
+import org.mifos.mobilewallet.mifospay.bank.fragment.UpiPinFragment;
 import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountDetailActivity;
 import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity;
 import org.mifos.mobilewallet.mifospay.bank.ui.LinkBankAccountActivity;
+import org.mifos.mobilewallet.mifospay.bank.ui.SetupUpiPinActivity;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.SearchActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
@@ -21,6 +26,8 @@ import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionFragment;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCLevel1Fragment;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCLevel2Fragment;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCLevel3Fragment;
+import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment;
+import org.mifos.mobilewallet.mifospay.notification.ui.NotificationActivity;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
@@ -98,4 +105,18 @@ public interface ActivityComponent {
     void inject(LinkBankAccountActivity linkBankAccountActivity);
 
     void inject(BankAccountDetailActivity bankAccountDetailActivity);
+
+    void inject(MerchantsFragment merchantsFragment);
+
+    void inject(DebitCardFragment debitCardFragment);
+
+    void inject(OtpFragment otpFragment);
+
+    void inject(UpiPinFragment upiPinFragment);
+
+    void inject(SetupUpiPinDialog setupUpiPinDialog);
+
+    void inject(SetupUpiPinActivity setupUpiPinActivity);
+
+    void inject(NotificationActivity notificationActivity);
 }

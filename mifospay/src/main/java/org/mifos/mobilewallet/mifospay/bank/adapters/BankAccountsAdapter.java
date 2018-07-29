@@ -1,14 +1,24 @@
 package org.mifos.mobilewallet.mifospay.bank.adapters;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.BankAccountDetails;
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity;
+import org.mifos.mobilewallet.mifospay.bank.ui.SetupUpiPinActivity;
+import org.mifos.mobilewallet.mifospay.utils.AnimationUtil;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +35,11 @@ import butterknife.ButterKnife;
 public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapter.ViewHolder> {
 
     private List<BankAccountDetails> mBankAccountDetailsList;
+    private Activity mActivity;
 
     @Inject
-    public BankAccountsAdapter() {
+    public BankAccountsAdapter(Activity activity) {
+        mActivity = activity;
         mBankAccountDetailsList = new ArrayList<>();
     }
 
@@ -39,8 +51,8 @@ public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapte
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        BankAccountDetails bankAccountDetails = mBankAccountDetailsList.get(position);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        final BankAccountDetails bankAccountDetails = mBankAccountDetailsList.get(position);
         holder.mTvBankName.setText(bankAccountDetails.getBankName());
         holder.mTvAccountHolderName.setText(bankAccountDetails.getAccountholderName());
         holder.mTvBranch.setText(bankAccountDetails.getBranch());
@@ -70,6 +82,11 @@ public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapte
         mBankAccountDetailsList.add(bankAccountDetails);
         notifyDataSetChanged();
         DebugUtil.log(mBankAccountDetailsList.size());
+    }
+
+    public void setBankDetails(int index, BankAccountDetails bankAccountDetails) {
+        mBankAccountDetailsList.set(index, bankAccountDetails);
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

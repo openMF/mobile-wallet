@@ -6,13 +6,16 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 
+import org.mifos.mobilewallet.core.utils.Constants;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -26,6 +29,9 @@ public class SignupMethod extends BottomSheetDialogFragment {
 
     private GoogleSignInClient googleSignInClient;
     private GoogleSignInAccount account;
+
+    @BindView(R.id.cb_google_account)
+    CheckBox mCbGoogleAccount;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -47,19 +53,29 @@ public class SignupMethod extends BottomSheetDialogFragment {
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
-    @OnClick(R.id.btn_google_account)
-    public void onGoogleAccountClicked() {
+    @OnClick(R.id.btn_merchant)
+    public void onMerchantClicked() {
         dismiss();
         if (getActivity() instanceof LoginActivity) {
-            ((LoginActivity) getActivity()).signupUsingGoogleAccount();
+            if (mCbGoogleAccount.isChecked()) {
+                ((LoginActivity) getActivity()).signupUsingGoogleAccount(
+                        Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID);
+            } else {
+                ((LoginActivity) getActivity()).signup(Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID);
+            }
         }
     }
 
-    @OnClick(R.id.btn_no)
-    public void onNoClicked() {
+    @OnClick(R.id.btn_customer)
+    public void onCustomerClicked() {
         dismiss();
         if (getActivity() instanceof LoginActivity) {
-            ((LoginActivity) getActivity()).signup();
+            if (mCbGoogleAccount.isChecked()) {
+                ((LoginActivity) getActivity()).signupUsingGoogleAccount(
+                        Constants.MIFOS_CUSTOMER_SAVINGS_PRODUCT_ID);
+            } else {
+                ((LoginActivity) getActivity()).signup(Constants.MIFOS_CUSTOMER_SAVINGS_PRODUCT_ID);
+            }
         }
     }
 

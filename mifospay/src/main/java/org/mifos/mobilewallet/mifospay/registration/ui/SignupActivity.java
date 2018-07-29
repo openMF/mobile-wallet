@@ -71,6 +71,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     private String mobileNumber;
     private String countryId;
     private String stateId;
+    private int mifosSavingProductId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +86,13 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         showBackButton();
         setToolbarTitle("");
 
+        mifosSavingProductId = getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0);
+        if (mifosSavingProductId
+                == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID) {
+            mEtBusinessShopName.setVisibility(View.VISIBLE);
+        } else {
+            mEtBusinessShopName.setVisibility(View.GONE);
+        }
         mobileNumber = getIntent().getStringExtra(Constants.MOBILE_NUMBER);
         countryName = getIntent().getStringExtra(Constants.COUNTRY);
 
@@ -213,7 +221,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
         mSignupPresenter.registerUser(firstName, lastName, mobileNumber, email, businessName,
                 addressline1, addressline2, pincode, city, countryName, username, password, stateId,
-                countryId);
+                countryId, mifosSavingProductId);
     }
 
     @Override

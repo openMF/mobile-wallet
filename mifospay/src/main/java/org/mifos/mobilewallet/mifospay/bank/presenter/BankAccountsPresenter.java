@@ -8,6 +8,7 @@ import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -38,6 +39,8 @@ public class BankAccountsPresenter implements BankContract.BankAccountsPresenter
         // TODO:: fetch linked bank accounts
 
         List<BankAccountDetails> bankAccountDetailsList = new ArrayList<>();
+        bankAccountDetailsList.add(new BankAccountDetails("SBI", "Ankur Sharma", "New Delhi",
+                new Random().nextInt() + " ", "Savings"));
         mBankAccountsView.showLinkedBankAccounts(bankAccountDetailsList);
     }
 }

@@ -135,4 +135,37 @@ public class Constants {
     public static final String BANK_ACCOUNT_DETAILS = "Bank Account Details";
     public static final String NEW_BANK_ACCOUNT = "newBankAccount";
     public static final String VERIFYING_MOBILE_NUMBER = "Verifying mobile number..";
+    public static final String MIFOS_SAVINGS_PRODUCT_ID = "Mifos Savings Product Id";
+    public static final String ERROR_FETCHING_MERCHANTS = "Error fetching merchants";
+    public static final String MERCHANTS = "Merchants";
+    public static final String UPI_PIN = "UPI PIN";
+    public static final String STEP = "step";
+    public static final String TYPE = "Type";
+    public static final String SETUP = "Setup";
+    public static final String BANK_DELETED_SUCCESSFULLY = "Bank deleted successfully";
+    public static final String ERROR_OCCURRED_WHILE_CHANGING_UPI_PIN =
+            "Error occurred while changing UPI PIN";
+    public static final String SETUP_UPI = "Setup UPI";
+    public static final String ERROR_WHILE_SETTING_UP_UPI_PIN = "Error while setting up UPI PIN";
+    public static final String UPI_PIN_SETUP_COMPLETED_SUCCESSFULLY =
+            "UPI PIN Setup Completed Successfully";
+    public static final String FORGOT = "Forgot";
+    public static final String CHANGE = "Change";
+    public static final String OTP = "otp";
+    public static final String SETUP_UPI_PIN = "Setup UPI PIN";
+    public static final String SETTING_UP_UPI_PIN = "Setting up UPI PIN..";
+    public static final String UPDATED_BANK_ACCOUNT = "Updated Bank Account";
+    public static final String INDEX = "Index";
+    public static final String CHANGE_UPI_PIN = "Change UPI PIN";
+    public static final String FORGOT_UPI_PIN = "Forgot UPI PIN";
+
+    // broadcast receiver intent filters
+    public static final String REGISTRATION_COMPLETE = "registrationComplete";
+    public static final String PUSH_NOTIFICATION = "pushNotification";
+
+    // id to handle the notification in the notification tray
+    public static final int NOTIFICATION_ID = 100;
+    public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
+
+
 }

@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.bank.domain.model;
+package org.mifos.mobilewallet.mifospay.domain.model;
 
 /**
  * Created by naman on 20/6/17.

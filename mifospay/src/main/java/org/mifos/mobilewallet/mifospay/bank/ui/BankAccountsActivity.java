@@ -42,6 +42,10 @@ public class BankAccountsActivity extends BaseActivity implements BankContract.B
     @Inject
     BankAccountsAdapter mBankAccountsAdapter;
 
+    public static int LINK_BANK_ACCOUNT_REQUEST_CODE = 1;
+    public static int SETUP_UPI_REQUEST_CODE = 2;
+    public static int Bank_Account_Details_Request_Code = 3;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,9 +55,13 @@ public class BankAccountsActivity extends BaseActivity implements BankContract.B
         showBackButton();
         setToolbarTitle(Constants.LINKED_BANK_ACCOUNTS);
         mPresenter.attachView(this);
-
         showProgressDialog(Constants.PLEASE_WAIT);
 
+        setupRecycletView();
+        mBankAccountsPresenter.fetchLinkedBankAccounts();
+    }
+
+    private void setupRecycletView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRvLinkedBankAccounts.setLayoutManager(layoutManager);
@@ -62,18 +70,21 @@ public class BankAccountsActivity extends BaseActivity implements BankContract.B
         mRvLinkedBankAccounts.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL));
 
-        mBankAccountsPresenter.fetchLinkedBankAccounts();
-
         mRvLinkedBankAccounts.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.SimpleOnItemClickListener() {
+                new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View childView, int position) {
-                        BankAccountDetails bankAccountDetails = mBankAccountsAdapter.getBankDetails(
-                                position);
                         Intent intent = new Intent(BankAccountsActivity.this,
                                 BankAccountDetailActivity.class);
-                        intent.putExtra(Constants.BANK_ACCOUNT_DETAILS, bankAccountDetails);
-                        startActivity(intent);
+                        intent.putExtra(Constants.BANK_ACCOUNT_DETAILS,
+                                mBankAccountsAdapter.getBankDetails(position));
+                        intent.putExtra(Constants.INDEX, position);
+                        startActivityForResult(intent, Bank_Account_Details_Request_Code);
+                    }
+
+                    @Override
+                    public void onItemLongPress(View childView, int position) {
+
                     }
                 }));
     }
@@ -100,7 +111,7 @@ public class BankAccountsActivity extends BaseActivity implements BankContract.B
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         DebugUtil.log("rescode ", resultCode);
-        if (requestCode == 1 && resultCode == RESULT_OK) {
+        if (requestCode == LINK_BANK_ACCOUNT_REQUEST_CODE && resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
             DebugUtil.log("bundle", bundle);
             if (bundle != null) {
@@ -111,12 +122,21 @@ public class BankAccountsActivity extends BaseActivity implements BankContract.B
                 mRvLinkedBankAccounts.setVisibility(View.VISIBLE);
                 mTvPlaceholder.setVisibility(View.GONE);
             }
+        } else if (requestCode == Bank_Account_Details_Request_Code && resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            DebugUtil.log("bundle", bundle);
+            if (bundle != null) {
+                BankAccountDetails bankAccountDetails = bundle.getParcelable(
+                        Constants.UPDATED_BANK_ACCOUNT);
+                int index = bundle.getInt(Constants.INDEX);
+                mBankAccountsAdapter.setBankDetails(index, bankAccountDetails);
+            }
         }
     }
 
     @OnClick(R.id.btn_link_bank_account)
     public void onLinkBankAccountClicked() {
         Intent intent = new Intent(BankAccountsActivity.this, LinkBankAccountActivity.class);
-        startActivityForResult(intent, 1);
+        startActivityForResult(intent, LINK_BANK_ACCOUNT_REQUEST_CODE);
     }
 }

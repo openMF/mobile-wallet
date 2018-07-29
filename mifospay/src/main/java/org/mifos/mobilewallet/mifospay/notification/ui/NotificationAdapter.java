@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.notification;
+package org.mifos.mobilewallet.mifospay.notification.ui;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.mifospay.R;
 
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ import butterknife.ButterKnife;
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
 
-    private List<String> mNotificationPayloadList;
+    private List<NotificationPayload> mNotificationPayloadList;
 
     @Inject
     public NotificationAdapter() {
@@ -41,7 +42,9 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.mTvBody.setText(mNotificationPayloadList.get(position));
+        holder.mTvBody.setText(mNotificationPayloadList.get(position).getBody());
+        holder.mTvTitle.setText(mNotificationPayloadList.get(position).getTitle());
+        holder.mTvTimestamp.setText(mNotificationPayloadList.get(position).getTimestamp());
     }
 
     @Override
@@ -53,8 +56,8 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
         }
     }
 
-    public void addNotification(String notification) {
-        mNotificationPayloadList.add(notification);
+    public void setNotificationPayloadList(List<NotificationPayload> notificationPayloadList) {
+        mNotificationPayloadList = notificationPayloadList;
         notifyDataSetChanged();
     }
 
@@ -62,6 +65,10 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
 
         @BindView(R.id.tv_body)
         TextView mTvBody;
+        @BindView(R.id.tv_title)
+        TextView mTvTitle;
+        @BindView(R.id.tv_timestamp)
+        TextView mTvTimestamp;
 
         public ViewHolder(View v) {
             super(v);

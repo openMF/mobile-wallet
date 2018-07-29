@@ -1,96 +1,72 @@
 package org.mifos.mobilewallet.mifospay.bank.fragment;
 
-import android.app.Dialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
-import com.alimuzaffar.lib.pin.PinEntryEditText;
+import android.view.ViewGroup;
 
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.bank.adapters.UpiPinPagerAdapter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.utils.AnimationUtil;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by ankur on 16/July/2018
  */
 
-public class UpiSetupHolderDialog extends BottomSheetDialogFragment {
+public class SetupUpiPinDialog extends BottomSheetDialogFragment {
 
-    @BindView(R.id.et_debit_card_number)
-    EditText mEtDebitCardNumber;
-    @BindView(R.id.pe_month)
-    PinEntryEditText mPeMonth;
-    @BindView(R.id.pe_year)
-    PinEntryEditText mPeYear;
-    @BindView(R.id.ll_debit_card)
-    LinearLayout mLlDebitCard;
-    @BindView(R.id.tv_otp_title)
-    TextView mTvOtpTitle;
-    @BindView(R.id.pe_otp)
-    PinEntryEditText mPeOtp;
-    @BindView(R.id.ll_otp)
-    LinearLayout mLlOtp;
-    @BindView(R.id.tv_upi_title)
-    TextView mTvUpiTitle;
-    @BindView(R.id.pe_upi_pin)
-    PinEntryEditText mPeUpiPin;
-    @BindView(R.id.upi)
-    LinearLayout mUpi;
-    @BindView(R.id.btn_cancel)
-    Button mBtnCancel;
-    @BindView(R.id.btn_okay)
-    Button mBtnOkay;
-    Unbinder unbinder;
+    @BindView(R.id.vp_setup_upi_pin)
+    ViewPager mVpSetupUpiPin;
 
     private BottomSheetBehavior mBottomSheetBehavior;
     private String type;
+    private Fragment[] mSetupUpiPinFragments;
+    private UpiPinPagerAdapter upiPinPagerAdapter;
 
-    public static UpiSetupHolderDialog newInstance(String type) {
+    public static SetupUpiPinDialog newInstance(String type) {
 
         Bundle args = new Bundle();
         args.putString(Constants.TYPE, type);
-        UpiSetupHolderDialog fragment = new UpiSetupHolderDialog();
+        SetupUpiPinDialog fragment = new SetupUpiPinDialog();
         fragment.setArguments(args);
         return fragment;
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
-
-        View view = View.inflate(getContext(), R.layout.dialog_upi_setup_holderr, null);
-
-        dialog.setContentView(view);
-        mBottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
-
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         ((BaseActivity) getActivity()).getActivityComponent().inject(this);
-        ButterKnife.bind(this, view);
+    }
 
-        Bundle b = getArguments();
-        if (b != null) {
-            type = b.getString(Constants.TYPE);
-            if (type.equals(Constants.SETUP) || type.equals(Constants.FORGOT)) {
-                AnimationUtil.expand(mLlDebitCard);
-            } else {
-                AnimationUtil.expand(mLlOtp);
-            }
-        }
-        DebugUtil.log(b ,type);
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+            @Nullable Bundle savedInstanceState) {
+        View rootView = View.inflate(getContext(), R.layout.dialog_setup_upi_pin2, null);
 
-        return dialog;
+        mBottomSheetBehavior = BottomSheetBehavior.from((View) rootView.getParent());
+
+        ButterKnife.bind(this, rootView);
+
+        mSetupUpiPinFragments = new Fragment[4];
+        mSetupUpiPinFragments[0] = new DebitCardFragment();
+        mSetupUpiPinFragments[1] = new OtpFragment();
+        mSetupUpiPinFragments[2] = new UpiPinFragment();
+        mSetupUpiPinFragments[3] = new UpiPinFragment();
+        upiPinPagerAdapter = new UpiPinPagerAdapter(getChildFragmentManager(),
+                mSetupUpiPinFragments);
+
+        return rootView;
     }
 
     @Override

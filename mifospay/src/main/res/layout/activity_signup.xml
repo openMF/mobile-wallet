@@ -140,6 +140,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
                     android:hint="Name of Business"
+                    android:visibility="gone"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>

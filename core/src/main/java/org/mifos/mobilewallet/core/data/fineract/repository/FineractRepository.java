@@ -22,6 +22,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
+import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.core.domain.model.client.NewClient;
 import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken;
 import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod;
@@ -85,7 +86,6 @@ public class FineractRepository {
         return fineractApiManager.getSearchApi().searchResources(query, resources, exactMatch);
     }
 
-
     public Observable<ResponseBody> updateClient(long clientId, Object payload) {
         return fineractApiManager.getClientsApi().updateClient(clientId, payload)
                 .map(new Func1<ResponseBody, ResponseBody>() {
@@ -102,6 +102,10 @@ public class FineractRepository {
 
     public Observable<ClientAccounts> getAccounts(long clientId) {
         return fineractApiManager.getClientsApi().getAccounts(clientId, Constants.SAVINGS);
+    }
+
+    public Observable<Page<SavingsWithAssociations>> getSavingsAccounts() {
+        return fineractApiManager.getSavingAccountsListApi().getSavingsAccounts(-1);
     }
 
     public Observable<GenericResponse> blockUnblockCommand(long accountId, String command) {
@@ -154,6 +158,10 @@ public class FineractRepository {
             KYCLevel1Details kycLevel1Details) {
         return fineractApiManager.getKycLevel1Api().updateKYCLevel1Details(clientId,
                 kycLevel1Details);
+    }
+
+    public Observable<List<NotificationPayload>> fetchNotifications(long clientId) {
+        return fineractApiManager.getNotificationApi().fetchNotifications(clientId);
     }
 
     public Observable<List<DeliveryMethod>> getDeliveryMethods() {

@@ -89,6 +89,8 @@
         is
         registered on MifosPay. \n3. It's sim is on this device.
     </string>
+    <string name="okay">Okay</string>
+    <string name="trusted_merchants">Trusted \nMerchants</string>
 
     <string-array name="months_array">
         <item>01</item>

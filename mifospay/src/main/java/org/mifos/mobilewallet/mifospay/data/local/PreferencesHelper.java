@@ -24,7 +24,7 @@ public class PreferencesHelper {
     private static final String USER_ID = "preferences_user_id";
     private static final String CLIENT_VPA = "preferences_client_vpa";
     private static final String MOBILE_NO = "preferences_mobile_no";
-
+    private static final String FIREBASE_REG_ID = "preferences_firebase_reg_id";
 
     private SharedPreferences sharedPreferences;
 
@@ -128,6 +128,14 @@ public class PreferencesHelper {
 
     public void setClientVpa(String vpa) {
         putString(CLIENT_VPA, vpa);
+    }
+
+    public String getFirebaseRegId() {
+        return getString(FIREBASE_REG_ID, "");
+    }
+
+    public void setFirebaseRegId(String firebaseRegId) {
+        putString(FIREBASE_REG_ID, firebaseRegId);
     }
 
 }

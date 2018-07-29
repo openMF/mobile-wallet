@@ -51,8 +51,9 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
     @Override
     public void startLoginActivity() {
         hideProgressDialog();
-        startActivity(new Intent(SettingsActivity.this,
-                LoginActivity.class));
-        finish();
+        Intent intent = new Intent(SettingsActivity.this, LoginActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
     }
 }
