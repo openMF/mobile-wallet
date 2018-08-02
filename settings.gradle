@@ -1,1 +1,1 @@
-include ':app', ':core', ':mifospay'
+include ':core', ':mifospay'
