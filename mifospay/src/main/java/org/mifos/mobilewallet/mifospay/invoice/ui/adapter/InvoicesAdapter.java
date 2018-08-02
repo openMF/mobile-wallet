@@ -45,7 +45,7 @@ public class InvoicesAdapter
     public void onBindViewHolder(ViewHolder holder, int position) {
         Invoice invoice = mInvoiceList.get(position);
 
-        holder.mTvInvoiceId.setText(invoice.getId() + "");
+        holder.mTvInvoiceId.setText("Invoice Id: " + invoice.getId() + "");
         holder.mTvInvoiceStatus.setText(
                 (invoice.getStatus() == 0) ? Constants.PENDING : Constants.DONE);
         holder.mTvInvoiceDate.setText(DateHelper.getDateAsString(invoice.getDate()));

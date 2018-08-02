@@ -138,9 +138,10 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
 
     @OnClick(R.id.btn_transfer)
     public void transferClicked() {
-        String externalId = etVpa.getText().toString();
-        String eamount = etAmount.getText().toString();
-        if (eamount.equals("") || externalId.equals("")) {
+        String externalId = etVpa.getText().toString().trim();
+        String eamount = etAmount.getText().toString().trim();
+        String mobileNumber = mEtMobileNumber.getText().toString().trim();
+        if (eamount.equals("") || (externalId.equals("") && mobileNumber.equals(""))) {
             Toast.makeText(getActivity(),
                     Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
         } else {

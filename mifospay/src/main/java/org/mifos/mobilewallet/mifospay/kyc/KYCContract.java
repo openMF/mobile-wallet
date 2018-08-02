@@ -41,7 +41,7 @@ public interface KYCContract {
     interface KYCLevel1Presenter extends BasePresenter {
 
         void submitData(String fname, String lname, String address1, String address2,
-                String phonecode, String phoneno, String dob);
+                String phoneno, String dob);
     }
 
     interface KYCLevel2View extends BaseView<KYCLevel2Presenter> {

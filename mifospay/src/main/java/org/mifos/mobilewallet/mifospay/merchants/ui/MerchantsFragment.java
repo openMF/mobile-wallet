@@ -22,6 +22,7 @@ import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -45,6 +46,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     RecyclerView mRvMerchants;
     @BindView(R.id.et_search_merchants)
     EditText mEtSearchMerchants;
+    private List<SavingsWithAssociations> merchantsList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -98,7 +100,10 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mMerchantsAdapter.getFilter().filter(mEtSearchMerchants.getText().toString());
+//                mMerchantsAdapter.getFilter().filter(mEtSearchMerchants.getText().toString());
+//                DebugUtil.log(mEtSearchMerchants.getText().toString());
+                filter(mEtSearchMerchants.getText().toString());
+
             }
 
             @Override
@@ -108,6 +113,25 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         });
     }
 
+    public void filter(String text) {
+        List<SavingsWithAssociations> filteredList = new ArrayList<>();
+
+        if (text.trim().isEmpty()) {
+            filteredList = merchantsList;
+        } else {
+            for (SavingsWithAssociations merchant : merchantsList) {
+                if (merchant.getClientName().toLowerCase().contains(
+                        text.toLowerCase())
+                        || (merchant.getExternalId() == null ? ""
+                        : merchant.getExternalId()).toLowerCase().contains(
+                        text.toLowerCase())) {
+                    filteredList.add(merchant);
+                }
+            }
+        }
+        mMerchantsAdapter.filterList(filteredList);
+    }
+
     @Override
     public void setPresenter(MerchantsContract.MerchantsPresenter presenter) {
         mMerchantsPresenter = presenter;
@@ -115,6 +139,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
 
     @Override
     public void listMerchants(List<SavingsWithAssociations> savingsWithAssociationsList) {
+        merchantsList = savingsWithAssociationsList;
         mMerchantsAdapter.setData(savingsWithAssociationsList);
         hideProgressDialog();
     }

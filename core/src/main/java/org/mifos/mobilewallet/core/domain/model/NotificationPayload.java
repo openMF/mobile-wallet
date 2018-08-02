@@ -3,23 +3,11 @@ package org.mifos.mobilewallet.core.domain.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Date;
-
 /**
  * Created by ankur on 24/July/2018
  */
 
 public class NotificationPayload implements Parcelable {
-
-    private String title;
-    private String body;
-    private String timestamp;
-
-    protected NotificationPayload(Parcel in) {
-        title = in.readString();
-        body = in.readString();
-        timestamp = in.readString();
-    }
 
     public static final Creator<NotificationPayload> CREATOR = new Creator<NotificationPayload>() {
         @Override
@@ -32,6 +20,15 @@ public class NotificationPayload implements Parcelable {
             return new NotificationPayload[size];
         }
     };
+    private String title;
+    private String body;
+    private String timestamp;
+
+    protected NotificationPayload(Parcel in) {
+        title = in.readString();
+        body = in.readString();
+        timestamp = in.readString();
+    }
 
     public String getTitle() {
         return title;

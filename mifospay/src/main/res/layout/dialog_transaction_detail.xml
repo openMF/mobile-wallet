@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-
     <LinearLayout
+        android:id="@+id/ll_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:id="@+id/ll_main"
         android:padding="@dimen/value_10dp">
 
         <RelativeLayout
@@ -42,7 +42,7 @@
                     android:id="@+id/tv_transaction_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/gray_5"/>
 
                 <TextView
                     android:id="@+id/tv_receiptId"
@@ -57,7 +57,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/gray_5"/>
 
             </LinearLayout>
 

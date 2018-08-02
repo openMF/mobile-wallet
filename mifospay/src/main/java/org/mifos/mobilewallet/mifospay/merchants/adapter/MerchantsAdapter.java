@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +72,7 @@ public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.View
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charString = constraint.toString();
+                DebugUtil.log("adapter", charString);
                 if (charString.isEmpty()) {
                     mMerchantsFilteredList = mMerchantsList;
                 } else {
@@ -98,6 +100,11 @@ public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.View
                 notifyDataSetChanged();
             }
         };
+    }
+
+    public void filterList(List<SavingsWithAssociations> filterdNames) {
+        this.mMerchantsList = filterdNames;
+        notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

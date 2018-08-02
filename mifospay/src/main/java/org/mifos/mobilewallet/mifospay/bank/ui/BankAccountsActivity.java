@@ -29,6 +29,9 @@ import butterknife.OnClick;
 
 public class BankAccountsActivity extends BaseActivity implements BankContract.BankAccountsView {
 
+    public static int LINK_BANK_ACCOUNT_REQUEST_CODE = 1;
+    public static int SETUP_UPI_REQUEST_CODE = 2;
+    public static int Bank_Account_Details_Request_Code = 3;
     @Inject
     BankAccountsPresenter mPresenter;
     BankContract.BankAccountsPresenter mBankAccountsPresenter;
@@ -38,13 +41,8 @@ public class BankAccountsActivity extends BaseActivity implements BankContract.B
     TextView mTvPlaceholder;
     @BindView(R.id.btn_link_bank_account)
     Button mBtnLinkBankAccount;
-
     @Inject
     BankAccountsAdapter mBankAccountsAdapter;
-
-    public static int LINK_BANK_ACCOUNT_REQUEST_CODE = 1;
-    public static int SETUP_UPI_REQUEST_CODE = 2;
-    public static int Bank_Account_Details_Request_Code = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

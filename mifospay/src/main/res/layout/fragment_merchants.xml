@@ -35,7 +35,6 @@
             android:id="@+id/rv_merchants"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/value_30dp"
             android:layout_marginTop="@dimen/value_10dp"
             android:clipToPadding="false"/>
 

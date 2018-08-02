@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="@dimen/value_10dp"
+    android:layout_margin="@dimen/value_5dp"
     android:orientation="vertical"
     app:cardCornerRadius="5dp"
     app:cardElevation="1dp"

@@ -15,11 +15,9 @@ import javax.inject.Inject;
 
 public class NotificationPresenter implements NotificationContract.NotificationPresenter {
 
-    NotificationContract.NotificationView mNotificationView;
-
     private final UseCaseHandler mUseCaseHandler;
     private final LocalRepository mLocalRepository;
-
+    NotificationContract.NotificationView mNotificationView;
     @Inject
     FetchNotifications fetchNotificationsUseCase;
 

@@ -15,8 +15,11 @@ import android.provider.MediaStore;
 
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -48,56 +51,58 @@ public class FileUtils {
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
 
         // DocumentProvider
-        if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
 
-            // ExternalStorageProvider
-            if (isExternalStorageDocument(uri)) {
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
+                // ExternalStorageProvider
+                if (isExternalStorageDocument(uri)) {
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    final String[] split = docId.split(":");
+                    final String type = split[0];
 
-                if ("primary".equalsIgnoreCase(type)) {
-                    return Environment.getExternalStorageDirectory() + "/"
-                            + split[1];
+                    if ("primary".equalsIgnoreCase(type)) {
+                        return Environment.getExternalStorageDirectory() + "/"
+                                + split[1];
+                    }
+                } else if (isDownloadsDocument(uri)) { // DownloadsProvider
+
+                    final String id = DocumentsContract.getDocumentId(uri);
+                    final Uri contentUri = ContentUris.withAppendedId(
+                            Uri.parse("content://downloads/public_downloads"),
+                            Long.valueOf(id));
+
+                    return getDataColumn(context, contentUri, null, null);
+                } else if (isMediaDocument(uri)) { // MediaProvider
+                    final String docId = DocumentsContract.getDocumentId(uri);
+                    final String[] split = docId.split(":");
+                    final String type = split[0];
+
+                    Uri contentUri = null;
+                    if ("image".equals(type)) {
+                        contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    } else if ("video".equals(type)) {
+                        contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                    } else if ("audio".equals(type)) {
+                        contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                    }
+
+                    final String selection = "_id=?";
+                    final String[] selectionArgs = new String[]{split[1]};
+
+                    return getDataColumn(context, contentUri, selection,
+                            selectionArgs);
                 }
-            } else if (isDownloadsDocument(uri)) { // DownloadsProvider
+            } else if ("content".equalsIgnoreCase(uri.getScheme())) { // MediaStore (and general)
 
-                final String id = DocumentsContract.getDocumentId(uri);
-                final Uri contentUri = ContentUris.withAppendedId(
-                        Uri.parse("content://downloads/public_downloads"),
-                        Long.valueOf(id));
-
-                return getDataColumn(context, contentUri, null, null);
-            } else if (isMediaDocument(uri)) { // MediaProvider
-                final String docId = DocumentsContract.getDocumentId(uri);
-                final String[] split = docId.split(":");
-                final String type = split[0];
-
-                Uri contentUri = null;
-                if ("image".equals(type)) {
-                    contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
-                } else if ("video".equals(type)) {
-                    contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
-                } else if ("audio".equals(type)) {
-                    contentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+                // Return the remote address
+                if (isGooglePhotosUri(uri)) {
+                    return uri.getLastPathSegment();
                 }
 
-                final String selection = "_id=?";
-                final String[] selectionArgs = new String[]{split[1]};
-
-                return getDataColumn(context, contentUri, selection,
-                        selectionArgs);
+                return getDataColumn(context, uri, null, null);
+            } else if ("file".equalsIgnoreCase(uri.getScheme())) { // File
+                return uri.getPath();
             }
-        } else if ("content".equalsIgnoreCase(uri.getScheme())) { // MediaStore (and general)
-
-            // Return the remote address
-            if (isGooglePhotosUri(uri)) {
-                return uri.getLastPathSegment();
-            }
-
-            return getDataColumn(context, uri, null, null);
-        } else if ("file".equalsIgnoreCase(uri.getScheme())) { // File
-            return uri.getPath();
         }
 
         return null;
@@ -185,5 +190,42 @@ public class FileUtils {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    public static File saveImage(final Context context, final String imageData) {
+        final byte[] imgBytesData = android.util.Base64.decode(imageData,
+                android.util.Base64.DEFAULT);
+
+        File file = null;
+        try {
+            File mifosDirectory = new File(Environment.getExternalStorageDirectory(),
+                    Constants.MIFOSPAY);
+            file = new File(mifosDirectory, "kuch");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        final FileOutputStream fileOutputStream;
+        try {
+            fileOutputStream = new FileOutputStream(file);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        final BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(
+                fileOutputStream);
+        try {
+            bufferedOutputStream.write(imgBytesData);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                bufferedOutputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return file;
     }
 }

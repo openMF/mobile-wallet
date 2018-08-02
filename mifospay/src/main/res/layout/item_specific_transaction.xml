@@ -6,15 +6,6 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <!--<View-->
-    <!--android:id="@+id/v_side"-->
-    <!--android:layout_width="@dimen/value_10dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_alignParentLeft="true"-->
-    <!--android:background="@color/primaryDarkBlue"-->
-    <!--android:minHeight="@dimen/value_40dp">-->
-    <!--</View>-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -135,14 +126,14 @@
                     android:id="@+id/tv_transaction_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/gray_5"/>
 
                 <TextView
                     android:id="@+id/tv_transaction_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/gray_5"/>
 
             </LinearLayout>
 

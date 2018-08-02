@@ -89,6 +89,7 @@ public class FetchClientData extends UseCase<FetchClientData.RequestValues,
     public static final class RequestValues implements UseCase.RequestValues {
 
         private final long clientid;
+
         public RequestValues(long clientid) {
             this.clientid = clientid;
         }

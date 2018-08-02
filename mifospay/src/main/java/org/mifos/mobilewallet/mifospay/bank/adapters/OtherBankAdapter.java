@@ -105,6 +105,11 @@ public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.View
         };
     }
 
+    public void filterList(List<Bank> filterdNames) {
+        this.otherBanks = filterdNames;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.iv_popular_bank)

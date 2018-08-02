@@ -21,10 +21,8 @@ import javax.inject.Inject;
 
 public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter {
 
-    MerchantsContract.MerchantsView mMerchantsView;
-
     private final UseCaseHandler mUseCaseHandler;
-
+    MerchantsContract.MerchantsView mMerchantsView;
     @Inject
     FetchMerchantsSavingsAccounts mFetchMerchantsSavingsAccountsUseCase;
 

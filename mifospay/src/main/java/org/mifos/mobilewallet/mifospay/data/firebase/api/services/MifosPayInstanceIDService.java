@@ -16,7 +16,6 @@
 
 package org.mifos.mobilewallet.mifospay.data.firebase.api.services;
 
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.google.firebase.iid.FirebaseInstanceId;

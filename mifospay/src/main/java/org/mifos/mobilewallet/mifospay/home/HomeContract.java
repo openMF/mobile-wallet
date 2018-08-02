@@ -1,12 +1,11 @@
 package org.mifos.mobilewallet.mifospay.home;
 
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.core.domain.model.Account;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
-import java.util.List;
+import okhttp3.ResponseBody;
 
 /**
  * Created by naman on 17/6/17.
@@ -68,11 +67,15 @@ public interface HomeContract {
         void showToast(String message);
 
         void showSnackbar(String message);
+
+        void fetchImageSuccess(ResponseBody responseBody);
     }
 
     interface ProfilePresenter extends BasePresenter {
 
         void fetchprofile();
+
+        void fetchClientImage();
     }
 
 

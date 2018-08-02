@@ -22,7 +22,8 @@ import rx.schedulers.Schedulers;
  */
 
 public class FetchMerchantsSavingsAccounts extends
-        UseCase<FetchMerchantsSavingsAccounts.RequestValues, FetchMerchantsSavingsAccounts.ResponseValue> {
+        UseCase<FetchMerchantsSavingsAccounts.RequestValues, FetchMerchantsSavingsAccounts
+                .ResponseValue> {
 
     private final FineractRepository mFineractRepository;
 

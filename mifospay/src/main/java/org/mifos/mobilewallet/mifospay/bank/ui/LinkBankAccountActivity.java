@@ -12,7 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -22,14 +21,15 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.bank.BankContract;
 import org.mifos.mobilewallet.mifospay.bank.adapters.OtherBankAdapter;
 import org.mifos.mobilewallet.mifospay.bank.adapters.PopularBankAdapter;
-import org.mifos.mobilewallet.mifospay.domain.model.Bank;
 import org.mifos.mobilewallet.mifospay.bank.presenter.LinkBankAccountPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
+import org.mifos.mobilewallet.mifospay.domain.model.Bank;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -123,16 +123,30 @@ public class LinkBankAccountActivity extends BaseActivity implements
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.d("qxz", "onTextChanged: " + s.toString());
-                mOtherBankAdapter.getFilter().filter(mEtSearchBank.getText().toString());
+//                Log.d("qxz", "onTextChanged: " + s.toString());
+//                mOtherBankAdapter.getFilter().filter(mEtSearchBank.getText().toString());
+                filter(mEtSearchBank.getText().toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                Log.d("qxz", "afterTextChanged: " + s.toString());
-                mOtherBankAdapter.getFilter().filter(mEtSearchBank.getText().toString());
             }
         });
+    }
+
+    private void filter(String text) {
+        List<Bank> filteredList = new ArrayList<>();
+
+        if (text.trim().isEmpty()) {
+            filteredList = banksList;
+        } else {
+            for (Bank bank : banksList) {
+                if (bank.getName().toLowerCase().contains(text.toLowerCase())) {
+                    filteredList.add(bank);
+                }
+            }
+        }
+        mOtherBankAdapter.filterList(filteredList);
     }
 
     private void setupAdapterData() {

@@ -11,6 +11,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 
+import com.hbb20.CountryCodePicker;
+
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
@@ -52,11 +54,11 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
     @BindView(R.id.et_address2)
     EditText etAddress2;
 
-    @BindView(R.id.et_phonecode)
-    EditText etPhonecode;
+    @BindView(R.id.ccp_code)
+    CountryCodePicker ccpPhonecode;
 
-    @BindView(R.id.et_phoneno)
-    EditText etPhoneno;
+    @BindView(R.id.et_mobile_number)
+    EditText etMobileNumber;
 
     @BindView(R.id.et_dob)
     EditText etDOB;
@@ -98,6 +100,9 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
                 etDOB.setText(sdf.format(myCalendar.getTime()));
             }
         };
+
+        ccpPhonecode.registerCarrierNumberEditText(etMobileNumber);
+        ccpPhonecode.setCustomMasterCountries("IN,US");
     }
 
     @Nullable
@@ -129,11 +134,10 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
         String lname = etLname.getText().toString();
         String address1 = etAddress1.getText().toString();
         String address2 = etAddress2.getText().toString();
-        String phonecode = etPhonecode.getText().toString();
-        String phoneno = etPhoneno.getText().toString();
+        String phoneno = ccpPhonecode.getFullNumber();
         String dob = etDOB.getText().toString();
 
-        mKYCLevel1Presenter.submitData(fname, lname, address1, address2, phonecode, phoneno, dob);
+        mKYCLevel1Presenter.submitData(fname, lname, address1, address2, phoneno, dob);
         Utils.hideSoftKeyboard(getActivity());
     }
 

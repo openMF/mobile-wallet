@@ -1,24 +1,15 @@
 package org.mifos.mobilewallet.mifospay.bank.adapters;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.BankAccountDetails;
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity;
-import org.mifos.mobilewallet.mifospay.bank.ui.SetupUpiPinActivity;
-import org.mifos.mobilewallet.mifospay.utils.AnimationUtil;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
-import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -25,13 +25,11 @@ import butterknife.OnClick;
 
 public class SignupMethod extends BottomSheetDialogFragment {
 
-    private BottomSheetBehavior mBottomSheetBehavior;
-
-    private GoogleSignInClient googleSignInClient;
-    private GoogleSignInAccount account;
-
     @BindView(R.id.cb_google_account)
     CheckBox mCbGoogleAccount;
+    private BottomSheetBehavior mBottomSheetBehavior;
+    private GoogleSignInClient googleSignInClient;
+    private GoogleSignInAccount account;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {

@@ -53,7 +53,6 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     View rootView;
 
     public static CardsFragment newInstance() {
-
         Bundle args = new Bundle();
 
         CardsFragment fragment = new CardsFragment();

@@ -56,12 +56,12 @@ public class FetchAccountTransfer extends
             this.transferId = transferId;
         }
 
-        public void setTransferId(long transferId) {
-            this.transferId = transferId;
-        }
-
         public long getTransferId() {
             return transferId;
+        }
+
+        public void setTransferId(long transferId) {
+            this.transferId = transferId;
         }
     }
 

@@ -28,6 +28,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 
 /**
  * Created by naman on 7/9/17.
@@ -82,6 +83,7 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
         setHasOptionsMenu(true);
 
         mProfilePresenter.fetchprofile();
+        mProfilePresenter.fetchClientImage();
 
         return rootView;
     }
@@ -118,6 +120,11 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
     }
 
     @Override
+    public void fetchImageSuccess(ResponseBody responseBody) {
+
+    }
+
+    @Override
     public void setPresenter(HomeContract.ProfilePresenter presenter) {
         this.mProfilePresenter = presenter;
     }
@@ -131,6 +138,5 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
     public void showSnackbar(String message) {
         Toaster.show(getView(), message);
     }
-
 
 }
