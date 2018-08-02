@@ -48,6 +48,9 @@ public class TransactionsHistoryActivity extends BaseActivity implements
     @BindView(R.id.tv_account_balance)
     TextView tvAccountBalance;
 
+    @BindView(R.id.tv_placeholder)
+    TextView tvPlaceHolder;
+
     @Inject
     TransactionsAdapter mTransactionsAdapter;
 
@@ -59,7 +62,7 @@ public class TransactionsHistoryActivity extends BaseActivity implements
         getActivityComponent().inject(this);
         setContentView(R.layout.activity_transaction_history);
         ButterKnife.bind(this);
-        setToolbarTitle("Transactions History");
+        setToolbarTitle(Constants.TRANSACTIONS_HISTORY);
         showBackButton();
         mPresenter.attachView(this);
 
@@ -115,7 +118,14 @@ public class TransactionsHistoryActivity extends BaseActivity implements
 
     @Override
     public void showTransactions(List<Transaction> transactions) {
-        mTransactionsAdapter.setData(transactions);
+        if (transactions == null || transactions.size() == 0) {
+            rvTransactions.setVisibility(View.GONE);
+            tvPlaceHolder.setVisibility(View.VISIBLE);
+        } else {
+            rvTransactions.setVisibility(View.VISIBLE);
+            tvPlaceHolder.setVisibility(View.GONE);
+            mTransactionsAdapter.setData(transactions);
+        }
         hideSwipeProgress();
     }
 
@@ -124,12 +134,12 @@ public class TransactionsHistoryActivity extends BaseActivity implements
         TransactionDetailDialog transactionDetailDialog = new TransactionDetailDialog();
 
         Bundle arg = new Bundle();
-        arg.putParcelableArrayList("transactions", mTransactionsAdapter.getTransactions());
-        arg.putParcelable("transaction", mTransactionsAdapter.getTransactions().get(i));
-        arg.putString("accountNo", account.getNumber());
+        arg.putParcelableArrayList(Constants.TRANSACTIONS, mTransactionsAdapter.getTransactions());
+        arg.putParcelable(Constants.TRANSACTION, mTransactionsAdapter.getTransactions().get(i));
+        arg.putString(Constants.ACCOUNT_NUMBER, account.getNumber());
         transactionDetailDialog.setArguments(arg);
 
-        transactionDetailDialog.show(getSupportFragmentManager(), "Transaction Details");
+        transactionDetailDialog.show(getSupportFragmentManager(), Constants.TRANSACTION_DETAILS);
     }
 
     public void showToast(String message) {

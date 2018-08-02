@@ -6,6 +6,92 @@
     <string name="cancel_txt">Cancel</string>
     <string name="cvv">CVV</string>
 
+    <string name="edit_card">Edit Card</string>
+    <string name="delete_card">Delete Card</string>
+    <string name="pan_id">PAN ID</string>
+
+    <string name="level_1">Level 1</string>
+    <string name="level_1_description">Level 1 Description</string>
+    <string name="level_2">Level 2</string>
+    <string name="level_2_description">Level 2 Description</string>
+    <string name="level_3">Level 3</string>
+    <string name="level_3_description">Level 3 Description</string>
+    <string name="address_line_1">Address Line 1</string>
+    <string name="address_line_2">Address Line 2</string>
+    <string name="code">Code</string>
+    <string name="date_of_birth">Date of Birth</string>
+    <string name="add_card">Add Card</string>
+    <string name="id_type">ID Type</string>
+    <string name="browse">Browse</string>
+    <string name="submit">Submit</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="credit_card_number">Credit Card Number</string>
+    <string name="expiry_date">Expiry Date</string>
+    <string name="add">ADD</string>
+    <string name="home">Home</string>
+    <string name="transfer">Transfer</string>
+    <string name="profile">Profile</string>
+    <string name="mifos_pay">Mifos Pay</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="enter_name_or_vpa">Enter name or vpa</string>
+    <string name="balance">Balance</string>
+    <string name="transaction_history">TRANSACTION HISTORY</string>
+    <string name="invoices">Invoices</string>
+    <string name="request">Request</string>
+    <string name="bank_account">Bank Account</string>
+    <string name="qr_code">QR code</string>
+    <string name="complete_kyc">Complete KYC</string>
+    <string name="saved_cards">Saved Cards</string>
+    <string name="qr_code_details">QR code details</string>
+    <string name="user_details">User details</string>
+    <string name="send_money">Send money</string>
+    <string name="sending_to">Sending to</string>
+    <string name="cancel">Cancel</string>
+    <string name="confirm">Confirm</string>
+    <string name="send">Send</string>
+    <string name="amount">Amount</string>
+    <string name="vpa_mobile_number">VPA/ Mobile Number</string>
+    <string name="proceed">Proceed</string>
+    <string name="scan_code">Scan Code</string>
+    <string name="receive">Receive</string>
+    <string name="virtual_payment_address_vpa">Virtual Payment Address (VPA)</string>
+    <string name="show_code">Show code</string>
+    <string name="unique_receipt_link">Unique Receipt Link</string>
+    <string name="invoice_details">Invoice details</string>
+    <string name="payment_options_will_be_fetched_from_upi">Payment Options (will be fetched from
+        UPI)
+    </string>
+    <string name="unique_payment_link">Unique Payment Link</string>
+    <string name="view_receipt">View Receipt</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="create_one">Create one</string>
+    <string name="enter_mobile_number_description">It should be currently activated on your device
+        and linked with your bank account as well.
+    </string>
+    <string name="complete_your_registration">Complete your registration</string>
+    <string name="virtual_payment_address">Virtual Payment Address</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="send_via">Send via</string>
+
+    <string name="verify_mobile_number">Verify Mobile Number</string>
+    <string name="confirm_mobile_number_message">To confirm your mobile number \n we need to send an
+        SMS from \n your phone*
+    </string>
+    <string name="choose_your_sim">Please choose your SIM</string>
+    <string name="regular_charges_will_apply">*Regular charges will apply</string>
+    <string name="send_sms">Send SMS</string>
+    <string name="or">or</string>
+    <string name="bank_account_mobile_verification_conditions">Make sure that the following
+        conditions are met: \n1. Mobile Number is linked with your Bank Account. \n2. Mobile Number
+        is
+        registered on MifosPay. \n3. It's sim is on this device.
+    </string>
+    <string name="okay">Okay</string>
+    <string name="trusted_merchants">Trusted \nMerchants</string>
+
     <string-array name="months_array">
         <item>01</item>
         <item>02</item>

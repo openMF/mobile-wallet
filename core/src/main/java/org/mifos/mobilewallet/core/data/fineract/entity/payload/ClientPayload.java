@@ -22,6 +22,7 @@ public class ClientPayload implements Parcelable {
                     return new ClientPayload[size];
                 }
             };
+    public static final String DD_MMMM_YYYY = "dd MMMM YYYY";
     @SerializedName("firstname")
     String firstname;
     @SerializedName("lastname")
@@ -51,7 +52,7 @@ public class ClientPayload implements Parcelable {
     @SerializedName("clientClassificationId")
     Integer clientClassificationId;
     @SerializedName("dateFormat")
-    String dateFormat = "dd MMMM YYYY";
+    String dateFormat = DD_MMMM_YYYY;
     @SerializedName("locale")
     String locale = "en";
     @SerializedName("datatables")

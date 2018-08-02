@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.mifospay.data.local;
 
-import org.mifos.mobilewallet.core.domain.model.Client;
+import org.mifos.mobilewallet.core.domain.model.client.Client;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -24,7 +24,6 @@ public class LocalRepository {
         details.setName(preferencesHelper.getFullName());
         details.setClientId(preferencesHelper.getClientId());
         details.setExternalId(preferencesHelper.getClientVpa());
-
         return details;
     }
 
@@ -34,5 +33,7 @@ public class LocalRepository {
         preferencesHelper.setClientVpa(client.getExternalId());
     }
 
-
+    public PreferencesHelper getPreferencesHelper() {
+        return preferencesHelper;
+    }
 }

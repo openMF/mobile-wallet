@@ -11,13 +11,14 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -64,8 +65,23 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     TextView btnShowQr;
     @BindView(R.id.btn_scan_qr)
     TextView btnScanQr;
+    @BindView(R.id.btn_vpa)
+    Button mBtnVpa;
+    @BindView(R.id.btn_mobile)
+    Button mBtnMobile;
+    @BindView(R.id.et_mobile_number)
+    EditText mEtMobileNumber;
+    @BindView(R.id.btn_search_contact)
+    TextView mBtnSearchContact;
+    @BindView(R.id.rl_mobile)
+    RelativeLayout mRlMobile;
+    @BindView(R.id.tv_client_mobile)
+    TextView mTvClientMobile;
+    @BindView(R.id.til_vpa)
+    TextInputLayout mTilVpa;
 
     private String vpa;
+    private String mobile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -81,26 +97,58 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
                 false);
         ButterKnife.bind(this, rootView);
 
-        setToolbarTitle("Transfer");
+        setToolbarTitle(Constants.TRANSFER);
         setSwipeEnabled(false);
         mPresenter.attachView(this);
         hideBackButton();
 
         mPresenter.fetchVpa();
+        mPresenter.fetchMobile();
 
         return rootView;
     }
 
+    @OnClick(R.id.btn_vpa)
+    public void onVPASelected() {
+        mBtnVpa.setFocusable(true);
+        mBtnVpa.setFocusableInTouchMode(true);
+
+        mBtnVpa.setBackgroundResource(R.drawable.button_round_primary);
+        mBtnMobile.setBackgroundResource(R.drawable.button_round_stroke);
+        mBtnVpa.setTextColor(getResources().getColor(android.R.color.white));
+        mBtnMobile.setTextColor(getResources().getColor(android.R.color.black));
+
+        mRlMobile.setVisibility(View.GONE);
+        mTilVpa.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.btn_mobile)
+    public void onMobileSelected() {
+        mBtnMobile.setFocusable(true);
+        mBtnMobile.setFocusableInTouchMode(true);
+
+        mBtnMobile.setBackgroundResource(R.drawable.button_round_primary);
+        mBtnVpa.setBackgroundResource(R.drawable.button_round_stroke);
+        mBtnMobile.setTextColor(getResources().getColor(android.R.color.white));
+        mBtnVpa.setTextColor(getResources().getColor(android.R.color.black));
+
+        mTilVpa.setVisibility(View.GONE);
+        mRlMobile.setVisibility(View.VISIBLE);
+    }
+
     @OnClick(R.id.btn_transfer)
     public void transferClicked() {
-        String externalId = etVpa.getText().toString();
-        String eamount = etAmount.getText().toString();
-        if (eamount.equals("") || externalId.equals("")) {
-            Toast.makeText(getActivity(), "Please enter all the fields", Toast.LENGTH_SHORT).show();
+        String externalId = etVpa.getText().toString().trim();
+        String eamount = etAmount.getText().toString().trim();
+        String mobileNumber = mEtMobileNumber.getText().toString().trim();
+        if (eamount.equals("") || (externalId.equals("") && mobileNumber.equals(""))) {
+            Toast.makeText(getActivity(),
+                    Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
         } else {
             double amount = Double.parseDouble(eamount);
             MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
-            fragment.show(getChildFragmentManager(), "Make Transfer Fragment");
+            fragment.show(getChildFragmentManager(),
+                    Constants.MAKE_TRANSFER_FRAGMENT);
         }
     }
 
@@ -166,7 +214,8 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
             double amount = Double.parseDouble(etAmount.getText().toString());
             MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId,
                     amount);
-            fragment.show(getChildFragmentManager(), "Make Transfer Fragment");
+            fragment.show(getChildFragmentManager(),
+                    Constants.MAKE_TRANSFER_FRAGMENT);
 
         } else if (requestCode == PICK_CONTACT && resultCode == Activity.RESULT_OK) {
             Cursor cursor = null;
@@ -187,11 +236,10 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
                 phoneNo = cursor.getString(phoneIndex);
                 name = cursor.getString(nameIndex);
 
-                etVpa.setText(phoneNo);
-                Log.d("qxz", "onActivityResult: " + phoneNo + " " + name);
+                mEtMobileNumber.setText(phoneNo);
 
             } catch (Exception e) {
-                showToast("Error choosing contact");
+                showToast(Constants.ERROR_CHOOSING_CONTACT);
             }
         }
     }
@@ -212,8 +260,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toaster.show(getView(),
-                            "Need camera permission to scan qr code.");
+                    Toaster.show(getView(), Constants.NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE);
                 }
                 return;
             }
@@ -230,7 +277,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toaster.show(getView(), "Need read contacts permission.");
+                    Toaster.show(getView(), Constants.NEED_READ_CONTACTS_PERMISSION);
                 }
                 return;
             }
@@ -247,4 +294,9 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         Toaster.show(getView(), message);
     }
 
+    @Override
+    public void showMobile(String mobileNo) {
+        this.mobile = mobileNo;
+        mTvClientMobile.setText(mobileNo);
+    }
 }

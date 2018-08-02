@@ -39,7 +39,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Unique Receipt Link"
+                android:text="@string/unique_receipt_link"
                 android:textStyle="bold"/>
 
             <TextView

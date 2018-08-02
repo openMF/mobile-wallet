@@ -1,20 +1,25 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.mifos.mobilewallet.core.domain.model.Client;
+import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfilePresenter;
+import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
@@ -23,6 +28,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.ResponseBody;
 
 /**
  * Created by naman on 7/9/17.
@@ -47,7 +53,6 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
     @BindView(R.id.tv_client_vpa)
     TextView tvClientVpa;
 
-
     public static ProfileFragment newInstance(long clientId) {
 
         Bundle args = new Bundle();
@@ -71,19 +76,41 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle("Profile");
+        setToolbarTitle(Constants.PROFILE);
         hideBackButton();
         setSwipeEnabled(false);
 
+        setHasOptionsMenu(true);
+
         mProfilePresenter.fetchprofile();
+        mProfilePresenter.fetchClientImage();
 
         return rootView;
     }
 
     @Override
-    public void showProfile(Client client) {
-        Log.d("qxz", "showProfile: " + client);
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_profile, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_edit_profile:
+                startActivity(new Intent(getActivity(), EditProfileActivity.class));
+                break;
+            case R.id.item_profile_setting:
+                startActivity(new Intent(getActivity(), SettingsActivity.class));
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    @Override
+    public void showProfile(Client client) {
         ivUserName.setText(client.getName());
         tvUserDetailsName.setText(client.getName());
         TextDrawable drawable = TextDrawable.builder()
@@ -93,19 +120,23 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
     }
 
     @Override
+    public void fetchImageSuccess(ResponseBody responseBody) {
+
+    }
+
+    @Override
     public void setPresenter(HomeContract.ProfilePresenter presenter) {
         this.mProfilePresenter = presenter;
     }
 
     @Override
     public void showToast(String message) {
-        Toaster.showToast(getContext(), message);
+        Toaster.showToast(getActivity(), message);
     }
 
     @Override
     public void showSnackbar(String message) {
         Toaster.show(getView(), message);
     }
-
 
 }

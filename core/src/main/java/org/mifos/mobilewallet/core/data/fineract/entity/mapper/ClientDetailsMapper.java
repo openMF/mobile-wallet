@@ -1,9 +1,6 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.mapper;
 
-import org.mifos.mobilewallet.core.data.fineract.entity.payload.ClientPayload;
-import org.mifos.mobilewallet.core.domain.model.Client;
-import org.mifos.mobilewallet.core.domain.model.NewClient;
-import org.mifos.mobilewallet.core.utils.DateHelper;
+import org.mifos.mobilewallet.core.domain.model.client.Client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,23 +38,23 @@ public class ClientDetailsMapper {
             clientDetails.setName(client.getDisplayName());
             clientDetails.setClientId(client.getId());
             clientDetails.setExternalId(client.getExternalId());
-
+            clientDetails.setMobileNo(client.getMobileNo());
         }
         return clientDetails;
     }
 
-    public ClientPayload transformClientPayload(NewClient client) {
-
-        ClientPayload payload = new ClientPayload();
-        payload.setFirstname(client.getFirstname());
-        payload.setLastname(client.getLastname());
-        payload.setExternalId(client.getExternalId());
-
-        payload.setActive(true);
-        payload.setActivationDate(DateHelper.getDateAsStringFromLong(System.currentTimeMillis()));
-        payload.setOfficeId(1);
-
-        return payload;
-
-    }
+//    public ClientPayload transformClientPayload(NewClient client) {
+//
+//        ClientPayload payload = new ClientPayload();
+//        payload.setFirstname(client.getFirstname());
+//        payload.setLastname(client.getLastname());
+//        payload.setExternalId(client.getExternalId());
+//
+//        payload.setActive(true);
+//        payload.setActivationDate(DateHelper.getDateAsStringFromLong(System.currentTimeMillis()));
+//        payload.setOfficeId(1);
+//
+//        return payload;
+//
+//    }
 }

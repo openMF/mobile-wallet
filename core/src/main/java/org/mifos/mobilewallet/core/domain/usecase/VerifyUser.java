@@ -3,6 +3,7 @@ package org.mifos.mobilewallet.core.domain.usecase;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -40,7 +41,7 @@ public class VerifyUser extends UseCase<VerifyUser.RequestValues,
 
                     @Override
                     public void onError(Throwable e) {
-                        getUseCaseCallback().onError("Error verifying user");
+                        getUseCaseCallback().onError(Constants.ERROR_VERIFYING_USER);
                     }
 
                     @Override

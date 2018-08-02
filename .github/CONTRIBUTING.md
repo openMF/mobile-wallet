@@ -55,7 +55,7 @@ If you can, please submit a pull request with the fix or improvements including 
 * Write tests and code
 * Run the CheckStyle, PMD, Findbugs code analysis tools with `gradlew check` to make sure you have written quality code.
 * If you have multiple commits please combine them into one commit by squashing them.  See [this article](http://eli.thegreenplace.net/2014/02/19/squashing-github-pull-requests-into-a-single-commit) and [this Git documentation](http://git-scm.com/book/en/Git-Tools-Rewriting-History#Squashing-Commits) for instructions.
-* Please follow the commit message [guidelines](https://github.com/openMF/mobile-wallet/wiki/Commit-style-guide) before making PR.
+* Please follow the commit body [guidelines](https://github.com/openMF/mobile-wallet/wiki/Commit-style-guide) before making PR.
 * Push the commit to your fork
 * Submit a pull request with a motive for your change and the method you used to achieve it with `development` branch.
 

@@ -7,6 +7,8 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationServic
 import org.mifos.mobilewallet.core.data.fineract.api.services.SavingAccountsListService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.ThirdPartyTransferService;
 
+import java.util.concurrent.TimeUnit;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -19,6 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SelfServiceApiManager {
 
+    public static final String DEFAULT = "default";
     private static BaseURL baseUrl = new BaseURL();
     private static final String BASE_URL = baseUrl.getSelfServiceUrl();
 
@@ -54,8 +57,11 @@ public class SelfServiceApiManager {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken, "default"))
+                .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
                 .build();
 
         retrofit = new Retrofit.Builder()

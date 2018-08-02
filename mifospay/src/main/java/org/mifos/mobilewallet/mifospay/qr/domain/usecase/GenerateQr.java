@@ -8,6 +8,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 import org.mifos.mobilewallet.core.base.UseCase;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -34,11 +35,11 @@ public class GenerateQr extends UseCase<GenerateQr.RequestValues, GenerateQr.Res
             if (bitmap != null) {
                 getUseCaseCallback().onSuccess(new ResponseValue(bitmap));
             } else {
-                getUseCaseCallback().onError("Error occurred");
+                getUseCaseCallback().onError(Constants.ERROR_OCCURRED);
             }
 
         } catch (WriterException e) {
-            getUseCaseCallback().onError("Failed to write data to qr");
+            getUseCaseCallback().onError(Constants.FAILED_TO_WRITE_DATA_TO_QR);
         }
     }
 

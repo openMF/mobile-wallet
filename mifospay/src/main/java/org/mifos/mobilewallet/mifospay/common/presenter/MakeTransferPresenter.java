@@ -3,10 +3,11 @@ package org.mifos.mobilewallet.mifospay.common.presenter;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.SearchResult;
-import org.mifos.mobilewallet.core.domain.usecase.SearchClient;
-import org.mifos.mobilewallet.core.domain.usecase.TransferFunds;
+import org.mifos.mobilewallet.core.domain.usecase.account.TransferFunds;
+import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.common.TransferContract;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -47,7 +48,7 @@ public class MakeTransferPresenter implements TransferContract.TransferPresenter
 
                     @Override
                     public void onError(String message) {
-                        mTransferView.showToast("Error fetching receiver");
+                        mTransferView.showToast(Constants.ERROR_FETCHING_RECEIVER);
                     }
                 });
     }

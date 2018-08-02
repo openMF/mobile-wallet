@@ -21,6 +21,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 import org.mifos.mobilewallet.mifospay.transactions.TransactionsContract;
 import org.mifos.mobilewallet.mifospay.transactions.presenter.TransactionDetailPresenter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import java.util.ArrayList;
 
@@ -120,17 +121,17 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            transaction = bundle.getParcelable("transaction");
-            accountNo = bundle.getString("accountNo");
-            transactions = bundle.getParcelableArrayList("transactions");
+            transaction = bundle.getParcelable(Constants.TRANSACTION);
+            accountNo = bundle.getString(Constants.ACCOUNT_NUMBER);
+            transactions = bundle.getParcelableArrayList(Constants.TRANSACTIONS);
             if (transaction == null) {
                 return dialog;
             }
         }
         mPresenter.attachView(this);
 
-        tvTransactionId.setText("Transaction ID: " + transaction.getTransactionId());
-        tvTransactionDate.setText("Date: " + transaction.getDate());
+        tvTransactionId.setText(Constants.TRANSACTION_ID + ": " + transaction.getTransactionId());
+        tvTransactionDate.setText(Constants.DATE + ": " + transaction.getDate());
         tvTransactionAmount.setText(
                 transaction.getCurrency().getCode() + " " + transaction.getAmount());
 
@@ -148,20 +149,20 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
 
         if (transaction.getReceiptId() != null) {
             tvReceiptId.setVisibility(View.VISIBLE);
-            tvReceiptId.setText("Receipt ID: " + transaction.getReceiptId());
+            tvReceiptId.setText(Constants.RECEIPT_ID + ": " + transaction.getReceiptId());
         }
 
         switch (transaction.getTransactionType()) {
             case DEBIT:
-                tvTransactionStatus.setText("Debit");
+                tvTransactionStatus.setText(Constants.DEBIT);
                 tvTransactionAmount.setTextColor(Color.RED);
                 break;
             case CREDIT:
-                tvTransactionStatus.setText("Credit");
+                tvTransactionStatus.setText(Constants.CREDIT);
                 tvTransactionAmount.setTextColor(Color.parseColor("#009688"));
                 break;
             case OTHER:
-                tvTransactionStatus.setText("Other");
+                tvTransactionStatus.setText(Constants.OTHER);
                 tvTransactionAmount.setTextColor(Color.YELLOW);
                 break;
         }
@@ -178,7 +179,7 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
     @OnClick(R.id.tv_viewReceipt)
     public void viewReceipt() {
         Intent intent = new Intent(getActivity(), ReceiptActivity.class);
-        intent.setData(Uri.parse("https://receipt.mifospay.com/" + transaction.getTransactionId()));
+        intent.setData(Uri.parse(Constants.RECEIPT_DOMAIN + transaction.getTransactionId()));
         startActivity(intent);
     }
 
@@ -192,7 +193,7 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
 
         ArrayList specificTransactions = mTransactionDetailPresenter.getSpecificTransactions(
                 transactions, tvFromAccountNo.getText().toString());
-        intent.putParcelableArrayListExtra("specificTransactions", specificTransactions);
+        intent.putParcelableArrayListExtra(Constants.SPECIFIC_TRANSACTIONS, specificTransactions);
 
         mProgressBar.setVisibility(View.GONE);
         mLlMain.setVisibility(View.VISIBLE);
@@ -211,7 +212,7 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
 
         ArrayList specificTransactions = mTransactionDetailPresenter.getSpecificTransactions(
                 transactions, tvToAccountNo.getText().toString());
-        intent.putParcelableArrayListExtra("specificTransactions", specificTransactions);
+        intent.putParcelableArrayListExtra(Constants.SPECIFIC_TRANSACTIONS, specificTransactions);
 
         mProgressBar.setVisibility(View.GONE);
         mLlMain.setVisibility(View.VISIBLE);

@@ -16,6 +16,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.home.ui.HomeActivity;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCDescriptionPresenter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
@@ -82,11 +83,11 @@ public class KYCDescriptionFragment extends
         View rootView = inflater.inflate(R.layout.fragment_kyc_desc, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle("Complete KYC");
+        setToolbarTitle(Constants.COMPLETE_KYC);
         showBackButton();
         setSwipeEnabled(false);
 
-        showProgressDialog("Please wait..");
+        showProgressDialog(Constants.PLEASE_WAIT);
         mKYCDescriptionPresenter.fetchCurrentLevel();
 
         return rootView;

@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "650844498895",
+    "firebase_url": "https://mifos-mobile-wallet.firebaseio.com",
+    "project_id": "mifos-mobile-wallet",
+    "storage_bucket": "mifos-mobile-wallet.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650844498895:android:9be7e436ed39fe15",
+        "android_client_info": {
+          "package_name": "org.mifos.mobilewallet.mifospay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650844498895-eq3lvn274d8el5auf8q02n184om82eu5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.mifos.mobilewallet.mifospay",
+            "certificate_hash": "d9707290755498cb2de356116ba81da43c6e56a0"
+          }
+        },
+        {
+          "client_id": "650844498895-0pj67mmhg52u1boog7tatmsab1uohl74.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "650844498895-0pj67mmhg52u1boog7tatmsab1uohl74.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-EJsFmZHKNS0ww2iX823-PBNaHR-XHRE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650844498895-0pj67mmhg52u1boog7tatmsab1uohl74.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -27,28 +27,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/cardview_round_blue"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/value_10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/value_5dp"
-                    android:layout_marginLeft="@dimen/value_10dp"
-                    android:layout_marginRight="@dimen/value_10dp"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 1"
+                    android:layout_margin="@dimen/value_10dp"
+                    android:text="@string/level_1"
                     android:textColor="@color/white"
                     android:textSize="@dimen/value_25sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/value_5dp"
-                    android:layout_marginLeft="@dimen/value_10dp"
-                    android:layout_marginRight="@dimen/value_10dp"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 1 Description"
-                    android:textColor="@color/gray"/>
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="@dimen/value_5dp"-->
+                <!--android:layout_marginLeft="@dimen/value_10dp"-->
+                <!--android:layout_marginRight="@dimen/value_10dp"-->
+                <!--android:layout_marginTop="@dimen/value_10dp"-->
+                <!--android:text="@string/level_1_description"-->
+                <!--android:textColor="@color/gray"/>-->
 
             </LinearLayout>
 
@@ -66,28 +64,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/cardview_round_blue"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/value_10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/value_5dp"
-                    android:layout_marginLeft="@dimen/value_10dp"
-                    android:layout_marginRight="@dimen/value_10dp"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 2"
+                    android:layout_margin="@dimen/value_10dp"
+                    android:text="@string/level_2"
                     android:textColor="@color/white"
                     android:textSize="@dimen/value_25sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/value_5dp"
-                    android:layout_marginLeft="@dimen/value_10dp"
-                    android:layout_marginRight="@dimen/value_10dp"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 2 Description"
-                    android:textColor="@color/gray"/>
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="@dimen/value_5dp"-->
+                <!--android:layout_marginLeft="@dimen/value_10dp"-->
+                <!--android:layout_marginRight="@dimen/value_10dp"-->
+                <!--android:layout_marginTop="@dimen/value_10dp"-->
+                <!--android:text="@string/level_2_description"-->
+                <!--android:textColor="@color/gray"/>-->
 
             </LinearLayout>
 
@@ -105,28 +101,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/cardview_round_blue"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="@dimen/value_10dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/value_5dp"
-                    android:layout_marginLeft="@dimen/value_10dp"
-                    android:layout_marginRight="@dimen/value_10dp"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 3"
+                    android:layout_margin="@dimen/value_10dp"
+                    android:text="@string/level_3"
                     android:textColor="@color/white"
                     android:textSize="@dimen/value_25sp"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/value_5dp"
-                    android:layout_marginLeft="@dimen/value_10dp"
-                    android:layout_marginRight="@dimen/value_10dp"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Level 3 Description"
-                    android:textColor="@color/gray"/>
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="@dimen/value_5dp"-->
+                <!--android:layout_marginLeft="@dimen/value_10dp"-->
+                <!--android:layout_marginRight="@dimen/value_10dp"-->
+                <!--android:layout_marginTop="@dimen/value_10dp"-->
+                <!--android:text="@string/level_3_description"-->
+                <!--android:textColor="@color/gray"/>-->
 
             </LinearLayout>
 

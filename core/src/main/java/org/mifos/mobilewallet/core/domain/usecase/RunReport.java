@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.core.domain.usecase;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -26,7 +27,7 @@ public class RunReport extends UseCase<RunReport.RequestValues, RunReport.Respon
     @Override
     protected void executeUseCase(RequestValues requestValues) {
 
-        mFineractRepository.getTransactionReceipt("PDF", requestValues.transactionId)
+        mFineractRepository.getTransactionReceipt(Constants.PDF, requestValues.transactionId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<ResponseBody>() {

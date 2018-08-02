@@ -3,14 +3,17 @@ package org.mifos.mobilewallet.mifospay.auth.presenter;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
-import org.mifos.mobilewallet.core.domain.model.Client;
-import org.mifos.mobilewallet.core.domain.model.User;
-import org.mifos.mobilewallet.core.domain.usecase.AuthenticateUser;
-import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
-import org.mifos.mobilewallet.core.utils.Constants;
+import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole;
+import org.mifos.mobilewallet.core.domain.model.client.Client;
+import org.mifos.mobilewallet.core.domain.model.user.User;
+import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
+import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
+import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails;
 import org.mifos.mobilewallet.mifospay.auth.AuthContract;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 
 import javax.inject.Inject;
 
@@ -26,8 +29,9 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     AuthenticateUser authenticateUserUseCase;
     @Inject
     FetchClientData fetchClientDataUseCase;
+    @Inject
+    FetchUserDetails fetchUserDetailsUseCase;
     private AuthContract.LoginView mLoginView;
-
 
     @Inject
     public LoginPresenter(UseCaseHandler useCaseHandler, PreferencesHelper preferencesHelper) {
@@ -53,9 +57,9 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                 new UseCase.UseCaseCallback<AuthenticateUser.ResponseValue>() {
                     @Override
                     public void onSuccess(AuthenticateUser.ResponseValue response) {
-                        saveUserDetails(response.getUser());
                         createAuthenticatedService(response.getUser());
                         fetchClientData();
+                        fetchUserDetails(response.getUser());
                     }
 
                     @Override
@@ -65,6 +69,22 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                 });
 
 
+    }
+
+    private void fetchUserDetails(final User user) {
+        mUsecaseHandler.execute(fetchUserDetailsUseCase,
+                new FetchUserDetails.RequestValues(user.getUserId()),
+                new UseCase.UseCaseCallback<FetchUserDetails.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchUserDetails.ResponseValue response) {
+                        saveUserDetails(user, response.getUserWithRole());
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        DebugUtil.log(message);
+                    }
+                });
     }
 
     private void fetchClientData() {
@@ -96,17 +116,19 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
 
     }
 
-    private void saveUserDetails(User user) {
+    private void saveUserDetails(User user,
+            UserWithRole userWithRole) {
         final String userName = user.getUserName();
         final long userID = user.getUserId();
 
         preferencesHelper.saveUsername(userName);
         preferencesHelper.setUserId(userID);
-
+        preferencesHelper.saveEmail(userWithRole.getEmail());
     }
 
     private void saveClientDetails(Client client) {
         preferencesHelper.saveFullName(client.getName());
         preferencesHelper.setClientId(client.getClientId());
+        preferencesHelper.saveMobile(client.getMobileNo());
     }
 }

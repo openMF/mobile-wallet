@@ -1,13 +1,12 @@
 package org.mifos.mobilewallet.mifospay.home.presenter;
 
-import android.util.Log;
-
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.FetchAccount;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -21,6 +20,7 @@ public class WalletPresenter implements HomeContract.WalletPresenter {
     private final LocalRepository localRepository;
     @Inject
     FetchAccount mFetchAccountUseCase;
+
     private HomeContract.WalletView mWalletView;
 
     @Inject
@@ -47,11 +47,9 @@ public class WalletPresenter implements HomeContract.WalletPresenter {
 
                     @Override
                     public void onError(String message) {
-                        Log.e("qxz", message);
                         mWalletView.hideSwipeProgress();
-                        mWalletView.showToast("Error fetching balance");
+                        mWalletView.showToast(Constants.ERROR_FETCHING_BALANCE);
                     }
                 });
     }
-
 }

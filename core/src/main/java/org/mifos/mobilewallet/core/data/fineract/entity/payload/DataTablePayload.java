@@ -3,8 +3,6 @@ package org.mifos.mobilewallet.core.data.fineract.entity.payload;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.HashMap;
 
 public class DataTablePayload implements Parcelable {
@@ -24,9 +22,8 @@ public class DataTablePayload implements Parcelable {
     transient Integer id;
     transient Long clientCreationTime;
     transient String dataTableString;
-    @SerializedName("registeredTableName")
     String registeredTableName;
-    @SerializedName("data")
+    String applicationTableName;
     HashMap<String, Object> data;
 
     public DataTablePayload() {
@@ -59,6 +56,10 @@ public class DataTablePayload implements Parcelable {
 
     public void setRegisteredTableName(String registeredTableName) {
         this.registeredTableName = registeredTableName;
+    }
+
+    public void setApplicationTableName(String applicationTableName) {
+        this.applicationTableName = applicationTableName;
     }
 
     public HashMap<String, Object> getData() {
