@@ -45,6 +45,7 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
         mActivityComponent.inject(this);
 
         ButterKnife.bind(this);
+
     }
 
     @Override
@@ -83,4 +84,6 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
     public void setPresenter(PassCodeContract.PassCodePresenter presenter) {
         mPassCodePresenter = mPresenter;
     }
+
+
 }

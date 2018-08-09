@@ -1,168 +1,230 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent" android:layout_height="match_parent"
-              android:orientation="vertical">
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/value_20dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="@dimen/value_20dp">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.CardView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:cardElevation="1dp"
+            app:cardUseCompatPadding="true">
 
-            <TextView
-                android:layout_width="match_parent"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_marginTop="@dimen/value_20dp"
-                android:text="Balance"
-                android:textColor="@color/grey_900"
-                android:textSize="@dimen/value_18sp"/>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/value_10dp">
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tv_account_balance"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_marginBottom="@dimen/value_20dp"
                     android:layout_marginLeft="@dimen/value_20dp"
+                    android:layout_marginTop="@dimen/value_20dp"
+                    android:text="@string/balance"
                     android:textColor="@color/grey_900"
-                    android:textSize="@dimen/value_20sp"
-                    android:textStyle="bold"/>
+                    android:textSize="@dimen/value_18sp"/>
 
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/value_10dp">
+
+                    <TextView
+                        android:id="@+id/tv_account_balance"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginBottom="@dimen/value_20dp"
+                        android:layout_marginLeft="@dimen/value_20dp"
+                        android:textColor="@color/grey_900"
+                        android:textSize="@dimen/value_20sp"
+                        android:textStyle="bold"/>
+
+
+                    <TextView
+                        android:id="@+id/tv_view_details"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/value_20dp"
+                        android:layout_toRightOf="@+id/tv_account_balance"
+                        android:foregroundGravity="right|bottom"
+                        android:gravity="right|bottom"
+                        android:paddingBottom="@dimen/value_20dp"
+                        android:paddingLeft="@dimen/value_20dp"
+                        android:paddingTop="@dimen/value_5dp"
+                        android:text="@string/transaction_history"
+                        android:textColor="@color/primaryDarkBlue"
+                        android:textSize="@dimen/value_14sp"
+                        android:textStyle="bold"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/value_20dp"
+            app:cardElevation="1dp"
+            app:cardUseCompatPadding="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_20dp"
+                android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/tv_view_details"
-                    android:layout_toRightOf="@+id/tv_account_balance"
+                    android:id="@+id/btn_history"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/value_20dp"
-                    android:foregroundGravity="right|bottom"
-                    android:paddingBottom="@dimen/value_20dp"
-                    android:paddingLeft="@dimen/value_20dp"
-                    android:gravity="right|bottom"
-                    android:paddingTop="@dimen/value_5dp"
-                    android:text="TRANSACTION HISTORY"
-                    android:textColor="@color/primaryDarkBlue"
-                    android:textSize="@dimen/value_14sp"
-                    android:textStyle="bold"/>
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_repeat"
+                    android:gravity="center"
+                    android:text="History"/>
 
-            </RelativeLayout>
+                <TextView
+                    android:id="@+id/btn_send"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_send_selector"
+                    android:gravity="center"
+                    android:text="@string/send"/>
 
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/btn_request"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_request_selector"
+                    android:gravity="center"
+                    android:text="@string/request"/>
 
+                <TextView
+                    android:id="@+id/btn_show_qr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/qrcode_black_selector"
+                    android:gravity="center"
+                    android:text="@string/qr_code"/>
 
-    </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/value_20dp">
-
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_20dp"
-            android:orientation="horizontal">
+            app:cardElevation="1dp"
+            app:cardUseCompatPadding="true">
 
-            <TextView
-                android:id="@+id/btn_invoices"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/value_10dp"
-                android:drawableTop="@drawable/ic_invoice"
-                android:gravity="center"
-                android:text="Invoices"/>
+                android:layout_marginBottom="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_20dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/btn_send"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/value_10dp"
-                android:drawableTop="@drawable/ic_send_selector"
-                android:gravity="center"
-                android:text="Send"/>
+                <TextView
+                    android:id="@+id/btn_addBankAccount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_bank"
+                    android:gravity="center"
+                    android:text="@string/bank_account"/>
 
-            <TextView
-                android:id="@+id/btn_request"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/value_10dp"
-                android:drawableTop="@drawable/ic_request_selector"
-                android:gravity="center"
-                android:text="Request"/>
+                <TextView
+                    android:id="@+id/btn_kyc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_account_balance_wallet"
+                    android:gravity="center"
+                    android:text="@string/complete_kyc"/>
 
-            <TextView
-                android:id="@+id/btn_show_qr"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/value_10dp"
-                android:drawableTop="@drawable/qrcode_black_selector"
-                android:gravity="center"
-                android:text="QR code"/>
+                <TextView
+                    android:id="@+id/btn_cards"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_saved_cards"
+                    android:gravity="center"
+                    android:text="@string/saved_cards"/>
 
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/value_20dp">
-
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_20dp"
-            android:orientation="horizontal">
+            app:cardElevation="1dp"
+            app:cardUseCompatPadding="true">
 
-            <TextView
-                android:id="@+id/btn_addBankAccount"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/value_10dp"
-                android:drawableTop="@drawable/ic_bank"
-                android:gravity="center"
-                android:text="Bank Account"/>
+                android:layout_marginBottom="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_20dp"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/btn_kyc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/value_10dp"
-                android:drawableTop="@drawable/ic_account_balance_wallet"
-                android:gravity="center"
-                android:text="Complete KYC"/>
+                <TextView
+                    android:id="@+id/btn_merchant"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_merchant"
+                    android:gravity="center"
+                    android:text="@string/trusted_merchants"/>
 
-            <TextView
-                android:id="@+id/btn_cards"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:drawablePadding="@dimen/value_10dp"
-                android:drawableTop="@drawable/ic_saved_cards"
-                android:gravity="center"
-                android:text="Saved Cards"/>
+                <TextView
+                    android:id="@+id/btn_notifications"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_notification"
+                    android:gravity="center"
+                    android:text="Notifications"/>
 
-        </LinearLayout>
-    </android.support.v7.widget.CardView>
+                <TextView
+                    android:id="@+id/btn_invoices"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawablePadding="@dimen/value_10dp"
+                    android:drawableTop="@drawable/ic_invoice"
+                    android:gravity="center"
+                    android:text="@string/invoices"/>
 
-</LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+
+</ScrollView>

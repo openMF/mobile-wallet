@@ -8,14 +8,18 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.DocumentService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.InvoiceService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.KYCLevel1Service;
+import org.mifos.mobilewallet.core.data.fineract.api.services.NotificationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.RunReportService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SavedCardService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.SavingAccountsListService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.SavingsAccountsService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SearchService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.ThirdPartyTransferService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.TwoFactorAuthService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.UserService;
+import org.mifos.mobilewallet.core.utils.Constants;
+
+import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -29,13 +33,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FineractApiManager {
 
+    public static final String DEFAULT = "default";
+    public static final String BASIC = "Basic ";
     private static BaseURL baseUrl = new BaseURL();
     private static final String BASE_URL = baseUrl.getUrl();
 
     private static Retrofit retrofit;
     private static AuthenticationService authenticationApi;
     private static ClientService clientsApi;
-    private static SavingAccountsListService savingAccountsListApi;
+    private static SavingsAccountsService savingsAccountsApi;
     private static RegistrationService registrationAPi;
     private static SearchService searchApi;
     private static SavedCardService savedCardApi;
@@ -47,11 +53,12 @@ public class FineractApiManager {
     private static InvoiceService invoiceApi;
     private static UserService userApi;
     private static ThirdPartyTransferService thirdPartyTransferApi;
+    private static NotificationService notificationApi;
 
     private static SelfServiceApiManager sSelfInstance;
 
     public FineractApiManager() {
-        String authToken = "Basic " + Base64.encodeToString("mifos:password".getBytes(),
+        String authToken = BASIC + Base64.encodeToString(Constants.MIFOS_PASSWORD.getBytes(),
                 Base64.NO_WRAP);
         createService(authToken);
 
@@ -63,10 +70,9 @@ public class FineractApiManager {
     private static void init() {
         authenticationApi = createApi(AuthenticationService.class);
         clientsApi = createApi(ClientService.class);
-        savingAccountsListApi = createApi(SavingAccountsListService.class);
+        savingsAccountsApi = createApi(SavingsAccountsService.class);
         registrationAPi = createApi(RegistrationService.class);
         searchApi = createApi(SearchService.class);
-
         savedCardApi = createApi(SavedCardService.class);
         documentApi = createApi(DocumentService.class);
         twoFactorAuthApi = createApi(TwoFactorAuthService.class);
@@ -76,6 +82,7 @@ public class FineractApiManager {
         invoiceApi = createApi(InvoiceService.class);
         userApi = createApi(UserService.class);
         thirdPartyTransferApi = createApi(ThirdPartyTransferService.class);
+        notificationApi = createApi(NotificationService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
@@ -88,8 +95,11 @@ public class FineractApiManager {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .readTimeout(60, TimeUnit.SECONDS)
+                .connectTimeout(60, TimeUnit.SECONDS)
+                .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken, "default"))
+                .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -98,8 +108,8 @@ public class FineractApiManager {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(okHttpClient)
                 .build();
-        init();
 
+        init();
     }
 
     public static void createSelfService(String authToken) {
@@ -118,8 +128,8 @@ public class FineractApiManager {
         return clientsApi;
     }
 
-    public SavingAccountsListService getSavingAccountsListApi() {
-        return savingAccountsListApi;
+    public SavingsAccountsService getSavingAccountsListApi() {
+        return savingsAccountsApi;
     }
 
     public RegistrationService getRegistrationAPi() {
@@ -164,5 +174,9 @@ public class FineractApiManager {
 
     public ThirdPartyTransferService getThirdPartyTransferApi() {
         return thirdPartyTransferApi;
+    }
+
+    public NotificationService getNotificationApi() {
+        return notificationApi;
     }
 }

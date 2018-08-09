@@ -2,8 +2,8 @@ package org.mifos.mobilewallet.mifospay.passcode.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
-import org.mifos.mobilewallet.core.domain.usecase.AuthenticateUser;
-import org.mifos.mobilewallet.core.domain.usecase.FetchClientData;
+import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
+import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract;

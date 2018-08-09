@@ -4,7 +4,7 @@ import android.net.Uri;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.FetchInvoice;
+import org.mifos.mobilewallet.core.domain.usecase.invoice.FetchInvoice;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract;

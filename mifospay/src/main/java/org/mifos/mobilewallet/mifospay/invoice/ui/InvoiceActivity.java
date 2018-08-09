@@ -17,6 +17,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract;
 import org.mifos.mobilewallet.mifospay.invoice.presenter.InvoicePresenter;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
@@ -72,13 +73,13 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
 
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
-        setToolbarTitle("Invoice");
+        setToolbarTitle(Constants.INVOICE);
         showBackButton();
         mPresenter.attachView(this);
 
         Uri data = getIntent().getData();
         if (data != null) {
-            showProgressDialog("Please wait..");
+            showProgressDialog(Constants.PLEASE_WAIT);
             mInvoicePresenter.getInvoiceDetails(data);
         } else {
             finish();
@@ -94,31 +95,32 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
     @Override
     public void showInvoiceDetails(final Invoice invoice, String merchantId, String paymentLink) {
 
-        mTvMerchantId.setText("Merchant: " + merchantId);
+        mTvMerchantId.setText(Constants.MERCHANT + ": " + merchantId);
         mTvConsumerId.setText(
-                "Consumer: " + invoice.getConsumerName() + " " + invoice.getConsumerId());
-        mTvAmount.setText("Amount: INR " + invoice.getAmount() + "");
-        mTvItemsBought.setText("Item(s): " + invoice.getItemsBought());
-        String status = "Pending";
+                Constants.CONSUMER + ": " + invoice.getConsumerName() + " "
+                        + invoice.getConsumerId());
+        mTvAmount.setText(Constants.AMOUNT + ": " + Constants.INR + " " + invoice.getAmount() + "");
+        mTvItemsBought.setText(Constants.ITEMS + ": " + invoice.getItemsBought());
+        String status = Constants.PENDING;
         if (invoice.getStatus() == 1) {
-            status = "Done";
+            status = Constants.DONE;
 
             mTvTransactionId.setVisibility(View.VISIBLE);
             mVUrl.setVisibility(View.VISIBLE);
             mLlUrl.setVisibility(View.VISIBLE);
 
-            mTvTransactionId.setText("Transaction Id: " + invoice.getTransactionId());
+            mTvTransactionId.setText(Constants.TRANSACTION_ID + ": " + invoice.getTransactionId());
 
-            mTvReceiptLink.setText("https://receipt.mifospay.com/" + invoice.getTransactionId());
+            mTvReceiptLink.setText(Constants.RECEIPT_DOMAIN + invoice.getTransactionId());
             mTvReceiptLink.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     ClipboardManager cm = (ClipboardManager) getSystemService(
                             Context.CLIPBOARD_SERVICE);
-                    ClipData clipData = ClipData.newPlainText("Unique Receipt Link",
+                    ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_RECEIPT_LINK,
                             mTvReceiptLink.getText().toString());
                     cm.setPrimaryClip(clipData);
-                    showSnackbar("Unique Receipt Link copied to clipboard");
+                    showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
                     return true;
                 }
             });
@@ -127,13 +129,13 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
                 public void onClick(View v) {
                     Intent intent = new Intent(InvoiceActivity.this, ReceiptActivity.class);
                     intent.setData(Uri.parse(
-                            "https://receipt.mifospay.com/" + invoice.getTransactionId()));
+                            Constants.RECEIPT_DOMAIN + invoice.getTransactionId()));
                     startActivity(intent);
                 }
             });
         }
 
-        mTvStatus.setText("Status: " + status);
+        mTvStatus.setText(Constants.STATUS + ": " + status);
 
         mTvPaymentLink.setText(paymentLink);
         mTvPaymentLink.setOnLongClickListener(new View.OnLongClickListener() {
@@ -141,10 +143,10 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
             public boolean onLongClick(View v) {
                 ClipboardManager cm = (ClipboardManager) getSystemService(
                         Context.CLIPBOARD_SERVICE);
-                ClipData clipData = ClipData.newPlainText("Unique Payment Link",
+                ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_PAYMENT_LINK,
                         mTvPaymentLink.getText().toString());
                 cm.setPrimaryClip(clipData);
-                showSnackbar("Unique Payment Link copied to clipboard");
+                showSnackbar(Constants.UNIQUE_PAYMENT_LINK_COPIED_TO_CLIPBOARD);
                 return true;
             }
         });

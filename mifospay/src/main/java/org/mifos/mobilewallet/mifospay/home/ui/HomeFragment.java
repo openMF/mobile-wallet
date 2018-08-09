@@ -13,6 +13,7 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -54,7 +55,7 @@ public class HomeFragment extends BaseFragment {
 
         ButterKnife.bind(this, rootView);
 
-        setToolbarTitle("Home");
+        setToolbarTitle(Constants.HOME);
         hideBackButton();
 
         replaceFragment(WalletFragment.newInstance(localRepository

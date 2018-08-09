@@ -17,6 +17,7 @@ import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract;
 import org.mifos.mobilewallet.mifospay.invoice.presenter.InvoicesPresenter;
 import org.mifos.mobilewallet.mifospay.invoice.ui.adapter.InvoicesAdapter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
@@ -39,6 +40,8 @@ public class InvoicesActivity extends BaseActivity implements InvoiceContract.In
     TextView mTvAccountBalance;
     @BindView(R.id.rv_invoices)
     RecyclerView mRvInvoices;
+    @BindView(R.id.tv_placeholder)
+    TextView tvPlaceholder;
 
     @Inject
     InvoicesAdapter mInvoicesAdapter;
@@ -52,7 +55,7 @@ public class InvoicesActivity extends BaseActivity implements InvoiceContract.In
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
         mPresenter.attachView(this);
-        setToolbarTitle("Invoices");
+        setToolbarTitle(Constants.INVOICES);
         showBackButton();
 
         account = getIntent().getParcelableExtra(Constants.ACCOUNT);
@@ -111,6 +114,16 @@ public class InvoicesActivity extends BaseActivity implements InvoiceContract.In
 
     @Override
     public void showInvoices(List<Invoice> invoiceList) {
+        if (invoiceList == null || invoiceList.size() == 0) {
+            DebugUtil.log("null");
+            mRvInvoices.setVisibility(View.GONE);
+            tvPlaceholder.setVisibility(View.VISIBLE);
+        } else {
+            DebugUtil.log("yes");
+            mRvInvoices.setVisibility(View.VISIBLE);
+            tvPlaceholder.setVisibility(View.GONE);
+            mInvoicesAdapter.setData(invoiceList);
+        }
         mInvoicesAdapter.setData(invoiceList);
         hideSwipeProgress();
     }

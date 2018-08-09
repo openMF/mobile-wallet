@@ -11,6 +11,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCLevel3Presenter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -55,7 +56,7 @@ public class KYCLevel3Fragment extends BaseFragment implements KYCContract.KYCLe
         View rootView = inflater.inflate(R.layout.fragment_kyc_lvl3, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle("KYC Registration Level 3");
+        setToolbarTitle(Constants.KYC_REGISTRATION_LEVEL_3);
 
         return rootView;
     }

@@ -23,6 +23,7 @@ public class TransferPayload implements Parcelable {
                     return new TransferPayload[size];
                 }
             };
+    public static final String DD_MMMM_YYYY = "dd MMMM yyyy";
     @SerializedName("fromOfficeId")
     Integer fromOfficeId;
     @SerializedName("fromClientId")
@@ -45,7 +46,7 @@ public class TransferPayload implements Parcelable {
     Double transferAmount;
     @SerializedName("transferDescription")
     String transferDescription;
-    String dateFormat = "dd MMMM yyyy";
+    String dateFormat = DD_MMMM_YYYY;
     String locale = "en";
 
     public TransferPayload() {

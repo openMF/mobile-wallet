@@ -20,6 +20,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCLevel2Presenter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
@@ -81,7 +82,7 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
         View rootView = inflater.inflate(R.layout.fragment_kyc_lvl2, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle("KYC Registration Level 2");
+        setToolbarTitle(Constants.KYC_REGISTRATION_LEVEL_2);
 
         return rootView;
     }
@@ -104,13 +105,14 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
 
     @OnClick(R.id.btn_submit)
     public void onSubmitClicked() {
-        showProgressDialog("Please wait..");
+        showProgressDialog(Constants.PLEASE_WAIT);
         mKYCLevel2Presenter.uploadKYCDocs(etIdname.getText().toString());
     }
 
     @Override
     public void startDocChooseActivity(Intent intent, int READ_REQUEST_CODE) {
-        startActivityForResult(Intent.createChooser(intent, "Choose File"), READ_REQUEST_CODE);
+        startActivityForResult(Intent.createChooser(intent, Constants.CHOOSE_FILE),
+                READ_REQUEST_CODE);
     }
 
     @Override
@@ -141,7 +143,7 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    showToast("Need external storage permission to browse documents.");
+                    showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_DOCUMENTS);
                 }
                 return;
             }

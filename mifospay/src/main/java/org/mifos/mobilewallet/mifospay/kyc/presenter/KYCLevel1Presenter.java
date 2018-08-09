@@ -1,14 +1,13 @@
 package org.mifos.mobilewallet.mifospay.kyc.presenter;
 
-import android.telephony.PhoneNumberUtils;
-
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
-import org.mifos.mobilewallet.core.domain.usecase.UploadKYCLevel1Details;
+import org.mifos.mobilewallet.core.domain.usecase.kyc.UploadKYCLevel1Details;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -39,37 +38,36 @@ public class KYCLevel1Presenter implements KYCContract.KYCLevel1Presenter {
 
     @Override
     public void submitData(String fname, String lname, String address1, String address2,
-            String phonecode, String phoneno, String dob) {
+            String phoneno, String dob) {
 
-        if (PhoneNumberUtils.isGlobalPhoneNumber(phonecode + phoneno) || true) {
+        KYCLevel1Details kycLevel1Details = new KYCLevel1Details(fname, lname, address1,
+                address2, phoneno, dob, "1");
 
-            KYCLevel1Details kycLevel1Details = new KYCLevel1Details(fname, lname, address1,
-                    address2, phonecode + phoneno, dob, "1");
+        uploadKYCLevel1DetailsUseCase.setRequestValues(new UploadKYCLevel1Details.RequestValues(
+                (int) mLocalRepository.getClientDetails().getClientId(), kycLevel1Details));
 
-            uploadKYCLevel1DetailsUseCase.setRequestValues(new UploadKYCLevel1Details.RequestValues(
-                    (int) mLocalRepository.getClientDetails().getClientId(), kycLevel1Details));
+        final UploadKYCLevel1Details.RequestValues requestValues =
+                uploadKYCLevel1DetailsUseCase.getRequestValues();
 
-            final UploadKYCLevel1Details.RequestValues requestValues =
-                    uploadKYCLevel1DetailsUseCase.getRequestValues();
+        mUseCaseHandler.execute(uploadKYCLevel1DetailsUseCase, requestValues,
+                new UseCase.UseCaseCallback<UploadKYCLevel1Details.ResponseValue>() {
+                    @Override
+                    public void onSuccess(UploadKYCLevel1Details.ResponseValue response) {
 
-            mUseCaseHandler.execute(uploadKYCLevel1DetailsUseCase, requestValues,
-                    new UseCase.UseCaseCallback<UploadKYCLevel1Details.ResponseValue>() {
-                        @Override
-                        public void onSuccess(UploadKYCLevel1Details.ResponseValue response) {
-
-                            mKYCLevel1View.hideProgressDialog();
-                            mKYCLevel1View.showToast("KYC Level 1 details added successfully.");
-                            mKYCLevel1View.goBack();
-                        }
-
-                        @Override
-                        public void onError(String message) {
-
-                            mKYCLevel1View.hideProgressDialog();
-                            mKYCLevel1View.showToast("Error adding details.");
-                        }
+                        mKYCLevel1View.hideProgressDialog();
+                        mKYCLevel1View.showToast(
+                                Constants.KYC_LEVEL_1_DETAILS_ADDED_SUCCESSFULLY);
+                        mKYCLevel1View.goBack();
                     }
-            );
-        }
+
+                    @Override
+                    public void onError(String message) {
+
+                        mKYCLevel1View.hideProgressDialog();
+                        mKYCLevel1View.showToast(Constants.ERROR_ADDING_KYC_LEVEL_1_DETAILS);
+                    }
+                }
+        );
     }
 }
+

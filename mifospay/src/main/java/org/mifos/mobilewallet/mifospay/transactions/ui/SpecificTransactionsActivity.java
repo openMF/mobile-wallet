@@ -15,6 +15,7 @@ import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 import org.mifos.mobilewallet.mifospay.transactions.TransactionsContract;
 import org.mifos.mobilewallet.mifospay.transactions.presenter.SpecificTransactionsPresenter;
 import org.mifos.mobilewallet.mifospay.transactions.ui.adapter.SpecificTransactionsAdapter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 
 import java.util.ArrayList;
@@ -48,11 +49,11 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         ButterKnife.bind(this);
         mPresenter.attachView(this);
         showBackButton();
-        setToolbarTitle("Specific Transactions");
+        setToolbarTitle(Constants.SPECIFIC_TRANSACTIONS);
 
-        transactions = getIntent().getParcelableArrayListExtra("specificTransactions");
+        transactions = getIntent().getParcelableArrayListExtra(Constants.SPECIFIC_TRANSACTIONS);
 
-        showProgressDialog("Please Wait..");
+        showProgressDialog(Constants.PLEASE_WAIT);
 
         setupRecyclerView();
 
@@ -74,7 +75,7 @@ public class SpecificTransactionsActivity extends BaseActivity implements
                         Intent intent = new Intent(SpecificTransactionsActivity.this,
                                 ReceiptActivity.class);
                         intent.setData(Uri.parse(
-                                "https://receipt.mifospay.com/"
+                                Constants.RECEIPT_DOMAIN
                                         + mSpecificTransactionsAdapter.getTransaction(
                                         position).getTransactionId()));
                         startActivity(intent);

@@ -23,21 +23,4 @@ public interface AuthContract {
 
         void loginUser(String username, String password);
     }
-
-
-    interface SignupView extends BaseView<SignupPresenter> {
-
-        void openAddDetails();
-
-        void openLoginScreen();
-    }
-
-    interface SignupPresenter extends BasePresenter {
-
-        void onVerifyNumber();
-
-        void navigateLogin();
-
-    }
-
 }

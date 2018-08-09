@@ -1,20 +1,16 @@
 package org.mifos.mobilewallet.mifospay.savedcards.presenter;
 
-import android.util.Log;
-
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
-import org.mifos.mobilewallet.core.domain.usecase.AddCard;
-import org.mifos.mobilewallet.core.domain.usecase.DeleteCard;
-import org.mifos.mobilewallet.core.domain.usecase.EditCard;
-import org.mifos.mobilewallet.core.domain.usecase.FetchSavedCards;
+import org.mifos.mobilewallet.core.domain.usecase.savedcards.AddCard;
+import org.mifos.mobilewallet.core.domain.usecase.savedcards.DeleteCard;
+import org.mifos.mobilewallet.core.domain.usecase.savedcards.EditCard;
+import org.mifos.mobilewallet.core.domain.usecase.savedcards.FetchSavedCards;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -68,21 +64,13 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                 new UseCase.UseCaseCallback<FetchSavedCards.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchSavedCards.ResponseValue response) {
-
-                        final List<Card> cards = new ArrayList<>();
-                        Log.d("qxz", "fetch cards onSuccess: " + response.getCardList().size());
-                        for (Card c : response.getCardList()) {
-                            Log.d("qxz", "fetch cards onSuccess: " + c.toString());
-                        }
-                        cards.addAll(response.getCardList());
-                        mCardsView.showSavedCards(cards);
+                        mCardsView.showSavedCards(response.getCardList());
                     }
 
                     @Override
                     public void onError(String message) {
-                        Log.d("qxz", "fetch cards onError: " + message);
                         mCardsView.hideSwipeProgress();
-                        mCardsView.showToast("Error fetching cards.");
+                        mCardsView.showToast(Constants.ERROR_FETCHING_CARDS);
                     }
                 });
     }
@@ -90,10 +78,10 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
     @Override
     public void addCard(Card card) {
 
-        mCardsView.showProgressDialog("Adding Card..");
+        mCardsView.showProgressDialog(Constants.ADDING_CARD);
 
         if (!validateCreditCardNumber(card.getCardNumber())) {
-            mCardsView.showToast("Invalid Credit Card Number");
+            mCardsView.showToast(Constants.INVALID_CREDIT_CARD_NUMBER);
             mCardsView.hideProgressDialog();
             return;
         }
@@ -108,19 +96,15 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                 new UseCase.UseCaseCallback<AddCard.ResponseValue>() {
                     @Override
                     public void onSuccess(AddCard.ResponseValue response) {
-
-                        Log.d("qxz", "onSuccess: card presenter. ");
                         mCardsView.hideProgressDialog();
-                        mCardsView.showToast("Card added successfully.");
+                        mCardsView.showToast(Constants.CARD_ADDED_SUCCESSFULLY);
                         fetchSavedCards();
                     }
 
                     @Override
                     public void onError(String message) {
-
-                        Log.d("qxz", "onError: " + message);
                         mCardsView.hideProgressDialog();
-                        mCardsView.showToast("Error adding card.");
+                        mCardsView.showToast(Constants.ERROR_ADDING_CARD);
                     }
                 });
     }
@@ -128,10 +112,10 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
     @Override
     public void editCard(Card card) {
 
-        mCardsView.showProgressDialog("Updating Card..");
+        mCardsView.showProgressDialog(Constants.UPDATING_CARD);
 
         if (!validateCreditCardNumber(card.getCardNumber())) {
-            mCardsView.showToast("Invalid Credit Card Number");
+            mCardsView.showToast(Constants.INVALID_CREDIT_CARD_NUMBER);
             mCardsView.hideProgressDialog();
             return;
         }
@@ -145,26 +129,22 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                 new UseCase.UseCaseCallback<EditCard.ResponseValue>() {
                     @Override
                     public void onSuccess(EditCard.ResponseValue response) {
-
-                        Log.d("qxz", "onSuccess: card presenter. ");
                         mCardsView.hideProgressDialog();
-                        mCardsView.showToast("Card updated successfully.");
+                        mCardsView.showToast(Constants.CARD_UPDATED_SUCCESSFULLY);
                         fetchSavedCards();
                     }
 
                     @Override
                     public void onError(String message) {
-
-                        Log.d("qxz", "onError: " + message);
                         mCardsView.hideProgressDialog();
-                        mCardsView.showToast("Error updating card.");
+                        mCardsView.showToast(Constants.ERROR_UPDATING_CARD);
                     }
                 });
     }
 
     @Override
     public void deleteCard(int cardId) {
-        mCardsView.showProgressDialog("Deleting Card..");
+        mCardsView.showProgressDialog(Constants.DELETING_CARD);
 
         deleteCardUseCase.setRequestValues(
                 new DeleteCard.RequestValues(
@@ -176,18 +156,15 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                 new UseCase.UseCaseCallback<DeleteCard.ResponseValue>() {
                     @Override
                     public void onSuccess(DeleteCard.ResponseValue response) {
-
                         mCardsView.hideProgressDialog();
-                        mCardsView.showToast("Card deleted successfully.");
+                        mCardsView.showToast(Constants.CARD_DELETED_SUCCESSFULLY);
                         fetchSavedCards();
                     }
 
                     @Override
                     public void onError(String message) {
-
-                        Log.d("qxz", "onError: " + message);
                         mCardsView.hideProgressDialog();
-                        mCardsView.showToast("Error deleting card.");
+                        mCardsView.showToast(Constants.ERROR_DELETING_CARD);
                     }
                 });
     }

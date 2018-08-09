@@ -61,6 +61,8 @@ public class Client implements Parcelable {
     private boolean imagePresent;
     @SerializedName("externalId")
     private String externalId;
+    @SerializedName("mobileNo")
+    private String mobileNo;
 
     public Client() {
     }
@@ -88,6 +90,7 @@ public class Client implements Parcelable {
         this.imageId = in.readInt();
         this.imagePresent = in.readByte() != 0;
         this.externalId = in.readString();
+        this.mobileNo = in.readString();
     }
 
     public List<Integer> getDobDate() {
@@ -194,6 +197,14 @@ public class Client implements Parcelable {
         return officeId;
     }
 
+    public String getMobileNo() {
+        return mobileNo;
+    }
+
+    public void setMobileNo(String mobileNo) {
+        this.mobileNo = mobileNo;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
@@ -205,6 +216,7 @@ public class Client implements Parcelable {
                 ", lastname='" + lastname + '\'' +
                 ", displayName='" + displayName + '\'' +
                 ", fullname='" + fullname + '\'' +
+                ", mobileNo='" + mobileNo + '\'' +
                 '}';
     }
 
@@ -231,5 +243,6 @@ public class Client implements Parcelable {
         dest.writeValue(this.staffId);
         dest.writeString(this.staffName);
         dest.writeString(this.externalId);
+        dest.writeString(this.mobileNo);
     }
 }

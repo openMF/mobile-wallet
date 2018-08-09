@@ -43,5 +43,4 @@ public interface InvoiceService {
             @Path("invoiceId") long invoiceId,
             @Body Invoice invoice);
 
-
 }
