@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.mapper;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity;
-import org.mifos.mobilewallet.core.domain.model.User;
+import org.mifos.mobilewallet.core.domain.model.user.User;
 
 import javax.inject.Inject;
 

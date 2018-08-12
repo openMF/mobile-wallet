@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.common.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.SearchClient;
+import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.common.SearchContract;
 

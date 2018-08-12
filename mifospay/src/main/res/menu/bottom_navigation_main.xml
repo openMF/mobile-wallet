@@ -6,20 +6,20 @@
         android:id="@+id/action_home"
         android:enabled="true"
         android:icon="@drawable/ic_home"
-        android:title="Home"
+        android:title="@string/home"
         app:showAsAction="always|withText"/>
     <item
         android:id="@+id/action_transfer"
         android:enabled="true"
         android:icon="@drawable/ic_swap_horiz"
-        android:title="Transfer"
+        android:title="@string/transfer"
         app:showAsAction="always|withText"/>
 
     <item
         android:id="@+id/action_profile"
         android:enabled="true"
         android:icon="@drawable/ic_person"
-        android:title="Profile"
+        android:title="@string/profile"
         app:showAsAction="always|withText"/>
 
 </menu>

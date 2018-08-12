@@ -1,16 +1,18 @@
 package org.mifos.mobilewallet.mifospay.transactions.presenter;
 
+import static org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER_USECASE;
+
 import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.usecase.FetchAccountTransactions;
-import org.mifos.mobilewallet.core.domain.usecase.FetchAccountTransfer;
-import org.mifos.mobilewallet.core.domain.usecase.RunReport;
-import org.mifos.mobilewallet.core.utils.Constants;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchTransactionReceipt;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.transactions.TransactionsContract;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class TransactionsHistoryPresenter implements
     FetchAccountTransactions fetchAccountTransactionsUseCase;
 
     @Inject
-    RunReport runReportUseCase;
+    FetchTransactionReceipt mFetchTransactionReceiptUseCase;
 
     @Inject
     TaskLooper mTaskLooper;
@@ -60,6 +62,10 @@ public class TransactionsHistoryPresenter implements
                     public void onSuccess(FetchAccountTransactions.ResponseValue response) {
 
                         final List<Transaction> transactions = response.getTransactions();
+                        if (transactions == null || transactions.size() == 0) {
+                            mTransactionsHistoryView.showTransactions(transactions);
+                            return;
+                        }
 
                         for (int i = 0; i < transactions.size(); i++) {
 
@@ -71,10 +77,9 @@ public class TransactionsHistoryPresenter implements
                                 long transferId = transaction.getTransferId();
 
                                 mTaskLooper.addTask(
-                                        mUseCaseFactory.getUseCase(
-                                                Constants.FETCH_ACCOUNT_TRANSFER_USECASE),
+                                        mUseCaseFactory.getUseCase(FETCH_ACCOUNT_TRANSFER_USECASE),
                                         new FetchAccountTransfer.RequestValues(transferId),
-                                        new TaskLooper.TaskData("transfer details", i));
+                                        new TaskLooper.TaskData(Constants.TRANSFER_DETAILS, i));
                             }
                         }
 
@@ -84,7 +89,7 @@ public class TransactionsHistoryPresenter implements
                                     TaskLooper.TaskData taskData, R response) {
 
                                 switch (taskData.getTaskName()) {
-                                    case "transfer details":
+                                    case Constants.TRANSFER_DETAILS:
                                         FetchAccountTransfer.ResponseValue responseValue =
                                                 (FetchAccountTransfer.ResponseValue) response;
                                         int index = taskData.getTaskId();
@@ -101,7 +106,8 @@ public class TransactionsHistoryPresenter implements
                             @Override
                             public void onFailure(String message) {
                                 mTransactionsHistoryView.hideSwipeProgress();
-                                mTransactionsHistoryView.showToast("Error fetching transactions");
+                                mTransactionsHistoryView.showToast(
+                                        Constants.ERROR_FETCHING_TRANSACTIONS);
                             }
                         });
                     }
@@ -109,7 +115,7 @@ public class TransactionsHistoryPresenter implements
                     @Override
                     public void onError(String message) {
                         mTransactionsHistoryView.hideSwipeProgress();
-                        mTransactionsHistoryView.showToast("Error fetching transactions");
+                        mTransactionsHistoryView.showToast(Constants.ERROR_FETCHING_TRANSACTIONS);
                     }
                 });
     }

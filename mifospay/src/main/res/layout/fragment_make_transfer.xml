@@ -11,7 +11,7 @@
         android:layout_marginTop="@dimen/value_10dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:text="Send money"
+        android:text="@string/send_money"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/black"
         android:textStyle="bold"/>
@@ -40,7 +40,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Sending to"
+                    android:text="@string/sending_to"
                     android:textColor="@color/primaryDarkBlue"
                     android:textSize="@dimen/value_15sp"/>
 
@@ -63,7 +63,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/value_20dp"
-                    android:text="Amount"
+                    android:text="@string/amount"
                     android:textColor="@color/primaryDarkBlue"
                     android:textSize="@dimen/value_15sp"/>
 
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/grey_900"
-                    android:text="Cancel"
+                    android:text="@string/cancel"
                     android:textColor="@android:color/white"/>
 
                 <Button
@@ -101,7 +101,7 @@
                     android:layout_gravity="right"
                     android:layout_marginLeft="@dimen/value_30dp"
                     android:background="@color/primaryDarkBlue"
-                    android:text="Confirm"
+                    android:text="@string/confirm"
                     android:textColor="@android:color/white"/>
 
             </LinearLayout>

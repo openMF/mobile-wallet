@@ -18,4 +18,16 @@
     <color name="grey_200">#eeeeee</color>
     <color name="grey_300">#e0e0e0</color>
     <color name="grey_900">#212121</color>
+
+    <color name="gray_0">#d3d3d3</color>
+    <color name="gray_1">#bdbdbd</color>
+    <color name="gray_2">#a8a8a8</color>
+    <color name="gray_3">#939393</color>
+    <color name="gray_4">#7e7e7e</color>
+    <color name="gray_5">#696969</color>
+    <color name="gray_6">#545454</color>
+    <color name="gray_7">#3f3f3f</color>
+    <color name="gray_8">#2a2a2a</color>
+    <color name="gray_9">#151515</color>
+
 </resources>

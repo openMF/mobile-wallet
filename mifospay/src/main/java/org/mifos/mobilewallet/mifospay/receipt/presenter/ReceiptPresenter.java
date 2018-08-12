@@ -2,9 +2,10 @@ package org.mifos.mobilewallet.mifospay.receipt.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.RunReport;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchTransactionReceipt;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -16,7 +17,7 @@ public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
 
     private final UseCaseHandler mUseCaseHandler;
     @Inject
-    RunReport runReportUseCase;
+    FetchTransactionReceipt mFetchTransactionReceiptUseCase;
     private ReceiptContract.ReceiptView mReceiptView;
 
     @Inject
@@ -33,19 +34,19 @@ public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
     @Override
     public void fetchReceipt(final String transactionId) {
 
-        mUseCaseHandler.execute(runReportUseCase,
-                new RunReport.RequestValues(transactionId),
-                new UseCase.UseCaseCallback<RunReport.ResponseValue>() {
+        mUseCaseHandler.execute(mFetchTransactionReceiptUseCase,
+                new FetchTransactionReceipt.RequestValues(transactionId),
+                new UseCase.UseCaseCallback<FetchTransactionReceipt.ResponseValue>() {
                     @Override
-                    public void onSuccess(RunReport.ResponseValue response) {
+                    public void onSuccess(FetchTransactionReceipt.ResponseValue response) {
                         mReceiptView.writeReceipt(response.getResponseBody(),
-                                "receipt" + transactionId + ".pdf");
+                                Constants.RECEIPT + transactionId + Constants.PDF);
                     }
 
                     @Override
                     public void onError(String message) {
                         mReceiptView.hideProgressDialog();
-                        mReceiptView.showSnackbar("Error fetching receipt.");
+                        mReceiptView.showSnackbar(Constants.ERROR_FETCHING_RECEIPT);
                     }
                 });
     }

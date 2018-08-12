@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.transactions.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.usecase.RunReport;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchTransactionReceipt;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.transactions.TransactionsContract;
 
@@ -18,7 +18,7 @@ public class TransactionDetailPresenter implements TransactionsContract.Transact
 
     private final UseCaseHandler mUseCaseHandler;
     @Inject
-    RunReport runReportUseCase;
+    FetchTransactionReceipt mFetchTransactionReceiptUseCase;
     private TransactionsContract.TransactionDetailView mTransactionDetailView;
 
     @Inject

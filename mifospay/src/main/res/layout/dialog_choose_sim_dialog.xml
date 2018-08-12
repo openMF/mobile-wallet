@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/value_30dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="50dp"
+                android:text="@string/verify_mobile_number"
+                android:textColor="@color/primaryDarkBlue"
+                android:textSize="25sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="@dimen/value_15dp"
+                android:gravity="center"
+                android:text="@string/confirm_mobile_number_message"
+                android:textColor="@color/primaryDarkBlue"/>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_30dp"
+                android:lines="4"
+                android:text="@string/bank_account_mobile_verification_conditions"
+                android:textColor="@color/grey_900"/>
+
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/value_30dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_sim1"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginEnd="@dimen/value_30dp"
+                    android:layout_marginRight="@dimen/value_30dp"
+                    android:drawablePadding="@dimen/value_15dp"
+                    android:drawableTop="@drawable/sim_card_unselected"
+                    android:gravity="center"
+                    android:textColor="@color/primaryDarkBlue"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@string/or"
+                    android:textColor="@color/grey_900"/>
+
+                <TextView
+                    android:id="@+id/tv_sim2"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_marginLeft="@dimen/value_30dp"
+                    android:layout_marginStart="@dimen/value_30dp"
+                    android:drawablePadding="@dimen/value_15dp"
+                    android:drawableTop="@drawable/sim_card_unselected"
+                    android:gravity="center"
+                    android:textColor="@color/primaryDarkBlue"/>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginTop="@dimen/value_30dp"
+                android:gravity="center"
+                android:text="@string/regular_charges_will_apply"
+                android:textColor="@android:color/black"/>
+
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginBottom="@dimen/value_10dp"
+                android:layout_marginTop="@dimen/value_30dp"
+                android:background="@drawable/button_round_primary"
+                android:clickable="true"
+                android:text="@string/confirm"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:typeface="sans"/>
+
+        </LinearLayout>
+    </ScrollView>
+</FrameLayout>

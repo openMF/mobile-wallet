@@ -1,7 +1,8 @@
 package org.mifos.mobilewallet.core.base;
 
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
-import org.mifos.mobilewallet.core.domain.usecase.FetchAccountTransfer;
+import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientDetails;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer;
 import org.mifos.mobilewallet.core.utils.Constants;
 
 import javax.inject.Inject;
@@ -22,6 +23,8 @@ public class UseCaseFactory {
     public UseCase getUseCase(String useCase) {
         if (useCase.equals(Constants.FETCH_ACCOUNT_TRANSFER_USECASE)) {
             return new FetchAccountTransfer(mFineractRepository);
+        } else if (useCase.equals(Constants.FETCH_CLIENT_DETAILS_USE_CASE)) {
+            return new FetchClientDetails(mFineractRepository);
         }
 
         return null;

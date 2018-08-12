@@ -31,14 +31,14 @@
                     android:id="@+id/tv_invoice_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/gray_5"/>
 
                 <TextView
                     android:id="@+id/tv_invoice_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/gray_5"/>
 
             </LinearLayout>
 

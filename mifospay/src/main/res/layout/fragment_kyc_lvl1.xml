@@ -6,150 +6,97 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/value_20dp"
-        android:layout_marginRight="@dimen/value_20dp"
-        android:layout_marginTop="@dimen/value_20dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/value_20dp">
 
-        <android.support.design.widget.TextInputLayout
+        <EditText
+            android:id="@+id/et_fname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColorHint="@android:color/black"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+            android:layout_marginBottom="@dimen/value_20dp"
+            android:hint="@string/first_name"
+            android:nextFocusForward="@id/et_lname"
+            android:singleLine="true"
+            android:theme="@style/Theme.AppCompat.Light"/>
 
-            <EditText android:id="@+id/et_fname"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:hint="First Name"
-                      android:nextFocusForward="@id/et_lname"
-                      android:singleLine="true"
-                      android:theme="@style/Theme.AppCompat.Light"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
+        <EditText
+            android:id="@+id/et_lname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textColorHint="@android:color/black"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+            android:layout_marginBottom="@dimen/value_20dp"
+            android:hint="@string/last_name"
+            android:nextFocusForward="@id/et_address1"
+            android:singleLine="true"
+            android:theme="@style/Theme.AppCompat.Light"/>
 
-            <EditText android:id="@+id/et_lname"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:hint="Last Name"
-                      android:nextFocusForward="@id/et_address1"
-                      android:singleLine="true"
-                      android:theme="@style/Theme.AppCompat.Light"/>
-        </android.support.design.widget.TextInputLayout>
-
-
-        <android.support.design.widget.TextInputLayout
+        <EditText
+            android:id="@+id/et_address1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textColorHint="@android:color/black"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+            android:layout_marginBottom="@dimen/value_20dp"
+            android:hint="@string/address_line_1"
+            android:nextFocusForward="@id/et_address2"
+            android:singleLine="true"
+            android:theme="@style/Theme.AppCompat.Light"/>
 
-            <EditText android:id="@+id/et_address1"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:hint="Address Line 1"
-                      android:nextFocusForward="@id/et_address2"
-                      android:singleLine="true"
-                      android:theme="@style/Theme.AppCompat.Light"/>
-        </android.support.design.widget.TextInputLayout>
-
-        <android.support.design.widget.TextInputLayout
+        <EditText
+            android:id="@+id/et_address2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textColorHint="@android:color/black"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-            <EditText android:id="@+id/et_address2"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:hint="Address Line 2"
-                      android:nextFocusForward="@id/et_phonecode"
-                      android:singleLine="true"
-                      android:theme="@style/Theme.AppCompat.Light"/>
-        </android.support.design.widget.TextInputLayout>
+            android:layout_marginBottom="@dimen/value_20dp"
+            android:hint="@string/address_line_2"
+            android:nextFocusForward="@id/et_mobile_number"
+            android:singleLine="true"
+            android:theme="@style/Theme.AppCompat.Light"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/value_20dp"
             android:orientation="horizontal">
 
-            <android.support.design.widget.TextInputLayout
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/ccp_code"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/value_10dp"
-                android:layout_marginTop="20dp"
-                android:textColorHint="@android:color/black"
-                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_autoFormatNumber="false"/>
 
-                <EditText
-                    android:id="@+id/et_phonecode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:hint="Code"
-                    android:inputType="phone"
-                    android:nextFocusForward="@id/et_phoneno"
-                    android:nextFocusRight="@id/et_phoneno"
-                    android:singleLine="true"
-                    android:maxLength="4"
-                    android:minWidth="@dimen/value_50dp"
-                    android:theme="@style/Theme.AppCompat.Light"/>
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
+            <EditText
+                android:id="@+id/et_mobile_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:textColorHint="@android:color/black"
-                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-                <EditText
-                    android:id="@+id/et_phoneno"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Phone Number"
-                    android:inputType="phone"
-                    android:maxLength="10"
-                    android:nextFocusDown="@id/et_dob"
-                    android:singleLine="true"
-                    android:theme="@style/Theme.AppCompat.Light"/>
-            </android.support.design.widget.TextInputLayout>
+                android:layout_marginLeft="@dimen/value_5dp"
+                android:layout_weight="1"
+                android:hint="Mobile Number"
+                android:inputType="number"
+                android:nextFocusDown="@id/et_dob"
+                android:nextFocusForward="@id/et_dob"/>
 
         </LinearLayout>
 
-        <android.support.design.widget.TextInputLayout
+        <EditText
+            android:id="@+id/et_dob"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:textColorHint="@android:color/black"
-            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
-
-            <EditText android:id="@+id/et_dob"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:clickable="true"
-                      android:cursorVisible="false"
-                      android:focusable="false"
-                      android:focusableInTouchMode="false"
-                      android:hint="Date of Birth"
-                      android:theme="@style/Theme.AppCompat.Light"/>
-        </android.support.design.widget.TextInputLayout>
+            android:clickable="true"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/date_of_birth"
+            android:theme="@style/Theme.AppCompat.Light"/>
 
         <Button
             android:id="@+id/btn_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="45dp"
+            android:layout_marginTop="@dimen/value_20dp"
             android:background="@drawable/button_round_black"
-            android:text="Submit"
+            android:text="@string/submit"
             android:textColor="@color/white"/>
     </LinearLayout>
 

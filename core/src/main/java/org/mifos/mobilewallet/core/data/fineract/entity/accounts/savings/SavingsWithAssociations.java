@@ -330,4 +330,17 @@ public class SavingsWithAssociations implements Parcelable {
         dest.writeParcelable(this.summary, flags);
         dest.writeTypedList(this.transactions);
     }
+
+    @Override
+    public String toString() {
+        return "SavingsWithAssociations{" +
+                "id=" + id +
+                ", accountNo='" + accountNo + '\'' +
+                ", externalId='" + externalId + '\'' +
+                ", clientId=" + clientId +
+                ", clientName='" + clientName + '\'' +
+                ", savingsProductId=" + savingsProductId +
+                ", savingsProductName='" + savingsProductName + '\'' +
+                '}';
+    }
 }

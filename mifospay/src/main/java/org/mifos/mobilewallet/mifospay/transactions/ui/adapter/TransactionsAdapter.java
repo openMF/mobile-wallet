@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,15 +53,15 @@ public class TransactionsAdapter
 
         switch (transaction.getTransactionType()) {
             case DEBIT:
-                holder.tvTransactionStatus.setText("Debit");
+                holder.tvTransactionStatus.setText(Constants.DEBIT);
                 holder.tvTransactionAmount.setTextColor(Color.RED);
                 break;
             case CREDIT:
-                holder.tvTransactionStatus.setText("Credit");
+                holder.tvTransactionStatus.setText(Constants.CREDIT);
                 holder.tvTransactionAmount.setTextColor(Color.parseColor("#009688"));
                 break;
             case OTHER:
-                holder.tvTransactionStatus.setText("Other");
+                holder.tvTransactionStatus.setText(Constants.OTHER);
                 holder.tvTransactionAmount.setTextColor(Color.YELLOW);
                 break;
         }

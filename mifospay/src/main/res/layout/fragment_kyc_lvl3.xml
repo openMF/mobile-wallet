@@ -18,7 +18,7 @@
             android:id="@+id/et_panId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="PAN ID"
+            android:hint="@string/pan_id"
             android:theme="@style/Theme.AppCompat.Light"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -29,7 +29,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/value_20dp"
         android:background="@drawable/button_round_black"
-        android:text="Submit"
+        android:text="@string/submit"
         android:textColor="@color/white"/>
 
 </LinearLayout>

@@ -16,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity
             android:name=".auth.ui.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -25,24 +26,31 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name=".home.ui.HomeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".transactions.ui.TransactionsHistoryActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".common.ui.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".qr.ui.ShowQrActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".qr.ui.ReadQrActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".passcode.ui.PassCodeActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
+
         <activity
             android:name=".receipt.ui.ReceiptActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -57,6 +65,7 @@
                     android:scheme="https"/>
             </intent-filter>
         </activity>
+
         <activity
             android:name=".invoice.ui.InvoiceActivity"
             android:theme="@style/AppTheme.NoActionBar">
@@ -71,12 +80,57 @@
                     android:scheme="https"/>
             </intent-filter>
         </activity>
-        <activity android:name=".transactions.ui.SpecificTransactionsActivity"
-                  android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity android:name=".invoice.ui.InvoicesActivity"
-                  android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+
+        <activity
+            android:name=".transactions.ui.SpecificTransactionsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity
+            android:name=".invoice.ui.InvoicesActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <service android:name=".data.firebase.api.services.MifosPayMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <service android:name=".data.firebase.api.services.MifosPayInstanceIDService">
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_bank" />
+
+        <activity
+            android:name=".registration.ui.SignupActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".registration.ui.MobileVerificationActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".editprofile.ui.EditProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".settings.ui.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".bank.ui.BankAccountsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".bank.ui.LinkBankAccountActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".bank.ui.BankAccountDetailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".bank.ui.SetupUpiPinActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".notification.ui.NotificationActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

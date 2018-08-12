@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto"
+      xmlns:tools="http://schemas.android.com/tools"
+      tools:context=".home.ui.HomeActivity">
+
+    <item
+        android:id="@+id/item_edit_profile"
+        android:icon="@drawable/ic_edit"
+        android:title="edit"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/item_profile_setting"
+        android:icon="@drawable/ic_setting"
+        android:title="setting"
+        app:showAsAction="ifRoom"/>
+
+</menu>

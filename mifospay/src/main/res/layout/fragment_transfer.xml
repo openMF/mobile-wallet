@@ -16,10 +16,48 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_20dp"
-            android:text="Send"
+            android:text="@string/send_via"
             android:textColor="@color/primaryDarkBlue"
             android:textSize="@dimen/value_18sp"/>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/value_20dp"
+            android:layout_marginRight="@dimen/value_20dp"
+            android:layout_marginTop="@dimen/value_20dp"
+            android:background="@drawable/layout_rounded_edge"
+            android:orientation="horizontal"
+            android:padding="5dp"
+            android:weightSum="2">
+
+            <Button
+                android:id="@+id/btn_vpa"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="@dimen/value_10dp"
+                android:layout_marginRight="@dimen/value_10dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_round_primary"
+                android:clickable="true"
+                android:text="VPA"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                android:typeface="sans"/>
+
+            <Button
+                android:id="@+id/btn_mobile"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_round_stroke"
+                android:clickable="true"
+                android:text="Mobile Number"
+                android:textAllCaps="false"
+                android:textColor="@android:color/black"
+                android:typeface="sans"/>
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -36,16 +74,35 @@
                 <EditText android:id="@+id/et_amount"
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"
-                          android:hint="Amount"
+                          android:hint="@string/amount"
                           android:inputType="number"
                           android:theme="@style/Theme.AppCompat.Light"/>
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_vpa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/value_20dp"
+                android:textColorHint="@android:color/black"
+                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                <EditText android:id="@+id/et_vpa"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:hint="@string/virtual_payment_address"
+                          android:singleLine="true"
+                          android:theme="@style/Theme.AppCompat.Light"/>
+
+            </android.support.design.widget.TextInputLayout>
+
             <RelativeLayout
+                android:id="@+id/rl_mobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
@@ -54,10 +111,10 @@
                     android:textColorHint="@android:color/black"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <EditText android:id="@+id/et_vpa"
+                    <EditText android:id="@+id/et_mobile_number"
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
-                              android:hint="VPA/ Mobile Number"
+                              android:hint="@string/mobile_number"
                               android:singleLine="true"
                               android:theme="@style/Theme.AppCompat.Light"/>
 
@@ -76,7 +133,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="45dp"
+                android:layout_marginTop="@dimen/value_20dp"
                 android:orientation="horizontal">
 
                 <Button
@@ -85,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:background="@drawable/button_round_black"
-                    android:text="Proceed"
+                    android:text="@string/proceed"
                     android:textColor="@color/white"/>
 
                 <TextView
@@ -96,12 +153,10 @@
                     android:layout_weight="0.5"
                     android:drawableTop="@drawable/qrcode_blue_selector"
                     android:gravity="center_horizontal"
-                    android:text="Scan Code"
+                    android:text="@string/scan_code"
                     android:textColor="@color/primaryDarkBlue"/>
 
-
             </LinearLayout>
-
 
         </LinearLayout>
 
@@ -117,7 +172,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_30dp"
-            android:text="Receive"
+            android:text="@string/receive"
             android:textColor="@color/primaryDarkBlue"
             android:textSize="@dimen/value_18sp"/>
 
@@ -125,7 +180,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
-            android:layout_marginTop="@dimen/value_30dp"
+            android:layout_marginTop="@dimen/value_20dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -136,14 +191,26 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/virtual_payment_address_vpa"/>
+
+                <TextView
+                    android:id="@+id/tv_client_vpa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/value_18sp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Virtual Payment Address (VPA)"/>
+                    android:layout_marginTop="@dimen/value_10dp"
+                    android:text="@string/mobile_number"/>
 
                 <TextView
-                    android:id="@+id/tv_client_vpa"
+                    android:id="@+id/tv_client_mobile"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
@@ -160,7 +227,7 @@
                 android:layout_weight="0.8"
                 android:drawableTop="@drawable/qrcode_blue_selector"
                 android:gravity="center_horizontal|center_vertical"
-                android:text="Show code"
+                android:text="@string/show_code"
                 android:textColor="@color/primaryDarkBlue"/>
 
         </LinearLayout>

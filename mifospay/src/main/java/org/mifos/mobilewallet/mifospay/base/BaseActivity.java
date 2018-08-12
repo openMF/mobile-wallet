@@ -77,6 +77,7 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
             progressDialog.show();
         } else {
             progressDialog = new ProgressDialog(this);
+            progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setMessage(message);
             progressDialog.show();
         }
@@ -125,6 +126,12 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void addFragment(Fragment fragment, int containerId) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(containerId, fragment);
+        transaction.commit();
     }
 
     public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {
