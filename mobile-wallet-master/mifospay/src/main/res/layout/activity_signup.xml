@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:orientation="vertical">
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primaryDarkBlue">
+
+                <android.support.v7.widget.Toolbar
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/primaryDarkBlue"
+                    android:theme="@style/Theme.AppCompat"
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar"/>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/value_30dp"
+                    android:layout_marginRight="@dimen/value_20dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:text="@string/complete_your_registration"
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/value_20sp">
+
+                    </TextView>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/value_10dp"
+                        android:layout_marginTop="@dimen/value_5dp"
+                        android:text="All fields are mandatory."
+                        android:textColor="@color/white"
+                        android:textSize="@dimen/value_14sp"/>
+
+                </LinearLayout>
+
+            </android.support.design.widget.AppBarLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/value_20dp"
+                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_20dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/et_first_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:hint="First Name"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+
+                <EditText
+                    android:id="@+id/et_last_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:hint="Last Name"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+
+                <EditText
+                    android:id="@+id/et_user_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:hint="Username"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+
+                <EditText
+                    android:id="@+id/et_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+
+                <EditText
+                    android:id="@+id/et_confirm_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:hint="Confirm Password"
+                    android:inputType="textPassword"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+
+                <EditText
+                    android:id="@+id/et_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:hint="Email"
+                    android:inputType="textEmailAddress"
+                    android:paddingLeft="15dp"/>
+
+                <EditText
+                    android:id="@+id/et_business_shop_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:hint="Name of Business"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:visibility="gone"/>
+
+                <EditText
+                    android:id="@+id/et_address_line_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:hint="Address Line 1"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+
+                <EditText
+                    android:id="@+id/et_address_line_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:hint="Address Line 2"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+
+
+                <EditText
+                    android:id="@+id/et_pin_code"
+                    android:layout_width="200dp"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:hint="Pin Code"
+                    android:inputType="number"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+
+                <EditText
+                    android:id="@+id/et_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:hint="State"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/value_20dp"
+        android:layout_marginRight="@dimen/value_20dp"
+        android:backgroundTint="@color/primaryDarkBlue"
+        android:foregroundTint="@color/primaryDarkBlue"
+        android:scaleType="center"
+        android:visibility="visible"
+        app:backgroundTint="@color/primaryDarkBlue"
+        app:srcCompat="@drawable/ic_next"/>
+
+</RelativeLayout>

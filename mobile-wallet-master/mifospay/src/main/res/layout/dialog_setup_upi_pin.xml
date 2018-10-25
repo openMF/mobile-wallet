@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ll_debit_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/value_20dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/et_debit_card_number"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Debit Card Number"
+                android:inputType="number"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.alimuzaffar.lib.pin.PinEntryEditText
+                    android:id="@+id/pe_month"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/value_10dp"
+                    android:cursorVisible="false"
+                    android:digits="1234567890"
+                    android:gravity="center"
+                    android:hint="MM"
+                    android:inputType="number"
+                    android:maxLength="2"
+                    android:nextFocusForward="@id/pe_year"
+                    android:nextFocusRight="@id/pe_year"
+                    android:textIsSelectable="false"
+                    app:pinLineStroke="1dp"
+                    app:pinLineStrokeSelected="2dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="@dimen/value_10dp"
+                    android:layout_marginRight="@dimen/value_10dp"
+                    android:gravity="bottom"
+                    android:text="/"
+                    android:textSize="30sp"/>
+
+                <com.alimuzaffar.lib.pin.PinEntryEditText
+                    android:id="@+id/pe_year"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/value_10dp"
+                    android:cursorVisible="false"
+                    android:digits="1234567890"
+                    android:gravity="center"
+                    android:inputType="number"
+                    android:maxLength="4"
+                    android:textIsSelectable="false"
+                    app:pinLineStroke="1dp"
+                    app:pinLineStrokeSelected="2dp"/>
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/value_10dp"
+                android:background="#44000000"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ll_otp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/value_20dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_otp_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Enter OTP"
+                android:textColor="@color/primaryDarkBlue"
+                android:textSize="18sp"/>
+
+            <com.alimuzaffar.lib.pin.PinEntryEditText
+                android:id="@+id/pe_otp"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/value_10dp"
+                android:cursorVisible="false"
+                android:digits="1234567890"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:maxLength="4"
+                android:textIsSelectable="false"
+                android:textSize="20sp"
+                app:pinAnimationType="fromBottom"
+                app:pinLineStroke="2dp"
+                app:pinLineStrokeSelected="4dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/value_10dp"
+                android:background="#44000000"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/upi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="@dimen/value_20dp"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/tv_upi_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="Enter UPI PIN"
+                android:textColor="@color/primaryDarkBlue"
+                android:textSize="18sp"/>
+
+            <com.alimuzaffar.lib.pin.PinEntryEditText
+                android:id="@+id/pe_upi_pin"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/value_10dp"
+                android:cursorVisible="false"
+                android:digits="1234567890"
+                android:gravity="center"
+                android:inputType="numberPassword"
+                android:maxLength="4"
+                android:textIsSelectable="false"
+                android:textSize="20sp"
+                app:pinAnimationType="fromBottom"
+                app:pinLineStroke="2dp"
+                app:pinLineStrokeSelected="4dp"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/value_10dp"
+                android:background="#44000000"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/value_20dp"
+            android:layout_marginRight="@dimen/value_10dp"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/grey_900"
+                android:text="@string/cancel_txt"
+                android:textColor="@android:color/white"/>
+
+            <Button
+                android:id="@+id/btn_okay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="@dimen/value_30dp"
+                android:background="@color/primaryBlue"
+                android:text="Next"
+                android:textColor="@android:color/white"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

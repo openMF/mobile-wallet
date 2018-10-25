@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primaryDarkBlue">
+
+            <android.support.v7.widget.Toolbar
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/primaryDarkBlue"
+                android:theme="@style/Theme.AppCompat"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar">
+
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/ccp_country"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    app:ccpDialog_backgroundColor="@color/white"
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_autoFormatNumber="false"
+                    app:ccp_contentColor="@color/white"
+                    app:ccp_showFullName="true"
+                    app:ccp_showNameCode="false"
+                    app:ccp_showPhoneCode="false"
+                    app:ccp_textGravity="CENTER"/>
+
+            </android.support.v7.widget.Toolbar>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/value_30dp"
+                android:layout_marginRight="@dimen/value_20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:text="Enter Mobile Number"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/value_20sp">
+
+                </TextView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/value_10dp"
+                    android:layout_marginTop="@dimen/value_5dp"
+                    android:text="@string/enter_mobile_number_description"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/value_14sp"/>
+
+            </LinearLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/value_20dp"
+            android:layout_marginRight="@dimen/value_20dp"
+            android:layout_marginTop="@dimen/value_20dp"
+            android:orientation="horizontal">
+
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/ccp_code"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                app:ccp_autoDetectCountry="true"
+                app:ccp_autoFormatNumber="false"/>
+
+            <EditText
+                android:id="@+id/et_mobile_number"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginLeft="@dimen/value_5dp"
+                android:layout_weight="1"
+                android:background="@drawable/bg_et_round_border"
+                android:hint="Mobile Number"
+                android:inputType="number"
+                android:paddingLeft="@dimen/value_15dp"
+                android:paddingRight="15dp"/>
+
+            <TextView
+                android:id="@+id/btn_get_otp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="right|center_vertical|center_horizontal"
+                android:layout_marginLeft="@dimen/value_10dp"
+                android:background="@drawable/ic_right_arrow"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/value_20dp"
+            android:layout_marginRight="@dimen/value_20dp"
+            android:layout_marginTop="@dimen/value_10dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/et_otp"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_et_round_border"
+                android:hint="Enter OTP"
+                android:inputType="number"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:visibility="gone"/>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginLeft="@dimen/value_10dp"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/tv_verifying_otp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/value_10dp"
+                android:text="Verifying OTP. Please wait.."
+                android:visibility="gone"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_gravity="bottom"
+        android:layout_marginBottom="@dimen/value_20dp"
+        android:layout_marginRight="@dimen/value_20dp"
+        android:backgroundTint="@color/primaryDarkBlue"
+        android:foregroundTint="@color/primaryDarkBlue"
+        android:scaleType="center"
+        android:visibility="gone"
+        app:backgroundTint="@color/primaryDarkBlue"
+        app:srcCompat="@drawable/ic_next"/>
+
+</RelativeLayout>

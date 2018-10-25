@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_marginLeft="@dimen/value_20dp"
+    android:layout_marginRight="@dimen/value_20dp"
+    android:layout_marginTop="@dimen/value_20dp"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColorHint="@android:color/black"
+        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+        <EditText
+            android:id="@+id/et_idname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/id_type"
+            android:theme="@style/Theme.AppCompat.Light"/>
+    </android.support.design.widget.TextInputLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/value_20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_browse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/value_10dp"
+            android:background="@drawable/button_round_gray"
+            android:text="@string/browse"
+            android:textColor="@color/black"/>
+
+        <TextView
+            android:id="@+id/tv_filename"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/value_20dp"
+        android:background="@drawable/button_round_black"
+        android:text="@string/submit"
+        android:textColor="@color/white"/>
+
+</LinearLayout>

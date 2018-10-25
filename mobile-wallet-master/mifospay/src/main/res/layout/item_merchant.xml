@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/value_5dp"
+    android:orientation="vertical"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="1dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="@dimen/value_20dp">
+
+        <TextView
+            android:id="@+id/tv_merchant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey_900"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/tv_merchant_external_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/primaryDarkBlue"/>
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>
