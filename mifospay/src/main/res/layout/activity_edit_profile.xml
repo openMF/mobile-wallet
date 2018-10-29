@@ -217,7 +217,7 @@
                                 android:id="@+id/et_new_passcode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="New Password"
+                                android:hint="New Passcode"
                                 android:inputType="textPassword"/>
                         </android.support.design.widget.TextInputLayout>
 
