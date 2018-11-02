@@ -45,6 +45,7 @@ import butterknife.OnClick;
 
 public class TransferFragment extends BaseFragment implements HomeContract.TransferView {
 
+    public static final int REQUEST_SHOW_DETAILS = 3;
     private static final int REQUEST_CAMERA = 0;
     private static final int SCAN_QR_REQUEST_CODE = 666;
     private static final int PICK_CONTACT = 1;
@@ -146,9 +147,12 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
                     Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
         } else {
             double amount = Double.parseDouble(eamount);
-            MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
-            fragment.show(getChildFragmentManager(),
-                    Constants.MAKE_TRANSFER_FRAGMENT);
+            if (amount <= 0) {
+                showSnackbar(Constants.PLEASE_ENTER_VALID_AMOUNT);
+                return;
+            }
+            showSwipeProgress();
+            mTransferPresenter.checkBalanceAvailability(externalId, amount);
         }
     }
 
@@ -241,6 +245,8 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
             } catch (Exception e) {
                 showToast(Constants.ERROR_CHOOSING_CONTACT);
             }
+        } else if (requestCode == REQUEST_SHOW_DETAILS && resultCode == Activity.RESULT_CANCELED) {
+            showSnackbar(Constants.ERROR_FINDING_VPA);
         }
     }
 
@@ -298,5 +304,15 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     public void showMobile(String mobileNo) {
         this.mobile = mobileNo;
         mTvClientMobile.setText(mobileNo);
+    }
+
+    @Override
+    public void showClientDetails(String externalId, double amount) {
+        MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
+        fragment.setTargetFragment(this, REQUEST_SHOW_DETAILS);
+        if (getParentFragment() != null) {
+            fragment.show(getParentFragment().getChildFragmentManager(),
+                    Constants.MAKE_TRANSFER_FRAGMENT);
+        }
     }
 }

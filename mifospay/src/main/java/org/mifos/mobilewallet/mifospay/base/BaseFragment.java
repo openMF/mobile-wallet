@@ -44,7 +44,7 @@ public class BaseFragment extends Fragment {
         }
     }
 
-    protected void hideSwipeProgress() {
+    public void hideSwipeProgress() {
         if (callback != null) {
             callback.hideSwipeProgress();
         }

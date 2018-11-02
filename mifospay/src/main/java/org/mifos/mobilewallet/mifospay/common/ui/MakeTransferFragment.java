@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.common.ui;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -17,8 +18,8 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.common.TransferContract;
 import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
+import org.mifos.mobilewallet.mifospay.home.ui.TransferFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
 
@@ -171,13 +172,11 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     }
 
     @Override
-    public void showToast(String message) {
-        Toaster.showToast(getContext(), message);
+    public void showVpaNotFoundSnackbar() {
+        if (getTargetFragment() != null) {
+            getTargetFragment().onActivityResult(TransferFragment.REQUEST_SHOW_DETAILS,
+                    Activity.RESULT_CANCELED, null);
+            dismiss();
+        }
     }
-
-    @Override
-    public void showSnackbar(String message) {
-        Toaster.show(getView(), message);
-    }
-
 }
