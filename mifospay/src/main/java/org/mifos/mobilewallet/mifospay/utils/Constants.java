@@ -65,7 +65,9 @@ public class Constants {
     public static final String UNABLE_TO_PROCESS_TRANSFER = "Unable to process transfer";
     public static final String TRANSACTION_SUCCESSFUL = "Transaction successful";
     public static final String SENDING_MONEY = "Sending money...";
-    public static final String ERROR_FETCHING_RECEIVER = "Error fetching receiver";
+    public static final String INSUFFICIENT_BALANCE = "Insufficient balance";
+    public static final String ERROR_FINDING_VPA = "Error finding Virtual Payment Address";
+    public static final String PLEASE_ENTER_VALID_AMOUNT = "Please enter a valid amount";
     public static final String NEED_READ_CONTACTS_PERMISSION = "Need read contacts permission.";
     public static final String NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE =
             "Need camera permission to scan qr code.";

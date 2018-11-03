@@ -7,7 +7,6 @@ import org.mifos.mobilewallet.core.domain.usecase.account.TransferFunds;
 import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.common.TransferContract;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -48,7 +47,7 @@ public class MakeTransferPresenter implements TransferContract.TransferPresenter
 
                     @Override
                     public void onError(String message) {
-                        mTransferView.showToast(Constants.ERROR_FETCHING_RECEIVER);
+                        mTransferView.showVpaNotFoundSnackbar();
                     }
                 });
     }

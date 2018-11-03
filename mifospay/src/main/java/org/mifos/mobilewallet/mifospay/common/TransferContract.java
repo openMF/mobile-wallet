@@ -17,9 +17,7 @@ public interface TransferContract {
 
         void transferFailure();
 
-        void showToast(String message);
-
-        void showSnackbar(String message);
+        void showVpaNotFoundSnackbar();
     }
 
     interface TransferPresenter extends BasePresenter {
