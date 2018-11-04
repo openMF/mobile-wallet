@@ -115,6 +115,7 @@
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
                               android:hint="@string/mobile_number"
+                              android:inputType="phone|number"
                               android:singleLine="true"
                               android:theme="@style/Theme.AppCompat.Light"/>
 
