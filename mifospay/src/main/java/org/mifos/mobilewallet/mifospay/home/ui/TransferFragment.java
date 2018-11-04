@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
+import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,11 +34,16 @@ import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.michaelrocks.libphonenumber.android.NumberParseException;
+import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
+import io.michaelrocks.libphonenumber.android.Phonenumber;
 
 /**
  * Created by naman on 30/8/17.
@@ -82,7 +88,6 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     TextInputLayout mTilVpa;
 
     private String vpa;
-    private String mobile;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -106,6 +111,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         mPresenter.fetchVpa();
         mPresenter.fetchMobile();
 
+        mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         return rootView;
     }
 
@@ -141,7 +147,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     public void transferClicked() {
         String externalId = etVpa.getText().toString().trim();
         String eamount = etAmount.getText().toString().trim();
-        String mobileNumber = mEtMobileNumber.getText().toString().trim();
+        String mobileNumber = mEtMobileNumber.getText().toString().trim().replaceAll("\\s+", "");
         if (eamount.equals("") || (externalId.equals("") && mobileNumber.equals(""))) {
             Toast.makeText(getActivity(),
                     Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
@@ -302,8 +308,16 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
 
     @Override
     public void showMobile(String mobileNo) {
-        this.mobile = mobileNo;
-        mTvClientMobile.setText(mobileNo);
+        PhoneNumberUtil phoneNumberUtil =
+                PhoneNumberUtil.createInstance(mTvClientMobile.getContext());
+        try {
+            Phonenumber.PhoneNumber phoneNumber =
+                    phoneNumberUtil.parse(mobileNo, Locale.getDefault().getCountry());
+            mTvClientMobile.setText(phoneNumberUtil.format(phoneNumber,
+                    PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
+        } catch (NumberParseException e) {
+            mTvClientMobile.setText(mobileNo); // If mobile number is not parsed properly
+        }
     }
 
     @Override
