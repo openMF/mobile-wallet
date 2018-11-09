@@ -3,9 +3,11 @@ package org.mifos.mobilewallet.mifospay.savedcards.ui;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.design.widget.TextInputLayout;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -16,12 +18,14 @@ import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -31,6 +35,7 @@ import butterknife.OnClick;
 
 public class AddCardDialog extends BottomSheetDialogFragment {
 
+    private static final String TAG = "AddCardDialog";
     boolean forEdit;
     Card editCard;
     @BindView(R.id.et_card_number)
@@ -51,6 +56,23 @@ public class AddCardDialog extends BottomSheetDialogFragment {
     Button btnCancel;
     CardsContract.CardsPresenter mCardsPresenter;
     private BottomSheetBehavior mBottomSheetBehavior;
+    @BindViews({R.id.til_fName, R.id.til_lName, R.id.til_card_number, R.id.til_cvv})
+    List<TextInputLayout> mTextInputLayouts;
+    private boolean fieldsValid;
+    private final ButterKnife.Action<TextInputLayout> CHECK_ERROR =
+            new ButterKnife.Action<TextInputLayout>() {
+                @Override
+                public void apply(@NonNull TextInputLayout view, int index) {
+                    EditText editText = view.getEditText();
+                    if (editText == null || editText.getEditableText() == null
+                            || editText.getEditableText().toString().trim().isEmpty()) {
+                        view.setError(AddCardDialog.this.getString(R.string.field_required));
+                        fieldsValid = false;
+                    } else {
+                        view.setError(null);
+                    }
+                }
+            };
 
     public void setCardsPresenter(
             CardsContract.CardsPresenter cardsPresenter) {
@@ -62,6 +84,7 @@ public class AddCardDialog extends BottomSheetDialogFragment {
         super.onDismiss(dialog);
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
@@ -109,9 +132,11 @@ public class AddCardDialog extends BottomSheetDialogFragment {
 
     @OnClick(R.id.btn_add)
     public void onAddClicked() {
-
+        if (!areFieldsValid()) {
+            return;
+        }
         Card card = new Card(etCardNumber.getText().toString(), etCVV.getText().toString(),
-                (String) spnMM.getSelectedItem() + "/" + (String) spnYY.getSelectedItem(),
+                spnMM.getSelectedItem() + "/" + spnYY.getSelectedItem(),
                 etFname.getText().toString(), etLname.getText().toString());
 
         if (forEdit) {
@@ -122,5 +147,19 @@ public class AddCardDialog extends BottomSheetDialogFragment {
         }
 
         dismiss();
+    }
+
+    private boolean areFieldsValid() {
+        fieldsValid = true;
+        ButterKnife.apply(mTextInputLayouts, CHECK_ERROR);
+        int expiryMonth = Integer.parseInt(spnMM.getSelectedItem().toString());
+        int expiryYear = Integer.parseInt(spnYY.getSelectedItem().toString());
+        Calendar calendar = Calendar.getInstance();
+        if (expiryYear == calendar.get(Calendar.YEAR)
+                && expiryMonth < (calendar.get(Calendar.MONTH) + 1)) {
+            Toaster.showToast(getContext(), getString(R.string.card_expiry_message));
+            fieldsValid = false;
+        }
+        return fieldsValid;
     }
 }
