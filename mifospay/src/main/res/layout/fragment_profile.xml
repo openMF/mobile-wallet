@@ -17,6 +17,7 @@
             android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
             android:layout_marginTop="30dp"/>
 
         <TextView
@@ -26,6 +27,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="@dimen/value_20dp"
             android:layout_marginLeft="@dimen/value_10dp"
+            android:layout_marginRight="@dimen/value_10dp"
             android:layout_marginTop="@dimen/value_15dp"
             android:textColor="@android:color/black"/>
 
