@@ -19,6 +19,10 @@ public interface EditProfileContract {
 
         void updateMobile(String fullNumber);
 
+        void handleProfileImageChangeRequest();
+
+        void handleProfileImageRemoved();
+
         void fetchUserDetails();
     }
 
@@ -37,6 +41,10 @@ public interface EditProfileContract {
         void onUpdatePasswordSuccess();
 
         void onUpdatePasswordError(String message);
+
+        void changeProfileImage();
+
+        void removeProfileImage();
 
         void setEmail(String email);
 
