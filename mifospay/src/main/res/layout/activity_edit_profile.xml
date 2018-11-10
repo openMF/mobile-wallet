@@ -1,36 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/toolbar"/>
+        <include layout="@layout/toolbar" />
 
     </android.support.design.widget.AppBarLayout>
-
-    <ImageView
-        android:id="@+id/iv_user_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"/>
-
-    <TextView
-        android:id="@+id/tv_change_photo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="@dimen/value_20dp"
-        android:layout_marginLeft="@dimen/value_10dp"
-        android:layout_marginTop="@dimen/value_15dp"
-        android:text="Change Photo"
-        android:textColor="@color/primaryDarkBlue"/>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -41,6 +22,25 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="@dimen/value_20dp">
+
+            <ImageView
+                android:id="@+id/iv_user_image"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp" />
+
+            <TextView
+                android:id="@+id/tv_change_photo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/value_20dp"
+                android:layout_marginLeft="@dimen/value_10dp"
+                android:layout_marginTop="@dimen/value_15dp"
+                android:text="Change Photo"
+                android:textColor="@color/primaryDarkBlue" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/cv_password"
@@ -63,7 +63,7 @@
                         android:layout_height="wrap_content"
                         android:text="Change Password"
                         android:textColor="@color/grey_900"
-                        android:textSize="17sp"/>
+                        android:textSize="17sp" />
 
                     <LinearLayout
                         android:id="@+id/ll_password"
@@ -86,7 +86,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Current Password"
-                                android:inputType="textPassword"/>
+                                android:inputType="textPassword" />
 
                         </android.support.design.widget.TextInputLayout>
 
@@ -103,7 +103,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="New Password"
-                                android:inputType="textPassword"/>
+                                android:inputType="textPassword" />
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout
@@ -119,7 +119,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Confirm New Password"
-                                android:inputType="textPassword"/>
+                                android:inputType="textPassword" />
                         </android.support.design.widget.TextInputLayout>
 
                         <LinearLayout
@@ -136,7 +136,7 @@
                                 android:background="@color/grey_900"
                                 android:text="@string/cancel_txt"
                                 android:textAllCaps="false"
-                                android:textColor="@android:color/white"/>
+                                android:textColor="@android:color/white" />
 
                             <Button
                                 android:id="@+id/btn_password_save"
@@ -147,7 +147,7 @@
                                 android:background="@color/primaryBlue"
                                 android:text="@string/save"
                                 android:textAllCaps="false"
-                                android:textColor="@android:color/white"/>
+                                android:textColor="@android:color/white" />
 
                         </LinearLayout>
 
@@ -177,7 +177,7 @@
                         android:layout_height="wrap_content"
                         android:text="Change Passcode"
                         android:textColor="@color/grey_900"
-                        android:textSize="17sp"/>
+                        android:textSize="17sp" />
 
                     <LinearLayout
                         android:id="@+id/ll_passcode"
@@ -201,7 +201,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Current Passcode"
-                                android:inputType="textPassword"/>
+                                android:inputType="textPassword" />
 
                         </android.support.design.widget.TextInputLayout>
 
@@ -218,7 +218,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="New Password"
-                                android:inputType="textPassword"/>
+                                android:inputType="textPassword" />
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout
@@ -234,7 +234,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="Confirm New Passcode"
-                                android:inputType="textPassword"/>
+                                android:inputType="textPassword" />
                         </android.support.design.widget.TextInputLayout>
 
                         <LinearLayout
@@ -251,7 +251,7 @@
                                 android:background="@color/grey_900"
                                 android:text="@string/cancel_txt"
                                 android:textAllCaps="false"
-                                android:textColor="@android:color/white"/>
+                                android:textColor="@android:color/white" />
 
                             <Button
                                 android:id="@+id/btn_pasccode_save"
@@ -262,7 +262,7 @@
                                 android:background="@color/primaryBlue"
                                 android:text="@string/save"
                                 android:textAllCaps="false"
-                                android:textColor="@android:color/white"/>
+                                android:textColor="@android:color/white" />
 
                         </LinearLayout>
 
@@ -292,14 +292,14 @@
                         android:layout_height="wrap_content"
                         android:text="Change Email"
                         android:textColor="@color/grey_900"
-                        android:textSize="17sp"/>
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/tv_current_email"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primaryDarkBlue"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
 
                     <LinearLayout
                         android:id="@+id/ll_email"
@@ -320,7 +320,7 @@
                                 android:id="@+id/et_new_email"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Email"/>
+                                android:hint="Email" />
                         </android.support.design.widget.TextInputLayout>
 
                         <LinearLayout
@@ -337,7 +337,7 @@
                                 android:background="@color/grey_900"
                                 android:text="@string/cancel_txt"
                                 android:textAllCaps="false"
-                                android:textColor="@android:color/white"/>
+                                android:textColor="@android:color/white" />
 
                             <Button
                                 android:id="@+id/btn_email_save"
@@ -348,7 +348,7 @@
                                 android:background="@color/primaryBlue"
                                 android:text="@string/save"
                                 android:textAllCaps="false"
-                                android:textColor="@android:color/white"/>
+                                android:textColor="@android:color/white" />
 
                         </LinearLayout>
 
@@ -377,14 +377,14 @@
                         android:layout_height="wrap_content"
                         android:text="Change Mobile Number"
                         android:textColor="@color/grey_900"
-                        android:textSize="17sp"/>
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/tv_current_mobile_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/primaryDarkBlue"
-                        android:visibility="visible"/>
+                        android:visibility="visible" />
 
                     <LinearLayout
                         android:id="@+id/ll_mobile"
@@ -408,7 +408,7 @@
                                 android:layout_gravity="center_vertical"
                                 android:gravity="center_vertical"
                                 app:ccp_autoDetectCountry="true"
-                                app:ccp_autoFormatNumber="false"/>
+                                app:ccp_autoFormatNumber="false" />
 
                             <EditText
                                 android:id="@+id/et_new_mobile_number"
@@ -416,7 +416,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/value_5dp"
                                 android:hint="Mobile Number"
-                                android:inputType="number"/>
+                                android:inputType="number" />
 
                         </LinearLayout>
 
@@ -434,7 +434,7 @@
                                 android:background="@color/grey_900"
                                 android:text="@string/cancel_txt"
                                 android:textAllCaps="false"
-                                android:textColor="@android:color/white"/>
+                                android:textColor="@android:color/white" />
 
                             <Button
                                 android:id="@+id/btn_mobile_save"
@@ -445,7 +445,7 @@
                                 android:background="@color/primaryBlue"
                                 android:text="@string/save"
                                 android:textAllCaps="false"
-                                android:textColor="@android:color/white"/>
+                                android:textColor="@android:color/white" />
 
                         </LinearLayout>
 
