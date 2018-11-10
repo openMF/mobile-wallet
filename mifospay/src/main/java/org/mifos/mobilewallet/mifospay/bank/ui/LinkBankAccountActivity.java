@@ -70,6 +70,7 @@ public class LinkBankAccountActivity extends BaseActivity implements
 
         showProgressDialog(Constants.PLEASE_WAIT);
         setupRecyclerview();
+        mRvOtherBanks.setNestedScrollingEnabled(false);
         setupAdapterData();
         hideProgressDialog();
     }
