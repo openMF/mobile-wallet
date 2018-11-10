@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.util.Log;
@@ -21,7 +20,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
 
@@ -40,7 +38,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Optional;
 
 public class EditProfileActivity extends BaseActivity implements
         EditProfileContract.EditProfileView {
@@ -135,11 +132,11 @@ public class EditProfileActivity extends BaseActivity implements
         showBackButton();
         setToolbarTitle(Constants.EDIT_PROFILE);
         mPresenter.attachView(this);
+        mCcpNewCode.registerCarrierNumberEditText(mEtNewMobileNumber);
 
         showProgressDialog(Constants.PLEASE_WAIT);
         mEditProfilePresenter.fetchUserDetails();
 
-        mCcpNewCode.registerCarrierNumberEditText(mEtNewMobileNumber);
         setupBottomSheetDialog();
     }
 
@@ -232,10 +229,15 @@ public class EditProfileActivity extends BaseActivity implements
             }
             AnimationUtil.expand(mLlMobile);
             mTvCurrentMobileNumber.setVisibility(View.GONE);
-            mEtNewMobileNumber.setText(mobile);
+            String mobileNumberWithCountryCodeExcluded = excludeCountryCodeFromString(mobile);
+            mEtNewMobileNumber.setText(mobileNumberWithCountryCodeExcluded);
         }
     }
 
+    private String excludeCountryCodeFromString(String str) {
+        String selectedCountryCode = mCcpNewCode.getSelectedCountryCode();
+        return str.substring(selectedCountryCode.length(), str.length());
+    }
 
     @OnClick({R.id.btn_password_cancel, R.id.btn_password_save, R.id.btn_passcode_cancel,
             R.id.btn_pasccode_save, R.id.btn_email_cancel, R.id.btn_email_save,
@@ -302,6 +304,7 @@ public class EditProfileActivity extends BaseActivity implements
 
             case R.id.btn_mobile_save:
                 showProgressDialog(Constants.PLEASE_WAIT);
+
                 if (mCcpNewCode.isValidFullNumber()) {
                     mEditProfilePresenter.updateMobile(mCcpNewCode.getFullNumber());
                 } else {

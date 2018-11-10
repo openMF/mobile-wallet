@@ -406,6 +406,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/value_5dp"
                                 android:hint="Mobile Number"
+                                android:maxLength="@integer/telephone_numbers_max_length_standard"
                                 android:inputType="number"/>
 
                         </LinearLayout>
