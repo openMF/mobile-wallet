@@ -113,8 +113,10 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
     public void showProfile(Client client) {
         ivUserName.setText(client.getName());
         tvUserDetailsName.setText(client.getName());
-        TextDrawable drawable = TextDrawable.builder()
-                .buildRound(client.getName().substring(0, 1), R.color.colorPrimary);
+        TextDrawable drawable = TextDrawable.builder().beginConfig()
+                .width((int)getResources().getDimension(R.dimen.user_profile_image_size))
+                .height((int)getResources().getDimension(R.dimen.user_profile_image_size))
+                .endConfig().buildRound(client.getName().substring(0, 1), R.color.colorPrimary);
         ivUserImage.setImageDrawable(drawable);
         tvClientVpa.setText(client.getExternalId());
     }
