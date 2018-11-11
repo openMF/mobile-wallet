@@ -293,7 +293,8 @@ public class EditProfileActivity extends BaseActivity implements
 
             case R.id.btn_email_save:
                 showProgressDialog(Constants.PLEASE_WAIT);
-                if (ValidateUtil.validateEmail(mEtNewEmail.getText().toString())) {
+                String email = mEtNewEmail.getText().toString();
+                if (ValidateUtil.isValidEmail(email)) {
                     mEditProfilePresenter.updateEmail(mEtNewEmail.getText().toString());
                 } else {
                     hideProgressDialog();
