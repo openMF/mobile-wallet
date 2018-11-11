@@ -109,4 +109,6 @@
         <item>12</item>
     </string-array>
 
+    <string name="label_select_picture">Select picture</string>
+
 </resources>
