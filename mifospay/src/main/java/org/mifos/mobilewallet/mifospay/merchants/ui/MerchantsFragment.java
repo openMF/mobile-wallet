@@ -30,6 +30,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
+
 /**
  * Created by ankur on 11/July/2018
  */
@@ -116,7 +118,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     public void filter(String text) {
         List<SavingsWithAssociations> filteredList = new ArrayList<>();
 
-        if (text.trim().isEmpty()) {
+        if (isBlank(text)) {
             filteredList = merchantsList;
         } else {
             for (SavingsWithAssociations merchant : merchantsList) {

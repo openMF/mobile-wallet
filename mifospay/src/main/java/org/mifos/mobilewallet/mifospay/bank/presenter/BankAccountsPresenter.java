@@ -18,6 +18,7 @@ import javax.inject.Inject;
 
 public class BankAccountsPresenter implements BankContract.BankAccountsPresenter {
 
+    private static final Random mRandom = new Random();
     private final LocalRepository mLocalRepository;
     private final UseCaseHandler mUseCaseHandler;
     BankContract.BankAccountsView mBankAccountsView;
@@ -40,7 +41,7 @@ public class BankAccountsPresenter implements BankContract.BankAccountsPresenter
 
         List<BankAccountDetails> bankAccountDetailsList = new ArrayList<>();
         bankAccountDetailsList.add(new BankAccountDetails("SBI", "Ankur Sharma", "New Delhi",
-                new Random().nextInt() + " ", "Savings"));
+                mRandom.nextInt() + " ", "Savings"));
         mBankAccountsView.showLinkedBankAccounts(bankAccountDetailsList);
     }
 }

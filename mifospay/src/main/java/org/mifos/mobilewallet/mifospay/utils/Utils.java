@@ -30,4 +30,12 @@ public class Utils {
 
         return (int) (dp * displaymetrics.density + 0.5f);
     }
+
+    public static boolean isBlank(String s) {
+        if (s == null) return true;
+        for (char ch : s.toCharArray()) {
+            if (!Character.isWhitespace(ch)) return false;
+        }
+        return true;
+    }
 }

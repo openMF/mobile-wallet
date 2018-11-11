@@ -422,7 +422,8 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void changeProfileImage() {
-        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getApplicationContext(),
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(getApplicationContext(),
                 Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
 
             // Permission is not granted

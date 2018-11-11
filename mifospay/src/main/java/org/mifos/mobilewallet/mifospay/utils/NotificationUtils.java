@@ -36,7 +36,7 @@ import java.util.List;
 
 public class NotificationUtils {
 
-    private static String TAG = NotificationUtils.class.getSimpleName();
+    private static final String TAG = NotificationUtils.class.getSimpleName();
 
     private Context mContext;
 
@@ -87,7 +87,7 @@ public class NotificationUtils {
             Date date = format.parse(timeStamp);
             return date.getTime();
         } catch (ParseException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Unable to parse the timestamp", e);
         }
         return 0;
     }
@@ -207,10 +207,9 @@ public class NotificationUtils {
             connection.setDoInput(true);
             connection.connect();
             InputStream input = connection.getInputStream();
-            Bitmap myBitmap = BitmapFactory.decodeStream(input);
-            return myBitmap;
+            return BitmapFactory.decodeStream(input);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Unable to create bitmap", e);
             return null;
         }
     }

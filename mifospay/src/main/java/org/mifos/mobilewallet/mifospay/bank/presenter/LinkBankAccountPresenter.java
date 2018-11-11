@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 public class LinkBankAccountPresenter implements BankContract.LinkBankAccountPresenter {
 
+    private static final Random mRandom = new Random();
     BankContract.LinkBankAccountView mLinkBankAccountView;
 
     @Inject
@@ -32,6 +33,6 @@ public class LinkBankAccountPresenter implements BankContract.LinkBankAccountPre
         // TODO:: UPI API implement
         mLinkBankAccountView.addBankAccount(
                 new BankAccountDetails(bankName, "Ankur Sharma", "New Delhi",
-                        new Random().nextInt() + " ", "Savings"));
+                        mRandom.nextInt() + " ", "Savings"));
     }
 }
