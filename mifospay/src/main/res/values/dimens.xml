@@ -26,4 +26,6 @@
     <dimen name="appBarTopMargin">0dp</dimen>
     <dimen name="value_50dp">50dp</dimen>
 
+    <dimen name="user_profile_image_size">60dp</dimen>
+
 </resources>

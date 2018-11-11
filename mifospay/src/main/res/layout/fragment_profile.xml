@@ -11,13 +11,14 @@
                   android:layout_height="wrap_content"
                   android:orientation="vertical">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_user_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center_horizontal"
+            android:layout_width="@dimen/user_profile_image_size"
+            android:layout_height="@dimen/user_profile_image_size"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginRight="10dp" />
 
         <TextView
             android:id="@+id/tv_user_name"
@@ -27,7 +28,8 @@
             android:layout_marginBottom="@dimen/value_20dp"
             android:layout_marginLeft="@dimen/value_10dp"
             android:layout_marginTop="@dimen/value_15dp"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:layout_marginRight="@dimen/value_10dp" />
 
         <ScrollView
             android:layout_width="match_parent"
