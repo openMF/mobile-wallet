@@ -144,7 +144,8 @@ public class EditProfileActivity extends BaseActivity implements
 
     private void setupBottomSheetDialog() {
         bottomSheetDialog = new BottomSheetDialog(EditProfileActivity.this);
-        View sheetView = getLayoutInflater().inflate(R.layout.dialog_change_profile_picture, null);
+        View sheetView = getLayoutInflater()
+                .inflate(R.layout.dialog_change_profile_picture, null);
         bottomSheetDialog.setContentView(sheetView);
         BottomSheetViews bsv = new BottomSheetViews();
         ButterKnife.bind(bsv, sheetView);
@@ -456,7 +457,8 @@ public class EditProfileActivity extends BaseActivity implements
     private void pickImageFromGallery() {
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(getApplicationContext(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_READ_EXTERNAL_STORAGE);
         } else {
@@ -469,7 +471,8 @@ public class EditProfileActivity extends BaseActivity implements
                 i.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
             }
 
-            startActivityForResult(Intent.createChooser(i, getString(R.string.label_select_picture)), REQUEST_READ_IMAGE);
+            startActivityForResult(Intent.createChooser(i,
+                    getString(R.string.label_select_picture)), REQUEST_READ_IMAGE);
         }
     }
 
