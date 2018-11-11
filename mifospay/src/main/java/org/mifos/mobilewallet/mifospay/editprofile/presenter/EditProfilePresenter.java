@@ -44,7 +44,7 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
     }
 
     @Override
-    public void updatePassword(String currentPassword, final String newPassword) {
+    public void updatePassword(final String currentPassword, final String newPassword) {
         // authenticate and then update
         mUseCaseHandler.execute(authenticateUserUseCase,
                 new AuthenticateUser.RequestValues(mPreferencesHelper.getUsername(),
@@ -65,6 +65,7 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
 
                                     @Override
                                     public void onError(String message) {
+                                        message = currentPassword.equals(newPassword) ? "Same Passwords" : "Wrong password";
                                         mEditProfileView.onUpdatePasswordError(message);
                                     }
                                 });
@@ -72,7 +73,8 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
 
                     @Override
                     public void onError(String message) {
-                        mEditProfileView.onUpdatePasswordError("Wrong password");
+                        message = currentPassword.equals(newPassword) ? "Same Passwords" : "Wrong password";
+                        mEditProfileView.onUpdatePasswordError(message);
                     }
                 });
     }

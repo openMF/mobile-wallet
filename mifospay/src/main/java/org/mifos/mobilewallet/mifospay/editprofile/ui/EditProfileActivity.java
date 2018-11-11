@@ -361,11 +361,18 @@ public class EditProfileActivity extends BaseActivity implements
     @Override
     public void onUpdateEmailSuccess(String email) {
         hideProgressDialog();
-        this.email = email;
-        mTvCurrentEmail.setText(email);
-        AnimationUtil.collapse(mLlEmail);
-        mTvCurrentEmail.setVisibility(View.VISIBLE);
-        showToast("Email successfully updated");
+        String message = null;
+        if(email.equals(mEtNewEmail.getText().toString())) {
+            message = "Same Email";
+        }
+        else{
+            this.email = email;
+            AnimationUtil.collapse(mLlEmail);
+            message = "Email successfully updated";
+            mTvCurrentEmail.setText(email);
+            mTvCurrentEmail.setVisibility(View.VISIBLE);
+        }
+        showToast(message);
     }
 
     @Override
@@ -377,11 +384,18 @@ public class EditProfileActivity extends BaseActivity implements
     @Override
     public void onUpdateMobileSuccess(String fullNumber) {
         hideProgressDialog();
-        mobile = fullNumber;
-        mTvCurrentMobileNumber.setText(fullNumber);
-        AnimationUtil.collapse(mLlMobile);
-        mTvCurrentMobileNumber.setVisibility(View.VISIBLE);
-        showToast("Mobile number successfully updated");
+        String message = null;
+        if(fullNumber.equals(mCcpNewCode.getFullNumber())){
+            message  = "Same mobile number";
+        }
+        else{
+            mobile = fullNumber;
+            mTvCurrentMobileNumber.setText(fullNumber);
+            AnimationUtil.collapse(mLlMobile);
+            mTvCurrentMobileNumber.setVisibility(View.VISIBLE);
+            message = "Mobile number successfully updated";
+        }
+        showToast(message);
     }
 
     @Override
