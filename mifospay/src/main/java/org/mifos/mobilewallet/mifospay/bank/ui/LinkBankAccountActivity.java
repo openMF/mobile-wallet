@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.mifospay.bank.ui;
 
-import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -35,6 +33,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
+import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
 
 public class LinkBankAccountActivity extends BaseActivity implements
         BankContract.LinkBankAccountView {
@@ -138,7 +139,7 @@ public class LinkBankAccountActivity extends BaseActivity implements
     private void filter(String text) {
         List<Bank> filteredList = new ArrayList<>();
 
-        if (text.trim().isEmpty()) {
+        if (isBlank(text)) {
             filteredList = banksList;
         } else {
             for (Bank bank : banksList) {
@@ -151,7 +152,7 @@ public class LinkBankAccountActivity extends BaseActivity implements
     }
 
     private void setupAdapterData() {
-        JSONObject jsonObject = null;
+        JSONObject jsonObject;
         try {
             jsonObject = readJson(this, "banks.json");
             banksList = new ArrayList<>();

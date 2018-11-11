@@ -29,9 +29,9 @@ import butterknife.OnClick;
 
 public class BankAccountsActivity extends BaseActivity implements BankContract.BankAccountsView {
 
-    public static int LINK_BANK_ACCOUNT_REQUEST_CODE = 1;
-    public static int SETUP_UPI_REQUEST_CODE = 2;
-    public static int Bank_Account_Details_Request_Code = 3;
+    public static final int LINK_BANK_ACCOUNT_REQUEST_CODE = 1;
+    public static final int SETUP_UPI_REQUEST_CODE = 2;
+    public static final int Bank_Account_Details_Request_Code = 3;
     @Inject
     BankAccountsPresenter mPresenter;
     BankContract.BankAccountsPresenter mBankAccountsPresenter;

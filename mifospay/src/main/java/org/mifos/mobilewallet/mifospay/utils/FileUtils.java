@@ -12,6 +12,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import org.json.JSONObject;
 
@@ -25,6 +26,7 @@ import java.io.OutputStream;
 
 public class FileUtils {
 
+    private static final String TAG = "FileUtils";
     public static JSONObject readJson(Context context, String file) {
         JSONObject jsonObject = null;
         try {
@@ -46,13 +48,9 @@ public class FileUtils {
      * @return path of the selected image file from gallery
      */
     public static String getPath(final Context context, final Uri uri) {
-
-        // check here to KITKAT or new version
-        final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
-
         // DocumentProvider
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            if (DocumentsContract.isDocumentUri(context, uri)) {
 
                 // ExternalStorageProvider
                 if (isExternalStorageDocument(uri)) {
@@ -69,7 +67,7 @@ public class FileUtils {
                     final String id = DocumentsContract.getDocumentId(uri);
                     final Uri contentUri = ContentUris.withAppendedId(
                             Uri.parse("content://downloads/public_downloads"),
-                            Long.valueOf(id));
+                            Long.parseLong(id));
 
                     return getDataColumn(context, contentUri, null, null);
                 } else if (isMediaDocument(uri)) { // MediaProvider
@@ -202,13 +200,13 @@ public class FileUtils {
                     Constants.MIFOSPAY);
             file = new File(mifosDirectory, "kuch");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(TAG, "Unable to create file", e);
         }
         final FileOutputStream fileOutputStream;
         try {
             fileOutputStream = new FileOutputStream(file);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Unable to create output stream", e);
             return null;
         }
 
@@ -217,13 +215,13 @@ public class FileUtils {
         try {
             bufferedOutputStream.write(imgBytesData);
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(TAG, "Unable to write", e);
             return null;
         } finally {
             try {
                 bufferedOutputStream.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(TAG, "Unable to close the output stream", e);
             }
         }
         return file;
