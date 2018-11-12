@@ -96,7 +96,7 @@
         </module>
 
         <module name="WhitespaceAfter">
-            <property name="tokens" value="COMMA, SEMI, TYPECAST"/>
+            <property name="tokens" value="COMMA, SEMI"/>
         </module>
 
         <module name="NoWhitespaceBefore">
