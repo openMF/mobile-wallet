@@ -117,6 +117,9 @@
             android:name=".settings.ui.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
+            android:name=".faq.ui.FAQActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
             android:name=".bank.ui.BankAccountsActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
