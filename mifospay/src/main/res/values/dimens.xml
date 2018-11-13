@@ -26,6 +26,9 @@
     <dimen name="appBarTopMargin">0dp</dimen>
     <dimen name="value_50dp">50dp</dimen>
 
-    <dimen name="user_profile_image_size">60dp</dimen>
+    <dimen name="user_profile_image_size">96dp</dimen>
+    <dimen name="editable_image_hint_shape_size">32dp</dimen>
+    <dimen name="editable_image_hint_border_width">2dp</dimen>
+    <dimen name="editable_image_hint_icon_margin">16dp</dimen>
 
 </resources>
