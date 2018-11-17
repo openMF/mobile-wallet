@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape
+            android:shape="oval" >
+            <stroke android:width="@dimen/editable_image_hint_border_width" android:color="@color/colorPrimary" />
+            <solid android:color="@color/black" />
+            <size
+                android:height="@dimen/editable_image_hint_shape_size"
+                android:width="@dimen/editable_image_hint_shape_size" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/ic_camera"
+        android:left="@dimen/editable_image_hint_icon_margin"
+        android:top="@dimen/editable_image_hint_icon_margin"
+        android:right="@dimen/editable_image_hint_icon_margin"
+        android:bottom="@dimen/editable_image_hint_icon_margin" />
+</layer-list>
