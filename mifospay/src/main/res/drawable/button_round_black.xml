@@ -1,11 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android">
+<selector
+xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <solid android:color="@color/primaryDarkBlue"/>
+<item android:state_pressed="true" >
+    <shape>
+        <solid android:color="@color/primaryBlue"/>
 
-    <corners
-        android:bottomLeftRadius="20dp"
-        android:bottomRightRadius="20dp"
-        android:topLeftRadius="20dp"
-        android:topRightRadius="20dp"/>
-</shape>
+        <corners
+            android:bottomLeftRadius="20dp"
+            android:bottomRightRadius="20dp"
+            android:topLeftRadius="20dp"
+            android:topRightRadius="20dp"/>
+    </shape>
+</item>
+
+<item android:state_focused="true" >
+    <shape>
+        <solid android:color="@color/primaryDarkBlue"/>
+
+        <corners
+            android:bottomLeftRadius="20dp"
+            android:bottomRightRadius="20dp"
+            android:topLeftRadius="20dp"
+            android:topRightRadius="20dp"/>
+    </shape>
+</item>
+
+<item android:state_enabled="false">
+    <shape>
+        <solid android:color="@color/gray_1"/>
+
+        <corners
+            android:bottomLeftRadius="20dp"
+            android:bottomRightRadius="20dp"
+            android:topLeftRadius="20dp"
+            android:topRightRadius="20dp"/>
+    </shape>
+</item>
+
+<item>
+    <shape>
+        <solid android:color="@color/primaryDarkBlue"/>
+
+        <corners
+            android:bottomLeftRadius="20dp"
+            android:bottomRightRadius="20dp"
+            android:topLeftRadius="20dp"
+            android:topRightRadius="20dp"/>
+    </shape>
+</item>
+</selector>

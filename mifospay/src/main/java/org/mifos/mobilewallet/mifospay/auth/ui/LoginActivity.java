@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -34,6 +35,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 
 /**
  * Created by naman on 16/6/17.
@@ -52,6 +55,9 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     @BindView(R.id.et_password)
     EditText etPassword;
 
+    @BindView(R.id.btn_login)
+    Button btnLogin;
+
     private GoogleSignInClient googleSignInClient;
     private GoogleSignInAccount account;
     private int mMifosSavingProductId;
@@ -68,11 +74,29 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         if (!pref.getPassCode().isEmpty()) {
             startPassCodeActivity();
         }
+
+        disableLoginButton();
     }
 
     @Override
     public void setPresenter(AuthContract.LoginPresenter presenter) {
         mLoginPresenter = presenter;
+    }
+
+    @OnFocusChange({ R.id.et_username, R.id.et_password })
+    public void onLoginInputFocusChanged() {
+        handeLoginInputChanged();
+    }
+
+    @OnTextChanged({ R.id.et_username, R.id.et_password })
+    public void onLoginInputTextChanged() {
+        handeLoginInputChanged();
+    }
+
+    private void handeLoginInputChanged() {
+        String usernameContent = etUsername.getText().toString();
+        String passwordContent = etPassword.getText().toString();
+        mPresenter.handleLoginButtonStatus(usernameContent, passwordContent);
     }
 
     @OnClick(R.id.btn_login)
@@ -87,6 +111,16 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     public void onSignupClicked() {
         SignupMethod signupMethod = new SignupMethod();
         signupMethod.show(getSupportFragmentManager(), Constants.CHOOSE_SIGNUP_METHOD);
+    }
+
+    @Override
+    public void disableLoginButton() {
+        btnLogin.setEnabled(false);
+    }
+
+    @Override
+    public void enableLoginButton() {
+        btnLogin.setEnabled(true);
     }
 
     @Override
