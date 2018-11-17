@@ -17,6 +17,7 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
+import org.mifos.mobilewallet.mifospay.faq.ui.FAQActivity;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfilePresenter;
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
@@ -97,6 +98,9 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.item_faq:
+                startActivity(new Intent(getActivity(), FAQActivity.class));
+                break;
             case R.id.item_edit_profile:
                 startActivity(new Intent(getActivity(), EditProfileActivity.class));
                 break;

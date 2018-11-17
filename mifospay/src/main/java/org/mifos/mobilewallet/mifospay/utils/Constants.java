@@ -133,6 +133,7 @@ public class Constants {
             "Need external storage permission to browse images";
     public static final String SETTINGS = "Settings";
     public static final String EDIT_PROFILE = "Edit Profile";
+    public static final String FAQ = "Frequent Asked Questions";
     public static final String LINKED_BANK_ACCOUNTS = "Linked Bank Accounts";
     public static final String BANK_ACCOUNT_DETAILS = "Bank Account Details";
     public static final String NEW_BANK_ACCOUNT = "newBankAccount";

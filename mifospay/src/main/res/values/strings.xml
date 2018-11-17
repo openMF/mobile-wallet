@@ -109,6 +109,18 @@
         <item>12</item>
     </string-array>
 
+
     <string name="label_select_picture">Select picture</string>
+
+
+    <string name="question1">Question 1</string>
+    <string name="question2">Question 2</string>
+    <string name="question3">Question 3</string>
+    <string name="question4">Question 4</string>
+    <string name="answer1">Answer 1</string>
+    <string name="answer2">Answer 1</string>
+    <string name="answer3">Answer 1</string>
+    <string name="answer4">Answer 1</string>
+
 
 </resources>
