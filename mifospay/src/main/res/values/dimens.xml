@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <dimen name="textH4">34sp</dimen>
+    <dimen name="textH6">20sp</dimen>
+    <dimen name="textBody1">16sp</dimen>
+    <dimen name="textBody2">14sp</dimen>
+    <dimen name="textButton">14sp</dimen>
+    <dimen name="textCaption">12sp</dimen>
+    <dimen name="textOverline">12sp</dimen>
+
+    <dimen name="paddingLayout">24dp</dimen>
+
+    <dimen name="marginItemsInSectionSmall">16dp</dimen>
+    <dimen name="marginItemsInSectionMedium">20dp</dimen>
+    <dimen name="marginItemsInSectionLarge">24dp</dimen>
+    <dimen name="marginBetweenSections">48dp</dimen>
+    <dimen name="marginBetweenWords">4dp</dimen>
+
+    <dimen name="marginBetweenLogoAndLoginInput">100dp</dimen>
+
     <dimen name="value_10dp">10dp</dimen>
     <dimen name="value_10sp">10sp</dimen>
     <dimen name="value_20dp">20dp</dimen>
