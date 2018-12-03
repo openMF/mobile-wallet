@@ -1,14 +1,19 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
+import org.mifos.mobilewallet.mifospay.faq.ui.FAQActivity;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.HomePresenter;
+import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
@@ -51,7 +56,6 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
         swipeLayout.setEnabled(false);
 
         mHomePresenter.fetchClientDetails();
-
     }
 
 //    private void setupHeaderView(View headerView) {
@@ -69,6 +73,27 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
 //        mHomePresenter.fetchClientDetails();
 //
 //    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_overflow, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_faq:
+                startActivity(new Intent(getApplicationContext(), FAQActivity.class));
+                break;
+            case R.id.item_profile_setting:
+                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
 
     @Override
     public void setPresenter(HomeContract.HomePresenter presenter) {

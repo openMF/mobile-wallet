@@ -114,17 +114,17 @@ public class WalletFragment extends BaseFragment implements HomeContract.WalletV
 
     @OnClick(R.id.btn_send)
     public void sendClicked() {
-        ((HomeFragment) getParentFragment()).navigateFragment(R.id.action_transfer, true);
+        ((HomeFragment) getParentFragment()).navigateFragment(R.id.action_payments, true);
     }
 
     @OnClick(R.id.btn_request)
     public void requestClicked() {
-        ((HomeFragment) getParentFragment()).navigateFragment(R.id.action_transfer, true);
+        ((HomeFragment) getParentFragment()).navigateFragment(R.id.action_payments, true);
     }
 
     @OnClick(R.id.btn_show_qr)
     public void showQrClicked() {
-        ((HomeFragment) getParentFragment()).navigateFragment(R.id.action_transfer, true);
+        ((HomeFragment) getParentFragment()).navigateFragment(R.id.action_payments, true);
     }
 
     @OnClick(R.id.btn_addBankAccount)

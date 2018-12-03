@@ -8,4 +8,9 @@
         <item name="android:fontFamily">@font/roboto</item>
     </style>
 
+    <style name="AppTheme.Toolbar" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+    </style>
+
 </resources>

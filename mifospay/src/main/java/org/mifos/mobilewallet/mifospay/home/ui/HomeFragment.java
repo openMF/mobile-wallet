@@ -85,9 +85,13 @@ public class HomeFragment extends BaseFragment {
                             R.id.bottom_navigation_fragment_container);
                     break;
 
-                case R.id.action_transfer:
+                case R.id.action_payments:
                     replaceFragment(new TransferFragment(), false,
                             R.id.bottom_navigation_fragment_container);
+                    break;
+
+                case R.id.action_finance:
+                    // TODO: REDESIGN - CREATE FINANCE FRAGMENT
                     break;
 
                 case R.id.action_profile:

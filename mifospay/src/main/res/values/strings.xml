@@ -30,7 +30,8 @@
     <string name="expiry_date">Expiry Date</string>
     <string name="add">ADD</string>
     <string name="home">Home</string>
-    <string name="transfer">Transfer</string>
+    <string name="payments">Payments</string>
+    <string name="finance">Finance</string>
     <string name="profile">Profile</string>
     <string name="mifos_pay">Mifos Pay</string>
     <string name="username">Username</string>
