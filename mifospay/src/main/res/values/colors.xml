@@ -1,8 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#fafafa</color>
-    <color name="colorPrimaryDark">#e1e1e1</color>
-    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#000AFF</color>
+
+    <!-- 100, 87, 54 etc.. - OPACITY IN PERCENTAGE -->
+    <color name="colorBlack100">#000000</color>
+    <color name="colorBlack87">#DE000000</color>
+    <color name="colorBlack70">#B3000000</color>
+    <color name="colorBlack54">#8A000000</color>
+    <color name="colorBlack50">#80000000</color>
+    <color name="colorBlack38">#61000000</color>
+    <color name="colorBlack12">#1F000000</color>
+
+    <color name="colorTextPrimary">@color/colorBlack87</color>
+    <color name="colorTextSecondary">@color/colorBlack54</color>
+    <color name="colorTextDisabled">@color/colorBlack38</color>
+
+    <color name="colorAccentBlue">#000AFF</color>
+    <color name="colorAccentBlack">#2F3542</color>
+    <color name="colorAccentYellow">#FFF700</color>
+    <color name="colorListImageBackground">#E6E6E6</color>
+    <color name="colorListImageIcon">#B8B8B8</color>
+
+    <color name="colorExpandableBottomSheetDialogGrip">@color/colorBlack38</color>
+
+    <color name="colorDivider">@color/colorBlack12</color>
+
+    <color name="colorFABBackground">@color/colorAccentBlack</color>
+    <color name="colorFABContent">@color/colorPrimary</color>
+
+    <color name="colorChangeProfileImageShapeBackground">@color/colorAccentBlack</color>
+    <color name="colorChangeProfileImageShapeText">@color/colorPrimary</color>
+
+
+
+
+
+
+    <!-- OLD COLORS ARE TEMPORARY HERE UNTIL ALL OF THE LAYOUT WON'T BE REDESIGNED TO AVOID CRASHES/BUGS/CONFLICTS -->
 
     <color name="primaryBlue">#3F51B5</color>
     <color name="primaryDarkBlue">#303F9F</color>
