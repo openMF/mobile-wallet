@@ -12,7 +12,7 @@ import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
-import org.mifos.mobilewallet.mifospay.home.HomeContract;
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfilePresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
@@ -28,12 +28,12 @@ import okhttp3.ResponseBody;
  * Created by naman on 7/9/17.
  */
 
-public class ProfileFragment extends BaseFragment implements HomeContract.ProfileView {
+public class ProfileFragment extends BaseFragment implements BaseHomeContract.ProfileView {
 
     @Inject
     ProfilePresenter mPresenter;
 
-    HomeContract.ProfilePresenter mProfilePresenter;
+    BaseHomeContract.ProfilePresenter mProfilePresenter;
 
     @BindView(R.id.iv_user_image)
     ImageView ivUserImage;
@@ -98,7 +98,7 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
     }
 
     @Override
-    public void setPresenter(HomeContract.ProfilePresenter presenter) {
+    public void setPresenter(BaseHomeContract.ProfilePresenter presenter) {
         this.mProfilePresenter = presenter;
     }
 

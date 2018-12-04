@@ -38,8 +38,9 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="enter_name_or_vpa">Enter name or vpa</string>
-    <string name="balance">Balance</string>
-    <string name="transaction_history">TRANSACTION HISTORY</string>
+    <string name="balance_hint">Total balance</string>
+    <string name="show_more">Show more</string>
+    <string name="transaction_history">Transaction History</string>
     <string name="invoices">Invoices</string>
     <string name="request">Request</string>
     <string name="bank_account">Bank Account</string>
@@ -126,4 +127,11 @@
     <string name="answer2">Answer 1</string>
     <string name="answer3">Answer 1</string>
     <string name="answer4">Answer 1</string>
+
+    <string name="fetching">Fetching…</string>
+    <string name="empty_no_transaction_history_title">Your history is empty</string>
+    <string name="empty_no_transaction_history_subtitle">Complete a transfer and come back here to see results!</string>
+    <string name="error_oops">Oops!</string>
+    <string name="error_no_transaction_history_subtitle">Couldn\'t fetch transactions history. Please, try again.</string>
+    <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
 </resources>
