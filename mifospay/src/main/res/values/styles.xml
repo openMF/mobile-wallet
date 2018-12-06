@@ -22,4 +22,8 @@
         <item name="colorControlHighlight">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.Toolbar" parent="ThemeOverlay.MaterialComponents.Light">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
 </resources>

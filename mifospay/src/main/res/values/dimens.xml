@@ -19,6 +19,13 @@
 
     <dimen name="marginBetweenLogoAndLoginInput">100dp</dimen>
 
+    <dimen name="bottomSheetDialogBorderRadius">10dp</dimen>
+    <dimen name="bottomSheetPeekHeight">175dp</dimen>
+
+    <dimen name="listImageSize">39dp</dimen>
+
+    <dimen name="emptyStateImageSize">64dp</dimen>
+
     <dimen name="value_10dp">10dp</dimen>
     <dimen name="value_10sp">10sp</dimen>
     <dimen name="value_20dp">20dp</dimen>

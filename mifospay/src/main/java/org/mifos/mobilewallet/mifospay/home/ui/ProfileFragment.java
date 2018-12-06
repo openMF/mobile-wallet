@@ -1,12 +1,8 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,11 +12,8 @@ import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
-import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
-import org.mifos.mobilewallet.mifospay.faq.ui.FAQActivity;
-import org.mifos.mobilewallet.mifospay.home.HomeContract;
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfilePresenter;
-import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
@@ -35,12 +28,12 @@ import okhttp3.ResponseBody;
  * Created by naman on 7/9/17.
  */
 
-public class ProfileFragment extends BaseFragment implements HomeContract.ProfileView {
+public class ProfileFragment extends BaseFragment implements BaseHomeContract.ProfileView {
 
     @Inject
     ProfilePresenter mPresenter;
 
-    HomeContract.ProfilePresenter mProfilePresenter;
+    BaseHomeContract.ProfilePresenter mProfilePresenter;
 
     @BindView(R.id.iv_user_image)
     ImageView ivUserImage;
@@ -81,36 +74,10 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
         hideBackButton();
         setSwipeEnabled(false);
 
-        setHasOptionsMenu(true);
-
         mProfilePresenter.fetchprofile();
         mProfilePresenter.fetchClientImage();
 
         return rootView;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_profile, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item_faq:
-                startActivity(new Intent(getActivity(), FAQActivity.class));
-                break;
-            case R.id.item_edit_profile:
-                startActivity(new Intent(getActivity(), EditProfileActivity.class));
-                break;
-            case R.id.item_profile_setting:
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-        return true;
     }
 
     @Override
@@ -131,7 +98,7 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
     }
 
     @Override
-    public void setPresenter(HomeContract.ProfilePresenter presenter) {
+    public void setPresenter(BaseHomeContract.ProfilePresenter presenter) {
         this.mProfilePresenter = presenter;
     }
 

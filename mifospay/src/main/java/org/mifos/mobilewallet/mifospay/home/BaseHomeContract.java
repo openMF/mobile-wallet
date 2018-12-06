@@ -1,9 +1,12 @@
 package org.mifos.mobilewallet.mifospay.home;
 
 import org.mifos.mobilewallet.core.domain.model.Account;
+import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
+
+import java.util.List;
 
 import okhttp3.ResponseBody;
 
@@ -11,36 +14,44 @@ import okhttp3.ResponseBody;
  * Created by naman on 17/6/17.
  */
 
-public interface HomeContract {
+public interface BaseHomeContract {
 
-    interface HomeView extends BaseView<HomePresenter> {
+    interface BaseHomeView extends BaseView<BaseHomePresenter> {
 
         void showClientDetails(Client client);
     }
 
-    interface HomePresenter extends BasePresenter {
+    interface BaseHomePresenter extends BasePresenter {
 
         void fetchClientDetails();
     }
 
-
-    interface WalletView extends BaseView<WalletPresenter> {
+    interface HomeView extends BaseView<HomePresenter> {
 
         void showSnackbar(String message);
 
-        void showWallet(Account account);
+        void showAccountBalance(Account account);
+
+        void showTransactionsHistory(List<Transaction> transactions);
+
+        void showTransactionsError();
+
+        void showTransactionsEmpty();
+
+        void showBottomSheetActionButton();
+
+        void hideBottomSheetActionButton();
 
         void showToast(String message);
 
         void hideSwipeProgress();
     }
 
-    interface WalletPresenter extends BasePresenter {
+    interface HomePresenter extends BasePresenter {
 
-        void fetchWallet();
+        void fetchAccountDetails();
 
     }
-
 
     interface TransferView extends BaseView<TransferPresenter> {
 

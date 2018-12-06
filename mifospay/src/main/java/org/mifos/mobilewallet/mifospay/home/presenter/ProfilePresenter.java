@@ -5,7 +5,7 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientImage;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.home.HomeContract;
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 
 import javax.inject.Inject;
@@ -14,14 +14,14 @@ import javax.inject.Inject;
  * Created by naman on 7/9/17.
  */
 
-public class ProfilePresenter implements HomeContract.ProfilePresenter {
+public class ProfilePresenter implements BaseHomeContract.ProfilePresenter {
 
     private final UseCaseHandler mUsecaseHandler;
     private final LocalRepository localRepository;
 
     @Inject
     FetchClientImage fetchClientImageUseCase;
-    private HomeContract.ProfileView mProfileView;
+    private BaseHomeContract.ProfileView mProfileView;
 
     @Inject
     public ProfilePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
@@ -31,7 +31,7 @@ public class ProfilePresenter implements HomeContract.ProfilePresenter {
 
     @Override
     public void attachView(BaseView baseView) {
-        mProfileView = (HomeContract.ProfileView) baseView;
+        mProfileView = (BaseHomeContract.ProfileView) baseView;
         mProfileView.setPresenter(this);
     }
 

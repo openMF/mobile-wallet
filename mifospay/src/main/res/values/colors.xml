@@ -19,6 +19,7 @@
     <color name="colorTextDisabled">@color/colorBlack38</color>
 
     <color name="colorAccentBlue">#000AFF</color>
+    <color name="colorAccentBlue50">#80000AFF</color>
     <color name="colorAccentBlack">#2F3542</color>
     <color name="colorAccentYellow">#FFF700</color>
     <color name="colorListImageBackground">#E6E6E6</color>
@@ -33,6 +34,8 @@
 
     <color name="colorChangeProfileImageShapeBackground">@color/colorAccentBlack</color>
     <color name="colorChangeProfileImageShapeText">@color/colorPrimary</color>
+
+    <color name="colorBottomViewNotFocusedIcon">@color/colorAccentBlue50</color>
 
 
 

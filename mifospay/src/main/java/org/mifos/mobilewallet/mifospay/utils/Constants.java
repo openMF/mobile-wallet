@@ -78,8 +78,8 @@ public class Constants {
     public static final String TRANSACTION_DETAILS = "Transaction Details";
     public static final String ACCOUNT_NUMBER = "account Number";
     public static final String TRANSACTION = "transaction";
-    public static final String TRANSACTIONS_HISTORY = "Transactions History";
-    public static final String SPECIFIC_TRANSACTIONS = "Specific Transactions";
+    public static final String TRANSACTIONS_HISTORY = "TransactionsHistory History";
+    public static final String SPECIFIC_TRANSACTIONS = "Specific TransactionsHistory";
     public static final String RECEIPT_DOMAIN = "https://receipt.mifospay.com/";
     public static final String OTHER = "Other";
     public static final String CREDIT = "Credit";
@@ -169,6 +169,8 @@ public class Constants {
     // id to handle the notification in the notification tray
     public static final int NOTIFICATION_ID = 100;
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
+
+    public static final int HOME_HISTORY_TRANSACTIONS_LIMIT = 5;
 
 
 }

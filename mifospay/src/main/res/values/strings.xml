@@ -30,15 +30,17 @@
     <string name="expiry_date">Expiry Date</string>
     <string name="add">ADD</string>
     <string name="home">Home</string>
-    <string name="transfer">Transfer</string>
+    <string name="payments">Payments</string>
+    <string name="finance">Finance</string>
     <string name="profile">Profile</string>
     <string name="mifos_pay">Mifos Pay</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="enter_name_or_vpa">Enter name or vpa</string>
-    <string name="balance">Balance</string>
-    <string name="transaction_history">TRANSACTION HISTORY</string>
+    <string name="balance_hint">Total balance</string>
+    <string name="show_more">Show more</string>
+    <string name="transaction_history">Transaction History</string>
     <string name="invoices">Invoices</string>
     <string name="request">Request</string>
     <string name="bank_account">Bank Account</string>
@@ -94,6 +96,10 @@
     <string name="field_required">Field Required</string>
     <string name="card_expiry_message">Your card has expired</string>
 
+    <string name="create_an_account">Create an account</string>
+    <string name="sign_up_as_merchant">Sign up as merchant</string>
+    <string name="sign_up_as_customer">Sign up as customer</string>
+
     <string-array name="months_array">
         <item>01</item>
         <item>02</item>
@@ -122,5 +128,10 @@
     <string name="answer3">Answer 1</string>
     <string name="answer4">Answer 1</string>
 
-
+    <string name="fetching">Fetching…</string>
+    <string name="empty_no_transaction_history_title">Your history is empty</string>
+    <string name="empty_no_transaction_history_subtitle">Complete a transfer and come back here to see results!</string>
+    <string name="error_oops">Oops!</string>
+    <string name="error_no_transaction_history_subtitle">Couldn\'t fetch transactions history. Please, try again.</string>
+    <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
 </resources>

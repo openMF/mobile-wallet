@@ -13,11 +13,10 @@ import org.mifos.mobilewallet.mifospay.bank.ui.SetupUpiPinActivity;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.SearchActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
-import org.mifos.mobilewallet.mifospay.home.ui.HomeActivity;
-import org.mifos.mobilewallet.mifospay.home.ui.HomeFragment;
+import org.mifos.mobilewallet.mifospay.home.ui.MainActivity;
 import org.mifos.mobilewallet.mifospay.home.ui.ProfileFragment;
 import org.mifos.mobilewallet.mifospay.home.ui.TransferFragment;
-import org.mifos.mobilewallet.mifospay.home.ui.WalletFragment;
+import org.mifos.mobilewallet.mifospay.home.ui.HomeFragment;
 import org.mifos.mobilewallet.mifospay.injection.PerActivity;
 import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
 import org.mifos.mobilewallet.mifospay.invoice.ui.InvoiceActivity;
@@ -50,11 +49,9 @@ public interface ActivityComponent {
 
     void inject(LoginActivity loginActivity);
 
-    void inject(HomeActivity homeActivity);
+    void inject(MainActivity mainActivity);
 
     void inject(HomeFragment homeFragment);
-
-    void inject(WalletFragment walletFragment);
 
     void inject(TransactionsHistoryActivity transactionsHistoryActivity);
 
