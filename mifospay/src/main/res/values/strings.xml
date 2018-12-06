@@ -134,4 +134,9 @@
     <string name="error_oops">Oops!</string>
     <string name="error_no_transaction_history_subtitle">Couldn\'t fetch transactions history. Please, try again.</string>
     <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+    <string name="account_details">Account Details</string>
+    <string name="edit_profile">Edit profile</string>
+    <string name="email">E-mail</string>
+    <string name="vpa">Virtual payment address (VPA)</string>
+    <string name="mobile">Mobile number</string>
 </resources>

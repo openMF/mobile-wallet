@@ -37,7 +37,7 @@ public class HomeAdapter
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.item_transaction_history, parent, false);
+                R.layout.item_casual_list, parent, false);
         return new ViewHolder(v);
     }
 
@@ -91,13 +91,13 @@ public class HomeAdapter
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tv_transaction_history_status)
+        @BindView(R.id.tv_item_casual_list_title)
         TextView tvTransactionStatus;
 
-        @BindView(R.id.tv_transaction_history_amount)
+        @BindView(R.id.tv_item_casual_list_optional_caption)
         TextView tvTransactionAmount;
 
-        @BindView(R.id.tv_transaction_history_date)
+        @BindView(R.id.tv_item_casual_list_subtitle)
         TextView tvTransactionDate;
 
         public ViewHolder(View v) {
