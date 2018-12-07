@@ -81,6 +81,12 @@ public interface BaseHomeContract {
 
         void showProfile(Client client);
 
+        void showEmail(String email);
+
+        void showVpa(String vpa);
+
+        void showMobile(String mobile);
+
         void showToast(String message);
 
         void showSnackbar(String message);
@@ -90,7 +96,9 @@ public interface BaseHomeContract {
 
     interface ProfilePresenter extends BasePresenter {
 
-        void fetchprofile();
+        void fetchProfile();
+
+        void fetchAccountDetails();
 
         void fetchClientImage();
     }
