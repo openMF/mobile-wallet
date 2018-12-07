@@ -139,4 +139,12 @@
     <string name="email">E-mail</string>
     <string name="vpa">Virtual payment address (VPA)</string>
     <string name="mobile">Mobile number</string>
+    <string name="change_passcode">Change passcode</string>
+    <string name="change_password">Change password</string>
+    <string name="current_password">Current password</string>
+    <string name="new_password">New password</string>
+    <string name="confirm_new_password">Confirm new password</string>
+    <string name="discard_changes_and_exit">Discard changes and exit?</string>
+    <string name="discard_changes_and_exit_description">This will discard all unsaved changes and return to the Profile section.</string>
+    <string name="accept">accept</string>
 </resources>

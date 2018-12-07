@@ -172,5 +172,8 @@ public class Constants {
 
     public static final int HOME_HISTORY_TRANSACTIONS_LIMIT = 5;
 
+    public static final String ERROR_FIELDS_CANNOT_BE_EMPTY = "Fields cannot be empty";
+    public static final String ERROR_VALIDATING_PASSWORD = "Passwords are not the same";
+
 
 }
