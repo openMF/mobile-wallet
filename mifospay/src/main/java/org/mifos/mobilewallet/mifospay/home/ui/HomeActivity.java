@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.home.ui;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
@@ -24,6 +25,7 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
     HomePresenter mPresenter;
 
     HomeContract.HomePresenter mHomePresenter;
+    private HomeFragment mHomeFragment;
 
 //    private TextView tvUsername;
 //    private ImageView ivUserImage;
@@ -43,7 +45,8 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
         setToolbarTitle(Constants.HOME);
         hideBackButton();
 
-        replaceFragment(HomeFragment.newInstance(), false, R.id.container);
+        mHomeFragment = HomeFragment.newInstance();
+        replaceFragment(mHomeFragment, false, R.id.container);
 
         swipeLayout.setEnabled(false);
 
@@ -78,5 +81,16 @@ public class HomeActivity extends BaseActivity implements HomeContract.HomeView 
 //        TextDrawable drawable = TextDrawable.builder()
 //                .buildRound(client.getName().substring(0, 1), R.color.colorPrimary);
 //        ivUserImage.setImageDrawable(drawable);
+    }
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = mHomeFragment.getChildFragmentManager()
+                .findFragmentById(R.id.bottom_navigation_fragment_container);
+        if (fragment != null && !(fragment instanceof WalletFragment) && fragment.isVisible()) {
+            mHomeFragment.navigateFragment(R.id.action_home, true);
+            return;
+        }
+        super.onBackPressed();
     }
 }

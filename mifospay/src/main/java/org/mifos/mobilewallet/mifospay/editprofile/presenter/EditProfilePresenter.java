@@ -121,9 +121,24 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
     }
 
     @Override
+    public void handleProfileImageChangeRequest() {
+        mEditProfileView.changeProfileImage();
+    }
+
+    @Override
+    public void handleProfileImageRemoved() {
+        mEditProfileView.removeProfileImage();
+        setDefaultUserImage();
+    }
+
+    @Override
     public void fetchUserDetails() {
         mEditProfileView.setEmail(mPreferencesHelper.getEmail());
         mEditProfileView.setMobile(mPreferencesHelper.getMobile());
-        mEditProfileView.setImage(mPreferencesHelper.getFullName()); // client name
+        setDefaultUserImage();
+    }
+
+    private void setDefaultUserImage() {
+        mEditProfileView.setImage(mPreferencesHelper.getFullName());
     }
 }

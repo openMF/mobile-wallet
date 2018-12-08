@@ -3,13 +3,12 @@ package org.mifos.mobilewallet.mifospay.editprofile.ui;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.BitmapFactory;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
 import android.view.View;
@@ -20,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.hbb20.CountryCodePicker;
+import com.yalantis.ucrop.UCrop;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -30,6 +30,9 @@ import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 import org.mifos.mobilewallet.mifospay.utils.ValidateUtil;
+
+import java.io.File;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -42,14 +45,13 @@ public class EditProfileActivity extends BaseActivity implements
 
     private static final int REQUEST_READ_IMAGE = 1;
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 7;
+
     @Inject
     EditProfilePresenter mPresenter;
 
     EditProfileContract.EditProfilePresenter mEditProfilePresenter;
     @BindView(R.id.iv_user_image)
     ImageView mIvUserImage;
-    @BindView(R.id.tv_change_photo)
-    TextView mTvChangePhoto;
     @BindView(R.id.et_current_password)
     EditText mEtCurrentPassword;
     @BindView(R.id.et_new_password)
@@ -104,8 +106,24 @@ public class EditProfileActivity extends BaseActivity implements
     LinearLayout mLlMobile;
     @BindView(R.id.cv_mobile)
     CardView mCvMobile;
+
     private String email;
     private String mobile;
+    private BottomSheetDialog bottomSheetDialog;
+
+    class BottomSheetViews {
+        @OnClick(R.id.ll_change_profile_image_dialog_row)
+        public void onChangeProfileImageClicked() {
+            mPresenter.handleProfileImageChangeRequest();
+            bottomSheetDialog.dismiss();
+        }
+
+        @OnClick(R.id.ll_remove_profile_image_dialog_row)
+        public void onRemoveProfileImageClicked() {
+            mEditProfilePresenter.handleProfileImageRemoved();
+            bottomSheetDialog.dismiss();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,11 +134,21 @@ public class EditProfileActivity extends BaseActivity implements
         showBackButton();
         setToolbarTitle(Constants.EDIT_PROFILE);
         mPresenter.attachView(this);
+        mCcpNewCode.registerCarrierNumberEditText(mEtNewMobileNumber);
 
         showProgressDialog(Constants.PLEASE_WAIT);
         mEditProfilePresenter.fetchUserDetails();
 
-        mCcpNewCode.registerCarrierNumberEditText(mEtNewMobileNumber);
+        setupBottomSheetDialog();
+    }
+
+    private void setupBottomSheetDialog() {
+        bottomSheetDialog = new BottomSheetDialog(EditProfileActivity.this);
+        View sheetView = getLayoutInflater()
+                .inflate(R.layout.dialog_change_profile_picture, null);
+        bottomSheetDialog.setContentView(sheetView);
+        BottomSheetViews bsv = new BottomSheetViews();
+        ButterKnife.bind(bsv, sheetView);
     }
 
     @Override
@@ -204,10 +232,15 @@ public class EditProfileActivity extends BaseActivity implements
             }
             AnimationUtil.expand(mLlMobile);
             mTvCurrentMobileNumber.setVisibility(View.GONE);
-            mEtNewMobileNumber.setText(mobile);
+            String mobileNumberWithCountryCodeExcluded = excludeCountryCodeFromString(mobile);
+            mEtNewMobileNumber.setText(mobileNumberWithCountryCodeExcluded);
         }
     }
 
+    private String excludeCountryCodeFromString(String str) {
+        String selectedCountryCode = mCcpNewCode.getSelectedCountryCode();
+        return str.substring(selectedCountryCode.length(), str.length());
+    }
 
     @OnClick({R.id.btn_password_cancel, R.id.btn_password_save, R.id.btn_passcode_cancel,
             R.id.btn_pasccode_save, R.id.btn_email_cancel, R.id.btn_email_save,
@@ -264,7 +297,8 @@ public class EditProfileActivity extends BaseActivity implements
 
             case R.id.btn_email_save:
                 showProgressDialog(Constants.PLEASE_WAIT);
-                if (ValidateUtil.validateEmail(mEtNewEmail.getText().toString())) {
+                String email = mEtNewEmail.getText().toString();
+                if (ValidateUtil.isValidEmail(email)) {
                     mEditProfilePresenter.updateEmail(mEtNewEmail.getText().toString());
                 } else {
                     hideProgressDialog();
@@ -274,6 +308,7 @@ public class EditProfileActivity extends BaseActivity implements
 
             case R.id.btn_mobile_save:
                 showProgressDialog(Constants.PLEASE_WAIT);
+
                 if (mCcpNewCode.isValidFullNumber()) {
                     mEditProfilePresenter.updateMobile(mCcpNewCode.getFullNumber());
                 } else {
@@ -284,23 +319,9 @@ public class EditProfileActivity extends BaseActivity implements
         }
     }
 
-    @OnClick(R.id.tv_change_photo)
-    public void onChangePhotoClicked() {
-
-        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    REQUEST_READ_EXTERNAL_STORAGE);
-        } else {
-
-            // Permission has already been granted
-            Intent i = new Intent(Intent.ACTION_PICK,
-                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-            startActivityForResult(i, REQUEST_READ_IMAGE);
-        }
+    @OnClick(R.id.iv_user_image)
+    public void onProfileImageClicked() {
+        bottomSheetDialog.show();
     }
 
     @Override
@@ -335,22 +356,47 @@ public class EditProfileActivity extends BaseActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_READ_IMAGE && resultCode == RESULT_OK && null != data) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
-            Cursor cursor = getContentResolver().query(selectedImage,
-                    filePathColumn, null, null, null);
-            cursor.moveToFirst();
-
-            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-            String picturePath = cursor.getString(columnIndex);
-            cursor.close();
-
-            mIvUserImage.setImageBitmap(BitmapFactory.decodeFile(picturePath));
-
-            // TODO: update image on server
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_READ_IMAGE && data != null) {
+                Uri selectedImageUri = data.getData();
+                if (selectedImageUri != null) {
+                    startCrop(selectedImageUri);
+                }
+            } else if (requestCode == UCrop.REQUEST_CROP) {
+                handleCropResult(data);
+            }
         }
+    }
+
+    private void startCrop(@NonNull Uri uri) {
+        String destinationFileName = UUID.randomUUID().toString() + ".jpg";
+
+        UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationFileName)));
+        uCrop = getConfiguredUCrop(uCrop);
+        uCrop.start(EditProfileActivity.this);
+    }
+
+    private UCrop getConfiguredUCrop(UCrop uCrop) {
+        uCrop = uCrop.withAspectRatio(1, 1);
+
+        int size = (int) getResources().getDimension(R.dimen.user_profile_image_size);
+        if (size > UCrop.MIN_SIZE) {
+            uCrop = uCrop.withMaxResultSize(size, size);
+        }
+
+        UCrop.Options options = new UCrop.Options();
+        options.setCompressionFormat(Bitmap.CompressFormat.JPEG);
+        options.setCompressionQuality(80);
+
+        options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary));
+        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.primaryBlue));
+        options.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.black));
+        options.setCircleDimmedLayer(true);
+        options.setShowCropFrame(false);
+        options.setCropGridColumnCount(0);
+        options.setCropGridRowCount(0);
+        return uCrop.withOptions(options);
     }
 
     @Override
@@ -404,6 +450,45 @@ public class EditProfileActivity extends BaseActivity implements
     }
 
     @Override
+    public void changeProfileImage() {
+        pickImageFromGallery();
+    }
+
+    private void pickImageFromGallery() {
+        if (Build.VERSION.SDK_INT >= 23 &&
+                ContextCompat.checkSelfPermission(getApplicationContext(),
+                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_READ_EXTERNAL_STORAGE);
+        } else {
+            Intent i = new Intent(Intent.ACTION_GET_CONTENT)
+                    .setType("image/*")
+                    .addCategory(Intent.CATEGORY_OPENABLE);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                String[] mimeTypes = {"image/jpeg", "image/png"};
+                i.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+            }
+
+            startActivityForResult(Intent.createChooser(i,
+                    getString(R.string.label_select_picture)), REQUEST_READ_IMAGE);
+        }
+    }
+
+    private void handleCropResult(@NonNull Intent result) {
+        final Uri resultUri = UCrop.getOutput(result);
+        if (resultUri != null) {
+            mIvUserImage.setImageURI(resultUri);
+        }
+    }
+
+    @Override
+    public void removeProfileImage() {
+        // TODO: Remove image from database
+    }
+
+    @Override
     public void setEmail(String email) {
         this.email = email;
         mTvCurrentEmail.setText(email);
@@ -417,8 +502,10 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void setImage(String fullName) {
-        TextDrawable drawable = TextDrawable.builder().buildRound(fullName.substring(0, 1),
-                R.color.colorPrimary);
+        TextDrawable drawable = TextDrawable.builder().beginConfig()
+                .width((int)getResources().getDimension(R.dimen.user_profile_image_size))
+                .height((int)getResources().getDimension(R.dimen.user_profile_image_size))
+                .endConfig().buildRound(fullName.substring(0, 1), R.color.colorPrimary);
         mIvUserImage.setImageDrawable(drawable);
         hideProgressDialog();
     }

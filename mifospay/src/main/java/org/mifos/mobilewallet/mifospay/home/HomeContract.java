@@ -51,6 +51,10 @@ public interface HomeContract {
         void showSnackbar(String message);
 
         void showMobile(String mobileNo);
+
+        void hideSwipeProgress();
+
+        void showClientDetails(String externalId, double amount);
     }
 
     interface TransferPresenter extends BasePresenter {
@@ -58,6 +62,8 @@ public interface HomeContract {
         void fetchVpa();
 
         void fetchMobile();
+
+        void checkBalanceAvailability(String externalId, double transferAmount);
     }
 
     interface ProfileView extends BaseView<ProfilePresenter> {
