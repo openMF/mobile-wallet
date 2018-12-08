@@ -91,6 +91,13 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
     }
 
     @Override
+    public void cancelProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.cancel();
+        }
+    }
+
+    @Override
     public void setToolbarTitle(String title) {
         if (getSupportActionBar() != null && getTitle() != null) {
             setTitle(title);
