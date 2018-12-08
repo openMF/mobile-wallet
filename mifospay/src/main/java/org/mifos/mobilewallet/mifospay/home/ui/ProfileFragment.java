@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfilePresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -82,10 +84,6 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
 
         setupUi();
 
-        mProfilePresenter.fetchProfile();
-        mProfilePresenter.fetchAccountDetails();
-        mProfilePresenter.fetchClientImage();
-
         return rootView;
     }
 
@@ -112,17 +110,32 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mProfilePresenter.fetchProfile();
+        mProfilePresenter.fetchAccountDetails();
+        mProfilePresenter.fetchClientImage();
+    }
+
+    @Override
     public void setPresenter(BaseHomeContract.ProfilePresenter presenter) {
         this.mProfilePresenter = presenter;
     }
 
     @OnClick(R.id.iv_user_image)
     public void onUserImageEditClicked() {
-        // TODO: EDIT USER IMAGE
+        if (getActivity() != null) {
+            Intent i = new Intent(getActivity(), EditProfileActivity.class);
+            i.putExtra(Constants.CHANGE_PROFILE_IMAGE_KEY, Constants.CHANGE_PROFILE_IMAGE_VALUE);
+            startActivity(i);
+        }
     }
 
     @OnClick(R.id.btn_profile_bottom_sheet_action)
     public void onEditProfileClicked() {
+        if (getActivity() != null) {
+            getActivity().startActivity(new Intent(getActivity(), EditProfileActivity.class));
+        }
     }
 
     @Override

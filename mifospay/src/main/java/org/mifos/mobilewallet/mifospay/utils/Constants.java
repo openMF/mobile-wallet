@@ -175,5 +175,6 @@ public class Constants {
     public static final String ERROR_FIELDS_CANNOT_BE_EMPTY = "Fields cannot be empty";
     public static final String ERROR_VALIDATING_PASSWORD = "Passwords are not the same";
 
-
+    public static final String CHANGE_PROFILE_IMAGE_KEY = "CHANGE_PROFILE_IMAGE_KEY";
+    public static final String CHANGE_PROFILE_IMAGE_VALUE = "CHANGE_PROFILE_IMAGE_VALUE";
 }

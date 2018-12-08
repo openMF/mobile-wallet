@@ -120,6 +120,10 @@ public class EditProfileActivity extends BaseActivity implements
         mPresenter.attachView(this);
         ccpCountryCode.registerCarrierNumberEditText(etMobileNumber);
         mEditProfilePresenter.fetchUserDetails();
+
+        if (isChangeImageRequestFromProfile()) {
+            bottomSheetDialog.show();
+        }
     }
 
     private void setupUi() {
@@ -136,6 +140,10 @@ public class EditProfileActivity extends BaseActivity implements
         bottomSheetDialog.setContentView(sheetView);
         BottomSheetViews bsv = new BottomSheetViews();
         ButterKnife.bind(bsv, sheetView);
+    }
+
+    private boolean isChangeImageRequestFromProfile() {
+        return getIntent().getStringExtra(Constants.CHANGE_PROFILE_IMAGE_KEY) != null;
     }
 
     @Override
