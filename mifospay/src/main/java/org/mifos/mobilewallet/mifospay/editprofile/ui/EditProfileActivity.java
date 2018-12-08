@@ -95,6 +95,7 @@ public class EditProfileActivity extends BaseActivity implements
     List<EditText> userDetailsInputs;
 
     private BottomSheetDialog bottomSheetDialog;
+    private AlertDialog alertDialog;
 
     class BottomSheetViews {
         @OnClick(R.id.ll_change_profile_image_dialog_row)
@@ -374,23 +375,31 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void showDiscardChangesDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,
-                R.style.AppTheme_Dialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog);
         builder.setTitle(R.string.discard_changes_and_exit);
         builder.setMessage(R.string.discard_changes_and_exit_description);
-        builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                mPresenter.onDialogPositive();
-            }
-        });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                mPresenter.onDialogNegative();
-            }
-        });
-        builder.show();
+        builder.setCancelable(true);
+
+        builder.setPositiveButton(
+                getString(R.string.accept),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mPresenter.onDialogPositive();
+                        dialog.dismiss();
+                    }
+                });
+
+        builder.setNegativeButton(
+                getString(R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mPresenter.onDialogNegative();
+                        dialog.dismiss();
+                    }
+                });
+
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override
@@ -435,6 +444,11 @@ public class EditProfileActivity extends BaseActivity implements
     @Override
     public void onPause() {
         super.onPause();
-        stopProgressBar();
+
+        cancelProgressDialog();
+
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
     }
 }
