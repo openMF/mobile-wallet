@@ -1,32 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/iv_empty_invoice"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:contentDescription="@string/nothing_in_invoices"
-        android:tint="@color/colorBlack38"
-        app:layout_constraintBottom_toTopOf="@id/tv_empty_invoice"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:srcCompat="@drawable/ic_outline_description_24dp" />
-
-    <TextView
-        android:id="@+id/tv_empty_invoice"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/inc_state_view"
+        layout="@layout/placeholder_state"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/value_12dp"
-        android:text="@string/nothing_in_invoices"
-        android:textColor="@color/colorBlack50"
-        android:textSize="@dimen/value_16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/iv_empty_invoice" />
-</android.support.constraint.ConstraintLayout>
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/marginItemsInSectionLarge"
+        android:visibility="gone" />
+
+</android.support.design.widget.CoordinatorLayout>

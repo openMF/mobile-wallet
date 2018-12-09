@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.home.ui;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,30 +10,55 @@ import android.view.ViewGroup;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
-import org.mifos.mobilewallet.mifospay.home.adapter.PaymentsAdapter;
+import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
+import org.mifos.mobilewallet.mifospay.payments.ui.HistoryFragment;
+import org.mifos.mobilewallet.mifospay.payments.ui.InvoicesFragment;
+import org.mifos.mobilewallet.mifospay.payments.ui.RequestFragment;
+import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class PaymentsFragment extends BaseFragment {
 
-    @BindView(R.id.vp_payments)
-    ViewPager mViewPager;
+    @BindView(R.id.vp_tab_layout)
+    ViewPager vpTabLayout;
 
-    @Nullable
+    @BindView(R.id.tl_tab_layout)
+    TabLayout tilTabLayout;
+
+    public static FinanceFragment newInstance() {
+        Bundle args = new Bundle();
+        FinanceFragment fragment = new FinanceFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        setToolbarTitle(getString(R.string.payments));
-        View root = inflater.inflate(R.layout.fragment_payments, container, false);
-        ButterKnife.bind(this, root);
-        String[] titles = {
-                getString(R.string.send),
-                getString(R.string.request),
-                getString(R.string.history),
-                getString(R.string.invoices)
-        };
-        mViewPager.setAdapter(new PaymentsAdapter(getChildFragmentManager(), titles));
-        return root;
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_finance, container, false);
+        ButterKnife.bind(this, rootView);
+
+        setupUi();
+        setupViewPager();
+        tilTabLayout.setupWithViewPager(vpTabLayout);
+
+        return rootView;
+    }
+
+    private void setupUi() {
+        setSwipeEnabled(false);
+        setToolbarTitle(getString(R.string.finance));
+    }
+
+    private void setupViewPager() {
+        TabLayoutAdapter tabLayoutAdapter
+                = new TabLayoutAdapter(getChildFragmentManager());
+        tabLayoutAdapter.addFragment(new SendFragment(), getString(R.string.send));
+        tabLayoutAdapter.addFragment(new RequestFragment(), getString(R.string.request));
+        tabLayoutAdapter.addFragment(new HistoryFragment(), getString(R.string.history));
+        tabLayoutAdapter.addFragment(new InvoicesFragment(), getString(R.string.invoices));
+        vpTabLayout.setAdapter(tabLayoutAdapter);
     }
 }
