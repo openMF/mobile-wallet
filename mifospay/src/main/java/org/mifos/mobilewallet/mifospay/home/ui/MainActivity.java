@@ -125,7 +125,8 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
                     break;
 
                 case R.id.action_finance:
-                    // TODO: REDESIGN - CREATE FINANCE FRAGMENT
+                    replaceFragment(FinanceFragment.newInstance(), false,
+                            R.id.bottom_navigation_fragment_container);
                     break;
 
                 case R.id.action_profile:
