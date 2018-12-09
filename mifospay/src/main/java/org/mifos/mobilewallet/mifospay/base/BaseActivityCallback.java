@@ -12,6 +12,8 @@ public interface BaseActivityCallback {
 
     void hideProgressDialog();
 
+    void cancelProgressDialog();
+
     void setToolbarTitle(String title);
 
     void setSwipeRefreshEnabled(boolean enabled);
