@@ -43,6 +43,7 @@
     <string name="transaction_history">Transaction History</string>
     <string name="invoices">Invoices</string>
     <string name="request">Request</string>
+    <string name="history">History</string>
     <string name="bank_account">Bank Account</string>
     <string name="qr_code">QR code</string>
     <string name="complete_kyc">Complete KYC</string>
@@ -130,6 +131,8 @@
 
     <string name="fetching">Fetching…</string>
     <string name="empty_no_transaction_history_title">Your history is empty</string>
+    <string name="nothing_in_invoices">Nothing in Invoices</string>
+    <string name="select_transfer_method">Select transfer method</string>
     <string name="empty_no_transaction_history_subtitle">Complete a transfer and come back here to see results!</string>
     <string name="error_oops">Oops!</string>
     <string name="error_no_transaction_history_subtitle">Couldn\'t fetch transactions history. Please, try again.</string>
