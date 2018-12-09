@@ -99,9 +99,26 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
 
     @Override
     public void showBackButton() {
+        showHomeButton();
+        setToolbarIcon(R.drawable.ic_arrow_back);
+    }
+
+    @Override
+    public void showCloseButton() {
+        showHomeButton();
+        setToolbarIcon(R.drawable.ic_close);
+    }
+
+    private void showHomeButton() {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void setToolbarIcon(int res) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeAsUpIndicator(res);
         }
     }
 

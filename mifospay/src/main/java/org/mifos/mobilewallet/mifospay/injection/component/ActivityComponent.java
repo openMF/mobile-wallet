@@ -28,6 +28,7 @@ import org.mifos.mobilewallet.mifospay.kyc.ui.KYCLevel3Fragment;
 import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment;
 import org.mifos.mobilewallet.mifospay.notification.ui.NotificationActivity;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
+import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
@@ -94,6 +95,8 @@ public interface ActivityComponent {
     void inject(MobileVerificationActivity mobileVerificationActivity);
 
     void inject(EditProfileActivity editProfileActivity);
+
+    void inject(EditPasswordActivity editPasswordActivity);
 
     void inject(SettingsActivity settingsActivity);
 

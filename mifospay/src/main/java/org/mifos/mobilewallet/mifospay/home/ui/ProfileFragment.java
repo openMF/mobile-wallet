@@ -123,7 +123,6 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
 
     @OnClick(R.id.btn_profile_bottom_sheet_action)
     public void onEditProfileClicked() {
-        // TODO: EDIT PROFILE
     }
 
     @Override

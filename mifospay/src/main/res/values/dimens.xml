@@ -57,5 +57,6 @@
     <dimen name="editable_image_hint_shape_size">32dp</dimen>
     <dimen name="editable_image_hint_border_width">2dp</dimen>
     <dimen name="editable_image_hint_icon_margin">16dp</dimen>
+    <dimen name="marginItemsInSectionExtraSmall">8dp</dimen>
 
 </resources>

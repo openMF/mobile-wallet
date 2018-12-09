@@ -115,6 +115,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".editprofile.ui.EditProfileActivity"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".settings.ui.SettingsActivity"
@@ -141,6 +142,8 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".password.ui.EditPasswordActivity"
             android:theme="@style/AppTheme" />
     </application>
 

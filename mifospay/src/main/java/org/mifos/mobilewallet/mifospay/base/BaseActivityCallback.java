@@ -18,6 +18,8 @@ public interface BaseActivityCallback {
 
     void showBackButton();
 
+    void showCloseButton();
+
     void hideBackButton();
 
     SwipeRefreshLayout getSwipeRefreshLayout();
