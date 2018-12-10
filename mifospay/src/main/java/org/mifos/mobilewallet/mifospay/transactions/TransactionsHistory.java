@@ -19,6 +19,8 @@ import static org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER
 
 public class TransactionsHistory {
 
+    public TransactionsContract.TransactionsHistoryAsync delegate = null;
+
     private List<Transaction> transactions;
     private final UseCaseHandler mUsecaseHandler;
 
@@ -40,7 +42,7 @@ public class TransactionsHistory {
         transactions = new ArrayList<>();
     }
 
-    public List<Transaction> getTransactionHistoryOrReturnNullOnError(long accountId) {
+    public void fetchTransactionsHistory(long accountId) {
         mUsecaseHandler.execute(fetchAccountTransactionsUseCase,
                 new FetchAccountTransactions.RequestValues(accountId),
                 new UseCase.UseCaseCallback<FetchAccountTransactions.ResponseValue>() {
@@ -49,6 +51,7 @@ public class TransactionsHistory {
                     public void onSuccess(FetchAccountTransactions.ResponseValue response) {
 
                         transactions = response.getTransactions();
+                        delegate.onTransactionsFetchCompleted(transactions);
 
                         if (transactions != null && transactions.size() > 0) {
 
@@ -86,6 +89,7 @@ public class TransactionsHistory {
 
                                 @Override
                                 public void onComplete() {
+                                    delegate.onTransactionsFetchCompleted(transactions);
                                 }
 
                                 @Override
@@ -101,6 +105,5 @@ public class TransactionsHistory {
                         transactions = null;
                     }
                 });
-        return transactions;
     }
 }
