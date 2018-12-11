@@ -3,15 +3,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:gravity="center_horizontal"
-    android:orientation="vertical">
+    android:gravity="center"
+    android:orientation="vertical" >
 
     <ImageView
         android:id="@+id/iv_empty_no_transaction_history"
         android:layout_width="@dimen/emptyStateImageSize"
         android:layout_height="@dimen/emptyStateImageSize"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/ic_error_state" />
+        app:srcCompat="@drawable/ic_error_state"
+        android:contentDescription="@string/content_description_placeholder" />
 
     <TextView
         android:id="@+id/tv_empty_no_transaction_history_title"
