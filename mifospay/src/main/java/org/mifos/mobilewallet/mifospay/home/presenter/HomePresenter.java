@@ -10,6 +10,7 @@ import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactio
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
+import org.mifos.mobilewallet.mifospay.transactions.TransactionsContract;
 import org.mifos.mobilewallet.mifospay.transactions.TransactionsHistory;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
@@ -21,7 +22,8 @@ import javax.inject.Inject;
  * Created by naman on 17/8/17.
  */
 
-public class HomePresenter implements BaseHomeContract.HomePresenter {
+public class HomePresenter implements BaseHomeContract.HomePresenter,
+        TransactionsContract.TransactionsHistoryAsync {
 
     @Inject
     FetchAccount mFetchAccountUseCase;
@@ -52,6 +54,7 @@ public class HomePresenter implements BaseHomeContract.HomePresenter {
     public void attachView(BaseView baseView) {
         mHomeView = (BaseHomeContract.HomeView) baseView;
         mHomeView.setPresenter(this);
+        transactionsHistory.delegate = this;
     }
 
     @Override
@@ -62,9 +65,7 @@ public class HomePresenter implements BaseHomeContract.HomePresenter {
                     @Override
                     public void onSuccess(FetchAccount.ResponseValue response) {
                         mHomeView.showAccountBalance(response.getAccount());
-                        handleTransactionsHistory(transactionsHistory
-                                .getTransactionHistoryOrReturnNullOnError(response
-                                        .getAccount().getId()));
+                        transactionsHistory.fetchTransactionsHistory(response.getAccount().getId());
                         mHomeView.hideSwipeProgress();
                     }
 
@@ -76,6 +77,11 @@ public class HomePresenter implements BaseHomeContract.HomePresenter {
                         mHomeView.hideSwipeProgress();
                     }
                 });
+    }
+
+    @Override
+    public void onTransactionsFetchCompleted(List<Transaction> transactions) {
+        handleTransactionsHistory(transactions);
     }
 
     private void handleTransactionsHistory(List<Transaction> transactions) {

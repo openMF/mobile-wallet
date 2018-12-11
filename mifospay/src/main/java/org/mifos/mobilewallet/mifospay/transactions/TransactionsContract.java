@@ -13,6 +13,12 @@ import java.util.List;
 
 public interface TransactionsContract {
 
+    interface TransactionsHistoryAsync {
+
+        void onTransactionsFetchCompleted(List<Transaction> transactions);
+
+    }
+
     interface TransactionsHistoryView extends BaseView<TransactionsHistoryPresenter> {
 
         void showTransactions(List<Transaction> transactions);
