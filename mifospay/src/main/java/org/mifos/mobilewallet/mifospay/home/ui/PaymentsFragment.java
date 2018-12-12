@@ -27,9 +27,9 @@ public class PaymentsFragment extends BaseFragment {
     @BindView(R.id.tl_tab_layout)
     TabLayout tilTabLayout;
 
-    public static FinanceFragment newInstance() {
+    public static PaymentsFragment newInstance() {
         Bundle args = new Bundle();
-        FinanceFragment fragment = new FinanceFragment();
+        PaymentsFragment fragment = new PaymentsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,7 +49,7 @@ public class PaymentsFragment extends BaseFragment {
 
     private void setupUi() {
         setSwipeEnabled(false);
-        setToolbarTitle(getString(R.string.finance));
+        setToolbarTitle(getString(R.string.payments));
     }
 
     private void setupViewPager() {
