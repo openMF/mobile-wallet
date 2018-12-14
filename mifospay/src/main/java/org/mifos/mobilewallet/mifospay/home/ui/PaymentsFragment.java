@@ -10,8 +10,8 @@ import android.view.ViewGroup;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.history.ui.HistoryFragment;
 import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
-import org.mifos.mobilewallet.mifospay.payments.ui.HistoryFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.InvoicesFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.RequestFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;

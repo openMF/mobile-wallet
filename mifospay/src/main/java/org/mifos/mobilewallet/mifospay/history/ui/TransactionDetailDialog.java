@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.transactions.ui;
+package org.mifos.mobilewallet.mifospay.history.ui;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -19,8 +19,8 @@ import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
-import org.mifos.mobilewallet.mifospay.transactions.TransactionsContract;
-import org.mifos.mobilewallet.mifospay.transactions.presenter.TransactionDetailPresenter;
+import org.mifos.mobilewallet.mifospay.history.HistoryContract;
+import org.mifos.mobilewallet.mifospay.history.presenter.TransactionDetailPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import java.util.ArrayList;
@@ -37,12 +37,12 @@ import butterknife.Unbinder;
  */
 
 public class TransactionDetailDialog extends BottomSheetDialogFragment implements
-        TransactionsContract.TransactionDetailView {
+        HistoryContract.TransactionDetailView {
 
     @Inject
     TransactionDetailPresenter mPresenter;
 
-    TransactionsContract.TransactionDetailPresenter mTransactionDetailPresenter;
+    HistoryContract.TransactionDetailPresenter mTransactionDetailPresenter;
 
     @BindView(R.id.tv_transaction_id)
     TextView tvTransactionId;
@@ -102,7 +102,7 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
     private ArrayList<Transaction> transactions;
 
     @Override
-    public void setPresenter(TransactionsContract.TransactionDetailPresenter presenter) {
+    public void setPresenter(HistoryContract.TransactionDetailPresenter presenter) {
         mTransactionDetailPresenter = presenter;
     }
 

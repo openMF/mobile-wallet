@@ -13,6 +13,9 @@ import org.mifos.mobilewallet.mifospay.bank.ui.SetupUpiPinActivity;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.SearchActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
+import org.mifos.mobilewallet.mifospay.history.ui.HistoryFragment;
+import org.mifos.mobilewallet.mifospay.history.ui.SpecificTransactionsActivity;
+import org.mifos.mobilewallet.mifospay.history.ui.TransactionDetailDialog;
 import org.mifos.mobilewallet.mifospay.home.ui.HomeFragment;
 import org.mifos.mobilewallet.mifospay.home.ui.MainActivity;
 import org.mifos.mobilewallet.mifospay.home.ui.ProfileFragment;
@@ -34,9 +37,6 @@ import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 import org.mifos.mobilewallet.mifospay.registration.ui.MobileVerificationActivity;
 import org.mifos.mobilewallet.mifospay.registration.ui.SignupActivity;
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
-import org.mifos.mobilewallet.mifospay.transactions.ui.SpecificTransactionsActivity;
-import org.mifos.mobilewallet.mifospay.transactions.ui.TransactionDetailDialog;
-import org.mifos.mobilewallet.mifospay.transactions.ui.TransactionsHistoryActivity;
 
 import dagger.Component;
 
@@ -52,7 +52,7 @@ public interface ActivityComponent {
 
     void inject(HomeFragment homeFragment);
 
-    void inject(TransactionsHistoryActivity transactionsHistoryActivity);
+    void inject(HistoryFragment HistoryFragment);
 
     void inject(SearchActivity searchActivity);
 

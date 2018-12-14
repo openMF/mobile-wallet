@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.transactions.ui;
+package org.mifos.mobilewallet.mifospay.history.ui;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -12,9 +12,9 @@ import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
-import org.mifos.mobilewallet.mifospay.transactions.TransactionsContract;
-import org.mifos.mobilewallet.mifospay.transactions.presenter.SpecificTransactionsPresenter;
-import org.mifos.mobilewallet.mifospay.transactions.ui.adapter.SpecificTransactionsAdapter;
+import org.mifos.mobilewallet.mifospay.history.HistoryContract;
+import org.mifos.mobilewallet.mifospay.history.presenter.SpecificTransactionsPresenter;
+import org.mifos.mobilewallet.mifospay.history.ui.adapter.SpecificTransactionsAdapter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 
@@ -26,12 +26,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class SpecificTransactionsActivity extends BaseActivity implements
-        TransactionsContract.SpecificTransactionsView {
+        HistoryContract.SpecificTransactionsView {
 
     @Inject
     SpecificTransactionsPresenter mPresenter;
 
-    TransactionsContract.SpecificTransactionsPresenter mSpecificTransactionsPresenter;
+    HistoryContract.SpecificTransactionsPresenter mSpecificTransactionsPresenter;
 
     @Inject
     SpecificTransactionsAdapter mSpecificTransactionsAdapter;
@@ -90,7 +90,7 @@ public class SpecificTransactionsActivity extends BaseActivity implements
     }
 
     @Override
-    public void setPresenter(TransactionsContract.SpecificTransactionsPresenter presenter) {
+    public void setPresenter(HistoryContract.SpecificTransactionsPresenter presenter) {
         mSpecificTransactionsPresenter = presenter;
     }
 

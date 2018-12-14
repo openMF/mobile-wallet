@@ -20,8 +20,8 @@ import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
-import org.mifos.mobilewallet.mifospay.home.adapter.HomeAdapter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
@@ -44,7 +44,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     BaseHomeContract.HomePresenter mHomePresenter;
 
     @Inject
-    HomeAdapter mHomeAdapter;
+    HistoryAdapter mHistoryAdapter;
 
     @BindView(R.id.tv_account_balance)
     TextView mTvAccountBalance;
@@ -162,7 +162,8 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
 
     private void setupRecyclerView() {
         rvHomeBottomSheetContent.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvHomeBottomSheetContent.setAdapter(mHomeAdapter);
+        mHistoryAdapter.setContext(getActivity());
+        rvHomeBottomSheetContent.setAdapter(mHistoryAdapter);
     }
 
     @Override
@@ -185,7 +186,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     public void showTransactionsHistory(List<Transaction> transactions) {
         vStateView.setVisibility(View.GONE);
         rvHomeBottomSheetContent.setVisibility(View.VISIBLE);
-        mHomeAdapter.setData(transactions);
+        mHistoryAdapter.setData(transactions);
     }
 
     @Override

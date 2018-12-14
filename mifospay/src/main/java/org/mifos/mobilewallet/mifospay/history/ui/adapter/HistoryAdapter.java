@@ -1,17 +1,17 @@
-package org.mifos.mobilewallet.mifospay.transactions.ui.adapter;
+package org.mifos.mobilewallet.mifospay.history.ui.adapter;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,20 +25,20 @@ import butterknife.ButterKnife;
  * Created by naman on 17/8/17.
  */
 
-public class TransactionsAdapter
-        extends RecyclerView.Adapter<TransactionsAdapter.ViewHolder> {
+public class HistoryAdapter
+        extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
-    private Context context;
     private List<Transaction> transactions;
+    private Context context;
 
     @Inject
-    public TransactionsAdapter() {
+    public HistoryAdapter() {
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.item_transaction, parent, false);
+                R.layout.item_casual_list, parent, false);
         return new ViewHolder(v);
     }
 
@@ -46,25 +46,32 @@ public class TransactionsAdapter
     public void onBindViewHolder(ViewHolder holder, int position) {
         Transaction transaction = transactions.get(position);
 
-        holder.tvTransactionAmount.setText(transaction.getCurrency().getCode() + " " +
-                transaction.getAmount());
+        String balance = Utils.getFormattedAccountBalance(transaction.getAmount());
+        String currency = transaction.getCurrency().getCode();
+        holder.tvTransactionAmount.setText(String.format("%s %s", currency, balance));
         holder.tvTransactionDate.setText(transaction.getDate());
-        holder.tvTransactionId.setText(transaction.getTransactionId());
+
+        if (isBalancePositive(balance) && context != null) {
+            int color = ContextCompat.getColor(context, R.color.colorAccentBlue);
+            holder.tvTransactionAmount.setTextColor(color);
+        }
 
         switch (transaction.getTransactionType()) {
             case DEBIT:
                 holder.tvTransactionStatus.setText(Constants.DEBIT);
-                holder.tvTransactionAmount.setTextColor(Color.RED);
                 break;
             case CREDIT:
                 holder.tvTransactionStatus.setText(Constants.CREDIT);
-                holder.tvTransactionAmount.setTextColor(Color.parseColor("#009688"));
                 break;
             case OTHER:
                 holder.tvTransactionStatus.setText(Constants.OTHER);
-                holder.tvTransactionAmount.setTextColor(Color.YELLOW);
                 break;
         }
+    }
+
+    private boolean isBalancePositive(String balance) {
+        balance = balance.replaceAll("[,.]", "");
+        return Double.parseDouble(balance) > 0;
     }
 
     @Override
@@ -95,20 +102,14 @@ public class TransactionsAdapter
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tv_transaction_id)
-        TextView tvTransactionId;
-
-        @BindView(R.id.tv_transaction_status)
+        @BindView(R.id.tv_item_casual_list_title)
         TextView tvTransactionStatus;
 
-        @BindView(R.id.tv_transaction_amount)
+        @BindView(R.id.tv_item_casual_list_optional_caption)
         TextView tvTransactionAmount;
 
-        @BindView(R.id.tv_transaction_date)
+        @BindView(R.id.tv_item_casual_list_subtitle)
         TextView tvTransactionDate;
-
-        @BindView(R.id.iv_transaction_status)
-        ImageView ivTransactionStatus;
 
         public ViewHolder(View v) {
             super(v);
