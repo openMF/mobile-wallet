@@ -179,9 +179,14 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
             requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
         } else {
 
-            // Permission has already been granted
-            Intent i = new Intent(getActivity(), ReadQrActivity.class);
-            startActivityForResult(i, SCAN_QR_REQUEST_CODE);
+            if (etAmount.getText().toString().equals("")) {
+                etAmount.requestFocus();
+                etAmount.setError("Please enter amount");
+            } else {
+                // Permission has already been granted
+                Intent i = new Intent(getActivity(), ReadQrActivity.class);
+                startActivityForResult(i, SCAN_QR_REQUEST_CODE);
+            }
         }
     }
 
