@@ -149,8 +149,17 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         String eamount = etAmount.getText().toString().trim();
         String mobileNumber = mEtMobileNumber.getText().toString().trim().replaceAll("\\s+", "");
         if (eamount.equals("") || (externalId.equals("") && mobileNumber.equals(""))) {
-            Toast.makeText(getActivity(),
-                    Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
+
+            if (eamount.equals("")) {
+                etAmount.requestFocus();
+                etAmount.setError("Please enter amount");
+            }
+
+            if (externalId.equals("")) {
+                etVpa.requestFocus();
+                etVpa.setError("Please enter Virtual Payment Address");
+            }
+
         } else {
             double amount = Double.parseDouble(eamount);
             if (amount <= 0) {
