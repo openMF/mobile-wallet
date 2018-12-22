@@ -120,7 +120,7 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
                     break;
 
                 case R.id.action_payments:
-                    replaceFragment(new PaymentsFragment(), false,
+                    replaceFragment(PaymentsFragment.newInstance(), false,
                             R.id.bottom_navigation_fragment_container);
                     break;
 
