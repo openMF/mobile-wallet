@@ -1,7 +1,9 @@
 package org.mifos.mobilewallet.mifospay.kyc.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,9 +58,15 @@ public class KYCLevel3Fragment extends BaseFragment implements KYCContract.KYCLe
         View rootView = inflater.inflate(R.layout.fragment_kyc_lvl3, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle(Constants.KYC_REGISTRATION_LEVEL_3);
+
 
         return rootView;
+    }
+    public void goBack() {
+        Intent intent = getActivity().getIntent();
+        getActivity().finish();
+        startActivity(intent);
+
     }
 
 }

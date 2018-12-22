@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,7 +93,6 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
         View rootView = inflater.inflate(R.layout.fragment_kyc_lvl1, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle(Constants.KYC_REGISTRATION_LEVEL_1);
 
 
         myCalendar = Calendar.getInstance();
@@ -167,5 +167,6 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
         Intent intent = getActivity().getIntent();
         getActivity().finish();
         startActivity(intent);
+
     }
 }

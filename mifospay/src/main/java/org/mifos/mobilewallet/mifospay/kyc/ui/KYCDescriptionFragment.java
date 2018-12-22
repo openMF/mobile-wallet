@@ -3,11 +3,15 @@ package org.mifos.mobilewallet.mifospay.kyc.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
 import org.mifos.mobilewallet.mifospay.R;
@@ -37,6 +41,24 @@ public class KYCDescriptionFragment extends
 
     KYCContract.KYCDescriptionPresenter mKYCDescriptionPresenter;
 
+    @BindView(R.id.img1)
+    ImageView img1;
+
+    @BindView(R.id.img2)
+    ImageView img2;
+
+    @BindView(R.id.img3)
+    ImageView img3;
+
+    @BindView(R.id.first)
+    LinearLayout f;
+
+    @BindView(R.id.second)
+    LinearLayout s;
+
+    @BindView(R.id.third)
+    LinearLayout t;
+
     @BindView(R.id.cv_lvl1)
     CardView cvLvl1;
 
@@ -54,6 +76,24 @@ public class KYCDescriptionFragment extends
 
     @BindView(R.id.ll_lvl3)
     LinearLayout llLvl3;
+
+    @BindView(R.id.lvl1text)
+    TextView text1;
+
+    @BindView(R.id.lvl2text)
+    TextView text2;
+
+    @BindView(R.id.lvl3text)
+    TextView text3;
+
+    @BindView(R.id.completed1)
+    TextView completed1;
+
+    @BindView(R.id.completed2)
+    TextView completed2;
+
+    @BindView(R.id.completed3)
+    TextView completed3;
 
     public static KYCDescriptionFragment newInstance() {
 
@@ -83,8 +123,6 @@ public class KYCDescriptionFragment extends
         View rootView = inflater.inflate(R.layout.fragment_kyc_desc, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle(Constants.COMPLETE_KYC);
-        showBackButton();
         setSwipeEnabled(false);
 
         showProgressDialog(Constants.PLEASE_WAIT);
@@ -95,20 +133,32 @@ public class KYCDescriptionFragment extends
 
     @OnClick(R.id.cv_lvl1)
     public void onLevel1Clicked() {
-        replaceFragmentUsingFragmentManager(KYCLevel1Fragment.newInstance(), true,
-                R.id.container);
+        KYCLevel1Fragment kycLevel1Fragment=new KYCLevel1Fragment();
+        FragmentTransaction fragmentTransaction=getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.finalcontainer,kycLevel1Fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
     }
 
     @OnClick(R.id.cv_lvl2)
     public void onLevel2Clicked() {
-        replaceFragmentUsingFragmentManager(KYCLevel2Fragment.newInstance(), true,
-                R.id.container);
+        KYCLevel2Fragment kycLevel2Fragment=new KYCLevel2Fragment();
+        FragmentTransaction fragmentTransaction=getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.finalcontainer,kycLevel2Fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+
     }
 
     @OnClick(R.id.cv_lvl3)
     public void onLevel3Clicked() {
-        replaceFragmentUsingFragmentManager(KYCLevel3Fragment.newInstance(), true,
-                R.id.container);
+
+        KYCLevel3Fragment kycLevel3Fragment=new KYCLevel3Fragment();
+        FragmentTransaction fragmentTransaction=getFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.finalcontainer,kycLevel3Fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
 
@@ -119,15 +169,24 @@ public class KYCDescriptionFragment extends
 
         if (currentLevel >= 1) {
             cvLvl1.setClickable(false);
-            llLvl1.setBackgroundResource(R.drawable.cardview_round_green);
+            text1.setTextColor(getResources().getColor(R.color.colorofkyvlevelsbutton));
+            completed1.setText("Completed");
+            img1.setImageResource(R.drawable.ic_tick);
+            llLvl1.setBackgroundResource(R.drawable.cardview_round_white);
         }
         if (currentLevel >= 2) {
             cvLvl2.setClickable(false);
-            llLvl2.setBackgroundResource(R.drawable.cardview_round_green);
+            text2.setTextColor(getResources().getColor(R.color.colorofkyvlevelsbutton));
+            completed2.setText("Completed");
+            img2.setImageResource(R.drawable.ic_tick);
+            llLvl2.setBackgroundResource(R.drawable.cardview_round_white);
         }
         if (currentLevel >= 3) {
             cvLvl3.setClickable(false);
-            llLvl3.setBackgroundResource(R.drawable.cardview_round_green);
+            text3.setTextColor(getResources().getColor(R.color.colorofkyvlevelsbutton));
+            completed3.setText("Completed");
+            img3.setImageResource(R.drawable.ic_tick);
+            llLvl3.setBackgroundResource(R.drawable.cardview_round_white);
         }
     }
 

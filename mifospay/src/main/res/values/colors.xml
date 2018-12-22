@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+    <color name="colorbackground">#FAFAFA</color>
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#000AFF</color>
@@ -37,7 +37,7 @@
 
     <color name="colorBottomViewNotFocusedIcon">@color/colorAccentBlue50</color>
 
-
+    <color name="colorofkyvlevelsbutton">#0B0AEE</color>
 
 
 

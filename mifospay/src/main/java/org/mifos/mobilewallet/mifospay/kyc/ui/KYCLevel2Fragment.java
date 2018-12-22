@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,7 +83,6 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
         View rootView = inflater.inflate(R.layout.fragment_kyc_lvl2, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle(Constants.KYC_REGISTRATION_LEVEL_2);
 
         return rootView;
     }
@@ -159,6 +159,7 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
     }
 
     @Override
+
     public void hideProgressDialog() {
         super.hideProgressDialog();
     }
@@ -168,5 +169,6 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
         Intent intent = getActivity().getIntent();
         getActivity().finish();
         startActivity(intent);
+
     }
 }

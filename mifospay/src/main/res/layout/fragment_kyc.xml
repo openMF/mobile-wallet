@@ -1,6 +1,181 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/windowBackground"
+    android:orientation="vertical">
 
-</android.support.design.widget.CoordinatorLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:layout_marginTop="@dimen/value_30dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textSize="@dimen/value_18dp"
+            android:text="@string/completekyc" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_lvl1"
+            android:layout_width="125dp"
+            android:layout_marginRight="72dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="@dimen/value_30dp"
+            android:layout_marginTop="40dp"
+            app:cardCornerRadius="@dimen/value_10dp">
+
+            <LinearLayout
+                android:id="@+id/ll_lvl1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/cardview_round_blue"
+                android:orientation="vertical"
+                android:padding="@dimen/value_10dp">
+
+                <TextView
+                    android:id="@+id/lvl1text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/value_10dp"
+                    android:text="@string/level_1"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/value_16sp" />
+
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="@dimen/value_5dp"-->
+                <!--android:layout_marginLeft="@dimen/value_10dp"-->
+                <!--android:layout_marginRight="@dimen/value_10dp"-->
+                <!--android:layout_marginTop="@dimen/value_10dp"-->
+                <!--android:text="@string/level_1_description"-->
+                <!--android:textColor="@color/gray"/>-->
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/completed1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/value_50dp" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_lvl2"
+            android:layout_width="125dp"
+            android:layout_marginRight="72dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="@dimen/value_30dp"
+            app:cardCornerRadius="@dimen/value_10dp">
+
+            <LinearLayout
+                android:id="@+id/ll_lvl2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/cardview_round_blue"
+                android:orientation="vertical"
+                android:padding="@dimen/value_10dp">
+
+                <TextView
+                    android:id="@+id/lvl2text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/value_10dp"
+                    android:text="@string/level_2"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/value_16sp" />
+
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="@dimen/value_5dp"-->
+                <!--android:layout_marginLeft="@dimen/value_10dp"-->
+                <!--android:layout_marginRight="@dimen/value_10dp"-->
+                <!--android:layout_marginTop="@dimen/value_10dp"-->
+                <!--android:text="@string/level_2_description"-->
+                <!--android:textColor="@color/gray"/>-->
+
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/completed2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/value_30dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_lvl3"
+            android:layout_width="125dp"
+            android:layout_marginRight="72dp"
+            android:layout_marginTop="10dp"
+            android:layout_height="60dp"
+            android:layout_marginBottom="@dimen/value_30dp"
+            app:cardCornerRadius="@dimen/value_10dp">
+
+            <LinearLayout
+                android:id="@+id/ll_lvl3"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/cardview_round_blue"
+                android:orientation="vertical"
+                android:padding="@dimen/value_10dp">
+
+                <TextView
+                    android:id="@+id/lvl3text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/value_10dp"
+                    android:text="@string/level_3"
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/value_16sp" />
+
+                <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="@dimen/value_5dp"-->
+                <!--android:layout_marginLeft="@dimen/value_10dp"-->
+                <!--android:layout_marginRight="@dimen/value_10dp"-->
+                <!--android:layout_marginTop="@dimen/value_10dp"-->
+                <!--android:text="@string/level_3_description"-->
+                <!--android:textColor="@color/gray"/>-->
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+            <TextView
+                android:id="@+id/completed3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/value_40dp" />
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/value_30dp" />
+    </LinearLayout>
+
+</LinearLayout>
