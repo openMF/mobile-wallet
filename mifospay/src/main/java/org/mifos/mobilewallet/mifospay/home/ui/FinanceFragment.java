@@ -13,7 +13,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.finance.ui.AccountsFragment;
 import org.mifos.mobilewallet.mifospay.finance.ui.CardsFragment;
 import org.mifos.mobilewallet.mifospay.finance.ui.KycFragment;
-import org.mifos.mobilewallet.mifospay.finance.ui.MerchantsFragment;
+import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment;
 import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
 
 import butterknife.BindView;

@@ -93,7 +93,7 @@
         registered on MifosPay. \n3. It's sim is on this device.
     </string>
     <string name="okay">Okay</string>
-    <string name="trusted_merchants">Trusted \nMerchants</string>
+    <string name="trusted_merchants">Trusted Merchants</string>
     <string name="field_required">Field Required</string>
     <string name="card_expiry_message">Your card has expired</string>
 
