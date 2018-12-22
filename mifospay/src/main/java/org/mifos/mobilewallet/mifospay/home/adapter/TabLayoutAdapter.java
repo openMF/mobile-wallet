@@ -7,12 +7,12 @@ import android.support.v4.app.FragmentPagerAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FinanceAdapter extends FragmentPagerAdapter {
+public class TabLayoutAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitleList = new ArrayList<>();
 
-    public FinanceAdapter(FragmentManager fragmentManager) {
+    public TabLayoutAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
     }
 

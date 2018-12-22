@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.transactions;
+package org.mifos.mobilewallet.mifospay.history;
 
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
@@ -11,22 +11,32 @@ import java.util.List;
  * Created by naman on 17/8/17.
  */
 
-public interface TransactionsContract {
+public interface HistoryContract {
 
-    interface TransactionsHistoryView extends BaseView<TransactionsHistoryPresenter> {
+    interface TransactionsHistoryAsync {
+
+        void onTransactionsFetchCompleted(List<Transaction> transactions);
+
+    }
+
+    interface HistoryView extends BaseView<TransactionsHistoryPresenter> {
+
+        void showRecyclerView();
+
+        void showStateView(int drawable, int title, int subtitle);
 
         void showTransactions(List<Transaction> transactions);
 
-        void showSnackbar(String message);
+        void showTransactionDetailDialog(int transactionIndex, String accountNumber);
 
-        void showToast(String error_fetching_transactions);
-
-        void hideSwipeProgress();
+        void showHistoryFetchingProgress();
     }
 
     interface TransactionsHistoryPresenter extends BasePresenter {
 
-        void fetchTransactions(long accountId);
+        void fetchTransactions();
+
+        void handleTransactionClick(int transactionIndex);
 
     }
 

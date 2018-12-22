@@ -14,6 +14,7 @@ import org.mifos.mobilewallet.mifospay.finance.ui.AccountsFragment;
 import org.mifos.mobilewallet.mifospay.finance.ui.CardsFragment;
 import org.mifos.mobilewallet.mifospay.finance.ui.KycFragment;
 import org.mifos.mobilewallet.mifospay.finance.ui.MerchantsFragment;
+
 import org.mifos.mobilewallet.mifospay.home.adapter.FinanceAdapter;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionFragment;
 
@@ -22,11 +23,11 @@ import butterknife.ButterKnife;
 
 public class FinanceFragment extends BaseFragment {
 
-    @BindView(R.id.vp_finance)
-    ViewPager vpFinance;
+    @BindView(R.id.vp_tab_layout)
+    ViewPager vpTabLayout;
 
-    @BindView(R.id.tl_finance)
-    TabLayout tlFinance;
+    @BindView(R.id.tl_tab_layout)
+    TabLayout tilTabLayout;
 
     public static FinanceFragment newInstance() {
         Bundle args = new Bundle();
@@ -43,7 +44,7 @@ public class FinanceFragment extends BaseFragment {
 
         setupUi();
         setupViewPager();
-        tlFinance.setupWithViewPager(vpFinance);
+        tilTabLayout.setupWithViewPager(vpTabLayout);
 
         return rootView;
     }
@@ -61,5 +62,7 @@ public class FinanceFragment extends BaseFragment {
         financeAdapter.addFragment(new MerchantsFragment(), getString(R.string.merchants));
         financeAdapter.addFragment(new KYCDescriptionFragment(), getString(R.string.complete_kyc));
         vpFinance.setAdapter(financeAdapter);
+
+      
     }
 }

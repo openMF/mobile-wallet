@@ -1,10 +1,10 @@
-package org.mifos.mobilewallet.mifospay.transactions.presenter;
+package org.mifos.mobilewallet.mifospay.history.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchTransactionReceipt;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
-import org.mifos.mobilewallet.mifospay.transactions.TransactionsContract;
+import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 
 import java.util.ArrayList;
 
@@ -14,12 +14,12 @@ import javax.inject.Inject;
  * Created by ankur on 06/June/2018
  */
 
-public class TransactionDetailPresenter implements TransactionsContract.TransactionDetailPresenter {
+public class TransactionDetailPresenter implements HistoryContract.TransactionDetailPresenter {
 
     private final UseCaseHandler mUseCaseHandler;
     @Inject
     FetchTransactionReceipt mFetchTransactionReceiptUseCase;
-    private TransactionsContract.TransactionDetailView mTransactionDetailView;
+    private HistoryContract.TransactionDetailView mTransactionDetailView;
 
     @Inject
     public TransactionDetailPresenter(UseCaseHandler useCaseHandler) {
@@ -28,7 +28,7 @@ public class TransactionDetailPresenter implements TransactionsContract.Transact
 
     @Override
     public void attachView(BaseView baseView) {
-        mTransactionDetailView = (TransactionsContract.TransactionDetailView) baseView;
+        mTransactionDetailView = (HistoryContract.TransactionDetailView) baseView;
         mTransactionDetailView.setPresenter(this);
     }
 

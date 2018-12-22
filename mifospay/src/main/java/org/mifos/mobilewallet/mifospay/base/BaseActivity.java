@@ -167,6 +167,7 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         if (!fragmentPopped && getSupportFragmentManager().findFragmentByTag(backStateName) ==
                 null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.custom_fade_in, R.anim.custom_fade_out);
             transaction.replace(containerId, fragment, backStateName);
             if (addToBackStack) {
                 transaction.addToBackStack(backStateName);
