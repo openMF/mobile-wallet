@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.transactions.ui.adapter;
+package org.mifos.mobilewallet.mifospay.history.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;

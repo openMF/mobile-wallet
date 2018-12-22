@@ -1,8 +1,8 @@
-package org.mifos.mobilewallet.mifospay.transactions.presenter;
+package org.mifos.mobilewallet.mifospay.history.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
-import org.mifos.mobilewallet.mifospay.transactions.TransactionsContract;
+import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 
 import javax.inject.Inject;
 
@@ -11,10 +11,10 @@ import javax.inject.Inject;
  */
 
 public class SpecificTransactionsPresenter implements
-        TransactionsContract.SpecificTransactionsPresenter {
+        HistoryContract.SpecificTransactionsPresenter {
 
     private final UseCaseHandler mUseCaseHandler;
-    private TransactionsContract.SpecificTransactionsView mSpecificTransactionsView;
+    private HistoryContract.SpecificTransactionsView mSpecificTransactionsView;
 
     @Inject
     public SpecificTransactionsPresenter(UseCaseHandler useCaseHandler) {
@@ -23,7 +23,7 @@ public class SpecificTransactionsPresenter implements
 
     @Override
     public void attachView(BaseView baseView) {
-        mSpecificTransactionsView = (TransactionsContract.SpecificTransactionsView) baseView;
+        mSpecificTransactionsView = (HistoryContract.SpecificTransactionsView) baseView;
         mSpecificTransactionsView.setPresenter(this);
     }
 }

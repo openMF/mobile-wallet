@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.transactions;
+package org.mifos.mobilewallet.mifospay.history;
 
 import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
@@ -19,7 +19,7 @@ import static org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER
 
 public class TransactionsHistory {
 
-    public TransactionsContract.TransactionsHistoryAsync delegate = null;
+    public HistoryContract.TransactionsHistoryAsync delegate;
 
     private List<Transaction> transactions;
     private final UseCaseHandler mUsecaseHandler;
