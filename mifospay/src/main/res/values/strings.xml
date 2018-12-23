@@ -87,7 +87,7 @@
     <string name="bank_account_mobile_verification_conditions">Make sure that the following
         conditions are met: \n1. Mobile Number is linked with your Bank Account. \n2. Mobile Number
         is
-        registered on MifosPay. \n3. It's sim is on this device.
+        registered on MifosPay. \n3. It\'s sim is on this device.
     </string>
     <string name="okay">Okay</string>
     <string name="trusted_merchants">Trusted \nMerchants</string>
