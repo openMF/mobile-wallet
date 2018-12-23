@@ -1,12 +1,12 @@
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,29 +44,32 @@ public class MifosPayInstanceIDService extends FirebaseInstanceIdService {
     // [START refresh_token]
     @Override
     public void onTokenRefresh() {
-        // Get updated InstanceID token.
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        Log.d(TAG, "Refreshed token: " + refreshedToken);
+        //this solves a bug that occurs when this class is constructed
+        //see: App crashing on start #161
+        if (mPreferencesHelper != null) {
+            // Get updated InstanceID token.
+            String refreshedToken = FirebaseInstanceId.getInstance().getToken();
+            Log.d(TAG, "Refreshed token: " + refreshedToken);
 
-        // Saving reg id to shared preferences
-        mPreferencesHelper.setFirebaseRegId(refreshedToken);
+            // Saving reg id to shared preferences
+            mPreferencesHelper.setFirebaseRegId(refreshedToken);
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // Instance ID token to your app server.
-        sendRegistrationToServer(refreshedToken);
+            // If you want to send messages to this application instance or
+            // manage this apps subscriptions on the server side, send the
+            // Instance ID token to your app server.
+            sendRegistrationToServer(refreshedToken);
 
-        // Notify UI that registration has completed, so the progress indicator can be hidden.
-//        Intent registrationComplete = new Intent(Config.REGISTRATION_COMPLETE);
-//        registrationComplete.putExtra("token", refreshedToken);
-//        LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
-
+            // Notify UI that registration has completed, so the progress indicator can be hidden.
+            // Intent registrationComplete = new Intent(Config.REGISTRATION_COMPLETE);
+            // registrationComplete.putExtra("token", refreshedToken);
+            // LocalBroadcastManager.getInstance(this).sendBroadcast(registrationComplete);
+        }
     }
     // [END refresh_token]
 
     /**
      * Persist token to third-party servers.
-     *
+     * <p>
      * Modify this method to associate the user's FCM InstanceID token with any server-side account
      * maintained by your application.
      *
