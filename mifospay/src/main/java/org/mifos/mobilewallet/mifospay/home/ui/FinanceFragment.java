@@ -12,9 +12,9 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.finance.ui.AccountsFragment;
 import org.mifos.mobilewallet.mifospay.finance.ui.CardsFragment;
-import org.mifos.mobilewallet.mifospay.finance.ui.KycFragment;
 import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment;
 import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
+import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +58,7 @@ public class FinanceFragment extends BaseFragment {
         tabLayoutAdapter.addFragment(new AccountsFragment(), getString(R.string.accounts));
         tabLayoutAdapter.addFragment(new CardsFragment(), getString(R.string.cards));
         tabLayoutAdapter.addFragment(new MerchantsFragment(), getString(R.string.merchants));
-        tabLayoutAdapter.addFragment(new KycFragment(), getString(R.string.kyc));
+        tabLayoutAdapter.addFragment(new KYCDescriptionFragment(), getString(R.string.kyc));
         vpTabLayout.setAdapter(tabLayoutAdapter);
     }
 }
