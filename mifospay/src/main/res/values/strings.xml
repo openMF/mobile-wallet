@@ -12,6 +12,7 @@
 
     <string name="level_1">Level 1</string>
     <string name="level_1_description">Level 1 Description</string>
+    <string name="completion">Completed</string>
     <string name="level_2">Level 2</string>
     <string name="level_2_description">Level 2 Description</string>
     <string name="level_3">Level 3</string>
@@ -46,7 +47,7 @@
     <string name="history">History</string>
     <string name="bank_account">Bank Account</string>
     <string name="qr_code">QR code</string>
-    <string name="complete_kyc">Complete KYC</string>
+    <string name="complete_kyc">Complete the KYC process</string>
     <string name="saved_cards">Saved Cards</string>
     <string name="qr_code_details">QR code details</string>
     <string name="user_details">User details</string>
