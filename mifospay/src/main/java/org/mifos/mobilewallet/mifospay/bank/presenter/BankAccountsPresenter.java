@@ -42,6 +42,20 @@ public class BankAccountsPresenter implements BankContract.BankAccountsPresenter
         List<BankAccountDetails> bankAccountDetailsList = new ArrayList<>();
         bankAccountDetailsList.add(new BankAccountDetails("SBI", "Ankur Sharma", "New Delhi",
                 mRandom.nextInt() + " ", "Savings"));
+        bankAccountDetailsList.add(new BankAccountDetails("HDFC", "Mandeep Singh ", "Uttar Pradesh",
+                mRandom.nextInt() + " ", "Savings"));
+        bankAccountDetailsList.add(new BankAccountDetails("ANDHRA", "Rakesh anna ", "Telegana",
+                mRandom.nextInt() + " ", "Savings"));
+        bankAccountDetailsList.add(new BankAccountDetails("PNB", "luv Pro ", "Gujrat",
+                mRandom.nextInt() + " ", "Savings"));
+        bankAccountDetailsList.add(new BankAccountDetails("HDF", "Harry potter ", "Hogwarts",
+                mRandom.nextInt() + " ", "Savings"));
+        bankAccountDetailsList.add(new BankAccountDetails("GCI", "JIGME ", "JAMMU",
+                mRandom.nextInt() + " ", "Savings"));
+        bankAccountDetailsList.add(new BankAccountDetails("FCI", "NISHU BOII ", "ASSAM",
+                mRandom.nextInt() + " ", "Savings"));
+
         mBankAccountsView.showLinkedBankAccounts(bankAccountDetailsList);
     }
 }
+
