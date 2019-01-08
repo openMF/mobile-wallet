@@ -21,7 +21,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -149,8 +148,15 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         String eamount = etAmount.getText().toString().trim();
         String mobileNumber = mEtMobileNumber.getText().toString().trim().replaceAll("\\s+", "");
         if (eamount.equals("") || (externalId.equals("") && mobileNumber.equals(""))) {
-            Toast.makeText(getActivity(),
-                    Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
+            if (eamount.equals("")) {
+                etAmount.requestFocus();
+                etAmount.setError("Please enter amount");
+            }
+
+            if (externalId.equals("")) {
+                etVpa.requestFocus();
+                etVpa.setError("Please enter Virtual Payment Address");
+            }
         } else {
             double amount = Double.parseDouble(eamount);
             if (amount <= 0) {
@@ -179,9 +185,14 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
             requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
         } else {
 
-            // Permission has already been granted
-            Intent i = new Intent(getActivity(), ReadQrActivity.class);
-            startActivityForResult(i, SCAN_QR_REQUEST_CODE);
+            if (etAmount.getText().toString().equals("")) {
+                etAmount.requestFocus();
+                etAmount.setError("Please enter amount");
+            } else {
+                // Permission has already been granted
+                Intent i = new Intent(getActivity(), ReadQrActivity.class);
+                startActivityForResult(i, SCAN_QR_REQUEST_CODE);
+            }
         }
     }
 
