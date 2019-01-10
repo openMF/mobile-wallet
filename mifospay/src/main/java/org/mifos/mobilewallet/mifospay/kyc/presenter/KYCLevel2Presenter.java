@@ -85,6 +85,7 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
     @Override
     public void uploadKYCDocs(String identityType) {
         if (file != null) {
+            //Uploading the KYC Docs
             uploadKYCDocsUseCase.setRequestValues(
                     new UploadKYCDocs.RequestValues(ENTITY_TYPE_CLIENTS,
                             preferencesHelper.getClientId(), file.getName(), identityType,
@@ -93,8 +94,15 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
             final UploadKYCDocs.RequestValues requestValues =
                     uploadKYCDocsUseCase.getRequestValues();
 
+            // using handler to to upload KYCDOCS and update it in the UI
+
             mUseCaseHandler.execute(uploadKYCDocsUseCase, requestValues,
                     new UseCase.UseCaseCallback<UploadKYCDocs.ResponseValue>() {
+
+                        /** If details successfully added show a success toast
+                         and hide the progress bar  and return to base
+                         activity ie leaving the level 1 Fragment **/
+
                         @Override
                         public void onSuccess(UploadKYCDocs.ResponseValue response) {
 
@@ -103,6 +111,9 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
                                     Constants.KYC_LEVEL_2_DOCUMENTS_ADDED_SUCCESSFULLY);
                             mKYCLevel2View.goBack();
                         }
+
+                        /** If details not added successfully
+                          hide the progress dialog and show an error message **/
 
                         @Override
                         public void onError(String message) {

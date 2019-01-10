@@ -15,9 +15,10 @@ import javax.inject.Inject;
  */
 
 public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresenter {
-
     private final UseCaseHandler mUseCaseHandler;
     private final LocalRepository mLocalRepository;
+
+
     @Inject
     FetchKYCLevel1Details fetchKYCLevel1DetailsUseCase;
     private KYCContract.KYCDescriptionView mKYCDescriptionView;
@@ -35,6 +36,10 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
         mKYCDescriptionView.setPresenter(this);
     }
 
+    /**
+     * Implementation of fetching the kyc current level in the kyc Tab
+     */
+
     @Override
     public void fetchCurrentLevel() {
 
@@ -43,6 +48,8 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
 
         FetchKYCLevel1Details.RequestValues requestValues =
                 fetchKYCLevel1DetailsUseCase.getRequestValues();
+
+        // using handler to get the  KYCLevel1Details and update it in the UI
 
         mUseCaseHandler.execute(fetchKYCLevel1DetailsUseCase, requestValues,
                 new UseCase.UseCaseCallback<FetchKYCLevel1Details.ResponseValue>() {
@@ -55,6 +62,11 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
                             mKYCDescriptionView.hideProgressDialog();
                         }
                     }
+
+                    /** When no internet connection present Error message
+                     * of please try again later occurs
+                     * ,ProgressDialog is hidden and Home activity is opened
+                     */
 
                     @Override
                     public void onError(String message) {

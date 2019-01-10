@@ -106,11 +106,13 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
     @OnClick(R.id.btn_submit)
     public void onSubmitClicked() {
         showProgressDialog(Constants.PLEASE_WAIT);
+        //Uploading KYCDocs
         mKYCLevel2Presenter.uploadKYCDocs(etIdname.getText().toString());
     }
 
     @Override
     public void startDocChooseActivity(Intent intent, int READ_REQUEST_CODE) {
+        //Function for browsing files from users device
         startActivityForResult(Intent.createChooser(intent, Constants.CHOOSE_FILE),
                 READ_REQUEST_CODE);
     }

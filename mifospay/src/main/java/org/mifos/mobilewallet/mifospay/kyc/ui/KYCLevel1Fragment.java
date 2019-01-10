@@ -42,32 +42,40 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
 
     KYCContract.KYCLevel1Presenter mKYCLevel1Presenter;
 
-    @BindView(R.id.et_fname)
+    /**
+     * Binding the Edit text Views which provide the user information like  first name, last name,
+     * address1, address2 , mobilenumber, Date of birth
+     * and it binds the submit button and the DatepickerDialog Box
+     */
+
+    @BindView(R.id.et_fname)  //Binding the first name edit text view
     EditText etFname;
 
-    @BindView(R.id.et_lname)
+    @BindView(R.id.et_lname)   //Binding the last name edit text view
     EditText etLname;
 
-    @BindView(R.id.et_address1)
+    @BindView(R.id.et_address1)   //Binding the addresss 1 edit textview
     EditText etAddress1;
 
-    @BindView(R.id.et_address2)
+    @BindView(R.id.et_address2)   // Binding the address 2 edit textview
     EditText etAddress2;
 
-    @BindView(R.id.ccp_code)
+    @BindView(R.id.ccp_code)      //Binding the codepicker object
     CountryCodePicker ccpPhonecode;
 
-    @BindView(R.id.et_mobile_number)
+    @BindView(R.id.et_mobile_number) //Binding the mobile number edit textview
     EditText etMobileNumber;
 
-    @BindView(R.id.et_dob)
+    @BindView(R.id.et_dob)     //Binding the date of birth edit textview
     EditText etDOB;
 
-    @BindView(R.id.btn_submit)
+    @BindView(R.id.btn_submit)    //Binding the submit button
     Button btnSubmit;
 
-    DatePickerDialog.OnDateSetListener date;
+    DatePickerDialog.OnDateSetListener date;    //Instantiating the DatePickerDialog
     private Calendar myCalendar;
+
+    //Function for making the KYCLevel1 Fragment instance
 
     public static KYCLevel1Fragment newInstance() {
 
@@ -89,14 +97,18 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
+        //Inflating the kyc level 1 layout
         View rootView = inflater.inflate(R.layout.fragment_kyc_lvl1, container, false);
+        //Using the butterknife library to bind the views
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
+        //Setting the toolbar title to KYC REGISTERATION LEVEL 1 on opening KYC Level 1
         setToolbarTitle(Constants.KYC_REGISTRATION_LEVEL_1);
 
-
+        //Creating a instance of the calender
         myCalendar = Calendar.getInstance();
 
+        //Implementing DatePickerDialog listener
         date = new DatePickerDialog.OnDateSetListener() {
 
             @Override
@@ -127,9 +139,12 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
 
     }
 
+
     @OnClick(R.id.btn_submit)
     public void onClickSubmit() {
         showProgressDialog(Constants.PLEASE_WAIT);
+
+        //Collecting the user inputs in KYC Level 1
 
         String fname = etFname.getText().toString();
         String lname = etLname.getText().toString();
@@ -138,29 +153,40 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
         String phoneno = ccpPhonecode.getFullNumber();
         String dob = etDOB.getText().toString();
 
+        //Calling the submit data function in KYCLevel1Presenter
+
         mKYCLevel1Presenter.submitData(fname, lname, address1, address2, phoneno, dob);
         Utils.hideSoftKeyboard(getActivity());
     }
+
+    //setter function for setting the KYCLevel1 Presenter
 
     @Override
     public void setPresenter(KYCContract.KYCLevel1Presenter presenter) {
         mKYCLevel1Presenter = presenter;
     }
 
+    //Function for showing the toast message
+
     @Override
     public void showToast(String s) {
         Toaster.show(getView(), s);
     }
+
+    // Function for showing thw the progress dialog
 
     @Override
     public void showProgressDialog(String message) {
         super.showProgressDialog(message);
     }
 
+    //fFunction for hiding the progress dialog
+
     @Override
     public void hideProgressDialog() {
         super.hideProgressDialog();
     }
+
 
     @Override
     public void goBack() {

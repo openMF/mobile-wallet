@@ -17,6 +17,8 @@ public class KYCLevel3Presenter implements KYCContract.KYCLevel3Presenter {
     private final LocalRepository mLocalRepository;
     private KYCContract.KYCLevel3View mKYCLevel1View;
 
+    //Injecting the KYCLevel3Presenter
+
     @Inject
     public KYCLevel3Presenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
         mUseCaseHandler = useCaseHandler;

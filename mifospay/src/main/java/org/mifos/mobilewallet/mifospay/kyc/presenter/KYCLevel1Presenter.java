@@ -49,16 +49,29 @@ public class KYCLevel1Presenter implements KYCContract.KYCLevel1Presenter {
         final UploadKYCLevel1Details.RequestValues requestValues =
                 uploadKYCLevel1DetailsUseCase.getRequestValues();
 
+        // using handler to to upload KYCLevel1Details and update it in the UI
+
         mUseCaseHandler.execute(uploadKYCLevel1DetailsUseCase, requestValues,
                 new UseCase.UseCaseCallback<UploadKYCLevel1Details.ResponseValue>() {
+
+                    /**
+                     *  If details successfully added show a success toast
+                     *  and hide the progress bar  and return to base activity
+                     *  ie leaving the level 1 Fragment
+                     */
+
                     @Override
                     public void onSuccess(UploadKYCLevel1Details.ResponseValue response) {
-
                         mKYCLevel1View.hideProgressDialog();
                         mKYCLevel1View.showToast(
                                 Constants.KYC_LEVEL_1_DETAILS_ADDED_SUCCESSFULLY);
                         mKYCLevel1View.goBack();
                     }
+
+                    /**
+                     *  If details not added successfully hide the progress
+                     *  dialog and show an error message
+                     */
 
                     @Override
                     public void onError(String message) {

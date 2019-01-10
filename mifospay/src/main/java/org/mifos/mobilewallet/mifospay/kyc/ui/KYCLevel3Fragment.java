@@ -37,6 +37,8 @@ public class KYCLevel3Fragment extends BaseFragment implements KYCContract.KYCLe
         return fragment;
     }
 
+    //Setter function for setting the Presenter for KYCLevel3Presenter
+
     @Override
     public void setPresenter(KYCContract.KYCLevel3Presenter presenter) {
         mKYCLevel3Presenter = presenter;
@@ -53,11 +55,13 @@ public class KYCLevel3Fragment extends BaseFragment implements KYCContract.KYCLe
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
+        //Inflating the kyc level 3 fragment
         View rootView = inflater.inflate(R.layout.fragment_kyc_lvl3, container, false);
+        //Using the butter knife library function bind to bind the views
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
+        //setting the toolbar Title of KYC REGISTERATION
         setToolbarTitle(Constants.KYC_REGISTRATION_LEVEL_3);
-
         return rootView;
     }
 
