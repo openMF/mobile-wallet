@@ -16,7 +16,9 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 11/July/2018
+ * This class is the Presenter component of the Architecture.
+ * @author ankur
+ * @since 11/July/2018
  */
 
 public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter {
@@ -43,6 +45,9 @@ public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter 
         mMerchantsView.setPresenter(this);
     }
 
+    /**
+     * An overridden method from Contract to fetch merchants using UseCase Callbacks.
+     */
     @Override
     public void fetchMerchants() {
         mUseCaseHandler.execute(mFetchMerchantsUseCase,
@@ -60,6 +65,10 @@ public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter 
                 });
     }
 
+    /**
+     * A method to fetch Merchants and Send them to UI Component.
+     * @param savingsWithAssociationsList : List to fetch the client details.
+     */
     private void retreiveMerchantsData(
             final List<SavingsWithAssociations> savingsWithAssociationsList) {
 

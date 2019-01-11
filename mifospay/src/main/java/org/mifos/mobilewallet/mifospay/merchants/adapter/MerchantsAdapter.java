@@ -21,7 +21,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ankur on 11/July/2018
+ * This class is the Adapter class for MerchantAdapter.
+ * @author ankur
+ * @since 11/July/2018
  */
 
 public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.ViewHolder> implements
