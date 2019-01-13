@@ -4,7 +4,7 @@
 
 Mobile wallet is an Android based frame-work for mobile wallets based on top of <a href='https://github.com/openMF/mobile-wallet/wiki/Fineract-backend'>Fineract</a>. The app follows 
 <a href='https://github.com/openMF/mobile-wallet/wiki/Architecture'>clean architecture</a> and contains a core library module
-that can be used as a dependency in any other wallet based project.It is developed at <a href='https://mifos.org/'>MIFOS</a> together with a global community.
+that can be used as a dependency in any other wallet based project. It is developed at <a href='https://mifos.org/'>MIFOS</a> together with a global community.
 
 
 | Master | Development | Chat |
@@ -70,10 +70,3 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 ## Wiki
 
 https://github.com/openMF/mobile-wallet/wiki
-
-## Maintainers
-
-The project is maintained by
-- Ankur Sharma ([@ankurs287](https://github.com/ankurs287))
-- Chirag Gupta ([@luckyman20](http://github.com/luckyman20))
-
