@@ -30,7 +30,7 @@ android {
         abortOnError false
         disable 'InvalidPackage'
     }
-    buildToolsVersion '27.0.3'
+    buildToolsVersion rootProject.ext.buildToolsVersion
 }
 
 dependencies {
@@ -53,7 +53,7 @@ dependencies {
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttp3Version"
 
     implementation 'io.reactivex:rxandroid:1.1.0'
-    implementation 'io.reactivex:rxjava:1.1.4'
+    implementation 'io.reactivex:rxjava:1.2.0'
 
     testImplementation 'junit:junit:4.12'
 }
