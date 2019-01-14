@@ -13,7 +13,7 @@ buildscript {
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'com.google.gms:google-services:4.0.1'
+        classpath 'com.google.gms:google-services:4.2.0'
     }
 }
 
@@ -35,13 +35,13 @@ ext {
     minSdkVersion = 15
     targetSdkVersion = 26
     compileSdkVersion = 26
-    buildToolsVersion = '26.0.2'
+    buildToolsVersion = '27.0.3'
 
     // App dependencies
     supportLibraryVersion = '27.1.0'
     daggerVersion = '2.11'
     retrofitVersion = '2.2.0'
     okHttp3Version = '3.6.0'
-    butterKnifeVersion = '8.6.0'
+    butterKnifeVersion = '8.8.1'
     dbflowVersion = '3.1.1'
 }
