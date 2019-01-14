@@ -118,7 +118,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     public void filter(String text) {
         List<SavingsWithAssociations> filteredList = new ArrayList<>();
 
-        if(merchantsList != null) {
+        if (merchantsList != null) {
             if (isBlank(text)) {
                 filteredList = merchantsList;
             } else {
