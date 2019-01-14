@@ -20,6 +20,7 @@
     <string name="address_line_1">Address Line 1</string>
     <string name="address_line_2">Address Line 2</string>
     <string name="code">Code</string>
+    <string name="linked_bank_account">Linked bank accounts</string>
     <string name="date_of_birth">Date of Birth</string>
     <string name="add_card">Add Card</string>
     <string name="id_type">ID Type</string>
@@ -57,6 +58,7 @@
     <string name="confirm">Confirm</string>
     <string name="send">Send</string>
     <string name="amount">Amount</string>
+    <string name="add_account">ADD ACCOUNT</string>
     <string name="vpa_mobile_number">VPA/ Mobile Number</string>
     <string name="proceed">Proceed</string>
     <string name="scan_code">Scan Code</string>
