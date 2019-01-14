@@ -3,6 +3,7 @@ package org.mifos.mobilewallet.mifospay.qr.ui;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,6 +53,9 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
         mShowQrPresenter.generateQr(qrData);
         tvQrData.setText(qrData);
 
+        WindowManager.LayoutParams layout = getWindow().getAttributes();
+        layout.screenBrightness = 1F;
+        getWindow().setAttributes(layout);
     }
 
     @Override
