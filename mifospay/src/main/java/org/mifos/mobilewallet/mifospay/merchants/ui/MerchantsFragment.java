@@ -118,20 +118,22 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     public void filter(String text) {
         List<SavingsWithAssociations> filteredList = new ArrayList<>();
 
-        if (isBlank(text)) {
-            filteredList = merchantsList;
-        } else {
-            for (SavingsWithAssociations merchant : merchantsList) {
-                if (merchant.getClientName().toLowerCase().contains(
-                        text.toLowerCase())
-                        || (merchant.getExternalId() == null ? ""
-                        : merchant.getExternalId()).toLowerCase().contains(
-                        text.toLowerCase())) {
-                    filteredList.add(merchant);
+        if (merchantsList != null) {
+            if (isBlank(text)) {
+                filteredList = merchantsList;
+            } else {
+                for (SavingsWithAssociations merchant : merchantsList) {
+                    if (merchant.getClientName().toLowerCase().contains(
+                            text.toLowerCase())
+                            || (merchant.getExternalId() == null ? ""
+                            : merchant.getExternalId()).toLowerCase().contains(
+                            text.toLowerCase())) {
+                        filteredList.add(merchant);
+                    }
                 }
             }
+            mMerchantsAdapter.filterList(filteredList);
         }
-        mMerchantsAdapter.filterList(filteredList);
     }
 
     @Override
