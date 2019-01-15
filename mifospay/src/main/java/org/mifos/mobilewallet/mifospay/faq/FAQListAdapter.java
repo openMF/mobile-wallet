@@ -12,6 +12,11 @@ import org.mifos.mobilewallet.mifospay.R;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * This class is the Adapter class for FAQ Section.
+ * @author ankur
+ * @since 11/July/2018
+ */
 public class FAQListAdapter extends BaseExpandableListAdapter {
 
     private Context context;
