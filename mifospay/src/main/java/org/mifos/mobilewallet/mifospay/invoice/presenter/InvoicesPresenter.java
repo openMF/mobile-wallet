@@ -9,7 +9,6 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 
 import javax.inject.Inject;
 
@@ -44,14 +43,11 @@ public class InvoicesPresenter implements InvoiceContract.InvoicesPresenter {
                 new UseCase.UseCaseCallback<FetchInvoices.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchInvoices.ResponseValue response) {
-                        DebugUtil.log("ivoices fetched successfully",
-                                response.getInvoiceList().size());
                         mInvoicesView.showInvoices(response.getInvoiceList());
                     }
 
                     @Override
                     public void onError(String message) {
-                        DebugUtil.log("unable to fetvh invoices");
                         mInvoicesView.hideProgress();
                         mInvoicesView.showToast(Constants.ERROR_FETCHING_INVOICES);
                     }
