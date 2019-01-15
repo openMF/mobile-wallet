@@ -27,7 +27,7 @@ public class Constants {
             "Error adding KYC Level 1 details.";
     public static final String KYC_LEVEL_1_DETAILS_ADDED_SUCCESSFULLY =
             "KYC Level 1 details added successfully.";
-    public static final String PLEASE_TRY_AGAIN_LATER = "Please try again later.";
+    public static final String ERROR_FETCHING_KYC = "Error fetching KYC";
     public static final String PLEASE_WAIT = "Please wait..";
     public static final String COMPLETE_KYC = "Complete KYC";
     public static final String NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_DOCUMENTS =

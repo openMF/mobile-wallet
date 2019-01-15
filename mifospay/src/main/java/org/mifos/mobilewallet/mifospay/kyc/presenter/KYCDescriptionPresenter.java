@@ -58,9 +58,8 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
 
                     @Override
                     public void onError(String message) {
-                        mKYCDescriptionView.showToast(Constants.PLEASE_TRY_AGAIN_LATER);
+                        mKYCDescriptionView.showToast(Constants.ERROR_FETCHING_KYC);
                         mKYCDescriptionView.hideProgressDialog();
-                        mKYCDescriptionView.gotoHome();
                     }
                 });
     }
