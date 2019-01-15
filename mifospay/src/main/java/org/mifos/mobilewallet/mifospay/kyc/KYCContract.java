@@ -19,8 +19,6 @@ public interface KYCContract {
 
         void showToast(String s);
 
-        void gotoHome();
-
         void hideProgressDialog();
     }
 
