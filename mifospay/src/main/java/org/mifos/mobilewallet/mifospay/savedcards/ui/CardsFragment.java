@@ -32,6 +32,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * This is the UI component of the SavedCards Architecture.
+ * @author ankur
+ * @since 21/May/2018
+ */
 public class CardsFragment extends BaseFragment implements CardsContract.CardsView {
 
     @Inject
@@ -87,6 +92,10 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         return rootView;
     }
 
+    /**
+     * A function to setup the Layout Manager and Integrate the RecyclerView with Adapter.
+     * This function also implements click action on CardList.
+     */
     private void setupCardsRecyclerView() {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rvCards.setLayoutManager(llm);
@@ -144,6 +153,9 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                 }));
     }
 
+    /**
+     * A function to enable swipe refresh.
+     * */
     private void setupSwipeLayout() {
         setSwipeEnabled(true);
         getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -154,11 +166,18 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         });
     }
 
+    /**
+     * An overridden function to set Presenter reference in this UI Component.
+     * @param presenter : Presenter component reference for the Architecture.
+     */
     @Override
     public void setPresenter(CardsContract.CardsPresenter presenter) {
         mCardsPresenter = presenter;
     }
 
+    /**
+     * A function to show Add Card Dialog box.
+     */
     @OnClick(R.id.btn_add_card)
     public void onClickAddCard() {
         AddCardDialog addCardDialog = new AddCardDialog();
@@ -167,6 +186,10 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         addCardDialog.show(getFragmentManager(), Constants.ADD_CARD_DIALOG);
     }
 
+    /**
+     * A function to show setup the cards list with adapter.
+     * @param cards: List of cards.
+     */
     @Override
     public void showSavedCards(List<Card> cards) {
 
@@ -182,21 +205,33 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         hideSwipeProgress();
     }
 
+    /**
+     * An overridden method to show a toast message.
+     */
     @Override
     public void showToast(String message) {
         Toaster.show(getView(), message);
     }
 
+    /**
+     * An overridden method to show a progress dialog.
+     */
     @Override
     public void showProgressDialog(String message) {
         super.showProgressDialog(message);
     }
 
+    /**
+     * An overridden method to hide a progress dialog.
+     */
     @Override
     public void hideProgressDialog() {
         super.hideProgressDialog();
     }
 
+    /**
+     * An overridden method to hide the swipe progress.
+     */
     @Override
     public void hideSwipeProgress() {
         super.hideSwipeProgress();
