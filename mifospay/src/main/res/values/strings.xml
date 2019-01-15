@@ -24,6 +24,7 @@
     <string name="date_of_birth">Date of Birth</string>
     <string name="add_card">Add Card</string>
     <string name="id_type">ID Type</string>
+    <string name="vpaname">VPA</string>
     <string name="browse">Browse</string>
     <string name="submit">Submit</string>
     <string name="first_name">First Name</string>
