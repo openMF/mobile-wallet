@@ -8,10 +8,17 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 import java.util.List;
 
 /**
- * Created by ankur on 19/May/2018
+ * This a contract class working as an Interface for UI
+ * and Presenter components of the SavedCards Architecture.
+ * @author ankur
+ * @since 19/May/2018
  */
 
 public interface CardsContract {
+
+    /**
+     * Defines all the functions in UI Component.
+     */
     interface CardsView extends BaseView<CardsPresenter> {
 
         void showSavedCards(List<Card> cards);
@@ -25,6 +32,9 @@ public interface CardsContract {
         void hideSwipeProgress();
     }
 
+    /**
+     * Defines all the functions in Presenter Component.
+     */
     interface CardsPresenter extends BasePresenter {
 
         void fetchSavedCards();
