@@ -2,7 +2,7 @@
 
 # Mobile Wallet
 
-Mobile wallet is an Android based frame-work for mobile wallets based on top of <a href='https://github.com/openMF/mobile-wallet/wiki/Fineract-backend'>Fineract</a>. The app follows 
+Mobile wallet is an  Android-based framework for mobile wallets based on top of <a href='https://github.com/openMF/mobile-wallet/wiki/Fineract-backend'>Fineract</a>. The app follows 
 <a href='https://github.com/openMF/mobile-wallet/wiki/Architecture'>clean architecture</a> and contains a core library module
 that can be used as a dependency in any other wallet based project. It is developed at <a href='https://mifos.org/'>MIFOS</a> together with a global community.
 
@@ -21,7 +21,7 @@ that can be used as a dependency in any other wallet based project. It is develo
 
 ## How to Contribute
 
-This is an OpenSource project and we would be happy to see new contributors. The issues should be raised via the github issue tracker.
+This is an OpenSource project and we would be happy to see new contributors. The issues should be raised via the GitHub issue tracker.
 For Issue tracker guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/CONTRIBUTING.md">here</a>. All fixes should be proposed via pull requests. For pull request guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/CONTRIBUTING.md">here</a>. For commit style guidelines please click <a href="https://github.com/openMF/mobile-wallet/wiki/Commit-style-guide">here</a>. 
 
 ### Branch Policy
@@ -42,10 +42,10 @@ We have the following branches
     `git clone -b development --single-branch https://github.com/username/mobile-wallet.git`
 
  * **master**
-   The master branch contains all the stable and bug-free working code. The developement branch once complete will be merged with this branch.
+   The master branch contains all the stable and bug-free working code. The development branch once complete will be merged with this branch.
    
  * **redesign**
-   The app is presently being redesigned. All the work done under redesign domain should be commited to this branch.
+   The app is presently being redesigned. All the work done under the redesign domain should be committed to this branch.
    
 ## Development Setup
 
@@ -53,13 +53,13 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 
 ## Building the Code
 
-1. Clone the repository using HTTP : git clone https://github.com/openMF/mobile-wallet.git
+1. Clone the repository using HTTP: git clone https://github.com/openMF/mobile-wallet.git
 
 2. Open Android studio
 
 3. Click on 'Open an existing android studio project'
 
-4. Browse to the directory where you cloned mobile-wallet repo and click OK.
+4. Browse to the directory where you cloned the mobile-wallet repo and click OK.
 
 5. Let Android studio import the project
 
