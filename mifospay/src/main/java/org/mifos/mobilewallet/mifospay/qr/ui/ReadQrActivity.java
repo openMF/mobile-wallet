@@ -20,9 +20,9 @@ import butterknife.ButterKnife;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**
- * Created by naman on 7/9/17.
+ * @author naman
+ * @since 8/7/17
  */
-
 public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrView,
         ZXingScannerView.ResultHandler {
 
@@ -73,6 +73,9 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
 
     }
 
+    /**
+     * Set the presenter to this view
+     */
     @Override
     public void setPresenter(QrContract.ReadQrPresenter presenter) {
         this.mReadQrPresenter = presenter;

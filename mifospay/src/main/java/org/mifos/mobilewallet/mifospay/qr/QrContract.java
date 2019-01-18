@@ -6,9 +6,9 @@ import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
 /**
- * Created by naman on 8/7/17.
+ * @author naman
+ * @since 8/7/17
  */
-
 public interface QrContract {
 
     interface ShowQrView extends BaseView<ShowQrPresenter> {
