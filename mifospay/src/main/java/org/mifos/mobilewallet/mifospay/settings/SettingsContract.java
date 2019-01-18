@@ -4,7 +4,9 @@ import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
 /**
- * Created by ankur on 09/July/2018
+ * Interface for settings presenter and view
+ * @author ankur
+ * @since 9/7/18
  */
 
 public interface SettingsContract {
@@ -21,3 +23,4 @@ public interface SettingsContract {
         void startLoginActivity();
     }
 }
+
