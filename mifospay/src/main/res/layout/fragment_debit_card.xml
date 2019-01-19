@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:hint="Debit Card Number"
+        android:hint="@string/debit_card_number"
         android:imeOptions="actionNext"
         android:inputType="number"
         android:nextFocusDown="@id/pe_month"
@@ -32,7 +32,7 @@
             android:cursorVisible="false"
             android:digits="1234567890"
             android:gravity="center"
-            android:hint="MM"
+            android:hint="@string/mm"
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="2"
@@ -50,7 +50,7 @@
             android:layout_marginLeft="@dimen/value_10dp"
             android:layout_marginRight="@dimen/value_10dp"
             android:gravity="bottom"
-            android:text="/"
+            android:text="@string/slash"
             android:textSize="30sp"/>
 
         <com.alimuzaffar.lib.pin.PinEntryEditText

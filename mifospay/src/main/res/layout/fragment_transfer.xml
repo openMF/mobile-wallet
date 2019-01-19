@@ -40,7 +40,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_round_primary"
                 android:clickable="true"
-                android:text="VPA"
+                android:text="@string/vpa"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:typeface="sans"/>
@@ -52,7 +52,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/button_round_stroke"
                 android:clickable="true"
-                android:text="Mobile Number"
+                android:text="@string/mobile_number"
                 android:textAllCaps="false"
                 android:textColor="@android:color/black"
                 android:typeface="sans"/>

@@ -96,7 +96,7 @@
                     android:drawablePadding="@dimen/value_10dp"
                     android:drawableTop="@drawable/ic_repeat"
                     android:gravity="center"
-                    android:text="History"/>
+                    android:text="@string/history"/>
 
                 <TextView
                     android:id="@+id/btn_send"
@@ -210,7 +210,7 @@
                     android:drawablePadding="@dimen/value_10dp"
                     android:drawableTop="@drawable/ic_notification"
                     android:gravity="center"
-                    android:text="Notifications"/>
+                    android:text="@string/notifications"/>
 
                 <TextView
                     android:id="@+id/btn_invoices"

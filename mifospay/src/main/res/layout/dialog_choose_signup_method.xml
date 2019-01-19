@@ -14,7 +14,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:text="Sign up as"
+            android:text="@string/sign_up_as"
             android:textColor="@color/primaryDarkBlue"
             android:textSize="25sp"/>
 
@@ -35,7 +35,7 @@
                 android:background="@drawable/button_round_stroke_primary"
                 android:clickable="true"
                 android:drawablePadding="@dimen/value_15dp"
-                android:text="Merchant"
+                android:text="@string/merchant"
                 android:textAllCaps="false"
                 android:textColor="@color/primaryBlue"/>
 
@@ -56,7 +56,7 @@
                 android:background="@drawable/button_round_stroke_primary"
                 android:clickable="true"
                 android:drawablePadding="@dimen/value_15dp"
-                android:text="Customer"
+                android:text="@string/customer"
                 android:textAllCaps="false"
                 android:textColor="@color/primaryBlue"/>
 
@@ -72,7 +72,7 @@
             android:buttonTint="@color/primaryBlue"
             android:checked="true"
             android:gravity="center"
-            android:text="Ease my sign up using Google Account"/>
+            android:text="@string/ease_my_sign_up_using_google_account"/>
 
     </LinearLayout>
 

@@ -25,7 +25,7 @@
                 android:drawableLeft="@drawable/et_search"
                 android:drawablePadding="10dp"
                 android:drawableStart="@drawable/et_search"
-                android:hint="Search"
+                android:hint="@string/search"
                 android:inputType="text"
                 android:paddingLeft="15dp"/>
 

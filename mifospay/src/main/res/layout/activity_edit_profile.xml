@@ -52,7 +52,7 @@
                     android:src="@drawable/drawable_editable_image_hint"
                     app:layout_constraintBottom_toBottomOf="@+id/iv_user_image"
                     app:layout_constraintEnd_toEndOf="@+id/iv_user_image"
-                    android:contentDescription="Editable image hint" />
+                    android:contentDescription="@string/editable_image_hint" />
 
             </android.support.constraint.ConstraintLayout>
 
@@ -76,7 +76,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Change Password"
+                        android:text="@string/change_password"
                         android:textColor="@color/grey_900"
                         android:textSize="17sp"/>
 
@@ -100,7 +100,7 @@
                                 android:id="@+id/et_current_password"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Current Password"
+                                android:hint="@string/current_password"
                                 android:inputType="textPassword"/>
 
                         </android.support.design.widget.TextInputLayout>
@@ -117,7 +117,7 @@
                                 android:id="@+id/et_new_password"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="New Password"
+                                android:hint="@string/new_password"
                                 android:inputType="textPassword"/>
                         </android.support.design.widget.TextInputLayout>
 
@@ -133,7 +133,7 @@
                                 android:id="@+id/et_confirm_password"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Confirm New Password"
+                                android:hint="@string/confirm_new_password"
                                 android:inputType="textPassword"/>
                         </android.support.design.widget.TextInputLayout>
 
@@ -190,7 +190,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Change Passcode"
+                        android:text="@string/change_passcode"
                         android:textColor="@color/grey_900"
                         android:textSize="17sp"/>
 
@@ -215,7 +215,7 @@
                                 android:id="@+id/et_current_passcode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Current Passcode"
+                                android:hint="@string/current_passcode"
                                 android:inputType="textPassword"/>
 
                         </android.support.design.widget.TextInputLayout>
@@ -232,7 +232,7 @@
                                 android:id="@+id/et_new_passcode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="New Passcode"
+                                android:hint="@string/new_passcode"
                                 android:inputType="textPassword"/>
                         </android.support.design.widget.TextInputLayout>
 
@@ -248,7 +248,7 @@
                                 android:id="@+id/et_confirm_passcode"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Confirm New Passcode"
+                                android:hint="@string/confirm_new_passcode"
                                 android:inputType="textPassword"/>
                         </android.support.design.widget.TextInputLayout>
 
@@ -305,7 +305,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Change Email"
+                        android:text="@string/change_email"
                         android:textColor="@color/grey_900"
                         android:textSize="17sp"/>
 
@@ -335,7 +335,7 @@
                                 android:id="@+id/et_new_email"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:hint="Email"
+                                android:hint="@string/email"
                                 android:inputType="textEmailAddress" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -391,7 +391,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Change Mobile Number"
+                        android:text="@string/change_mobile_number"
                         android:textColor="@color/grey_900"
                         android:textSize="17sp"/>
 
@@ -431,7 +431,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/value_5dp"
-                                android:hint="Mobile Number"
+                                android:hint="@string/mobile_number"
                                 android:maxLength="@integer/telephone_numbers_max_length_standard"
                                 android:inputType="number"/>
 
