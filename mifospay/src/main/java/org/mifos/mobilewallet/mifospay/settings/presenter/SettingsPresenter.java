@@ -35,7 +35,7 @@ public class SettingsPresenter implements SettingsContract.SettingsPresenter {
     }
 
     /**
-     *Attach view to presenter
+     * Attach view to presenter
      */
     @Override
     public void attachView(BaseView baseView) {
