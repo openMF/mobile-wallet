@@ -37,7 +37,7 @@ public class ShowQrPresenter implements QrContract.ShowQrPresenter {
 
     /**
      * Method used to generate QR code and display it to the user
-     * @param data vpa of the user
+     * @param data VPA of the user
      */
     @Override
     public void generateQr(String data) {
