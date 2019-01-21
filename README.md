@@ -2,7 +2,7 @@
 
 # Mobile Wallet
 
-Mobile wallet is an  Android-based framework for mobile wallets based on top of <a href='https://github.com/openMF/mobile-wallet/wiki/Fineract-backend'>Fineract</a>. The app follows 
+Mobile Wallet is an Android-based framework for mobile wallets based on top of <a href='https://github.com/openMF/mobile-wallet/wiki/Fineract-backend'>Fineract</a>. The app follows 
 <a href='https://github.com/openMF/mobile-wallet/wiki/Architecture'>clean architecture</a> and contains a core library module
 that can be used as a dependency in any other wallet based project. It is developed at <a href='https://mifos.org/'>MIFOS</a> together with a global community.
 
@@ -22,16 +22,17 @@ that can be used as a dependency in any other wallet based project. It is develo
 ## How to Contribute
 
 This is an OpenSource project and we would be happy to see new contributors. The issues should be raised via the GitHub issue tracker.
-For Issue tracker guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/CONTRIBUTING.md">here</a>. All fixes should be proposed via pull requests. For pull request guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/CONTRIBUTING.md">here</a>. For commit style guidelines please click <a href="https://github.com/openMF/mobile-wallet/wiki/Commit-style-guide">here</a>. 
+For Issue tracker guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/CONTRIBUTING.md">here</a>. All fixes should be proposed via pull requests.
+For pull request guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/CONTRIBUTING.md">here</a>. For commit style guidelines please click <a href="https://github.com/openMF/mobile-wallet/wiki/Commit-style-guide">here</a>. 
 
 ### Branch Policy
 
-We have the following branches
+We have the following branches :
 
  * **dev**
      All the contributions should be pushed to this branch. If you're making a contribution,
      you are supposed to make a pull request to _dev_.
-     Please make sure it passes a build check on Travis
+     Please make sure it passes a build check on Travis.
 
      It is advisable to clone only the development branch using the following command:
 
@@ -55,17 +56,17 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 
 1. Clone the repository using HTTP: git clone https://github.com/openMF/mobile-wallet.git
 
-2. Open Android studio
+2. Open Android Studio.
 
-3. Click on 'Open an existing android studio project'
+3. Click on 'Open an existing Android Studio project'
 
 4. Browse to the directory where you cloned the mobile-wallet repo and click OK.
 
-5. Let Android studio import the project
+5. Let Android Studio import the project.
 
-6. You will see an error in gradle build related to missing RblClientIdProp and RblClientSecretProp. Add RblClientIdProp and RblClientSecretProp as environment variables with any value
+6. You will see an error in gradle build related to missing RblClientIdProp and RblClientSecretProp. Add RblClientIdProp and RblClientSecretProp as environment variables with any value.
 
-7. Sync the project again in Android studio
+7. Sync the project again in Android studio.
 
 ## Wiki
 
