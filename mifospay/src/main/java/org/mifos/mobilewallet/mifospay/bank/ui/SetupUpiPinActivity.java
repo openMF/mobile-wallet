@@ -91,6 +91,11 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
         mSetupUpiPinPresenter = presenter;
     }
 
+    /**
+     * Method invoked when Debit Card is verified.
+     * @param otp
+     */
+
     @Override
     public void debitCardVerified(String otp) {
         mTvDebitCard.setVisibility(View.VISIBLE);
@@ -99,6 +104,10 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
         AnimationUtil.expand(mFlOtp);
     }
 
+    /**
+     * Method invoked when OTP is verified.
+     */
+
     public void otpVerified() {
         mTvOtp.setVisibility(View.VISIBLE);
         addFragment(new UpiPinFragment(), R.id.fl_upi_pin);
@@ -106,15 +115,30 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
         AnimationUtil.collapse(mFlOtp);
     }
 
+    /**
+     * Method invoked when UPI PIN is entered.
+     * @param upiPin
+     */
+
     public void upiPinEntered(String upiPin) {
         replaceFragment(UpiPinFragment.newInstance(1, upiPin), false, R.id.fl_upi_pin);
     }
+
+    /**
+     * Method invoked when UPI PIN is confirmed.
+     * @param upiPin
+     */
 
     public void upiPinConfirmed(String upiPin) {
         mTvUpi.setVisibility(View.VISIBLE);
         showProgressDialog(Constants.SETTING_UP_UPI_PIN);
         mSetupUpiPinPresenter.setupUpiPin(bankAccountDetails, upiPin);
     }
+
+    /**
+     * Method invoked when UPI PIN entered is correct.
+     * @param mSetupUpiPin
+     */
 
     @Override
     public void setupUpiPinSuccess(String mSetupUpiPin) {
@@ -128,6 +152,11 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
         setResult(Activity.RESULT_OK, intent);
         finish();
     }
+
+    /**
+     * Method invoked when UPI PIN entered is incorrect.
+     * @param message
+     */
 
     @Override
     public void setupUpiPinError(String message) {

@@ -76,6 +76,10 @@ public class LinkBankAccountActivity extends BaseActivity implements
         hideProgressDialog();
     }
 
+    /**
+     * Method to setup RecyclerViews with adapters.
+     */
+
     private void setupRecyclerview() {
         LinearLayoutManager gridManager = new GridLayoutManager(this, 3);
         gridManager.setOrientation(GridLayoutManager.VERTICAL);
@@ -136,6 +140,11 @@ public class LinkBankAccountActivity extends BaseActivity implements
         });
     }
 
+    /**
+     * Method to filter the list based on the text entered.
+     * @param text
+     */
+
     private void filter(String text) {
         List<Bank> filteredList = new ArrayList<>();
 
@@ -150,6 +159,10 @@ public class LinkBankAccountActivity extends BaseActivity implements
         }
         mOtherBankAdapter.filterList(filteredList);
     }
+
+    /**
+     * Method to set list of {@link Bank} as data for the adapters.
+     */
 
     private void setupAdapterData() {
         JSONObject jsonObject;

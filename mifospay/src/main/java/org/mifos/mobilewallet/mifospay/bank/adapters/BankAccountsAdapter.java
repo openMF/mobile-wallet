@@ -20,7 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ankur on 09/July/2018
+ * This is an adapter for the Bank Accounts list in the Bank section.
+ * @author ankur
+ * @since 09/July/2018
  */
 
 public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapter.ViewHolder> {

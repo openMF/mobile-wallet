@@ -7,7 +7,12 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 import java.util.List;
 
 /**
- * Created by ankur on 09/July/2018
+ * This is a contract working as an interface between
+ * UI and Presenter of the bank section.
+ * Different interfaces contain their respective methods
+ * implemented in the activities and presenters.
+ * @author ankur
+ * @since 09/July/2018
  */
 
 public interface BankContract {

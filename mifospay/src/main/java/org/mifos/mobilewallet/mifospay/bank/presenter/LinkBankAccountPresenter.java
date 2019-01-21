@@ -9,7 +9,8 @@ import java.util.Random;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 09/July/2018
+ * @author ankur
+ * @since 09/July/2018
  */
 
 public class LinkBankAccountPresenter implements BankContract.LinkBankAccountPresenter {

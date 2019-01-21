@@ -6,7 +6,8 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 09/July/2018
+ * @author ankur
+ * @since 09/July/2018
  */
 
 public class BankAccountDetailPresenter implements BankContract.BankAccountDetailPresenter {

@@ -20,7 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by naman on 20/6/17.
+ * This is an adapter for the popular bank list while linking a new bank account.
+ * @author naman
+ * @since 20/6/17.
  */
 
 public class PopularBankAdapter extends RecyclerView.Adapter<PopularBankAdapter.ViewHolder> {

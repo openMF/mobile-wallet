@@ -27,6 +27,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ *
+ */
 public class BankAccountsActivity extends BaseActivity implements BankContract.BankAccountsView {
 
     public static final int LINK_BANK_ACCOUNT_REQUEST_CODE = 1;
@@ -91,6 +94,13 @@ public class BankAccountsActivity extends BaseActivity implements BankContract.B
     public void setPresenter(BankContract.BankAccountsPresenter presenter) {
         mBankAccountsPresenter = presenter;
     }
+
+    /**
+     * Method to display the list of linked bank accounts of a user.
+     * It provides the list of bank accounts {@link BankAccountDetails}
+     * to the adapter {@link BankAccountsAdapter}.
+     * @param bankAccountList
+     */
 
     @Override
     public void showLinkedBankAccounts(List<BankAccountDetails> bankAccountList) {

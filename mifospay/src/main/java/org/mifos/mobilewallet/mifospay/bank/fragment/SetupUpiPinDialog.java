@@ -20,7 +20,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ankur on 16/July/2018
+ * @author ankur
+ * @since 16/July/2018
  */
 
 public class SetupUpiPinDialog extends BottomSheetDialogFragment {
