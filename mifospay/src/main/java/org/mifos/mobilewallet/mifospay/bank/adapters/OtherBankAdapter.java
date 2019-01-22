@@ -23,9 +23,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by naman on 20/6/17.
+ * This is an adapter for the other banks list while linking a new bank account.
+ * @author naman
+ * @since 20/6/17.
  */
-
 public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.ViewHolder> implements
         Filterable {
 
@@ -74,6 +75,10 @@ public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.View
         return otherBanks.get(position);
     }
 
+    /**
+     * Method to apply filter on the bank account list based on the text entered in search bar.
+     * @return filter.
+     */
     @Override
     public Filter getFilter() {
         return new Filter() {

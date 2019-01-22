@@ -28,7 +28,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ankur on 13/July/2018
+ * @author ankur
+ * @since 13/July/2018
  */
 
 public class DebitCardFragment extends BaseFragment implements BankContract.DebitCardView {
@@ -77,6 +78,10 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
         return rootView;
     }
 
+    /**
+     * Method invoked when debit card details are entered.
+     * It calls another method to verify the debit card through an instance of DebitCardPresenter.
+     */
     public void okayClicked() {
         showProgressDialog(Constants.PLEASE_WAIT);
 

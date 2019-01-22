@@ -92,6 +92,12 @@ public class BankAccountsActivity extends BaseActivity implements BankContract.B
         mBankAccountsPresenter = presenter;
     }
 
+    /**
+     * Method to display the list of linked bank accounts of a user.
+     * It provides the list of bank accounts {@link BankAccountDetails}
+     * to the adapter {@link BankAccountsAdapter}.
+     * @param bankAccountList
+     */
     @Override
     public void showLinkedBankAccounts(List<BankAccountDetails> bankAccountList) {
         if (bankAccountList == null || bankAccountList.size() == 0) {

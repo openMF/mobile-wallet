@@ -26,6 +26,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * This the activity for bank account details.
+ */
 public class BankAccountDetailActivity extends BaseActivity implements
         BankContract.BankAccountDetailView {
 

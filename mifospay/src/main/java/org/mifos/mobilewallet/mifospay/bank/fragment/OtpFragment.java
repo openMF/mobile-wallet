@@ -23,7 +23,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ankur on 13/July/2018
+ * @author ankur
+ * @since 13/July/2018
  */
 
 public class OtpFragment extends BaseFragment {
@@ -77,6 +78,10 @@ public class OtpFragment extends BaseFragment {
         return rootView;
     }
 
+    /**
+     * Method invoked when OTP is entered.
+     * If OTP is incorrect it shows a toast message.
+     */
     public void okayClicked() {
         if (getActivity() instanceof SetupUpiPinActivity) {
             if (mPeOtp.getText().toString().equals(otp)) {

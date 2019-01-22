@@ -16,7 +16,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by ankur on 09/July/2018
+ * @author ankur
+ * @since 09/July/2018
  */
 
 public class ChooseSimDialog extends BottomSheetDialogFragment {

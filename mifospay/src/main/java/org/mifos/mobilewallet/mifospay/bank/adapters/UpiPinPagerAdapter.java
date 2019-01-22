@@ -5,7 +5,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 /**
- * Created by ankur on 13/July/2018
+ * @author ankur
+ * @since 13/July/2018
  */
 
 public class UpiPinPagerAdapter extends FragmentPagerAdapter {

@@ -27,9 +27,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ankur on 13/July/2018
+ * @author ankur
+ * @since 13/July/2018
  */
-
 public class UpiPinFragment extends BaseFragment implements BankContract.UpiPinView {
 
     @Inject
@@ -91,6 +91,9 @@ public class UpiPinFragment extends BaseFragment implements BankContract.UpiPinV
         return rootView;
     }
 
+    /**
+     * Method invoked when UPI PIN is entered.
+     */
     public void okayClicked() {
         if (getActivity() instanceof SetupUpiPinActivity) {
             if (mPeUpiPin.getText().toString().length() == 4) {
