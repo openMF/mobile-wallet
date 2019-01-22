@@ -4,13 +4,17 @@ import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
 /**
- * Created by naman on 16/6/17.
+ * This is an interface which specifies the contract
+ * between view and the presenter.
+ * @author naman
+ * @since 16-June-17.
  */
 
-/**
- * This specifies the contract between the view and the presenter.
- */
 public interface AuthContract {
+
+    /**
+     * Defines all the functions in UI Component.
+     */
 
     interface LoginView extends BaseView<LoginPresenter> {
 
@@ -18,6 +22,10 @@ public interface AuthContract {
 
         void loginFail(String message);
     }
+
+    /**
+     * Defines all the functions in presenter component
+     */
 
     interface LoginPresenter extends BasePresenter {
 
