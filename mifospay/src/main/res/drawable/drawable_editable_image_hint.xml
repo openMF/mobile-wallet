@@ -4,7 +4,7 @@
         <shape
             android:shape="oval" >
             <stroke android:width="@dimen/editable_image_hint_border_width" android:color="@color/colorPrimary" />
-            <solid android:color="@color/black" />
+            <solid android:color="@color/colorAccentBlack" />
             <size
                 android:height="@dimen/editable_image_hint_shape_size"
                 android:width="@dimen/editable_image_hint_shape_size" />

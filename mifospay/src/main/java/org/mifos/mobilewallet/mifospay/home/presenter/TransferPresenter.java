@@ -6,7 +6,7 @@ import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.home.HomeContract;
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
@@ -15,7 +15,7 @@ import javax.inject.Inject;
  * Created by naman on 30/8/17.
  */
 
-public class TransferPresenter implements HomeContract.TransferPresenter {
+public class TransferPresenter implements BaseHomeContract.TransferPresenter {
 
     private final UseCaseHandler mUsecaseHandler;
     private final LocalRepository localRepository;
@@ -24,7 +24,7 @@ public class TransferPresenter implements HomeContract.TransferPresenter {
     @Inject
     FetchAccount mFetchAccount;
 
-    private HomeContract.TransferView mTransferView;
+    private BaseHomeContract.TransferView mTransferView;
 
     @Inject
     public TransferPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
@@ -34,7 +34,7 @@ public class TransferPresenter implements HomeContract.TransferPresenter {
 
     @Override
     public void attachView(BaseView baseView) {
-        mTransferView = (HomeContract.TransferView) baseView;
+        mTransferView = (BaseHomeContract.TransferView) baseView;
         mTransferView.setPresenter(this);
     }
 

@@ -91,6 +91,13 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
     }
 
     @Override
+    public void cancelProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.cancel();
+        }
+    }
+
+    @Override
     public void setToolbarTitle(String title) {
         if (getSupportActionBar() != null && getTitle() != null) {
             setTitle(title);
@@ -99,9 +106,26 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
 
     @Override
     public void showBackButton() {
+        showHomeButton();
+        setToolbarIcon(R.drawable.ic_arrow_back);
+    }
+
+    @Override
+    public void showCloseButton() {
+        showHomeButton();
+        setToolbarIcon(R.drawable.ic_close);
+    }
+
+    private void showHomeButton() {
         if (getSupportActionBar() != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    private void setToolbarIcon(int res) {
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setHomeAsUpIndicator(res);
         }
     }
 
@@ -143,6 +167,7 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         if (!fragmentPopped && getSupportFragmentManager().findFragmentByTag(backStateName) ==
                 null) {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.custom_fade_in, R.anim.custom_fade_out);
             transaction.replace(containerId, fragment, backStateName);
             if (addToBackStack) {
                 transaction.addToBackStack(backStateName);

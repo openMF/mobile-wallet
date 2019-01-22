@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/iv_empty_no_transaction_history"
+        android:layout_width="@dimen/emptyStateImageSize"
+        android:layout_height="@dimen/emptyStateImageSize"
+        android:scaleType="fitCenter"
+        app:srcCompat="@drawable/ic_error_state"
+        android:contentDescription="@string/content_description_placeholder" />
+
+    <TextView
+        android:id="@+id/tv_empty_no_transaction_history_title"
+        android:layout_marginTop="@dimen/marginItemsInSectionLarge"
+        android:text="@string/error_oops"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/textBody1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_empty_no_transaction_history_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/marginItemsInSectionLarge"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="@dimen/marginItemsInSectionLarge"
+        android:layout_marginBottom="@dimen/marginItemsInSectionLarge"
+        android:text="@string/unexpected_error_subtitle"
+        android:textAlignment="center"
+        android:textColor="@color/colorTextSecondary"
+        android:textSize="@dimen/textBody2" />
+</LinearLayout>

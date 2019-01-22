@@ -13,7 +13,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
-import org.mifos.mobilewallet.mifospay.home.ui.HomeActivity;
+import org.mifos.mobilewallet.mifospay.home.ui.MainActivity;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCDescriptionPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -138,7 +138,7 @@ public class KYCDescriptionFragment extends
 
     @Override
     public void gotoHome() {
-        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        Intent intent = new Intent(getActivity(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

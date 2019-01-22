@@ -12,11 +12,15 @@ public interface BaseActivityCallback {
 
     void hideProgressDialog();
 
+    void cancelProgressDialog();
+
     void setToolbarTitle(String title);
 
     void setSwipeRefreshEnabled(boolean enabled);
 
     void showBackButton();
+
+    void showCloseButton();
 
     void hideBackButton();
 
