@@ -18,7 +18,9 @@ import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import javax.inject.Inject;
 
 /**
- * Created by naman on 16/6/17.
+ * This class is the Presenter component of the auth package.
+ * @author  naman
+ * @since  16-June-17.
  */
 
 public class LoginPresenter implements AuthContract.LoginPresenter {
@@ -39,12 +41,18 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
         this.preferencesHelper = preferencesHelper;
     }
 
+
     @Override
     public void attachView(BaseView baseView) {
         mLoginView = (AuthContract.LoginView) baseView;
         mLoginView.setPresenter(this);
     }
 
+    /**
+     * A function to a authenticate user based on the credentials
+     * @param username A variable of the type String
+     * @param password A variable of the type String
+     */
 
     public void loginUser(String username, String password) {
 
@@ -71,6 +79,11 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
 
     }
 
+    /**
+     * A function used to fetch the details of the user after login.
+     * @param user A variable of the type User
+     */
+
     private void fetchUserDetails(final User user) {
         mUsecaseHandler.execute(fetchUserDetailsUseCase,
                 new FetchUserDetails.RequestValues(user.getUserId()),
@@ -86,6 +99,10 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                     }
                 });
     }
+
+    /**
+     * A function is used to fetch the client's data
+     */
 
     private void fetchClientData() {
         mUsecaseHandler.execute(fetchClientDataUseCase, null,
@@ -106,6 +123,11 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                 });
     }
 
+    /**
+     * A function is ued to create authentication service for the user
+     * @param user A variable of the type User
+     */
+
     private void createAuthenticatedService(User user) {
 
         final String authToken = Constants.BASIC +
@@ -116,6 +138,12 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
 
     }
 
+    /**
+     * A function is used to save user details
+     * @param user A variable of the type User
+     * @param userWithRole A variable of the type UserWithRole
+     */
+
     private void saveUserDetails(User user,
             UserWithRole userWithRole) {
         final String userName = user.getUserName();
@@ -125,6 +153,11 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
         preferencesHelper.setUserId(userID);
         preferencesHelper.saveEmail(userWithRole.getEmail());
     }
+
+    /**
+     * A function is used to save clients details
+     * @param client A variable of the type Client
+     */
 
     private void saveClientDetails(Client client) {
         preferencesHelper.saveFullName(client.getName());
