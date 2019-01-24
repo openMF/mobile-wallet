@@ -82,8 +82,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     /**
      * A function that enables login on button click
      */
-
-    @OnClick(R.id.btn_login)
+	@OnClick(R.id.btn_login)
     public void onLoginClicked() {
         Utils.hideSoftKeyboard(this);
         showProgressDialog(Constants.LOGGING_IN);
@@ -94,8 +93,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     /**
      * A function that enables signup on button click
      */
-
-    @OnClick(R.id.ll_signup)
+	@OnClick(R.id.ll_signup)
     public void onSignupClicked() {
         SignupMethod signupMethod = new SignupMethod();
         signupMethod.show(getSupportFragmentManager(), Constants.CHOOSE_SIGNUP_METHOD);
@@ -104,8 +102,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     /**
      * An overriden function implemented if login is successful
      */
-
-    @Override
+	@Override
     public void loginSuccess() {
         hideProgressDialog();
         Utils.hideSoftKeyboard(this);
@@ -138,8 +135,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
      * This method is used to sign in using google account
      * @param mifosSavingsProductId A variable of the type integer
      */
-
-    public void signupUsingGoogleAccount(int mifosSavingsProductId) {
+	public void signupUsingGoogleAccount(int mifosSavingsProductId) {
         showProgressDialog(Constants.PLEASE_WAIT);
 
         mMifosSavingProductId = mifosSavingsProductId;

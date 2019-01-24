@@ -15,8 +15,7 @@ public interface AuthContract {
     /**
      * Defines all the functions in UI Component.
      */
-
-    interface LoginView extends BaseView<LoginPresenter> {
+   interface LoginView extends BaseView<LoginPresenter> {
 
         void loginSuccess();
 
@@ -26,8 +25,7 @@ public interface AuthContract {
     /**
      * Defines all the functions in presenter component
      */
-
-    interface LoginPresenter extends BasePresenter {
+   interface LoginPresenter extends BasePresenter {
 
         void loginUser(String username, String password);
     }
