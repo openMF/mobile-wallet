@@ -36,8 +36,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by naman on 16/6/17.
+ * This is the UI component of the auth package
+ * @author  naman
+ * @since  16-June-17.
  */
+
 
 public class LoginActivity extends BaseActivity implements AuthContract.LoginView {
 
@@ -75,7 +78,11 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         mLoginPresenter = presenter;
     }
 
-    @OnClick(R.id.btn_login)
+
+    /**
+     * A function that enables login on button click
+     */
+	@OnClick(R.id.btn_login)
     public void onLoginClicked() {
         Utils.hideSoftKeyboard(this);
         showProgressDialog(Constants.LOGGING_IN);
@@ -83,19 +90,30 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
                 etPassword.getText().toString());
     }
 
-    @OnClick(R.id.ll_signup)
+    /**
+     * A function that enables signup on button click
+     */
+	@OnClick(R.id.ll_signup)
     public void onSignupClicked() {
         SignupMethod signupMethod = new SignupMethod();
         signupMethod.show(getSupportFragmentManager(), Constants.CHOOSE_SIGNUP_METHOD);
     }
 
-    @Override
+    /**
+     * An overriden function implemented if login is successful
+     */
+	@Override
     public void loginSuccess() {
         hideProgressDialog();
         Utils.hideSoftKeyboard(this);
         startPassCodeActivity();
     }
 
+
+    /**
+     * An overriden function implemented if login is failed.
+     *@param message A variable of type String
+     */
     @Override
     public void loginFail(String message) {
         Utils.hideSoftKeyboard(this);
@@ -112,6 +130,11 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         startActivity(intent);
         finish();
     }
+
+    /**
+     * This method is used to sign in using google account
+     * @param mifosSavingsProductId A variable of the type integer
+     */
 
     public void signupUsingGoogleAccount(int mifosSavingsProductId) {
         showProgressDialog(Constants.PLEASE_WAIT);
@@ -142,7 +165,6 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 account = task.getResult(ApiException.class);
-                DebugUtil.log(account.toJson().toString(), account.toString());
                 hideProgressDialog();
                 signup(mMifosSavingProductId);
 
