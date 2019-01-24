@@ -199,6 +199,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
                         public void onComplete(@NonNull Task<Void> task) {
                             account = null;
                         }
+
                     });
         }
     }
