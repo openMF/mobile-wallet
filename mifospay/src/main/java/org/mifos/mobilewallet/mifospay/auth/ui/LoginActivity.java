@@ -135,7 +135,8 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
      * This method is used to sign in using google account
      * @param mifosSavingsProductId A variable of the type integer
      */
-	public void signupUsingGoogleAccount(int mifosSavingsProductId) {
+
+    public void signupUsingGoogleAccount(int mifosSavingsProductId) {
         showProgressDialog(Constants.PLEASE_WAIT);
 
         mMifosSavingProductId = mifosSavingsProductId;
@@ -199,7 +200,6 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
                         public void onComplete(@NonNull Task<Void> task) {
                             account = null;
                         }
-
                     });
         }
     }

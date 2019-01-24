@@ -41,7 +41,8 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
         this.preferencesHelper = preferencesHelper;
     }
 
-   @Override
+
+    @Override
     public void attachView(BaseView baseView) {
         mLoginView = (AuthContract.LoginView) baseView;
         mLoginView.setPresenter(this);
@@ -52,7 +53,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
      * @param username A variable of the type String
      * @param password A variable of the type String
      */
-    public void loginUser(String username, String password) {
+	public void loginUser(String username, String password) {
 
         authenticateUserUseCase.setRequestValues(new
                 AuthenticateUser.RequestValues(username, password));
@@ -123,7 +124,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
      * A function is ued to create authentication service for the user
      * @param user A variable of the type User
      */
-	private void createAuthenticatedService(User user) {
+    private void createAuthenticatedService(User user) {
 
         final String authToken = Constants.BASIC +
                 user.getAuthenticationKey();
@@ -138,7 +139,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
      * @param user A variable of the type User
      * @param userWithRole A variable of the type UserWithRole
      */
-	private void saveUserDetails(User user,
+    private void saveUserDetails(User user,
             UserWithRole userWithRole) {
         final String userName = user.getUserName();
         final long userID = user.getUserId();
@@ -152,7 +153,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
      * A function is used to save clients details
      * @param client A variable of the type Client
      */
-	private void saveClientDetails(Client client) {
+    private void saveClientDetails(Client client) {
         preferencesHelper.saveFullName(client.getName());
         preferencesHelper.setClientId(client.getClientId());
         preferencesHelper.saveMobile(client.getMobileNo());
