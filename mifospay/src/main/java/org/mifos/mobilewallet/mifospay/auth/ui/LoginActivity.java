@@ -142,7 +142,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 account = task.getResult(ApiException.class);
-                DebugUtil.log(account.toJson().toString(), account.toString());
+//                DebugUtil.log(account.toJson().toString(), account.toString());
                 hideProgressDialog();
                 signup(mMifosSavingProductId);
 
