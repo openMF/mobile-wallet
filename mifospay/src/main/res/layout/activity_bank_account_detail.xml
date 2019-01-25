@@ -32,31 +32,31 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Bank Name"/>
+                    android:text="@string/bank_name"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="A/C Holder Name"/>
+                    android:text="@string/ac_holder_name"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Branch Name"/>
+                    android:text="@string/branch_name"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="IFSC"/>
+                    android:text="@string/ifsc"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Type"/>
+                    android:text="@string/type"/>
 
             </LinearLayout>
 
@@ -109,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/value_20dp"
             android:background="@drawable/button_round_stroke_primary"
-            android:text="Setup UPI"
+            android:text="@string/setup_upi"
             android:visibility="visible"/>
 
         <View
@@ -135,7 +135,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_20dp"
-                    android:text="Change UPI PIN"
+                    android:text="@string/change_upi_pin"
                     android:textColor="@color/grey_900"
                     android:textSize="17sp"/>
 
@@ -153,7 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_20dp"
-                    android:text="Forgot UPI PIN"
+                    android:text="@string/forgot_upi_pin"
                     android:textColor="@color/grey_900"
                     android:textSize="17sp"/>
 
@@ -171,7 +171,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_20dp"
-                    android:text="Delete Bank"
+                    android:text="@string/delete_bank"
                     android:textColor="@color/grey_900"
                     android:textSize="17sp"/>
 

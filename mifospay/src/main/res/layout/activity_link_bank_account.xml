@@ -52,7 +52,7 @@
                             android:drawableLeft="@drawable/et_search"
                             android:drawablePadding="10dp"
                             android:drawableStart="@drawable/et_search"
-                            android:hint="Search"
+                            android:hint="@string/search"
                             android:inputType="text"
                             android:paddingLeft="15dp"/>
 
@@ -65,7 +65,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/value_15dp"
-                    android:text="Popular Banks"
+                    android:text="@string/popular_banks"
                     android:textColor="@android:color/black"/>
 
                 <android.support.v7.widget.CardView
@@ -87,7 +87,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/value_15dp"
-                    android:text="Other Banks"
+                    android:text="@string/other_banks"
                     android:textColor="@android:color/black"/>
 
                 <android.support.v7.widget.CardView

@@ -5,11 +5,11 @@
 
     <item
         android:id="@+id/item_edit_profile"
-        android:title="Edit Profile"/>
+        android:title="@string/edit_profile"/>
 
     <item
         android:id="@+id/item_faq"
-        android:title="FAQ"/>
+        android:title="@string/faq"/>
 
     <item
         android:id="@+id/item_profile_setting"

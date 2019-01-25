@@ -55,21 +55,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:text="items bought"/>
+                android:text="@string/items_bought"/>
 
             <TextView
                 android:id="@+id/tv_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:text="status"/>
+                android:text="@string/status"/>
 
             <TextView
                 android:id="@+id/tv_transaction_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:text="transaction id"
+                android:text="@string/transaction_id"
                 android:textColor="@color/primaryDarkBlue"
                 android:visibility="gone"/>
 
@@ -78,7 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:text="date"/>
+                android:text="@string/date"/>
 
         </LinearLayout>
 
@@ -128,7 +128,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:text="link"
+                android:text="@string/link"
                 android:textColor="@color/primaryDarkBlue"/>
 
         </LinearLayout>
