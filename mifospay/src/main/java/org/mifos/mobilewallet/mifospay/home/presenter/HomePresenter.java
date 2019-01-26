@@ -19,9 +19,10 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by naman on 17/8/17.
+ * Home Presenter
+ * @author naman
+ * @since 17/8/17
  */
-
 public class HomePresenter implements BaseHomeContract.HomePresenter,
         HistoryContract.TransactionsHistoryAsync {
 
@@ -44,12 +45,20 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     private final LocalRepository localRepository;
     private BaseHomeContract.HomeView mHomeView;
 
+    /**
+     * Constructor for HomePresenter to initialize global fields
+     * @param useCaseHandler An instance of UseCaseHandler
+     * @param localRepository An instance of LocalRepository
+     */
     @Inject
     public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
         this.mUsecaseHandler = useCaseHandler;
         this.localRepository = localRepository;
     }
 
+    /**
+     * Attaches View to the Presenter
+     */
     @Override
     public void attachView(BaseView baseView) {
         mHomeView = (BaseHomeContract.HomeView) baseView;
@@ -57,6 +66,9 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
         transactionsHistory.delegate = this;
     }
 
+    /**
+     * Used to fetch account details of the client
+     */
     @Override
     public void fetchAccountDetails() {
         mUsecaseHandler.execute(mFetchAccountUseCase,
@@ -79,11 +91,19 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
                 });
     }
 
+    /**
+     * Callback method for completion of fetching transactions
+     * @param transactions ArrayList of transactions carried out by the user
+     */
     @Override
     public void onTransactionsFetchCompleted(List<Transaction> transactions) {
         handleTransactionsHistory(transactions);
     }
 
+    /**
+     * Checks about constraints on transaction data and works accordingly.
+     * @param transactions ArrayList of transactions carried out by the user
+     */
     private void handleTransactionsHistory(List<Transaction> transactions) {
         if (transactions == null) {
             mHomeView.hideBottomSheetActionButton();

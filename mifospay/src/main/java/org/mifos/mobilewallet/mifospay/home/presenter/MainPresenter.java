@@ -10,9 +10,10 @@ import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import javax.inject.Inject;
 
 /**
- * Created by naman on 17/6/17.
+ * Main Presenter
+ * @author naman
+ * @since 17/6/17
  */
-
 public class MainPresenter implements BaseHomeContract.BaseHomePresenter {
 
     private final UseCaseHandler mUsecaseHandler;
@@ -21,18 +22,29 @@ public class MainPresenter implements BaseHomeContract.BaseHomePresenter {
     FetchClientData fetchClientData;
     private BaseHomeContract.BaseHomeView mHomeView;
 
+    /**
+     * Constructor for MainPresenter to initialize global fields
+     * @param useCaseHandler An instance of UseCaseHandler
+     * @param localRepository An instance of LocalRepository
+     */
     @Inject
     public MainPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
         this.mUsecaseHandler = useCaseHandler;
         this.localRepository = localRepository;
     }
 
+    /**
+     * Attaches View to presenter.
+     */
     @Override
     public void attachView(BaseView baseView) {
         mHomeView = (BaseHomeContract.BaseHomeView) baseView;
         mHomeView.setPresenter(this);
     }
 
+    /**
+     * Used to fetch details of the client
+     */
     @Override
     public void fetchClientDetails() {
         mUsecaseHandler.execute(fetchClientData,

@@ -46,9 +46,10 @@ import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
 import io.michaelrocks.libphonenumber.android.Phonenumber;
 
 /**
- * Created by naman on 30/8/17.
+ * Transfer Fragment
+ * @author naman
+ * @since 30/8/17
  */
-
 public class TransferFragment extends BaseFragment implements BaseHomeContract.TransferView {
 
     public static final int REQUEST_SHOW_DETAILS = 3;
@@ -115,6 +116,9 @@ public class TransferFragment extends BaseFragment implements BaseHomeContract.T
         return rootView;
     }
 
+    /**
+     * OnClickListener for VPA button.
+     */
     @OnClick(R.id.btn_vpa)
     public void onVPASelected() {
         mBtnVpa.setFocusable(true);
@@ -129,6 +133,9 @@ public class TransferFragment extends BaseFragment implements BaseHomeContract.T
         mTilVpa.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * OnClickListener for mobile button
+     */
     @OnClick(R.id.btn_mobile)
     public void onMobileSelected() {
         mBtnMobile.setFocusable(true);
@@ -143,6 +150,9 @@ public class TransferFragment extends BaseFragment implements BaseHomeContract.T
         mRlMobile.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * OnClickListener for Transfer button
+     */
     @OnClick(R.id.btn_transfer)
     public void transferClicked() {
         String externalId = etVpa.getText().toString().trim();
@@ -162,6 +172,9 @@ public class TransferFragment extends BaseFragment implements BaseHomeContract.T
         }
     }
 
+    /**
+     * OnClickListener for ShowQR button
+     */
     @OnClick(R.id.btn_show_qr)
     public void showQrClicked() {
         Intent intent = new Intent(getActivity(), ShowQrActivity.class);
@@ -169,6 +182,9 @@ public class TransferFragment extends BaseFragment implements BaseHomeContract.T
         startActivity(intent);
     }
 
+    /**
+     * OnClickListener for ScanQR button
+     */
     @OnClick(R.id.btn_scan_qr)
     public void scanQrClicked() {
 
@@ -185,6 +201,10 @@ public class TransferFragment extends BaseFragment implements BaseHomeContract.T
         }
     }
 
+    /**
+     * Updates the VPA of the client.
+     * @param vpa VPA of the user.
+     */
     @Override
     public void showVpa(String vpa) {
         this.vpa = vpa;
@@ -192,11 +212,17 @@ public class TransferFragment extends BaseFragment implements BaseHomeContract.T
         btnShowQr.setClickable(true);
     }
 
+    /**
+     * Sets presenter to the View.
+     */
     @Override
     public void setPresenter(BaseHomeContract.TransferPresenter presenter) {
         this.mTransferPresenter = presenter;
     }
 
+    /**
+     * OnClickListener for Contacts icon.
+     */
     @OnClick(R.id.btn_search_contact)
     public void searchContactClicked() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getActivity(),
@@ -214,6 +240,9 @@ public class TransferFragment extends BaseFragment implements BaseHomeContract.T
         }
     }
 
+    /**
+     * Perform the required actions for which the permissions were required.
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -256,6 +285,9 @@ public class TransferFragment extends BaseFragment implements BaseHomeContract.T
         }
     }
 
+    /**
+     * Request permissions for Camera and Contacts.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
             @NonNull int[] grantResults) {
@@ -296,16 +328,28 @@ public class TransferFragment extends BaseFragment implements BaseHomeContract.T
         }
     }
 
+    /**
+     * Displays a toast message.
+     * @param message message to be displayed
+     */
     @Override
     public void showToast(String message) {
         Toaster.showToast(getContext(), message);
     }
 
+    /**
+     * Displays a Snackbar.
+     * @param message message to be displayed
+     */
     @Override
     public void showSnackbar(String message) {
         Toaster.show(getView(), message);
     }
 
+    /**
+     * Parses the mobile number of the client and updates it on the screen.
+     * @param mobileNo Mobile number of the client
+     */
     @Override
     public void showMobile(String mobileNo) {
         PhoneNumberUtil phoneNumberUtil =
@@ -320,6 +364,11 @@ public class TransferFragment extends BaseFragment implements BaseHomeContract.T
         }
     }
 
+    /**
+     * Shows the following client details to whom the money is being transferred.
+     * @param externalId VPA of the user
+     * @param amount amount to be transferred
+     */
     @Override
     public void showClientDetails(String externalId, double amount) {
         MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);

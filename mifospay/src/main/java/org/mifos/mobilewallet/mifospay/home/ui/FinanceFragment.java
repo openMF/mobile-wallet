@@ -19,6 +19,11 @@ import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+/**
+ * Finance Fragment
+ * @author anonymous
+ * @since 17/6/17
+ */
 public class FinanceFragment extends BaseFragment {
 
     @BindView(R.id.vp_tab_layout)
@@ -27,6 +32,9 @@ public class FinanceFragment extends BaseFragment {
     @BindView(R.id.tl_tab_layout)
     TabLayout tilTabLayout;
 
+    /**
+     * Returns a new instance of the fragment.
+     */
     public static FinanceFragment newInstance() {
         Bundle args = new Bundle();
         FinanceFragment fragment = new FinanceFragment();
@@ -47,11 +55,18 @@ public class FinanceFragment extends BaseFragment {
         return rootView;
     }
 
+    /**
+     * Sets the swipe refresh layout to false.
+     * Updates the ActionBar title.
+     */
     private void setupUi() {
         setSwipeEnabled(false);
         setToolbarTitle(getString(R.string.finance));
     }
 
+    /**
+     * Initializes the @tabLayoutAdapter and adds the required fragments.
+     */
     private void setupViewPager() {
         TabLayoutAdapter tabLayoutAdapter
                 = new TabLayoutAdapter(getChildFragmentManager());

@@ -30,9 +30,10 @@ import butterknife.OnClick;
 import okhttp3.ResponseBody;
 
 /**
- * Created by naman on 7/9/17.
+ * Profile Fragment
+ * @author anonymous
+ * @since 17/6/17
  */
-
 public class ProfileFragment extends BaseFragment implements BaseHomeContract.ProfileView {
 
     @Inject
@@ -58,6 +59,9 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     @BindView(R.id.inc_account_details_mobile_number)
     View vAccountDetailsMobile;
 
+    /**
+     * Returns a new instance of the fragment.
+     */
     public static ProfileFragment newInstance(long clientId) {
 
         Bundle args = new Bundle();
@@ -87,6 +91,10 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
         return rootView;
     }
 
+    /**
+     * Sets the swipe refresh layout to false.
+     * Updates the ActionBar title.
+     */
     private void setupUi() {
         setToolbarTitle(Constants.PROFILE);
         setSwipeEnabled(false);
@@ -94,6 +102,10 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
         setupBottomSheet();
     }
 
+    /**
+     * Sets up a BottomSheet on HomeFragment.
+     * Implements callback methods for BottomSheet.
+     */
     private void setupBottomSheet() {
         BottomSheetBehavior mBottomSheetBehavior = BottomSheetBehavior
                 .from(vProfileBottomSheetDialog);
@@ -117,11 +129,17 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
         mProfilePresenter.fetchClientImage();
     }
 
+    /**
+     * Attaches presenter to the view.
+     */
     @Override
     public void setPresenter(BaseHomeContract.ProfilePresenter presenter) {
         this.mProfilePresenter = presenter;
     }
 
+    /**
+     * OnClickListener for image view to edit user's profile image .
+     */
     @OnClick(R.id.iv_user_image)
     public void onUserImageEditClicked() {
         if (getActivity() != null) {
@@ -131,6 +149,9 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
         }
     }
 
+    /**
+     * OnClickListener for EditProfile Button.
+     */
     @OnClick(R.id.btn_profile_bottom_sheet_action)
     public void onEditProfileClicked() {
         if (getActivity() != null) {
@@ -138,6 +159,10 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
         }
     }
 
+    /**
+     * Updates the image and name of the client
+     * @param client Instance {@link Client}
+     */
     @Override
     public void showProfile(Client client) {
         TextDrawable drawable = TextDrawable.builder().beginConfig()
@@ -148,6 +173,10 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
         tvUserName.setText(client.getName());
     }
 
+    /**
+     * Updates the email of the client
+     * @param email email-id of the client
+     */
     @Override
     public void showEmail(String email) {
         ((ImageView) vAccountDetailsEmail.findViewById(R.id.iv_item_casual_list_icon))
@@ -158,6 +187,10 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
                 .setText(getResources().getString(R.string.email));
     }
 
+    /**
+     * Updates the VPA of the client
+     * @param vpa Virtual Payment Address of the client
+     */
     @Override
     public void showVpa(String vpa) {
         ((ImageView) vAccountDetailsVpa.findViewById(R.id.iv_item_casual_list_icon))
@@ -168,6 +201,10 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
                 .setText(getResources().getString(R.string.vpa));
     }
 
+    /**
+     * Updates the mobile number of the client
+     * @param mobile mobile number of the client.
+     */
     @Override
     public void showMobile(String mobile) {
         ((ImageView) vAccountDetailsMobile.findViewById(R.id.iv_item_casual_list_icon))
@@ -183,11 +220,19 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
 
     }
 
+    /**
+     * Displays a toast message.
+     * @param message message to be displayed
+     */
     @Override
     public void showToast(String message) {
-        Toaster.showToast(getActivity(), message);
+        Toaster.showToast(getContext(), message);
     }
 
+    /**
+     * Displays a Snackbar.
+     * @param message message to be displayed
+     */
     @Override
     public void showSnackbar(String message) {
         Toaster.show(getView(), message);

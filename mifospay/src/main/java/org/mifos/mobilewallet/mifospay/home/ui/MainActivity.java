@@ -25,7 +25,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by naman on 17/6/17.
+ * The parent activity for all other fragments @{@link HomeFragment} @{@link PaymentsFragment}
+ * and @{@link ProfileFragment} @{@link TransferFragment} @{@link FinanceFragment}.
+ * @author naman
+ * @since 17/6/17
  */
 
 public class MainActivity extends BaseActivity implements BaseHomeContract.BaseHomeView {
@@ -63,12 +66,20 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
         setToolbarTitle(Constants.HOME);
     }
 
+    /**
+     * Inflates our custom menu layout to the Activity's standard options menu
+     * @param menu The options menu in which you place your items.
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_overflow, menu);
         return true;
     }
 
+    /**
+     * Starts new Activities depending on which menu item was clicked.
+     * @param item The menu item that was selected.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -84,6 +95,9 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
         return true;
     }
 
+    /**
+     * Attaches the presenter.
+     */
     @Override
     public void setPresenter(BaseHomeContract.BaseHomePresenter presenter) {
         mHomePresenter = presenter;
@@ -97,6 +111,9 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
 //        ivUserImage.setImageDrawable(drawable);
     }
 
+    /**
+     * Navigates back to @{@link HomeFragment} on pressing back button.
+     */
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager()
@@ -108,6 +125,9 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
         super.onBackPressed();
     }
 
+    /**
+     * Used to manage all the fragment transactions.
+     */
     private void navigateFragment(int id, boolean shouldSelect) {
         if (shouldSelect) {
             bottomNavigationView.setSelectedItemId(id);

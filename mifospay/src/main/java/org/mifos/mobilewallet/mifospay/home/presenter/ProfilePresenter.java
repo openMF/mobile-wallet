@@ -12,7 +12,9 @@ import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import javax.inject.Inject;
 
 /**
- * Created by naman on 7/9/17.
+ * Profile Presenter
+ * @author naman
+ * @since 7/9/17
  */
 
 public class ProfilePresenter implements BaseHomeContract.ProfilePresenter {
@@ -25,6 +27,12 @@ public class ProfilePresenter implements BaseHomeContract.ProfilePresenter {
     FetchClientImage fetchClientImageUseCase;
     private BaseHomeContract.ProfileView mProfileView;
 
+    /**
+     * Constructor for ProfilePresenter to initialize global fields
+     * @param useCaseHandler An instance of UseCaseHandler
+     * @param localRepository An instance of LocalRepository
+     * @param preferencesHelper An instance of PreferenceHelper
+     */
     @Inject
     public ProfilePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository,
                             PreferencesHelper preferencesHelper) {
@@ -33,17 +41,26 @@ public class ProfilePresenter implements BaseHomeContract.ProfilePresenter {
         this.mPreferencesHelper = preferencesHelper;
     }
 
+    /**
+     * Attaches View to presenter
+     */
     @Override
     public void attachView(BaseView baseView) {
         mProfileView = (BaseHomeContract.ProfileView) baseView;
         mProfileView.setPresenter(this);
     }
 
+    /**
+     * Used to fetch Client details
+     */
     @Override
     public void fetchProfile() {
         mProfileView.showProfile(localRepository.getClientDetails());
     }
 
+    /**
+     * Used to fetch Client's Account details
+     */
     @Override
     public void fetchAccountDetails() {
         String email = mPreferencesHelper.getEmail();
@@ -54,6 +71,9 @@ public class ProfilePresenter implements BaseHomeContract.ProfilePresenter {
         mProfileView.showMobile(mobile.isEmpty() ? "-" : mobile);
     }
 
+    /**
+     * Used to fetch Client's image to display
+     */
     @Override
     public void fetchClientImage() {
         mUsecaseHandler.execute(fetchClientImageUseCase,

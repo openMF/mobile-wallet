@@ -34,9 +34,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by naman on 17/8/17.
+ * Home Fragment
+ * @author naman
+ * @since 17/8/17
  */
-
 public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeView {
 
     @Inject
@@ -74,6 +75,9 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
+    /**
+     * Returns a new instance of the fragment.
+     */
     public static HomeFragment newInstance(long clientId) {
 
         Bundle args = new Bundle();
@@ -107,19 +111,27 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         return rootView;
     }
 
+    /**
+     * Enables SwipeProgress when the fragment is Resumed.
+     */
     @Override
     public void onResume() {
         super.onResume();
         showSwipeProgress();
     }
 
-
+    /**
+     * Disables SwipeProgress when the fragment goes in Paused state.
+     */
     @Override
     public void onPause() {
         super.onPause();
         hideSwipeProgress();
     }
 
+    /**
+     * Fetches client Account details when fragment is refreshed .
+     */
     private void setUpSwipeRefresh() {
         getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -129,6 +141,9 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         });
     }
 
+    /**
+     * Sets the UI on fragment created by calling all the required methods.
+     */
     private void setupUi() {
         hideBackButton();
         setupBottomSheet();
@@ -138,6 +153,10 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         vStateView.setVisibility(View.GONE);
     }
 
+    /**
+     * Sets up a BottomSheet on HomeFragment.
+     * Implements callback methods for BottomSheet.
+     */
     private void setupBottomSheet() {
         mBottomSheetBehavior = BottomSheetBehavior.from(vHomeBottomSheetDialog);
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -160,17 +179,27 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         });
     }
 
+    /**
+     * Sets the adapter to RecyclerView.
+     */
     private void setupRecyclerView() {
         rvHomeBottomSheetContent.setLayoutManager(new LinearLayoutManager(getContext()));
         mHistoryAdapter.setContext(getActivity());
         rvHomeBottomSheetContent.setAdapter(mHistoryAdapter);
     }
 
+    /**
+     * Attaches presenter to the View.
+     */
     @Override
     public void setPresenter(BaseHomeContract.HomePresenter presenter) {
         this.mHomePresenter = presenter;
     }
 
+    /**
+     * Updates the text view with accountBalance and currency symbol.
+     * @param account instance of Account class which is specific to the user.
+     */
     @Override
     public void showAccountBalance(Account account) {
         this.account = account;
@@ -182,6 +211,10 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         mTvAccountBalance.setText(balanceFormatted);
     }
 
+    /**
+     * Sets data for the adapter to show.
+     * @param transactions ArrayList of transactions carried out by the user.
+     */
     @Override
     public void showTransactionsHistory(List<Transaction> transactions) {
         vStateView.setVisibility(View.GONE);
@@ -189,6 +222,9 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         mHistoryAdapter.setData(transactions);
     }
 
+    /**
+     * Called when there is an error in retrieving information from the server.
+     */
     @Override
     public void showTransactionsError() {
         rvHomeBottomSheetContent.setVisibility(View.GONE);
@@ -196,6 +232,9 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         vStateView.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Called when there are no transactions to show.
+     */
     @Override
     public void showTransactionsEmpty() {
         rvHomeBottomSheetContent.setVisibility(View.GONE);
@@ -203,31 +242,51 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         vStateView.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Sets the visibility of ShowMore button to VISIBLE.
+     */
     @Override
     public void showBottomSheetActionButton() {
         btnShowMoreTransactionsHistory.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * Sets the visibility of ShowMore button to GONE.
+     */
     @Override
     public void hideBottomSheetActionButton() {
         btnShowMoreTransactionsHistory.setVisibility(View.GONE);
     }
 
+    /**
+     * Hides the Refresh SwipeProgress.
+     */
     @Override
     public void hideSwipeProgress() {
         super.hideSwipeProgress();
     }
 
+    /**
+     * Displays a toast message.
+     * @param message message to be displayed
+     */
     @Override
     public void showToast(String message) {
         Toaster.showToast(getContext(), message);
     }
 
+    /**
+     * Displays a Snackbar.
+     * @param message message to be displayed
+     */
     @Override
     public void showSnackbar(String message) {
         Toaster.show(getView(), message);
     }
 
+    /**
+     * Called when the transaction history is empty.
+     */
     private void setupEmptyStateView() {
         if (getActivity() != null) {
             Resources res = getResources();
@@ -240,6 +299,10 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         }
     }
 
+    /**
+     * Called when there is an error in retrieving information from the server.
+     * Displays required text and images.
+     */
     private void setupErrorStateView() {
         if (getActivity() != null) {
             Resources res = getResources();
