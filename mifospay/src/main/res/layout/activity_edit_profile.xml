@@ -76,8 +76,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/value_10dp"
                         android:layout_marginRight="@dimen/value_10dp"
-                        android:orientation="vertical"
-                        android:visibility="gone"/>
+                        android:orientation="vertical"/>
+
 
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
