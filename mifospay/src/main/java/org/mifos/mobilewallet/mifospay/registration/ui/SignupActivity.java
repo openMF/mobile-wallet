@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.text.TextUtils;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
 
@@ -215,6 +217,13 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
         if (!password.equals(confirmPassword)) {
             Toaster.showToast(this, "Password is not same as Confirm Password");
+            hideProgressDialog();
+            return;
+        }
+
+
+        if (TextUtils.isEmpty(email) && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toaster.showToast(this, "Please enter correct Email Address.");
             hideProgressDialog();
             return;
         }
