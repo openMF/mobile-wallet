@@ -18,7 +18,7 @@ dependencies {
     checkstyle 'com.puppycrawl.tools:checkstyle:6.5'
 }
 
-def qualityConfigDir = "$project.rootDir/config/quality";
+def qualityConfigDir = "$project.rootDir/config/quality"
 def reportsDir = "$project.buildDir/reports"
 
 check.dependsOn 'checkstyle', 'findbugs', 'pmd'
@@ -31,6 +31,7 @@ task checkstyle(type: Checkstyle, group: 'Verification', description: 'Runs code
     reports {
         xml.enabled = true
         xml {
+            //noinspection GrDeprecatedAPIUsage
             destination "$reportsDir/checkstyle/checkstyle.xml"
         }
     }
@@ -58,9 +59,11 @@ task findbugs(type: FindBugs,
         xml.enabled = false
         html.enabled = true
         xml {
+            //noinspection GrDeprecatedAPIUsage
             destination "$reportsDir/findbugs/findbugs.xml"
         }
         html {
+            //noinspection GrDeprecatedAPIUsage
             destination "$reportsDir/findbugs/findbugs.html"
         }
     }
@@ -82,9 +85,11 @@ task pmd(type: Pmd, group: 'Verification', description: 'Inspect sourcecode for 
         xml.enabled = true
         html.enabled = true
         xml {
+            //noinspection GrDeprecatedAPIUsage
             destination "$reportsDir/pmd/pmd.xml"
         }
         html {
+            //noinspection GrDeprecatedAPIUsage
             destination "$reportsDir/pmd/pmd.html"
         }
     }
