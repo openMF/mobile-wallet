@@ -21,11 +21,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * This activity is to view notifications record.
- * Notifications Datatable is populated automatically by server when an event happens.
+ * This is the UI component of the Notification Architecture.
+ * This activity is to view notification record.
+ * Notification Data table is populated automatically by server when an event happens.
  * This feature is yet to be implemented on the server side.
+ * @author ankur
+ * @since 24/July/2018
  */
-
 public class NotificationActivity extends BaseActivity implements
         NotificationContract.NotificationView {
 
@@ -57,6 +59,10 @@ public class NotificationActivity extends BaseActivity implements
         mNotificationPresenter.fetchNotifications();
     }
 
+    /**
+     * A function to setup the Layout Manager and integrate the RecyclerView with Adapter.
+     * This function also adds a divider between notifications vertically
+     */
     private void setupRecyclerView() {
         mRvNotification.setLayoutManager(new LinearLayoutManager(this));
         mRvNotification.setAdapter(mNotificationAdapter);
@@ -64,6 +70,9 @@ public class NotificationActivity extends BaseActivity implements
                 DividerItemDecoration.VERTICAL));
     }
 
+    /**
+     * A function to enable swipe refresh.
+     */
     private void setupSwipeRefreshLayout() {
         setSwipeRefreshEnabled(true);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -74,23 +83,39 @@ public class NotificationActivity extends BaseActivity implements
         });
     }
 
+    /**
+     * An overridden function to set Presenter reference in this UI Component.
+     * @param presenter : Presenter component reference for the Architecture
+     */
     @Override
     public void setPresenter(NotificationContract.NotificationPresenter presenter) {
         mNotificationPresenter = presenter;
     }
 
+    /**
+     * An overridden method to fetch notifications when the task completes successfully.
+     * @param notificationPayloadList : Notification Payload list
+     */
     @Override
     public void fetchNotificationsSuccess(List<NotificationPayload> notificationPayloadList) {
         hideSwipeProgress();
         mNotificationAdapter.setNotificationPayloadList(notificationPayloadList);
     }
 
+    /**
+     * An overridden method to fetch error message when the task fails with an exception.
+     * @param message : The exception that caused the task to fail
+     */
     @Override
     public void fetchNotificationsError(String message) {
         hideSwipeProgress();
         showToast(message);
     }
 
+    /**
+     * An overridden method to show a toast message.
+     * @param message : String to be displayed by toast
+     */
     public void showToast(String message) {
         Toaster.showToast(this, message);
     }

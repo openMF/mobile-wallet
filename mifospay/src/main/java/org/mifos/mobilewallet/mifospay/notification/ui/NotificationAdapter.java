@@ -19,7 +19,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ankur on 23/July/2018
+ * This is an Adapter Class to display Notifications.
+ * @author ankur
+ * @since 23/July/2018
  */
 
 public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapter.ViewHolder> {
