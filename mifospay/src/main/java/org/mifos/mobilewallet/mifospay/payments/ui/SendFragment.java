@@ -100,7 +100,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @OnClick(R.id.btn_vpa)
     public void onVPASelected() {
-        mBtnVpa.setFocusable(true);
+        mBtnVpa.setFocusable(false);
         mBtnVpa.setFocusableInTouchMode(true);
         mBtnVpa.setChipBackgroundColorResource(R.color.clickedblue);
         mBtnMobile.setChipBackgroundColorResource(R.color.changedBackgroundColour);
@@ -111,7 +111,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @OnClick(R.id.btn_mobile)
     public void onMobileSelected() {
-        mBtnMobile.setFocusable(true);
+        mBtnMobile.setFocusable(false);
         mBtnMobile.setFocusableInTouchMode(true);
         mBtnMobile.setChipBackgroundColorResource(R.color.clickedblue);
         mBtnVpa.setChipBackgroundColorResource(R.color.changedBackgroundColour);
