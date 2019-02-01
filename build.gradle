@@ -44,4 +44,8 @@ ext {
     okHttp3Version = '3.6.0'
     butterKnifeVersion = '8.6.0'
     dbflowVersion = '3.1.1'
+    espressoVersion = '2.2.2'
+    rxandroidVersion = '1.1.0'
+    rxjavaVersion = '1.1.4'
+    junitVersion = '4.12'
 }
