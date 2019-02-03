@@ -63,10 +63,11 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
                 intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
             }
         } else {
-            String mimeTypesStr = "";
+            StringBuilder mimeTypesStrBuilder = new StringBuilder();
             for (String mimeType : mimeTypes) {
-                mimeTypesStr += mimeType + "|";
+                mimeTypesStrBuilder.append(mimeType).append('|');
             }
+            String mimeTypesStr = mimeTypesStrBuilder.toString();
             intent.setType(mimeTypesStr.substring(0, mimeTypesStr.length() - 1));
         }
         mKYCLevel2View.startDocChooseActivity(intent, READ_REQUEST_CODE);

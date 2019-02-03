@@ -10,10 +10,11 @@ public class DebugUtil {
 
     public static Object[] log(Object... objects) {
 
-        String stringToPrint = "";
+        StringBuilder stringBuilderToPrint = new StringBuilder();
         for (Object object : objects) {
-            stringToPrint += object + ", ";
+            stringBuilderToPrint.append(object).append(", ");
         }
+        String stringToPrint = stringBuilderToPrint.toString();
         stringToPrint = stringToPrint.substring(0, stringToPrint.lastIndexOf(','));
         Log.d("QXZ:: ", stringToPrint);
         return objects;
