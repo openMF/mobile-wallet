@@ -24,7 +24,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ankur on 18/June/2018
+ * This is the adapter class for
+ * Specific Transactions.
+ * @author ankur
+ * @since 18/June/2018
  */
 
 public class SpecificTransactionsAdapter
@@ -93,11 +96,20 @@ public class SpecificTransactionsAdapter
         this.context = context;
     }
 
+    /**
+     * Method to set list of Transactions
+     * as the data for the adapter.
+     * @param transactions
+     */
     public void setData(List<Transaction> transactions) {
         this.transactions = transactions;
         notifyDataSetChanged();
     }
 
+    /**
+     *  Method to return the list of data.
+     * @return list of Transactions.
+     */
     public ArrayList<Transaction> getTransactions() {
         return (ArrayList<Transaction>) transactions;
     }

@@ -7,7 +7,8 @@ import org.mifos.mobilewallet.mifospay.transactions.TransactionsContract;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 08/June/2018
+ * @author ankur
+ * @since 08/June/2018
  */
 
 public class SpecificTransactionsPresenter implements

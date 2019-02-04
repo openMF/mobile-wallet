@@ -19,7 +19,8 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by naman on 17/8/17.
+ * @author naman
+ * @since 17/8/17.
  */
 
 public class TransactionsHistoryPresenter implements
@@ -52,6 +53,11 @@ public class TransactionsHistoryPresenter implements
         mTransactionsHistoryView.setPresenter(this);
     }
 
+    /**
+     * Method to fetch transactions
+     * of a particular account.
+     * @param accountId
+     */
     @Override
     public void fetchTransactions(long accountId) {
 

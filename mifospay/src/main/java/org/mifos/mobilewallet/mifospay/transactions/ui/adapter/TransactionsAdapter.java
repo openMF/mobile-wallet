@@ -22,6 +22,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ * This is an adapter class for
+ * the Transaction history.
  * Created by naman on 17/8/17.
  */
 
@@ -80,11 +82,20 @@ public class TransactionsAdapter
         this.context = context;
     }
 
+    /**
+     * Method to set the list of Transactions
+     * as the data for this adapter.
+     * @param transactions
+     */
     public void setData(List<Transaction> transactions) {
         this.transactions = transactions;
         notifyDataSetChanged();
     }
 
+    /**
+     * Method to return the list of data.
+     * @return list of Transactions.
+     */
     public ArrayList<Transaction> getTransactions() {
         return (ArrayList<Transaction>) transactions;
     }

@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 06/June/2018
+ * @author ankur
+ * @since 06/June/2018
  */
 
 public class TransactionDetailPresenter implements TransactionsContract.TransactionDetailPresenter {
@@ -32,6 +33,13 @@ public class TransactionDetailPresenter implements TransactionsContract.Transact
         mTransactionDetailView.setPresenter(this);
     }
 
+    /**
+     * Method to return specific transactions
+     * from list of transactions.
+     * @param transactions
+     * @param secondAccountNumber
+     * @return
+     */
     @Override
     public ArrayList<Transaction> getSpecificTransactions(ArrayList<Transaction> transactions,
             String secondAccountNumber) {

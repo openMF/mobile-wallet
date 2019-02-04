@@ -33,7 +33,10 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
- * Created by ankur on 06/June/2018
+ * This is the dialog fragment
+ * for details of a transaction.
+ * @author ankur
+ * @since 06/June/2018
  */
 
 public class TransactionDetailDialog extends BottomSheetDialogFragment implements

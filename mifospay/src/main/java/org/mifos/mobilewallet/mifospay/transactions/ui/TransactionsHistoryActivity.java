@@ -28,7 +28,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by naman on 17/8/17.
+ * This is the activity to show history of transactions.
+ * @author naman
+ * @since 17/8/17.
  */
 
 public class TransactionsHistoryActivity extends BaseActivity implements
@@ -90,7 +92,10 @@ public class TransactionsHistoryActivity extends BaseActivity implements
             }
         });
     }
-
+    /**
+     * Method to set adapter for the RecyclerView
+     * and implement its listeners.
+     */
     private void setupRecyclerView() {
         rvTransactions.setLayoutManager(new LinearLayoutManager(this));
         rvTransactions.setAdapter(mTransactionsAdapter);
@@ -116,6 +121,10 @@ public class TransactionsHistoryActivity extends BaseActivity implements
         this.mTransactionsHistoryPresenter = presenter;
     }
 
+    /**
+     *
+     * @param transactions
+     */
     @Override
     public void showTransactions(List<Transaction> transactions) {
         if (transactions == null || transactions.size() == 0) {
@@ -129,6 +138,11 @@ public class TransactionsHistoryActivity extends BaseActivity implements
         hideSwipeProgress();
     }
 
+    /**
+     * Method to show transaction details
+     * of a particular transaction.
+     * @param i represents that transaction.
+     */
     public void showTransactionDetailDialog(int i) {
 
         TransactionDetailDialog transactionDetailDialog = new TransactionDetailDialog();
