@@ -7,7 +7,10 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 import java.util.List;
 
 /**
- * Created by ankur on 11/July/2018
+ * This is a contract working as an interface between
+ * UI and Presenter of the transactions section.
+ * @author ankur
+ * @since 11/07/2018
  */
 
 public interface MerchantsContract {

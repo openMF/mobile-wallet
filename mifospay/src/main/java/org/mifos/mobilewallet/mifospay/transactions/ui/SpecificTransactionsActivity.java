@@ -60,6 +60,10 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         hideProgressDialog();
     }
 
+    /**
+     * Method to set adapter for the RecyclerView
+     * and implement its listeners.
+     */
     private void setupRecyclerView() {
         mRvTransactions.setLayoutManager(new LinearLayoutManager(this));
         mRvTransactions.setAdapter(mSpecificTransactionsAdapter);
