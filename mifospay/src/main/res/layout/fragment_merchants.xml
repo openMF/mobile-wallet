@@ -39,7 +39,8 @@
             android:layout_marginTop="@dimen/marginBetweenSections"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false"
+            android:scrollbars="vertical"/>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>
