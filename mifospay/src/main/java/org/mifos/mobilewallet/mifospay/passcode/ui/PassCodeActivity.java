@@ -22,7 +22,9 @@ import javax.inject.Inject;
 import butterknife.ButterKnife;
 
 /**
- * Created by ankur on 15/May/2018
+ * This class defines the UI components of the PassCode Activity
+ * @author ankur
+ * @since 15/May/2018
  */
 public class PassCodeActivity extends MifosPassCodeActivity implements
         PassCodeContract.PassCodeView {
@@ -49,11 +51,18 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
 
     }
 
+    /**
+     * This function returns the logo
+     * @return 0
+     */
     @Override
     public int getLogo() {
         return 0;
     }
 
+    /**
+     * This function starts the LoginActivity
+     */
     @Override
     public void startNextActivity() {
         // authenticate user with saved Preferences
@@ -65,22 +74,37 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
         startActivity(intent);
     }
 
+    /**
+     * This function starts the LoginActivity
+     */
     @Override
     public void startLoginActivity() {
         Intent intent = new Intent(PassCodeActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 
+    /**
+     * This function displays the current context in a Toast.
+     * @param view The current view
+     * @param msg A message of type integer.
+     */
     @Override
     public void showToaster(View view, int msg) {
         Toast.makeText(getApplicationContext(), getText(msg), Toast.LENGTH_SHORT).show();
     }
 
+    /**
+     * This function return the Encryption type.
+     */
     @Override
     public int getEncryptionType() {
         return EncryptionUtil.DEFAULT;
     }
 
+    /**
+     * This function sets the Presenter.
+     * @param presenter A type of PassCodePresenter
+     */
     @Override
     public void setPresenter(PassCodeContract.PassCodePresenter presenter) {
         mPassCodePresenter = mPresenter;
