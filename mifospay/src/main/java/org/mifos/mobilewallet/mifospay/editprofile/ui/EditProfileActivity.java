@@ -40,6 +40,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * This is the UI component of the EditProfile package.
+ * @author ankur
+ * @since 27/June/2018
+ */
 public class EditProfileActivity extends BaseActivity implements
         EditProfileContract.EditProfileView {
 
@@ -142,6 +147,9 @@ public class EditProfileActivity extends BaseActivity implements
         setupBottomSheetDialog();
     }
 
+    /**
+     * A function to set up bottom sheet dialog.
+     */
     private void setupBottomSheetDialog() {
         bottomSheetDialog = new BottomSheetDialog(EditProfileActivity.this);
         View sheetView = getLayoutInflater()
@@ -151,6 +159,10 @@ public class EditProfileActivity extends BaseActivity implements
         ButterKnife.bind(bsv, sheetView);
     }
 
+    /**
+     * An overridden function to set Presenter reference in this UI Component.
+     * @param presenter : Presenter component reference for the Architecture
+     */
     @Override
     public void setPresenter(EditProfileContract.EditProfilePresenter presenter) {
         mEditProfilePresenter = presenter;
@@ -161,7 +173,9 @@ public class EditProfileActivity extends BaseActivity implements
         if (mLlPassword.isShown()) {
             AnimationUtil.collapse(mLlPassword);
         } else {
-            // collapse other views
+            /**
+             * Collapse other views.
+             */
             if (mLlPasscode.isShown()) {
                 AnimationUtil.collapse(mLlPasscode);
             } else if (mLlEmail.isShown()) {
@@ -180,7 +194,9 @@ public class EditProfileActivity extends BaseActivity implements
         if (mLlPasscode.isShown()) {
             AnimationUtil.collapse(mLlPasscode);
         } else {
-            // collapse other views
+            /**
+             * Collapse other views.
+             */
             if (mLlPassword.isShown()) {
                 AnimationUtil.collapse(mLlPassword);
             } else if (mLlEmail.isShown()) {
@@ -200,7 +216,9 @@ public class EditProfileActivity extends BaseActivity implements
             AnimationUtil.collapse(mLlEmail);
             mTvCurrentEmail.setVisibility(View.VISIBLE);
         } else {
-            // collapse other views
+            /**
+             * Collapse other views.
+             */
             if (mLlPasscode.isShown()) {
                 AnimationUtil.collapse(mLlPasscode);
             } else if (mLlPassword.isShown()) {
@@ -221,7 +239,9 @@ public class EditProfileActivity extends BaseActivity implements
             AnimationUtil.collapse(mLlMobile);
             mTvCurrentMobileNumber.setVisibility(View.VISIBLE);
         } else {
-            // collapse other views
+            /**
+             * Collapse other views.
+             */
             if (mLlPasscode.isShown()) {
                 AnimationUtil.collapse(mLlPasscode);
             } else if (mLlPassword.isShown()) {
@@ -237,6 +257,11 @@ public class EditProfileActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * A function to exclude country code from the given string.
+     * @param str : A string with country code included
+     * @return : A string without country code
+     */
     private String excludeCountryCodeFromString(String str) {
         String selectedCountryCode = mCcpNewCode.getSelectedCountryCode();
         return str.substring(selectedCountryCode.length(), str.length());
@@ -329,26 +354,31 @@ public class EditProfileActivity extends BaseActivity implements
             @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_READ_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
+                /**
+                 * If request is cancelled, the result arrays are empty.
+                 */
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // storage-related task you need to do.
-
+                    /**
+                     * permission was granted, yay! Do the storage-related task you need to do.
+                     */
                     Intent i = new Intent(Intent.ACTION_PICK,
                             android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
                     startActivityForResult(i, REQUEST_READ_IMAGE);
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    /**
+                     * Permission denied, boo!
+                     * Disable the functionality that depends on this permission.
+                     */
                     showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_IMAGES);
                 }
                 return;
             }
 
-            // other 'case' lines to check for other
-            // permissions this app might request.
+            /**
+             * Other 'case' lines to check for other permissions this app might request.
+             */
         }
     }
 
@@ -399,11 +429,19 @@ public class EditProfileActivity extends BaseActivity implements
         return uCrop.withOptions(options);
     }
 
+    /**
+     * An overridden method to show a toast message.
+     * @param message : String to be displayed by toast
+     */
     @Override
     public void showToast(String message) {
         Toaster.showToast(this, message);
     }
 
+    /**
+     * An overridden method called when email is successfully updated.
+     * @param email : The email that has been updated
+     */
     @Override
     public void onUpdateEmailSuccess(String email) {
         hideProgressDialog();
@@ -414,12 +452,20 @@ public class EditProfileActivity extends BaseActivity implements
         showToast("Email successfully updated");
     }
 
+    /**
+     * An overridden method called when there is error in updation of email.
+     * @param message : The exception that caused the task to fail
+     */
     @Override
     public void onUpdateEmailError(String message) {
         hideProgressDialog();
         showToast(message);
     }
 
+    /**
+     * An overridden method called when mobile number is successfully updated.
+     * @param fullNumber : Mobile number that has been updated
+     */
     @Override
     public void onUpdateMobileSuccess(String fullNumber) {
         hideProgressDialog();
@@ -430,12 +476,19 @@ public class EditProfileActivity extends BaseActivity implements
         showToast("Mobile number successfully updated");
     }
 
+    /**
+     * An overridden method called when there is error in updation of mobile number.
+     * @param message : The exception that caused the task to fail
+     */
     @Override
     public void onUpdateMobileError(String message) {
         hideProgressDialog();
         showToast(message);
     }
 
+    /**
+     * An overridden method called when password is successfully updated.
+     */
     @Override
     public void onUpdatePasswordSuccess() {
         hideProgressDialog();
@@ -443,17 +496,27 @@ public class EditProfileActivity extends BaseActivity implements
         showToast("Password successfully updated");
     }
 
+    /**
+     * An overridden method called when there is error in updation of password.
+     * @param message : The exception that caused the task to fail
+     */
     @Override
     public void onUpdatePasswordError(String message) {
         hideProgressDialog();
         showToast(message);
     }
 
+    /**
+     * An overridden method to change profile image.
+     */
     @Override
     public void changeProfileImage() {
         pickImageFromGallery();
     }
 
+    /**
+     * A function to pick image from gallery.
+     */
     private void pickImageFromGallery() {
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(getApplicationContext(),
@@ -476,6 +539,10 @@ public class EditProfileActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * A function to handle crop results.
+     * @param result : Intent that contains final Uri of the cropped image
+     */
     private void handleCropResult(@NonNull Intent result) {
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
@@ -483,23 +550,40 @@ public class EditProfileActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * An overridden method to remove profile image.
+     */
     @Override
     public void removeProfileImage() {
-        // TODO: Remove image from database
+        /**
+         * TODO: Remove image from database
+         */
     }
 
+    /**
+     * An Overridden method to set email
+     * @param email : Email to set as current email
+     */
     @Override
     public void setEmail(String email) {
         this.email = email;
         mTvCurrentEmail.setText(email);
     }
 
+    /**
+     * An Overridden method to set mobile number.
+     * @param mobile : Mobile number to set as current mobile number
+     */
     @Override
     public void setMobile(String mobile) {
         this.mobile = mobile;
         mTvCurrentMobileNumber.setText(mobile);
     }
 
+    /**
+     * An Overridden method to set user image.
+     * @param fullName : The full name of the user
+     */
     @Override
     public void setImage(String fullName) {
         TextDrawable drawable = TextDrawable.builder().beginConfig()
