@@ -28,7 +28,9 @@ import java.util.ArrayList;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 21/June/2018
+ * This class contains the components of the Presenter required for Sign Up.
+ * @author ankur
+ * @since 21/June/2018
  */
 
 public class SignupPresenter implements RegistrationContract.SignupPresenter {
@@ -64,12 +66,34 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
         mPreferencesHelper = preferencesHelper;
     }
 
+    /**
+     * This function attaches a view.
+     * @param baseView This view is set as SignUp View.
+     */
     @Override
     public void attachView(BaseView baseView) {
         mSignupView = (RegistrationContract.SignupView) baseView;
         mSignupView.setPresenter(this);
     }
 
+    /**
+     * This function registers the user.
+     * @param firstName This is the first name of the user.
+     * @param lastName  This is the last name of the user.
+     * @param mobileNumber This is the mobile number of the user.
+     * @param email This is the email-id of the user.
+     * @param businessName This is the business name of the user.
+     * @param addressline1  This is the first address line of the user.
+     * @param addressline2  This is the second address line of the user.
+     * @param pincode   This is the pincode of the area.
+     * @param city  This is the name of the city.
+     * @param countryName   This is the country name.
+     * @param username  This is the username.
+     * @param password  This is the password of the user.
+     * @param stateId   This is the state ID.
+     * @param countryId This is the country ID.
+     * @param mifosSavingProductId  This is the Mifos Saving Product ID.
+     */
     @Override
     public void registerUser(final String firstName, final String lastName,
             final String mobileNumber, final String email, final String businessName,
@@ -114,6 +138,9 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
                 });
     }
 
+    /**
+     * This function creates a new user.
+     */
     private void createUser() {
 
         NewUser newUser = new NewUser(username, firstName, lastName, email, password);
@@ -133,6 +160,10 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
                 });
     }
 
+    /**
+     * This function creates a new client.
+     * @param userId This is the user ID.
+     */
     private void createClient(final int userId) {
 
         DebugUtil.log("mob::::: ", mobileNumber);
@@ -161,6 +192,11 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
                 });
     }
 
+    /**
+     * This function updates the client list.
+     * @param clients This is the list of the clients.
+     * @param userId  This is the user ID of the client that wishes to update.
+     */
     private void updateClient(ArrayList<Integer> clients, int userId) {
         mUseCaseHandler.execute(updateUserUseCase,
                 new UpdateUser.RequestValues(new UpdateUserEntityClients(clients), userId),
@@ -179,6 +215,11 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
                 });
     }
 
+    /**
+     * This function logs the user in.
+     * @param username  This is the username.
+     * @param password  This is the password.
+     */
     private void loginUser(String username, String password) {
         authenticateUserUseCase.setRequestValues(new
                 AuthenticateUser.RequestValues(username, password));
@@ -203,6 +244,10 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
 
     }
 
+    /**
+     * This function fetches the user details.
+     * @param user This is the user whose details are to be fetched.
+     */
     private void fetchUserDetails(final User user) {
         mUseCaseHandler.execute(fetchUserDetailsUseCase,
                 new FetchUserDetails.RequestValues(user.getUserId()),
@@ -219,6 +264,9 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
                 });
     }
 
+    /**
+     * This function fetches the client data.
+     */
     private void fetchClientData() {
         mUseCaseHandler.execute(fetchClientDataUseCase, null,
                 new UseCase.UseCaseCallback<FetchClientData.ResponseValue>() {
@@ -238,6 +286,10 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
                 });
     }
 
+    /**
+     * This function creates an authenticated service.
+     * @param user This is the User.
+     */
     private void createAuthenticatedService(User user) {
 
         final String authToken = Constants.BASIC +
@@ -247,6 +299,11 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
         FineractApiManager.createSelfService(mPreferencesHelper.getToken());
     }
 
+    /**
+     * This function saves user details.
+     * @param user This is the user whose details are to be saved.
+     * @param userWithRole A type of UserWithRole
+     */
     private void saveUserDetails(User user,
             UserWithRole userWithRole) {
         final String userName = user.getUserName();
@@ -257,12 +314,20 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
         mPreferencesHelper.saveEmail(userWithRole.getEmail());
     }
 
+    /**
+     * This function saves client details
+     * @param client This is of the type Client, with client details.
+     */
     private void saveClientDetails(Client client) {
         mPreferencesHelper.saveFullName(client.getName());
         mPreferencesHelper.setClientId(client.getClientId());
         mPreferencesHelper.saveMobile(client.getMobileNo());
     }
 
+    /**
+     * This function deletes the user.
+     * @param userId This is userId to be deleted.
+     */
     private void deleteUser(int userId) {
         mUseCaseHandler.execute(deleteUserUseCase, new DeleteUser.RequestValues(userId),
                 new UseCase.UseCaseCallback<DeleteUser.ResponseValue>() {

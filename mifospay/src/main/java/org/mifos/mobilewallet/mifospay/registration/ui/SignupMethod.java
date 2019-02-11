@@ -20,7 +20,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by ankur on 26/June/2018
+ * This class contains UI Components of the Sign Up Method
+ * @author ankur
+ * @since 26/June/2018
  */
 
 public class SignupMethod extends BottomSheetDialogFragment {
@@ -45,12 +47,18 @@ public class SignupMethod extends BottomSheetDialogFragment {
         return dialog;
     }
 
+    /**
+     * This function sets the state on starting.
+     */
     @Override
     public void onStart() {
         super.onStart();
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
+    /**
+     * This function signs up when the merchant is clicked
+     */
     @OnClick(R.id.btn_merchant)
     public void onMerchantClicked() {
         dismiss();
@@ -64,6 +72,9 @@ public class SignupMethod extends BottomSheetDialogFragment {
         }
     }
 
+    /**
+     * This function signs up when the customer is clicked.
+     */
     @OnClick(R.id.btn_customer)
     public void onCustomerClicked() {
         dismiss();

@@ -66,11 +66,19 @@ public class MobileVerificationActivity extends BaseActivity implements
         mCcpCountry.setCustomMasterCountries("IN,US");
     }
 
+    /**
+     * This function sets the presenter.
+     * @param presenter This is the presenter that is set.
+     */
     @Override
     public void setPresenter(RegistrationContract.MobileVerificationPresenter presenter) {
         mMobileVerificationPresenter = presenter;
     }
 
+    /**
+     * This function requests OTP from the server if the mobile number is valid,
+     * else asks for a valid mobile number.
+     */
     @OnClick(R.id.btn_get_otp)
     public void onGetOTp() {
         Utils.hideSoftKeyboard(this);
@@ -91,6 +99,9 @@ public class MobileVerificationActivity extends BaseActivity implements
         }
     }
 
+    /**
+     * This function displays the components of the presenter on OTP success.
+     */
     @Override
     public void onRequestOtpSuccess() {
         hideProgressDialog();
@@ -105,12 +116,19 @@ public class MobileVerificationActivity extends BaseActivity implements
         mFabNext.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * This function show a toast when its fails to request an OTP
+     * @param s This is the message that is displayed on the toast.
+     */
     @Override
     public void onRequestOtpFailed(String s) {
         hideProgressDialog();
         showToast(s);
     }
 
+    /**
+     * This function is implemented when Next is clicked.
+     */
     @OnClick(R.id.fab_next)
     public void onNextClicked() {
         Utils.hideSoftKeyboard(this);
@@ -131,6 +149,9 @@ public class MobileVerificationActivity extends BaseActivity implements
         }, 1500);
     }
 
+    /**
+     * This functions starts a new activity on verification success.
+     */
     @Override
     public void onOtpVerificationSuccess() {
         Intent intent = new Intent(MobileVerificationActivity.this, SignupActivity.class);
@@ -155,6 +176,10 @@ public class MobileVerificationActivity extends BaseActivity implements
         finish();
     }
 
+    /**
+     * This function shows a toast if the verification fails.
+     * @param s This is the message to be displayed on the toast.
+     */
     @Override
     public void onOtpVerificationFailed(String s) {
         mFabNext.setClickable(true);
@@ -167,7 +192,10 @@ public class MobileVerificationActivity extends BaseActivity implements
         showToast(s);
     }
 
-
+    /**
+     * This function shows a toast message
+     * @param message This is the message that is shown on the toast.
+     */
     @Override
     public void showToast(String message) {
         Toaster.showToast(this, message);

@@ -135,6 +135,9 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 //        mEtCity.setText("Delhi");
     }
 
+    /**
+     * This function initiates the State Spinner and adds all the data to the JSON object.
+     */
     private void initSearchableStateSpinner() {
         JSONObject jsonObject = null;
         try {
@@ -183,11 +186,18 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         }
     }
 
+    /**
+     * This function sets the presenter.
+     * @param presenter A type of presenter that will be set to the view.
+     */
     @Override
     public void setPresenter(RegistrationContract.SignupPresenter presenter) {
         mSignupPresenter = presenter;
     }
 
+    /**
+     * This functions registers the user when clicked.
+     */
     @OnClick(R.id.fab_next)
     public void onNextClicked() {
         showProgressDialog(Constants.PLEASE_WAIT);
@@ -224,6 +234,10 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
                 countryId, mifosSavingProductId);
     }
 
+    /**
+     * This function starts a new activity on register success.
+     * @param s The message that is displayed on the Toast.
+     */
     @Override
     public void onRegisterSuccess(String s) {
         // registered but unable to login or user not updated with client
@@ -236,6 +250,9 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         finish();
     }
 
+    /**
+     * This function starts a new activity on login success.
+     */
     @Override
     public void loginSuccess() {
         hideProgressDialog();
@@ -247,12 +264,21 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         finish();
     }
 
+    /**
+     * This function shows a toast message on registration failure.
+     * @param message This is the message displayed on the toast.
+     */
     @Override
     public void onRegisterFailed(String message) {
         hideProgressDialog();
         showToast(message);
     }
 
+    /**
+     * This function returns a boolean if the Edit Text is empty.
+     * @param etText This is the editText
+     * @return A boolean value true if the length is 0,else false
+     */
     private boolean isEmpty(EditText etText) {
         return etText.getText().toString().trim().length() == 0;
     }

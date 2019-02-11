@@ -9,7 +9,9 @@ import org.mifos.mobilewallet.mifospay.registration.RegistrationContract;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 21/June/2018
+ * This class contains the components of the Presenter required for Mobile Verification.
+ * @author ankur
+ * @since 21/June/2018
  */
 
 public class MobileVerificationPresenter implements
@@ -25,12 +27,21 @@ public class MobileVerificationPresenter implements
         mUseCaseHandler = useCaseHandler;
     }
 
+    /**
+     * This function attaches a view.
+     * @param baseView This view is set as Mobile Verification View.
+     */
     @Override
     public void attachView(BaseView baseView) {
         mMobileVerificationView = (RegistrationContract.MobileVerificationView) baseView;
         mMobileVerificationView.setPresenter(this);
     }
 
+    /**
+     * This function requests for the OTP from the server.
+     * @param fullNumber This is the full number.
+     * @param mobileNo This is the mobile number of the user
+     */
     @Override
     public void requestOTPfromServer(String fullNumber, String mobileNo) {
 
@@ -49,6 +60,10 @@ public class MobileVerificationPresenter implements
                 });
     }
 
+    /**
+     * This function verifies the OTP.
+     * @param otp The otp which was received by the user
+     */
     @Override
     public void verifyOTP(String otp) {
         // TODO:: verify OTP

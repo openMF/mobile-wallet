@@ -4,11 +4,15 @@ import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
 /**
- * Created by ankur on 21/June/2018
+ * A contract class working as an interface between the UI and the presenter of the Registration
+ * @author ankur
+ * @since 21/June/2018
  */
 
 public interface RegistrationContract {
-
+    /**
+     * Contains all the functions of the UI component of Mobile Verification View.
+     */
     interface MobileVerificationView extends BaseView<MobileVerificationPresenter> {
 
         void onRequestOtpSuccess();
@@ -24,6 +28,9 @@ public interface RegistrationContract {
         void onOtpVerificationFailed(String s);
     }
 
+    /**
+     * Contains all the functions of the Presenter component of Mobile Verification View.
+     */
     interface MobileVerificationPresenter extends BasePresenter {
 
         void requestOTPfromServer(String fullNumber, String s);
@@ -31,7 +38,9 @@ public interface RegistrationContract {
         void verifyOTP(String otp);
     }
 
-
+    /**
+     * Contains all the functions of the UI component of SignUp View
+     */
     interface SignupView extends BaseView<SignupPresenter> {
 
         void showToast(String s);
@@ -45,6 +54,9 @@ public interface RegistrationContract {
         void onRegisterSuccess(String s);
     }
 
+    /**
+     * Contains all the functions of the Presenter component of the SignUp View.
+     */
     interface SignupPresenter extends BasePresenter {
 
         void registerUser(String firstName, String lastName, String mobileNumber, String email,
