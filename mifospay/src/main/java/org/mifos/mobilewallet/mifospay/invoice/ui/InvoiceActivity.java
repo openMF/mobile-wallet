@@ -87,11 +87,21 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
 
     }
 
+    /**
+     * This function sets the Presenter.
+     * @param presenter This is the presenter that will be set.
+     */
     @Override
     public void setPresenter(InvoiceContract.InvoicePresenter presenter) {
         mInvoicePresenter = presenter;
     }
 
+    /**
+     * This function shows the Invoice details.
+     * @param invoice This contains the invoice details.
+     * @param merchantId This is the merchant ID.
+     * @param paymentLink This is the payment link.
+     */
     @Override
     public void showInvoiceDetails(final Invoice invoice, String merchantId, String paymentLink) {
 
@@ -156,12 +166,20 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
         hideProgressDialog();
     }
 
+    /**
+     * This function shows a toast message.
+     * @param message This is the message that will be shown.
+     */
     @Override
     public void showToast(String message) {
         Toaster.showToast(this, message);
         finish();
     }
 
+    /**
+     * This function shows a snackbar.
+     * @param message This is the message that will be shown on the snackbar.
+     */
     @Override
     public void showSnackbar(String message) {
         Toaster.show(findViewById(android.R.id.content), message);

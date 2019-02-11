@@ -12,7 +12,9 @@ import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 07/June/2018
+ * This class contains the components of the Presenter required by Invoice.
+ * @author ankur
+ * @since 07/June/2018
  */
 
 public class InvoicePresenter implements InvoiceContract.InvoicePresenter {
@@ -29,13 +31,20 @@ public class InvoicePresenter implements InvoiceContract.InvoicePresenter {
         mPreferencesHelper = preferencesHelper;
     }
 
-
+    /**
+     * This function attaches a view.
+     * @param baseView This is the view to be attached.
+     */
     @Override
     public void attachView(BaseView baseView) {
         mInvoiceView = (InvoiceContract.InvoiceView) baseView;
         mInvoiceView.setPresenter(this);
     }
 
+    /**
+     * This function gets the invoice details.
+     * @param data This of the type Uri.
+     */
     @Override
     public void getInvoiceDetails(final Uri data) {
 

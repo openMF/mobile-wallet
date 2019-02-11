@@ -20,7 +20,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ankur on 11/June/2018
+ * This is the adapter class that will feed data to the RecyclerView.
+ * @author ankur
+ * @since 11/June/2018
  */
 
 public class InvoicesAdapter
@@ -33,6 +35,12 @@ public class InvoicesAdapter
     public InvoicesAdapter() {
     }
 
+    /**
+     * This function creates the viewholder and initializes/inflates the view with the given layout.
+     * @param parent This is the parent view.
+     * @param viewType This is the viewtype.
+     * @return This returns the viewholder after inflation.
+     */
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -41,6 +49,11 @@ public class InvoicesAdapter
         return new ViewHolder(v);
     }
 
+    /**
+     * This function displays the data at the specified position.
+     * @param holder This is the viewholder.
+     * @param position This is the position of the view.
+     */
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Invoice invoice = mInvoiceList.get(position);
@@ -52,6 +65,10 @@ public class InvoicesAdapter
         holder.mTvInvoiceAmount.setText(Constants.INR + invoice.getAmount());
     }
 
+    /**
+     * This function returns the item count of the invoice list.
+     * @return Item count of the invoice list.
+     */
     @Override
     public int getItemCount() {
         if (mInvoiceList != null) {
@@ -61,19 +78,35 @@ public class InvoicesAdapter
         }
     }
 
+    /**
+     * This function sets the context.
+     * @param context This is the context that is set.
+     */
     public void setContext(Context context) {
         this.context = context;
     }
 
+    /**
+     * This function sets the data to the invoice list.
+     * @param invoices This is the new list whose data is set.
+     */
     public void setData(List<Invoice> invoices) {
         this.mInvoiceList = invoices;
         notifyDataSetChanged();
     }
 
+    /**
+     * This function returns the Invoice List.
+     * @return Invoice list of the type Invoice.
+     */
     public List<Invoice> getInvoiceList() {
         return mInvoiceList;
     }
 
+    /**
+     * This is the Viewholder class which defines all the components
+     * to be feeded in the RecyclerView.
+     */
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_invoice_id)

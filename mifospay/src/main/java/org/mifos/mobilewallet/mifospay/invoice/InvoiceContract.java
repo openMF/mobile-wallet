@@ -9,11 +9,16 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 import java.util.List;
 
 /**
- * Created by ankur on 07/June/2018
+ * This contract class acts as interface between the UI and the Presenter components of Invoice.
+ * @author ankur
+ * @since 07/June/2018
  */
 
 public interface InvoiceContract {
 
+    /**
+     * Contains all the functions of the Invoice UI component.
+     */
     interface InvoiceView extends BaseView<InvoicePresenter> {
 
         void showInvoiceDetails(Invoice invoice, String merchantId, String paymentLink);
@@ -23,12 +28,18 @@ public interface InvoiceContract {
         void showToast(String message);
     }
 
+    /**
+     * Contains all the functions of the Presenter component.
+     */
     interface InvoicePresenter extends BasePresenter {
 
 
         void getInvoiceDetails(Uri data);
     }
 
+    /**
+     * Contains all the functions of the Invoices UI component.
+     */
     interface InvoicesView extends BaseView<InvoicesPresenter> {
 
         void showSnackbar(String message);
@@ -40,6 +51,9 @@ public interface InvoiceContract {
         void hideProgress();
     }
 
+    /**
+     * Contains all the functions of the Invoices Presenter component.
+     */
     interface InvoicesPresenter extends BasePresenter {
 
 

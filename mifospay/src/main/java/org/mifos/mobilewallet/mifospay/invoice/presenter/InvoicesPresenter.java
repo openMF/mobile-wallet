@@ -14,7 +14,9 @@ import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 11/June/2018
+ * This class contains components of the Presenter required by Invoices.
+ * @author ankur
+ * @since 11/June/2018
  */
 
 public class InvoicesPresenter implements InvoiceContract.InvoicesPresenter {
@@ -31,12 +33,19 @@ public class InvoicesPresenter implements InvoiceContract.InvoicesPresenter {
         mPreferencesHelper = preferencesHelper;
     }
 
+    /**
+     * This function attaches a view.
+     * @param baseView This is the view to be attached.
+     */
     @Override
     public void attachView(BaseView baseView) {
         mInvoicesView = (InvoiceContract.InvoicesView) baseView;
         mInvoicesView.setPresenter(this);
     }
 
+    /**
+     * This function fetches the Invoices.
+     */
     @Override
     public void fetchInvoices() {
         mUseCaseHandler.execute(fetchInvoicesUseCase,
@@ -58,6 +67,11 @@ public class InvoicesPresenter implements InvoiceContract.InvoicesPresenter {
                 });
     }
 
+    /**
+     * This function gets the Unique Invoice Link
+     * @param id This is the client id of the type long.
+     * @return Returns data of the type Uri.
+     */
     @Override
     public Uri getUniqueInvoiceLink(long id) {
         Uri data = Uri.parse(

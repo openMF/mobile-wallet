@@ -73,6 +73,9 @@ public class InvoicesActivity extends BaseActivity implements InvoiceContract.In
         setupRecyclerView();
     }
 
+    /**
+     * This function sets up the recyclerview.
+     */
     private void setupRecyclerView() {
         mRvInvoices.setLayoutManager(new LinearLayoutManager(this));
         mRvInvoices.setAdapter(mInvoicesAdapter);
@@ -97,6 +100,9 @@ public class InvoicesActivity extends BaseActivity implements InvoiceContract.In
                 }));
     }
 
+    /**
+     * This fucntion sets up the Swipe Refresh Layout.
+     */
     private void setupSwipeRefreshLayout() {
         setSwipeRefreshEnabled(true);
         swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -107,11 +113,19 @@ public class InvoicesActivity extends BaseActivity implements InvoiceContract.In
         });
     }
 
+    /**
+     * This function sets the presenter.
+     * @param presenter This is the presenter that will be set.
+     */
     @Override
     public void setPresenter(InvoiceContract.InvoicesPresenter presenter) {
         mInvoicesPresenter = presenter;
     }
 
+    /**
+     * This function shows the Invoices.
+     * @param invoiceList This is the invoice list with the invoice data.
+     */
     @Override
     public void showInvoices(List<Invoice> invoiceList) {
         if (invoiceList == null || invoiceList.size() == 0) {
@@ -128,16 +142,27 @@ public class InvoicesActivity extends BaseActivity implements InvoiceContract.In
         hideSwipeProgress();
     }
 
+    /**
+     * This function hides the Swipe Progress
+     */
     @Override
     public void hideProgress() {
         super.hideSwipeProgress();
     }
 
+    /**
+     * This function shows a toast message.
+     * @param message This is the message that will be shown.
+     */
     @Override
     public void showToast(String message) {
         Toaster.showToast(this, message);
     }
 
+    /**
+     * This function shows a snackbar message.
+     * @param message This is the message that is shown on the snackbar.
+     */
     @Override
     public void showSnackbar(String message) {
         Toaster.show(findViewById(android.R.id.content), message);
