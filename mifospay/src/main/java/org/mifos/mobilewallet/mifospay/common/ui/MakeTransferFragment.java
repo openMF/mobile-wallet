@@ -27,7 +27,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by naman on 30/8/17.
+ * This class defines the UI components of the Transfer Fragment.
+ * @author naman
+ * @since 30/8/17
  */
 
 public class MakeTransferFragment extends BottomSheetDialogFragment
@@ -91,11 +93,19 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         ((BaseActivity) getActivity()).getActivityComponent().inject(this);
     }
 
+    /**
+     * This function dismisses the dialog interface.
+     * @param dialog : The dialog to be dismissed
+     */
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
     }
 
+    /**
+     * This function creates a dialog.
+     * @return : The dialog created
+     */
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
@@ -146,6 +156,10 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     }
 
+    /**
+     * This function is called when the transfer made is successful.
+     * This function will set the transfer state to successful.
+     */
     @Override
     public void transferSuccess() {
         tvTransferStatus.setText(Constants.TRANSACTION_SUCCESSFUL);
@@ -153,6 +167,10 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         viewTransferSuccess.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * This function is called when the transfer made is a failure.
+     * This function will set the transfer state to failure.
+     */
     @Override
     public void transferFailure() {
         tvTransferStatus.setText(Constants.UNABLE_TO_PROCESS_TRANSFER);
@@ -166,11 +184,18 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
+    /**
+     * An overridden function to set Presenter reference in this UI Component.
+     * @param presenter : Presenter component reference for this package
+     */
     @Override
     public void setPresenter(TransferContract.TransferPresenter presenter) {
         this.mTransferPresenter = presenter;
     }
 
+    /**
+     * This function is called when Vpa is not found.
+     */
     @Override
     public void showVpaNotFoundSnackbar() {
         if (getTargetFragment() != null) {

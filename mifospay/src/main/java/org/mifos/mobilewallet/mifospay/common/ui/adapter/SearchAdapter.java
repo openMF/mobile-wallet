@@ -17,7 +17,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by naman on 21/8/17.
+ * This is a Adapter Class to display search results.
+ * @author naman
+ * @since 21/8/17
  */
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {

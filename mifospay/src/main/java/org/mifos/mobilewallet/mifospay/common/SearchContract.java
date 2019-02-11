@@ -7,11 +7,17 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 import java.util.List;
 
 /**
- * Created by naman on 21/8/17.
+ * This is a contract class working as an Interface for UI
+ * and Presenter components of the Common package.
+ * @author naman
+ * @since 21/8/17
  */
 
 public interface SearchContract {
 
+    /**
+     * Defines all the functions in UI Component.
+     */
     interface SearchView extends BaseView<SearchPresenter> {
 
         void showSearchResult(List<SearchResult> searchResults);
@@ -21,6 +27,9 @@ public interface SearchContract {
         void showSnackbar(String message);
     }
 
+    /**
+     * Defines all the functions in Presenter Component.
+     */
     interface SearchPresenter extends BasePresenter {
 
         void performSearch(String query);

@@ -26,7 +26,9 @@ import butterknife.ButterKnife;
 import butterknife.OnTextChanged;
 
 /**
- * Created by naman on 21/8/17.
+ * This class defines the UI components of the Search Activity.
+ * @author naman
+ * @since 21/8/17
  */
 
 public class SearchActivity extends BaseActivity implements SearchContract.SearchView {
@@ -75,22 +77,36 @@ public class SearchActivity extends BaseActivity implements SearchContract.Searc
         }
     }
 
+    /**
+     * An overridden function to set Presenter reference in this UI Component.
+     * @param presenter : Presenter component reference for this package
+     */
     @Override
     public void setPresenter(SearchContract.SearchPresenter presenter) {
         this.mSearchPresenter = presenter;
     }
 
+    /**
+     * An overriden function to show search results.
+     * @param searchResults : The results to be shown
+     */
     @Override
     public void showSearchResult(List<SearchResult> searchResults) {
         searchAdapter.setData(searchResults);
         hideSwipeProgress();
     }
 
+    /**
+     * An overridden method to show a toast message.
+     */
     @Override
     public void showToast(String message) {
         Toaster.showToast(getContext(), message);
     }
 
+    /**
+     * An overridden method to show a snackbar message.
+     */
     @Override
     public void showSnackbar(String message) {
         Toaster.show(findViewById(android.R.id.content), message);
