@@ -201,7 +201,7 @@ public class EditProfileActivity extends BaseActivity implements
             R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile })
     public void onUserDetailsFocusChanged(EditText input, boolean isFocused) {
         if  (!isDataSaveNecessary((input))) {
-                input.getText().clear();
+            input.getText().clear();
         }
     }
 
