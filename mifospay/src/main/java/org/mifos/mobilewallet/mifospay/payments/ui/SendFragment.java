@@ -107,6 +107,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.VISIBLE);
+        hideKeyboard(getView());
     }
 
     @OnClick(R.id.btn_mobile)
@@ -118,6 +119,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mTilVpa.setVisibility(View.GONE);
         btnScanQr.setVisibility(View.GONE);
         mRlMobile.setVisibility(View.VISIBLE);
+        hideKeyboard(getView());
     }
 
     @OnClick(R.id.btn_submit)
