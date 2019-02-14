@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.View;
 
 /**
  * Created by naman on 17/6/17.
@@ -42,6 +43,10 @@ public class BaseFragment extends Fragment {
         if (callback != null) {
             callback.showSwipeProgress();
         }
+    }
+
+    protected void hideKeyboard(View view){
+        callback.hideKeyboard(view);
     }
 
     public void hideSwipeProgress() {

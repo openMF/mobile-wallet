@@ -1,10 +1,14 @@
 package org.mifos.mobilewallet.mifospay.base;
 
+import android.app.Activity;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.view.View;
 
 public interface BaseActivityCallback {
 
     void showSwipeProgress();
+
+    void hideKeyboard(View view);
 
     void hideSwipeProgress();
 

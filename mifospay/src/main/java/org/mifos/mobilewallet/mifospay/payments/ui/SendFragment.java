@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.payments.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -107,6 +109,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.VISIBLE);
+        hideKeyboard(getView());
     }
 
     @OnClick(R.id.btn_mobile)
@@ -118,6 +121,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mTilVpa.setVisibility(View.GONE);
         btnScanQr.setVisibility(View.GONE);
         mRlMobile.setVisibility(View.VISIBLE);
+        hideKeyboard(getView());
     }
 
     @OnClick(R.id.btn_submit)
