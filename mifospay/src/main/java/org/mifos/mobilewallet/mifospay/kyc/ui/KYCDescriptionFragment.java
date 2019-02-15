@@ -78,13 +78,16 @@ public class KYCDescriptionFragment extends
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_kyc_desc, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
         setToolbarTitle(Constants.COMPLETE_KYC);
         showBackButton();
+        cvLvl1.setEnabled(false);
+        cvLvl2.setEnabled(false);
+        cvLvl3.setEnabled(false);
         setSwipeEnabled(false);
 
         showProgressDialog(Constants.PLEASE_WAIT);
@@ -117,17 +120,21 @@ public class KYCDescriptionFragment extends
         hideProgressDialog();
 
         int currentLevel = Integer.parseInt(kycLevel1Details.getCurrentLevel());
-
+        if (currentLevel >= 0) {
+            cvLvl1.setEnabled(true);
+        }
         if (currentLevel >= 1) {
-            cvLvl1.setClickable(false);
+            cvLvl1.setEnabled(false);
+            cvLvl2.setEnabled(true);
             llLvl1.setBackgroundResource(R.drawable.cardview_round_green);
         }
         if (currentLevel >= 2) {
-            cvLvl2.setClickable(false);
+            cvLvl2.setEnabled(false);
+            cvLvl3.setEnabled(true);
             llLvl2.setBackgroundResource(R.drawable.cardview_round_green);
         }
         if (currentLevel >= 3) {
-            cvLvl3.setClickable(false);
+            cvLvl3.setEnabled(false);
             llLvl3.setBackgroundResource(R.drawable.cardview_round_green);
         }
     }
