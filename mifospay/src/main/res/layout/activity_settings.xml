@@ -30,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_20dp"
-                    android:text="Notification Setting"
+                    android:text="@string/notification_settings"
                     android:textColor="@color/grey_900"
                     android:textSize="17sp"/>
 
