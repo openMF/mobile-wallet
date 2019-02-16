@@ -34,6 +34,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import okhttp3.ResponseBody;
 
+/**
+ * This class is the UI component of the receipt package.
+ * @author ankur
+ * @since 6-June-2018
+ */
+
 public class ReceiptActivity extends BaseActivity implements ReceiptContract.ReceiptView {
 
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 48;
@@ -100,20 +106,37 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         }
     }
 
+    /**
+     * This function used to set the Presenter.
+     * @param presenter A variable of the type ReceiptPresenter
+     */
     @Override
     public void setPresenter(ReceiptContract.ReceiptPresenter presenter) {
         mReceiptPresenter = presenter;
     }
 
+    /**
+     * This function shows a toast message.
+     * @param message This is the message that will be shown
+     */
     public void showToast(String message) {
         Toaster.showToast(this, message);
     }
 
+    /**
+     * This function shows a snackbar.
+     * @param message This is the message that will be shown in snackbar
+     */
     @Override
     public void showSnackbar(String message) {
         Toaster.show(findViewById(android.R.id.content), message);
     }
 
+    /**
+     * An overridden function from ReceiptContract to write receipt.
+     * @param responseBody response of the type ResponseBody
+     * @param filename filename of the type String
+     */
     @Override
     public void writeReceipt(ResponseBody responseBody, String filename) {
 
@@ -134,6 +157,12 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         }
     }
 
+    /**
+     * An overridden method to request permission to write in external storage.
+     * @param requestCode request code of type integer
+     * @param permissions This variable is an array of type String
+     * @param grantResults This variable is an array of type integer
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
             @NonNull int[] grantResults) {

@@ -10,7 +10,9 @@ import org.mifos.mobilewallet.mifospay.utils.Constants;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 06/June/2018
+ * This class is the Presenter component of the receipt package.
+ * @author ankur
+ * @since 06-June-2018
  */
 
 public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
@@ -25,12 +27,20 @@ public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
         this.mUseCaseHandler = useCaseHandler;
     }
 
+    /**
+     * This function attaches view to the presenter.
+     * @param baseView The view which is set as the ReceiptView
+     */
     @Override
     public void attachView(BaseView baseView) {
         mReceiptView = (ReceiptContract.ReceiptView) baseView;
         mReceiptView.setPresenter(this);
     }
 
+    /**
+     * An overridden method from ReceiptContract to fetch receipt.
+     * @param transactionId The Id of the transaction
+     */
     @Override
     public void fetchReceipt(final String transactionId) {
 

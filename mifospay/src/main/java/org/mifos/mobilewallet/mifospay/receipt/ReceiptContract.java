@@ -6,11 +6,17 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 import okhttp3.ResponseBody;
 
 /**
- * Created by ankur on 06/June/2018
+ * This is a contract class working as an Interface for UI
+ * and Presenter components for receipt package.
+ * @author ankur
+ * @since 6-June-2018
  */
 
 public interface ReceiptContract {
 
+    /**
+     * Defines all the functions in UI component.
+     */
     interface ReceiptView extends BaseView<ReceiptPresenter> {
 
         void showSnackbar(String message);
@@ -20,6 +26,9 @@ public interface ReceiptContract {
         void hideProgressDialog();
     }
 
+    /**
+     * Defines all the functions in Presenter component.
+     */
     interface ReceiptPresenter extends BasePresenter {
 
         void fetchReceipt(String transactionId);
