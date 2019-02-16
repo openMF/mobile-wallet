@@ -18,7 +18,9 @@
         android:layout_marginBottom="0dp"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        tools:layout_editor_absoluteY="0dp"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="0dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -97,7 +99,7 @@
                     android:id="@+id/et_amount"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Label"
+                    android:hint="Amount"
                     android:inputType="number"
                     android:paddingBottom="@dimen/value_20dp"
                     android:textSize="@dimen/value_15dp"
