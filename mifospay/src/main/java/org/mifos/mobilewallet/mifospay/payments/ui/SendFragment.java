@@ -12,16 +12,13 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.chip.Chip;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
-import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import org.mifos.mobilewallet.mifospay.R;
@@ -39,6 +36,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Created by naman on 30/8/17.
  */
@@ -53,29 +51,30 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @Inject
     TransferPresenter mPresenter;
-    BaseHomeContract.TransferPresenter mTransferPresenter;
-    @BindView(R.id.et_amount)
-    EditText etAmount;
-    @BindView(R.id.et_vpa)
-    EditText etVpa;
-    @BindView(R.id.btn_submit)
-    Button btnTransfer;
-    @BindView(R.id.btn_scan_qr)
-    TextView btnScanQr;
-    @BindView(R.id.btn_vpa)
-    Chip mBtnVpa;
-    @BindView(R.id.btn_mobile)
-    Chip mBtnMobile;
-    @BindView(R.id.et_mobile_number)
-    EditText mEtMobileNumber;
-    @BindView(R.id.btn_search_contact)
-    TextView mBtnSearchContact;
-    @BindView(R.id.rl_mobile)
-    RelativeLayout mRlMobile;
-    @BindView(R.id.til_vpa)
-    TextInputLayout mTilVpa;
 
-    private String vpa;
+    BaseHomeContract.TransferPresenter mTransferPresenter;
+
+    @BindView(R.id.chip_send_vpa_transfer)
+    Chip mChipVpaTransfer;
+
+    @BindView(R.id.chip_send_mobile_transfer)
+    Chip mChipMobileTransfer;
+
+    @BindView(R.id.et_send_amount)
+    EditText mEtAmount;
+
+    @BindView(R.id.et_send_transfer_method_address)
+    EditText mEtTransferMethodAddress;
+
+    @BindView(R.id.btn_send_enter_transfer_address_externally)
+    ImageButton mBtnScanTransferAddress;
+
+    private enum TransferMethod {
+        VPA,
+        MOBILE
+    }
+
+    private TransferMethod transferMethod;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -91,40 +90,71 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 false);
         ButterKnife.bind(this, rootView);
         setSwipeEnabled(false);
+
         mPresenter.attachView(this);
         mPresenter.fetchVpa();
         mPresenter.fetchMobile();
-        mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+
+        transferMethod = TransferMethod.VPA;
+        setupTransferMethodView();
+
         return rootView;
     }
 
-    @OnClick(R.id.btn_vpa)
-    public void onVPASelected() {
-        mBtnVpa.setFocusable(true);
-        mBtnVpa.setFocusableInTouchMode(true);
-        mBtnVpa.setChipBackgroundColorResource(R.color.clickedblue);
-        mBtnMobile.setChipBackgroundColorResource(R.color.changedBackgroundColour);
-        btnScanQr.setVisibility(View.VISIBLE);
-        mRlMobile.setVisibility(View.GONE);
-        mTilVpa.setVisibility(View.VISIBLE);
+    private void setupTransferMethodView() {
+
+        int externalSelectionImageDrawableResId;
+        int hintStringResId;
+        int addressInputType;
+
+        switch (transferMethod) {
+            case MOBILE:
+                externalSelectionImageDrawableResId = R.drawable.ic_contact;
+                hintStringResId = R.string.mobile_number;
+                addressInputType = InputType.TYPE_CLASS_NUMBER;
+                break;
+            case VPA:
+            default:
+                externalSelectionImageDrawableResId = R.drawable.qrcode_blue_selector;
+                hintStringResId = R.string.virtual_payment_address;
+                addressInputType = InputType.TYPE_CLASS_TEXT;
+        }
+        mBtnScanTransferAddress.setBackgroundResource(externalSelectionImageDrawableResId);
+        mEtTransferMethodAddress.setInputType(addressInputType);
+        mEtTransferMethodAddress.setHint(hintStringResId);
+        mEtTransferMethodAddress.setText("");
     }
 
-    @OnClick(R.id.btn_mobile)
-    public void onMobileSelected() {
-        mBtnMobile.setFocusable(true);
-        mBtnMobile.setFocusableInTouchMode(true);
-        mBtnMobile.setChipBackgroundColorResource(R.color.clickedblue);
-        mBtnVpa.setChipBackgroundColorResource(R.color.changedBackgroundColour);
-        mTilVpa.setVisibility(View.GONE);
-        btnScanQr.setVisibility(View.GONE);
-        mRlMobile.setVisibility(View.VISIBLE);
+    @OnClick(R.id.chip_send_vpa_transfer)
+    public void onVpaTransferSelected() {
+        /* We won't let user un-select the chip
+        At least one chip needs to be selected */
+        if (transferMethod == TransferMethod.VPA) {
+            mChipVpaTransfer.setChecked(true);
+        } else {
+            transferMethod = TransferMethod.VPA;
+            setupTransferMethodView();
+        }
     }
 
-    @OnClick(R.id.btn_submit)
-    public void transferClicked() {
-        String externalId = etVpa.getText().toString().trim();
-        String eamount = etAmount.getText().toString().trim();
-        String mobileNumber = mEtMobileNumber.getText().toString().trim().replaceAll("\\s+", "");
+    @OnClick(R.id.chip_send_mobile_transfer)
+    public void onMobileTransferSelected() {
+        /* We won't let user un-select the chip
+        At least one chip needs to be selected */
+        if (transferMethod == TransferMethod.MOBILE) {
+            mChipMobileTransfer.setChecked(true);
+        } else {
+            transferMethod = TransferMethod.MOBILE;
+            setupTransferMethodView();
+        }
+    }
+
+    @OnClick(R.id.btn_send_proceed)
+    public void onTransferClicked() {
+        String externalId = mEtTransferMethodAddress.getText().toString().trim();
+        String eamount = mEtAmount.getText().toString().trim();
+        String mobileNumber = mEtTransferMethodAddress.getText().toString().trim()
+                .replaceAll("\\s+", "");
         if (eamount.equals("") || (externalId.equals("") && mobileNumber.equals(""))) {
             Toast.makeText(getActivity(),
                     Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
@@ -139,16 +169,16 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         }
     }
 
-//    @OnClick(R.id.btn_show_qr)
-//    public void showQrClicked() {
-//        Intent intent = new Intent(getActivity(), ShowQrActivity.class);
-//        intent.putExtra(Constants.QR_DATA, vpa);
-//        startActivity(intent);
-//    }
+    @OnClick(R.id.btn_send_enter_transfer_address_externally)
+    public void onEnterTransferAddressExternallyClicked() {
+        if (transferMethod == TransferMethod.VPA) {
+            startBarcodeScan();
+        } else {
+            startNumberFromContactsSelection();
+        }
+    }
 
-    @OnClick(R.id.btn_scan_qr)
-    public void scanQrClicked() {
-
+    private void startBarcodeScan() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
@@ -162,20 +192,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         }
     }
 
-    @Override
-    public void showVpa(String vpa) {
-        this.vpa = vpa;
-        //tvClientVpa.setText(vpa);
-        //btnShowQr.setClickable(true);
-    }
-
-    @Override
-    public void setPresenter(BaseHomeContract.TransferPresenter presenter) {
-        this.mTransferPresenter = presenter;
-    }
-
-    @OnClick(R.id.btn_search_contact)
-    public void searchContactClicked() {
+    private void startNumberFromContactsSelection() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
 
@@ -192,22 +209,31 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     }
 
     @Override
+    public void showVpa(String vpa) {
+    }
+
+    @Override
+    public void setPresenter(BaseHomeContract.TransferPresenter presenter) {
+        this.mTransferPresenter = presenter;
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (requestCode == SCAN_QR_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String qrData = data.getStringExtra(Constants.QR_DATA);
-            etVpa.setText(qrData);
-            String externalId = etVpa.getText().toString();
-            double amount = Double.parseDouble(etAmount.getText().toString());
+            mEtTransferMethodAddress.setText(qrData);
+            String externalId = mEtTransferMethodAddress.getText().toString();
+            double amount = Double.parseDouble(mEtAmount.getText().toString());
             MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId,
                     amount);
             fragment.show(getChildFragmentManager(),
                     Constants.MAKE_TRANSFER_FRAGMENT);
 
         } else if (requestCode == PICK_CONTACT && resultCode == Activity.RESULT_OK) {
-            Cursor cursor = null;
+            Cursor cursor;
             try {
-                String phoneNo = null;
+                String phoneNo;
                 String name = null;
                 // getData() method will have the Content Uri of the selected contact
                 Uri uri = data.getData();
@@ -223,7 +249,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 phoneNo = cursor.getString(phoneIndex);
                 name = cursor.getString(nameIndex);
 
-                mEtMobileNumber.setText(phoneNo);
+                mEtTransferMethodAddress.setText(phoneNo);
 
             } catch (Exception e) {
                 showToast(Constants.ERROR_CHOOSING_CONTACT);
@@ -268,7 +294,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                     // functionality that depends on this permission.
                     Toaster.show(getView(), Constants.NEED_READ_CONTACTS_PERMISSION);
                 }
-                return;
             }
         }
     }
@@ -285,16 +310,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @Override
     public void showMobile(String mobileNo) {
-//        PhoneNumberUtil phoneNumberUtil =
-//                PhoneNumberUtil.createInstance(mTvClientMobile.getContext());
-//        try {
-//            Phonenumber.PhoneNumber phoneNumber =
-//                    phoneNumberUtil.parse(mobileNo, Locale.getDefault().getCountry());
-//            mTvClientMobile.setText(phoneNumberUtil.format(phoneNumber,
-//                    PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
-//        } catch (NumberParseException e) {
-//            mTvClientMobile.setText(mobileNo); // If mobile number is not parsed properly
-//        }
     }
 
     @Override
@@ -306,6 +321,4 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                     Constants.MAKE_TRANSFER_FRAGMENT);
         }
     }
-
-
 }

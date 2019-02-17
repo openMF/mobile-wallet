@@ -21,6 +21,7 @@
 
     <color name="colorAccentBlue">#000AFF</color>
     <color name="colorAccentBlue50">#80000AFF</color>
+    <color name="colorAccentBlue10">#1A000AFF</color>
     <color name="colorAccentBlack">#2F3542</color>
     <color name="colorAccentYellow">#FFF700</color>
     <color name="colorListImageBackground">#E6E6E6</color>
