@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
 
@@ -23,6 +25,7 @@ import org.mifos.mobilewallet.mifospay.registration.presenter.SignupPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
+import org.mifos.mobilewallet.mifospay.utils.ValidateUtil;
 
 import java.util.ArrayList;
 
@@ -40,6 +43,8 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     SignupPresenter mPresenter;
 
     RegistrationContract.SignupPresenter mSignupPresenter;
+    @BindView(R.id.signup_parent)
+    RelativeLayout mparentView;
     @BindView(R.id.et_first_name)
     EditText mEtFirstName;
     @BindView(R.id.et_last_name)
@@ -215,6 +220,13 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
         if (!password.equals(confirmPassword)) {
             Toaster.showToast(this, "Password is not same as Confirm Password");
+            hideProgressDialog();
+            return;
+        }
+
+        if (!ValidateUtil.isValidEmail(email)) {
+            Snackbar.make(mparentView, "Please enter correct Email Address.",
+                    Snackbar.LENGTH_SHORT).show();
             hideProgressDialog();
             return;
         }
