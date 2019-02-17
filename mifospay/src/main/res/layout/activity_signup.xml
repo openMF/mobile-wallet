@@ -5,27 +5,28 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/primaryDarkBlue">
 
-                <android.support.v7.widget.Toolbar
-                    xmlns:android="http://schemas.android.com/apk/res/android"
+                <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/primaryDarkBlue"
                     android:theme="@style/Theme.AppCompat"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar"/>
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -48,11 +49,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/value_10dp"
                         android:layout_marginTop="@dimen/value_5dp"
+                        android:layout_marginBottom="@dimen/value_10dp"
                         android:text="All fields are mandatory."
                         android:textColor="@color/white"
-                        android:textSize="@dimen/value_14sp"/>
+                        android:textSize="@dimen/value_14sp" />
 
                 </LinearLayout>
 
@@ -62,124 +63,193 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/value_20dp"
                 android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_20dp"
                 android:layout_marginTop="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_20dp"
+                android:layout_marginBottom="@dimen/value_20dp"
                 android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/et_first_name"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_et_round_border"
-                    android:hint="First Name"
-                    android:inputType="text"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/et_last_name"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_first_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_et_round_border"
+                        android:hint="First Name"
+                        android:inputType="text"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout2"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_et_round_border"
-                    android:hint="Last Name"
-                    android:inputType="text"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/et_user_name"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_last_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_et_round_border"
+                        android:hint="Last Name"
+                        android:inputType="text"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout3"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_et_round_border"
-                    android:hint="Username"
-                    android:inputType="text"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/et_password"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_user_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_et_round_border"
+                        android:hint="Username"
+                        android:inputType="text"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout4"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_et_round_border"
-                    android:hint="Password"
-                    android:inputType="textPassword"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/et_confirm_password"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_et_round_border"
+                        android:hint="Password"
+                        android:inputType="textPassword"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout5"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_et_round_border"
-                    android:hint="Confirm Password"
-                    android:inputType="textPassword"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/et_email"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_confirm_password"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_et_round_border"
+                        android:hint="Confirm Password"
+                        android:inputType="textPassword"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout6"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_et_round_border"
-                    android:hint="Email"
-                    android:inputType="textEmailAddress"
-                    android:paddingLeft="15dp"/>
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/et_business_shop_name"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_et_round_border"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:paddingLeft="15dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout7"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_et_round_border"
-                    android:hint="Name of Business"
-                    android:inputType="text"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"
-                    android:visibility="gone"/>
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/et_address_line_1"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_business_shop_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_et_round_border"
+                        android:hint="Name of Business"
+                        android:inputType="text"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp"
+                        android:visibility="gone" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout8"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_et_round_border"
-                    android:hint="Address Line 1"
-                    android:inputType="text"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/et_address_line_2"
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_address_line_1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_et_round_border"
+                        android:hint="Address Line 1"
+                        android:inputType="text"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout9"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_et_round_border"
-                    android:hint="Address Line 2"
-                    android:inputType="text"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:layout_height="wrap_content">
 
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_address_line_2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_et_round_border"
+                        android:hint="Address Line 2"
+                        android:inputType="text"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp" />
+                </android.support.design.widget.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/et_pin_code"
-                    android:layout_width="200dp"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/bg_et_round_border"
-                    android:hint="Pin Code"
-                    android:inputType="number"
-                    android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/textInputLayout10"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <EditText
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_pin_code"
+                        android:layout_width="200dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:background="@drawable/bg_et_round_border"
+                        android:hint="Pin Code"
+                        android:inputType="number"
+                        android:paddingLeft="15dp"
+                        android:paddingRight="15dp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputEditText
                     android:id="@+id/et_state"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
@@ -192,7 +262,7 @@
                     android:hint="State"
                     android:inputType="text"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:paddingRight="15dp" />
 
             </LinearLayout>
 
@@ -204,16 +274,16 @@
         android:id="@+id/fab_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/value_20dp"
         android:layout_marginRight="@dimen/value_20dp"
+        android:layout_marginBottom="@dimen/value_20dp"
         android:backgroundTint="@color/primaryDarkBlue"
         android:foregroundTint="@color/primaryDarkBlue"
         android:scaleType="center"
         android:visibility="visible"
         app:backgroundTint="@color/primaryDarkBlue"
-        app:srcCompat="@drawable/ic_next"/>
+        app:srcCompat="@drawable/ic_next" />
 
 </RelativeLayout>
