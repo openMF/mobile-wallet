@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:text="Enter Mobile Number"
+                    android:text="@string/enter_mobile_number"
                     android:textColor="@color/white"
                     android:textSize="@dimen/value_20sp">
 
@@ -96,7 +96,7 @@
                 android:layout_marginLeft="@dimen/value_5dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_et_round_border"
-                android:hint="Mobile Number"
+                android:hint="@string/mobile_number"
                 android:inputType="number"
                 android:paddingLeft="@dimen/value_15dp"
                 android:paddingRight="15dp"/>
@@ -124,7 +124,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:background="@drawable/bg_et_round_border"
-                android:hint="Enter OTP"
+                android:hint="@string/enter_otp"
                 android:inputType="number"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
@@ -144,7 +144,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/value_10dp"
-                android:text="Verifying OTP. Please wait.."
+                android:text="@string/verifying_otp_please_wait"
                 android:visibility="gone"/>
 
         </LinearLayout>

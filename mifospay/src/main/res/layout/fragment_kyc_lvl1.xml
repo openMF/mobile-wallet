@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/value_5dp"
                 android:layout_weight="1"
-                android:hint="Mobile Number"
+                android:hint="@string/mobile_number"
                 android:inputType="number"
                 android:nextFocusDown="@id/et_dob"
                 android:nextFocusForward="@id/et_dob"/>

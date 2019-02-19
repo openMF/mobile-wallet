@@ -44,7 +44,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Debit Card Details"
+                        android:text="@string/debit_card_details"
                         android:textColor="@color/grey_900"
                         android:textSize="17sp"/>
 
@@ -91,7 +91,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="One Time Password"
+                        android:text="@string/one_time_password"
                         android:textColor="@color/grey_900"
                         android:textSize="17sp"/>
 
@@ -138,7 +138,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="UPI PIN Setup"
+                        android:text="@string/upi_pin_setup"
                         android:textColor="@color/grey_900"
                         android:textSize="17sp"/>
 

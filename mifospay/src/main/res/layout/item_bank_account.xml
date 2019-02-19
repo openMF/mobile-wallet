@@ -26,31 +26,31 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Bank Name"/>
+                android:text="@string/bank_name"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:text="A/C Holder Name"/>
+                android:text="@string/ac_holder_name"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:text="Branch Name"/>
+                android:text="@string/branch_name"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:text="IFSC"/>
+                android:text="@string/ifsc"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:text="Type"/>
+                android:text="@string/type"/>
 
         </LinearLayout>
 
