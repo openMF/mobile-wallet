@@ -1,7 +1,9 @@
 package org.mifos.mobilewallet.mifospay.passcode.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Toast;
 
@@ -9,6 +11,7 @@ import com.mifos.mobile.passcode.MifosPassCodeActivity;
 import com.mifos.mobile.passcode.utils.EncryptionUtil;
 
 import org.mifos.mobilewallet.mifospay.MifosPayApp;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.home.ui.HomeActivity;
 import org.mifos.mobilewallet.mifospay.injection.component.ActivityComponent;
@@ -67,8 +70,24 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
 
     @Override
     public void startLoginActivity() {
-        Intent intent = new Intent(PassCodeActivity.this, LoginActivity.class);
-        startActivity(intent);
+        AlertDialog.Builder builder = new AlertDialog.Builder(PassCodeActivity.this);
+        builder.setTitle(R.string.passcode_title);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(PassCodeActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
