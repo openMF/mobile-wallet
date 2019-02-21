@@ -14,6 +14,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,7 +111,26 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
 
         mPresenter.fetchVpa();
         mPresenter.fetchMobile();
+        etAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
 
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().length() > 3 && s.toString().contains(".")) {
+                    if (s.toString().length() - s.toString().indexOf(".") > 3) {
+                        etAmount.setText(s.toString().substring(0, s.length() - 1));
+                        etAmount.setSelection(etAmount.getText().length());
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable arg0) {
+
+            }
+        });
         mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         return rootView;
     }
