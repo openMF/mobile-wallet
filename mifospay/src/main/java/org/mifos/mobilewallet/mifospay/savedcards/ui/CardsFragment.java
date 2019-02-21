@@ -1,8 +1,10 @@
 package org.mifos.mobilewallet.mifospay.savedcards.ui;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -132,9 +134,8 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                                                         Constants.EDIT_CARD_DIALOG);
                                                 break;
                                             case R.id.delete_card:
-                                                mCardsPresenter.deleteCard(
-                                                        mCardsAdapter.getCards().get(
-                                                                position).getId());
+                                                deleteCard(mCardsAdapter
+                                                        .getCards().get(position).getId());
                                                 break;
                                             case R.id.cancel:
                                                 break;
@@ -164,6 +165,22 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                 mCardsPresenter.fetchSavedCards();
             }
         });
+    }
+    private void deleteCard (final int cardId) {
+        new AlertDialog.Builder(getContext()).setTitle(R.string.delete_confirm)
+                .setPositiveButton(R.string.confirm,
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            mCardsPresenter.deleteCard(cardId);
+                        }
+                    }).setNegativeButton(R.string.cancel,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        }).create().show();
     }
 
     /**
