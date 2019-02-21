@@ -11,10 +11,10 @@ import android.view.ViewGroup;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.finance.ui.AccountsFragment;
-import org.mifos.mobilewallet.mifospay.finance.ui.CardsFragment;
 import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment;
 import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionFragment;
+import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
