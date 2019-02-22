@@ -62,7 +62,7 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 
 3. Click on 'Open an existing Android Studio project'
 
-4. Browse to the directory where you cloned the mobile-wallet repo and click OK.
+4. Browse to the directory where you have cloned the mobile-wallet repo and click OK.
 
 5. Let Android Studio import the project.
 
