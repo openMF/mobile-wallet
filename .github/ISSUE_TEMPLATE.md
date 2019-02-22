@@ -6,7 +6,7 @@ Summarize your issue here.
 
 How can we reproduce again the issue?
 
-**Expected behavior:**
+**Expected behaviour:**
 
 What did you expect the app to do?
 
