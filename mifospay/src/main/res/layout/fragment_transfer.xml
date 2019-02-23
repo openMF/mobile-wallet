@@ -75,7 +75,7 @@
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"
                           android:hint="@string/amount"
-                          android:inputType="number"
+                          android:inputType="numberDecimal"
                           android:theme="@style/Theme.AppCompat.Light"/>
             </android.support.design.widget.TextInputLayout>
 
@@ -115,7 +115,7 @@
                               android:layout_width="match_parent"
                               android:layout_height="wrap_content"
                               android:hint="@string/mobile_number"
-                              android:inputType="phone|number"
+                              android:inputType="number"
                               android:singleLine="true"
                               android:theme="@style/Theme.AppCompat.Light"/>
 
