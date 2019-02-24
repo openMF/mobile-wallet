@@ -104,7 +104,8 @@
                 android:text="@string/confirm"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
-                android:typeface="sans"/>
+                android:typeface="sans"
+                android:focusable="true" />
 
         </LinearLayout>
     </ScrollView>

@@ -187,7 +187,7 @@
                     android:background="@drawable/bg_et_round_border"
                     android:clickable="true"
                     android:cursorVisible="false"
-                    android:focusable="false"
+                    android:focusable="true"
                     android:focusableInTouchMode="false"
                     android:hint="@string/state"
                     android:inputType="text"

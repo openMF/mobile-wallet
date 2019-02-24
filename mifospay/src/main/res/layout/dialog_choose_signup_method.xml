@@ -37,7 +37,8 @@
                 android:drawablePadding="@dimen/value_15dp"
                 android:text="@string/merchant"
                 android:textAllCaps="false"
-                android:textColor="@color/primaryBlue"/>
+                android:textColor="@color/primaryBlue"
+                android:focusable="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -58,7 +59,8 @@
                 android:drawablePadding="@dimen/value_15dp"
                 android:text="@string/customer"
                 android:textAllCaps="false"
-                android:textColor="@color/primaryBlue"/>
+                android:textColor="@color/primaryBlue"
+                android:focusable="true" />
 
         </LinearLayout>
 

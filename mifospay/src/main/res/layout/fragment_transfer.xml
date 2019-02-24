@@ -43,7 +43,8 @@
                 android:text="@string/vpa"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
-                android:typeface="sans"/>
+                android:typeface="sans"
+                android:focusable="true" />
 
             <Button
                 android:id="@+id/btn_mobile"
@@ -55,7 +56,8 @@
                 android:text="@string/mobile_number"
                 android:textAllCaps="false"
                 android:textColor="@android:color/black"
-                android:typeface="sans"/>
+                android:typeface="sans"
+                android:focusable="true" />
 
         </LinearLayout>
 
