@@ -10,9 +10,12 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.domain.model.Bank;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -58,6 +61,12 @@ public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.View
     }
 
     public void setData(List<SavingsWithAssociations> mMerchantsList) {
+        Collections.sort(mMerchantsList, new Comparator<SavingsWithAssociations>() {
+            @Override
+            public int compare(SavingsWithAssociations s1, SavingsWithAssociations s2) {
+                return s1.getClientName().toLowerCase().compareTo(s2.getClientName().toLowerCase());
+            }
+        });
         this.mMerchantsList = mMerchantsList;
         notifyDataSetChanged();
     }
