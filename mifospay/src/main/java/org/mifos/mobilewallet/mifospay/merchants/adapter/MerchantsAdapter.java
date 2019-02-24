@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.domain.model.Bank;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 
 import java.util.ArrayList;
