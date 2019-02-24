@@ -35,7 +35,7 @@
             android:layout_marginRight="@dimen/value_10dp"
             android:background="@drawable/button_round_gray"
             android:text="@string/browse"
-            android:textColor="@color/black"/>
+            android:textColor="@color/white"/>
 
         <TextView
             android:id="@+id/tv_filename"
