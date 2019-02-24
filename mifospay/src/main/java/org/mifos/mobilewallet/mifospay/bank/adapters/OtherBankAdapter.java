@@ -15,6 +15,8 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.domain.model.Bank;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -66,6 +68,12 @@ public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.View
     }
 
     public void setData(List<Bank> banks) {
+        Collections.sort(banks, new Comparator<Bank>() {
+            @Override
+            public int compare(Bank s1, Bank s2) {
+                return s1.getName().toLowerCase().compareTo(s2.getName().toLowerCase());
+            }
+        });
         this.otherBanks = banks;
         notifyDataSetChanged();
     }
