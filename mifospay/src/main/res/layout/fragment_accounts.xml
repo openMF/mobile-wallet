@@ -30,7 +30,8 @@
         android:layout_marginBottom="@dimen/value_70dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"/>
+        android:clipToPadding="false"
+        android:scrollbars="vertical"/>
 
     <android.support.design.chip.Chip
         android:id="@+id/addaccountbutton"
