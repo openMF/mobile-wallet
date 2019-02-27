@@ -25,6 +25,7 @@ import org.mifos.mobilewallet.mifospay.domain.model.Bank;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.mifos.mobilewallet.mifospay.MifosPayApp.getContext;
 import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
 import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
 
@@ -185,8 +187,12 @@ public class LinkBankAccountActivity extends BaseActivity implements
     }
 
     public void linkBankAccount(int selectedSim) {
-        showProgressDialog(Constants.VERIFYING_MOBILE_NUMBER);
-        mLinkBankAccountPresenter.fetchBankAccountDetails(bankSelected);
+        if (selectedSim == 0) {
+            showToast(this.getString(R.string.choose_your_sim));
+        } else {
+            showProgressDialog(Constants.VERIFYING_MOBILE_NUMBER);
+            mLinkBankAccountPresenter.fetchBankAccountDetails(bankSelected);
+        }
     }
 
     @Override
@@ -203,5 +209,9 @@ public class LinkBankAccountActivity extends BaseActivity implements
             }
         }, 1500);
 
+    }
+
+    public void showToast(String message) {
+        Toaster.showToast(getContext(), message);
     }
 }
