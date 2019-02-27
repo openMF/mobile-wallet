@@ -14,6 +14,8 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneNumberFormattingTextWatcher;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,6 +57,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     private static final int SCAN_QR_REQUEST_CODE = 666;
     private static final int PICK_CONTACT = 1;
     private static final int REQUEST_READ_CONTACTS = 2;
+    private static final String AMOUNT_DECIMAL_SEPARATOR = ".";
 
     @Inject
     TransferPresenter mPresenter;
@@ -111,6 +114,34 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         mPresenter.fetchMobile();
 
         mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        etAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            /**
+             * An overridden method used to allow the user to enter amount upto 2 decimal places
+             * @param s : CharSequence entered by user
+             * @param start : Starting index of CharSequence
+             * @param before : Length of old text
+             * @param count : To count number of characters
+             */
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.toString().contains(AMOUNT_DECIMAL_SEPARATOR) &&
+                        s.toString().length() -
+                                s.toString().indexOf(AMOUNT_DECIMAL_SEPARATOR) > 3) {
+                    etAmount.setText(s.toString().substring(0, s.length() - 1));
+                    etAmount.setSelection(etAmount.getText().length());
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         return rootView;
     }
 
