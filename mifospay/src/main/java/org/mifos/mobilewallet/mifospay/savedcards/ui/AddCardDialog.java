@@ -30,7 +30,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
- * Created by ankur on 19/May/2018
+ * This is a Dialog class to add a new card.
+ * @author ankur
+ * @since 19/May/2018
  */
 
 public class AddCardDialog extends BottomSheetDialogFragment {
@@ -74,6 +76,10 @@ public class AddCardDialog extends BottomSheetDialogFragment {
                 }
             };
 
+    /**
+     * A function to set the Presenter.
+     * @param cardsPresenter : Cards Presenter from Contract Class.
+     */
     public void setCardsPresenter(
             CardsContract.CardsPresenter cardsPresenter) {
         mCardsPresenter = cardsPresenter;
@@ -125,11 +131,17 @@ public class AddCardDialog extends BottomSheetDialogFragment {
         }
     }
 
+    /**
+     * A function to dismiss the dialog box when user presses cancel button.
+     */
     @OnClick(R.id.btn_cancel)
     public void onCancelClicked() {
         dismiss();
     }
 
+    /**
+     * A function to add a new card after entering all the valid details.
+     */
     @OnClick(R.id.btn_add)
     public void onAddClicked() {
         if (!areFieldsValid()) {
@@ -149,6 +161,9 @@ public class AddCardDialog extends BottomSheetDialogFragment {
         dismiss();
     }
 
+    /**
+     * An utility function to check if the new Card entries are valid or not.
+     */
     private boolean areFieldsValid() {
         fieldsValid = true;
         ButterKnife.apply(mTextInputLayouts, CHECK_ERROR);

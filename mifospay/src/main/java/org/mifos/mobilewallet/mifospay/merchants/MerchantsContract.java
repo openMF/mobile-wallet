@@ -7,16 +7,25 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 import java.util.List;
 
 /**
- * Created by ankur on 11/July/2018
+ * This a contract class working as an Interface for UI
+ * and Presenter components of the Merchants Architecture.
+ * @author ankur
+ * @since 11/July/2018
  */
 
 public interface MerchantsContract {
 
+    /**
+     * Defines all the functions in Presenter Component.
+     */
     interface MerchantsPresenter extends BasePresenter {
 
         void fetchMerchants();
     }
 
+    /**
+     * Defines all the functions in UI Component.
+     */
     interface MerchantsView extends BaseView<MerchantsPresenter> {
 
         void listMerchants(List<SavingsWithAssociations> savingsWithAssociationsList);

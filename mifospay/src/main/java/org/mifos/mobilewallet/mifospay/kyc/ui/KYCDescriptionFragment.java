@@ -114,6 +114,7 @@ public class KYCDescriptionFragment extends
 
     @Override
     public void onFetchLevelSuccess(KYCLevel1Details kycLevel1Details) {
+        hideProgressDialog();
 
         int currentLevel = Integer.parseInt(kycLevel1Details.getCurrentLevel());
 

@@ -15,7 +15,9 @@ import org.mifos.mobilewallet.mifospay.utils.Constants;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 19/May/2018
+ * This class is the Presenter component of the Architecture.
+ * @author ankur
+ * @since 19/May/2018
  */
 
 public class CardsPresenter implements CardsContract.CardsPresenter {
@@ -49,7 +51,9 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
         mCardsView.setPresenter(this);
     }
 
-
+    /**
+     * An overridden method from Contract to fetch Saved Cards.
+     */
     @Override
     public void fetchSavedCards() {
 
@@ -75,6 +79,10 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                 });
     }
 
+    /**
+     * An overridden method from Contract to Add a new Card.
+     * @param card : The card to be added.
+     */
     @Override
     public void addCard(Card card) {
 
@@ -109,6 +117,10 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                 });
     }
 
+    /**
+     * An overridden method from Contract to edit a Card.
+     * @param card : Card to be edited.
+     */
     @Override
     public void editCard(Card card) {
 
@@ -142,6 +154,10 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                 });
     }
 
+    /**
+     * An overridden method from Contract to delete a particular card.
+     * @param cardId : Card to be deleted.
+     */
     @Override
     public void deleteCard(int cardId) {
         mCardsView.showProgressDialog(Constants.DELETING_CARD);
@@ -170,8 +186,12 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
     }
 
 
-    /* Luhn Algorithm for validating Credit Card Number
-     * src: https://www.journaldev.com/1443/java-credit-card-validation-luhn-algorithm-java*/
+    /**
+     * An utility function to validate a Credit Card Nnumber.
+     * @param str : String to be validated
+     * Luhn Algorithm for validating Credit Card Number
+     * src: https://www.journaldev.com/1443/java-credit-card-validation-luhn-algorithm-java
+     */
     private boolean validateCreditCardNumber(String str) {
 
         int u = 2;

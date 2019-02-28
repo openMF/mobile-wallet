@@ -33,7 +33,9 @@ import butterknife.ButterKnife;
 import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
 
 /**
- * Created by ankur on 11/July/2018
+ * This class is the UI component of the Architecture.
+ * @author ankur
+ * @since 11/July/2018
  */
 
 public class MerchantsFragment extends BaseFragment implements MerchantsContract.MerchantsView {
@@ -75,6 +77,10 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         return rootView;
     }
 
+    /**
+     * A function to setup the Layout Manager and Integrate the RecyclerView with Adapter.
+     * This function also implements click action on MerchantList and performs Search action.
+     */
     private void setupRecyclerView() {
         mRvMerchants.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvMerchants.setAdapter(mMerchantsAdapter);
@@ -115,30 +121,44 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         });
     }
 
+    /**
+     * A function used to filter MerchantsList as per user Search.
+     * @param text : String entered by user for search.
+     */
     public void filter(String text) {
         List<SavingsWithAssociations> filteredList = new ArrayList<>();
 
-        if (isBlank(text)) {
-            filteredList = merchantsList;
-        } else {
-            for (SavingsWithAssociations merchant : merchantsList) {
-                if (merchant.getClientName().toLowerCase().contains(
-                        text.toLowerCase())
-                        || (merchant.getExternalId() == null ? ""
-                        : merchant.getExternalId()).toLowerCase().contains(
-                        text.toLowerCase())) {
-                    filteredList.add(merchant);
+        if (merchantsList != null) {
+            if (isBlank(text)) {
+                filteredList = merchantsList;
+            } else {
+                for (SavingsWithAssociations merchant : merchantsList) {
+                    if (merchant.getClientName().toLowerCase().contains(
+                            text.toLowerCase())
+                            || (merchant.getExternalId() == null ? ""
+                            : merchant.getExternalId()).toLowerCase().contains(
+                            text.toLowerCase())) {
+                        filteredList.add(merchant);
+                    }
                 }
             }
+            mMerchantsAdapter.filterList(filteredList);
         }
-        mMerchantsAdapter.filterList(filteredList);
     }
 
+    /**
+     * An overridden function to set Presenter reference in this UI Component.
+     * @param presenter : Presenter component reference for the Architecture.
+     */
     @Override
     public void setPresenter(MerchantsContract.MerchantsPresenter presenter) {
         mMerchantsPresenter = presenter;
     }
 
+    /**
+     * An overridden function to set Adapter data with MerchantList fetched from Presenter.
+     * @param savingsWithAssociationsList : MerchantsList received by Presenter.
+     */
     @Override
     public void listMerchants(List<SavingsWithAssociations> savingsWithAssociationsList) {
         merchantsList = savingsWithAssociationsList;
@@ -146,12 +166,19 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         hideProgressDialog();
     }
 
+    /**
+     * An overridden method used if their is an error fetching the merchants.
+     */
     @Override
     public void fetchMerchantsError() {
         hideProgressDialog();
         showToast(Constants.ERROR_FETCHING_MERCHANTS);
     }
 
+    /**
+     * An overridden method used to display a toast message.
+     * @param message : Toast message to be displayed.
+     */
     @Override
     public void showToast(String message) {
         Toaster.showToast(getContext(), message);

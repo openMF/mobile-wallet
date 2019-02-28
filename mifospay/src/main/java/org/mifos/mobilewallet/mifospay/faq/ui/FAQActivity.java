@@ -17,6 +17,11 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+/**
+ * This class is the UI component of the Architecture.
+ * @author ankur
+ * @since 11/July/2018
+ */
 
 public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
 
@@ -59,7 +64,7 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
     }
 
     /**
-     * method to initialize the views
+     * Method to initialize the views
      */
     public void initViews() {
 
@@ -68,7 +73,7 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
     }
 
     /**
-     * method to initialize the listeners
+     * Method to initialize the listeners
      */
     public void initListeners() {
 
@@ -100,7 +105,7 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
     }
 
     /**
-     * method to initialize the objects
+     * Method to initialize the objects
      */
     public void initObjects() {
 
@@ -118,9 +123,8 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
 
     }
 
-    /*
+    /**
      * Preparing the list data
-     *
      * Dummy Items
      */
     public void initListData() {
