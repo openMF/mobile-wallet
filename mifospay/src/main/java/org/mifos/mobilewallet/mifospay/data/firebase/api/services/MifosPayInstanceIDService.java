@@ -21,6 +21,7 @@ import android.util.Log;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
+import org.mifos.mobilewallet.mifospay.MifosPayApp;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 
 import javax.inject.Inject;
@@ -32,9 +33,12 @@ import javax.inject.Inject;
 public class MifosPayInstanceIDService extends FirebaseInstanceIdService {
 
     private static final String TAG = "MyFirebaseIIDService";
-
     @Inject
     PreferencesHelper mPreferencesHelper;
+
+    public MifosPayInstanceIDService() {
+        MifosPayApp.get(MifosPayApp.getContext()).component().inject(this);
+    }
 
     /**
      * Called if InstanceID token is updated. This may occur if the security of
