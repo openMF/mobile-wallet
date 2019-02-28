@@ -35,13 +35,13 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
 
-    implementation 'com.google.dagger:dagger:2.11'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
 
     implementation ("com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion") {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
@@ -52,8 +52,8 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$rootProject.okHttp3Version"
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttp3Version"
 
-    implementation 'io.reactivex:rxandroid:1.1.0'
-    implementation 'io.reactivex:rxjava:1.2.0'
+    implementation "io.reactivex:rxandroid:$rootProject.rxandroidVersion"
+    implementation "io.reactivex:rxjava:$rootProject.rxjavaVersion"
 
-    testImplementation 'junit:junit:4.12'
+    testImplementation "junit:junit:$rootProject.junitVersion"
 }

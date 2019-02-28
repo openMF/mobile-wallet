@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="Enter UPI PIN"
+        android:text="@string/enter_upi_pin"
         android:textColor="@color/primaryDarkBlue"
         android:textSize="18sp"/>
 

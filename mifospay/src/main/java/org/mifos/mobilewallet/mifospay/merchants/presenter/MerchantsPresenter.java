@@ -11,6 +11,8 @@ import org.mifos.mobilewallet.core.utils.Constants;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.merchants.MerchantsContract;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -93,6 +95,14 @@ public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter 
 
             @Override
             public void onComplete() {
+                Collections.sort(savingsWithAssociationsList, new
+                        Comparator<SavingsWithAssociations>() {
+                    @Override
+                    public int compare(SavingsWithAssociations s1, SavingsWithAssociations s2) {
+                        return s1.getClientName().toLowerCase().
+                                compareTo(s2.getClientName().toLowerCase());
+                    }
+                });
                 mMerchantsView.listMerchants(savingsWithAssociationsList);
             }
 

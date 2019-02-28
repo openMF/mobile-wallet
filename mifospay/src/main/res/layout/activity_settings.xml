@@ -30,7 +30,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_20dp"
-                    android:text="Notification Setting"
+                    android:text="@string/notification_setting"
                     android:textColor="@color/grey_900"
                     android:textSize="17sp"/>
 
@@ -45,7 +45,7 @@
         android:layout_height="60dp"
         android:layout_marginTop="@dimen/value_20dp"
         android:background="@android:color/holo_red_light"
-        android:text="Disable account"
+        android:text="@string/disable_account"
         android:textColor="@color/grey_900"
         app:layout_constraintBottom_toTopOf="@+id/btn_logout"/>
     <Button
@@ -54,7 +54,7 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:background="@color/grey_900"
-        android:text="Log out"
+        android:text="@string/log_out"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"/>
 

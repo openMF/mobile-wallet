@@ -34,6 +34,4 @@ public interface ApplicationComponent {
     PreferencesHelper prefManager();
 
     LocalRepository localRepository();
-
-
 }

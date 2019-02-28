@@ -50,7 +50,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/value_10dp"
                         android:layout_marginTop="@dimen/value_5dp"
-                        android:text="All fields are mandatory."
+                        android:text="@string/all_fields_are_mandatory"
                         android:textColor="@color/white"
                         android:textSize="@dimen/value_14sp"/>
 
@@ -74,7 +74,7 @@
                     android:layout_height="48dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
-                    android:hint="First Name"
+                    android:hint="@string/first_name"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -85,7 +85,7 @@
                     android:layout_height="48dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
-                    android:hint="Last Name"
+                    android:hint="@string/last_name"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -96,7 +96,7 @@
                     android:layout_height="48dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
-                    android:hint="Username"
+                    android:hint="@string/username"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -107,7 +107,7 @@
                     android:layout_height="48dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
-                    android:hint="Password"
+                    android:hint="@string/password"
                     android:inputType="textPassword"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -118,7 +118,7 @@
                     android:layout_height="48dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
-                    android:hint="Confirm Password"
+                    android:hint="@string/confirm_password"
                     android:inputType="textPassword"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -129,7 +129,7 @@
                     android:layout_height="48dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
-                    android:hint="Email"
+                    android:hint="@string/email"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="15dp"/>
 
@@ -139,7 +139,7 @@
                     android:layout_height="48dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
-                    android:hint="Name of Business"
+                    android:hint="@string/name_of_business"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
@@ -151,7 +151,7 @@
                     android:layout_height="48dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
-                    android:hint="Address Line 1"
+                    android:hint="@string/address_line_1"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -162,7 +162,7 @@
                     android:layout_height="48dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
-                    android:hint="Address Line 2"
+                    android:hint="@string/address_line_2"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -174,7 +174,7 @@
                     android:layout_height="48dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
-                    android:hint="Pin Code"
+                    android:hint="@string/pin_code"
                     android:inputType="number"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -189,7 +189,7 @@
                     android:cursorVisible="false"
                     android:focusable="false"
                     android:focusableInTouchMode="false"
-                    android:hint="State"
+                    android:hint="@string/state"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
