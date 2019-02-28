@@ -216,6 +216,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/current_passcode"
+                                android:maxLength="4"
                                 android:inputType="textPassword"/>
 
                         </android.support.design.widget.TextInputLayout>
@@ -233,6 +234,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/new_passcode"
+                                android:maxLength="4"
                                 android:inputType="textPassword"/>
                         </android.support.design.widget.TextInputLayout>
 
@@ -249,6 +251,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:hint="@string/confirm_new_passcode"
+                                android:maxLength="4"
                                 android:inputType="textPassword"/>
                         </android.support.design.widget.TextInputLayout>
 

@@ -285,13 +285,21 @@ public class EditProfileActivity extends BaseActivity implements
 
             case R.id.btn_pasccode_save:
                 showProgressDialog(Constants.PLEASE_WAIT);
-                if (mEtNewPasscode.getText().toString().equals(
-                        mEtConfirmPasscode.getText().toString())) {
-                    mEditProfilePresenter.updatePasscode(mEtCurrentPasscode.getText().toString(),
-                            mEtNewPasscode.getText().toString());
+                if (mEtConfirmPasscode.getText().length() == 4 &&
+                        mEtNewPasscode.getText().length() == 4 &&
+                        mEtCurrentPasscode.getText().length() == 4) {
+                    if (mEtNewPasscode.getText().toString().equals(
+                            mEtConfirmPasscode.getText().toString())) {
+                        mEditProfilePresenter
+                                .updatePasscode(mEtCurrentPasscode.getText().toString(),
+                                mEtNewPasscode.getText().toString());
+                    } else {
+                        hideProgressDialog();
+                        showToast("Passcode mismatch");
+                    }
                 } else {
                     hideProgressDialog();
-                    showToast("Passcode mismatch");
+                    showToast(this.getString(R.string.passcode_should_be_4_digits_long));
                 }
                 break;
 
