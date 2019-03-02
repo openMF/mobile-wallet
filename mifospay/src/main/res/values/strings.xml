@@ -53,7 +53,6 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="send">Send</string>
-    <string name="amount">Amount</string>
     <string name="add_account">ADD ACCOUNT</string>
     <string name="vpa_mobile_number">VPA/ Mobile Number</string>
     <string name="proceed">Proceed</string>
@@ -227,4 +226,5 @@
     <string name="empty_no_invoices_title">You have no invoices</string>
     <string name="empty_no_invoices_subtitle">All invoices will be displaying here</string>
     <string name="notification_settings">Notification Settings</string>
+	<string name="amount">Amount</string>
 </resources>

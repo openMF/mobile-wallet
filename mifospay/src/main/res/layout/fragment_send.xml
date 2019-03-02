@@ -98,10 +98,10 @@
                     android:id="@+id/et_amount"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Label"
+                    android:hint="@string/amount"
                     android:inputType="number"
                     android:paddingBottom="@dimen/value_20dp"
-                    android:textSize="@dimen/value_15dp"
+                    android:textSize="@dimen/value_15sp"
                     android:theme="@style/Theme.AppCompat.Light" />
             </android.support.design.widget.TextInputLayout>
 

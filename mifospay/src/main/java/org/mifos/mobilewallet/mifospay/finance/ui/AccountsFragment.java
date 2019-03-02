@@ -1,7 +1,11 @@
 package org.mifos.mobilewallet.mifospay.finance.ui;
 
+import static org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity.Bank_Account_Details_Request_Code;
+
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.design.chip.Chip;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,13 +19,18 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.bank.BankContract;
 import org.mifos.mobilewallet.mifospay.bank.adapters.BankAccountsAdapter;
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountsPresenter;
+import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountDetailActivity;
+import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
+
 import java.util.List;
 import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 public class AccountsFragment extends BaseFragment implements BankContract.BankAccountsView {
@@ -35,7 +44,6 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
 
     @BindView(R.id.rv_accounts)
     RecyclerView mRvLinkedBankAccounts;
-
 
     @BindView(R.id.iv_empty_no_transaction_history)
     ImageView ivTransactionsStateIcon;
@@ -68,7 +76,6 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
         setupRecycletView();
         mPresenter.attachView(this);
         mBankAccountsPresenter.fetchLinkedBankAccounts();
-        showProgressDialog(Constants.PLEASE_WAIT);
         return rootView;
     }
     private void setupRecycletView() {
@@ -84,7 +91,7 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
 //                new RecyclerItemClickListener.OnItemClickListener() {
 //                    @Override
 //                    public void onItemClick(View childView, int position) {
-//                        Intent intent = new Intent(BankAccountsActivity.this,
+//                        Intent intent = new Intent(getContext(),
 //                                BankAccountDetailActivity.class);
 //                        intent.putExtra(Constants.BANK_ACCOUNT_DETAILS,
 //                                mBankAccountsAdapter.getBankDetails(position));
@@ -112,8 +119,6 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
             mBankAccountsAdapter.setData(bankAccountList);
         }
         hideProgressDialog();
-
-
     }
 
     private void setupUi() {
@@ -141,5 +146,11 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
     public void setPresenter(BankContract.BankAccountsPresenter presenter) {
         mBankAccountsPresenter = presenter;
     }
+
+    @OnClick(R.id.addaccountbutton)
+    public void addAccountClicked(){
+
+    }
+
 }
 
