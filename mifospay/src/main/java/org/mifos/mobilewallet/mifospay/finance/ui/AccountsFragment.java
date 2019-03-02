@@ -18,6 +18,9 @@ import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountsPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.inject.Inject;
 import butterknife.BindView;
@@ -106,6 +109,7 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
             linkedAccountsText.setVisibility(View.GONE);
             setupUi();
         } else {
+            sortListInAplhabeticalOrder(bankAccountList);
             hideEmptyStateView();
             mRvLinkedBankAccounts.setVisibility(View.VISIBLE);
             linkedAccountsText.setVisibility(View.VISIBLE);
@@ -114,6 +118,17 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
         hideProgressDialog();
 
 
+    }
+
+    private void sortListInAplhabeticalOrder(List<BankAccountDetails> bankAccountList) {
+        Collections.sort(bankAccountList, new
+                Comparator<BankAccountDetails>() {
+                    @Override
+                    public int compare(BankAccountDetails s1, BankAccountDetails s2) {
+                        return s1.getBankName().toLowerCase().
+                                compareTo(s2.getBankName().toLowerCase());
+                    }
+                });
     }
 
     private void setupUi() {
