@@ -11,6 +11,9 @@
     <string name="pan_id">PAN ID</string>
 
     <string name="level_1">Level 1</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="history">History</string>
+    <string name="email">E-mail</string>
     <string name="level_1_description">Level 1 Description</string>
     <string name="completion">Completed</string>
     <string name="level_2">Level 2</string>
@@ -37,10 +40,8 @@
     <string name="enter_name_or_vpa">Enter name or vpa</string>
     <string name="balance_hint">Total balance</string>
     <string name="show_more">Show more</string>
-    <string name="transaction_history">Transaction History</string>
     <string name="invoices">Invoices</string>
     <string name="request">Request</string>
-    <string name="history">History</string>
     <string name="bank_account">Bank Account</string>
     <string name="qr_code">QR code</string>
     <string name="complete_kyc">Complete the KYC process</string>
@@ -164,7 +165,6 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="email">Email</string>
     <string name="name_of_business">Name of Business</string>
     <string name="address_line_1">Address Line 1</string>
     <string name="client_name">client name</string>
@@ -189,7 +189,6 @@
     <string name="enter_otp">Enter OTP</string>
     <string name="vpa">VPA</string>
     <string name="enter_upi_pin">Enter UPI PIN</string>
-    <string name="history">History</string>
     <string name="notifications">Notifications</string>
     <string name="bank_name">Bank Name</string>
     <string name="ac_holder_name">A/C Holder Name</string>
@@ -210,15 +209,7 @@
     <string name="error_no_transaction_history_subtitle">Couldn\'t fetch transactions history. Please, try again.</string>
     <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
     <string name="account_details">Account Details</string>
-    <string name="edit_profile">Edit profile</string>
-    <string name="email">E-mail</string>
-    <string name="vpa">Virtual payment address (VPA)</string>
     <string name="mobile">Mobile number</string>
-    <string name="change_passcode">Change passcode</string>
-    <string name="change_password">Change password</string>
-    <string name="current_password">Current password</string>
-    <string name="new_password">New password</string>
-    <string name="confirm_new_password">Confirm new password</string>
     <string name="discard_changes_and_exit">Discard changes and exit?</string>
     <string name="discard_changes_and_exit_description">This will discard all unsaved changes and return to the Profile section.</string>
     <string name="accept">accept</string>
