@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:id="@+id/levelcontainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/value_40dp"
+            android:text="@string/complete_kyc"
+            android:textAlignment="center"
+            android:textSize="@dimen/value_15sp" />
+
+        <LinearLayout
+            android:id="@+id/lv1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/value_70dp"
+            android:layout_marginTop="130dp">
+
+            <Button
+                android:id="@+id/blv1"
+                style="@style/Widget.MaterialComponents.Button"
+                android:background="@color/colorAccent"
+                android:layout_width="@dimen/value_100dp"
+                android:layout_height="@dimen/value_50dp"
+                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_50dp"
+                android:text="@string/level_1" />
+
+            <ImageView
+                android:id="@+id/tickimg1"
+                android:layout_width="@dimen/value_20sp"
+                android:layout_height="@dimen/value_20sp"
+                android:layout_marginTop="@dimen/value_13sp"
+                />
+
+            <TextView
+                android:id="@+id/completedtx1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/value_20dp"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lv2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/value_70dp"
+            android:layout_marginTop="210dp">
+
+            <Button
+                android:id="@+id/blv2"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="@dimen/value_100dp"
+                android:layout_height="@dimen/value_50dp"
+                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_50dp"
+                android:text="@string/level_2" />
+
+            <ImageView
+                android:id="@+id/tickimg2"
+                android:layout_width="@dimen/value_20sp"
+                android:layout_height="@dimen/value_20sp"
+                android:layout_marginTop="@dimen/value_13sp" />
+
+            <TextView
+                android:id="@+id/completedtx2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/value_20dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lv3"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/value_70dp"
+            android:layout_marginTop="290dp">
+
+            <Button
+                android:id="@+id/blv3"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="@dimen/value_100dp"
+                android:layout_height="@dimen/value_50dp"
+                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_50dp"
+                android:text="@string/level_3" />
+
+            <ImageView
+                android:id="@+id/tickimg3"
+                android:layout_width="@dimen/value_20sp"
+                android:layout_height="@dimen/value_20sp"
+                android:layout_marginTop="@dimen/value_13sp" />
+
+            <TextView
+                android:id="@+id/completedtx3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/value_20dp" />
+
+        </LinearLayout>
+    </FrameLayout>
+
+</android.support.design.widget.CoordinatorLayout>

@@ -10,6 +10,7 @@ import java.util.List;
 /**
  * This a contract class working as an Interface for UI
  * and Presenter components of the SavedCards Architecture.
+ *
  * @author ankur
  * @since 19/May/2018
  */

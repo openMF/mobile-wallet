@@ -9,17 +9,22 @@
         android:title="@string/home"
         app:showAsAction="always|withText"/>
     <item
-        android:id="@+id/action_transfer"
+        android:id="@+id/action_payments"
         android:enabled="true"
         android:icon="@drawable/ic_swap_horiz"
-        android:title="@string/transfer"
+        android:title="@string/payments"
         app:showAsAction="always|withText"/>
-
+    <item
+        android:id="@+id/action_finance"
+        android:enabled="true"
+        android:icon="@drawable/ic_finance"
+        android:title="@string/finance"
+        app:showAsAction="ifRoom|withText"/>
     <item
         android:id="@+id/action_profile"
         android:enabled="true"
         android:icon="@drawable/ic_person"
         android:title="@string/profile"
-        app:showAsAction="always|withText"/>
+        app:showAsAction="ifRoom|withText"/>
 
 </menu>

@@ -6,6 +6,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 /**
  * This class is a Contract Class working as Interface for UI and
  * Presenter components of FAQ setion.
+ *
  * @author ankur
  * @since 11/July/2018
  */

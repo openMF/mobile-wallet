@@ -82,7 +82,7 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
         View rootView = inflater.inflate(R.layout.fragment_kyc_lvl2, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle(Constants.KYC_REGISTRATION_LEVEL_2);
+        //setToolbarTitle(Constants.KYC_REGISTRATION_LEVEL_2);
 
         return rootView;
     }

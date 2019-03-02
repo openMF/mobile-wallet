@@ -6,11 +6,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
+import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +20,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-/**
- * This class is the Adapter class for MerchantAdapter.
- * @author ankur
- * @since 11/July/2018
- */
 
 public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.ViewHolder> implements
         Filterable {
@@ -38,7 +33,7 @@ public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_merchant,
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_casual_list,
                 parent, false);
         return new ViewHolder(v);
     }
@@ -46,26 +41,22 @@ public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         SavingsWithAssociations mMerchant = mMerchantsList.get(position);
+        TextDrawable iconDrawable = TextDrawable.builder().beginConfig()
+                .endConfig().buildRound(mMerchant.getClientName()
+                        .substring(0, 1), R.color.colorAccentBlack);
+        holder.mTvMerchantIcon.setImageDrawable(iconDrawable);
         holder.mTvMerchantName.setText(mMerchant.getClientName());
         holder.mTvMerchantExternalId.setText(mMerchant.getExternalId());
     }
 
     @Override
     public int getItemCount() {
-        if (mMerchantsList != null) {
-            return mMerchantsList.size();
-        } else {
-            return 0;
-        }
+        return mMerchantsList != null ? mMerchantsList.size() : 0;
     }
 
     public void setData(List<SavingsWithAssociations> mMerchantsList) {
         this.mMerchantsList = mMerchantsList;
         notifyDataSetChanged();
-    }
-
-    public List<SavingsWithAssociations> getMerchantsList() {
-        return mMerchantsList;
     }
 
     @Override
@@ -74,7 +65,6 @@ public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.View
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charString = constraint.toString();
-                DebugUtil.log("adapter", charString);
                 if (charString.isEmpty()) {
                     mMerchantsFilteredList = mMerchantsList;
                 } else {
@@ -104,16 +94,14 @@ public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.View
         };
     }
 
-    public void filterList(List<SavingsWithAssociations> filterdNames) {
-        this.mMerchantsList = filterdNames;
-        notifyDataSetChanged();
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tv_merchant_name)
+        @BindView(R.id.iv_item_casual_list_icon)
+        ImageView mTvMerchantIcon;
+        @BindView(R.id.tv_item_casual_list_title)
         TextView mTvMerchantName;
-        @BindView(R.id.tv_merchant_external_id)
+        @BindView(R.id.tv_item_casual_list_subtitle)
         TextView mTvMerchantExternalId;
 
         public ViewHolder(View v) {
