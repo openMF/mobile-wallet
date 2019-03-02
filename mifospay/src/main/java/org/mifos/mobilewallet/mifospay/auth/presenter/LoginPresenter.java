@@ -45,6 +45,17 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
         mLoginView.setPresenter(this);
     }
 
+    @Override
+    public void handleLoginButtonStatus(String usernameContent, String passwordContent) {
+        if (isStringEmpty(usernameContent) || isStringEmpty(passwordContent)) {
+            mLoginView.disableLoginButton();
+        } else {
+            mLoginView.enableLoginButton();
+        }
+    }
+    private boolean isStringEmpty(String str) {
+        return str == null || str.isEmpty();
+    }
 
     public void loginUser(String username, String password) {
 
@@ -117,7 +128,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     }
 
     private void saveUserDetails(User user,
-            UserWithRole userWithRole) {
+                                 UserWithRole userWithRole) {
         final String userName = user.getUserName();
         final long userID = user.getUserId();
 
