@@ -27,7 +27,7 @@ public class ProfilePresenter implements BaseHomeContract.ProfilePresenter {
 
     @Inject
     public ProfilePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository,
-                            PreferencesHelper preferencesHelper) {
+            PreferencesHelper preferencesHelper) {
         this.mUsecaseHandler = useCaseHandler;
         this.localRepository = localRepository;
         this.mPreferencesHelper = preferencesHelper;

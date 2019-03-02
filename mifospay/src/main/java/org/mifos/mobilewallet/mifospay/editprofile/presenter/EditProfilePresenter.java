@@ -74,11 +74,13 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
             mEditProfileView.showEmail(mPreferencesHelper.getEmail());
         }
     }
+
     private void showVpaIfNotEmpty() {
         if (!mPreferencesHelper.getClientVpa().isEmpty()) {
             mEditProfileView.showVpa(mPreferencesHelper.getClientVpa());
         }
     }
+
     private void showMobielIfNotEmpty() {
         if (!mPreferencesHelper.getMobile().isEmpty()) {
             mEditProfileView.showMobileNumber(mPreferencesHelper.getMobile());

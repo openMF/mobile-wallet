@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.history;
 
+import static org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER_USECASE;
+
 import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
@@ -15,26 +17,19 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import static org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER_USECASE;
-
 public class TransactionsHistory {
 
-    public HistoryContract.TransactionsHistoryAsync delegate;
-
-    private List<Transaction> transactions;
     private final UseCaseHandler mUsecaseHandler;
-
+    public HistoryContract.TransactionsHistoryAsync delegate;
     @Inject
     FetchAccount mFetchAccountUseCase;
-
     @Inject
     FetchAccountTransactions fetchAccountTransactionsUseCase;
-
     @Inject
     TaskLooper mTaskLooper;
-
     @Inject
     UseCaseFactory mUseCaseFactory;
+    private List<Transaction> transactions;
 
     @Inject
     public TransactionsHistory(UseCaseHandler useCaseHandler) {

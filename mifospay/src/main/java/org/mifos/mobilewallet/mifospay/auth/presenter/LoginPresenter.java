@@ -53,6 +53,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
             mLoginView.enableLoginButton();
         }
     }
+
     private boolean isStringEmpty(String str) {
         return str == null || str.isEmpty();
     }
@@ -128,7 +129,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     }
 
     private void saveUserDetails(User user,
-                                 UserWithRole userWithRole) {
+            UserWithRole userWithRole) {
         final String userName = user.getUserName();
         final long userID = user.getUserId();
 

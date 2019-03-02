@@ -1,11 +1,7 @@
 package org.mifos.mobilewallet.mifospay.finance.ui;
 
-import static org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity.Bank_Account_Details_Request_Code;
-
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.design.chip.Chip;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,20 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import org.mifos.mobilewallet.core.domain.model.BankAccountDetails;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.bank.BankContract;
 import org.mifos.mobilewallet.mifospay.bank.adapters.BankAccountsAdapter;
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountsPresenter;
-import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountDetailActivity;
-import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 
 import java.util.List;
+
 import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -69,7 +65,7 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_accounts, container, false);
         ButterKnife.bind(this, rootView);
         showProgressDialog(Constants.PLEASE_WAIT);
@@ -78,6 +74,7 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
         mBankAccountsPresenter.fetchLinkedBankAccounts();
         return rootView;
     }
+
     private void setupRecycletView() {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -148,7 +145,7 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
     }
 
     @OnClick(R.id.addaccountbutton)
-    public void addAccountClicked(){
+    public void addAccountClicked() {
 
     }
 

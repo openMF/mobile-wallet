@@ -83,14 +83,16 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         mLoginPresenter = presenter;
     }
 
-    @OnFocusChange({ R.id.et_username, R.id.et_password })
+    @OnFocusChange({R.id.et_username, R.id.et_password})
     public void onLoginInputFocusChanged() {
         handleLoginInputChanged();
     }
-    @OnTextChanged({ R.id.et_username, R.id.et_password })
+
+    @OnTextChanged({R.id.et_username, R.id.et_password})
     public void onLoginInputTextChanged() {
         handleLoginInputChanged();
     }
+
     private void handleLoginInputChanged() {
         String usernameContent = etUsername.getText().toString();
         String passwordContent = etPassword.getText().toString();
@@ -115,6 +117,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     public void disableLoginButton() {
         btnLogin.setEnabled(false);
     }
+
     @Override
     public void enableLoginButton() {
         btnLogin.setEnabled(true);

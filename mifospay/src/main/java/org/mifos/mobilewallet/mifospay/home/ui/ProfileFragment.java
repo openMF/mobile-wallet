@@ -141,8 +141,8 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     @Override
     public void showProfile(Client client) {
         TextDrawable drawable = TextDrawable.builder().beginConfig()
-                .width((int)getResources().getDimension(R.dimen.user_profile_image_size))
-                .height((int)getResources().getDimension(R.dimen.user_profile_image_size))
+                .width((int) getResources().getDimension(R.dimen.user_profile_image_size))
+                .height((int) getResources().getDimension(R.dimen.user_profile_image_size))
                 .endConfig().buildRound(client.getName().substring(0, 1), R.color.colorAccentBlack);
         ivUserImage.setImageDrawable(drawable);
         tvUserName.setText(client.getName());

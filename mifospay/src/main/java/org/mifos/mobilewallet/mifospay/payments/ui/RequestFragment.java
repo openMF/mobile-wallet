@@ -16,7 +16,7 @@ public class RequestFragment extends BaseFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_request, container, false);
         ButterKnife.bind(this, root);
         return root;

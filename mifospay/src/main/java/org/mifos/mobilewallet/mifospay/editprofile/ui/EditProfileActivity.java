@@ -90,26 +90,12 @@ public class EditProfileActivity extends BaseActivity implements
     @BindView(R.id.fab_edit_profile_save_changes)
     FloatingActionButton fabSaveChanges;
 
-    @BindViews( { R.id.et_edit_profile_username, R.id.et_edit_profile_email,
-            R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile } )
+    @BindViews({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
+            R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile})
     List<EditText> userDetailsInputs;
 
     private BottomSheetDialog bottomSheetDialog;
     private AlertDialog alertDialog;
-
-    class BottomSheetViews {
-        @OnClick(R.id.ll_change_profile_image_dialog_row)
-        public void onChangeProfileImageClicked() {
-            mPresenter.handleProfileImageChangeRequest();
-            bottomSheetDialog.dismiss();
-        }
-
-        @OnClick(R.id.ll_remove_profile_image_dialog_row)
-        public void onRemoveProfileImageClicked() {
-            mEditProfilePresenter.handleProfileImageRemoved();
-            bottomSheetDialog.dismiss();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -178,8 +164,8 @@ public class EditProfileActivity extends BaseActivity implements
         // TODO: it's not supported by the api???
     }
 
-    @OnTextChanged( {R.id.et_edit_profile_username, R.id.et_edit_profile_email,
-            R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile })
+    @OnTextChanged({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
+            R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile})
     public void onUserDetailsChanged() {
         for (EditText et : userDetailsInputs) {
             if (isDataSaveNecessary(et)) {
@@ -197,10 +183,10 @@ public class EditProfileActivity extends BaseActivity implements
         return !(TextUtils.isEmpty(content) || content.equals(currentContent));
     }
 
-    @OnFocusChange( {R.id.et_edit_profile_username, R.id.et_edit_profile_email,
-            R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile })
+    @OnFocusChange({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
+            R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile})
     public void onUserDetailsFocusChanged(EditText input, boolean isFocused) {
-        if  (!isDataSaveNecessary((input))) {
+        if (!isDataSaveNecessary((input))) {
             if (isFocused) {
                 input.setText(input.getHint().toString());
             } else {
@@ -212,8 +198,8 @@ public class EditProfileActivity extends BaseActivity implements
     @Override
     public void showDefaultImageByUsername(String fullName) {
         TextDrawable drawable = TextDrawable.builder().beginConfig()
-                .width((int)getResources().getDimension(R.dimen.user_profile_image_size))
-                .height((int)getResources().getDimension(R.dimen.user_profile_image_size))
+                .width((int) getResources().getDimension(R.dimen.user_profile_image_size))
+                .height((int) getResources().getDimension(R.dimen.user_profile_image_size))
                 .endConfig().buildRound(fullName.substring(0, 1), R.color.colorPrimary);
         ivUserImage.setImageDrawable(drawable);
     }
@@ -457,6 +443,20 @@ public class EditProfileActivity extends BaseActivity implements
 
         if (alertDialog != null) {
             alertDialog.dismiss();
+        }
+    }
+
+    class BottomSheetViews {
+        @OnClick(R.id.ll_change_profile_image_dialog_row)
+        public void onChangeProfileImageClicked() {
+            mPresenter.handleProfileImageChangeRequest();
+            bottomSheetDialog.dismiss();
+        }
+
+        @OnClick(R.id.ll_remove_profile_image_dialog_row)
+        public void onRemoveProfileImageClicked() {
+            mEditProfilePresenter.handleProfileImageRemoved();
+            bottomSheetDialog.dismiss();
         }
     }
 }

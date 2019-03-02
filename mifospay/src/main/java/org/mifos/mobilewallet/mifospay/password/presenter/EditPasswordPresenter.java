@@ -27,7 +27,7 @@ public class EditPasswordPresenter implements EditPasswordContract.EditPasswordP
 
     @Inject
     public EditPasswordPresenter(UseCaseHandler useCaseHandler,
-                                 PreferencesHelper preferencesHelper) {
+            PreferencesHelper preferencesHelper) {
         mUseCaseHandler = useCaseHandler;
         mPreferencesHelper = preferencesHelper;
     }
@@ -40,7 +40,7 @@ public class EditPasswordPresenter implements EditPasswordContract.EditPasswordP
 
     @Override
     public void updatePassword(String currentPassword, final String newPassword,
-                               final String newPasswordRepeat) {
+            final String newPasswordRepeat) {
         mEditPasswordView.startProgressBar();
         if (isNotEmpty(currentPassword) && isNotEmpty(newPassword)
                 && isNotEmpty(newPasswordRepeat)) {

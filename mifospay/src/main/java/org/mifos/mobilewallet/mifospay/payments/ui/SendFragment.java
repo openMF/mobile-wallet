@@ -39,6 +39,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
 /**
  * Created by naman on 30/8/17.
  */
@@ -86,7 +87,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_send, container,
                 false);
         ButterKnife.bind(this, rootView);
@@ -235,7 +236,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
+            @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_CAMERA: {
                 // If request is cancelled, the result arrays are empty.

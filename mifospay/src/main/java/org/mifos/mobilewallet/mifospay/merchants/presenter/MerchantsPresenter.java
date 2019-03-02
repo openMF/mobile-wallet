@@ -28,13 +28,12 @@ public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter 
 
     @Inject
     UseCaseFactory mUseCaseFactory;
+    private Boolean isMerchantListEmpty = true;
 
     @Inject
     public MerchantsPresenter(UseCaseHandler useCaseHandler) {
         mUseCaseHandler = useCaseHandler;
     }
-
-    private Boolean isMerchantListEmpty = true;
 
     @Override
     public void attachView(BaseView baseView) {
@@ -73,8 +72,8 @@ public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter 
         mTaskLooper.listen(new TaskLooper.Listener() {
             @Override
             public <R extends UseCase.ResponseValue> void onTaskSuccess(TaskLooper.TaskData
-                                                                                taskData,
-                                                                        R response) {
+                    taskData,
+                    R response) {
                 FetchClientDetails.ResponseValue responseValue =
                         (FetchClientDetails.ResponseValue) response;
                 savingsWithAssociationsList.get(taskData.getTaskId()).setExternalId(

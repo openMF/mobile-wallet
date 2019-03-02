@@ -51,7 +51,7 @@ public class InvoicesAdapter
                 (invoice.getStatus() == 0) ? Constants.PENDING : Constants.DONE);
         holder.mInvoiceImage.setImageResource(
                 (invoice.getStatus() == 0) ? R.drawable.ic_remove_circle_outline_black_24dp :
-                R.drawable.ic_check_round_black_24dp);
+                        R.drawable.ic_check_round_black_24dp);
         holder.mTvInvoiceDate.setText(DateHelper.getDateAsString(invoice.getDate()));
         holder.mTvInvoiceAmount.setText(Constants.INR + invoice.getAmount());
     }

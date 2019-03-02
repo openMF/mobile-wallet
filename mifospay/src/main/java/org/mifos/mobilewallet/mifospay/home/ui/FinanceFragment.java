@@ -12,9 +12,9 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.finance.ui.AccountsFragment;
 import org.mifos.mobilewallet.mifospay.finance.ui.CardsFragment;
-import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment;
 import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionFragment;
+import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,7 +36,7 @@ public class FinanceFragment extends BaseFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+            Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_finance, container, false);
         ButterKnife.bind(this, rootView);
 

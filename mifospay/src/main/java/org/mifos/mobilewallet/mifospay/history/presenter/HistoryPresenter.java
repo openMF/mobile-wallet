@@ -22,24 +22,18 @@ public class HistoryPresenter implements
         HistoryContract.TransactionsHistoryPresenter,
         HistoryContract.TransactionsHistoryAsync {
 
-    @Inject
-    FetchAccount mFetchAccountUseCase;
-
-    @Inject
-    FetchAccountTransactions fetchAccountTransactionsUseCase;
-
-    @Inject
-    TaskLooper mTaskLooper;
-
-    @Inject
-    UseCaseFactory mUseCaseFactory;
-
-    @Inject
-    TransactionsHistory mTransactionsHistory;
-
     private final UseCaseHandler mUseCaseHandler;
     private final LocalRepository mLocalRepository;
-
+    @Inject
+    FetchAccount mFetchAccountUseCase;
+    @Inject
+    FetchAccountTransactions fetchAccountTransactionsUseCase;
+    @Inject
+    TaskLooper mTaskLooper;
+    @Inject
+    UseCaseFactory mUseCaseFactory;
+    @Inject
+    TransactionsHistory mTransactionsHistory;
     private HistoryContract.HistoryView mHistoryView;
     private Account mAccount;
 

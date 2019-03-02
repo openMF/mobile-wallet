@@ -31,6 +31,7 @@ import butterknife.OnClick;
 
 /**
  * This is a Dialog class to add a new card.
+ *
  * @author ankur
  * @since 19/May/2018
  */
@@ -57,9 +58,9 @@ public class AddCardDialog extends BottomSheetDialogFragment {
     @BindView(R.id.btn_cancel)
     Button btnCancel;
     CardsContract.CardsPresenter mCardsPresenter;
-    private BottomSheetBehavior mBottomSheetBehavior;
     @BindViews({R.id.til_fName, R.id.til_lName, R.id.til_card_number, R.id.til_cvv})
     List<TextInputLayout> mTextInputLayouts;
+    private BottomSheetBehavior mBottomSheetBehavior;
     private boolean fieldsValid;
     private final ButterKnife.Action<TextInputLayout> CHECK_ERROR =
             new ButterKnife.Action<TextInputLayout>() {
@@ -78,6 +79,7 @@ public class AddCardDialog extends BottomSheetDialogFragment {
 
     /**
      * A function to set the Presenter.
+     *
      * @param cardsPresenter : Cards Presenter from Contract Class.
      */
     public void setCardsPresenter(

@@ -25,23 +25,18 @@ import javax.inject.Inject;
 public class HomePresenter implements BaseHomeContract.HomePresenter,
         HistoryContract.TransactionsHistoryAsync {
 
-    @Inject
-    FetchAccount mFetchAccountUseCase;
-
-    @Inject
-    FetchAccountTransactions fetchAccountTransactionsUseCase;
-
-    @Inject
-    TaskLooper mTaskLooper;
-
-    @Inject
-    UseCaseFactory mUseCaseFactory;
-
-    @Inject
-    TransactionsHistory transactionsHistory;
-
     private final UseCaseHandler mUsecaseHandler;
     private final LocalRepository localRepository;
+    @Inject
+    FetchAccount mFetchAccountUseCase;
+    @Inject
+    FetchAccountTransactions fetchAccountTransactionsUseCase;
+    @Inject
+    TaskLooper mTaskLooper;
+    @Inject
+    UseCaseFactory mUseCaseFactory;
+    @Inject
+    TransactionsHistory transactionsHistory;
     private BaseHomeContract.HomeView mHomeView;
 
     @Inject

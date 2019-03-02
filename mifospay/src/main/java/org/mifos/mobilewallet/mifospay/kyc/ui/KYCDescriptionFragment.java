@@ -100,7 +100,7 @@ public class KYCDescriptionFragment extends
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
+            @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_kyc, container, false);
         ButterKnife.bind(this, rootView);
