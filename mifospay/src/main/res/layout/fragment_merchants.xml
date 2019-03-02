@@ -30,7 +30,16 @@
                 android:paddingLeft="15dp"/>
 
         </android.support.v7.widget.CardView>
-
+        <TextView
+            android:id="@+id/no_merchants_found_text"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/value_30dp"
+            android:text="@string/no_merchants_found_text"
+            android:textAlignment="center"
+            android:textSize="@dimen/value_20dp"
+            android:layout_marginTop="@dimen/value_10dp"
+            android:visibility="gone"
+            />
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_merchants"
             android:layout_width="match_parent"

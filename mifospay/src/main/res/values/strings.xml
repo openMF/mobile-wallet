@@ -166,6 +166,7 @@
     <string name="sign_up_as">Sign up as</string>
     <string name="merchant">Merchant</string>
     <string name="customer">Customer</string>
+    <string name="no_merchants_found_text">No Trusted Merchants Found</string>
     <string name="ease_my_sign_up_using_google_account">Ease my sign up using Google Account</string>
     <string name="next">Next</string>
     <string name="account">account</string>

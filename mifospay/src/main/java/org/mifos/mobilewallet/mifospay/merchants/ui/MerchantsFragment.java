@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.mifospay.R;
@@ -43,7 +44,8 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     @Inject
     MerchantsPresenter mPresenter;
     MerchantsContract.MerchantsPresenter mMerchantsPresenter;
-
+    @BindView(R.id.no_merchants_found_text)
+    TextView noMerchantsText;
     @Inject
     MerchantsAdapter mMerchantsAdapter;
     @BindView(R.id.rv_merchants)
@@ -61,7 +63,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_merchants, container, false);
         ButterKnife.bind(this, rootView);
@@ -131,6 +133,8 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         if (merchantsList != null) {
             if (isBlank(text)) {
                 filteredList = merchantsList;
+                mRvMerchants.setVisibility(View.VISIBLE);
+                noMerchantsText.setVisibility(View.GONE);
             } else {
                 for (SavingsWithAssociations merchant : merchantsList) {
                     if (merchant.getClientName().toLowerCase().contains(
@@ -139,8 +143,16 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
                             : merchant.getExternalId()).toLowerCase().contains(
                             text.toLowerCase())) {
                         filteredList.add(merchant);
+                        mRvMerchants.setVisibility(View.VISIBLE);
+                        noMerchantsText.setVisibility(View.GONE);
                     }
                 }
+            }
+            if (filteredList.size() == 0) {
+
+                mRvMerchants.setVisibility(View.GONE);
+                noMerchantsText.setVisibility(View.VISIBLE);
+
             }
             mMerchantsAdapter.filterList(filteredList);
         }
