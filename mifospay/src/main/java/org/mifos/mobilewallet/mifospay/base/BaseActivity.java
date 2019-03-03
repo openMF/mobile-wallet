@@ -22,7 +22,7 @@ import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
  * Created by naman on 16/6/17.
  */
 
-public class BaseActivity extends BasePassCodeActivity implements BaseActivityCallback {
+public abstract class BaseActivity extends BasePassCodeActivity implements BaseActivityCallback {
 
     public Toolbar toolbar;
     public SwipeRefreshLayout swipeLayout;
