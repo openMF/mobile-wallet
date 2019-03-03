@@ -1,9 +1,11 @@
 package org.mifos.mobilewallet.mifospay.settings.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
 import org.mifos.mobilewallet.mifospay.R;
+import android.support.v7.app.AlertDialog;
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.settings.SettingsContract;
@@ -39,8 +41,25 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
 
     @OnClick(R.id.btn_logout)
     public void onLogoutClicked() {
-        showProgressDialog(Constants.LOGGING_OUT);
-        mSettingsPresenter.logout();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(this.getString(R.string.are_you_sure_you_want_to_logout));
+        builder.setCancelable(false);
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showProgressDialog(Constants.LOGGING_OUT);
+                mSettingsPresenter.logout();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.show();
     }
 
     @OnClick(R.id.btn_disable_account)
