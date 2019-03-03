@@ -16,6 +16,7 @@
         android:hint="@string/debit_card_number"
         android:imeOptions="actionNext"
         android:inputType="number"
+        android:maxLength="16"
         android:nextFocusDown="@id/pe_month"
         android:nextFocusForward="@id/pe_month"/>
 

@@ -78,10 +78,14 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
     }
 
     public void okayClicked() {
-        showProgressDialog(Constants.PLEASE_WAIT);
+        if (mEtDebitCardNumber.getText().length() < 16) {
+            showToast("Please enter valid Debit Card Number");
+        } else {
+            showProgressDialog(Constants.PLEASE_WAIT);
 
-        mDebitCardPresenter.verifyDebitCard(mEtDebitCardNumber.getText()
-                .toString(), mPeMonth.getText().toString(), mPeYear.getText().toString());
+            mDebitCardPresenter.verifyDebitCard(mEtDebitCardNumber.getText()
+                    .toString(), mPeMonth.getText().toString(), mPeYear.getText().toString());
+        }
 
     }
 
