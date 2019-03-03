@@ -80,7 +80,8 @@
                                 <ImageView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    app:srcCompat="@drawable/ic_person"/>
+                                    app:srcCompat="@drawable/ic_person"
+                                    android:contentDescription="@string/username"/>
 
                                 <TextView
                                     android:id="@+id/tv_user_details_name"

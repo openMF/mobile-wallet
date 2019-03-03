@@ -20,7 +20,8 @@
             android:id="@+id/iv_change_profile_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_photo_library" />
+            app:srcCompat="@drawable/ic_photo_library"
+            android:contentDescription="@string/change_profile_picture" />
 
         <TextView
             android:id="@+id/tv_change_profile_image"
@@ -47,7 +48,8 @@
             android:id="@+id/iv_remove_profile_image"
             android:layout_width="27dp"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_remove" />
+            app:srcCompat="@drawable/ic_remove"
+            android:contentDescription="@string/remove_profile_picture"/>
 
         <TextView
             android:id="@+id/tv_remove_profile_image"

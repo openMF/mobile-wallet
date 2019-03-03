@@ -31,7 +31,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/ic_person"/>
+                    android:background="@drawable/ic_person"
+                    android:contentDescription="@string/transaction_from_client"/>
 
                 <TextView
                     android:id="@+id/tv_fromClientName"
@@ -55,7 +56,8 @@
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_send"
-                android:foregroundGravity="center"/>
+                android:foregroundGravity="center"
+                android:contentDescription="@string/send"/>
 
             <LinearLayout
                 android:id="@+id/ll_to"
@@ -69,7 +71,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/ic_person"/>
+                    android:background="@drawable/ic_person"
+                    android:contentDescription="@string/transaction_to_client"/>
 
                 <TextView
                     android:id="@+id/tv_toClientName"
@@ -106,7 +109,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/transaction_status"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"

@@ -190,5 +190,10 @@
     <string name="settings">Settings</string>
     <string name="mobile_number">Mobile Number</string>
 
+    <string name="transaction_status" translatable="false">Transaction status</string>
+    <string name="transaction_from_client" translatable="false">Transaction from a Client</string>
+    <string name="transaction_to_client" translatable="false">Transaction to a Client</string>
+    <string name="user_image" translatable="false">User image</string>
+
 
 </resources>
