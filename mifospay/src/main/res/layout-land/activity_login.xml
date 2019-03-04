@@ -62,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/marginItemsInSectionSmall"
-        android:background="@drawable/button_round_black"
+        android:background="@drawable/button_round_primary"
         android:text="@string/login"
         app:layout_constraintBottom_toTopOf="@+id/ll_signup"
         app:layout_constraintEnd_toEndOf="parent"

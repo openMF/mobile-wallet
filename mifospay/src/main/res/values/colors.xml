@@ -52,6 +52,8 @@
 
     <color name="white">@android:color/white</color>
     <color name="black">@android:color/black</color>
+    <color name="white_transparency">#b9ffffff</color>
+
 
     <color name="gray">#ffdfdfdf</color>
     <color name="grey_50">#fafafa</color>

@@ -50,7 +50,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/value_20dp"
-        android:background="@drawable/button_round_black"
+        android:background="@drawable/button_round_primary"
         android:text="@string/submit"
         android:textColor="@color/white"/>
 
