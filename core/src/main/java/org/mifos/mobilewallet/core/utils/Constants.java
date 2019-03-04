@@ -16,6 +16,8 @@ public class Constants {
     public static final int MIFOS_MERCHANT_SAVINGS_PRODUCT_ID = 165; // 372
     public static final int MIFOS_CONSUMER_SAVINGS_PRODUCT_ID = 165; // 373
 
+    public static final Integer[] NEW_USER_ROLE_IDS = {1, 471};
+
     public static final String ENTITY_TYPE_CLIENTS = "clients";
 
     public static final String FETCH_ACCOUNT_TRANSFER_USECASE = "FetchAccountTransfer";
