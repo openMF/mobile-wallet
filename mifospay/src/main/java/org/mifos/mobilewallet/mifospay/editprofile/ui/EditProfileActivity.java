@@ -4,9 +4,11 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
@@ -21,6 +23,9 @@ import android.widget.TextView;
 import com.hbb20.CountryCodePicker;
 import com.yalantis.ucrop.UCrop;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
@@ -138,7 +143,10 @@ public class EditProfileActivity extends BaseActivity implements
 
         showProgressDialog(Constants.PLEASE_WAIT);
         mEditProfilePresenter.fetchUserDetails();
-
+        Bitmap bitmap=load();
+        if (bitmap != null) {
+            mIvUserImage.setImageBitmap(bitmap);
+        }
         setupBottomSheetDialog();
     }
 
@@ -363,7 +371,11 @@ public class EditProfileActivity extends BaseActivity implements
                     startCrop(selectedImageUri);
                 }
             } else if (requestCode == UCrop.REQUEST_CROP) {
-                handleCropResult(data);
+                try {
+                    handleCropResult(data);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -476,15 +488,18 @@ public class EditProfileActivity extends BaseActivity implements
         }
     }
 
-    private void handleCropResult(@NonNull Intent result) {
+    private void handleCropResult(@NonNull Intent result) throws IOException {
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
             mIvUserImage.setImageURI(resultUri);
+            Bitmap bitmap=MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+            savebitmap(bitmap);
         }
     }
 
     @Override
     public void removeProfileImage() {
+        savebitmap(null);
         // TODO: Remove image from database
     }
 
@@ -508,5 +523,50 @@ public class EditProfileActivity extends BaseActivity implements
                 .endConfig().buildRound(fullName.substring(0, 1), R.color.colorPrimary);
         mIvUserImage.setImageDrawable(drawable);
         hideProgressDialog();
+    }
+    public void savebitmap(Bitmap bitmapImage) {
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileOutputStream = new FileOutputStream(createFile());
+            bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (fileOutputStream != null) {
+                    fileOutputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    @NonNull
+    private File createFile() {
+        File directory;
+        directory = new File(getApplicationContext().getFilesDir()+"/"+"mifos-wallet");
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+        return new File(directory, "profile.png");
+    }
+
+    public Bitmap load() {
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(createFile());
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

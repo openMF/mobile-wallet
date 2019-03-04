@@ -1,7 +1,10 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,10 +15,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
 import org.mifos.mobilewallet.mifospay.faq.ui.FAQActivity;
 import org.mifos.mobilewallet.mifospay.home.HomeContract;
@@ -69,6 +77,21 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
         ((BaseActivity) getActivity()).getActivityComponent().inject(this);
     }
 
+    @Override public void onResume() {
+        super.onResume();
+        PreferencesHelper preferencesHelper = new PreferencesHelper(getContext());
+        Bitmap bitmap=load();
+        if (bitmap != null) {
+            ivUserImage.setImageBitmap(bitmap);
+        } else {
+            TextDrawable drawable = TextDrawable.builder().beginConfig()
+                .width((int)getResources().getDimension(R.dimen.user_profile_image_size))
+                .height((int)getResources().getDimension(R.dimen.user_profile_image_size))
+                .endConfig().buildRound(preferencesHelper.getFullName().substring(0, 1), R.color.colorPrimary);
+            ivUserImage.setImageDrawable(drawable);
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -85,7 +108,10 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
 
         mProfilePresenter.fetchprofile();
         mProfilePresenter.fetchClientImage();
-
+        Bitmap bitmap=load();
+        if (bitmap != null) {
+            ivUserImage.setImageBitmap(bitmap);
+        }
         return rootView;
     }
 
@@ -145,4 +171,32 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
         Toaster.show(getView(), message);
     }
 
+    public Bitmap load() {
+        FileInputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(createFile());
+            return BitmapFactory.decodeStream(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @NonNull
+    private File createFile() {
+        File directory;
+        directory = new File(getContext().getFilesDir()+"/"+"mifos-wallet");
+        if (!directory.exists()) {
+            directory.mkdir();
+        }
+        return new File(directory, "profile.png");
+    }
 }
