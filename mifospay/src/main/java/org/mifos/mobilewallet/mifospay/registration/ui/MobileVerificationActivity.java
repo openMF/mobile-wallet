@@ -114,7 +114,10 @@ public class MobileVerificationActivity extends BaseActivity implements
     @OnClick(R.id.fab_next)
     public void onNextClicked() {
         Utils.hideSoftKeyboard(this);
-
+        if (mEtOtp.getText().toString().trim().length()==0){
+            showToast("Enter valid OTP");
+            return;
+        }
         mFabNext.setClickable(false);
         mProgressBar.setVisibility(View.VISIBLE);
         mTvVerifyingOtp.setVisibility(View.VISIBLE);
