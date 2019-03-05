@@ -344,7 +344,6 @@ public class EditProfileActivity extends BaseActivity implements
                     // functionality that depends on this permission.
                     showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_IMAGES);
                 }
-                return;
             }
 
             // other 'case' lines to check for other

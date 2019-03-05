@@ -145,7 +145,6 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
                     // functionality that depends on this permission.
                     showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_DOCUMENTS);
                 }
-                return;
             }
 
             // other 'case' lines to check for other
