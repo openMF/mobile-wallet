@@ -143,7 +143,7 @@ public class EditProfileActivity extends BaseActivity implements
 
         showProgressDialog(Constants.PLEASE_WAIT);
         mEditProfilePresenter.fetchUserDetails();
-        Bitmap bitmap=load();
+        Bitmap bitmap = load();
         if (bitmap != null) {
             mIvUserImage.setImageBitmap(bitmap);
         }
@@ -374,7 +374,6 @@ public class EditProfileActivity extends BaseActivity implements
                 try {
                     handleCropResult(data);
                 } catch (IOException e) {
-                    e.printStackTrace();
                 }
             }
         }
@@ -492,7 +491,7 @@ public class EditProfileActivity extends BaseActivity implements
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
             mIvUserImage.setImageURI(resultUri);
-            Bitmap bitmap=MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
             savebitmap(bitmap);
         }
     }
@@ -530,21 +529,19 @@ public class EditProfileActivity extends BaseActivity implements
             fileOutputStream = new FileOutputStream(createFile());
             bitmapImage.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
         } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if (fileOutputStream != null) {
                     fileOutputStream.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
             }
         }
     }
     @NonNull
     private File createFile() {
         File directory;
-        directory = new File(getApplicationContext().getFilesDir()+"/"+"mifos-wallet");
+        directory = new File(getApplicationContext().getFilesDir() + "/" + "mifos-wallet");
         if (!directory.exists()) {
             directory.mkdir();
         }
@@ -557,14 +554,12 @@ public class EditProfileActivity extends BaseActivity implements
             inputStream = new FileInputStream(createFile());
             return BitmapFactory.decodeStream(inputStream);
         } catch (Exception e) {
-            e.printStackTrace();
         } finally {
             try {
                 if (inputStream != null) {
                     inputStream.close();
                 }
             } catch (IOException e) {
-                e.printStackTrace();
             }
         }
         return null;
