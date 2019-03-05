@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.v4.content.ContextCompat;
@@ -21,12 +22,14 @@ import android.widget.TextView;
 import com.hbb20.CountryCodePicker;
 import com.yalantis.ucrop.UCrop;
 
+import java.io.IOException;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter;
 import org.mifos.mobilewallet.mifospay.utils.AnimationUtil;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.ImageInputOutput;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 import org.mifos.mobilewallet.mifospay.utils.ValidateUtil;
@@ -110,6 +113,7 @@ public class EditProfileActivity extends BaseActivity implements
     private String email;
     private String mobile;
     private BottomSheetDialog bottomSheetDialog;
+    private ImageInputOutput imageInputOutput;
 
     class BottomSheetViews {
         @OnClick(R.id.ll_change_profile_image_dialog_row)
@@ -135,10 +139,13 @@ public class EditProfileActivity extends BaseActivity implements
         setToolbarTitle(Constants.EDIT_PROFILE);
         mPresenter.attachView(this);
         mCcpNewCode.registerCarrierNumberEditText(mEtNewMobileNumber);
-
+        imageInputOutput = new ImageInputOutput(getApplicationContext(), "profile");
         showProgressDialog(Constants.PLEASE_WAIT);
         mEditProfilePresenter.fetchUserDetails();
-
+        Bitmap bitmap = imageInputOutput.load();
+        if (bitmap != null) {
+            mIvUserImage.setImageBitmap(bitmap);
+        }
         setupBottomSheetDialog();
     }
 
@@ -363,7 +370,10 @@ public class EditProfileActivity extends BaseActivity implements
                     startCrop(selectedImageUri);
                 }
             } else if (requestCode == UCrop.REQUEST_CROP) {
-                handleCropResult(data);
+                try {
+                    handleCropResult(data);
+                } catch (IOException e) {
+                }
             }
         }
     }
@@ -457,8 +467,8 @@ public class EditProfileActivity extends BaseActivity implements
     private void pickImageFromGallery() {
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(getApplicationContext(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_READ_EXTERNAL_STORAGE);
         } else {
@@ -476,15 +486,18 @@ public class EditProfileActivity extends BaseActivity implements
         }
     }
 
-    private void handleCropResult(@NonNull Intent result) {
+    private void handleCropResult(@NonNull Intent result) throws IOException {
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
             mIvUserImage.setImageURI(resultUri);
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), resultUri);
+            imageInputOutput.savebitmap(bitmap);
         }
     }
 
     @Override
     public void removeProfileImage() {
+        imageInputOutput.savebitmap(null);
         // TODO: Remove image from database
     }
 
@@ -509,4 +522,5 @@ public class EditProfileActivity extends BaseActivity implements
         mIvUserImage.setImageDrawable(drawable);
         hideProgressDialog();
     }
+
 }
