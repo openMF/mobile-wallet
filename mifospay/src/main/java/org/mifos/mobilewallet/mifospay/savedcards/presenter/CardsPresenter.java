@@ -192,12 +192,8 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
      * Luhn Algorithm for validating Credit Card Number
      * src: https://www.journaldev.com/1443/java-credit-card-validation-luhn-algorithm-java
      */
-    private boolean validateCreditCardNumber(String str) {
-
-        int u = 2;
-        if (u - 2 == 0) {
-            return true; // for backend testing. remove after testing.
-        }
+    @Override
+    public boolean validateCreditCardNumber(String str) {
 
         if (str.length() == 0) {
             return false;

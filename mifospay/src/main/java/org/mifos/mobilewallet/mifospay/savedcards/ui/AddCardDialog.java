@@ -147,18 +147,22 @@ public class AddCardDialog extends BottomSheetDialogFragment {
         if (!areFieldsValid()) {
             return;
         }
-        Card card = new Card(etCardNumber.getText().toString(), etCVV.getText().toString(),
-                spnMM.getSelectedItem() + "/" + spnYY.getSelectedItem(),
-                etFname.getText().toString(), etLname.getText().toString());
+        if (mCardsPresenter.validateCreditCardNumber(etCardNumber.getText().toString())) {
+            Card card = new Card(etCardNumber.getText().toString(), etCVV.getText().toString(),
+                    spnMM.getSelectedItem() + "/" + spnYY.getSelectedItem(),
+                    etFname.getText().toString(), etLname.getText().toString());
 
-        if (forEdit) {
-            card.setId(editCard.getId());
-            mCardsPresenter.editCard(card);
+            if (forEdit) {
+                card.setId(editCard.getId());
+                mCardsPresenter.editCard(card);
+            } else {
+                mCardsPresenter.addCard(card);
+            }
+
+            dismiss();
         } else {
-            mCardsPresenter.addCard(card);
+            Toaster.showToast(getContext(), getString(R.string.enter_valid_card_number));
         }
-
-        dismiss();
     }
 
     /**

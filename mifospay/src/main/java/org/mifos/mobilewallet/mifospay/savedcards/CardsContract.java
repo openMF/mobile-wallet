@@ -44,5 +44,7 @@ public interface CardsContract {
         void editCard(Card card);
 
         void deleteCard(int position);
+
+        boolean validateCreditCardNumber(String str);
     }
 }
