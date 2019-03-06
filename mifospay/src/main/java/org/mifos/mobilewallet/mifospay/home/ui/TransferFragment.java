@@ -333,7 +333,6 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
                     // functionality that depends on this permission.
                     Toaster.show(getView(), Constants.NEED_READ_CONTACTS_PERMISSION);
                 }
-                return;
             }
         }
     }

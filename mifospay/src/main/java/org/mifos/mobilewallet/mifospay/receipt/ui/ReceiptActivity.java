@@ -153,7 +153,6 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                     // functionality that depends on this permission.
                     showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_DOWNLOAD_RECEIPT);
                 }
-                return;
             }
 
             // other 'case' lines to check for other
