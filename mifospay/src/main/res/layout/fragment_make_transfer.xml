@@ -107,17 +107,68 @@
             </LinearLayout>
 
         </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/layout_success"
+            android:visibility="gone"
+            >
+            <View
+                android:id="@+id/view_transfer_success"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_20dp"
+                android:background="@drawable/transfer_success"
+                android:layout_alignParentRight="true"
+                android:visibility="visible"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/payment_success"
+                android:layout_toLeftOf="@id/view_transfer_success"
+                android:text="@string/amount"
+                android:textSize="@dimen/value_16sp"
+                android:textColor="@color/black"
+                android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                android:textStyle="bold"
 
-        <View
-            android:id="@+id/view_transfer_success"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:background="@drawable/transfer_success"
-            android:visibility="gone"/>
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/receiver_name"
+                android:layout_toLeftOf="@id/view_transfer_success"
+                android:text="@string/customer"
+                android:textSize="@dimen/value_16sp"
+                android:layout_marginTop="@dimen/value_7dp"
+                android:textColor="@color/black"
+                android:layout_below="@id/payment_success"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/transction_id"
+                android:layout_toLeftOf="@id/view_transfer_success"
+                android:text="@string/transaction_id"
+                android:textSize="@dimen/value_16sp"
+                android:layout_marginTop="@dimen/value_10dp"
+                android:textColor="@color/black"
+                android:layout_below="@id/receiver_name"
+                />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/show_receipt"
+                android:text="@string/view_receipt"
+                android:textColor="@color/primaryDarkBlue"
+                android:layout_below="@+id/transction_id"
+                android:layout_marginTop="@dimen/value_10dp"
+                />
+        </RelativeLayout>
         <View
             android:id="@+id/view_transfer_failure"
             android:layout_width="130dp"
