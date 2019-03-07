@@ -110,7 +110,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 //                mMerchantsAdapter.getFilter().filter(mEtSearchMerchants.getText().toString());
 //                DebugUtil.log(mEtSearchMerchants.getText().toString());
-                filter(mEtSearchMerchants.getText().toString());
+                filter(mEtSearchMerchants.getText().toString().trim());
 
             }
 

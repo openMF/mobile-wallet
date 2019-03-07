@@ -79,8 +79,8 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     public void onLoginClicked() {
         Utils.hideSoftKeyboard(this);
         showProgressDialog(Constants.LOGGING_IN);
-        mLoginPresenter.loginUser(etUsername.getText().toString(),
-                etPassword.getText().toString());
+        mLoginPresenter.loginUser(etUsername.getText().toString().trim(),
+                etPassword.getText().toString().trim());
     }
 
     @OnClick(R.id.ll_signup)

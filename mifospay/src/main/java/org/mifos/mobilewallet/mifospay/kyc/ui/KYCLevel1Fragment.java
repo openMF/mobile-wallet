@@ -131,12 +131,12 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
     public void onClickSubmit() {
         showProgressDialog(Constants.PLEASE_WAIT);
 
-        String fname = etFname.getText().toString();
-        String lname = etLname.getText().toString();
-        String address1 = etAddress1.getText().toString();
-        String address2 = etAddress2.getText().toString();
-        String phoneno = ccpPhonecode.getFullNumber();
-        String dob = etDOB.getText().toString();
+        String fname = etFname.getText().toString().trim();
+        String lname = etLname.getText().toString().trim();
+        String address1 = etAddress1.getText().toString().trim();
+        String address2 = etAddress2.getText().toString().trim();
+        String phoneno = ccpPhonecode.getFullNumber().trim();
+        String dob = etDOB.getText().toString().trim();
 
         mKYCLevel1Presenter.submitData(fname, lname, address1, address2, phoneno, dob);
         Utils.hideSoftKeyboard(getActivity());

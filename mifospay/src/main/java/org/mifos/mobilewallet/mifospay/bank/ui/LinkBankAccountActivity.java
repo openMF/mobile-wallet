@@ -127,7 +127,7 @@ public class LinkBankAccountActivity extends BaseActivity implements
             public void onTextChanged(CharSequence s, int start, int before, int count) {
 //                Log.d("qxz", "onTextChanged: " + s.toString());
 //                mOtherBankAdapter.getFilter().filter(mEtSearchBank.getText().toString());
-                filter(mEtSearchBank.getText().toString());
+                filter(mEtSearchBank.getText().toString().trim());
             }
 
             @Override

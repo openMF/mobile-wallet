@@ -201,17 +201,17 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
             return;
         }
 
-        String firstName = mEtFirstName.getText().toString();
-        String lastName = mEtLastName.getText().toString();
-        String email = mEtEmail.getText().toString();
-        String businessName = mEtBusinessShopName.getText().toString();
-        String addressline1 = mEtAddressLine1.getText().toString();
-        String addressline2 = mEtAddressLine2.getText().toString();
-        String pincode = mEtPinCode.getText().toString();
-        String city = mEtCity.getText().toString();
-        String username = mEtUserName.getText().toString();
-        String password = mEtPassword.getText().toString();
-        String confirmPassword = mEtConfirmPassword.getText().toString();
+        String firstName = mEtFirstName.getText().toString().trim();
+        String lastName = mEtLastName.getText().toString().trim();
+        String email = mEtEmail.getText().toString().trim();
+        String businessName = mEtBusinessShopName.getText().toString().trim();
+        String addressline1 = mEtAddressLine1.getText().toString().trim();
+        String addressline2 = mEtAddressLine2.getText().toString().trim();
+        String pincode = mEtPinCode.getText().toString().trim();
+        String city = mEtCity.getText().toString().trim();
+        String username = mEtUserName.getText().toString().trim();
+        String password = mEtPassword.getText().toString().trim();
+        String confirmPassword = mEtConfirmPassword.getText().toString().trim();
 
         if (!password.equals(confirmPassword)) {
             Toaster.showToast(this, "Password is not same as Confirm Password");

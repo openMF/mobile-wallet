@@ -67,9 +67,9 @@ public class SearchActivity extends BaseActivity implements SearchContract.Searc
 
     @OnTextChanged(R.id.et_search)
     public void searchTextChanged() {
-        if (etSearch.getText().toString().length() > 3) {
+        if (etSearch.getText().toString().trim().length() > 3) {
             showSwipeProgress();
-            mSearchPresenter.performSearch(etSearch.getText().toString());
+            mSearchPresenter.performSearch(etSearch.getText().toString().trim());
         } else {
             searchAdapter.clearData();
         }

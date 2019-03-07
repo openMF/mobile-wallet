@@ -147,9 +147,9 @@ public class AddCardDialog extends BottomSheetDialogFragment {
         if (!areFieldsValid()) {
             return;
         }
-        Card card = new Card(etCardNumber.getText().toString(), etCVV.getText().toString(),
-                spnMM.getSelectedItem() + "/" + spnYY.getSelectedItem(),
-                etFname.getText().toString(), etLname.getText().toString());
+        Card card = new Card(etCardNumber.getText().toString().trim(), etCVV.getText().toString()
+                .trim(), spnMM.getSelectedItem() + "/" + spnYY.getSelectedItem(),
+                etFname.getText().toString().trim(), etLname.getText().toString().trim());
 
         if (forEdit) {
             card.setId(editCard.getId());

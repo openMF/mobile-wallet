@@ -273,10 +273,11 @@ public class EditProfileActivity extends BaseActivity implements
 
             case R.id.btn_password_save:
                 showProgressDialog(Constants.PLEASE_WAIT);
-                if (mEtNewPassword.getText().toString().equals(
-                        mEtConfirmPassword.getText().toString())) {
-                    mEditProfilePresenter.updatePassword(mEtCurrentPassword.getText().toString(),
-                            mEtNewPassword.getText().toString());
+                if (mEtNewPassword.getText().toString().trim().equals(
+                        mEtConfirmPassword.getText().toString().trim())) {
+                    mEditProfilePresenter.updatePassword(mEtCurrentPassword.getText().toString()
+                                    .trim(),
+                            mEtNewPassword.getText().toString().trim());
                 } else {
                     hideProgressDialog();
                     showToast("Password mismatch");
@@ -285,10 +286,11 @@ public class EditProfileActivity extends BaseActivity implements
 
             case R.id.btn_pasccode_save:
                 showProgressDialog(Constants.PLEASE_WAIT);
-                if (mEtNewPasscode.getText().toString().equals(
-                        mEtConfirmPasscode.getText().toString())) {
-                    mEditProfilePresenter.updatePasscode(mEtCurrentPasscode.getText().toString(),
-                            mEtNewPasscode.getText().toString());
+                if (mEtNewPasscode.getText().toString().trim().equals(
+                        mEtConfirmPasscode.getText().toString().trim())) {
+                    mEditProfilePresenter.updatePasscode(mEtCurrentPasscode.getText().toString()
+                                    .trim(),
+                            mEtNewPasscode.getText().toString().trim());
                 } else {
                     hideProgressDialog();
                     showToast("Passcode mismatch");
@@ -297,9 +299,9 @@ public class EditProfileActivity extends BaseActivity implements
 
             case R.id.btn_email_save:
                 showProgressDialog(Constants.PLEASE_WAIT);
-                String email = mEtNewEmail.getText().toString();
+                String email = mEtNewEmail.getText().toString().trim();
                 if (ValidateUtil.isValidEmail(email)) {
-                    mEditProfilePresenter.updateEmail(mEtNewEmail.getText().toString());
+                    mEditProfilePresenter.updateEmail(mEtNewEmail.getText().toString().trim());
                 } else {
                     hideProgressDialog();
                     showToast("Incorrect email address");

@@ -216,7 +216,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
             requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
         } else {
 
-            if (etAmount.getText().toString().equals("")) {
+            if (etAmount.getText().toString().trim().equals("")) {
                 etAmount.requestFocus();
                 etAmount.setError("Please enter amount");
             } else {
@@ -262,8 +262,8 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         if (requestCode == SCAN_QR_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String qrData = data.getStringExtra(Constants.QR_DATA);
             etVpa.setText(qrData);
-            String externalId = etVpa.getText().toString();
-            double amount = Double.parseDouble(etAmount.getText().toString());
+            String externalId = etVpa.getText().toString().trim();
+            double amount = Double.parseDouble(etAmount.getText().toString().trim());
             MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId,
                     amount);
             fragment.show(getChildFragmentManager(),

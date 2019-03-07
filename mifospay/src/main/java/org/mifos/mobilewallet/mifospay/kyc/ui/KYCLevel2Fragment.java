@@ -106,7 +106,7 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
     @OnClick(R.id.btn_submit)
     public void onSubmitClicked() {
         showProgressDialog(Constants.PLEASE_WAIT);
-        mKYCLevel2Presenter.uploadKYCDocs(etIdname.getText().toString());
+        mKYCLevel2Presenter.uploadKYCDocs(etIdname.getText().toString().trim());
     }
 
     @Override
