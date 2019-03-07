@@ -84,36 +84,41 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
 
     @Override
     public void uploadKYCDocs(String identityType) {
-        if (file != null) {
-            uploadKYCDocsUseCase.setRequestValues(
-                    new UploadKYCDocs.RequestValues(ENTITY_TYPE_CLIENTS,
-                            preferencesHelper.getClientId(), file.getName(), identityType,
-                            getRequestFileBody(file)));
+        if (!identityType.isEmpty()) {
+            if (file != null) {
+                uploadKYCDocsUseCase.setRequestValues(
+                        new UploadKYCDocs.RequestValues(ENTITY_TYPE_CLIENTS,
+                                preferencesHelper.getClientId(), file.getName(), identityType,
+                                getRequestFileBody(file)));
 
-            final UploadKYCDocs.RequestValues requestValues =
-                    uploadKYCDocsUseCase.getRequestValues();
+                final UploadKYCDocs.RequestValues requestValues =
+                        uploadKYCDocsUseCase.getRequestValues();
 
-            mUseCaseHandler.execute(uploadKYCDocsUseCase, requestValues,
-                    new UseCase.UseCaseCallback<UploadKYCDocs.ResponseValue>() {
-                        @Override
-                        public void onSuccess(UploadKYCDocs.ResponseValue response) {
+                mUseCaseHandler.execute(uploadKYCDocsUseCase, requestValues,
+                        new UseCase.UseCaseCallback<UploadKYCDocs.ResponseValue>() {
+                            @Override
+                            public void onSuccess(UploadKYCDocs.ResponseValue response) {
 
-                            mKYCLevel2View.hideProgressDialog();
-                            mKYCLevel2View.showToast(
-                                    Constants.KYC_LEVEL_2_DOCUMENTS_ADDED_SUCCESSFULLY);
-                            mKYCLevel2View.goBack();
-                        }
+                                mKYCLevel2View.hideProgressDialog();
+                                mKYCLevel2View.showToast(
+                                        Constants.KYC_LEVEL_2_DOCUMENTS_ADDED_SUCCESSFULLY);
+                                mKYCLevel2View.goBack();
+                            }
 
-                        @Override
-                        public void onError(String message) {
+                            @Override
+                            public void onError(String message) {
 
-                            mKYCLevel2View.hideProgressDialog();
-                            mKYCLevel2View.showToast(Constants.ERROR_UPLOADING_DOCS);
-                        }
-                    });
+                                mKYCLevel2View.hideProgressDialog();
+                                mKYCLevel2View.showToast(Constants.ERROR_UPLOADING_DOCS);
+                            }
+                        });
+            } else {
+                // choose a file first
+                mKYCLevel2View.showToast(Constants.CHOOSE_A_FILE_TO_UPLOAD);
+                mKYCLevel2View.hideProgressDialog();
+            }
         } else {
-            // choose a file first
-            mKYCLevel2View.showToast(Constants.CHOOSE_A_FILE_TO_UPLOAD);
+            mKYCLevel2View.showToast(Constants.PLEASE_ENTER_ID_TYPE);
             mKYCLevel2View.hideProgressDialog();
         }
     }

@@ -18,6 +18,7 @@ public class Constants {
     public static final String FILE = "file";
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
     public static final String CHOOSE_A_FILE_TO_UPLOAD = "Choose a file to upload.";
+    public static final String PLEASE_ENTER_ID_TYPE = "Please enter ID Type";
     public static final String ERROR_UPLOADING_DOCS = "Error uploading docs.";
     public static final String KYC_LEVEL_2_DOCUMENTS_ADDED_SUCCESSFULLY =
             "KYC Level 2 documents added successfully.";
