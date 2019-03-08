@@ -3,6 +3,8 @@ package org.mifos.mobilewallet.core.domain.model.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mifos.mobilewallet.core.utils.Constants.NEW_USER_ROLE_IDS;
+
 /**
  * Created by ankur on 25/June/2018
  */
@@ -28,7 +30,6 @@ public class NewUser {
         this.email = email;
         this.password = password;
         this.repeatPassword = password;
-        roles.add(471);
-        roles.add(1);
+        roles.addAll(NEW_USER_ROLE_IDS);
     }
 }
