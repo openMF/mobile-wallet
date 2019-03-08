@@ -152,6 +152,15 @@ public class AddCardDialog extends BottomSheetDialogFragment {
     private boolean areFieldsValid() {
         fieldsValid = true;
         ButterKnife.apply(mTextInputLayouts, CHECK_ERROR);
+        String firstName = etFname.getText().toString();
+        String lastName = etLname.getText().toString();
+        String creditCardNumber = etCardNumber.getText().toString();
+        String cvv = etCVV.getText().toString();
+        if (firstName.equals("") || lastName.equals("") ||
+                creditCardNumber.equals("") || cvv.equals("")) {
+            Toaster.showToast(getContext(), getString(R.string.please_enter_all_the_field));
+            return false;
+        }
         int expiryMonth = Integer.parseInt(spnMM.getSelectedItem().toString());
         int expiryYear = Integer.parseInt(spnYY.getSelectedItem().toString());
         Calendar calendar = Calendar.getInstance();
