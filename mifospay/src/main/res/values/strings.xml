@@ -189,6 +189,9 @@
     <string name="faq">FAQ</string>
     <string name="settings">Settings</string>
     <string name="mobile_number">Mobile Number</string>
+    <string name="please_enter_amount">Please enter amount</string>
+    <string name="enter_virtual_payment_address">Please enter Virtual Payment Address</string>
+    <string name="please_enter_mobile_number">Please enter mobile number</string>
 
 
 </resources>

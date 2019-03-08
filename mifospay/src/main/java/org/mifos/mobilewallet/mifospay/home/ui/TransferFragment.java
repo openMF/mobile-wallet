@@ -87,6 +87,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     TextInputLayout mTilVpa;
 
     private String vpa;
+    private boolean isMobileSelected = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -126,6 +127,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
 
         mRlMobile.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.VISIBLE);
+        isMobileSelected = false;
     }
 
     @OnClick(R.id.btn_mobile)
@@ -140,6 +142,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
 
         mTilVpa.setVisibility(View.GONE);
         mRlMobile.setVisibility(View.VISIBLE);
+        isMobileSelected = true;
     }
 
     @OnClick(R.id.btn_transfer)
@@ -150,12 +153,17 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
         if (eamount.equals("") || (externalId.equals("") && mobileNumber.equals(""))) {
             if (eamount.equals("")) {
                 etAmount.requestFocus();
-                etAmount.setError("Please enter amount");
+                etAmount.setError(this.getString(R.string.please_enter_amount));
             }
 
-            if (externalId.equals("")) {
+            if (externalId.equals("") && isMobileSelected == false) {
                 etVpa.requestFocus();
-                etVpa.setError("Please enter Virtual Payment Address");
+                etVpa.setError(this.getString(R.string.enter_virtual_payment_address));
+            }
+
+            if (mobileNumber.equals("") && isMobileSelected == true) {
+                mEtMobileNumber.requestFocus();
+                mEtMobileNumber.setError(this.getString(R.string.please_enter_mobile_number));
             }
         } else {
             double amount = Double.parseDouble(eamount);
