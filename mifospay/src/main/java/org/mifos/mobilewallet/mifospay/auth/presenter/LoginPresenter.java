@@ -48,25 +48,31 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
 
     public void loginUser(String username, String password) {
 
-        authenticateUserUseCase.setRequestValues(new
-                AuthenticateUser.RequestValues(username, password));
-        final AuthenticateUser.RequestValues requestValue =
-                authenticateUserUseCase.getRequestValues();
+        if (username.isEmpty()) {
+            mLoginView.loginFail("Username cannot be empty");
+        } else if (password.isEmpty()) {
+            mLoginView.loginFail("Password cannot be empty");
+        } else {
+            authenticateUserUseCase.setRequestValues(new
+                    AuthenticateUser.RequestValues(username, password));
+            final AuthenticateUser.RequestValues requestValue =
+                    authenticateUserUseCase.getRequestValues();
 
-        mUsecaseHandler.execute(authenticateUserUseCase, requestValue,
-                new UseCase.UseCaseCallback<AuthenticateUser.ResponseValue>() {
-                    @Override
-                    public void onSuccess(AuthenticateUser.ResponseValue response) {
-                        createAuthenticatedService(response.getUser());
-                        fetchClientData();
-                        fetchUserDetails(response.getUser());
-                    }
+            mUsecaseHandler.execute(authenticateUserUseCase, requestValue,
+                    new UseCase.UseCaseCallback<AuthenticateUser.ResponseValue>() {
+                        @Override
+                        public void onSuccess(AuthenticateUser.ResponseValue response) {
+                            createAuthenticatedService(response.getUser());
+                            fetchClientData();
+                            fetchUserDetails(response.getUser());
+                        }
 
-                    @Override
-                    public void onError(String message) {
-                        mLoginView.loginFail(message);
-                    }
-                });
+                        @Override
+                        public void onError(String message) {
+                            mLoginView.loginFail(message);
+                        }
+                    });
+        }
 
 
     }
