@@ -1,12 +1,16 @@
 package org.mifos.mobilewallet.mifospay.qr.ui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import butterknife.OnClick;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.qr.QrContract;
@@ -35,6 +39,10 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
     @BindView(R.id.tv_qr_data)
     TextView tvQrData;
 
+    @BindView(R.id.share_qr)
+    ImageView shareQR;
+
+    Bitmap bitmap;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,7 +73,20 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
 
     @Override
     public void showGeneratedQr(Bitmap bitmap) {
+        this.bitmap = bitmap;
         ivQrCode.setImageBitmap(bitmap);
 
+    }
+
+    @OnClick(R.id.share_qr)
+    public void shareQRImage() {
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_SEND);
+        intent.setType("image/*");
+        String bitmapPath = MediaStore.Images.Media.insertImage(getContentResolver(),
+                bitmap, "qr", null);
+        Uri bitmapUri = Uri.parse(bitmapPath);
+        intent.putExtra(Intent.EXTRA_STREAM, bitmapUri);
+        startActivity(Intent.createChooser(intent, "Share QR Image"));
     }
 }
