@@ -5,22 +5,32 @@
 
     <include layout="@layout/toolbar"/>
 
-
-    <FrameLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-        <me.dm7.barcodescanner.zxing.ZXingScannerView
-            android:id="@+id/scannerView"
+        android:layout_height="wrap_content"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/from_gallery"
+            android:layout_alignParentRight="true"
+            android:id="@+id/from_gallery"
+            />
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center">
+            android:layout_height="wrap_content">
 
 
-        </me.dm7.barcodescanner.zxing.ZXingScannerView>
+            <me.dm7.barcodescanner.zxing.ZXingScannerView
+                android:id="@+id/scannerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center">
 
-    </FrameLayout>
 
+            </me.dm7.barcodescanner.zxing.ZXingScannerView>
+
+        </FrameLayout>
+    </RelativeLayout>
 
 </LinearLayout>

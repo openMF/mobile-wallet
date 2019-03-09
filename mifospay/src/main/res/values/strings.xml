@@ -169,6 +169,7 @@
     <string name="ease_my_sign_up_using_google_account">Ease my sign up using Google Account</string>
     <string name="next">Next</string>
     <string name="account">account</string>
+    <string name="from_gallery">From Gallery</string>
     <string name="subitem">SubItem</string>
     <string name="no_saved_cards_found">No saved cards found</string>
     <string name="debit_card_number">Debit Card Number</string>
