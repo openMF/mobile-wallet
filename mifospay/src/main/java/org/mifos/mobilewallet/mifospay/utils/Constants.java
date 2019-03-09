@@ -35,6 +35,8 @@ public class Constants {
     public static final String CHOOSE_FILE = "Choose File";
     public static final String KYC_REGISTRATION_LEVEL_2 = "KYC Registration Level 2";
     public static final String KYC_REGISTRATION_LEVEL_1 = "KYC Registration Level 1";
+    public static final String ENTER_VALID_AADHAAR_NUMBER = "Please enter valid Aadhaar number";
+    public static final String VALID_AADHAAR_NUMBER = "You entered valid Aadhaar number";
     public static final String DD_MM_YY = "dd/MM/yy";
     public static final String ERROR_DELETING_CARD = "Error deleting card.";
     public static final String CARD_DELETED_SUCCESSFULLY = "Card deleted successfully.";
