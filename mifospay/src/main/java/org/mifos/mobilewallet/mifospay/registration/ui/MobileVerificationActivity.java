@@ -63,7 +63,7 @@ public class MobileVerificationActivity extends BaseActivity implements
         showBackButton();
 
         mCcpCode.registerCarrierNumberEditText(mEtMobileNumber);
-        mCcpCountry.setCustomMasterCountries("IN,US");
+        mCcpCountry.setCustomMasterCountries(null);
     }
 
     @Override

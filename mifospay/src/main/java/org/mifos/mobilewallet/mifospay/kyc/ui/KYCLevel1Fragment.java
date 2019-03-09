@@ -114,7 +114,7 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
         };
 
         ccpPhonecode.registerCarrierNumberEditText(etMobileNumber);
-        ccpPhonecode.setCustomMasterCountries("IN,US");
+        ccpPhonecode.setCustomMasterCountries(null);
 
         return rootView;
     }
