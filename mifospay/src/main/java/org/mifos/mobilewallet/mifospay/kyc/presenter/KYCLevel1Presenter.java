@@ -38,36 +38,48 @@ public class KYCLevel1Presenter implements KYCContract.KYCLevel1Presenter {
 
     @Override
     public void submitData(String fname, String lname, String address1, String address2,
-            String phoneno, String dob) {
+                           String phoneno, String dob) {
+        if (!areFieldsValid(fname, lname, address1, address2, phoneno, dob)) {
+            mKYCLevel1View.showToast(Constants.PLEASE_ENTER_ALL_THE_FIELDS);
+            mKYCLevel1View.hideProgressDialog();
+        } else {
+            KYCLevel1Details kycLevel1Details = new KYCLevel1Details(fname, lname, address1,
+                    address2, phoneno, dob, "1");
 
-        KYCLevel1Details kycLevel1Details = new KYCLevel1Details(fname, lname, address1,
-                address2, phoneno, dob, "1");
+            uploadKYCLevel1DetailsUseCase.setRequestValues(new UploadKYCLevel1Details.RequestValues(
+                    (int) mLocalRepository.getClientDetails().getClientId(), kycLevel1Details));
 
-        uploadKYCLevel1DetailsUseCase.setRequestValues(new UploadKYCLevel1Details.RequestValues(
-                (int) mLocalRepository.getClientDetails().getClientId(), kycLevel1Details));
+            final UploadKYCLevel1Details.RequestValues requestValues =
+                    uploadKYCLevel1DetailsUseCase.getRequestValues();
 
-        final UploadKYCLevel1Details.RequestValues requestValues =
-                uploadKYCLevel1DetailsUseCase.getRequestValues();
+            mUseCaseHandler.execute(uploadKYCLevel1DetailsUseCase, requestValues,
+                    new UseCase.UseCaseCallback<UploadKYCLevel1Details.ResponseValue>() {
+                        @Override
+                        public void onSuccess(UploadKYCLevel1Details.ResponseValue response) {
 
-        mUseCaseHandler.execute(uploadKYCLevel1DetailsUseCase, requestValues,
-                new UseCase.UseCaseCallback<UploadKYCLevel1Details.ResponseValue>() {
-                    @Override
-                    public void onSuccess(UploadKYCLevel1Details.ResponseValue response) {
+                            mKYCLevel1View.hideProgressDialog();
+                            mKYCLevel1View.showToast(
+                                    Constants.KYC_LEVEL_1_DETAILS_ADDED_SUCCESSFULLY);
+                            mKYCLevel1View.goBack();
+                        }
 
-                        mKYCLevel1View.hideProgressDialog();
-                        mKYCLevel1View.showToast(
-                                Constants.KYC_LEVEL_1_DETAILS_ADDED_SUCCESSFULLY);
-                        mKYCLevel1View.goBack();
+                        @Override
+                        public void onError(String message) {
+
+                            mKYCLevel1View.hideProgressDialog();
+                            mKYCLevel1View.showToast(Constants.ERROR_ADDING_KYC_LEVEL_1_DETAILS);
+                        }
                     }
+            );
+        }
+    }
 
-                    @Override
-                    public void onError(String message) {
+    private boolean areFieldsValid(String fname, String lname, String address1, String address2,
+                                   String phoneno, String dob) {
 
-                        mKYCLevel1View.hideProgressDialog();
-                        mKYCLevel1View.showToast(Constants.ERROR_ADDING_KYC_LEVEL_1_DETAILS);
-                    }
-                }
-        );
+        return !fname.isEmpty() && !lname.isEmpty() && !address1.isEmpty() && !address2.isEmpty() &&
+                !phoneno.isEmpty() && !dob.isEmpty();
+
     }
 }
 
