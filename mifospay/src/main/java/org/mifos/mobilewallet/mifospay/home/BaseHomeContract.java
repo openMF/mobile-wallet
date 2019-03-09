@@ -38,7 +38,7 @@ public interface BaseHomeContract {
 
         void showTransactionsEmpty();
 
-        void showBottomSheetActionButton();
+        void showBottomSheetActionButton(List<Transaction> transactions);
 
         void hideBottomSheetActionButton();
 

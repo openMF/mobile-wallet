@@ -26,12 +26,14 @@ import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by naman on 17/8/17.
@@ -73,6 +75,8 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     private Account account;
 
     private BottomSheetBehavior mBottomSheetBehavior;
+
+    private List<Transaction> newTransaction = new ArrayList<>();
 
     public static HomeFragment newInstance(long clientId) {
 
@@ -204,7 +208,8 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     }
 
     @Override
-    public void showBottomSheetActionButton() {
+    public void showBottomSheetActionButton(List<Transaction> transactions) {
+        newTransaction = transactions;
         btnShowMoreTransactionsHistory.setVisibility(View.VISIBLE);
     }
 
@@ -226,6 +231,12 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     @Override
     public void showSnackbar(String message) {
         Toaster.show(getView(), message);
+    }
+
+    @OnClick(R.id.btn_home_bottom_sheet_action)
+    public void showMoreClicked() {
+        showTransactionsHistory(newTransaction);
+        hideBottomSheetActionButton();
     }
 
     private void setupEmptyStateView() {
