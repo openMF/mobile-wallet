@@ -3,6 +3,8 @@ package org.mifos.mobilewallet.mifospay.bank.ui;
 import static org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity.SETUP_UPI_REQUEST_CODE;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -114,6 +116,27 @@ public class BankAccountDetailActivity extends BaseActivity implements
         } else {
             showToast(Constants.SETUP_UPI_PIN);
         }
+    }
+    @OnClick(R.id.cv_delete_bank)
+    public void onDeleteBankClicked() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(this.getString(R.string.delete_this_bank));
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 
     private void startSetupActivity(String type, int index) {
