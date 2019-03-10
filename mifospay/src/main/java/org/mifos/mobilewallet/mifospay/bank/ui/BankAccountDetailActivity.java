@@ -53,6 +53,8 @@ public class BankAccountDetailActivity extends BaseActivity implements
     CardView mCvForgotUpiPin;
     @BindView(R.id.cv_delete_bank)
     CardView mCvDeleteBank;
+    @BindView(R.id.cv_edit_bank)
+    CardView mCvEditBank;
 
     private BankAccountDetails bankAccountDetails;
     private int index;
