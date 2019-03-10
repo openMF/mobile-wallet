@@ -19,7 +19,8 @@ import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 
 /**
- * Created by naman on 16/6/17.
+ * @author naman
+ * @since 16/6/17
  */
 
 public class BaseActivity extends BasePassCodeActivity implements BaseActivityCallback {
@@ -50,6 +51,9 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
+    /**
+     * This method shows the swipe Progress
+     */
     @Override
     public void showSwipeProgress() {
         if (swipeLayout != null) {
@@ -58,6 +62,9 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
+    /**
+     * This method hides the Swipe Progress.
+     */
     @Override
     public void hideSwipeProgress() {
         if (swipeLayout != null) {
@@ -65,6 +72,10 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
+    /**
+     * This method enables or disables the swiping to refresh.
+     * @param enabled This is a boolean which enables the swiping.
+     */
     @Override
     public void setSwipeRefreshEnabled(boolean enabled) {
         if (swipeLayout != null) {
@@ -72,6 +83,10 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
+    /**
+     * This method shows the progress dialog
+     * @param message This is the message to be shown in the progress dialog.
+     */
     @Override
     public void showProgressDialog(String message) {
         if (progressDialog != null) {
@@ -85,6 +100,9 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
+    /**
+     * This method hides the progress dialog
+     */
     @Override
     public void hideProgressDialog() {
         if (progressDialog != null) {
@@ -92,6 +110,10 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
+    /**
+     * This method sets the Toolbar title
+     * @param title This is the title to be set.
+     */
     @Override
     public void setToolbarTitle(String title) {
         if (getSupportActionBar() != null && getTitle() != null) {
@@ -99,6 +121,9 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
+    /**
+     * This method shows the back button.
+     */
     @Override
     public void showBackButton() {
         if (getSupportActionBar() != null) {
@@ -107,6 +132,9 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
+    /**
+     * This method hides the back button.
+     */
     @Override
     public void hideBackButton() {
         if (getSupportActionBar() != null) {
@@ -115,6 +143,10 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
+    /**
+     * This method refreshes the layout when swiped down.
+     * @return A type of SwipeRefreshLayout
+     */
     @Override
     public SwipeRefreshLayout getSwipeRefreshLayout() {
         return swipeLayout;
@@ -130,12 +162,23 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * This method adds the Fragment
+     * @param fragment This is the fragment to be added.
+     * @param containerId This is the container ID.
+     */
     public void addFragment(Fragment fragment, int containerId) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.add(containerId, fragment);
         transaction.commit();
     }
 
+    /**
+     * This method replaces the fragment.
+     * @param fragment This is the fragment to be replaced with.
+     * @param addToBackStack A boolean which tells if added to back stack
+     * @param containerId This is the container id
+     */
     public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {
         invalidateOptionsMenu();
         String backStateName = fragment.getClass().getName();
@@ -153,6 +196,9 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
+    /**
+     * This method clears the Fragment Back Stack
+     */
     public void clearFragmentBackStack() {
         FragmentManager fm = getSupportFragmentManager();
         int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
@@ -162,6 +208,10 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
+    /**
+     * This method return the PassCode class
+     * @return A type of Passcode Class
+     */
     @Override
     public Class getPassCodeClass() {
         return PassCodeActivity.class;

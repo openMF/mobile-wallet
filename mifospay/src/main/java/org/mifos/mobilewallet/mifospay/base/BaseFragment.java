@@ -20,50 +20,81 @@ public class BaseFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
+    /**
+     * This method sets the Toolbar title.
+     * @param title This is the title to be set.
+     */
     protected void setToolbarTitle(String title) {
         if (callback != null) {
             callback.setToolbarTitle(title);
         }
     }
 
+    /**
+     * This method shows the back button
+     */
     protected void showBackButton() {
         if (callback != null) {
             callback.showBackButton();
         }
     }
 
+    /**
+     * This method hides the back button
+     */
     protected void hideBackButton() {
         if (callback != null) {
             callback.hideBackButton();
         }
     }
 
+    /**
+     * This method shows the swipe progress
+     */
     protected void showSwipeProgress() {
         if (callback != null) {
             callback.showSwipeProgress();
         }
     }
 
+    /**
+     * This method hides the Swipe progress
+     */
     public void hideSwipeProgress() {
         if (callback != null) {
             callback.hideSwipeProgress();
         }
     }
 
+    /**
+     * This method shows the progress dialog
+     * @param message This is the message to be shown
+     */
     protected void showProgressDialog(String message) {
         callback.showProgressDialog(message);
     }
 
+    /**
+     * This method hides the progress dialog.
+     */
     protected void hideProgressDialog() {
         callback.hideProgressDialog();
     }
 
+    /**
+     * This method enables or disables the swiping to refresh.
+     * @param enabled This is a boolean which enables the swiping.
+     */
     protected void setSwipeEnabled(boolean enabled) {
         if (callback != null) {
             callback.setSwipeRefreshEnabled(enabled);
         }
     }
 
+    /**
+     * This method returns the Swipe refresh layout
+     * @return A type of Swipe Refresh Layout
+     */
     protected SwipeRefreshLayout getSwipeRefreshLayout() {
         if (callback != null) {
             return callback.getSwipeRefreshLayout();
@@ -71,7 +102,10 @@ public class BaseFragment extends Fragment {
         return null;
     }
 
-
+    /**
+     * This method attaches the context
+     * @param context This is the context to be attached
+     */
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
@@ -84,12 +118,21 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    /**
+     * This method detaches the context
+     */
     @Override
     public void onDetach() {
         super.onDetach();
         callback = null;
     }
 
+    /**
+     * This method replaces the fragment using Fragment Manager
+     * @param fragment This is the fragment to be replaced with
+     * @param addToBackStack A boolean which tells if added to back stack or not
+     * @param containerId This is the container ID.
+     */
     public void replaceFragmentUsingFragmentManager(Fragment fragment, boolean addToBackStack,
             int containerId) {
         String backStateName = fragment.getClass().getName();
@@ -107,6 +150,12 @@ public class BaseFragment extends Fragment {
         }
     }
 
+    /**
+     * This method replaces the fragment
+     * @param fragment This is the fragment to be replaced with.
+     * @param addToBackStack A boolean which tells if added to back stack or not
+     * @param containerId This is the container ID
+     */
     public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {
         String backStateName = fragment.getClass().getName();
         boolean fragmentPopped = getChildFragmentManager().popBackStackImmediate(backStateName,

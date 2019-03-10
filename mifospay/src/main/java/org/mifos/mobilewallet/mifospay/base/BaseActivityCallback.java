@@ -2,6 +2,9 @@ package org.mifos.mobilewallet.mifospay.base;
 
 import android.support.v4.widget.SwipeRefreshLayout;
 
+/**
+ * This interface is used for fragment to fragment communication.
+ */
 public interface BaseActivityCallback {
 
     void showSwipeProgress();
