@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.settings.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -45,6 +47,24 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
 
     @OnClick(R.id.btn_disable_account)
     public void onDisableAccountClicked() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(this.getString(R.string.disable_this_account));
+        builder.setCancelable(false);
+        builder.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
         mSettingsPresenter.disableAccount();
     }
 
