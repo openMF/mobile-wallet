@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/value_20dp"
             android:hint="@string/first_name"
+            android:inputType="textPersonName"
             android:nextFocusForward="@id/et_lname"
             android:singleLine="true"
             android:theme="@style/Theme.AppCompat.Light"/>
@@ -26,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/value_20dp"
             android:hint="@string/last_name"
+            android:inputType="textPersonName"
             android:nextFocusForward="@id/et_address1"
             android:singleLine="true"
             android:theme="@style/Theme.AppCompat.Light"/>
@@ -36,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/value_20dp"
             android:hint="@string/address_line_1"
+            android:inputType="text"
             android:nextFocusForward="@id/et_address2"
             android:singleLine="true"
             android:theme="@style/Theme.AppCompat.Light"/>
@@ -46,6 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/value_20dp"
             android:hint="@string/address_line_2"
+            android:inputType="text"
             android:nextFocusForward="@id/et_mobile_number"
             android:singleLine="true"
             android:theme="@style/Theme.AppCompat.Light"/>
@@ -87,6 +91,7 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:hint="@string/date_of_birth"
+            android:inputType="date"
             android:theme="@style/Theme.AppCompat.Light"/>
 
         <Button
