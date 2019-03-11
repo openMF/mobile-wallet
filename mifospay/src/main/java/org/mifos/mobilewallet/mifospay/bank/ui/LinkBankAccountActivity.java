@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 import org.mifos.mobilewallet.core.domain.model.BankAccountDetails;
@@ -49,6 +50,8 @@ public class LinkBankAccountActivity extends BaseActivity implements
     RecyclerView mRvPopularBanks;
     @BindView(R.id.rv_other_banks)
     RecyclerView mRvOtherBanks;
+    @BindView(R.id.popular_banks)
+    TextView mPopularBanks;
 
     @Inject
     PopularBankAdapter mPopularBankAdapter;
@@ -140,8 +143,12 @@ public class LinkBankAccountActivity extends BaseActivity implements
         List<Bank> filteredList = new ArrayList<>();
 
         if (isBlank(text)) {
+            mRvPopularBanks.setVisibility(View.VISIBLE);
+            mPopularBanks.setVisibility(View.VISIBLE);
             filteredList = banksList;
         } else {
+            mRvPopularBanks.setVisibility(View.GONE);
+            mPopularBanks.setVisibility(View.GONE);
             for (Bank bank : banksList) {
                 if (bank.getName().toLowerCase().contains(text.toLowerCase())) {
                     filteredList.add(bank);
