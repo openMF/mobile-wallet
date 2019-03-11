@@ -162,6 +162,14 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     @Override
     public void listMerchants(List<SavingsWithAssociations> savingsWithAssociationsList) {
         merchantsList = savingsWithAssociationsList;
+        int j = merchantsList.size();
+        for (int i = 0; i < j; i++) {
+            if (merchantsList.get(i).getExternalId() == null || merchantsList.get(i)
+                    .getExternalId().trim().equals("")) {
+                merchantsList.remove(i);
+                i--; j--;
+            }
+        }
         mMerchantsAdapter.setData(savingsWithAssociationsList);
         hideProgressDialog();
     }
