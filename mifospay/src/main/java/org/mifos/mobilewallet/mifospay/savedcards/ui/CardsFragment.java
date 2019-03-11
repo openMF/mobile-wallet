@@ -6,14 +6,18 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -31,6 +35,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
 
 /**
  * This is the UI component of the SavedCards Architecture.
@@ -52,10 +58,14 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     @BindView(R.id.tv_placeholder)
     TextView tvPlaceholder;
 
+    @BindView(R.id.et_search_cards)
+    EditText searchCardsView;
+
     @Inject
     CardsAdapter mCardsAdapter;
 
     View rootView;
+    List<Card> mainCards;
 
     public static CardsFragment newInstance() {
         Bundle args = new Bundle();
@@ -151,6 +161,25 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
 
                     }
                 }));
+
+        searchCardsView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                filter(searchCardsView.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
     }
 
     /**
@@ -173,6 +202,27 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     @Override
     public void setPresenter(CardsContract.CardsPresenter presenter) {
         mCardsPresenter = presenter;
+    }
+
+
+
+    public void filter(String text) {
+        List<Card> filteredList = new ArrayList<>();
+
+        if (mainCards  != null) {
+            if (isBlank(text)) {
+                filteredList = mainCards;
+            } else {
+                for (Card mycard : mainCards ) {
+                    String fullname = mycard.getFirstName().toLowerCase() + " " +
+                            mycard.getLastName().toLowerCase();
+                    if (fullname.contains(text.toLowerCase())) {
+                        filteredList.add(mycard);
+                    }
+                }
+            }
+            mCardsAdapter.filterList(filteredList);
+        }
     }
 
     /**
@@ -202,6 +252,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
             mCardsAdapter.setCards(cards);
         }
         mCardsAdapter.setCards(cards);
+        mainCards = cards;
         hideSwipeProgress();
     }
 

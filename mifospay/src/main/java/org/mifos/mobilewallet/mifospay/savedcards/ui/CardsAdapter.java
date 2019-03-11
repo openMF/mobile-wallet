@@ -82,4 +82,9 @@ public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> 
             ButterKnife.bind(this, itemView);
         }
     }
+
+    public void filterList(List<Card> filterdNames) {
+        this.cards = filterdNames;
+        notifyDataSetChanged();
+    }
 }
