@@ -1,25 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:layout_marginLeft="@dimen/value_20dp"
-    android:layout_marginRight="@dimen/value_20dp"
     android:layout_marginTop="@dimen/value_20dp"
+    android:layout_marginRight="@dimen/value_20dp"
     android:orientation="vertical">
 
     <android.support.design.widget.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/value_10dp"
         android:textColorHint="@android:color/black"
         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:id="@+id/et_idname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/id_type"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:inputType="text"
+            android:paddingBottom="@dimen/value_20dp"
+            android:textSize="@dimen/value_15dp"
+            android:theme="@style/Theme.AppCompat.Light" />
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
@@ -35,12 +40,12 @@
             android:layout_marginRight="@dimen/value_10dp"
             android:background="@drawable/button_round_gray"
             android:text="@string/browse"
-            android:textColor="@color/black"/>
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/tv_filename"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 
@@ -52,6 +57,6 @@
         android:layout_marginTop="@dimen/value_20dp"
         android:background="@drawable/button_round_black"
         android:text="@string/submit"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white" />
 
 </LinearLayout>

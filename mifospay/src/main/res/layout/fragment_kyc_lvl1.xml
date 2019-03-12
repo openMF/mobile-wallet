@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -10,45 +11,91 @@
         android:orientation="vertical"
         android:padding="@dimen/value_20dp">
 
-        <EditText
-            android:id="@+id/et_fname"
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:hint="@string/first_name"
-            android:nextFocusForward="@id/et_lname"
-            android:singleLine="true"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:padding="@dimen/value_3dp"
+            android:textColorHint="@android:color/black"
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-        <EditText
-            android:id="@+id/et_lname"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:hint="@string/last_name"
-            android:nextFocusForward="@id/et_address1"
-            android:singleLine="true"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_fname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/value_12dp"
+                android:hint="@string/first_name"
+                android:inputType="text"
+                android:nextFocusForward="@id/et_lname"
+                android:paddingBottom="@dimen/value_20dp"
+                android:singleLine="true"
+                android:textSize="@dimen/value_15dp"
+                android:theme="@style/Theme.AppCompat.Light" />
+        </android.support.design.widget.TextInputLayout>
 
-        <EditText
-            android:id="@+id/et_address1"
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:hint="@string/address_line_1"
-            android:nextFocusForward="@id/et_address2"
-            android:singleLine="true"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:padding="@dimen/value_3dp"
+            android:textColorHint="@android:color/black"
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-        <EditText
-            android:id="@+id/et_address2"
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_lname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/value_12dp"
+                android:hint="@string/last_name"
+                android:nextFocusForward="@id/et_address1"
+                android:paddingBottom="@dimen/value_20dp"
+                android:singleLine="true"
+                android:textSize="@dimen/value_15dp"
+                android:theme="@style/Theme.AppCompat.Light" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:hint="@string/address_line_2"
-            android:nextFocusForward="@id/et_mobile_number"
-            android:singleLine="true"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:padding="@dimen/value_3dp"
+            android:textColorHint="@android:color/black"
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_address1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/value_12dp"
+                android:hint="@string/address_line_1"
+                android:nextFocusForward="@id/et_address2"
+                android:paddingBottom="@dimen/value_20dp"
+                android:singleLine="true"
+                android:textSize="@dimen/value_15dp"
+                android:theme="@style/Theme.AppCompat.Light" />
+        </android.support.design.widget.TextInputLayout>
+
+
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/value_3dp"
+            android:textColorHint="@android:color/black"
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_address2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/value_12dp"
+                android:hint="@string/address_line_2"
+                android:nextFocusForward="@id/et_mobile_number"
+                android:paddingBottom="@dimen/value_20dp"
+                android:singleLine="true"
+                android:textSize="@dimen/value_15dp"
+                android:theme="@style/Theme.AppCompat.Light" />
+        </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -63,31 +110,55 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
                 app:ccp_autoDetectCountry="true"
-                app:ccp_autoFormatNumber="false"/>
+                app:ccp_autoFormatNumber="false" />
 
-            <EditText
-                android:id="@+id/et_mobile_number"
+            <android.support.design.widget.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_5dp"
-                android:layout_weight="1"
-                android:hint="Mobile Number"
-                android:inputType="number"
-                android:nextFocusDown="@id/et_dob"
-                android:nextFocusForward="@id/et_dob"/>
+                android:padding="@dimen/value_3dp"
+                android:textColorHint="@android:color/black"
+                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_mobile_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/value_5dp"
+                    android:layout_marginBottom="@dimen/value_12dp"
+                    android:layout_weight="1"
+                    android:hint="Mobile Number"
+                    android:inputType="number"
+                    android:nextFocusDown="@id/et_dob"
+                    android:nextFocusForward="@id/et_dob"
+                    android:paddingBottom="@dimen/value_20dp"
+                    android:singleLine="true"
+                    android:textSize="@dimen/value_15dp"
+                    android:theme="@style/Theme.AppCompat.Light" />
+            </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/et_dob"
+        <android.support.design.widget.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="@string/date_of_birth"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:padding="@dimen/value_3dp"
+            android:textColorHint="@android:color/black"
+            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/et_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:hint="@string/date_of_birth"
+                android:nextFocusForward="@id/et_mobile_number"
+                android:theme="@style/Theme.AppCompat.Light" />
+        </android.support.design.widget.TextInputLayout>
 
         <Button
             android:id="@+id/btn_submit"
@@ -97,7 +168,7 @@
             android:layout_marginTop="@dimen/value_20dp"
             android:background="@drawable/button_round_black"
             android:text="@string/submit"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
     </LinearLayout>
 
 </ScrollView>

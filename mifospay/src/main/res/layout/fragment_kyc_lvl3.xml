@@ -9,17 +9,22 @@
     android:orientation="vertical">
 
     <android.support.design.widget.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:padding="@dimen/value_10dp"
         android:textColorHint="@android:color/black"
         app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-        <EditText
+        <android.support.design.widget.TextInputEditText
             android:id="@+id/et_panId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/pan_id"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:inputType="text"
+            android:paddingBottom="@dimen/value_20dp"
+            android:textSize="@dimen/value_15dp"
+            android:theme="@style/Theme.AppCompat.Light" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
