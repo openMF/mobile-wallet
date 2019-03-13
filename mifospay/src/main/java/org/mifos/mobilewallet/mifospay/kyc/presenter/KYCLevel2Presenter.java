@@ -17,6 +17,7 @@ import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.FileUtils;
 
 import java.io.File;
+import java.util.Objects;
 
 import javax.inject.Inject;
 
@@ -77,7 +78,9 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
 
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             Uri uri = data.getData();
-            file = new File(FileUtils.getPath(mKYCLevel2View.getContext(), uri));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                file = new File(Objects.requireNonNull(uri).getPath());
+            }
             mKYCLevel2View.setFilename(file.getPath());
         }
     }
