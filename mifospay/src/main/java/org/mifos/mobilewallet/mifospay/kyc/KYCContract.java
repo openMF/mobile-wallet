@@ -70,7 +70,7 @@ public interface KYCContract {
     }
 
     interface KYCLevel3View extends BaseView<KYCLevel3Presenter> {
-
+        void showToast(String s);
     }
 
     interface KYCLevel3Presenter extends BasePresenter {
