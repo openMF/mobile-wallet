@@ -29,6 +29,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
 
@@ -155,6 +156,11 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     @Override
     public void showToast(String message) {
         Toaster.showToast(getContext(), message);
+    }
+
+    @OnClick(R.id.et_cross_merchants)
+    public void onCrossClicked() {
+        mEtSearchMerchants.getText().clear();
     }
 
 }

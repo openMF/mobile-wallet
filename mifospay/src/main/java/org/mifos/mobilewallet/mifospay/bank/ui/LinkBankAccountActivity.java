@@ -33,6 +33,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
 import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
@@ -203,5 +204,10 @@ public class LinkBankAccountActivity extends BaseActivity implements
             }
         }, 1500);
 
+    }
+
+    @OnClick(R.id.et_cross_bank)
+    public void onCrossClicked() {
+        mEtSearchBank.getText().clear();
     }
 }
