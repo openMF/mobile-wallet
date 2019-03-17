@@ -171,4 +171,5 @@ public class Constants {
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 
 
+    public static final String ERROR_FINDING_MOBILE_NUMBER = "Error finding Mobile Number";
 }

@@ -164,7 +164,11 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
                 return;
             }
             showSwipeProgress();
-            mTransferPresenter.checkBalanceAvailability(externalId, amount);
+            if (externalId.equals("")) {
+                mTransferPresenter.checkBalanceAvailability(mobileNumber, amount);
+            } else {
+                mTransferPresenter.checkBalanceAvailability(externalId, amount);
+            }
         }
     }
 
@@ -263,7 +267,11 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
                 showToast(Constants.ERROR_CHOOSING_CONTACT);
             }
         } else if (requestCode == REQUEST_SHOW_DETAILS && resultCode == Activity.RESULT_CANCELED) {
-            showSnackbar(Constants.ERROR_FINDING_VPA);
+            if (etVpa.getText().toString().trim().equals("")) {
+                showSnackbar(Constants.ERROR_FINDING_MOBILE_NUMBER);
+            } else {
+                showSnackbar(Constants.ERROR_FINDING_VPA);
+            }
         }
     }
 
