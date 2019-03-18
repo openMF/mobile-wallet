@@ -250,12 +250,18 @@ public class EditProfileActivity extends BaseActivity implements
             case R.id.btn_password_cancel:
                 if (mLlPassword.isShown()) {
                     AnimationUtil.collapse(mLlPassword);
+                    mEtConfirmPassword.setText("");
+                    mEtCurrentPassword.setText("");
+                    mEtNewPassword.setText("");
                 }
                 break;
 
             case R.id.btn_passcode_cancel:
                 if (mLlPasscode.isShown()) {
                     AnimationUtil.collapse(mLlPasscode);
+                    mEtConfirmPasscode.setText("");
+                    mEtCurrentPasscode.setText("");
+                    mEtNewPasscode.setText("");
                 }
                 break;
 
