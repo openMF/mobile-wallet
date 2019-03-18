@@ -23,6 +23,7 @@
             android:id="@+id/rv_notification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:scrollbars="vertical"
             android:paddingBottom="@dimen/value_10dp"
             android:paddingLeft="@dimen/value_10dp"
             android:paddingRight="@dimen/value_10dp"/>
