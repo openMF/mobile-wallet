@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.merchants.ui;
 
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import android.widget.Toast;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -51,7 +53,6 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     @BindView(R.id.et_search_merchants)
     EditText mEtSearchMerchants;
     private List<SavingsWithAssociations> merchantsList;
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,7 +74,6 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         showProgressDialog(Constants.PLEASE_WAIT);
         setupRecyclerView();
         mMerchantsPresenter.fetchMerchants();
-
         return rootView;
     }
 
@@ -91,7 +91,15 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View childView, int position) {
-
+                        ClipboardManager clipboard = (ClipboardManager) getContext().
+                                getSystemService(getContext().CLIPBOARD_SERVICE);
+                        String s = merchantsList.get(position).getExternalId();
+                        if (s == null) {
+                            s = "";
+                        }
+                        clipboard.setText(s);
+                        Toast.makeText(getContext(),
+                            "Copied " + s + " to Clipboard", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
