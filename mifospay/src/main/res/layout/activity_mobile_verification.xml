@@ -160,7 +160,6 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/value_20dp"
         android:layout_marginRight="@dimen/value_20dp"
-        android:backgroundTint="@color/primaryDarkBlue"
         android:foregroundTint="@color/primaryDarkBlue"
         android:scaleType="center"
         android:visibility="gone"
