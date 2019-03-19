@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.finance.ui;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
@@ -16,6 +17,7 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.bank.BankContract;
 import org.mifos.mobilewallet.mifospay.bank.adapters.BankAccountsAdapter;
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountsPresenter;
+import org.mifos.mobilewallet.mifospay.bank.ui.LinkBankAccountActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -27,7 +29,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 
+import static android.app.Activity.RESULT_OK;
 
 public class AccountsFragment extends BaseFragment implements BankContract.BankAccountsView {
 
@@ -56,6 +60,9 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
 
     @BindView(R.id.tv_empty_no_transaction_history_subtitle)
     TextView tvTransactionsStateSubtitle;
+
+    public static final int LINK_BANK_ACCOUNT_REQUEST_CODE = 1;
+    public static final int Bank_Account_Details_Request_Code = 3;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,7 +153,36 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
 
     @OnClick(R.id.addaccountbutton)
     public void addAccountClicked() {
+        Intent intent = new Intent(getContext(), LinkBankAccountActivity.class);
+        startActivityForResult(intent, LINK_BANK_ACCOUNT_REQUEST_CODE);
+    }
 
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        DebugUtil.log("rescode ", resultCode);
+        if (requestCode == LINK_BANK_ACCOUNT_REQUEST_CODE && resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            DebugUtil.log("bundle", bundle);
+            if (bundle != null) {
+                BankAccountDetails bankAccountDetails = bundle.getParcelable(
+                    Constants.NEW_BANK_ACCOUNT);
+                DebugUtil.log("details", bankAccountDetails);
+                mBankAccountsAdapter.addBank(bankAccountDetails);
+                mRvLinkedBankAccounts.setVisibility(View.VISIBLE);
+            }
+        } else if (requestCode == Bank_Account_Details_Request_Code && resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            DebugUtil.log("bundle", bundle);
+            if (bundle != null) {
+                BankAccountDetails bankAccountDetails = bundle.getParcelable(
+                    Constants.UPDATED_BANK_ACCOUNT);
+                int index = bundle.getInt(Constants.INDEX);
+                mBankAccountsAdapter.setBankDetails(index, bankAccountDetails);
+            }
+        }
     }
 
 }
