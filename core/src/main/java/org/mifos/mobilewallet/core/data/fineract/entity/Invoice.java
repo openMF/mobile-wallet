@@ -62,7 +62,7 @@ public class Invoice implements Parcelable {
         this.status = in.readInt();
         this.transactionId = in.readString();
         this.id = in.readInt();
-        this.date = new ArrayList<Integer>();
+        this.date = new ArrayList<>();
         in.readList(this.date, Integer.class.getClassLoader());
     }
 

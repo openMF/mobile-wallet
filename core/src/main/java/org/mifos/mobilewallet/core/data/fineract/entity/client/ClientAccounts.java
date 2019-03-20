@@ -29,7 +29,7 @@ public class ClientAccounts implements Parcelable {
 
 
     protected ClientAccounts(Parcel in) {
-        this.savingsAccounts = new ArrayList<SavingAccount>();
+        this.savingsAccounts = new ArrayList<>();
     }
 
     public List<SavingAccount> getSavingsAccounts() {
@@ -54,7 +54,7 @@ public class ClientAccounts implements Parcelable {
     }
 
     private List<SavingAccount> getSavingsAccounts(boolean wantRecurring) {
-        List<SavingAccount> result = new ArrayList<SavingAccount>();
+        List<SavingAccount> result = new ArrayList<>();
         if (this.savingsAccounts != null) {
             for (SavingAccount account : savingsAccounts) {
                 if (account.isRecurring() == wantRecurring) {

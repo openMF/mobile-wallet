@@ -9,7 +9,7 @@ import java.util.List;
 public class Page<T> {
 
     private int totalFilteredRecords;
-    private List<T> pageItems = new ArrayList<T>();
+    private List<T> pageItems = new ArrayList<>();
 
     public List<T> getPageItems() {
         return pageItems;

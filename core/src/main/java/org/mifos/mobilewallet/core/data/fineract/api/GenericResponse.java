@@ -7,7 +7,7 @@ import java.util.HashMap;
  */
 public class GenericResponse {
 
-    HashMap<String, Object> responseFields = new HashMap<String, Object>();
+    HashMap<String, Object> responseFields = new HashMap<>();
 
     public HashMap<String, Object> getResponseFields() {
         return responseFields;
