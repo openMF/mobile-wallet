@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.faq.ui.FAQActivity;
@@ -74,6 +75,11 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
         switch (item.getItemId()) {
             case R.id.item_faq:
                 startActivity(new Intent(getApplicationContext(), FAQActivity.class));
+                break;
+            case R.id.logout:
+                localRepository.getPreferencesHelper().clear();
+                finish();
+                startActivity(new Intent(MainActivity.this, LoginActivity.class));
                 break;
             case R.id.item_profile_setting:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));

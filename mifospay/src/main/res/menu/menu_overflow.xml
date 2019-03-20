@@ -11,4 +11,7 @@
         android:id="@+id/item_profile_setting"
         android:title="Settings"/>
 
+    <item
+        android:id="@+id/logout"
+        android:title="Log Out"/>
 </menu>
