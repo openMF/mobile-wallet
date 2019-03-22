@@ -21,6 +21,7 @@ public class GenerateQr extends UseCase<GenerateQr.RequestValues, GenerateQr.Res
     private static final int WHITE = 0xFFFFFFFF;
     private static final int BLACK = 0xFF000000;
     private static final int WIDTH = 500;
+    private static final int HEIGHT = 500;
 
     @Inject
     public GenerateQr() {
@@ -47,7 +48,7 @@ public class GenerateQr extends UseCase<GenerateQr.RequestValues, GenerateQr.Res
         BitMatrix result;
         try {
             result = new MultiFormatWriter().encode(str,
-                    BarcodeFormat.QR_CODE, WIDTH, WIDTH, null);
+                    BarcodeFormat.QR_CODE, WIDTH, HEIGHT, null);
         } catch (IllegalArgumentException iae) {
             return null;
         }
