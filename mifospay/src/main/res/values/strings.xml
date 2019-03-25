@@ -168,4 +168,5 @@
     <string name="empty_no_invoices_title">You have no invoices</string>
     <string name="empty_no_invoices_subtitle">All invoices will be displaying here</string>
     <string name="notification_settings">Notification Settings</string>
+    <string name="flashlight">Turn On/Off Camera LED/ Flashlight Android</string>
 </resources>

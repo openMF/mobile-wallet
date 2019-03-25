@@ -20,6 +20,20 @@
 
         </me.dm7.barcodescanner.zxing.ZXingScannerView>
 
+        <ToggleButton
+            android:id="@+id/onOffFlashlight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/value_15dp"
+            android:textOn=""
+            android:textOff=""
+            android:checked="false"
+            android:layout_gravity="bottom"
+            android:background="@drawable/flashlight"
+            android:text="@string/flashlight"
+            android:layout_marginStart="@dimen/value_15dp"
+            android:layout_marginBottom="@dimen/value_15dp"/>
+
     </FrameLayout>
 
 

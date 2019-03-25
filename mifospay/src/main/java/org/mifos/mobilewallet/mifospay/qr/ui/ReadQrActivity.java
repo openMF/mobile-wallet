@@ -2,8 +2,11 @@ package org.mifos.mobilewallet.mifospay.qr.ui;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.hardware.Camera;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.widget.CompoundButton;
+import android.widget.ToggleButton;
 
 import com.google.zxing.Result;
 
@@ -34,6 +37,10 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
     @BindView(R.id.scannerView)
     ZXingScannerView mScannerView;
 
+    ToggleButton toggleButton;
+    Camera camera;
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +55,32 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
         mPresenter.attachView(this);
 
         mScannerView.setAutoFocus(true);
+
+        toggleButton = (ToggleButton) findViewById(R.id.onOffFlashlight);
+
+        toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+                if (checked) {
+
+                    camera = Camera.open();
+                    Camera.Parameters parameters = camera.getParameters();
+                    parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                    camera.setParameters(parameters);
+                    camera.startPreview();
+
+                } else {
+
+                    camera = Camera.open();
+                    Camera.Parameters parameters = camera.getParameters();
+                    parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                    camera.setParameters(parameters);
+                    camera.stopPreview();
+                    camera.release();
+
+                }
+            }
+        });
     }
 
     @Override
