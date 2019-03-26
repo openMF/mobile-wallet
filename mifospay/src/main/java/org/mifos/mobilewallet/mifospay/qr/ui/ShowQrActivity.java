@@ -13,10 +13,15 @@ import org.mifos.mobilewallet.mifospay.qr.QrContract;
 import org.mifos.mobilewallet.mifospay.qr.presenter.ShowQrPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
+import java.util.Locale;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.michaelrocks.libphonenumber.android.NumberParseException;
+import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
+import io.michaelrocks.libphonenumber.android.Phonenumber;
 
 /**
  * Created by naman on 8/7/17.
@@ -34,6 +39,9 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
 
     @BindView(R.id.tv_qr_data)
     TextView tvQrData;
+
+    @BindView(R.id.tv_mobile_number)
+    TextView tvMoileNumber;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,5 +75,19 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
     public void showGeneratedQr(Bitmap bitmap) {
         ivQrCode.setImageBitmap(bitmap);
 
+    }
+
+    @Override
+    public void showMobile(String mobileNo) {
+        PhoneNumberUtil phoneNumberUtil =
+                PhoneNumberUtil.createInstance(tvMoileNumber.getContext());
+        try {
+            Phonenumber.PhoneNumber phoneNumber =
+                    phoneNumberUtil.parse(mobileNo, Locale.getDefault().getCountry());
+            tvMoileNumber.setText(phoneNumberUtil.format(phoneNumber,
+                    PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
+        } catch (NumberParseException e) {
+            tvMoileNumber.setText(mobileNo); // If mobile number is not parsed properly
+        }
     }
 }

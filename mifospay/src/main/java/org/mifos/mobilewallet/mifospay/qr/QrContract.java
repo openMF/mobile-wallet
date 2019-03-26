@@ -14,6 +14,8 @@ public interface QrContract {
     interface ShowQrView extends BaseView<ShowQrPresenter> {
 
         void showGeneratedQr(Bitmap bitmap);
+
+        void showMobile(String mobileNo);
     }
 
     interface ShowQrPresenter extends BasePresenter {

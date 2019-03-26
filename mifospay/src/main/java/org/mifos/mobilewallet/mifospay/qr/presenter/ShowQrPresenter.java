@@ -3,6 +3,7 @@ package org.mifos.mobilewallet.mifospay.qr.presenter;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.qr.QrContract;
 import org.mifos.mobilewallet.mifospay.qr.domain.usecase.GenerateQr;
 
@@ -18,10 +19,12 @@ public class ShowQrPresenter implements QrContract.ShowQrPresenter {
     @Inject
     GenerateQr generateQrUseCase;
     private QrContract.ShowQrView mShowQrView;
+    private final LocalRepository localRepository;
 
     @Inject
-    public ShowQrPresenter(UseCaseHandler useCaseHandler) {
+    public ShowQrPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
         this.mUsecaseHandler = useCaseHandler;
+        this.localRepository = localRepository;
     }
 
     @Override
@@ -39,6 +42,7 @@ public class ShowQrPresenter implements QrContract.ShowQrPresenter {
                     @Override
                     public void onSuccess(GenerateQr.ResponseValue response) {
                         mShowQrView.showGeneratedQr(response.getBitmap());
+                        mShowQrView.showMobile(localRepository.getPreferencesHelper().getMobile());
                     }
 
                     @Override

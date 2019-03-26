@@ -47,6 +47,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_20dp"/>
 
+            <TextView
+                android:id="@+id/tv_mobile_number"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/value_20dp"/>
+
         </LinearLayout>
     </LinearLayout>
 
