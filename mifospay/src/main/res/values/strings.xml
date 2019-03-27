@@ -111,9 +111,9 @@
     <string name="question3">Question 3</string>
     <string name="question4">Question 4</string>
     <string name="answer1">Answer 1</string>
-    <string name="answer2">Answer 1</string>
-    <string name="answer3">Answer 1</string>
-    <string name="answer4">Answer 1</string>
+    <string name="answer2">Answer 2</string>
+    <string name="answer3">Answer 3</string>
+    <string name="answer4">Answer 4</string>
     <string name="setup_upi">Setup UPI</string>
     <string name="change_upi_pin">Change UPI PIN</string>
     <string name="forgot_upi_pin">Forgot UPI PIN</string>
