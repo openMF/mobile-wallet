@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.history;
 
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
@@ -42,20 +43,23 @@ public interface HistoryContract {
 
     interface TransactionDetailView extends BaseView<TransactionDetailPresenter> {
 
+        void showTransferDetail(TransferDetail transferDetail);
     }
 
     interface TransactionDetailPresenter extends BasePresenter {
 
-        ArrayList<Transaction> getSpecificTransactions(ArrayList<Transaction> transactions,
-                String secondAccountNumber);
+        void getTransferDetail(long transferId);
     }
 
     interface SpecificTransactionsView extends BaseView<SpecificTransactionsPresenter> {
 
+        void showSpecificTransactions(ArrayList<Transaction> specificTransactions);
     }
 
     interface SpecificTransactionsPresenter extends BasePresenter {
 
+        ArrayList<Transaction> getSpecificTransactions(ArrayList<Transaction> transactions,
+                                                       String secondAccountNumber);
     }
 
 

@@ -15,6 +15,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -135,17 +136,7 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
         tvTransactionAmount.setText(
                 transaction.getCurrency().getCode() + " " + transaction.getAmount());
 
-        if (transaction.getTransferId() != 0) {
-            rlFromTo.setVisibility(View.VISIBLE);
-            vRule2.setVisibility(View.VISIBLE);
-
-            tvFromClientName.setText(
-                    transaction.getTransferDetail().getFromClient().getDisplayName());
-            tvFromAccountNo.setText(
-                    transaction.getTransferDetail().getFromAccount().getAccountNo());
-            tvToClientName.setText(transaction.getTransferDetail().getToClient().getDisplayName());
-            tvToAccountNo.setText(transaction.getTransferDetail().getToAccount().getAccountNo());
-        }
+        mPresenter.getTransferDetail(transaction.getTransferId());
 
         if (transaction.getReceiptId() != null) {
             tvReceiptId.setVisibility(View.VISIBLE);
@@ -186,17 +177,9 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
     @OnClick(R.id.ll_from)
     public void onFromViewClicked() {
 
-        mLlMain.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
-
         Intent intent = new Intent(getActivity(), SpecificTransactionsActivity.class);
-
-        ArrayList specificTransactions = mTransactionDetailPresenter.getSpecificTransactions(
-                transactions, tvFromAccountNo.getText().toString());
-        intent.putParcelableArrayListExtra(Constants.SPECIFIC_TRANSACTIONS, specificTransactions);
-
-        mProgressBar.setVisibility(View.GONE);
-        mLlMain.setVisibility(View.VISIBLE);
+        intent.putParcelableArrayListExtra(Constants.TRANSACTIONS, transactions);
+        intent.putExtra(Constants.ACCOUNT_NUMBER, tvFromAccountNo.getText().toString());
 
         startActivity(intent);
 
@@ -205,19 +188,27 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
     @OnClick(R.id.ll_to)
     public void onToViewClicked() {
 
-        mLlMain.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
-
         Intent intent = new Intent(getActivity(), SpecificTransactionsActivity.class);
 
-        ArrayList specificTransactions = mTransactionDetailPresenter.getSpecificTransactions(
-                transactions, tvToAccountNo.getText().toString());
-        intent.putParcelableArrayListExtra(Constants.SPECIFIC_TRANSACTIONS, specificTransactions);
-
-        mProgressBar.setVisibility(View.GONE);
-        mLlMain.setVisibility(View.VISIBLE);
+        intent.putParcelableArrayListExtra(Constants.TRANSACTIONS, transactions);
+        intent.putExtra(Constants.ACCOUNT_NUMBER, tvToAccountNo.getText().toString());
 
         startActivity(intent);
 
+    }
+
+    @Override
+    public void showTransferDetail(TransferDetail transferDetail) {
+        if (transaction.getTransferId() != 0) {
+            rlFromTo.setVisibility(View.VISIBLE);
+            vRule2.setVisibility(View.VISIBLE);
+
+            tvFromClientName.setText(
+                    transferDetail.getFromClient().getDisplayName());
+            tvFromAccountNo.setText(
+                    transferDetail.getFromAccount().getAccountNo());
+            tvToClientName.setText(transferDetail.getToClient().getDisplayName());
+            tvToAccountNo.setText(transferDetail.getToAccount().getAccountNo());
+        }
     }
 }

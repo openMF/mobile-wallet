@@ -40,6 +40,7 @@ public class SpecificTransactionsActivity extends BaseActivity implements
     RecyclerView mRvTransactions;
 
     private ArrayList<Transaction> transactions;
+    private String secondAccountNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,13 +52,13 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         showBackButton();
         setToolbarTitle(Constants.SPECIFIC_TRANSACTIONS);
 
-        transactions = getIntent().getParcelableArrayListExtra(Constants.SPECIFIC_TRANSACTIONS);
-
-        showProgressDialog(Constants.PLEASE_WAIT);
+        transactions = getIntent().getParcelableArrayListExtra(Constants.TRANSACTIONS);
+        secondAccountNumber = getIntent().getStringExtra(Constants.ACCOUNT_NUMBER);
 
         setupRecyclerView();
 
-        hideProgressDialog();
+        mPresenter.getSpecificTransactions(transactions, secondAccountNumber);
+
     }
 
     private void setupRecyclerView() {
@@ -65,8 +66,6 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         mRvTransactions.setAdapter(mSpecificTransactionsAdapter);
         mRvTransactions.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL));
-
-        mSpecificTransactionsAdapter.setData(transactions);
 
         mRvTransactions.addOnItemTouchListener(new RecyclerItemClickListener(this,
                 new RecyclerItemClickListener.OnItemClickListener() {
@@ -94,4 +93,8 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         mSpecificTransactionsPresenter = presenter;
     }
 
+    @Override
+    public void showSpecificTransactions(ArrayList<Transaction> specificTransactions) {
+        mSpecificTransactionsAdapter.setData(specificTransactions);
+    }
 }

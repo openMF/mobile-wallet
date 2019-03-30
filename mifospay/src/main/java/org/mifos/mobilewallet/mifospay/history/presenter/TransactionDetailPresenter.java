@@ -1,7 +1,10 @@
 package org.mifos.mobilewallet.mifospay.history.presenter;
 
+import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchTransactionReceipt;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
@@ -18,7 +21,7 @@ public class TransactionDetailPresenter implements HistoryContract.TransactionDe
 
     private final UseCaseHandler mUseCaseHandler;
     @Inject
-    FetchTransactionReceipt mFetchTransactionReceiptUseCase;
+    FetchAccountTransfer mFetchAccountTransferUseCase;
     private HistoryContract.TransactionDetailView mTransactionDetailView;
 
     @Inject
@@ -33,19 +36,20 @@ public class TransactionDetailPresenter implements HistoryContract.TransactionDe
     }
 
     @Override
-    public ArrayList<Transaction> getSpecificTransactions(ArrayList<Transaction> transactions,
-            String secondAccountNumber) {
-        ArrayList<Transaction> specificTransactions = new ArrayList<>();
-        for (Transaction transaction : transactions) {
-            if (transaction.getTransferDetail() != null
-                    && (transaction.getTransferDetail().getFromAccount().getAccountNo().equals(
-                    secondAccountNumber)
-                    || transaction.getTransferDetail().getToAccount().getAccountNo().equals(
-                    secondAccountNumber))) {
+    public void getTransferDetail(long transferId) {
+        mUseCaseHandler.execute(mFetchAccountTransferUseCase,
+                new FetchAccountTransfer.RequestValues(transferId),
+                new UseCase.UseCaseCallback<FetchAccountTransfer.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchAccountTransfer.ResponseValue response) {
+                       mTransactionDetailView.showTransferDetail(response.getTransferDetail());
+                    }
 
-                specificTransactions.add(transaction);
-            }
-        }
-        return specificTransactions;
+                    @Override
+                    public void onError(String message) {
+
+                    }
+                });
     }
+
 }
