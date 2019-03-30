@@ -108,7 +108,7 @@ public class KYCDescriptionFragment extends
         blv1.setEnabled(false);
         blv2.setEnabled(false);
         blv3.setEnabled(false);
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showSwipeProgress();
         mKYCDescriptionPresenter.fetchCurrentLevel();
 
         return rootView;
@@ -145,8 +145,7 @@ public class KYCDescriptionFragment extends
 
     @Override
     public void onFetchLevelSuccess(KYCLevel1Details kycLevel1Details) {
-        hideProgressDialog();
-
+        hideSwipeProgress();
         int currentLevel = Integer.parseInt(kycLevel1Details.getCurrentLevel());
 
         if (currentLevel >= 0) {

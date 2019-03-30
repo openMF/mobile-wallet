@@ -102,22 +102,10 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         setUpSwipeRefresh();
         setupUi();
 
+        showSwipeProgress();
         mHomePresenter.fetchAccountDetails();
 
         return rootView;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        showSwipeProgress();
-    }
-
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        hideSwipeProgress();
     }
 
     private void setUpSwipeRefresh() {
@@ -180,6 +168,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         String balanceFormatted = currency + " " + accountBalance;
 
         mTvAccountBalance.setText(balanceFormatted);
+        hideSwipeProgress();
     }
 
     @Override

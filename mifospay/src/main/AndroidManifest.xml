@@ -124,9 +124,6 @@
             android:name=".faq.ui.FAQActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".bank.ui.BankAccountsActivity"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".bank.ui.LinkBankAccountActivity"
             android:theme="@style/AppTheme" />
         <activity

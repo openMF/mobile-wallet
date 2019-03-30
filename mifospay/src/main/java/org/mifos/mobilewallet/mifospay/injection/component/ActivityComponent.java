@@ -7,13 +7,12 @@ import org.mifos.mobilewallet.mifospay.bank.fragment.OtpFragment;
 import org.mifos.mobilewallet.mifospay.bank.fragment.SetupUpiPinDialog;
 import org.mifos.mobilewallet.mifospay.bank.fragment.UpiPinFragment;
 import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountDetailActivity;
-import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity;
 import org.mifos.mobilewallet.mifospay.bank.ui.LinkBankAccountActivity;
 import org.mifos.mobilewallet.mifospay.bank.ui.SetupUpiPinActivity;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.SearchActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
-import org.mifos.mobilewallet.mifospay.finance.ui.AccountsFragment;
+import org.mifos.mobilewallet.mifospay.bank.ui.AccountsFragment;
 import org.mifos.mobilewallet.mifospay.history.ui.HistoryFragment;
 import org.mifos.mobilewallet.mifospay.history.ui.SpecificTransactionsActivity;
 import org.mifos.mobilewallet.mifospay.history.ui.TransactionDetailDialog;
@@ -39,6 +38,7 @@ import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 import org.mifos.mobilewallet.mifospay.registration.ui.MobileVerificationActivity;
 import org.mifos.mobilewallet.mifospay.registration.ui.SignupActivity;
+import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsFragment;
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
 
 import dagger.Component;
@@ -71,6 +71,8 @@ public interface ActivityComponent {
 
     void inject(AccountsFragment accountsFragment);
 
+    void inject(CardsFragment cardsFragment);
+
     void inject(SendFragment sendFragment);
 
     void inject(PassCodeActivity passCodeActivity);
@@ -102,8 +104,6 @@ public interface ActivityComponent {
     void inject(EditPasswordActivity editPasswordActivity);
 
     void inject(SettingsActivity settingsActivity);
-
-    void inject(BankAccountsActivity bankAccountsActivity);
 
     void inject(LinkBankAccountActivity linkBankAccountActivity);
 
