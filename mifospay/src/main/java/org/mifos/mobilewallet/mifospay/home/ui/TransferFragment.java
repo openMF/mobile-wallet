@@ -28,7 +28,7 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
-import org.mifos.mobilewallet.mifospay.home.HomeContract;
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.TransferPresenter;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
@@ -50,7 +50,7 @@ import io.michaelrocks.libphonenumber.android.Phonenumber;
  * Created by naman on 30/8/17.
  */
 
-public class TransferFragment extends BaseFragment implements HomeContract.TransferView {
+public class TransferFragment extends BaseFragment implements BaseHomeContract.TransferView {
 
     public static final int REQUEST_SHOW_DETAILS = 3;
     private static final int REQUEST_CAMERA = 0;
@@ -61,7 +61,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
 
     @Inject
     TransferPresenter mPresenter;
-    HomeContract.TransferPresenter mTransferPresenter;
+    BaseHomeContract.TransferPresenter mTransferPresenter;
     @BindView(R.id.et_amount)
     EditText etAmount;
     @BindView(R.id.et_vpa)
@@ -235,7 +235,7 @@ public class TransferFragment extends BaseFragment implements HomeContract.Trans
     }
 
     @Override
-    public void setPresenter(HomeContract.TransferPresenter presenter) {
+    public void setPresenter(BaseHomeContract.TransferPresenter presenter) {
         this.mTransferPresenter = presenter;
     }
 

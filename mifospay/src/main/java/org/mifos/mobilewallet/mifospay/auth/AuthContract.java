@@ -14,12 +14,18 @@ public interface AuthContract {
 
     interface LoginView extends BaseView<LoginPresenter> {
 
+        void disableLoginButton();
+
+        void enableLoginButton();
+
         void loginSuccess();
 
         void loginFail(String message);
     }
 
     interface LoginPresenter extends BasePresenter {
+
+        void handleLoginButtonStatus(String usernameContent, String passwordContent);
 
         void loginUser(String username, String password);
     }

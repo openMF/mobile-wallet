@@ -27,6 +27,7 @@ import java.io.OutputStream;
 public class FileUtils {
 
     private static final String TAG = "FileUtils";
+
     public static JSONObject readJson(Context context, String file) {
         JSONObject jsonObject = null;
         try {

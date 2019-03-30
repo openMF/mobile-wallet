@@ -19,23 +19,20 @@ import javax.inject.Inject;
 
 /**
  * This class is the UI component of the Architecture.
+ *
  * @author ankur
  * @since 11/July/2018
  */
 
 public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
 
-    private ExpandableListView expandableListView;
-
-    private FAQListAdapter faqListAdapter;
-
-    private List<String> listDataGroup;
-
-    private HashMap<String, List<String>> listDataChild;
-
     @Inject
     FAQPresenter mPresenter;
     FAQContract.FAQPresenter mFAQPresenter;
+    private ExpandableListView expandableListView;
+    private FAQListAdapter faqListAdapter;
+    private List<String> listDataGroup;
+    private HashMap<String, List<String>> listDataChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

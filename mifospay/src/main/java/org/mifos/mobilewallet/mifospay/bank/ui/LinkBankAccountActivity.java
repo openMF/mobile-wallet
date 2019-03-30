@@ -1,5 +1,8 @@
 package org.mifos.mobilewallet.mifospay.bank.ui;
 
+import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
+import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -33,9 +36,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-
-import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
-import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
 
 public class LinkBankAccountActivity extends BaseActivity implements
         BankContract.LinkBankAccountView {

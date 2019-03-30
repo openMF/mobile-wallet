@@ -1,10 +1,10 @@
 package org.mifos.mobilewallet.mifospay.bank.adapters;
 
-import android.app.Activity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.BankAccountDetails;
@@ -26,17 +26,16 @@ import butterknife.ButterKnife;
 public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapter.ViewHolder> {
 
     private List<BankAccountDetails> mBankAccountDetailsList;
-    private Activity mActivity;
+
 
     @Inject
-    public BankAccountsAdapter(Activity activity) {
-        mActivity = activity;
+    public BankAccountsAdapter() {
         mBankAccountDetailsList = new ArrayList<>();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_bank_account,
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_casual_list,
                 parent, false);
         return new ViewHolder(v);
     }
@@ -47,8 +46,7 @@ public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapte
         holder.mTvBankName.setText(bankAccountDetails.getBankName());
         holder.mTvAccountHolderName.setText(bankAccountDetails.getAccountholderName());
         holder.mTvBranch.setText(bankAccountDetails.getBranch());
-        holder.mTvType.setText(bankAccountDetails.getType());
-        holder.mTvIfsc.setText(bankAccountDetails.getIfsc());
+        holder.imageViewAccount.setImageResource(R.drawable.ic_bank);
     }
 
     @Override
@@ -82,16 +80,14 @@ public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.tv_bank_name)
+        @BindView(R.id.tv_item_casual_list_title)
         TextView mTvBankName;
-        @BindView(R.id.tv_account_holder_name)
+        @BindView(R.id.tv_item_casual_list_subtitle)
         TextView mTvAccountHolderName;
-        @BindView(R.id.tv_branch)
+        @BindView(R.id.tv_item_casual_list_optional_caption)
         TextView mTvBranch;
-        @BindView(R.id.tv_ifsc)
-        TextView mTvIfsc;
-        @BindView(R.id.tv_type)
-        TextView mTvType;
+        @BindView(R.id.iv_item_casual_list_icon)
+        ImageView imageViewAccount;
 
         public ViewHolder(View v) {
             super(v);

@@ -2,11 +2,10 @@ package org.mifos.mobilewallet.mifospay.home.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,10 +16,8 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
-import org.mifos.mobilewallet.mifospay.faq.ui.FAQActivity;
-import org.mifos.mobilewallet.mifospay.home.HomeContract;
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfilePresenter;
-import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
@@ -29,30 +26,37 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import okhttp3.ResponseBody;
 
 /**
  * Created by naman on 7/9/17.
  */
 
-public class ProfileFragment extends BaseFragment implements HomeContract.ProfileView {
+public class ProfileFragment extends BaseFragment implements BaseHomeContract.ProfileView {
 
     @Inject
     ProfilePresenter mPresenter;
 
-    HomeContract.ProfilePresenter mProfilePresenter;
+    BaseHomeContract.ProfilePresenter mProfilePresenter;
 
     @BindView(R.id.iv_user_image)
     ImageView ivUserImage;
 
     @BindView(R.id.tv_user_name)
-    TextView ivUserName;
+    TextView tvUserName;
 
-    @BindView(R.id.tv_user_details_name)
-    TextView tvUserDetailsName;
+    @BindView(R.id.nsv_profile_bottom_sheet_dialog)
+    View vProfileBottomSheetDialog;
 
-    @BindView(R.id.tv_client_vpa)
-    TextView tvClientVpa;
+    @BindView(R.id.inc_account_details_email)
+    View vAccountDetailsEmail;
+
+    @BindView(R.id.inc_account_details_vpa)
+    View vAccountDetailsVpa;
+
+    @BindView(R.id.inc_account_details_mobile_number)
+    View vAccountDetailsMobile;
 
     public static ProfileFragment newInstance(long clientId) {
 
@@ -77,62 +81,106 @@ public class ProfileFragment extends BaseFragment implements HomeContract.Profil
         View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        setToolbarTitle(Constants.PROFILE);
-        hideBackButton();
-        setSwipeEnabled(false);
 
-        setHasOptionsMenu(true);
-
-        mProfilePresenter.fetchprofile();
-        mProfilePresenter.fetchClientImage();
+        setupUi();
 
         return rootView;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_profile, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+    private void setupUi() {
+        setToolbarTitle(Constants.PROFILE);
+        setSwipeEnabled(false);
+        hideBackButton();
+        setupBottomSheet();
+    }
+
+    private void setupBottomSheet() {
+        BottomSheetBehavior mBottomSheetBehavior = BottomSheetBehavior
+                .from(vProfileBottomSheetDialog);
+        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View view, int newState) {
+            }
+
+            @Override
+            public void onSlide(@NonNull View view, float v) {
+
+            }
+        });
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item_faq:
-                startActivity(new Intent(getActivity(), FAQActivity.class));
-                break;
-            case R.id.item_edit_profile:
-                startActivity(new Intent(getActivity(), EditProfileActivity.class));
-                break;
-            case R.id.item_profile_setting:
-                startActivity(new Intent(getActivity(), SettingsActivity.class));
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+    public void onResume() {
+        super.onResume();
+        mProfilePresenter.fetchProfile();
+        mProfilePresenter.fetchAccountDetails();
+        mProfilePresenter.fetchClientImage();
+    }
+
+    @Override
+    public void setPresenter(BaseHomeContract.ProfilePresenter presenter) {
+        this.mProfilePresenter = presenter;
+    }
+
+    @OnClick(R.id.iv_user_image)
+    public void onUserImageEditClicked() {
+        if (getActivity() != null) {
+            Intent i = new Intent(getActivity(), EditProfileActivity.class);
+            i.putExtra(Constants.CHANGE_PROFILE_IMAGE_KEY, Constants.CHANGE_PROFILE_IMAGE_VALUE);
+            startActivity(i);
         }
-        return true;
+    }
+
+    @OnClick(R.id.btn_profile_bottom_sheet_action)
+    public void onEditProfileClicked() {
+        if (getActivity() != null) {
+            getActivity().startActivity(new Intent(getActivity(), EditProfileActivity.class));
+        }
     }
 
     @Override
     public void showProfile(Client client) {
-        ivUserName.setText(client.getName());
-        tvUserDetailsName.setText(client.getName());
         TextDrawable drawable = TextDrawable.builder().beginConfig()
-                .width((int)getResources().getDimension(R.dimen.user_profile_image_size))
-                .height((int)getResources().getDimension(R.dimen.user_profile_image_size))
-                .endConfig().buildRound(client.getName().substring(0, 1), R.color.colorPrimary);
+                .width((int) getResources().getDimension(R.dimen.user_profile_image_size))
+                .height((int) getResources().getDimension(R.dimen.user_profile_image_size))
+                .endConfig().buildRound(client.getName().substring(0, 1), R.color.colorAccentBlack);
         ivUserImage.setImageDrawable(drawable);
-        tvClientVpa.setText(client.getExternalId());
+        tvUserName.setText(client.getName());
+    }
+
+    @Override
+    public void showEmail(String email) {
+        ((ImageView) vAccountDetailsEmail.findViewById(R.id.iv_item_casual_list_icon))
+                .setImageDrawable(getResources().getDrawable(R.drawable.ic_email));
+        ((TextView) vAccountDetailsEmail.findViewById(R.id.tv_item_casual_list_title))
+                .setText(email);
+        ((TextView) vAccountDetailsEmail.findViewById(R.id.tv_item_casual_list_subtitle))
+                .setText(getResources().getString(R.string.email));
+    }
+
+    @Override
+    public void showVpa(String vpa) {
+        ((ImageView) vAccountDetailsVpa.findViewById(R.id.iv_item_casual_list_icon))
+                .setImageDrawable(getResources().getDrawable(R.drawable.ic_transaction));
+        ((TextView) vAccountDetailsVpa.findViewById(R.id.tv_item_casual_list_title))
+                .setText(vpa);
+        ((TextView) vAccountDetailsVpa.findViewById(R.id.tv_item_casual_list_subtitle))
+                .setText(getResources().getString(R.string.vpa));
+    }
+
+    @Override
+    public void showMobile(String mobile) {
+        ((ImageView) vAccountDetailsMobile.findViewById(R.id.iv_item_casual_list_icon))
+                .setImageDrawable(getResources().getDrawable(R.drawable.ic_mobile));
+        ((TextView) vAccountDetailsMobile.findViewById(R.id.tv_item_casual_list_title))
+                .setText(mobile);
+        ((TextView) vAccountDetailsMobile.findViewById(R.id.tv_item_casual_list_subtitle))
+                .setText(getResources().getString(R.string.mobile));
     }
 
     @Override
     public void fetchImageSuccess(ResponseBody responseBody) {
 
-    }
-
-    @Override
-    public void setPresenter(HomeContract.ProfilePresenter presenter) {
-        this.mProfilePresenter = presenter;
     }
 
     @Override

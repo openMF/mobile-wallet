@@ -9,6 +9,7 @@ import javax.inject.Inject;
 
 /**
  * This class is the Presenter component of the Architecture.
+ *
  * @author ankur
  * @since 11/July/2018
  */

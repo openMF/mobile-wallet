@@ -4,10 +4,10 @@ import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.client.UpdateClientEntityMobile;
 import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityEmail;
-import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityPassword;
 import org.mifos.mobilewallet.core.domain.usecase.client.UpdateClient;
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
@@ -44,46 +44,68 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
     }
 
     @Override
-    public void updatePassword(String currentPassword, final String newPassword) {
-        // authenticate and then update
-        mUseCaseHandler.execute(authenticateUserUseCase,
-                new AuthenticateUser.RequestValues(mPreferencesHelper.getUsername(),
-                        currentPassword),
-                new UseCase.UseCaseCallback<AuthenticateUser.ResponseValue>() {
-                    @Override
-                    public void onSuccess(AuthenticateUser.ResponseValue response) {
+    public void fetchUserDetails() {
+        showUserImageOrDefault();
+        showUsernameIfNotEmpty();
+        showEmailIfNotEmpty();
+        showVpaIfNotEmpty();
+        showMobielIfNotEmpty();
+    }
 
-                        mUseCaseHandler.execute(updateUserUseCase,
-                                new UpdateUser.RequestValues(
-                                        new UpdateUserEntityPassword(newPassword),
-                                        (int) mPreferencesHelper.getUserId()),
-                                new UseCase.UseCaseCallback<UpdateUser.ResponseValue>() {
-                                    @Override
-                                    public void onSuccess(UpdateUser.ResponseValue response) {
-                                        mEditProfileView.onUpdatePasswordSuccess();
-                                    }
+    private void showUserImageOrDefault() {
+        /*
+            TODO:
 
-                                    @Override
-                                    public void onError(String message) {
-                                        mEditProfileView.onUpdatePasswordError(message);
-                                    }
-                                });
-                    }
+            We could check if user has a custom image and then fetch it from the db here
+            and show the custom image on success or default on error/if user doesn't have one
 
-                    @Override
-                    public void onError(String message) {
-                        mEditProfileView.onUpdatePasswordError("Wrong password");
-                    }
-                });
+         */
+        mEditProfileView.showDefaultImageByUsername(mPreferencesHelper.getFullName());
+    }
+
+    private void showUsernameIfNotEmpty() {
+        if (!mPreferencesHelper.getUsername().isEmpty()) {
+            mEditProfileView.showUsername(mPreferencesHelper.getUsername());
+        }
+    }
+
+    private void showEmailIfNotEmpty() {
+        if (!mPreferencesHelper.getEmail().isEmpty()) {
+            mEditProfileView.showEmail(mPreferencesHelper.getEmail());
+        }
+    }
+
+    private void showVpaIfNotEmpty() {
+        if (!mPreferencesHelper.getClientVpa().isEmpty()) {
+            mEditProfileView.showVpa(mPreferencesHelper.getClientVpa());
+        }
+    }
+
+    private void showMobielIfNotEmpty() {
+        if (!mPreferencesHelper.getMobile().isEmpty()) {
+            mEditProfileView.showMobileNumber(mPreferencesHelper.getMobile());
+        }
     }
 
     @Override
-    public void updatePasscode(String currentPasscode, String newPasscode) {
-        // feature not available in MifosPassCode library
+    public void updateInputById(int id, String content) {
+        switch (id) {
+            case R.id.et_edit_profile_username:
+                break;
+            case R.id.et_edit_profile_email:
+                updateEmail(content);
+                break;
+            case R.id.et_edit_profile_vpa:
+                break;
+            case R.id.et_edit_profile_mobile:
+                updateMobile(content);
+                break;
+        }
     }
 
     @Override
     public void updateEmail(final String email) {
+        mEditProfileView.startProgressBar();
         mUseCaseHandler.execute(updateUserUseCase,
                 new UpdateUser.RequestValues(new UpdateUserEntityEmail(email),
                         (int) mPreferencesHelper.getUserId()),
@@ -91,18 +113,22 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
                     @Override
                     public void onSuccess(UpdateUser.ResponseValue response) {
                         mPreferencesHelper.saveEmail(email);
-                        mEditProfileView.onUpdateEmailSuccess(email);
+                        showEmailIfNotEmpty();
+                        mEditProfileView.stopProgressBar();
                     }
 
                     @Override
                     public void onError(String message) {
                         mEditProfileView.onUpdateEmailError(message);
+                        mEditProfileView.showFab();
+                        mEditProfileView.stopProgressBar();
                     }
                 });
     }
 
     @Override
     public void updateMobile(final String fullNumber) {
+        mEditProfileView.startProgressBar();
         mUseCaseHandler.execute(updateClientUseCase,
                 new UpdateClient.RequestValues(new UpdateClientEntityMobile(fullNumber),
                         (int) mPreferencesHelper.getClientId()),
@@ -110,12 +136,15 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
                     @Override
                     public void onSuccess(UpdateClient.ResponseValue response) {
                         mPreferencesHelper.saveMobile(fullNumber);
-                        mEditProfileView.onUpdateMobileSuccess(fullNumber);
+                        showMobielIfNotEmpty();
+                        mEditProfileView.stopProgressBar();
                     }
 
                     @Override
                     public void onError(String message) {
                         mEditProfileView.onUpdateMobileError(message);
+                        mEditProfileView.showFab();
+                        mEditProfileView.stopProgressBar();
                     }
                 });
     }
@@ -128,17 +157,27 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
     @Override
     public void handleProfileImageRemoved() {
         mEditProfileView.removeProfileImage();
-        setDefaultUserImage();
+        mEditProfileView.showDefaultImageByUsername(mPreferencesHelper.getFullName());
     }
 
     @Override
-    public void fetchUserDetails() {
-        mEditProfileView.setEmail(mPreferencesHelper.getEmail());
-        mEditProfileView.setMobile(mPreferencesHelper.getMobile());
-        setDefaultUserImage();
+    public void handleNecessaryDataSave() {
+        mEditProfileView.showFab();
     }
 
-    private void setDefaultUserImage() {
-        mEditProfileView.setImage(mPreferencesHelper.getFullName());
+    @Override
+    public void handleExitOnUnsavedChanges() {
+        mEditProfileView.hideFab();
+        mEditProfileView.showDiscardChangesDialog();
+    }
+
+    @Override
+    public void onDialogNegative() {
+        mEditProfileView.showFab();
+    }
+
+    @Override
+    public void onDialogPositive() {
+        mEditProfileView.closeActivity();
     }
 }
