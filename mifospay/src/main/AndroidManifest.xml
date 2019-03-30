@@ -86,7 +86,7 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".invoice.ui.InvoicesActivity"
+            android:name=".invoice.ui.InvoicesFragment"
             android:theme="@style/AppTheme" />
 
         <service android:name=".data.firebase.api.services.MifosPayMessagingService">

@@ -29,7 +29,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
-import org.mifos.mobilewallet.mifospay.home.presenter.TransferPresenter;
+import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
@@ -93,8 +93,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         ButterKnife.bind(this, rootView);
         setSwipeEnabled(false);
         mPresenter.attachView(this);
-        mPresenter.fetchVpa();
-        mPresenter.fetchMobile();
         mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         return rootView;
     }
@@ -140,13 +138,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         }
     }
 
-//    @OnClick(R.id.btn_show_qr)
-//    public void showQrClicked() {
-//        Intent intent = new Intent(getActivity(), ShowQrActivity.class);
-//        intent.putExtra(Constants.QR_DATA, vpa);
-//        startActivity(intent);
-//    }
-
     @OnClick(R.id.btn_scan_qr)
     public void scanQrClicked() {
 
@@ -166,8 +157,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     @Override
     public void showVpa(String vpa) {
         this.vpa = vpa;
-        //tvClientVpa.setText(vpa);
-        //btnShowQr.setClickable(true);
     }
 
     @Override
@@ -286,16 +275,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @Override
     public void showMobile(String mobileNo) {
-//        PhoneNumberUtil phoneNumberUtil =
-//                PhoneNumberUtil.createInstance(mTvClientMobile.getContext());
-//        try {
-//            Phonenumber.PhoneNumber phoneNumber =
-//                    phoneNumberUtil.parse(mobileNo, Locale.getDefault().getCountry());
-//            mTvClientMobile.setText(phoneNumberUtil.format(phoneNumber,
-//                    PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
-//        } catch (NumberParseException e) {
-//            mTvClientMobile.setText(mobileNo); // If mobile number is not parsed properly
-//        }
     }
 
     @Override

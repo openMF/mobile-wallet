@@ -12,7 +12,7 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.history.ui.HistoryFragment;
 import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
-import org.mifos.mobilewallet.mifospay.payments.ui.InvoicesFragment;
+import org.mifos.mobilewallet.mifospay.invoice.ui.InvoicesFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.RequestFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 
@@ -53,6 +53,7 @@ public class PaymentsFragment extends BaseFragment {
     }
 
     private void setupViewPager() {
+        vpTabLayout.setOffscreenPageLimit(1);
         TabLayoutAdapter tabLayoutAdapter
                 = new TabLayoutAdapter(getChildFragmentManager());
         tabLayoutAdapter.addFragment(new SendFragment(), getString(R.string.send));

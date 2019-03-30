@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.home.presenter;
+package org.mifos.mobilewallet.mifospay.payments.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;

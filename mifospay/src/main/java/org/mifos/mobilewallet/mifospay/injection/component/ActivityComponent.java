@@ -19,11 +19,10 @@ import org.mifos.mobilewallet.mifospay.history.ui.TransactionDetailDialog;
 import org.mifos.mobilewallet.mifospay.home.ui.HomeFragment;
 import org.mifos.mobilewallet.mifospay.home.ui.MainActivity;
 import org.mifos.mobilewallet.mifospay.home.ui.ProfileFragment;
-import org.mifos.mobilewallet.mifospay.home.ui.TransferFragment;
 import org.mifos.mobilewallet.mifospay.injection.PerActivity;
 import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
 import org.mifos.mobilewallet.mifospay.invoice.ui.InvoiceActivity;
-import org.mifos.mobilewallet.mifospay.invoice.ui.InvoicesActivity;
+import org.mifos.mobilewallet.mifospay.invoice.ui.InvoicesFragment;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionFragment;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCLevel1Fragment;
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCLevel2Fragment;
@@ -32,6 +31,7 @@ import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment;
 import org.mifos.mobilewallet.mifospay.notification.ui.NotificationActivity;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
+import org.mifos.mobilewallet.mifospay.payments.ui.RequestFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
@@ -63,7 +63,7 @@ public interface ActivityComponent {
 
     void inject(ReadQrActivity readQrActivity);
 
-    void inject(TransferFragment transferFragment);
+    void inject(RequestFragment requestFragment);
 
     void inject(ProfileFragment profileFragment);
 
@@ -93,7 +93,7 @@ public interface ActivityComponent {
 
     void inject(SpecificTransactionsActivity specificTransactionsActivity);
 
-    void inject(InvoicesActivity invoicesActivity);
+    void inject(InvoicesFragment invoicesFragment);
 
     void inject(SignupActivity signupActivity);
 
