@@ -72,7 +72,8 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_invoices, container, false);
         ButterKnife.bind(this, root);
         mPresenter.attachView(this);

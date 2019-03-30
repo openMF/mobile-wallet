@@ -19,8 +19,6 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.bank.BankContract;
 import org.mifos.mobilewallet.mifospay.bank.adapters.BankAccountsAdapter;
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountsPresenter;
-import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountDetailActivity;
-import org.mifos.mobilewallet.mifospay.bank.ui.LinkBankAccountActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -34,7 +32,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 public class AccountsFragment extends BaseFragment implements BankContract.BankAccountsView {
 
@@ -153,7 +150,8 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
                 mRvLinkedBankAccounts.setVisibility(View.VISIBLE);
                 linkedAccountsText.setVisibility(View.GONE);
             }
-        } else if (requestCode == BANK_ACCOUNT_DETAILS_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+        } else if (requestCode == BANK_ACCOUNT_DETAILS_REQUEST_CODE && resultCode
+                == Activity.RESULT_OK) {
             Bundle bundle = data.getExtras();
             DebugUtil.log("bundle", bundle);
             if (bundle != null) {

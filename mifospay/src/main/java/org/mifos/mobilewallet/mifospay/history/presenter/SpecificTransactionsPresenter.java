@@ -44,7 +44,8 @@ public class SpecificTransactionsPresenter implements
     }
 
     @Override
-    public ArrayList<Transaction> getSpecificTransactions(final ArrayList<Transaction> transactions, final String secondAccountNumber) {
+    public ArrayList<Transaction> getSpecificTransactions(final ArrayList<Transaction> transactions,
+                                                          final String secondAccountNumber) {
         final ArrayList<Transaction> specificTransactions = new ArrayList<>();
 
         if (transactions != null && transactions.size() > 0) {
@@ -85,9 +86,11 @@ public class SpecificTransactionsPresenter implements
                 public void onComplete() {
                     for (Transaction transaction : transactions) {
                         if (transaction.getTransferDetail() != null
-                                && (transaction.getTransferDetail().getFromAccount().getAccountNo().equals(
+                                && (transaction.getTransferDetail().getFromAccount()
+                                .getAccountNo().equals(
                                 secondAccountNumber)
-                                || transaction.getTransferDetail().getToAccount().getAccountNo().equals(
+                                || transaction.getTransferDetail().getToAccount()
+                                .getAccountNo().equals(
                                 secondAccountNumber))) {
 
                             specificTransactions.add(transaction);

@@ -2,14 +2,9 @@ package org.mifos.mobilewallet.mifospay.history.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchTransactionReceipt;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -42,7 +37,7 @@ public class TransactionDetailPresenter implements HistoryContract.TransactionDe
                 new UseCase.UseCaseCallback<FetchAccountTransfer.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchAccountTransfer.ResponseValue response) {
-                       mTransactionDetailView.showTransferDetail(response.getTransferDetail());
+                        mTransactionDetailView.showTransferDetail(response.getTransferDetail());
                     }
 
                     @Override
