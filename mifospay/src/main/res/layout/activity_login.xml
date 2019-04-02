@@ -76,7 +76,7 @@
         android:layout_marginBottom="@dimen/marginItemsInSectionLarge"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/ll_login_paymenthub"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -97,6 +97,40 @@
             android:layout_height="wrap_content"
             android:text="@string/create_one"
             android:textColor="@color/colorAccent" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/ll_login_paymenthub"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="@dimen/value_20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginEnd="@dimen/marginBetweenWords"
+            android:layout_marginRight="@dimen/marginBetweenWords"
+            android:text="Want to login to Payment Hub?"
+            android:textColor="@color/colorTextSecondary" />
+
+        <Button
+            android:id="@+id/btn_login_paymenthub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/button_round_black"
+            android:text="Login to Payment Hub"
+            app:layout_constraintBottom_toTopOf="@+id/ll_signup"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </LinearLayout>
 
