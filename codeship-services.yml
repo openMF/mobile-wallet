@@ -2,3 +2,4 @@ app:
   build:
     context: .
     dockerfile: Dockerfile
+  cached: true

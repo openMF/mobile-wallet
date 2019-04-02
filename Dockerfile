@@ -39,8 +39,6 @@ ENV PATH="/home/gradle/gradle/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform
 RUN sdkmanager 'platform-tools'
 RUN sdkmanager 'platforms;android-28'
 RUN sdkmanager 'build-tools;27.0.3'
-RUN sdkmanager 'extras;m2repository;com;android;support;constraint;constraint-layout-solver;1.1.2'
-RUN sdkmanager 'extras;m2repository;com;android;support;constraint;constraint-layout;1.1.2'
 RUN sdkmanager 'extras;google;m2repository'
 RUN sdkmanager 'extras;android;m2repository'
 RUN sdkmanager 'extras;google;google_play_services'
