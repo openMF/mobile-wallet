@@ -63,7 +63,7 @@ public class Constants {
     public static final String PROFILE = "Profile";
     public static final String ERROR_FETCHING_BALANCE = "Error fetching balance";
     public static final String UNABLE_TO_PROCESS_TRANSFER = "Unable to process transfer";
-    public static final String TRANSACTION_SUCCESSFUL = "Transaction successful";
+    public static final String TRANSACTION_SUCCESSFUL = "TransactionInfo successful";
     public static final String SENDING_MONEY = "Sending money...";
     public static final String INSUFFICIENT_BALANCE = "Insufficient balance";
     public static final String ERROR_FINDING_VPA = "Error finding Virtual Payment Address";
@@ -75,7 +75,7 @@ public class Constants {
     public static final String MAKE_TRANSFER_FRAGMENT = "Make Transfer Fragment";
     public static final String PLEASE_ENTER_ALL_THE_FIELDS = "Please enter all the fields";
     public static final String TRANSFER = "Transfer";
-    public static final String TRANSACTION_DETAILS = "Transaction Details";
+    public static final String TRANSACTION_DETAILS = "TransactionInfo Details";
     public static final String ACCOUNT_NUMBER = "account Number";
     public static final String TRANSACTION = "transaction";
     public static final String TRANSACTIONS_HISTORY = "Transactions History History";
@@ -86,7 +86,7 @@ public class Constants {
     public static final String DEBIT = "Debit";
     public static final String RECEIPT_ID = "Receipt ID";
     public static final String DATE = "Date";
-    public static final String TRANSACTION_ID = "Transaction ID";
+    public static final String TRANSACTION_ID = "TransactionInfo ID";
     public static final String TRANSACTIONS = "transactions";
     public static final String ERROR_FETCHING_TRANSACTIONS = "Error fetching transactions";
     public static final String TRANSFER_DETAILS = "transfer details";
