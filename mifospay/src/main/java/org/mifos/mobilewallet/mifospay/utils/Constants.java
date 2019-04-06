@@ -78,8 +78,8 @@ public class Constants {
     public static final String TRANSACTION_DETAILS = "Transaction Details";
     public static final String ACCOUNT_NUMBER = "account Number";
     public static final String TRANSACTION = "transaction";
-    public static final String TRANSACTIONS_HISTORY = "Transactions History";
-    public static final String SPECIFIC_TRANSACTIONS = "Specific Transactions";
+    public static final String TRANSACTIONS_HISTORY = "Transactions History History";
+    public static final String SPECIFIC_TRANSACTIONS = "Specific Transactions History";
     public static final String RECEIPT_DOMAIN = "https://receipt.mifospay.com/";
     public static final String OTHER = "Other";
     public static final String CREDIT = "Credit";
@@ -170,5 +170,11 @@ public class Constants {
     public static final int NOTIFICATION_ID = 100;
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 
+    public static final int HOME_HISTORY_TRANSACTIONS_LIMIT = 5;
 
+    public static final String ERROR_FIELDS_CANNOT_BE_EMPTY = "Fields cannot be empty";
+    public static final String ERROR_VALIDATING_PASSWORD = "Passwords are not the same";
+
+    public static final String CHANGE_PROFILE_IMAGE_KEY = "CHANGE_PROFILE_IMAGE_KEY";
+    public static final String CHANGE_PROFILE_IMAGE_VALUE = "CHANGE_PROFILE_IMAGE_VALUE";
 }

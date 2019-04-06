@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/value_20dp"
+        android:layout_marginTop="@dimen/value_30dp"
+        android:text="@string/receive"
+        android:textColor="@color/primaryDarkBlue"
+        android:textSize="@dimen/value_18sp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="@dimen/value_20dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="@dimen/value_100dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:layout_marginLeft="@dimen/value_20dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/virtual_payment_address_vpa"/>
+
+            <TextView
+                android:id="@+id/tv_client_vpa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/value_18sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/value_10dp"
+                android:text="@string/mobile_number"/>
+
+            <TextView
+                android:id="@+id/tv_client_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/value_18sp"/>
+
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/btn_show_qr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.8"
+            android:drawableTop="@drawable/qrcode_blue_selector"
+            android:gravity="center_horizontal|center_vertical"
+            android:text="@string/show_code"
+            android:textColor="@color/primaryDarkBlue"/>
+
+    </LinearLayout>
+
+</LinearLayout>

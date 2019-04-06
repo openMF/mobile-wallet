@@ -7,6 +7,8 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by naman on 17/6/17.
  */
@@ -37,5 +39,10 @@ public class Utils {
             if (!Character.isWhitespace(ch)) return false;
         }
         return true;
+    }
+
+    public static String getFormattedAccountBalance(Double balance) {
+        DecimalFormat accountBalanceFormatter = new DecimalFormat("#,###,###.##");
+        return accountBalanceFormatter.format(balance);
     }
 }

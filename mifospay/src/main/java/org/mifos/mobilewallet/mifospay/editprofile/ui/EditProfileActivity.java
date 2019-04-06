@@ -1,6 +1,9 @@
 package org.mifos.mobilewallet.mifospay.editprofile.ui;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -9,14 +12,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.CardView;
+import android.text.TextUtils;
 import android.view.View;
-import android.widget.Button;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.hbb20.CountryCodePicker;
 import com.yalantis.ucrop.UCrop;
@@ -25,20 +28,23 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter;
-import org.mifos.mobilewallet.mifospay.utils.AnimationUtil;
+import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
-import org.mifos.mobilewallet.mifospay.utils.ValidateUtil;
 
 import java.io.File;
+import java.util.List;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 
 public class EditProfileActivity extends BaseActivity implements
         EditProfileContract.EditProfileView {
@@ -50,80 +56,46 @@ public class EditProfileActivity extends BaseActivity implements
     EditProfilePresenter mPresenter;
 
     EditProfileContract.EditProfilePresenter mEditProfilePresenter;
-    @BindView(R.id.iv_user_image)
-    ImageView mIvUserImage;
-    @BindView(R.id.et_current_password)
-    EditText mEtCurrentPassword;
-    @BindView(R.id.et_new_password)
-    EditText mEtNewPassword;
-    @BindView(R.id.et_confirm_password)
-    EditText mEtConfirmPassword;
-    @BindView(R.id.btn_password_cancel)
-    Button mBtnPasswordCancel;
-    @BindView(R.id.btn_password_save)
-    Button mBtnPasswordSave;
-    @BindView(R.id.ll_password)
-    LinearLayout mLlPassword;
-    @BindView(R.id.cv_password)
-    CardView mCvPassword;
-    @BindView(R.id.et_current_passcode)
-    EditText mEtCurrentPasscode;
-    @BindView(R.id.et_new_passcode)
-    EditText mEtNewPasscode;
-    @BindView(R.id.et_confirm_passcode)
-    EditText mEtConfirmPasscode;
-    @BindView(R.id.btn_passcode_cancel)
-    Button mBtnPasscodeCancel;
-    @BindView(R.id.btn_pasccode_save)
-    Button mBtnPasccodeSave;
-    @BindView(R.id.ll_passcode)
-    LinearLayout mLlPasscode;
-    @BindView(R.id.cv_passcode)
-    CardView mCvPasscode;
-    @BindView(R.id.tv_current_email)
-    TextView mTvCurrentEmail;
-    @BindView(R.id.et_new_email)
-    EditText mEtNewEmail;
-    @BindView(R.id.btn_email_cancel)
-    Button mBtnEmailCancel;
-    @BindView(R.id.btn_email_save)
-    Button mBtnEmailSave;
-    @BindView(R.id.ll_email)
-    LinearLayout mLlEmail;
-    @BindView(R.id.cv_email)
-    CardView mCvEmail;
-    @BindView(R.id.tv_current_mobile_number)
-    TextView mTvCurrentMobileNumber;
+
     @BindView(R.id.ccp_new_code)
-    CountryCodePicker mCcpNewCode;
-    @BindView(R.id.et_new_mobile_number)
-    EditText mEtNewMobileNumber;
-    @BindView(R.id.btn_mobile_cancel)
-    Button mBtnMobileCancel;
-    @BindView(R.id.btn_mobile_save)
-    Button mBtnMobileSave;
-    @BindView(R.id.ll_mobile)
-    LinearLayout mLlMobile;
-    @BindView(R.id.cv_mobile)
-    CardView mCvMobile;
+    CountryCodePicker ccpCountryCode;
 
-    private String email;
-    private String mobile;
+    @BindView(R.id.iv_user_image)
+    ImageView ivUserImage;
+
+    @BindView(R.id.til_edit_profile_username)
+    TextInputLayout tilUsername;
+
+    @BindView(R.id.til_edit_profile_email)
+    TextInputLayout tilEmail;
+
+    @BindView(R.id.til_edit_profile_vpa)
+    TextInputLayout tilVpa;
+
+    @BindView(R.id.til_edit_profile_mobile)
+    TextInputLayout tilMobileNumber;
+
+    @BindView(R.id.et_edit_profile_username)
+    EditText etUsername;
+
+    @BindView(R.id.et_edit_profile_email)
+    EditText etEmail;
+
+    @BindView(R.id.et_edit_profile_vpa)
+    EditText etVpa;
+
+    @BindView(R.id.et_edit_profile_mobile)
+    EditText etMobileNumber;
+
+    @BindView(R.id.fab_edit_profile_save_changes)
+    FloatingActionButton fabSaveChanges;
+
+    @BindViews({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
+            R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile})
+    List<EditText> userDetailsInputs;
+
     private BottomSheetDialog bottomSheetDialog;
-
-    class BottomSheetViews {
-        @OnClick(R.id.ll_change_profile_image_dialog_row)
-        public void onChangeProfileImageClicked() {
-            mPresenter.handleProfileImageChangeRequest();
-            bottomSheetDialog.dismiss();
-        }
-
-        @OnClick(R.id.ll_remove_profile_image_dialog_row)
-        public void onRemoveProfileImageClicked() {
-            mEditProfilePresenter.handleProfileImageRemoved();
-            bottomSheetDialog.dismiss();
-        }
-    }
+    private AlertDialog alertDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,14 +103,20 @@ public class EditProfileActivity extends BaseActivity implements
         setContentView(R.layout.activity_edit_profile);
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
-        showBackButton();
-        setToolbarTitle(Constants.EDIT_PROFILE);
+        setupUi();
         mPresenter.attachView(this);
-        mCcpNewCode.registerCarrierNumberEditText(mEtNewMobileNumber);
-
-        showProgressDialog(Constants.PLEASE_WAIT);
+        ccpCountryCode.registerCarrierNumberEditText(etMobileNumber);
         mEditProfilePresenter.fetchUserDetails();
 
+        if (isChangeImageRequestFromProfile()) {
+            bottomSheetDialog.show();
+        }
+    }
+
+    private void setupUi() {
+        hideFab();
+        showCloseButton();
+        setToolbarTitle(Constants.EDIT_PROFILE);
         setupBottomSheetDialog();
     }
 
@@ -151,177 +129,128 @@ public class EditProfileActivity extends BaseActivity implements
         ButterKnife.bind(bsv, sheetView);
     }
 
+    private boolean isChangeImageRequestFromProfile() {
+        return getIntent().getStringExtra(Constants.CHANGE_PROFILE_IMAGE_KEY) != null;
+    }
+
     @Override
     public void setPresenter(EditProfileContract.EditProfilePresenter presenter) {
         mEditProfilePresenter = presenter;
     }
 
-    @OnClick(R.id.cv_password)
-    public void onMCvPasswordClicked() {
-        if (mLlPassword.isShown()) {
-            AnimationUtil.collapse(mLlPassword);
-        } else {
-            // collapse other views
-            if (mLlPasscode.isShown()) {
-                AnimationUtil.collapse(mLlPasscode);
-            } else if (mLlEmail.isShown()) {
-                AnimationUtil.collapse(mLlEmail);
-                mTvCurrentEmail.setVisibility(View.VISIBLE);
-            } else if (mLlMobile.isShown()) {
-                AnimationUtil.collapse(mLlMobile);
-                mTvCurrentMobileNumber.setVisibility(View.VISIBLE);
+    @OnClick(R.id.fab_edit_profile_save_changes)
+    public void onSaveChangesClicked() {
+        for (EditText input : userDetailsInputs) {
+            if (isDataSaveNecessary(input)) {
+                mPresenter.updateInputById(input.getId(), input.getText().toString());
             }
-            AnimationUtil.expand(mLlPassword);
         }
-    }
-
-    @OnClick(R.id.cv_passcode)
-    public void onMCvPasscodeClicked() {
-        if (mLlPasscode.isShown()) {
-            AnimationUtil.collapse(mLlPasscode);
-        } else {
-            // collapse other views
-            if (mLlPassword.isShown()) {
-                AnimationUtil.collapse(mLlPassword);
-            } else if (mLlEmail.isShown()) {
-                AnimationUtil.collapse(mLlEmail);
-                mTvCurrentEmail.setVisibility(View.VISIBLE);
-            } else if (mLlMobile.isShown()) {
-                AnimationUtil.collapse(mLlMobile);
-                mTvCurrentMobileNumber.setVisibility(View.VISIBLE);
-            }
-            AnimationUtil.expand(mLlPasscode);
-        }
-    }
-
-    @OnClick(R.id.cv_email)
-    public void onMCvEmailClicked() {
-        if (mLlEmail.isShown()) {
-            AnimationUtil.collapse(mLlEmail);
-            mTvCurrentEmail.setVisibility(View.VISIBLE);
-        } else {
-            // collapse other views
-            if (mLlPasscode.isShown()) {
-                AnimationUtil.collapse(mLlPasscode);
-            } else if (mLlPassword.isShown()) {
-                AnimationUtil.collapse(mLlPassword);
-            } else if (mLlMobile.isShown()) {
-                AnimationUtil.collapse(mLlMobile);
-                mTvCurrentMobileNumber.setVisibility(View.VISIBLE);
-            }
-            AnimationUtil.expand(mLlEmail);
-            mTvCurrentEmail.setVisibility(View.GONE);
-            mEtNewEmail.setText(email);
-        }
-    }
-
-    @OnClick(R.id.cv_mobile)
-    public void onMCvMobileClicked() {
-        if (mLlMobile.isShown()) {
-            AnimationUtil.collapse(mLlMobile);
-            mTvCurrentMobileNumber.setVisibility(View.VISIBLE);
-        } else {
-            // collapse other views
-            if (mLlPasscode.isShown()) {
-                AnimationUtil.collapse(mLlPasscode);
-            } else if (mLlPassword.isShown()) {
-                AnimationUtil.collapse(mLlPassword);
-            } else if (mLlEmail.isShown()) {
-                AnimationUtil.collapse(mLlEmail);
-                mTvCurrentEmail.setVisibility(View.VISIBLE);
-            }
-            AnimationUtil.expand(mLlMobile);
-            mTvCurrentMobileNumber.setVisibility(View.GONE);
-            String mobileNumberWithCountryCodeExcluded = excludeCountryCodeFromString(mobile);
-            mEtNewMobileNumber.setText(mobileNumberWithCountryCodeExcluded);
-        }
-    }
-
-    private String excludeCountryCodeFromString(String str) {
-        String selectedCountryCode = mCcpNewCode.getSelectedCountryCode();
-        return str.substring(selectedCountryCode.length(), str.length());
-    }
-
-    @OnClick({R.id.btn_password_cancel, R.id.btn_password_save, R.id.btn_passcode_cancel,
-            R.id.btn_pasccode_save, R.id.btn_email_cancel, R.id.btn_email_save,
-            R.id.btn_mobile_cancel, R.id.btn_mobile_save})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.btn_password_cancel:
-                if (mLlPassword.isShown()) {
-                    AnimationUtil.collapse(mLlPassword);
-                }
-                break;
-
-            case R.id.btn_passcode_cancel:
-                if (mLlPasscode.isShown()) {
-                    AnimationUtil.collapse(mLlPasscode);
-                }
-                break;
-
-            case R.id.btn_email_cancel:
-                if (mLlEmail.isShown()) {
-                    AnimationUtil.collapse(mLlEmail);
-                }
-                break;
-
-            case R.id.btn_mobile_cancel:
-                if (mLlMobile.isShown()) {
-                    AnimationUtil.collapse(mLlMobile);
-                }
-                break;
-
-            case R.id.btn_password_save:
-                showProgressDialog(Constants.PLEASE_WAIT);
-                if (mEtNewPassword.getText().toString().equals(
-                        mEtConfirmPassword.getText().toString())) {
-                    mEditProfilePresenter.updatePassword(mEtCurrentPassword.getText().toString(),
-                            mEtNewPassword.getText().toString());
-                } else {
-                    hideProgressDialog();
-                    showToast("Password mismatch");
-                }
-                break;
-
-            case R.id.btn_pasccode_save:
-                showProgressDialog(Constants.PLEASE_WAIT);
-                if (mEtNewPasscode.getText().toString().equals(
-                        mEtConfirmPasscode.getText().toString())) {
-                    mEditProfilePresenter.updatePasscode(mEtCurrentPasscode.getText().toString(),
-                            mEtNewPasscode.getText().toString());
-                } else {
-                    hideProgressDialog();
-                    showToast("Passcode mismatch");
-                }
-                break;
-
-            case R.id.btn_email_save:
-                showProgressDialog(Constants.PLEASE_WAIT);
-                String email = mEtNewEmail.getText().toString();
-                if (ValidateUtil.isValidEmail(email)) {
-                    mEditProfilePresenter.updateEmail(mEtNewEmail.getText().toString());
-                } else {
-                    hideProgressDialog();
-                    showToast("Incorrect email address");
-                }
-                break;
-
-            case R.id.btn_mobile_save:
-                showProgressDialog(Constants.PLEASE_WAIT);
-
-                if (mCcpNewCode.isValidFullNumber()) {
-                    mEditProfilePresenter.updateMobile(mCcpNewCode.getFullNumber());
-                } else {
-                    hideProgressDialog();
-                    showToast("Incorrect mobile number");
-                }
-                break;
-        }
+        hideFab();
+        hideKeyboard();
     }
 
     @OnClick(R.id.iv_user_image)
     public void onProfileImageClicked() {
         bottomSheetDialog.show();
+    }
+
+    @OnClick(R.id.btn_change_password)
+    public void onChangePasswordClicked() {
+        startActivity(new Intent(getApplicationContext(), EditPasswordActivity.class));
+    }
+
+    @OnClick(R.id.btn_change_passcode)
+    public void onChangePasscodeClicked() {
+        // TODO: it's not supported by the api???
+    }
+
+    @OnTextChanged({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
+            R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile})
+    public void onUserDetailsChanged() {
+        for (EditText et : userDetailsInputs) {
+            if (isDataSaveNecessary(et)) {
+                mPresenter.handleNecessaryDataSave();
+                break;
+            } else {
+                hideFab();
+            }
+        }
+    }
+
+    private boolean isDataSaveNecessary(EditText input) {
+        String content = input.getText().toString();
+        String currentContent = input.getHint().toString();
+        return !(TextUtils.isEmpty(content) || content.equals(currentContent));
+    }
+
+    @OnFocusChange({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
+            R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile})
+    public void onUserDetailsFocusChanged(EditText input, boolean isFocused) {
+        if (!isDataSaveNecessary((input))) {
+            if (isFocused) {
+                input.setText(input.getHint().toString());
+            } else {
+                input.getText().clear();
+            }
+        }
+    }
+
+    @Override
+    public void showDefaultImageByUsername(String fullName) {
+        TextDrawable drawable = TextDrawable.builder().beginConfig()
+                .width((int) getResources().getDimension(R.dimen.user_profile_image_size))
+                .height((int) getResources().getDimension(R.dimen.user_profile_image_size))
+                .endConfig().buildRound(fullName.substring(0, 1), R.color.colorPrimary);
+        ivUserImage.setImageDrawable(drawable);
+    }
+
+    @Override
+    public void showUsername(String username) {
+        tilUsername.setHint(username);
+        handleUpdatedInput(etUsername);
+    }
+
+    @Override
+    public void showEmail(String email) {
+        tilEmail.setHint(email);
+        handleUpdatedInput(etEmail);
+    }
+
+    @Override
+    public void showVpa(String vpa) {
+        tilVpa.setHint(vpa);
+        handleUpdatedInput(etVpa);
+    }
+
+    @Override
+    public void showMobileNumber(String mobileNumber) {
+        tilMobileNumber.setHint(mobileNumber);
+        handleUpdatedInput(etMobileNumber);
+    }
+
+    private void handleUpdatedInput(EditText input) {
+        input.clearFocus();
+        input.getText().clear();
+    }
+
+    @Override
+    public void showFab() {
+        fabSaveChanges.show();
+    }
+
+    @Override
+    public void hideFab() {
+        fabSaveChanges.hide();
+    }
+
+    public void hideKeyboard() {
+        InputMethodManager imm
+                = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = getCurrentFocus();
+        if (view == null && imm != null) {
+            view = new View(this);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     @Override
@@ -344,7 +273,6 @@ public class EditProfileActivity extends BaseActivity implements
                     // functionality that depends on this permission.
                     showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_IMAGES);
                 }
-                return;
             }
 
             // other 'case' lines to check for other
@@ -400,53 +328,8 @@ public class EditProfileActivity extends BaseActivity implements
     }
 
     @Override
-    public void showToast(String message) {
-        Toaster.showToast(this, message);
-    }
-
-    @Override
-    public void onUpdateEmailSuccess(String email) {
-        hideProgressDialog();
-        this.email = email;
-        mTvCurrentEmail.setText(email);
-        AnimationUtil.collapse(mLlEmail);
-        mTvCurrentEmail.setVisibility(View.VISIBLE);
-        showToast("Email successfully updated");
-    }
-
-    @Override
-    public void onUpdateEmailError(String message) {
-        hideProgressDialog();
-        showToast(message);
-    }
-
-    @Override
-    public void onUpdateMobileSuccess(String fullNumber) {
-        hideProgressDialog();
-        mobile = fullNumber;
-        mTvCurrentMobileNumber.setText(fullNumber);
-        AnimationUtil.collapse(mLlMobile);
-        mTvCurrentMobileNumber.setVisibility(View.VISIBLE);
-        showToast("Mobile number successfully updated");
-    }
-
-    @Override
-    public void onUpdateMobileError(String message) {
-        hideProgressDialog();
-        showToast(message);
-    }
-
-    @Override
-    public void onUpdatePasswordSuccess() {
-        hideProgressDialog();
-        AnimationUtil.collapse(mLlPassword);
-        showToast("Password successfully updated");
-    }
-
-    @Override
-    public void onUpdatePasswordError(String message) {
-        hideProgressDialog();
-        showToast(message);
+    public void removeProfileImage() {
+        // TODO: Remove image from database
     }
 
     @Override
@@ -479,34 +362,100 @@ public class EditProfileActivity extends BaseActivity implements
     private void handleCropResult(@NonNull Intent result) {
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
-            mIvUserImage.setImageURI(resultUri);
+            ivUserImage.setImageURI(resultUri);
         }
     }
 
     @Override
-    public void removeProfileImage() {
-        // TODO: Remove image from database
+    public void showDiscardChangesDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog);
+        builder.setTitle(R.string.discard_changes_and_exit);
+        builder.setMessage(R.string.discard_changes_and_exit_description);
+        builder.setCancelable(true);
+
+        builder.setPositiveButton(
+                getString(R.string.accept),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mPresenter.onDialogPositive();
+                        dialog.dismiss();
+                    }
+                });
+
+        builder.setNegativeButton(
+                getString(R.string.cancel),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        mPresenter.onDialogNegative();
+                        dialog.dismiss();
+                    }
+                });
+
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override
-    public void setEmail(String email) {
-        this.email = email;
-        mTvCurrentEmail.setText(email);
+    public void onUpdateEmailError(String message) {
+        showToast(message);
     }
 
     @Override
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-        mTvCurrentMobileNumber.setText(mobile);
+    public void onUpdateMobileError(String message) {
+        showToast(message);
     }
 
     @Override
-    public void setImage(String fullName) {
-        TextDrawable drawable = TextDrawable.builder().beginConfig()
-                .width((int)getResources().getDimension(R.dimen.user_profile_image_size))
-                .height((int)getResources().getDimension(R.dimen.user_profile_image_size))
-                .endConfig().buildRound(fullName.substring(0, 1), R.color.colorPrimary);
-        mIvUserImage.setImageDrawable(drawable);
+    public void showToast(String message) {
+        Toaster.showToast(this, message);
+    }
+
+    @Override
+    public void startProgressBar() {
+        showProgressDialog(Constants.PLEASE_WAIT);
+    }
+
+    @Override
+    public void stopProgressBar() {
         hideProgressDialog();
+    }
+
+    @Override
+    public void closeActivity() {
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (fabSaveChanges.isOrWillBeShown()) {
+            mPresenter.handleExitOnUnsavedChanges();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        cancelProgressDialog();
+
+        if (alertDialog != null) {
+            alertDialog.dismiss();
+        }
+    }
+
+    class BottomSheetViews {
+        @OnClick(R.id.ll_change_profile_image_dialog_row)
+        public void onChangeProfileImageClicked() {
+            mPresenter.handleProfileImageChangeRequest();
+            bottomSheetDialog.dismiss();
+        }
+
+        @OnClick(R.id.ll_remove_profile_image_dialog_row)
+        public void onRemoveProfileImageClicked() {
+            mEditProfilePresenter.handleProfileImageRemoved();
+            bottomSheetDialog.dismiss();
+        }
     }
 }

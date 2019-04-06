@@ -1,4 +1,5 @@
 package org.mifos.mobilewallet.mifospay.faq;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import java.util.List;
 
 /**
  * This class is the Adapter class for FAQ Section.
+ *
  * @author ankur
  * @since 11/July/2018
  */
@@ -28,7 +30,7 @@ public class FAQListAdapter extends BaseExpandableListAdapter {
     private HashMap<String, List<String>> listDataChild;
 
     public FAQListAdapter(Context context, List<String> listDataGroup,
-                                     HashMap<String, List<String>> listChildData) {
+            HashMap<String, List<String>> listChildData) {
         this.context = context;
         this.listDataGroup = listDataGroup;
         this.listDataChild = listChildData;
@@ -47,7 +49,7 @@ public class FAQListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getChildView(int groupPosition, final int childPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
+            boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String childText = (String) getChild(groupPosition, childPosition);
 
@@ -87,7 +89,7 @@ public class FAQListAdapter extends BaseExpandableListAdapter {
 
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded,
-                             View convertView, ViewGroup parent) {
+            View convertView, ViewGroup parent) {
         String headerTitle = (String) getGroup(groupPosition);
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context

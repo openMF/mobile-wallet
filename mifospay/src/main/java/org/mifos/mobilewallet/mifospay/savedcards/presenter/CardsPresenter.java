@@ -16,6 +16,7 @@ import javax.inject.Inject;
 
 /**
  * This class is the Presenter component of the Architecture.
+ *
  * @author ankur
  * @since 19/May/2018
  */
@@ -81,6 +82,7 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
 
     /**
      * An overridden method from Contract to Add a new Card.
+     *
      * @param card : The card to be added.
      */
     @Override
@@ -119,6 +121,7 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
 
     /**
      * An overridden method from Contract to edit a Card.
+     *
      * @param card : Card to be edited.
      */
     @Override
@@ -156,6 +159,7 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
 
     /**
      * An overridden method from Contract to delete a particular card.
+     *
      * @param cardId : Card to be deleted.
      */
     @Override
@@ -188,9 +192,11 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
 
     /**
      * An utility function to validate a Credit Card Nnumber.
+     *
      * @param str : String to be validated
-     * Luhn Algorithm for validating Credit Card Number
-     * src: https://www.journaldev.com/1443/java-credit-card-validation-luhn-algorithm-java
+     *            Luhn Algorithm for validating Credit Card Number
+     *            src: https://www.journaldev
+     *            .com/1443/java-credit-card-validation-luhn-algorithm-java
      */
     private boolean validateCreditCardNumber(String str) {
 

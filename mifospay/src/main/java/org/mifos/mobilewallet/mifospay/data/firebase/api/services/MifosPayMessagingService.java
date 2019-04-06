@@ -225,7 +225,7 @@ public class MifosPayMessagingService extends FirebaseMessagingService {
 
             // Below code can be used when you want to show notification with Image.
 
-//            Intent resultIntent = new Intent(getApplicationContext(), HomeActivity.class);
+//            Intent resultIntent = new Intent(getApplicationContext(), MainActivity.class);
 //            resultIntent.putExtra("message", message);
 
 //            // check for image attachment

@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
@@ -37,17 +38,20 @@ public class InvoicesAdapter
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
         View v = LayoutInflater.from(parent.getContext()).inflate(
-                R.layout.item_invoice, parent, false);
+                R.layout.invoice_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Invoice invoice = mInvoiceList.get(position);
-
+        holder.mTvInvoiceTitle.setText(invoice.getTitle());
         holder.mTvInvoiceId.setText("Invoice Id: " + invoice.getId() + "");
         holder.mTvInvoiceStatus.setText(
                 (invoice.getStatus() == 0) ? Constants.PENDING : Constants.DONE);
+        holder.mInvoiceImage.setImageResource(
+                (invoice.getStatus() == 0) ? R.drawable.ic_remove_circle_outline_black_24dp :
+                        R.drawable.ic_check_round_black_24dp);
         holder.mTvInvoiceDate.setText(DateHelper.getDateAsString(invoice.getDate()));
         holder.mTvInvoiceAmount.setText(Constants.INR + invoice.getAmount());
     }
@@ -78,12 +82,16 @@ public class InvoicesAdapter
 
         @BindView(R.id.tv_invoice_id)
         TextView mTvInvoiceId;
+        @BindView(R.id.invoice_status_image)
+        ImageView mInvoiceImage;
         @BindView(R.id.tv_invoice_date)
         TextView mTvInvoiceDate;
         @BindView(R.id.tv_invoice_status)
         TextView mTvInvoiceStatus;
         @BindView(R.id.tv_invoice_amount)
         TextView mTvInvoiceAmount;
+        @BindView(R.id.tv_invoice_title)
+        TextView mTvInvoiceTitle;
 
         public ViewHolder(View v) {
             super(v);

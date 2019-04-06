@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 
 /**
  * This is a Adapter Class to display Cards.
+ *
  * @author ankur
  * @since 21/May/2018
  */

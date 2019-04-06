@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.mifospay.bank.ui;
 
-import static org.mifos.mobilewallet.mifospay.bank.ui.BankAccountsActivity.SETUP_UPI_REQUEST_CODE;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,6 +26,8 @@ import butterknife.OnClick;
 
 public class BankAccountDetailActivity extends BaseActivity implements
         BankContract.BankAccountDetailView {
+
+    public static final int SETUP_UPI_REQUEST_CODE = 2;
 
     @Inject
     BankAccountDetailPresenter mPresenter;

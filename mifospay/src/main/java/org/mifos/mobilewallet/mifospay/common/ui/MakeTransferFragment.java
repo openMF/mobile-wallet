@@ -18,7 +18,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.common.TransferContract;
 import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.home.ui.TransferFragment;
+import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
@@ -174,7 +174,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     @Override
     public void showVpaNotFoundSnackbar() {
         if (getTargetFragment() != null) {
-            getTargetFragment().onActivityResult(TransferFragment.REQUEST_SHOW_DETAILS,
+            getTargetFragment().onActivityResult(SendFragment.REQUEST_SHOW_DETAILS,
                     Activity.RESULT_CANCELED, null);
             dismiss();
         }

@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.savedcards.ui;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,7 +11,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
@@ -44,13 +45,20 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
 
     CardsContract.CardsPresenter mCardsPresenter;
 
-    @BindView(R.id.btn_add_card)
-    Button btnAddCard;
+    @BindView(R.id.inc_state_view)
+    View vStateView;
+
+    @BindView(R.id.iv_empty_no_transaction_history)
+    ImageView ivTransactionsStateIcon;
+
+    @BindView(R.id.tv_empty_no_transaction_history_title)
+    TextView tvTransactionsStateTitle;
+
+    @BindView(R.id.tv_empty_no_transaction_history_subtitle)
+    TextView tvTransactionsStateSubtitle;
 
     @BindView(R.id.rv_cards)
     RecyclerView rvCards;
-    @BindView(R.id.tv_placeholder)
-    TextView tvPlaceholder;
 
     @Inject
     CardsAdapter mCardsAdapter;
@@ -76,20 +84,39 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_cards, container, false);
-
-        setToolbarTitle(Constants.SAVED_CARDS);
         ButterKnife.bind(this, rootView);
-        showBackButton();
-
         mPresenter.attachView(this);
+        setUpSwipeRefresh();
         setupCardsRecyclerView();
-
-        setupSwipeLayout();
-
         showSwipeProgress();
         mCardsPresenter.fetchSavedCards();
-
         return rootView;
+    }
+
+    private void setUpSwipeRefresh() {
+        getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mCardsPresenter.fetchSavedCards();
+            }
+        });
+    }
+
+    private void showEmptyStateView() {
+        if (getActivity() != null) {
+            vStateView.setVisibility(View.VISIBLE);
+            Resources res = getResources();
+            ivTransactionsStateIcon
+                    .setImageDrawable(res.getDrawable(R.drawable.ic_cards));
+            tvTransactionsStateTitle
+                    .setText(res.getString(R.string.empty_no_cards_title));
+            tvTransactionsStateSubtitle
+                    .setText(res.getString(R.string.empty_no_cards_subtitle));
+        }
+    }
+
+    private void hideEmptyStateView() {
+        vStateView.setVisibility(View.GONE);
     }
 
     /**
@@ -154,19 +181,6 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     }
 
     /**
-     * A function to enable swipe refresh.
-     * */
-    private void setupSwipeLayout() {
-        setSwipeEnabled(true);
-        getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mCardsPresenter.fetchSavedCards();
-            }
-        });
-    }
-
-    /**
      * An overridden function to set Presenter reference in this UI Component.
      * @param presenter : Presenter component reference for the Architecture.
      */
@@ -194,11 +208,11 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     public void showSavedCards(List<Card> cards) {
 
         if (cards == null || cards.size() == 0) {
+            showEmptyStateView();
             rvCards.setVisibility(View.GONE);
-            tvPlaceholder.setVisibility(View.VISIBLE);
         } else {
+            hideEmptyStateView();
             rvCards.setVisibility(View.VISIBLE);
-            tvPlaceholder.setVisibility(View.GONE);
             mCardsAdapter.setCards(cards);
         }
         mCardsAdapter.setCards(cards);
