@@ -1,0 +1,34 @@
+{
+  "users": [
+    {
+      "username": "merchant",
+      "firstName": "Carl",
+      "lastName": "Baker",
+      "role": "merchant",
+      "banks": [
+        {
+          "bankName": "Bank1",
+          "partyIdInfo": {
+            "partyIdType": "MSISDN",
+            "partyIdentifier": "27710102999"
+          }
+        }
+      ]
+    },
+    {
+      "username": "customer",
+      "firstName": "John",
+      "lastName": "Smith",
+      "role": "customer",
+      "banks": [
+        {
+          "bankName": "Bank2",
+          "partyIdInfo": {
+            "partyIdType": "MSISDN",
+            "partyIdentifier": "27710101999"
+          }
+        }
+      ]
+    }
+  ]
+}

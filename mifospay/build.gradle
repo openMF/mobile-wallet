@@ -89,6 +89,10 @@ dependencies {
     testImplementation "junit:junit:$rootProject.junitVersion"
 
     implementation project(':core')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$rootProject.kotlinVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'
+repositories {
+    mavenCentral()
+}

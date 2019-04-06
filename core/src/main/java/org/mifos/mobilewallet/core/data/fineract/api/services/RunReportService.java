@@ -13,7 +13,7 @@ import rx.Observable;
 
 public interface RunReportService {
 
-    @GET(ApiEndPoints.RUN_REPORT + "/Savings Transaction Receipt")
+    @GET(ApiEndPoints.RUN_REPORT + "/Savings TransactionInfo Receipt")
     Observable<ResponseBody> getTransactionReceipt(
             @Query("output-type") String outputType,
             @Query("R_transactionId") String R_transactionId
