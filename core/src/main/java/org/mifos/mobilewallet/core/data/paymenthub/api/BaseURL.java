@@ -9,7 +9,7 @@ public class BaseURL {
     public static final String PROTOCOL_HTTPS = "https://";
 
     public static final String API_ENDPOINT = "payments.dpc.hu";
-    public static final String API_PATH = "/in01/channel/transactions/";
+    public static final String API_PATH = "/in01/channel/";
 
 
     public String getUrl() {

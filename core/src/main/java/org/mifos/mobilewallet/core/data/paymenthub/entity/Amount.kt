@@ -1,12 +1,15 @@
 package org.mifos.mobilewallet.core.data.paymenthub.entity
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
-class Amount {
+@Parcelize
+class Amount: Parcelable {
 
     @SerializedName("currency")
-    internal var currency: String? = null
+    var currency: String? = null
 
     @SerializedName("amount")
-    internal var amount: String? = null
+    var amount: String? = null
 }

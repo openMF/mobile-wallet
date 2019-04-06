@@ -4,6 +4,8 @@ import org.mifos.mobilewallet.core.data.paymenthub.api.services.TransactionsServ
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
+
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
@@ -22,13 +24,12 @@ public class PaymentHubApiManager {
     private static Retrofit retrofit;
     private static TransactionsService transactionsApi;
 
+    @Inject
     public PaymentHubApiManager() {
         createService();
-    }
-
-    private static void init() {
         transactionsApi = createApi(TransactionsService.class);
     }
+
 
     private static <T> T createApi(Class<T> clazz) {
         return retrofit.create(clazz);
@@ -54,7 +55,6 @@ public class PaymentHubApiManager {
                 .client(okHttpClient)
                 .build();
 
-        init();
     }
 
 
