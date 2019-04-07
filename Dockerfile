@@ -45,3 +45,4 @@ RUN sdkmanager 'extras;google;google_play_services'
 
 COPY . /app
 WORKDIR /app
+USER root
