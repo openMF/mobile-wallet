@@ -42,3 +42,6 @@ RUN sdkmanager 'build-tools;27.0.3'
 RUN sdkmanager 'extras;google;m2repository'
 RUN sdkmanager 'extras;android;m2repository'
 RUN sdkmanager 'extras;google;google_play_services'
+
+COPY . /app
+WORKDIR /app
