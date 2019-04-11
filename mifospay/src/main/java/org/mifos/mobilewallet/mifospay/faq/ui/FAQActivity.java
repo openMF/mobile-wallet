@@ -81,7 +81,7 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
                     @Override
                     public void onGroupExpand(int groupPosition) {
                         Toast.makeText(getApplicationContext(),
-                                listDataGroup.get(groupPosition) + "Collapsed",
+                                listDataGroup.get(groupPosition) + "Expanded",
                                 Toast.LENGTH_SHORT).show();
                     }
                 });
