@@ -40,6 +40,9 @@ class PaymentHubActivity : BaseActivity(), TransactionContract.TransactionView {
         activityComponent.inject(this)
         mPresenter.attachView(this)
         setContentView(R.layout.activity_payment_hub)
+        setSupportActionBar(toolbar.apply {
+            title = "Mifos Pay Payment Hub"
+        })
 
         btn_scan_qr.setOnClickListener { scanQr() }
 

@@ -113,45 +113,21 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/value_30dp"
             android:layout_marginBottom="50dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center_horizontal">
 
-            <LinearLayout
-                android:layout_width="@dimen/value_100dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Virtual Payment Address (VPA)" />
-
-                <TextView
-                    android:id="@+id/tv_client_vpa"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/value_18sp" />
-
-            </LinearLayout>
-
-
-            <TextView
+            <Button
                 android:id="@+id/btn_scan_qr"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_20dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="0.8"
-                android:drawableTop="@drawable/qrcode_blue_selector"
-                android:gravity="center_horizontal|center_vertical"
-                android:text="Scan code"
-                android:textColor="@color/primaryDarkBlue" />
+                android:background="@drawable/button_round_black"
+                android:text="Scan QR code"
+                android:textColor="@color/white" />
 
-        </LinearLayout>
-
+    </LinearLayout>
     </LinearLayout>
 
 </ScrollView>
