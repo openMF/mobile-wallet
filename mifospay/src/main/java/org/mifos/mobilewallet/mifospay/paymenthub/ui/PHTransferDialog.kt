@@ -132,9 +132,11 @@ class PHTransferDialog : BottomSheetDialogFragment(), TransactionContract.Transa
     private fun toggleLoading(loading: Boolean) {
         if (loading) {
             dialogView.progressBar.visibility = View.VISIBLE
+            dialogView.progressBar.startRippleAnimation()
             dialogView.contentView.setVisibility(View.GONE)
         } else {
             dialogView.progressBar.visibility = View.GONE
+            dialogView.progressBar.stopRippleAnimation()
             dialogView.contentView.setVisibility(View.VISIBLE)
         }
     }

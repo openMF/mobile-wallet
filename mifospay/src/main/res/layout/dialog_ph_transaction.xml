@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="@dimen/value_20dp">
@@ -12,6 +13,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:text="@string/send_money"
+        android:gravity="center_horizontal"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/black"
         android:textStyle="bold"/>
@@ -128,11 +130,28 @@
             android:background="@drawable/transfer_failure"
             android:visibility="gone"/>
 
-        <ProgressBar
+        <com.skyfishjy.library.RippleBackground
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/value_20dp"
+            android:minHeight="270dp"
             android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            app:rb_color="#0099CC"
+            app:rb_radius="32dp"
+            app:rb_rippleAmount="4"
+            app:rb_duration="3500"
+            app:rb_scale="4">
+
+            <ImageView
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_centerInParent="true"
+                android:id="@+id/centerImage"
+                app:srcCompat="@drawable/ic_compare_arrows"/>
+
+        </com.skyfishjy.library.RippleBackground>
 
 
     </FrameLayout>
