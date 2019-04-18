@@ -3,6 +3,8 @@ package org.mifos.mobilewallet.mifospay.registration.ui;
 import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -201,6 +203,12 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
             return;
         }
 
+        if (!haveNetwork()) {
+            showToast(getString(R.string.no_internet_connection));
+            hideProgressDialog();
+            return;
+        }
+
         String firstName = mEtFirstName.getText().toString();
         String lastName = mEtLastName.getText().toString();
         String email = mEtEmail.getText().toString();
@@ -222,6 +230,23 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         mSignupPresenter.registerUser(firstName, lastName, mobileNumber, email, businessName,
                 addressline1, addressline2, pincode, city, countryName, username, password, stateId,
                 countryId, mifosSavingProductId);
+    }
+
+    private boolean haveNetwork() {
+        boolean hasWifi = false;
+        boolean hasMobileData = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+        for (NetworkInfo info : networkInfos) {
+            if (info.getTypeName().equalsIgnoreCase("Wifi") && info.isConnected()) {
+                hasWifi = true;
+            }
+            if (info.getTypeName().equalsIgnoreCase("Mobile") && info.isConnected()) {
+                hasMobileData = true;
+            }
+        }
+        return hasWifi || hasMobileData;
     }
 
     @Override
