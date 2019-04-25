@@ -32,10 +32,6 @@
             android:theme="@style/AppTheme" />
 
         <activity
-            android:name=".history.ui.TransactionsHistoryActivity"
-            android:theme="@style/AppTheme" />
-
-        <activity
             android:name=".common.ui.SearchActivity"
             android:theme="@style/AppTheme" />
 
@@ -85,18 +81,9 @@
             android:name=".history.ui.SpecificTransactionsActivity"
             android:theme="@style/AppTheme" />
 
-        <activity
-            android:name=".invoice.ui.InvoicesFragment"
-            android:theme="@style/AppTheme" />
-
         <service android:name=".data.firebase.api.services.MifosPayMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".data.firebase.api.services.MifosPayInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 
