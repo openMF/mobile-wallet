@@ -226,5 +226,6 @@
     <string name="empty_no_invoices_title">You have no invoices</string>
     <string name="empty_no_invoices_subtitle">All invoices will be displaying here</string>
     <string name="notification_settings">Notification Settings</string>
-	<string name="amount">Amount</string>
+    <string name="amount">Amount</string>
+    <string name="merchant_history_message">The transaction history with this merchant will be shown here</string>
 </resources>

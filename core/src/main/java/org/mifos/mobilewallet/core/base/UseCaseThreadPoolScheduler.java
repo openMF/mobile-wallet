@@ -23,7 +23,7 @@ public class UseCaseThreadPoolScheduler implements UseCaseScheduler {
 
     public UseCaseThreadPoolScheduler() {
         mThreadPoolExecutor = new ThreadPoolExecutor(POOL_SIZE, MAX_POOL_SIZE, TIMEOUT,
-                TimeUnit.SECONDS, new ArrayBlockingQueue<Runnable>(POOL_SIZE));
+                TimeUnit.SECONDS, new ThreadPoolQueue(MAX_POOL_SIZE));
     }
 
     @Override
