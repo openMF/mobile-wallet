@@ -1,13 +1,15 @@
 {
   "users": [
     {
-      "username": "merchant",
+      "username": "lion_merchant",
       "firstName": "Carl",
       "lastName": "Baker",
-      "role": "merchant",
+      "role": "PAYEE",
+      "tenant": "tn02",
+      "fspName": "lion",
       "banks": [
         {
-          "bankName": "Bank1",
+          "bankName": "Bank2",
           "partyIdInfo": {
             "partyIdType": "MSISDN",
             "partyIdentifier": "27710102999"
@@ -16,16 +18,54 @@
       ]
     },
     {
-      "username": "customer",
+      "username": "buffalo_customer",
+      "password": "password",
       "firstName": "John",
       "lastName": "Smith",
-      "role": "customer",
+      "role": "PAYER",
+      "tenant": "tn01",
+      "fspName": "buffalo",
       "banks": [
         {
-          "bankName": "Bank2",
+          "bankName": "Bank1",
           "partyIdInfo": {
             "partyIdType": "MSISDN",
             "partyIdentifier": "27710101999"
+          }
+        }
+      ]
+    },
+    {
+      "username": "rhino_customer",
+      "password": "password",
+      "firstName": "John",
+      "lastName": "Smith",
+      "role": "PAYER",
+      "tenant": "tn03",
+      "fspName": "rhino",
+      "banks": [
+        {
+          "bankName": "Bank3",
+          "partyIdInfo": {
+            "partyIdType": "MSISDN",
+            "partyIdentifier": "27710103999"
+          }
+        }
+      ]
+    },
+    {
+      "username": "elephant_merchant",
+      "firstName": "Carl",
+      "lastName": "Baker",
+      "role": "PAYEE",
+      "tenant": "tn04",
+      "fspName": "elephant",
+      "banks": [
+        {
+          "bankName": "Bank4",
+          "partyIdInfo": {
+            "partyIdType": "MSISDN",
+            "partyIdentifier": "27710104999"
           }
         }
       ]

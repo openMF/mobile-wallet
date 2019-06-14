@@ -20,6 +20,6 @@ public interface TransactionsService {
     @POST(ApiEndPoints.TRANSACTIONS)
     Observable<TransactionInfo> createPaymentRequest(@Body Transaction transaction);
 
-    @GET(ApiEndPoints.TRANSACTIONS + "/client/{transferId}")
+    @GET(ApiEndPoints.TRANSACTIONS + "/{transferId}")
     Observable<TransactionStatus> fetchTransactionInfo(@Path("transferId") String transferId);
 }

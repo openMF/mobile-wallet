@@ -19,14 +19,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PaymentHubApiManager {
 
     private static BaseURL baseUrl = new BaseURL();
-    private static final String BASE_URL = baseUrl.getUrl();
 
     private static Retrofit retrofit;
     private static TransactionsService transactionsApi;
 
     @Inject
     public PaymentHubApiManager() {
-        createService();
+        String baseURLUserType = "";
+        String headerTenant = "";
+        createService(baseURLUserType,headerTenant);
+    }
+
+    public static void createAPI() {
         transactionsApi = createApi(TransactionsService.class);
     }
 
@@ -35,8 +39,12 @@ public class PaymentHubApiManager {
         return retrofit.create(clazz);
     }
 
-    public static void createService() {
+    public static void createService(String fspName, String headerTenant) {
 
+        if (!fspName.equals("")) {
+            fspName = fspName + ".";
+        }
+        final String BASE_URL = baseUrl.getUrl(fspName);
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -45,7 +53,7 @@ public class PaymentHubApiManager {
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor("tn01"))
+                .addInterceptor(new ApiInterceptor(headerTenant))
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -54,9 +62,9 @@ public class PaymentHubApiManager {
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(okHttpClient)
                 .build();
+        createAPI();
 
     }
-
 
     public TransactionsService getTransactionsApi() {
         return transactionsApi;
