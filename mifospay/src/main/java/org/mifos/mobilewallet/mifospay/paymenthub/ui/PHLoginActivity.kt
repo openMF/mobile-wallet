@@ -28,13 +28,17 @@ class PHLoginActivity: AppCompatActivity() {
         btn_login.setOnClickListener {
 
             //TODO this is temp implementation that stores the registered users locally till a
-            // login API is implemented on the payment hub
+            // login API is implemented on the payment hub. All the four users are hardcoded in the
+            // JSON file.
+
             val userName = et_username.text.toString()
+            val password = et_password.text.toString()
 
             var registered = false
 
-            for (i in 0..users.length()) {
-                if (userName == users.getJSONObject(i).getString("username")) {
+            for (i in 0 until users.length()) {
+                if ((userName == users.getJSONObject(i).getString("username")) &&
+                        password == users.getJSONObject(i).getString("password")) {
                     registered = true
                     val registeredUser = users.getJSONObject(i)
 

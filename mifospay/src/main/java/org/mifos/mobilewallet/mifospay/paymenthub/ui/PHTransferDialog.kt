@@ -1,7 +1,6 @@
 package org.mifos.mobilewallet.mifospay.paymenthub.ui
 
 import android.app.Dialog
-import android.content.DialogInterface
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.BottomSheetDialog
@@ -13,7 +12,6 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 
 import javax.inject.Inject
 
-import kotlinx.android.synthetic.main.dialog_ph_transaction.*
 import org.mifos.mobilewallet.core.data.paymenthub.entity.QRData
 import org.mifos.mobilewallet.core.data.paymenthub.entity.Transaction
 import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionInfo
@@ -46,7 +44,7 @@ class PHTransferDialog : BottomSheetDialogFragment(), TransactionContract.Transa
 
     companion object {
         fun newInstance(transaction: Transaction): PHTransferDialog
-         = PHTransferDialog().apply {
+                = PHTransferDialog().apply {
             arguments = Bundle().apply  { putParcelable(Constants.TRANSACTION, transaction) }
         }
 
@@ -57,9 +55,6 @@ class PHTransferDialog : BottomSheetDialogFragment(), TransactionContract.Transa
         (activity as BaseActivity).activityComponent.inject(this)
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
-        super.onDismiss(dialog)
-    }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
@@ -100,11 +95,12 @@ class PHTransferDialog : BottomSheetDialogFragment(), TransactionContract.Transa
 
 
     override fun showTransactionStatus(transactionStatus: TransactionStatus) {
-        if (transactionStatus.transferState == "COMMITTED") {
+        if (transactionStatus.transferState == "COMMITTED" || transactionStatus.transferState == "RECEIVED") {
             dialogView.view_transfer_success.visibility = View.VISIBLE
             toggleLoading(false)
             dialogView.tv_transfer_status.text = "Payment successful"
             transactionSuccessful = true
+            dialogView.contentView.visibility = View.GONE
         } else if (transactionStatus.transferState == "ABORTED") {
             toggleLoading(false)
             showTransactionError("Payment aborted")
@@ -118,7 +114,7 @@ class PHTransferDialog : BottomSheetDialogFragment(), TransactionContract.Transa
         toggleLoading(true)
 
         transactionStatusRunnable = Runnable {
-            mPresenter.fetchTransactionInfo(transaction.clientRefId)
+            mPresenter.fetchTransactionInfo(transactionInfo.transactionId)
         }
 
         handler.postDelayed(transactionStatusRunnable, 1000)

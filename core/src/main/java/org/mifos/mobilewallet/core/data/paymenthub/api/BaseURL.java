@@ -8,12 +8,11 @@ public class BaseURL {
 
     public static final String PROTOCOL_HTTPS = "https://";
 
-    public static final String API_ENDPOINT = "payments.dpc.hu";
-    public static final String API_PATH = "/in01/channel/";
+    public static final String API_ENDPOINT = "mlabs.dpc.hu";
+    public static final String API_PATH = "/api/";
 
 
-    public String getUrl() {
-        return PROTOCOL_HTTPS + API_ENDPOINT + API_PATH;
-
+    public String getUrl(String userType) {
+        return PROTOCOL_HTTPS + userType + API_ENDPOINT + API_PATH;
     }
 }
