@@ -154,7 +154,7 @@ public class Transaction implements Parcelable {
 
     @Override
     public String toString() {
-        return "Transaction{" +
+        return "TransactionInfo{" +
                 "transactionId='" + transactionId + '\'' +
                 ", transferId=" + transferId +
                 ", transferDetail=" + transferDetail +

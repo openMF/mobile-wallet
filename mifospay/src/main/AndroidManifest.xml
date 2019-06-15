@@ -20,11 +20,11 @@
         <activity
             android:name=".auth.ui.LoginActivity"
             android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <activity
@@ -135,6 +135,20 @@
         <activity
             android:name=".notification.ui.NotificationActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".paymenthub.ui.PHLoginActivity"
+            android:theme="@style/AppTheme"
+            android:label="Payment Hub"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".paymenthub.ui.PaymentHubActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

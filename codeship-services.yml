@@ -1,0 +1,7 @@
+app:
+  build:
+    context: .
+    dockerfile: Dockerfile
+    volumes:
+      - .
+  cached: true
