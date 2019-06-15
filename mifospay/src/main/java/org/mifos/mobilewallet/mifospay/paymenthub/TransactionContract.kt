@@ -18,6 +18,8 @@ interface TransactionContract {
         fun createTransaction(transaction: Transaction)
 
         fun fetchTransactionInfo(transactionId: String)
+
+        fun updateEndPoints(fspName : String, headerTenant : String)
     }
 
     interface TransactionView: BaseView<TransactionPresenter> {
