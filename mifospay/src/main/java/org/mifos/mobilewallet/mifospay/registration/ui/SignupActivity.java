@@ -84,7 +84,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         mPresenter.attachView(this);
 
         showBackButton();
-        setToolbarTitle("");
+        setToolbarTitle("Registration");
 
         mifosSavingProductId = getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0);
         if (mifosSavingProductId
@@ -121,18 +121,6 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         showProgressDialog(Constants.PLEASE_WAIT);
 
         initSearchableStateSpinner();
-
-//        mEtFirstName.setText("Harry");
-//        mEtLastName.setText("Potter");
-//        mEtUserName.setText("harrypotter123");
-//        mEtPassword.setText("harryharry");
-//        mEtConfirmPassword.setText("harryharry");
-//        mEtEmail.setText("ankurs287@gmail.com");
-//        mEtBusinessShopName.setText("Hogwarts");
-//        mEtAddressLine1.setText("diagon");
-//        mEtAddressLine2.setText("alley");
-//        mEtPinCode.setText("111222");
-//        mEtCity.setText("Delhi");
     }
 
     private void initSearchableStateSpinner() {
@@ -192,8 +180,15 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     public void onNextClicked() {
         showProgressDialog(Constants.PLEASE_WAIT);
 
-        if (isEmpty(mEtFirstName) || isEmpty(mEtLastName) || isEmpty(mEtEmail) || isEmpty(
-                mEtBusinessShopName) || isEmpty(mEtAddressLine1) || isEmpty(mEtAddressLine2)
+        if (mifosSavingProductId
+                == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
+            && isEmpty(mEtBusinessShopName)) {
+            Toaster.showToast(this, "All fields are mandatory");
+            hideProgressDialog();
+            return;
+        }
+        if (isEmpty(mEtFirstName) || isEmpty(mEtLastName) || isEmpty(mEtEmail)
+                || isEmpty(mEtAddressLine1) || isEmpty(mEtAddressLine2)
                 || isEmpty(mEtPinCode) || isEmpty(mEtCity) || isEmpty(mEtUserName) || isEmpty(
                 mEtPassword) || isEmpty(mEtConfirmPassword)) {
             Toaster.showToast(this, "All fields are mandatory");
