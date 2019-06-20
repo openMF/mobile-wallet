@@ -14,6 +14,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.chip.Chip;
 import android.support.design.widget.TextInputLayout;
+import android.support.transition.TransitionManager;
 import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
@@ -56,6 +57,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     @Inject
     TransferPresenter mPresenter;
     BaseHomeContract.TransferPresenter mTransferPresenter;
+    @BindView(R.id.rl_send_container)
+    ViewGroup sendContainer;
     @BindView(R.id.et_amount)
     EditText etAmount;
     @BindView(R.id.et_vpa)
@@ -100,6 +103,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @OnClick(R.id.btn_vpa)
     public void onVPASelected() {
+        TransitionManager.beginDelayedTransition(sendContainer);
         mBtnVpa.setFocusable(true);
         mBtnVpa.setChipBackgroundColorResource(R.color.clickedblue);
         mBtnMobile.setChipBackgroundColorResource(R.color.changedBackgroundColour);
@@ -110,6 +114,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @OnClick(R.id.btn_mobile)
     public void onMobileSelected() {
+        TransitionManager.beginDelayedTransition(sendContainer);
         mBtnMobile.setFocusable(true);
         mBtnMobile.setChipBackgroundColorResource(R.color.clickedblue);
         mBtnVpa.setChipBackgroundColorResource(R.color.changedBackgroundColour);
@@ -189,7 +194,13 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
         if (requestCode == SCAN_QR_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String qrData = data.getStringExtra(Constants.QR_DATA);
-            etVpa.setText(qrData);
+            final String[] qrDataArray = qrData.split(", ");
+            if(qrDataArray.length == 1) {
+                etVpa.setText(qrDataArray[0]);
+            } else {
+                etVpa.setText(qrDataArray[0]);
+                etAmount.setText(qrDataArray[1]);
+            }
             String externalId = etVpa.getText().toString();
             if (etAmount.getText().toString().isEmpty()) {
                 showSnackbar(Constants.PLEASE_ENTER_AMOUNT);

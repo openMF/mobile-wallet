@@ -31,7 +31,7 @@ public interface BaseHomeContract {
 
         void showSnackbar(String message);
 
-        void showAccountBalance(Account account);
+        void setAccountBalance(Account account);
 
         void showTransactionsHistory(List<Transaction> transactions);
 
@@ -51,6 +51,8 @@ public interface BaseHomeContract {
     interface HomePresenter extends BasePresenter {
 
         void fetchAccountDetails();
+
+        void showMoreHistory(int existingItemsCount);
 
     }
 

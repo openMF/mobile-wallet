@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.google.zxing.Result;
 
@@ -17,6 +19,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**
@@ -33,6 +36,10 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
 
     @BindView(R.id.scannerView)
     ZXingScannerView mScannerView;
+    @BindView(R.id.btn_flash_on)
+    ImageButton mFlashOn;
+    @BindView(R.id.btn_flash_off)
+    ImageButton mFlashOff;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +55,20 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
         mPresenter.attachView(this);
 
         mScannerView.setAutoFocus(true);
+    }
+
+    @OnClick(R.id.btn_flash_on)
+    void turnOnFlash() {
+        mScannerView.setFlash(true);
+        mFlashOn.setVisibility(View.GONE);
+        mFlashOff.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.btn_flash_off)
+    void turnOffFlash() {
+        mScannerView.setFlash(false);
+        mFlashOn.setVisibility(View.VISIBLE);
+        mFlashOff.setVisibility(View.GONE);
     }
 
     @Override
