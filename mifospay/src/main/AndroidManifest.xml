@@ -53,7 +53,8 @@
 
         <activity
             android:name=".receipt.ui.ReceiptActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -68,7 +69,8 @@
 
         <activity
             android:name=".invoice.ui.InvoiceActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

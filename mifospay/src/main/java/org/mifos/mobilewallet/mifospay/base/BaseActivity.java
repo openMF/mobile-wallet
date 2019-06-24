@@ -98,6 +98,12 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
             progressDialog.cancel();
         }
     }
+    @Override
+    public void dismissProgressDialog() {
+        if (progressDialog != null && progressDialog.isShowing()) {
+            progressDialog.dismiss();
+        }
+    }
 
     @Override
     public void setToolbarTitle(String title) {
