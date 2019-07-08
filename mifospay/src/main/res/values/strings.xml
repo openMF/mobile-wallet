@@ -227,4 +227,10 @@
     <string name="empty_no_invoices_subtitle">All invoices will be displaying here</string>
     <string name="notification_settings">Notification Settings</string>
 	<string name="amount">Amount</string>
+
+    <string name="password_very_weak">"Password should contain more than 6 characters"</string>
+    <string name="password_weak">Weak</string>
+    <string name="password_normal">Normal</string>
+    <string name="password_strong">Strong</string>
+    <string name="password_very_strong">Very Strong</string>
 </resources>
