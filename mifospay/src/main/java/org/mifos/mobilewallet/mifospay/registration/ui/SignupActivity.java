@@ -3,12 +3,19 @@ package org.mifos.mobilewallet.mifospay.registration.ui;
 import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.transition.TransitionManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
 
@@ -59,6 +66,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     @BindView(R.id.fab_next)
     FloatingActionButton mFabNext;
 
+
     SpinnerDialog spinnerDialog;
     @BindView(R.id.et_user_name)
     EditText mEtUserName;
@@ -66,6 +74,12 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     EditText mEtPassword;
     @BindView(R.id.et_confirm_password)
     EditText mEtConfirmPassword;
+    @BindView(R.id.rr_container)
+    ViewGroup container;
+    @BindView(R.id.pb_password_strength)
+    ProgressBar passwordStrengthProgress;
+    @BindView(R.id.tv_password_strength)
+    TextView passwordStrengthText;
 
     private String countryName;
     private String mobileNumber;
@@ -115,6 +129,21 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         if (lastName != null) {
             mEtLastName.setText(lastName);
         }
+
+        mEtPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mPresenter.checkPasswordStrength(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
 
         DebugUtil.log(mobileNumber, countryName, email, displayName, firstName, lastName, photoUri);
 
@@ -195,6 +224,10 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
             hideProgressDialog();
             return;
         }
+        if (mEtPassword.getText().toString().length()<6) {
+            showToast("Password should contain more than 6 characters");
+            return;
+        }
 
         String firstName = mEtFirstName.getText().toString();
         String lastName = mEtLastName.getText().toString();
@@ -229,6 +262,21 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         showToast("Registered successfully.");
         startActivity(new Intent(SignupActivity.this, LoginActivity.class));
         finish();
+    }
+
+    @Override
+    public void updatePasswordStrength(int stringRes, int colorRes, int value) {
+        TransitionManager.beginDelayedTransition(container);
+        passwordStrengthText.setVisibility(View.VISIBLE);
+        if (value == 0) {
+            passwordStrengthText.setText("Password should contain more than 6 characters");
+            return;
+        }
+        passwordStrengthProgress.setVisibility(View.VISIBLE);
+        passwordStrengthProgress.getProgressDrawable().setColorFilter(
+                colorRes, android.graphics.PorterDuff.Mode.SRC_IN);
+        passwordStrengthProgress.setProgress(value);
+        passwordStrengthText.setText(stringRes);
     }
 
     @Override
