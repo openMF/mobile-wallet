@@ -14,6 +14,9 @@ public class Constants {
     public static final String TO_EXTERNAL_ID = "to_external_id";
     public static final String RUPEE = "₹";
     public static final String QR_DATA = "qr_data";
+    public static final String MERCHANT_NAME = "merchant_name";
+    public static final String MERCHANT_VPA = "merchant_vpa";
+    public static final String MERCHANT_ACCOUNT_NO = "merchant_account_no";
 
     public static final String FILE = "file";
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
@@ -68,7 +71,9 @@ public class Constants {
     public static final String INSUFFICIENT_BALANCE = "Insufficient balance";
     public static final String ERROR_FINDING_VPA = "Error finding Virtual Payment Address";
     public static final String PLEASE_ENTER_VALID_AMOUNT = "Please enter a valid amount";
-    public static final String NEED_READ_CONTACTS_PERMISSION = "Need read contacts permission.";
+    public static final String SELF_ACCOUNT_ERROR = "Self Account transfer is not allowed";
+    public static final String PLEASE_ENTER_AMOUNT = "Please enter a valid amount before making the transfer";
+    public static final String NEED_READ_CONTACTS_PERMISSION = "Need read contacts permission";
     public static final String NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE =
             "Need camera permission to scan qr code.";
     public static final String ERROR_CHOOSING_CONTACT = "Error choosing contact";
@@ -80,6 +85,7 @@ public class Constants {
     public static final String TRANSACTION = "transaction";
     public static final String TRANSACTIONS_HISTORY = "Transactions History History";
     public static final String SPECIFIC_TRANSACTIONS = "Specific Transactions History";
+    public static final String HISTORY_NOT_AVAILABLE = "No Transaction History Available";
     public static final String RECEIPT_DOMAIN = "https://receipt.mifospay.com/";
     public static final String OTHER = "Other";
     public static final String CREDIT = "Credit";

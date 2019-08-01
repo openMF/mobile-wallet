@@ -49,6 +49,11 @@ public class TransferPresenter implements BaseHomeContract.TransferPresenter {
     }
 
     @Override
+    public boolean checkSelfTransfer(String externalId) {
+        return (externalId.equals(localRepository.getClientDetails().getExternalId()));
+    }
+
+    @Override
     public void checkBalanceAvailability(final String externalId, final double transferAmount) {
         mUsecaseHandler.execute(mFetchAccount,
                 new FetchAccount.RequestValues(localRepository.getClientDetails().getClientId()),
