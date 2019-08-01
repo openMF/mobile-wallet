@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.chip.Chip;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
@@ -100,7 +101,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     @OnClick(R.id.btn_vpa)
     public void onVPASelected() {
         mBtnVpa.setFocusable(true);
-        mBtnVpa.setFocusableInTouchMode(true);
         mBtnVpa.setChipBackgroundColorResource(R.color.clickedblue);
         mBtnMobile.setChipBackgroundColorResource(R.color.changedBackgroundColour);
         btnScanQr.setVisibility(View.VISIBLE);
@@ -111,7 +111,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     @OnClick(R.id.btn_mobile)
     public void onMobileSelected() {
         mBtnMobile.setFocusable(true);
-        mBtnMobile.setFocusableInTouchMode(true);
         mBtnMobile.setChipBackgroundColorResource(R.color.clickedblue);
         mBtnVpa.setChipBackgroundColorResource(R.color.changedBackgroundColour);
         mTilVpa.setVisibility(View.GONE);
@@ -133,8 +132,12 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 showSnackbar(Constants.PLEASE_ENTER_VALID_AMOUNT);
                 return;
             }
-            showSwipeProgress();
-            mTransferPresenter.checkBalanceAvailability(externalId, amount);
+            if (!mTransferPresenter.checkSelfTransfer(externalId)) {
+                mTransferPresenter.checkBalanceAvailability(externalId, amount);
+            } else {
+                showSwipeProgress();
+                showSnackbar(Constants.SELF_ACCOUNT_ERROR);
+            }
         }
     }
 
@@ -188,6 +191,10 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
             String qrData = data.getStringExtra(Constants.QR_DATA);
             etVpa.setText(qrData);
             String externalId = etVpa.getText().toString();
+            if (etAmount.getText().toString().isEmpty()) {
+                showSnackbar(Constants.PLEASE_ENTER_AMOUNT);
+                return;
+            }
             double amount = Double.parseDouble(etAmount.getText().toString());
             MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId,
                     amount);

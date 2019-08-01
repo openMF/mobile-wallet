@@ -68,7 +68,9 @@ public class Constants {
     public static final String INSUFFICIENT_BALANCE = "Insufficient balance";
     public static final String ERROR_FINDING_VPA = "Error finding Virtual Payment Address";
     public static final String PLEASE_ENTER_VALID_AMOUNT = "Please enter a valid amount";
-    public static final String NEED_READ_CONTACTS_PERMISSION = "Need read contacts permission.";
+    public static final String SELF_ACCOUNT_ERROR = "Self Account transfer is not allowed";
+    public static final String PLEASE_ENTER_AMOUNT = "Please enter a valid amount before making the transfer";
+    public static final String NEED_READ_CONTACTS_PERMISSION = "Need read contacts permission";
     public static final String NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE =
             "Need camera permission to scan qr code.";
     public static final String ERROR_CHOOSING_CONTACT = "Error choosing contact";

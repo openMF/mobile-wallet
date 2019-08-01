@@ -72,6 +72,8 @@ public interface BaseHomeContract {
 
         void fetchVpa();
 
+        boolean checkSelfTransfer(String externalId);
+
         void fetchMobile();
 
         void checkBalanceAvailability(String externalId, double transferAmount);
