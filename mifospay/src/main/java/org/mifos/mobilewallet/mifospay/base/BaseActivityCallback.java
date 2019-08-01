@@ -24,5 +24,7 @@ public interface BaseActivityCallback {
 
     void hideBackButton();
 
+    void dismissProgressDialog();
+
     SwipeRefreshLayout getSwipeRefreshLayout();
 }

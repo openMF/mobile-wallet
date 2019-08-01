@@ -67,35 +67,39 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         if (data != null) {
             String scheme = data.getScheme(); // "https"
             String host = data.getHost(); // "receipt.mifospay.com"
-            List<String> params = data.getPathSegments();
-            transactionId = params.get(0); // "transactionId"
+            List<String> params;
+            try {
+                params = data.getPathSegments();
+                transactionId = params.get(0); // "transactionId"
+                tvReceiptLink.setText(data.toString());
+                tvReceiptLink.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        ClipboardManager cm = (ClipboardManager) getSystemService(
+                                Context.CLIPBOARD_SERVICE);
+                        ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_RECEIPT_LINK,
+                                tvReceiptLink.getText().toString());
+                        cm.setPrimaryClip(clipData);
+                        showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
+                        return true;
+                    }
+                });
 
-            tvReceiptLink.setText(data.toString());
-            tvReceiptLink.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View v) {
-                    ClipboardManager cm = (ClipboardManager) getSystemService(
-                            Context.CLIPBOARD_SERVICE);
-                    ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_RECEIPT_LINK,
-                            tvReceiptLink.getText().toString());
-                    cm.setPrimaryClip(clipData);
-                    showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
-                    return true;
+                if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    // Permission is not granted
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            REQUEST_WRITE_EXTERNAL_STORAGE);
+                } else {
+                    // Permission already granted
+                    showProgressDialog(Constants.PLEASE_WAIT);
+                    mPresenter.fetchReceipt(transactionId);
                 }
-            });
-
-            if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                    != PackageManager.PERMISSION_GRANTED) {
-
-                // Permission is not granted
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                        REQUEST_WRITE_EXTERNAL_STORAGE);
-            } else {
-                // Permission already granted
-                showProgressDialog(Constants.PLEASE_WAIT);
-                mPresenter.fetchReceipt(transactionId);
+            } catch(IndexOutOfBoundsException e) {
+                showToast("Invalid link used to open the App.");
             }
         }
     }
@@ -158,5 +162,17 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
             // other 'case' lines to check for other
             // permissions this app might request.
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dismissProgressDialog();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dismissProgressDialog();
     }
 }
