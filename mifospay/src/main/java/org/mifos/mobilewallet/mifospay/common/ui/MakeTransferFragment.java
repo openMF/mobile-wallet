@@ -66,11 +66,14 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     @BindView(R.id.tv_transfer_status)
     TextView tvTransferStatus;
 
-    @BindView(R.id.ll_content)
+    @BindView(R.id.cc_content)
     View contentView;
 
     @BindView(R.id.view_transfer_success)
     View viewTransferSuccess;
+
+    @BindView(R.id.tv_client_name_text)
+    TextView tvClientText;
 
     @BindView(R.id.view_transfer_failure)
     View viewTransferFailure;
@@ -155,8 +158,12 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     @Override
     public void transferSuccess() {
         tvTransferStatus.setText(Constants.TRANSACTION_SUCCESSFUL);
+        contentView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);
+        btnConfirm.setVisibility(View.GONE);
+        btnCancel.setVisibility(View.GONE);
         viewTransferSuccess.setVisibility(View.VISIBLE);
+        tvClientText.setText("Client Details");
     }
 
     @Override
@@ -164,7 +171,11 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         TransitionManager.beginDelayedTransition(makeTransferContainer);
         tvTransferStatus.setText(Constants.UNABLE_TO_PROCESS_TRANSFER);
         progressBar.setVisibility(View.GONE);
+        btnConfirm.setVisibility(View.GONE);
+        btnCancel.setVisibility(View.GONE);
+        contentView.setVisibility(View.VISIBLE);
         viewTransferFailure.setVisibility(View.VISIBLE);
+        tvClientText.setText("Client Details");
     }
 
     @Override

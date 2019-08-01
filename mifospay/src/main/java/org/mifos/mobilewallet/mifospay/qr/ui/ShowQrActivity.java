@@ -2,8 +2,11 @@ package org.mifos.mobilewallet.mifospay.qr.ui;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.view.View;
@@ -24,7 +27,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by naman on 8/7/17.
@@ -47,6 +49,10 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
     Button btnSetAmount;
 
     private String mAmount = null;
+    @BindView(R.id.iv_share_qr)
+    ImageView ivShareQR;
+
+    private Bitmap bitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +115,19 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
             }
         });
         editTextDialog.show();
+        ivShareQR.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_SEND);
+                intent.setType("image/*");
+                String bitmapPath = MediaStore.Images.Media.insertImage(getContentResolver(),
+                        bitmap, "qr", null);
+                Uri bitmapUri = Uri.parse(bitmapPath);
+                intent.putExtra(Intent.EXTRA_STREAM, bitmapUri);
+                startActivity(Intent.createChooser(intent, "Share QR Image"));
+            }
+        });
     }
 
     @Override
@@ -118,6 +137,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
 
     @Override
     public void showGeneratedQr(Bitmap bitmap) {
+        this.bitmap = bitmap;
         ivQrCode.setImageBitmap(bitmap);
     }
 

@@ -21,6 +21,7 @@
         android:id="@+id/inc_state_view"
         layout="@layout/placeholder_state"
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="@dimen/marginItemsInSectionLarge" />

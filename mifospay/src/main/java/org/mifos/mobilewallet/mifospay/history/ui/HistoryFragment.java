@@ -84,7 +84,6 @@ public class HistoryFragment extends BaseFragment
     private void setupUi() {
         setupSwipeRefreshLayout();
         setupRecyclerView();
-        vStateView.setVisibility(View.GONE);
     }
 
     private void setupRecyclerView() {

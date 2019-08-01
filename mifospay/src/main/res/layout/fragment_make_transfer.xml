@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent" android:layout_height="match_parent"
-              android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:id="@+id/ll_make_transfer_container"
-              android:padding="@dimen/value_20dp">
+    android:padding="@dimen/value_20dp">
 
     <TextView
         android:id="@+id/tv_transfer_status"
@@ -24,111 +26,112 @@
         android:layout_marginTop="@dimen/value_10dp"
         android:minHeight="270dp">
 
-        <LinearLayout
-            android:id="@+id/ll_content"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone">
+            android:id="@+id/cc_content"
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/tv_client_name_text"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:text="@string/sending_to"
+                android:textColor="@color/primaryDarkBlue"
+                android:textSize="@dimen/value_15sp"/>
+
+            <TextView
+                android:id="@+id/tv_client_name"
+                android:layout_width="wrap_content"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_client_name_text"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/value_10dp"
+                android:text="Naman Dwivedi"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/value_20sp"/>
+
+            <TextView
+                android:id="@+id/tv_client_vpa"
+                android:text="nama@tstsgf"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_client_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/value_5dp"
+                android:textSize="@dimen/value_18sp"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:id="@+id/tv_amount_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_client_vpa"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/value_20dp"
+                android:text="@string/amount"
+                android:textColor="@color/primaryDarkBlue"
+                android:textSize="@dimen/value_15sp"/>
+            <TextView
+                android:id="@+id/tv_amount"
+                android:text="Bhot Saara"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingTop="@dimen/value_10dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_amount_text"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/value_20sp"/>
+
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_amount"
+                android:layout_marginLeft="@dimen/value_30dp"
+                android:background="@color/primaryDarkBlue"
+                android:text="@string/confirm"
+                android:textColor="@android:color/white"/>
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/tv_amount"
+                android:background="@color/grey_900"
+                android:layout_marginEnd="20dp"
+                android:text="@string/cancel"
+                app:layout_constraintRight_toLeftOf="@id/btn_confirm"
+                android:textColor="@android:color/white"
+                android:layout_marginRight="20dp" />
+
+            <View
+                android:id="@+id/view_transfer_success"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_20dp"
                 android:layout_marginTop="@dimen/value_20dp"
-                android:orientation="vertical">
+                android:background="@drawable/transfer_success"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"
+                android:layout_marginEnd="@dimen/value_12dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginRight="@dimen/value_12dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/sending_to"
-                    android:textColor="@color/primaryDarkBlue"
-                    android:textSize="@dimen/value_15sp"/>
-
-                <TextView
-                    android:id="@+id/tv_client_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/value_10dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/value_20sp"/>
-
-                <TextView
-                    android:id="@+id/tv_client_vpa"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/value_5dp"
-                    android:textSize="@dimen/value_18sp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/value_20dp"
-                    android:text="@string/amount"
-                    android:textColor="@color/primaryDarkBlue"
-                    android:textSize="@dimen/value_15sp"/>
-
-                <TextView
-                    android:id="@+id/tv_amount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/value_10dp"
-                    android:textColor="@android:color/black"
-                    android:textSize="@dimen/value_20sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+            <View
+                android:id="@+id/view_transfer_failure"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_10dp"
-                android:layout_marginTop="@dimen/value_30dp"
-                android:gravity="right"
-                android:orientation="horizontal">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/value_20dp"
+                android:background="@drawable/transfer_failure"
+                android:visibility="gone"/>
 
-                <Button
-                    android:id="@+id/btn_cancel"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/grey_900"
-                    android:text="@string/cancel"
-                    android:textColor="@android:color/white"/>
-
-                <Button
-                    android:id="@+id/btn_confirm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="@dimen/value_30dp"
-                    android:background="@color/primaryDarkBlue"
-                    android:text="@string/confirm"
-                    android:textColor="@android:color/white"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/view_transfer_success"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:background="@drawable/transfer_success"
-            android:visibility="gone"/>
-
-        <View
-            android:id="@+id/view_transfer_failure"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:background="@drawable/transfer_failure"
-            android:visibility="gone"/>
+        </android.support.constraint.ConstraintLayout>
 
         <ProgressBar
             android:id="@+id/progressBar"
