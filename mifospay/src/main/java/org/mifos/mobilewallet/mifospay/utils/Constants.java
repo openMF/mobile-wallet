@@ -14,6 +14,9 @@ public class Constants {
     public static final String TO_EXTERNAL_ID = "to_external_id";
     public static final String RUPEE = "₹";
     public static final String QR_DATA = "qr_data";
+    public static final String MERCHANT_NAME = "merchant_name";
+    public static final String MERCHANT_VPA = "merchant_vpa";
+    public static final String MERCHANT_ACCOUNT_NO = "merchant_account_no";
 
     public static final String FILE = "file";
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
@@ -82,6 +85,7 @@ public class Constants {
     public static final String TRANSACTION = "transaction";
     public static final String TRANSACTIONS_HISTORY = "Transactions History History";
     public static final String SPECIFIC_TRANSACTIONS = "Specific Transactions History";
+    public static final String HISTORY_NOT_AVAILABLE = "No Transaction History Available";
     public static final String RECEIPT_DOMAIN = "https://receipt.mifospay.com/";
     public static final String OTHER = "Other";
     public static final String CREDIT = "Credit";

@@ -49,19 +49,7 @@ public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter 
                 new UseCase.UseCaseCallback<FetchMerchants.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchMerchants.ResponseValue response) {
-
-                        //TODO removing this for now to avoid too many api calls
-//                        retreiveMerchantsData(response.getSavingsWithAssociationsList());
-
-                        List<SavingsWithAssociations> savingsWithAssociationsList =
-                                response.getSavingsWithAssociationsList();
-
-                        mMerchantsView.listMerchantsData(savingsWithAssociationsList);
-                        if (savingsWithAssociationsList.size() == 0) {
-                            mMerchantsView.showEmptyStateView();
-                        } else {
-                            mMerchantsView.showMerchants();
-                        }
+                        retreiveMerchantsData(response.getSavingsWithAssociationsList());
                     }
 
                     @Override

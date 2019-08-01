@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="org.mifos.mobilewallet.mifospay">
+    package="org.mifos.mobilewallet.mifospay">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".merchants.ui.MerchantTransferActivity"></activity>
         <activity
             android:name=".auth.ui.LoginActivity"
             android:theme="@style/AppTheme">
@@ -26,31 +26,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".home.ui.MainActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".history.ui.TransactionsHistoryActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".common.ui.SearchActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".qr.ui.ShowQrActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".qr.ui.ReadQrActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".passcode.ui.PassCodeActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".receipt.ui.ReceiptActivity"
             android:theme="@style/AppTheme">
@@ -65,7 +58,6 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".invoice.ui.InvoiceActivity"
             android:theme="@style/AppTheme">
@@ -80,11 +72,9 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".history.ui.SpecificTransactionsActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".invoice.ui.InvoicesFragment"
             android:theme="@style/AppTheme" />
@@ -115,8 +105,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".editprofile.ui.EditProfileActivity"
-            android:windowSoftInputMode="adjustResize"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".settings.ui.SettingsActivity"
             android:theme="@style/AppTheme" />
@@ -135,12 +125,12 @@
         <activity
             android:name=".notification.ui.NotificationActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
-        <activity android:name=".password.ui.EditPasswordActivity"
+        <activity
+            android:name=".password.ui.EditPasswordActivity"
             android:theme="@style/AppTheme" />
     </application>
 

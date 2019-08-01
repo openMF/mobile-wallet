@@ -9,6 +9,7 @@ import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.TransactionsHistory;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
@@ -38,11 +39,14 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     @Inject
     TransactionsHistory transactionsHistory;
     private BaseHomeContract.HomeView mHomeView;
+    private final PreferencesHelper preferencesHelper;
+
 
     @Inject
-    public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
+    public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository, PreferencesHelper preferencesHelper) {
         this.mUsecaseHandler = useCaseHandler;
         this.localRepository = localRepository;
+        this.preferencesHelper = preferencesHelper;
     }
 
     @Override
@@ -60,6 +64,7 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
                     @Override
                     public void onSuccess(FetchAccount.ResponseValue response) {
                         mHomeView.showAccountBalance(response.getAccount());
+                        preferencesHelper.setAccountId(response.getAccount().getId());
                         transactionsHistory.fetchTransactionsHistory(response.getAccount().getId());
                         mHomeView.hideSwipeProgress();
                     }
