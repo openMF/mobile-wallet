@@ -22,6 +22,7 @@ import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
+import org.mifos.mobilewallet.mifospay.utils.PasswordStrength;
 
 import java.util.ArrayList;
 
@@ -68,6 +69,12 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
     public void attachView(BaseView baseView) {
         mSignupView = (RegistrationContract.SignupView) baseView;
         mSignupView.setPresenter(this);
+    }
+
+    @Override
+    public void checkPasswordStrength(String password) {
+        PasswordStrength p = new PasswordStrength(password);
+        mSignupView.updatePasswordStrength(p.getStrengthStringId(),p.getColorResId(),p.getValue());
     }
 
     @Override

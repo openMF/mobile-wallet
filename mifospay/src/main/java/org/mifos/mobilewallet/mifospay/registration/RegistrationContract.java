@@ -43,9 +43,13 @@ public interface RegistrationContract {
         void onRegisterFailed(String message);
 
         void onRegisterSuccess(String s);
+
+        void updatePasswordStrength(int stringRes, int colorRes, int value);
     }
 
     interface SignupPresenter extends BasePresenter {
+
+        void checkPasswordStrength(String password);
 
         void registerUser(String firstName, String lastName, String mobileNumber, String email,
                 String businessName, String addressline1, String addressline2, String pincode,
