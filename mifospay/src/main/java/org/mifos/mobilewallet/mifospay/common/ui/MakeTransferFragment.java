@@ -8,7 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.transition.TransitionManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,6 +43,8 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     TransferContract.TransferPresenter mTransferPresenter;
 
+    @BindView(R.id.ll_make_transfer_container)
+    ViewGroup makeTransferContainer;
     @BindView(R.id.btn_confirm)
     Button btnConfirm;
 
@@ -124,6 +128,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
             public void onClick(View v) {
                 mTransferPresenter.makeTransfer(localRepository.getClientDetails().getClientId(),
                         toClientId, amount);
+                TransitionManager.beginDelayedTransition(makeTransferContainer);
                 tvTransferStatus.setText(Constants.SENDING_MONEY);
                 progressBar.setVisibility(View.VISIBLE);
                 contentView.setVisibility(View.GONE);
@@ -137,6 +142,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     public void showToClientDetails(long clientId, String name, String externalId) {
         this.toClientId = clientId;
 
+        TransitionManager.beginDelayedTransition(makeTransferContainer);
         tvClientName.setText(name);
         tvAmount.setText(Constants.RUPEE + " " + amount);
         tvClientVpa.setText(externalId);
@@ -155,6 +161,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     @Override
     public void transferFailure() {
+        TransitionManager.beginDelayedTransition(makeTransferContainer);
         tvTransferStatus.setText(Constants.UNABLE_TO_PROCESS_TRANSFER);
         progressBar.setVisibility(View.GONE);
         viewTransferFailure.setVisibility(View.VISIBLE);

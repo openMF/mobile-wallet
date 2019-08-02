@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.history.ui;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.transition.TransitionManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +40,9 @@ public class HistoryFragment extends BaseFragment
     @Inject
     HistoryPresenter mPresenter;
     HistoryContract.TransactionsHistoryPresenter mTransactionsHistoryPresenter;
+
+    @BindView(R.id.cc_history_container)
+    ViewGroup historyContainer;
 
     @BindView(R.id.inc_state_view)
     View vStateView;
@@ -138,6 +142,7 @@ public class HistoryFragment extends BaseFragment
 
     @Override
     public void showStateView(int drawable, int title, int subtitle) {
+        TransitionManager.beginDelayedTransition(historyContainer);
         rvHistory.setVisibility(View.GONE);
         pbHistory.setVisibility(View.GONE);
         vStateView.setVisibility(View.VISIBLE);
@@ -160,6 +165,7 @@ public class HistoryFragment extends BaseFragment
 
     @Override
     public void showRecyclerView() {
+        TransitionManager.beginDelayedTransition(historyContainer);
         vStateView.setVisibility(View.GONE);
         pbHistory.setVisibility(View.GONE);
         rvHistory.setVisibility(View.VISIBLE);
@@ -167,6 +173,7 @@ public class HistoryFragment extends BaseFragment
 
     @Override
     public void showHistoryFetchingProgress() {
+        TransitionManager.beginDelayedTransition(historyContainer);
         vStateView.setVisibility(View.GONE);
         rvHistory.setVisibility(View.GONE);
         pbHistory.setVisibility(View.VISIBLE);
