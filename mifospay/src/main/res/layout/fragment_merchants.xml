@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:id="@+id/merchant_fragment_layout"
         android:layout_height="match_parent"
-        android:visibility="gone"
+
         android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
@@ -35,9 +35,19 @@
             android:layout_marginStart="@dimen/paddingLayout"
             android:textColor="@color/colorTextPrimary"
             android:layout_marginLeft="@dimen/paddingLayout" />
+
+        <android.support.v7.widget.SearchView
+            android:layout_width="match_parent"
+            android:layout_marginEnd="@dimen/value_10dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/value_10dp"
+            android:id="@+id/sv_merchant"
+            android:layout_marginRight="@dimen/value_10dp">
+
+        </android.support.v7.widget.SearchView>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_merchants"
-            android:layout_marginTop="@dimen/marginBetweenSections"
+            android:layout_marginTop="@dimen/value_20dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"

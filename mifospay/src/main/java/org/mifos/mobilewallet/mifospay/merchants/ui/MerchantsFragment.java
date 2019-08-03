@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.support.v7.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,7 +31,6 @@ import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.List;
-
 import javax.inject.Inject;
 
 import butterknife.BindView;
@@ -60,6 +61,9 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     @BindView(R.id.tv_empty_no_transaction_history_subtitle)
     TextView tvTransactionsStateSubtitle;
 
+    @BindView(R.id.sv_merchant)
+    SearchView svSearchMerchant;
+
     @BindView(R.id.pb_merchants)
     ProgressBar mMerchantProgressBar;
     private List<SavingsWithAssociations> merchantsList;
@@ -78,6 +82,19 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         mPresenter.attachView(this);
         mMerchantsPresenter.fetchMerchants();
         setupUi();
+        svSearchMerchant.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.e("guds",query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.e("gijuags",newText);
+                return false;
+            }
+        });
         return rootView;
     }
 
