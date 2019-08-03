@@ -15,13 +15,13 @@ import rx.schedulers.Schedulers;
  * Created by ankur on 06/June/2018
  */
 
-public class FetchTransactionReceipt extends
-        UseCase<FetchTransactionReceipt.RequestValues, FetchTransactionReceipt.ResponseValue> {
+public class DownloadTransactionReceipt extends
+        UseCase<DownloadTransactionReceipt.RequestValues, DownloadTransactionReceipt.ResponseValue> {
 
     private final FineractRepository mFineractRepository;
 
     @Inject
-    public FetchTransactionReceipt(FineractRepository fineractRepository) {
+    public DownloadTransactionReceipt(FineractRepository fineractRepository) {
         mFineractRepository = fineractRepository;
     }
 

@@ -81,7 +81,7 @@ public class Constants {
     public static final String PLEASE_ENTER_ALL_THE_FIELDS = "Please enter all the fields";
     public static final String TRANSFER = "Transfer";
     public static final String TRANSACTION_DETAILS = "Transaction Details";
-    public static final String ACCOUNT_NUMBER = "account Number";
+    public static final String ACCOUNT_NUMBER = "Account Number : ";
     public static final String TRANSACTION = "transaction";
     public static final String TRANSACTIONS_HISTORY = "Transactions History History";
     public static final String SPECIFIC_TRANSACTIONS = "Specific Transactions History";
@@ -184,4 +184,5 @@ public class Constants {
     public static final String CHANGE_PROFILE_IMAGE_KEY = "CHANGE_PROFILE_IMAGE_KEY";
     public static final String CHANGE_PROFILE_IMAGE_VALUE = "CHANGE_PROFILE_IMAGE_VALUE";
     public static final String TAP_TO_REVEAL = "Tap to Reveal";
+    public static final String NAME = "Name : ";
 }

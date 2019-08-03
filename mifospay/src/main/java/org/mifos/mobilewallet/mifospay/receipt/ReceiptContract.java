@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.receipt;
 
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
+import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
@@ -15,13 +17,19 @@ public interface ReceiptContract {
 
         void showSnackbar(String message);
 
-        void writeReceipt(ResponseBody responseBody, String filename);
+        void writeReceiptToPDF(ResponseBody responseBody, String filename);
 
         void hideProgressDialog();
+
+        void showTransactionDetail (Transaction transaction);
+
+        void showTransferDetail (TransferDetail transferDetail);
     }
 
     interface ReceiptPresenter extends BasePresenter {
 
-        void fetchReceipt(String transactionId);
+        void downloadReceipt(String transactionId);
+
+        void fetchTransaction(long transactionId);
     }
 }

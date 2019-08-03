@@ -9,6 +9,8 @@ import org.mifos.mobilewallet.mifospay.injection.ApplicationContext;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static org.mifos.mobilewallet.mifospay.utils.Constants.ACCOUNT_ID;
+
 /**
  * Created by naman on 17/6/17.
  */
@@ -142,6 +144,5 @@ public class PreferencesHelper {
     public void setFirebaseRegId(String firebaseRegId) {
         putString(FIREBASE_REG_ID, firebaseRegId);
     }
-
 
 }
