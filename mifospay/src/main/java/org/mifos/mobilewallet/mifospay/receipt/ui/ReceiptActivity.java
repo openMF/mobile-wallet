@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
@@ -17,10 +18,13 @@ import android.view.View;
 import android.widget.TextView;
 
 
+import com.mifos.mobile.passcode.utils.PassCodeConstants;
+
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
+import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract;
 import org.mifos.mobilewallet.mifospay.receipt.presenter.ReceiptPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -70,6 +74,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
 
     private String transactionId;
     private boolean isDebit;
+    private Uri deepLinkURI;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +89,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         mPresenter.attachView(this);
 
         Uri data = getIntent().getData();
+        deepLinkURI = data;
         if (data != null) {
             String scheme = data.getScheme(); // "https"
             String host = data.getHost(); // "receipt.mifospay.com"
@@ -110,6 +116,17 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
             showProgressDialog(Constants.PLEASE_WAIT);
             mPresenter.fetchTransaction(Long.parseLong(transactionId));
         }
+    }
+
+    @Override
+    public void openPassCodeActivity() {
+        Intent i = new Intent(this, PassCodeActivity.class);
+        i.putExtra("uri",deepLinkURI.toString());
+
+        //this is actually not true but has to be set true so as to make the passcode open a new receipt activity
+        i.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true);
+        startActivity(i);
+        finish();
     }
 
     @Override

@@ -185,4 +185,5 @@ public class Constants {
     public static final String CHANGE_PROFILE_IMAGE_VALUE = "CHANGE_PROFILE_IMAGE_VALUE";
     public static final String TAP_TO_REVEAL = "Tap to Reveal";
     public static final String NAME = "Name : ";
+    public static final String UNAUTHORIZED_ERROR = "401 unauthorized";
 }

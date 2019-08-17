@@ -1,7 +1,9 @@
 package org.mifos.mobilewallet.mifospay.passcode.ui;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import org.mifos.mobilewallet.mifospay.injection.component.DaggerActivityCompone
 import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract;
 import org.mifos.mobilewallet.mifospay.passcode.presenter.PassCodePresenter;
+import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 
 import javax.inject.Inject;
 
@@ -32,6 +35,7 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
     PassCodeContract.PassCodePresenter mPassCodePresenter;
 
     private ActivityComponent mActivityComponent;
+    private String deepLinkURI = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +50,7 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
         mActivityComponent.inject(this);
 
         ButterKnife.bind(this);
+        deepLinkURI = getIntent().getStringExtra("uri");
 
     }
 
@@ -59,10 +64,17 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
         // authenticate user with saved Preferences
         mPresenter.createAuthenticatedService();
 
-        Intent intent = new Intent(PassCodeActivity.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        if (deepLinkURI!=null) {
+            Uri uri = Uri.parse(deepLinkURI);
+            Intent intent = new Intent(PassCodeActivity.this, ReceiptActivity.class);
+            intent.setData(uri);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(PassCodeActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
     }
 
     @Override

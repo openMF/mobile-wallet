@@ -135,6 +135,10 @@ public class MerchantTransferActivity extends BaseActivity implements BaseHomeCo
     @OnClick(R.id.btn_submit)
     public void makeTransaction() {
         String externalId = tvMerchantVPA.getText().toString().trim();
+        if (etAmount.getText().toString().isEmpty()) {
+            showToast("Please Enter Amount");
+            return;
+        }
         String eamount = etAmount.getText().toString().trim();
 
         double amount = Double.parseDouble(eamount);
