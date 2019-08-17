@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.mifospay.merchants.adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,7 +41,10 @@ public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        SavingsWithAssociations mMerchant = mMerchantsList.get(position);
+        if (mMerchantsFilteredList == null) {
+            mMerchantsFilteredList = mMerchantsList;
+        }
+        SavingsWithAssociations mMerchant = mMerchantsFilteredList.get(position);
         TextDrawable iconDrawable = TextDrawable.builder().beginConfig()
                 .endConfig().buildRound(mMerchant.getClientName()
                         .substring(0, 1), R.color.colorAccentBlack);
@@ -69,10 +73,19 @@ public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.View
                     mMerchantsFilteredList = mMerchantsList;
                 } else {
                     List<SavingsWithAssociations> filteredList = new ArrayList<>();
+                    Log.e("size", String.valueOf(mMerchantsList.size()));
+
                     for (SavingsWithAssociations merchant : mMerchantsList) {
+                        Log.e("merchant", merchant.toString());
+
+                        if (merchant.getExternalId() != null) {
+                            if (merchant.getExternalId().toLowerCase().contains(
+                                    charString.toLowerCase()
+                            )) {
+                                filteredList.add(merchant);
+                            }
+                        }
                         if (merchant.getClientName().toLowerCase().contains(
-                                charString.toLowerCase())
-                                || merchant.getExternalId().toLowerCase().contains(
                                 charString.toLowerCase())) {
                             filteredList.add(merchant);
                         }

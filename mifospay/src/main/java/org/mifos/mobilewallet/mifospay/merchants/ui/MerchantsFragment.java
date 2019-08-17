@@ -13,7 +13,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.support.v7.widget.SearchView;
 import android.widget.TextView;
@@ -35,6 +37,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnTextChanged;
 
 public class MerchantsFragment extends BaseFragment implements MerchantsContract.MerchantsView {
 
@@ -61,8 +64,11 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     @BindView(R.id.tv_empty_no_transaction_history_subtitle)
     TextView tvTransactionsStateSubtitle;
 
-    @BindView(R.id.sv_merchant)
-    SearchView svSearchMerchant;
+    @BindView(R.id.et_search_merchant)
+    EditText etMerchantSearch;
+
+    @BindView(R.id.ll_search_merchant)
+    LinearLayout searchView;
 
     @BindView(R.id.pb_merchants)
     ProgressBar mMerchantProgressBar;
@@ -82,19 +88,6 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         mPresenter.attachView(this);
         mMerchantsPresenter.fetchMerchants();
         setupUi();
-        svSearchMerchant.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Log.e("guds",query);
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                Log.e("gijuags",newText);
-                return false;
-            }
-        });
         return rootView;
     }
 
@@ -176,7 +169,14 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         mMerchantFragmentLayout.setVisibility(View.VISIBLE);
         vStateView.setVisibility(View.GONE);
         mMerchantProgressBar.setVisibility(View.GONE);
+       // searchView.setVisibility(View.VISIBLE);
     }
+
+//    @OnTextChanged(R.id.et_search_merchant)
+//    void filerMerchants() {
+//        Log.e("log","Text Change " + etMerchantSearch.getText().toString());
+//        mMerchantsAdapter.getFilter().filter(etMerchantSearch.getText().toString());
+//    }
 
     @Override
     public void setPresenter(MerchantsContract.MerchantsPresenter presenter) {
@@ -202,6 +202,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
 
     @Override
     public void showMerchantFetchProcess() {
+        searchView.setVisibility(View.GONE);
         mMerchantFragmentLayout.setVisibility(View.GONE);
         vStateView.setVisibility(View.GONE);
         mMerchantProgressBar.setVisibility(View.VISIBLE);
