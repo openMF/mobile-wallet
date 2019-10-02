@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.qr.ui;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;

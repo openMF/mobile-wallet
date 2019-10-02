@@ -5,7 +5,7 @@ import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;

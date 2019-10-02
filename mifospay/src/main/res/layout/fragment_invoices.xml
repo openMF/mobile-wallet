@@ -35,7 +35,7 @@
                 android:textSize="@dimen/value_20sp" />
         </RelativeLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_invoices"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

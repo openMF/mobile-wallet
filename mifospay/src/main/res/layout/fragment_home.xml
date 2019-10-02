@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -33,7 +33,7 @@
         android:textColor="@color/colorBlack54"
         android:textSize="@dimen/textOverline" />
 
-    <android.support.v4.widget.NestedScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_home_bottom_sheet_dialog"
         app:layout_behavior="@string/bottom_sheet_behavior"
         android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="@dimen/textBody1" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_home_bottom_sheet"
                 android:layout_height="0dp"
                 android:visibility="gone"
@@ -95,6 +95,6 @@
 
         </LinearLayout>
 
-    </android.support.v4.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

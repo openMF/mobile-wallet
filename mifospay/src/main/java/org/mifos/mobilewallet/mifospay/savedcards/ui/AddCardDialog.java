@@ -3,11 +3,11 @@ package org.mifos.mobilewallet.mifospay.savedcards.ui;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.TextInputLayout;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputLayout;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,6 +28,7 @@ import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Action;
 
 /**
  * This is a Dialog class to add a new card.
@@ -62,20 +63,21 @@ public class AddCardDialog extends BottomSheetDialogFragment {
     List<TextInputLayout> mTextInputLayouts;
     private BottomSheetBehavior mBottomSheetBehavior;
     private boolean fieldsValid;
-    private final ButterKnife.Action<TextInputLayout> CHECK_ERROR =
-            new ButterKnife.Action<TextInputLayout>() {
-                @Override
-                public void apply(@NonNull TextInputLayout view, int index) {
-                    EditText editText = view.getEditText();
-                    if (editText == null || editText.getEditableText() == null
-                            || editText.getEditableText().toString().trim().isEmpty()) {
-                        view.setError(AddCardDialog.this.getString(R.string.field_required));
-                        fieldsValid = false;
-                    } else {
-                        view.setError(null);
-                    }
-                }
-            };
+//    private final ButterKnife.Action<TextInputLayout> CHECK_ERROR =
+//            new ButterKnife.Action<TextInputLayout>() {
+//                @Override
+//                public void apply(@NonNull TextInputLayout view, int index) {
+//                    EditText editText = view.getEditText();
+//                    if (editText == null || editText.getEditableText() == null
+//                            || editText.getEditableText().toString().trim().isEmpty()) {
+//                        view.setError(AddCardDialog.this.getString(R.string.field_required));
+//                        fieldsValid = false;
+//                    } else {
+//                        view.setError(null);
+//                    }
+//                }
+//            };
+
 
     /**
      * A function to set the Presenter.
@@ -168,7 +170,8 @@ public class AddCardDialog extends BottomSheetDialogFragment {
      */
     private boolean areFieldsValid() {
         fieldsValid = true;
-        ButterKnife.apply(mTextInputLayouts, CHECK_ERROR);
+//        ButterKnife.apply(mTextInputLayouts, CHECK_ERROR);
+        checkEachInputLayouts();
         int expiryMonth = Integer.parseInt(spnMM.getSelectedItem().toString());
         int expiryYear = Integer.parseInt(spnYY.getSelectedItem().toString());
         Calendar calendar = Calendar.getInstance();
@@ -177,6 +180,23 @@ public class AddCardDialog extends BottomSheetDialogFragment {
             Toaster.showToast(getContext(), getString(R.string.card_expiry_message));
             fieldsValid = false;
         }
+        return fieldsValid;
+    }
+
+    private boolean checkEachInputLayouts()
+    {
+        for(TextInputLayout view : mTextInputLayouts)
+        {
+            EditText editText = view.getEditText();
+            if (editText == null || editText.getEditableText() == null
+                    || editText.getEditableText().toString().trim().isEmpty()) {
+                view.setError(AddCardDialog.this.getString(R.string.field_required));
+                fieldsValid = false;
+            } else {
+                view.setError(null);
+            }
+        }
+
         return fieldsValid;
     }
 }
