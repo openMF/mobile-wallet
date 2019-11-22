@@ -32,7 +32,6 @@ android {
     }
 
     compileOptions.incremental = false
-    buildToolsVersion rootProject.ext.buildToolsVersion
 }
 
 dependencies {
@@ -78,6 +77,7 @@ dependencies {
     implementation 'com.mifos.mobile:mifos-passcode:0.3.0'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
+    implementation 'io.michaelrocks:libphonenumber-android:8.10.16'
 
     implementation 'com.hbb20:ccp:2.2.0'
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:1.9'
