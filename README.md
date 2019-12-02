@@ -9,7 +9,7 @@ that can be used as a dependency in any other wallet based project. It is develo
 
 | Master | Development | Chat |
 |------------|-----------------|-----------------|
-| [![Build Status](https://travis-ci.org/openMF/mobile-wallet.svg?branch=master)](https://travis-ci.org/openMF/mobile-wallet) | [![Build Status](https://travis-ci.org/openMF/mobile-wallet.svg?branch=dev)](https://travis-ci.org/openMF/mobile-wallet) | [![Join the chat at https://gitter.im/openMF/mobile-wallet](https://badges.gitter.im/openMF/mobile-wallet.svg)](https://gitter.im/openMF/mobile-wallet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
+| [![Build Status](https://travis-ci.com/openMF/mobile-wallet.svg?branch=master)](https://travis-ci.com/openMF/mobile-wallet) | [![Build Status](https://travis-ci.com/openMF/mobile-wallet.svg?branch=dev)](https://travis-ci.com/openMF/mobile-wallet) | [![Join the chat at https://gitter.im/openMF/mobile-wallet](https://badges.gitter.im/openMF/mobile-wallet.svg)](https://gitter.im/openMF/mobile-wallet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
 
 ## Screenshots
 
