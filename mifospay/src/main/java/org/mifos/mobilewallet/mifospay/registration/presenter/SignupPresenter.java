@@ -74,7 +74,8 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
     @Override
     public void checkPasswordStrength(String password) {
         PasswordStrength p = new PasswordStrength(password);
-        mSignupView.updatePasswordStrength(p.getStrengthStringId(),p.getColorResId(),p.getValue());
+        mSignupView.updatePasswordStrength(p.getStrengthStringId(),
+                p.getColorResId(), p.getValue());
     }
 
     @Override

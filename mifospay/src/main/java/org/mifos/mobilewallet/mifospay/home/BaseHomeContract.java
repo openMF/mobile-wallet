@@ -6,7 +6,6 @@ import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;

@@ -34,7 +34,8 @@ public class FetchAccountTransaction extends UseCase<FetchAccountTransaction.Req
     @Override
     protected void executeUseCase(final FetchAccountTransaction.RequestValues requestValues) {
 
-        fineractRepository.getSelfAccountTransactionFromId(requestValues.accountId, requestValues.transactionId)
+        fineractRepository.getSelfAccountTransactionFromId(requestValues.accountId,
+                requestValues.transactionId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Observer<Transactions>() {
@@ -68,8 +69,13 @@ public class FetchAccountTransaction extends UseCase<FetchAccountTransaction.Req
             this.accountId = accountId;
         }
 
-        public void setAccountId(long accountId) { this.accountId = accountId; }
-        public void setTransactionId(long transactionId) {this.transactionId = transactionId;}
+        public void setAccountId(long accountId) {
+            this.accountId = accountId;
+        }
+
+        public void setTransactionId(long transactionId) {
+            this.transactionId = transactionId;
+        }
     }
 
     public static final class ResponseValue implements UseCase.ResponseValue {

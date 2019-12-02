@@ -15,7 +15,6 @@ import org.mifos.mobilewallet.mifospay.history.TransactionsHistory;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -44,7 +43,8 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     private List<Transaction> transactionList;
 
     @Inject
-    public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository, PreferencesHelper preferencesHelper) {
+    public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository,
+                         PreferencesHelper preferencesHelper) {
         this.mUsecaseHandler = useCaseHandler;
         this.localRepository = localRepository;
         this.preferencesHelper = preferencesHelper;
@@ -94,7 +94,8 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     private void handleTransactionsHistory(int existingItemCount) {
         int transactionsAmount = transactionList.size() - existingItemCount;
         if (transactionsAmount > Constants.HOME_HISTORY_TRANSACTIONS_LIMIT) {
-            List<Transaction> showList = transactionList.subList(0, Constants.HOME_HISTORY_TRANSACTIONS_LIMIT + existingItemCount);
+            List<Transaction> showList = transactionList.subList(0,
+                    Constants.HOME_HISTORY_TRANSACTIONS_LIMIT + existingItemCount);
             mHomeView.showTransactionsHistory(showList);
             mHomeView.showBottomSheetActionButton();
         } else {

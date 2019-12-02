@@ -240,7 +240,8 @@ public class FineractRepository {
                         Constants.TRANSACTIONS);
     }
 
-    public Observable<Transactions> getSelfAccountTransactionFromId(long accountId, long transactionId) {
+    public Observable<Transactions> getSelfAccountTransactionFromId(long accountId,
+                                                                    long transactionId) {
         return selfApiManager
                 .getSavingAccountsListApi().getSavingAccountTransaction(accountId,
                         transactionId);

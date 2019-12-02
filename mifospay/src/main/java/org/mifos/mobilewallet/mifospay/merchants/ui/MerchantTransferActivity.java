@@ -36,7 +36,8 @@ import static org.mifos.mobilewallet.mifospay.MifosPayApp.getContext;
  * Created by Shivansh Tiwari on 06/07/19.
  */
 
-public class MerchantTransferActivity extends BaseActivity implements BaseHomeContract.MerchantTransferView {
+public class MerchantTransferActivity extends BaseActivity implements
+        BaseHomeContract.MerchantTransferView {
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -96,7 +97,8 @@ public class MerchantTransferActivity extends BaseActivity implements BaseHomeCo
         TextDrawable drawable = TextDrawable.builder().beginConfig()
                 .width((int) getResources().getDimension(R.dimen.user_profile_image_size))
                 .height((int) getResources().getDimension(R.dimen.user_profile_image_size))
-                .endConfig().buildRound(getIntent().getStringExtra(Constants.MERCHANT_NAME).substring(0, 1), R.color.colorPrimary);
+                .endConfig().buildRound(getIntent().getStringExtra(Constants.MERCHANT_NAME)
+                        .substring(0, 1), R.color.colorPrimary);
         ivMerchantImage.setImageDrawable(drawable);
         showTransactionFetching();
         setUpRecycleView();
@@ -153,7 +155,7 @@ public class MerchantTransferActivity extends BaseActivity implements BaseHomeCo
     @Override
     public void showPaymentDetails(String externalId, double amount) {
         MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
-        fragment.show(getSupportFragmentManager(),"tag");
+        fragment.show(getSupportFragmentManager(), "tag");
     }
 
     @Override

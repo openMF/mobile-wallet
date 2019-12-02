@@ -104,7 +104,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                         return true;
                     }
                 });
-            } catch(IndexOutOfBoundsException e) {
+            } catch (IndexOutOfBoundsException e) {
                 showToast("Invalid link used to open the App.");
             }
             showProgressDialog(Constants.PLEASE_WAIT);
@@ -148,9 +148,11 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
             tvPaidToName.setText(transferDetail.getFromClient().getDisplayName());
         }
         tvTransToName.setText(Constants.NAME + transferDetail.getToClient().getDisplayName());
-        tvTransToNumber.setText(Constants.ACCOUNT_NUMBER + transferDetail.getToAccount().getAccountNo());
+        tvTransToNumber.setText(Constants.ACCOUNT_NUMBER + transferDetail
+                .getToAccount().getAccountNo());
         tvTransFromName.setText(Constants.NAME + transferDetail.getFromClient().getDisplayName());
-        tvTransFromNumber.setText(Constants.ACCOUNT_NUMBER + transferDetail.getFromAccount().getAccountNo());
+        tvTransFromNumber.setText(Constants.ACCOUNT_NUMBER + transferDetail
+                .getFromAccount().getAccountNo());
         hideProgressDialog();
     }
 

@@ -133,9 +133,13 @@ public class PreferencesHelper {
         putString(CLIENT_VPA, vpa);
     }
 
-    public void setAccountId(long accountId) {putLong(ACCOUNT_ID,accountId);}
+    public void setAccountId(long accountId) {
+        putLong(ACCOUNT_ID, accountId);
+    }
 
-    public Long getAccountId() {return getLong(ACCOUNT_ID,0);}
+    public Long getAccountId() {
+        return getLong(ACCOUNT_ID, 0);
+    }
 
     public String getFirebaseRegId() {
         return getString(FIREBASE_REG_ID, "");

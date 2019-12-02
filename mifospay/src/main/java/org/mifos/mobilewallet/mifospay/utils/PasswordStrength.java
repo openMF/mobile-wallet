@@ -14,7 +14,7 @@ public class PasswordStrength {
 
     public PasswordStrength(String password) {
 
-        Log.e ("log","INIT : "+currentScore+" "+password.length());
+        Log.e ("log", "INIT : " + currentScore + " " + password.length());
         if (password.length() < 6) {
             currentScore = 0;
         } else if (password.length() < 12) {
@@ -23,8 +23,8 @@ public class PasswordStrength {
             currentScore = 2;
         }
 
-        if (password.length()>6) {
-            for (int i=0;i<password.length();i++) {
+        if (password.length() > 6) {
+            for (int i = 0; i < password.length(); i++) {
                 char c = password.charAt(i);
 
                 if (Character.isUpperCase(c)) {
@@ -33,8 +33,8 @@ public class PasswordStrength {
                 }
             }
         }
-        if (password.length()>6) {
-            for (int i=0;i<password.length();i++) {
+        if (password.length() > 6) {
+            for (int i = 0; i < password.length(); i++) {
                 char c = password.charAt(i);
 
                 if (Character.isDigit(c)) {
@@ -43,7 +43,7 @@ public class PasswordStrength {
                 }
             }
         }
-        Log.e("log","Final : "+currentScore);
+        Log.e("log", "Final : " + currentScore);
 
         switch (currentScore) {
             case (0) : value = 0;

@@ -3,7 +3,6 @@ package org.mifos.mobilewallet.mifospay.registration.ui;
 import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -211,7 +210,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
         if (mifosSavingProductId
                 == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
-            && isEmpty(mEtBusinessShopName)) {
+                && isEmpty(mEtBusinessShopName)) {
             Toaster.showToast(this, "All fields are mandatory");
             hideProgressDialog();
             return;
@@ -224,7 +223,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
             hideProgressDialog();
             return;
         }
-        if (mEtPassword.getText().toString().length()<6) {
+        if (mEtPassword.getText().toString().length() < 6) {
             showToast("Password should contain more than 6 characters");
             return;
         }

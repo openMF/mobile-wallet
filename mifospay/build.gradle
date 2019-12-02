@@ -75,6 +75,8 @@ dependencies {
     implementation "io.reactivex:rxandroid:$rootProject.rxandroidVersion"
     implementation "io.reactivex:rxjava:$rootProject.rxjavaVersion"
 
+    implementation "io.michaelrocks:libphonenumber-android:8.11.0"
+
     implementation 'me.dm7.barcodescanner:zxing:1.8.4'
 
     implementation 'com.mifos.mobile:mifos-passcode:0.3.0'
