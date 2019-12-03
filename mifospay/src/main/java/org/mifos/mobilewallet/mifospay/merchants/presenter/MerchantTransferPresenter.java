@@ -29,7 +29,7 @@ import static org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER
  */
 
 public class MerchantTransferPresenter implements BaseHomeContract.MerchantTransferPresenter,
-        HistoryContract.TransactionsHistoryAsync{
+        HistoryContract.TransactionsHistoryAsync {
 
     private final UseCaseHandler mUsecaseHandler;
     private final LocalRepository localRepository;
@@ -51,7 +51,9 @@ public class MerchantTransferPresenter implements BaseHomeContract.MerchantTrans
 
 
     @Inject
-    public MerchantTransferPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository, PreferencesHelper preferencesHelper) {
+    public MerchantTransferPresenter(UseCaseHandler useCaseHandler,
+                                     LocalRepository localRepository,
+                                     PreferencesHelper preferencesHelper) {
         this.mUsecaseHandler = useCaseHandler;
         this.localRepository = localRepository;
         this.preferencesHelper = preferencesHelper;

@@ -16,7 +16,8 @@ import rx.schedulers.Schedulers;
  */
 
 public class DownloadTransactionReceipt extends
-        UseCase<DownloadTransactionReceipt.RequestValues, DownloadTransactionReceipt.ResponseValue> {
+        UseCase<DownloadTransactionReceipt.RequestValues,
+                DownloadTransactionReceipt.ResponseValue> {
 
     private final FineractRepository mFineractRepository;
 

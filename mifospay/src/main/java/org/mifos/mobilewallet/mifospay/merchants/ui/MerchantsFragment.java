@@ -98,12 +98,17 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
                                 .get(position).getExternalId();
                         if (merchantVPA == null) {
                             Toast.makeText(getActivity(),
-                                    "VPA is Null. Can't make any transactions.",Toast.LENGTH_LONG).show();
+                                    "VPA is Null. Can't make any transactions.",
+                                    Toast.LENGTH_LONG).show();
                         } else {
-                            Intent intent = new Intent(getActivity(), MerchantTransferActivity.class);
-                            intent.putExtra(Constants.MERCHANT_NAME,mMerchantsAdapter.getMerchants().get(position).getClientName());
-                            intent.putExtra(Constants.MERCHANT_VPA,mMerchantsAdapter.getMerchants().get(position).getExternalId());
-                            intent.putExtra(Constants.MERCHANT_ACCOUNT_NO,mMerchantsAdapter.getMerchants().get(position).getAccountNo());
+                            Intent intent = new Intent(getActivity(),
+                                    MerchantTransferActivity.class);
+                            intent.putExtra(Constants.MERCHANT_NAME, mMerchantsAdapter
+                                    .getMerchants().get(position).getClientName());
+                            intent.putExtra(Constants.MERCHANT_VPA, mMerchantsAdapter
+                                    .getMerchants().get(position).getExternalId());
+                            intent.putExtra(Constants.MERCHANT_ACCOUNT_NO, mMerchantsAdapter
+                                    .getMerchants().get(position).getAccountNo());
                             startActivity(intent);
                         }
                     }
@@ -116,12 +121,13 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
                                 .get(position).getExternalId();
                         if (merchantVPA == null) {
                             Toast.makeText(getActivity(),
-                                    "VPA is Null, can't be copied.",Toast.LENGTH_LONG).show();
+                                    "VPA is Null, can't be copied.", Toast.LENGTH_LONG).show();
                         } else {
-                            ClipData clip = ClipData.newPlainText("VPA",merchantVPA);
+                            ClipData clip = ClipData.newPlainText("VPA", merchantVPA);
                             clipboard.setPrimaryClip(clip);
                             Toast.makeText(getActivity(),
-                                    "VPA copied to Clipboard Successfully",Toast.LENGTH_LONG).show();
+                                    "VPA copied to Clipboard Successfully",
+                                    Toast.LENGTH_LONG).show();
                         }
                     }
                 }));

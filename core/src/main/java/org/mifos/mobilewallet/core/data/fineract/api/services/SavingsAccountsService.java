@@ -6,7 +6,6 @@ import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -34,7 +33,8 @@ public interface SavingsAccountsService {
             @Path("accountId") long accountId,
             @Query("command") String command);
 
-    @GET(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}/" + ApiEndPoints.TRANSACTIONS + "/{transactionId}")
+    @GET(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}/" + ApiEndPoints.TRANSACTIONS
+            + "/{transactionId}")
     Observable<Transactions> getSavingAccountTransaction(@Path("accountId") long accountId,
                                                          @Path("transactionId") long transactionId);
 }

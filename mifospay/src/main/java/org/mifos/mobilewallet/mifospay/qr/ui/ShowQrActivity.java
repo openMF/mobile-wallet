@@ -24,7 +24,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by naman on 8/7/17.
@@ -95,8 +94,8 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                     return;
                 }
                 mAmount = edittext.getText().toString();
-                tvQrData.setText(qrData + ", "+mAmount);
-                generateQR(qrData + ", "+mAmount);
+                tvQrData.setText(qrData + ", " + mAmount);
+                generateQR(qrData + ", " + mAmount);
             }
         });
         editTextDialog.setNeutralButton("Reset", new DialogInterface.OnClickListener() {
@@ -122,7 +121,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
     }
 
     void showToast(String message) {
-        Toast.makeText(this,message,Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 
     void generateQR(String qrData) {

@@ -1,7 +1,6 @@
 package org.mifos.mobilewallet.core.domain.usecase.invoice;
 
 import android.net.Uri;
-import android.widget.Toast;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
@@ -63,7 +62,7 @@ public class FetchInvoice extends UseCase<FetchInvoice.RequestValues, FetchInvoi
                             }
                         }
                     });
-        } catch(IndexOutOfBoundsException e) {
+        } catch (IndexOutOfBoundsException e) {
             getUseCaseCallback().onError("Invalid link used to open the App");
         }
 

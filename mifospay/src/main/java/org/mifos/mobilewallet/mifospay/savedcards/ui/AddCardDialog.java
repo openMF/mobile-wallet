@@ -131,8 +131,8 @@ public class AddCardDialog extends BottomSheetDialogFragment {
             etCardNumber.setText(editCard.getCardNumber());
             String[] expiryDate = editCard.getExpiryDate().split("/");
             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-            spnMM.setSelection(Integer.parseInt(expiryDate[0])-1);
-            spnYY.setSelection(Integer.parseInt(expiryDate[1])-currentYear);
+            spnMM.setSelection(Integer.parseInt(expiryDate[0]) - 1);
+            spnYY.setSelection(Integer.parseInt(expiryDate[1]) - currentYear);
             btnAdd.setText(Constants.UPDATE);
         }
     }
