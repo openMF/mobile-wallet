@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.settings.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -39,8 +41,17 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
 
     @OnClick(R.id.btn_logout)
     public void onLogoutClicked() {
-        showProgressDialog(Constants.LOGGING_OUT);
-        mSettingsPresenter.logout();
+        new AlertDialog.Builder(this)
+                .setMessage("Are you sure you want to log out?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        showProgressDialog(Constants.LOGGING_OUT);
+                        mPresenter.logout();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
     }
 
     @OnClick(R.id.btn_disable_account)
