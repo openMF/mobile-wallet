@@ -19,7 +19,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/shape_bottom_sheet_dialog_grip"
-            android:contentDescription="@string/content_description" />
+            android:contentDescription="@string/grip" />
 
         <TextView
             android:id="@+id/textView4"

@@ -222,7 +222,7 @@
     <string name="empty_no_cards_subtitle">Add a card and come back here to see results!</string>
     <string name="empty_no_merchants_title">You haven\'t added any merchant yet</string>
     <string name="empty_no_merchants_subtitle">Every added merchant will be visible here</string>
-    <string name="content_description">grip</string>
+    <string name="grip">grip</string>
     <string name="content_description_placeholder">Placeholder</string>
     <string name="empty_no_invoices_title">You have no invoices</string>
     <string name="empty_no_invoices_subtitle">All invoices will be displaying here</string>
