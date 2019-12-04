@@ -10,6 +10,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.TPTResponse;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPayload;
@@ -237,6 +238,13 @@ public class FineractRepository {
         return selfApiManager
                 .getSavingAccountsListApi().getSavingsWithAssociations(accountId,
                         Constants.TRANSACTIONS);
+    }
+
+    public Observable<Transactions> getSelfAccountTransactionFromId(long accountId,
+                                                                    long transactionId) {
+        return selfApiManager
+                .getSavingAccountsListApi().getSavingAccountTransaction(accountId,
+                        transactionId);
     }
 
     public Observable<ClientAccounts> getSelfAccounts(long clientId) {

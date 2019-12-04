@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.chip.Chip;
 import android.support.design.widget.TextInputLayout;
+import android.support.transition.TransitionManager;
 import android.support.v4.content.ContextCompat;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
@@ -55,6 +56,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     @Inject
     TransferPresenter mPresenter;
     BaseHomeContract.TransferPresenter mTransferPresenter;
+    @BindView(R.id.rl_send_container)
+    ViewGroup sendContainer;
     @BindView(R.id.et_amount)
     EditText etAmount;
     @BindView(R.id.et_vpa)
@@ -99,8 +102,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @OnClick(R.id.btn_vpa)
     public void onVPASelected() {
+        TransitionManager.beginDelayedTransition(sendContainer);
         mBtnVpa.setFocusable(true);
-        mBtnVpa.setFocusableInTouchMode(true);
         mBtnVpa.setChipBackgroundColorResource(R.color.clickedblue);
         mBtnMobile.setChipBackgroundColorResource(R.color.changedBackgroundColour);
         btnScanQr.setVisibility(View.VISIBLE);
@@ -110,8 +113,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @OnClick(R.id.btn_mobile)
     public void onMobileSelected() {
+        TransitionManager.beginDelayedTransition(sendContainer);
         mBtnMobile.setFocusable(true);
-        mBtnMobile.setFocusableInTouchMode(true);
         mBtnMobile.setChipBackgroundColorResource(R.color.clickedblue);
         mBtnVpa.setChipBackgroundColorResource(R.color.changedBackgroundColour);
         mTilVpa.setVisibility(View.GONE);
@@ -123,7 +126,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     public void transferClicked() {
         String externalId = etVpa.getText().toString().trim();
         String eamount = etAmount.getText().toString().trim();
-        String mobileNumber = mEtMobileNumber.getText().toString().trim().replaceAll("\\s+", "");
+        String mobileNumber = mEtMobileNumber.getText()
+                .toString().trim().replaceAll("\\s+", "");
         if (eamount.equals("") || (externalId.equals("") && mobileNumber.equals(""))) {
             Toast.makeText(getActivity(),
                     Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
@@ -133,8 +137,12 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 showSnackbar(Constants.PLEASE_ENTER_VALID_AMOUNT);
                 return;
             }
-            showSwipeProgress();
-            mTransferPresenter.checkBalanceAvailability(externalId, amount);
+            if (!mTransferPresenter.checkSelfTransfer(externalId)) {
+                mTransferPresenter.checkBalanceAvailability(externalId, amount);
+            } else {
+                showSwipeProgress();
+                showSnackbar(Constants.SELF_ACCOUNT_ERROR);
+            }
         }
     }
 
@@ -186,8 +194,18 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
         if (requestCode == SCAN_QR_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             String qrData = data.getStringExtra(Constants.QR_DATA);
-            etVpa.setText(qrData);
+            final String[] qrDataArray = qrData.split(", ");
+            if (qrDataArray.length == 1) {
+                etVpa.setText(qrDataArray[0]);
+            } else {
+                etVpa.setText(qrDataArray[0]);
+                etAmount.setText(qrDataArray[1]);
+            }
             String externalId = etVpa.getText().toString();
+            if (etAmount.getText().toString().isEmpty()) {
+                showSnackbar(Constants.PLEASE_ENTER_AMOUNT);
+                return;
+            }
             double amount = Double.parseDouble(etAmount.getText().toString());
             MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId,
                     amount);

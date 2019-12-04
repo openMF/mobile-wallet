@@ -6,9 +6,15 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.transition.TransitionManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
 
@@ -59,6 +65,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     @BindView(R.id.fab_next)
     FloatingActionButton mFabNext;
 
+
     SpinnerDialog spinnerDialog;
     @BindView(R.id.et_user_name)
     EditText mEtUserName;
@@ -66,6 +73,12 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     EditText mEtPassword;
     @BindView(R.id.et_confirm_password)
     EditText mEtConfirmPassword;
+    @BindView(R.id.rr_container)
+    ViewGroup container;
+    @BindView(R.id.pb_password_strength)
+    ProgressBar passwordStrengthProgress;
+    @BindView(R.id.tv_password_strength)
+    TextView passwordStrengthText;
 
     private String countryName;
     private String mobileNumber;
@@ -84,7 +97,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         mPresenter.attachView(this);
 
         showBackButton();
-        setToolbarTitle("");
+        setToolbarTitle("Registration");
 
         mifosSavingProductId = getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0);
         if (mifosSavingProductId
@@ -116,23 +129,26 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
             mEtLastName.setText(lastName);
         }
 
+        mEtPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mPresenter.checkPasswordStrength(s.toString());
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
         DebugUtil.log(mobileNumber, countryName, email, displayName, firstName, lastName, photoUri);
 
         showProgressDialog(Constants.PLEASE_WAIT);
 
         initSearchableStateSpinner();
-
-//        mEtFirstName.setText("Harry");
-//        mEtLastName.setText("Potter");
-//        mEtUserName.setText("harrypotter123");
-//        mEtPassword.setText("harryharry");
-//        mEtConfirmPassword.setText("harryharry");
-//        mEtEmail.setText("ankurs287@gmail.com");
-//        mEtBusinessShopName.setText("Hogwarts");
-//        mEtAddressLine1.setText("diagon");
-//        mEtAddressLine2.setText("alley");
-//        mEtPinCode.setText("111222");
-//        mEtCity.setText("Delhi");
     }
 
     private void initSearchableStateSpinner() {
@@ -192,12 +208,23 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     public void onNextClicked() {
         showProgressDialog(Constants.PLEASE_WAIT);
 
-        if (isEmpty(mEtFirstName) || isEmpty(mEtLastName) || isEmpty(mEtEmail) || isEmpty(
-                mEtBusinessShopName) || isEmpty(mEtAddressLine1) || isEmpty(mEtAddressLine2)
+        if (mifosSavingProductId
+                == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
+                && isEmpty(mEtBusinessShopName)) {
+            Toaster.showToast(this, "All fields are mandatory");
+            hideProgressDialog();
+            return;
+        }
+        if (isEmpty(mEtFirstName) || isEmpty(mEtLastName) || isEmpty(mEtEmail)
+                || isEmpty(mEtAddressLine1) || isEmpty(mEtAddressLine2)
                 || isEmpty(mEtPinCode) || isEmpty(mEtCity) || isEmpty(mEtUserName) || isEmpty(
                 mEtPassword) || isEmpty(mEtConfirmPassword)) {
             Toaster.showToast(this, "All fields are mandatory");
             hideProgressDialog();
+            return;
+        }
+        if (mEtPassword.getText().toString().length() < 6) {
+            showToast("Password should contain more than 6 characters");
             return;
         }
 
@@ -234,6 +261,21 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         showToast("Registered successfully.");
         startActivity(new Intent(SignupActivity.this, LoginActivity.class));
         finish();
+    }
+
+    @Override
+    public void updatePasswordStrength(int stringRes, int colorRes, int value) {
+        TransitionManager.beginDelayedTransition(container);
+        passwordStrengthText.setVisibility(View.VISIBLE);
+        if (value == 0) {
+            passwordStrengthText.setText("Password should contain more than 6 characters");
+            return;
+        }
+        passwordStrengthProgress.setVisibility(View.VISIBLE);
+        passwordStrengthProgress.getProgressDrawable().setColorFilter(
+                colorRes, android.graphics.PorterDuff.Mode.SRC_IN);
+        passwordStrengthProgress.setProgress(value);
+        passwordStrengthText.setText(stringRes);
     }
 
     @Override

@@ -9,6 +9,7 @@ import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.TransactionsHistory;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
@@ -38,11 +39,15 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     @Inject
     TransactionsHistory transactionsHistory;
     private BaseHomeContract.HomeView mHomeView;
+    private final PreferencesHelper preferencesHelper;
+    private List<Transaction> transactionList;
 
     @Inject
-    public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
+    public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository,
+                         PreferencesHelper preferencesHelper) {
         this.mUsecaseHandler = useCaseHandler;
         this.localRepository = localRepository;
+        this.preferencesHelper = preferencesHelper;
     }
 
     @Override
@@ -59,7 +64,8 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
                 new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchAccount.ResponseValue response) {
-                        mHomeView.showAccountBalance(response.getAccount());
+                        preferencesHelper.setAccountId(response.getAccount().getId());
+                        mHomeView.setAccountBalance(response.getAccount());
                         transactionsHistory.fetchTransactionsHistory(response.getAccount().getId());
                         mHomeView.hideSwipeProgress();
                     }
@@ -76,28 +82,37 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
 
     @Override
     public void onTransactionsFetchCompleted(List<Transaction> transactions) {
-        handleTransactionsHistory(transactions);
-    }
-
-    private void handleTransactionsHistory(List<Transaction> transactions) {
-        if (transactions == null) {
+        this.transactionList = transactions;
+        if (transactionList == null) {
             mHomeView.hideBottomSheetActionButton();
             mHomeView.showTransactionsError();
         } else {
-            int transactionsAmount = transactions.size();
-            if (transactionsAmount > Constants.HOME_HISTORY_TRANSACTIONS_LIMIT) {
-                transactions = transactions.subList(0, Constants.HOME_HISTORY_TRANSACTIONS_LIMIT);
-                mHomeView.showTransactionsHistory(transactions);
-                mHomeView.showBottomSheetActionButton();
+            handleTransactionsHistory(0);
+        }
+    }
+
+    private void handleTransactionsHistory(int existingItemCount) {
+        int transactionsAmount = transactionList.size() - existingItemCount;
+        if (transactionsAmount > Constants.HOME_HISTORY_TRANSACTIONS_LIMIT) {
+            List<Transaction> showList = transactionList.subList(0,
+                    Constants.HOME_HISTORY_TRANSACTIONS_LIMIT + existingItemCount);
+            mHomeView.showTransactionsHistory(showList);
+            mHomeView.showBottomSheetActionButton();
+        } else {
+            if (transactionsAmount < Constants.HOME_HISTORY_TRANSACTIONS_LIMIT
+                    && transactionsAmount > 0) {
+                mHomeView.showTransactionsHistory(transactionList);
             } else {
-                mHomeView.hideBottomSheetActionButton();
-                if (transactionsAmount < Constants.HOME_HISTORY_TRANSACTIONS_LIMIT
-                        && transactionsAmount > 0) {
-                    mHomeView.showTransactionsHistory(transactions);
-                } else {
-                    mHomeView.showTransactionsEmpty();
-                }
+                mHomeView.showTransactionsEmpty();
             }
+        }
+    }
+    @Override
+    public void showMoreHistory(int existingItemCount) {
+        if (transactionList.size() == existingItemCount) {
+            mHomeView.showToast("No more History Available");
+        } else {
+            handleTransactionsHistory(existingItemCount);
         }
     }
 }

@@ -3,6 +3,7 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/cc_home_screen"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.mifos.mobilewallet.mifospay.home.ui.MainActivity"
@@ -11,7 +12,8 @@
 
     <TextView
         android:id="@+id/tv_account_balance"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
+        android:gravity="center"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal|top"
         android:layout_marginTop="@dimen/marginBetweenLogoAndLoginInput"
@@ -32,6 +34,20 @@
         android:textAllCaps="true"
         android:textColor="@color/colorBlack54"
         android:textSize="@dimen/textOverline" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hide Balance"
+        android:textSize="20sp"
+        android:id="@+id/tv_hide_balance"
+        android:layout_marginTop="40dp"
+        android:fontFamily="sans-serf-black"
+        android:textColor="@color/colorAccent"
+        android:visibility="gone"
+        android:layout_gravity="center|bottom"
+        app:layout_anchorGravity="bottom|center_horizontal"
+        app:layout_anchor="@id/textView8"/>
 
     <android.support.v4.widget.NestedScrollView
         android:id="@+id/nsv_home_bottom_sheet_dialog"

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.transition.TransitionManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -70,9 +71,17 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     @BindView(R.id.tv_empty_no_transaction_history_subtitle)
     TextView tvTransactionsStateSubtitle;
 
+    @BindView(R.id.tv_hide_balance)
+    TextView tvHideBalance;
+
+    @BindView(R.id.cc_home_screen)
+    ViewGroup homeScreenContainer;
+
     private Account account;
 
     private BottomSheetBehavior mBottomSheetBehavior;
+
+    private String accountBalance;
 
     public static HomeFragment newInstance(long clientId) {
 
@@ -104,6 +113,34 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
 
         showSwipeProgress();
         mHomePresenter.fetchAccountDetails();
+
+        mTvAccountBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mTvAccountBalance.getText().toString().equals(Constants.TAP_TO_REVEAL)) {
+                    TransitionManager.beginDelayedTransition(homeScreenContainer);
+                    mTvAccountBalance.setText(accountBalance);
+                    tvHideBalance.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        tvHideBalance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TransitionManager.beginDelayedTransition(homeScreenContainer);
+                mTvAccountBalance.setText(Constants.TAP_TO_REVEAL);
+                tvHideBalance.setVisibility(View.INVISIBLE);
+            }
+        });
+
+        btnShowMoreTransactionsHistory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TransitionManager.beginDelayedTransition(homeScreenContainer);
+                mHomePresenter.showMoreHistory(mHistoryAdapter.getItemCount());
+            }
+        });
 
         return rootView;
     }
@@ -160,15 +197,17 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     }
 
     @Override
-    public void showAccountBalance(Account account) {
+    public void setAccountBalance(Account account) {
         this.account = account;
 
         String currency = account.getCurrency().getCode();
-        String accountBalance = Utils.getFormattedAccountBalance(account.getBalance());
-        String balanceFormatted = currency + " " + accountBalance;
-
-        mTvAccountBalance.setText(balanceFormatted);
+        String accountBal = Utils.getFormattedAccountBalance(account.getBalance());
+        accountBalance = currency + " " + accountBal;
         hideSwipeProgress();
+
+        TransitionManager.beginDelayedTransition(homeScreenContainer);
+        mTvAccountBalance.setText(Constants.TAP_TO_REVEAL);
+        tvHideBalance.setVisibility(View.INVISIBLE);
     }
 
     @Override

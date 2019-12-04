@@ -30,7 +30,7 @@ public interface BaseHomeContract {
 
         void showSnackbar(String message);
 
-        void showAccountBalance(Account account);
+        void setAccountBalance(Account account);
 
         void showTransactionsHistory(List<Transaction> transactions);
 
@@ -50,6 +50,8 @@ public interface BaseHomeContract {
     interface HomePresenter extends BasePresenter {
 
         void fetchAccountDetails();
+
+        void showMoreHistory(int existingItemsCount);
 
     }
 
@@ -72,9 +74,35 @@ public interface BaseHomeContract {
 
         void fetchVpa();
 
+        boolean checkSelfTransfer(String externalId);
+
         void fetchMobile();
 
         void checkBalanceAvailability(String externalId, double transferAmount);
+    }
+
+    interface MerchantTransferView extends BaseView<MerchantTransferPresenter> {
+
+        void showToast(String message);
+
+        void hideSwipeProgress();
+
+        void showPaymentDetails(String externalId, double amount);
+
+        void showTransactionFetching();
+
+        void showTransactions(List<Transaction> transactions);
+
+        void showSpecificView(int drawable, int title, int subtitle);
+
+    }
+
+    interface MerchantTransferPresenter extends BasePresenter {
+
+        void checkBalanceAvailability(String externalId, double transferAmount);
+
+        void fetchMerchantTransfers(String merchantAccountNo);
+
     }
 
     interface ProfileView extends BaseView<ProfilePresenter> {

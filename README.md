@@ -9,7 +9,7 @@ that can be used as a dependency in any other wallet based project. It is develo
 
 | Master | Development | Chat |
 |------------|-----------------|-----------------|
-| [![Build Status](https://travis-ci.org/openMF/mobile-wallet.svg?branch=master)](https://travis-ci.org/openMF/mobile-wallet) | [![Build Status](https://travis-ci.org/openMF/mobile-wallet.svg?branch=dev)](https://travis-ci.org/openMF/mobile-wallet) | [![Join the chat at https://gitter.im/openMF/mobile-wallet](https://badges.gitter.im/openMF/mobile-wallet.svg)](https://gitter.im/openMF/mobile-wallet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
+| [![Build Status](https://travis-ci.com/openMF/mobile-wallet.svg?branch=master)](https://travis-ci.com/openMF/mobile-wallet) | [![Build Status](https://travis-ci.com/openMF/mobile-wallet.svg?branch=dev)](https://travis-ci.com/openMF/mobile-wallet) | [![Join the chat at https://gitter.im/openMF/mobile-wallet](https://badges.gitter.im/openMF/mobile-wallet.svg)](https://gitter.im/openMF/mobile-wallet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
 
 ## Screenshots
 
@@ -40,7 +40,7 @@ We have the following branches :
     
     With Git 1.7.10 and later, add --single-branch to prevent fetching of all branches. Example, with development branch:
 
-    `git clone -b development --single-branch https://github.com/username/mobile-wallet.git`
+    `git clone -b dev --single-branch https://github.com/username/mobile-wallet.git`
 
  * **master**
    The master branch contains all the stable and bug-free working code. The development branch once complete will be merged with this branch.
@@ -60,7 +60,7 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 
 3. Click on 'Open an existing Android Studio project'
 
-4. Browse to the directory where you cloned the mobile-wallet repo and click OK.
+4. Browse to the directory where you have cloned the mobile-wallet repo and click OK.
 
 5. Let Android Studio import the project.
 

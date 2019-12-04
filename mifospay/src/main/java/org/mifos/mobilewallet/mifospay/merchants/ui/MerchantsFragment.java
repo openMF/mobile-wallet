@@ -1,5 +1,9 @@
 package org.mifos.mobilewallet.mifospay.merchants.ui;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.mifospay.R;
@@ -20,6 +25,7 @@ import org.mifos.mobilewallet.mifospay.merchants.MerchantsContract;
 import org.mifos.mobilewallet.mifospay.merchants.adapter.MerchantsAdapter;
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantsPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.List;
@@ -84,6 +90,47 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
 
         mRvMerchants.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvMerchants.setAdapter(mMerchantsAdapter);
+        mRvMerchants.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View childView, int position) {
+                        String merchantVPA = mMerchantsAdapter.getMerchants()
+                                .get(position).getExternalId();
+                        if (merchantVPA == null) {
+                            Toast.makeText(getActivity(),
+                                    "VPA is Null. Can't make any transactions.",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            Intent intent = new Intent(getActivity(),
+                                    MerchantTransferActivity.class);
+                            intent.putExtra(Constants.MERCHANT_NAME, mMerchantsAdapter
+                                    .getMerchants().get(position).getClientName());
+                            intent.putExtra(Constants.MERCHANT_VPA, mMerchantsAdapter
+                                    .getMerchants().get(position).getExternalId());
+                            intent.putExtra(Constants.MERCHANT_ACCOUNT_NO, mMerchantsAdapter
+                                    .getMerchants().get(position).getAccountNo());
+                            startActivity(intent);
+                        }
+                    }
+
+                    @Override
+                    public void onItemLongPress(View childView, int position) {
+                        ClipboardManager clipboard = (ClipboardManager) getActivity()
+                                .getSystemService(Context.CLIPBOARD_SERVICE);
+                        String merchantVPA = mMerchantsAdapter.getMerchants()
+                                .get(position).getExternalId();
+                        if (merchantVPA == null) {
+                            Toast.makeText(getActivity(),
+                                    "VPA is Null, can't be copied.", Toast.LENGTH_LONG).show();
+                        } else {
+                            ClipData clip = ClipData.newPlainText("VPA", merchantVPA);
+                            clipboard.setPrimaryClip(clip);
+                            Toast.makeText(getActivity(),
+                                    "VPA copied to Clipboard Successfully",
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }));
     }
 
     private void setUpSwipeRefreshLayout() {

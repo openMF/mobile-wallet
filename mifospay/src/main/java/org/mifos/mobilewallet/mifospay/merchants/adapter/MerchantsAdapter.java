@@ -94,6 +94,9 @@ public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.View
         };
     }
 
+    public List<SavingsWithAssociations> getMerchants() {
+        return mMerchantsList;
+    }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 

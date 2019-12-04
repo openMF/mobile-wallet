@@ -34,33 +34,38 @@ public class FetchInvoice extends UseCase<FetchInvoice.RequestValues, FetchInvoi
         Uri paymentLink = requestValues.uniquePaymentLink;
         String scheme = paymentLink.getScheme(); // "https"
         String host = paymentLink.getHost(); // "invoice.mifospay.com"
-        List<String> params = paymentLink.getPathSegments();
-        String clientId = params.get(0); // "clientId"
-        String invoiceId = params.get(1); // "invoiceId"
+        try {
+            List<String> params = paymentLink.getPathSegments();
+            String clientId = params.get(0); // "clientId"
+            String invoiceId = params.get(1); // "invoiceId"
 
-        mFineractRepository.fetchInvoice(clientId, invoiceId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<List<Invoice>>() {
-                    @Override
-                    public void onCompleted() {
+            mFineractRepository.fetchInvoice(clientId, invoiceId)
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Subscriber<List<Invoice>>() {
+                        @Override
+                        public void onCompleted() {
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getUseCaseCallback().onError(Constants.INVALID_UPL);
-                    }
-
-                    @Override
-                    public void onNext(List<Invoice> invoices) {
-                        if (invoices.size() > 0) {
-                            getUseCaseCallback().onSuccess(new ResponseValue(invoices));
-                        } else {
-                            getUseCaseCallback().onError(Constants.INVOICE_DOES_NOT_EXIST);
                         }
-                    }
-                });
+
+                        @Override
+                        public void onError(Throwable e) {
+                            getUseCaseCallback().onError(Constants.INVALID_UPL);
+                        }
+
+                        @Override
+                        public void onNext(List<Invoice> invoices) {
+                            if (invoices.size() > 0) {
+                                getUseCaseCallback().onSuccess(new ResponseValue(invoices));
+                            } else {
+                                getUseCaseCallback().onError(Constants.INVOICE_DOES_NOT_EXIST);
+                            }
+                        }
+                    });
+        } catch (IndexOutOfBoundsException e) {
+            getUseCaseCallback().onError("Invalid link used to open the App");
+        }
+
     }
 
     public static final class RequestValues implements UseCase.RequestValues {

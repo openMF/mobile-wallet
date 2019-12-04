@@ -5,6 +5,7 @@ import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -31,4 +32,9 @@ public interface SavingsAccountsService {
     Observable<GenericResponse> blockUnblockAccount(
             @Path("accountId") long accountId,
             @Query("command") String command);
+
+    @GET(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}/" + ApiEndPoints.TRANSACTIONS
+            + "/{transactionId}")
+    Observable<Transactions> getSavingAccountTransaction(@Path("accountId") long accountId,
+                                                         @Path("transactionId") long transactionId);
 }
