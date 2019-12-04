@@ -209,6 +209,7 @@
     <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
     <string name="account_details">Account Details</string>
     <string name="mobile">Mobile number</string>
+    <string name="login_out_title">Do you want to logout?</string>
     <string name="discard_changes_and_exit">Discard changes and exit?</string>
     <string name="discard_changes_and_exit_description">This will discard all unsaved changes and return to the Profile section.</string>
     <string name="accept">accept</string>
