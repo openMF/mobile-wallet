@@ -113,8 +113,7 @@
                         android:id="@+id/til_edit_profile_mobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:helperText="@string/mobile"
-                        android:hint="@string/mobile" >
+                        >
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_edit_profile_mobile"

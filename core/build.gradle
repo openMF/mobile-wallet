@@ -30,7 +30,6 @@ android {
         abortOnError false
         disable 'InvalidPackage'
     }
-    buildToolsVersion rootProject.ext.buildToolsVersion
 }
 
 dependencies {
@@ -51,7 +50,6 @@ dependencies {
     implementation "com.squareup.retrofit2:adapter-rxjava:$rootProject.retrofitVersion"
     implementation "com.squareup.okhttp3:okhttp:$rootProject.okHttp3Version"
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttp3Version"
-
     implementation "io.reactivex:rxandroid:$rootProject.rxandroidVersion"
     implementation "io.reactivex:rxjava:$rootProject.rxjavaVersion"
 
