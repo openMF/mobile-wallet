@@ -5,10 +5,10 @@
 
     <item
         android:id="@+id/item_faq"
-        android:title="FAQ"/>
+        android:title="@string/faq"/>
 
     <item
         android:id="@+id/item_profile_setting"
-        android:title="Settings"/>
+        android:title="@string/settings"/>
 
 </menu>
