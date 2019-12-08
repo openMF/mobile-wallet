@@ -188,8 +188,6 @@ public class EditProfileActivity extends BaseActivity implements
     public void onUserDetailsFocusChanged(EditText input, boolean isFocused) {
         if (!isDataSaveNecessary((input))) {
             if (isFocused) {
-                input.setText(input.getHint().toString());
-            } else {
                 input.getText().clear();
             }
         }
