@@ -234,4 +234,5 @@
     <string name="password_very_strong">Very Strong</string>
     <string name="amount">Amount</string>
     <string name="merchant_history_message">The transaction history with this merchant will be shown here</string>
+    <string name="log_out_title">Do you want to logout?</string>
 </resources>
