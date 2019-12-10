@@ -55,14 +55,17 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 ## Building the Code
 
 1. Fork the repository.
-2. Go to your fork and clone only the dev branch using `git clone -b dev <remote_repo>`.
+2. Go to your fork and clone only the dev branch using `git clone -b dev <remote_repo>`(remote_repo url refers to your fork).
 3. Click on 'Open an existing Android Studio project'.
 4. Browse to the directory where you cloned the mobile-wallet repo and click OK.
 5. Let Android Studio import the project.
 6. Let the gradle sync.
 7. There should be no errors in gradle build.
-8. Set your remote origin and also set upstream to Origin repository to pull changes whenever needed.
-9. To set the upstream please refer this <a href="https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork">document </a>.
+8. Set your remote upstream to the remote repository to pull changes whenever needed, using
+`git remote add upstream https://github.com/openMF/mobile-wallet.git` 
+9. Pull changes from dev branch of upstream, whenever needed, using
+`git checkout dev`
+`git pull upstream dev`
 
 ## Wiki
 
