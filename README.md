@@ -61,7 +61,8 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 5. Let Android Studio import the project.
 6. Let the gradle sync.
 7. There should be no errors in gradle build.
-8. Set your remote origin and also set upstream to Origin repository to pull changes whenever needed.
+8. Set your remote upstream to the remote repository to pull changes whenever needed, using
+`git remote add upstream https://github.com/openMF/mobile-wallet.git` 
 9. To set the upstream please refer this <a href="https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/syncing-a-fork">document </a>.
 
 ## Wiki
