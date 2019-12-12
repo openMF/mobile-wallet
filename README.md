@@ -54,19 +54,27 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 
 ## Building the Code
 
-1. Clone the repository using HTTP: git clone https://github.com/openMF/mobile-wallet.git
+1. Fork the repository.
 
-2. Open Android Studio.
+2. Go to your fork and clone only the dev branch using `git clone -b dev <remote_repo>`(remote_repo url refers to your fork).
 
-3. Click on 'Open an existing Android Studio project'
+3. Click on 'Open an existing Android Studio project'.
 
-4. Browse to the directory where you have cloned the mobile-wallet repo and click OK.
+4. Browse to the directory where you cloned the mobile-wallet repo and click OK.
 
 5. Let Android Studio import the project.
 
-6. You will see an error in gradle build related to missing RblClientIdProp and RblClientSecretProp. Add RblClientIdProp and RblClientSecretProp as environment variables with any value.
+6. Let the gradle sync.
 
-7. Sync the project again in Android studio.
+7. There should be no errors in gradle build.
+
+8. Set your remote upstream to the remote repository to pull changes whenever needed, using
+`git remote add upstream https://github.com/openMF/mobile-wallet.git` 
+
+9. Pull changes from dev branch of upstream, whenever needed, using
+`git checkout dev`
+`git pull upstream dev`
+
 
 ## Wiki
 
