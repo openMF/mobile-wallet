@@ -73,32 +73,6 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
      * Method to initialize the listeners
      */
     public void initListeners() {
-
-        // ExpandableListView Group expanded listener
-        expandableListView.setOnGroupExpandListener(
-                new ExpandableListView.OnGroupExpandListener() {
-
-                    @Override
-                    public void onGroupExpand(int groupPosition) {
-                        Toast.makeText(getApplicationContext(),
-                                listDataGroup.get(groupPosition) + "Collapsed",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        // ExpandableListView Group collapsed listener
-        expandableListView.setOnGroupCollapseListener(
-                new ExpandableListView.OnGroupCollapseListener() {
-
-                    @Override
-                    public void onGroupCollapse(int groupPosition) {
-                        Toast.makeText(getApplicationContext(),
-                                listDataGroup.get(groupPosition) + "Collapsed",
-                                Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-
     }
 
     /**
