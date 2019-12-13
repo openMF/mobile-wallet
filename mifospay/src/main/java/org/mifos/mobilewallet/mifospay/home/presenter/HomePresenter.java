@@ -44,7 +44,7 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
 
     @Inject
     public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository,
-                         PreferencesHelper preferencesHelper) {
+            PreferencesHelper preferencesHelper) {
         this.mUsecaseHandler = useCaseHandler;
         this.localRepository = localRepository;
         this.preferencesHelper = preferencesHelper;
@@ -99,14 +99,16 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
             mHomeView.showTransactionsHistory(showList);
             mHomeView.showBottomSheetActionButton();
         } else {
-            if (transactionsAmount < Constants.HOME_HISTORY_TRANSACTIONS_LIMIT
+            if (transactionsAmount <= Constants.HOME_HISTORY_TRANSACTIONS_LIMIT
                     && transactionsAmount > 0) {
                 mHomeView.showTransactionsHistory(transactionList);
+                mHomeView.hideBottomSheetActionButton();
             } else {
                 mHomeView.showTransactionsEmpty();
             }
         }
     }
+
     @Override
     public void showMoreHistory(int existingItemCount) {
         if (transactionList.size() == existingItemCount) {
