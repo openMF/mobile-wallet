@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
 import com.yalantis.ucrop.UCrop;
@@ -302,6 +303,7 @@ public class EditProfileActivity extends BaseActivity implements
         UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationFileName)));
         uCrop = getConfiguredUCrop(uCrop);
         uCrop.start(EditProfileActivity.this);
+
     }
 
     private UCrop getConfiguredUCrop(UCrop uCrop) {
@@ -329,12 +331,15 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void removeProfileImage() {
+        Toast.makeText(this,"Profile picture removed",Toast.LENGTH_SHORT).show();
+
         // TODO: Remove image from database
     }
 
     @Override
     public void changeProfileImage() {
         pickImageFromGallery();
+
     }
 
     private void pickImageFromGallery() {
@@ -356,7 +361,10 @@ public class EditProfileActivity extends BaseActivity implements
 
             startActivityForResult(Intent.createChooser(i,
                     getString(R.string.label_select_picture)), REQUEST_READ_IMAGE);
+
         }
+
+
     }
 
     private void handleCropResult(@NonNull Intent result) {
@@ -364,6 +372,8 @@ public class EditProfileActivity extends BaseActivity implements
         if (resultUri != null) {
             ivUserImage.setImageURI(resultUri);
         }
+        Toast.makeText(this,"Profile picture changed",Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
