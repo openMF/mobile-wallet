@@ -331,7 +331,7 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void removeProfileImage() {
-        Toast.makeText(this,"Profile picture removed",Toast.LENGTH_SHORT).show();
+         Toast.makeText(this,"Profile picture removed",Toast.LENGTH_SHORT).show();
 
         // TODO: Remove image from database
     }
