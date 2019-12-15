@@ -9,9 +9,12 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 
 public interface RegistrationContract {
 
-    interface MobileVerificationView extends BaseView<MobileVerificationPresenter> {
+    interface OtpVerificationPresenter extends BasePresenter {
 
-        void onRequestOtpSuccess();
+        void verifyOTP(String otp);
+    }
+
+    interface OtpVerificationView extends BaseView<OtpVerificationPresenter> {
 
         void onOtpVerificationSuccess();
 
@@ -19,18 +22,24 @@ public interface RegistrationContract {
 
         void hideProgressDialog();
 
-        void onRequestOtpFailed(String s);
-
         void onOtpVerificationFailed(String s);
     }
 
-    interface MobileVerificationPresenter extends BasePresenter {
+    interface InitiateRegistrationPresenter extends BasePresenter {
 
-        void requestOTPfromServer(String fullNumber, String s);
-
-        void verifyOTP(String otp);
+        void requestOtpFromServer(String fullNumber, String s);
     }
 
+    interface InitiateRegistrationView extends BaseView<InitiateRegistrationPresenter> {
+
+        void onRequestOtpSuccess();
+
+        void onRequestOtpFailed(String s);
+
+        void showToast(String s);
+
+        void hideProgressDialog();
+    }
 
     interface SignupView extends BaseView<SignupPresenter> {
 

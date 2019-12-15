@@ -8,56 +8,39 @@ import org.mifos.mobilewallet.mifospay.registration.RegistrationContract;
 
 import javax.inject.Inject;
 
-/**
- * Created by ankur on 21/June/2018
- */
-
-public class MobileVerificationPresenter implements
-        RegistrationContract.MobileVerificationPresenter {
-
+public class InitiateRegistrationPresenter implements
+        RegistrationContract.InitiateRegistrationPresenter {
     private final UseCaseHandler mUseCaseHandler;
-    RegistrationContract.MobileVerificationView mMobileVerificationView;
+    RegistrationContract.InitiateRegistrationView mInitiateRegistrationView;
     @Inject
     SearchClient searchClientUseCase;
 
     @Inject
-    public MobileVerificationPresenter(UseCaseHandler useCaseHandler) {
+    public InitiateRegistrationPresenter(UseCaseHandler useCaseHandler) {
         mUseCaseHandler = useCaseHandler;
     }
 
     @Override
-    public void attachView(BaseView baseView) {
-        mMobileVerificationView = (RegistrationContract.MobileVerificationView) baseView;
-        mMobileVerificationView.setPresenter(this);
-    }
-
-    @Override
-    public void requestOTPfromServer(String fullNumber, String mobileNo) {
-
+    public void requestOtpFromServer(String fullNumber, String mobileNo) {
         mUseCaseHandler.execute(searchClientUseCase, new SearchClient.RequestValues(mobileNo),
                 new UseCase.UseCaseCallback<SearchClient.ResponseValue>() {
                     @Override
                     public void onSuccess(SearchClient.ResponseValue response) {
-                        mMobileVerificationView.onRequestOtpFailed("Mobile number already exists.");
+                        mInitiateRegistrationView.onRequestOtpFailed(
+                                "Mobile number already exists.");
                     }
 
                     @Override
                     public void onError(String message) {
                         // TODO:: request OTP
-                        mMobileVerificationView.onRequestOtpSuccess();
+                        mInitiateRegistrationView.onRequestOtpSuccess();
                     }
                 });
     }
 
     @Override
-    public void verifyOTP(String otp) {
-        // TODO:: verify OTP
-        mMobileVerificationView.onOtpVerificationSuccess();
-
-        // TODO::
-
-//        if (false) { // on error
-//            mMobileVerificationView.onOtpVerificationFailed("OTP Verification Failed.");
-//        }
+    public void attachView(BaseView baseView) {
+        mInitiateRegistrationView = (RegistrationContract.InitiateRegistrationView) baseView;
+        mInitiateRegistrationView.setPresenter(this);
     }
 }

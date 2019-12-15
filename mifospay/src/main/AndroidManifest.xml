@@ -16,7 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".merchants.ui.MerchantTransferActivity"></activity>
+        <activity android:name=".merchants.ui.MerchantTransferActivity" />
         <activity
             android:name=".auth.ui.LoginActivity"
             android:theme="@style/AppTheme">
@@ -46,8 +46,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".receipt.ui.ReceiptActivity"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -61,8 +61,8 @@
         </activity>
         <activity
             android:name=".invoice.ui.InvoiceActivity"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -105,6 +105,12 @@
         <activity
             android:name=".registration.ui.MobileVerificationActivity"
             android:theme="@style/AppTheme" />
+        <activity
+            android:name=".registration.ui.InitiateRegistrationActivity"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".registration.ui.OtpVerificationActivity"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".editprofile.ui.EditProfileActivity"
             android:theme="@style/AppTheme"

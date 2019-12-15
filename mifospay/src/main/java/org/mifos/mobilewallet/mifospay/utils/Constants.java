@@ -126,6 +126,7 @@ public class Constants {
 
     public static final String SENDING_OTP_TO_YOUR_MOBILE_NUMBER =
             "Sending OTP to your mobile number..";
+    public static final String VERIFYING_OTP_PLEASE_WAIT = "Verifying OTP. Please wait.. ";
     public static final String MOBILE_NUMBER = "Mobile Number";
     public static final String COUNTRY = "Country";
     public static final String GOOGLE_SIGN_IN_FAILED = "Google Sign in failed.";

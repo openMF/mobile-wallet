@@ -37,7 +37,8 @@ import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
-import org.mifos.mobilewallet.mifospay.registration.ui.MobileVerificationActivity;
+import org.mifos.mobilewallet.mifospay.registration.ui.InitiateRegistrationActivity;
+import org.mifos.mobilewallet.mifospay.registration.ui.OtpVerificationActivity;
 import org.mifos.mobilewallet.mifospay.registration.ui.SignupActivity;
 import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsFragment;
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
@@ -98,7 +99,9 @@ public interface ActivityComponent {
 
     void inject(SignupActivity signupActivity);
 
-    void inject(MobileVerificationActivity mobileVerificationActivity);
+    void inject (InitiateRegistrationActivity initiateRegistrationActivity);
+
+    void inject (OtpVerificationActivity otpVerificationActivity);
 
     void inject(EditProfileActivity editProfileActivity);
 

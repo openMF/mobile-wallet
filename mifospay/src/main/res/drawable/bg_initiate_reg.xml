@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="64"
+    android:viewportHeight="64">
+
+    <path
+        android:name="rectangle"
+        android:fillColor="@color/primaryDarkBlue"
+        android:pathData="M0,0 L 0,64 L 64,64 L 64,0 L 0,0" />
+
+    <path
+        android:name="circle"
+        android:fillColor="@color/primaryLightBlue"
+        android:pathData="M20,64
+        A10,10 0 1,1 0,0
+        A10,10 0 1,1 20,64 Z" />
+</vector>

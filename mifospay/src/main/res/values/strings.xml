@@ -151,6 +151,8 @@
     <string name="popular_banks">Popular Banks</string>
     <string name="other_banks">Other Banks</string>
     <string name="enter_mobile_number">Enter Mobile Number</string>
+    <string name="verification_code">Verification Code</string>
+    <string name="please_type_otp">Please type the OTP sent to your mobile</string>
     <string name="verifying_otp_please_wait">Verifying OTP. Please wait..</string>
     <string name="notification_setting">Notification Setting</string>
     <string name="disable_account">Disable account</string>

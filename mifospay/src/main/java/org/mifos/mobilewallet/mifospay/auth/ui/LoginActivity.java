@@ -23,7 +23,7 @@ import org.mifos.mobilewallet.mifospay.auth.AuthContract;
 import org.mifos.mobilewallet.mifospay.auth.presenter.LoginPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
-import org.mifos.mobilewallet.mifospay.registration.ui.MobileVerificationActivity;
+import org.mifos.mobilewallet.mifospay.registration.ui.InitiateRegistrationActivity;
 import org.mifos.mobilewallet.mifospay.registration.ui.SignupMethod;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
@@ -191,7 +191,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
 
     public void signup(int mifosSavingsProductId) {
         showProgressDialog(Constants.PLEASE_WAIT);
-        Intent intent = new Intent(LoginActivity.this, MobileVerificationActivity.class);
+        Intent intent = new Intent(LoginActivity.this, InitiateRegistrationActivity.class);
         intent.putExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, mMifosSavingProductId);
         if (account != null) {
             intent.putExtra(Constants.GOOGLE_PHOTO_URI, account.getPhotoUrl());
