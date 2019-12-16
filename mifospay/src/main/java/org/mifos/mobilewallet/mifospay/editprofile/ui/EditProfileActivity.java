@@ -186,12 +186,8 @@ public class EditProfileActivity extends BaseActivity implements
     @OnFocusChange({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
             R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile})
     public void onUserDetailsFocusChanged(EditText input, boolean isFocused) {
-        if (!isDataSaveNecessary((input))) {
-            if (isFocused) {
-                input.setText(input.getHint().toString());
-            } else {
-                input.getText().clear();
-            }
+        if (!isDataSaveNecessary((input)) && (!isFocused)) {
+            input.setText(input.getHint().toString());
         }
     }
 
