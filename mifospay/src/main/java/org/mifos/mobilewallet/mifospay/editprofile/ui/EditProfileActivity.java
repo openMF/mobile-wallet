@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
 import com.yalantis.ucrop.UCrop;
@@ -28,6 +29,7 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter;
+import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
@@ -161,7 +163,8 @@ public class EditProfileActivity extends BaseActivity implements
 
     @OnClick(R.id.btn_change_passcode)
     public void onChangePasscodeClicked() {
-        // TODO: it's not supported by the api???
+        startActivity(new Intent(getApplicationContext(), PassCodeActivity.class));
+
     }
 
     @OnTextChanged({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
@@ -329,6 +332,7 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void removeProfileImage() {
+        Toast.makeText(this,"Profile picture removed",Toast.LENGTH_SHORT).show();
         // TODO: Remove image from database
     }
 
@@ -364,6 +368,7 @@ public class EditProfileActivity extends BaseActivity implements
         if (resultUri != null) {
             ivUserImage.setImageURI(resultUri);
         }
+        Toast.makeText(this,"Profile picture changed",Toast.LENGTH_SHORT).show();
     }
 
     @Override
