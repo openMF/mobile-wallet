@@ -3,7 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:id="@+id/parent_container">
 
     <ScrollView android:layout_width="match_parent"
                 android:layout_height="match_parent">
@@ -101,6 +102,12 @@
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
 
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="false"
+                    app:passwordToggleEnabled="true">
+
                 <EditText
                     android:id="@+id/et_password"
                     android:layout_width="match_parent"
@@ -112,6 +119,14 @@
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
 
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:hintEnabled="false"
+                    app:passwordToggleEnabled="true">
+
                 <EditText
                     android:id="@+id/et_confirm_password"
                     android:layout_width="match_parent"
@@ -122,6 +137,8 @@
                     android:inputType="textPassword"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
+
+                </android.support.design.widget.TextInputLayout>
 
                 <EditText
                     android:id="@+id/et_email"
