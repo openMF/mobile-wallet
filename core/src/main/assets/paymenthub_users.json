@@ -7,6 +7,7 @@
       "role": "PAYEE",
       "tenant": "tn02",
       "fspName": "lion",
+      "password": "password",
       "banks": [
         {
           "bankName": "Bank2",
@@ -57,6 +58,7 @@
       "username": "elephant_merchant",
       "firstName": "Carl",
       "lastName": "Baker",
+      "password": "password",
       "role": "PAYEE",
       "tenant": "tn04",
       "fspName": "elephant",
