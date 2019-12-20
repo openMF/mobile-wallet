@@ -193,9 +193,9 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         showProgressDialog(Constants.PLEASE_WAIT);
 
         if (isEmpty(mEtFirstName) || isEmpty(mEtLastName) || isEmpty(mEtEmail) || isEmpty(
-                mEtBusinessShopName) || isEmpty(mEtAddressLine1) || isEmpty(mEtAddressLine2)
-                || isEmpty(mEtPinCode) || isEmpty(mEtCity) || isEmpty(mEtUserName) || isEmpty(
-                mEtPassword) || isEmpty(mEtConfirmPassword)) {
+                mEtBusinessShopName) || isEmpty(mEtAddressLine1) || isEmpty(mEtPinCode)
+                || isEmpty(mEtCity) || isEmpty(mEtUserName) || isEmpty(
+                        mEtPassword) || isEmpty(mEtConfirmPassword)) {
             Toaster.showToast(this, "All fields are mandatory");
             hideProgressDialog();
             return;
