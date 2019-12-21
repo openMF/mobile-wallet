@@ -117,9 +117,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         }
     }
 
-    private void hideEmptyStateView() {
-        vStateView.setVisibility(View.GONE);
-    }
+    private void hideEmptyStateView() { vStateView.setVisibility(View.GONE); }
 
     /**
      * A function to setup the Layout Manager and Integrate the RecyclerView with Adapter.
@@ -137,7 +135,6 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(final View childView, final int position) {
-
                         PopupMenu savedCardMenu = new PopupMenu(getContext(), childView);
                         savedCardMenu.getMenuInflater().inflate(R.menu.menu_saved_card,
                                 savedCardMenu.getMenu());
