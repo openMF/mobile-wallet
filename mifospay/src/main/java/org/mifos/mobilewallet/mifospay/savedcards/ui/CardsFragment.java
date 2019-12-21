@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.savedcards.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -159,9 +161,20 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                                                         Constants.EDIT_CARD_DIALOG);
                                                 break;
                                             case R.id.delete_card:
-                                                mCardsPresenter.deleteCard(
-                                                        mCardsAdapter.getCards().get(
-                                                                position).getId());
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), R.style.AppTheme_Dialog);
+                                                builder.setTitle(R.string.alert_delete_card);
+                                                builder.setCancelable(false)
+                                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                                            public void onClick(DialogInterface dialog, int id) {
+                                                                showProgressDialog(Constants.DELETE_CARD);
+                                                                mCardsPresenter.deleteCard(
+                                                                        mCardsAdapter.getCards().get(
+                                                                                position).getId());
+                                                            }
+                                                        })
+                                                        .setNegativeButton("No", null);
+                                                AlertDialog alert = builder.create();
+                                                alert.show();
                                                 break;
                                             case R.id.cancel:
                                                 break;

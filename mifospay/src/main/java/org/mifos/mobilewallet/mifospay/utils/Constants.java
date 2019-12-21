@@ -136,6 +136,8 @@ public class Constants {
     public static final String GOOGLE_PHOTO_URI = "GOOGLE_PHOTO_URI";
     public static final String CHOOSE_SIGNUP_METHOD = "Choose Signup Method";
     public static final String LOGGING_OUT = "Logging out...";
+    public static final String DELETE_CARD = "Deleting card...";
+
     public static final String NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_IMAGES =
             "Need external storage permission to browse images";
     public static final String SETTINGS = "Settings";
@@ -181,6 +183,7 @@ public class Constants {
 
     public static final String ERROR_FIELDS_CANNOT_BE_EMPTY = "Fields cannot be empty";
     public static final String ERROR_VALIDATING_PASSWORD = "Passwords are not the same";
+
 
     public static final String CHANGE_PROFILE_IMAGE_KEY = "CHANGE_PROFILE_IMAGE_KEY";
     public static final String CHANGE_PROFILE_IMAGE_VALUE = "CHANGE_PROFILE_IMAGE_VALUE";
