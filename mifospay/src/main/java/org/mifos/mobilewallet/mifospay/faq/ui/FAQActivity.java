@@ -80,9 +80,6 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
 
                     @Override
                     public void onGroupExpand(int groupPosition) {
-                        Toast.makeText(getApplicationContext(),
-                                listDataGroup.get(groupPosition) + "Collapsed",
-                                Toast.LENGTH_SHORT).show();
                     }
                 });
 
@@ -92,9 +89,6 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
 
                     @Override
                     public void onGroupCollapse(int groupPosition) {
-                        Toast.makeText(getApplicationContext(),
-                                listDataGroup.get(groupPosition) + "Collapsed",
-                                Toast.LENGTH_SHORT).show();
 
                     }
                 });
