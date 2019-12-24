@@ -26,8 +26,6 @@ public interface FAQContract {
 
         void initViews();
 
-        void initListeners();
-
         void initObjects();
 
         void initListData();

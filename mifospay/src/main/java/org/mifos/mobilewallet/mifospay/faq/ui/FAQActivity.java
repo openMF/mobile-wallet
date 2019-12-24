@@ -2,7 +2,6 @@ package org.mifos.mobilewallet.mifospay.faq.ui;
 
 import android.os.Bundle;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -45,9 +44,6 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
         // initializing the views
         initViews();
 
-        // initializing the listeners
-        initListeners();
-
         // initializing the objects
         initObjects();
 
@@ -66,38 +62,6 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
     public void initViews() {
 
         expandableListView = findViewById(R.id.faq_list);
-
-    }
-
-    /**
-     * Method to initialize the listeners
-     */
-    public void initListeners() {
-
-        // ExpandableListView Group expanded listener
-        expandableListView.setOnGroupExpandListener(
-                new ExpandableListView.OnGroupExpandListener() {
-
-                    @Override
-                    public void onGroupExpand(int groupPosition) {
-                        Toast.makeText(getApplicationContext(),
-                                listDataGroup.get(groupPosition) + "Collapsed",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        // ExpandableListView Group collapsed listener
-        expandableListView.setOnGroupCollapseListener(
-                new ExpandableListView.OnGroupCollapseListener() {
-
-                    @Override
-                    public void onGroupCollapse(int groupPosition) {
-                        Toast.makeText(getApplicationContext(),
-                                listDataGroup.get(groupPosition) + "Collapsed",
-                                Toast.LENGTH_SHORT).show();
-
-                    }
-                });
 
     }
 
