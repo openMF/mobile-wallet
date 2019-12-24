@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.hbb20.CountryCodePicker;
 import com.yalantis.ucrop.UCrop;
@@ -325,6 +326,7 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void removeProfileImage() {
+        Toast.makeText(getApplicationContext(),R.string.toast_profile_removed,Toast.LENGTH_SHORT).show();
         // TODO: Remove image from database
     }
 
@@ -360,6 +362,7 @@ public class EditProfileActivity extends BaseActivity implements
         if (resultUri != null) {
             ivUserImage.setImageURI(resultUri);
         }
+        Toast.makeText(getApplicationContext(),R.string.toast_profile_changed,Toast.LENGTH_SHORT).show();
     }
 
     @Override
