@@ -116,7 +116,7 @@
                         android:paddingRight="15dp"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
-                        android:hint="Password"
+                        android:hint="@string/password"
                         android:inputType="textPassword"/>
                 </android.support.design.widget.TextInputLayout>
                 <ProgressBar

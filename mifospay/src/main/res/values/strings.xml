@@ -144,7 +144,10 @@
     <string name="change_mobile_number">Change Mobile Number</string>
     <string name="items_bought">items bought</string>
     <string name="status">status</string>
-    <string name="transaction_id">transaction id</string>
+    <string name="transaction_id">Transaction ID</string>
+    <string name="transaction_date">Transaction Date</string>
+    <string name="to">To:</string>
+    <string name="from">From:</string>
     <string name="date">date</string>
     <string name="link">link</string>
     <string name="no_invoices_found">No invoices found</string>
@@ -235,4 +238,11 @@
     <string name="amount">Amount</string>
     <string name="merchant_history_message">The transaction history with this merchant will be shown here</string>
     <string name="log_out_title">Do you want to logout?</string>
+    <string name="transfer_money_to_this_merchant">Transfer money to this merchant</string>
+    <string name="test_user">Dwight Schrute</string>
+    <string name="test_vpa">rohan.jain@mifos</string>
+    <string name="set_amount">Set Amount</string>
+    <string name="grip">Grip</string>
+    <string name="hide_balance">Hide Balance</string>
+
 </resources>

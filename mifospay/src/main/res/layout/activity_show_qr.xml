@@ -24,7 +24,7 @@
         android:layout_marginBottom="20dp"
         android:background="@drawable/button_round_black"
         android:layout_gravity="center"
-        android:text="Set Amount" />
+        android:text="@string/set_amount" />
 
     <LinearLayout
         android:layout_width="match_parent"

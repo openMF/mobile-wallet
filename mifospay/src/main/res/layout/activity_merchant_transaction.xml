@@ -25,16 +25,16 @@
             android:visibility="visible" />
 
         <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_merchant_history"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="175dp"
-            android:id="@+id/rv_merchant_history"/>
+            android:layout_marginBottom="175dp" />
 
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/nsv_merchant_bottom_sheet_dialog"
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/value_20dp"
             android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/value_20dp"
             android:background="@drawable/drawable_bottom_sheet_view"
             app:behavior_hideable="false"
             app:behavior_peekHeight="@dimen/bottomSheetPeekHeight"
@@ -57,53 +57,54 @@
                     android:id="@+id/dialog_home_bottom_sheet_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/roboto"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/marginItemsInSectionSmall"
-                    android:text="Transfer Money to this Merchant"
+                    android:fontFamily="@font/roboto"
+                    android:text="@string/transfer_money_to_this_merchant"
                     android:textColor="@color/colorAccentBlue"
                     android:textSize="@dimen/textBody1" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_merchant_image"
                     android:layout_width="@dimen/user_profile_image_size"
-                    android:layout_gravity="center_horizontal|top"
                     android:layout_height="@dimen/user_profile_image_size"
+                    android:layout_gravity="center_horizontal|top"
                     android:layout_marginTop="@dimen/value_30dp"
-                    android:src="@drawable/logo_pnb"/>
+                    android:src="@drawable/logo_pnb" />
 
                 <TextView
                     android:id="@+id/tv_pay_to_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginTop="@dimen/marginItemsInSectionSmall"
-                    android:text="Naman Dwivedi 2"
+                    android:text="@string/test_user"
                     android:textColor="@color/black"
-                    android:textSize="@dimen/text_large"
-                    android:layout_gravity="center" />
+                    android:textSize="@dimen/text_large" />
 
                 <TextView
                     android:id="@+id/tv_pay_to_vpa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_marginTop="@dimen/marginItemsInSectionSmall"
-                    android:text="naman.dwivedi2@mifos"
+                    android:text="@string/test_vpa"
                     android:textColor="@color/gray_dark"
-                    android:textSize="@dimen/text_large"
-                    android:layout_gravity="center" />
+                    android:textSize="@dimen/text_large" />
 
                 <android.support.design.widget.TextInputLayout
+                    android:id="@+id/edittext"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="80dp"
-                    android:id="@+id/edittext"
+                    android:layout_gravity="center"
                     android:layout_marginLeft="@dimen/value_20dp"
-                    android:layout_marginRight="@dimen/value_20dp"
                     android:layout_marginTop="@dimen/value_20dp"
+                    android:layout_marginRight="@dimen/value_20dp"
                     android:padding="@dimen/value_10dp"
                     android:textColorHint="@android:color/black"
-                    android:layout_gravity="center"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_merchant_amount"
                         android:layout_width="match_parent"
@@ -114,13 +115,14 @@
                         android:textSize="@dimen/value_15sp"
                         android:theme="@style/Theme.AppCompat.Light" />
                 </android.support.design.widget.TextInputLayout>
+
                 <Button
                     android:id="@+id/btn_submit"
                     android:layout_width="150dp"
                     android:layout_height="@dimen/value_50dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="Submit"
+                    android:text="@string/submit"
                     android:textColor="@color/white" />
 
             </LinearLayout>

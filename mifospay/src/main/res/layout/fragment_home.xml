@@ -38,7 +38,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hide Balance"
+        android:text="@string/hide_balance"
         android:textSize="20sp"
         android:id="@+id/tv_hide_balance"
         android:layout_marginTop="40dp"
