@@ -2,7 +2,6 @@ package org.mifos.mobilewallet.mifospay.editprofile.ui;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -30,6 +29,7 @@ import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter;
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.DialogBox;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
@@ -95,7 +95,7 @@ public class EditProfileActivity extends BaseActivity implements
     List<EditText> userDetailsInputs;
 
     private BottomSheetDialog bottomSheetDialog;
-    private AlertDialog alertDialog;
+    public DialogBox dialogBox = new DialogBox();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,8 +186,12 @@ public class EditProfileActivity extends BaseActivity implements
     @OnFocusChange({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
             R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile})
     public void onUserDetailsFocusChanged(EditText input, boolean isFocused) {
-        if (!isDataSaveNecessary((input)) && (!isFocused)) {
-            input.setText(input.getHint().toString());
+        if (!isDataSaveNecessary((input))) {
+            if (isFocused) {
+                input.setText(input.getHint().toString());
+            } else {
+                input.getText().clear();
+            }
         }
     }
 
@@ -364,31 +368,22 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void showDiscardChangesDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog);
-        builder.setTitle(R.string.discard_changes_and_exit);
-        builder.setMessage(R.string.discard_changes_and_exit_description);
-        builder.setCancelable(true);
-
-        builder.setPositiveButton(
-                getString(R.string.accept),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mPresenter.onDialogPositive();
-                        dialog.dismiss();
-                    }
-                });
-
-        builder.setNegativeButton(
-                getString(R.string.cancel),
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        mPresenter.onDialogNegative();
-                        dialog.dismiss();
-                    }
-                });
-
-        alertDialog = builder.create();
-        alertDialog.show();
+        dialogBox.setOnPositiveListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mPresenter.onDialogPositive();
+                dialog.dismiss();
+            }
+        });
+        dialogBox.setOnNegativeListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mPresenter.onDialogNegative();
+                dialog.dismiss();
+            }
+        });
+        dialogBox.show(this, R.string.discard_changes_and_exit,
+                R.string.discard_changes_and_exit_description, R.string.accept, R.string.cancel);
     }
 
     @Override
@@ -436,8 +431,8 @@ public class EditProfileActivity extends BaseActivity implements
 
         cancelProgressDialog();
 
-        if (alertDialog != null) {
-            alertDialog.dismiss();
+        if (dialogBox != null) {
+            dialogBox.dismiss();
         }
     }
 
