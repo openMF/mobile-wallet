@@ -19,7 +19,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/shape_bottom_sheet_dialog_grip"
-            android:contentDescription="Grip" />
+            android:contentDescription="@string/grip" />
 
         <TextView
             android:id="@+id/textView4"
@@ -79,7 +79,7 @@
             android:layout_marginBottom="@dimen/marginBetweenSections"
             android:buttonTint="@color/colorAccent"
             android:checked="true"
-            android:text="Ease my sign up using Google Account"
+            android:text="@string/ease_my_sign_up_using_google_account"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
