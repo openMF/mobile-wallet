@@ -243,15 +243,17 @@ public class EditProfileActivity extends BaseActivity implements
         InputMethodManager imm
                 = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         View view = getCurrentFocus();
-        if (view == null && imm != null) {
-            view = new View(this);
+        if (imm != null) {
+            if (view == null) {
+                view = new View(this);
+            }
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-            @NonNull int[] grantResults) {
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case REQUEST_READ_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
