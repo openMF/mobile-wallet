@@ -32,6 +32,7 @@ import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
+import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import java.io.File;
 import java.util.List;
@@ -140,13 +141,17 @@ public class EditProfileActivity extends BaseActivity implements
 
     @OnClick(R.id.fab_edit_profile_save_changes)
     public void onSaveChangesClicked() {
+        hideKeyboard();
+        if (!Utils.isValidEmail(etEmail.getText().toString())) {
+            onUpdateEmailError(Constants.INVALID_EMAIL);
+            return;
+        }
         for (EditText input : userDetailsInputs) {
             if (isDataSaveNecessary(input)) {
                 mPresenter.updateInputById(input.getId(), input.getText().toString());
             }
         }
         hideFab();
-        hideKeyboard();
     }
 
     @OnClick(R.id.iv_user_image)

@@ -29,6 +29,7 @@ import org.mifos.mobilewallet.mifospay.registration.presenter.SignupPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
+import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -242,6 +243,12 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
         if (!password.equals(confirmPassword)) {
             Toaster.showToast(this, "Password is not same as Confirm Password");
+            hideProgressDialog();
+            return;
+        }
+
+        if (!Utils.isValidEmail(email)) {
+            Toaster.showToast(this, "Email not valid");
             hideProgressDialog();
             return;
         }

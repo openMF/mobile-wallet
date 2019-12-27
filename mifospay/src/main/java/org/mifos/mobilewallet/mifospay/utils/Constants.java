@@ -168,6 +168,7 @@ public class Constants {
     public static final String INDEX = "Index";
     public static final String CHANGE_UPI_PIN = "Change UPI PIN";
     public static final String FORGOT_UPI_PIN = "Forgot UPI PIN";
+    public static final String INVALID_EMAIL = "Invalid Email";
 
     // broadcast receiver intent filters
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
