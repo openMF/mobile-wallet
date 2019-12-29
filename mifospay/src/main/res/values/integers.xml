@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="telephone_numbers_max_length_standard">15</integer>
+    <integer name="telephone_numbers_max_length_standard">10</integer>
     <integer name="bottom_view_transition_duration">200</integer>
 </resources>
