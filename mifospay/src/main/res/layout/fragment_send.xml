@@ -175,7 +175,8 @@
                         android:singleLine="true"
                         android:textAlignment="center"
                         android:textSize="@dimen/value_15sp"
-                        android:theme="@style/Theme.AppCompat.Light" />
+                        android:theme="@style/Theme.AppCompat.Light"
+                        android:maxLength="@integer/telephone_numbers_max_length_standard"/>
 
                 </android.support.design.widget.TextInputLayout>
 
