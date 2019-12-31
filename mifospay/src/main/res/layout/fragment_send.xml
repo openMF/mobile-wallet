@@ -171,7 +171,7 @@
                         android:layout_height="match_parent"
                         android:paddingBottom="@dimen/value_10dp"
                         android:hint="@string/mobile_number"
-                        android:inputType="phone|number"
+                        android:inputType="number"
                         android:singleLine="true"
                         android:textAlignment="center"
                         android:textSize="@dimen/value_15sp"
