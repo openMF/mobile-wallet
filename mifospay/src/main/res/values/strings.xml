@@ -244,5 +244,6 @@
     <string name="set_amount">Set Amount</string>
     <string name="grip">Grip</string>
     <string name="hide_balance">Hide Balance</string>
+    <string name="toast_profile_removed">Profile picture removed</string>
 
 </resources>
