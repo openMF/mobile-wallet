@@ -332,7 +332,7 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void removeProfileImage() {
-        Toast.makeText(this,R.string.toast_profile_removed,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.toast_profile_removed, Toast.LENGTH_SHORT).show();
         // TODO: Remove image from database
     }
 
@@ -368,7 +368,6 @@ public class EditProfileActivity extends BaseActivity implements
         if (resultUri != null) {
             ivUserImage.setImageURI(resultUri);
         }
-
     }
 
     @Override
