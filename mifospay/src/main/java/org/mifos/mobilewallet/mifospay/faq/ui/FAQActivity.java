@@ -49,6 +49,9 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
 
         // preparing list data
         initListData();
+
+        //closes one faq when another one is open
+        initExpand();
     }
 
     @Override
@@ -82,6 +85,20 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
         // setting list adapter
         expandableListView.setAdapter(faqListAdapter);
 
+    }
+
+    public void initExpand() {
+        expandableListView.setOnGroupExpandListener(
+                new ExpandableListView.OnGroupExpandListener() {
+                    int expand_pos = -1;
+                    @Override
+                    public void onGroupExpand(int groupPosition) {
+                        if (expand_pos >= 0 && expand_pos != groupPosition) {
+                            expandableListView.collapseGroup(expand_pos);
+                        }
+                        expand_pos = groupPosition;
+                    }
+                });
     }
 
     /**
