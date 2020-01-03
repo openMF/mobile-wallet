@@ -90,13 +90,13 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
     public void initExpand() {
         expandableListView.setOnGroupExpandListener(
                 new ExpandableListView.OnGroupExpandListener() {
-                    int prevExpandPos= -1;
+                    int prevExpandPos = -1;
                     @Override
                     public void onGroupExpand(int groupPosition) {
-                        if (prevExpandPos>= 0 && prevExpandPos != groupPosition) {
+                        if (prevExpandPos >= 0 && prevExpandPos != groupPosition) {
                             expandableListView.collapseGroup(prevExpandPos);
                         }
-                        prevExpandPos= groupPosition;
+                        prevExpandPos = groupPosition;
                     }
                 });
     }
