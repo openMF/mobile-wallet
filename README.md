@@ -76,10 +76,16 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 `git pull upstream dev`
 
 ## Travis CI
-<a href="https://travis-ci.com">Travis CI</a> is a hosted continuous integration service used to build and test software projects hosted at GitHub. We use Travis CI for continous integration and clean maintainence of code. All your prs must pass the CI build only then, it will be allowed to merge. Sometimes,when the build doesn't pass you can use these commands in your local terminal and check for the errors,</br>
+<a href="https://travis-ci.com">Travis CI</a> is a hosted continuous integration service used to build and test software projects hosted at GitHub. We use Travis CI for continous integration and clean maintainence of code. All your pull requests must pass the CI build only then, it will be allowed to merge. Sometimes,when the build doesn't pass you can use these commands in your local terminal and check for the errors,</br>
+For Mac OS, you can use the following commands:
 * `./gradlew check` quality checks on your project’s code using Checkstyle and generates reports from these checks.</br>
 * `./gradlew spotlessApply` an check and apply formatting to any plain-text file.</br>
 * `./gradlew build`  provides a command line to execute build script.</br>
+
+For Windows, you can use the following commands:
+* `gradlew check` quality checks on your project’s code using Checkstyle and generates reports from these checks.</br>
+* `gradlew spotlessApply` an check and apply formatting to any plain-text file.</br>
+* `gradlew build`  provides a command line to execute build script.</br>
         
 
 
