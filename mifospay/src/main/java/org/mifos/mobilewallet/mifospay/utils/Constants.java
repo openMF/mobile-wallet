@@ -72,6 +72,7 @@ public class Constants {
     public static final String NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE =
             "Need camera permission to scan qr code.";
     public static final String ERROR_CHOOSING_CONTACT = "Error choosing contact";
+    public static final String ERROR_FINDING_MOBILE_NUMBER = "Error finding Mobile Number";
     public static final String MAKE_TRANSFER_FRAGMENT = "Make Transfer Fragment";
     public static final String PLEASE_ENTER_ALL_THE_FIELDS = "Please enter all the fields";
     public static final String TRANSFER = "Transfer";

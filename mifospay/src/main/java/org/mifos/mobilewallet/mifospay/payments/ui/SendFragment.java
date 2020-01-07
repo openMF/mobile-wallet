@@ -77,6 +77,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     TextInputLayout mTilVpa;
 
     private String vpa;
+    private boolean isMobile = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +100,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @OnClick(R.id.btn_vpa)
     public void onVPASelected() {
+        isMobile = false;
         mBtnVpa.setFocusable(true);
         mBtnVpa.setFocusableInTouchMode(true);
         mBtnVpa.setChipBackgroundColorResource(R.color.clickedblue);
@@ -110,6 +112,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @OnClick(R.id.btn_mobile)
     public void onMobileSelected() {
+        isMobile = true;
         mBtnMobile.setFocusable(true);
         mBtnMobile.setFocusableInTouchMode(true);
         mBtnMobile.setChipBackgroundColorResource(R.color.clickedblue);
@@ -219,7 +222,11 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 showToast(Constants.ERROR_CHOOSING_CONTACT);
             }
         } else if (requestCode == REQUEST_SHOW_DETAILS && resultCode == Activity.RESULT_CANCELED) {
-            showSnackbar(Constants.ERROR_FINDING_VPA);
+            if (isMobile) {
+                showSnackbar(Constants.ERROR_FINDING_MOBILE_NUMBER);
+            } else {
+                showSnackbar(Constants.ERROR_FINDING_VPA);
+            }
         }
     }
 
