@@ -25,6 +25,7 @@ import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -213,9 +214,9 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         } else {
             hideEmptyStateView();
             rvCards.setVisibility(View.VISIBLE);
+            Collections.reverse(cards);
             mCardsAdapter.setCards(cards);
         }
-        mCardsAdapter.setCards(cards);
         hideSwipeProgress();
     }
 
