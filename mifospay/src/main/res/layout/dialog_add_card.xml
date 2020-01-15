@@ -44,6 +44,7 @@
         android:id="@+id/til_card_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:counterEnabled="true"
         android:layout_marginTop="@dimen/value_10dp"
         app:errorEnabled="true">
 
@@ -53,6 +54,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/credit_card_number"
             android:inputType="number"
+            android:maxLength="19"
             android:nextFocusForward="@id/spn_mm"
             android:singleLine="true"/>
     </android.support.design.widget.TextInputLayout>
