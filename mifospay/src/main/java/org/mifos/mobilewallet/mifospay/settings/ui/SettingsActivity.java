@@ -11,6 +11,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.settings.SettingsContract;
 import org.mifos.mobilewallet.mifospay.settings.presenter.SettingsPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.DialogBox;
 
 import javax.inject.Inject;
 
@@ -18,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SettingsActivity extends BaseActivity implements SettingsContract.SettingsView {
+    public DialogBox dialogBox = new DialogBox();
 
     @Inject
     SettingsPresenter mPresenter;
@@ -57,7 +59,20 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
 
     @OnClick(R.id.btn_disable_account)
     public void onDisableAccountClicked() {
-        mSettingsPresenter.disableAccount();
+        dialogBox.setOnPositiveListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mSettingsPresenter.disableAccount();
+            }
+        });
+        dialogBox.setOnNegativeListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialogBox.show(this, R.string.alert_disable_account,
+                R.string.alert_disable_account_desc, R.string.ok, R.string.cancel);
     }
 
     @Override

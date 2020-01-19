@@ -238,6 +238,9 @@
     <string name="amount">Amount</string>
     <string name="merchant_history_message">The transaction history with this merchant will be shown here</string>
     <string name="log_out_title">Do you want to logout?</string>
+    <string name="ok">Ok</string>
+    <string name="alert_disable_account">Are you sure you want to disable account?</string>
+    <string name="alert_disable_account_desc">This will delete all the information about your account</string>
     <string name="transfer_money_to_this_merchant">Transfer money to this merchant</string>
     <string name="test_user">Dwight Schrute</string>
     <string name="test_vpa">rohan.jain@mifos</string>
