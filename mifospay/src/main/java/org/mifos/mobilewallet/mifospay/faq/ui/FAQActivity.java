@@ -49,6 +49,9 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
 
         // preparing list data
         initListData();
+
+        //Expand the views
+        initExpand();
     }
 
     @Override
@@ -88,6 +91,22 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
      * Preparing the list data
      * Dummy Items
      */
+
+    public void initExpand() {
+        expandableListView.setOnGroupExpandListener(
+                new ExpandableListView.OnGroupExpandListener() {
+                    int prevExpandPos = -1;
+                    @Override
+                    public void onGroupExpand(int groupPosition) {
+                        if (prevExpandPos >= 0 && prevExpandPos != groupPosition) {
+                            expandableListView.collapseGroup(prevExpandPos);
+                        }
+                        prevExpandPos = groupPosition;
+                    }
+                });
+    }
+
+    
     public void initListData() {
 
 
