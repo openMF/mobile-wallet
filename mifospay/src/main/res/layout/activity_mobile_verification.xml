@@ -129,7 +129,8 @@
                 android:inputType="number"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:maxLength="6"/>
 
             <ProgressBar
                 android:id="@+id/progressBar"
