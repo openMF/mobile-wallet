@@ -27,6 +27,7 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter;
+import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DialogBox;
@@ -95,7 +96,7 @@ public class EditProfileActivity extends BaseActivity implements
     List<EditText> userDetailsInputs;
 
     private BottomSheetDialog bottomSheetDialog;
-    public DialogBox dialogBox = new DialogBox();
+    public DialogBox dialogBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +112,7 @@ public class EditProfileActivity extends BaseActivity implements
         if (isChangeImageRequestFromProfile()) {
             bottomSheetDialog.show();
         }
+        dialogBox = new DialogBox();
     }
 
     private void setupUi() {
@@ -433,8 +435,8 @@ public class EditProfileActivity extends BaseActivity implements
 
         cancelProgressDialog();
 
-        if (dialogBox != null) {
-            dialogBox.dismiss();
+        if (dialogBox.alertDialog != null) {
+            dialogBox.alertDialog.dismiss();
         }
     }
 
