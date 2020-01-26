@@ -87,7 +87,9 @@
                 android:visibility="gone"
                 android:layout_width="match_parent"
                 android:layout_weight="1"
-                android:layout_marginTop="24dp" />
+                android:layout_marginTop="24dp"
+                android:scrollbars="vertical"
+                />
 
             <include android:id="@+id/inc_empty_transactions_state_view"
                 android:layout_height="0dp"
