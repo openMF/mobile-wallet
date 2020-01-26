@@ -55,8 +55,8 @@ public class EditPasswordActivity extends BaseActivity implements
     @OnClick(R.id.btn_save)
     public void onSaveClicked() {
         String currentPassword = etCurrentPassword.getText().toString();
-        String newPassword = etNewPassword.getText().toString();
-        String newPasswordRepeat = etNewPasswordRepeat.getText().toString();
+        String newPassword = etCurrentPassword.getText().toString();
+        String newPasswordRepeat = etCurrentPassword.getText().toString();
         mPresenter.updatePassword(currentPassword, newPassword, newPasswordRepeat);
     }
 
