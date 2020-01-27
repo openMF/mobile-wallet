@@ -3,6 +3,7 @@ package org.mifos.mobilewallet.mifospay.common.ui;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -20,6 +21,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.common.TransferContract;
 import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
+import org.mifos.mobilewallet.mifospay.passcode.ui.PaymentPasscodeActivity;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
@@ -126,12 +128,8 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTransferPresenter.makeTransfer(localRepository.getClientDetails().getClientId(),
-                        toClientId, amount);
-                TransitionManager.beginDelayedTransition(makeTransferContainer);
-                tvTransferStatus.setText(Constants.SENDING_MONEY);
-                progressBar.setVisibility(View.VISIBLE);
-                contentView.setVisibility(View.GONE);
+                Intent i = new Intent(getActivity(), PaymentPasscodeActivity.class);
+                startActivityForResult(i, Constants.PASSCODE_VERIFICATION);
             }
         });
 
@@ -184,6 +182,20 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
             getTargetFragment().onActivityResult(SendFragment.REQUEST_SHOW_DETAILS,
                     Activity.RESULT_CANCELED, null);
             dismiss();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.PASSCODE_VERIFICATION &&
+                resultCode == getActivity().RESULT_OK) {
+            mTransferPresenter.makeTransfer(localRepository.getClientDetails().getClientId(),
+                    toClientId, amount);
+            TransitionManager.beginDelayedTransition(makeTransferContainer);
+            tvTransferStatus.setText(Constants.SENDING_MONEY);
+            progressBar.setVisibility(View.VISIBLE);
+            contentView.setVisibility(View.GONE);
         }
     }
 }

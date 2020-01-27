@@ -247,5 +247,8 @@
     <string name="set_amount">Set Amount</string>
     <string name="grip">Grip</string>
     <string name="hide_balance">Hide Balance</string>
+    <string name="invalid_passcode">Invalid Passcode</string>
+    <string name="incorrect_passcode">Incorrect Passcode</string>
+    <string name="enter_passcode">Enter your passcode</string>
 
 </resources>

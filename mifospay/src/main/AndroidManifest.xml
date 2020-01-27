@@ -44,6 +44,7 @@
         <activity
             android:name=".passcode.ui.PassCodeActivity"
             android:theme="@style/AppTheme" />
+        <activity android:name=".passcode.ui.PaymentPasscodeActivity"/>
         <activity
             android:name=".receipt.ui.ReceiptActivity"
             android:theme="@style/AppTheme"
