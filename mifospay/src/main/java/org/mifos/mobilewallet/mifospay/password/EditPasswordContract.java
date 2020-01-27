@@ -13,6 +13,7 @@ public interface EditPasswordContract {
 
         void updatePassword(String currentPassword, String newPassword, String newPasswordRepeat);
 
+        void handleSavePasswordButtonStatus(String currentPassword, String newPassword, String newPasswordRepeat);
     }
 
     interface EditPasswordView extends BaseView<EditPasswordPresenter> {
@@ -24,6 +25,10 @@ public interface EditPasswordContract {
         void stopProgressBar();
 
         void showError(String msg);
+
+        void enableSavePasswordButton();
+
+        void disableSavePasswordButton();
 
     }
 }
