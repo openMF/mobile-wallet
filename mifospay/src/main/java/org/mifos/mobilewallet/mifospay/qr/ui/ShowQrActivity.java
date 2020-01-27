@@ -19,6 +19,17 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.qr.QrContract;
 import org.mifos.mobilewallet.mifospay.qr.presenter.ShowQrPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import io.michaelrocks.libphonenumber.android.NumberParseException;
+
+
+
+import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
+
+
+
+import io.michaelrocks.libphonenumber.android.Phonenumber;
+
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -44,6 +55,9 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
 
     @BindView(R.id.btn_set_amount)
     Button btnSetAmount;
+
+    @BindView(R.id.tv_mob_numb)
+    TextView tvMobileNumber;
 
     private String mAmount = null;
 
@@ -110,6 +124,8 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
         editTextDialog.show();
     }
 
+
+
     @Override
     public void setPresenter(QrContract.ShowQrPresenter presenter) {
         this.mShowQrPresenter = presenter;
@@ -127,4 +143,20 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
     void generateQR(String qrData) {
         mShowQrPresenter.generateQr(qrData);
     }
+
+    @Override
+    public void showMobile(String mobileNo) {
+        PhoneNumberUtil phoneNumberUtil =
+                PhoneNumberUtil.createInstance(tvMobileNumber.getContext());
+        try {
+            Phonenumber.PhoneNumber phoneNumber =
+                    phoneNumberUtil.parse(mobileNo, Locale.getDefault().getCountry());
+            tvMobileNumber.setText(phoneNumberUtil.format(phoneNumber,
+                    PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
+        } catch (NumberParseException e) {
+            tvMobileNumber.setText(mobileNo); // If mobile number is not parsed properly
+        }
+    }
+
+
 }

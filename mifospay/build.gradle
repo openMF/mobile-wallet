@@ -53,6 +53,7 @@ dependencies {
     implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
     implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
     api "com.android.support:design:$rootProject.supportLibraryVersion"
+    implementation 'io.michaelrocks:libphonenumber-android:8.11.2'
 
 
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
