@@ -95,7 +95,7 @@ public class EditProfileActivity extends BaseActivity implements
     List<EditText> userDetailsInputs;
 
     private BottomSheetDialog bottomSheetDialog;
-    public DialogBox dialogBox;
+    public DialogBox dialogBox = new DialogBox();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +111,6 @@ public class EditProfileActivity extends BaseActivity implements
         if (isChangeImageRequestFromProfile()) {
             bottomSheetDialog.show();
         }
-        dialogBox = new DialogBox();
     }
 
     private void setupUi() {
@@ -434,8 +433,8 @@ public class EditProfileActivity extends BaseActivity implements
 
         cancelProgressDialog();
 
-        if (dialogBox.alertDialog != null) {
-            dialogBox.alertDialog.dismiss();
+        if (dialogBox != null) {
+            dialogBox.dismiss();
         }
     }
 

@@ -5,6 +5,7 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityPassword;
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract;
@@ -27,7 +28,7 @@ public class EditPasswordPresenter implements EditPasswordContract.EditPasswordP
 
     @Inject
     public EditPasswordPresenter(UseCaseHandler useCaseHandler,
-            PreferencesHelper preferencesHelper) {
+                                 PreferencesHelper preferencesHelper) {
         mUseCaseHandler = useCaseHandler;
         mPreferencesHelper = preferencesHelper;
     }
@@ -39,8 +40,22 @@ public class EditPasswordPresenter implements EditPasswordContract.EditPasswordP
     }
 
     @Override
+    public void handleSavePasswordButtonStatus(String currentPassword, String newPassword, String newPasswordRepeat) {
+        if (currentPassword.equals("") || newPassword.equals("") ||
+                newPasswordRepeat.equals("")) {
+            mEditPasswordView.disableSavePasswordButton();
+        } else {
+            if (newPassword.equals(newPasswordRepeat)) {
+                mEditPasswordView.enableSavePasswordButton();
+            } else {
+                mEditPasswordView.disableSavePasswordButton();
+            }
+        }
+    }
+
+    @Override
     public void updatePassword(String currentPassword, final String newPassword,
-            final String newPasswordRepeat) {
+                               final String newPasswordRepeat) {
         mEditPasswordView.startProgressBar();
         if (isNotEmpty(currentPassword) && isNotEmpty(newPassword)
                 && isNotEmpty(newPasswordRepeat)) {
