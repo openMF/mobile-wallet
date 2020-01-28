@@ -13,7 +13,9 @@ public interface EditPasswordContract {
 
         void updatePassword(String currentPassword, String newPassword, String newPasswordRepeat);
 
-        void handleSavePasswordButtonStatus(String currentPassword, String newPassword, String newPasswordRepeat);
+        void handleSavePasswordButtonStatus(String currentPassword, 
+                                            String newPassword, 
+                                            String newPasswordRepeat);
     }
 
     interface EditPasswordView extends BaseView<EditPasswordPresenter> {
