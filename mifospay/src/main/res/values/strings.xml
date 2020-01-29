@@ -247,5 +247,6 @@
     <string name="set_amount">Set Amount</string>
     <string name="grip">Grip</string>
     <string name="hide_balance">Hide Balance</string>
+    <string name="no_bank_account">No bank found</string>
 
 </resources>
