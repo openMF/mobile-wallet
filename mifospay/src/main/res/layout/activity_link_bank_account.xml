@@ -45,17 +45,39 @@
                         app:cardElevation="2dp"
                         app:contentPadding="@dimen/value_10dp">
 
-                        <EditText
-                            android:id="@+id/et_search_bank"
+
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="48dp"
-                            android:background="@drawable/bg_et_round_border"
-                            android:drawableLeft="@drawable/et_search"
-                            android:drawablePadding="10dp"
-                            android:drawableStart="@drawable/et_search"
-                            android:hint="@string/search"
-                            android:inputType="text"
-                            android:paddingLeft="15dp"/>
+                            android:gravity="center_vertical">
+
+                            <EditText
+                                android:id="@+id/et_search_bank"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:drawableStart="@drawable/et_search"
+                                android:drawableLeft="@drawable/et_search"
+                                android:drawablePadding="10dp"
+                                android:hint="@string/search"
+                                android:drawableRight="@drawable/ic_clear_black_24dp"
+                                android:drawableEnd="@drawable/ic_clear_black_24dp"
+                                android:paddingRight="@dimen/value_15dp"
+                                android:background="@drawable/bg_et_round_border"
+                                android:inputType="text"
+                                android:paddingLeft="15dp" />
+
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="48dp"
+                                android:id="@+id/et_cross_bank"
+                                android:layout_alignParentEnd="true"
+                                android:onClick="onCrossClicked"
+                                android:layout_alignParentRight="true"
+                                android:paddingLeft="@dimen/value_15dp"
+                                android:paddingRight="@dimen/value_30dp"/>
+
+                        </RelativeLayout>
 
                     </android.support.v7.widget.CardView>
 

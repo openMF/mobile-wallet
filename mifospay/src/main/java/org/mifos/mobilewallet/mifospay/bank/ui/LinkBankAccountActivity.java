@@ -37,6 +37,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LinkBankAccountActivity extends BaseActivity implements
         BankContract.LinkBankAccountView {
@@ -52,7 +53,10 @@ public class LinkBankAccountActivity extends BaseActivity implements
     RecyclerView mRvOtherBanks;
     @BindView(R.id.popular_banks)
     TextView mPopularBanks;
-
+    @OnClick(R.id.et_cross_bank)
+    public void onCrossClicked() {
+        mEtSearchBank.getText().clear();
+    }
     @Inject
     PopularBankAdapter mPopularBankAdapter;
     @Inject
