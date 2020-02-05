@@ -81,7 +81,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/dont_have_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
@@ -92,7 +92,7 @@
             android:textColor="@color/colorTextSecondary" />
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/create_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/create_one"
