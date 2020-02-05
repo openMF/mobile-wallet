@@ -19,7 +19,8 @@
         <activity android:name=".merchants.ui.MerchantTransferActivity"></activity>
         <activity
             android:name=".auth.ui.LoginActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateVisible">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,6 +39,15 @@
         <activity
             android:name=".qr.ui.ShowQrActivity"
             android:theme="@style/AppTheme" />
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="org.mifos.mobilewallet.mifospay.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
         <activity
             android:name=".qr.ui.ReadQrActivity"
             android:theme="@style/AppTheme" />

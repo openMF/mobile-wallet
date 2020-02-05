@@ -89,12 +89,6 @@
 
         </RelativeLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/value_10dp"
-            android:background="@color/light_grey"/>
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

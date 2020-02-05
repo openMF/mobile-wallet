@@ -52,6 +52,10 @@ public class LinkBankAccountActivity extends BaseActivity implements
     RecyclerView mRvOtherBanks;
     @BindView(R.id.popular_banks)
     TextView mPopularBanks;
+    @BindView(R.id.other_banks)
+    TextView mOtherBanks;
+    @BindView(R.id.no_bank_found)
+    TextView mNoBankFound;
 
     @Inject
     PopularBankAdapter mPopularBankAdapter;
@@ -69,7 +73,7 @@ public class LinkBankAccountActivity extends BaseActivity implements
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
         setToolbarTitle("Link Bank Account");
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         mPresenter.attachView(this);
 
         showProgressDialog(Constants.PLEASE_WAIT);
@@ -156,6 +160,13 @@ public class LinkBankAccountActivity extends BaseActivity implements
             }
         }
         mOtherBankAdapter.filterList(filteredList);
+        if (filteredList.isEmpty()) {
+            mNoBankFound.setVisibility(View.VISIBLE);
+            mOtherBanks.setVisibility(View.GONE);
+        } else {
+            mNoBankFound.setVisibility(View.GONE);
+            mOtherBanks.setVisibility(View.GONE);
+        }
     }
 
     private void setupAdapterData() {
@@ -210,5 +221,14 @@ public class LinkBankAccountActivity extends BaseActivity implements
             }
         }, 1500);
 
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mEtSearchBank.getText().length() != 0) {
+            mEtSearchBank.getText().clear();
+        } else {
+            super.onBackPressed();
+        }
     }
 }

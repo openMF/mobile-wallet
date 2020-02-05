@@ -26,7 +26,6 @@ import org.mifos.mobilewallet.mifospay.merchants.adapter.MerchantsAdapter;
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantsPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
-import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.List;
 
@@ -98,7 +97,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
                                 .get(position).getExternalId();
                         if (merchantVPA == null) {
                             Toast.makeText(getActivity(),
-                                    "VPA is Null. Can't make any transactions.",
+                                    R.string.vpa_null_no_transactions,
                                     Toast.LENGTH_LONG).show();
                         } else {
                             Intent intent = new Intent(getActivity(),
@@ -121,12 +120,12 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
                                 .get(position).getExternalId();
                         if (merchantVPA == null) {
                             Toast.makeText(getActivity(),
-                                    "VPA is Null, can't be copied.", Toast.LENGTH_LONG).show();
+                                    R.string.vpa_null_cant_copy, Toast.LENGTH_LONG).show();
                         } else {
                             ClipData clip = ClipData.newPlainText("VPA", merchantVPA);
                             clipboard.setPrimaryClip(clip);
                             Toast.makeText(getActivity(),
-                                    "VPA copied to Clipboard Successfully",
+                                    R.string.vpa_copy_success,
                                     Toast.LENGTH_LONG).show();
                         }
                     }
@@ -142,6 +141,23 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
                 mPresenter.fetchMerchants();
             }
         });
+    }
+
+    @Override
+    public void showErrorStateView(int drawable, int title, int subtitle) {
+        mRvMerchants.setVisibility(View.GONE);
+        mMerchantProgressBar.setVisibility(View.GONE);
+        hideSwipeProgress();
+        vStateView.setVisibility(View.VISIBLE);
+        if (getActivity() != null) {
+            Resources res = getResources();
+            ivTransactionsStateIcon
+                    .setImageDrawable(res.getDrawable(drawable));
+            tvTransactionsStateTitle
+                    .setText(res.getString(title));
+            tvTransactionsStateSubtitle
+                    .setText(res.getString(subtitle));
+        }
     }
 
     @Override
@@ -176,17 +192,6 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     public void listMerchantsData(List<SavingsWithAssociations> savingsWithAssociationsList) {
         merchantsList = savingsWithAssociationsList;
         mMerchantsAdapter.setData(savingsWithAssociationsList);
-    }
-
-    @Override
-    public void fetchMerchantsError() {
-        hideProgressDialog();
-        showToast(Constants.ERROR_FETCHING_MERCHANTS);
-    }
-
-    @Override
-    public void showToast(String message) {
-        Toaster.showToast(getContext(), message);
     }
 
     @Override

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
@@ -11,6 +11,13 @@
         android:layout_height="wrap_content"
         android:clipToPadding="false"
         android:paddingBottom="60dp"/>
+
+    <ProgressBar
+        android:id="@+id/pb_cards"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <include
         android:id="@+id/inc_state_view"
@@ -26,6 +33,7 @@
         android:layout_width="155dp"
         app:chipBackgroundColor="@color/black"
         android:layout_height="35dp"
+        android:layout_gravity="center_horizontal|bottom"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="23dp"
@@ -35,4 +43,4 @@
         android:textAlignment="center"
         android:textColor="@color/colorPrimary" />
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>

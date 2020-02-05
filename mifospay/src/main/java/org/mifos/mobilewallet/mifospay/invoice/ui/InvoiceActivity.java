@@ -74,7 +74,7 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
         setToolbarTitle(Constants.INVOICE);
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         mPresenter.attachView(this);
 
         Uri data = getIntent().getData();

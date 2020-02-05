@@ -83,7 +83,7 @@ public class MerchantTransferActivity extends BaseActivity implements
         setContentView(R.layout.activity_merchant_transaction);
         ButterKnife.bind(this);
         setToolbarTitle("Merchant Transaction");
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         setupUI();
         mPresenter.attachView(this);
         mPresenter.fetchMerchantTransfers(merchantAccountNumber);

@@ -97,14 +97,17 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         setSwipeEnabled(false);
         mPresenter.attachView(this);
         mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        mBtnVpa.setSelected(true);
         return rootView;
     }
 
     @OnClick(R.id.btn_vpa)
     public void onVPASelected() {
         TransitionManager.beginDelayedTransition(sendContainer);
+        mBtnVpa.setSelected(true);
         mBtnVpa.setFocusable(true);
         mBtnVpa.setChipBackgroundColorResource(R.color.clickedblue);
+        mBtnMobile.setSelected(false);
         mBtnMobile.setChipBackgroundColorResource(R.color.changedBackgroundColour);
         btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
@@ -114,8 +117,10 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     @OnClick(R.id.btn_mobile)
     public void onMobileSelected() {
         TransitionManager.beginDelayedTransition(sendContainer);
+        mBtnMobile.setSelected(true);
         mBtnMobile.setFocusable(true);
         mBtnMobile.setChipBackgroundColorResource(R.color.clickedblue);
+        mBtnVpa.setSelected(false);
         mBtnVpa.setChipBackgroundColorResource(R.color.changedBackgroundColour);
         mTilVpa.setVisibility(View.GONE);
         btnScanQr.setVisibility(View.GONE);
@@ -128,7 +133,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         String eamount = etAmount.getText().toString().trim();
         String mobileNumber = mEtMobileNumber.getText()
                 .toString().trim().replaceAll("\\s+", "");
-        if (eamount.equals("") || (externalId.equals("") && mobileNumber.equals(""))) {
+        if (eamount.equals("") || (mBtnVpa.isSelected() && externalId.equals("")) ||
+                (mBtnMobile.isSelected() && mobileNumber.equals(""))) {
             Toast.makeText(getActivity(),
                     Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
         } else {

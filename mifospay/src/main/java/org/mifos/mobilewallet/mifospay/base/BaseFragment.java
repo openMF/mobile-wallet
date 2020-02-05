@@ -7,6 +7,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
 
+import org.mifos.mobilewallet.mifospay.utils.Constants;
+
 /**
  * Created by naman on 17/6/17.
  */
@@ -28,7 +30,7 @@ public class BaseFragment extends Fragment {
 
     protected void showBackButton() {
         if (callback != null) {
-            callback.showBackButton();
+            callback.showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         }
     }
 

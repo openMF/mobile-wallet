@@ -73,6 +73,12 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
     }
 
     @Override
+    public void showColoredBackButton(int drawable) {
+        showHomeButton();
+        setToolbarIcon(drawable);
+    }
+
+    @Override
     public void showProgressDialog(String message) {
         if (progressDialog != null) {
             progressDialog.setMessage(message);
@@ -112,11 +118,7 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         }
     }
 
-    @Override
-    public void showBackButton() {
-        showHomeButton();
-        setToolbarIcon(R.drawable.ic_arrow_back);
-    }
+
 
     @Override
     public void showCloseButton() {
@@ -144,6 +146,7 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
             getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         }
     }
+
 
     @Override
     public SwipeRefreshLayout getSwipeRefreshLayout() {
