@@ -73,7 +73,6 @@ public class MobileVerificationActivity extends BaseActivity implements
 
     @OnClick(R.id.btn_get_otp)
     public void onGetOTp() {
-        Utils.hideSoftKeyboard(this);
         if (mCcpCode.isValidFullNumber()) {
             showProgressDialog(Constants.SENDING_OTP_TO_YOUR_MOBILE_NUMBER);
 
@@ -102,7 +101,6 @@ public class MobileVerificationActivity extends BaseActivity implements
         mEtOtp.setVisibility(View.VISIBLE);
         mBtnGetOtp.setClickable(false);
         mBtnGetOtp.setBackgroundResource(R.drawable.ic_done);
-        mFabNext.setVisibility(View.VISIBLE);
     }
 
     @Override
