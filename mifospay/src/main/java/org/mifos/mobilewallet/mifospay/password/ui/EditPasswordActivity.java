@@ -15,6 +15,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 
 public class EditPasswordActivity extends BaseActivity implements
         EditPasswordContract.EditPasswordView {
@@ -40,6 +42,37 @@ public class EditPasswordActivity extends BaseActivity implements
         ButterKnife.bind(this);
         setupUi();
         mPresenter.attachView(this);
+
+        disableSavePasswordButton();
+    }
+
+    @OnFocusChange({R.id.et_edit_password_current, R.id.et_edit_password_new,
+            R.id.et_edit_password_new_repeat})
+    public void onPasswordInputFocusChanged() {
+        handlePasswordInputChanged();
+    }
+
+    @OnTextChanged({R.id.et_edit_password_current, R.id.et_edit_password_new,
+            R.id.et_edit_password_new_repeat})
+    public void onPasswordInputTextChanged() {
+        handlePasswordInputChanged();
+    }
+
+    public void handlePasswordInputChanged() {
+        String currentPassword = etCurrentPassword.getText().toString();
+        String newPassword = etNewPassword.getText().toString();
+        String newPasswordRepeat = etNewPasswordRepeat.getText().toString();
+        mPresenter.handleSavePasswordButtonStatus(currentPassword, newPassword, newPasswordRepeat);
+    }
+
+    @Override
+    public void enableSavePasswordButton() {
+        findViewById(R.id.btn_save).setEnabled(true);
+    }
+
+    @Override
+    public void disableSavePasswordButton() {
+        findViewById(R.id.btn_save).setEnabled(false);
     }
 
     private void setupUi() {
