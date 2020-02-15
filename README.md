@@ -54,7 +54,7 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 
 ## Building the Code
 
-1. Clone the repository using HTTP: git clone https://github.com/openMF/mobile-wallet.git
+1. Fork the Project then Clone the repository using HTTP: git clone https://github.com/openMF/mobile-wallet.git
 
 2. Open Android Studio.
 
