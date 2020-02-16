@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.home.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
@@ -18,6 +19,7 @@ import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.MainPresenter;
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
 
@@ -40,6 +42,8 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
     BottomNavigationView bottomNavigationView;
 
     BaseHomeContract.BaseHomePresenter mHomePresenter;
+
+    boolean doubleBackToExitPressedOnce = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,9 +107,18 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
                 .findFragmentById(R.id.bottom_navigation_fragment_container);
         if (fragment != null && !(fragment instanceof HomeFragment) && fragment.isVisible()) {
             navigateFragment(R.id.action_home, true);
-            return;
+        } else if (!doubleBackToExitPressedOnce) {
+            this.doubleBackToExitPressedOnce = true;
+            Toaster.showToast(this, getString(R.string.exit_message));
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    doubleBackToExitPressedOnce = false;
+                }
+            }, 2000);
+        } else {
+            super.onBackPressed();
         }
-        super.onBackPressed();
     }
 
     private void navigateFragment(int id, boolean shouldSelect) {
