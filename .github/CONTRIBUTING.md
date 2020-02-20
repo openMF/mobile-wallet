@@ -65,5 +65,5 @@ We will accept pull requests if:
 * It's quality code that conforms to standard style guides and best practices
 * The description includes a motive for your change and the method you used to achieve it
 * It is not a catch-all pull request but rather fixes a specific issue or implements a specific feature
-* If it makes changes to the UI the pull request should include screenshots
+* It should include screen shot of the changes.
 * It is a single commit (please use `git rebase -i` to squash commits)
