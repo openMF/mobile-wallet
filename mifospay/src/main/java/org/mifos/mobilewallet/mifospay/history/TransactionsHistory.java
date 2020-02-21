@@ -4,9 +4,11 @@ import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.domain.model.CheckBoxStatus;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +36,12 @@ public class TransactionsHistory {
     }
 
     public void fetchTransactionsHistory(long accountId) {
+        fetchTransactionsHistory(accountId, null);
+    }
+
+    public void fetchTransactionsHistory(long accountId, List<CheckBoxStatus> filterList) {
         mUsecaseHandler.execute(fetchAccountTransactionsUseCase,
-                new FetchAccountTransactions.RequestValues(accountId),
+                new FetchAccountTransactions.RequestValues(accountId, filterList),
                 new UseCase.UseCaseCallback<FetchAccountTransactions.ResponseValue>() {
 
                     @Override

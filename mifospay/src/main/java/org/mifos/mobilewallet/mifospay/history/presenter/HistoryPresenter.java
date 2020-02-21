@@ -5,6 +5,7 @@ import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.Account;
+import org.mifos.mobilewallet.core.domain.model.CheckBoxStatus;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
@@ -51,7 +52,7 @@ public class HistoryPresenter implements
     }
 
     @Override
-    public void fetchTransactions() {
+    public void fetchTransactions(final List<CheckBoxStatus> filterList) {
         mHistoryView.showHistoryFetchingProgress();
         mUseCaseHandler.execute(mFetchAccountUseCase,
                 new FetchAccount.RequestValues(mLocalRepository.getClientDetails().getClientId()),
@@ -60,7 +61,7 @@ public class HistoryPresenter implements
                     public void onSuccess(FetchAccount.ResponseValue response) {
                         mAccount = response.getAccount();
                         mTransactionsHistory
-                                .fetchTransactionsHistory(response.getAccount().getId());
+                                .fetchTransactionsHistory(mAccount.getId(), filterList);
                     }
 
                     @Override

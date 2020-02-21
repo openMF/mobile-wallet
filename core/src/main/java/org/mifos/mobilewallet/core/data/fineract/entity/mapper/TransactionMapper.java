@@ -2,12 +2,15 @@ package org.mifos.mobilewallet.core.data.fineract.entity.mapper;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions;
+import org.mifos.mobilewallet.core.domain.model.CheckBoxStatus;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.model.TransactionType;
 import org.mifos.mobilewallet.core.utils.DateHelper;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -25,17 +28,34 @@ public class TransactionMapper {
     }
 
     public List<Transaction> transformTransactionList(SavingsWithAssociations
-            savingsWithAssociations) {
+            savingsWithAssociations, List<CheckBoxStatus> filterList) {
+        List<Transaction> transactionList = new ArrayList<>();
+        Set<TransactionType> checkedFilterSet = getCheckedFilterSet(filterList);
+
+        if (savingsWithAssociations != null && savingsWithAssociations.getTransactions() != null
+                && savingsWithAssociations.getTransactions().size() != 0) {
+
+            for (Transactions transactions : savingsWithAssociations.getTransactions()) {
+                Transaction transaction = transformInvoice(transactions);
+                if (checkedFilterSet.contains(transaction.getTransactionType())) {
+                    transactionList.add(transaction);
+                }
+            }
+        }
+        return transactionList;
+    }
+
+    public List<Transaction> transformTransactionList(SavingsWithAssociations
+                                                              savingsWithAssociations) {
         List<Transaction> transactionList = new ArrayList<>();
 
         if (savingsWithAssociations != null && savingsWithAssociations.getTransactions() != null
                 && savingsWithAssociations.getTransactions().size() != 0) {
 
             for (Transactions transactions : savingsWithAssociations.getTransactions()) {
-                transactionList.add(transformInvoice(transactions));
+                Transaction transaction = transformInvoice(transactions);
+                transactionList.add(transaction);
             }
-
-
         }
         return transactionList;
     }
@@ -73,5 +93,21 @@ public class TransactionMapper {
             }
         }
         return transaction;
+    }
+
+    public Set<TransactionType> getCheckedFilterSet(List<CheckBoxStatus> filterList) {
+        Set<TransactionType> checkedFilterSet = new HashSet<>();
+        for (CheckBoxStatus status : filterList) {
+            if (status.getChecked()) {
+                if (status.getText().equals("Credit")) {
+                    checkedFilterSet.add(TransactionType.CREDIT);
+                } else if (status.getText().equals("Debit")) {
+                    checkedFilterSet.add(TransactionType.DEBIT);
+                } else if (status.getText().equals("Other")) {
+                    checkedFilterSet.add(TransactionType.OTHER);
+                }
+            }
+        }
+        return  checkedFilterSet;
     }
 }

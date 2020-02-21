@@ -4,6 +4,7 @@ import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.TransactionMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.domain.model.CheckBoxStatus;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.utils.Constants;
 
@@ -54,21 +55,29 @@ public class FetchAccountTransactions extends UseCase<FetchAccountTransactions.R
 
                     @Override
                     public void onNext(SavingsWithAssociations transactions) {
+                        List<Transaction> transactionList;
+                        if (requestValues.filterList != null) {
+                            transactionList = transactionMapper.transformTransactionList
+                                    (transactions, requestValues.filterList);
+                        } else {
+                            transactionList = transactionMapper.transformTransactionList
+                                    (transactions);
+                        }
                         getUseCaseCallback().onSuccess(new
-                                ResponseValue(transactionMapper
-                                .transformTransactionList(transactions)));
+                                ResponseValue(transactionList));
                     }
                 });
-
-
     }
 
     public static final class RequestValues implements UseCase.RequestValues {
 
         private long accountId;
+        private List<CheckBoxStatus> filterList;
 
-        public RequestValues(long accountId) {
+
+        public RequestValues(long accountId, List<CheckBoxStatus> filterList) {
             this.accountId = accountId;
+            this.filterList = filterList;
         }
 
         public void setAccountId(long accountId) {
