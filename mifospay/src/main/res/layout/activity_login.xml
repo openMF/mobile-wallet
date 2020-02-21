@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/paddingLayout"
-    android:background="@color/colorPrimary">
+    android:background="@color/colorPrimary"
+    android:padding="@dimen/paddingLayout">
 
     <ImageView
         android:id="@+id/image_logo"
@@ -83,7 +83,7 @@
     <LinearLayout
         android:id="@+id/ll_signup"
         android:layout_width="0dp"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/marginItemsInSectionLarge"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
