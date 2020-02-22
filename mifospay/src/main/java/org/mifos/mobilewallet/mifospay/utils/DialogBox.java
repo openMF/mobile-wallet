@@ -42,6 +42,7 @@ public class DialogBox {
 
 
     public void dismiss() {
-        alertDialog.dismiss();
+        if (alertDialog != null)
+            alertDialog.dismiss();
     }
 }
