@@ -19,7 +19,8 @@
         <activity android:name=".merchants.ui.MerchantTransferActivity"></activity>
         <activity
             android:name=".auth.ui.LoginActivity"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateVisible">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
