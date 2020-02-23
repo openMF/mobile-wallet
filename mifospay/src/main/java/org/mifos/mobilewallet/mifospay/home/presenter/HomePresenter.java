@@ -4,6 +4,7 @@ import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
+import org.mifos.mobilewallet.core.domain.model.Account;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
@@ -24,7 +25,7 @@ import javax.inject.Inject;
  */
 
 public class HomePresenter implements BaseHomeContract.HomePresenter,
-        HistoryContract.TransactionsHistoryAsync {
+        HistoryContract.TransactionsHistoryAsync, HistoryContract.TransactionsHistoryPresenter {
 
     private final UseCaseHandler mUsecaseHandler;
     private final LocalRepository localRepository;
@@ -41,10 +42,11 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     private BaseHomeContract.HomeView mHomeView;
     private final PreferencesHelper preferencesHelper;
     private List<Transaction> transactionList;
+    private Account mAccount;
 
     @Inject
     public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository,
-            PreferencesHelper preferencesHelper) {
+                         PreferencesHelper preferencesHelper) {
         this.mUsecaseHandler = useCaseHandler;
         this.localRepository = localRepository;
         this.preferencesHelper = preferencesHelper;
@@ -64,6 +66,7 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
                 new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchAccount.ResponseValue response) {
+                        mAccount = response.getAccount();
                         preferencesHelper.setAccountId(response.getAccount().getId());
                         mHomeView.setAccountBalance(response.getAccount());
                         transactionsHistory.fetchTransactionsHistory(response.getAccount().getId());
@@ -116,5 +119,16 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
         } else {
             handleTransactionsHistory(existingItemCount);
         }
+    }
+
+    @Override
+    public void fetchTransactions() {
+
+    }
+
+    @Override
+    public void handleTransactionClick(int transactionIndex) {
+        String accountNumber = mAccount != null ? mAccount.getNumber() : "";
+        mHomeView.showTransactionDetailDialog(transactionIndex, accountNumber);
     }
 }

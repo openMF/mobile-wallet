@@ -34,6 +34,8 @@ public interface BaseHomeContract {
 
         void showTransactionsHistory(List<Transaction> transactions);
 
+        void showTransactionDetailDialog(int transactionIndex, String accountNumber);
+
         void showTransactionsError();
 
         void showTransactionsEmpty();

@@ -21,9 +21,11 @@ import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.history.ui.TransactionDetailDialog;
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
 
@@ -101,7 +103,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
+                             @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
         setToolbarTitle(Constants.HOME);
@@ -189,6 +191,18 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         rvHomeBottomSheetContent.setLayoutManager(new LinearLayoutManager(getContext()));
         mHistoryAdapter.setContext(getActivity());
         rvHomeBottomSheetContent.setAdapter(mHistoryAdapter);
+        rvHomeBottomSheetContent.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View childView, int position) {
+                        mPresenter.handleTransactionClick(position);
+                    }
+
+                    @Override
+                    public void onItemLongPress(View childView, int position) {
+
+                    }
+                }));
     }
 
     @Override
@@ -215,6 +229,22 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         vStateView.setVisibility(View.GONE);
         rvHomeBottomSheetContent.setVisibility(View.VISIBLE);
         mHistoryAdapter.setData(transactions);
+    }
+
+    @Override
+    public void showTransactionDetailDialog(int transactionIndex, String accountNumber) {
+        if (getActivity() != null) {
+            TransactionDetailDialog transactionDetailDialog = new TransactionDetailDialog();
+            Transaction transaction = mHistoryAdapter.getTransaction(transactionIndex);
+
+            Bundle arg = new Bundle();
+            arg.putParcelable(Constants.TRANSACTION, transaction);
+            arg.putString(Constants.ACCOUNT_NUMBER, accountNumber);
+            transactionDetailDialog.setArguments(arg);
+
+            transactionDetailDialog.show(getActivity().getSupportFragmentManager(),
+                    Constants.TRANSACTION_DETAILS);
+        }
     }
 
     @Override
