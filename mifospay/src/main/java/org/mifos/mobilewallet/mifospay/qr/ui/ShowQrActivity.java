@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.mifospay.qr.ui;
 
-import android.app.AlertDialog;
+import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
