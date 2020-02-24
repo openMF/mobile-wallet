@@ -146,7 +146,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
             if (!mTransferPresenter.checkSelfTransfer(externalId)) {
                 mTransferPresenter.checkBalanceAvailability(externalId, amount);
             } else {
-                showSwipeProgress();
                 showSnackbar(Constants.SELF_ACCOUNT_ERROR);
             }
         }
