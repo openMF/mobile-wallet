@@ -31,9 +31,6 @@
             android:name=".home.ui.MainActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".history.ui.TransactionsHistoryActivity"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".common.ui.SearchActivity"
             android:theme="@style/AppTheme" />
         <activity
