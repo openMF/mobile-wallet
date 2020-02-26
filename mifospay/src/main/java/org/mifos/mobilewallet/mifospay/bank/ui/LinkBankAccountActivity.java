@@ -143,6 +143,10 @@ public class LinkBankAccountActivity extends BaseActivity implements
         });
     }
 
+    public void onCrossClicked() {
+        mEtSearchBank.getText().clear();
+    }
+
     private void filter(String text) {
         List<Bank> filteredList = new ArrayList<>();
 
