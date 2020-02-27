@@ -200,9 +200,8 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     public void setAccountBalance(Account account) {
         this.account = account;
 
-        String currency = account.getCurrency().getCode();
-        String accountBal = Utils.getFormattedAccountBalance(account.getBalance());
-        accountBalance = currency + " " + accountBal;
+        String currencyCode = account.getCurrency().getCode();
+        accountBalance = Utils.getFormattedAccountBalance(account.getBalance(), currencyCode);
         hideSwipeProgress();
 
         TransitionManager.beginDelayedTransition(homeScreenContainer);

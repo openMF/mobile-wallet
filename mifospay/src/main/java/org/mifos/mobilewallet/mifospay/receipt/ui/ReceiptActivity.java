@@ -26,6 +26,7 @@ import org.mifos.mobilewallet.mifospay.receipt.presenter.ReceiptPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.FileUtils;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
+import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import java.io.File;
 import java.util.List;
@@ -114,7 +115,8 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
 
     @Override
     public void showTransactionDetail(Transaction transaction) {
-        tvAmount.setText(transaction.getCurrency().getCode() + " " + transaction.getAmount());
+        tvAmount.setText(Utils.getFormattedAccountBalance(
+                transaction.getAmount(), transaction.getCurrency().getCode()));
         tvDate.setText(transaction.getDate());
         tvReceiptLink.setText(Constants.RECEIPT_DOMAIN + transaction.getTransactionId());
         tvTransactionID.setText(String.valueOf(transaction.getTransactionId()));
