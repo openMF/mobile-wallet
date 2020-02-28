@@ -118,6 +118,11 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
         setToolbarIcon(R.drawable.ic_arrow_back);
     }
 
+    public void showBackButtonBlack() {
+        showHomeButton();
+        setToolbarIcon(R.drawable.ic_arrow_back_black);
+    }
+
     @Override
     public void showCloseButton() {
         showHomeButton();
