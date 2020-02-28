@@ -29,6 +29,7 @@
         </activity>
         <activity
             android:name=".home.ui.MainActivity"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".history.ui.TransactionsHistoryActivity"
