@@ -90,7 +90,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String amount = edittext.getText().toString();
-                if (amount.equals("")) {
+                if (amount.isEmpty()) {
                     showToast("Please enter the Amount");
                     return;
                 } else if (Double.parseDouble(amount) <= 0) {
