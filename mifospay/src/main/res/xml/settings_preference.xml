@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <android.support.v7.preference.PreferenceCategory
+        android:title="@string/accounts">
+        <Preference
+            android:key="@string/password"
+            android:persistent="false"
+            android:icon="@drawable/ic_lock_black_24dp"
+            android:summary="@string/change_password"
+            android:title="@string/change_password"/>
+
+        <Preference
+            android:key="@string/passcode"
+            android:persistent="false"
+            android:icon="@drawable/ic_passcode"
+            android:summary="@string/change_passcode"
+            android:title="@string/change_passcode"/>
+        <Preference
+            android:key="@string/disable_account"
+            android:persistent="false"
+            android:icon="@drawable/ic_delete"
+            android:summary="@string/disable_account_desc"
+            android:title="@string/disable_account"/>
+    </android.support.v7.preference.PreferenceCategory	>
+</android.support.v7.preference.PreferenceScreen>

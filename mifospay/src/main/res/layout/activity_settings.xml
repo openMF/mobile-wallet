@@ -1,72 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    tools:context=".settings.ui.SettingsActivity">
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="vertical">
+    <LinearLayout style="@style/LinearLayout.Base">
 
         <include layout="@layout/toolbar"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:orientation="vertical"
-            android:padding="@dimen/value_20dp">
-
-            <android.support.v7.widget.CardView
-                android:id="@+id/cv_notification_setting"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardElevation="1dp"
-                app:cardUseCompatPadding="true">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/value_20dp"
-                    android:text="@string/notification_settings"
-                    android:textColor="@color/grey_900"
-                    android:textSize="17sp"/>
-
-            </android.support.v7.widget.CardView>
-
-        </LinearLayout>
+        <FrameLayout style="@style/FrameLayout.Base.Container"/>
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_disable_account"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginLeft="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/default_margin"
-        android:layout_marginRight="@dimen/default_margin"
-        android:background="@android:color/holo_red_light"
-        android:text="@string/disable_account"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/btn_logout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginLeft="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/default_margin"
-        android:layout_marginRight="@dimen/default_margin"
-        android:background="@color/grey_900"
-        android:text="@string/log_out"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

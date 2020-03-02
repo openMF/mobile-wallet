@@ -132,11 +132,11 @@
     <string name="link_your_bank_account">Link Your Bank Account</string>
     <string name="no_linked_bank_accounts">No Linked Bank Accounts</string>
     <string name="editable_image_hint">Editable image hint</string>
-    <string name="change_password">Change Password</string>
+    <string name="change_password">Changes your Account Password</string>
     <string name="current_password">Current Password</string>
     <string name="new_password">New Password</string>
     <string name="confirm_new_password">Confirm New Password</string>
-    <string name="change_passcode">Change Passcode</string>
+    <string name="change_passcode">Changes your Account Passcode</string>
     <string name="current_passcode">Current Passcode</string>
     <string name="new_passcode">New Passcode</string>
     <string name="confirm_new_passcode">Confirm New Passcode</string>
@@ -248,5 +248,15 @@
     <string name="grip">Grip</string>
     <string name="hide_balance">Hide Balance</string>
     <string name="no_bank_account">No bank found</string>
+    <string name="language_type">Choose your language</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="passcode">Passcode</string>
+    <string name="other">Other</string>
+    <string name="choose_language">Choose your language</string>
+    <string name="language">Language</string>
+    <string name="pref_configuration">Pref Configuration</string>
+    <string name="pref_base_url_title">Update Endpoint</string>
+    <string name="pref_base_url_desc">Click here to change your Endpoint Configurations</string>
+    <string name="disable_account_desc">Disables your Current Account</string>
 </resources>

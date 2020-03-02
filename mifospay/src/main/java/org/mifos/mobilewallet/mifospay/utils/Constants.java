@@ -25,6 +25,9 @@ public class Constants {
     public static final String KYC_LEVEL_2_DOCUMENTS_ADDED_SUCCESSFULLY =
             "KYC Level 2 documents added successfully.";
     public static final String IMAGE = "image/*";
+    public static final String PASSWORD = "Password";
+    public static final String PASSCODE = "Passcode";
+    public static final String DISABLE_ACCOUNT = "Disable Account";
     public static final String APPLICATION_PDF = "application/pdf";
     public static final String ERROR_ADDING_KYC_LEVEL_1_DETAILS =
             "Error adding KYC Level 1 details.";
@@ -168,6 +171,8 @@ public class Constants {
     public static final String INDEX = "Index";
     public static final String CHANGE_UPI_PIN = "Change UPI PIN";
     public static final String FORGOT_UPI_PIN = "Forgot UPI PIN";
+    public static final String HAS_SETTINGS_CHANGED = "hasSettingsChanged";
+
 
     // broadcast receiver intent filters
     public static final String REGISTRATION_COMPLETE = "registrationComplete";

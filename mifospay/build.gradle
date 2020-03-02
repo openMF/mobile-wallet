@@ -83,6 +83,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.android.support:preference-v7:23.0.1'
+
 
     implementation 'com.hbb20:ccp:2.2.0'
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:1.9'
