@@ -60,6 +60,8 @@ class PaymentHubActivity : BaseActivity(), TransactionContract.TransactionView {
         btn_show_qr.setOnClickListener { showQr() }
 
         btn_make_payment.setOnClickListener{ makePaymentfromDetails() }
+
+        rg_idtype.check(R.id.type_msisdn)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -104,11 +106,21 @@ class PaymentHubActivity : BaseActivity(), TransactionContract.TransactionView {
         val transaction = mPresenter.manualDataToTransaction(
                 createTransactionID(),et_send_amount.text.toString(),et_send_desc.text.toString(),
                 radioText,et_send_identifier.text.toString(),currentUser!!, this)
-        if (!transaction.payee.name.toString().equals("inValid")) {
+
+        val payee = transaction.payee
+        val payer = transaction.payer
+
+        if (transaction.amount.amount!!.isEmpty() || transaction.amount.amount!!.toDouble() <= 0) {
+            Toast.makeText(this,"Invalid amount", Toast.LENGTH_LONG).show()
+        } else if (payee.name.toString().equals("inValid")) {
+            Toast.makeText(this,"Invalid Payee", Toast.LENGTH_LONG).show()
+        } else if (payee.partyIdInfo.partyIdType.equals(payer.partyIdInfo.partyIdType) &&
+                payee.partyIdInfo.partyIdentifier.equals(payer.partyIdInfo.partyIdentifier)) {
+            Toast.makeText(this,"Self account transfer is not allowed",
+                    Toast.LENGTH_LONG).show()
+        } else {
             PHTransferDialog.newInstance(transaction)
                     .show(supportFragmentManager, "PHTransactionDialog")
-        } else {
-            Toast.makeText(this,"Invalid Payee",Toast.LENGTH_LONG).show()
         }
     }
 
