@@ -96,16 +96,18 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                 params = data.getPathSegments();
                 transactionId = params.get(0); // "transactionId"
                 tvReceiptLink.setText(data.toString());
-                tvReceiptLink.setOnLongClickListener(new View.OnLongClickListener() {
+                tvReceiptLink.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public boolean onLongClick(View v) {
-                        ClipboardManager cm = (ClipboardManager) getSystemService(
-                                Context.CLIPBOARD_SERVICE);
-                        ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_RECEIPT_LINK,
-                                tvReceiptLink.getText().toString());
-                        cm.setPrimaryClip(clipData);
-                        showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
-                        return true;
+                    public void onClick(View v) {
+                        Intent shareReceiptIntent = new Intent(Intent.ACTION_SEND);
+                        shareReceiptIntent.setType("text/plain");
+                        shareReceiptIntent.
+                                putExtra(Intent.EXTRA_TEXT, tvReceiptLink.getText().toString());
+                        shareReceiptIntent.
+                                putExtra(Intent.EXTRA_SUBJECT, Constants.UNIQUE_RECEIPT_LINK);
+                        shareReceiptIntent = Intent.createChooser
+                                (shareReceiptIntent, getString(R.string.share_receipt));
+                        startActivity(shareReceiptIntent);
                     }
                 });
             } catch (IndexOutOfBoundsException e) {

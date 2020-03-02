@@ -270,6 +270,7 @@
     <string name="grip">Grip</string>
     <string name="hide_balance">Hide Balance</string>
     <string name="no_bank_account">No bank found</string>
+    <string name="share_receipt">Share Receipt</string>
     <string name="error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
     <string name="fetching_history">Fetching History...</string>
 
