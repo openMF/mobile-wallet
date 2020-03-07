@@ -139,6 +139,11 @@ public class MerchantTransferActivity extends BaseActivity implements
         String externalId = tvMerchantVPA.getText().toString().trim();
         String eamount = etAmount.getText().toString().trim();
 
+        if (TextUtils.isEmpty(eamount)){
+            showToast(Constants.PLEASE_ENTER_ALL_THE_FIELDS);
+            return;
+        }
+            
         double amount = Double.parseDouble(eamount);
         if (amount <= 0) {
             showToast(Constants.PLEASE_ENTER_VALID_AMOUNT);
