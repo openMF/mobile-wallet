@@ -102,13 +102,12 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                 generateQR(qrData + ", " + mAmount);
             }
         });
-        editTextDialog.setNeutralButton("Reset", new DialogInterface.OnClickListener() {
+        editTextDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mAmount = null;
                 tvQrData.setText(qrData);
                 generateQR(qrData);
-                showToast("Reset Amount Successful");
             }
         });
         editTextDialog.show();
