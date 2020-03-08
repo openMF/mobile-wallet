@@ -111,6 +111,12 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                 showToast("Reset Amount Successful");
             }
         });
+        editTextDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
         editTextDialog.show();
     }
 
