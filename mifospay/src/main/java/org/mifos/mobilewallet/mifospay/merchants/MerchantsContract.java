@@ -16,9 +16,7 @@ public interface MerchantsContract {
 
         void listMerchantsData(List<SavingsWithAssociations> savingsWithAssociationsList);
 
-        void fetchMerchantsError();
-
-        void showToast(String message);
+        void showErrorStateView(int drawable, int title, int subtitle);
 
         void showEmptyStateView();
 
