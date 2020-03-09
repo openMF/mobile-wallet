@@ -1,10 +1,13 @@
 package org.mifos.mobilewallet.mifospay.auth.ui;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.view.inputmethod.InputMethodManager;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -113,6 +116,11 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         signupMethod.show(getSupportFragmentManager(), Constants.CHOOSE_SIGNUP_METHOD);
     }
 
+    @OnClick(R.id.bg_screen)
+    public void backgroundScreenClicked() {
+        hideSoftKeyboard();
+    }
+
     @Override
     public void disableLoginButton() {
         btnLogin.setEnabled(false);
@@ -212,6 +220,14 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
                             account = null;
                         }
                     });
+        }
+    }
+
+    private void hideSoftKeyboard() {
+        View view = this.getCurrentFocus();
+        if(view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
     }
 }
