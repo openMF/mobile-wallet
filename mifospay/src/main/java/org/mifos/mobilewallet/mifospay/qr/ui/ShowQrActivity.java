@@ -108,6 +108,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                 mAmount = null;
                 tvQrData.setText(qrData);
                 generateQR(qrData);
+                showToast(String.valueOf(R.string.reset_amount));
             }
         });
         editTextDialog.show();
