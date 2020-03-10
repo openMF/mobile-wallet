@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
@@ -60,6 +61,9 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
 
     @BindView(R.id.rv_invoices)
     RecyclerView mRvInvoices;
+
+    @BindView(R.id.pb_invoices)
+    ProgressBar pbInvoices;
 
     @Inject
     InvoicesAdapter mInvoicesAdapter;
@@ -116,6 +120,7 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
         getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                getSwipeRefreshLayout().setRefreshing(false);
                 mInvoicesPresenter.fetchInvoices();
             }
         });
@@ -131,10 +136,12 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
     public void showInvoices(List<Invoice> invoiceList) {
         if (invoiceList == null || invoiceList.size() == 0) {
             DebugUtil.log("null");
+            pbInvoices.setVisibility(View.GONE);
             mRvInvoices.setVisibility(View.GONE);
             showEmptyStateView();
         } else {
             DebugUtil.log("yes");
+            pbInvoices.setVisibility(View.GONE);
             mRvInvoices.setVisibility(View.VISIBLE);
             mInvoicesAdapter.setData(invoiceList);
             hideEmptyStateView();
@@ -145,6 +152,7 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
 
     private void showEmptyStateView() {
         if (getActivity() != null) {
+            pbInvoices.setVisibility(View.GONE);
             vStateView.setVisibility(View.VISIBLE);
             Resources res = getResources();
             ivTransactionsStateIcon
@@ -156,18 +164,32 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
         }
     }
 
+    @Override
+    public void showErrorStateView(int drawable, int title, int subtitle) {
+        mRvInvoices.setVisibility(View.GONE);
+        pbInvoices.setVisibility(View.GONE);
+        hideSwipeProgress();
+        vStateView.setVisibility(View.VISIBLE);
+        if (getActivity() != null) {
+            Resources res = getResources();
+            ivTransactionsStateIcon
+                    .setImageDrawable(res.getDrawable(drawable));
+            tvTransactionsStateTitle
+                    .setText(res.getString(title));
+            tvTransactionsStateSubtitle
+                    .setText(res.getString(subtitle));
+        }
+    }
+
+    @Override
+    public void showFetchingProcess() {
+        vStateView.setVisibility(View.GONE);
+        mRvInvoices.setVisibility(View.GONE);
+        pbInvoices.setVisibility(View.VISIBLE);
+    }
+
     private void hideEmptyStateView() {
         vStateView.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void hideProgress() {
-        super.hideSwipeProgress();
-    }
-
-    @Override
-    public void showToast(String message) {
-        Toaster.showToast(getActivity() , message);
     }
 
     @Override

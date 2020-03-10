@@ -210,6 +210,9 @@
     <string name="empty_no_transaction_history_subtitle">Every completed transaction will be displaying here</string>
     <string name="error_oops">Oops!</string>
     <string name="error_no_transaction_history_subtitle">Couldn\'t fetch transactions history. Please, try again.</string>
+    <string name="error_no_invoices_found">Couldn\'t fetch invoice list. Please, try again.</string>
+    <string name="error_no_cards_found">Couldn\'t fetch cards list. Please, try again.</string>
+    <string name="error_no_merchants_found">Couldn\'t fetch merchant list. Please, try again.</string>
     <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
     <string name="account_details">Account Details</string>
     <string name="mobile">Mobile number</string>
@@ -248,5 +251,6 @@
     <string name="grip">Grip</string>
     <string name="hide_balance">Hide Balance</string>
     <string name="no_bank_account">No bank found</string>
+    <string name="error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
 
 </resources>
