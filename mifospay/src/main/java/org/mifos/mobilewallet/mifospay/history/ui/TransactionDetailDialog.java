@@ -23,6 +23,7 @@ import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.presenter.TransactionDetailPresenter;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.ArrayList;
 
@@ -90,11 +91,11 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
     LinearLayout mLlFrom;
     @BindView(R.id.ll_to)
     LinearLayout mLlTo;
-    @BindView(R.id.progressBar)
-    ProgressBar mProgressBar;
     Unbinder unbinder;
     @BindView(R.id.ll_main)
     LinearLayout mLlMain;
+    @BindView(R.id.pb_transaction_detail)
+    ProgressBar progressBar;
 
 
     private BottomSheetBehavior mBottomSheetBehavior;
@@ -210,5 +211,20 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
             tvToClientName.setText(transferDetail.getToClient().getDisplayName());
             tvToAccountNo.setText(transferDetail.getToAccount().getAccountNo());
         }
+    }
+
+    @Override
+    public void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toaster.showToast(getActivity() , message);
     }
 }

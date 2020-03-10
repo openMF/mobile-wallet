@@ -96,6 +96,7 @@ public class Constants {
     public static final String TRANSACTION_ID = "Transaction ID";
     public static final String TRANSACTIONS = "transactions";
     public static final String ERROR_FETCHING_TRANSACTIONS = "Error fetching transactions";
+    public static final String ERROR_FETCHING_TRANSACTION_DETAILS = "Error fetching details";
     public static final String TRANSFER_DETAILS = "transfer details";
     public static final String UNIQUE_PAYMENT_LINK_COPIED_TO_CLIPBOARD =
             "Unique Payment Link copied to clipboard";

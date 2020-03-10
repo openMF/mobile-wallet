@@ -44,6 +44,13 @@ public interface HistoryContract {
     interface TransactionDetailView extends BaseView<TransactionDetailPresenter> {
 
         void showTransferDetail(TransferDetail transferDetail);
+
+        void showProgressBar();
+
+        void hideProgressBar();
+
+        void showToast(String message);
+
     }
 
     interface TransactionDetailPresenter extends BasePresenter {
