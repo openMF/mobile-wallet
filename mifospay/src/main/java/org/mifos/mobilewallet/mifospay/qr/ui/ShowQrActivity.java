@@ -1,11 +1,16 @@
 package org.mifos.mobilewallet.mifospay.qr.ui;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputType;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -19,6 +24,10 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.qr.QrContract;
 import org.mifos.mobilewallet.mifospay.qr.presenter.ShowQrPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -46,6 +55,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
     Button btnSetAmount;
 
     private String mAmount = null;
+    private Bitmap mBitmap;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,6 +84,59 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                 showSetAmountDialog(qrData);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_share_qr, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_share_qr:
+                if (mBitmap != null) {
+                    Uri imageUri = saveImage(mBitmap);
+                    shareQr(imageUri);
+                }
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    private Uri saveImage(Bitmap bitmap) {
+        File imagesFolder = new File(getCacheDir(), "codes");
+        Uri uri = null;
+        try {
+            imagesFolder.mkdirs();
+            File file = new File(imagesFolder, "shared_code.png");
+
+            FileOutputStream stream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+            stream.flush();
+            stream.close();
+            uri = FileProvider.getUriForFile(this,
+                    "org.mifos.mobilewallet.mifospay.provider", file);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return uri;
+    }
+
+    private void shareQr(Uri uri) {
+        if (uri != null) {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.putExtra(Intent.EXTRA_STREAM, uri);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.setType("image/png");
+            intent = Intent.createChooser(intent, "Share Qr code");
+            startActivity(intent);
+        }
     }
 
     void showSetAmountDialog (final String qrData) {
@@ -122,6 +185,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
     @Override
     public void showGeneratedQr(Bitmap bitmap) {
         ivQrCode.setImageBitmap(bitmap);
+        this.mBitmap = bitmap;
     }
 
     void showToast(String message) {
