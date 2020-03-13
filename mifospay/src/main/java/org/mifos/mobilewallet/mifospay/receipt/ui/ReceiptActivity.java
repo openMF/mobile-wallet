@@ -22,7 +22,6 @@ import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transfe
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.invoice.ui.InvoiceActivity;
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract;
 import org.mifos.mobilewallet.mifospay.receipt.presenter.ReceiptPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
