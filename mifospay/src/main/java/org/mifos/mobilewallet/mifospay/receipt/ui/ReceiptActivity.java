@@ -102,6 +102,8 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                         if (intent.resolveActivity(getPackageManager()) != null) {
                             startActivity(intent);
                         }
+                        else
+                            Log.d("Error","err");
                     }
                 });
                 tvReceiptLink.setOnLongClickListener(new View.OnLongClickListener() {
