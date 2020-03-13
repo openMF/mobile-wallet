@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
@@ -21,6 +22,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transfe
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
+import org.mifos.mobilewallet.mifospay.invoice.ui.InvoiceActivity;
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract;
 import org.mifos.mobilewallet.mifospay.receipt.presenter.ReceiptPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -92,6 +94,16 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                 params = data.getPathSegments();
                 transactionId = params.get(0); // "transactionId"
                 tvReceiptLink.setText(data.toString());
+                tvReceiptLink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri webpage = Uri.parse(tvReceiptLink.getText().toString());
+                        Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(intent);
+                        }
+                    }
+                });
                 tvReceiptLink.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
                     public boolean onLongClick(View v) {
