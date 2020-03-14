@@ -17,7 +17,7 @@ public class Constants {
     public static final String MERCHANT_NAME = "merchant_name";
     public static final String MERCHANT_VPA = "merchant_vpa";
     public static final String MERCHANT_ACCOUNT_NO = "merchant_account_no";
-
+    public static final String AMOUNT_EXCEEDING = "Amount exceeding the limit";
     public static final String FILE = "file";
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
     public static final String CHOOSE_A_FILE_TO_UPLOAD = "Choose a file to upload.";

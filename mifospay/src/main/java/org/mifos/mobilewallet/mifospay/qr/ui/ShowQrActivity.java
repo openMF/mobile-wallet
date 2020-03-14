@@ -97,6 +97,10 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                     showToast(Constants.PLEASE_ENTER_VALID_AMOUNT);
                     return;
                 }
+                else if (Double.parseDouble(amount)>=100000) {
+                    showToast(Constants.AMOUNT_EXCEEDING);
+                    return;
+                }
                 mAmount = amount;
                 tvQrData.setText(qrData + ", " + mAmount);
                 generateQR(qrData + ", " + mAmount);
