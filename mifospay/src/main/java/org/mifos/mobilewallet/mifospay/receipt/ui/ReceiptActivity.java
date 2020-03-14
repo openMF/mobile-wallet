@@ -100,9 +100,10 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                         Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
                         if (intent.resolveActivity(getPackageManager()) != null) {
                             startActivity(intent);
-                        } else
+                        } else {
                             Log.d("Error", "err");
                     }
+                       } 
                 });
                 tvReceiptLink.setOnLongClickListener(new View.OnLongClickListener() {
                     @Override
