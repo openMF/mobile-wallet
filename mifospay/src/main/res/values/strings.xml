@@ -248,5 +248,17 @@
     <string name="grip">Grip</string>
     <string name="hide_balance">Hide Balance</string>
     <string name="no_bank_account">No bank found</string>
+    <string name="about_us">About us</string>
+    <string name="app_version">Version %1$s</string>
+    <string name="copy_right_mifos">©2016-%1$s Mifos Initiative.</string>
+    <string name="all_rights_reserved">All rights reserved.</string>
+    <string name="licenses">Licenses</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="need_help">Contact us</string>
+    <string name="contact_email" translatable="false">support@mifos.org</string>
+    <string name="help_line_number">8000000000</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

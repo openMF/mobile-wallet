@@ -8,6 +8,7 @@
     <dimen name="textButton">14sp</dimen>
     <dimen name="textCaption">12sp</dimen>
     <dimen name="textOverline">12sp</dimen>
+    <dimen name="text_medium">16sp</dimen>
 
     <dimen name="paddingLayout">24dp</dimen>
 
@@ -36,6 +37,12 @@
     <dimen name="value_18sp">18sp</dimen>
     <dimen name="value_40dp">40dp</dimen>
     <dimen name="value_5dp">5dp</dimen>
+    <dimen name="layout_padding_4dp">4dp</dimen>
+    <dimen name="layout_padding_48dp">48dp</dimen>
+    <dimen name="layout_padding_16dp">16dp</dimen>
+    <dimen name="row_padding_right">16dp</dimen>
+    <dimen name="divider_margin">5dp</dimen>
+
     <dimen name="value_3dp">3dp</dimen>
     <dimen name="value_7dp">7dp</dimen>
     <dimen name="value_12dp">12dp</dimen>

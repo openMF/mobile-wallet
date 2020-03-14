@@ -16,20 +16,24 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".merchants.ui.MerchantTransferActivity"></activity>
+        <activity android:name=".PrivacyPolicyActivity"></activity>
+        <activity android:name=".AboutUs" />
+        <activity android:name=".merchants.ui.MerchantTransferActivity" />
         <activity
             android:name=".auth.ui.LoginActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateVisible">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".home.ui.MainActivity"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme" >
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
         <activity
             android:name=".history.ui.TransactionsHistoryActivity"
             android:theme="@style/AppTheme" />
@@ -47,8 +51,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".receipt.ui.ReceiptActivity"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -62,8 +66,8 @@
         </activity>
         <activity
             android:name=".invoice.ui.InvoiceActivity"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
