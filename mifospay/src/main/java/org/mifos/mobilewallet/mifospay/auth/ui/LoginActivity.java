@@ -1,13 +1,10 @@
 package org.mifos.mobilewallet.mifospay.auth.ui;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
-import android.view.inputmethod.InputMethodManager;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
