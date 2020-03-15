@@ -93,8 +93,11 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                 if (amount.equals("")) {
                     showToast("Please enter the Amount");
                     return;
-                } else if (Double.parseDouble(amount) <= 0) {
+                } else if (Double.parseDouble(amount) <= 0)  {
                     showToast(Constants.PLEASE_ENTER_VALID_AMOUNT);
+                    return;
+                } else if (Double.parseDouble(amount) > 100000) {
+                    showToast(getString(R.string.amount_exceed));
                     return;
                 }
                 mAmount = amount;
