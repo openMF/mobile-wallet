@@ -102,8 +102,7 @@
                     android:hint="@string/amount"
                     android:inputType="number"
                     android:paddingBottom="@dimen/value_20dp"
-                    android:textSize="@dimen/value_15sp"
-                    android:theme="@style/Theme.AppCompat.Light" />
+                    android:textSize="@dimen/value_15sp" />
             </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
@@ -128,8 +127,7 @@
                         android:hint="@string/virtual_payment_address"
                         android:paddingBottom="@dimen/value_20dp"
                         android:singleLine="true"
-                        android:textSize="@dimen/value_15sp"
-                        android:theme="@style/Theme.AppCompat.Light" />
+                        android:textSize="@dimen/value_15sp" />
                 </android.support.design.widget.TextInputLayout>
 
                 <TextView
@@ -174,9 +172,8 @@
                         android:inputType="number"
                         android:singleLine="true"
                         android:textAlignment="center"
-                        android:textSize="@dimen/value_15sp"
-                        android:theme="@style/Theme.AppCompat.Light"
-                        android:maxLength="@integer/telephone_numbers_max_length_standard"/>
+                        android:maxLength="@integer/telephone_numbers_max_length_standard"
+                        android:textSize="@dimen/value_15sp" />
 
                 </android.support.design.widget.TextInputLayout>
 
