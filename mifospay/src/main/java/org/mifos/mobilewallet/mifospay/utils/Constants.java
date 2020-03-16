@@ -49,7 +49,6 @@ public class Constants {
     public static final String ERROR_ADDING_CARD = "Error adding card.";
     public static final String CARD_ADDED_SUCCESSFULLY = "Card added successfully.";
     public static final String ADDING_CARD = "Adding Card..";
-    public static final String ERROR_FETCHING_CARDS = "Error fetching cards.";
 
     public static final String ADD_CARD_DIALOG = "Add Card Dialog";
     public static final String EDIT_CARD_DIALOG = "Edit Card Dialog";
@@ -119,8 +118,6 @@ public class Constants {
     public static final String MIFOSPAY = "mifospay";
     public static final String RECEIPT = "Receipt";
     public static final String PDF = ".pdf";
-    public static final String INVOICES = "Invoices";
-    public static final String ERROR_FETCHING_INVOICES = "Error fetching invoices";
     public static final String ERROR_FETCHING_RECEIPT = "Error fetching receipt";
     public static final String INVOICE_DOMAIN = "https://invoice.mifospay.com/";
 
@@ -146,7 +143,6 @@ public class Constants {
     public static final String NEW_BANK_ACCOUNT = "newBankAccount";
     public static final String VERIFYING_MOBILE_NUMBER = "Verifying mobile number..";
     public static final String MIFOS_SAVINGS_PRODUCT_ID = "Mifos Savings Product Id";
-    public static final String ERROR_FETCHING_MERCHANTS = "Error fetching merchants";
     public static final String MERCHANTS = "Merchants";
     public static final String UPI_PIN = "UPI PIN";
     public static final String STEP = "step";
@@ -186,4 +182,5 @@ public class Constants {
     public static final String CHANGE_PROFILE_IMAGE_VALUE = "CHANGE_PROFILE_IMAGE_VALUE";
     public static final String TAP_TO_REVEAL = "Tap to Reveal";
     public static final String NAME = "Name : ";
+    public static final String ERROR_FETCHING_TRANSACTION_DETAILS = "Error fetching details";
 }

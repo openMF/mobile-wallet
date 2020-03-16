@@ -26,7 +26,6 @@ import org.mifos.mobilewallet.mifospay.merchants.adapter.MerchantsAdapter;
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantsPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
-import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.List;
 
@@ -145,6 +144,23 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     }
 
     @Override
+    public void showErrorStateView(int drawable, int title, int subtitle) {
+        mRvMerchants.setVisibility(View.GONE);
+        mMerchantProgressBar.setVisibility(View.GONE);
+        hideSwipeProgress();
+        vStateView.setVisibility(View.VISIBLE);
+        if (getActivity() != null) {
+            Resources res = getResources();
+            ivTransactionsStateIcon
+                    .setImageDrawable(res.getDrawable(drawable));
+            tvTransactionsStateTitle
+                    .setText(res.getString(title));
+            tvTransactionsStateSubtitle
+                    .setText(res.getString(subtitle));
+        }
+    }
+
+    @Override
     public void showEmptyStateView() {
         mMerchantFragmentLayout.setVisibility(View.GONE);
         mMerchantProgressBar.setVisibility(View.GONE);
@@ -176,17 +192,6 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     public void listMerchantsData(List<SavingsWithAssociations> savingsWithAssociationsList) {
         merchantsList = savingsWithAssociationsList;
         mMerchantsAdapter.setData(savingsWithAssociationsList);
-    }
-
-    @Override
-    public void fetchMerchantsError() {
-        hideProgressDialog();
-        showToast(Constants.ERROR_FETCHING_MERCHANTS);
-    }
-
-    @Override
-    public void showToast(String message) {
-        Toaster.showToast(getContext(), message);
     }
 
     @Override
