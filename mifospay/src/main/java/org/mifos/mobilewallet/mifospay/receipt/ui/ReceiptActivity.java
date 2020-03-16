@@ -105,7 +105,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                     }
                 });
             } catch (IndexOutOfBoundsException e) {
-                showToast("Invalid link used to open the App.");
+                showToast(getString(R.string.invalid_link));
             }
             showProgressDialog(Constants.PLEASE_WAIT);
             mPresenter.fetchTransaction(Long.parseLong(transactionId));
@@ -123,12 +123,12 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         switch (transaction.getTransactionType()) {
             case DEBIT:
                 isDebit = true;
-                tvOperation.setText("Paid to");
+                tvOperation.setText(R.string.paid_to);
                 tvOperation.setTextColor(Color.RED);
                 break;
             case CREDIT:
                 isDebit = false;
-                tvOperation.setText("Credited By");
+                tvOperation.setText(R.string.credited_by);
                 tvOperation.setTextColor(Color.parseColor("#009688"));
                 break;
             case OTHER:
@@ -168,7 +168,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                     REQUEST_WRITE_EXTERNAL_STORAGE);
         } else {
             // Permission already granted
-            showSnackbar("Downloading Receipt");
+            showSnackbar(getString(R.string.downloading_receipt));
             mPresenter.downloadReceipt(transactionId);
         }
     }
@@ -212,7 +212,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    showSnackbar("Downloading Receipt");
+                    showSnackbar(getString(R.string.downloading_receipt));
                     mReceiptPresenter.downloadReceipt(transactionId);
 
                 } else {

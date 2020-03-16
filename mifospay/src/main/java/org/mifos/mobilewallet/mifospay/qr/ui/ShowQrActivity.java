@@ -86,12 +86,12 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
         if (mAmount != null) {
             edittext.setText(mAmount);
         }
-        editTextDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+        editTextDialog.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String amount = edittext.getText().toString();
                 if (amount.equals("")) {
-                    showToast("Please enter the Amount");
+                    showToast(getString(R.string.enter_amount));
                     return;
                 } else if (Double.parseDouble(amount) <= 0) {
                     showToast(Constants.PLEASE_ENTER_VALID_AMOUNT);
@@ -102,7 +102,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                 generateQR(qrData + ", " + mAmount);
             }
         });
-        editTextDialog.setNeutralButton("Reset", new DialogInterface.OnClickListener() {
+        editTextDialog.setNeutralButton(R.string.reset, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mAmount = null;
