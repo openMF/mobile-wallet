@@ -82,12 +82,12 @@ public class OtpFragment extends BaseFragment {
             if (mPeOtp.getText().toString().equals(otp)) {
                 ((SetupUpiPinActivity) getActivity()).otpVerified();
             } else {
-                showToast("Wrong OTP");
+                showToast(R.string.wrong_otp);
             }
         }
     }
 
-    public void showToast(String message) {
+    public void showToast(int message) {
         Toaster.showToast(getActivity(), message);
     }
 }

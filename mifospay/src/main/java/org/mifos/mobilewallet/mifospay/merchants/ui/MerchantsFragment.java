@@ -121,12 +121,12 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
                                 .get(position).getExternalId();
                         if (merchantVPA == null) {
                             Toast.makeText(getActivity(),
-                                    "VPA is Null, can't be copied.", Toast.LENGTH_LONG).show();
+                                    R.string.vpa_null_cant_copy, Toast.LENGTH_LONG).show();
                         } else {
                             ClipData clip = ClipData.newPlainText("VPA", merchantVPA);
                             clipboard.setPrimaryClip(clip);
                             Toast.makeText(getActivity(),
-                                    "VPA copied to Clipboard Successfully",
+                                    R.string.vpa_copied_sucessfully,
                                     Toast.LENGTH_LONG).show();
                         }
                     }

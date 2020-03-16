@@ -123,12 +123,12 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         switch (transaction.getTransactionType()) {
             case DEBIT:
                 isDebit = true;
-                tvOperation.setText("Paid to");
+                tvOperation.setText(R.string.paid_to);
                 tvOperation.setTextColor(Color.RED);
                 break;
             case CREDIT:
                 isDebit = false;
-                tvOperation.setText("Credited By");
+                tvOperation.setText(R.string.credited_to);
                 tvOperation.setTextColor(Color.parseColor("#009688"));
                 break;
             case OTHER:

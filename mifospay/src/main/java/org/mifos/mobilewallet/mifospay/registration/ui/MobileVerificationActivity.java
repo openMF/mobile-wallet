@@ -87,7 +87,7 @@ public class MobileVerificationActivity extends BaseActivity implements
             }, 1500);
 
         } else {
-            showToast("Enter a valid mobile number");
+            showToast(getString(R.string.enter_mobile_number));
         }
     }
 

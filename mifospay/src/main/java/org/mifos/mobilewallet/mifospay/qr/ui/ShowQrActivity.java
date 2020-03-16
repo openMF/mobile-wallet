@@ -79,19 +79,19 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
     void showSetAmountDialog (final String qrData) {
         final AlertDialog.Builder editTextDialog = new AlertDialog.Builder(this);
         editTextDialog.setCancelable(false);
-        editTextDialog.setTitle("Enter Amount");
+        editTextDialog.setTitle(R.string.enter_amount);
         final EditText edittext = new EditText(this);
         edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
         editTextDialog.setView(edittext);
         if (mAmount != null) {
             edittext.setText(mAmount);
         }
-        editTextDialog.setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
+        editTextDialog.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String amount = edittext.getText().toString();
                 if (amount.equals("")) {
-                    showToast("Please enter the Amount");
+                    showToast(getString(R.string.please_enter_amount));
                     return;
                 } else if (Double.parseDouble(amount) <= 0) {
                     showToast(Constants.PLEASE_ENTER_VALID_AMOUNT);
@@ -102,13 +102,13 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                 generateQR(qrData + ", " + mAmount);
             }
         });
-        editTextDialog.setNeutralButton("Reset", new DialogInterface.OnClickListener() {
+        editTextDialog.setNeutralButton(R.string.reset, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mAmount = null;
                 tvQrData.setText(qrData);
                 generateQR(qrData);
-                showToast("Reset Amount Successful");
+                showToast(getString(R.string.reset_amount_success));
             }
         });
         editTextDialog.show();
