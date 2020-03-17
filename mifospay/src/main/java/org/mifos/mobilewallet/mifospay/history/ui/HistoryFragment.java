@@ -6,12 +6,15 @@ import android.support.transition.TransitionManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
@@ -62,6 +65,9 @@ public class HistoryFragment extends BaseFragment
     @BindView(R.id.pb_history)
     ProgressBar pbHistory;
 
+    @BindView(R.id.btn_scroll)
+    ImageView scrollDownButton;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,7 +111,32 @@ public class HistoryFragment extends BaseFragment
 
                     }
                 }));
+
     }
+
+    @Override
+    public void scrollDownBottom() {
+        rvHistory.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (!recyclerView.canScrollVertically(1)) {
+                        Toast.makeText(getContext(), R.string.end_of_transactions,
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        scrollDownButton.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+        scrollDownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+                public void onClick(View view) {
+                    int length = mHistoryAdapter.getItemCount();
+                    rvHistory.scrollToPosition(length - 1);
+                }
+            });
+    }
+
 
     @Override
     public void showTransactionDetailDialog(int transactionIndex, String accountNumber) {
