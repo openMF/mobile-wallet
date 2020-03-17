@@ -228,9 +228,6 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
         for (int i = 0; i < ints.length; i++) {
             sum += ints[i];
         }
-        if (sum % 10 == 0) {
-            return true;
-        }
-        return false;
+        return sum % 10 == 0;
     }
 }
