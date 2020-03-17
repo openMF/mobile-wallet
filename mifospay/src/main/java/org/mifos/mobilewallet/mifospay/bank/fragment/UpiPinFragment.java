@@ -74,7 +74,7 @@ public class UpiPinFragment extends BaseFragment implements BankContract.UpiPinV
         if (b != null) {
             step = b.getInt(Constants.STEP, 0);
             upiPin = b.getString(Constants.UPI_PIN, null);
-            mTvTitle.setText("Re-enter UPI PIN");
+            mTvTitle.setText(R.string.reenter_upi);
         }
 
         mPeUpiPin.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -98,14 +98,14 @@ public class UpiPinFragment extends BaseFragment implements BankContract.UpiPinV
                     if (upiPin.equals(mPeUpiPin.getText().toString())) {
                         ((SetupUpiPinActivity) getActivity()).upiPinConfirmed(upiPin);
                     } else {
-                        showToast("UPI PIN mismatch");
+                        showToast(getString(R.string.upi_pin_mismatch));
                     }
                 } else {
                     ((SetupUpiPinActivity) getActivity()).upiPinEntered(
                             mPeUpiPin.getText().toString());
                 }
             } else {
-                showToast("Enter UPI PIN of length 4");
+                showToast(getString(R.string.enter_upi_length_4));
             }
         }
     }
