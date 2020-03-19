@@ -252,5 +252,6 @@
     <string name="hide_balance">Hide Balance</string>
     <string name="no_bank_account">No bank found</string>
     <string name="error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
+    <string name="end_of_transactions">End of transactions</string>
 
 </resources>

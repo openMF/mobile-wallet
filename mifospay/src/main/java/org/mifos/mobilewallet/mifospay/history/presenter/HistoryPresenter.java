@@ -53,6 +53,7 @@ public class HistoryPresenter implements
     @Override
     public void fetchTransactions() {
         mHistoryView.showHistoryFetchingProgress();
+        mHistoryView.setUpScrollDownBottomButton();
         mUseCaseHandler.execute(mFetchAccountUseCase,
                 new FetchAccount.RequestValues(mLocalRepository.getClientDetails().getClientId()),
                 new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {

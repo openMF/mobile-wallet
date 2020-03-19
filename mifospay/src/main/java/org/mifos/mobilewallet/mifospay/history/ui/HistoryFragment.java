@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
@@ -62,6 +63,10 @@ public class HistoryFragment extends BaseFragment
     @BindView(R.id.pb_history)
     ProgressBar pbHistory;
 
+    @BindView(R.id.btn_scroll)
+    ImageView scrollDownButton;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +90,30 @@ public class HistoryFragment extends BaseFragment
         setupSwipeRefreshLayout();
         setupRecyclerView();
         vStateView.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setUpScrollDownBottomButton() {
+        rvHistory.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1)) {
+                    Toast.makeText(getContext(), R.string.end_of_transactions,
+                            Toast.LENGTH_SHORT).show();
+                    scrollDownButton.setVisibility(View.GONE);
+                } else {
+                    scrollDownButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        scrollDownButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int length = mHistoryAdapter.getItemCount();
+                rvHistory.smoothScrollToPosition(length - 1);
+            }
+        });
     }
 
     private void setupRecyclerView() {
@@ -177,5 +206,6 @@ public class HistoryFragment extends BaseFragment
         vStateView.setVisibility(View.GONE);
         rvHistory.setVisibility(View.GONE);
         pbHistory.setVisibility(View.VISIBLE);
+        scrollDownButton.setVisibility(View.GONE);
     }
 }
