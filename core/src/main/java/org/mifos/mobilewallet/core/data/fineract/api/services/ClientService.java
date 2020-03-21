@@ -14,6 +14,7 @@ import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
@@ -36,6 +37,7 @@ public interface ClientService {
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/images")
     Observable<ResponseBody> getClientImage(@Path("clientId") long clientId);
 
+    @Multipart
     @PUT(ApiEndPoints.CLIENTS + "/{clientId}/images")
     Observable<GenericResponse> updateClientImage(
             @Path("clientId") long clientId,

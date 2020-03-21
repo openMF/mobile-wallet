@@ -3,6 +3,8 @@ package org.mifos.mobilewallet.mifospay.editprofile;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
+import okhttp3.MultipartBody;
+
 /**
  * Created by ankur on 27/June/2018
  */
@@ -30,6 +32,8 @@ public interface EditProfileContract {
         void onDialogNegative();
 
         void onDialogPositive();
+
+        void updateClientImage(MultipartBody.Part body);
     }
 
     interface EditProfileView extends BaseView<EditProfilePresenter> {

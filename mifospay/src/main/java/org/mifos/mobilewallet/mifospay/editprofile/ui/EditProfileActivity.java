@@ -36,15 +36,19 @@ import org.mifos.mobilewallet.mifospay.utils.Toaster;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
-
 import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+
+import static org.mifos.mobilewallet.mifospay.utils.FileUtils.getPath;
+
 
 public class EditProfileActivity extends BaseActivity implements
         EditProfileContract.EditProfileView {
@@ -300,7 +304,10 @@ public class EditProfileActivity extends BaseActivity implements
 
     private void startCrop(@NonNull Uri uri) {
         String destinationFileName = UUID.randomUUID().toString() + ".jpg";
-
+        MultipartBody.Part body = getMultiPartBody(uri);
+        if (body != null) {
+            mEditProfilePresenter.updateClientImage(body);
+        }
         UCrop uCrop = UCrop.of(uri, Uri.fromFile(new File(getCacheDir(), destinationFileName)));
         uCrop = getConfiguredUCrop(uCrop);
         uCrop.start(EditProfileActivity.this);
@@ -363,9 +370,25 @@ public class EditProfileActivity extends BaseActivity implements
 
     private void handleCropResult(@NonNull Intent result) {
         final Uri resultUri = UCrop.getOutput(result);
+
         if (resultUri != null) {
             ivUserImage.setImageURI(resultUri);
         }
+    }
+
+    private MultipartBody.Part getMultiPartBody(Uri imageUri) {
+        File imageFile = new File(getPath(this, imageUri));
+        String mediaType = getContentResolver().getType(imageUri);
+        if (mediaType != null && imageFile != null) {
+            RequestBody requestImageFile = RequestBody.create(
+                    MediaType.parse(getContentResolver().getType(imageUri)), imageFile
+            );
+
+            MultipartBody.Part body = MultipartBody.Part.createFormData(
+                    "client_image", imageFile.getName(), requestImageFile);
+            return body;
+        }
+        return null;
     }
 
     @Override

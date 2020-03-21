@@ -122,6 +122,11 @@ public class FineractRepository {
         return fineractApiManager.getClientsApi().getClientImage(clientId);
     }
 
+    public Observable<GenericResponse> updateClientProfileImage(long clientId,
+                                                                MultipartBody.Part body) {
+        return fineractApiManager.getClientsApi().updateClientImage(clientId, body);
+    }
+
     public Observable<GenericResponse> addSavedCards(long clientId,
             Card card) {
         return fineractApiManager.getSavedCardApi().addSavedCard((int) clientId, card);

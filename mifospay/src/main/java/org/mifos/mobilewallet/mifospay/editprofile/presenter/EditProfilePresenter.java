@@ -5,6 +5,7 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.client.UpdateClientEntityMobile;
 import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityEmail;
 import org.mifos.mobilewallet.core.domain.usecase.client.UpdateClient;
+import org.mifos.mobilewallet.core.domain.usecase.client.UpdateClientProfileImage;
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser;
 import org.mifos.mobilewallet.mifospay.R;
@@ -13,6 +14,7 @@ import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
 
 import javax.inject.Inject;
+import okhttp3.MultipartBody;
 
 /**
  * Created by ankur on 27/June/2018
@@ -26,6 +28,8 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
     UpdateUser updateUserUseCase;
     @Inject
     UpdateClient updateClientUseCase;
+    @Inject
+    UpdateClientProfileImage updateClientProfileImage;
     @Inject
     AuthenticateUser authenticateUserUseCase;
     private EditProfileContract.EditProfileView mEditProfileView;
@@ -150,6 +154,28 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
     }
 
     @Override
+    public void updateClientImage(MultipartBody.Part body) {
+        mEditProfileView.startProgressBar();
+        mUseCaseHandler.execute(updateClientProfileImage,
+                new UpdateClientProfileImage.RequestValues(body,
+                        (int) mPreferencesHelper.getClientId()),
+                new UseCase.UseCaseCallback<UpdateClientProfileImage.ResponseValue>() {
+
+                    @Override
+                    public void onSuccess(UpdateClientProfileImage.ResponseValue response) {
+
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mEditProfileView.onUpdateMobileError(message);
+                        mEditProfileView.showFab();
+                        mEditProfileView.stopProgressBar();
+                    }
+                });
+    }
+
+    @Override
     public void handleProfileImageChangeRequest() {
         mEditProfileView.changeProfileImage();
     }
@@ -180,4 +206,5 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
     public void onDialogPositive() {
         mEditProfileView.closeActivity();
     }
+
 }
