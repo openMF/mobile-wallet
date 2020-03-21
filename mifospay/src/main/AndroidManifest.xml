@@ -17,6 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".merchants.ui.MerchantTransferActivity"></activity>
+        <activity android:name=".PrivacyPolicyActivity"></activity>
+        <activity android:name=".AboutusActivity" />
         <activity
             android:name=".auth.ui.LoginActivity"
             android:theme="@style/AppTheme"

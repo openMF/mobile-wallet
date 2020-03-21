@@ -6,6 +6,7 @@
     <color name="colorAccent">#000AFF</color>
     <color name="changedBackgroundColour">#ecf0f1 </color>
     <color name="clickedblue">#00bfff</color>
+    <color name="light_blue">#03A9F4</color>
     <!-- 100, 87, 54 etc.. - OPACITY IN PERCENTAGE -->
     <color name="colorBlack100">#000000</color>
     <color name="colorBlack87">#DE000000</color>

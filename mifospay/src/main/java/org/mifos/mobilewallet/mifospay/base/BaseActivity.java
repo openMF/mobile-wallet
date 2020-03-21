@@ -42,7 +42,7 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
         if (toolbar != null) {

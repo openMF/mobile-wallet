@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import org.mifos.mobilewallet.core.domain.model.client.Client;
+import org.mifos.mobilewallet.mifospay.AboutusActivity;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
@@ -77,6 +78,9 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
                 break;
             case R.id.item_profile_setting:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                break;
+            case R.id.item_about_us:
+                startActivity(new Intent(getApplicationContext(), AboutusActivity.class));
                 break;
             default:
                 return super.onOptionsItemSelected(item);
