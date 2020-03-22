@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
@@ -19,6 +20,7 @@ import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+
 public class PaymentsFragment extends BaseFragment {
 
     @BindView(R.id.vp_tab_layout)
@@ -26,6 +28,8 @@ public class PaymentsFragment extends BaseFragment {
 
     @BindView(R.id.tl_tab_layout)
     TabLayout tilTabLayout;
+
+    private TabLayoutAdapter tabLayoutAdapter;
 
     public static PaymentsFragment newInstance() {
         Bundle args = new Bundle();
@@ -36,12 +40,13 @@ public class PaymentsFragment extends BaseFragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_finance, container, false);
         ButterKnife.bind(this, rootView);
 
         setupUi();
         setupViewPager();
+        checkFixedScroll();
         tilTabLayout.setupWithViewPager(vpTabLayout);
 
         return rootView;
@@ -54,12 +59,26 @@ public class PaymentsFragment extends BaseFragment {
 
     private void setupViewPager() {
         vpTabLayout.setOffscreenPageLimit(1);
-        TabLayoutAdapter tabLayoutAdapter
+        tabLayoutAdapter
                 = new TabLayoutAdapter(getChildFragmentManager());
         tabLayoutAdapter.addFragment(new SendFragment(), getString(R.string.send));
         tabLayoutAdapter.addFragment(new RequestFragment(), getString(R.string.request));
         tabLayoutAdapter.addFragment(new HistoryFragment(), getString(R.string.history));
         tabLayoutAdapter.addFragment(new InvoicesFragment(), getString(R.string.invoices));
         vpTabLayout.setAdapter(tabLayoutAdapter);
+    }
+
+    private void checkFixedScroll() {
+        int totalWidth = 0;
+        int maxWidth = 0;
+        for (int i = 0; i <= tilTabLayout.getTabCount(); i++) {
+            int tabWidth = tilTabLayout.getChildAt(i).getWidth();
+            totalWidth += tabWidth;
+            maxWidth = Math.max(maxWidth, tabWidth);
+        }
+        int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        if (totalWidth < screenWidth && screenWidth / tabLayoutAdapter.getCount() >= maxWidth) {
+            tilTabLayout.setTabMode(TabLayout.MODE_FIXED);
+        }
     }
 }
