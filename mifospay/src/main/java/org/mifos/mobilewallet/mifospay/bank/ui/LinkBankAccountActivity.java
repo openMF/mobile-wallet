@@ -76,7 +76,7 @@ public class LinkBankAccountActivity extends BaseActivity implements
         showBackButton();
         mPresenter.attachView(this);
 
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
         setupRecyclerview();
         mRvOtherBanks.setNestedScrollingEnabled(false);
         setupAdapterData();

@@ -79,7 +79,7 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
 
         Uri data = getIntent().getData();
         if (data != null) {
-            showProgressDialog(Constants.PLEASE_WAIT);
+            showProgressDialog(getString(R.string.please_wait));
             mInvoicePresenter.getInvoiceDetails(data);
         } else {
             finish();

@@ -187,7 +187,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                                                 addCardDialog.setCardsPresenter(mCardsPresenter);
 
                                                 addCardDialog.show(getFragmentManager(),
-                                                        Constants.EDIT_CARD_DIALOG);
+                                                        getString(R.string.edit_card_dialog));
                                                 break;
                                             case R.id.delete_card:
                                                 mCardsPresenter.deleteCard(
@@ -228,7 +228,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         AddCardDialog addCardDialog = new AddCardDialog();
         addCardDialog.forEdit = false;
         addCardDialog.setCardsPresenter(mCardsPresenter);
-        addCardDialog.show(getFragmentManager(), Constants.ADD_CARD_DIALOG);
+        addCardDialog.show(getFragmentManager(), getString(R.string.add_card_dialog));
     }
 
     /**

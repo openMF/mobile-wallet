@@ -60,7 +60,7 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
                     }
                 });
         bottomNavigationView.setSelectedItemId(R.id.action_home);
-        setToolbarTitle(Constants.HOME);
+        setToolbarTitle(getString(R.string.home));
     }
 
     @Override

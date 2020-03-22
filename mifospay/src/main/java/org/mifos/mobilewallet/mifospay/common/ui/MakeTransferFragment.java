@@ -162,7 +162,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     @Override
     public void transferFailure() {
         TransitionManager.beginDelayedTransition(makeTransferContainer);
-        tvTransferStatus.setText(Constants.UNABLE_TO_PROCESS_TRANSFER);
+        tvTransferStatus.setText(R.string.unable_to_transfer_process);
         progressBar.setVisibility(View.GONE);
         viewTransferFailure.setVisibility(View.VISIBLE);
     }

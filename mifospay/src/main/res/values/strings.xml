@@ -252,5 +252,19 @@
     <string name="hide_balance">Hide Balance</string>
     <string name="no_bank_account">No bank found</string>
     <string name="error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
+    <string name="add_card_dialog">Add Card Dialog</string>
+    <string name="edit_card_dialog">Edit Card Dialog</string>
+    <string name="update">Update</string>
+    <string name="ok">OK</string>
+    <string name="logging_in">Logging in..</string>
+    <string name="unable_to_transfer_process">Unable to process transfer</string>
+    <string name="please_wait">Please wait..</string>
+    <string name="need_external_permission">Need external storage permission to browse documents.</string>
+    <string name="choose_file">Choose File</string>
+    <string name="notification_id">100</string>
+    <string name="notification_id_big_image">101</string>
+    <string name="tap_to_reveal">Tap to Reveal</string>
+
+
 
 </resources>

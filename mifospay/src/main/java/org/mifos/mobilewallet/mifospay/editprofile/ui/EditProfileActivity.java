@@ -405,7 +405,7 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void startProgressBar() {
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
     }
 
     @Override

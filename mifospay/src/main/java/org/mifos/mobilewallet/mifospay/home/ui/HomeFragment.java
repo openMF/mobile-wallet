@@ -104,7 +104,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
             @Nullable Bundle savedInstanceState) {
 
         View rootView = inflater.inflate(R.layout.fragment_home, container, false);
-        setToolbarTitle(Constants.HOME);
+        setToolbarTitle(getString(R.string.home));
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
 
@@ -117,7 +117,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         mTvAccountBalance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mTvAccountBalance.getText().toString().equals(Constants.TAP_TO_REVEAL)) {
+                if (mTvAccountBalance.getText().toString().equals(R.string.tap_to_reveal)) {
                     TransitionManager.beginDelayedTransition(homeScreenContainer);
                     mTvAccountBalance.setText(accountBalance);
                     tvHideBalance.setVisibility(View.VISIBLE);
@@ -129,7 +129,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
             @Override
             public void onClick(View v) {
                 TransitionManager.beginDelayedTransition(homeScreenContainer);
-                mTvAccountBalance.setText(Constants.TAP_TO_REVEAL);
+                mTvAccountBalance.setText(R.string.tap_to_reveal);
                 tvHideBalance.setVisibility(View.INVISIBLE);
             }
         });
@@ -206,7 +206,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         hideSwipeProgress();
 
         TransitionManager.beginDelayedTransition(homeScreenContainer);
-        mTvAccountBalance.setText(Constants.TAP_TO_REVEAL);
+        mTvAccountBalance.setText(R.string.tap_to_reveal);
         tvHideBalance.setVisibility(View.INVISIBLE);
     }
 

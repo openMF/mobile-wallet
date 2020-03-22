@@ -66,7 +66,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
 
         ButterKnife.bind(ShowQrActivity.this);
 
-        setToolbarTitle(Constants.QR_CODE);
+        setToolbarTitle(getString(R.string.qr_code));
         showBackButton();
         mPresenter.attachView(this);
 

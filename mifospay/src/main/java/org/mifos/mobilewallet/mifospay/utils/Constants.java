@@ -10,7 +10,6 @@ public class Constants {
 
     public static final String CLIENT_ID = "client_id";
     public static final String ACCOUNT_ID = "account_id";
-    public static final String ACCOUNT = "account";
     public static final String TO_EXTERNAL_ID = "to_external_id";
     public static final String RUPEE = "₹";
     public static final String QR_DATA = "qr_data";
@@ -31,13 +30,6 @@ public class Constants {
     public static final String KYC_LEVEL_1_DETAILS_ADDED_SUCCESSFULLY =
             "KYC Level 1 details added successfully.";
     public static final String PLEASE_TRY_AGAIN_LATER = "Please try again later.";
-    public static final String PLEASE_WAIT = "Please wait..";
-    public static final String COMPLETE_KYC = "Complete KYC";
-    public static final String NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_DOCUMENTS =
-            "Need external storage permission to browse documents.";
-    public static final String CHOOSE_FILE = "Choose File";
-    public static final String KYC_REGISTRATION_LEVEL_2 = "KYC Registration Level 2";
-    public static final String KYC_REGISTRATION_LEVEL_1 = "KYC Registration Level 1";
     public static final String DD_MM_YY = "dd/MM/yy";
     public static final String ERROR_DELETING_CARD = "Error deleting card.";
     public static final String CARD_DELETED_SUCCESSFULLY = "Card deleted successfully.";
@@ -49,22 +41,9 @@ public class Constants {
     public static final String ERROR_ADDING_CARD = "Error adding card.";
     public static final String CARD_ADDED_SUCCESSFULLY = "Card added successfully.";
     public static final String ADDING_CARD = "Adding Card..";
-
-    public static final String ADD_CARD_DIALOG = "Add Card Dialog";
-    public static final String EDIT_CARD_DIALOG = "Edit Card Dialog";
-    public static final String SAVED_CARDS = "Saved Cards";
-    public static final String UPDATE = "Update";
-    public static final String KYC_REGISTRATION_LEVEL_3 = "KYC Registration Level 3";
-    public static final String OK = "OK";
-    public static final String SCAN_CODE = "Scan code";
-    public static final String QR_CODE = "QR code";
     public static final String FAILED_TO_WRITE_DATA_TO_QR = "Failed to write data to qr";
     public static final String ERROR_OCCURRED = "Error occurred";
-    public static final String LOGGING_IN = "Logging in..";
-    public static final String HOME = "Home";
-    public static final String PROFILE = "Profile";
     public static final String ERROR_FETCHING_BALANCE = "Error fetching balance";
-    public static final String UNABLE_TO_PROCESS_TRANSFER = "Unable to process transfer";
     public static final String TRANSACTION_SUCCESSFUL = "Transaction successful";
     public static final String SENDING_MONEY = "Sending money...";
     public static final String INSUFFICIENT_BALANCE = "Insufficient balance";
@@ -79,13 +58,10 @@ public class Constants {
     public static final String ERROR_CHOOSING_CONTACT = "Error choosing contact";
     public static final String MAKE_TRANSFER_FRAGMENT = "Make Transfer Fragment";
     public static final String PLEASE_ENTER_ALL_THE_FIELDS = "Please enter all the fields";
-    public static final String TRANSFER = "Transfer";
     public static final String TRANSACTION_DETAILS = "Transaction Details";
     public static final String ACCOUNT_NUMBER = "Account Number : ";
     public static final String TRANSACTION = "transaction";
-    public static final String TRANSACTIONS_HISTORY = "Transactions History History";
     public static final String SPECIFIC_TRANSACTIONS = "Specific Transactions History";
-    public static final String HISTORY_NOT_AVAILABLE = "No Transaction History Available";
     public static final String RECEIPT_DOMAIN = "https://receipt.mifospay.com/";
     public static final String OTHER = "Other";
     public static final String CREDIT = "Credit";
@@ -94,7 +70,6 @@ public class Constants {
     public static final String DATE = "Date";
     public static final String TRANSACTION_ID = "Transaction ID";
     public static final String TRANSACTIONS = "transactions";
-    public static final String ERROR_FETCHING_TRANSACTIONS = "Error fetching transactions";
     public static final String TRANSFER_DETAILS = "transfer details";
     public static final String UNIQUE_PAYMENT_LINK_COPIED_TO_CLIPBOARD =
             "Unique Payment Link copied to clipboard";
@@ -138,20 +113,14 @@ public class Constants {
     public static final String SETTINGS = "Settings";
     public static final String EDIT_PROFILE = "Edit Profile";
     public static final String FAQ = "Frequent Asked Questions";
-    public static final String LINKED_BANK_ACCOUNTS = "Linked Bank Accounts";
     public static final String BANK_ACCOUNT_DETAILS = "Bank Account Details";
     public static final String NEW_BANK_ACCOUNT = "newBankAccount";
     public static final String VERIFYING_MOBILE_NUMBER = "Verifying mobile number..";
     public static final String MIFOS_SAVINGS_PRODUCT_ID = "Mifos Savings Product Id";
-    public static final String MERCHANTS = "Merchants";
     public static final String UPI_PIN = "UPI PIN";
     public static final String STEP = "step";
     public static final String TYPE = "Type";
     public static final String SETUP = "Setup";
-    public static final String BANK_DELETED_SUCCESSFULLY = "Bank deleted successfully";
-    public static final String ERROR_OCCURRED_WHILE_CHANGING_UPI_PIN =
-            "Error occurred while changing UPI PIN";
-    public static final String SETUP_UPI = "Setup UPI";
     public static final String ERROR_WHILE_SETTING_UP_UPI_PIN = "Error while setting up UPI PIN";
     public static final String UPI_PIN_SETUP_COMPLETED_SUCCESSFULLY =
             "UPI PIN Setup Completed Successfully";
@@ -169,10 +138,6 @@ public class Constants {
     public static final String REGISTRATION_COMPLETE = "registrationComplete";
     public static final String PUSH_NOTIFICATION = "pushNotification";
 
-    // id to handle the notification in the notification tray
-    public static final int NOTIFICATION_ID = 100;
-    public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
-
     public static final int HOME_HISTORY_TRANSACTIONS_LIMIT = 5;
 
     public static final String ERROR_FIELDS_CANNOT_BE_EMPTY = "Fields cannot be empty";
@@ -180,7 +145,6 @@ public class Constants {
 
     public static final String CHANGE_PROFILE_IMAGE_KEY = "CHANGE_PROFILE_IMAGE_KEY";
     public static final String CHANGE_PROFILE_IMAGE_VALUE = "CHANGE_PROFILE_IMAGE_VALUE";
-    public static final String TAP_TO_REVEAL = "Tap to Reveal";
     public static final String NAME = "Name : ";
     public static final String ERROR_FETCHING_TRANSACTION_DETAILS = "Error fetching details";
 }

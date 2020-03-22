@@ -78,7 +78,7 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
     }
 
     public void okayClicked() {
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
 
         mDebitCardPresenter.verifyDebitCard(mEtDebitCardNumber.getText()
                 .toString(), mPeMonth.getText().toString(), mPeYear.getText().toString());

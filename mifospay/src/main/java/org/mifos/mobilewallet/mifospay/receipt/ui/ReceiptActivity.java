@@ -107,7 +107,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
             } catch (IndexOutOfBoundsException e) {
                 showToast("Invalid link used to open the App.");
             }
-            showProgressDialog(Constants.PLEASE_WAIT);
+            showProgressDialog(getString(R.string.please_wait));
             mPresenter.fetchTransaction(Long.parseLong(transactionId));
         }
     }

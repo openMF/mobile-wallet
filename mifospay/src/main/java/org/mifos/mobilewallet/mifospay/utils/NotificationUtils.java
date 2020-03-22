@@ -167,7 +167,7 @@ public class NotificationUtils {
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(
                 Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(Constants.NOTIFICATION_ID, notification);
+        notificationManager.notify(R.string.notification_id, notification);
     }
 
     private void showBigNotification(Bitmap bitmap, NotificationCompat.Builder mBuilder, int icon,
@@ -193,7 +193,7 @@ public class NotificationUtils {
 
         NotificationManager notificationManager = (NotificationManager) mContext.getSystemService(
                 Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(Constants.NOTIFICATION_ID_BIG_IMAGE, notification);
+        notificationManager.notify(R.string.notification_id_big_image, notification);
     }
 
     /**

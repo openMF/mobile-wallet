@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mifos.mobilewallet.mifospay.MifosPayApp;
+import org.mifos.mobilewallet.mifospay.R;
 
 /**
  * Created by ankur on 23/May/2018
@@ -26,7 +27,7 @@ public class Toaster {
             TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
             textView.setTextColor(Color.WHITE);
             textView.setTextSize(12);
-            snackbar.setAction(Constants.OK, new View.OnClickListener() {
+            snackbar.setAction(R.string.ok, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     snackbar.dismiss();

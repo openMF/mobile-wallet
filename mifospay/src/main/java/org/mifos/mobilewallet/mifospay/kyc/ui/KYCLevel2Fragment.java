@@ -105,13 +105,13 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
 
     @OnClick(R.id.btn_submit)
     public void onSubmitClicked() {
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
         mKYCLevel2Presenter.uploadKYCDocs(etIdname.getText().toString());
     }
 
     @Override
     public void startDocChooseActivity(Intent intent, int READ_REQUEST_CODE) {
-        startActivityForResult(Intent.createChooser(intent, Constants.CHOOSE_FILE),
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.choose_file)),
                 READ_REQUEST_CODE);
     }
 
@@ -143,7 +143,7 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_DOCUMENTS);
+                    showToast(getString(R.string.need_external_permission));
                 }
             }
 

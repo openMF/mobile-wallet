@@ -88,7 +88,7 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     }
 
     private void setupUi() {
-        setToolbarTitle(Constants.PROFILE);
+        setToolbarTitle(getString(R.string.profile));
         setSwipeEnabled(false);
         hideBackButton();
         setupBottomSheet();
