@@ -183,4 +183,5 @@ public class Constants {
     public static final String TAP_TO_REVEAL = "Tap to Reveal";
     public static final String NAME = "Name : ";
     public static final String ERROR_FETCHING_TRANSACTION_DETAILS = "Error fetching details";
+    public static final String PASSCODE_NEXT_ACTIVITY = "passcode_next_code_activity";
 }
