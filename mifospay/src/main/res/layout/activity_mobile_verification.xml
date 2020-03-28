@@ -118,6 +118,7 @@
             android:layout_marginLeft="@dimen/value_20dp"
             android:layout_marginRight="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_10dp"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <EditText
