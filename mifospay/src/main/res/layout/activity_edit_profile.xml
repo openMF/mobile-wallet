@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.design.widget.CoordinatorLayout
+<android.support.design.widget.CoordinatorLayout xmlns:tools="http://schemas.android.com/tools"
     android:focusableInTouchMode="true"
     android:focusable="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -49,16 +49,27 @@
                     android:id="@+id/til_edit_profile_username"
                     android:layout_marginTop="@dimen/marginItemsInSectionLarge"
                     android:layout_width="match_parent"
-                    app:helperText="@string/username"
-                    android:hint="@string/username"
                     android:layout_height="wrap_content" >
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_edit_profile_username"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_person_black_24dp"
+                        android:drawableStart="@drawable/ic_person_black_24dp"
+                        android:drawablePadding="@dimen/value_10dp"
+                        android:drawableTint="@color/colorAccentBlack"
+                        android:hint="@string/username"
+                        android:inputType="textPersonName|text"
+                        android:paddingStart="@dimen/value_10dp"
+                        android:paddingRight="0dp"
+                        android:paddingEnd="0dp"
+                        android:paddingLeft="@dimen/value_10dp"
+                        android:textSize="@dimen/value_14sp"/>
 
                 </android.support.design.widget.TextInputLayout>
+
+
 
                 <android.support.design.widget.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -66,14 +77,23 @@
                     android:layout_width="match_parent"
                     android:id="@+id/til_edit_profile_email"
                     app:layout_anchor="@id/til_edit_profile_username"
-                    app:helperText="@string/email"
-                    android:hint="@string/email"
                     android:layout_height="wrap_content" >
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_edit_profile_email"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_email_black_24dp"
+                        android:drawableStart="@drawable/ic_email_black_24dp"
+                        android:drawablePadding="@dimen/value_10dp"
+                        android:drawableTint="@color/colorAccentBlack"
+                        android:hint="@string/email"
+                        android:inputType="textEmailAddress"
+                        android:paddingLeft="@dimen/value_10dp"
+                        android:paddingRight="0dp"
+                        android:paddingEnd="0dp"
+                        android:paddingStart="@dimen/value_10dp"
+                        android:textSize="@dimen/value_14sp"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -82,14 +102,23 @@
                     android:layout_marginTop="@dimen/marginItemsInSectionMedium"
                     android:id="@+id/til_edit_profile_vpa"
                     android:layout_width="match_parent"
-                    app:helperText="@string/vpa"
-                    android:hint="@string/vpa"
                     android:layout_height="wrap_content" >
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_edit_profile_vpa"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:drawableLeft="@drawable/ic_account_balance_black_24dp"
+                        android:drawableStart="@drawable/ic_account_balance_black_24dp"
+                        android:drawablePadding="@dimen/value_10dp"
+                        android:drawableTint="@color/colorAccentBlack"
+                        android:hint="@string/vpa"
+                        android:inputType="text"
+                        android:paddingLeft="@dimen/value_10dp"
+                        android:paddingRight="0dp"
+                        android:paddingEnd="0dp"
+                        android:paddingStart="@dimen/value_10dp"
+                        android:textSize="@dimen/value_14sp"/>
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -112,37 +141,53 @@
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:id="@+id/til_edit_profile_mobile"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:helperText="@string/mobile"
-                        android:hint="@string/mobile" >
+                        android:layout_height="wrap_content">
 
                         <android.support.design.widget.TextInputEditText
                             android:id="@+id/et_edit_profile_mobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLength="@integer/telephone_numbers_max_length_standard"
-                            android:inputType="number" />
+                            android:inputType="number"
+                            android:drawableLeft="@drawable/ic_call_black_24dp"
+                            android:drawableStart="@drawable/ic_call_black_24dp"
+                            android:drawablePadding="@dimen/value_10dp"
+                            android:drawableTint="@color/colorAccentBlack"
+                            android:hint="@string/mobile_number"
+                            android:paddingLeft="@dimen/value_10dp"
+                            android:paddingRight="0dp"
+                            android:paddingEnd="0dp"
+                            android:paddingStart="@dimen/value_10dp"
+                            android:textSize="@dimen/value_14sp"/>
 
                     </android.support.design.widget.TextInputLayout>
 
                 </LinearLayout>
 
                 <Button
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    app:icon="@drawable/ic_lock_black_24dp"
+                    app:iconGravity="start"
+                    android:drawableTint="@color/colorPrimary"
                     android:text="@string/change_password"
                     android:id="@+id/btn_change_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginBetweenSections" />
+                    android:layout_marginTop="@dimen/marginBetweenSections"
+                    tools:ignore="MissingPrefix" />
 
                 <Button
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                    android:drawableTint="@color/colorPrimary"
+                    app:icon="@drawable/ic_fiber_pin_black_24dp"
+                    app:iconGravity="start"
                     android:text="@string/change_passcode"
                     android:id="@+id/btn_change_passcode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/marginItemsInSectionExtraSmall"
-                    android:layout_marginBottom="@dimen/paddingLayout" />
+                    android:layout_marginBottom="@dimen/paddingLayout"
+                    tools:ignore="MissingPrefix" />
             </LinearLayout>
 
     </ScrollView>
