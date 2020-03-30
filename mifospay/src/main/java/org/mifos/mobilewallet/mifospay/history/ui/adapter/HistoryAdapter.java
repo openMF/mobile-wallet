@@ -1,11 +1,14 @@
 package org.mifos.mobilewallet.mifospay.history.ui.adapter;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.Transaction;
@@ -44,8 +47,12 @@ public class HistoryAdapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Transaction transaction = transactions.get(position);
 
+
+        Transaction transaction = transactions.get(position);
+        holder.icon.setAnimation(AnimationUtils.loadAnimation(context, R.anim.history_fade));
+        holder.constraintLayout.setAnimation(AnimationUtils.
+                loadAnimation(context, R.anim.history_fade_in));
         String balance = Utils.getFormattedAccountBalance(transaction.getAmount());
         String currency = transaction.getCurrency().getCode();
         holder.tvTransactionAmount.setText(String.format("%s %s", currency, balance));
@@ -110,6 +117,12 @@ public class HistoryAdapter
 
         @BindView(R.id.tv_item_casual_list_subtitle)
         TextView tvTransactionDate;
+
+        @BindView(R.id.root_layout)
+        ConstraintLayout constraintLayout;
+
+        @BindView(R.id.iv_item_casual_list_icon)
+        ImageView icon;
 
         public ViewHolder(View v) {
             super(v);
