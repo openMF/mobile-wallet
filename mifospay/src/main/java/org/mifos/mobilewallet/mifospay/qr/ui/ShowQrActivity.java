@@ -72,7 +72,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
 
         final String qrData = getIntent().getStringExtra(Constants.QR_DATA);
         mShowQrPresenter.generateQr(qrData);
-        tvQrData.setText(qrData);
+        tvQrData.setText(getString(R.string.email) + ": " + qrData);
 
         WindowManager.LayoutParams layout = getWindow().getAttributes();
         layout.screenBrightness = 1F;
