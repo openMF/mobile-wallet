@@ -9,6 +9,7 @@ import com.mifos.mobile.passcode.MifosPassCodeActivity;
 import com.mifos.mobile.passcode.utils.EncryptionUtil;
 
 import org.mifos.mobilewallet.mifospay.MifosPayApp;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.home.ui.MainActivity;
 import org.mifos.mobilewallet.mifospay.injection.component.ActivityComponent;
@@ -51,7 +52,7 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
 
     @Override
     public int getLogo() {
-        return 0;
+        return R.drawable.mifos_pay_logo_round;
     }
 
     @Override
