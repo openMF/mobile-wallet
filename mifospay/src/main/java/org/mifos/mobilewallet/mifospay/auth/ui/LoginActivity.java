@@ -67,6 +67,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         super.onCreate(savedInstanceState);
         getActivityComponent().inject(this);
         setContentView(R.layout.activity_login);
+        setTheme(R.style.AppTheme);
         ButterKnife.bind(this);
         mPresenter.attachView(this);
 
