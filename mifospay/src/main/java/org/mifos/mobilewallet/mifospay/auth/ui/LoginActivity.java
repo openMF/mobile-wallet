@@ -115,7 +115,9 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
 
     @OnClick(R.id.bg_screen)
     public void backgroundScreenClicked() {
-        Utils.hideSoftKeyboard(this);
+        if (this.getCurrentFocus() != null) {
+            Utils.hideSoftKeyboard(this);
+        }
     }
 
     @Override
