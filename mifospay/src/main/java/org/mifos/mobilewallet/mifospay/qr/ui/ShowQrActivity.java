@@ -72,7 +72,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
 
         final String qrData = getIntent().getStringExtra(Constants.QR_DATA);
         mShowQrPresenter.generateQr(qrData);
-        tvQrData.setText(getString(R.string.email) + ": " + qrData);
+        tvQrData.setText(getString(R.string.vpa) + ": " + qrData);
 
         WindowManager.LayoutParams layout = getWindow().getAttributes();
         layout.screenBrightness = 1F;
@@ -161,7 +161,8 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                     return;
                 }
                 mAmount = amount;
-                tvQrData.setText(qrData + ", " + mAmount);
+                tvQrData.setText(getString(R.string.vpa) + ": " + qrData +
+                        "\n" + getString(R.string.amount) + ": " + mAmount);
                 generateQR(qrData + ", " + mAmount);
             }
         });
@@ -169,7 +170,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 mAmount = null;
-                tvQrData.setText(qrData);
+                tvQrData.setText(getString(R.string.vpa) + ": " + qrData);
                 generateQR(qrData);
                 showToast("Reset Amount Successful");
             }
