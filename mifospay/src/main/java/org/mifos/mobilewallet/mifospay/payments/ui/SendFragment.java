@@ -213,10 +213,11 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 return;
             }
             double amount = Double.parseDouble(etAmount.getText().toString());
-            MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId,
-                    amount);
-            fragment.show(getChildFragmentManager(),
-                    Constants.MAKE_TRANSFER_FRAGMENT);
+            if (!mTransferPresenter.checkSelfTransfer(externalId)) {
+                mTransferPresenter.checkBalanceAvailability(externalId, amount);
+            } else {
+                showSnackbar(Constants.SELF_ACCOUNT_ERROR);
+            }
 
         } else if (requestCode == PICK_CONTACT && resultCode == Activity.RESULT_OK) {
             Cursor cursor = null;
