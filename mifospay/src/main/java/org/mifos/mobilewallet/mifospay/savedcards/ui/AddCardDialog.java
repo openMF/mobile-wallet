@@ -177,7 +177,7 @@ public class AddCardDialog extends BottomSheetDialogFragment {
         int expiryYear = Integer.parseInt(spnYY.getSelectedItem().toString());
         Calendar calendar = Calendar.getInstance();
         if (expiryYear == calendar.get(Calendar.YEAR)
-                && expiryMonth < (calendar.get(Calendar.MONTH) + 1)) {
+                && expiryMonth < (calendar.get(Calendar.MONTH) + 1) && fieldsValid) {
             Toaster.showToast(getContext(), getString(R.string.card_expiry_message));
             fieldsValid = false;
         }
