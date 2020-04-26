@@ -68,7 +68,7 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
         mPresenter.attachView(this);
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         setToolbarTitle(Constants.SPECIFIC_TRANSACTIONS);
 
         transactions = getIntent().getParcelableArrayListExtra(Constants.TRANSACTIONS);

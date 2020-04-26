@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.utils;
 
+import org.mifos.mobilewallet.mifospay.R;
+
 /**
  * Created by naman on 17/6/17.
  */
@@ -183,4 +185,7 @@ public class Constants {
     public static final String TAP_TO_REVEAL = "Tap to Reveal";
     public static final String NAME = "Name : ";
     public static final String ERROR_FETCHING_TRANSACTION_DETAILS = "Error fetching details";
+
+    public static final int WHITE_BACK_BUTTON = R.drawable.ic_arrow_back_white_24dp;
+    public static final int BLACK_BACK_BUTTON = R.drawable.ic_arrow_back_black_24dp;
 }

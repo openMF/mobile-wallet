@@ -96,7 +96,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
         mPresenter.attachView(this);
 
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         setToolbarTitle("Registration");
 
         mifosSavingProductId = getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0);

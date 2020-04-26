@@ -60,7 +60,7 @@ public class MobileVerificationActivity extends BaseActivity implements
         mPresenter.attachView(this);
 
         setToolbarTitle("");
-        showBackButton();
+        showColoredBackButton(Constants.WHITE_BACK_BUTTON);
 
         mCcpCode.registerCarrierNumberEditText(mEtMobileNumber);
         mCcpCountry.setCustomMasterCountries("IN,US");
