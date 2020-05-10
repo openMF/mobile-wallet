@@ -49,6 +49,8 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
 
     @BindView(R.id.tv_amount)
     TextView tvAmount;
+    @BindView(R.id.tv_amount_in_words)
+    TextView tvAmountInWords;
     @BindView(R.id.tv_operation)
     TextView tvOperation;
     @BindView(R.id.tv_name)
@@ -115,6 +117,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
     @Override
     public void showTransactionDetail(Transaction transaction) {
         tvAmount.setText(transaction.getCurrency().getCode() + " " + transaction.getAmount());
+        tvAmountInWords.setText(transaction.getAmountInWords((int)transaction.getAmount()));
         tvDate.setText(transaction.getDate());
         tvReceiptLink.setText(Constants.RECEIPT_DOMAIN + transaction.getTransactionId());
         tvTransactionID.setText(String.valueOf(transaction.getTransactionId()));

@@ -39,6 +39,14 @@
                         android:layout_gravity="center"/>
 
                     <TextView
+                        android:id="@+id/tv_amount_in_words"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/gray_dark"
+                        android:textSize="@dimen/textH6"
+                        android:layout_gravity="center"/>
+
+                    <TextView
                         android:id="@+id/tv_operation"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
