@@ -250,6 +250,7 @@
     <string name="empty_no_invoices_title">You have no invoices</string>
     <string name="empty_no_invoices_subtitle">All invoices will be displaying here</string>
     <string name="notification_settings">Notification Settings</string>
+    <string name="validate_email">Please enter a valid email address</string>
     <string name="password_very_weak">"Password should contain more than 6 characters"</string>
     <string name="password_weak">Weak</string>
     <string name="password_normal">Normal</string>
