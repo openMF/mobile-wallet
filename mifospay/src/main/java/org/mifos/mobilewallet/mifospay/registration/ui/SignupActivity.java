@@ -237,7 +237,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         String password = mEtPassword.getText().toString();
         String confirmPassword = mEtConfirmPassword.getText().toString();
 
-        if (!ValidateUtil.isValidEmail(email)) {
+        if (!ValidateUtil.INSTANCE.isValidEmail(email)) {
             Snackbar.make(container, R.string.validate_email, Snackbar.LENGTH_SHORT).show();
             hideProgressDialog();
             return;
