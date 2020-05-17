@@ -244,7 +244,11 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 showToast(Constants.ERROR_CHOOSING_CONTACT);
             }
         } else if (requestCode == REQUEST_SHOW_DETAILS && resultCode == Activity.RESULT_CANCELED) {
-            showSnackbar(Constants.ERROR_FINDING_VPA);
+            if (mBtnMobile.isSelected()) {
+                showSnackbar(Constants.ERROR_FINDING_MOBILE_NUMBER);
+            } else {
+                showSnackbar(Constants.ERROR_FINDING_VPA);
+            }
         }
     }
 

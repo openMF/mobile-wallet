@@ -71,6 +71,7 @@ public class Constants {
     public static final String SENDING_MONEY = "Sending money...";
     public static final String INSUFFICIENT_BALANCE = "Insufficient balance";
     public static final String ERROR_FINDING_VPA = "Error finding Virtual Payment Address";
+    public static final String ERROR_FINDING_MOBILE_NUMBER = "Error finding Mobile Number";
     public static final String PLEASE_ENTER_VALID_AMOUNT = "Please enter a valid amount";
     public static final String SELF_ACCOUNT_ERROR = "Self Account transfer is not allowed";
     public static final String PLEASE_ENTER_AMOUNT =
