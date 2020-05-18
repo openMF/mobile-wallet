@@ -191,7 +191,6 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
                 DebugUtil.log(Constants.GOOGLE_SIGN_IN_FAILED, e.getMessage());
                 Toaster.showToast(this, Constants.GOOGLE_SIGN_IN_FAILED);
                 hideProgressDialog();
-                startActivity(new Intent(LoginActivity.this, LoginActivity.class));
             }
         }
     }
