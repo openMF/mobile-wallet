@@ -7,7 +7,8 @@ import android.view.Display;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Currency;
 
 /**
  * Created by naman on 17/6/17.
@@ -43,8 +44,11 @@ public class Utils {
         return true;
     }
 
-    public static String getFormattedAccountBalance(Double balance) {
-        DecimalFormat accountBalanceFormatter = new DecimalFormat("#,###,###.##");
+    public static String getFormattedAccountBalance(Double balance, String currencyCode) {
+        NumberFormat accountBalanceFormatter = NumberFormat.getCurrencyInstance();
+        accountBalanceFormatter.setMaximumFractionDigits(0);
+        accountBalanceFormatter.setCurrency(Currency.getInstance(currencyCode));
+
         return accountBalanceFormatter.format(balance);
     }
 }
