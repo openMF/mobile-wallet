@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -35,6 +35,13 @@
 
     <style name="transparentBackground" >
         <item name="android:background">@null</item>
+    </style>
+
+    <!--SplashScreen Theme-->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:statusBarColor"
+            tools:targetApi="lollipop">@color/colorPrimaryDark</item>
+        <item name="android:windowBackground">@drawable/splash_screen_background</item>
     </style>
 
 </resources>
