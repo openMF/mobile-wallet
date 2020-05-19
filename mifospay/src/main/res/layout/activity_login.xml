@@ -87,7 +87,7 @@
     <LinearLayout
         android:id="@+id/ll_signup"
         android:layout_width="0dp"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/marginItemsInSectionLarge"
         android:gravity="center_horizontal"
         android:orientation="horizontal"
