@@ -191,4 +191,5 @@ public class Constants {
 
     public static final int WHITE_BACK_BUTTON = R.drawable.ic_arrow_back_white_24dp;
     public static final int BLACK_BACK_BUTTON = R.drawable.ic_arrow_back_black_24dp;
+    public static final String VIEW = "View";
 }

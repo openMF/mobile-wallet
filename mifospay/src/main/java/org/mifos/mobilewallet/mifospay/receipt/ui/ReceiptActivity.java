@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.Uri;
@@ -11,8 +12,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.TextView;
 
@@ -195,12 +198,32 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         if (!mifosDirectory.exists()) {
             mifosDirectory.mkdirs();
         }
-        File documentFile = new File(mifosDirectory.getPath(), filename);
+        final File documentFile = new File(mifosDirectory.getPath(), filename);
         if (!FileUtils.writeInputStreamDataToFile(responseBody.byteStream(), documentFile)) {
             showToast(Constants.ERROR_DOWNLOADING_RECEIPT);
         } else {
-            showSnackbar(Constants.RECEIPT_DOWNLOADED_SUCCESSFULLY);
+            Toaster.show(findViewById(android.R.id.content),
+                    Constants.RECEIPT_DOWNLOADED_SUCCESSFULLY, Snackbar.LENGTH_LONG, Constants.VIEW,
+                    new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openFile(ReceiptActivity.this, documentFile);
+                        }
+                    });
         }
+    }
+
+    private void openFile(Context context, File file) {
+        final Uri data = FileProvider.getUriForFile(context,
+                "org.mifos.mobilewallet.mifospay.provider", file);
+        context.grantUriPermission(context.getPackageName(),
+                data, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Intent intent = new Intent(Intent.ACTION_VIEW)
+                .setDataAndType(data, "application/pdf")
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        intent = Intent.createChooser(intent, getString(R.string.view_receipt));
+        context.startActivity(intent);
     }
 
     @Override

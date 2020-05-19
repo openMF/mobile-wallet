@@ -53,7 +53,6 @@ public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
                     public void onSuccess(DownloadTransactionReceipt.ResponseValue response) {
                         mReceiptView.writeReceiptToPDF(response.getResponseBody(),
                                 Constants.RECEIPT + transactionId + Constants.PDF);
-                        mReceiptView.showSnackbar(Constants.RECEIPT_DOWNLOADED_SUCCESSFULLY);
                     }
 
                     @Override
