@@ -63,7 +63,7 @@ public class MobileVerificationActivity extends BaseActivity implements
         showColoredBackButton(Constants.WHITE_BACK_BUTTON);
 
         mCcpCode.registerCarrierNumberEditText(mEtMobileNumber);
-        mCcpCountry.setCustomMasterCountries("IN,US");
+        mCcpCountry.setCustomMasterCountries(null);
     }
 
     @Override
