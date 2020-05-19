@@ -7,6 +7,7 @@ import org.mifos.mobilewallet.core.domain.usecase.savedcards.AddCard;
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.DeleteCard;
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.EditCard;
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.FetchSavedCards;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
@@ -57,7 +58,7 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
      */
     @Override
     public void fetchSavedCards() {
-
+        mCardsView.showFetchingProcess();
         fetchSavedCardsUseCase.setRequestValues(
                 new FetchSavedCards.RequestValues(
                         mLocalRepository.getClientDetails().getClientId()));
@@ -75,7 +76,9 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                     @Override
                     public void onError(String message) {
                         mCardsView.hideSwipeProgress();
-                        mCardsView.showToast(Constants.ERROR_FETCHING_CARDS);
+                        mCardsView.showErrorStateView(R.drawable.ic_error_state,
+                                R.string.error_oops,
+                                R.string.error_no_cards_found);
                     }
                 });
     }
@@ -113,7 +116,7 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
 
                     @Override
                     public void onError(String message) {
-                        mCardsView.hideProgressDialog();
+                        mCardsView.hideSwipeProgress();
                         mCardsView.showToast(Constants.ERROR_ADDING_CARD);
                     }
                 });
@@ -225,9 +228,6 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
         for (int i = 0; i < ints.length; i++) {
             sum += ints[i];
         }
-        if (sum % 10 == 0) {
-            return true;
-        }
-        return false;
+        return sum % 10 == 0;
     }
 }

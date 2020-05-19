@@ -159,6 +159,7 @@
     <string name="disable_account">Disable account</string>
     <string name="log_out">Log out</string>
     <string name="debit_card_details">Debit Card Details</string>
+    <string name="debit_card_error_message">Invalid Debit Card Number</string>
     <string name="one_time_password">One Time Password</string>
     <string name="upi_pin_setup">UPI PIN Setup</string>
     <string name="all_fields_are_mandatory">All fields are mandatory.</string>
@@ -201,7 +202,25 @@
     <string name="faq">FAQ</string>
     <string name="settings">Settings</string>
     <string name="mobile_number">Mobile Number</string>
+    <string name="passcode_title">Passcode will be reset, are you sure?</string>
+    <string name="yes">Yes</string>
     <string name="no_notification_found">No Notifications Found</string>
+    <string name="wrong_otp">Wrong OTP</string>
+    <string name="reenter_upi">Re-enter UPI PIN</string>
+    <string name="upi_pin_mismatch">UPI PIN mismatch</string>
+    <string name="enter_upi_length_4">Enter UPI PIN of length 4</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="enter_valid_mob_num">Enter a valid mobile number</string>
+    <string name="invalid_link">Invalid link used to open the App.</string>
+    <string name="paid_to">Paid to</string>
+    <string name="credited_by">Credited by</string>
+    <string name="downloading_receipt">Downloading Receipt</string>
+    <string name="enter_amount">Please enter the Amount</string>
+    <string name="reset">Reset</string>
+    <string name="vpa_null_no_transactions">VPA is Null. Can\'t make any transactions.</string>
+    <string name="vpa_null_cant_copy">VPA is Null. Can\'t copy.</string>
+    <string name="vpa_copy_success">VPA copied to Clipboard Successfully</string>
 
     <string name="fetching">Fetching…</string>
     <string name="empty_no_transaction_history_title">Your history is empty</string>
@@ -210,6 +229,9 @@
     <string name="empty_no_transaction_history_subtitle">Every completed transaction will be displaying here</string>
     <string name="error_oops">Oops!</string>
     <string name="error_no_transaction_history_subtitle">Couldn\'t fetch transactions history. Please, try again.</string>
+    <string name="error_no_invoices_found">Couldn\'t fetch invoice list. Please, try again.</string>
+    <string name="error_no_cards_found">Couldn\'t fetch cards list. Please, try again.</string>
+    <string name="error_no_merchants_found">Couldn\'t fetch merchant list. Please, try again.</string>
     <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
     <string name="account_details">Account Details</string>
     <string name="mobile">Mobile number</string>
@@ -230,6 +252,7 @@
     <string name="empty_no_invoices_title">You have no invoices</string>
     <string name="empty_no_invoices_subtitle">All invoices will be displaying here</string>
     <string name="notification_settings">Notification Settings</string>
+    <string name="validate_email">Please enter a valid email address</string>
     <string name="password_very_weak">"Password should contain more than 6 characters"</string>
     <string name="password_weak">Weak</string>
     <string name="password_normal">Normal</string>
@@ -248,5 +271,6 @@
     <string name="grip">Grip</string>
     <string name="hide_balance">Hide Balance</string>
     <string name="no_bank_account">No bank found</string>
+    <string name="error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
 
 </resources>

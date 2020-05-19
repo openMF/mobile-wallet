@@ -113,6 +113,13 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         signupMethod.show(getSupportFragmentManager(), Constants.CHOOSE_SIGNUP_METHOD);
     }
 
+    @OnClick(R.id.bg_screen)
+    public void backgroundScreenClicked() {
+        if (this.getCurrentFocus() != null) {
+            Utils.hideSoftKeyboard(this);
+        }
+    }
+
     @Override
     public void disableLoginButton() {
         btnLogin.setEnabled(false);
@@ -184,7 +191,6 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
                 DebugUtil.log(Constants.GOOGLE_SIGN_IN_FAILED, e.getMessage());
                 Toaster.showToast(this, Constants.GOOGLE_SIGN_IN_FAILED);
                 hideProgressDialog();
-                startActivity(new Intent(LoginActivity.this, LoginActivity.class));
             }
         }
     }

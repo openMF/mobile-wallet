@@ -28,7 +28,7 @@
                         android:layout_width="@dimen/value_120dp"
                         android:layout_height="@dimen/value_120dp"
                         android:layout_gravity="center"
-                        app:srcCompat="@drawable/mifos_logo" />
+                        app:srcCompat="@drawable/mifospay_round_logo" />
 
                     <TextView
                         android:id="@+id/tv_amount"

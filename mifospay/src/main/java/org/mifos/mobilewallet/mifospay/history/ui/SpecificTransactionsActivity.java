@@ -1,12 +1,16 @@
 package org.mifos.mobilewallet.mifospay.history.ui;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
@@ -39,6 +43,21 @@ public class SpecificTransactionsActivity extends BaseActivity implements
     @BindView(R.id.rv_transactions)
     RecyclerView mRvTransactions;
 
+    @BindView(R.id.pb_specific_transaction)
+    ProgressBar progressBar;
+
+    @BindView(R.id.iv_empty_no_transaction_history)
+    ImageView ivStateIcon;
+
+    @BindView(R.id.tv_empty_no_transaction_history_title)
+    TextView tvStateTitle;
+
+    @BindView(R.id.tv_empty_no_transaction_history_subtitle)
+    TextView tvStateSubtitle;
+
+    @BindView(R.id.error_state_view)
+    View errorStateView;
+
     private ArrayList<Transaction> transactions;
     private String secondAccountNumber;
 
@@ -49,7 +68,7 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
         mPresenter.attachView(this);
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         setToolbarTitle(Constants.SPECIFIC_TRANSACTIONS);
 
         transactions = getIntent().getParcelableArrayListExtra(Constants.TRANSACTIONS);
@@ -95,6 +114,36 @@ public class SpecificTransactionsActivity extends BaseActivity implements
 
     @Override
     public void showSpecificTransactions(ArrayList<Transaction> specificTransactions) {
+        hideProgress();
         mSpecificTransactionsAdapter.setData(specificTransactions);
     }
+
+    @Override
+    public void showProgress() {
+        mRvTransactions.setVisibility(View.GONE);
+        errorStateView.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        progressBar.setVisibility(View.GONE);
+        errorStateView.setVisibility(View.GONE);
+        mRvTransactions.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showStateView(int drawable, int title, int subtitle) {
+        mRvTransactions.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+        errorStateView.setVisibility(View.VISIBLE);
+        Resources res = getResources();
+        ivStateIcon
+                .setImageDrawable(res.getDrawable(drawable));
+        tvStateTitle
+                .setText(res.getString(title));
+        tvStateSubtitle
+                .setText(res.getString(subtitle));
+    }
+
 }

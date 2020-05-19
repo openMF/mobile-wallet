@@ -146,7 +146,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
             if (!mTransferPresenter.checkSelfTransfer(externalId)) {
                 mTransferPresenter.checkBalanceAvailability(externalId, amount);
             } else {
-                showSwipeProgress();
                 showSnackbar(Constants.SELF_ACCOUNT_ERROR);
             }
         }
@@ -213,10 +212,11 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 return;
             }
             double amount = Double.parseDouble(etAmount.getText().toString());
-            MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId,
-                    amount);
-            fragment.show(getChildFragmentManager(),
-                    Constants.MAKE_TRANSFER_FRAGMENT);
+            if (!mTransferPresenter.checkSelfTransfer(externalId)) {
+                mTransferPresenter.checkBalanceAvailability(externalId, amount);
+            } else {
+                showSnackbar(Constants.SELF_ACCOUNT_ERROR);
+            }
 
         } else if (requestCode == PICK_CONTACT && resultCode == Activity.RESULT_OK) {
             Cursor cursor = null;
@@ -243,7 +243,11 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 showToast(Constants.ERROR_CHOOSING_CONTACT);
             }
         } else if (requestCode == REQUEST_SHOW_DETAILS && resultCode == Activity.RESULT_CANCELED) {
-            showSnackbar(Constants.ERROR_FINDING_VPA);
+            if (mBtnMobile.isSelected()) {
+                showSnackbar(Constants.ERROR_FINDING_MOBILE_NUMBER);
+            } else {
+                showSnackbar(Constants.ERROR_FINDING_VPA);
+            }
         }
     }
 

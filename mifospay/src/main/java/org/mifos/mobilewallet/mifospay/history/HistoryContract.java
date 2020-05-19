@@ -44,6 +44,12 @@ public interface HistoryContract {
     interface TransactionDetailView extends BaseView<TransactionDetailPresenter> {
 
         void showTransferDetail(TransferDetail transferDetail);
+
+        void showProgressBar();
+
+        void hideProgressBar();
+
+        void showToast(String message);
     }
 
     interface TransactionDetailPresenter extends BasePresenter {
@@ -54,6 +60,12 @@ public interface HistoryContract {
     interface SpecificTransactionsView extends BaseView<SpecificTransactionsPresenter> {
 
         void showSpecificTransactions(ArrayList<Transaction> specificTransactions);
+
+        void showProgress();
+
+        void hideProgress();
+
+        void showStateView(int drawable, int title, int subtitle);
     }
 
     interface SpecificTransactionsPresenter extends BasePresenter {
