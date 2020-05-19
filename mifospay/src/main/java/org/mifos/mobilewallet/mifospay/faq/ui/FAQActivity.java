@@ -2,7 +2,6 @@ package org.mifos.mobilewallet.mifospay.faq.ui;
 
 import android.os.Bundle;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -17,34 +16,33 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+/**
+ * This class is the UI component of the Architecture.
+ *
+ * @author ankur
+ * @since 11/July/2018
+ */
 
 public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
-
-    private ExpandableListView expandableListView;
-
-    private FAQListAdapter faqListAdapter;
-
-    private List<String> listDataGroup;
-
-    private HashMap<String, List<String>> listDataChild;
 
     @Inject
     FAQPresenter mPresenter;
     FAQContract.FAQPresenter mFAQPresenter;
+    private ExpandableListView expandableListView;
+    private FAQListAdapter faqListAdapter;
+    private List<String> listDataGroup;
+    private HashMap<String, List<String>> listDataChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faq);
 
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         setToolbarTitle(Constants.FAQ);
 
         // initializing the views
         initViews();
-
-        // initializing the listeners
-        initListeners();
 
         // initializing the objects
         initObjects();
@@ -59,7 +57,7 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
     }
 
     /**
-     * method to initialize the views
+     * Method to initialize the views
      */
     public void initViews() {
 
@@ -68,39 +66,7 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
     }
 
     /**
-     * method to initialize the listeners
-     */
-    public void initListeners() {
-
-        // ExpandableListView Group expanded listener
-        expandableListView.setOnGroupExpandListener(
-                new ExpandableListView.OnGroupExpandListener() {
-
-                    @Override
-                    public void onGroupExpand(int groupPosition) {
-                        Toast.makeText(getApplicationContext(),
-                                listDataGroup.get(groupPosition) + "Collapsed",
-                                Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-        // ExpandableListView Group collapsed listener
-        expandableListView.setOnGroupCollapseListener(
-                new ExpandableListView.OnGroupCollapseListener() {
-
-                    @Override
-                    public void onGroupCollapse(int groupPosition) {
-                        Toast.makeText(getApplicationContext(),
-                                listDataGroup.get(groupPosition) + "Collapsed",
-                                Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-
-    }
-
-    /**
-     * method to initialize the objects
+     * Method to initialize the objects
      */
     public void initObjects() {
 
@@ -118,9 +84,8 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
 
     }
 
-    /*
+    /**
      * Preparing the list data
-     *
      * Dummy Items
      */
     public void initListData() {

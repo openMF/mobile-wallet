@@ -7,6 +7,7 @@ import org.mifos.mobilewallet.core.domain.usecase.savedcards.AddCard;
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.DeleteCard;
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.EditCard;
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.FetchSavedCards;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
@@ -15,7 +16,10 @@ import org.mifos.mobilewallet.mifospay.utils.Constants;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 19/May/2018
+ * This class is the Presenter component of the Architecture.
+ *
+ * @author ankur
+ * @since 19/May/2018
  */
 
 public class CardsPresenter implements CardsContract.CardsPresenter {
@@ -49,10 +53,12 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
         mCardsView.setPresenter(this);
     }
 
-
+    /**
+     * An overridden method from Contract to fetch Saved Cards.
+     */
     @Override
     public void fetchSavedCards() {
-
+        mCardsView.showFetchingProcess();
         fetchSavedCardsUseCase.setRequestValues(
                 new FetchSavedCards.RequestValues(
                         mLocalRepository.getClientDetails().getClientId()));
@@ -70,11 +76,18 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                     @Override
                     public void onError(String message) {
                         mCardsView.hideSwipeProgress();
-                        mCardsView.showToast(Constants.ERROR_FETCHING_CARDS);
+                        mCardsView.showErrorStateView(R.drawable.ic_error_state,
+                                R.string.error_oops,
+                                R.string.error_no_cards_found);
                     }
                 });
     }
 
+    /**
+     * An overridden method from Contract to Add a new Card.
+     *
+     * @param card : The card to be added.
+     */
     @Override
     public void addCard(Card card) {
 
@@ -103,12 +116,17 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
 
                     @Override
                     public void onError(String message) {
-                        mCardsView.hideProgressDialog();
+                        mCardsView.hideSwipeProgress();
                         mCardsView.showToast(Constants.ERROR_ADDING_CARD);
                     }
                 });
     }
 
+    /**
+     * An overridden method from Contract to edit a Card.
+     *
+     * @param card : Card to be edited.
+     */
     @Override
     public void editCard(Card card) {
 
@@ -142,6 +160,11 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                 });
     }
 
+    /**
+     * An overridden method from Contract to delete a particular card.
+     *
+     * @param cardId : Card to be deleted.
+     */
     @Override
     public void deleteCard(int cardId) {
         mCardsView.showProgressDialog(Constants.DELETING_CARD);
@@ -170,8 +193,14 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
     }
 
 
-    /* Luhn Algorithm for validating Credit Card Number
-     * src: https://www.journaldev.com/1443/java-credit-card-validation-luhn-algorithm-java*/
+    /**
+     * An utility function to validate a Credit Card Nnumber.
+     *
+     * @param str : String to be validated
+     *            Luhn Algorithm for validating Credit Card Number
+     *            src: https://www.journaldev
+     *            .com/1443/java-credit-card-validation-luhn-algorithm-java
+     */
     private boolean validateCreditCardNumber(String str) {
 
         int u = 2;
@@ -199,9 +228,6 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
         for (int i = 0; i < ints.length; i++) {
             sum += ints[i];
         }
-        if (sum % 10 == 0) {
-            return true;
-        }
-        return false;
+        return sum % 10 == 0;
     }
 }

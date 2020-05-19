@@ -9,6 +9,8 @@ import org.mifos.mobilewallet.mifospay.injection.ApplicationContext;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import static org.mifos.mobilewallet.mifospay.utils.Constants.ACCOUNT_ID;
+
 /**
  * Created by naman on 17/6/17.
  */
@@ -25,6 +27,7 @@ public class PreferencesHelper {
     private static final String CLIENT_VPA = "preferences_client_vpa";
     private static final String MOBILE_NO = "preferences_mobile_no";
     private static final String FIREBASE_REG_ID = "preferences_firebase_reg_id";
+    private static final String ACCOUNT_ID = "preferences_account_id";
 
     private SharedPreferences sharedPreferences;
 
@@ -128,6 +131,14 @@ public class PreferencesHelper {
 
     public void setClientVpa(String vpa) {
         putString(CLIENT_VPA, vpa);
+    }
+
+    public void setAccountId(long accountId) {
+        putLong(ACCOUNT_ID, accountId);
+    }
+
+    public Long getAccountId() {
+        return getLong(ACCOUNT_ID, 0);
     }
 
     public String getFirebaseRegId() {

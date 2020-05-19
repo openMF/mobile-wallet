@@ -1,6 +1,10 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'com.github.dcendents.android-maven'
 apply from: '../config/quality/quality.gradle'
+
 
 group='com.github.ankurs287'
 
@@ -30,18 +34,17 @@ android {
         abortOnError false
         disable 'InvalidPackage'
     }
-    buildToolsVersion '27.0.3'
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
 
-    implementation 'com.google.dagger:dagger:2.11'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
 
     implementation ("com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion") {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
@@ -52,8 +55,10 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$rootProject.okHttp3Version"
     implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttp3Version"
 
-    implementation 'io.reactivex:rxandroid:1.1.0'
-    implementation 'io.reactivex:rxjava:1.1.4'
+    implementation "io.reactivex:rxandroid:$rootProject.rxandroidVersion"
+    implementation "io.reactivex:rxjava:$rootProject.rxjavaVersion"
 
-    testImplementation 'junit:junit:4.12'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${rootProject.kotlinVersion}"
+
+    testImplementation "junit:junit:$rootProject.junitVersion"
 }

@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.savedcards.ui;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -10,8 +11,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
@@ -32,6 +34,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+/**
+ * This is the UI component of the SavedCards Architecture.
+ * @author ankur
+ * @since 21/May/2018
+ */
 public class CardsFragment extends BaseFragment implements CardsContract.CardsView {
 
     @Inject
@@ -39,13 +46,23 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
 
     CardsContract.CardsPresenter mCardsPresenter;
 
-    @BindView(R.id.btn_add_card)
-    Button btnAddCard;
+    @BindView(R.id.inc_state_view)
+    View vStateView;
+
+    @BindView(R.id.iv_empty_no_transaction_history)
+    ImageView ivTransactionsStateIcon;
+
+    @BindView(R.id.tv_empty_no_transaction_history_title)
+    TextView tvTransactionsStateTitle;
+
+    @BindView(R.id.tv_empty_no_transaction_history_subtitle)
+    TextView tvTransactionsStateSubtitle;
 
     @BindView(R.id.rv_cards)
     RecyclerView rvCards;
-    @BindView(R.id.tv_placeholder)
-    TextView tvPlaceholder;
+
+    @BindView(R.id.pb_cards)
+    ProgressBar pbCards;
 
     @Inject
     CardsAdapter mCardsAdapter;
@@ -71,22 +88,72 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_cards, container, false);
-
-        setToolbarTitle(Constants.SAVED_CARDS);
         ButterKnife.bind(this, rootView);
-        showBackButton();
-
         mPresenter.attachView(this);
+        setUpSwipeRefresh();
         setupCardsRecyclerView();
-
-        setupSwipeLayout();
-
         showSwipeProgress();
         mCardsPresenter.fetchSavedCards();
-
         return rootView;
     }
 
+    private void setUpSwipeRefresh() {
+        getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getSwipeRefreshLayout().setRefreshing(false);
+                mCardsPresenter.fetchSavedCards();
+            }
+        });
+    }
+
+    private void showEmptyStateView() {
+        if (getActivity() != null) {
+            vStateView.setVisibility(View.VISIBLE);
+            pbCards.setVisibility(View.GONE);
+            Resources res = getResources();
+            ivTransactionsStateIcon
+                    .setImageDrawable(res.getDrawable(R.drawable.ic_cards));
+            tvTransactionsStateTitle
+                    .setText(res.getString(R.string.empty_no_cards_title));
+            tvTransactionsStateSubtitle
+                    .setText(res.getString(R.string.empty_no_cards_subtitle));
+        }
+    }
+
+    @Override
+    public void showErrorStateView(int drawable, int title, int subtitle) {
+        rvCards.setVisibility(View.GONE);
+        pbCards.setVisibility(View.GONE);
+        hideSwipeProgress();
+        vStateView.setVisibility(View.VISIBLE);
+        if (getActivity() != null) {
+            Resources res = getResources();
+            ivTransactionsStateIcon
+                    .setImageDrawable(res.getDrawable(drawable));
+            tvTransactionsStateTitle
+                    .setText(res.getString(title));
+            tvTransactionsStateSubtitle
+                    .setText(res.getString(subtitle));
+        }
+    }
+
+    @Override
+    public void showFetchingProcess() {
+        vStateView.setVisibility(View.GONE);
+        rvCards.setVisibility(View.GONE);
+        pbCards.setVisibility(View.VISIBLE);
+    }
+
+
+    private void hideEmptyStateView() {
+        vStateView.setVisibility(View.GONE);
+    }
+
+    /**
+     * A function to setup the Layout Manager and Integrate the RecyclerView with Adapter.
+     * This function also implements click action on CardList.
+     */
     private void setupCardsRecyclerView() {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rvCards.setLayoutManager(llm);
@@ -144,21 +211,18 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
                 }));
     }
 
-    private void setupSwipeLayout() {
-        setSwipeEnabled(true);
-        getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                mCardsPresenter.fetchSavedCards();
-            }
-        });
-    }
-
+    /**
+     * An overridden function to set Presenter reference in this UI Component.
+     * @param presenter : Presenter component reference for the Architecture.
+     */
     @Override
     public void setPresenter(CardsContract.CardsPresenter presenter) {
         mCardsPresenter = presenter;
     }
 
+    /**
+     * A function to show Add Card Dialog box.
+     */
     @OnClick(R.id.btn_add_card)
     public void onClickAddCard() {
         AddCardDialog addCardDialog = new AddCardDialog();
@@ -167,36 +231,52 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         addCardDialog.show(getFragmentManager(), Constants.ADD_CARD_DIALOG);
     }
 
+    /**
+     * A function to show setup the cards list with adapter.
+     * @param cards: List of cards.
+     */
     @Override
     public void showSavedCards(List<Card> cards) {
-
+        pbCards.setVisibility(View.GONE);
         if (cards == null || cards.size() == 0) {
+            showEmptyStateView();
             rvCards.setVisibility(View.GONE);
-            tvPlaceholder.setVisibility(View.VISIBLE);
         } else {
+            hideEmptyStateView();
             rvCards.setVisibility(View.VISIBLE);
-            tvPlaceholder.setVisibility(View.GONE);
             mCardsAdapter.setCards(cards);
         }
         mCardsAdapter.setCards(cards);
         hideSwipeProgress();
     }
 
+    /**
+     * An overridden method to show a toast message.
+     */
     @Override
     public void showToast(String message) {
         Toaster.show(getView(), message);
     }
 
+    /**
+     * An overridden method to show a progress dialog.
+     */
     @Override
     public void showProgressDialog(String message) {
         super.showProgressDialog(message);
     }
 
+    /**
+     * An overridden method to hide a progress dialog.
+     */
     @Override
     public void hideProgressDialog() {
         super.hideProgressDialog();
     }
 
+    /**
+     * An overridden method to hide the swipe progress.
+     */
     @Override
     public void hideSwipeProgress() {
         super.hideSwipeProgress();

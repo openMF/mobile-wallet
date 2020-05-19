@@ -5,12 +5,16 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.notification.NotificationContract;
 import org.mifos.mobilewallet.mifospay.notification.presenter.NotificationPresenter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.List;
@@ -35,6 +39,8 @@ public class NotificationActivity extends BaseActivity implements
 
     @BindView(R.id.rv_notification)
     RecyclerView mRvNotification;
+    @BindView(R.id.tv_placeholder)
+    TextView tvplaceholder;
 
     @Inject
     NotificationAdapter mNotificationAdapter;
@@ -45,7 +51,7 @@ public class NotificationActivity extends BaseActivity implements
         setContentView(R.layout.activity_notification);
         ButterKnife.bind(this);
         setToolbarTitle("Notifications");
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         getActivityComponent().inject(this);
 
         setupRecyclerView();
@@ -82,6 +88,16 @@ public class NotificationActivity extends BaseActivity implements
     @Override
     public void fetchNotificationsSuccess(List<NotificationPayload> notificationPayloadList) {
         hideSwipeProgress();
+        if (notificationPayloadList == null || notificationPayloadList.size() == 0) {
+            DebugUtil.log("null");
+            mRvNotification.setVisibility(View.GONE);
+            tvplaceholder.setVisibility(View.VISIBLE);
+        } else {
+            DebugUtil.log("yes");
+            mRvNotification.setVisibility(View.VISIBLE);
+            tvplaceholder.setVisibility(View.GONE);
+            mNotificationAdapter.setNotificationPayloadList(notificationPayloadList);
+        }
         mNotificationAdapter.setNotificationPayloadList(notificationPayloadList);
     }
 

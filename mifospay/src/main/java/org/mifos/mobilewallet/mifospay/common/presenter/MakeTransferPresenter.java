@@ -54,16 +54,19 @@ public class MakeTransferPresenter implements TransferContract.TransferPresenter
 
     @Override
     public void makeTransfer(long fromClientId, long toClientId, double amount) {
+        mTransferView.enableDragging(false);
         mUsecaseHandler.execute(transferFunds,
                 new TransferFunds.RequestValues(fromClientId, toClientId, amount),
                 new UseCase.UseCaseCallback<TransferFunds.ResponseValue>() {
                     @Override
                     public void onSuccess(TransferFunds.ResponseValue response) {
+                        mTransferView.enableDragging(true);
                         mTransferView.transferSuccess();
                     }
 
                     @Override
                     public void onError(String message) {
+                        mTransferView.enableDragging(true);
                         mTransferView.transferFailure();
                     }
                 });

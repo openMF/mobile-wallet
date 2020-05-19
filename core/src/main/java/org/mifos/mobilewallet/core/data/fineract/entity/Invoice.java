@@ -39,11 +39,13 @@ public class Invoice implements Parcelable {
     String transactionId;
     @SerializedName("id")
     long id;
+    @SerializedName("title")
+    String title;
     @SerializedName("date")
     List<Integer> date = new ArrayList<>();
 
     public Invoice(String consumerId, String consumerName, double amount, String itemsBought,
-            long status, String transactionId, long id, List<Integer> date) {
+            long status, String transactionId, long id, String title, List<Integer> date) {
         this.consumerId = consumerId;
         this.consumerName = consumerName;
         this.amount = amount;
@@ -51,6 +53,7 @@ public class Invoice implements Parcelable {
         this.status = status;
         this.transactionId = transactionId;
         this.id = id;
+        this.title = title;
         this.date = date;
     }
 
@@ -62,6 +65,7 @@ public class Invoice implements Parcelable {
         this.status = in.readInt();
         this.transactionId = in.readString();
         this.id = in.readInt();
+        this.title = in.readString();
         this.date = new ArrayList<Integer>();
         in.readList(this.date, Integer.class.getClassLoader());
     }
@@ -122,6 +126,15 @@ public class Invoice implements Parcelable {
         this.id = id;
     }
 
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -136,6 +149,7 @@ public class Invoice implements Parcelable {
         dest.writeLong(this.status);
         dest.writeString(this.transactionId);
         dest.writeList(this.date);
+        dest.writeString(this.title);
     }
 
     @Override
@@ -147,6 +161,7 @@ public class Invoice implements Parcelable {
                 ", itemsBought='" + itemsBought + '\'' +
                 ", status=" + status +
                 ", transactionId='" + transactionId + '\'' +
+                ", title=" + title +
                 ", id=" + id +
                 ", date=" + date +
                 '}';

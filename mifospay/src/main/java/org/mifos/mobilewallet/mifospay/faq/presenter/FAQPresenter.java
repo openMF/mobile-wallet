@@ -8,7 +8,10 @@ import org.mifos.mobilewallet.mifospay.faq.FAQContract;
 import javax.inject.Inject;
 
 /**
- * Created by ankur on 09/July/2018
+ * This class is the Presenter component of the Architecture.
+ *
+ * @author ankur
+ * @since 11/July/2018
  */
 
 public class FAQPresenter implements FAQContract.FAQPresenter {

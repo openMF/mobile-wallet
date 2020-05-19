@@ -1,5 +1,9 @@
 package org.mifos.mobilewallet.core.utils;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+
 /**
  * Created by naman on 17/6/17.
  */
@@ -15,6 +19,11 @@ public class Constants {
 
     public static final int MIFOS_MERCHANT_SAVINGS_PRODUCT_ID = 165; // 372
     public static final int MIFOS_CONSUMER_SAVINGS_PRODUCT_ID = 165; // 373
+
+    private static final int MOBILE_WALLET_ROLE_ID = 471;
+    private static final int SUPER_USER_ROLE_ID = 1;
+    public static final Collection<Integer> NEW_USER_ROLE_IDS = Collections.unmodifiableList(
+            Arrays.asList(MOBILE_WALLET_ROLE_ID, SUPER_USER_ROLE_ID));
 
     public static final String ENTITY_TYPE_CLIENTS = "clients";
 

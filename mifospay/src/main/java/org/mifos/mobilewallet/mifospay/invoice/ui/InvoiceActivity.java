@@ -74,7 +74,7 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
         setToolbarTitle(Constants.INVOICE);
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         mPresenter.attachView(this);
 
         Uri data = getIntent().getData();
@@ -159,11 +159,22 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
     @Override
     public void showToast(String message) {
         Toaster.showToast(this, message);
-        finish();
+        dismissProgressDialog();
     }
 
     @Override
     public void showSnackbar(String message) {
         Toaster.show(findViewById(android.R.id.content), message);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        dismissProgressDialog();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        dismissProgressDialog();
     }
 }

@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
+import android.support.transition.TransitionManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,7 +21,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.common.TransferContract;
 import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.home.ui.TransferFragment;
+import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
@@ -41,6 +44,8 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     TransferContract.TransferPresenter mTransferPresenter;
 
+    @BindView(R.id.ll_make_transfer_container)
+    ViewGroup makeTransferContainer;
     @BindView(R.id.btn_confirm)
     Button btnConfirm;
 
@@ -124,6 +129,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
             public void onClick(View v) {
                 mTransferPresenter.makeTransfer(localRepository.getClientDetails().getClientId(),
                         toClientId, amount);
+                TransitionManager.beginDelayedTransition(makeTransferContainer);
                 tvTransferStatus.setText(Constants.SENDING_MONEY);
                 progressBar.setVisibility(View.VISIBLE);
                 contentView.setVisibility(View.GONE);
@@ -137,6 +143,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     public void showToClientDetails(long clientId, String name, String externalId) {
         this.toClientId = clientId;
 
+        TransitionManager.beginDelayedTransition(makeTransferContainer);
         tvClientName.setText(name);
         tvAmount.setText(Constants.RUPEE + " " + amount);
         tvClientVpa.setText(externalId);
@@ -155,6 +162,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     @Override
     public void transferFailure() {
+        TransitionManager.beginDelayedTransition(makeTransferContainer);
         tvTransferStatus.setText(Constants.UNABLE_TO_PROCESS_TRANSFER);
         progressBar.setVisibility(View.GONE);
         viewTransferFailure.setVisibility(View.VISIBLE);
@@ -174,9 +182,25 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     @Override
     public void showVpaNotFoundSnackbar() {
         if (getTargetFragment() != null) {
-            getTargetFragment().onActivityResult(TransferFragment.REQUEST_SHOW_DETAILS,
+            getTargetFragment().onActivityResult(SendFragment.REQUEST_SHOW_DETAILS,
                     Activity.RESULT_CANCELED, null);
             dismiss();
         }
     }
+
+    @Override
+    public void enableDragging(final boolean enable) {
+        mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_DRAGGING && !enable) {
+                    mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) { }
+        });
+    }
+
 }

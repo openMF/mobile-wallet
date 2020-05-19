@@ -11,9 +11,11 @@ public interface EditProfileContract {
 
     interface EditProfilePresenter extends BasePresenter {
 
-        void updatePassword(String currentPassword, String newPassword);
+        void fetchUserDetails();
 
-        void updatePasscode(String currentPasscode, String newPasscode);
+        void handleNecessaryDataSave();
+
+        void updateInputById(int id, String content);
 
         void updateEmail(String email);
 
@@ -23,33 +25,47 @@ public interface EditProfileContract {
 
         void handleProfileImageRemoved();
 
-        void fetchUserDetails();
+        void handleExitOnUnsavedChanges();
+
+        void onDialogNegative();
+
+        void onDialogPositive();
     }
 
     interface EditProfileView extends BaseView<EditProfilePresenter> {
 
-        void showToast(String message);
+        void showDefaultImageByUsername(String fullName);
 
-        void onUpdateEmailSuccess(String email);
+        void showUsername(String username);
 
-        void onUpdateEmailError(String message);
+        void showEmail(String email);
 
-        void onUpdateMobileSuccess(String fullNumber);
+        void showVpa(String vpa);
 
-        void onUpdateMobileError(String message);
-
-        void onUpdatePasswordSuccess();
-
-        void onUpdatePasswordError(String message);
-
-        void changeProfileImage();
+        void showMobileNumber(String mobileNumber);
 
         void removeProfileImage();
 
-        void setEmail(String email);
+        void changeProfileImage();
 
-        void setMobile(String mobile);
+        void onUpdateEmailError(String message);
 
-        void setImage(String fullName);
+        void onUpdateMobileError(String message);
+
+        void showToast(String message);
+
+        void showFab();
+
+        void hideFab();
+
+        void hideKeyboard();
+
+        void startProgressBar();
+
+        void stopProgressBar();
+
+        void showDiscardChangesDialog();
+
+        void closeActivity();
     }
 }

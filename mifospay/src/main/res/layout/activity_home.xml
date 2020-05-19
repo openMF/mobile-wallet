@@ -1,32 +1,41 @@
-<RelativeLayout
+<android.support.v4.widget.SwipeRefreshLayout
+    android:id="@+id/swipe_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/colorPrimary" >
 
-        <android.support.design.widget.AppBarLayout
+        <include layout="@layout/toolbar"
+            android:layout_height="wrap_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_marginEnd="@dimen/paddingLayout"
+            android:layout_marginRight="@dimen/paddingLayout"
+            android:layout_marginLeft="@dimen/paddingLayout"
+            android:layout_marginStart="@dimen/paddingLayout" />
 
-            <include layout="@layout/toolbar"/>
-
-        </android.support.design.widget.AppBarLayout>
-
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipe_layout"
+        <FrameLayout
+            android:id="@+id/bottom_navigation_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="1" />
 
+        <android.support.design.widget.BottomNavigationView
+            android:id="@+id/bottom_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@color/colorPrimary"
+            app:elevation="25dp"
+            app:itemIconTint="@drawable/bottomview_selector"
+            app:itemTextColor="@drawable/bottomview_selector"
+            app:menu="@menu/bottom_navigation_main" />
 
-            <FrameLayout
-                android:id="@+id/container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-        </android.support.v4.widget.SwipeRefreshLayout>
     </LinearLayout>
-</RelativeLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

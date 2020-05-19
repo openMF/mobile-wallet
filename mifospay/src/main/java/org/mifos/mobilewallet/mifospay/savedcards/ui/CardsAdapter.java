@@ -17,7 +17,10 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by ankur on 21/May/2018
+ * This is a Adapter Class to display Cards.
+ *
+ * @author ankur
+ * @since 21/May/2018
  */
 
 public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> {

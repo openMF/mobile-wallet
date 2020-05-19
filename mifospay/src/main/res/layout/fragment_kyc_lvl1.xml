@@ -73,6 +73,7 @@
                 android:layout_weight="1"
                 android:hint="@string/mobile_number"
                 android:inputType="number"
+                android:maxLength="@integer/telephone_numbers_max_length_standard"
                 android:nextFocusDown="@id/et_dob"
                 android:nextFocusForward="@id/et_dob"/>
 

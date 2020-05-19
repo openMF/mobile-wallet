@@ -6,12 +6,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 
 import java.util.List;
 
-/**
- * Created by ankur on 11/July/2018
- */
-
 public interface MerchantsContract {
-
     interface MerchantsPresenter extends BasePresenter {
 
         void fetchMerchants();
@@ -19,10 +14,15 @@ public interface MerchantsContract {
 
     interface MerchantsView extends BaseView<MerchantsPresenter> {
 
-        void listMerchants(List<SavingsWithAssociations> savingsWithAssociationsList);
+        void listMerchantsData(List<SavingsWithAssociations> savingsWithAssociationsList);
 
-        void fetchMerchantsError();
+        void showErrorStateView(int drawable, int title, int subtitle);
 
-        void showToast(String message);
+        void showEmptyStateView();
+
+        void showMerchants();
+
+        void showMerchantFetchProcess();
+
     }
 }

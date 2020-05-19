@@ -11,33 +11,40 @@
     <string name="pan_id">PAN ID</string>
 
     <string name="level_1">Level 1</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="history">History</string>
+    <string name="email">E-mail</string>
     <string name="level_1_description">Level 1 Description</string>
+    <string name="completion">Completed</string>
     <string name="level_2">Level 2</string>
     <string name="level_2_description">Level 2 Description</string>
     <string name="level_3">Level 3</string>
     <string name="level_3_description">Level 3 Description</string>
     <string name="code">Code</string>
+    <string name="linked_bank_account">Linked bank accounts</string>
     <string name="date_of_birth">Date of Birth</string>
     <string name="add_card">Add Card</string>
     <string name="id_type">ID Type</string>
+    <string name="vpaname">VPA</string>
     <string name="browse">Browse</string>
     <string name="submit">Submit</string>
     <string name="credit_card_number">Credit Card Number</string>
     <string name="expiry_date">Expiry Date</string>
     <string name="add">ADD</string>
     <string name="home">Home</string>
-    <string name="transfer">Transfer</string>
+    <string name="payments">Payments</string>
+    <string name="finance">Finance</string>
     <string name="profile">Profile</string>
     <string name="mifos_pay">Mifos Pay</string>
     <string name="login">Login</string>
     <string name="enter_name_or_vpa">Enter name or vpa</string>
-    <string name="balance">Balance</string>
-    <string name="transaction_history">TRANSACTION HISTORY</string>
+    <string name="balance_hint">Total balance</string>
+    <string name="show_more">Show more</string>
     <string name="invoices">Invoices</string>
     <string name="request">Request</string>
     <string name="bank_account">Bank Account</string>
     <string name="qr_code">QR code</string>
-    <string name="complete_kyc">Complete KYC</string>
+    <string name="complete_kyc">Complete the KYC process</string>
     <string name="saved_cards">Saved Cards</string>
     <string name="qr_code_details">QR code details</string>
     <string name="user_details">User details</string>
@@ -46,7 +53,7 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
     <string name="send">Send</string>
-    <string name="amount">Amount</string>
+    <string name="add_account">ADD ACCOUNT</string>
     <string name="vpa_mobile_number">VPA/ Mobile Number</string>
     <string name="proceed">Proceed</string>
     <string name="scan_code">Scan Code</string>
@@ -83,9 +90,13 @@
         registered on MifosPay. \n3. It\'s sim is on this device.
     </string>
     <string name="okay">Okay</string>
-    <string name="trusted_merchants">Trusted \nMerchants</string>
+    <string name="trusted_merchants">Trusted Merchants</string>
     <string name="field_required">Field Required</string>
     <string name="card_expiry_message">Your card has expired</string>
+
+    <string name="create_an_account">Create an account</string>
+    <string name="sign_up_as_merchant">Sign up as merchant</string>
+    <string name="sign_up_as_customer">Sign up as customer</string>
 
     <string-array name="months_array">
         <item>01</item>
@@ -106,14 +117,14 @@
     <string name="label_select_picture">Select picture</string>
 
 
-    <string name="question1">Question 1</string>
-    <string name="question2">Question 2</string>
-    <string name="question3">Question 3</string>
-    <string name="question4">Question 4</string>
-    <string name="answer1">Answer 1</string>
-    <string name="answer2">Answer 1</string>
-    <string name="answer3">Answer 1</string>
-    <string name="answer4">Answer 1</string>
+    <string name="question1">How can I add an Account?</string>
+    <string name="question2">How can I access my Payment History?</string>
+    <string name="question3">How to make a Transfer?</string>
+    <string name="question4">How can I add a Card?</string>
+    <string name="answer1">To add an account, navigate to finance section and click on the add account button. Then select your bank and verify your mobile number to get going. </string>
+    <string name="answer2">Navigate to Payments section. You will find your payment history under the History tab.</string>
+    <string name="answer3">To make a transfer, navigate to Payments section.Under the Send tab, from there you can choose the type of transfer, add the amount and submit.</string>
+    <string name="answer4">Navigate to Finance section. Click on Add Card under the Cards tab.</string>
     <string name="setup_upi">Setup UPI</string>
     <string name="change_upi_pin">Change UPI PIN</string>
     <string name="forgot_upi_pin">Forgot UPI PIN</string>
@@ -133,7 +144,10 @@
     <string name="change_mobile_number">Change Mobile Number</string>
     <string name="items_bought">items bought</string>
     <string name="status">status</string>
-    <string name="transaction_id">transaction id</string>
+    <string name="transaction_id">Transaction ID</string>
+    <string name="transaction_date">Transaction Date</string>
+    <string name="to">To:</string>
+    <string name="from">From:</string>
     <string name="date">date</string>
     <string name="link">link</string>
     <string name="no_invoices_found">No invoices found</string>
@@ -145,6 +159,7 @@
     <string name="disable_account">Disable account</string>
     <string name="log_out">Log out</string>
     <string name="debit_card_details">Debit Card Details</string>
+    <string name="debit_card_error_message">Invalid Debit Card Number</string>
     <string name="one_time_password">One Time Password</string>
     <string name="upi_pin_setup">UPI PIN Setup</string>
     <string name="all_fields_are_mandatory">All fields are mandatory.</string>
@@ -153,7 +168,6 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
-    <string name="email">Email</string>
     <string name="name_of_business">Name of Business</string>
     <string name="address_line_1">Address Line 1</string>
     <string name="client_name">client name</string>
@@ -178,7 +192,6 @@
     <string name="enter_otp">Enter OTP</string>
     <string name="vpa">VPA</string>
     <string name="enter_upi_pin">Enter UPI PIN</string>
-    <string name="history">History</string>
     <string name="notifications">Notifications</string>
     <string name="bank_name">Bank Name</string>
     <string name="ac_holder_name">A/C Holder Name</string>
@@ -189,8 +202,75 @@
     <string name="faq">FAQ</string>
     <string name="settings">Settings</string>
     <string name="mobile_number">Mobile Number</string>
-    <string name="passcode_title">Are you sure you want to login with password ?</string>
+    <string name="passcode_title">Passcode will be reset, are you sure?</string>
     <string name="yes">Yes</string>
+    <string name="no_notification_found">No Notifications Found</string>
+    <string name="wrong_otp">Wrong OTP</string>
+    <string name="reenter_upi">Re-enter UPI PIN</string>
+    <string name="upi_pin_mismatch">UPI PIN mismatch</string>
+    <string name="enter_upi_length_4">Enter UPI PIN of length 4</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="enter_valid_mob_num">Enter a valid mobile number</string>
+    <string name="invalid_link">Invalid link used to open the App.</string>
+    <string name="paid_to">Paid to</string>
+    <string name="credited_by">Credited by</string>
+    <string name="downloading_receipt">Downloading Receipt</string>
+    <string name="enter_amount">Please enter the Amount</string>
+    <string name="reset">Reset</string>
+    <string name="vpa_null_no_transactions">VPA is Null. Can\'t make any transactions.</string>
+    <string name="vpa_null_cant_copy">VPA is Null. Can\'t copy.</string>
+    <string name="vpa_copy_success">VPA copied to Clipboard Successfully</string>
 
+    <string name="fetching">Fetching…</string>
+    <string name="empty_no_transaction_history_title">Your history is empty</string>
+    <string name="nothing_in_invoices">Nothing in Invoices</string>
+    <string name="select_transfer_method">Select transfer method</string>
+    <string name="empty_no_transaction_history_subtitle">Every completed transaction will be displaying here</string>
+    <string name="error_oops">Oops!</string>
+    <string name="error_no_transaction_history_subtitle">Couldn\'t fetch transactions history. Please, try again.</string>
+    <string name="error_no_invoices_found">Couldn\'t fetch invoice list. Please, try again.</string>
+    <string name="error_no_cards_found">Couldn\'t fetch cards list. Please, try again.</string>
+    <string name="error_no_merchants_found">Couldn\'t fetch merchant list. Please, try again.</string>
+    <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+    <string name="account_details">Account Details</string>
+    <string name="mobile">Mobile number</string>
+    <string name="discard_changes_and_exit">Discard changes and exit?</string>
+    <string name="discard_changes_and_exit_description">This will discard all unsaved changes and return to the Profile section.</string>
+    <string name="accept">accept</string>
+    <string name="accounts">Accounts</string>
+    <string name="cards">Cards</string>
+    <string name="merchants">Merchants</string>
+    <string name="kyc">KYC</string>
+    <string name="empty_no_accounts_title">You haven\'t configured any account yet</string>
+    <string name="empty_no_accounts_subtitle">Add an account and come back here to see results!</string>
+    <string name="empty_no_cards_title">You haven\'t added any card yet</string>
+    <string name="empty_no_cards_subtitle">Add a card and come back here to see results!</string>
+    <string name="empty_no_merchants_title">You haven\'t added any merchant yet</string>
+    <string name="empty_no_merchants_subtitle">Every added merchant will be visible here</string>
+    <string name="content_description_placeholder">Placeholder</string>
+    <string name="empty_no_invoices_title">You have no invoices</string>
+    <string name="empty_no_invoices_subtitle">All invoices will be displaying here</string>
+    <string name="notification_settings">Notification Settings</string>
+    <string name="validate_email">Please enter a valid email address</string>
+    <string name="password_very_weak">"Password should contain more than 6 characters"</string>
+    <string name="password_weak">Weak</string>
+    <string name="password_normal">Normal</string>
+    <string name="password_strong">Strong</string>
+    <string name="password_very_strong">Very Strong</string>
+    <string name="amount">Amount</string>
+    <string name="merchant_history_message">The transaction history with this merchant will be shown here</string>
+    <string name="log_out_title">Do you want to logout?</string>
+    <string name="ok">Ok</string>
+    <string name="alert_disable_account">Are you sure you want to disable account?</string>
+    <string name="alert_disable_account_desc">This will delete all the information about your account</string>
+    <string name="transfer_money_to_this_merchant">Transfer money to this merchant</string>
+    <string name="test_user">Dwight Schrute</string>
+    <string name="test_vpa">rohan.jain@mifos</string>
+    <string name="set_amount">Set Amount</string>
+    <string name="grip">Grip</string>
+    <string name="hide_balance">Hide Balance</string>
+    <string name="no_bank_account">No bank found</string>
+    <string name="error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
 
 </resources>

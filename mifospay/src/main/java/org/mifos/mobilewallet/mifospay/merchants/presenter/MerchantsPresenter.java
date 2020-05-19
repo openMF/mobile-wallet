@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.merchants.presenter;
 
+
 import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
@@ -8,16 +9,13 @@ import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Savings
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchMerchants;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientDetails;
 import org.mifos.mobilewallet.core.utils.Constants;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.merchants.MerchantsContract;
 
 import java.util.List;
 
 import javax.inject.Inject;
-
-/**
- * Created by ankur on 11/July/2018
- */
 
 public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter {
 
@@ -31,6 +29,7 @@ public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter 
 
     @Inject
     UseCaseFactory mUseCaseFactory;
+    private Boolean isMerchantListEmpty = true;
 
     @Inject
     public MerchantsPresenter(UseCaseHandler useCaseHandler) {
@@ -45,6 +44,7 @@ public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter 
 
     @Override
     public void fetchMerchants() {
+        mMerchantsView.showMerchantFetchProcess();
         mUseCaseHandler.execute(mFetchMerchantsUseCase,
                 new FetchMerchants.RequestValues(),
                 new UseCase.UseCaseCallback<FetchMerchants.ResponseValue>() {
@@ -55,7 +55,9 @@ public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter 
 
                     @Override
                     public void onError(String message) {
-                        mMerchantsView.fetchMerchantsError();
+                        mMerchantsView.showErrorStateView(R.drawable.ic_error_state,
+                                R.string.error_oops,
+                                R.string.error_no_merchants_found);
                     }
                 });
     }
@@ -77,19 +79,25 @@ public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter 
                     R response) {
                 FetchClientDetails.ResponseValue responseValue =
                         (FetchClientDetails.ResponseValue) response;
-                int index = taskData.getTaskId();
-                savingsWithAssociationsList.get(index).setExternalId(
+                savingsWithAssociationsList.get(taskData.getTaskId()).setExternalId(
                         responseValue.getClient().getExternalId());
             }
 
             @Override
             public void onComplete() {
-                mMerchantsView.listMerchants(savingsWithAssociationsList);
+                mMerchantsView.listMerchantsData(savingsWithAssociationsList);
+                if (savingsWithAssociationsList.size() == 0) {
+                    mMerchantsView.showEmptyStateView();
+                } else {
+                    mMerchantsView.showMerchants();
+                }
             }
 
             @Override
             public void onFailure(String message) {
-                mMerchantsView.fetchMerchantsError();
+                mMerchantsView.showErrorStateView(R.drawable.ic_error_state,
+                        R.string.error_oops,
+                        R.string.error_no_merchants_found);
             }
         });
 

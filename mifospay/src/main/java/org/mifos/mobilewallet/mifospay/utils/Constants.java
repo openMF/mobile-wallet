@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.utils;
 
+import org.mifos.mobilewallet.mifospay.R;
+
 /**
  * Created by naman on 17/6/17.
  */
@@ -14,6 +16,9 @@ public class Constants {
     public static final String TO_EXTERNAL_ID = "to_external_id";
     public static final String RUPEE = "₹";
     public static final String QR_DATA = "qr_data";
+    public static final String MERCHANT_NAME = "merchant_name";
+    public static final String MERCHANT_VPA = "merchant_vpa";
+    public static final String MERCHANT_ACCOUNT_NO = "merchant_account_no";
 
     public static final String FILE = "file";
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
@@ -46,7 +51,6 @@ public class Constants {
     public static final String ERROR_ADDING_CARD = "Error adding card.";
     public static final String CARD_ADDED_SUCCESSFULLY = "Card added successfully.";
     public static final String ADDING_CARD = "Adding Card..";
-    public static final String ERROR_FETCHING_CARDS = "Error fetching cards.";
 
     public static final String ADD_CARD_DIALOG = "Add Card Dialog";
     public static final String EDIT_CARD_DIALOG = "Edit Card Dialog";
@@ -67,8 +71,12 @@ public class Constants {
     public static final String SENDING_MONEY = "Sending money...";
     public static final String INSUFFICIENT_BALANCE = "Insufficient balance";
     public static final String ERROR_FINDING_VPA = "Error finding Virtual Payment Address";
+    public static final String ERROR_FINDING_MOBILE_NUMBER = "Error finding Mobile Number";
     public static final String PLEASE_ENTER_VALID_AMOUNT = "Please enter a valid amount";
-    public static final String NEED_READ_CONTACTS_PERMISSION = "Need read contacts permission.";
+    public static final String SELF_ACCOUNT_ERROR = "Self Account transfer is not allowed";
+    public static final String PLEASE_ENTER_AMOUNT =
+            "Please enter a valid amount before making the transfer";
+    public static final String NEED_READ_CONTACTS_PERMISSION = "Need read contacts permission";
     public static final String NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE =
             "Need camera permission to scan qr code.";
     public static final String ERROR_CHOOSING_CONTACT = "Error choosing contact";
@@ -76,10 +84,11 @@ public class Constants {
     public static final String PLEASE_ENTER_ALL_THE_FIELDS = "Please enter all the fields";
     public static final String TRANSFER = "Transfer";
     public static final String TRANSACTION_DETAILS = "Transaction Details";
-    public static final String ACCOUNT_NUMBER = "account Number";
+    public static final String ACCOUNT_NUMBER = "Account Number : ";
     public static final String TRANSACTION = "transaction";
-    public static final String TRANSACTIONS_HISTORY = "Transactions History";
-    public static final String SPECIFIC_TRANSACTIONS = "Specific Transactions";
+    public static final String TRANSACTIONS_HISTORY = "Transactions History History";
+    public static final String SPECIFIC_TRANSACTIONS = "Specific Transactions History";
+    public static final String HISTORY_NOT_AVAILABLE = "No Transaction History Available";
     public static final String RECEIPT_DOMAIN = "https://receipt.mifospay.com/";
     public static final String OTHER = "Other";
     public static final String CREDIT = "Credit";
@@ -106,15 +115,13 @@ public class Constants {
     public static final String MERCHANT = "Merchant";
     public static final String INVOICE = "Invoice";
     public static final String NEED_EXTERNAL_STORAGE_PERMISSION_TO_DOWNLOAD_RECEIPT =
-            "Need external storage permission to download receipt.";
-    public static final String RECEIPT_DOWNLOADED_SUCCESSFULLY = "Receipt Downloaded Successfully.";
+            "Need external storage permission to download receipt";
+    public static final String RECEIPT_DOWNLOADED_SUCCESSFULLY = "Receipt Downloaded Successfully";
     public static final String ERROR_DOWNLOADING_RECEIPT = "Error downloading receipt";
     public static final String MIFOSPAY = "mifospay";
     public static final String RECEIPT = "Receipt";
     public static final String PDF = ".pdf";
-    public static final String INVOICES = "Invoices";
-    public static final String ERROR_FETCHING_INVOICES = "Error fetching invoices";
-    public static final String ERROR_FETCHING_RECEIPT = "Error fetching receipt.";
+    public static final String ERROR_FETCHING_RECEIPT = "Error fetching receipt";
     public static final String INVOICE_DOMAIN = "https://invoice.mifospay.com/";
 
     public static final String SENDING_OTP_TO_YOUR_MOBILE_NUMBER =
@@ -139,7 +146,6 @@ public class Constants {
     public static final String NEW_BANK_ACCOUNT = "newBankAccount";
     public static final String VERIFYING_MOBILE_NUMBER = "Verifying mobile number..";
     public static final String MIFOS_SAVINGS_PRODUCT_ID = "Mifos Savings Product Id";
-    public static final String ERROR_FETCHING_MERCHANTS = "Error fetching merchants";
     public static final String MERCHANTS = "Merchants";
     public static final String UPI_PIN = "UPI PIN";
     public static final String STEP = "step";
@@ -170,5 +176,19 @@ public class Constants {
     public static final int NOTIFICATION_ID = 100;
     public static final int NOTIFICATION_ID_BIG_IMAGE = 101;
 
+    public static final int HOME_HISTORY_TRANSACTIONS_LIMIT = 5;
 
+    public static final String ERROR_FIELDS_CANNOT_BE_EMPTY = "Fields cannot be empty";
+    public static final String ERROR_VALIDATING_PASSWORD = "Passwords are not the same";
+    public static final String ERROR_PASSWORDS_CANT_BE_SAME =
+            "New password can't be the same as old password.";
+
+    public static final String CHANGE_PROFILE_IMAGE_KEY = "CHANGE_PROFILE_IMAGE_KEY";
+    public static final String CHANGE_PROFILE_IMAGE_VALUE = "CHANGE_PROFILE_IMAGE_VALUE";
+    public static final String TAP_TO_REVEAL = "Tap to Reveal";
+    public static final String NAME = "Name : ";
+    public static final String ERROR_FETCHING_TRANSACTION_DETAILS = "Error fetching details";
+
+    public static final int WHITE_BACK_BUTTON = R.drawable.ic_arrow_back_white_24dp;
+    public static final int BLACK_BACK_BUTTON = R.drawable.ic_arrow_back_black_24dp;
 }

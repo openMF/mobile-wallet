@@ -1,4 +1,4 @@
-<img height='175' src="https://user-images.githubusercontent.com/37406965/51083189-d5dc3a80-173b-11e9-8ca0-28015e0893ac.png" align="left" hspace="1" vspace="1">
+<img height='175' src="https://user-images.githubusercontent.com/44283521/78983673-455cf780-7b42-11ea-849e-ecd2009dd562.png" align="left" hspace="1" vspace="1">
 
 # Mobile Wallet
 
@@ -9,7 +9,7 @@ that can be used as a dependency in any other wallet based project. It is develo
 
 | Master | Development | Chat |
 |------------|-----------------|-----------------|
-| [![Build Status](https://travis-ci.org/openMF/mobile-wallet.svg?branch=master)](https://travis-ci.org/openMF/mobile-wallet) | [![Build Status](https://travis-ci.org/openMF/mobile-wallet.svg?branch=dev)](https://travis-ci.org/openMF/mobile-wallet) | [![Join the chat at https://gitter.im/openMF/mobile-wallet](https://badges.gitter.im/openMF/mobile-wallet.svg)](https://gitter.im/openMF/mobile-wallet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
+| [![Build Status](https://travis-ci.com/openMF/mobile-wallet.svg?branch=master)](https://travis-ci.com/openMF/mobile-wallet) | [![Build Status](https://travis-ci.com/openMF/mobile-wallet.svg?branch=dev)](https://travis-ci.com/openMF/mobile-wallet) | [![Join the chat at https://gitter.im/openMF/mobile-wallet](https://badges.gitter.im/openMF/mobile-wallet.svg)](https://gitter.im/openMF/mobile-wallet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
 
 ## Screenshots
 
@@ -22,8 +22,8 @@ that can be used as a dependency in any other wallet based project. It is develo
 ## How to Contribute
 
 This is an OpenSource project and we would be happy to see new contributors. The issues should be raised via the GitHub issue tracker.
-For Issue tracker guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/.github/CONTRIBUTING.md">here</a>. All fixes should be proposed via pull requests.
-For pull request guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/.github/CONTRIBUTING.md">here</a>. For commit style guidelines please click <a href="https://github.com/openMF/mobile-wallet/wiki/Commit-style-guide">here</a>.
+For Issue tracker guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/.github/CONTRIBUTING.md#issue-tracker">here</a>. All fixes should be proposed via pull requests.
+For pull request guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/.github/CONTRIBUTING.md#pull-requests">here</a>. For commit style guidelines please click <a href="https://github.com/openMF/mobile-wallet/wiki/Commit-style-guide">here</a>.
 
 ### Branch Policy
 
@@ -40,7 +40,7 @@ We have the following branches :
     
     With Git 1.7.10 and later, add --single-branch to prevent fetching of all branches. Example, with development branch:
 
-    `git clone -b development --single-branch https://github.com/username/mobile-wallet.git`
+    `git clone -b dev --single-branch https://github.com/username/mobile-wallet.git`
 
  * **master**
    The master branch contains all the stable and bug-free working code. The development branch once complete will be merged with this branch.
@@ -54,19 +54,42 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 
 ## Building the Code
 
-1. Clone the repository using HTTP: git clone https://github.com/openMF/mobile-wallet.git
+1. Fork the repository.
 
-2. Open Android Studio.
+2. Go to your fork and clone only the dev branch using `git clone -b dev <remote_repo>`(remote_repo url refers to your fork).
 
-3. Click on 'Open an existing Android Studio project'
+3. Click on 'Open an existing Android Studio project'.
 
 4. Browse to the directory where you cloned the mobile-wallet repo and click OK.
 
 5. Let Android Studio import the project.
 
-6. You will see an error in gradle build related to missing RblClientIdProp and RblClientSecretProp. Add RblClientIdProp and RblClientSecretProp as environment variables with any value.
+6. Let the gradle sync.
 
-7. Sync the project again in Android studio.
+7. There should be no errors in gradle build.
+
+8. Set your remote upstream to the remote repository to pull changes whenever needed, using
+`git remote add upstream https://github.com/openMF/mobile-wallet.git` 
+
+9. Pull changes from dev branch of upstream, whenever needed, using
+`git checkout dev`
+`git pull upstream dev`
+
+## Travis CI
+<a href="https://travis-ci.com">Travis CI</a> is a hosted continuous integration service used to build and test software projects hosted at GitHub. We use Travis CI for continous integration and clean maintainence of code. All your pull requests must pass the CI build only then, it will be allowed to merge. Sometimes,when the build doesn't pass you can use these commands in your local terminal and check for the errors,</br>
+
+For Mac OS, you can use the following commands:
+
+* `./gradlew check` quality checks on your project’s code using Checkstyle and generates reports from these checks.</br>
+* `./gradlew spotlessApply` an check and apply formatting to any plain-text file.</br>
+* `./gradlew build`  provides a command line to execute build script.</br>
+
+
+For Windows, you can use the following commands:
+
+* `gradlew check` quality checks on your project’s code using Checkstyle and generates reports from these checks.</br>
+* `gradlew spotlessApply` an check and apply formatting to any plain-text file.</br>
+* `gradlew build`  provides a command line to execute build script.</br>
 
 ## Wiki
 
