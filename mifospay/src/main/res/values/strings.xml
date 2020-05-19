@@ -209,7 +209,6 @@
     <string name="reenter_upi">Re-enter UPI PIN</string>
     <string name="upi_pin_mismatch">UPI PIN mismatch</string>
     <string name="enter_upi_length_4">Enter UPI PIN of length 4</string>
-    <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="enter_valid_mob_num">Enter a valid mobile number</string>
     <string name="invalid_link">Invalid link used to open the App.</string>
