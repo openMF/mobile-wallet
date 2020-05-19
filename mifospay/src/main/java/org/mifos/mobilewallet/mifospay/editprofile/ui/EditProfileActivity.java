@@ -21,12 +21,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.hbb20.CountryCodePicker;
+import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper;
 import com.yalantis.ucrop.UCrop;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter;
+import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DialogBox;
@@ -96,6 +98,7 @@ public class EditProfileActivity extends BaseActivity implements
 
     private BottomSheetDialog bottomSheetDialog;
     public DialogBox dialogBox = new DialogBox();
+    private PasscodePreferencesHelper passcodePreferencesHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +110,7 @@ public class EditProfileActivity extends BaseActivity implements
         mPresenter.attachView(this);
         ccpCountryCode.registerCarrierNumberEditText(etMobileNumber);
         mEditProfilePresenter.fetchUserDetails();
-
+        passcodePreferencesHelper = new PasscodePreferencesHelper(this);
         if (isChangeImageRequestFromProfile()) {
             bottomSheetDialog.show();
         }
@@ -161,7 +164,13 @@ public class EditProfileActivity extends BaseActivity implements
 
     @OnClick(R.id.btn_change_passcode)
     public void onChangePasscodeClicked() {
-        // TODO: it's not supported by the api???
+        String currentPasscode = passcodePreferencesHelper.getPassCode();
+        // for re-initiating passcode generation process
+        passcodePreferencesHelper.savePassCode("");
+        Intent intent = new Intent(this, PassCodeActivity.class );
+        intent.putExtra(Constants.CURRENT_PASSCODE, currentPasscode);
+        intent.putExtra(Constants.UPDATE_PASSCODE, true);
+        startActivity(intent);
     }
 
     @OnTextChanged({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
