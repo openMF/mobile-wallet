@@ -50,31 +50,31 @@ public class KYCDescriptionFragment extends
     LinearLayout lv3;
 
     @BindView(R.id.blv1)
-    Button blv1;
+    Button btnLvl1;
 
     @BindView(R.id.blv2)
-    Button blv2;
+    Button btnLvl2;
 
     @BindView(R.id.blv3)
-    Button blv3;
+    Button btnLvl3;
 
     @BindView(R.id.completedtx1)
-    TextView completedtxt1;
+    TextView completedTxt1;
 
     @BindView(R.id.completedtx2)
-    TextView completedtxt2;
+    TextView completedTxt2;
 
     @BindView(R.id.completedtx3)
-    TextView completedtxt3;
+    TextView completedTxt3;
 
     @BindView(R.id.tickimg1)
-    ImageView tickimg1;
+    ImageView tickImg1;
 
     @BindView(R.id.tickimg2)
-    ImageView tickimg2;
+    ImageView tickImg2;
 
     @BindView(R.id.tickimg3)
-    ImageView tickimg3;
+    ImageView tickImg3;
 
     public static KYCDescriptionFragment newInstance() {
 
@@ -104,9 +104,9 @@ public class KYCDescriptionFragment extends
         View rootView = inflater.inflate(R.layout.fragment_kyc, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-        blv1.setEnabled(false);
-        blv2.setEnabled(false);
-        blv3.setEnabled(false);
+        btnLvl1.setEnabled(false);
+        btnLvl2.setEnabled(false);
+        btnLvl3.setEnabled(false);
         showSwipeProgress();
         mKYCDescriptionPresenter.fetchCurrentLevel();
 
@@ -149,32 +149,32 @@ public class KYCDescriptionFragment extends
 
         if (currentLevel >= 0) {
 
-            blv1.setEnabled(true);
+            btnLvl1.setEnabled(true);
         }
         if (currentLevel >= 1) {
-            blv1.setEnabled(false);
-            blv2.setEnabled(true);
-            tickimg1.setImageResource(R.drawable.ic_tick);
-            completedtxt1.setText(R.string.completion);
-            blv1.setTextColor(getResources().getColor(R.color.colorAccent));
-            blv1.getBackground().setColorFilter(getResources()
+            btnLvl1.setEnabled(false);
+            btnLvl2.setEnabled(true);
+            tickImg1.setImageResource(R.drawable.ic_tick);
+            completedTxt1.setText(R.string.completion);
+            btnLvl1.setTextColor(getResources().getColor(R.color.colorAccent));
+            btnLvl1.getBackground().setColorFilter(getResources()
                     .getColor(R.color.changedBackgroundColour), PorterDuff.Mode.MULTIPLY);
         }
         if (currentLevel >= 2) {
-            blv2.setEnabled(false);
-            blv3.setEnabled(true);
-            tickimg2.setImageResource(R.drawable.ic_tick);
-            completedtxt2.setText(R.string.completion);
-            blv2.setTextColor(getResources().getColor(R.color.colorAccent));
-            blv2.getBackground().setColorFilter(getResources()
+            btnLvl2.setEnabled(false);
+            btnLvl3.setEnabled(true);
+            tickImg2.setImageResource(R.drawable.ic_tick);
+            completedTxt2.setText(R.string.completion);
+            btnLvl2.setTextColor(getResources().getColor(R.color.colorAccent));
+            btnLvl2.getBackground().setColorFilter(getResources()
                     .getColor(R.color.changedBackgroundColour), PorterDuff.Mode.MULTIPLY);
         }
         if (currentLevel >= 3) {
-            blv3.setEnabled(false);
-            tickimg3.setImageResource(R.drawable.ic_tick);
-            completedtxt3.setText(R.string.completion);
-            blv3.setTextColor(getResources().getColor(R.color.colorAccent));
-            blv3.getBackground().setColorFilter(getResources()
+            btnLvl3.setEnabled(false);
+            tickImg3.setImageResource(R.drawable.ic_tick);
+            completedTxt3.setText(R.string.completion);
+            btnLvl3.setTextColor(getResources().getColor(R.color.colorAccent));
+            btnLvl3.getBackground().setColorFilter(getResources()
                     .getColor(R.color.changedBackgroundColour), PorterDuff.Mode.MULTIPLY);
         }
     }
