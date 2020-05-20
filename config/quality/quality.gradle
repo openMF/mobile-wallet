@@ -14,7 +14,7 @@ apply plugin: 'checkstyle'
 apply plugin: 'pmd'
 
 dependencies {
-    checkstyle 'com.puppycrawl.tools:checkstyle:6.5'
+    checkstyle 'com.puppycrawl.tools:checkstyle:6.19'
 }
 
 def qualityConfigDir = "$project.rootDir/config/quality"
