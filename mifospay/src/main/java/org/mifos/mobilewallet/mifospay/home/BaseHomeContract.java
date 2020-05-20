@@ -45,6 +45,8 @@ public interface BaseHomeContract {
         void showToast(String message);
 
         void hideSwipeProgress();
+
+        void hideTransactionLoading();
     }
 
     interface HomePresenter extends BasePresenter {

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.Account;
@@ -76,6 +77,12 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
 
     @BindView(R.id.cc_home_screen)
     ViewGroup homeScreenContainer;
+
+    @BindView(R.id.tv_loading_history)
+    TextView tvLoadingTransactions;
+
+    @BindView(R.id.pb_loading_history)
+    ProgressBar progressBar;
 
     private Account account;
 
@@ -149,6 +156,11 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
+                vStateView.setVisibility(View.GONE);
+                rvHomeBottomSheetContent.setVisibility(View.GONE);
+                btnShowMoreTransactionsHistory.setVisibility(View.GONE);
+                tvLoadingTransactions.setVisibility(View.VISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 mHomePresenter.fetchAccountDetails();
             }
         });
@@ -212,6 +224,8 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     @Override
     public void showTransactionsHistory(List<Transaction> transactions) {
         vStateView.setVisibility(View.GONE);
+        hideTransactionLoading();
+        btnShowMoreTransactionsHistory.setVisibility(View.VISIBLE);
         rvHomeBottomSheetContent.setVisibility(View.VISIBLE);
         mHistoryAdapter.setData(transactions);
     }
@@ -243,6 +257,12 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     @Override
     public void hideSwipeProgress() {
         super.hideSwipeProgress();
+    }
+
+    @Override
+    public void hideTransactionLoading() {
+        tvLoadingTransactions.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
