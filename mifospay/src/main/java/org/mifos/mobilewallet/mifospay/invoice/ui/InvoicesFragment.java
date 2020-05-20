@@ -19,6 +19,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.common.FragmentStateHandler;
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract;
 import org.mifos.mobilewallet.mifospay.invoice.presenter.InvoicesPresenter;
 import org.mifos.mobilewallet.mifospay.invoice.ui.adapter.InvoicesAdapter;
@@ -33,7 +34,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class InvoicesFragment extends BaseFragment implements InvoiceContract.InvoicesView {
+public class InvoicesFragment extends BaseFragment implements
+        InvoiceContract.InvoicesView, FragmentStateHandler {
 
     @Inject
     InvoicesPresenter mPresenter;
@@ -77,14 +79,20 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
         View root = inflater.inflate(R.layout.fragment_invoices, container, false);
         ButterKnife.bind(this, root);
         mPresenter.attachView(this);
+        return root;
+    }
 
+    @Override
+    public void onResumeFragment() {
+        setSwipeEnabled(true);
         setupRecyclerView();
         setUpSwipeRefresh();
-
-        showSwipeProgress();
         mInvoicesPresenter.fetchInvoices();
+    }
 
-        return root;
+    @Override
+    public void onPauseFragment() {
+        setSwipeEnabled(false);
     }
 
     private void setupRecyclerView() {

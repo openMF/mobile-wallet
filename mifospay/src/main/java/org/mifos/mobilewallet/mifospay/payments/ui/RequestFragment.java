@@ -12,6 +12,7 @@ import android.widget.TextView;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.common.FragmentStateHandler;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter;
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
@@ -29,7 +30,8 @@ import io.michaelrocks.libphonenumber.android.NumberParseException;
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
 import io.michaelrocks.libphonenumber.android.Phonenumber;
 
-public class RequestFragment extends BaseFragment implements BaseHomeContract.TransferView {
+public class RequestFragment extends BaseFragment implements
+        BaseHomeContract.TransferView, FragmentStateHandler {
 
     @Inject
     TransferPresenter mPresenter;
@@ -60,9 +62,20 @@ public class RequestFragment extends BaseFragment implements BaseHomeContract.Tr
         View root = inflater.inflate(R.layout.fragment_request, container, false);
         ButterKnife.bind(this, root);
         mPresenter.attachView(this);
+
+        return root;
+    }
+
+    @Override
+    public void onResumeFragment() {
+        setSwipeEnabled(false);
         mPresenter.fetchVpa();
         mPresenter.fetchMobile();
-        return root;
+    }
+
+    @Override
+    public void onPauseFragment() {
+        setSwipeEnabled(false);
     }
 
     @Override
@@ -113,4 +126,5 @@ public class RequestFragment extends BaseFragment implements BaseHomeContract.Tr
     public void showSnackbar(String message) {
         Toaster.show(getView(), message);
     }
+
 }

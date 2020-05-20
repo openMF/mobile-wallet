@@ -28,6 +28,7 @@ import android.widget.Toast;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.common.FragmentStateHandler;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter;
@@ -45,7 +46,8 @@ import butterknife.OnClick;
  * Created by naman on 30/8/17.
  */
 
-public class SendFragment extends BaseFragment implements BaseHomeContract.TransferView {
+public class SendFragment extends BaseFragment implements
+        BaseHomeContract.TransferView, FragmentStateHandler {
 
     public static final int REQUEST_SHOW_DETAILS = 3;
     private static final int REQUEST_CAMERA = 0;
@@ -99,6 +101,16 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         mBtnVpa.setSelected(true);
         return rootView;
+    }
+
+    @Override
+    public void onResumeFragment() {
+        setSwipeEnabled(false);
+    }
+
+    @Override
+    public void onPauseFragment() {
+        setSwipeEnabled(false);
     }
 
     @OnClick(R.id.btn_vpa)
@@ -310,6 +322,5 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                     Constants.MAKE_TRANSFER_FRAGMENT);
         }
     }
-
 
 }

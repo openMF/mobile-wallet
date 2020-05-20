@@ -21,6 +21,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Savings
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.common.FragmentStateHandler;
 import org.mifos.mobilewallet.mifospay.merchants.MerchantsContract;
 import org.mifos.mobilewallet.mifospay.merchants.adapter.MerchantsAdapter;
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantsPresenter;
@@ -35,7 +36,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MerchantsFragment extends BaseFragment implements MerchantsContract.MerchantsView {
+public class MerchantsFragment extends BaseFragment implements
+        MerchantsContract.MerchantsView, FragmentStateHandler {
 
     @Inject
     MerchantsPresenter mPresenter;
@@ -76,9 +78,20 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         View rootView = inflater.inflate(R.layout.fragment_merchants, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
+
+        return rootView;
+    }
+
+    @Override
+    public void onResumeFragment() {
+        setSwipeEnabled(true);
         mMerchantsPresenter.fetchMerchants();
         setupUi();
-        return rootView;
+    }
+
+    @Override
+    public void onPauseFragment() {
+        setSwipeEnabled(false);
     }
 
     private void setupUi() {
@@ -195,4 +208,5 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         vStateView.setVisibility(View.GONE);
         mMerchantProgressBar.setVisibility(View.VISIBLE);
     }
+
 }

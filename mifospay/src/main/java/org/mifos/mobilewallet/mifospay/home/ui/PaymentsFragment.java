@@ -56,10 +56,53 @@ public class PaymentsFragment extends BaseFragment {
         vpTabLayout.setOffscreenPageLimit(1);
         TabLayoutAdapter tabLayoutAdapter
                 = new TabLayoutAdapter(getChildFragmentManager());
-        tabLayoutAdapter.addFragment(new SendFragment(), getString(R.string.send));
-        tabLayoutAdapter.addFragment(new RequestFragment(), getString(R.string.request));
-        tabLayoutAdapter.addFragment(new HistoryFragment(), getString(R.string.history));
-        tabLayoutAdapter.addFragment(new InvoicesFragment(), getString(R.string.invoices));
+        final SendFragment sendFragment = new SendFragment();
+        final RequestFragment requestFragment = new RequestFragment();
+        final HistoryFragment historyFragment = new HistoryFragment();
+        final InvoicesFragment invoicesFragment = new InvoicesFragment();
+
+        tabLayoutAdapter.addFragment(sendFragment, getString(R.string.send));
+        tabLayoutAdapter.addFragment(requestFragment, getString(R.string.request));
+        tabLayoutAdapter.addFragment(historyFragment, getString(R.string.history));
+        tabLayoutAdapter.addFragment(invoicesFragment, getString(R.string.invoices));
         vpTabLayout.setAdapter(tabLayoutAdapter);
+
+        vpTabLayout.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) { }
+
+            @Override
+            public void onPageSelected(int i) {
+                switch (i) {
+                    case 0:
+                        requestFragment.onPauseFragment();
+                        historyFragment.onPauseFragment();
+                        invoicesFragment.onPauseFragment();
+                        sendFragment.onResumeFragment();
+                        break;
+                    case 1:
+                        sendFragment.onPauseFragment();
+                        historyFragment.onPauseFragment();
+                        invoicesFragment.onPauseFragment();
+                        requestFragment.onResumeFragment();
+                        break;
+                    case 2:
+                        sendFragment.onPauseFragment();
+                        requestFragment.onPauseFragment();
+                        invoicesFragment.onPauseFragment();
+                        historyFragment.onResumeFragment();
+                        break;
+                    case 3:
+                        sendFragment.onPauseFragment();
+                        requestFragment.onPauseFragment();
+                        historyFragment.onPauseFragment();
+                        invoicesFragment.onResumeFragment();
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) { }
+        });
     }
 }

@@ -59,6 +59,7 @@ public class HistoryPresenter implements
                     @Override
                     public void onSuccess(FetchAccount.ResponseValue response) {
                         mAccount = response.getAccount();
+                        mHistoryView.hideProgress();
                         mTransactionsHistory
                                 .fetchTransactionsHistory(response.getAccount().getId());
                     }

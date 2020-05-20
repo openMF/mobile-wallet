@@ -17,6 +17,7 @@ import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.common.FragmentStateHandler;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.presenter.HistoryPresenter;
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter;
@@ -32,7 +33,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class HistoryFragment extends BaseFragment
-        implements HistoryContract.HistoryView {
+        implements HistoryContract.HistoryView, FragmentStateHandler {
 
     @Inject
     HistoryAdapter mHistoryAdapter;
@@ -75,10 +76,19 @@ public class HistoryFragment extends BaseFragment
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
 
+        return rootView;
+    }
+
+    @Override
+    public void onResumeFragment() {
+        setSwipeEnabled(true);
         setupUi();
         mPresenter.fetchTransactions();
+    }
 
-        return rootView;
+    @Override
+    public void onPauseFragment() {
+        setSwipeEnabled(false);
     }
 
     private void setupUi() {
@@ -125,7 +135,6 @@ public class HistoryFragment extends BaseFragment
     }
 
     private void setupSwipeRefreshLayout() {
-        setSwipeEnabled(true);
         getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -133,6 +142,11 @@ public class HistoryFragment extends BaseFragment
                 mPresenter.fetchTransactions();
             }
         });
+    }
+
+    @Override
+    public void hideProgress() {
+        hideSwipeProgress();
     }
 
     @Override
@@ -178,4 +192,5 @@ public class HistoryFragment extends BaseFragment
         rvHistory.setVisibility(View.GONE);
         pbHistory.setVisibility(View.VISIBLE);
     }
+
 }

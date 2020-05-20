@@ -19,6 +19,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.common.FragmentStateHandler;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
 import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -38,7 +39,8 @@ import butterknife.OnClick;
  * @author ankur
  * @since 21/May/2018
  */
-public class CardsFragment extends BaseFragment implements CardsContract.CardsView {
+public class CardsFragment extends BaseFragment implements
+        CardsContract.CardsView, FragmentStateHandler {
 
     @Inject
     CardsPresenter mPresenter;
@@ -86,11 +88,21 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         rootView = inflater.inflate(R.layout.fragment_cards, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
+
+        return rootView;
+    }
+
+    @Override
+    public void onResumeFragment() {
+        setSwipeEnabled(true);
         setUpSwipeRefresh();
         setupCardsRecyclerView();
-        showSwipeProgress();
         mCardsPresenter.fetchSavedCards();
-        return rootView;
+    }
+
+    @Override
+    public void onPauseFragment() {
+        setSwipeEnabled(false);
     }
 
     private void setUpSwipeRefresh() {

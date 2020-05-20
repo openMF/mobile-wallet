@@ -21,6 +21,7 @@ import org.mifos.mobilewallet.mifospay.bank.adapters.BankAccountsAdapter;
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountsPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.common.FragmentStateHandler;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
@@ -33,7 +34,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class AccountsFragment extends BaseFragment implements BankContract.BankAccountsView {
+public class AccountsFragment extends BaseFragment implements
+        BankContract.BankAccountsView, FragmentStateHandler {
 
     public static final int LINK_BANK_ACCOUNT_REQUEST_CODE = 1;
     public static final int BANK_ACCOUNT_DETAILS_REQUEST_CODE = 3;
@@ -75,12 +77,21 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_accounts, container, false);
         ButterKnife.bind(this, rootView);
+        mPresenter.attachView(this);
         setupRecycletView();
         setUpSwipeRefresh();
-        mPresenter.attachView(this);
-        showSwipeProgress();
         mBankAccountsPresenter.fetchLinkedBankAccounts();
         return rootView;
+    }
+
+    @Override
+    public void onResumeFragment() {
+        setSwipeEnabled(true);
+    }
+
+    @Override
+    public void onPauseFragment() {
+        setSwipeEnabled(false);
     }
 
     private void setUpSwipeRefresh() {
