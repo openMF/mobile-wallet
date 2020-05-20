@@ -17,16 +17,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".merchants.ui.MerchantTransferActivity"></activity>
-        <activity
-            android:name=".auth.ui.LoginActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateVisible">
+
+	<activity
+            android:name=".SplashScreenActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+	<activity
+            android:name=".auth.ui.LoginActivity"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".home.ui.MainActivity"
             android:windowSoftInputMode="adjustPan"
