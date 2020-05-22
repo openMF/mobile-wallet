@@ -15,13 +15,11 @@ public interface KYCContract {
 
     interface KYCDescriptionView extends BaseView<KYCDescriptionPresenter> {
 
+        void showFetchingProcess();
+
         void onFetchLevelSuccess(KYCLevel1Details kycLevel1Details);
 
-        void showToast(String s);
-
-        void gotoHome();
-
-        void hideProgressDialog();
+        void showErrorState(int drawable, int errorTitle, int errorMessage);
     }
 
     interface KYCDescriptionPresenter extends BasePresenter {

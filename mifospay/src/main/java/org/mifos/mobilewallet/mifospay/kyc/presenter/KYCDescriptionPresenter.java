@@ -3,10 +3,10 @@ package org.mifos.mobilewallet.mifospay.kyc.presenter;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.usecase.kyc.FetchKYCLevel1Details;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -37,7 +37,7 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
 
     @Override
     public void fetchCurrentLevel() {
-
+        mKYCDescriptionView.showFetchingProcess();
         fetchKYCLevel1DetailsUseCase.setRequestValues(new FetchKYCLevel1Details.RequestValues(
                 (int) mLocalRepository.getClientDetails().getClientId()));
 
@@ -52,15 +52,15 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
                             mKYCDescriptionView.onFetchLevelSuccess(
                                     response.getKYCLevel1DetailsList().get(0));
                         } else {
-                            mKYCDescriptionView.hideProgressDialog();
+                            mKYCDescriptionView.showErrorState(R.drawable.ic_error_state,
+                                    R.string.error_oops, R.string.error_kyc_details);
                         }
                     }
 
                     @Override
                     public void onError(String message) {
-                        mKYCDescriptionView.showToast(Constants.PLEASE_TRY_AGAIN_LATER);
-                        mKYCDescriptionView.hideProgressDialog();
-                        mKYCDescriptionView.gotoHome();
+                        mKYCDescriptionView.showErrorState(R.drawable.ic_error_state,
+                                R.string.error_oops, R.string.error_kyc_details);
                     }
                 });
     }
