@@ -1,11 +1,10 @@
 package org.mifos.mobilewallet.mifospay.registration.ui;
 
-import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
-
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.transition.TransitionManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,9 +14,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
-
+import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
+import in.galaxyofandroid.spinerdialog.SpinnerDialog;
+import java.util.ArrayList;
+import javax.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mifos.mobilewallet.mifospay.R;
@@ -29,16 +33,9 @@ import org.mifos.mobilewallet.mifospay.registration.presenter.SignupPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
+import org.mifos.mobilewallet.mifospay.utils.ValidateUtil;
 
-import java.util.ArrayList;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
-import in.galaxyofandroid.spinerdialog.SpinnerDialog;
+import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
 
 public class SignupActivity extends BaseActivity implements RegistrationContract.SignupView {
 
@@ -96,7 +93,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
         mPresenter.attachView(this);
 
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         setToolbarTitle("Registration");
 
         mifosSavingProductId = getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0);
@@ -239,6 +236,12 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         String username = mEtUserName.getText().toString();
         String password = mEtPassword.getText().toString();
         String confirmPassword = mEtConfirmPassword.getText().toString();
+
+        if (!ValidateUtil.INSTANCE.isValidEmail(email)) {
+            Snackbar.make(container, R.string.validate_email, Snackbar.LENGTH_SHORT).show();
+            hideProgressDialog();
+            return;
+        }
 
         if (!password.equals(confirmPassword)) {
             Toaster.showToast(this, "Password is not same as Confirm Password");

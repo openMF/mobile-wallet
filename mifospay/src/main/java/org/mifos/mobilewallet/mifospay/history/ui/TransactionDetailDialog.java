@@ -23,6 +23,7 @@ import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.presenter.TransactionDetailPresenter;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.Utils;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.ArrayList;
@@ -134,8 +135,8 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
 
         tvTransactionId.setText(Constants.TRANSACTION_ID + ": " + transaction.getTransactionId());
         tvTransactionDate.setText(Constants.DATE + ": " + transaction.getDate());
-        tvTransactionAmount.setText(
-                transaction.getCurrency().getCode() + " " + transaction.getAmount());
+        tvTransactionAmount.setText(Utils.getFormattedAccountBalance(
+                transaction.getAmount(), transaction.getCurrency().getCode()));
 
         mPresenter.getTransferDetail(transaction.getTransferId());
 

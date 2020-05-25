@@ -115,7 +115,9 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
 
     @OnClick(R.id.bg_screen)
     public void backgroundScreenClicked() {
-        Utils.hideSoftKeyboard(this);
+        if (this.getCurrentFocus() != null) {
+            Utils.hideSoftKeyboard(this);
+        }
     }
 
     @Override
@@ -189,7 +191,6 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
                 DebugUtil.log(Constants.GOOGLE_SIGN_IN_FAILED, e.getMessage());
                 Toaster.showToast(this, Constants.GOOGLE_SIGN_IN_FAILED);
                 hideProgressDialog();
-                startActivity(new Intent(LoginActivity.this, LoginActivity.class));
             }
         }
     }

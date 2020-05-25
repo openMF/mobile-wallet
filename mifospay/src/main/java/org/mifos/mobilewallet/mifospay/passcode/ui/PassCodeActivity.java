@@ -1,14 +1,19 @@
 package org.mifos.mobilewallet.mifospay.passcode.ui;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Toast;
 
 import com.mifos.mobile.passcode.MifosPassCodeActivity;
 import com.mifos.mobile.passcode.utils.EncryptionUtil;
+import com.mifos.mobile.passcode.utils.PassCodeConstants;
+import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper;
 
 import org.mifos.mobilewallet.mifospay.MifosPayApp;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
 import org.mifos.mobilewallet.mifospay.home.ui.MainActivity;
 import org.mifos.mobilewallet.mifospay.injection.component.ActivityComponent;
@@ -16,6 +21,7 @@ import org.mifos.mobilewallet.mifospay.injection.component.DaggerActivityCompone
 import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract;
 import org.mifos.mobilewallet.mifospay.passcode.presenter.PassCodePresenter;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -32,6 +38,9 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
     PassCodeContract.PassCodePresenter mPassCodePresenter;
 
     private ActivityComponent mActivityComponent;
+    private String currPass = "";
+    private Boolean updatePassword = false;
+    private boolean isInitialScreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,9 +51,13 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
                 .activityModule(new ActivityModule(this))
                 .applicationComponent(MifosPayApp.get(this).component())
                 .build();
-
+        isInitialScreen = getIntent().getBooleanExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN,
+                false);
         mActivityComponent.inject(this);
-
+        if (getIntent() != null) {
+            currPass = getIntent().getStringExtra(Constants.CURRENT_PASSCODE);
+            updatePassword = getIntent().getBooleanExtra(Constants.UPDATE_PASSCODE, false);
+        }
         ButterKnife.bind(this);
 
     }
@@ -67,8 +80,24 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
 
     @Override
     public void startLoginActivity() {
-        Intent intent = new Intent(PassCodeActivity.this, LoginActivity.class);
-        startActivity(intent);
+        AlertDialog.Builder builder = new AlertDialog.Builder(PassCodeActivity.this);
+        builder.setTitle(R.string.passcode_title);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(PassCodeActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override
@@ -86,5 +115,27 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
         mPassCodePresenter = mPresenter;
     }
 
+    private void saveCurrentPasscode() {
+        if (updatePassword && !currPass.isEmpty()) {
+            PasscodePreferencesHelper helper = new PasscodePreferencesHelper(this);
+            helper.savePassCode(currPass);
+        }
+    }
+
+    @Override
+    public void skip(View v) {
+        saveCurrentPasscode();
+        if (isInitialScreen) {
+            startNextActivity();
+        }
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        saveCurrentPasscode();
+        finish();
+    }
 
 }

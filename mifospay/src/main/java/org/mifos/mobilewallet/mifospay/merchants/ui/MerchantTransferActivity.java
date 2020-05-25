@@ -83,7 +83,7 @@ public class MerchantTransferActivity extends BaseActivity implements
         setContentView(R.layout.activity_merchant_transaction);
         ButterKnife.bind(this);
         setToolbarTitle("Merchant Transaction");
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         setupUI();
         mPresenter.attachView(this);
         mPresenter.fetchMerchantTransfers(merchantAccountNumber);
@@ -137,14 +137,16 @@ public class MerchantTransferActivity extends BaseActivity implements
     @OnClick(R.id.btn_submit)
     public void makeTransaction() {
         String externalId = tvMerchantVPA.getText().toString().trim();
-        String eamount = etAmount.getText().toString().trim();
+        String amount = etAmount.getText().toString().trim();
 
-        double amount = Double.parseDouble(eamount);
-        if (amount <= 0) {
+        if (amount.isEmpty()) {
+            showToast(Constants.PLEASE_ENTER_ALL_THE_FIELDS);
+            return;
+        } else if (Double.parseDouble(amount) <= 0) {
             showToast(Constants.PLEASE_ENTER_VALID_AMOUNT);
             return;
         }
-        mTransferPresenter.checkBalanceAvailability(externalId, amount);
+        mTransferPresenter.checkBalanceAvailability(externalId, Double.parseDouble(amount));
     }
 
     @Override

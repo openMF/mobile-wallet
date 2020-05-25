@@ -17,21 +17,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".merchants.ui.MerchantTransferActivity"></activity>
-        <activity
-            android:name=".auth.ui.LoginActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateVisible">
+
+	<activity
+            android:name=".SplashScreenActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+	<activity
+            android:name=".auth.ui.LoginActivity"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".home.ui.MainActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".history.ui.TransactionsHistoryActivity"
+            android:windowSoftInputMode="adjustPan"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".common.ui.SearchActivity"
@@ -94,11 +96,6 @@
         <service android:name=".data.firebase.api.services.MifosPayMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".data.firebase.api.services.MifosPayInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 

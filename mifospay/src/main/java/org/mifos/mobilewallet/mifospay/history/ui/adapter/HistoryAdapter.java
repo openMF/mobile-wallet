@@ -46,12 +46,12 @@ public class HistoryAdapter
     public void onBindViewHolder(ViewHolder holder, int position) {
         Transaction transaction = transactions.get(position);
 
-        String balance = Utils.getFormattedAccountBalance(transaction.getAmount());
-        String currency = transaction.getCurrency().getCode();
-        holder.tvTransactionAmount.setText(String.format("%s %s", currency, balance));
+        Double balance = transaction.getAmount();
+        String currencyCode = transaction.getCurrency().getCode();
+        holder.tvTransactionAmount.setText(Utils.getFormattedAccountBalance(balance, currencyCode));
         holder.tvTransactionDate.setText(transaction.getDate());
 
-        if (isBalancePositive(balance) && context != null) {
+        if (balance > 0 && context != null) {
             int color = ContextCompat.getColor(context, R.color.colorAccentBlue);
             holder.tvTransactionAmount.setTextColor(color);
         }
@@ -67,11 +67,6 @@ public class HistoryAdapter
                 holder.tvTransactionStatus.setText(Constants.OTHER);
                 break;
         }
-    }
-
-    private boolean isBalancePositive(String balance) {
-        balance = balance.replaceAll("[,.]", "");
-        return Double.parseDouble(balance) > 0;
     }
 
     @Override
