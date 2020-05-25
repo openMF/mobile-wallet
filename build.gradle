@@ -34,17 +34,17 @@ ext {
     minSdkVersion = 15
     targetSdkVersion = 28
     compileSdkVersion = 28
-    buildToolsVersion = '26.0.2'
-    kotlinVersion = "1.3.21"
+    buildToolsVersion = '29.0.2'
+    kotlinVersion = "1.3.72"
 
     // App dependencies
     supportLibraryVersion = '28.0.0'
-    daggerVersion = '2.11'
-    retrofitVersion = '2.2.0'
-    okHttp3Version = '3.6.0'
-    butterKnifeVersion = '8.6.0'
-    dbflowVersion = '3.1.1'
-    espressoVersion = '2.2.2'
+    daggerVersion = '2.26'
+    retrofitVersion = '2.9.0'
+    okHttp3Version = '4.7.2'
+    butterKnifeVersion = '10.2.1'
+    dbflowVersion = '5.0.0-alpha1'
+    espressoVersion = '3.0.0'
     rxandroidVersion = '1.1.0'
     rxjavaVersion = '1.1.4'
     junitVersion = '4.12'
