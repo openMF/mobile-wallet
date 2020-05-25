@@ -1,35 +1,44 @@
-<p>
-<img src="https://user-images.githubusercontent.com/37215508/76327029-7b267a80-630f-11ea-963b-4313b7a093d8.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76327389-f12ae180-630f-11ea-9bcf-6caf02bde210.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76327581-33ecb980-6310-11ea-9009-d76efda0b663.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76327722-5979c300-6310-11ea-9672-e3de2a3c7b0e.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76327957-aeb5d480-6310-11ea-8eaa-a3f5bcc2142d.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76328256-1b30d380-6311-11ea-91dc-99feaa390fba.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76328401-41567380-6311-11ea-99bf-3338a58459df.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76328672-985c4880-6311-11ea-9a65-33d94e41a1b0.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76328891-e07b6b00-6311-11ea-9ab7-654392a8c6c4.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76328966-f852ef00-6311-11ea-90d0-b35ef04d6c59.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76329068-14ef2700-6312-11ea-9556-b5d7b52201a4.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76329203-45cf5c00-6312-11ea-9b5a-62f1bd40fa03.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76329305-68fa0b80-6312-11ea-8889-177bde47bada.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76329500-ac547a00-6312-11ea-94fc-d771193332d6.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76329561-be361d00-6312-11ea-8498-749c8440e5ae.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76329746-f9385080-6312-11ea-9adb-d39798ce3f55.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76329796-09e8c680-6313-11ea-8457-dca7f812f79d.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76329847-19680f80-6313-11ea-94aa-a249679df064.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76329901-284ec200-6313-11ea-9fa1-aabed403398a.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76329949-38ff3800-6313-11ea-94c5-09daeacbf0db.jpg" width="288" height="500" />
+|Splash Screen|Login Screen|Selecting User Type|
+|------|------|------|
+|<img src="https://user-images.githubusercontent.com/46667021/82584052-8ddfea00-9bb1-11ea-92a9-8c83abf6322e.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82584248-d8616680-9bb1-11ea-97b2-6a6e5129687a.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82584330-faf37f80-9bb1-11ea-8443-bb676a99d714.jpg" width="288" height="500" />|
+
+|Google Signup|Mobile Verification|Registration Screen|
+|------|------|------|
+|<img src="https://user-images.githubusercontent.com/46667021/82584418-18284e00-9bb2-11ea-94d2-5d9dedff8fb2.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82584793-a13f8500-9bb2-11ea-847d-bb0e05279309.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82584872-bd432680-9bb2-11ea-8a99-eca1a031db20.jpg" width="288" height="500" />|
+
+|Passcode Verification|Home Screen|Recent Transactions|
+|------|------|------|
+|<img src="https://user-images.githubusercontent.com/46667021/82588474-7b1ce380-9bb8-11ea-9a12-c72a57a7d5fe.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82584944-dba92200-9bb2-11ea-87ca-4f87b078d593.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82585044-ff6c6800-9bb2-11ea-86b2-764e7ec47689.jpg" width="288" height="500" />|
 
 
+|Selecting Transfer Method|Scanning QR Code for VPA Address|Making a Payment|
+|------|------|------|
+|<img src="https://user-images.githubusercontent.com/46667021/82585154-2fb40680-9bb3-11ea-84d6-dd46d8eb571a.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82586309-fa101d00-9bb4-11ea-86b4-c7fff96a87f2.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82585255-56723d00-9bb3-11ea-9ced-7ee128103ac9.jpg" width="288" height="500" />|
 
-<img src="https://user-images.githubusercontent.com/37215508/76330252-9eebbf80-6313-11ea-8098-3b8f2962edb8.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76330291-ae6b0880-6313-11ea-8625-5c55ad8b09a5.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76330449-dbb7b680-6313-11ea-934a-08d5d0e2c8ff.jpg" width="288" height="500" />
 
-<img src="https://user-images.githubusercontent.com/37215508/76330597-073aa100-6314-11ea-9f40-9dc24a868e2c.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76330738-3a7d3000-6314-11ea-9a4f-d6b04e433e6e.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76330810-4ec12d00-6314-11ea-8553-e7a8bf576a9a.jpg" width="288" height="500" />
-<img src="https://user-images.githubusercontent.com/37215508/76331165-c3946700-6314-11ea-83fc-9e42a5553af3.jpg" width="288" height="500" />
+|Requesting Payment|Request Payment QR Code |Transaction History|
+|------|------|------|
+|<img src="https://user-images.githubusercontent.com/46667021/82585523-c2ed3c00-9bb3-11ea-999b-c68582f3f811.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82585345-7bff4680-9bb3-11ea-913a-9f2a27f9c83a.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82585589-dbf5ed00-9bb3-11ea-8f28-5ed2150e107d.jpg" width="288" height="500" />|
 
-</p>
+|Transaction Details|Specification Transactions History|Transaction Receipt|
+|------|------|------|
+|<img src="https://user-images.githubusercontent.com/46667021/82585645-f8922500-9bb3-11ea-8a5e-6190d2acddde.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82585705-1790b700-9bb4-11ea-9f77-05057301a51d.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82585802-4313a180-9bb4-11ea-897a-b5da9a7ff0d9.jpg" width="288" height="500" />|
 
+|Bank Accounts Screen|Linking Bank Account|Phone Number Verification|
+|------|------|------|
+|<img src="https://user-images.githubusercontent.com/46667021/82585960-7e15d500-9bb4-11ea-88a0-e9f3def320cd.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82586461-33e12380-9bb5-11ea-9ca6-9fe6199a29bb.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82586565-6723b280-9bb5-11ea-961e-19872e7f70f8.jpg" width="288" height="500" />|
+
+
+|Merchants Screen|Merchant Payment and History Screen|User Profile Screen|
+|------|------|------|
+|<img src="https://user-images.githubusercontent.com/46667021/82587508-efef1e00-9bb6-11ea-81b2-54d9b8239ff6.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82587653-317fc900-9bb7-11ea-993b-36d558e2d499.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82586663-8fabac80-9bb5-11ea-8373-cd962931aa70.jpg" width="288" height="500" />|
+
+
+|Edit Profile Screen|Change Password Screen|Change Passcode Screen|
+|------|------|------|
+|<img src="https://user-images.githubusercontent.com/46667021/82586725-a94cf400-9bb5-11ea-85c5-8da97c6afff7.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82637787-2c586380-9c23-11ea-9631-664cdac3be66.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82637928-73deef80-9c23-11ea-9766-0dd25af4edec.jpg" width="288" height="500" />|
+
+
+|Application Settings|FAQ Screen|
+|------|------|
+|<img src="https://user-images.githubusercontent.com/46667021/82586823-d26d8480-9bb5-11ea-85e2-10e5a0528a52.jpg" width="288" height="500" />|<img src="https://user-images.githubusercontent.com/46667021/82586860-df8a7380-9bb5-11ea-9784-320f28cc8e1b.jpg" width="288" height="500" />|
