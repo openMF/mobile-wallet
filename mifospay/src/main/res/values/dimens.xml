@@ -45,6 +45,7 @@
     <dimen name="value_2dp">2dp</dimen>
     <dimen name="value_70dp">70dp</dimen>
     <dimen name="value_100dp">100dp</dimen>
+    <dimen name="value_150dp">150dp</dimen>
     <dimen name="value_13sp">13sp</dimen>
     <dimen name="value_14sp">14sp</dimen>
     <dimen name="value_16sp">16sp</dimen>
