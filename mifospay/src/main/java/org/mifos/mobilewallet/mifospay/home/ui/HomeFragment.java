@@ -26,7 +26,6 @@ import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
-import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import java.util.List;
 
@@ -34,6 +33,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance;
 
 /**
  * Created by naman on 17/8/17.
@@ -213,7 +214,8 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         this.account = account;
 
         String currencyCode = account.getCurrency().getCode();
-        accountBalance = Utils.getFormattedAccountBalance(account.getBalance(), currencyCode);
+        accountBalance =
+                getFormattedAccountBalance(account.getBalance(), currencyCode);
         hideSwipeProgress();
 
         TransitionManager.beginDelayedTransition(homeScreenContainer);

@@ -11,7 +11,6 @@ import android.widget.TextView;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,8 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance;
 
 /**
  * Created by naman on 17/8/17.
@@ -48,7 +49,8 @@ public class HistoryAdapter
 
         Double balance = transaction.getAmount();
         String currencyCode = transaction.getCurrency().getCode();
-        holder.tvTransactionAmount.setText(Utils.getFormattedAccountBalance(balance, currencyCode));
+        holder.tvTransactionAmount
+                .setText(getFormattedAccountBalance(balance, currencyCode));
         holder.tvTransactionDate.setText(transaction.getDate());
 
         if (balance > 0 && context != null) {
