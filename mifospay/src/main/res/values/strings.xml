@@ -266,6 +266,7 @@
     <string name="transfer_money_to_this_merchant">Transfer money to this merchant</string>
     <string name="test_user">Dwight Schrute</string>
     <string name="test_vpa">rohan.jain@mifos</string>
+    <string name="end_of_transactions">End of transactions</string>
     <string name="set_amount">Set Amount</string>
     <string name="grip">Grip</string>
     <string name="hide_balance">Hide Balance</string>

@@ -31,6 +31,8 @@ public interface HistoryContract {
         void showTransactionDetailDialog(int transactionIndex, String accountNumber);
 
         void showHistoryFetchingProgress();
+
+        void setUpScrollDownBottomButton();
     }
 
     interface TransactionsHistoryPresenter extends BasePresenter {

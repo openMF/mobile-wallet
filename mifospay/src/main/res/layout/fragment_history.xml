@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:id="@+id/cc_history_container"
     android:layout_height="match_parent">
@@ -17,6 +17,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical" />
+
+    <ImageView
+        android:layout_width="@dimen/value_30dp"
+        android:layout_height="@dimen/value_30dp"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:srcCompat="@drawable/ic_down_arrow"
+        android:layout_marginBottom="@dimen/value_7dp"
+        android:id="@+id/btn_scroll"
+        android:clickable="true"
+        android:visibility="visible"
+        />
 
     <include
         android:id="@+id/inc_state_view"

@@ -22,6 +22,7 @@ import org.mifos.mobilewallet.mifospay.history.presenter.HistoryPresenter;
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,6 +62,9 @@ public class HistoryFragment extends BaseFragment
 
     @BindView(R.id.pb_history)
     ProgressBar pbHistory;
+
+    @BindView(R.id.btn_scroll)
+    ImageView scrollDownButton;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -177,5 +181,38 @@ public class HistoryFragment extends BaseFragment
         vStateView.setVisibility(View.GONE);
         rvHistory.setVisibility(View.GONE);
         pbHistory.setVisibility(View.VISIBLE);
+        scrollDownButton.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void setUpScrollDownBottomButton() {
+        rvHistory.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                final int length = mHistoryAdapter.getItemCount();
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!recyclerView.canScrollVertically(1)) {
+                    Toaster.showToast(getContext(), getString(R.string.end_of_transactions));
+                    scrollDownButton.setImageResource(R.drawable.ic_up_arrow);
+                    scrollDownButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            rvHistory.smoothScrollToPosition(0);
+                        }
+                    });
+                }
+                if (!recyclerView.canScrollVertically(recyclerView.getLayoutParams().height)) {
+                    scrollDownButton.setImageResource(R.drawable.ic_down_arrow);
+                    scrollDownButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            rvHistory.smoothScrollToPosition(length - 1);
+                        }
+                    });
+                } else {
+                    scrollDownButton.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 }
