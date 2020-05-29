@@ -151,7 +151,6 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         Intent intent = new Intent(LoginActivity.this, PassCodeActivity.class);
         intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true);
         startActivity(intent);
-        finish();
     }
 
     public void signupUsingGoogleAccount(int mifosSavingsProductId) {
