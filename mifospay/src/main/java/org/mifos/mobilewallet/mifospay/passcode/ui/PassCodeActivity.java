@@ -15,6 +15,7 @@ import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper;
 import org.mifos.mobilewallet.mifospay.MifosPayApp;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity;
+import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
 import org.mifos.mobilewallet.mifospay.home.ui.MainActivity;
 import org.mifos.mobilewallet.mifospay.injection.component.ActivityComponent;
 import org.mifos.mobilewallet.mifospay.injection.component.DaggerActivityComponent;
@@ -71,11 +72,17 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
     public void startNextActivity() {
         // authenticate user with saved Preferences
         mPresenter.createAuthenticatedService();
-
-        Intent intent = new Intent(PassCodeActivity.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        if (EditProfileActivity.class.getSimpleName().equals(getIntent().
+                getStringExtra(Constants.PASSCODE_NEXT_ACTIVITY))) {
+            Intent intent = new Intent(PassCodeActivity.this, EditProfileActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(PassCodeActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
     }
 
     @Override

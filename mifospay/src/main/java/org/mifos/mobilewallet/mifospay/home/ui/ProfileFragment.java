@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mifos.mobile.passcode.utils.PassCodeConstants;
+
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -18,6 +20,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfilePresenter;
+import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
@@ -135,6 +138,12 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     public void onEditProfileClicked() {
         if (getActivity() != null) {
             getActivity().startActivity(new Intent(getActivity(), EditProfileActivity.class));
+            Intent intent = new Intent(getActivity(), PassCodeActivity.class);
+            intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true);
+            intent.putExtra(Constants.PASSCODE_NEXT_ACTIVITY,
+                    EditProfileActivity.class.getSimpleName());
+            getActivity().startActivity(intent);
+            Toaster.showToast(getActivity(), getString(R.string.edit_credential));
         }
     }
 

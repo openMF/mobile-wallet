@@ -195,4 +195,5 @@ public class Constants {
 
     public static final String CURRENT_PASSCODE = "current passcode";
     public static final String UPDATE_PASSCODE = "update passcode";
+    public static final String PASSCODE_NEXT_ACTIVITY = "passcode_next_code_activity";
 }
