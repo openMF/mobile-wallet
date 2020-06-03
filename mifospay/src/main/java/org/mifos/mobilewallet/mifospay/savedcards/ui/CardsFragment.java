@@ -3,6 +3,7 @@ package org.mifos.mobilewallet.mifospay.savedcards.ui;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.chip.Chip;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -66,6 +67,9 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
 
     @Inject
     CardsAdapter mCardsAdapter;
+
+    @BindView(R.id.btn_add_card)
+    Chip addCard;
 
     View rootView;
 
@@ -143,6 +147,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         vStateView.setVisibility(View.GONE);
         rvCards.setVisibility(View.GONE);
         pbCards.setVisibility(View.VISIBLE);
+        addCard.setVisibility(View.GONE);
     }
 
 
@@ -248,6 +253,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         }
         mCardsAdapter.setCards(cards);
         hideSwipeProgress();
+        addCard.setVisibility(View.VISIBLE);
     }
 
     /**
