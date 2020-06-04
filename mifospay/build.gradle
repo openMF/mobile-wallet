@@ -82,7 +82,7 @@ dependencies {
     implementation 'com.mifos.mobile:mifos-passcode:0.3.0'
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
-    implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.firebase:firebase-core:17.4.3'
 
     implementation 'com.hbb20:ccp:2.2.0'
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:1.9'
