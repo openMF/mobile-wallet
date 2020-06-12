@@ -158,7 +158,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_height="60dp"
                     android:layout_marginLeft="@dimen/value_20dp"
-                    android:layout_marginRight="@dimen/value_15dp"
+                    android:layout_marginRight="@dimen/value_20dp"
                     android:layout_toLeftOf="@+id/btn_search_contact"
                     android:textColorHint="@android:color/black"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
@@ -167,11 +167,10 @@
                         android:id="@+id/et_mobile_number"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingBottom="@dimen/value_10dp"
+                        android:paddingBottom="@dimen/value_20dp"
                         android:hint="@string/mobile_number"
                         android:inputType="number"
                         android:singleLine="true"
-                        android:textAlignment="center"
                         android:maxLength="@integer/telephone_numbers_max_length_standard"
                         android:textSize="@dimen/value_15sp" />
 
