@@ -22,6 +22,9 @@ import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
+import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.SDIResponse;
+import org.mifos.mobilewallet.core.data.fineract.entity.payload.StandingInstructionPayload;
+import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.core.domain.model.client.NewClient;
@@ -218,6 +221,32 @@ public class FineractRepository {
 
     public Observable<TPTResponse> makeThirdPartyTransfer(TransferPayload transferPayload) {
         return fineractApiManager.getThirdPartyTransferApi().makeTransfer(transferPayload);
+    }
+
+    public Observable<SDIResponse> createStandingInstruction(
+            StandingInstructionPayload standingInstructionPayload) {
+        return fineractApiManager.getStandingInstructionApi()
+                .createStandingInstruction(standingInstructionPayload);
+    }
+
+    public Observable<Page<StandingInstruction>> getAllStandingInstructions(long clientId) {
+        return fineractApiManager.getStandingInstructionApi().getAllStandingInstructions(clientId);
+    }
+
+    public Observable<StandingInstruction> getStandingInstruction(long standingInstructionId) {
+        return fineractApiManager.getStandingInstructionApi()
+                .getStandingInstruction(standingInstructionId);
+    }
+
+    public Observable<GenericResponse> updateStandingInstruction(long standingInstructionId,
+                              StandingInstructionPayload standingInstructionPayload) {
+        return fineractApiManager.getStandingInstructionApi().updateStandingInstruction(
+                standingInstructionId, standingInstructionPayload, "update");
+    }
+
+    public Observable<GenericResponse> deleteStandingInstruction(long standingInstruction) {
+        return fineractApiManager.getStandingInstructionApi().deleteStandingInstruction(
+                standingInstruction, "delete");
     }
 
     //self user apis
