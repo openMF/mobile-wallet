@@ -125,4 +125,5 @@ public interface ActivityComponent {
     void inject(NotificationActivity notificationActivity);
 
     void inject(MerchantTransferActivity merchantTransferActivity);
+
 }

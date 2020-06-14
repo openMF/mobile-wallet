@@ -57,4 +57,5 @@ public class Constants {
     public static final String MERCHANT = "merchant";
     public static final String FETCH_CLIENT_DETAILS_USE_CASE = "Fetch Client Details UseCase";
     public static final String ERROR_FETCHING_NOTIFICATIONS = "Error fetching notifications";
+    public static final String UNAUTHORIZED_ERROR = "401 Unauthorized";
 }

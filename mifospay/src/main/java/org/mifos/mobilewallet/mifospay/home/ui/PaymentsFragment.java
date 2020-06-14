@@ -16,7 +16,6 @@ import org.mifos.mobilewallet.mifospay.invoice.ui.InvoicesFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.RequestFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 

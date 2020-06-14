@@ -76,8 +76,12 @@ public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
 
                     @Override
                     public void onError(String message) {
-                        mReceiptView.hideProgressDialog();
-                        mReceiptView.showSnackbar("Error fetching Transaction");
+                        if (message.equals(Constants.UNAUTHORIZED_ERROR)) {
+                            mReceiptView.openPassCodeActivity();
+                        } else {
+                            mReceiptView.hideProgressDialog();
+                            mReceiptView.showSnackbar("Error fetching Transaction");
+                        }
                     }
                 }
         );

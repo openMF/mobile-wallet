@@ -12,7 +12,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,13 +28,16 @@ import org.mifos.mobilewallet.mifospay.merchants.adapter.MerchantsAdapter;
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantsPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
+import org.mifos.mobilewallet.mifospay.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnTextChanged;
 
 public class MerchantsFragment extends BaseFragment implements MerchantsContract.MerchantsView {
 
@@ -61,6 +66,11 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
 
     @BindView(R.id.pb_merchants)
     ProgressBar mMerchantProgressBar;
+    @BindView(R.id.et_search_merchant)
+    EditText etMerchantSearch;
+
+    @BindView(R.id.ll_search_merchant)
+    LinearLayout searchView;
     private List<SavingsWithAssociations> merchantsList;
 
     @Override
@@ -181,6 +191,36 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         mMerchantFragmentLayout.setVisibility(View.VISIBLE);
         vStateView.setVisibility(View.GONE);
         mMerchantProgressBar.setVisibility(View.GONE);
+        searchView.setVisibility(View.VISIBLE);
+    }
+
+    @OnTextChanged(R.id.et_search_merchant)
+    void filerMerchants() {
+        filterList(etMerchantSearch.getText().toString());
+    }
+
+    public void filterList(String text) {
+        List<SavingsWithAssociations> merchantFilteredList = new ArrayList<>();
+
+        if (merchantsList  != null) {
+            if (Utils.isBlank(text)) {
+                merchantFilteredList = merchantsList;
+            } else {
+                List<SavingsWithAssociations> filteredList = new ArrayList<>();
+                for (SavingsWithAssociations merchant : merchantsList) {
+                    if (merchant.getExternalId() != null &&
+                            merchant.getExternalId().toLowerCase().contains(text.toLowerCase())) {
+                        filteredList.add(merchant);
+                    }
+                    if (merchant.getClientName().toLowerCase().contains(
+                            text.toLowerCase())) {
+                        filteredList.add(merchant);
+                    }
+                }
+                merchantFilteredList = filteredList;
+            }
+            mMerchantsAdapter.setData(merchantFilteredList);
+        }
     }
 
     @Override
@@ -196,6 +236,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
 
     @Override
     public void showMerchantFetchProcess() {
+        searchView.setVisibility(View.GONE);
         mMerchantFragmentLayout.setVisibility(View.GONE);
         vStateView.setVisibility(View.GONE);
         mMerchantProgressBar.setVisibility(View.VISIBLE);

@@ -61,5 +61,6 @@
     <dimen name="marginItemsInSectionExtraSmall">8dp</dimen>
     <dimen name="value_120dp">120dp</dimen>
     <dimen name="value_250dp">250dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>
