@@ -137,7 +137,6 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     @OnClick(R.id.btn_profile_bottom_sheet_action)
     public void onEditProfileClicked() {
         if (getActivity() != null) {
-            getActivity().startActivity(new Intent(getActivity(), EditProfileActivity.class));
             Intent intent = new Intent(getActivity(), PassCodeActivity.class);
             intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true);
             intent.putExtra(Constants.PASSCODE_NEXT_ACTIVITY,
