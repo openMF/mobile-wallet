@@ -29,6 +29,9 @@ public class PreferencesHelper {
     private static final String FIREBASE_REG_ID = "preferences_firebase_reg_id";
     private static final String ACCOUNT_ID = "preferences_account_id";
 
+    // for FineractCN
+    private static final String ACCESS_TOKEN = "access_token";
+
     private SharedPreferences sharedPreferences;
 
     @Inject
@@ -69,12 +72,20 @@ public class PreferencesHelper {
         putString(TOKEN, token);
     }
 
+    public void saveFineractCNAccessToken(String accessToken) {
+        putString(ACCESS_TOKEN, accessToken);
+    }
+
     public void clearToken() {
         putString(TOKEN, "");
     }
 
     public String getToken() {
         return getString(TOKEN, "");
+    }
+
+    public String getFineractCNAccessToken() {
+        return getString(ACCESS_TOKEN, "");
     }
 
     public void saveFullName(String name) {

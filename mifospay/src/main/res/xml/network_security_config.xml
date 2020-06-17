@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--should be removed, added just for testing-->
+<network-security-config>
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">buffalo.mifos.io</domain>
+    </domain-config>
+</network-security-config>

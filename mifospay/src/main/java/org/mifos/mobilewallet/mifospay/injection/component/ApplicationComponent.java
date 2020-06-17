@@ -5,7 +5,8 @@ import android.content.Context;
 
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.data.common.FineractRepository;
+import org.mifos.mobilewallet.core.data.fineractcn.api.FineractCNApiManager;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.injection.ApplicationContext;
@@ -28,6 +29,8 @@ public interface ApplicationComponent {
     UseCaseHandler usecasehandler();
 
     FineractApiManager fineractApiManager();
+
+    FineractCNApiManager fineractCNApiManager();
 
     FineractRepository fineractRepository();
 

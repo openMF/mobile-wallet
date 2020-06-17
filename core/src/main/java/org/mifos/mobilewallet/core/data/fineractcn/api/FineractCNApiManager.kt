@@ -1,0 +1,76 @@
+package org.mifos.mobilewallet.core.data.fineractcn.api
+
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.mifos.mobilewallet.core.data.fineractcn.api.BaseURL.baseURL
+import org.mifos.mobilewallet.core.data.fineractcn.api.services.AuthenticationService
+import org.mifos.mobilewallet.core.data.fineractcn.api.services.CustomerService
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
+
+/**
+ * Created by Devansh on 17/06/2020
+ */
+class FineractCNApiManager {
+
+    init {
+        val accessToken = ""
+        createService(accessToken)
+    }
+
+    companion object {
+
+        private lateinit var retrofit: Retrofit
+        private lateinit var customerApi: CustomerService
+        private lateinit var authenticationApi: AuthenticationService
+
+        fun createAuthenticatedService(accessToken: String) {
+            createService(accessToken)
+        }
+
+        private fun createService(accessToken: String) {
+
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+
+            val okHttpClient = OkHttpClient.Builder()
+                    .readTimeout(60, TimeUnit.SECONDS)
+                    .connectTimeout(60, TimeUnit.SECONDS)
+                    .writeTimeout(60, TimeUnit.SECONDS)
+                    .addInterceptor(interceptor)
+                    /**
+                     * Using hardcoded values for now
+                     */
+                    .addInterceptor(ApiInterceptor(accessToken, "tn01", "interopUser"))
+                    .build()
+
+            retrofit = Retrofit.Builder()
+                    .baseUrl(baseURL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                    .client(okHttpClient)
+                    .build()
+            init()
+        }
+
+        private fun init() {
+            customerApi = createApi(CustomerService::class.java)
+            authenticationApi = createApi(AuthenticationService::class.java)
+        }
+
+
+        private fun <T> createApi(clazz: Class<T>): T {
+            return retrofit.create(clazz)
+        }
+    }
+
+    fun getAuthenticationAPI(): AuthenticationService {
+        return authenticationApi
+    }
+
+    fun getCustomerApi(): CustomerService {
+        return customerApi
+    }
+}

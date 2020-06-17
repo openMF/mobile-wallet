@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.core.domain.usecase.invoice;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.data.common.FineractRepository;
 
 import java.util.List;
 

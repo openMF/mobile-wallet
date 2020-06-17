@@ -4,9 +4,12 @@ import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole;
+import org.mifos.mobilewallet.core.data.fineractcn.api.FineractCNApiManager;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.LoginResponse;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.core.domain.model.user.User;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
+import org.mifos.mobilewallet.core.domain.usecase.fineractcnuser.AuthenticateFineractCNUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails;
 import org.mifos.mobilewallet.mifospay.auth.AuthContract;
@@ -31,6 +34,8 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     FetchClientData fetchClientDataUseCase;
     @Inject
     FetchUserDetails fetchUserDetailsUseCase;
+    @Inject
+    AuthenticateFineractCNUser authenticateFineractCNUser;
     private AuthContract.LoginView mLoginView;
 
     @Inject
@@ -70,6 +75,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                     @Override
                     public void onSuccess(AuthenticateUser.ResponseValue response) {
                         createAuthenticatedService(response.getUser());
+                        loginFineractCNUser();
                         fetchClientData();
                         fetchUserDetails(response.getUser());
                     }
@@ -81,6 +87,40 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                 });
 
 
+    }
+
+    private void loginFineractCNUser() {
+        /**
+         * Using hardcoded values for now
+         */
+        authenticateFineractCNUser.setRequestValues(
+                new AuthenticateFineractCNUser.RequestValues(
+                        "password", "interopUser", "aW50b3BAZDE="));
+        final AuthenticateFineractCNUser.RequestValues requestValue =
+                authenticateFineractCNUser.getRequestValues();
+
+        mUsecaseHandler.execute(authenticateFineractCNUser, requestValue,
+                new UseCase.UseCaseCallback<AuthenticateFineractCNUser.ResponseValue>() {
+                    @Override
+                    public void onSuccess(AuthenticateFineractCNUser.ResponseValue response) {
+                        LoginResponse loginResponse = response.getLoginResponse();
+                        createAuthenticatedFineractCNService(loginResponse.getAccessToken());
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mLoginView.loginFail(message);
+                    }
+                });
+    }
+
+    /**
+     * @param accessToken is saved in @link{preferenceHelper} for later use and also used to create
+     *                    an authenticated FineractCN service for accessing back-office APIs
+     */
+    private void createAuthenticatedFineractCNService(String accessToken) {
+        preferencesHelper.saveFineractCNAccessToken(accessToken);
+        FineractCNApiManager.Companion.createAuthenticatedService(accessToken);
     }
 
     private void fetchUserDetails(final User user) {

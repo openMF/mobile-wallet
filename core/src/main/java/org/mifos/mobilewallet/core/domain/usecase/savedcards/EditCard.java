@@ -1,9 +1,9 @@
 package org.mifos.mobilewallet.core.domain.usecase.savedcards;
 
 import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
+import org.mifos.mobilewallet.core.data.common.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.data.common.FineractRepository;
 
 import javax.inject.Inject;
 

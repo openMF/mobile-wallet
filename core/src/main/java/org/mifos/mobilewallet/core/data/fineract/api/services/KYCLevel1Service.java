@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.api.services;
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
+import org.mifos.mobilewallet.core.data.common.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
 
 import java.util.List;

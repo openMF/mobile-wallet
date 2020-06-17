@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.api.services;
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
+import org.mifos.mobilewallet.core.data.common.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;

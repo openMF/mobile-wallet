@@ -9,7 +9,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUp
 import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.data.common.FineractRepository;
 import org.mifos.mobilewallet.core.utils.Constants;
 import org.mifos.mobilewallet.core.utils.DateHelper;
 
