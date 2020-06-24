@@ -3,8 +3,10 @@ package org.mifos.mobilewallet.core.data.fineractcn.api
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.mifos.mobilewallet.core.data.fineractcn.api.BaseURL.baseURL
+import org.mifos.mobilewallet.core.data.fineractcn.api.services.AccountingService
 import org.mifos.mobilewallet.core.data.fineractcn.api.services.AuthenticationService
 import org.mifos.mobilewallet.core.data.fineractcn.api.services.CustomerService
+import org.mifos.mobilewallet.core.data.fineractcn.api.services.DepositService
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -25,6 +27,8 @@ class FineractCNApiManager {
         private lateinit var retrofit: Retrofit
         private lateinit var customerApi: CustomerService
         private lateinit var authenticationApi: AuthenticationService
+        private lateinit var depositApi: DepositService
+        private lateinit var accountingApi: AccountingService
 
         fun createAuthenticatedService(accessToken: String) {
             createService(accessToken)
@@ -56,8 +60,10 @@ class FineractCNApiManager {
         }
 
         private fun init() {
-            customerApi = createApi(CustomerService::class.java)
             authenticationApi = createApi(AuthenticationService::class.java)
+            customerApi = createApi(CustomerService::class.java)
+            depositApi = createApi(DepositService::class.java)
+            accountingApi = createApi(AccountingService::class.java)
         }
 
 
@@ -72,5 +78,13 @@ class FineractCNApiManager {
 
     fun getCustomerApi(): CustomerService {
         return customerApi
+    }
+
+    fun getDepositApi(): DepositService {
+        return depositApi
+    }
+
+    fun getAccountingApi(): AccountingService {
+        return accountingApi
     }
 }

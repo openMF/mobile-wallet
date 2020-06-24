@@ -21,7 +21,7 @@ import rx.Observable
 interface CustomerService {
 
     @GET(ApiEndPoints.CUSTOMER + "/customers")
-    abstract fun fetchCustomers(
+    fun fetchCustomers(
             @Query("pageIndex") integer: Int?,
             @Query("size") size: Int?): Observable<CustomerPage>
 
@@ -44,7 +44,7 @@ interface CustomerService {
 
     @Multipart
     @POST(ApiEndPoints.CUSTOMER + "/customers/{identifier}/portrait")
-    abstract fun uploadCustomerPortrait(
+    fun uploadCustomerPortrait(
             @Path("identifier") customerIdentifier: String,
             @Part file: MultipartBody.Part): Completable
 

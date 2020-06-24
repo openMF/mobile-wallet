@@ -24,6 +24,8 @@ import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.core.data.fineractcn.api.FineractCNApiManager;
 import org.mifos.mobilewallet.core.data.fineractcn.entity.LoginResponse;
 import org.mifos.mobilewallet.core.data.fineractcn.entity.customer.Customer;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.depositaccount.DepositAccount;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.core.domain.model.client.NewClient;
@@ -279,5 +281,24 @@ public class FineractRepository {
 
     public Observable<Customer> fetchCustomerDetails(String customerIdentifier) {
         return fineractCNApiManager.getCustomerApi().fetchCustomer(customerIdentifier);
+    }
+
+    public Observable<List<DepositAccount>> fetchCustomerDepositAccounts(
+            String customerIdentifier) {
+        return fineractCNApiManager.getDepositApi().fetchCustomersDeposits(customerIdentifier);
+    }
+
+    public Observable<DepositAccount> fetchDepositAccountDetails(String accountIdentifier) {
+        return fineractCNApiManager.getDepositApi().fetchCustomerDepositDetails(accountIdentifier);
+    }
+
+    public Observable<List<JournalEntry>> fetchJournalEntries(
+            String accountIdentifier, String dateRange) {
+        return fineractCNApiManager.getAccountingApi().fetchJournalEntries(
+                accountIdentifier, dateRange);
+    }
+
+    public Observable<JournalEntry> fetchJournalEntry(String entryIdentifier) {
+        return fineractCNApiManager.getAccountingApi().fetchJournalEntry(entryIdentifier);
     }
 }

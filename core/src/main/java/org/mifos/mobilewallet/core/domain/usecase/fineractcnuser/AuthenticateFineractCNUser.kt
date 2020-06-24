@@ -12,7 +12,8 @@ import javax.inject.Inject
  * Created by Devansh 0n 17/06/2020
  */
 class AuthenticateFineractCNUser  @Inject constructor(private val apiRepository: FineractRepository) :
-        UseCase<AuthenticateFineractCNUser.RequestValues, AuthenticateFineractCNUser.ResponseValue>() {
+        UseCase<AuthenticateFineractCNUser.RequestValues,
+                AuthenticateFineractCNUser.ResponseValue>() {
 
     /**
      * Used to access FineractCN's back-office APIs by logging by a back-office user and creating

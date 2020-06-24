@@ -31,6 +31,7 @@ public class PreferencesHelper {
 
     // for FineractCN
     private static final String ACCESS_TOKEN = "access_token";
+    private static final String CUSTOMER_IDENTIFIER = "customer_identifier";
 
     private SharedPreferences sharedPreferences;
 
@@ -72,20 +73,12 @@ public class PreferencesHelper {
         putString(TOKEN, token);
     }
 
-    public void saveFineractCNAccessToken(String accessToken) {
-        putString(ACCESS_TOKEN, accessToken);
-    }
-
     public void clearToken() {
         putString(TOKEN, "");
     }
 
     public String getToken() {
         return getString(TOKEN, "");
-    }
-
-    public String getFineractCNAccessToken() {
-        return getString(ACCESS_TOKEN, "");
     }
 
     public void saveFullName(String name) {
@@ -158,6 +151,24 @@ public class PreferencesHelper {
 
     public void setFirebaseRegId(String firebaseRegId) {
         putString(FIREBASE_REG_ID, firebaseRegId);
+    }
+
+    // For FineractCN
+
+    public void saveFineractCNAccessToken(String accessToken) {
+        putString(ACCESS_TOKEN, accessToken);
+    }
+
+    public String getFineractCNAccessToken() {
+        return getString(ACCESS_TOKEN, "");
+    }
+
+    public void saveCustomerIdentifier(String customerIdentifier) {
+        putString(CUSTOMER_IDENTIFIER, customerIdentifier);
+    }
+
+    public String getCustomerIdentifier() {
+        return getString(CUSTOMER_IDENTIFIER, "");
     }
 
 }

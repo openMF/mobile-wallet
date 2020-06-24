@@ -147,6 +147,20 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                         saveClientDetails(response.getUserDetails());
 
                         if (!response.getUserDetails().getName().equals("")) {
+                            /**
+                             * Note: externalId from Client is mapped with customerIdentifier
+                             * from Customer
+                             */
+
+                            // Commenting below part for now
+                            //preferencesHelper.saveCustomerIdentifier(
+                            // response.getUserDetails().getExternalId());
+
+                            /**
+                             * For now using hardcoded CustomerIdentifier of an existing Customer
+                             * in the FineractCN's database
+                             */
+                            preferencesHelper.saveCustomerIdentifier("InteropCustomer");
                             mLoginView.loginSuccess();
                         }
                     }
@@ -159,13 +173,11 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     }
 
     private void createAuthenticatedService(User user) {
-
         final String authToken = Constants.BASIC +
                 user.getAuthenticationKey();
 
         preferencesHelper.saveToken(authToken);
         FineractApiManager.createSelfService(preferencesHelper.getToken());
-
     }
 
     private void saveUserDetails(User user,
