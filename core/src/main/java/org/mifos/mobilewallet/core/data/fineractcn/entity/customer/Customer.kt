@@ -29,7 +29,7 @@ data class Customer(
         @SerializedName("address")
         val address: Address? = null,
         @SerializedName("contactDetails")
-        val contactDetails: ContactDetails? = null,
+        val contactDetails: List<ContactDetail>? = null,
         @SerializedName("currentState")
         val currentState: State? = null,
         @SerializedName("createdBy")

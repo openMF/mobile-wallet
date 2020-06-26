@@ -8,9 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.Account;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.mifos.mobilewallet.mifospay.utils.Constants.CREDIT;
+import static org.mifos.mobilewallet.mifospay.utils.Constants.DEBIT;
+import static org.mifos.mobilewallet.mifospay.utils.Constants.OTHER;
 import static org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance;
 
 /**
@@ -29,8 +32,10 @@ import static org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBal
 public class HistoryAdapter
         extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
-    private List<Transaction> transactions;
+    private List<JournalEntry> transactions;
+    private String currency;
     private Context context;
+    private String accountIdentifier;
 
     @Inject
     public HistoryAdapter() {
@@ -45,28 +50,33 @@ public class HistoryAdapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Transaction transaction = transactions.get(position);
+        JournalEntry entry = transactions.get(position);
 
-        Double balance = transaction.getAmount();
-        String currencyCode = transaction.getCurrency().getCode();
+        List<Account> creditors = entry.getCreditors();
+        Double balance = Double.valueOf(creditors.get(0).getAmount());
+        // Default as DEBIT
+        String transactionType = DEBIT;
+        if (creditors.get(0).getAccountNumber().equals(accountIdentifier)) {
+            transactionType = CREDIT;
+        }
         holder.tvTransactionAmount
-                .setText(getFormattedAccountBalance(balance, currencyCode));
-        holder.tvTransactionDate.setText(transaction.getDate());
+                .setText(getFormattedAccountBalance(balance, currency));
+        holder.tvTransactionDate.setText(entry.getTransactionDate());
 
         if (balance > 0 && context != null) {
             int color = ContextCompat.getColor(context, R.color.colorAccentBlue);
             holder.tvTransactionAmount.setTextColor(color);
         }
 
-        switch (transaction.getTransactionType()) {
+        switch (transactionType) {
             case DEBIT:
-                holder.tvTransactionStatus.setText(Constants.DEBIT);
+                holder.tvTransactionStatus.setText(DEBIT);
                 break;
             case CREDIT:
-                holder.tvTransactionStatus.setText(Constants.CREDIT);
+                holder.tvTransactionStatus.setText(CREDIT);
                 break;
             case OTHER:
-                holder.tvTransactionStatus.setText(Constants.OTHER);
+                holder.tvTransactionStatus.setText(OTHER);
                 break;
         }
     }
@@ -84,16 +94,19 @@ public class HistoryAdapter
         this.context = context;
     }
 
-    public void setData(List<Transaction> transactions) {
+    public void setData(List<JournalEntry> transactions, String currency,
+                        String accountIdentifier) {
+        this.currency = currency;
         this.transactions = transactions;
+        this.accountIdentifier = accountIdentifier;
         notifyDataSetChanged();
     }
 
-    public ArrayList<Transaction> getTransactions() {
-        return (ArrayList<Transaction>) transactions;
+    public ArrayList<JournalEntry> getTransactions() {
+        return (ArrayList<JournalEntry>) transactions;
     }
 
-    public Transaction getTransaction(int position) {
+    public JournalEntry getTransaction(int position) {
         return transactions.get(position);
     }
 

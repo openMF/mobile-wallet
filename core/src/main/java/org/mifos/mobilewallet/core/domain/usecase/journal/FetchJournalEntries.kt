@@ -15,10 +15,10 @@ class FetchJournalEntries @Inject constructor(private val apiRepository: Finerac
         UseCase<FetchJournalEntries.RequestValues, FetchJournalEntries.ResponseValue>() {
 
     override fun executeUseCase(requestValues: RequestValues) {
-        apiRepository.fetchJournalEntry(requestValues.entryIdentifier)
+        apiRepository.fetchJournalEntries(requestValues.accountIdentifier, requestValues.dateRange)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(object : Subscriber<JournalEntry>() {
+                .subscribe(object : Subscriber<List<JournalEntry>>() {
 
                     override fun onCompleted() {
 
@@ -27,13 +27,14 @@ class FetchJournalEntries @Inject constructor(private val apiRepository: Finerac
                     override fun onError(e: Throwable)
                             = useCaseCallback.onError(e.message)
 
-                    override fun onNext(journalEntry: JournalEntry)
-                            = useCaseCallback.onSuccess(ResponseValue(journalEntry))
+                    override fun onNext(journalEntryList: List<JournalEntry>) =
+                            useCaseCallback.onSuccess(ResponseValue(journalEntryList))
                 })
     }
 
-    class RequestValues(val entryIdentifier: String) : UseCase.RequestValues
+    class RequestValues(val accountIdentifier: String, val dateRange: String) :
+            UseCase.RequestValues
 
-    class ResponseValue(val journalEntry: JournalEntry) : UseCase.ResponseValue
+    class ResponseValue(val journalEntryList: List<JournalEntry>) : UseCase.ResponseValue
 
 }

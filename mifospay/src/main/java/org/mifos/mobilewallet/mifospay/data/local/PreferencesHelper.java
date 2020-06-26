@@ -32,6 +32,11 @@ public class PreferencesHelper {
     // for FineractCN
     private static final String ACCESS_TOKEN = "access_token";
     private static final String CUSTOMER_IDENTIFIER = "customer_identifier";
+    private static final String CUSTOMER_NAME = "customer_name";
+    private static final String CUSTOMER_NUMBER = "customer_number";
+    private static final String CUSTOMER_EMAIL = "customer_email";
+    private static final String DEPOSIT_ACCOUNT_IDENTIFIER = "deposit_account_identifier";
+    private static final String CURRENCY_SIGN = "currency_sign";
 
     private SharedPreferences sharedPreferences;
 
@@ -169,6 +174,46 @@ public class PreferencesHelper {
 
     public String getCustomerIdentifier() {
         return getString(CUSTOMER_IDENTIFIER, "");
+    }
+
+    public void saveCustomerName(String customerName) {
+        putString(CUSTOMER_NAME, customerName);
+    }
+
+    public String getCustomerName() {
+        return getString(CUSTOMER_NAME, "");
+    }
+
+    public void saveCustomerNumber(String customerNumber) {
+        putString(CUSTOMER_NUMBER, customerNumber);
+    }
+
+    public String getCustomerNumber() {
+        return getString(CUSTOMER_NUMBER, "");
+    }
+
+    public void saveCustomerEmail(String customerEmail) {
+        putString(CUSTOMER_EMAIL, customerEmail);
+    }
+
+    public String getCustomerEmail() {
+        return getString(CUSTOMER_EMAIL, "");
+    }
+
+    public void saveCustomerDepositAccountIdentifier(String accountIdentifier) {
+        putString(DEPOSIT_ACCOUNT_IDENTIFIER, accountIdentifier);
+    }
+
+    public String getCustomerDepositAccountIdentifier() {
+        return getString(DEPOSIT_ACCOUNT_IDENTIFIER, "");
+    }
+
+    public void saveCurrencySign(String currencySign) {
+        putString(CURRENCY_SIGN, currencySign);
+    }
+
+    public String getCurrencySign() {
+        return getString(CURRENCY_SIGN, "");
     }
 
 }

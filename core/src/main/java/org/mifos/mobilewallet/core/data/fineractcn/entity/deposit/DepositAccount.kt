@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.core.data.fineractcn.entity.depositaccount
+package org.mifos.mobilewallet.core.data.fineractcn.entity.deposit
 
 import com.google.gson.annotations.SerializedName
 

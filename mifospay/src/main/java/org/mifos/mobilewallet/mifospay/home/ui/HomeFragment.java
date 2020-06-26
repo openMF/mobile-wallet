@@ -17,11 +17,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.mifos.mobilewallet.core.domain.model.Account;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -48,6 +48,9 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
 
     @Inject
     HistoryAdapter mHistoryAdapter;
+
+    @Inject
+    PreferencesHelper preferencesHelper;
 
     @BindView(R.id.tv_account_balance)
     TextView mTvAccountBalance;
@@ -85,11 +88,9 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     @BindView(R.id.pb_loading_history)
     ProgressBar progressBar;
 
-    private Account account;
-
     private BottomSheetBehavior mBottomSheetBehavior;
-
     private String accountBalance;
+    private String currencySign;
 
     public static HomeFragment newInstance(long clientId) {
 
@@ -210,26 +211,23 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     }
 
     @Override
-    public void setAccountBalance(Account account) {
-        this.account = account;
-
-        String currencyCode = account.getCurrency().getCode();
-        accountBalance =
-                getFormattedAccountBalance(account.getBalance(), currencyCode);
+    public void setAccountBalance(Double balance) {
+        currencySign = preferencesHelper.getCurrencySign();
+        accountBalance = getFormattedAccountBalance(balance, currencySign);
         hideSwipeProgress();
-
         TransitionManager.beginDelayedTransition(homeScreenContainer);
         mTvAccountBalance.setText(Constants.TAP_TO_REVEAL);
         tvHideBalance.setVisibility(View.INVISIBLE);
     }
 
     @Override
-    public void showTransactionsHistory(List<Transaction> transactions) {
+    public void showTransactionsHistory(List<JournalEntry> transactions) {
         vStateView.setVisibility(View.GONE);
         hideTransactionLoading();
         btnShowMoreTransactionsHistory.setVisibility(View.VISIBLE);
         rvHomeBottomSheetContent.setVisibility(View.VISIBLE);
-        mHistoryAdapter.setData(transactions);
+        String accountIdentifier = preferencesHelper.getCustomerDepositAccountIdentifier();
+        mHistoryAdapter.setData(transactions, currencySign, accountIdentifier);
     }
 
     @Override

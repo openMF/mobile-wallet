@@ -6,9 +6,12 @@ import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole;
 import org.mifos.mobilewallet.core.data.fineractcn.api.FineractCNApiManager;
 import org.mifos.mobilewallet.core.data.fineractcn.entity.LoginResponse;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.customer.ContactDetail;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.customer.Customer;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.core.domain.model.user.User;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
+import org.mifos.mobilewallet.core.domain.usecase.customer.FetchCustomerDetails;
 import org.mifos.mobilewallet.core.domain.usecase.fineractcnuser.AuthenticateFineractCNUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails;
@@ -19,6 +22,9 @@ import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 
 import javax.inject.Inject;
+
+import static org.mifos.mobilewallet.core.data.fineractcn.entity.customer.ContactDetail.Type.EMAIL;
+import static org.mifos.mobilewallet.core.data.fineractcn.entity.customer.ContactDetail.Type.MOBILE;
 
 /**
  * Created by naman on 16/6/17.
@@ -36,6 +42,8 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     FetchUserDetails fetchUserDetailsUseCase;
     @Inject
     AuthenticateFineractCNUser authenticateFineractCNUser;
+    @Inject
+    FetchCustomerDetails fetchCustomerUseCase;
     private AuthContract.LoginView mLoginView;
 
     @Inject
@@ -161,15 +169,49 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                              * in the FineractCN's database
                              */
                             preferencesHelper.saveCustomerIdentifier("InteropCustomer");
-                            mLoginView.loginSuccess();
+                            fetchCustomer("InteropCustomer");
                         }
                     }
 
                     @Override
                     public void onError(String message) {
-
+                        mLoginView.loginFail(message);
                     }
                 });
+    }
+
+    private void fetchCustomer(String customerIdentifier) {
+        mUsecaseHandler.execute(fetchCustomerUseCase,
+                new FetchCustomerDetails.RequestValues(customerIdentifier),
+                new UseCase.UseCaseCallback<FetchCustomerDetails.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchCustomerDetails.ResponseValue response) {
+                        saveCustomerDetails(response.getCustomer());
+                        mLoginView.loginSuccess();
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mLoginView.loginFail(message);
+                    }
+                });
+    }
+
+    private void saveCustomerDetails(Customer customer) {
+        String customerName = customer.getFirstName() + " "
+                + customer.getMiddleName() + " "
+                + customer.getLastName();
+        if (customer.getMiddleName() != null) {
+            customerName = customer.getFirstName() + " " + customer.getLastName();
+        }
+        preferencesHelper.saveCustomerName(customerName);
+        for (ContactDetail contactDetail : customer.getContactDetails()) {
+            if (contactDetail.getType().equals(EMAIL)) {
+                preferencesHelper.saveCustomerEmail(contactDetail.getValue());
+            } else if (contactDetail.getType().equals(MOBILE)) {
+                preferencesHelper.saveCustomerNumber(contactDetail.getValue());
+            }
+        }
     }
 
     private void createAuthenticatedService(User user) {

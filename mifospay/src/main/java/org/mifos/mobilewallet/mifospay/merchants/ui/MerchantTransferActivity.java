@@ -11,10 +11,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.SpecificTransactionsAdapter;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantTransferPresenter;
@@ -38,6 +39,9 @@ import static org.mifos.mobilewallet.mifospay.MifosPayApp.getContext;
 
 public class MerchantTransferActivity extends BaseActivity implements
         BaseHomeContract.MerchantTransferView {
+
+    @Inject
+    PreferencesHelper preferencesHelper;
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -169,10 +173,11 @@ public class MerchantTransferActivity extends BaseActivity implements
     }
 
     @Override
-    public void showTransactions(List<Transaction> transactions) {
+    public void showTransactions(List<JournalEntry> transactions) {
         vEmptyState.setVisibility(View.GONE);
         rvMerchantHistory.setVisibility(View.VISIBLE);
-        mMerchantHistoryAdapter.setData(transactions);
+        mMerchantHistoryAdapter.setData(transactions, preferencesHelper.getCurrencySign(),
+                preferencesHelper.getCustomerDepositAccountIdentifier());
     }
 
     @Override

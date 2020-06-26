@@ -5,9 +5,8 @@ import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
@@ -22,8 +21,6 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import static org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER_USECASE;
-
 /**
  * Created by Shivansh Tiwari on 06/07/19.
  */
@@ -31,7 +28,7 @@ import static org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER
 public class MerchantTransferPresenter implements BaseHomeContract.MerchantTransferPresenter,
         HistoryContract.TransactionsHistoryAsync {
 
-    private final UseCaseHandler mUsecaseHandler;
+    private final UseCaseHandler mUseCaseHandler;
     private final LocalRepository localRepository;
     @Inject
     TransactionsHistory transactionsHistory;
@@ -47,14 +44,14 @@ public class MerchantTransferPresenter implements BaseHomeContract.MerchantTrans
 
     private BaseHomeContract.MerchantTransferView mMerchantTransferView;
     private final PreferencesHelper preferencesHelper;
-    private String merchantAccountNumber;
+    private String merchantAccountIdentifier;
 
 
     @Inject
     public MerchantTransferPresenter(UseCaseHandler useCaseHandler,
                                      LocalRepository localRepository,
                                      PreferencesHelper preferencesHelper) {
-        this.mUsecaseHandler = useCaseHandler;
+        this.mUseCaseHandler = useCaseHandler;
         this.localRepository = localRepository;
         this.preferencesHelper = preferencesHelper;
     }
@@ -68,7 +65,7 @@ public class MerchantTransferPresenter implements BaseHomeContract.MerchantTrans
 
     @Override
     public void checkBalanceAvailability(final String externalId, final double transferAmount) {
-        mUsecaseHandler.execute(mFetchAccount,
+        mUseCaseHandler.execute(mFetchAccount,
                 new FetchAccount.RequestValues(localRepository.getClientDetails().getClientId()),
                 new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {
                     @Override
@@ -90,73 +87,36 @@ public class MerchantTransferPresenter implements BaseHomeContract.MerchantTrans
     }
 
     @Override
-    public void fetchMerchantTransfers(String merchantAccountNumber) {
-        transactionsHistory.fetchTransactionsHistory(preferencesHelper.getAccountId());
-        this.merchantAccountNumber = merchantAccountNumber;
+    public void fetchMerchantTransfers(String merchantAccountIdentifier) {
+        transactionsHistory.fetchTransactionsHistory(
+                preferencesHelper.getCustomerDepositAccountIdentifier());
+        this.merchantAccountIdentifier = merchantAccountIdentifier;
     }
 
     @Override
-    public void onTransactionsFetchCompleted(final List<Transaction> transactions) {
-        final ArrayList<Transaction> specificTransactions = new ArrayList<>();
-
+    public void onTransactionsFetchCompleted(final List<JournalEntry> transactions) {
+        final ArrayList<JournalEntry> merchantTransactions = new ArrayList<>();
         if (transactions != null && transactions.size() > 0) {
 
-            for (int i = 0; i < transactions.size(); i++) {
-
-                final Transaction transaction = transactions.get(i);
-
-                if (transaction.getTransferDetail() == null
-                        && transaction.getTransferId() != 0) {
-
-                    long transferId = transaction.getTransferId();
-
-                    mTaskLooper.addTask(
-                            mUseCaseFactory
-                                    .getUseCase(FETCH_ACCOUNT_TRANSFER_USECASE),
-                            new FetchAccountTransfer.RequestValues(transferId),
-                            new TaskLooper.TaskData(Constants.TRANSFER_DETAILS, i));
+            for (JournalEntry transaction : transactions) {
+                boolean isCreditor =
+                        transaction.getCreditors().get(0).getAccountNumber().
+                                equals(merchantAccountIdentifier);
+                boolean isDebtor =
+                        transaction.getDebtors().get(0).getAccountNumber().
+                                equals(merchantAccountIdentifier);
+                if (isCreditor || isDebtor) {
+                    merchantTransactions.add(transaction);
                 }
             }
 
-            mTaskLooper.listen(new TaskLooper.Listener() {
-                @Override
-                public <R extends UseCase.ResponseValue> void onTaskSuccess(
-                        TaskLooper.TaskData taskData, R response) {
-
-                    switch (taskData.getTaskName()) {
-                        case Constants.TRANSFER_DETAILS:
-                            FetchAccountTransfer.ResponseValue responseValue =
-                                    (FetchAccountTransfer.ResponseValue) response;
-                            int index = taskData.getTaskId();
-                            transactions.get(index).setTransferDetail(
-                                    responseValue.getTransferDetail());
-                    }
-                }
-
-                @Override
-                public void onComplete() {
-                    for (Transaction transaction : transactions) {
-                        if (transaction.getTransferDetail() != null
-                                && transaction.getTransferDetail().getToAccount()
-                                .getAccountNo().equals(
-                                        merchantAccountNumber)) {
-
-                            specificTransactions.add(transaction);
-                        }
-                    }
-                    if (specificTransactions.size() == 0) {
-                        showEmptyStateView();
-                    } else {
-                        //mMerchantTransferView.showToast("History Fetched Successfully");
-                        mMerchantTransferView.showTransactions(specificTransactions);
-                    }
-                }
-
-                @Override
-                public void onFailure(String message) {
-                    showErrorStateView();
-                }
-            });
+            if (merchantTransactions.size() == 0) {
+                showEmptyStateView();
+            } else {
+                mMerchantTransferView.showTransactions(merchantTransactions);
+            }
+        } else {
+            showErrorStateView();
         }
     }
     private void showErrorStateView() {

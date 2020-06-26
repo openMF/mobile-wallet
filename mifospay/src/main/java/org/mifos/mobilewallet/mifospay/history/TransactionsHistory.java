@@ -4,10 +4,8 @@ import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
-
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
+import org.mifos.mobilewallet.core.domain.usecase.journal.FetchJournalEntries;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,14 +16,12 @@ public class TransactionsHistory {
     private final UseCaseHandler mUsecaseHandler;
     public HistoryContract.TransactionsHistoryAsync delegate;
     @Inject
-    FetchAccount mFetchAccountUseCase;
-    @Inject
-    FetchAccountTransactions fetchAccountTransactionsUseCase;
+    FetchJournalEntries fetchJournalEntriesUseCase;
     @Inject
     TaskLooper mTaskLooper;
     @Inject
     UseCaseFactory mUseCaseFactory;
-    private List<Transaction> transactions;
+    private List<JournalEntry> transactions;
 
     @Inject
     public TransactionsHistory(UseCaseHandler useCaseHandler) {
@@ -33,14 +29,15 @@ public class TransactionsHistory {
         transactions = new ArrayList<>();
     }
 
-    public void fetchTransactionsHistory(long accountId) {
-        mUsecaseHandler.execute(fetchAccountTransactionsUseCase,
-                new FetchAccountTransactions.RequestValues(accountId),
-                new UseCase.UseCaseCallback<FetchAccountTransactions.ResponseValue>() {
+    public void fetchTransactionsHistory(String accountIdentifier) {
+        String dateRange = "";
+        mUsecaseHandler.execute(fetchJournalEntriesUseCase,
+                new FetchJournalEntries.RequestValues(accountIdentifier, dateRange),
+                new UseCase.UseCaseCallback<FetchJournalEntries.ResponseValue>() {
 
                     @Override
-                    public void onSuccess(FetchAccountTransactions.ResponseValue response) {
-                        transactions = response.getTransactions();
+                    public void onSuccess(FetchJournalEntries.ResponseValue response) {
+                        transactions = response.getJournalEntryList();
                         delegate.onTransactionsFetchCompleted(transactions);
                     }
 

@@ -11,7 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.Account;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
@@ -24,6 +25,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.mifos.mobilewallet.mifospay.utils.Constants.CREDIT;
+import static org.mifos.mobilewallet.mifospay.utils.Constants.DEBIT;
+import static org.mifos.mobilewallet.mifospay.utils.Constants.OTHER;
+
 /**
  * Created by ankur on 18/June/2018
  */
@@ -32,7 +37,9 @@ public class SpecificTransactionsAdapter
         extends RecyclerView.Adapter<SpecificTransactionsAdapter.ViewHolder> {
 
     private Context context;
-    private List<Transaction> transactions;
+    private List<JournalEntry> transactions;
+    private String currencySign;
+    private String accountIdentifier;
 
     @Inject
     public SpecificTransactionsAdapter() {
@@ -47,34 +54,37 @@ public class SpecificTransactionsAdapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Transaction transaction = transactions.get(position);
+        JournalEntry transaction = transactions.get(position);
 
         holder.mTvTransactionId.setText(
-                Constants.TRANSACTION_ID + ": " + transaction.getTransactionId());
-        holder.mTvTransactionDate.setText(Constants.DATE + ": " + transaction.getDate());
-        holder.mTvTransactionAmount.setText(Utils.getFormattedAccountBalance(
-                transaction.getAmount(), transaction.getCurrency().getCode()));
+                Constants.TRANSACTION_ID + ": " + transaction.getTransactionIdentifier());
+        holder.mTvTransactionDate.setText(Constants.DATE + ": " + transaction.getTransactionDate());
 
-        holder.mTvFromClientName.setText(
-                transaction.getTransferDetail().getFromClient().getDisplayName());
-        holder.mTvFromAccountNo.setText(
-                transaction.getTransferDetail().getFromAccount().getAccountNo());
-        holder.mTvToClientName.setText(
-                transaction.getTransferDetail().getToClient().getDisplayName());
-        holder.mTvToAccountNo.setText(
-                transaction.getTransferDetail().getToAccount().getAccountNo());
+        List<Account> creditors = transaction.getCreditors();
+        List<Account> debtors = transaction.getDebtors();
+        Double amount = Double.valueOf(creditors.get(0).getAmount());
+
+        holder.mTvTransactionAmount.setText(Utils.getFormattedAccountBalance(amount, currencySign));
+
+        String transactionType = DEBIT;
+        if (creditors.get(0).getAccountNumber() == accountIdentifier) {
+            transactionType = CREDIT;
+        }
+
+        holder.mTvFromAccountNo.setText(creditors.get(0).getAccountNumber());
+        holder.mTvToAccountNo.setText(debtors.get(0).getAccountNumber());
 
         switch (transaction.getTransactionType()) {
             case DEBIT:
-                holder.mTvTransactionStatus.setText(Constants.DEBIT);
+                holder.mTvTransactionStatus.setText(DEBIT);
                 holder.mTvTransactionAmount.setTextColor(Color.RED);
                 break;
             case CREDIT:
-                holder.mTvTransactionStatus.setText(Constants.CREDIT);
+                holder.mTvTransactionStatus.setText(CREDIT);
                 holder.mTvTransactionAmount.setTextColor(Color.parseColor("#009688"));
                 break;
             case OTHER:
-                holder.mTvTransactionStatus.setText(Constants.OTHER);
+                holder.mTvTransactionStatus.setText(OTHER);
                 holder.mTvTransactionAmount.setTextColor(Color.YELLOW);
                 break;
         }
@@ -94,16 +104,19 @@ public class SpecificTransactionsAdapter
         this.context = context;
     }
 
-    public void setData(List<Transaction> transactions) {
+    public void setData(List<JournalEntry> transactions, String currencySign,
+                        String accountIdentifier) {
         this.transactions = transactions;
+        this.currencySign  = currencySign;
+        this.accountIdentifier = accountIdentifier;
         notifyDataSetChanged();
     }
 
-    public ArrayList<Transaction> getTransactions() {
-        return (ArrayList<Transaction>) transactions;
+    public ArrayList<JournalEntry> getTransactions() {
+        return (ArrayList<JournalEntry>) transactions;
     }
 
-    public Transaction getTransaction(int position) {
+    public JournalEntry getTransaction(int position) {
         return transactions.get(position);
     }
 
@@ -121,16 +134,12 @@ public class SpecificTransactionsAdapter
         TextView mTvTransactionAmount;
         @BindView(R.id.iv_fromImage)
         ImageView mIvFromImage;
-        @BindView(R.id.tv_fromClientName)
-        TextView mTvFromClientName;
         @BindView(R.id.tv_fromAccountNo)
         TextView mTvFromAccountNo;
         @BindView(R.id.ll_from)
         LinearLayout mLlFrom;
         @BindView(R.id.iv_toImage)
         ImageView mIvToImage;
-        @BindView(R.id.tv_toClientName)
-        TextView mTvToClientName;
         @BindView(R.id.tv_toAccountNo)
         TextView mTvToAccountNo;
         @BindView(R.id.ll_to)

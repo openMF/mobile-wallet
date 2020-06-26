@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 /**
  * Created by Devansh on 17/06/2020
  */
-data class ContactDetails(
+data class ContactDetail(
         @SerializedName("type")
         val type: Type? = null,
         @SerializedName("value")

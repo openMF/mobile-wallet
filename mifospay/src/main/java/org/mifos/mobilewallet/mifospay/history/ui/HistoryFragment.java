@@ -13,10 +13,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.presenter.HistoryPresenter;
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter;
@@ -31,8 +32,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class HistoryFragment extends BaseFragment
-        implements HistoryContract.HistoryView {
+public class HistoryFragment extends BaseFragment implements HistoryContract.HistoryView {
 
     @Inject
     HistoryAdapter mHistoryAdapter;
@@ -40,6 +40,9 @@ public class HistoryFragment extends BaseFragment
     @Inject
     HistoryPresenter mPresenter;
     HistoryContract.TransactionsHistoryPresenter mTransactionsHistoryPresenter;
+
+    @Inject
+    PreferencesHelper preferencesHelper;
 
     @BindView(R.id.cc_history_container)
     ViewGroup historyContainer;
@@ -62,6 +65,8 @@ public class HistoryFragment extends BaseFragment
     @BindView(R.id.pb_history)
     ProgressBar pbHistory;
 
+    private String customerAccountIdentifier;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,9 +79,9 @@ public class HistoryFragment extends BaseFragment
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
-
+        customerAccountIdentifier = preferencesHelper.getCustomerDepositAccountIdentifier();
         setupUi();
-        mPresenter.fetchTransactions();
+        mPresenter.fetchTransactions(customerAccountIdentifier);
 
         return rootView;
     }
@@ -97,7 +102,7 @@ public class HistoryFragment extends BaseFragment
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View childView, int position) {
-                        mPresenter.handleTransactionClick(position);
+                        showTransactionDetailDialog(position);
                     }
 
                     @Override
@@ -108,15 +113,14 @@ public class HistoryFragment extends BaseFragment
     }
 
     @Override
-    public void showTransactionDetailDialog(int transactionIndex, String accountNumber) {
+    public void showTransactionDetailDialog(int transactionIndex) {
         if (getActivity() != null) {
             TransactionDetailDialog transactionDetailDialog = new TransactionDetailDialog();
-            ArrayList<Transaction> transactions = mHistoryAdapter.getTransactions();
+            ArrayList<JournalEntry> transactions = mHistoryAdapter.getTransactions();
 
             Bundle arg = new Bundle();
             arg.putParcelableArrayList(Constants.TRANSACTIONS, transactions);
             arg.putParcelable(Constants.TRANSACTION, transactions.get(transactionIndex));
-            arg.putString(Constants.ACCOUNT_NUMBER, accountNumber);
             transactionDetailDialog.setArguments(arg);
 
             transactionDetailDialog.show(getActivity().getSupportFragmentManager(),
@@ -130,7 +134,7 @@ public class HistoryFragment extends BaseFragment
             @Override
             public void onRefresh() {
                 getSwipeRefreshLayout().setRefreshing(false);
-                mPresenter.fetchTransactions();
+                mPresenter.fetchTransactions(customerAccountIdentifier);
             }
         });
     }
@@ -158,9 +162,10 @@ public class HistoryFragment extends BaseFragment
     }
 
     @Override
-    public void showTransactions(List<Transaction> transactions) {
+    public void showTransactions(List<JournalEntry> transactions) {
         showRecyclerView();
-        mHistoryAdapter.setData(transactions);
+        mHistoryAdapter.setData(transactions, preferencesHelper.getCurrencySign(),
+                customerAccountIdentifier);
     }
 
     @Override

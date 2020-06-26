@@ -1,7 +1,6 @@
 package org.mifos.mobilewallet.mifospay.history;
 
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
@@ -16,7 +15,7 @@ public interface HistoryContract {
 
     interface TransactionsHistoryAsync {
 
-        void onTransactionsFetchCompleted(List<Transaction> transactions);
+        void onTransactionsFetchCompleted(List<JournalEntry> transactions);
 
     }
 
@@ -26,40 +25,28 @@ public interface HistoryContract {
 
         void showStateView(int drawable, int title, int subtitle);
 
-        void showTransactions(List<Transaction> transactions);
+        void showTransactions(List<JournalEntry> transactions);
 
-        void showTransactionDetailDialog(int transactionIndex, String accountNumber);
+        void showTransactionDetailDialog(int transactionIndex);
 
         void showHistoryFetchingProgress();
     }
 
     interface TransactionsHistoryPresenter extends BasePresenter {
 
-        void fetchTransactions();
-
-        void handleTransactionClick(int transactionIndex);
+        void fetchTransactions(String accountIdentifier);
 
     }
 
-    interface TransactionDetailView extends BaseView<TransactionDetailPresenter> {
-
-        void showTransferDetail(TransferDetail transferDetail);
-
-        void showProgressBar();
-
-        void hideProgressBar();
+    interface TransactionDetailView {
 
         void showToast(String message);
-    }
 
-    interface TransactionDetailPresenter extends BasePresenter {
-
-        void getTransferDetail(long transferId);
     }
 
     interface SpecificTransactionsView extends BaseView<SpecificTransactionsPresenter> {
 
-        void showSpecificTransactions(ArrayList<Transaction> specificTransactions);
+        void showSpecificTransactions(ArrayList<JournalEntry> specificTransactions);
 
         void showProgress();
 
@@ -70,8 +57,8 @@ public interface HistoryContract {
 
     interface SpecificTransactionsPresenter extends BasePresenter {
 
-        ArrayList<Transaction> getSpecificTransactions(ArrayList<Transaction> transactions,
-                                                       String secondAccountNumber);
+        void getSpecificTransactions(ArrayList<JournalEntry> transactions,
+                                                       String secondAccountIdentifier);
     }
 
 

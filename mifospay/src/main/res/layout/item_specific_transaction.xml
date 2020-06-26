@@ -34,13 +34,6 @@
                     android:background="@drawable/ic_person"/>
 
                 <TextView
-                    android:id="@+id/tv_fromClientName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="@color/grey_900"/>
-
-                <TextView
                     android:id="@+id/tv_fromAccountNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -70,13 +63,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/ic_person"/>
-
-                <TextView
-                    android:id="@+id/tv_toClientName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:textColor="@color/grey_900"/>
 
                 <TextView
                     android:id="@+id/tv_toAccountNo"

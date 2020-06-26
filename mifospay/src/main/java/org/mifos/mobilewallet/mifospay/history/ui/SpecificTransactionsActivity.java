@@ -1,8 +1,6 @@
 package org.mifos.mobilewallet.mifospay.history.ui;
 
-import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,13 +10,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.presenter.SpecificTransactionsPresenter;
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.SpecificTransactionsAdapter;
-import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 
@@ -34,8 +32,10 @@ public class SpecificTransactionsActivity extends BaseActivity implements
 
     @Inject
     SpecificTransactionsPresenter mPresenter;
-
     HistoryContract.SpecificTransactionsPresenter mSpecificTransactionsPresenter;
+
+    @Inject
+    PreferencesHelper preferencesHelper;
 
     @Inject
     SpecificTransactionsAdapter mSpecificTransactionsAdapter;
@@ -58,7 +58,7 @@ public class SpecificTransactionsActivity extends BaseActivity implements
     @BindView(R.id.error_state_view)
     View errorStateView;
 
-    private ArrayList<Transaction> transactions;
+    private ArrayList<JournalEntry> transactions;
     private String secondAccountNumber;
 
     @Override
@@ -90,13 +90,13 @@ public class SpecificTransactionsActivity extends BaseActivity implements
                 new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View childView, int position) {
-                        Intent intent = new Intent(SpecificTransactionsActivity.this,
-                                ReceiptActivity.class);
-                        intent.setData(Uri.parse(
-                                Constants.RECEIPT_DOMAIN
-                                        + mSpecificTransactionsAdapter.getTransaction(
-                                        position).getTransactionId()));
-                        startActivity(intent);
+//                        Intent intent = new Intent(SpecificTransactionsActivity.this,
+//                                ReceiptActivity.class);
+//                        intent.setData(Uri.parse(
+//                                Constants.RECEIPT_DOMAIN
+//                                        + mSpecificTransactionsAdapter.getTransaction(
+//                                        position).getTransactionId()));
+//                        startActivity(intent);
                     }
 
                     @Override
@@ -113,9 +113,12 @@ public class SpecificTransactionsActivity extends BaseActivity implements
     }
 
     @Override
-    public void showSpecificTransactions(ArrayList<Transaction> specificTransactions) {
+    public void showSpecificTransactions(ArrayList<JournalEntry> specificTransactions) {
         hideProgress();
-        mSpecificTransactionsAdapter.setData(specificTransactions);
+        mSpecificTransactionsAdapter.setData(
+                specificTransactions,
+                preferencesHelper.getCurrencySign(),
+                preferencesHelper.getCustomerDepositAccountIdentifier());
     }
 
     @Override

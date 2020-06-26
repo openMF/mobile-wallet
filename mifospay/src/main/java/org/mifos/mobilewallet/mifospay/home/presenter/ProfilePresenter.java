@@ -17,7 +17,7 @@ import javax.inject.Inject;
 
 public class ProfilePresenter implements BaseHomeContract.ProfilePresenter {
 
-    private final UseCaseHandler mUsecaseHandler;
+    private final UseCaseHandler mUseCaseHandler;
     private final LocalRepository localRepository;
     private final PreferencesHelper mPreferencesHelper;
 
@@ -28,7 +28,7 @@ public class ProfilePresenter implements BaseHomeContract.ProfilePresenter {
     @Inject
     public ProfilePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository,
             PreferencesHelper preferencesHelper) {
-        this.mUsecaseHandler = useCaseHandler;
+        this.mUseCaseHandler = useCaseHandler;
         this.localRepository = localRepository;
         this.mPreferencesHelper = preferencesHelper;
     }
@@ -40,15 +40,10 @@ public class ProfilePresenter implements BaseHomeContract.ProfilePresenter {
     }
 
     @Override
-    public void fetchProfile() {
-        mProfileView.showProfile(localRepository.getClientDetails());
-    }
-
-    @Override
     public void fetchAccountDetails() {
-        String email = mPreferencesHelper.getEmail();
+        String email = mPreferencesHelper.getCustomerEmail();
         String vpa = mPreferencesHelper.getClientVpa();
-        String mobile = mPreferencesHelper.getMobile();
+        String mobile = mPreferencesHelper.getCustomerNumber();
         mProfileView.showEmail(email.isEmpty() ? "-" : email);
         mProfileView.showVpa(vpa.isEmpty() ? "-" : vpa);
         mProfileView.showMobile(mobile.isEmpty() ? "-" : mobile);
@@ -56,7 +51,7 @@ public class ProfilePresenter implements BaseHomeContract.ProfilePresenter {
 
     @Override
     public void fetchClientImage() {
-        mUsecaseHandler.execute(fetchClientImageUseCase,
+        mUseCaseHandler.execute(fetchClientImageUseCase,
                 new FetchClientImage.RequestValues(localRepository.getClientDetails().getClientId()
                 ), new UseCase.UseCaseCallback<FetchClientImage.ResponseValue>() {
                     @Override

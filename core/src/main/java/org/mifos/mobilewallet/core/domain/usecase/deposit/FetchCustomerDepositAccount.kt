@@ -1,8 +1,8 @@
-package org.mifos.mobilewallet.core.domain.usecase.depositaccount
+package org.mifos.mobilewallet.core.domain.usecase.deposit
 
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.data.common.FineractRepository
-import org.mifos.mobilewallet.core.data.fineractcn.entity.depositaccount.DepositAccount
+import org.mifos.mobilewallet.core.data.fineractcn.entity.deposit.DepositAccount
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers

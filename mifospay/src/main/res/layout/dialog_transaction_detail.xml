@@ -11,13 +11,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/pb_transaction_detail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:indeterminate="true"
-            style="?android:attr/progressBarStyleHorizontal" />
-
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -93,8 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/value_10dp"
             android:layout_marginRight="@dimen/value_10dp"
-            android:layout_marginTop="@dimen/value_10dp"
-            android:visibility="gone">
+            android:layout_marginTop="@dimen/value_10dp">
 
             <LinearLayout
                 android:id="@+id/ll_from"
@@ -109,14 +101,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/ic_person"/>
-
-                <TextView
-                    android:id="@+id/tv_fromClientName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/client_name"
-                    android:textColor="@color/grey_900"/>
 
                 <TextView
                     android:id="@+id/tv_fromAccountNo"
@@ -151,14 +135,6 @@
                     android:background="@drawable/ic_person"/>
 
                 <TextView
-                    android:id="@+id/tv_toClientName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/client_name"
-                    android:textColor="@color/grey_900"/>
-
-                <TextView
                     android:id="@+id/tv_toAccountNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -175,8 +151,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_margin="@dimen/value_10dp"
-            android:background="#44000000"
-            android:visibility="gone"/>
+            android:background="#44000000" />
 
         <TextView
             android:id="@+id/tv_viewReceipt"
