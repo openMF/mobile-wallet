@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.mifospay.history.presenter;
 
-import org.mifos.mobilewallet.core.base.TaskLooper;
-import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.R;
@@ -20,12 +18,6 @@ public class SpecificTransactionsPresenter implements
 
     private final UseCaseHandler mUseCaseHandler;
     private HistoryContract.SpecificTransactionsView mSpecificTransactionsView;
-
-    @Inject
-    TaskLooper mTaskLooper;
-
-    @Inject
-    UseCaseFactory mUseCaseFactory;
 
     @Inject
     public SpecificTransactionsPresenter(UseCaseHandler useCaseHandler) {
@@ -65,6 +57,11 @@ public class SpecificTransactionsPresenter implements
             } else {
                 mSpecificTransactionsView.showSpecificTransactions(specificTransactions);
             }
+        } else {
+            mSpecificTransactionsView.showStateView(
+                    R.drawable.ic_error_state,
+                    R.string.error_oops,
+                    R.string.unexpected_error_subtitle);
         }
 
     }

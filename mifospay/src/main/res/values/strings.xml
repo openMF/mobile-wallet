@@ -272,5 +272,7 @@
     <string name="no_bank_account">No bank found</string>
     <string name="empty_specific_transactions">No specific transactions found.</string>
     <string name="fetching_history">Fetching History...</string>
+    <string name="processed">Processed</string>
+    <string name="pending">Pending</string>
 
 </resources>

@@ -7,6 +7,7 @@ import org.mifos.mobilewallet.core.data.fineractcn.api.services.AccountingServic
 import org.mifos.mobilewallet.core.data.fineractcn.api.services.AuthenticationService
 import org.mifos.mobilewallet.core.data.fineractcn.api.services.CustomerService
 import org.mifos.mobilewallet.core.data.fineractcn.api.services.DepositService
+import org.mifos.mobilewallet.core.utils.Constants
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -47,7 +48,7 @@ class FineractCNApiManager {
                     /**
                      * Using hardcoded values for now
                      */
-                    .addInterceptor(ApiInterceptor(accessToken, "tn01", "interopUser"))
+                    .addInterceptor(ApiInterceptor(accessToken, Constants.TENANT, Constants.USER))
                     .build()
 
             retrofit = Retrofit.Builder()
@@ -56,10 +57,10 @@ class FineractCNApiManager {
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .client(okHttpClient)
                     .build()
-            init()
+            initialise()
         }
 
-        private fun init() {
+        private fun initialise() {
             authenticationApi = createApi(AuthenticationService::class.java)
             customerApi = createApi(CustomerService::class.java)
             depositApi = createApi(DepositService::class.java)

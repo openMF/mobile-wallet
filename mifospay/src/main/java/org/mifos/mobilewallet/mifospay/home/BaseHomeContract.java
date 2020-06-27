@@ -35,6 +35,8 @@ public interface BaseHomeContract {
 
         void showTransactionsError();
 
+        void showBalanceError();
+
         void showTransactionsEmpty();
 
         void showBottomSheetActionButton();

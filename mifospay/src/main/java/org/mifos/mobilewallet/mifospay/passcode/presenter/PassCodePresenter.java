@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.passcode.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
+import org.mifos.mobilewallet.core.data.fineractcn.api.FineractCNApiManager;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
@@ -36,5 +37,7 @@ public class PassCodePresenter implements PassCodeContract.PassCodePresenter {
 
     public void createAuthenticatedService() {
         FineractApiManager.createSelfService(preferencesHelper.getToken());
+        FineractCNApiManager.Companion.createAuthenticatedService(
+                preferencesHelper.getFineractCNAccessToken());
     }
 }

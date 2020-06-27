@@ -106,6 +106,10 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
                                     .getMerchants().get(position).getClientName());
                             intent.putExtra(Constants.MERCHANT_VPA, mMerchantsAdapter
                                     .getMerchants().get(position).getExternalId());
+                            /**
+                             * Incomplete for FineractCN integration. Passsing accountNumber but
+                             * needed accountIdentifier
+                             */
                             intent.putExtra(Constants.MERCHANT_ACCOUNT_NO, mMerchantsAdapter
                                     .getMerchants().get(position).getAccountNo());
                             startActivity(intent);

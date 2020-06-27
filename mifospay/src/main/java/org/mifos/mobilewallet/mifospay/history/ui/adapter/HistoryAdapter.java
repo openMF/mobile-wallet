@@ -53,10 +53,14 @@ public class HistoryAdapter
         JournalEntry entry = transactions.get(position);
 
         List<Account> creditors = entry.getCreditors();
-        Double balance = Double.valueOf(creditors.get(0).getAmount());
+        // default value
+        Double balance = 0.0;
+        if (creditors.get(0).getAmount() != null) {
+            balance = Double.valueOf(creditors.get(0).getAmount());
+        }
         // Default as DEBIT
         String transactionType = DEBIT;
-        if (creditors.get(0).getAccountNumber().equals(accountIdentifier)) {
+        if (accountIdentifier.equals(creditors.get(0).getAccountNumber())) {
             transactionType = CREDIT;
         }
         holder.tvTransactionAmount

@@ -57,4 +57,8 @@ public class Constants {
     public static final String MERCHANT = "merchant";
     public static final String FETCH_CLIENT_DETAILS_USE_CASE = "Fetch Client Details UseCase";
     public static final String ERROR_FETCHING_NOTIFICATIONS = "Error fetching notifications";
+
+    // FineractCN Header Values
+    public static final String TENANT = "tn01";
+    public static final String USER = "interopUser";
 }

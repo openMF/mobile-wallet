@@ -1,12 +1,15 @@
 package org.mifos.mobilewallet.mifospay.history;
 
-import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.core.domain.usecase.journal.FetchJournalEntries;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,8 +21,6 @@ public class TransactionsHistory {
     @Inject
     FetchJournalEntries fetchJournalEntriesUseCase;
     @Inject
-    TaskLooper mTaskLooper;
-    @Inject
     UseCaseFactory mUseCaseFactory;
     private List<JournalEntry> transactions;
 
@@ -30,7 +31,9 @@ public class TransactionsHistory {
     }
 
     public void fetchTransactionsHistory(String accountIdentifier) {
-        String dateRange = "";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        String currentDate = sdf.format(new Date());
+        String dateRange = currentDate + "Z.." + Constants.STARTING_DATE + "Z";
         mUsecaseHandler.execute(fetchJournalEntriesUseCase,
                 new FetchJournalEntries.RequestValues(accountIdentifier, dateRange),
                 new UseCase.UseCaseCallback<FetchJournalEntries.ResponseValue>() {

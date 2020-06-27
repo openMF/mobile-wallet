@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.mifospay.history.presenter;
 
-import org.mifos.mobilewallet.core.base.TaskLooper;
-import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.R;
@@ -17,10 +15,6 @@ public class HistoryPresenter implements HistoryContract.TransactionsHistoryPres
 
     private final UseCaseHandler mUseCaseHandler;
     private final LocalRepository mLocalRepository;
-    @Inject
-    TaskLooper mTaskLooper;
-    @Inject
-    UseCaseFactory mUseCaseFactory;
     @Inject
     TransactionsHistory mTransactionsHistory;
     private HistoryContract.HistoryView mHistoryView;

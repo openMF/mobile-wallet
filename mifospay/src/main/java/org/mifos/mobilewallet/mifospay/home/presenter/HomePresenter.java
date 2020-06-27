@@ -1,8 +1,6 @@
 package org.mifos.mobilewallet.mifospay.home.presenter;
 
-import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineractcn.entity.deposit.Currency;
 import org.mifos.mobilewallet.core.data.fineractcn.entity.deposit.DepositAccount;
@@ -35,10 +33,6 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     @Inject
     FetchProductDetails fetchProductDetailsUseCase;
     @Inject
-    TaskLooper mTaskLooper;
-    @Inject
-    UseCaseFactory mUseCaseFactory;
-    @Inject
     TransactionsHistory transactionsHistory;
     private BaseHomeContract.HomeView mHomeView;
     private final PreferencesHelper preferencesHelper;
@@ -67,20 +61,22 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
                 new UseCase.UseCaseCallback<FetchCustomerDepositAccount.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchCustomerDepositAccount.ResponseValue response) {
+                        mHomeView.hideSwipeProgress();
                         DepositAccount customerDepositAccount = response.getDepositAccount();
                         preferencesHelper.saveCustomerDepositAccountIdentifier(
                                 customerDepositAccount.getAccountIdentifier());
+
                         mHomeView.setAccountBalance(customerDepositAccount.getBalance());
                         fetchCurrency(customerDepositAccount.getProductIdentifier());
                         transactionsHistory.fetchTransactionsHistory(
                                 customerDepositAccount.getAccountIdentifier());
-                        mHomeView.hideSwipeProgress();
                     }
 
                     @Override
                     public void onError(String message) {
                         mHomeView.hideBottomSheetActionButton();
                         mHomeView.showTransactionsError();
+                        mHomeView.showBalanceError();
                         mHomeView.hideSwipeProgress();
                         mHomeView.hideTransactionLoading();
                     }

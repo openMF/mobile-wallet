@@ -88,8 +88,6 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
     private BottomSheetBehavior mBottomSheetBehavior;
     private JournalEntry transaction;
     private ArrayList<JournalEntry> transactions;
-    private String creditAccountIdentifier;
-    private String debitAccountIdentifier;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -151,47 +149,51 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
 
     private void showDetails(JournalEntry transaction) {
 
-        tvTransactionId.setText(Constants.TRANSACTION_ID + ": " +
-                transaction.getTransactionIdentifier());
-        tvTransactionDate.setText(Constants.DATE + ": " + transaction.getTransactionDate());
-        List<Account> creditors = transaction.getCreditors();
-        List<Account> debtors = transaction.getDebtors();
-        creditAccountIdentifier = creditors.get(0).getAccountNumber();
-        debitAccountIdentifier = debtors.get(0).getAccountNumber();
+        try {
+            tvTransactionId.setText(Constants.TRANSACTION_ID + ": " +
+                    transaction.getTransactionIdentifier());
+            tvTransactionDate.setText(Constants.DATE + ": " + transaction.getTransactionDate());
+            List<Account> creditors = transaction.getCreditors();
+            List<Account> debtors = transaction.getDebtors();
+            String creditAccountIdentifier = creditors.get(0).getAccountNumber();
+            String debitAccountIdentifier = debtors.get(0).getAccountNumber();
 
-        tvFromAccountNo.setText(creditAccountIdentifier);
-        tvToAccountNo.setText(debitAccountIdentifier);
+            tvFromAccountNo.setText(creditAccountIdentifier);
+            tvToAccountNo.setText(debitAccountIdentifier);
 
-        Double amount = Double.valueOf(creditors.get(0).getAmount());
-        String transactionType = DEBIT;
-        if (creditAccountIdentifier.equals(
-                preferencesHelper.getCustomerDepositAccountIdentifier())) {
-            transactionType = CREDIT;
+            Double amount = Double.valueOf(creditors.get(0).getAmount());
+            String transactionType = DEBIT;
+            if (preferencesHelper.getCustomerDepositAccountIdentifier()
+                    .equals(creditAccountIdentifier)) {
+                transactionType = CREDIT;
+            }
+
+            tvTransactionAmount.setText(Utils.getFormattedAccountBalance(
+                    amount, preferencesHelper.getCurrencySign()));
+
+//        if (transaction.getTransactionType() != null) {
+//            tvReceiptId.setVisibility(View.VISIBLE);
+//            tvReceiptId.setText(Constants.RECEIPT_ID + ": " + transaction.getReceiptId());
+//        }
+
+            switch (transactionType) {
+                case DEBIT:
+                    tvTransactionStatus.setText(DEBIT);
+                    tvTransactionAmount.setTextColor(Color.RED);
+                    break;
+                case CREDIT:
+                    tvTransactionStatus.setText(CREDIT);
+                    tvTransactionAmount.setTextColor(Color.parseColor("#009688"));
+                    break;
+                case OTHER:
+                    tvTransactionStatus.setText(OTHER);
+                    tvTransactionAmount.setTextColor(Color.YELLOW);
+                    break;
+            }
+        } catch (NullPointerException e) {
+            showToast(getString(R.string.unexpected_error_subtitle));
+            dismiss();
         }
-
-        tvTransactionAmount.setText(Utils.getFormattedAccountBalance(
-                amount, preferencesHelper.getCurrencySign()));
-
-        if (transaction.getTransactionType() != null) {
-            tvReceiptId.setVisibility(View.VISIBLE);
-            //tvReceiptId.setText(Constants.RECEIPT_ID + ": " + transaction.getReceiptId());
-        }
-
-        switch (transactionType) {
-            case DEBIT:
-                tvTransactionStatus.setText(DEBIT);
-                tvTransactionAmount.setTextColor(Color.RED);
-                break;
-            case CREDIT:
-                tvTransactionStatus.setText(CREDIT);
-                tvTransactionAmount.setTextColor(Color.parseColor("#009688"));
-                break;
-            case OTHER:
-                tvTransactionStatus.setText(OTHER);
-                tvTransactionAmount.setTextColor(Color.YELLOW);
-                break;
-        }
-
     }
 
     @Override

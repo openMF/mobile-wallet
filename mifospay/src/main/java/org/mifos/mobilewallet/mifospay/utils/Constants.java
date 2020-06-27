@@ -195,4 +195,11 @@ public class Constants {
 
     public static final String CURRENT_PASSCODE = "current passcode";
     public static final String UPDATE_PASSCODE = "update passcode";
+
+    // FineractCN login
+    public static final String GRANT_TYPE = "password";
+    public static final String USER_NAME = "interopUser";
+    public static final String PASSWORD = "aW50b3BAZDE=";
+
+    public static final String STARTING_DATE = "01-01-2017";
 }

@@ -214,9 +214,15 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     public void setAccountBalance(Double balance) {
         currencySign = preferencesHelper.getCurrencySign();
         accountBalance = getFormattedAccountBalance(balance, currencySign);
-        hideSwipeProgress();
         TransitionManager.beginDelayedTransition(homeScreenContainer);
+        mTvAccountBalance.setVisibility(View.VISIBLE);
         mTvAccountBalance.setText(Constants.TAP_TO_REVEAL);
+        tvHideBalance.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void showBalanceError() {
+        mTvAccountBalance.setVisibility(View.INVISIBLE);
         tvHideBalance.setVisibility(View.INVISIBLE);
     }
 

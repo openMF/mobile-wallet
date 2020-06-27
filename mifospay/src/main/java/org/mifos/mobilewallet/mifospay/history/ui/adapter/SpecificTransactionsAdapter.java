@@ -67,14 +67,14 @@ public class SpecificTransactionsAdapter
         holder.mTvTransactionAmount.setText(Utils.getFormattedAccountBalance(amount, currencySign));
 
         String transactionType = DEBIT;
-        if (creditors.get(0).getAccountNumber() == accountIdentifier) {
+        if (accountIdentifier.equals(creditors.get(0).getAccountNumber())) {
             transactionType = CREDIT;
         }
 
         holder.mTvFromAccountNo.setText(creditors.get(0).getAccountNumber());
         holder.mTvToAccountNo.setText(debtors.get(0).getAccountNumber());
 
-        switch (transaction.getTransactionType()) {
+        switch (transactionType) {
             case DEBIT:
                 holder.mTvTransactionStatus.setText(DEBIT);
                 holder.mTvTransactionAmount.setTextColor(Color.RED);

@@ -103,7 +103,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
          */
         authenticateFineractCNUser.setRequestValues(
                 new AuthenticateFineractCNUser.RequestValues(
-                        "password", "interopUser", "aW50b3BAZDE="));
+                        Constants.GRANT_TYPE, Constants.USER_NAME, Constants.PASSWORD));
         final AuthenticateFineractCNUser.RequestValues requestValue =
                 authenticateFineractCNUser.getRequestValues();
 
@@ -201,7 +201,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
         String customerName = customer.getFirstName() + " "
                 + customer.getMiddleName() + " "
                 + customer.getLastName();
-        if (customer.getMiddleName() != null) {
+        if (customer.getMiddleName() == null) {
             customerName = customer.getFirstName() + " " + customer.getLastName();
         }
         preferencesHelper.saveCustomerName(customerName);
