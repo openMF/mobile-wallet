@@ -280,6 +280,10 @@ public class FineractRepository {
                 grantType, userName, password);
     }
 
+    public Observable<ResponseBody> createCustomer(Customer customerPayload) {
+        return fineractCNApiManager.getCustomerApi().createCustomer(customerPayload);
+    }
+
     public Observable<Customer> fetchCustomerDetails(String customerIdentifier) {
         return fineractCNApiManager.getCustomerApi().fetchCustomer(customerIdentifier);
     }

@@ -51,9 +51,10 @@ public interface RegistrationContract {
 
         void checkPasswordStrength(String password);
 
-        void registerUser(String firstName, String lastName, String mobileNumber, String email,
-                String businessName, String addressline1, String addressline2, String pincode,
-                String city, String countryName, String username, String password,
-                String stateId, String countryId, int mifosSavingProductId);
+        void registerUser(String firstName, String middleName, String lastName, String mobileNumber,
+                          String email, String dateOfBirth, String businessName,
+                          String addressline1, String addressline2, String pincode, String city,
+                          String countryName, String countryCode, String username, String password,
+                          String stateId, String countryId, int mifosSavingProductId);
     }
 }

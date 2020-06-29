@@ -61,4 +61,11 @@ public class Constants {
     // FineractCN Header Values
     public static final String TENANT = "tn01";
     public static final String USER = "interopUser";
+
+    // For FineractCN Customer Creation
+    public static final String CUSTOMER_ACCOUNT_BENEFICIARY = "Hubby";
+    public static final String CUSTOMER_REFERENCE_CUSTOMER = "friend";
+    public static final String CUSTOMER_ASSIGNED_OFFICE = "Bali ViB";
+    public static final String CUSTOMER_ASSIGNED_EMPLOYEE = "Shu Dion";
+
 }

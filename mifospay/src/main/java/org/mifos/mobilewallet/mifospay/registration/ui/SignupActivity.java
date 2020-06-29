@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.registration.ui;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,6 +23,8 @@ import com.mifos.mobile.passcode.utils.PassCodeConstants;
 import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
 import in.galaxyofandroid.spinerdialog.SpinnerDialog;
 import java.util.ArrayList;
+import java.util.Calendar;
+
 import javax.inject.Inject;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -76,8 +80,13 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     ProgressBar passwordStrengthProgress;
     @BindView(R.id.tv_password_strength)
     TextView passwordStrengthText;
+    @BindView(R.id.et_birth_date)
+    EditText mEtDateOfBirth;
+    @BindView(R.id.et_middle_name)
+    EditText mEtMiddleName;
 
     private String countryName;
+    private String countryCode;
     private String mobileNumber;
     private String countryId;
     private String stateId;
@@ -105,6 +114,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         }
         mobileNumber = getIntent().getStringExtra(Constants.MOBILE_NUMBER);
         countryName = getIntent().getStringExtra(Constants.COUNTRY);
+        countryCode = getIntent().getStringExtra(Constants.COUNTRY_CODE);
 
         String email = getIntent().getStringExtra(Constants.GOOGLE_EMAIL);
         String displayName = getIntent().getStringExtra(Constants.GOOGLE_DISPLAY_NAME);
@@ -201,6 +211,24 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         mSignupPresenter = presenter;
     }
 
+    @OnClick(R.id.iv_pick_date)
+    public void pickDateOfBirth() {
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH);
+        int year = calendar.get(Calendar.YEAR);
+        DatePickerDialog pickerDialog = new DatePickerDialog(
+                this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(
+                            DatePicker datePicker, int yearValue, int monthValue, int dayValue) {
+                        monthValue++;
+                        mEtDateOfBirth.setText(dayValue + "-" + monthValue + "-" + yearValue);
+                    }
+                    }, year, month, day);
+        pickerDialog.show();
+    }
+
     @OnClick(R.id.fab_next)
     public void onNextClicked() {
         showProgressDialog(Constants.PLEASE_WAIT);
@@ -215,7 +243,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         if (isEmpty(mEtFirstName) || isEmpty(mEtLastName) || isEmpty(mEtEmail)
                 || isEmpty(mEtAddressLine1) || isEmpty(mEtAddressLine2)
                 || isEmpty(mEtPinCode) || isEmpty(mEtCity) || isEmpty(mEtUserName) || isEmpty(
-                mEtPassword) || isEmpty(mEtConfirmPassword)) {
+                mEtPassword) || isEmpty(mEtConfirmPassword) || isEmpty(mEtDateOfBirth)) {
             Toaster.showToast(this, "All fields are mandatory");
             hideProgressDialog();
             return;
@@ -226,6 +254,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         }
 
         String firstName = mEtFirstName.getText().toString();
+        String middleName = mEtMiddleName.getText().toString();
         String lastName = mEtLastName.getText().toString();
         String email = mEtEmail.getText().toString();
         String businessName = mEtBusinessShopName.getText().toString();
@@ -236,6 +265,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         String username = mEtUserName.getText().toString();
         String password = mEtPassword.getText().toString();
         String confirmPassword = mEtConfirmPassword.getText().toString();
+        String dateOfBirth = mEtDateOfBirth.getText().toString();
 
         if (!ValidateUtil.INSTANCE.isValidEmail(email)) {
             Snackbar.make(container, R.string.validate_email, Snackbar.LENGTH_SHORT).show();
@@ -249,9 +279,9 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
             return;
         }
 
-        mSignupPresenter.registerUser(firstName, lastName, mobileNumber, email, businessName,
-                addressline1, addressline2, pincode, city, countryName, username, password, stateId,
-                countryId, mifosSavingProductId);
+        mSignupPresenter.registerUser(firstName, middleName, lastName, mobileNumber, email,
+                dateOfBirth, businessName, addressline1, addressline2, pincode, city, countryName,
+                countryCode, username, password, stateId, countryId, mifosSavingProductId);
     }
 
     @Override

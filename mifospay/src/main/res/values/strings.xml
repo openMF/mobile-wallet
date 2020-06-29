@@ -274,5 +274,6 @@
     <string name="fetching_history">Fetching History...</string>
     <string name="processed">Processed</string>
     <string name="pending">Pending</string>
+    <string name="middle_name">Middle Name</string>
 
 </resources>

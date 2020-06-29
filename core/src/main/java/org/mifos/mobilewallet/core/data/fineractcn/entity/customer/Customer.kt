@@ -24,6 +24,8 @@ data class Customer(
         val accountBeneficiary: String? = null,
         @SerializedName("referenceCustomer")
         val referenceCustomer: String? = null,
+        @SerializedName("assignedOffice")
+        val assignedOffice: String? = null,
         @SerializedName("assignedEmployee")
         val assignedEmployee: String? = null,
         @SerializedName("address")
@@ -32,6 +34,10 @@ data class Customer(
         val contactDetails: List<ContactDetail>? = null,
         @SerializedName("currentState")
         val currentState: State? = null,
+        @SerializedName("applicationDate")
+        val applicationDate: String? = null,
+        @SerializedName("customValues")
+        val customValues: List<String>? = null,
         @SerializedName("createdBy")
         val createdBy: String? = null,
         @SerializedName("createdOn")

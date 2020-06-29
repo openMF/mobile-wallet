@@ -128,6 +128,7 @@ public class Constants {
             "Sending OTP to your mobile number..";
     public static final String MOBILE_NUMBER = "Mobile Number";
     public static final String COUNTRY = "Country";
+    public static final String COUNTRY_CODE = "Country_Code";
     public static final String GOOGLE_SIGN_IN_FAILED = "Google Sign in failed.";
     public static final String GOOGLE_GIVEN_NAME = "GOOGLE_GIVEN_NAME";
     public static final String GOOGLE_FAMILY_NAME = "GOOGLE_FAMILY_NAME";

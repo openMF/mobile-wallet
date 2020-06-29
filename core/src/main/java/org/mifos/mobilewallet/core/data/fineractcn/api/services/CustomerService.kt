@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineractcn.api.services
 
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.data.fineractcn.api.ApiEndPoints
 import org.mifos.mobilewallet.core.data.fineractcn.entity.customer.Customer
 import org.mifos.mobilewallet.core.data.fineractcn.entity.customer.CustomerPage
@@ -12,7 +13,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
-import rx.Completable
 import rx.Observable
 
 /**
@@ -29,12 +29,12 @@ interface CustomerService {
     fun fetchCustomer(@Path("identifier") identifier: String): Observable<Customer>
 
     @POST(ApiEndPoints.CUSTOMER + "/customers")
-    fun createCustomer(@Body customer: Customer): Completable
+    fun createCustomer(@Body customerPayload: Customer): Observable<ResponseBody>
 
     @PUT(ApiEndPoints.CUSTOMER + "/customers/{identifier}")
     fun updateCustomer(
             @Path("identifier") identifier: String,
-            @Body customer: Customer): Completable
+            @Body customer: Customer): Observable<ResponseBody>
 
     @GET(ApiEndPoints.CUSTOMER + "/customers")
     fun searchCustomer(
@@ -46,6 +46,6 @@ interface CustomerService {
     @POST(ApiEndPoints.CUSTOMER + "/customers/{identifier}/portrait")
     fun uploadCustomerPortrait(
             @Path("identifier") customerIdentifier: String,
-            @Part file: MultipartBody.Part): Completable
+            @Part file: MultipartBody.Part): Observable<ResponseBody>
 
 }
