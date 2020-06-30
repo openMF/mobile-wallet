@@ -60,6 +60,7 @@ public class SpecificTransactionsActivity extends BaseActivity implements
 
     private ArrayList<JournalEntry> transactions;
     private String secondAccountNumber;
+    private String secondCustomerName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,7 @@ public class SpecificTransactionsActivity extends BaseActivity implements
 
         transactions = getIntent().getParcelableArrayListExtra(Constants.TRANSACTIONS);
         secondAccountNumber = getIntent().getStringExtra(Constants.ACCOUNT_NUMBER);
+        secondCustomerName = getIntent().getStringExtra(Constants.OTHER_CUSTOMER_NAME);
 
         setupRecyclerView();
 
@@ -118,7 +120,9 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         mSpecificTransactionsAdapter.setData(
                 specificTransactions,
                 preferencesHelper.getCurrencySign(),
-                preferencesHelper.getCustomerDepositAccountIdentifier());
+                preferencesHelper.getCustomerDepositAccountIdentifier(),
+                preferencesHelper.getCustomerName(),
+                secondCustomerName);
     }
 
     @Override

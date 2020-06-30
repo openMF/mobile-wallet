@@ -17,6 +17,7 @@ import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
 import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient;
 import org.mifos.mobilewallet.core.domain.usecase.customer.CreateCustomer;
+import org.mifos.mobilewallet.core.domain.usecase.deposit.CreateDepositAccount;
 import org.mifos.mobilewallet.core.domain.usecase.fineractcnuser.AuthenticateFineractCNUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser;
@@ -56,6 +57,8 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
     AuthenticateFineractCNUser authenticateFineractCNUser;
     @Inject
     CreateCustomer createCustomerUseCase;
+    @Inject
+    CreateDepositAccount createDepositAccountUseCase;
     @Inject
     FetchClientData fetchClientDataUseCase;
     @Inject
@@ -109,6 +112,7 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
         // 0. Login with FineractCN user and create an authenticated service
         // 1. Save the access_token for later use
         // 2. Create a FineractCN customer using back-office APIs
+        // 3. Create a Product Instance(A deposit account) for the customer created
 
         this.firstName = firstName;
         this.middleName = middleName;
@@ -281,6 +285,24 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
                     @Override
                     public void onSuccess(CreateCustomer.ResponseValue response) {
                         saveCustomerDetails();
+                        createCustomerDepositAccount();
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mSignupView.onRegisterFailed(message);
+                    }
+                });
+    }
+
+    private void createCustomerDepositAccount() {
+
+        mUseCaseHandler.execute(createDepositAccountUseCase,
+                new CreateDepositAccount.RequestValues(externalId),
+                new UseCase.UseCaseCallback<CreateDepositAccount.ResponseValue>() {
+                    @Override
+                    public void onSuccess(CreateDepositAccount.ResponseValue response) {
+
                     }
 
                     @Override

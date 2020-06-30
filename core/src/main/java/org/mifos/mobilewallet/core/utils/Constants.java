@@ -68,4 +68,7 @@ public class Constants {
     public static final String CUSTOMER_ASSIGNED_OFFICE = "Bali ViB";
     public static final String CUSTOMER_ASSIGNED_EMPLOYEE = "Shu Dion";
 
+    // For FineractCN Deposit Account Creation
+    public static final String WALLET_DEPOSIT_PRODUCT_INSTANCE_IDENTIFIER = "MW_PRDCT_001";
+
 }

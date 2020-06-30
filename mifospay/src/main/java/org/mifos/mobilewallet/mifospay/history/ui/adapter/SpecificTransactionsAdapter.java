@@ -40,6 +40,8 @@ public class SpecificTransactionsAdapter
     private List<JournalEntry> transactions;
     private String currencySign;
     private String accountIdentifier;
+    private String customerName;
+    private String otherCustomerName;
 
     @Inject
     public SpecificTransactionsAdapter() {
@@ -78,10 +80,14 @@ public class SpecificTransactionsAdapter
             case DEBIT:
                 holder.mTvTransactionStatus.setText(DEBIT);
                 holder.mTvTransactionAmount.setTextColor(Color.RED);
+                holder.mTvToClientName.setText(customerName);
+                holder.mTvFromClientName.setText(otherCustomerName);
                 break;
             case CREDIT:
                 holder.mTvTransactionStatus.setText(CREDIT);
                 holder.mTvTransactionAmount.setTextColor(Color.parseColor("#009688"));
+                holder.mTvToClientName.setText(otherCustomerName);
+                holder.mTvFromClientName.setText(customerName);
                 break;
             case OTHER:
                 holder.mTvTransactionStatus.setText(OTHER);
@@ -105,10 +111,13 @@ public class SpecificTransactionsAdapter
     }
 
     public void setData(List<JournalEntry> transactions, String currencySign,
-                        String accountIdentifier) {
+                        String accountIdentifier, String customerName,
+                        String otherCustomerName) {
         this.transactions = transactions;
         this.currencySign  = currencySign;
         this.accountIdentifier = accountIdentifier;
+        this.customerName = customerName;
+        this.otherCustomerName = otherCustomerName;
         notifyDataSetChanged();
     }
 
@@ -134,12 +143,16 @@ public class SpecificTransactionsAdapter
         TextView mTvTransactionAmount;
         @BindView(R.id.iv_fromImage)
         ImageView mIvFromImage;
+        @BindView(R.id.tv_fromClientName)
+        TextView mTvFromClientName;
         @BindView(R.id.tv_fromAccountNo)
         TextView mTvFromAccountNo;
         @BindView(R.id.ll_from)
         LinearLayout mLlFrom;
         @BindView(R.id.iv_toImage)
         ImageView mIvToImage;
+        @BindView(R.id.tv_toClientName)
+        TextView mTvToClientName;
         @BindView(R.id.tv_toAccountNo)
         TextView mTvToAccountNo;
         @BindView(R.id.ll_to)

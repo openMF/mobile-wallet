@@ -176,8 +176,11 @@ public class MerchantTransferActivity extends BaseActivity implements
     public void showTransactions(List<JournalEntry> transactions) {
         vEmptyState.setVisibility(View.GONE);
         rvMerchantHistory.setVisibility(View.VISIBLE);
-        mMerchantHistoryAdapter.setData(transactions, preferencesHelper.getCurrencySign(),
-                preferencesHelper.getCustomerDepositAccountIdentifier());
+        mMerchantHistoryAdapter.setData(transactions,
+                preferencesHelper.getCurrencySign(),
+                preferencesHelper.getCustomerDepositAccountIdentifier(),
+                preferencesHelper.getCustomerName(),
+                tvMerchantName.getText().toString());
     }
 
     @Override

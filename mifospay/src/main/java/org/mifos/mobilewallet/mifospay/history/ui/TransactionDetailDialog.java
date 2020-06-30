@@ -10,6 +10,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.Account;
@@ -18,6 +19,7 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
+import org.mifos.mobilewallet.mifospay.history.presenter.TransactionDetailPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
@@ -43,6 +45,10 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
         HistoryContract.TransactionDetailView {
 
     @Inject
+    TransactionDetailPresenter mPresenter;
+    HistoryContract.TransactionDetailPresenter mTransactionDetailPresenter;
+
+    @Inject
     PreferencesHelper preferencesHelper;
 
     @BindView(R.id.tv_transaction_id)
@@ -66,14 +72,23 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
     @BindView(R.id.iv_fromImage)
     ImageView ivFromImage;
 
+    @BindView(R.id.tv_fromClientName)
+    TextView tvFromClientName;
+
     @BindView(R.id.tv_fromAccountNo)
     TextView tvFromAccountNo;
 
     @BindView(R.id.iv_toImage)
     ImageView ivToImage;
 
+    @BindView(R.id.tv_toClientName)
+    TextView tvToClientName;
+
     @BindView(R.id.tv_toAccountNo)
     TextView tvToAccountNo;
+
+    @BindView(R.id.v_rule2)
+    View vRule2;
 
     @BindView(R.id.tv_viewReceipt)
     TextView tvViewReceipt;
@@ -81,13 +96,15 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
     LinearLayout mLlFrom;
     @BindView(R.id.ll_to)
     LinearLayout mLlTo;
+    @BindView(R.id.pb_transaction_detail)
+    ProgressBar progressBar;
     @BindView(R.id.ll_main)
     LinearLayout mLlMain;
-
 
     private BottomSheetBehavior mBottomSheetBehavior;
     private JournalEntry transaction;
     private ArrayList<JournalEntry> transactions;
+    private String transactionType;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -110,6 +127,7 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
                 return dialog;
             }
         }
+        mPresenter.attachView(this);
         showDetails(transaction);
         return dialog;
     }
@@ -120,6 +138,11 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
         mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
+    @Override
+    public void setPresenter(HistoryContract.TransactionDetailPresenter presenter) {
+        mTransactionDetailPresenter = presenter;
+    }
+
     @OnClick(R.id.tv_viewReceipt)
     public void viewReceipt() {
 //        Intent intent = new Intent(getActivity(), ReceiptActivity.class);
@@ -127,22 +150,18 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
 //        startActivity(intent);
     }
 
-    @OnClick(R.id.ll_from)
-    public void onFromViewClicked() {
+    @OnClick(R.id.rl_from_to)
+    public void showSpecificTransactions() {
 
         Intent intent = new Intent(getActivity(), SpecificTransactionsActivity.class);
         intent.putParcelableArrayListExtra(Constants.TRANSACTIONS, transactions);
-        intent.putExtra(Constants.ACCOUNT_NUMBER, tvFromAccountNo.getText().toString());
-        startActivity(intent);
-
-    }
-
-    @OnClick(R.id.ll_to)
-    public void onToViewClicked() {
-
-        Intent intent = new Intent(getActivity(), SpecificTransactionsActivity.class);
-        intent.putParcelableArrayListExtra(Constants.TRANSACTIONS, transactions);
-        intent.putExtra(Constants.ACCOUNT_NUMBER, tvToAccountNo.getText().toString());
+        if (transactionType == DEBIT) {
+            intent.putExtra(Constants.ACCOUNT_NUMBER, tvFromAccountNo.getText().toString());
+            intent.putExtra(Constants.OTHER_CUSTOMER_NAME, tvFromClientName.getText().toString());
+        } else if (transactionType == CREDIT) {
+            intent.putExtra(Constants.ACCOUNT_NUMBER, tvToAccountNo.getText().toString());
+            intent.putExtra(Constants.OTHER_CUSTOMER_NAME, tvToClientName.getText().toString());
+        }
         startActivity(intent);
 
     }
@@ -162,10 +181,23 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
             tvToAccountNo.setText(debitAccountIdentifier);
 
             Double amount = Double.valueOf(creditors.get(0).getAmount());
-            String transactionType = DEBIT;
+            transactionType = OTHER;
             if (preferencesHelper.getCustomerDepositAccountIdentifier()
                     .equals(creditAccountIdentifier)) {
                 transactionType = CREDIT;
+                /**
+                 * Fetching the details of the debtor
+                 */
+                mTransactionDetailPresenter.fetchAccountDetail(debitAccountIdentifier);
+                tvFromClientName.setText(preferencesHelper.getCustomerName());
+            } else if (preferencesHelper.getCustomerDepositAccountIdentifier()
+                    .equals(debitAccountIdentifier)) {
+                transactionType = DEBIT;
+                /**
+                 * Fetching the details of the creditor
+                 */
+                mTransactionDetailPresenter.fetchAccountDetail(creditAccountIdentifier);
+                tvToClientName.setText(preferencesHelper.getCustomerName());
             }
 
             tvTransactionAmount.setText(Utils.getFormattedAccountBalance(
@@ -196,8 +228,36 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
         }
     }
 
+
     @Override
-    public void showToast(String message) {
-        Toaster.showToast(getActivity() , message);
+    public void showCustomerName(String customerName) {
+        rlFromTo.setVisibility(View.VISIBLE);
+        vRule2.setVisibility(View.VISIBLE);
+        if (transactionType.equals(DEBIT)) {
+            tvFromClientName.setText(customerName);
+        } else if (transactionType.equals(CREDIT)) {
+            tvToClientName.setText(customerName);
+        }
     }
+
+    private void showToast(String message) {
+        Toaster.showToast(getActivity(), message);
+    }
+
+    @Override
+    public void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showError(String message) {
+        showToast(message);
+        dismiss();
+    }
+
 }

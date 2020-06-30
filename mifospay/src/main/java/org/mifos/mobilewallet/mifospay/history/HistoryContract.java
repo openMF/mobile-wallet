@@ -38,9 +38,21 @@ public interface HistoryContract {
 
     }
 
-    interface TransactionDetailView {
+    interface TransactionDetailView extends BaseView<TransactionDetailPresenter> {
 
-        void showToast(String message);
+        void showCustomerName(String customerName);
+
+        void showProgressBar();
+
+        void hideProgressBar();
+
+        void showError(String message);
+
+    }
+
+    interface TransactionDetailPresenter extends BasePresenter {
+
+        void fetchAccountDetail(String accountIdentifier);
 
     }
 
