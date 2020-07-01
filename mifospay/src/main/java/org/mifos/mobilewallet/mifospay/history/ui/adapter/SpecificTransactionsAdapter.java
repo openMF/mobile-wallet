@@ -60,7 +60,9 @@ public class SpecificTransactionsAdapter
 
         holder.mTvTransactionId.setText(
                 Constants.TRANSACTION_ID + ": " + transaction.getTransactionIdentifier());
-        holder.mTvTransactionDate.setText(Constants.DATE + ": " + transaction.getTransactionDate());
+
+        String formattedTransactionDate = Utils.getFormattedDate(transaction.getTransactionDate());
+        holder.mTvTransactionDate.setText(Constants.DATE + ": " + formattedTransactionDate);
 
         List<Account> creditors = transaction.getCreditors();
         List<Account> debtors = transaction.getDebtors();

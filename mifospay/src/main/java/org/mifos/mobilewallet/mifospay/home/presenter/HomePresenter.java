@@ -38,6 +38,9 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     private final PreferencesHelper preferencesHelper;
     private List<JournalEntry> transactionList;
 
+    private Double accountBalance;
+    private String accountIdentifier;
+
     @Inject
     public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository,
             PreferencesHelper preferencesHelper) {
@@ -63,13 +66,11 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
                     public void onSuccess(FetchCustomerDepositAccount.ResponseValue response) {
                         mHomeView.hideSwipeProgress();
                         DepositAccount customerDepositAccount = response.getDepositAccount();
-                        preferencesHelper.saveCustomerDepositAccountIdentifier(
-                                customerDepositAccount.getAccountIdentifier());
-
-                        mHomeView.setAccountBalance(customerDepositAccount.getBalance());
+                        accountIdentifier = customerDepositAccount.getAccountIdentifier();
+                        accountBalance = customerDepositAccount.getBalance();
+                        preferencesHelper.saveCustomerDepositAccountIdentifier(accountIdentifier);
                         fetchCurrency(customerDepositAccount.getProductIdentifier());
-                        transactionsHistory.fetchTransactionsHistory(
-                                customerDepositAccount.getAccountIdentifier());
+
                     }
 
                     @Override
@@ -86,7 +87,7 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
 
     /**
      *@param productIdentifier - Used to fetch the product associated with customers account.
-     *                         Currency Sign of the product is saved in shared preferences for
+     *                         Currency Code of the product is saved in shared preferences for
      *                         later usage
      */
     private void fetchCurrency(final String productIdentifier) {
@@ -97,17 +98,21 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
                     public void onSuccess(FetchProductDetails.ResponseValue response) {
                         Currency currency = response.getProduct().getCurrency();
                         preferencesHelper.saveCurrencySign(currency.getSign());
+
+                        mHomeView.setAccountBalance(accountBalance);
+                        transactionsHistory.fetchTransactionsHistory(accountIdentifier);
                     }
 
                     @Override
                     public void onError(String message) {
-
+                        mHomeView.showToast(message);
                     }
                 });
     }
 
     @Override
     public void onTransactionsFetchCompleted(List<JournalEntry> transactions) {
+        mHomeView.hideTransactionLoading();
         this.transactionList = transactions;
         if (transactionList == null) {
             mHomeView.hideBottomSheetActionButton();
@@ -115,6 +120,13 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
         } else {
             handleTransactionsHistory(0);
         }
+    }
+
+    @Override
+    public void onTransactionsFetchError(String message) {
+        mHomeView.hideBottomSheetActionButton();
+        mHomeView.hideTransactionLoading();
+        mHomeView.showTransactionsError();
     }
 
     private void handleTransactionsHistory(int existingItemCount) {

@@ -14,8 +14,8 @@ interface AccountingService {
 
     @GET(ApiEndPoints.ACCOUNTING + "/journal")
     fun fetchJournalEntries (
-            @Query("account") accountIdentifier: String,
-            @Query("dateRange") dateRange: String): Observable<List<JournalEntry>>
+            @Query("dateRange") dateRange: String,
+            @Query("account") accountIdentifier: String): Observable<List<JournalEntry>>
 
 
     @GET(ApiEndPoints.ACCOUNTING + "/journal/{entryIdentifier}")

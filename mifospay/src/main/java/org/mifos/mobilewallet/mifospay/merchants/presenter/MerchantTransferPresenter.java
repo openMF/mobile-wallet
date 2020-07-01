@@ -119,6 +119,12 @@ public class MerchantTransferPresenter implements BaseHomeContract.MerchantTrans
             showErrorStateView();
         }
     }
+
+    @Override
+    public void onTransactionsFetchError(String message) {
+        showErrorStateView();
+    }
+
     private void showErrorStateView() {
         mMerchantTransferView.showSpecificView(R.drawable.ic_error_state, R.string.error_oops,
                 R.string.error_no_transaction_history_subtitle);

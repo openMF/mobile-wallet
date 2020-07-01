@@ -202,6 +202,6 @@ public class Constants {
     public static final String USER_NAME = "interopUser";
     public static final String PASSWORD = "aW50b3BAZDE=";
 
-    public static final String STARTING_DATE = "01-01-2017";
+    public static final String STARTING_DATE = "2017-01-01Z";
     public static final String OTHER_CUSTOMER_NAME = "other_customer_name";
 }

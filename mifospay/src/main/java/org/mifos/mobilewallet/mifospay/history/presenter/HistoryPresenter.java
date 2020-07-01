@@ -52,6 +52,11 @@ public class HistoryPresenter implements HistoryContract.TransactionsHistoryPres
         }
     }
 
+    @Override
+    public void onTransactionsFetchError(String message) {
+        showEmptyStateView();
+    }
+
     private void showErrorStateView() {
         mHistoryView.showStateView(R.drawable.ic_error_state, R.string.error_oops,
                 R.string.error_no_transaction_history_subtitle);

@@ -171,7 +171,9 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
         try {
             tvTransactionId.setText(Constants.TRANSACTION_ID + ": " +
                     transaction.getTransactionIdentifier());
-            tvTransactionDate.setText(Constants.DATE + ": " + transaction.getTransactionDate());
+            String formattedTransactionDate =
+                    Utils.getFormattedDate(transaction.getTransactionDate());
+            tvTransactionDate.setText(Constants.DATE + ": " + formattedTransactionDate);
             List<Account> creditors = transaction.getCreditors();
             List<Account> debtors = transaction.getDebtors();
             String creditAccountIdentifier = creditors.get(0).getAccountNumber();

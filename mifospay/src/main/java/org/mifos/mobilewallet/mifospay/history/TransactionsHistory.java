@@ -31,9 +31,9 @@ public class TransactionsHistory {
     }
 
     public void fetchTransactionsHistory(String accountIdentifier) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String currentDate = sdf.format(new Date());
-        String dateRange = currentDate + "Z.." + Constants.STARTING_DATE + "Z";
+        String dateRange = Constants.STARTING_DATE + ".." + currentDate + "Z";
         mUsecaseHandler.execute(fetchJournalEntriesUseCase,
                 new FetchJournalEntries.RequestValues(accountIdentifier, dateRange),
                 new UseCase.UseCaseCallback<FetchJournalEntries.ResponseValue>() {

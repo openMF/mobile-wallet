@@ -17,6 +17,8 @@ public interface HistoryContract {
 
         void onTransactionsFetchCompleted(List<JournalEntry> transactions);
 
+        void onTransactionsFetchError(String message);
+
     }
 
     interface HistoryView extends BaseView<TransactionsHistoryPresenter> {

@@ -15,7 +15,7 @@ class ApiInterceptor(
         private val user: String) : Interceptor {
 
     companion object {
-        const val HEADER_ACCESS_TOKEN = "access_token"
+        const val AUTHORIZATION = "Authorization"
         const val HEADER_X_TENANT_IDENTIFIER = "X-Tenant-Identifier"
         const val USER = "User"
     }
@@ -26,7 +26,7 @@ class ApiInterceptor(
         val builder = chainRequest.newBuilder()
 
         if (!TextUtils.isEmpty(accessToken)) {
-            builder.header(HEADER_ACCESS_TOKEN, accessToken)
+            builder.header(AUTHORIZATION, accessToken)
             builder.header(USER, user)
         }
 

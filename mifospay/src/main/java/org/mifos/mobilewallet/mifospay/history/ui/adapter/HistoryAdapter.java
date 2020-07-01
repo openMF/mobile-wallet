@@ -7,11 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.Account;
 import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.R;
-
+import org.mifos.mobilewallet.mifospay.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -65,7 +64,8 @@ public class HistoryAdapter
         }
         holder.tvTransactionAmount
                 .setText(getFormattedAccountBalance(balance, currency));
-        holder.tvTransactionDate.setText(entry.getTransactionDate());
+        String formattedDate = Utils.getFormattedDate(entry.getTransactionDate());
+        holder.tvTransactionDate.setText(formattedDate);
 
         if (balance > 0 && context != null) {
             int color = ContextCompat.getColor(context, R.color.colorAccentBlue);

@@ -309,7 +309,7 @@ public class FineractRepository {
     public Observable<List<JournalEntry>> fetchJournalEntries(
             String accountIdentifier, String dateRange) {
         return fineractCNApiManager.getAccountingApi().fetchJournalEntries(
-                accountIdentifier, dateRange);
+                dateRange, accountIdentifier);
     }
 
     public Observable<JournalEntry> fetchJournalEntry(String entryIdentifier) {
