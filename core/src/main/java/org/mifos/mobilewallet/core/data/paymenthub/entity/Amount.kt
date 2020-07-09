@@ -5,11 +5,8 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class Amount: Parcelable {
-
-    @SerializedName("currency")
-    var currency: String? = null
-
-    @SerializedName("amount")
-    var amount: String? = null
-}
+data class Amount(
+        @SerializedName("currency")
+        var currency: String? = null,
+        @SerializedName("amount")
+        var amount: String? = null) : Parcelable

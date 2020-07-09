@@ -15,7 +15,7 @@ import okhttp3.Response;
 
 public class ApiInterceptor implements Interceptor {
 
-    public static final String HEADER_TENANT = "X-Tenant-Identifier";
+    public static final String HEADER_TENANT = "Platform-TenantId";
     private String headerTenant;
 
     public ApiInterceptor(String headerTenant) {

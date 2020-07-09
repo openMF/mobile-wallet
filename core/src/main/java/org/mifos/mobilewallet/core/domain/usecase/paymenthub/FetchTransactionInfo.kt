@@ -1,10 +1,8 @@
 package org.mifos.mobilewallet.core.domain.usecase.paymenthub
 
 import org.mifos.mobilewallet.core.base.UseCase
-import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionInfo
-import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionStatus
+import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionResponse
 import org.mifos.mobilewallet.core.data.paymenthub.repository.PaymentHubRepository
-import org.mifos.mobilewallet.core.utils.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
@@ -18,7 +16,7 @@ class FetchTransactionInfo @Inject constructor(val paymentHubRepository: Payment
         paymentHubRepository.fetchTransactionInfo(requestValues.transactionId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(object : Subscriber<TransactionStatus>() {
+                .subscribe(object : Subscriber<TransactionResponse>() {
                     override fun onCompleted() {
 
                     }
@@ -27,7 +25,7 @@ class FetchTransactionInfo @Inject constructor(val paymentHubRepository: Payment
                         useCaseCallback.onError("Error")
                     }
 
-                    override fun onNext(t: TransactionStatus) {
+                    override fun onNext(t: TransactionResponse) {
                         useCaseCallback.onSuccess(ResponseValue(t))
                     }
                 })
@@ -36,5 +34,5 @@ class FetchTransactionInfo @Inject constructor(val paymentHubRepository: Payment
 
     class RequestValues(val transactionId: String) : UseCase.RequestValues
 
-    class ResponseValue(val transactionStatus: TransactionStatus) : UseCase.ResponseValue
+    class ResponseValue(val transactionResponse: TransactionResponse) : UseCase.ResponseValue
 }

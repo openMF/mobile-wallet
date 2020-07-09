@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.core.data.paymenthub.api;
 
 import org.mifos.mobilewallet.core.data.paymenthub.api.services.TransactionsService;
+import org.mifos.mobilewallet.core.utils.Constants;
 
 import java.util.concurrent.TimeUnit;
 
@@ -25,9 +26,7 @@ public class PaymentHubApiManager {
 
     @Inject
     public PaymentHubApiManager() {
-        String baseURLUserType = "";
-        String headerTenant = "";
-        createService(baseURLUserType,headerTenant);
+        createService();
     }
 
     public static void createAPI() {
@@ -39,12 +38,9 @@ public class PaymentHubApiManager {
         return retrofit.create(clazz);
     }
 
-    public static void createService(String fspName, String headerTenant) {
+    public static void createService() {
 
-        if (!fspName.equals("")) {
-            fspName = fspName + ".";
-        }
-        final String BASE_URL = baseUrl.getUrl(fspName);
+        final String BASE_URL = baseUrl.getUrl();
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -53,7 +49,7 @@ public class PaymentHubApiManager {
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(headerTenant))
+                .addInterceptor(new ApiInterceptor(Constants.TENANT_ID))
                 .build();
 
         retrofit = new Retrofit.Builder()

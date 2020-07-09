@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.core.data.paymenthub.api.services;
 import org.mifos.mobilewallet.core.data.paymenthub.api.ApiEndPoints;
 import org.mifos.mobilewallet.core.data.paymenthub.entity.Transaction;
 import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionInfo;
-import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionStatus;
+import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionResponse;
 
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -17,9 +17,10 @@ import rx.Observable;
 
 public interface TransactionsService {
 
-    @POST(ApiEndPoints.TRANSACTIONS)
+    @POST(ApiEndPoints.TRANSFER)
     Observable<TransactionInfo> createPaymentRequest(@Body Transaction transaction);
 
-    @GET(ApiEndPoints.TRANSACTIONS + "/{transferId}")
-    Observable<TransactionStatus> fetchTransactionInfo(@Path("transferId") String transferId);
+    @GET(ApiEndPoints.TRANSFER + "/{transactionId}")
+    Observable<TransactionResponse> fetchTransactionInfo(
+            @Path("transactionId") String transactionId);
 }

@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.mifospay.paymenthub
 import org.mifos.mobilewallet.core.data.paymenthub.entity.QRData
 import org.mifos.mobilewallet.core.data.paymenthub.entity.Transaction
 import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionInfo
-import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionStatus
+import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionResponse
 import org.mifos.mobilewallet.mifospay.base.BasePresenter
 import org.mifos.mobilewallet.mifospay.base.BaseView
 
@@ -30,7 +30,7 @@ interface TransactionContract {
 
         fun transactionCreated(transactionInfo: TransactionInfo)
 
-        fun showTransactionStatus(transactionStatus: TransactionStatus)
+        fun showTransactionStatus(transactionResponse: TransactionResponse)
 
         fun showTransactionError(message: String)
     }

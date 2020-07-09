@@ -34,7 +34,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FineractApiManager {
 
-    public static final String DEFAULT = "default";
     public static final String BASIC = "Basic ";
     private static BaseURL baseUrl = new BaseURL();
     private static final String BASE_URL = baseUrl.getUrl();
@@ -100,7 +99,7 @@ public class FineractApiManager {
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
+                .addInterceptor(new ApiInterceptor(authToken, Constants.TENANT_ID))
                 .build();
 
         retrofit = new Retrofit.Builder()

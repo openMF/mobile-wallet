@@ -10,11 +10,10 @@ import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.RadioButton
-import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_payment_hub.*
 import org.mifos.mobilewallet.core.data.paymenthub.entity.QRData
 import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionInfo
-import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionStatus
+import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionResponse
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.paymenthub.TransactionContract
@@ -36,7 +35,7 @@ class PaymentHubActivity : BaseActivity(), TransactionContract.TransactionView {
 
     lateinit var mTransactionPresenter: TransactionContract.TransactionPresenter
 
-    private val currentUser = PHLoginActivity.currentUser
+//    private val currentUser: User? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,9 +46,9 @@ class PaymentHubActivity : BaseActivity(), TransactionContract.TransactionView {
         setSupportActionBar(toolbar.apply {
             title = "Mifos Pay Payment Hub"
         })
-        if (currentUser != null) {
-            mPresenter.updateEndPoints(currentUser.fspName,currentUser.tenant)
-        }
+//        if (currentUser != null) {
+//            mPresenter.updateEndPoints(currentUser.fspName,currentUser.tenant)
+//        }
 
         chip_scan_qr.setOnClickListener { showScanQRUI() }
 
@@ -81,35 +80,33 @@ class PaymentHubActivity : BaseActivity(), TransactionContract.TransactionView {
     }
 
     private fun showQr() {
-        if (currentUser == null) return
-        val userBank = currentUser.banks.get(0)
+
         val transactionId = createTransactionID()
 
-        val qrData = QRData(userBank.partyIdInfo.partyIdType!!,
-                userBank.partyIdInfo.partyIdentifier!!,
-                currentUser.firstName + " " + currentUser.lastName,
-                "0000",
-                et_request_amount.text.toString(),
-                et_request_desc.text.toString(),
-                "IDR",
-                transactionId,
-                "https://webshop.dpc.hu/orderId=${transactionId}")
+//        val qrData = QRData(userBank.partyIdInfo.partyIdType!!,
+//                userBank.partyIdInfo.partyIdentifier!!,
+//                currentUser.firstName + " " + currentUser.lastName,
+//                "0000",
+//                et_request_amount.text.toString(),
+//                et_request_desc.text.toString(),
+//                "IDR",
+//                transactionId,
+//                "https://webshop.dpc.hu/orderId=${transactionId}")
 
-        mPresenter.createQRData(qrData)
     }
     private fun makePaymentfromDetails() {
 
         val radioText = findViewById<RadioButton>(rg_idtype.checkedRadioButtonId).text.toString()
 
-        val transaction = mPresenter.manualDataToTransaction(
-                createTransactionID(),et_send_amount.text.toString(),et_send_desc.text.toString(),
-                radioText,et_send_identifier.text.toString(),currentUser!!, this)
-        if (!transaction.payee.name.toString().equals("inValid")) {
-            PHTransferDialog.newInstance(transaction)
-                    .show(supportFragmentManager, "PHTransactionDialog")
-        } else {
-            Toast.makeText(this,"Invalid Payee",Toast.LENGTH_LONG).show()
-        }
+//        val transaction = mPresenter.manualDataToTransaction(
+//                createTransactionID(),et_send_amount.text.toString(),et_send_desc.text.toString(),
+//                radioText,et_send_identifier.text.toString(),currentUser!!, this)
+//        if (!transaction.payee.name.toString().equals("inValid")) {
+//            PHTransferDialog.newInstance(transaction)
+//                    .show(supportFragmentManager, "PHTransactionDialog")
+//        } else {
+//            Toast.makeText(this,"Invalid Payee",Toast.LENGTH_LONG).show()
+//        }
     }
 
 
@@ -141,8 +138,8 @@ class PaymentHubActivity : BaseActivity(), TransactionContract.TransactionView {
     }
 
     override fun qrDecoded(qrData: QRData) {
-        PHTransferDialog.newInstance(mPresenter.qrDataToTransaction(qrData, currentUser!!))
-                .show(supportFragmentManager, "PHTransactionDialog")
+//        PHTransferDialog.newInstance(mPresenter.qrDataToTransaction(qrData, currentUser!!))
+//                .show(supportFragmentManager, "PHTransactionDialog")
     }
 
     @Throws(Exception::class)
@@ -152,7 +149,7 @@ class PaymentHubActivity : BaseActivity(), TransactionContract.TransactionView {
 
     override fun transactionCreated(transactionInfo: TransactionInfo) {}
 
-    override fun showTransactionStatus(transactionStatus: TransactionStatus) {}
+    override fun showTransactionStatus(transactionResponse: TransactionResponse) {}
 
     override fun showTransactionError(message: String) {}
 }

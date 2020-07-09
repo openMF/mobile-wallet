@@ -15,7 +15,7 @@ import javax.inject.Inject
 import org.mifos.mobilewallet.core.data.paymenthub.entity.QRData
 import org.mifos.mobilewallet.core.data.paymenthub.entity.Transaction
 import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionInfo
-import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionStatus
+import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionResponse
 import org.mifos.mobilewallet.mifospay.paymenthub.TransactionContract
 import org.mifos.mobilewallet.mifospay.paymenthub.presenter.TransactionPresenter
 import org.mifos.mobilewallet.mifospay.utils.Constants
@@ -94,14 +94,14 @@ class PHTransferDialog : BottomSheetDialogFragment(), TransactionContract.Transa
     }
 
 
-    override fun showTransactionStatus(transactionStatus: TransactionStatus) {
-        if (transactionStatus.transferState == "COMMITTED" || transactionStatus.transferState == "RECEIVED") {
+    override fun showTransactionStatus(transactionResponse: TransactionResponse) {
+        if (transactionResponse.transferState == "COMMITTED" || transactionResponse.transferState == "RECEIVED") {
             dialogView.view_transfer_success.visibility = View.VISIBLE
             toggleLoading(false)
             dialogView.tv_transfer_status.text = "Payment successful"
             transactionSuccessful = true
             dialogView.contentView.visibility = View.GONE
-        } else if (transactionStatus.transferState == "ABORTED") {
+        } else if (transactionResponse.transferState == "ABORTED") {
             toggleLoading(false)
             showTransactionError("Payment aborted")
         } else {

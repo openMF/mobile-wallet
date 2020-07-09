@@ -5,13 +5,8 @@ import org.json.JSONObject
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.data.paymenthub.api.PaymentHubApiManager
-import org.mifos.mobilewallet.core.data.paymenthub.entity.Amount
-import org.mifos.mobilewallet.core.data.paymenthub.entity.PartyIdInfo
 import org.mifos.mobilewallet.core.data.paymenthub.entity.QRData
-import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactingEntity
 import org.mifos.mobilewallet.core.data.paymenthub.entity.Transaction
-import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionType
-import org.mifos.mobilewallet.core.data.paymenthub.entity.User
 import org.mifos.mobilewallet.core.domain.usecase.paymenthub.CreateTransaction
 import org.mifos.mobilewallet.core.domain.usecase.paymenthub.DecodeQR
 import org.mifos.mobilewallet.core.domain.usecase.paymenthub.EncodeQR
@@ -92,90 +87,90 @@ class TransactionPresenter @Inject constructor(val useCaseHandler: UseCaseHandle
     }
 
     override fun fetchTransactionInfo(transactionId: String) {
-        useCaseHandler.execute(fetchTransactionInfo, FetchTransactionInfo.RequestValues(transactionId),
-                object : UseCase.UseCaseCallback<FetchTransactionInfo.ResponseValue> {
-                    override fun onSuccess(response: FetchTransactionInfo.ResponseValue?) {
-                        response?.let {
-                            transactionView.showTransactionStatus(it.transactionStatus)
-                        } ?: kotlin.run {
-                            onError("Unable to fetch transaction status")
-                        }
-                    }
-                    override fun onError(message: String?) {
-                        android.os.Handler().postDelayed({
-                            fetchTransactionInfo(transactionId)
-                        }, 3000)
-                    }
-                } )
+//        useCaseHandler.execute(fetchTransactionInfo, FetchTransactionInfo.RequestValues(transactionId),
+//                object : UseCase.UseCaseCallback<FetchTransactionInfo.ResponseValue> {
+//                    override fun onSuccess(response: FetchTransactionInfo.ResponseValue?) {
+//                        response?.let {
+//                            transactionView.showTransactionStatus(it.transactionStatus)
+//                        } ?: kotlin.run {
+//                            onError("Unable to fetch transaction status")
+//                        }
+//                    }
+//                    override fun onError(message: String?) {
+//                        android.os.Handler().postDelayed({
+//                            fetchTransactionInfo(transactionId)
+//                        }, 3000)
+//                    }
+//                } )
     }
 
-    fun qrDataToTransaction(qrData: QRData, currentUser: User): Transaction {
-        return Transaction(
-                qrData.clientRefId!!,
-                TransactingEntity(
-                        PartyIdInfo().apply {
-                            partyIdType = qrData.idType
-                            partyIdentifier = qrData.id
-                        },
-                        null,
-                        qrData.name!!
-                ),
-                TransactingEntity(
-                        PartyIdInfo().apply {
-                            partyIdType = currentUser.banks.get(0).partyIdInfo.partyIdType
-                            partyIdentifier = currentUser.banks.get(0).partyIdInfo.partyIdentifier
-                        },
-                        null,
-                        "${currentUser.firstName} ${currentUser.lastName}"
-                ),
-                "SEND",
-                Amount().apply {
-                    currency = qrData.currency
-                    amount = qrData.amount
-                },
-                TransactionType().apply {
-                    scenario = "TRANSFER"
-                    initiator = "PAYER"
-                    initiatorType = "CONSUMER"
-                },
-                qrData.note ?: ""
+//    fun qrDataToTransaction(qrData: QRData, currentUser: User): Transaction {
+//        return Transaction(
+//                qrData.clientRefId!!,
+//                TransactingEntity(
+//                        PartyIdInfo().apply {
+//                            partyIdType = qrData.idType
+//                            partyIdentifier = qrData.id
+//                        },
+//                        null,
+//                        qrData.name!!
+//                ),
+//                TransactingEntity(
+//                        PartyIdInfo().apply {
+//                            partyIdType = currentUser.banks.get(0).partyIdInfo.partyIdType
+//                            partyIdentifier = currentUser.banks.get(0).partyIdInfo.partyIdentifier
+//                        },
+//                        null,
+//                        "${currentUser.firstName} ${currentUser.lastName}"
+//                ),
+//                "SEND",
+//                Amount().apply {
+//                    currency = qrData.currency
+//                    amount = qrData.amount
+//                },
+//                TransactionType().apply {
+//                    scenario = "TRANSFER"
+//                    initiator = "PAYER"
+//                    initiatorType = "CONSUMER"
+//                },
+//                qrData.note ?: ""
+//
+//        )
+//    }
 
-        )
-    }
-
-    fun manualDataToTransaction(clientRefId: String, amountString: String, note: String, party_IdType:
-    String, party_Identifier: String, currentUser: User, context: Context): Transaction {
-        return Transaction(
-                clientRefId,
-                TransactingEntity(
-                        PartyIdInfo().apply {
-                            partyIdType = party_IdType
-                            partyIdentifier = party_Identifier
-                        },
-                        null,
-                        getPayeeName(party_Identifier,context)
-                ),
-                TransactingEntity(
-                        PartyIdInfo().apply {
-                            partyIdType = currentUser.banks.get(0).partyIdInfo.partyIdType
-                            partyIdentifier = currentUser.banks.get(0).partyIdInfo.partyIdentifier
-                        },
-                        null,
-                        "${currentUser.firstName} ${currentUser.lastName}"
-                ),
-                "SEND",
-                Amount().apply {
-                    currency = "TZS"
-                    amount = amountString
-                },
-                TransactionType().apply {
-                    scenario = "TRANSFER"
-                    initiator = "PAYER"
-                    initiatorType = "CONSUMER"
-                },
-                note
-        )
-    }
+//    fun manualDataToTransaction(clientRefId: String, amountString: String, note: String, party_IdType:
+//    String, party_Identifier: String, currentUser: User, context: Context): Transaction {
+//        return Transaction(
+//                clientRefId,
+//                TransactingEntity(
+//                        PartyIdInfo().apply {
+//                            partyIdType = party_IdType
+//                            partyIdentifier = party_Identifier
+//                        },
+//                        null,
+//                        getPayeeName(party_Identifier,context)
+//                ),
+//                TransactingEntity(
+//                        PartyIdInfo().apply {
+//                            partyIdType = currentUser.banks.get(0).partyIdInfo.partyIdType
+//                            partyIdentifier = currentUser.banks.get(0).partyIdInfo.partyIdentifier
+//                        },
+//                        null,
+//                        "${currentUser.firstName} ${currentUser.lastName}"
+//                ),
+//                "SEND",
+//                Amount().apply {
+//                    currency = "TZS"
+//                    amount = amountString
+//                },
+//                TransactionType().apply {
+//                    scenario = "TRANSFER"
+//                    initiator = "PAYER"
+//                    initiatorType = "CONSUMER"
+//                },
+//                note
+//        )
+//    }
 
     fun getPayeeName(payeeIdentifier : String, context: Context) : String{
         var payeeName = "inValid"
@@ -195,6 +190,6 @@ class TransactionPresenter @Inject constructor(val useCaseHandler: UseCaseHandle
     }
 
     override fun updateEndPoints(fspName : String, headerTenant : String) {
-        PaymentHubApiManager.createService(fspName,headerTenant)
+        PaymentHubApiManager.createService()
     }
 }

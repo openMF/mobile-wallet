@@ -6,13 +6,14 @@ package org.mifos.mobilewallet.core.data.paymenthub.api;
 
 public class BaseURL {
 
-    public static final String PROTOCOL_HTTPS = "https://";
+    public static final String PROTOCOL_HTTPS = "http://";
 
-    public static final String API_ENDPOINT = "mlabs.dpc.hu";
-    public static final String API_PATH = "/api/";
+    public static final String API_ENDPOINT = "med-connector-channel.mifos.io";
+    public static final String PORT_NUMBER = "80";
+    public static final String API_PATH = "/channel/";
 
 
-    public String getUrl(String userType) {
-        return PROTOCOL_HTTPS + userType + API_ENDPOINT + API_PATH;
+    public String getUrl() {
+        return PROTOCOL_HTTPS + API_ENDPOINT + ":" + PORT_NUMBER + API_PATH;
     }
 }
