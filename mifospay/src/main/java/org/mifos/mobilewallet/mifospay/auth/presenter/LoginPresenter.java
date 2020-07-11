@@ -7,7 +7,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole;
 import org.mifos.mobilewallet.core.data.paymenthub.entity.Identifier;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.core.domain.model.user.User;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchSelfAccount;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
 import org.mifos.mobilewallet.core.domain.usecase.paymenthub.FetchSecondaryIdentifiers;
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
@@ -36,7 +36,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     @Inject
     FetchUserDetails fetchUserDetailsUseCase;
     @Inject
-    FetchAccount mFetchAccountUseCase;
+    FetchSelfAccount mFetchSelfAccountUseCase;
     @Inject
     FetchSecondaryIdentifiers mFetchSecondaryIdentifiersUseCase;
     private AuthContract.LoginView mLoginView;
@@ -128,11 +128,11 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     }
 
     private void fetchClientAccount(final Client client) {
-        mUsecaseHandler.execute(mFetchAccountUseCase,
-                new FetchAccount.RequestValues(client.getClientId()),
-                new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {
+        mUsecaseHandler.execute(mFetchSelfAccountUseCase,
+                new FetchSelfAccount.RequestValues(client.getClientId()),
+                new UseCase.UseCaseCallback<FetchSelfAccount.ResponseValue>() {
                     @Override
-                    public void onSuccess(FetchAccount.ResponseValue response) {
+                    public void onSuccess(FetchSelfAccount.ResponseValue response) {
                         fetchSecondaryIdentifiers(response.getAccount().getExternalId());
                     }
 

@@ -71,19 +71,19 @@ class TransactionPresenter @Inject constructor(val useCaseHandler: UseCaseHandle
     }
 
     override fun createTransaction(transaction: Transaction) {
-        useCaseHandler.execute(createTransaction, CreateTransaction.RequestValues(transaction),
-                object : UseCase.UseCaseCallback<CreateTransaction.ResponseValue> {
-                    override fun onSuccess(response: CreateTransaction.ResponseValue?) {
-                        response?.let {
-                            transactionView.transactionCreated(it.transactionInfo)
-                        } ?: kotlin.run {
-                            onError("Unable to create transaction")
-                        }
-                    }
-                    override fun onError(message: String?) {
-                        transactionView.showTransactionError("Failed to initiate payment")
-                    }
-                } )
+//        useCaseHandler.execute(createTransaction, CreateTransaction.RequestValues(transaction),
+//                object : UseCase.UseCaseCallback<CreateTransaction.ResponseValue> {
+//                    override fun onSuccess(response: CreateTransaction.ResponseValue?) {
+//                        response?.let {
+//                            transactionView.transactionCreated(it.transactionInfo)
+//                        } ?: kotlin.run {
+//                            onError("Unable to create transaction")
+//                        }
+//                    }
+//                    override fun onError(message: String?) {
+//                        transactionView.showTransactionError("Failed to initiate payment")
+//                    }
+//                } )
     }
 
     override fun fetchTransactionInfo(transactionId: String) {

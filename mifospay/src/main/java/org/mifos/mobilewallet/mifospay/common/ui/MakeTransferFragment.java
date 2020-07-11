@@ -75,10 +75,10 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     private long toClientId;
     private double amount;
 
-    public static MakeTransferFragment newInstance(String toExternalId, double amount) {
+    public static MakeTransferFragment newInstance(String toClientIdentifier, double amount) {
 
         Bundle args = new Bundle();
-        args.putString(Constants.TO_EXTERNAL_ID, toExternalId);
+        args.putString(Constants.TO_CLIENT_IDENTIFIER, toClientIdentifier);
         args.putDouble(Constants.AMOUNT, amount);
         MakeTransferFragment fragment = new MakeTransferFragment();
         fragment.setArguments(args);
@@ -110,7 +110,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
         amount = getArguments().getDouble(Constants.AMOUNT);
 
-        mTransferPresenter.fetchClient(getArguments().getString(Constants.TO_EXTERNAL_ID));
+        mTransferPresenter.fetchClient(getArguments().getString(Constants.TO_CLIENT_IDENTIFIER));
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,8 +122,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTransferPresenter.makeTransfer(localRepository.getClientDetails().getClientId(),
-                        toClientId, amount);
+                mTransferPresenter.fetchToClientAccount(toClientId, amount);
                 tvTransferStatus.setText(Constants.SENDING_MONEY);
                 progressBar.setVisibility(View.VISIBLE);
                 contentView.setVisibility(View.GONE);
@@ -134,12 +133,12 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     }
 
     @Override
-    public void showToClientDetails(long clientId, String name, String externalId) {
+    public void showToClientDetails(long clientId, String name, String clientIdentifier) {
         this.toClientId = clientId;
 
         tvClientName.setText(name);
         tvAmount.setText(Constants.RUPEE + " " + amount);
-        tvClientVpa.setText(externalId);
+        tvClientVpa.setText(clientIdentifier);
 
         contentView.setVisibility(View.VISIBLE);
         progressBar.setVisibility(View.GONE);

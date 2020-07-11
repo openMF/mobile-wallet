@@ -12,7 +12,7 @@ import org.mifos.mobilewallet.core.domain.model.client.NewClient;
 import org.mifos.mobilewallet.core.domain.model.user.NewUser;
 import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityClients;
 import org.mifos.mobilewallet.core.domain.model.user.User;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchSelfAccount;
 import org.mifos.mobilewallet.core.domain.usecase.account.UpdateAccount;
 import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
@@ -59,7 +59,7 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
     @Inject
     FetchUserDetails fetchUserDetailsUseCase;
     @Inject
-    FetchAccount mFetchAccountUseCase;
+    FetchSelfAccount mFetchSelfAccountUseCase;
     @Inject
     UpdateAccount updateAccountUseCase;
     @Inject
@@ -252,11 +252,11 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
     }
 
     private void fetchClientAccount(final Client client) {
-        mUseCaseHandler.execute(mFetchAccountUseCase,
-                new FetchAccount.RequestValues(client.getClientId()),
-                new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {
+        mUseCaseHandler.execute(mFetchSelfAccountUseCase,
+                new FetchSelfAccount.RequestValues(client.getClientId()),
+                new UseCase.UseCaseCallback<FetchSelfAccount.ResponseValue>() {
                     @Override
-                    public void onSuccess(FetchAccount.ResponseValue response) {
+                    public void onSuccess(FetchSelfAccount.ResponseValue response) {
                         updateSavingsAccount(response.getAccount().getId());
                         /**
                          * Other identifiers can also be registered, needs discussion

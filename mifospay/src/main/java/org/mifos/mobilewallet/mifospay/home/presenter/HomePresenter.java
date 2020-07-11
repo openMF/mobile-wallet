@@ -5,7 +5,7 @@ import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchSelfAccount;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
@@ -28,7 +28,7 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     private final UseCaseHandler mUsecaseHandler;
     private final LocalRepository localRepository;
     @Inject
-    FetchAccount mFetchAccountUseCase;
+    FetchSelfAccount mFetchSelfAccountUseCase;
     @Inject
     FetchAccountTransactions fetchAccountTransactionsUseCase;
     @Inject
@@ -54,11 +54,11 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
 
     @Override
     public void fetchAccountDetails() {
-        mUsecaseHandler.execute(mFetchAccountUseCase,
-                new FetchAccount.RequestValues(localRepository.getClientDetails().getClientId()),
-                new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {
+        mUsecaseHandler.execute(mFetchSelfAccountUseCase,
+                new FetchSelfAccount.RequestValues(localRepository.getClientDetails().getClientId()),
+                new UseCase.UseCaseCallback<FetchSelfAccount.ResponseValue>() {
                     @Override
-                    public void onSuccess(FetchAccount.ResponseValue response) {
+                    public void onSuccess(FetchSelfAccount.ResponseValue response) {
                         mHomeView.showAccountBalance(response.getAccount());
                         transactionsHistory.fetchTransactionsHistory(response.getAccount().getId());
                         mHomeView.hideSwipeProgress();

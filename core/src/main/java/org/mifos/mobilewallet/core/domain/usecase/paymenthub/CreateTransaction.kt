@@ -1,6 +1,9 @@
 package org.mifos.mobilewallet.core.domain.usecase.paymenthub
 
 import org.mifos.mobilewallet.core.base.UseCase
+import org.mifos.mobilewallet.core.data.paymenthub.entity.Amount
+import org.mifos.mobilewallet.core.data.paymenthub.entity.PartyIdInfo
+import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactingEntity
 import org.mifos.mobilewallet.core.data.paymenthub.entity.Transaction
 import org.mifos.mobilewallet.core.data.paymenthub.entity.TransactionInfo
 import org.mifos.mobilewallet.core.data.paymenthub.repository.PaymentHubRepository
@@ -14,8 +17,11 @@ class CreateTransaction @Inject constructor(private val paymentHubRepository: Pa
         UseCase<CreateTransaction.RequestValues, CreateTransaction.ResponseValue>() {
 
     override fun executeUseCase(requestValues: RequestValues) {
+        val payee = TransactingEntity(requestValues.payeeParty);
+        val payer = TransactingEntity(requestValues.payerParty);
+        val transaction = Transaction(payee, payer, requestValues.amount);
 
-        paymentHubRepository.createTransaction(requestValues.transaction)
+        paymentHubRepository.createTransaction(transaction)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(object : Subscriber<TransactionInfo>() {
@@ -34,7 +40,10 @@ class CreateTransaction @Inject constructor(private val paymentHubRepository: Pa
 
     }
 
-    class RequestValues(val transaction: Transaction) : UseCase.RequestValues
+    class RequestValues(
+            val payeeParty: PartyIdInfo,
+            val payerParty: PartyIdInfo,
+            val amount: Amount) : UseCase.RequestValues
 
     class ResponseValue(val transactionInfo: TransactionInfo) : UseCase.ResponseValue
 }
