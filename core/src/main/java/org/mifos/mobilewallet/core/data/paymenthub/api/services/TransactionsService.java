@@ -18,9 +18,12 @@ import rx.Observable;
 public interface TransactionsService {
 
     @POST(ApiEndPoints.TRANSFER)
-    Observable<TransactionInfo> createPaymentRequest(@Body Transaction transaction);
+    Observable<TransactionInfo> makeTransaction(@Body Transaction transaction);
 
     @GET(ApiEndPoints.TRANSFER + "/{transactionId}")
     Observable<TransactionResponse> fetchTransactionInfo(
             @Path("transactionId") String transactionId);
+
+    @POST(ApiEndPoints.TRANSACTION_REQUEST)
+    Observable<TransactionInfo> requestTransaction(@Body Transaction transactionRequest);
 }

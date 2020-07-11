@@ -6,6 +6,7 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.AccountTransfersSe
 import org.mifos.mobilewallet.core.data.fineract.api.services.AuthenticationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.DocumentService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.FineractPaymentHubService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.InvoiceService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.KYCLevel1Service;
 import org.mifos.mobilewallet.core.data.fineract.api.services.NotificationService;
@@ -54,6 +55,7 @@ public class FineractApiManager {
     private static UserService userApi;
     private static ThirdPartyTransferService thirdPartyTransferApi;
     private static NotificationService notificationApi;
+    private static FineractPaymentHubService fineractPaymentHubApi;
 
     private static SelfServiceApiManager sSelfInstance;
 
@@ -83,6 +85,7 @@ public class FineractApiManager {
         userApi = createApi(UserService.class);
         thirdPartyTransferApi = createApi(ThirdPartyTransferService.class);
         notificationApi = createApi(NotificationService.class);
+        fineractPaymentHubApi = createApi(FineractPaymentHubService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
@@ -178,5 +181,9 @@ public class FineractApiManager {
 
     public NotificationService getNotificationApi() {
         return notificationApi;
+    }
+
+    public FineractPaymentHubService getFineractPaymentHubApi() {
+        return fineractPaymentHubApi;
     }
 }

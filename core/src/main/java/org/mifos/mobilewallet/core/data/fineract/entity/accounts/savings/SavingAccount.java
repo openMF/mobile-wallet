@@ -30,6 +30,8 @@ public class SavingAccount implements Parcelable {
     private long id;
     @SerializedName("accountNo")
     private String accountNo;
+    @SerializedName("externalId")
+    private String externalId;
     @SerializedName("productName")
     private String productName;
     @SerializedName("productId")
@@ -63,6 +65,7 @@ public class SavingAccount implements Parcelable {
     protected SavingAccount(Parcel in) {
         this.id = in.readLong();
         this.accountNo = in.readString();
+        this.externalId = in.readString();
         this.productName = in.readString();
         this.productId = (Integer) in.readValue(Integer.class.getClassLoader());
         this.overdraftLimit = in.readLong();
@@ -190,6 +193,14 @@ public class SavingAccount implements Parcelable {
         this.accountNo = accountNo;
     }
 
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
+    }
+
     public String getProductName() {
         return productName;
     }
@@ -215,6 +226,7 @@ public class SavingAccount implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(this.id);
         dest.writeString(this.accountNo);
+        dest.writeString(this.externalId);
         dest.writeString(this.productName);
         dest.writeValue(this.productId);
         dest.writeLong(this.overdraftLimit);

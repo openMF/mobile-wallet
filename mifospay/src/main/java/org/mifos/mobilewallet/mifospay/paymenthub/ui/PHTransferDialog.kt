@@ -71,7 +71,7 @@ class PHTransferDialog : BottomSheetDialogFragment(), TransactionContract.Transa
         toggleLoading(false)
         dialogView.tv_amount.text = "${transaction.amount.amount} ${transaction.amount.currency}"
         dialogView.tv_client_vpa.text = "${transaction.payee.partyIdInfo.partyIdType}: ${transaction.payee.partyIdInfo.partyIdentifier}"
-        dialogView.tv_client_name.text = transaction.payee.name
+        //dialogView.tv_client_name.text = transaction.payee.name
 
         dialogView.btn_cancel.setOnClickListener { dismiss() }
 
@@ -95,18 +95,18 @@ class PHTransferDialog : BottomSheetDialogFragment(), TransactionContract.Transa
 
 
     override fun showTransactionStatus(transactionResponse: TransactionResponse) {
-        if (transactionResponse.transferState == "COMMITTED" || transactionResponse.transferState == "RECEIVED") {
-            dialogView.view_transfer_success.visibility = View.VISIBLE
-            toggleLoading(false)
-            dialogView.tv_transfer_status.text = "Payment successful"
-            transactionSuccessful = true
-            dialogView.contentView.visibility = View.GONE
-        } else if (transactionResponse.transferState == "ABORTED") {
-            toggleLoading(false)
-            showTransactionError("Payment aborted")
-        } else {
-            handler.postDelayed(transactionStatusRunnable, 3000)
-        }
+//        if (transactionResponse.transferState == "COMMITTED" || transactionResponse.transferState == "RECEIVED") {
+//            dialogView.view_transfer_success.visibility = View.VISIBLE
+//            toggleLoading(false)
+//            dialogView.tv_transfer_status.text = "Payment successful"
+//            transactionSuccessful = true
+//            dialogView.contentView.visibility = View.GONE
+//        } else if (transactionResponse.transferState == "ABORTED") {
+//            toggleLoading(false)
+//            showTransactionError("Payment aborted")
+//        } else {
+//            handler.postDelayed(transactionStatusRunnable, 3000)
+//        }
     }
 
     override fun transactionCreated(transactionInfo: TransactionInfo) {

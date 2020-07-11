@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.core.data.paymenthub.api;
 
+import org.mifos.mobilewallet.core.data.paymenthub.api.services.RegistrationService;
 import org.mifos.mobilewallet.core.data.paymenthub.api.services.TransactionsService;
 import org.mifos.mobilewallet.core.utils.Constants;
 
@@ -23,6 +24,7 @@ public class PaymentHubApiManager {
 
     private static Retrofit retrofit;
     private static TransactionsService transactionsApi;
+    private static RegistrationService registrationApi;
 
     @Inject
     public PaymentHubApiManager() {
@@ -31,6 +33,7 @@ public class PaymentHubApiManager {
 
     public static void createAPI() {
         transactionsApi = createApi(TransactionsService.class);
+        registrationApi = createApi(RegistrationService.class);
     }
 
 
@@ -64,5 +67,9 @@ public class PaymentHubApiManager {
 
     public TransactionsService getTransactionsApi() {
         return transactionsApi;
+    }
+
+    public RegistrationService getRegistrationApi() {
+        return registrationApi;
     }
 }

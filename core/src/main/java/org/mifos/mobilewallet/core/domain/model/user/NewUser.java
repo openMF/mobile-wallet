@@ -28,7 +28,7 @@ public class NewUser {
         this.email = email;
         this.password = password;
         this.repeatPassword = password;
-        roles.add(471);
+        roles.add(3);   // Mobile Wallet Role in leopard.mifos.io
         roles.add(1);
     }
 }

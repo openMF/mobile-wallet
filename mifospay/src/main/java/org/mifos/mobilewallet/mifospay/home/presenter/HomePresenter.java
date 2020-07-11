@@ -100,4 +100,5 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
             }
         }
     }
+
 }

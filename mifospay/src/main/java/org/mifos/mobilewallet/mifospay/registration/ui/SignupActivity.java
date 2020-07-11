@@ -192,6 +192,11 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     public void onNextClicked() {
         showProgressDialog(Constants.PLEASE_WAIT);
 
+        if (isEmpty(mEtBusinessShopName)) {
+            mEtBusinessShopName.setText(
+                    mEtFirstName.getText().toString() + mEtLastName.getText().toString());
+        }
+
         if (isEmpty(mEtFirstName) || isEmpty(mEtLastName) || isEmpty(mEtEmail) || isEmpty(
                 mEtBusinessShopName) || isEmpty(mEtAddressLine1) || isEmpty(mEtAddressLine2)
                 || isEmpty(mEtPinCode) || isEmpty(mEtCity) || isEmpty(mEtUserName) || isEmpty(

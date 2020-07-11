@@ -23,4 +23,8 @@ public class ApiEndPoints {
     public static final String TWOFACTOR = "twofactor";
     public static final String RUN_REPORT = "runreports";
     public static final String USER = "users";
+
+    // For Payment-Hub related calls
+    public static final String INTEROPERATION = "interoperation";
+    public static final String ACCOUNTS = "accounts";
 }

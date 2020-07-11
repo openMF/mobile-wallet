@@ -26,6 +26,9 @@ public class PreferencesHelper {
     private static final String MOBILE_NO = "preferences_mobile_no";
     private static final String FIREBASE_REG_ID = "preferences_firebase_reg_id";
 
+    private static final String EMAIL_IDENTIFIER = "secondary_identifier_email";
+    private static final String MSISDN_IDENTIFIER = "secondary_identifier_msisdn";
+
     private SharedPreferences sharedPreferences;
 
     @Inject
@@ -136,6 +139,22 @@ public class PreferencesHelper {
 
     public void setFirebaseRegId(String firebaseRegId) {
         putString(FIREBASE_REG_ID, firebaseRegId);
+    }
+
+    public String getEmailIdentifier() {
+        return getString(EMAIL_IDENTIFIER, "");
+    }
+
+    public void saveEmailIdentifier(String email) {
+        putString(EMAIL_IDENTIFIER, email);
+    }
+
+    public String getMSISDNIdentifier() {
+        return getString(MSISDN_IDENTIFIER, "");
+    }
+
+    public void saveMSISDNIdentifier(String email) {
+        putString(MSISDN_IDENTIFIER, email);
     }
 
 }

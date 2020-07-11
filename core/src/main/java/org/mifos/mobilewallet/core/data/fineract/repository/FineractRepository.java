@@ -18,9 +18,11 @@ import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
 import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
+import org.mifos.mobilewallet.core.data.fineract.entity.payload.UpdateSavingsAccountPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
+import org.mifos.mobilewallet.core.data.paymenthub.entity.PartyIdentifiers;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.core.domain.model.client.NewClient;
@@ -106,6 +108,12 @@ public class FineractRepository {
 
     public Observable<Page<SavingsWithAssociations>> getSavingsAccounts() {
         return fineractApiManager.getSavingAccountsListApi().getSavingsAccounts(-1);
+    }
+
+    public Observable<GenericResponse> updateSavingsAccount(
+            long accountId, UpdateSavingsAccountPayload payload) {
+        return fineractApiManager.getSavingAccountsListApi()
+                .updateSavingsAccount(accountId, payload);
     }
 
     public Observable<GenericResponse> blockUnblockAccount(long accountId, String command) {
@@ -254,5 +262,12 @@ public class FineractRepository {
     public Observable<ResponseBody> updateBeneficiary(long beneficiaryId,
             BeneficiaryUpdatePayload payload) {
         return selfApiManager.getBeneficiaryApi().updateBeneficiary(beneficiaryId, payload);
+    }
+
+    // for Payment-Hub related API calls
+
+    public Observable<PartyIdentifiers> getSecondaryIdentifiers(String accountExternalId) {
+        return fineractApiManager.getFineractPaymentHubApi()
+                .fetchSecondaryIdentifiers(accountExternalId);
     }
 }

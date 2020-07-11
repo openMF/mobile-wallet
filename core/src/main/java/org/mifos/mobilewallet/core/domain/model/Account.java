@@ -23,6 +23,7 @@ public class Account implements Parcelable {
     private String image;
     private String name;
     private String number;
+    private String externalId;
     private double balance;
     private long id;
     private long productId;
@@ -35,6 +36,7 @@ public class Account implements Parcelable {
         this.image = in.readString();
         this.name = in.readString();
         this.number = in.readString();
+        this.externalId = in.readString();
         this.balance = in.readDouble();
         this.id = in.readLong();
         this.productId = in.readLong();
@@ -63,6 +65,14 @@ public class Account implements Parcelable {
 
     public void setNumber(String number) {
         this.number = number;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 
     public long getId() {
@@ -107,6 +117,7 @@ public class Account implements Parcelable {
         dest.writeString(this.image);
         dest.writeString(this.name);
         dest.writeString(this.number);
+        dest.writeString(this.externalId);
         dest.writeDouble(this.balance);
         dest.writeLong(this.id);
         dest.writeLong(this.productId);

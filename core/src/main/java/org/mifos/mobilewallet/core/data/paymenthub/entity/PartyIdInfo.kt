@@ -7,6 +7,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class PartyIdInfo(
         @SerializedName("partyIdType")
-        var partyIdType: String? = null,
+        var partyIdType: IdentifierType? = null,
         @SerializedName("partyIdentifier")
         var partyIdentifier: String? = null) : Parcelable
