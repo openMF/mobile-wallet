@@ -132,9 +132,6 @@
         <activity
             android:name=".notification.ui.NotificationActivity"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".paymenthub.ui.PaymentHubActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

@@ -31,8 +31,6 @@ import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment;
 import org.mifos.mobilewallet.mifospay.notification.ui.NotificationActivity;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
-import org.mifos.mobilewallet.mifospay.paymenthub.ui.PHTransferDialog;
-import org.mifos.mobilewallet.mifospay.paymenthub.ui.PaymentHubActivity;
 import org.mifos.mobilewallet.mifospay.payments.ui.RequestFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
@@ -125,7 +123,4 @@ public interface ActivityComponent {
 
     void inject(NotificationActivity notificationActivity);
 
-    void inject(PaymentHubActivity paymentHubActivity);
-
-    void inject(PHTransferDialog phTransferDialog);
 }
