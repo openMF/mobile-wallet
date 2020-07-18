@@ -9,7 +9,7 @@
     android:orientation="vertical"
     android:padding="@dimen/value_20dp">
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_fName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,9 +22,9 @@
             android:hint="@string/first_name"
             android:nextFocusForward="@id/et_lName"
             android:singleLine="true"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_lName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -38,9 +38,9 @@
             android:hint="@string/last_name"
             android:nextFocusForward="@id/et_card_number"
             android:singleLine="true"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_card_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
             android:inputType="number"
             android:nextFocusForward="@id/spn_mm"
             android:singleLine="true"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -84,7 +84,7 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.TextInputLayout
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_cvv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -100,7 +100,7 @@
             android:maxLength="3"
             android:minWidth="@dimen/value_70dp"
             android:nextFocusForward="@id/btn_add"/>
-    </android.support.design.widget.TextInputLayout>
+    </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -38,7 +38,7 @@
             android:orientation="horizontal"
             android:padding="5dp">
 
-            <android.support.design.chip.Chip
+            <com.google.android.material.chip.Chip
                 android:id="@+id/btn_vpa"
                 android:layout_width="80dp"
                 android:layout_height="40dp"
@@ -56,7 +56,7 @@
                 android:typeface="sans"
                 app:chipBackgroundColor="@color/clickedblue" />
 
-            <android.support.design.chip.Chip
+            <com.google.android.material.chip.Chip
                 android:id="@+id/btn_mobile"
                 android:layout_width="140dp"
                 android:layout_height="40dp"
@@ -85,7 +85,7 @@
             android:layout_marginTop="@dimen/value_20dp"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="80dp"
@@ -95,7 +95,7 @@
                 android:textColorHint="@android:color/black"
                 app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_amount"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -103,14 +103,14 @@
                     android:inputType="number"
                     android:paddingBottom="@dimen/value_20dp"
                     android:textSize="@dimen/value_15sp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:layout_width="400dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_vpa"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="270dp"
@@ -120,7 +120,7 @@
                     android:textColorHint="@android:color/black"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_vpa"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -128,7 +128,7 @@
                         android:paddingBottom="@dimen/value_20dp"
                         android:singleLine="true"
                         android:textSize="@dimen/value_15sp" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/btn_scan_qr"
@@ -153,7 +153,7 @@
                 android:orientation="horizontal"
                 android:visibility="gone">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_height="60dp"
@@ -163,7 +163,7 @@
                     android:textColorHint="@android:color/black"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_mobile_number"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -175,7 +175,7 @@
                         android:maxLength="@integer/telephone_numbers_max_length_standard"
                         android:textSize="@dimen/value_15sp" />
 
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
                     android:id="@+id/btn_search_contact"

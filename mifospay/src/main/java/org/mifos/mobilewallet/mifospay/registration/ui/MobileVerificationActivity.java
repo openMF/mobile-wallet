@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.mifospay.registration.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -78,13 +78,9 @@ public class MobileVerificationActivity extends BaseActivity implements
             showProgressDialog(Constants.SENDING_OTP_TO_YOUR_MOBILE_NUMBER);
 
             Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
+            handler.postDelayed(() ->
                     mMobileVerificationPresenter.requestOTPfromServer(mCcpCode.getFullNumber(),
-                            mEtMobileNumber.getText().toString());
-                }
-            }, 1500);
+                    mEtMobileNumber.getText().toString()), 1500);
 
         } else {
             showToast(getString(R.string.enter_valid_mob_num));
@@ -138,7 +134,7 @@ public class MobileVerificationActivity extends BaseActivity implements
         intent.putExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID,
                 getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0));
         intent.putExtra(Constants.GOOGLE_PHOTO_URI,
-                getIntent().getParcelableExtra(Constants.GOOGLE_PHOTO_URI));
+                (Bundle) getIntent().getParcelableExtra(Constants.GOOGLE_PHOTO_URI));
         intent.putExtra(Constants.GOOGLE_DISPLAY_NAME,
                 getIntent().getStringExtra(Constants.GOOGLE_DISPLAY_NAME));
         intent.putExtra(Constants.GOOGLE_EMAIL,

@@ -13,12 +13,12 @@
                       android:layout_height="wrap_content"
                       android:orientation="vertical">
 
-            <android.support.design.widget.AppBarLayout
+            <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/primaryDarkBlue">
 
-                <android.support.v7.widget.Toolbar
+                <androidx.appcompat.widget.Toolbar
                     xmlns:android="http://schemas.android.com/apk/res/android"
                     xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/toolbar"
@@ -57,7 +57,7 @@
 
                 </LinearLayout>
 
-            </android.support.design.widget.AppBarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
 
 
             <LinearLayout
@@ -101,7 +101,7 @@
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/etPasswordLayout"
                     android:background="@drawable/bg_et_round_border"
                     android:layout_marginBottom="10dp"
@@ -110,7 +110,7 @@
                     android:inputType="textPassword"
                     app:passwordToggleEnabled="true">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_password"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"
@@ -118,7 +118,7 @@
                         android:layout_height="48dp"
                         android:hint="@string/password"
                         android:inputType="textPassword"/>
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
                 <ProgressBar
                     android:layout_width="match_parent"
                     android:id="@+id/pb_password_strength"
@@ -133,7 +133,7 @@
                     android:visibility="gone"
                     android:layout_marginBottom="8dp"
                     android:layout_height="wrap_content" />
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/etPasswordLayout2"
 
                     android:layout_width="match_parent"
@@ -143,7 +143,7 @@
                     android:layout_marginBottom="10dp"
                     app:passwordToggleEnabled="true">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_confirm_password"
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
@@ -151,7 +151,7 @@
                         android:inputType="textPassword"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"/>
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
                 <EditText
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
@@ -229,7 +229,7 @@
 
     </ScrollView>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

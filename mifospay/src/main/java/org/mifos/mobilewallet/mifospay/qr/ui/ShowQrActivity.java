@@ -2,12 +2,12 @@ package org.mifos.mobilewallet.mifospay.qr.ui;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
+import androidx.core.content.FileProvider;
+import androidx.appcompat.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 import android.text.InputType;
 import android.view.Menu;
 import android.view.MenuItem;

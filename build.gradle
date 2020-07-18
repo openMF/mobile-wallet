@@ -37,13 +37,13 @@ ext {
     kotlinVersion = "1.3.61"
 
     // App dependencies
-    supportLibraryVersion = '28.0.0'
+    designVersion = '1.0.0'
     daggerVersion = '2.11'
-    retrofitVersion = '2.2.0'
+    retrofitVersion = '2.4.0'
     okHttp3Version = '3.6.0'
-    butterKnifeVersion = '8.6.0'
+    butterKnifeVersion = '10.0.0'
     dbflowVersion = '3.1.1'
-    espressoVersion = '2.2.2'
+    espressoVersion = '3.1.0'
     rxandroidVersion = '1.1.0'
     rxjavaVersion = '1.1.4'
     junitVersion = '4.12'

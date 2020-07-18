@@ -15,9 +15,15 @@ android {
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
     }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -40,19 +46,18 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support.constraint:constraint-layout:1.1.3'
-    androidTestImplementation("com.android.support.test.espresso:espresso-core:$rootProject.espressoVersion", {
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    androidTestImplementation("androidx.test.espresso:espresso-core:$rootProject.espressoVersion", {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
-    implementation "com.android.support:appcompat-v7:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:support-v4:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:animated-vector-drawable:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:support-media-compat:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:design:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:cardview-v7:$rootProject.supportLibraryVersion"
-    implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
-    api "com.android.support:design:$rootProject.supportLibraryVersion"
+    implementation "androidx.appcompat:appcompat:$rootProject.designVersion"
+    implementation "androidx.legacy:legacy-support-v4:$rootProject.designVersion"
+    implementation "androidx.vectordrawable:vectordrawable-animated:$rootProject.designVersion"
+    implementation "androidx.media:media:$rootProject.designVersion"
+    implementation "com.google.android.material:material:$rootProject.designVersion"
+    implementation "androidx.cardview:cardview:$rootProject.designVersion"
+    implementation "androidx.recyclerview:recyclerview:$rootProject.designVersion"
 
 
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
