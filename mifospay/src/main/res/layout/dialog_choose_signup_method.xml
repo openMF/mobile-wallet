@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@color/colorCardBackground"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -65,7 +66,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/or"
-            android:textColor="@color/grey_900"
+            android:textColor="@color/colorSubtleText"
             app:layout_constraintEnd_toStartOf="@+id/divider2"
             app:layout_constraintStart_toEndOf="@+id/divider"
             app:layout_constraintTop_toBottomOf="@+id/btn_merchant" />
@@ -79,6 +80,7 @@
             android:buttonTint="@color/colorAccent"
             android:checked="true"
             android:text="@string/ease_my_sign_up_using_google_account"
+            android:textColor="@color/colorTextPrimary"
             android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

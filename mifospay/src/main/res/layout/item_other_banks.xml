@@ -23,7 +23,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/value_10dp"
         android:layout_marginStart="40dp"
-        android:textColor="@android:color/black"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/value_15sp"/>
 
 </LinearLayout>

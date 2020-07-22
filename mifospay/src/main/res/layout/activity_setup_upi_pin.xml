@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:focusable="true"
-              android:focusableInTouchMode="true"
-              android:orientation="vertical">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:background="@color/colorPrimary"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -26,6 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardElevation="1dp"
+            app:cardBackgroundColor="@color/colorCardBackground"
             app:cardUseCompatPadding="true">
 
             <LinearLayout
@@ -45,7 +48,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/debit_card_details"
-                        android:textColor="@color/grey_900"
+                        android:textColor="@color/colorTextSecondary"
                         android:textSize="17sp"/>
 
                     <TextView
@@ -72,6 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/value_20dp"
+            app:cardBackgroundColor="@color/colorCardBackground"
             app:cardElevation="1dp"
             app:cardUseCompatPadding="true">
 
@@ -92,7 +96,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/one_time_password"
-                        android:textColor="@color/grey_900"
+                        android:textColor="@color/colorTextSecondary"
                         android:textSize="17sp"/>
 
                     <TextView
@@ -119,6 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/value_20dp"
+            app:cardBackgroundColor="@color/colorCardBackground"
             app:cardElevation="1dp"
             app:cardUseCompatPadding="true">
 
@@ -139,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/upi_pin_setup"
-                        android:textColor="@color/grey_900"
+                        android:textColor="@color/colorTextSecondary"
                         android:textSize="17sp"/>
 
                     <TextView

@@ -5,17 +5,18 @@
     android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
-        app:elevation="0dp"
+        app:elevation="@dimen/value_5dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_tab_layout"
-            style="@style/Widget.MaterialComponents.TabLayout"
+            style="@style/AppTheme.TabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
+            app:tabMaxWidth="0dp"
             app:tabMode="scrollable" />
 
     </com.google.android.material.appbar.AppBarLayout>

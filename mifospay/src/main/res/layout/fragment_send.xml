@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/value_20dp"
+            android:textColor="@color/colorTextSecondary"
             android:layout_marginTop="@dimen/value_20dp"
             android:text="@string/select_transfer_method"
             android:textSize="@dimen/value_18sp" />
@@ -51,6 +52,7 @@
                 android:layout_weight="1"
                 android:clickable="true"
                 android:text="@string/vpa"
+                android:textColor="@color/colorTextPrimary"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:typeface="sans"
@@ -73,7 +75,7 @@
                 android:paddingRight="@dimen/value_10dp"
                 android:textAllCaps="false"
                 android:textSize="8sp"
-                android:textColor="@android:color/black"
+                android:textColor="@color/colorTextPrimary"
                 android:typeface="sans"
                 app:chipBackgroundColor="@color/changedBackgroundColour" />
 
@@ -92,7 +94,7 @@
                 android:layout_marginLeft="@dimen/value_20dp"
                 android:layout_marginRight="@dimen/value_20dp"
                 android:padding="@dimen/value_10dp"
-                android:textColorHint="@android:color/black"
+                android:textColorHint="@color/colorTextSecondary"
                 app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -100,6 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/amount"
+                    android:textColor="@color/colorTextPrimary"
                     android:inputType="number"
                     android:paddingBottom="@dimen/value_20dp"
                     android:textSize="@dimen/value_15sp" />
@@ -117,7 +120,7 @@
                     android:layout_height="90dp"
                     android:layout_marginLeft="@dimen/value_20dp"
                     android:padding="@dimen/value_10dp"
-                    android:textColorHint="@android:color/black"
+                    android:textColorHint="@color/colorTextSecondary"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -126,6 +129,7 @@
                         android:layout_height="match_parent"
                         android:hint="@string/virtual_payment_address"
                         android:paddingBottom="@dimen/value_20dp"
+                        android:textColor="@color/colorTextPrimary"
                         android:singleLine="true"
                         android:textSize="@dimen/value_15sp" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -160,7 +164,7 @@
                     android:layout_marginLeft="@dimen/value_20dp"
                     android:layout_marginRight="@dimen/value_15dp"
                     android:layout_toLeftOf="@+id/btn_search_contact"
-                    android:textColorHint="@android:color/black"
+                    android:textColorHint="@color/colorTextSecondary"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -169,6 +173,7 @@
                         android:layout_height="match_parent"
                         android:paddingBottom="@dimen/value_10dp"
                         android:hint="@string/mobile_number"
+                        android:textColor="@color/colorTextPrimary"
                         android:inputType="number"
                         android:singleLine="true"
                         android:textAlignment="center"

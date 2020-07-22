@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- main application colors-->
+    <color name="colorPrimary">#121212</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#BB86FC</color>
+    <color name="colorAccentBlue">@color/colorAccent</color>
+
+    <!-- for icons-->
+    <color name="colorContrast">@color/white</color>
+
+    <!-- for text-->
+    <color name="colorTextPrimary">@color/white</color>
+    <color name="colorTextSecondary">#d3d3d3</color>
+    <color name="colorSubtleText">#939393</color>
+    <color name="colorBrightText">#bdbdbd</color>
+
+    <!-- for cardviews, bottom sheets, toolbar and tablayout-->
+    <color name="colorCardBackground">#1e1e1e</color>
+
+    <!-- for text input layout unfocused border color-->
+    <color name="mtrl_textinput_default_box_stroke_color">@color/colorTextSecondary</color>
+
+    <color name="colorDivider">#3f3f3f</color>
+    <color name="colorDullBackground">@color/colorPrimary</color>
+
+    <!-- when card is not selected-->
+    <color name="changedBackgroundColour">@color/colorCardBackground</color>
+
+    <!-- for button outline-->
+    <color name="mtrl_btn_stroke_color_selector">#7e7e7e</color>
+
+    <color name="colorChipBlack">@color/colorCardBackground</color>
+
+</resources>

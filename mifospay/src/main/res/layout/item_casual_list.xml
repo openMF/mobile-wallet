@@ -55,6 +55,7 @@
         android:layout_marginRight="@dimen/marginItemsInSectionSmall"
         android:layout_marginBottom="8dp"
         android:textSize="@dimen/textCaption"
+        android:textColor="@color/colorTextSecondary"
         app:layout_constraintBottom_toBottomOf="@+id/tv_item_casual_list_subtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_item_casual_list_title" />

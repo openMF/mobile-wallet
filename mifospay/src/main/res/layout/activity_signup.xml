@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:id="@+id/rr_container"
+    android:background="@color/colorPrimary"
     android:layout_height="match_parent">
 
     <ScrollView android:layout_width="match_parent"
@@ -76,6 +77,8 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
                     android:hint="@string/first_name"
+                    android:textColorHint="@color/colorTextSecondary"
+                    android:textColor="@color/colorTextPrimary"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -87,6 +90,8 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
                     android:hint="@string/last_name"
+                    android:textColorHint="@color/colorTextSecondary"
+                    android:textColor="@color/colorTextPrimary"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -98,6 +103,8 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
                     android:hint="@string/username"
+                    android:textColorHint="@color/colorTextSecondary"
+                    android:textColor="@color/colorTextPrimary"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -108,6 +115,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
+                    android:textColorHint="@color/colorTextSecondary"
+                    app:passwordToggleTint="@color/colorTextSecondary"
                     app:passwordToggleEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -117,6 +126,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:hint="@string/password"
+                        android:textColor="@color/colorTextPrimary"
                         android:inputType="textPassword"/>
                 </com.google.android.material.textfield.TextInputLayout>
                 <ProgressBar
@@ -131,6 +141,7 @@
                     android:id="@+id/tv_password_strength"
                     android:gravity="center"
                     android:visibility="gone"
+                    android:textColor="@color/colorTextPrimary"
                     android:layout_marginBottom="8dp"
                     android:layout_height="wrap_content" />
                 <com.google.android.material.textfield.TextInputLayout
@@ -140,7 +151,9 @@
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
                     android:background="@drawable/bg_et_round_border"
+                    android:textColorHint="@color/colorTextSecondary"
                     android:layout_marginBottom="10dp"
+                    app:passwordToggleTint="@color/colorTextSecondary"
                     app:passwordToggleEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -148,6 +161,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="48dp"
                         android:hint="@string/confirm_password"
+                        android:textColor="@color/colorTextPrimary"
                         android:inputType="textPassword"
                         android:paddingLeft="15dp"
                         android:paddingRight="15dp"/>
@@ -159,6 +173,8 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
                     android:hint="@string/email"
+                    android:textColorHint="@color/colorTextSecondary"
+                    android:textColor="@color/colorTextPrimary"
                     android:inputType="textEmailAddress"
                     android:paddingLeft="15dp"/>
 
@@ -169,6 +185,8 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
                     android:hint="@string/name_of_business"
+                    android:textColorHint="@color/colorTextSecondary"
+                    android:textColor="@color/colorTextPrimary"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
@@ -181,6 +199,8 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
                     android:hint="@string/address_line_1"
+                    android:textColorHint="@color/colorTextSecondary"
+                    android:textColor="@color/colorTextPrimary"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -192,6 +212,8 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
                     android:hint="@string/address_line_2"
+                    android:textColorHint="@color/colorTextSecondary"
+                    android:textColor="@color/colorTextPrimary"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -204,6 +226,8 @@
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"
                     android:hint="@string/pin_code"
+                    android:textColorHint="@color/colorTextSecondary"
+                    android:textColor="@color/colorTextPrimary"
                     android:inputType="number"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>
@@ -219,6 +243,8 @@
                     android:focusable="false"
                     android:focusableInTouchMode="false"
                     android:hint="@string/state"
+                    android:textColorHint="@color/colorTextSecondary"
+                    android:textColor="@color/colorTextPrimary"
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"/>

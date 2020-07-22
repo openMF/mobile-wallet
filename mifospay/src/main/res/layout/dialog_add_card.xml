@@ -6,6 +6,7 @@
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:focusedByDefault="true"
+    android:background="@color/colorCardBackground"
     android:orientation="vertical"
     android:padding="@dimen/value_20dp">
 
@@ -13,6 +14,7 @@
         android:id="@+id/til_fName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textColorHint="@color/colorTextSecondary"
         app:errorEnabled="true">
 
         <EditText
@@ -20,6 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/first_name"
+            android:backgroundTint="@color/colorTextPrimary"
+            android:textColor="@color/colorTextPrimary"
             android:nextFocusForward="@id/et_lName"
             android:singleLine="true"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -29,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/value_5dp"
+        android:textColorHint="@color/colorTextSecondary"
         app:errorEnabled="true">
 
         <EditText
@@ -36,6 +41,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/last_name"
+            android:backgroundTint="@color/colorTextPrimary"
+            android:textColor="@color/colorTextPrimary"
             android:nextFocusForward="@id/et_card_number"
             android:singleLine="true"/>
     </com.google.android.material.textfield.TextInputLayout>
@@ -45,6 +52,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/value_10dp"
+        android:textColorHint="@color/colorTextSecondary"
         app:errorEnabled="true">
 
         <EditText
@@ -52,6 +60,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/credit_card_number"
+            android:backgroundTint="@color/colorTextPrimary"
+            android:textColor="@color/colorTextPrimary"
             android:inputType="number"
             android:nextFocusForward="@id/spn_mm"
             android:singleLine="true"/>
@@ -61,6 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/value_10dp"
+        android:textColor="@color/colorTextSecondary"
         android:text="@string/expiry_date"/>
 
     <LinearLayout
@@ -74,12 +85,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:entries="@array/months_array"
+            android:backgroundTint="@color/colorTextPrimary"
             android:padding="@dimen/value_10dp"/>
 
         <Spinner
             android:id="@+id/spn_yy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorTextPrimary"
             android:padding="@dimen/value_10dp"/>
 
     </LinearLayout>
@@ -89,6 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/value_10dp"
+        android:textColorHint="@color/colorTextSecondary"
         app:errorEnabled="true">
 
         <EditText
@@ -96,6 +110,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/cvv"
+            android:backgroundTint="@color/colorTextPrimary"
+            android:textColor="@color/colorTextPrimary"
             android:inputType="numberPassword"
             android:maxLength="3"
             android:minWidth="@dimen/value_70dp"

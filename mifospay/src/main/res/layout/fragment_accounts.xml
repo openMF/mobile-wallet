@@ -36,15 +36,15 @@
     <com.google.android.material.chip.Chip
         android:id="@+id/addaccountbutton"
         android:layout_width="wrap_content"
-        app:chipBackgroundColor="@color/black"
+        app:chipBackgroundColor="@color/colorChipBlack"
         android:layout_height="35dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="23dp"
         android:text="@string/add_account"
         app:chipIcon="@drawable/ic_add"
-        app:chipIconTint="@color/colorPrimary"
+        app:chipIconTint="@color/white"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/white" />
 
 </RelativeLayout>

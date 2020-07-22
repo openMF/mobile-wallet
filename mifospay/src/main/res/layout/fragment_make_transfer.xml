@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent" android:layout_height="match_parent"
-              android:orientation="vertical"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:id="@+id/ll_make_transfer_container"
-              android:padding="@dimen/value_20dp">
+    android:background="@color/colorCardBackground"
+    android:padding="@dimen/value_20dp">
 
     <TextView
         android:id="@+id/tv_transfer_status"
@@ -15,7 +18,7 @@
         android:focusableInTouchMode="true"
         android:text="@string/send_money"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@android:color/black"
+        android:textColor="@color/colorTextPrimary"
         android:textStyle="bold"/>
 
     <FrameLayout
@@ -51,13 +54,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/value_10dp"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/colorTextPrimary"
                     android:textSize="@dimen/value_20sp"/>
 
                 <TextView
                     android:id="@+id/tv_client_vpa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/colorTextSecondary"
                     android:paddingTop="@dimen/value_5dp"
                     android:textSize="@dimen/value_18sp"/>
 
@@ -74,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/value_10dp"
-                    android:textColor="@android:color/black"
+                    android:textColor="@color/colorTextPrimary"
                     android:textSize="@dimen/value_20sp"/>
 
             </LinearLayout>

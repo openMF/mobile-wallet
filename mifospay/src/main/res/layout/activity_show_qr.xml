@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
@@ -47,7 +47,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
+                android:textColor="@color/colorTextPrimary"
                 android:text="@string/qr_code_details"
                 android:textStyle="bold"/>
 
@@ -55,6 +55,7 @@
                 android:id="@+id/tv_qr_vpa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/colorTextSecondary"
                 android:layout_marginTop="@dimen/value_20dp"/>
 
         </LinearLayout>

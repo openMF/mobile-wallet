@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/colorPrimary"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <include layout="@layout/toolbar"/>
@@ -12,7 +13,6 @@
         android:layout_width="match_parent"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:background="@color/white"
         android:layout_height="match_parent"
         tools:context=".merchants.ui.MerchantTransferActivity">
 
@@ -79,7 +79,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/marginItemsInSectionSmall"
                     android:text="@string/test_user"
-                    android:textColor="@color/black"
+                    android:textColor="@color/colorTextPrimary"
                     android:textSize="@dimen/text_large" />
 
                 <TextView
@@ -89,7 +89,7 @@
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/marginItemsInSectionSmall"
                     android:text="@string/test_vpa"
-                    android:textColor="@color/gray_dark"
+                    android:textColor="@color/colorTextSecondary"
                     android:textSize="@dimen/text_large" />
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -102,7 +102,7 @@
                     android:layout_marginTop="@dimen/value_20dp"
                     android:layout_marginRight="@dimen/value_20dp"
                     android:padding="@dimen/value_10dp"
-                    android:textColorHint="@android:color/black"
+                    android:textColorHint="@color/colorTextSecondary"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -110,6 +110,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/amount"
+                        android:textColor="@color/colorTextPrimary"
                         android:inputType="number"
                         android:paddingBottom="@dimen/value_20dp"
                         android:textSize="@dimen/value_15sp"

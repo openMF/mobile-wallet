@@ -4,6 +4,7 @@
     android:id="@+id/rl_parent"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorCardBackground"
     android:orientation="vertical">
 
     <LinearLayout
@@ -38,14 +39,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/colorSubtleText"/>
 
                 <TextView
                     android:id="@+id/tv_fromAccountNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/colorSubtleText"/>
 
             </LinearLayout>
 
@@ -76,14 +77,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/colorSubtleText"/>
 
                 <TextView
                     android:id="@+id/tv_toAccountNo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/colorSubtleText"/>
 
             </LinearLayout>
 
@@ -120,14 +121,14 @@
                     android:id="@+id/tv_transaction_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/gray_5"/>
+                    android:textColor="@color/colorBrightText"/>
 
                 <TextView
                     android:id="@+id/tv_transaction_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:textColor="@color/gray_5"/>
+                    android:textColor="@color/colorBrightText"/>
 
             </LinearLayout>
 

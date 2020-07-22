@@ -50,13 +50,17 @@
                     android:layout_marginTop="@dimen/marginItemsInSectionLarge"
                     android:layout_width="match_parent"
                     app:helperText="@string/username"
+                    app:helperTextTextAppearance=
+                        "@style/TextAppearance.App.TextInputLayout.HelperTextAppearance"
                     android:hint="@string/username"
+                    android:textColorHint="@color/colorTextSecondary"
                     android:layout_height="wrap_content" >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_edit_profile_username"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextPrimary"
                         android:inputType="text"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -68,12 +72,16 @@
                     android:id="@+id/til_edit_profile_email"
                     app:layout_anchor="@id/til_edit_profile_username"
                     app:helperText="@string/email"
+                    app:helperTextTextAppearance=
+                        "@style/TextAppearance.App.TextInputLayout.HelperTextAppearance"
                     android:hint="@string/email"
+                    android:textColorHint="@color/colorTextSecondary"
                     android:layout_height="wrap_content" >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_edit_profile_email"
                         android:layout_width="match_parent"
+                        android:textColor="@color/colorTextPrimary"
                         android:layout_height="wrap_content"
                         android:inputType="textEmailAddress"/>
 
@@ -85,13 +93,17 @@
                     android:id="@+id/til_edit_profile_vpa"
                     android:layout_width="match_parent"
                     app:helperText="@string/vpa"
+                    app:helperTextTextAppearance=
+                        "@style/TextAppearance.App.TextInputLayout.HelperTextAppearance"
                     android:hint="@string/vpa"
+                    android:textColorHint="@color/colorTextSecondary"
                     android:layout_height="wrap_content" >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_edit_profile_vpa"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/colorTextPrimary"
                         android:inputType="text"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -109,6 +121,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         app:ccp_autoDetectCountry="true"
+                        app:ccp_contentColor="@color/colorTextPrimary"
                         app:ccp_autoFormatNumber="false" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -117,13 +130,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:helperText="@string/mobile"
-                        android:hint="@string/mobile" >
+                        app:helperTextTextAppearance=
+                            "@style/TextAppearance.App.TextInputLayout.HelperTextAppearance"
+                        android:hint="@string/mobile"
+                        android:textColorHint="@color/colorTextSecondary">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_edit_profile_mobile"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:maxLength="@integer/telephone_numbers_max_length_standard"
+                            android:textColor="@color/colorTextPrimary"
                             android:inputType="number" />
 
                     </com.google.android.material.textfield.TextInputLayout>

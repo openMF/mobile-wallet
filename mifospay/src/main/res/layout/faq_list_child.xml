@@ -11,6 +11,6 @@
         android:layout_margin="16dp"
         android:layout_weight="7"
         android:text="@string/subitem"
-        android:textColor="@android:color/black" />
+        android:textColor="@color/colorTextSecondary" />
 
 </LinearLayout>

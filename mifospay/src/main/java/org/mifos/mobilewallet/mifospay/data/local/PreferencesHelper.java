@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import org.mifos.mobilewallet.mifospay.injection.ApplicationContext;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -28,6 +29,7 @@ public class PreferencesHelper {
     private static final String MOBILE_NO = "preferences_mobile_no";
     private static final String FIREBASE_REG_ID = "preferences_firebase_reg_id";
     private static final String ACCOUNT_ID = "preferences_account_id";
+    private static final String APPLICATION_THEME = "preferences_application_theme";
 
     private SharedPreferences sharedPreferences;
 
@@ -147,6 +149,14 @@ public class PreferencesHelper {
 
     public void setFirebaseRegId(String firebaseRegId) {
         putString(FIREBASE_REG_ID, firebaseRegId);
+    }
+
+    public String getApplicationTheme() {
+        return getString(APPLICATION_THEME, Constants.SYSTEM_THEME);
+    }
+
+    public void setApplicationTheme(String applicationTheme) {
+        putString(APPLICATION_THEME, applicationTheme);
     }
 
 }

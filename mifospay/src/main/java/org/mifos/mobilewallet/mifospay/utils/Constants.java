@@ -195,4 +195,9 @@ public class Constants {
 
     public static final String CURRENT_PASSCODE = "current passcode";
     public static final String UPDATE_PASSCODE = "update passcode";
+
+    public static final String SYSTEM_THEME = "system theme";
+    public static final String LIGHT_THEME = "light theme";
+    public static final String DARK_THEME = "dark theme";
+
 }

@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -29,7 +30,7 @@
                           xmlns:app="http://schemas.android.com/apk/res-auto"
                           android:layout_width="match_parent"
                           android:layout_height="match_parent"
-                          android:background="@color/grey_50"
+                          android:background="@color/colorDullBackground"
                           android:orientation="vertical">
 
                 <LinearLayout
@@ -41,6 +42,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:focusable="true"
+                        app:cardBackgroundColor="@color/colorCardBackground"
                         android:focusableInTouchMode="true"
                         app:cardElevation="2dp"
                         app:contentPadding="@dimen/value_10dp">
@@ -52,6 +54,8 @@
                             android:background="@drawable/bg_et_round_border"
                             android:drawableLeft="@drawable/et_search"
                             android:drawablePadding="10dp"
+                            android:textColorHint="@color/colorTextSecondary"
+                            android:textColor="@color/colorTextPrimary"
                             android:drawableStart="@drawable/et_search"
                             android:hint="@string/search"
                             android:inputType="text"
@@ -68,12 +72,13 @@
                     android:id="@+id/popular_banks"
                     android:padding="@dimen/value_15dp"
                     android:text="@string/popular_banks"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@color/colorTextPrimary"/>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:cardElevation="2dp"
+                    app:cardBackgroundColor="@color/colorCardBackground"
                     app:contentPadding="@dimen/value_10dp">
 
                     <androidx.recyclerview.widget.RecyclerView
@@ -93,7 +98,7 @@
                     android:gravity="center"
                     android:textSize="@dimen/value_15dp"
                     android:visibility="gone"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@color/colorTextPrimary"/>
 
                 <TextView
                     style="@style/TextAppearance.AppCompat.Small"
@@ -102,11 +107,12 @@
                     android:layout_height="wrap_content"
                     android:padding="@dimen/value_15dp"
                     android:text="@string/other_banks"
-                    android:textColor="@android:color/black"/>
+                    android:textColor="@color/colorTextPrimary"/>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    app:cardBackgroundColor="@color/colorCardBackground"
                     app:cardElevation="2dp">
 
                     <androidx.recyclerview.widget.RecyclerView

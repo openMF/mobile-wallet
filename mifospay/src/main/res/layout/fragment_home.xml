@@ -32,7 +32,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/balance_hint"
         android:textAllCaps="true"
-        android:textColor="@color/colorBlack54"
+        android:textColor="@color/colorTextSecondary"
         android:textSize="@dimen/textOverline" />
 
     <TextView
@@ -55,6 +55,7 @@
         android:layout_width="match_parent"
         android:background="@drawable/drawable_bottom_sheet_view"
         app:behavior_hideable="false"
+        android:elevation="@dimen/value_5dp"
         app:behavior_peekHeight="@dimen/bottomSheetPeekHeight"
         android:layout_height="match_parent" >
 

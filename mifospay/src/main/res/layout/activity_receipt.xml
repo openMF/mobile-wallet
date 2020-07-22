@@ -9,7 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/white"
+        android:background="@color/colorPrimary"
         android:orientation="vertical">
 
         <include layout="@layout/toolbar" />
@@ -34,7 +34,7 @@
                         android:id="@+id/tv_amount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColor="@color/black"
+                        android:textColor="@color/colorTextPrimary"
                         android:textSize="@dimen/textH4"
                         android:layout_gravity="center"/>
 
@@ -53,7 +53,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:gravity="center"
-                        android:textColor="@color/black"
+                        android:textColor="@color/colorTextPrimary"
                         android:textSize="@dimen/text_large"
                         android:layout_gravity="center"/>
 
@@ -65,68 +65,68 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/gray_dark"
+                            android:textColor="@color/colorTextSecondary"
                             android:textSize="@dimen/value_16sp"
                             android:text="@string/transaction_id"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_transaction_ID"
-                            android:textColor="@color/black"
+                            android:textColor="@color/colorTextPrimary"
                             android:textSize="@dimen/value_16sp"
                             android:layout_marginBottom="@dimen/marginItemsInSectionMedium" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/gray_dark"
+                            android:textColor="@color/colorTextSecondary"
                             android:textSize="@dimen/value_16sp"
                             android:text="@string/transaction_date"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_transaction_date"
-                            android:textColor="@color/black"
+                            android:textColor="@color/colorTextPrimary"
                             android:textSize="@dimen/value_16sp"
                             android:layout_marginBottom="@dimen/marginItemsInSectionMedium" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/gray_dark"
+                            android:textColor="@color/colorTextSecondary"
                             android:textSize="@dimen/value_16sp"
                             android:text="@string/to"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_transaction_to_name"
-                            android:textColor="@color/black"
+                            android:textColor="@color/colorTextPrimary"
                             android:textSize="@dimen/value_16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_transaction_to_number"
-                            android:textColor="@color/black"
+                            android:textColor="@color/colorTextPrimary"
                             android:textSize="@dimen/value_16sp"
                             android:layout_marginBottom="@dimen/marginItemsInSectionMedium" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/gray_dark"
+                            android:textColor="@color/colorTextSecondary"
                             android:textSize="@dimen/value_16sp"
                             android:text="@string/from"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_transaction_from_name"
-                            android:textColor="@color/black"
+                            android:textColor="@color/colorTextPrimary"
                             android:textSize="@dimen/value_16sp" />
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/tv_transaction_from_number"
-                            android:textColor="@color/black"
+                            android:textColor="@color/colorTextPrimary"
                             android:textSize="@dimen/value_16sp"
                             android:layout_marginBottom="@dimen/marginItemsInSectionMedium" />
 
@@ -134,7 +134,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/gray_dark"
+                            android:textColor="@color/colorTextSecondary"
                             android:textSize="@dimen/value_16sp"
                             android:text="@string/unique_receipt_link"/>
                         <TextView

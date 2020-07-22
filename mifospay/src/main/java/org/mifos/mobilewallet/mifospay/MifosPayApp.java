@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.mifos.mobile.passcode.utils.ForegroundChecker;
 
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.injection.component.ApplicationComponent;
 import org.mifos.mobilewallet.mifospay.injection.component.DaggerApplicationComponent;
 import org.mifos.mobilewallet.mifospay.injection.module.ApplicationModule;
+import org.mifos.mobilewallet.mifospay.utils.ThemeHelper;
 
 import butterknife.ButterKnife;
 
@@ -19,6 +21,7 @@ import butterknife.ButterKnife;
 public class MifosPayApp extends Application {
 
     private static MifosPayApp instance;
+    private PreferencesHelper preferencesHelper;
 
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
@@ -44,6 +47,10 @@ public class MifosPayApp extends Application {
 
         //Initialize ForegroundChecker
         ForegroundChecker.init(this);
+
+        // for applying application theme
+        preferencesHelper = new PreferencesHelper(this);
+        ThemeHelper.applyTheme(preferencesHelper.getApplicationTheme());
     }
 
     public ApplicationComponent component() {

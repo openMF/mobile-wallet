@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/marginItemsInSectionSmall"
         app:fontFamily="@font/roboto_medium"
-        android:textColor="@color/colorBlack87"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/textH6"
         app:layout_constraintEnd_toEndOf="@+id/iv_user_image"
         app:layout_constraintStart_toStartOf="@+id/iv_user_image"

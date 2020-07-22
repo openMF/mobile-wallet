@@ -2,6 +2,7 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colorPrimary"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:orientation="vertical">
 
@@ -86,6 +87,7 @@
                 android:layout_height="48dp"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
+                app:ccp_contentColor="@color/colorTextPrimary"
                 app:ccp_autoDetectCountry="true"
                 app:ccp_autoFormatNumber="false"/>
 
@@ -97,6 +99,8 @@
                 android:layout_weight="1"
                 android:background="@drawable/bg_et_round_border"
                 android:hint="@string/mobile_number"
+                android:textColorHint="@color/colorTextSecondary"
+                android:textColor="@color/colorTextPrimary"
                 android:inputType="number"
                 android:maxLength="@integer/telephone_numbers_max_length_standard"
                 android:paddingLeft="@dimen/value_15dp"
@@ -126,6 +130,8 @@
                 android:layout_height="48dp"
                 android:background="@drawable/bg_et_round_border"
                 android:hint="@string/enter_otp"
+                android:textColorHint="@color/colorTextSecondary"
+                android:textColor="@color/colorTextPrimary"
                 android:inputType="number"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
@@ -145,6 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:textColor="@color/colorTextSecondary"
                 android:layout_marginLeft="@dimen/value_10dp"
                 android:text="@string/verifying_otp_please_wait"
                 android:visibility="gone"/>

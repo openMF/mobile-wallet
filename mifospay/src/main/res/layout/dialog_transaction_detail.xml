@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/colorCardBackground"
     android:orientation="vertical">
 
     <LinearLayout
@@ -49,14 +51,14 @@
                     android:id="@+id/tv_transaction_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/gray_5"/>
+                    android:textColor="@color/colorBrightText"/>
 
                 <TextView
                     android:id="@+id/tv_receiptId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:textColor="@color/grey_900"
+                    android:textColor="@color/colorSubtleText"
                     android:visibility="gone"/>
 
                 <TextView
@@ -64,7 +66,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:textColor="@color/gray_5"/>
+                    android:textColor="@color/colorBrightText"/>
 
             </LinearLayout>
 
@@ -116,7 +118,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/client_name"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/colorSubtleText"/>
 
                 <TextView
                     android:id="@+id/tv_fromAccountNo"
@@ -124,7 +126,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/account"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/colorSubtleText"/>
 
             </LinearLayout>
 
@@ -133,7 +135,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
-                android:background="@drawable/ic_send"
+                app:srcCompat="@drawable/ic_send"
                 android:foregroundGravity="center"/>
 
             <LinearLayout
@@ -156,7 +158,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/client_name"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/colorSubtleText"/>
 
                 <TextView
                     android:id="@+id/tv_toAccountNo"
@@ -164,7 +166,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/account"
-                    android:textColor="@color/grey_900"/>
+                    android:textColor="@color/colorSubtleText"/>
 
             </LinearLayout>
 

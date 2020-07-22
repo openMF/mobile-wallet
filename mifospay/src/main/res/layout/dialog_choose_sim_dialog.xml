@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content">
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorCardBackground">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -42,7 +44,7 @@
                 android:layout_marginTop="@dimen/value_30dp"
                 android:lines="4"
                 android:text="@string/bank_account_mobile_verification_conditions"
-                android:textColor="@color/grey_900"/>
+                android:textColor="@color/colorSubtleText"/>
 
 
             <LinearLayout
@@ -90,7 +92,7 @@
                 android:layout_marginTop="@dimen/value_30dp"
                 android:gravity="center"
                 android:text="@string/regular_charges_will_apply"
-                android:textColor="@android:color/black"/>
+                android:textColor="@color/colorTextPrimary"/>
 
             <Button
                 android:id="@+id/btn_confirm"

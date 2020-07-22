@@ -14,6 +14,8 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:hint="@string/debit_card_number"
+        android:textColorHint="@color/colorTextSecondary"
+        android:textColor="@color/colorTextPrimary"
         android:imeOptions="actionNext"
         android:inputType="number"
         android:nextFocusDown="@id/pe_month"
@@ -33,6 +35,7 @@
             android:digits="1234567890"
             android:gravity="center"
             android:hint="@string/mm"
+            android:textColor="@color/colorTextPrimary"
             android:imeOptions="actionNext"
             android:inputType="number"
             android:maxLength="2"
@@ -51,6 +54,7 @@
             android:layout_marginRight="@dimen/value_10dp"
             android:gravity="bottom"
             android:text="@string/slash"
+            android:textColor="@color/colorTextPrimary"
             android:textSize="30sp"/>
 
         <com.alimuzaffar.lib.pin.PinEntryEditText
@@ -61,6 +65,7 @@
             android:cursorVisible="false"
             android:digits="1234567890"
             android:gravity="center"
+            android:textColor="@color/colorTextPrimary"
             android:imeOptions="actionDone"
             android:inputType="number"
             android:maxLength="4"

@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:onClick="backgroundScreenClicked"
     android:id="@+id/bg_screen"
     android:layout_width="match_parent"
@@ -25,6 +24,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout2"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:textColorHint="@color/colorTextSecondary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/marginItemsInSectionLarge"
@@ -37,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/username"
+            android:textColor="@color/colorTextPrimary"
             android:inputType="textEmailAddress" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -47,8 +48,10 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/marginBetweenSections"
         app:layout_constraintBottom_toTopOf="@+id/btn_login"
+        android:textColorHint="@color/colorTextSecondary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        app:passwordToggleTint="@color/colorTextSecondary"
         app:passwordToggleEnabled="true">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -56,6 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/password"
+            android:textColor="@color/colorTextPrimary"
             android:inputType="textPassword" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -64,7 +68,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/marginBetweenSections"
-        android:background="@drawable/button_round_black"
+        android:background="@drawable/button_selector"
+        android:textColor="@color/colorTextPrimary"
         android:text="@string/login"
         app:layout_constraintBottom_toTopOf="@+id/ll_signup"
         app:layout_constraintEnd_toEndOf="parent"

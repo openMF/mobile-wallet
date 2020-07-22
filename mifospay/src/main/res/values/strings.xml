@@ -272,5 +272,10 @@
     <string name="no_bank_account">No bank found</string>
     <string name="error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
     <string name="fetching_history">Fetching History...</string>
+    <string name="application_theme">Application Theme</string>
+    <string name="select_theme">Select Application Theme</string>
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="system_theme">System Default</string>
 
 </resources>

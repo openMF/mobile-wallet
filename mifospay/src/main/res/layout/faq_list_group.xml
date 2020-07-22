@@ -13,5 +13,5 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
         android:layout_weight="8"
-        android:textColor="@android:color/black" />
+        android:textColor="@color/colorTextPrimary" />
 </LinearLayout>

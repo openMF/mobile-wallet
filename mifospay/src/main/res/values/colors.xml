@@ -6,6 +6,10 @@
     <color name="colorAccent">#000AFF</color>
     <color name="changedBackgroundColour">#ecf0f1 </color>
     <color name="clickedblue">#00bfff</color>
+
+    <!-- for icons-->
+    <color name="colorContrast">#000000</color>
+
     <!-- 100, 87, 54 etc.. - OPACITY IN PERCENTAGE -->
     <color name="colorBlack100">#000000</color>
     <color name="colorBlack87">#DE000000</color>
@@ -18,6 +22,11 @@
     <color name="colorTextPrimary">@color/colorBlack87</color>
     <color name="colorTextSecondary">@color/colorBlack54</color>
     <color name="colorTextDisabled">@color/colorBlack38</color>
+    <color name="colorBrightText">#696969</color>
+    <color name="colorSubtleText">#212121</color>
+
+    <!-- for cardviews and bottom sheets-->
+    <color name="colorCardBackground">@color/white</color>
 
     <color name="colorAccentBlue">#000AFF</color>
     <color name="colorAccentBlue50">#80000AFF</color>
@@ -37,6 +46,10 @@
     <color name="colorChangeProfileImageShapeText">@color/colorPrimary</color>
 
     <color name="colorBottomViewNotFocusedIcon">@color/colorAccentBlue50</color>
+
+    <color name="colorDullBackground">#fafafa</color>
+
+    <color name="colorChipBlack">@color/black</color>
 
 
 

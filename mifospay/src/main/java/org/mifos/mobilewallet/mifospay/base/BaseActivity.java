@@ -78,7 +78,7 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
             progressDialog.setMessage(message);
             progressDialog.show();
         } else {
-            progressDialog = new ProgressDialog(this);
+            progressDialog = new ProgressDialog(this, R.style.AppTheme_ProgressDialog);
             progressDialog.setCanceledOnTouchOutside(false);
             progressDialog.setMessage(message);
             progressDialog.show();
