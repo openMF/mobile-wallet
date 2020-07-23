@@ -89,18 +89,33 @@
                 app:ccp_autoDetectCountry="true"
                 app:ccp_autoFormatNumber="false"/>
 
-            <EditText
-                android:id="@+id/et_mobile_number"
-                android:layout_width="wrap_content"
-                android:layout_height="48dp"
-                android:layout_marginLeft="@dimen/value_5dp"
-                android:layout_weight="1"
-                android:background="@drawable/bg_et_round_border"
-                android:hint="@string/mobile_number"
-                android:inputType="number"
-                android:maxLength="@integer/telephone_numbers_max_length_standard"
-                android:paddingLeft="@dimen/value_15dp"
-                android:paddingRight="15dp"/>
+<!--            <EditText-->
+<!--                android:id="@+id/et_mobile_number"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:layout_marginLeft="@dimen/value_5dp"-->
+<!--                android:layout_weight="1"-->
+<!--                android:background="@drawable/bg_et_round_border"-->
+<!--                android:hint="@string/mobile_number"-->
+<!--                android:inputType="number"-->
+<!--                android:maxLength="@integer/telephone_numbers_max_length_standard"-->
+<!--                android:paddingLeft="@dimen/value_15dp"-->
+<!--                android:paddingRight="15dp"/>-->
+            <android.support.design.widget.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:hint="@string/mobile" >
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_mobile_number"
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:maxLength="@integer/telephone_numbers_max_length_standard"
+                    android:inputType="number" />
+
+            </android.support.design.widget.TextInputLayout>
+
 
             <TextView
                 android:id="@+id/btn_get_otp"
@@ -120,17 +135,32 @@
             android:layout_marginTop="@dimen/value_10dp"
             android:orientation="horizontal">
 
-            <EditText
-                android:id="@+id/et_otp"
+<!--            <EditText-->
+<!--                android:id="@+id/et_otp"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="48dp"-->
+<!--                android:background="@drawable/bg_et_round_border"-->
+<!--                android:hint="@string/enter_otp"-->
+<!--                android:inputType="number"-->
+<!--                android:paddingLeft="15dp"-->
+<!--                android:paddingRight="15dp"-->
+<!--                android:visibility="gone"-->
+<!--                android:maxLength="6"/>-->
+            <android.support.design.widget.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:background="@drawable/bg_et_round_border"
-                android:hint="@string/enter_otp"
-                android:inputType="number"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
-                android:visibility="gone"
-                android:maxLength="6"/>
+                android:hint="Enter OTP" >
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_otp"
+                    android:layout_width="120dp"
+                    android:visibility="gone"
+                    android:layout_height="wrap_content"
+                    android:maxLength="@integer/telephone_numbers_max_length_standard"
+                    android:inputType="number" />
+
+            </android.support.design.widget.TextInputLayout>
 
             <ProgressBar
                 android:id="@+id/progressBar"
