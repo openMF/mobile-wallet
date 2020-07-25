@@ -9,7 +9,7 @@
     <string name="edit_card">Edit Card</string>
     <string name="delete_card">Delete Card</string>
     <string name="pan_id">PAN ID</string>
-
+    <string name="otp">Enter OTP</string>
     <string name="level_1">Level 1</string>
     <string name="transaction_history">Transaction History</string>
     <string name="history">History</string>
