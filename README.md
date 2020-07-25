@@ -94,6 +94,10 @@ For Windows, you can use the following commands:
 * `gradlew spotlessApply` an check and apply formatting to any plain-text file.</br>
 * `gradlew build`  provides a command line to execute build script.</br>
 
+If you are using Git Bash, you can use the following commands:
+* `./gradlew check` quality checks on your project’s code using Checkstyle and generates reports from these checks.
+* `./gradlew spotlessApply` checks and applies formatting to any plain-text file.
+* `./gradlew build` provides a command line to execute build script.
 ## Wiki
 
 https://github.com/openMF/mobile-wallet/wiki
