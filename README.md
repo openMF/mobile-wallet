@@ -1,4 +1,4 @@
-<img height='175' src="https://user-images.githubusercontent.com/44283521/78983673-455cf780-7b42-11ea-849e-ecd2009dd562.png" align="left" hspace="1" vspace="1">
+<img height='175' src="https://raw.githubusercontent.com/haran2248/mobile-wallet/dev/mifospay/src/main/res/drawable/mifospay_round_logo.png" align="left" hspace="1" vspace="1">
 
 # Mobile Wallet
 
