@@ -272,5 +272,6 @@
     <string name="no_bank_account">No bank found</string>
     <string name="error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
     <string name="fetching_history">Fetching History...</string>
+    <string name="enter_amt">Enter Amount</string>
 
 </resources>

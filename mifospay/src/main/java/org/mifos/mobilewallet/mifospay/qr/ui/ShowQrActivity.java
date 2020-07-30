@@ -140,10 +140,12 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
     }
 
     void showSetAmountDialog (final String qrData) {
-        final AlertDialog.Builder editTextDialog = new AlertDialog.Builder(this);
+        AlertDialog.Builder editTextDialog = new AlertDialog.Builder(this);
         editTextDialog.setCancelable(false);
         editTextDialog.setTitle("Enter Amount");
-        final EditText edittext = new EditText(this);
+        final View customLayout = getLayoutInflater().inflate(R.layout.dialog_set_amt, null);
+        editTextDialog.setView(customLayout);
+        final EditText edittext = customLayout.findViewById(R.id.editText_set_amt);
         edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
         editTextDialog.setView(edittext);
         if (mAmount != null) {
