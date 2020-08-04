@@ -112,6 +112,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.VISIBLE);
+        if (Build.VERSION.SDK_INT > 18)
+            hideKeyboard(getActivity());
     }
 
     @OnClick(R.id.btn_mobile)
@@ -125,6 +127,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mTilVpa.setVisibility(View.GONE);
         btnScanQr.setVisibility(View.GONE);
         mRlMobile.setVisibility(View.VISIBLE);
+        if (Build.VERSION.SDK_INT > 18)
+         hideKeyboard(getActivity());
     }
 
     @OnClick(R.id.btn_submit)
@@ -313,6 +317,18 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
             fragment.show(getParentFragment().getChildFragmentManager(),
                     Constants.MAKE_TRANSFER_FRAGMENT);
         }
+    }
+    
+      @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
 
