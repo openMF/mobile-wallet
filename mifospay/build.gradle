@@ -15,6 +15,7 @@ android {
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
     }
@@ -90,6 +91,11 @@ dependencies {
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.yalantis:ucrop:2.2.2'
     testImplementation "junit:junit:$rootProject.junitVersion"
+
+    // Hover dependency
+    implementation "com.hover:android-sdk:$rootProject.hoverSDKVersion"
+    // For MultiDex Support
+    implementation "com.android.support:multidex:$rootProject.multiDexVersion"
 
     implementation project(':core')
 }

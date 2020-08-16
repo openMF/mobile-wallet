@@ -272,5 +272,9 @@
     <string name="no_bank_account">No bank found</string>
     <string name="error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
     <string name="fetching_history">Fetching History...</string>
+    <string name="error_message">An Error Occurred</string>
+    <string name="select_payment_method">Select Payment Method</string>
+    <string name="account_transfer">Account Transfer</string>
+    <string name="mobile_money">Mobile Money</string>
 
 </resources>

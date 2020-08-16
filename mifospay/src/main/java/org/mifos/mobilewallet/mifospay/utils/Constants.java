@@ -195,4 +195,10 @@ public class Constants {
 
     public static final String CURRENT_PASSCODE = "current passcode";
     public static final String UPDATE_PASSCODE = "update passcode";
+
+    // these values are dependent on the Hover Action created
+    // This action has been registered under Devansh Aggarwal's Hover account
+    public static final String HOVER_ACTION_ID = "2a985337";
+    public static final String HOVER_PHONE = "PhoneNumber";
+    public static final String HOVER_AMOUNT = "Amount";
 }

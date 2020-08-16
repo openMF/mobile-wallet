@@ -15,6 +15,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.hover.sdk.api.Hover;
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
 import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper;
 
@@ -69,7 +70,8 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         mPresenter.attachView(this);
-
+        // Initializing Hover - this helps in downloading the application configuration
+        Hover.initialize(this);
         PasscodePreferencesHelper pref = new PasscodePreferencesHelper(getApplicationContext());
         if (!pref.getPassCode().isEmpty()) {
             startPassCodeActivity();

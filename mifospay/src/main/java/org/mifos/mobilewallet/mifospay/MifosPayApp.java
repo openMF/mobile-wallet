@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.mifospay;
 
-import android.app.Application;
 import android.content.Context;
+import android.support.multidex.MultiDexApplication;
 import android.support.v7.app.AppCompatDelegate;
 
 import com.mifos.mobile.passcode.utils.ForegroundChecker;
@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
  * Created by naman on 17/8/17.
  */
 
-public class MifosPayApp extends Application {
+public class MifosPayApp extends MultiDexApplication {
 
     private static MifosPayApp instance;
 

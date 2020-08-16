@@ -16,6 +16,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <!-- this API token is received after registering the application package on Hover-->
+        <meta-data
+            android:name="com.hover.ApiKey"
+            android:value="79df16fcf5fb844e6b7d1103a6cd4e60" />
+
         <activity android:name=".merchants.ui.MerchantTransferActivity"></activity>
 
 	<activity
@@ -27,14 +33,18 @@
             </intent-filter>
         </activity>
         
-	<activity
+	    <activity
             android:name=".auth.ui.LoginActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".home.ui.MainActivity"
             android:windowSoftInputMode="adjustPan"
-            android:theme="@style/AppTheme" />
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="com.hover.sdk.RETURN_FROM_SETTINGS" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".common.ui.SearchActivity"
             android:theme="@style/AppTheme" />

@@ -12,6 +12,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.chip.Chip;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TextInputLayout;
 import android.support.transition.TransitionManager;
 import android.support.v4.content.ContextCompat;
@@ -25,6 +26,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hover.sdk.api.HoverParameters;
+
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
@@ -34,6 +37,7 @@ import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
+import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import javax.inject.Inject;
 
@@ -78,8 +82,12 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     RelativeLayout mRlMobile;
     @BindView(R.id.til_vpa)
     TextInputLayout mTilVpa;
+    @BindView(R.id.bs_payments_option)
+    View bottomSheetView;
 
     private String vpa;
+    private double transactionAmount;
+    private String toClientIdentifier;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +104,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         ButterKnife.bind(this, rootView);
         setSwipeEnabled(false);
         mPresenter.attachView(this);
+        bottomSheetView.setVisibility(View.GONE);
         mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         mBtnVpa.setSelected(true);
         return rootView;
@@ -112,6 +121,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.VISIBLE);
+        bottomSheetView.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.btn_mobile)
@@ -129,6 +139,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @OnClick(R.id.btn_submit)
     public void transferClicked() {
+        Utils.hideSoftKeyboard(getActivity());
         String externalId = etVpa.getText().toString().trim();
         String eamount = etAmount.getText().toString().trim();
         String mobileNumber = mEtMobileNumber.getText()
@@ -143,12 +154,59 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 showSnackbar(Constants.PLEASE_ENTER_VALID_AMOUNT);
                 return;
             }
-            if (!mTransferPresenter.checkSelfTransfer(externalId)) {
-                mTransferPresenter.checkBalanceAvailability(externalId, amount);
-            } else {
-                showSnackbar(Constants.SELF_ACCOUNT_ERROR);
+            if (mBtnMobile.isSelected()) {
+                transactionAmount = amount;
+                toClientIdentifier = mobileNumber;
+                showPaymentOptionsSheet();
+            } else if (mBtnVpa.isSelected()) {
+                transactionAmount = amount;
+                toClientIdentifier = externalId;
+                initiatePayment();
             }
         }
+    }
+
+    private void showPaymentOptionsSheet() {
+        bottomSheetView.setVisibility(View.VISIBLE);
+        BottomSheetBehavior behavior = BottomSheetBehavior.from(bottomSheetView);
+        behavior.setPeekHeight(350);
+        behavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+    }
+
+    @OnClick(R.id.chip_bank_transfer)
+    public void initiatePayment() {
+        if (!mTransferPresenter.checkSelfTransfer(toClientIdentifier)) {
+            mTransferPresenter.checkBalanceAvailability(toClientIdentifier, transactionAmount);
+        } else {
+            showSnackbar(Constants.SELF_ACCOUNT_ERROR);
+        }
+        bottomSheetView.setVisibility(View.GONE);
+    }
+
+    // The variables phoneNumber and amount should be defined in our Hover Action
+    @OnClick(R.id.chip_mobile_money)
+    public void makeHoverTransaction() {
+        try {
+            Intent hoverIntent = new HoverParameters.Builder(getActivity())
+                    .request(Constants.HOVER_ACTION_ID)
+                    .extra(Constants.HOVER_PHONE, toClientIdentifier)
+                    .extra(Constants.HOVER_AMOUNT, String.valueOf(transactionAmount))
+                    .buildIntent();
+            startActivityForResult(hoverIntent, 0);
+        } catch (Exception e) {
+            showSnackbar(getString(R.string.error_message));
+        }
+        bottomSheetView.setVisibility(View.GONE);
     }
 
     @OnClick(R.id.btn_scan_qr)
@@ -314,6 +372,5 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                     Constants.MAKE_TRANSFER_FRAGMENT);
         }
     }
-
 
 }

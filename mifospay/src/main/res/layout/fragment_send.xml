@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_send_container"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical">
 
@@ -221,11 +223,48 @@
             android:layout_marginBottom="50dp"
             android:orientation="horizontal">
 
+        </LinearLayout>
 
+    </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/bs_payments_option"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/drawable_bottom_sheet_view"
+        app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
+        android:layout_height="@dimen/value_250dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/value_15dp"
+            android:layout_gravity="center"
+            android:textAppearance="@style/TextAppearance.AppCompat"
+            android:text="@string/select_payment_method" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <android.support.design.chip.Chip
+                android:id="@+id/chip_bank_transfer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/value_15dp"
+                android:text="@string/account_transfer" />
+
+            <android.support.design.chip.Chip
+                android:id="@+id/chip_mobile_money"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/value_15dp"
+                android:text="@string/mobile_money" />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</RelativeLayout>
+</android.support.design.widget.CoordinatorLayout>
