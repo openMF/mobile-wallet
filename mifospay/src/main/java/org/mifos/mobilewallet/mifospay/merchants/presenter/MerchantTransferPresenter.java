@@ -137,9 +137,8 @@ public class MerchantTransferPresenter implements BaseHomeContract.MerchantTrans
                 public void onComplete() {
                     for (Transaction transaction : transactions) {
                         if (transaction.getTransferDetail() != null
-                                && transaction.getTransferDetail().getToAccount()
-                                .getAccountNo().equals(
-                                        merchantAccountNumber)) {
+                                && merchantAccountNumber.equals(
+                                transaction.getTransferDetail().getToAccount().getAccountNo())) {
 
                             specificTransactions.add(transaction);
                         }

@@ -87,12 +87,10 @@ public class SpecificTransactionsPresenter implements
                 public void onComplete() {
                     for (Transaction transaction : transactions) {
                         if (transaction.getTransferDetail() != null
-                                && (transaction.getTransferDetail().getFromAccount()
-                                .getAccountNo().equals(
-                                secondAccountNumber)
-                                || transaction.getTransferDetail().getToAccount()
-                                .getAccountNo().equals(
-                                secondAccountNumber))) {
+                                && (secondAccountNumber.equals(
+                                transaction.getTransferDetail().getFromAccount().getAccountNo())
+                                || secondAccountNumber.equals(
+                                transaction.getTransferDetail().getToAccount().getAccountNo()))) {
 
                             specificTransactions.add(transaction);
                         }

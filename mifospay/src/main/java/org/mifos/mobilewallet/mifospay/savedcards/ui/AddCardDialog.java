@@ -155,7 +155,7 @@ public class AddCardDialog extends BottomSheetDialogFragment {
         }
         Card card = new Card(etCardNumber.getText().toString(), etCVV.getText().toString(),
                 spnMM.getSelectedItem() + "/" + spnYY.getSelectedItem(),
-                etFname.getText().toString(), etLname.getText().toString());
+                etFname.getText().toString(), etLname.getText().toString(), 0);
 
         if (forEdit) {
             card.setId(editCard.getId());

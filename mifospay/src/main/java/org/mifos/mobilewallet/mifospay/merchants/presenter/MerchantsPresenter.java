@@ -79,8 +79,8 @@ public class MerchantsPresenter implements MerchantsContract.MerchantsPresenter 
                     R response) {
                 FetchClientDetails.ResponseValue responseValue =
                         (FetchClientDetails.ResponseValue) response;
-                savingsWithAssociationsList.get(taskData.getTaskId()).setExternalId(
-                        responseValue.getClient().getExternalId());
+                savingsWithAssociationsList.get(taskData.getTaskId())
+                        .setExternalId(responseValue.getClient().getExternalId());
             }
 
             @Override
