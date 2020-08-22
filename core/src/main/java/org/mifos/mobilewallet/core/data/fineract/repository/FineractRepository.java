@@ -22,7 +22,6 @@ import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
-import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.core.domain.model.client.NewClient;
 import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken;
@@ -95,10 +94,6 @@ public class FineractRepository {
                         return responseBody;
                     }
                 });
-    }
-
-    public Observable<GenericResponse> createSavingsAccount(NewAccount newAccount) {
-        return fineractApiManager.getClientsApi().createAccount(newAccount);
     }
 
     public Observable<ClientAccounts> getAccounts(long clientId) {
