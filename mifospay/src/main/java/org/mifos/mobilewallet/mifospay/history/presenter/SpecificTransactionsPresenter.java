@@ -56,7 +56,8 @@ public class SpecificTransactionsPresenter implements
                 final Transaction transaction = transactions.get(i);
 
                 if (transaction.getTransferDetail() == null
-                        && transaction.getTransferId() != 0) {
+                        && transaction.getTransferId() != null
+                        && !"0".equals(transaction.getTransactionId())) {
 
                     long transferId = transaction.getTransferId();
 

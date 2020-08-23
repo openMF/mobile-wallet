@@ -139,8 +139,8 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
         }
 
         editCardUseCase.setRequestValues(
-                new EditCard.RequestValues((int) mLocalRepository.getClientDetails().getClientId(),
-                        card));
+                new EditCard.RequestValues(
+                        mLocalRepository.getClientDetails().getClientId().intValue(), card));
         final EditCard.RequestValues requestValues = editCardUseCase.getRequestValues();
 
         mUseCaseHandler.execute(editCardUseCase, requestValues,
@@ -171,8 +171,7 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
 
         deleteCardUseCase.setRequestValues(
                 new DeleteCard.RequestValues(
-                        (int) mLocalRepository.getClientDetails().getClientId(),
-                        cardId));
+                        mLocalRepository.getClientDetails().getClientId().intValue(), cardId));
         final DeleteCard.RequestValues requestValues = deleteCardUseCase.getRequestValues();
 
         mUseCaseHandler.execute(deleteCardUseCase, requestValues,

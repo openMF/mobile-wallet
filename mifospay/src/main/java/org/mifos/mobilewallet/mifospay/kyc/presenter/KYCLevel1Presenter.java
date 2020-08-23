@@ -44,7 +44,7 @@ public class KYCLevel1Presenter implements KYCContract.KYCLevel1Presenter {
                 address2, phoneno, dob, "1");
 
         uploadKYCLevel1DetailsUseCase.setRequestValues(new UploadKYCLevel1Details.RequestValues(
-                (int) mLocalRepository.getClientDetails().getClientId(), kycLevel1Details));
+                mLocalRepository.getClientDetails().getClientId().intValue(), kycLevel1Details));
 
         final UploadKYCLevel1Details.RequestValues requestValues =
                 uploadKYCLevel1DetailsUseCase.getRequestValues();

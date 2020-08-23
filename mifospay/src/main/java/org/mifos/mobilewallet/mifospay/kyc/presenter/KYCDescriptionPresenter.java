@@ -39,7 +39,7 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
     public void fetchCurrentLevel() {
 
         fetchKYCLevel1DetailsUseCase.setRequestValues(new FetchKYCLevel1Details.RequestValues(
-                (int) mLocalRepository.getClientDetails().getClientId()));
+                mLocalRepository.getClientDetails().getClientId().intValue()));
 
         FetchKYCLevel1Details.RequestValues requestValues =
                 fetchKYCLevel1DetailsUseCase.getRequestValues();

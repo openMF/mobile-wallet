@@ -36,7 +36,7 @@ public class ClientDetailsMapper {
 
         if (client != null) {
             clientDetails.setName(client.getDisplayName());
-            clientDetails.setClientId(client.getId());
+            clientDetails.setClientId((long) client.getId());
             clientDetails.setExternalId(client.getExternalId());
             clientDetails.setMobileNo(client.getMobileNo());
         }
