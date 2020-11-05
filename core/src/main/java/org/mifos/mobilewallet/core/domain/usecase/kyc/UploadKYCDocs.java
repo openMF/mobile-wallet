@@ -1,8 +1,8 @@
 package org.mifos.mobilewallet.core.domain.usecase.kyc;
 
 import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.data.common.GenericResponse;
+import org.mifos.mobilewallet.core.data.common.FineractRepository;
 
 import javax.inject.Inject;
 

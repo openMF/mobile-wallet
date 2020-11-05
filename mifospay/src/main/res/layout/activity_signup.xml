@@ -81,6 +81,17 @@
                     android:paddingRight="15dp"/>
 
                 <EditText
+                    android:id="@+id/et_middle_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginBottom="10dp"
+                    android:background="@drawable/bg_et_round_border"
+                    android:hint="@string/middle_name"
+                    android:inputType="text"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"/>
+
+                <EditText
                     android:id="@+id/et_last_name"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -162,6 +173,33 @@
                     android:inputType="textEmailAddress"
                     android:paddingLeft="15dp"/>
 
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/value_10dp"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/et_birth_date"
+                        android:layout_width="@dimen/value_200dp"
+                        android:layout_height="48dp"
+                        android:layout_gravity="center"
+                        android:focusableInTouchMode="false"
+                        android:background="@drawable/bg_et_round_border"
+                        android:hint="@string/date_of_birth"
+                        android:inputType="date"
+                        android:paddingLeft="15dp"/>
+
+                    <ImageView
+                        android:id="@+id/iv_pick_date"
+                        android:layout_width="@dimen/value_40dp"
+                        android:layout_height="@dimen/value_40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/value_15dp"
+                        android:src="@drawable/ic_pick_date"/>
+
+                </LinearLayout>
+
                 <EditText
                     android:id="@+id/et_business_shop_name"
                     android:layout_width="match_parent"
@@ -199,7 +237,7 @@
 
                 <EditText
                     android:id="@+id/et_pin_code"
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/value_200dp"
                     android:layout_height="48dp"
                     android:layout_marginBottom="10dp"
                     android:background="@drawable/bg_et_round_border"

@@ -57,4 +57,18 @@ public class Constants {
     public static final String MERCHANT = "merchant";
     public static final String FETCH_CLIENT_DETAILS_USE_CASE = "Fetch Client Details UseCase";
     public static final String ERROR_FETCHING_NOTIFICATIONS = "Error fetching notifications";
+
+    // FineractCN Header Values
+    public static final String TENANT = "tn01";
+    public static final String USER = "interopUser";
+
+    // For FineractCN Customer Creation
+    public static final String CUSTOMER_ACCOUNT_BENEFICIARY = "Hubby";
+    public static final String CUSTOMER_REFERENCE_CUSTOMER = "friend";
+    public static final String CUSTOMER_ASSIGNED_OFFICE = "Bali ViB";
+    public static final String CUSTOMER_ASSIGNED_EMPLOYEE = "Shu Dion";
+
+    // For FineractCN Deposit Account Creation
+    public static final String WALLET_DEPOSIT_PRODUCT_INSTANCE_IDENTIFIER = "MW_PRDCT_001";
+
 }

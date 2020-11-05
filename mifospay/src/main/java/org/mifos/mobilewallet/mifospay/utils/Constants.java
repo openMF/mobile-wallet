@@ -128,6 +128,7 @@ public class Constants {
             "Sending OTP to your mobile number..";
     public static final String MOBILE_NUMBER = "Mobile Number";
     public static final String COUNTRY = "Country";
+    public static final String COUNTRY_CODE = "Country_Code";
     public static final String GOOGLE_SIGN_IN_FAILED = "Google Sign in failed.";
     public static final String GOOGLE_GIVEN_NAME = "GOOGLE_GIVEN_NAME";
     public static final String GOOGLE_FAMILY_NAME = "GOOGLE_FAMILY_NAME";
@@ -195,4 +196,12 @@ public class Constants {
 
     public static final String CURRENT_PASSCODE = "current passcode";
     public static final String UPDATE_PASSCODE = "update passcode";
+
+    // FineractCN login
+    public static final String GRANT_TYPE = "password";
+    public static final String USER_NAME = "interopUser";
+    public static final String PASSWORD = "aW50b3BAZDE=";
+
+    public static final String STARTING_DATE = "2017-01-01Z";
+    public static final String OTHER_CUSTOMER_NAME = "other_customer_name";
 }

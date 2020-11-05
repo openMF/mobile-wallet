@@ -1,12 +1,12 @@
 package org.mifos.mobilewallet.mifospay.home.presenter;
 
-import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.deposit.Currency;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.deposit.DepositAccount;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
+import org.mifos.mobilewallet.core.domain.usecase.deposit.FetchCustomerDepositAccount;
+import org.mifos.mobilewallet.core.domain.usecase.deposit.FetchProductDetails;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
@@ -29,18 +29,17 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     private final UseCaseHandler mUsecaseHandler;
     private final LocalRepository localRepository;
     @Inject
-    FetchAccount mFetchAccountUseCase;
+    FetchCustomerDepositAccount fetchDepositAccountUseCase;
     @Inject
-    FetchAccountTransactions fetchAccountTransactionsUseCase;
-    @Inject
-    TaskLooper mTaskLooper;
-    @Inject
-    UseCaseFactory mUseCaseFactory;
+    FetchProductDetails fetchProductDetailsUseCase;
     @Inject
     TransactionsHistory transactionsHistory;
     private BaseHomeContract.HomeView mHomeView;
     private final PreferencesHelper preferencesHelper;
-    private List<Transaction> transactionList;
+    private List<JournalEntry> transactionList;
+
+    private Double accountBalance;
+    private String accountIdentifier;
 
     @Inject
     public HomePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository,
@@ -59,30 +58,61 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
 
     @Override
     public void fetchAccountDetails() {
-        mUsecaseHandler.execute(mFetchAccountUseCase,
-                new FetchAccount.RequestValues(localRepository.getClientDetails().getClientId()),
-                new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {
+        mUsecaseHandler.execute(fetchDepositAccountUseCase,
+                new FetchCustomerDepositAccount.RequestValues(
+                        preferencesHelper.getCustomerIdentifier()),
+                new UseCase.UseCaseCallback<FetchCustomerDepositAccount.ResponseValue>() {
                     @Override
-                    public void onSuccess(FetchAccount.ResponseValue response) {
-                        preferencesHelper.setAccountId(response.getAccount().getId());
-                        mHomeView.setAccountBalance(response.getAccount());
-                        transactionsHistory.fetchTransactionsHistory(response.getAccount().getId());
+                    public void onSuccess(FetchCustomerDepositAccount.ResponseValue response) {
                         mHomeView.hideSwipeProgress();
+                        DepositAccount customerDepositAccount = response.getDepositAccount();
+                        accountIdentifier = customerDepositAccount.getAccountIdentifier();
+                        accountBalance = customerDepositAccount.getBalance();
+                        preferencesHelper.saveCustomerDepositAccountIdentifier(accountIdentifier);
+                        fetchCurrency(customerDepositAccount.getProductIdentifier());
+
                     }
 
                     @Override
                     public void onError(String message) {
                         mHomeView.hideBottomSheetActionButton();
                         mHomeView.showTransactionsError();
-                        mHomeView.showToast(message);
+                        mHomeView.showBalanceError();
                         mHomeView.hideSwipeProgress();
                         mHomeView.hideTransactionLoading();
+                    }
+                });
+
+    }
+
+    /**
+     *@param productIdentifier - Used to fetch the product associated with customers account.
+     *                         Currency Code of the product is saved in shared preferences for
+     *                         later usage
+     */
+    private void fetchCurrency(final String productIdentifier) {
+        mUsecaseHandler.execute(fetchProductDetailsUseCase,
+                new FetchProductDetails.RequestValues(productIdentifier),
+                new UseCase.UseCaseCallback<FetchProductDetails.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchProductDetails.ResponseValue response) {
+                        Currency currency = response.getProduct().getCurrency();
+                        preferencesHelper.saveCurrencySign(currency.getSign());
+
+                        mHomeView.setAccountBalance(accountBalance);
+                        transactionsHistory.fetchTransactionsHistory(accountIdentifier);
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mHomeView.showToast(message);
                     }
                 });
     }
 
     @Override
-    public void onTransactionsFetchCompleted(List<Transaction> transactions) {
+    public void onTransactionsFetchCompleted(List<JournalEntry> transactions) {
+        mHomeView.hideTransactionLoading();
         this.transactionList = transactions;
         if (transactionList == null) {
             mHomeView.hideBottomSheetActionButton();
@@ -92,10 +122,17 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
         }
     }
 
+    @Override
+    public void onTransactionsFetchError(String message) {
+        mHomeView.hideBottomSheetActionButton();
+        mHomeView.hideTransactionLoading();
+        mHomeView.showTransactionsError();
+    }
+
     private void handleTransactionsHistory(int existingItemCount) {
         int transactionsAmount = transactionList.size() - existingItemCount;
         if (transactionsAmount > Constants.HOME_HISTORY_TRANSACTIONS_LIMIT) {
-            List<Transaction> showList = transactionList.subList(0,
+            List<JournalEntry> showList = transactionList.subList(0,
                     Constants.HOME_HISTORY_TRANSACTIONS_LIMIT + existingItemCount);
             mHomeView.showTransactionsHistory(showList);
             mHomeView.showBottomSheetActionButton();

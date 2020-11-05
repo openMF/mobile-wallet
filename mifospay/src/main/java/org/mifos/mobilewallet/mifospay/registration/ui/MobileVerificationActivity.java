@@ -149,6 +149,7 @@ public class MobileVerificationActivity extends BaseActivity implements
                 getIntent().getStringExtra(Constants.GOOGLE_GIVEN_NAME));
 
         intent.putExtra(Constants.COUNTRY, mCcpCountry.getSelectedCountryName());
+        intent.putExtra(Constants.COUNTRY_CODE, mCcpCode.getCcpDialogShowNameCode());
         intent.putExtra(Constants.MOBILE_NUMBER, mCcpCode.getFullNumber());
 
         startActivity(intent);

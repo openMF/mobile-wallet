@@ -1,7 +1,6 @@
-package org.mifos.mobilewallet.core.data.fineract.repository;
+package org.mifos.mobilewallet.core.data.common;
 
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager;
 import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
 import org.mifos.mobilewallet.core.data.fineract.entity.Page;
@@ -22,6 +21,13 @@ import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
+import org.mifos.mobilewallet.core.data.fineractcn.api.FineractCNApiManager;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.LoginResponse;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.customer.Customer;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.deposit.DepositAccount;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.deposit.DepositAccountPayload;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.deposit.Product;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
 import org.mifos.mobilewallet.core.domain.model.client.NewClient;
@@ -51,11 +57,14 @@ public class FineractRepository {
 
     private final FineractApiManager fineractApiManager;
     private final SelfServiceApiManager selfApiManager;
+    private final FineractCNApiManager fineractCNApiManager;
 
     @Inject
-    public FineractRepository(FineractApiManager fineractApiManager) {
+    public FineractRepository(FineractApiManager fineractApiManager,
+                              FineractCNApiManager fineractCNApiManager) {
         this.fineractApiManager = fineractApiManager;
         this.selfApiManager = FineractApiManager.getSelfApiManager();
+        this.fineractCNApiManager = fineractCNApiManager;
     }
 
     public Observable<CreateClient.ResponseValue> createClient(NewClient newClient) {
@@ -262,5 +271,48 @@ public class FineractRepository {
     public Observable<ResponseBody> updateBeneficiary(long beneficiaryId,
             BeneficiaryUpdatePayload payload) {
         return selfApiManager.getBeneficiaryApi().updateBeneficiary(beneficiaryId, payload);
+    }
+
+    // FineractCN APIs
+
+    public Observable<LoginResponse> loginFineractCNUser(
+            String grantType, String userName, String password) {
+        return fineractCNApiManager.getAuthenticationAPI().authenticate(
+                grantType, userName, password);
+    }
+
+    public Observable<ResponseBody> createCustomer(Customer customerPayload) {
+        return fineractCNApiManager.getCustomerApi().createCustomer(customerPayload);
+    }
+
+    public Observable<Customer> fetchCustomerDetails(String customerIdentifier) {
+        return fineractCNApiManager.getCustomerApi().fetchCustomer(customerIdentifier);
+    }
+
+    public Observable<List<DepositAccount>> fetchCustomerDepositAccounts(
+            String customerIdentifier) {
+        return fineractCNApiManager.getDepositApi().fetchCustomersDeposits(customerIdentifier);
+    }
+
+    public Observable<DepositAccount> fetchDepositAccountDetails(String accountIdentifier) {
+        return fineractCNApiManager.getDepositApi().fetchDepositAccountDetails(accountIdentifier);
+    }
+
+    public Observable<Product> fetchProductDetails(String productIdentifier) {
+        return fineractCNApiManager.getDepositApi().fetchProductDetails(productIdentifier);
+    }
+
+    public Observable<ResponseBody> createDepositAccount(DepositAccountPayload payload) {
+        return fineractCNApiManager.getDepositApi().createDepositAccount(payload);
+    }
+
+    public Observable<List<JournalEntry>> fetchJournalEntries(
+            String accountIdentifier, String dateRange) {
+        return fineractCNApiManager.getAccountingApi().fetchJournalEntries(
+                dateRange, accountIdentifier);
+    }
+
+    public Observable<JournalEntry> fetchJournalEntry(String entryIdentifier) {
+        return fineractCNApiManager.getAccountingApi().fetchJournalEntry(entryIdentifier);
     }
 }

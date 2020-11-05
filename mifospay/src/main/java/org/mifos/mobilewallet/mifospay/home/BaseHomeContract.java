@@ -1,7 +1,6 @@
 package org.mifos.mobilewallet.mifospay.home;
 
-import org.mifos.mobilewallet.core.domain.model.Account;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
@@ -30,11 +29,13 @@ public interface BaseHomeContract {
 
         void showSnackbar(String message);
 
-        void setAccountBalance(Account account);
+        void setAccountBalance(Double accountBalance);
 
-        void showTransactionsHistory(List<Transaction> transactions);
+        void showTransactionsHistory(List<JournalEntry> transactions);
 
         void showTransactionsError();
+
+        void showBalanceError();
 
         void showTransactionsEmpty();
 
@@ -93,7 +94,7 @@ public interface BaseHomeContract {
 
         void showTransactionFetching();
 
-        void showTransactions(List<Transaction> transactions);
+        void showTransactions(List<JournalEntry> transactions);
 
         void showSpecificView(int drawable, int title, int subtitle);
 
@@ -109,8 +110,6 @@ public interface BaseHomeContract {
 
     interface ProfileView extends BaseView<ProfilePresenter> {
 
-        void showProfile(Client client);
-
         void showEmail(String email);
 
         void showVpa(String vpa);
@@ -125,8 +124,6 @@ public interface BaseHomeContract {
     }
 
     interface ProfilePresenter extends BasePresenter {
-
-        void fetchProfile();
 
         void fetchAccountDetails();
 

@@ -1,14 +1,15 @@
 package org.mifos.mobilewallet.mifospay.history;
 
-import org.mifos.mobilewallet.core.base.TaskLooper;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
+import org.mifos.mobilewallet.core.domain.usecase.journal.FetchJournalEntries;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -18,14 +19,10 @@ public class TransactionsHistory {
     private final UseCaseHandler mUsecaseHandler;
     public HistoryContract.TransactionsHistoryAsync delegate;
     @Inject
-    FetchAccount mFetchAccountUseCase;
-    @Inject
-    FetchAccountTransactions fetchAccountTransactionsUseCase;
-    @Inject
-    TaskLooper mTaskLooper;
+    FetchJournalEntries fetchJournalEntriesUseCase;
     @Inject
     UseCaseFactory mUseCaseFactory;
-    private List<Transaction> transactions;
+    private List<JournalEntry> transactions;
 
     @Inject
     public TransactionsHistory(UseCaseHandler useCaseHandler) {
@@ -33,14 +30,17 @@ public class TransactionsHistory {
         transactions = new ArrayList<>();
     }
 
-    public void fetchTransactionsHistory(long accountId) {
-        mUsecaseHandler.execute(fetchAccountTransactionsUseCase,
-                new FetchAccountTransactions.RequestValues(accountId),
-                new UseCase.UseCaseCallback<FetchAccountTransactions.ResponseValue>() {
+    public void fetchTransactionsHistory(String accountIdentifier) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = sdf.format(new Date());
+        String dateRange = Constants.STARTING_DATE + ".." + currentDate + "Z";
+        mUsecaseHandler.execute(fetchJournalEntriesUseCase,
+                new FetchJournalEntries.RequestValues(accountIdentifier, dateRange),
+                new UseCase.UseCaseCallback<FetchJournalEntries.ResponseValue>() {
 
                     @Override
-                    public void onSuccess(FetchAccountTransactions.ResponseValue response) {
-                        transactions = response.getTransactions();
+                    public void onSuccess(FetchJournalEntries.ResponseValue response) {
+                        transactions = response.getJournalEntryList();
                         delegate.onTransactionsFetchCompleted(transactions);
                     }
 

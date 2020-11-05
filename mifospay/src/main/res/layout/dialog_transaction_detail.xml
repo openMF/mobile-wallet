@@ -41,8 +41,10 @@
 
                 <TextView
                     android:id="@+id/tv_transaction_id"
-                    android:layout_width="match_parent"
+                    android:layout_width="@dimen/value_200dp"
                     android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textColor="@color/primaryDarkBlue"/>
 
                 <TextView
@@ -120,10 +122,12 @@
 
                 <TextView
                     android:id="@+id/tv_fromAccountNo"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/value_100dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/account"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textColor="@color/grey_900"/>
 
             </LinearLayout>
@@ -160,10 +164,12 @@
 
                 <TextView
                     android:id="@+id/tv_toAccountNo"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/value_100dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/account"
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:textColor="@color/grey_900"/>
 
             </LinearLayout>
@@ -176,7 +182,7 @@
             android:layout_height="1dp"
             android:layout_margin="@dimen/value_10dp"
             android:background="#44000000"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_viewReceipt"

@@ -1,41 +1,23 @@
 package org.mifos.mobilewallet.mifospay.history.presenter;
 
-import org.mifos.mobilewallet.core.base.TaskLooper;
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.model.Account;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.TransactionsHistory;
-
 import java.util.List;
-
 import javax.inject.Inject;
 
-public class HistoryPresenter implements
-        HistoryContract.TransactionsHistoryPresenter,
+public class HistoryPresenter implements HistoryContract.TransactionsHistoryPresenter,
         HistoryContract.TransactionsHistoryAsync {
 
     private final UseCaseHandler mUseCaseHandler;
     private final LocalRepository mLocalRepository;
     @Inject
-    FetchAccount mFetchAccountUseCase;
-    @Inject
-    FetchAccountTransactions fetchAccountTransactionsUseCase;
-    @Inject
-    TaskLooper mTaskLooper;
-    @Inject
-    UseCaseFactory mUseCaseFactory;
-    @Inject
     TransactionsHistory mTransactionsHistory;
     private HistoryContract.HistoryView mHistoryView;
-    private Account mAccount;
 
     @Inject
     public HistoryPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
@@ -51,27 +33,13 @@ public class HistoryPresenter implements
     }
 
     @Override
-    public void fetchTransactions() {
+    public void fetchTransactions(String accountIdentifier) {
         mHistoryView.showHistoryFetchingProgress();
-        mUseCaseHandler.execute(mFetchAccountUseCase,
-                new FetchAccount.RequestValues(mLocalRepository.getClientDetails().getClientId()),
-                new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {
-                    @Override
-                    public void onSuccess(FetchAccount.ResponseValue response) {
-                        mAccount = response.getAccount();
-                        mTransactionsHistory
-                                .fetchTransactionsHistory(response.getAccount().getId());
-                    }
-
-                    @Override
-                    public void onError(String message) {
-                        showErrorStateView();
-                    }
-                });
+        mTransactionsHistory.fetchTransactionsHistory(accountIdentifier);
     }
 
     @Override
-    public void onTransactionsFetchCompleted(List<Transaction> transactions) {
+    public void onTransactionsFetchCompleted(List<JournalEntry> transactions) {
         if (transactions == null) {
             showErrorStateView();
         } else {
@@ -85,9 +53,8 @@ public class HistoryPresenter implements
     }
 
     @Override
-    public void handleTransactionClick(int transactionIndex) {
-        String accountNumber = mAccount != null ? mAccount.getNumber() : "";
-        mHistoryView.showTransactionDetailDialog(transactionIndex, accountNumber);
+    public void onTransactionsFetchError(String message) {
+        showEmptyStateView();
     }
 
     private void showErrorStateView() {

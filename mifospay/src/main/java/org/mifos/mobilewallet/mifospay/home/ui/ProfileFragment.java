@@ -10,11 +10,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfilePresenter;
@@ -39,6 +38,9 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     ProfilePresenter mPresenter;
 
     BaseHomeContract.ProfilePresenter mProfilePresenter;
+
+    @Inject
+    PreferencesHelper preferencesHelper;
 
     @BindView(R.id.iv_user_image)
     ImageView ivUserImage;
@@ -112,7 +114,7 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     @Override
     public void onResume() {
         super.onResume();
-        mProfilePresenter.fetchProfile();
+        showProfile();
         mProfilePresenter.fetchAccountDetails();
         mProfilePresenter.fetchClientImage();
     }
@@ -138,14 +140,15 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
         }
     }
 
-    @Override
-    public void showProfile(Client client) {
+    private void showProfile() {
         TextDrawable drawable = TextDrawable.builder().beginConfig()
                 .width((int) getResources().getDimension(R.dimen.user_profile_image_size))
                 .height((int) getResources().getDimension(R.dimen.user_profile_image_size))
-                .endConfig().buildRound(client.getName().substring(0, 1), R.color.colorAccentBlack);
+                .endConfig()
+                .buildRound(preferencesHelper.getCustomerName().substring(0, 1),
+                        R.color.colorAccentBlack);
         ivUserImage.setImageDrawable(drawable);
-        tvUserName.setText(client.getName());
+        tvUserName.setText(preferencesHelper.getCustomerName());
     }
 
     @Override

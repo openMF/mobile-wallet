@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.core.base;
 
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.data.common.FineractRepository;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientDetails;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer;
 import org.mifos.mobilewallet.core.utils.Constants;
@@ -26,7 +26,6 @@ public class UseCaseFactory {
         } else if (useCase.equals(Constants.FETCH_CLIENT_DETAILS_USE_CASE)) {
             return new FetchClientDetails(mFineractRepository);
         }
-
         return null;
     }
 }

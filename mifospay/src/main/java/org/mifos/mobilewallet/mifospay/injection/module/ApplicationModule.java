@@ -6,6 +6,7 @@ import android.content.Context;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.base.UseCaseThreadPoolScheduler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
+import org.mifos.mobilewallet.core.data.fineractcn.api.FineractCNApiManager;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.injection.ApplicationContext;
 
@@ -43,6 +44,12 @@ public class ApplicationModule {
     @Singleton
     FineractApiManager provideFineractApiManager() {
         return new FineractApiManager();
+    }
+
+    @Provides
+    @Singleton
+    FineractCNApiManager provideFineractCNApiManager() {
+        return new FineractCNApiManager();
     }
 
     @Provides

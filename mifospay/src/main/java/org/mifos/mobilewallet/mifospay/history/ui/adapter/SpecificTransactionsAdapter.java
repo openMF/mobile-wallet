@@ -11,7 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.Account;
+import org.mifos.mobilewallet.core.data.fineractcn.entity.journal.JournalEntry;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
@@ -24,6 +25,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static org.mifos.mobilewallet.mifospay.utils.Constants.CREDIT;
+import static org.mifos.mobilewallet.mifospay.utils.Constants.DEBIT;
+import static org.mifos.mobilewallet.mifospay.utils.Constants.OTHER;
+
 /**
  * Created by ankur on 18/June/2018
  */
@@ -32,7 +37,11 @@ public class SpecificTransactionsAdapter
         extends RecyclerView.Adapter<SpecificTransactionsAdapter.ViewHolder> {
 
     private Context context;
-    private List<Transaction> transactions;
+    private List<JournalEntry> transactions;
+    private String currencySign;
+    private String accountIdentifier;
+    private String customerName;
+    private String otherCustomerName;
 
     @Inject
     public SpecificTransactionsAdapter() {
@@ -47,34 +56,43 @@ public class SpecificTransactionsAdapter
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Transaction transaction = transactions.get(position);
+        JournalEntry transaction = transactions.get(position);
 
         holder.mTvTransactionId.setText(
-                Constants.TRANSACTION_ID + ": " + transaction.getTransactionId());
-        holder.mTvTransactionDate.setText(Constants.DATE + ": " + transaction.getDate());
-        holder.mTvTransactionAmount.setText(Utils.getFormattedAccountBalance(
-                transaction.getAmount(), transaction.getCurrency().getCode()));
+                Constants.TRANSACTION_ID + ": " + transaction.getTransactionIdentifier());
 
-        holder.mTvFromClientName.setText(
-                transaction.getTransferDetail().getFromClient().getDisplayName());
-        holder.mTvFromAccountNo.setText(
-                transaction.getTransferDetail().getFromAccount().getAccountNo());
-        holder.mTvToClientName.setText(
-                transaction.getTransferDetail().getToClient().getDisplayName());
-        holder.mTvToAccountNo.setText(
-                transaction.getTransferDetail().getToAccount().getAccountNo());
+        String formattedTransactionDate = Utils.getFormattedDate(transaction.getTransactionDate());
+        holder.mTvTransactionDate.setText(Constants.DATE + ": " + formattedTransactionDate);
 
-        switch (transaction.getTransactionType()) {
+        List<Account> creditors = transaction.getCreditors();
+        List<Account> debtors = transaction.getDebtors();
+        Double amount = Double.valueOf(creditors.get(0).getAmount());
+
+        holder.mTvTransactionAmount.setText(Utils.getFormattedAccountBalance(amount, currencySign));
+
+        String transactionType = DEBIT;
+        if (accountIdentifier.equals(creditors.get(0).getAccountNumber())) {
+            transactionType = CREDIT;
+        }
+
+        holder.mTvFromAccountNo.setText(creditors.get(0).getAccountNumber());
+        holder.mTvToAccountNo.setText(debtors.get(0).getAccountNumber());
+
+        switch (transactionType) {
             case DEBIT:
-                holder.mTvTransactionStatus.setText(Constants.DEBIT);
+                holder.mTvTransactionStatus.setText(DEBIT);
                 holder.mTvTransactionAmount.setTextColor(Color.RED);
+                holder.mTvToClientName.setText(customerName);
+                holder.mTvFromClientName.setText(otherCustomerName);
                 break;
             case CREDIT:
-                holder.mTvTransactionStatus.setText(Constants.CREDIT);
+                holder.mTvTransactionStatus.setText(CREDIT);
                 holder.mTvTransactionAmount.setTextColor(Color.parseColor("#009688"));
+                holder.mTvToClientName.setText(otherCustomerName);
+                holder.mTvFromClientName.setText(customerName);
                 break;
             case OTHER:
-                holder.mTvTransactionStatus.setText(Constants.OTHER);
+                holder.mTvTransactionStatus.setText(OTHER);
                 holder.mTvTransactionAmount.setTextColor(Color.YELLOW);
                 break;
         }
@@ -94,16 +112,22 @@ public class SpecificTransactionsAdapter
         this.context = context;
     }
 
-    public void setData(List<Transaction> transactions) {
+    public void setData(List<JournalEntry> transactions, String currencySign,
+                        String accountIdentifier, String customerName,
+                        String otherCustomerName) {
         this.transactions = transactions;
+        this.currencySign  = currencySign;
+        this.accountIdentifier = accountIdentifier;
+        this.customerName = customerName;
+        this.otherCustomerName = otherCustomerName;
         notifyDataSetChanged();
     }
 
-    public ArrayList<Transaction> getTransactions() {
-        return (ArrayList<Transaction>) transactions;
+    public ArrayList<JournalEntry> getTransactions() {
+        return (ArrayList<JournalEntry>) transactions;
     }
 
-    public Transaction getTransaction(int position) {
+    public JournalEntry getTransaction(int position) {
         return transactions.get(position);
     }
 

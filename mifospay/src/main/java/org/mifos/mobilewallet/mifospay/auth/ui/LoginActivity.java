@@ -195,6 +195,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     }
 
     public void signup(int mifosSavingsProductId) {
+        mMifosSavingProductId = mifosSavingsProductId;
         showProgressDialog(Constants.PLEASE_WAIT);
         Intent intent = new Intent(LoginActivity.this, MobileVerificationActivity.class);
         mMifosSavingProductId = mifosSavingsProductId;

@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.core.data.fineract.api;
+package org.mifos.mobilewallet.core.data.common;
 
 import java.util.HashMap;
 

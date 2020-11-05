@@ -4,7 +4,7 @@ import android.net.Uri;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
+import org.mifos.mobilewallet.core.data.common.FineractRepository;
 import org.mifos.mobilewallet.core.utils.Constants;
 
 import java.util.List;

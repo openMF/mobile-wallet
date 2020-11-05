@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.api.services;
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
+import org.mifos.mobilewallet.core.data.common.GenericResponse;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole;
 import org.mifos.mobilewallet.core.domain.model.user.NewUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser;

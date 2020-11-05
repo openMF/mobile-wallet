@@ -4,7 +4,10 @@ import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.view.inputmethod.InputMethodManager
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.util.*
 
 object Utils {
@@ -24,11 +27,19 @@ object Utils {
     fun String.isBlank() = this.isEmpty() || indices.all { this[it].isWhitespace() }
 
     @JvmStatic
-    fun getFormattedAccountBalance(balance: Double?, currencyCode: String?): String {
-        val accountBalanceFormatter = NumberFormat.getCurrencyInstance()
-        accountBalanceFormatter.maximumFractionDigits = 0
-        accountBalanceFormatter.currency = Currency.getInstance(currencyCode)
-        return accountBalanceFormatter.format(balance)
+    fun getFormattedAccountBalance(balance: Double?, currencySymbol: String?): String {
+        val df = DecimalFormat("#")
+        df.roundingMode = RoundingMode.CEILING
+        val roundedBalance = df.format(balance)
+        return "$currencySymbol $roundedBalance"
+    }
+
+    @JvmStatic
+    fun getFormattedDate(unformattedDate: String): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+        val output = SimpleDateFormat("dd MMMM yyyy")
+        val date = sdf.parse(unformattedDate)
+        return output.format(date)
     }
 
 }
