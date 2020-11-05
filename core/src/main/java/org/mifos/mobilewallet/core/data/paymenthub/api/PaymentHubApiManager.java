@@ -1,6 +1,8 @@
 package org.mifos.mobilewallet.core.data.paymenthub.api;
 
+import org.mifos.mobilewallet.core.data.paymenthub.api.services.RegistrationService;
 import org.mifos.mobilewallet.core.data.paymenthub.api.services.TransactionsService;
+import org.mifos.mobilewallet.core.utils.Constants;
 
 import java.util.concurrent.TimeUnit;
 
@@ -22,16 +24,16 @@ public class PaymentHubApiManager {
 
     private static Retrofit retrofit;
     private static TransactionsService transactionsApi;
+    private static RegistrationService registrationApi;
 
     @Inject
     public PaymentHubApiManager() {
-        String baseURLUserType = "";
-        String headerTenant = "";
-        createService(baseURLUserType,headerTenant);
+        createService();
     }
 
     public static void createAPI() {
         transactionsApi = createApi(TransactionsService.class);
+        registrationApi = createApi(RegistrationService.class);
     }
 
 
@@ -39,12 +41,9 @@ public class PaymentHubApiManager {
         return retrofit.create(clazz);
     }
 
-    public static void createService(String fspName, String headerTenant) {
+    public static void createService() {
 
-        if (!fspName.equals("")) {
-            fspName = fspName + ".";
-        }
-        final String BASE_URL = baseUrl.getUrl(fspName);
+        final String BASE_URL = baseUrl.getUrl();
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
@@ -53,7 +52,7 @@ public class PaymentHubApiManager {
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(headerTenant))
+                .addInterceptor(new ApiInterceptor(Constants.TENANT_ID))
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -68,5 +67,9 @@ public class PaymentHubApiManager {
 
     public TransactionsService getTransactionsApi() {
         return transactionsApi;
+    }
+
+    public RegistrationService getRegistrationApi() {
+        return registrationApi;
     }
 }

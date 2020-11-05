@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.payments.presenter;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchSelfAccount;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
@@ -22,7 +22,7 @@ public class TransferPresenter implements BaseHomeContract.TransferPresenter {
     @Inject
     FetchClientData fetchClientData;
     @Inject
-    FetchAccount mFetchAccount;
+    FetchSelfAccount mFetchSelfAccount;
 
     private BaseHomeContract.TransferView mTransferView;
 
@@ -49,17 +49,17 @@ public class TransferPresenter implements BaseHomeContract.TransferPresenter {
     }
 
     @Override
-    public void checkBalanceAvailability(final String externalId, final double transferAmount) {
-        mUsecaseHandler.execute(mFetchAccount,
-                new FetchAccount.RequestValues(localRepository.getClientDetails().getClientId()),
-                new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {
+    public void checkBalanceAvailability(final String toClientIdentifier, final double transferAmount) {
+        mUsecaseHandler.execute(mFetchSelfAccount,
+                new FetchSelfAccount.RequestValues(localRepository.getClientDetails().getClientId()),
+                new UseCase.UseCaseCallback<FetchSelfAccount.ResponseValue>() {
                     @Override
-                    public void onSuccess(FetchAccount.ResponseValue response) {
+                    public void onSuccess(FetchSelfAccount.ResponseValue response) {
                         mTransferView.hideSwipeProgress();
                         if (transferAmount > response.getAccount().getBalance()) {
                             mTransferView.showSnackbar(Constants.INSUFFICIENT_BALANCE);
                         } else {
-                            mTransferView.showClientDetails(externalId, transferAmount);
+                            mTransferView.showClientDetails(toClientIdentifier, transferAmount);
                         }
                     }
 

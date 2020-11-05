@@ -5,14 +5,8 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-class PartyIdInfo: Parcelable {
-
-    @SerializedName("partyIdType")
-    var partyIdType: String? = null
-
-    @SerializedName("partyIdentifier")
-    var partyIdentifier: String? = null
-
-    @SerializedName("partySubIdOrType")
-    var partySubIdOrType: String? = null
-}
+data class PartyIdInfo(
+        @SerializedName("partyIdType")
+        var partyIdType: IdentifierType? = null,
+        @SerializedName("partyIdentifier")
+        var partyIdentifier: String? = null) : Parcelable

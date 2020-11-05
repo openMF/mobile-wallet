@@ -4,9 +4,12 @@ import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole;
+import org.mifos.mobilewallet.core.data.paymenthub.entity.Identifier;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.core.domain.model.user.User;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchSelfAccount;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
+import org.mifos.mobilewallet.core.domain.usecase.paymenthub.FetchSecondaryIdentifiers;
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails;
 import org.mifos.mobilewallet.mifospay.auth.AuthContract;
@@ -15,6 +18,7 @@ import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 
+import java.util.List;
 import javax.inject.Inject;
 
 /**
@@ -31,6 +35,10 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
     FetchClientData fetchClientDataUseCase;
     @Inject
     FetchUserDetails fetchUserDetailsUseCase;
+    @Inject
+    FetchSelfAccount mFetchSelfAccountUseCase;
+    @Inject
+    FetchSecondaryIdentifiers mFetchSecondaryIdentifiersUseCase;
     private AuthContract.LoginView mLoginView;
 
     @Inject
@@ -105,6 +113,7 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                     @Override
                     public void onSuccess(FetchClientData.ResponseValue response) {
                         saveClientDetails(response.getUserDetails());
+                        fetchClientAccount(response.getUserDetails());
 
                         if (!response.getUserDetails().getName().equals("")) {
                             mLoginView.loginSuccess();
@@ -116,6 +125,54 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
 
                     }
                 });
+    }
+
+    private void fetchClientAccount(final Client client) {
+        mUsecaseHandler.execute(mFetchSelfAccountUseCase,
+                new FetchSelfAccount.RequestValues(client.getClientId()),
+                new UseCase.UseCaseCallback<FetchSelfAccount.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchSelfAccount.ResponseValue response) {
+                        fetchSecondaryIdentifiers(response.getAccount().getExternalId());
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mLoginView.loginFail(message);
+                    }
+                });
+    }
+
+
+
+    private void fetchSecondaryIdentifiers(String accountExternalId) {
+        mUsecaseHandler.execute(mFetchSecondaryIdentifiersUseCase,
+                new FetchSecondaryIdentifiers.RequestValues(accountExternalId),
+                new UseCase.UseCaseCallback<FetchSecondaryIdentifiers.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchSecondaryIdentifiers.ResponseValue response) {
+                        List<Identifier> identifiersList = response.getIdentifierList();
+                        for (int i = 0; i < identifiersList.size(); i++) {
+                            saveIdentifier(identifiersList.get(i));
+                        }
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mLoginView.loginFail(message);
+                    }
+                });
+    }
+
+    private void saveIdentifier(Identifier identifier) {
+        switch (identifier.getIdType()) {
+            case EMAIL:
+                preferencesHelper.saveEmailIdentifier(identifier.getIdValue());
+                break;
+            case MSISDN:
+                preferencesHelper.saveMSISDNIdentifier(identifier.getIdValue());
+                break;
+        }
     }
 
     private void createAuthenticatedService(User user) {

@@ -8,5 +8,7 @@ public class ApiEndPoints {
 
     //This class contains all the Constants for API End Points
 
-    public static final String TRANSACTIONS = "transactions";
+    public static final String TRANSFER = "transfer";
+    public static final String PARTY_REGISTRATION = "partyRegistration";
+    public static final String TRANSACTION_REQUEST = "transactionRequest";
 }

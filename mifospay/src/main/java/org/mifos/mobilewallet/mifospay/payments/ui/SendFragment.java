@@ -75,7 +75,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     RelativeLayout mRlMobile;
     @BindView(R.id.til_vpa)
     TextInputLayout mTilVpa;
-
+    private String toClientIdentifier;
     private String vpa;
 
     @Override
@@ -124,7 +124,12 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         String externalId = etVpa.getText().toString().trim();
         String eamount = etAmount.getText().toString().trim();
         String mobileNumber = mEtMobileNumber.getText().toString().trim().replaceAll("\\s+", "");
-        if (eamount.equals("") || (externalId.equals("") && mobileNumber.equals(""))) {
+        if (mTilVpa.getVisibility() == View.VISIBLE) {
+            toClientIdentifier = externalId;
+        } else if (mRlMobile.getVisibility() == View.VISIBLE) {
+            toClientIdentifier = mobileNumber;
+        }
+        if (eamount.equals("") || toClientIdentifier.equals("")) {
             Toast.makeText(getActivity(),
                     Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
         } else {
@@ -134,7 +139,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 return;
             }
             showSwipeProgress();
-            mTransferPresenter.checkBalanceAvailability(externalId, amount);
+            mTransferPresenter.checkBalanceAvailability(toClientIdentifier, amount);
         }
     }
 
@@ -278,8 +283,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     }
 
     @Override
-    public void showClientDetails(String externalId, double amount) {
-        MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
+    public void showClientDetails(String identifier, double amount) {
+        MakeTransferFragment fragment = MakeTransferFragment.newInstance(identifier, amount);
         fragment.setTargetFragment(this, REQUEST_SHOW_DETAILS);
         if (getParentFragment() != null) {
             fragment.show(getParentFragment().getChildFragmentManager(),

@@ -4,14 +4,20 @@ import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole;
+import org.mifos.mobilewallet.core.data.fineract.entity.payload.UpdateSavingsAccountPayload;
+import org.mifos.mobilewallet.core.data.paymenthub.entity.IdentifierType;
+import org.mifos.mobilewallet.core.data.paymenthub.entity.RegistrationEntity;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.core.domain.model.client.NewClient;
 import org.mifos.mobilewallet.core.domain.model.user.NewUser;
 import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityClients;
 import org.mifos.mobilewallet.core.domain.model.user.User;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchSelfAccount;
+import org.mifos.mobilewallet.core.domain.usecase.account.UpdateAccount;
 import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient;
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
 import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient;
+import org.mifos.mobilewallet.core.domain.usecase.paymenthub.RegisterSecondaryIdentifier;
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.DeleteUser;
@@ -52,6 +58,12 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
     DeleteUser deleteUserUseCase;
     @Inject
     FetchUserDetails fetchUserDetailsUseCase;
+    @Inject
+    FetchSelfAccount mFetchSelfAccountUseCase;
+    @Inject
+    UpdateAccount updateAccountUseCase;
+    @Inject
+    RegisterSecondaryIdentifier registerSecondaryIdentifierUseCase;
 
     private String firstName, lastName, mobileNumber, email, businessName, addressLine1,
             addressLine2, pincode, city, countryName, username, password, stateId, countryId;
@@ -225,6 +237,7 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
                     @Override
                     public void onSuccess(FetchClientData.ResponseValue response) {
                         saveClientDetails(response.getUserDetails());
+                        fetchClientAccount(response.getUserDetails());
 
                         if (!response.getUserDetails().getName().equals("")) {
                             mSignupView.loginSuccess();
@@ -234,6 +247,84 @@ public class SignupPresenter implements RegistrationContract.SignupPresenter {
                     @Override
                     public void onError(String message) {
                         mSignupView.onRegisterSuccess("Fetch Client Error");
+                    }
+                });
+    }
+
+    private void fetchClientAccount(final Client client) {
+        mUseCaseHandler.execute(mFetchSelfAccountUseCase,
+                new FetchSelfAccount.RequestValues(client.getClientId()),
+                new UseCase.UseCaseCallback<FetchSelfAccount.ResponseValue>() {
+                    @Override
+                    public void onSuccess(FetchSelfAccount.ResponseValue response) {
+                        updateSavingsAccount(response.getAccount().getId());
+                        /**
+                         * Other identifiers can also be registered, needs discussion
+                         */
+                        registerSecondaryIdentifier(
+                                response.getAccount().getNumber(),
+                                IdentifierType.EMAIL,
+                                email
+                        );
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mSignupView.onRegisterFailed(message);
+                    }
+                });
+    }
+
+    /**
+     * Creating of savings account at the time of client creation does not allow setting up the
+     * savings account externalId. Hence it has to be updated after the account creation
+     *
+     * @param accountId - specify the savings account for which externalId is being updated.
+     *
+     */
+    private void updateSavingsAccount(long accountId) {
+        UpdateSavingsAccountPayload payload = new UpdateSavingsAccountPayload(username + "@mifos");
+        mUseCaseHandler.execute(updateAccountUseCase,
+                new UpdateAccount.RequestValues(accountId, payload),
+                new UseCase.UseCaseCallback<UpdateAccount.ResponseValue>() {
+                    @Override
+                    public void onSuccess(UpdateAccount.ResponseValue response) {
+
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mSignupView.onRegisterFailed(message);
+                    }
+                });
+    }
+
+    /**
+     *
+     * @param accountNumber - used to identify the savings account for which a secondary
+     *                          identifier is being register
+     * @param identifierType - used to specify the type of secondary identifier that is being
+     *                       registered
+     * @param identifierValue - the value of the secondary identifier
+     */
+    private void registerSecondaryIdentifier(String accountNumber, IdentifierType identifierType,
+                                             String identifierValue) {
+        RegistrationEntity entity = new RegistrationEntity(
+                accountNumber,
+                identifierType,
+                identifierValue);
+
+        mUseCaseHandler.execute(registerSecondaryIdentifierUseCase,
+                new RegisterSecondaryIdentifier.RequestValues(entity),
+                new UseCase.UseCaseCallback<RegisterSecondaryIdentifier.ResponseValue>() {
+                    @Override
+                    public void onSuccess(RegisterSecondaryIdentifier.ResponseValue response) {
+
+                    }
+
+                    @Override
+                    public void onError(String message) {
+                        mSignupView.onRegisterFailed(message);
                     }
                 });
     }

@@ -19,8 +19,8 @@ import rx.schedulers.Schedulers;
  * Created by naman on 29/8/17.
  */
 
-public class FetchAccount extends UseCase<FetchAccount.RequestValues,
-        FetchAccount.ResponseValue> {
+public class FetchSelfAccount extends UseCase<FetchSelfAccount.RequestValues,
+        FetchSelfAccount.ResponseValue> {
 
     private final FineractRepository fineractRepository;
 
@@ -28,7 +28,7 @@ public class FetchAccount extends UseCase<FetchAccount.RequestValues,
     AccountMapper accountMapper;
 
     @Inject
-    public FetchAccount(FineractRepository fineractRepository) {
+    public FetchSelfAccount(FineractRepository fineractRepository) {
         this.fineractRepository = fineractRepository;
     }
 

@@ -5,7 +5,7 @@ import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchSelfAccount;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class TransactionsHistory {
     private final UseCaseHandler mUsecaseHandler;
     public HistoryContract.TransactionsHistoryAsync delegate;
     @Inject
-    FetchAccount mFetchAccountUseCase;
+    FetchSelfAccount mFetchSelfAccountUseCase;
     @Inject
     FetchAccountTransactions fetchAccountTransactionsUseCase;
     @Inject

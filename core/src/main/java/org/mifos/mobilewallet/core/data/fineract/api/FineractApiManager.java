@@ -6,6 +6,7 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.AccountTransfersSe
 import org.mifos.mobilewallet.core.data.fineract.api.services.AuthenticationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.DocumentService;
+import org.mifos.mobilewallet.core.data.fineract.api.services.FineractPaymentHubService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.InvoiceService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.KYCLevel1Service;
 import org.mifos.mobilewallet.core.data.fineract.api.services.NotificationService;
@@ -34,7 +35,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FineractApiManager {
 
-    public static final String DEFAULT = "default";
     public static final String BASIC = "Basic ";
     private static BaseURL baseUrl = new BaseURL();
     private static final String BASE_URL = baseUrl.getUrl();
@@ -55,6 +55,7 @@ public class FineractApiManager {
     private static UserService userApi;
     private static ThirdPartyTransferService thirdPartyTransferApi;
     private static NotificationService notificationApi;
+    private static FineractPaymentHubService fineractPaymentHubApi;
 
     private static SelfServiceApiManager sSelfInstance;
 
@@ -84,6 +85,7 @@ public class FineractApiManager {
         userApi = createApi(UserService.class);
         thirdPartyTransferApi = createApi(ThirdPartyTransferService.class);
         notificationApi = createApi(NotificationService.class);
+        fineractPaymentHubApi = createApi(FineractPaymentHubService.class);
     }
 
     private static <T> T createApi(Class<T> clazz) {
@@ -100,7 +102,7 @@ public class FineractApiManager {
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
+                .addInterceptor(new ApiInterceptor(authToken, Constants.TENANT_ID))
                 .build();
 
         retrofit = new Retrofit.Builder()
@@ -179,5 +181,9 @@ public class FineractApiManager {
 
     public NotificationService getNotificationApi() {
         return notificationApi;
+    }
+
+    public FineractPaymentHubService getFineractPaymentHubApi() {
+        return fineractPaymentHubApi;
     }
 }

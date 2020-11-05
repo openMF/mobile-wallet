@@ -32,6 +32,7 @@ public class AccountMapper {
                 Account account = new Account();
                 account.setName(savingAccount.getProductName());
                 account.setNumber(savingAccount.getAccountNo());
+                account.setExternalId(savingAccount.getExternalId());
                 account.setId(savingAccount.getId());
                 account.setBalance(savingAccount.getAccountBalance());
                 account.setCurrency(currencyMapper.transform(savingAccount.getCurrency()));

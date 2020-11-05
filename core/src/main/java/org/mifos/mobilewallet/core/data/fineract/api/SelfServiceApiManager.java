@@ -6,6 +6,7 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.SavingsAccountsService;
 import org.mifos.mobilewallet.core.data.fineract.api.services.ThirdPartyTransferService;
+import org.mifos.mobilewallet.core.utils.Constants;
 
 import java.util.concurrent.TimeUnit;
 
@@ -21,7 +22,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class SelfServiceApiManager {
 
-    public static final String DEFAULT = "default";
     private static BaseURL baseUrl = new BaseURL();
     private static final String BASE_URL = baseUrl.getSelfServiceUrl();
 
@@ -61,7 +61,7 @@ public class SelfServiceApiManager {
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
+                .addInterceptor(new ApiInterceptor(authToken, Constants.TENANT_ID))
                 .build();
 
         retrofit = new Retrofit.Builder()

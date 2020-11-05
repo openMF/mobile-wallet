@@ -7,14 +7,17 @@ package org.mifos.mobilewallet.core.utils;
 public class Constants {
 
     public static final String BASIC = "Basic ";
+    public static final String TENANT_ID = "tn05";
 
     public static final String SAVINGS = "savingsAccounts";
     public static final String TRANSACTIONS = "transactions";
 
-    public static final int WALLET_ACCOUNT_SAVINGS_PRODUCT_ID = 165;
-
-    public static final int MIFOS_MERCHANT_SAVINGS_PRODUCT_ID = 165; // 372
-    public static final int MIFOS_CONSUMER_SAVINGS_PRODUCT_ID = 165; // 373
+    /**
+     * These IDs are with respect to the Fineract instance hosted on leopard.mifos.io
+     */
+    public static final int WALLET_ACCOUNT_SAVINGS_PRODUCT_ID = 2;
+    public static final int MIFOS_MERCHANT_SAVINGS_PRODUCT_ID = 2; // 372
+    public static final int MIFOS_CONSUMER_SAVINGS_PRODUCT_ID = 2; // 373
 
     public static final String ENTITY_TYPE_CLIENTS = "clients";
 
@@ -48,4 +51,7 @@ public class Constants {
     public static final String MERCHANT = "merchant";
     public static final String FETCH_CLIENT_DETAILS_USE_CASE = "Fetch Client Details UseCase";
     public static final String ERROR_FETCHING_NOTIFICATIONS = "Error fetching notifications";
+
+    public static final String NO_IDENTIFIERS_FOUND = "No secondary identifers found";
+
 }
