@@ -220,6 +220,7 @@ public class FineractRepository {
         return fineractApiManager.getThirdPartyTransferApi().makeTransfer(transferPayload);
     }
 
+
     //self user apis
 
     public Observable<UserEntity> loginSelf(String username, String password) {

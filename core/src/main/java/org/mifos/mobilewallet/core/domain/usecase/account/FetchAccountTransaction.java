@@ -46,8 +46,12 @@ public class FetchAccountTransaction extends UseCase<FetchAccountTransaction.Req
 
                     @Override
                     public void onError(Throwable e) {
-                        getUseCaseCallback().onError(
-                                Constants.ERROR_FETCHING_REMOTE_ACCOUNT_TRANSACTIONS);
+                        if (e.getMessage().equals("HTTP 401 Unauthorized")) {
+                            getUseCaseCallback().onError(Constants.UNAUTHORIZED_ERROR);
+                        } else {
+                            getUseCaseCallback().onError(
+                                    Constants.ERROR_FETCHING_REMOTE_ACCOUNT_TRANSACTIONS);
+                        }
                     }
 
                     @Override

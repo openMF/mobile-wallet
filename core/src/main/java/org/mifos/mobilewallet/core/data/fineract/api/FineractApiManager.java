@@ -180,4 +180,5 @@ public class FineractApiManager {
     public NotificationService getNotificationApi() {
         return notificationApi;
     }
+
 }

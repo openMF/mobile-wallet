@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -27,6 +29,7 @@ import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -34,6 +37,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTextChanged;
+
+import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
 
 /**
  * This is the UI component of the SavedCards Architecture.
@@ -70,6 +76,14 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
 
     @BindView(R.id.btn_add_card)
     Chip addCard;
+
+    @BindView(R.id.et_search_cards)
+    EditText etCardSearch;
+
+    @BindView(R.id.ll_search_cards)
+    LinearLayout searchView;
+
+    private List<Card> cardsList;
 
     View rootView;
 
@@ -113,6 +127,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
 
     private void showEmptyStateView() {
         if (getActivity() != null) {
+            searchView.setVisibility(View.GONE);
             vStateView.setVisibility(View.VISIBLE);
             pbCards.setVisibility(View.GONE);
             Resources res = getResources();
@@ -127,7 +142,6 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
 
     @Override
     public void showErrorStateView(int drawable, int title, int subtitle) {
-        rvCards.setVisibility(View.GONE);
         pbCards.setVisibility(View.GONE);
         hideSwipeProgress();
         vStateView.setVisibility(View.VISIBLE);
@@ -145,6 +159,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     @Override
     public void showFetchingProcess() {
         vStateView.setVisibility(View.GONE);
+        searchView.setVisibility(View.GONE);
         rvCards.setVisibility(View.GONE);
         pbCards.setVisibility(View.VISIBLE);
         addCard.setVisibility(View.GONE);
@@ -245,15 +260,39 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         pbCards.setVisibility(View.GONE);
         if (cards == null || cards.size() == 0) {
             showEmptyStateView();
-            rvCards.setVisibility(View.GONE);
         } else {
             hideEmptyStateView();
+            searchView.setVisibility(View.VISIBLE);
             rvCards.setVisibility(View.VISIBLE);
             mCardsAdapter.setCards(cards);
         }
+        cardsList = cards;
         mCardsAdapter.setCards(cards);
         hideSwipeProgress();
         addCard.setVisibility(View.VISIBLE);
+    }
+
+    @OnTextChanged(R.id.et_search_cards)
+    void filterCards() {
+        String text = etCardSearch.getText().toString();
+        List<Card> filteredList = new ArrayList<>();
+
+        if (cardsList  != null) {
+            if (isBlank(text)) {
+                filteredList = cardsList;
+            } else {
+                for (Card mycard : cardsList ) {
+                    String fullName = mycard.getFirstName().toLowerCase() + " " +
+                            mycard.getLastName().toLowerCase();
+                    String cardNo = mycard.getCardNumber().toLowerCase();
+                    if (fullName.contains(text.toLowerCase()) ||
+                            cardNo.contains(text.toLowerCase())) {
+                        filteredList.add(mycard);
+                    }
+                }
+            }
+            mCardsAdapter.setCards(filteredList);
+        }
     }
 
     /**
