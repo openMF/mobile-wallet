@@ -25,6 +25,9 @@ public interface TransferContract {
         void fetchClient(String externalId);
 
         void fetchToClientAccount(long toClientId, double amount);
+
+        void makeTransferUsingMsisdn(String msisdnNumber, double amount);
+
     }
 
 }

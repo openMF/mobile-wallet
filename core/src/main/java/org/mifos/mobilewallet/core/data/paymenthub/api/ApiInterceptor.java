@@ -1,6 +1,5 @@
 package org.mifos.mobilewallet.core.data.paymenthub.api;
 
-import android.text.TextUtils;
 
 import java.io.IOException;
 

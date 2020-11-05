@@ -1,6 +1,5 @@
 package org.mifos.mobilewallet.mifospay.data.local;
 
-import org.json.JSONObject;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 
 import javax.inject.Inject;

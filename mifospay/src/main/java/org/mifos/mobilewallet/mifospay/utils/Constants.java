@@ -177,4 +177,5 @@ public class Constants {
 
     public static final String CHANGE_PROFILE_IMAGE_KEY = "CHANGE_PROFILE_IMAGE_KEY";
     public static final String CHANGE_PROFILE_IMAGE_VALUE = "CHANGE_PROFILE_IMAGE_VALUE";
+    public static final String PAYMENT_METHOD = "payment hub used";
 }

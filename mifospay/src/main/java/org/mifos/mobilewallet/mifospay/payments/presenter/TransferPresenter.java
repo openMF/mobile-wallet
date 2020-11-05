@@ -49,9 +49,12 @@ public class TransferPresenter implements BaseHomeContract.TransferPresenter {
     }
 
     @Override
-    public void checkBalanceAvailability(final String toClientIdentifier, final double transferAmount) {
+    public void checkBalanceAvailability(
+            final String toClientIdentifier,
+            final double transferAmount) {
         mUsecaseHandler.execute(mFetchSelfAccount,
-                new FetchSelfAccount.RequestValues(localRepository.getClientDetails().getClientId()),
+                new FetchSelfAccount.RequestValues(
+                        localRepository.getClientDetails().getClientId()),
                 new UseCase.UseCaseCallback<FetchSelfAccount.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchSelfAccount.ResponseValue response) {
@@ -70,4 +73,5 @@ public class TransferPresenter implements BaseHomeContract.TransferPresenter {
                     }
                 });
     }
+
 }

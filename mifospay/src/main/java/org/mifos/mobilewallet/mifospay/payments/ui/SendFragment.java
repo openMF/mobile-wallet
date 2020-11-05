@@ -24,6 +24,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.mifos.mobilewallet.core.domain.model.PaymentMethod;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
@@ -51,6 +52,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     private static final int SCAN_QR_REQUEST_CODE = 666;
     private static final int PICK_CONTACT = 1;
     private static final int REQUEST_READ_CONTACTS = 2;
+    private PaymentMethod paymentMethod;
 
     @Inject
     TransferPresenter mPresenter;
@@ -65,10 +67,10 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     TextView btnScanQr;
     @BindView(R.id.btn_vpa)
     Chip mBtnVpa;
-    @BindView(R.id.btn_mobile)
-    Chip mBtnMobile;
-    @BindView(R.id.et_mobile_number)
-    EditText mEtMobileNumber;
+    @BindView(R.id.btn_msisdn)
+    Chip mBtnMsisdn;
+    @BindView(R.id.et_msisdn)
+    EditText mEtMsisdn;
     @BindView(R.id.btn_search_contact)
     TextView mBtnSearchContact;
     @BindView(R.id.rl_mobile)
@@ -93,7 +95,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         ButterKnife.bind(this, rootView);
         setSwipeEnabled(false);
         mPresenter.attachView(this);
-        mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
+        mEtMsisdn.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         return rootView;
     }
 
@@ -102,17 +104,17 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mBtnVpa.setFocusable(true);
         mBtnVpa.setFocusableInTouchMode(true);
         mBtnVpa.setChipBackgroundColorResource(R.color.clickedblue);
-        mBtnMobile.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        mBtnMsisdn.setChipBackgroundColorResource(R.color.changedBackgroundColour);
         btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.VISIBLE);
     }
 
-    @OnClick(R.id.btn_mobile)
+    @OnClick(R.id.btn_msisdn)
     public void onMobileSelected() {
-        mBtnMobile.setFocusable(true);
-        mBtnMobile.setFocusableInTouchMode(true);
-        mBtnMobile.setChipBackgroundColorResource(R.color.clickedblue);
+        mBtnMsisdn.setFocusable(true);
+        mBtnMsisdn.setFocusableInTouchMode(true);
+        mBtnMsisdn.setChipBackgroundColorResource(R.color.clickedblue);
         mBtnVpa.setChipBackgroundColorResource(R.color.changedBackgroundColour);
         mTilVpa.setVisibility(View.GONE);
         btnScanQr.setVisibility(View.GONE);
@@ -123,11 +125,13 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     public void transferClicked() {
         String externalId = etVpa.getText().toString().trim();
         String eamount = etAmount.getText().toString().trim();
-        String mobileNumber = mEtMobileNumber.getText().toString().trim().replaceAll("\\s+", "");
+        String msisdnNumber = mEtMsisdn.getText().toString().trim().replaceAll("\\s+", "");
         if (mTilVpa.getVisibility() == View.VISIBLE) {
             toClientIdentifier = externalId;
+            paymentMethod = PaymentMethod.VPA;
         } else if (mRlMobile.getVisibility() == View.VISIBLE) {
-            toClientIdentifier = mobileNumber;
+            toClientIdentifier = msisdnNumber;
+            paymentMethod = PaymentMethod.MSISDN;
         }
         if (eamount.equals("") || toClientIdentifier.equals("")) {
             Toast.makeText(getActivity(),
@@ -193,8 +197,11 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
             String qrData = data.getStringExtra(Constants.QR_DATA);
             etVpa.setText(qrData);
             String externalId = etVpa.getText().toString();
+            paymentMethod = PaymentMethod.VPA;
             double amount = Double.parseDouble(etAmount.getText().toString());
-            MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId,
+            MakeTransferFragment fragment = MakeTransferFragment.newInstance(
+                    externalId,
+                    paymentMethod,
                     amount);
             fragment.show(getChildFragmentManager(),
                     Constants.MAKE_TRANSFER_FRAGMENT);
@@ -218,7 +225,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 phoneNo = cursor.getString(phoneIndex);
                 name = cursor.getString(nameIndex);
 
-                mEtMobileNumber.setText(phoneNo);
+                mEtMsisdn.setText(phoneNo);
 
             } catch (Exception e) {
                 showToast(Constants.ERROR_CHOOSING_CONTACT);
@@ -284,13 +291,15 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     @Override
     public void showClientDetails(String identifier, double amount) {
-        MakeTransferFragment fragment = MakeTransferFragment.newInstance(identifier, amount);
+        MakeTransferFragment fragment = MakeTransferFragment.newInstance(
+                identifier,
+                paymentMethod,
+                amount);
         fragment.setTargetFragment(this, REQUEST_SHOW_DETAILS);
         if (getParentFragment() != null) {
             fragment.show(getParentFragment().getChildFragmentManager(),
                     Constants.MAKE_TRANSFER_FRAGMENT);
         }
     }
-
 
 }

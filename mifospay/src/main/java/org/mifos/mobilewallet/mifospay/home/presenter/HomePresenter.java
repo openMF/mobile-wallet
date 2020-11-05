@@ -55,7 +55,8 @@ public class HomePresenter implements BaseHomeContract.HomePresenter,
     @Override
     public void fetchAccountDetails() {
         mUsecaseHandler.execute(mFetchSelfAccountUseCase,
-                new FetchSelfAccount.RequestValues(localRepository.getClientDetails().getClientId()),
+                new FetchSelfAccount.RequestValues(
+                        localRepository.getClientDetails().getClientId()),
                 new UseCase.UseCaseCallback<FetchSelfAccount.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchSelfAccount.ResponseValue response) {
