@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.passcode.ui;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -22,7 +23,7 @@ import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract;
 import org.mifos.mobilewallet.mifospay.passcode.presenter.PassCodePresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
-
+import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -36,6 +37,8 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
     PassCodePresenter mPresenter;
 
     PassCodeContract.PassCodePresenter mPassCodePresenter;
+    private String deepLinkURI = null;
+
 
     private ActivityComponent mActivityComponent;
     private String currPass = "";
@@ -59,6 +62,7 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
             updatePassword = getIntent().getBooleanExtra(Constants.UPDATE_PASSCODE, false);
         }
         ButterKnife.bind(this);
+        deepLinkURI = getIntent().getStringExtra("uri");
 
     }
 
@@ -72,10 +76,17 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
         // authenticate user with saved Preferences
         mPresenter.createAuthenticatedService();
 
-        Intent intent = new Intent(PassCodeActivity.this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
+        if (deepLinkURI != null) {
+            Uri uri = Uri.parse(deepLinkURI);
+            Intent intent = new Intent(PassCodeActivity.this, ReceiptActivity.class);
+            intent.setData(uri);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(PassCodeActivity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
+                    Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+        }
     }
 
     @Override

@@ -134,4 +134,5 @@ public interface ActivityComponent {
     void inject (SIFragment siFragment);
 
     void inject (SIDetailsActivity siDetailsActivity);
+
 }

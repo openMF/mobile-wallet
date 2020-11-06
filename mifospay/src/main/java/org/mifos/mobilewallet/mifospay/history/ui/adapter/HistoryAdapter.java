@@ -61,9 +61,13 @@ public class HistoryAdapter
         switch (transaction.getTransactionType()) {
             case DEBIT:
                 holder.tvTransactionStatus.setText(Constants.DEBIT);
+                holder.tvTransactionStatus.setTextColor(ContextCompat.getColor(
+                        context, R.color.colorDebit));
                 break;
             case CREDIT:
                 holder.tvTransactionStatus.setText(Constants.CREDIT);
+                holder.tvTransactionStatus.setTextColor(ContextCompat.getColor(
+                        context, R.color.colorCredit));
                 break;
             case OTHER:
                 holder.tvTransactionStatus.setText(Constants.OTHER);
@@ -100,10 +104,10 @@ public class HistoryAdapter
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.tv_item_casual_list_title)
-        TextView tvTransactionStatus;
+        TextView tvTransactionAmount;
 
         @BindView(R.id.tv_item_casual_list_optional_caption)
-        TextView tvTransactionAmount;
+        TextView tvTransactionStatus;
 
         @BindView(R.id.tv_item_casual_list_subtitle)
         TextView tvTransactionDate;

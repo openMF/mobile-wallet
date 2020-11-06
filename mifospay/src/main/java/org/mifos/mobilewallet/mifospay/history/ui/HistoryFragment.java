@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.history.ui;
 
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.support.design.chip.Chip;
 import android.support.transition.TransitionManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -30,6 +32,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
+
+import static org.mifos.mobilewallet.core.domain.model.TransactionType.CREDIT;
+import static org.mifos.mobilewallet.core.domain.model.TransactionType.DEBIT;
 
 public class HistoryFragment extends BaseFragment
         implements HistoryContract.HistoryView {
@@ -61,6 +67,20 @@ public class HistoryFragment extends BaseFragment
 
     @BindView(R.id.pb_history)
     ProgressBar pbHistory;
+
+    @BindView(R.id.ll_filter_options)
+    LinearLayout filterLayout;
+
+    @BindView(R.id.btn_filter_credits)
+    Chip btnFilterCredits;
+
+    @BindView(R.id.btn_filter_all)
+    Chip btnFilterAll;
+
+    @BindView(R.id.btn_filter_debits)
+    Chip btnFilterDebits;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -131,6 +151,7 @@ public class HistoryFragment extends BaseFragment
             public void onRefresh() {
                 getSwipeRefreshLayout().setRefreshing(false);
                 mPresenter.fetchTransactions();
+                displayAll();
             }
         });
     }
@@ -145,6 +166,7 @@ public class HistoryFragment extends BaseFragment
         TransitionManager.beginDelayedTransition(historyContainer);
         rvHistory.setVisibility(View.GONE);
         pbHistory.setVisibility(View.GONE);
+        filterLayout.setVisibility(View.GONE);
         vStateView.setVisibility(View.VISIBLE);
         if (getActivity() != null) {
             Resources res = getResources();
@@ -164,11 +186,17 @@ public class HistoryFragment extends BaseFragment
     }
 
     @Override
+    public void refreshTransactions(List<Transaction> newTransactions) {
+        mHistoryAdapter.setData(newTransactions);
+    }
+
+    @Override
     public void showRecyclerView() {
         TransitionManager.beginDelayedTransition(historyContainer);
         vStateView.setVisibility(View.GONE);
         pbHistory.setVisibility(View.GONE);
         rvHistory.setVisibility(View.VISIBLE);
+        filterLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -176,6 +204,36 @@ public class HistoryFragment extends BaseFragment
         TransitionManager.beginDelayedTransition(historyContainer);
         vStateView.setVisibility(View.GONE);
         rvHistory.setVisibility(View.GONE);
+        filterLayout.setVisibility(View.GONE);
         pbHistory.setVisibility(View.VISIBLE);
     }
+
+    @OnClick(R.id.btn_filter_all)
+    void displayAll() {
+        btnFilterAll.setFocusable(true);
+        btnFilterAll.setChipBackgroundColorResource(R.color.clickedblue);
+        btnFilterCredits.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        btnFilterDebits.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        mTransactionsHistoryPresenter.filterTransactionType(null);
+    }
+
+    @OnClick(R.id.btn_filter_credits)
+    void displayCredits() {
+        btnFilterCredits.setFocusable(true);
+        btnFilterCredits.setChipBackgroundColorResource(R.color.clickedblue);
+        btnFilterAll.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        btnFilterDebits.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        mTransactionsHistoryPresenter.filterTransactionType(CREDIT);
+
+    }
+    @OnClick(R.id.btn_filter_debits)
+    void displayDebits() {
+        btnFilterDebits.setFocusable(true);
+        btnFilterDebits.setChipBackgroundColorResource(R.color.clickedblue);
+        btnFilterAll.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        btnFilterCredits.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        mTransactionsHistoryPresenter.filterTransactionType(DEBIT);
+    }
+
+
 }

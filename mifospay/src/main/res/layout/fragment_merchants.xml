@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <include
         android:id="@+id/inc_state_view"
@@ -23,7 +23,6 @@
         android:layout_width="match_parent"
         android:id="@+id/merchant_fragment_layout"
         android:layout_height="match_parent"
-        android:visibility="gone"
         android:orientation="vertical">
         <TextView
             android:layout_width="wrap_content"
@@ -31,13 +30,32 @@
             android:id="@+id/trusted_merchant_text"
             android:text="@string/trusted_merchants"
             android:textSize="@dimen/textBody1"
-            android:layout_marginTop="@dimen/marginBetweenSections"
+            android:layout_marginTop="@dimen/value_20dp"
             android:layout_marginStart="@dimen/paddingLayout"
             android:textColor="@color/colorTextPrimary"
             android:layout_marginLeft="@dimen/paddingLayout" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:id="@+id/ll_search_merchant"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_search"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:id="@+id/et_search_merchant"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_merchants"
-            android:layout_marginTop="@dimen/marginBetweenSections"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"

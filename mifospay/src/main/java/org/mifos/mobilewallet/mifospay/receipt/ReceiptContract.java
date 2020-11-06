@@ -24,6 +24,9 @@ public interface ReceiptContract {
         void showTransactionDetail (Transaction transaction);
 
         void showTransferDetail (TransferDetail transferDetail);
+
+        void openPassCodeActivity();
+
     }
 
     interface ReceiptPresenter extends BasePresenter {

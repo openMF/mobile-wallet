@@ -16,13 +16,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".standinginstruction.ui.SIDetailsActivity"></activity>
         <activity
             android:name=".standinginstruction.ui.NewSIActivity"
             android:label="@string/title_activity_new_si"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".merchants.ui.MerchantTransferActivity" />
-        <activity
+	    <activity
             android:name=".SplashScreenActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>

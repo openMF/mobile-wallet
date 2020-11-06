@@ -197,6 +197,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     public void signup(int mifosSavingsProductId) {
         showProgressDialog(Constants.PLEASE_WAIT);
         Intent intent = new Intent(LoginActivity.this, MobileVerificationActivity.class);
+        mMifosSavingProductId = mifosSavingsProductId;
         intent.putExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, mMifosSavingProductId);
         if (account != null) {
             intent.putExtra(Constants.GOOGLE_PHOTO_URI, account.getPhotoUrl());
