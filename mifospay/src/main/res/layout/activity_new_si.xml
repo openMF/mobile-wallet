@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/toolbar"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ll_create_si"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:id="@+id/til_si_amount"
+                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_20dp"
+                android:layout_marginBottom="@dimen/value_10dp"
+                android:padding="@dimen/value_10dp"
+                android:textColorHint="@android:color/black"
+                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_si_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/amount"
+                    android:inputType="number"
+                    android:textSize="@dimen/value_15sp"
+                    android:theme="@style/Theme.AppCompat.Light" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_si_vpa"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_10dp"
+                android:layout_marginBottom="@dimen/value_10dp"
+                android:padding="@dimen/value_10dp"
+                android:textColorHint="@android:color/black"
+                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_si_vpa"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/virtual_payment_address"
+                    android:singleLine="true"
+                    android:textSize="@dimen/value_15sp"
+                    android:theme="@style/Theme.AppCompat.Light" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/til_si_interval"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/value_10dp"
+                android:layout_marginBottom="@dimen/value_10dp"
+                android:padding="@dimen/value_10dp"
+                android:textColorHint="@android:color/black"
+                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_si_interval"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="Recurrence Interval (in months)"
+                    android:singleLine="true"
+                    android:inputType="number"
+                    android:textSize="@dimen/value_15sp"
+                    android:theme="@style/Theme.AppCompat.Light" />
+            </android.support.design.widget.TextInputLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/valid_till"
+                android:layout_marginBottom="@dimen/value_10dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/value_16sp"
+                android:layout_gravity="center" />
+            <Button
+                android:id="@+id/btn_valid_till"
+                android:layout_width="160dp"
+                android:layout_height="@dimen/value_50dp"
+                android:text="SELECT DATE"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/value_20dp"
+                android:textColor="@color/white" />
+            <Button
+                android:id="@+id/btn_create_si"
+                android:layout_width="260dp"
+                android:layout_height="@dimen/value_50dp"
+                android:text="@string/submit"
+                android:layout_gravity="center"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_confirm_transfer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            android:padding="@dimen/value_20dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sending_to"
+                android:textColor="@color/primaryDarkBlue"
+                android:textSize="@dimen/value_15sp"/>
+
+            <TextView
+                android:id="@+id/tv_client_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/value_10dp"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/value_20sp"/>
+
+            <TextView
+                android:id="@+id/tv_client_vpa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/value_5dp"
+                android:textSize="@dimen/value_18sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/value_20dp"
+                android:text="@string/amount"
+                android:textColor="@color/primaryDarkBlue"
+                android:textSize="@dimen/value_15sp"/>
+
+            <TextView
+                android:id="@+id/tv_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/value_10dp"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/value_20sp"/>
+
+            <LinearLayout
+                android:id="@+id/ll_confirm_cancel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/value_10dp"
+                android:layout_marginTop="@dimen/value_30dp"
+                android:gravity="right"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/grey_900"
+                    android:text="@string/cancel"
+                    android:textColor="@android:color/white"/>
+
+                <Button
+                    android:id="@+id/btn_confirm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginLeft="@dimen/value_30dp"
+                    android:background="@color/primaryDarkBlue"
+                    android:text="@string/confirm"
+                    android:textColor="@android:color/white"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:visibility="gone" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</LinearLayout>

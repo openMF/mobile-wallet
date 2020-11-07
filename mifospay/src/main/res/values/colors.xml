@@ -42,10 +42,8 @@
 
 
 
-
-
-
     <!-- OLD COLORS ARE TEMPORARY HERE UNTIL ALL OF THE LAYOUT WON'T BE REDESIGNED TO AVOID CRASHES/BUGS/CONFLICTS -->
+
 
     <color name="primaryBlue">#3F51B5</color>
     <color name="primaryDarkBlue">#303F9F</color>
