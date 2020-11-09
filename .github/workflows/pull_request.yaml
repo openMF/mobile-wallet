@@ -1,0 +1,28 @@
+name: CI Check for Mobile-Wallet
+on: [pull_request, push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+      # Set up JDK
+    - name: Set Up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+      # Update Gradle Permission
+    - name: Change gradlew Permission
+      run: chmod +x gradlew
+
+      # Build App
+    - name: Build with Gradle
+      run: ./gradlew assembleDebug --stacktrace
+
+      # Upload Built APK
+    - name: Upload Build Artifacts
+      uses: actions/upload-artifact@v2.2.0
+      with:
+        name: mobile-wallet
+        path: mifospay/build/outputs/apk/debug/
