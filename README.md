@@ -78,8 +78,8 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 `git checkout dev`
 `git pull upstream dev`
 
-## Travis CI
-<a href="https://travis-ci.com">Travis CI</a> is a hosted continuous integration service used to build and test software projects hosted at GitHub. We use Travis CI for continous integration and clean maintainence of code. All your pull requests must pass the CI build only then, it will be allowed to merge. Sometimes,when the build doesn't pass you can use these commands in your local terminal and check for the errors,</br>
+## GitHub Actions CI
+<a href="https://docs.github.com/en/free-pro-team@latest/actions">GitHub Actions CI</a> is a continuous integration service used to build and test software projects hosted at GitHub. We use GitHub Actions for continous integration and clean maintainence of code. All your pull requests must pass the CI build only then, it will be allowed to merge. Sometimes,when the build doesn't pass you can use these commands in your local terminal and check for the errors,</br>
 
 For Mac OS, you can use the following commands:
 
