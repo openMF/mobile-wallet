@@ -88,7 +88,7 @@ For Mac OS, you can use the following commands:
 * `./gradlew build`  provides a command line to execute build script.</br>
 
 
-For Windows, you can use the following commands:
+For Windows, you can use the following commands:-
 
 * `gradlew check` quality checks on your project’s code using Checkstyle and generates reports from these checks.</br>
 * `gradlew spotlessApply` an check and apply formatting to any plain-text file.</br>
