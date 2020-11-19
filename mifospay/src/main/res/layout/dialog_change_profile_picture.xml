@@ -6,15 +6,46 @@
     android:layout_height="match_parent">
 
     <LinearLayout
+        android:id="@+id/ll_click_profile_image_dialog_row"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/value_8dp"
+        android:layout_marginStart="@dimen/value_5dp"
+        android:layout_marginEnd="@dimen/value_8dp"
+        android:layout_marginBottom="@dimen/value_8dp"
+        android:layout_marginLeft="@dimen/value_5dp"
+        android:layout_marginTop="@dimen/value_16dp"
+        android:layout_marginRight="@dimen/value_8dp">
+
+        <ImageView
+            android:id="@+id/iv_click_image_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_camera"
+            android:layout_marginStart="@dimen/value_3dp"
+            android:layout_marginLeft="@dimen/value_3dp" />
+
+        <TextView
+            android:id="@+id/tv_click_image_picture"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/value_8dp"
+            android:layout_marginRight="@dimen/value_8dp"
+            android:text="@string/click_profile_picture" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/ll_change_profile_image_dialog_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:padding="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="16dp" >
+        android:padding="@dimen/value_8dp"
+        android:layout_marginEnd="@dimen/value_8dp"
+        android:layout_marginLeft="@dimen/value_8dp"
+        android:layout_marginBottom="@dimen/value_8dp"
+        android:layout_marginTop="@dimen/value_16dp"
+        android:layout_marginRight="@dimen/value_8dp">
 
         <ImageView
             android:id="@+id/iv_change_profile_image"
@@ -26,8 +57,8 @@
             android:id="@+id/tv_change_profile_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="@dimen/value_8dp"
+            android:layout_marginRight="@dimen/value_8dp"
             android:text="@string/change_profile_picture" />
 
     </LinearLayout>
@@ -36,16 +67,16 @@
         android:id="@+id/ll_remove_profile_image_dialog_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="16dp" >
+        android:padding="@dimen/value_8dp"
+        android:layout_marginStart="@dimen/value_8dp"
+        android:layout_marginEnd="@dimen/value_8dp"
+        android:layout_marginBottom="@dimen/value_8dp"
+        android:layout_marginLeft="@dimen/value_8dp"
+        android:layout_marginTop="@dimen/value_16dp" >
 
         <ImageView
             android:id="@+id/iv_remove_profile_image"
-            android:layout_width="27dp"
+            android:layout_width="@dimen/value_27dp"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_remove" />
 
@@ -53,8 +84,8 @@
             android:id="@+id/tv_remove_profile_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginRight="8dp"
+            android:layout_marginLeft="@dimen/value_8dp"
+            android:layout_marginRight="@dimen/value_8dp"
             android:text="@string/remove_profile_picture" />
 
     </LinearLayout>
