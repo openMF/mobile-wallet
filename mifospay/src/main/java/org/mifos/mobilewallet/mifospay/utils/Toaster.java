@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mifos.mobilewallet.mifospay.MifosPayApp;
+import org.mifos.mobilewallet.mifospay.R;
 
 /**
  * Created by ankur on 23/May/2018
@@ -33,12 +34,13 @@ public class Toaster {
     }
 
     public static void show(View view, String text, int duration) {
-        show(view, text, duration, Constants.OK, new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        show(view, text, duration, MifosPayApp.getContext()
+                .getString(R.string.OK), new View.OnClickListener() {
+                    @Override
+                     public void onClick(View view) {
 
-            }
-        });
+                    }
+                });
     }
 
     public static void show(View view, int res, int duration) {

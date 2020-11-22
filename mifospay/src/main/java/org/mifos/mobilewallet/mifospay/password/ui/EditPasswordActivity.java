@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.password.ui;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.widget.EditText;
 
@@ -7,7 +8,6 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract;
 import org.mifos.mobilewallet.mifospay.password.presenter.EditPasswordPresenter;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
@@ -100,7 +100,7 @@ public class EditPasswordActivity extends BaseActivity implements
 
     @Override
     public void startProgressBar() {
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
     }
 
     @Override
@@ -111,6 +111,11 @@ public class EditPasswordActivity extends BaseActivity implements
     @Override
     public void showError(String msg) {
         Toaster.showToast(this, msg);
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     @Override

@@ -131,7 +131,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
                 mTransferPresenter.makeTransfer(localRepository.getClientDetails().getClientId(),
                         toClientId, amount);
                 TransitionManager.beginDelayedTransition(makeTransferContainer);
-                tvTransferStatus.setText(Constants.SENDING_MONEY);
+                tvTransferStatus.setText(getString(R.string.sending_money));
                 progressBar.setVisibility(View.VISIBLE);
                 contentView.setVisibility(View.GONE);
             }
@@ -146,7 +146,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
         TransitionManager.beginDelayedTransition(makeTransferContainer);
         tvClientName.setText(name);
-        tvAmount.setText(Constants.RUPEE + " " + amount);
+        tvAmount.setText(getString(R.string.rupee) + " " + amount);
         tvClientVpa.setText(externalId);
 
         contentView.setVisibility(View.VISIBLE);
@@ -156,7 +156,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     @Override
     public void transferSuccess() {
-        tvTransferStatus.setText(Constants.TRANSACTION_SUCCESSFUL);
+        tvTransferStatus.setText(getString(R.string.transaction_successful));
         progressBar.setVisibility(View.GONE);
         viewTransferSuccess.setVisibility(View.VISIBLE);
     }
@@ -164,7 +164,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     @Override
     public void transferFailure() {
         TransitionManager.beginDelayedTransition(makeTransferContainer);
-        tvTransferStatus.setText(Constants.UNABLE_TO_PROCESS_TRANSFER);
+        tvTransferStatus.setText(getString(R.string.unable_to_process_transfer));
         progressBar.setVisibility(View.GONE);
         viewTransferFailure.setVisibility(View.VISIBLE);
     }

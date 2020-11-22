@@ -15,6 +15,8 @@ public interface KYCContract {
 
     interface KYCDescriptionView extends BaseView<KYCDescriptionPresenter> {
 
+        Context getContext();
+
         void onFetchLevelSuccess(KYCLevel1Details kycLevel1Details);
 
         void showToast(String s);
@@ -30,6 +32,8 @@ public interface KYCContract {
     }
 
     interface KYCLevel1View extends BaseView<KYCLevel1Presenter> {
+
+        Context getContext();
 
         void showToast(String message);
 

@@ -11,7 +11,6 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -91,10 +90,11 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
     @Override
     public void addCard(Card card) {
 
-        mCardsView.showProgressDialog(Constants.ADDING_CARD);
+        mCardsView.showProgressDialog(mCardsView.getContext().getString(R.string.adding_card));
 
         if (!validateCreditCardNumber(card.getCardNumber())) {
-            mCardsView.showToast(Constants.INVALID_CREDIT_CARD_NUMBER);
+            mCardsView.showToast(mCardsView.getContext()
+                    .getString(R.string.invalid_credit_card_number));
             mCardsView.hideProgressDialog();
             return;
         }
@@ -110,14 +110,18 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                     @Override
                     public void onSuccess(AddCard.ResponseValue response) {
                         mCardsView.hideProgressDialog();
-                        mCardsView.showToast(Constants.CARD_ADDED_SUCCESSFULLY);
+                        mCardsView.showToast(mCardsView
+                                .getContext()
+                                .getString(R.string.card_added_successfully));
                         fetchSavedCards();
                     }
 
                     @Override
                     public void onError(String message) {
                         mCardsView.hideSwipeProgress();
-                        mCardsView.showToast(Constants.ERROR_ADDING_CARD);
+                        mCardsView.showToast(mCardsView
+                                .getContext()
+                                .getString(R.string.error_adding_card));
                     }
                 });
     }
@@ -130,10 +134,14 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
     @Override
     public void editCard(Card card) {
 
-        mCardsView.showProgressDialog(Constants.UPDATING_CARD);
+        mCardsView.showProgressDialog(mCardsView
+                .getContext()
+                .getString(R.string.updating_card));
 
         if (!validateCreditCardNumber(card.getCardNumber())) {
-            mCardsView.showToast(Constants.INVALID_CREDIT_CARD_NUMBER);
+            mCardsView.showToast(mCardsView
+                    .getContext()
+                    .getString(R.string.invalid_credit_card_number));
             mCardsView.hideProgressDialog();
             return;
         }
@@ -148,14 +156,18 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                     @Override
                     public void onSuccess(EditCard.ResponseValue response) {
                         mCardsView.hideProgressDialog();
-                        mCardsView.showToast(Constants.CARD_UPDATED_SUCCESSFULLY);
+                        mCardsView.showToast(mCardsView
+                                .getContext()
+                                .getString(R.string.card_updated_successfully));
                         fetchSavedCards();
                     }
 
                     @Override
                     public void onError(String message) {
                         mCardsView.hideProgressDialog();
-                        mCardsView.showToast(Constants.ERROR_UPDATING_CARD);
+                        mCardsView.showToast(mCardsView
+                                .getContext()
+                                .getString(R.string.error_updating_card));
                     }
                 });
     }
@@ -167,7 +179,9 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
      */
     @Override
     public void deleteCard(int cardId) {
-        mCardsView.showProgressDialog(Constants.DELETING_CARD);
+        mCardsView.showProgressDialog(mCardsView
+                .getContext()
+                .getString(R.string.deleting_card));
 
         deleteCardUseCase.setRequestValues(
                 new DeleteCard.RequestValues(
@@ -180,14 +194,18 @@ public class CardsPresenter implements CardsContract.CardsPresenter {
                     @Override
                     public void onSuccess(DeleteCard.ResponseValue response) {
                         mCardsView.hideProgressDialog();
-                        mCardsView.showToast(Constants.CARD_DELETED_SUCCESSFULLY);
+                        mCardsView.showToast(mCardsView
+                                .getContext()
+                                .getString(R.string.card_deleted_successfully));
                         fetchSavedCards();
                     }
 
                     @Override
                     public void onError(String message) {
                         mCardsView.hideProgressDialog();
-                        mCardsView.showToast(Constants.ERROR_DELETING_CARD);
+                        mCardsView.showToast(mCardsView
+                                .getContext()
+                                .getString(R.string.error_deleting_card));
                     }
                 });
     }

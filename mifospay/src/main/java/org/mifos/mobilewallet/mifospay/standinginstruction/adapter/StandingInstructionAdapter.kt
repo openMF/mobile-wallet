@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.utils.Constants
 
 /**
  * Created by Devansh on 08/06/2020
@@ -40,7 +39,7 @@ class StandingInstructionAdapter(private val context: Context) :
              * Using hardcoded Currency as response doesn't return the currency
              */
             tvAmount.text = context.resources.getString(R.string.currency_amount,
-                    Constants.RUPEE, standingInstruction.amount.toString())
+                    context.resources.getString(R.string.rupee), standingInstruction.amount.toString())
 
             val validTill  = context.resources.getString(R.string.date_formatted,
                     standingInstruction.validTill?.get(2).toString(),

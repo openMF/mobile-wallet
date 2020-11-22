@@ -3,9 +3,9 @@ package org.mifos.mobilewallet.mifospay.history.presenter;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -47,7 +47,8 @@ public class TransactionDetailPresenter implements HistoryContract.TransactionDe
                     public void onError(String message) {
                         mTransactionDetailView.hideProgressBar();
                         mTransactionDetailView.showToast(
-                                Constants.ERROR_FETCHING_TRANSACTION_DETAILS);
+                                mTransactionDetailView.getContext()
+                                        .getString(R.string.error_fetching_transaction_details));
                     }
                 });
     }

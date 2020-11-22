@@ -64,7 +64,7 @@ public class BankAccountDetailActivity extends BaseActivity implements
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setToolbarTitle(Constants.BANK_ACCOUNT_DETAILS);
+        setToolbarTitle(getString(R.string.bank_account_details));
         mPresenter.attachView(this);
 
         bankAccountDetails = getIntent().getExtras().getParcelable(Constants.BANK_ACCOUNT_DETAILS);
@@ -103,7 +103,7 @@ public class BankAccountDetailActivity extends BaseActivity implements
         if (bankAccountDetails.isUpiEnabled()) {
             startSetupActivity(Constants.CHANGE, index);
         } else {
-            showToast(Constants.SETUP_UPI_PIN);
+            showToast(getString(R.string.setup_upi_pin));
         }
     }
 
@@ -112,7 +112,7 @@ public class BankAccountDetailActivity extends BaseActivity implements
         if (bankAccountDetails.isUpiEnabled()) {
             startSetupActivity(Constants.FORGOT, index);
         } else {
-            showToast(Constants.SETUP_UPI_PIN);
+            showToast(getString(R.string.setup_upi_pin));
         }
     }
 

@@ -5,10 +5,10 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityPassword;
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -62,16 +62,19 @@ public class EditPasswordPresenter implements EditPasswordContract.EditPasswordP
                 && isNotEmpty(newPasswordRepeat)) {
             if (currentPassword.equals(newPassword)) {
                 mEditPasswordView.stopProgressBar();
-                mEditPasswordView.showError(Constants.ERROR_PASSWORDS_CANT_BE_SAME);
+                mEditPasswordView.showError(mEditPasswordView.getContext()
+                        .getString(R.string.error_passwords_cannot_be_same));
             } else if (isNewPasswordValid(newPassword, newPasswordRepeat)) {
                 updatePassword(currentPassword, newPassword);
             } else {
                 mEditPasswordView.stopProgressBar();
-                mEditPasswordView.showError(Constants.ERROR_VALIDATING_PASSWORD);
+                mEditPasswordView.showError(mEditPasswordView.getContext()
+                        .getString(R.string.error_validating_password));
             }
         } else {
             mEditPasswordView.stopProgressBar();
-            mEditPasswordView.showError(Constants.ERROR_FIELDS_CANNOT_BE_EMPTY);
+            mEditPasswordView.showError(mEditPasswordView.getContext()
+                    .getString(R.string.error_fields_cannot_be_empty));
         }
     }
 

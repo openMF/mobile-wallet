@@ -73,13 +73,13 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
 
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
-        setToolbarTitle(Constants.INVOICE);
+        setToolbarTitle(getString(R.string.invoice));
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         mPresenter.attachView(this);
 
         Uri data = getIntent().getData();
         if (data != null) {
-            showProgressDialog(Constants.PLEASE_WAIT);
+            showProgressDialog(getString(R.string.please_wait));
             mInvoicePresenter.getInvoiceDetails(data);
         } else {
             finish();
@@ -95,21 +95,24 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
     @Override
     public void showInvoiceDetails(final Invoice invoice, String merchantId, String paymentLink) {
 
-        mTvMerchantId.setText(Constants.MERCHANT + ": " + merchantId);
+        mTvMerchantId.setText(getString(R.string.merchant) + ": " + merchantId);
         mTvConsumerId.setText(
-                Constants.CONSUMER + ": " + invoice.getConsumerName() + " "
+                getString(R.string.consumer) + ": " + invoice.getConsumerName() + " "
                         + invoice.getConsumerId());
-        mTvAmount.setText(Constants.AMOUNT + ": " + Constants.INR + " " + invoice.getAmount() + "");
-        mTvItemsBought.setText(Constants.ITEMS + ": " + invoice.getItemsBought());
-        String status = Constants.PENDING;
+        mTvAmount.setText(getString(R.string.amount) + ": "
+                + getString(R.string.INR) + " "
+                + invoice.getAmount() + "");
+        mTvItemsBought.setText(getString(R.string.items) + ": " + invoice.getItemsBought());
+        String status = getString(R.string.pending);
         if (invoice.getStatus() == 1) {
-            status = Constants.DONE;
+            status = getString(R.string.done);
 
             mTvTransactionId.setVisibility(View.VISIBLE);
             mVUrl.setVisibility(View.VISIBLE);
             mLlUrl.setVisibility(View.VISIBLE);
 
-            mTvTransactionId.setText(Constants.TRANSACTION_ID + ": " + invoice.getTransactionId());
+            mTvTransactionId.setText(getString(R.string.transaction_id)
+                    + ": " + invoice.getTransactionId());
 
             mTvReceiptLink.setText(Constants.RECEIPT_DOMAIN + invoice.getTransactionId());
             mTvReceiptLink.setOnLongClickListener(new View.OnLongClickListener() {
@@ -117,10 +120,11 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
                 public boolean onLongClick(View v) {
                     ClipboardManager cm = (ClipboardManager) getSystemService(
                             Context.CLIPBOARD_SERVICE);
-                    ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_RECEIPT_LINK,
+                    ClipData clipData = ClipData
+                            .newPlainText(getString(R.string.unique_receipt_link),
                             mTvReceiptLink.getText().toString());
                     cm.setPrimaryClip(clipData);
-                    showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
+                    showSnackbar(getString(R.string.unique_receipt_link_copied_to_clipboard));
                     return true;
                 }
             });
@@ -135,7 +139,7 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
             });
         }
 
-        mTvStatus.setText(Constants.STATUS + ": " + status);
+        mTvStatus.setText(getString(R.string.status) + ": " + status);
 
         mTvPaymentLink.setText(paymentLink);
         mTvPaymentLink.setOnLongClickListener(new View.OnLongClickListener() {
@@ -143,10 +147,11 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
             public boolean onLongClick(View v) {
                 ClipboardManager cm = (ClipboardManager) getSystemService(
                         Context.CLIPBOARD_SERVICE);
-                ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_PAYMENT_LINK,
+                ClipData clipData = ClipData
+                        .newPlainText(getString(R.string.unique_payment_link),
                         mTvPaymentLink.getText().toString());
                 cm.setPrimaryClip(clipData);
-                showSnackbar(Constants.UNIQUE_PAYMENT_LINK_COPIED_TO_CLIPBOARD);
+                showSnackbar(getString(R.string.unique_payment_link_copied_to_clipboard));
                 return true;
             }
         });

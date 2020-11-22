@@ -17,7 +17,6 @@ import org.mifos.mobilewallet.mifospay.faq.ui.FAQActivity;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
 import org.mifos.mobilewallet.mifospay.home.presenter.MainPresenter;
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -60,7 +59,7 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
                     }
                 });
         bottomNavigationView.setSelectedItemId(R.id.action_home);
-        setToolbarTitle(Constants.HOME);
+        setToolbarTitle(getString(R.string.home));
     }
 
     @Override

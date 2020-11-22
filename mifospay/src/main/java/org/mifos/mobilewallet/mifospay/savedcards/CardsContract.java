@@ -1,6 +1,8 @@
 package org.mifos.mobilewallet.mifospay.savedcards;
 
 
+import android.content.Context;
+
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
@@ -21,6 +23,8 @@ public interface CardsContract {
      * Defines all the functions in UI Component.
      */
     interface CardsView extends BaseView<CardsPresenter> {
+
+        Context getContext();
 
         void showSavedCards(List<Card> cards);
 

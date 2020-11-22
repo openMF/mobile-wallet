@@ -32,7 +32,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setToolbarTitle(Constants.SETTINGS);
+        setToolbarTitle(getString(R.string.settings));
         mPresenter.attachView(this);
     }
 
@@ -48,7 +48,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
         builder.setCancelable(false)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        showProgressDialog(Constants.LOGGING_OUT);
+                        showProgressDialog(getString(R.string.logging_out));
                         mPresenter.logout();
                     }
                 })

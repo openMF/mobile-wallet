@@ -75,7 +75,8 @@ public class MerchantTransferPresenter implements BaseHomeContract.MerchantTrans
                     public void onSuccess(FetchAccount.ResponseValue response) {
                         mMerchantTransferView.hideSwipeProgress();
                         if (transferAmount > response.getAccount().getBalance()) {
-                            mMerchantTransferView.showToast(Constants.INSUFFICIENT_BALANCE);
+                            mMerchantTransferView.showToast(mMerchantTransferView
+                                    .getContext().getString(R.string.insufficient_balance));
                         } else {
                             mMerchantTransferView.showPaymentDetails(externalId, transferAmount);
                         }
@@ -84,7 +85,8 @@ public class MerchantTransferPresenter implements BaseHomeContract.MerchantTrans
                     @Override
                     public void onError(String message) {
                         mMerchantTransferView.hideSwipeProgress();
-                        mMerchantTransferView.showToast(Constants.ERROR_FETCHING_BALANCE);
+                        mMerchantTransferView.showToast(mMerchantTransferView
+                                .getContext().getString(R.string.error_fetching_balance));
                     }
                 });
     }

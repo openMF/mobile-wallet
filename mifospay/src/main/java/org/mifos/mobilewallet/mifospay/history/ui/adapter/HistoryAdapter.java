@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,17 +59,17 @@ public class HistoryAdapter
 
         switch (transaction.getTransactionType()) {
             case DEBIT:
-                holder.tvTransactionStatus.setText(Constants.DEBIT);
+                holder.tvTransactionStatus.setText(context.getString(R.string.debit));
                 holder.tvTransactionStatus.setTextColor(ContextCompat.getColor(
                         context, R.color.colorDebit));
                 break;
             case CREDIT:
-                holder.tvTransactionStatus.setText(Constants.CREDIT);
+                holder.tvTransactionStatus.setText(context.getString(R.string.credit));
                 holder.tvTransactionStatus.setTextColor(ContextCompat.getColor(
                         context, R.color.colorCredit));
                 break;
             case OTHER:
-                holder.tvTransactionStatus.setText(Constants.OTHER);
+                holder.tvTransactionStatus.setText(context.getString(R.string.other));
                 break;
         }
     }

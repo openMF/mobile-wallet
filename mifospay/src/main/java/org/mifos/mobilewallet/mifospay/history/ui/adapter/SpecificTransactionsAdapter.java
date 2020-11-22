@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import java.util.ArrayList;
@@ -50,8 +49,9 @@ public class SpecificTransactionsAdapter
         Transaction transaction = transactions.get(position);
 
         holder.mTvTransactionId.setText(
-                Constants.TRANSACTION_ID + ": " + transaction.getTransactionId());
-        holder.mTvTransactionDate.setText(Constants.DATE + ": " + transaction.getDate());
+                context.getString(R.string.transaction_id) + ": " + transaction.getTransactionId());
+        holder.mTvTransactionDate.setText(context.getString(R.string.date)
+                + ": " + transaction.getDate());
         holder.mTvTransactionAmount.setText(Utils.getFormattedAccountBalance(
                 transaction.getAmount(), transaction.getCurrency().getCode()));
 
@@ -66,15 +66,15 @@ public class SpecificTransactionsAdapter
 
         switch (transaction.getTransactionType()) {
             case DEBIT:
-                holder.mTvTransactionStatus.setText(Constants.DEBIT);
+                holder.mTvTransactionStatus.setText(context.getString(R.string.debit));
                 holder.mTvTransactionAmount.setTextColor(Color.RED);
                 break;
             case CREDIT:
-                holder.mTvTransactionStatus.setText(Constants.CREDIT);
+                holder.mTvTransactionStatus.setText(context.getString(R.string.credit));
                 holder.mTvTransactionAmount.setTextColor(Color.parseColor("#009688"));
                 break;
             case OTHER:
-                holder.mTvTransactionStatus.setText(Constants.OTHER);
+                holder.mTvTransactionStatus.setText(context.getString(R.string.other));
                 holder.mTvTransactionAmount.setTextColor(Color.YELLOW);
                 break;
         }

@@ -129,7 +129,7 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
 
     @OnClick(R.id.btn_submit)
     public void onClickSubmit() {
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
 
         String fname = etFname.getText().toString();
         String lname = etLname.getText().toString();

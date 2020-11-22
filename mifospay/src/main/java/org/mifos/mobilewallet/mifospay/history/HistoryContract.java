@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.history;
 
+import android.content.Context;
+
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.model.TransactionType;
@@ -47,6 +49,8 @@ public interface HistoryContract {
     }
 
     interface TransactionDetailView extends BaseView<TransactionDetailPresenter> {
+
+        Context getContext();
 
         void showTransferDetail(TransferDetail transferDetail);
 

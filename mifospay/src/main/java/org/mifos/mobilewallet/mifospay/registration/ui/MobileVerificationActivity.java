@@ -75,7 +75,7 @@ public class MobileVerificationActivity extends BaseActivity implements
     public void onGetOTp() {
         Utils.hideSoftKeyboard(this);
         if (mCcpCode.isValidFullNumber()) {
-            showProgressDialog(Constants.SENDING_OTP_TO_YOUR_MOBILE_NUMBER);
+            showProgressDialog(getString(R.string.sending_otp_to_your_mobile_number));
 
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {

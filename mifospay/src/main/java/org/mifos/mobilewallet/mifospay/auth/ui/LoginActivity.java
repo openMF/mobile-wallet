@@ -102,7 +102,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     @OnClick(R.id.btn_login)
     public void onLoginClicked() {
         Utils.hideSoftKeyboard(this);
-        showProgressDialog(Constants.LOGGING_IN);
+        showProgressDialog(getString(R.string.logging_in));
         mLoginPresenter.loginUser(etUsername.getText().toString(),
                 etPassword.getText().toString());
     }
@@ -154,7 +154,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     }
 
     public void signupUsingGoogleAccount(int mifosSavingsProductId) {
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
 
         mMifosSavingProductId = mifosSavingsProductId;
 
@@ -175,7 +175,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == 11) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -188,14 +188,14 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
             } catch (Exception e) {
                 // Google Sign In failed, update UI appropriately
                 DebugUtil.log(Constants.GOOGLE_SIGN_IN_FAILED, e.getMessage());
-                Toaster.showToast(this, Constants.GOOGLE_SIGN_IN_FAILED);
+                Toaster.showToast(this, getString(R.string.google_sign_in_failed));
                 hideProgressDialog();
             }
         }
     }
 
     public void signup(int mifosSavingsProductId) {
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
         Intent intent = new Intent(LoginActivity.this, MobileVerificationActivity.class);
         mMifosSavingProductId = mifosSavingsProductId;
         intent.putExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, mMifosSavingProductId);

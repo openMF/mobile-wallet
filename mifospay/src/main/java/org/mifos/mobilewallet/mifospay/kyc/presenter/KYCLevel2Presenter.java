@@ -10,6 +10,7 @@ import android.os.Build;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.usecase.kyc.UploadKYCDocs;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
@@ -100,7 +101,8 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
 
                             mKYCLevel2View.hideProgressDialog();
                             mKYCLevel2View.showToast(
-                                    Constants.KYC_LEVEL_2_DOCUMENTS_ADDED_SUCCESSFULLY);
+                                    mKYCLevel2View.getContext().getString(
+                                            R.string.KYC_level_2_documents_added_successfully));
                             mKYCLevel2View.goBack();
                         }
 
@@ -108,12 +110,14 @@ public class KYCLevel2Presenter implements KYCContract.KYCLevel2Presenter {
                         public void onError(String message) {
 
                             mKYCLevel2View.hideProgressDialog();
-                            mKYCLevel2View.showToast(Constants.ERROR_UPLOADING_DOCS);
+                            mKYCLevel2View.showToast(mKYCLevel2View.getContext().getResources()
+                                    .getString(R.string.error_uploading_docs));
                         }
                     });
         } else {
             // choose a file first
-            mKYCLevel2View.showToast(Constants.CHOOSE_A_FILE_TO_UPLOAD);
+            mKYCLevel2View.showToast(mKYCLevel2View.getContext()
+                    .getString(R.string.choose_a_file_to_upload));
             mKYCLevel2View.hideProgressDialog();
         }
     }

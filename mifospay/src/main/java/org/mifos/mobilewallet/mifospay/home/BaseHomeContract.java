@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.home;
 
+import android.content.Context;
+
 import org.mifos.mobilewallet.core.domain.model.Account;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
@@ -59,6 +61,8 @@ public interface BaseHomeContract {
 
     interface TransferView extends BaseView<TransferPresenter> {
 
+        Context getContext();
+
         void showVpa(String vpa);
 
         void showToast(String message);
@@ -84,6 +88,8 @@ public interface BaseHomeContract {
     }
 
     interface MerchantTransferView extends BaseView<MerchantTransferPresenter> {
+
+        Context getContext();
 
         void showToast(String message);
 

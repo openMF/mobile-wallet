@@ -88,7 +88,7 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         tv_client_name.text = name
         tv_client_vpa.text = externalId
         tv_amount.text = resources.getString(R.string.currency_amount,
-                Constants.RUPEE, et_si_amount.text)
+                resources.getString(R.string.rupee), et_si_amount.text)
 
         ll_create_si.visibility = View.GONE
         ll_confirm_transfer.visibility = View.VISIBLE

@@ -136,17 +136,17 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         if (eamount.equals("") || (mBtnVpa.isSelected() && externalId.equals("")) ||
                 (mBtnMobile.isSelected() && mobileNumber.equals(""))) {
             Toast.makeText(getActivity(),
-                    Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
+                    getString(R.string.please_enter_all_the_fields), Toast.LENGTH_SHORT).show();
         } else {
             double amount = Double.parseDouble(eamount);
             if (amount <= 0) {
-                showSnackbar(Constants.PLEASE_ENTER_VALID_AMOUNT);
+                showSnackbar(getString(R.string.please_enter_a_valid_amount));
                 return;
             }
             if (!mTransferPresenter.checkSelfTransfer(externalId)) {
                 mTransferPresenter.checkBalanceAvailability(externalId, amount);
             } else {
-                showSnackbar(Constants.SELF_ACCOUNT_ERROR);
+                showSnackbar(getString(R.string.self_account_error));
             }
         }
     }
@@ -208,14 +208,14 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
             }
             String externalId = etVpa.getText().toString();
             if (etAmount.getText().toString().isEmpty()) {
-                showSnackbar(Constants.PLEASE_ENTER_AMOUNT);
+                showSnackbar(getString(R.string.please_enter_amount));
                 return;
             }
             double amount = Double.parseDouble(etAmount.getText().toString());
             if (!mTransferPresenter.checkSelfTransfer(externalId)) {
                 mTransferPresenter.checkBalanceAvailability(externalId, amount);
             } else {
-                showSnackbar(Constants.SELF_ACCOUNT_ERROR);
+                showSnackbar(getString(R.string.self_account_error));
             }
 
         } else if (requestCode == PICK_CONTACT && resultCode == Activity.RESULT_OK) {
@@ -240,13 +240,13 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 mEtMobileNumber.setText(phoneNo);
 
             } catch (Exception e) {
-                showToast(Constants.ERROR_CHOOSING_CONTACT);
+                showToast(getString(R.string.error_choosing_contact));
             }
         } else if (requestCode == REQUEST_SHOW_DETAILS && resultCode == Activity.RESULT_CANCELED) {
             if (mBtnMobile.isSelected()) {
-                showSnackbar(Constants.ERROR_FINDING_MOBILE_NUMBER);
+                showSnackbar(getString(R.string.error_finding_mobile_number));
             } else {
-                showSnackbar(Constants.ERROR_FINDING_VPA);
+                showSnackbar(getString(R.string.error_finding_virtual_payment_address));
             }
         }
     }
@@ -267,7 +267,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toaster.show(getView(), Constants.NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE);
+                    Toaster.show(getView(),
+                            getString(R.string.need_camera_permission_to_scan_qr_code));
                 }
                 return;
             }
@@ -284,7 +285,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    Toaster.show(getView(), Constants.NEED_READ_CONTACTS_PERMISSION);
+                    Toaster.show(getView(), getString(R.string.need_read_contacts_permission));
                 }
                 return;
             }

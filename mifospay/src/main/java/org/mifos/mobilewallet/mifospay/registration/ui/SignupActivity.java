@@ -143,7 +143,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
         DebugUtil.log(mobileNumber, countryName, email, displayName, firstName, lastName, photoUri);
 
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
 
         initSearchableStateSpinner();
     }
@@ -203,7 +203,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
     @OnClick(R.id.fab_next)
     public void onNextClicked() {
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
 
         if (mifosSavingProductId
                 == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID

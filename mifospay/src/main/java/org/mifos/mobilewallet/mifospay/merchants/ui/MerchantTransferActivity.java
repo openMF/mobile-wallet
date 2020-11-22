@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.merchants.ui;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.TextInputEditText;
@@ -140,13 +141,18 @@ public class MerchantTransferActivity extends BaseActivity implements
         String amount = etAmount.getText().toString().trim();
 
         if (amount.isEmpty()) {
-            showToast(Constants.PLEASE_ENTER_ALL_THE_FIELDS);
+            showToast(getString(R.string.please_enter_all_the_fields));
             return;
         } else if (Double.parseDouble(amount) <= 0) {
-            showToast(Constants.PLEASE_ENTER_VALID_AMOUNT);
+            showToast(getString(R.string.please_enter_a_valid_amount));
             return;
         }
         mTransferPresenter.checkBalanceAvailability(externalId, Double.parseDouble(amount));
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     @Override

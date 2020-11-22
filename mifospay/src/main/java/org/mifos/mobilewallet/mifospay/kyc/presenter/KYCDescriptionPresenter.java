@@ -3,10 +3,10 @@ package org.mifos.mobilewallet.mifospay.kyc.presenter;
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.usecase.kyc.FetchKYCLevel1Details;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import javax.inject.Inject;
 
@@ -58,7 +58,8 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
 
                     @Override
                     public void onError(String message) {
-                        mKYCDescriptionView.showToast(Constants.PLEASE_TRY_AGAIN_LATER);
+                        mKYCDescriptionView.showToast(mKYCDescriptionView.getContext()
+                                .getString(R.string.please_try_again_later));
                         mKYCDescriptionView.hideProgressDialog();
                         mKYCDescriptionView.gotoHome();
                     }

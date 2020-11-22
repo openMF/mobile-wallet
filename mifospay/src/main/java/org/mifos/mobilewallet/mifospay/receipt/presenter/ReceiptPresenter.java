@@ -6,6 +6,7 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.usecase.account.DownloadTransactionReceipt;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransaction;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer;
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract;
@@ -57,7 +58,8 @@ public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
 
                     @Override
                     public void onError(String message) {
-                        mReceiptView.showSnackbar(Constants.ERROR_FETCHING_RECEIPT);
+                        mReceiptView.showSnackbar(mReceiptView
+                                .getContext().getString(R.string.error_fetching_receipt));
                     }
                 });
     }

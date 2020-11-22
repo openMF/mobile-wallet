@@ -119,7 +119,7 @@ public class EditProfileActivity extends BaseActivity implements
     private void setupUi() {
         hideFab();
         showCloseButton();
-        setToolbarTitle(Constants.EDIT_PROFILE);
+        setToolbarTitle(getString(R.string.edit_profile));
         setupBottomSheetDialog();
     }
 
@@ -282,7 +282,8 @@ public class EditProfileActivity extends BaseActivity implements
                 } else {
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
-                    showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_IMAGES);
+                    showToast(getString(
+                            R.string.need_external_storage_permission_to_browse_images));
                 }
             }
 
@@ -414,7 +415,7 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void startProgressBar() {
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
     }
 
     @Override

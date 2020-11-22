@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.receipt;
 
+import android.content.Context;
+
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
@@ -14,6 +16,8 @@ import okhttp3.ResponseBody;
 public interface ReceiptContract {
 
     interface ReceiptView extends BaseView<ReceiptPresenter> {
+
+        Context getContext();
 
         void showSnackbar(String message);
 

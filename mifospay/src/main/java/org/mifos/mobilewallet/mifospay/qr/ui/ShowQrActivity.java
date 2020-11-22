@@ -66,7 +66,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
 
         ButterKnife.bind(ShowQrActivity.this);
 
-        setToolbarTitle(Constants.QR_CODE);
+        setToolbarTitle(getString(R.string.qr_code));
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         mPresenter.attachView(this);
 
@@ -157,7 +157,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                     showToast(getString(R.string.enter_amount));
                     return;
                 } else if (Double.parseDouble(amount) <= 0) {
-                    showToast(Constants.PLEASE_ENTER_VALID_AMOUNT);
+                    showToast(getString(R.string.please_enter_a_valid_amount));
                     return;
                 }
                 mAmount = amount;
