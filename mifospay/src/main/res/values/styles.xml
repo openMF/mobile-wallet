@@ -24,6 +24,7 @@
 
     <style name="AppTheme.Toolbar" parent="ThemeOverlay.MaterialComponents.Light">
         <item name="android:background">@color/colorPrimary</item>
+        <item name="colorControlNormal">@color/white</item>
     </style>
 
     <style name="AppTheme.Dialog" parent="ThemeOverlay.MaterialComponents.Dialog">
