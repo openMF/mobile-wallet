@@ -94,6 +94,15 @@ For Windows, you can use the following commands:
 * `gradlew spotlessApply` an check and apply formatting to any plain-text file.</br>
 * `gradlew build`  provides a command line to execute build script.</br>
 
+### Instructions to get the latest APK
+
+To get the latest apk fom the Github actions artifacts, follow these steps:
+
+1. Navigate to the [Actions](https://github.com/openMF/mobile-wallet/actions?query=workflow%3A%22Mobile-Wallet+CI%5BMaster%2FDev%5D%22+event%3Apush) tab of this repository.
+2. Click the latest workflow from the workflows list.
+3. Scroll down to the **Artifacts** section and click the **mobile-wallet** hyperlink.
+4. After successful download, extract the zip file to your preferred location.
+
 ## Wiki
 
 https://github.com/openMF/mobile-wallet/wiki
