@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
@@ -53,6 +54,7 @@ public class EditProfileActivity extends BaseActivity implements
 
     private static final int REQUEST_READ_IMAGE = 1;
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 7;
+    private static final int REQUEST_CAMERA = 0;
 
     @Inject
     EditProfilePresenter mPresenter;
@@ -268,6 +270,23 @@ public class EditProfileActivity extends BaseActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
+            case REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // camera-related task you need to do.
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toaster.showToast(this,
+                            getString(R.string.need_camera_permission_to_click_profile_picture));
+                }
+                return;
+            }
             case REQUEST_READ_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
@@ -285,7 +304,6 @@ public class EditProfileActivity extends BaseActivity implements
                     showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_IMAGES);
                 }
             }
-
             // other 'case' lines to check for other
             // permissions this app might request.
         }
@@ -303,6 +321,10 @@ public class EditProfileActivity extends BaseActivity implements
                 }
             } else if (requestCode == UCrop.REQUEST_CROP) {
                 handleCropResult(data);
+            } else if (requestCode == REQUEST_CAMERA) {
+                Bundle extras = data.getExtras();
+                Bitmap profileBitmapImage = (Bitmap) extras.get("data");
+                ivUserImage.setImageBitmap(profileBitmapImage);
             }
         }
     }
@@ -348,6 +370,11 @@ public class EditProfileActivity extends BaseActivity implements
         pickImageFromGallery();
     }
 
+    @Override
+    public void clickProfileImage() {
+        clickProfilePicFromCamera();
+    }
+
     private void pickImageFromGallery() {
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(getApplicationContext(),
@@ -374,6 +401,21 @@ public class EditProfileActivity extends BaseActivity implements
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
             ivUserImage.setImageURI(resultUri);
+        }
+    }
+
+    public void clickProfilePicFromCamera() {
+
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+        } else {
+
+            // Permission has already been granted
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, REQUEST_CAMERA);
         }
     }
 
@@ -457,6 +499,12 @@ public class EditProfileActivity extends BaseActivity implements
         @OnClick(R.id.ll_remove_profile_image_dialog_row)
         public void onRemoveProfileImageClicked() {
             mEditProfilePresenter.handleProfileImageRemoved();
+            bottomSheetDialog.dismiss();
+        }
+
+        @OnClick(R.id.ll_click_profile_image_dialog_row)
+        public void onClickProfileImageClicked() {
+            mEditProfilePresenter.handleClickProfileImageRequest();
             bottomSheetDialog.dismiss();
         }
     }

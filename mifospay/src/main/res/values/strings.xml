@@ -175,8 +175,10 @@
     <string name="pin_code">Pin Code</string>
     <string name="state">State</string>
     <string name="no_transactions_found">No transactions found</string>
-    <string name="change_profile_picture">Change Profile Picture</string>
-    <string name="remove_profile_picture">Remove Profile Picture</string>
+    <string name="click_profile_picture">Click profile picture</string>
+    <string name="change_profile_picture">Pick profile picture from device</string>
+    <string name="need_camera_permission_to_click_profile_picture">Need camera permission to click profile picture</string>
+    <string name="remove_profile_picture">Remove profile picture</string>
     <string name="sign_up_as">Sign up as</string>
     <string name="merchant">Merchant</string>
     <string name="customer">Customer</string>
