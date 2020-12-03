@@ -102,7 +102,7 @@ public class MobileVerificationActivity extends BaseActivity implements
         mEtOtp.setVisibility(View.VISIBLE);
         mBtnGetOtp.setClickable(false);
         mBtnGetOtp.setBackgroundResource(R.drawable.ic_done);
-        mFabNext.setVisibility(View.VISIBLE);
+        mFabNext.show();
     }
 
     @Override
