@@ -11,9 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
         android:orientation="vertical"
@@ -51,6 +53,7 @@
                 android:clickable="true"
                 android:text="@string/vpa"
                 android:textAlignment="center"
+                android:gravity="center_horizontal"
                 android:textAllCaps="false"
                 android:typeface="sans"
                 app:chipBackgroundColor="@color/clickedblue" />
@@ -69,6 +72,7 @@
                 android:clickable="true"
                 android:text="@string/mobile_number"
                 android:textAlignment="center"
+                android:gravity="center_horizontal"
                 android:paddingRight="@dimen/value_10dp"
                 android:textAllCaps="false"
                 android:textSize="8sp"
@@ -168,6 +172,7 @@
                         android:inputType="number"
                         android:singleLine="true"
                         android:textAlignment="center"
+                        android:gravity="center_horizontal"
                         android:maxLength="@integer/telephone_numbers_max_length_standard"
                         android:textSize="@dimen/value_15sp" />
 
