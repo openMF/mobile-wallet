@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.core.utils;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 
 import java.text.ParseException;
@@ -127,6 +128,7 @@ public class DateHelper {
     }
 
     public static long getDateAsLongFromString(String dateStr, String pattern) {
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
         Date date = null;
 
@@ -158,6 +160,7 @@ public class DateHelper {
     }
 
     public static String getDateAsStringFromLong(long timeInMillis) {
+        @SuppressLint("SimpleDateFormat")
         SimpleDateFormat sdf = new SimpleDateFormat(DD_MMM_YYYY);
         return sdf.format(new Date(timeInMillis));
     }

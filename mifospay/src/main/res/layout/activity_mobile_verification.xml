@@ -115,37 +115,44 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/value_20dp"
             android:layout_marginRight="@dimen/value_20dp"
-            android:layout_marginTop="@dimen/value_10dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/value_20dp"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-            <EditText
+            <org.mifos.mobilewallet.mifospay.utils.SBSCEditText
                 android:id="@+id/et_otp"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/value_250dp"
                 android:layout_height="48dp"
-                android:background="@drawable/bg_et_round_border"
-                android:hint="@string/enter_otp"
                 android:inputType="number"
-                android:paddingLeft="15dp"
-                android:paddingRight="15dp"
                 android:visibility="gone"
-                android:maxLength="6"/>
+                android:maxLength="6"
+                android:textIsSelectable="false"
+                android:cursorVisible="true"/>
 
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginLeft="@dimen/value_10dp"
-                android:visibility="gone"/>
-
-            <TextView
-                android:id="@+id/tv_verifying_otp"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/value_10dp"
-                android:text="@string/verifying_otp_please_wait"
-                android:visibility="gone"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/value_10dp">
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical|center_horizontal"
+                    android:layout_marginLeft="@dimen/value_10dp"
+                    android:visibility="gone"/>
+
+                <TextView
+                    android:id="@+id/tv_verifying_otp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/value_10dp"
+                    android:text="@string/verifying_otp_please_wait"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
