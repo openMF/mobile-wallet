@@ -26,7 +26,7 @@ that can be used as a dependency in any other wallet based project. It is develo
 
 This is an OpenSource project and we would be happy to see new contributors. The issues should be raised via the GitHub issue tracker.
 For Issue tracker guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/.github/CONTRIBUTING.md#issue-tracker">here</a>. All fixes should be proposed via pull requests.
-For pull request guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/.github/CONTRIBUTING.md#pull-requests">here</a>. For commit style guidelines please click <a href="https://github.com/openMF/mobile-wallet/wiki/Commit-style-guide">here</a>.
+For Pull Request guidelines please click <a href="https://github.com/openMF/mobile-wallet/blob/master/.github/CONTRIBUTING.md#pull-requests">here</a>. For commit style guidelines please click <a href="https://github.com/openMF/mobile-wallet/wiki/Commit-style-guide">here</a>.
 
 ### Branch Policy
 
@@ -59,7 +59,7 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 
 1. Fork the repository.
 
-2. Go to your fork and clone only the dev branch using `git clone -b dev <remote_repo>`(remote_repo url refers to your fork).
+2. Go to your forked repository and clone only the dev branch using `git clone -b dev <remote_repo>`(remote_repo url refers to your fork).
 
 3. Click on 'Open an existing Android Studio project'.
 
