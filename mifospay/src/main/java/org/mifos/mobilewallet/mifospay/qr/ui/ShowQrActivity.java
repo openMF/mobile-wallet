@@ -3,7 +3,6 @@ package org.mifos.mobilewallet.mifospay.qr.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -24,6 +23,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.qr.QrContract;
 import org.mifos.mobilewallet.mifospay.qr.presenter.ShowQrPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.DialogBox;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -139,19 +139,16 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
         }
     }
 
-    void showSetAmountDialog (final String qrData) {
-        final AlertDialog.Builder editTextDialog = new AlertDialog.Builder(this);
-        editTextDialog.setCancelable(false);
-        editTextDialog.setTitle("Enter Amount");
+    void showSetAmountDialog(final String qrData) {
         final EditText edittext = new EditText(this);
         edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
-        editTextDialog.setView(edittext);
         if (mAmount != null) {
             edittext.setText(mAmount);
         }
-        editTextDialog.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+        DialogBox editTextDialogBox = new DialogBox();
+        editTextDialogBox.setOnPositiveListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 String amount = edittext.getText().toString();
                 if (amount.equals("")) {
                     showToast(getString(R.string.enter_amount));
@@ -166,22 +163,23 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                 generateQR(qrData + ", " + mAmount);
             }
         });
-        editTextDialog.setNeutralButton(R.string.reset, new DialogInterface.OnClickListener() {
+        editTextDialogBox.setOnNeutralListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(DialogInterface dialogInterface, int i) {
                 mAmount = null;
                 tvQrData.setText(getString(R.string.vpa) + ": " + qrData);
                 generateQR(qrData);
                 showToast("Reset Amount Successful");
             }
         });
-        editTextDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        editTextDialogBox.setOnNegativeListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
             }
         });
-        editTextDialog.show();
+        editTextDialogBox.show(ShowQrActivity.this, R.string.enter_amount, R.string.confirm,
+                R.string.cancel, R.string.reset, edittext, false);
     }
 
     @Override

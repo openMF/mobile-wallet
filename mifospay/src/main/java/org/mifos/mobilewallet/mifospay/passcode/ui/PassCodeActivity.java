@@ -4,7 +4,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Toast;
 
@@ -24,6 +23,8 @@ import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract;
 import org.mifos.mobilewallet.mifospay.passcode.presenter.PassCodePresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
+import org.mifos.mobilewallet.mifospay.utils.DialogBox;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
@@ -59,7 +60,8 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
         mActivityComponent.inject(this);
         if (getIntent() != null) {
             currPass = getIntent().getStringExtra(Constants.CURRENT_PASSCODE);
-            updatePassword = getIntent().getBooleanExtra(Constants.UPDATE_PASSCODE, false);
+            updatePassword = getIntent()
+                    .getBooleanExtra(Constants.UPDATE_PASSCODE, false);
         }
         ButterKnife.bind(this);
         deepLinkURI = getIntent().getStringExtra("uri");
@@ -91,24 +93,24 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
 
     @Override
     public void startLoginActivity() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(PassCodeActivity.this);
-        builder.setTitle(R.string.passcode_title);
-        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+        DialogBox loginDialogBox = new DialogBox();
+        loginDialogBox.setOnPositiveListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(PassCodeActivity.this, LoginActivity.class);
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Intent intent = new Intent(PassCodeActivity.this
+                        , LoginActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
-        builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+        loginDialogBox.setOnNegativeListener(new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
             }
         });
-        AlertDialog dialog = builder.create();
-        dialog.show();
+        loginDialogBox.show(PassCodeActivity.this, R.string.passcode_title
+                , R.string.yes, R.string.no, true, null);
     }
 
     @Override

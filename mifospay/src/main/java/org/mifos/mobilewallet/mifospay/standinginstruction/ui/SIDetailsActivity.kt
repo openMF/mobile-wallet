@@ -274,6 +274,6 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
             dialog.dismiss()
         }
         dialogBox.show(this, R.string.discard_changes_and_exit,
-                R.string.discard_and_exit, R.string.accept, R.string.cancel)
+                R.string.discard_and_exit, R.string.accept, R.string.cancel, true, null)
     }
 }

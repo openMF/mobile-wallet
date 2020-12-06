@@ -436,7 +436,8 @@ public class EditProfileActivity extends BaseActivity implements
             }
         });
         dialogBox.show(this, R.string.discard_changes_and_exit,
-                R.string.discard_changes_and_exit_description, R.string.accept, R.string.cancel);
+                R.string.discard_changes_and_exit_description
+                , R.string.accept, R.string.cancel, true, null);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package org.mifos.mobilewallet.mifospay.settings.ui;
 
-import android.support.v7.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -43,18 +42,16 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
 
     @OnClick(R.id.btn_logout)
     public void onLogoutClicked() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog);
-        builder.setTitle(R.string.log_out_title);
-        builder.setCancelable(false)
-                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        showProgressDialog(Constants.LOGGING_OUT);
-                        mPresenter.logout();
-                    }
-                })
-                .setNegativeButton(R.string.no, null);
-        AlertDialog alert = builder.create();
-        alert.show();
+        DialogBox logoutDialogBox = new DialogBox();
+        logoutDialogBox.setOnPositiveListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showProgressDialog(Constants.LOGGING_OUT);
+                mPresenter.logout();
+            }
+        });
+        logoutDialogBox.show(SettingsActivity.this
+                , R.string.log_out_title, R.string.yes, R.string.no, false, null);
     }
 
     @OnClick(R.id.btn_disable_account)
@@ -72,7 +69,8 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
             }
         });
         dialogBox.show(this, R.string.alert_disable_account,
-                R.string.alert_disable_account_desc, R.string.ok, R.string.cancel);
+                R.string.alert_disable_account_desc, R.string.ok, R.string.cancel,
+                true, null);
     }
 
     @Override
