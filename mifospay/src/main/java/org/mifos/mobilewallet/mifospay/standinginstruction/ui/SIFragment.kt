@@ -92,27 +92,33 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     }
 
     override fun showLoadingView() {
-        inc_state_view.visibility = View.GONE
-        rv_si.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
+        if (isAdded && isVisible && userVisibleHint) {
+            inc_state_view.visibility = View.GONE
+            rv_si.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+        }
     }
 
     override fun showStandingInstructions(standingInstructionList: List<StandingInstruction>) {
-        progressBar.visibility = View.GONE
-        rv_si.visibility = View.VISIBLE
-        mSIAdapter.setData(standingInstructionList)
+        if (isAdded && isVisible && userVisibleHint) {
+            progressBar.visibility = View.GONE
+            rv_si.visibility = View.VISIBLE
+            mSIAdapter.setData(standingInstructionList)
+        }
     }
 
     override fun showStateView(drawable: Int, errorTitle: Int, errorMessage: Int) {
-        progressBar.visibility = View.GONE
-        rv_si.visibility = View.GONE
-        inc_state_view.visibility = View.VISIBLE
+        if (isAdded && isVisible && userVisibleHint) {
+            progressBar.visibility = View.GONE
+            rv_si.visibility = View.GONE
+            inc_state_view.visibility = View.VISIBLE
 
-        // setting up state view elements
-        val res = resources
-        iv_empty_no_transaction_history
+            // setting up state view elements
+            val res = resources
+            iv_empty_no_transaction_history
                 .setImageDrawable(res.getDrawable(drawable))
-        tv_empty_no_transaction_history_title.text = res.getString(errorTitle)
-        tv_empty_no_transaction_history_subtitle.text = res.getString(errorMessage)
+            tv_empty_no_transaction_history_title.text = res.getString(errorTitle)
+            tv_empty_no_transaction_history_subtitle.text = res.getString(errorMessage)
+        }
     }
 }
