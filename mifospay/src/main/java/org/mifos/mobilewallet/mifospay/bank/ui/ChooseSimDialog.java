@@ -76,10 +76,10 @@ public class ChooseSimDialog extends BottomSheetDialogFragment {
     @OnClick(R.id.btn_confirm)
     public void onConfirmClicked() {
         dismiss();
-        if (getActivity() instanceof LinkBankAccountActivity && (selectedSim==1 || selectedSim==2)) {
+        if (getActivity() instanceof LinkBankAccountActivity && (selectedSim == 1 || selectedSim == 2)) {
             ((LinkBankAccountActivity) getActivity()).linkBankAccount(selectedSim);
         } else {
-            Toast.makeText(getContext().getApplicationContext(),getString(R.string.choose_sim),Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext().getApplicationContext(), getString(R.string.choose_sim), Toast.LENGTH_SHORT).show();
         }
     }
 }
