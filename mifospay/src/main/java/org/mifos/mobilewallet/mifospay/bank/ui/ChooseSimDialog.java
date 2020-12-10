@@ -8,6 +8,7 @@ import android.support.design.widget.BottomSheetDialogFragment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.mifos.mobilewallet.mifospay.R;
 
@@ -75,8 +76,10 @@ public class ChooseSimDialog extends BottomSheetDialogFragment {
     @OnClick(R.id.btn_confirm)
     public void onConfirmClicked() {
         dismiss();
-        if (getActivity() instanceof LinkBankAccountActivity) {
+        if (getActivity() instanceof LinkBankAccountActivity && (selectedSim==1 || selectedSim==2)) {
             ((LinkBankAccountActivity) getActivity()).linkBankAccount(selectedSim);
+        } else {
+            Toast.makeText(getContext().getApplicationContext(),getString(R.string.choose_sim),Toast.LENGTH_SHORT).show();
         }
     }
 }
