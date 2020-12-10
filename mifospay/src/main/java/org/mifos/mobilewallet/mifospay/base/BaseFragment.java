@@ -55,7 +55,9 @@ public class BaseFragment extends Fragment {
     }
 
     protected void hideProgressDialog() {
-        callback.hideProgressDialog();
+        if(callback!=null){
+            callback.hideProgressDialog();
+        }
     }
 
     protected void setSwipeEnabled(boolean enabled) {
