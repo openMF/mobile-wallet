@@ -85,7 +85,7 @@ dependencies {
 
     implementation 'com.hbb20:ccp:2.2.0'
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:1.9'
-    implementation 'com.alimuzaffar.lib:pinentryedittext:1.3.1'
+    implementation 'com.alimuzaffar.lib:pinentryedittext:2.0.6'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.github.yalantis:ucrop:2.2.2'
     testImplementation "junit:junit:$rootProject.junitVersion"
