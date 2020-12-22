@@ -7,8 +7,7 @@
     android:background="@color/colorPrimary"
     android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
@@ -88,10 +87,9 @@
             <android.support.design.widget.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/value_20dp"
                 android:layout_marginRight="@dimen/value_20dp"
-                android:padding="@dimen/value_10dp"
                 android:textColorHint="@android:color/black"
                 app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
@@ -101,7 +99,6 @@
                     android:layout_height="match_parent"
                     android:hint="@string/amount"
                     android:inputType="number"
-                    android:paddingBottom="@dimen/value_20dp"
                     android:textSize="@dimen/value_15sp" />
             </android.support.design.widget.TextInputLayout>
 
@@ -114,9 +111,8 @@
                     android:id="@+id/til_vpa"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="270dp"
-                    android:layout_height="90dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/value_20dp"
-                    android:padding="@dimen/value_10dp"
                     android:textColorHint="@android:color/black"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 

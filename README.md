@@ -9,7 +9,7 @@ that can be used as a dependency in any other wallet based project. It is develo
 
 | Master | Development | Chat |
 |------------|-----------------|-----------------|
-| [![Build Status](https://travis-ci.com/openMF/mobile-wallet.svg?branch=master)](https://travis-ci.com/openMF/mobile-wallet) | [![Build Status](https://travis-ci.com/openMF/mobile-wallet.svg?branch=dev)](https://travis-ci.com/openMF/mobile-wallet) | [![Join the chat at https://gitter.im/openMF/mobile-wallet](https://badges.gitter.im/openMF/mobile-wallet.svg)](https://gitter.im/openMF/mobile-wallet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
+| ![Mobile-Wallet CI[Master/Dev]](https://github.com/openMF/mobile-wallet/workflows/Mobile-Wallet%20CI%5BMaster/Dev%5D/badge.svg?branch=master) | ![Mobile-Wallet CI[Master/Dev]](https://github.com/openMF/mobile-wallet/workflows/Mobile-Wallet%20CI%5BMaster/Dev%5D/badge.svg?branch=dev) | [![Join the chat at https://gitter.im/openMF/mobile-wallet](https://badges.gitter.im/openMF/mobile-wallet.svg)](https://gitter.im/openMF/mobile-wallet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
 
 ## Screenshots
 
@@ -78,8 +78,8 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
 `git checkout dev`
 `git pull upstream dev`
 
-## Travis CI
-<a href="https://travis-ci.com">Travis CI</a> is a hosted continuous integration service used to build and test software projects hosted at GitHub. We use Travis CI for continous integration and clean maintainence of code. All your pull requests must pass the CI build only then, it will be allowed to merge. Sometimes,when the build doesn't pass you can use these commands in your local terminal and check for the errors,</br>
+## GitHub Actions CI
+<a href="https://docs.github.com/en/free-pro-team@latest/actions">GitHub Actions CI</a> is a continuous integration service used to build and test software projects hosted at GitHub. We use GitHub Actions for continous integration and clean maintainence of code. All your pull requests must pass the CI build only then, it will be allowed to merge. Sometimes,when the build doesn't pass you can use these commands in your local terminal and check for the errors,</br>
 
 For Mac OS, you can use the following commands:
 
@@ -93,6 +93,15 @@ For Windows, you can use the following commands:
 * `gradlew check` quality checks on your project’s code using Checkstyle and generates reports from these checks.</br>
 * `gradlew spotlessApply` an check and apply formatting to any plain-text file.</br>
 * `gradlew build`  provides a command line to execute build script.</br>
+
+### Instructions to get the latest APK
+
+To get the latest apk fom the Github actions artifacts, follow these steps:
+
+1. Navigate to the [Actions](https://github.com/openMF/mobile-wallet/actions?query=workflow%3A%22Mobile-Wallet+CI%5BMaster%2FDev%5D%22+event%3Apush) tab of this repository.
+2. Click the latest workflow from the workflows list.
+3. Scroll down to the **Artifacts** section and click the **mobile-wallet** hyperlink.
+4. After successful download, extract the zip file to your preferred location.
 
 ## Wiki
 

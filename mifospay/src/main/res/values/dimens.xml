@@ -30,7 +30,9 @@
 
     <dimen name="value_10dp">10dp</dimen>
     <dimen name="value_10sp">10sp</dimen>
+    <dimen name="value_16dp">16dp</dimen>
     <dimen name="value_20dp">20dp</dimen>
+    <dimen name="value_27dp">27dp</dimen>
     <dimen name="value_20sp">20sp</dimen>
     <dimen name="value_15sp">15sp</dimen>
     <dimen name="value_18sp">18sp</dimen>
@@ -38,6 +40,7 @@
     <dimen name="value_5dp">5dp</dimen>
     <dimen name="value_3dp">3dp</dimen>
     <dimen name="value_7dp">7dp</dimen>
+    <dimen name="value_8dp">8dp</dimen>
     <dimen name="value_12dp">12dp</dimen>
     <dimen name="value_15dp">15dp</dimen>
     <dimen name="value_30dp">30dp</dimen>
@@ -61,5 +64,10 @@
     <dimen name="marginItemsInSectionExtraSmall">8dp</dimen>
     <dimen name="value_120dp">120dp</dimen>
     <dimen name="value_250dp">250dp</dimen>
+
+    <dimen name="value_60dp">60dp</dimen>
+    <dimen name="value_24sp">24sp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
 
 </resources>

@@ -7,7 +7,6 @@ apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-
     defaultConfig {
         applicationId "org.mifos.mobilewallet.mifospay"
         minSdkVersion rootProject.ext.minSdkVersion

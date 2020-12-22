@@ -195,4 +195,8 @@ public class Constants {
 
     public static final String CURRENT_PASSCODE = "current passcode";
     public static final String UPDATE_PASSCODE = "update passcode";
+    public static final String SELECT_DATE = "SELECT DATE";
+    public static final String SI_ID = "standing_instruction_id";
+    public static final String UNAUTHORIZED_ERROR = "401 Unauthorized";
+
 }

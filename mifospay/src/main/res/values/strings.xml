@@ -175,8 +175,10 @@
     <string name="pin_code">Pin Code</string>
     <string name="state">State</string>
     <string name="no_transactions_found">No transactions found</string>
-    <string name="change_profile_picture">Change Profile Picture</string>
-    <string name="remove_profile_picture">Remove Profile Picture</string>
+    <string name="click_profile_picture">Click profile picture</string>
+    <string name="change_profile_picture">Pick profile picture from device</string>
+    <string name="need_camera_permission_to_click_profile_picture">Need camera permission to click profile picture</string>
+    <string name="remove_profile_picture">Remove profile picture</string>
     <string name="sign_up_as">Sign up as</string>
     <string name="merchant">Merchant</string>
     <string name="customer">Customer</string>
@@ -272,5 +274,34 @@
     <string name="no_bank_account">No bank found</string>
     <string name="error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
     <string name="fetching_history">Fetching History...</string>
+    <string name="tile_si_activity">Create Standing Instruction</string>
+    <string name="standing_instruction">SI</string>
+    <string name="valid_till">Valid till :</string>
+    <string name="details">Details</string>
+    <string name="enter_valid_amount">Please enter a valid amount</string>
+    <string name="invalid_recurrence_interval">Interval cannot be smaller than 1 Month</string>
+    <string name="enter_recurrence_interval">Please enter the interval</string>
+    <string name="error_fetching_si_details">Couldn\'t fetch Standing Instruction details. Please, try again.</string>
+    <string name="error_fetching_si_list">Couldn\'t fetch Standing Instructions. Please, try again.</string>
+    <string name="discard_and_exit">This will discard all unsaved changes</string>
+    <string name="interval_cannot_smaller_than_1_month">Interval cannot be smaller than 1 Month</string>
+    <string name="delete_standing_instruction">Delete Standing Instruction</string>
+    <string name="pick_the_date"><u>pick the date</u></string>
+    <string name="empty_standing_instructions">No standing instructions to show</string>
+    <string name="select_till_date">Kindly select Till Date</string>
+    <string name="enter_VPA">Please enter the VPA</string>
+    <string name="amount_header">Amount:</string>
+    <string name="deleted_successfully">Deleted Successfully</string>
+
+    <!-- dynamically formatted strings-->
+    <string name="name_client_name">Name: %1$s</string>
+    <string name="number_account_number">Number: %1$s</string>
+    <string name="currency_amount">%1$s %2$s</string>
+    <string name="date_formatted">%1$s-%2$s-%3$s</string>
+    <string name="from_client_name">From: %1$s</string>
+    <string name="to_client_name">To: %1$s</string>
+    <string name="valid_till_date">Valid Till: %1$s</string>
+
+    <string name="title_activity_new_si">NewSIActivity</string>
 
 </resources>

@@ -23,6 +23,7 @@ import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
 
@@ -184,6 +185,9 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         if (getTargetFragment() != null) {
             getTargetFragment().onActivityResult(SendFragment.REQUEST_SHOW_DETAILS,
                     Activity.RESULT_CANCELED, null);
+            dismiss();
+        } else {
+            Toaster.showToast(getContext(), "Invalid");
             dismiss();
         }
     }

@@ -25,6 +25,8 @@
     <color name="colorAccentYellow">#FFF700</color>
     <color name="colorListImageBackground">#E6E6E6</color>
     <color name="colorListImageIcon">#B8B8B8</color>
+    <color name="colorDebit">#F10606</color>
+    <color name="colorCredit">#009688</color>
 
     <color name="colorExpandableBottomSheetDialogGrip">@color/colorBlack38</color>
 
@@ -40,10 +42,8 @@
 
 
 
-
-
-
     <!-- OLD COLORS ARE TEMPORARY HERE UNTIL ALL OF THE LAYOUT WON'T BE REDESIGNED TO AVOID CRASHES/BUGS/CONFLICTS -->
+
 
     <color name="primaryBlue">#3F51B5</color>
     <color name="primaryDarkBlue">#303F9F</color>
