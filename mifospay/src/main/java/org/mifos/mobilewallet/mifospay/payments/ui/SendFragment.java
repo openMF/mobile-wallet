@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -82,6 +83,8 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
 
     private String vpa;
 
+    Handler handler = new Handler();
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,10 +139,38 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         String eamount = etAmount.getText().toString().trim();
         String mobileNumber = mEtMobileNumber.getText()
                 .toString().trim().replaceAll("\\s+", "");
-        if (eamount.equals("") || (mBtnVpa.isSelected() && externalId.equals("")) ||
-                (mBtnMobile.isSelected() && mobileNumber.equals(""))) {
-            Toast.makeText(getActivity(),
-                    Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
+        if (eamount.equals("")) {
+            etAmount.setError(getString(R.string.please_enter_amount));
+            etAmount.requestFocus();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    etAmount.setError(null);
+                    etAmount.clearFocus();
+                }
+            }, 1500);
+            return;
+        }
+        if (externalId.equals("") && mBtnVpa.isSelected()) {
+            etVpa.setError(getString(R.string.please_enter_VPA));
+            etVpa.requestFocus();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    etVpa.setError(null);
+                    etVpa.clearFocus();
+                }
+            }, 1500);
+            return;
+        }
+        if (mobileNumber.equals("") && mBtnMobile.isSelected()) {
+            mEtMobileNumber.setError(getString(R.string.please_enter_mobile_number));
+            mEtMobileNumber.requestFocus();
+            handler.postDelayed(new Runnable() {
+                public void run() {
+                    mEtMobileNumber.setError(null);
+                    mEtMobileNumber.clearFocus();
+                }
+            }, 1500);
+            return;
         } else {
             double amount = Double.parseDouble(eamount);
             if (amount <= 0) {

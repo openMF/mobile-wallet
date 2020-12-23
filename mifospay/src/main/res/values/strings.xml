@@ -292,6 +292,9 @@
     <string name="enter_VPA">Please enter the VPA</string>
     <string name="amount_header">Amount:</string>
     <string name="deleted_successfully">Deleted Successfully</string>
+    <string name="please_enter_amount">Please enter amount</string>
+    <string name="please_enter_VPA">Please enter VPA</string>
+    <string name="please_enter_mobile_number">Please enter mobile number</string>
 
     <!-- dynamically formatted strings-->
     <string name="name_client_name">Name: %1$s</string>
