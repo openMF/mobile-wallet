@@ -21,23 +21,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/primaryDarkBlue"
                 android:theme="@style/Theme.AppCompat"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar">
-
-                <com.hbb20.CountryCodePicker
-                    android:id="@+id/ccp_country"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    app:ccpDialog_backgroundColor="@color/white"
-                    app:ccp_autoDetectCountry="true"
-                    app:ccp_autoFormatNumber="false"
-                    app:ccp_contentColor="@color/white"
-                    app:ccp_showFullName="true"
-                    app:ccp_showNameCode="false"
-                    app:ccp_showPhoneCode="false"
-                    app:ccp_textGravity="CENTER"/>
-
-            </android.support.v7.widget.Toolbar>
+                app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
