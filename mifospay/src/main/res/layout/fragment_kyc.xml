@@ -15,8 +15,7 @@
             android:layout_marginTop="@dimen/value_40dp"
             android:text="@string/complete_kyc"
             android:textAlignment="center"
-            android:textSize="@dimen/value_15sp"
-            android:gravity="center_horizontal" />
+            android:textSize="@dimen/value_15sp" />
 
         <LinearLayout
             android:id="@+id/lv1"
