@@ -23,6 +23,7 @@ import org.mifos.mobilewallet.mifospay.auth.AuthContract;
 import org.mifos.mobilewallet.mifospay.auth.presenter.LoginPresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
+import org.mifos.mobilewallet.mifospay.performchecks.PerformChecks;
 import org.mifos.mobilewallet.mifospay.registration.ui.MobileVerificationActivity;
 import org.mifos.mobilewallet.mifospay.registration.ui.SignupMethod;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
@@ -219,5 +220,13 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
                         }
                     });
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Starting a background process to check necessary conditions for application security
+        // (Checking device has root access or not).
+        startService(new Intent(this, PerformChecks.class));
     }
 }
