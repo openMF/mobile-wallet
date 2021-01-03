@@ -40,6 +40,8 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
     ImageButton mFlashOn;
     @BindView(R.id.btn_flash_off)
     ImageButton mFlashOff;
+    @BindView(R.id.btn_exit_scan)
+    ImageButton mExitBtn;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,6 +57,13 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
         mPresenter.attachView(this);
 
         mScannerView.setAutoFocus(true);
+
+        mExitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 
     @OnClick(R.id.btn_flash_on)

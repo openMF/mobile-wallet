@@ -45,6 +45,7 @@
         app:chipIcon="@drawable/ic_add"
         app:chipIconTint="@color/colorPrimary"
         android:textAlignment="center"
+        android:gravity="center_horizontal"
         android:textColor="@color/colorPrimary" />
 
 </RelativeLayout>
