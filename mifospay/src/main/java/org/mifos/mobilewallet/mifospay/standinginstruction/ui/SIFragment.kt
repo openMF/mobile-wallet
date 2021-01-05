@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.standinginstruction.ui
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -23,6 +24,7 @@ import javax.inject.Inject
 
 
 class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
+    val newSIActivityRequestCode = 100
 
     @Inject
     lateinit var mPresenter: StandingInstructionsPresenter
@@ -56,7 +58,7 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     private fun setUpUI() {
         fab_new_si.setOnClickListener {
             val i = Intent(activity, NewSIActivity::class.java)
-            startActivity(i)
+            startActivityForResult(i, newSIActivityRequestCode)
         }
         setUpRecyclerView()
         setupSwipeRefreshLayout()
@@ -81,6 +83,14 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
                         }
                     }
                 }))
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == newSIActivityRequestCode && resultCode == RESULT_OK) {
+            swipeRefreshLayout.isRefreshing = false
+            mStandingInstructionPresenter.getAllSI()
+        }
     }
 
     private fun setupSwipeRefreshLayout() {
