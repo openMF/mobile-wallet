@@ -286,6 +286,7 @@
     <string name="discard_and_exit">This will discard all unsaved changes</string>
     <string name="interval_cannot_smaller_than_1_month">Interval cannot be smaller than 1 Month</string>
     <string name="delete_standing_instruction">Delete Standing Instruction</string>
+    <string name="delete_standing_instruction_confirm">This will delete the Standing Instruction</string>
     <string name="pick_the_date"><u>pick the date</u></string>
     <string name="empty_standing_instructions">No standing instructions to show</string>
     <string name="select_till_date">Kindly select Till Date</string>
