@@ -129,6 +129,8 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
 
     override fun showSuccess(message: String) {
         showToast(message)
+        setResult(RESULT_OK)
+        finish()
     }
 
     override fun showFailureCreatingNewSI(message: String) {
