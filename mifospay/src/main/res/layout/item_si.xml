@@ -21,7 +21,7 @@
         android:layout_margin="@dimen/value_10dp"
         android:textColor="@color/colorTextPrimary"
         android:textSize="@dimen/textBody1"
-        android:text="dadas"
+        android:text="@string/from_client_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -32,7 +32,7 @@
         android:layout_marginTop="@dimen/value_20dp"
         android:layout_marginStart="@dimen/value_10dp"
         android:textColor="@color/colorTextPrimary"
-        android:text="dadsdasdasd"
+        android:text="@string/to_client_name"
         android:textSize="@dimen/textBody1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_from_client_name" />

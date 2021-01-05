@@ -101,14 +101,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_alignParentStart="true">
 
                 <ImageView
                     android:id="@+id/iv_fromImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/ic_person"/>
+                    android:background="@drawable/ic_person"
+                    android:contentDescription="@string/todo" />
 
                 <TextView
                     android:id="@+id/tv_fromClientName"
@@ -134,21 +136,24 @@
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_send"
-                android:foregroundGravity="center"/>
+                android:foregroundGravity="center"
+                android:contentDescription="@string/todo" />
 
             <LinearLayout
                 android:id="@+id/ll_to"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_alignParentEnd="true">
 
                 <ImageView
                     android:id="@+id/iv_toImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/ic_person"/>
+                    android:background="@drawable/ic_person"
+                    android:contentDescription="@string/todo" />
 
                 <TextView
                     android:id="@+id/tv_toClientName"

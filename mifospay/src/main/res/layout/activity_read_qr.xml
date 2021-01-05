@@ -26,7 +26,8 @@
             android:background="@null"
             android:id="@+id/btn_flash_on"
             android:layout_gravity="bottom|center"
-            app:srcCompat="@drawable/ic_flash_on"/>
+            app:srcCompat="@drawable/ic_flash_on"
+            android:contentDescription="@string/todo" />
         <ImageButton
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -34,7 +35,8 @@
             android:id="@+id/btn_flash_off"
             android:layout_gravity="bottom|center"
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_flash_off"/>
+            app:srcCompat="@drawable/ic_flash_off"
+            android:contentDescription="@string/todo" />
     </FrameLayout>
 
 

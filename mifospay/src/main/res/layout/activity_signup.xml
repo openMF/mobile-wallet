@@ -158,7 +158,8 @@
                     android:background="@drawable/bg_et_round_border"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
-                    android:paddingLeft="15dp"/>
+                    android:paddingLeft="15dp"
+                    android:paddingStart="15dp" />
 
                 <EditText
                     android:id="@+id/et_business_shop_name"

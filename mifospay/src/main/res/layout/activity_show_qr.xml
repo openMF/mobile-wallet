@@ -14,7 +14,8 @@
         <ImageView
             android:id="@+id/iv_qr_code"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:contentDescription="@string/todo" />
     </FrameLayout>
     <Button
         android:id="@+id/btn_set_amount"
