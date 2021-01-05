@@ -40,6 +40,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     lateinit var mPresenter: StandingInstructionDetailsPresenter
     private lateinit var mStandingInstructionPresenter:
             StandingInstructionContract.StandingInstructorDetailsPresenter
+    private lateinit var mOptionsMenu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -173,6 +174,12 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
                 standingInstruction.toAccount.accountNo)
 
         tv_si_status.text = standingInstruction.status.value
+        if (standingInstruction.status.value == "Deleted") {
+            if (this::mOptionsMenu.isInitialized) {
+                val nav_dashboard = mOptionsMenu.findItem(R.id.item_delete)
+                nav_dashboard.setVisible(false)
+            }
+        }
         tv_recurrence_interval.text = standingInstruction.recurrenceInterval.toString()
 
         // setting up TextInputLayouts
@@ -237,6 +244,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        mOptionsMenu = menu!!
         menuInflater.inflate(R.menu.menu_si_details, menu)
         return true
     }
