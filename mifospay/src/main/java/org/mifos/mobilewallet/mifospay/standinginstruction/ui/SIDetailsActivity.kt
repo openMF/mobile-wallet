@@ -198,6 +198,9 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     }
 
     private fun isDataSaveNecessary(): Boolean {
+        if (!this::standingInstruction.isInitialized) {
+            return false
+        }
         val originalValidTillDate = "${standingInstruction.validTill?.get(2)}-" +
                 "${standingInstruction.validTill?.get(1)}-${standingInstruction.validTill?.get(0)}"
 
