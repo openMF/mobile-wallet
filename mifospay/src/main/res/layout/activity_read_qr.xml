@@ -1,40 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-              android:orientation="vertical">
-
-    <include layout="@layout/toolbar"/>
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-
         <me.dm7.barcodescanner.zxing.ZXingScannerView
             android:id="@+id/scannerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            app:borderColor="@color/colorAccentBlue"
+            app:laserColor="@color/colorDebit"
+            app:cornerRadius="@dimen/value_10dp"
+            app:borderWidth="@dimen/value_7dp">
 
         </me.dm7.barcodescanner.zxing.ZXingScannerView>
 
-        <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@null"
-            android:id="@+id/btn_flash_on"
-            android:layout_gravity="bottom|center"
-            app:srcCompat="@drawable/ic_flash_on"/>
-        <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@null"
-            android:id="@+id/btn_flash_off"
-            android:layout_gravity="bottom|center"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_flash_off"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_gravity="top"
+            android:padding="@dimen/value_10dp">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:id="@+id/btn_exit_scan"
+                app:srcCompat="@drawable/ic_close"
+                android:tint="@color/white"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/btn_exit_scan"
+                android:layout_toEndOf="@id/btn_exit_scan"
+                android:layout_marginLeft="@dimen/value_10dp"
+                android:textSize="@dimen/value_20dp"
+                android:text="@string/scan_code"
+                android:fontFamily="@font/montserrat"
+                android:textColor="@color/white"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:id="@+id/btn_flash_on"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                app:srcCompat="@drawable/ic_flash_on"
+                android:tint="@color/white"
+                android:layout_centerVertical="true"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:id="@+id/btn_flash_off"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:visibility="gone"
+                app:srcCompat="@drawable/ic_flash_off"
+                android:tint="@color/white"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
     </FrameLayout>
 
 
