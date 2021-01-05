@@ -146,7 +146,7 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
     public void onBackPressed() {
         super.onBackPressed();
         saveCurrentPasscode();
-        finish();
+        finishAffinity();
     }
 
 }
