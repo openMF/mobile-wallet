@@ -126,8 +126,10 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
         String contents = null;
         int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
         bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
-        LuminanceSource source = new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
-        BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
+        LuminanceSource source =
+                new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
+        BinaryBitmap bitmap =
+                new BinaryBitmap(new HybridBinarizer(source));
         Reader reader = new MultiFormatReader();
         try {
             Result result = reader.decode(bitmap);
@@ -137,7 +139,8 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
             setResult(Activity.RESULT_OK, returnIntent);
             finish();
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error! " + e.toString(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),
+                    "Error! " + e.toString(), Toast.LENGTH_SHORT).show();
         }
         return contents;
     }
