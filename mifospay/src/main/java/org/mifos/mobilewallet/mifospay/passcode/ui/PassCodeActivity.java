@@ -3,7 +3,9 @@ package org.mifos.mobilewallet.mifospay.passcode.ui;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.Toast;
@@ -146,7 +148,11 @@ public class PassCodeActivity extends MifosPassCodeActivity implements
     public void onBackPressed() {
         super.onBackPressed();
         saveCurrentPasscode();
-        finish();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            finishAffinity(); //API 16+
+        } else {
+            ActivityCompat.finishAffinity(this); //Below 16
+        }
     }
 
 }
