@@ -132,6 +132,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
         if (uri != null) {
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.putExtra(Intent.EXTRA_STREAM, uri);
+            intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.scan_mifos_qr));
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             intent.setType("image/png");
             intent = Intent.createChooser(intent, "Share Qr code");
