@@ -127,7 +127,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_20dp"
-            android:background="@drawable/transfer_failure"
+            android:background="@drawable/ic_down_arrow"
             android:visibility="gone"/>
 
         <ProgressBar
