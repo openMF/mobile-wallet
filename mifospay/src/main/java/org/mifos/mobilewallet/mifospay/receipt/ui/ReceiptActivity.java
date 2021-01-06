@@ -178,7 +178,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         tvTransFromName.setText(Constants.NAME + transferDetail.getFromClient().getDisplayName());
         tvTransFromNumber.setText(Constants.ACCOUNT_NUMBER + transferDetail
                 .getFromAccount().getAccountNo());
-        hideProgressDialog();
+        dismissProgressDialog();
     }
 
     @OnClick(R.id.fab_download)
