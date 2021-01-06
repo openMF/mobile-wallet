@@ -61,6 +61,9 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
 
          */
         mEditProfileView.showDefaultImageByUsername(mPreferencesHelper.getFullName());
+        // when above check will be added, we can change below method accordingly;
+        mEditProfileView.isDefaultImg(true);
+
     }
 
     private void showUsernameIfNotEmpty() {

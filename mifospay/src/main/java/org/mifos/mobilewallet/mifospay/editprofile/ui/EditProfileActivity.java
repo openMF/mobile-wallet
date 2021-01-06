@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.hbb20.CountryCodePicker;
 import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper;
@@ -72,6 +73,8 @@ public class EditProfileActivity extends BaseActivity implements
 
     @BindView(R.id.til_edit_profile_email)
     TextInputLayout tilEmail;
+
+    private LinearLayout removeImgBtn;
 
     @BindView(R.id.til_edit_profile_vpa)
     TextInputLayout tilVpa;
@@ -130,6 +133,7 @@ public class EditProfileActivity extends BaseActivity implements
         View sheetView = getLayoutInflater()
                 .inflate(R.layout.dialog_change_profile_picture, null);
         bottomSheetDialog.setContentView(sheetView);
+        removeImgBtn = bottomSheetDialog.findViewById(R.id.ll_remove_profile_image_dialog_row);
         BottomSheetViews bsv = new BottomSheetViews();
         ButterKnife.bind(bsv, sheetView);
     }
@@ -283,7 +287,7 @@ public class EditProfileActivity extends BaseActivity implements
                     // permission denied, boo! Disable the
                     // functionality that depends on this permission.
                     Toaster.showToast(this,
-                            getString(R.string.need_camera_permission_to_click_profile_picture));
+                                      getString(R.string.need_camera_permission_to_click_profile_picture));
                 }
                 return;
             }
@@ -295,7 +299,7 @@ public class EditProfileActivity extends BaseActivity implements
                     // storage-related task you need to do.
 
                     Intent i = new Intent(Intent.ACTION_PICK,
-                            android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                                          android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
 
                     startActivityForResult(i, REQUEST_READ_IMAGE);
                 } else {
@@ -378,10 +382,10 @@ public class EditProfileActivity extends BaseActivity implements
     private void pickImageFromGallery() {
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(getApplicationContext(),
-                        Manifest.permission.READ_EXTERNAL_STORAGE)
+                                                  Manifest.permission.READ_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
-                    REQUEST_READ_EXTERNAL_STORAGE);
+                               REQUEST_READ_EXTERNAL_STORAGE);
         } else {
             Intent i = new Intent(Intent.ACTION_GET_CONTENT)
                     .setType("image/*")
@@ -393,7 +397,7 @@ public class EditProfileActivity extends BaseActivity implements
             }
 
             startActivityForResult(Intent.createChooser(i,
-                    getString(R.string.label_select_picture)), REQUEST_READ_IMAGE);
+                                                        getString(R.string.label_select_picture)), REQUEST_READ_IMAGE);
         }
     }
 
@@ -407,7 +411,7 @@ public class EditProfileActivity extends BaseActivity implements
     public void clickProfilePicFromCamera() {
 
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                                                                             Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 
             // Permission is not granted
             requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
@@ -436,7 +440,7 @@ public class EditProfileActivity extends BaseActivity implements
             }
         });
         dialogBox.show(this, R.string.discard_changes_and_exit,
-                R.string.discard_changes_and_exit_description, R.string.accept, R.string.cancel);
+                       R.string.discard_changes_and_exit_description, R.string.accept, R.string.cancel);
     }
 
     @Override
@@ -467,6 +471,12 @@ public class EditProfileActivity extends BaseActivity implements
     @Override
     public void closeActivity() {
         finish();
+    }
+
+    @Override
+    public void isDefaultImg(boolean isDef) {
+        if (isDef)
+            removeImgBtn.setVisibility(View.GONE);
     }
 
     @Override

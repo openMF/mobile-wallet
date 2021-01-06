@@ -71,5 +71,8 @@ public interface EditProfileContract {
         void showDiscardChangesDialog();
 
         void closeActivity();
+
+        void isDefaultImg(boolean isDef);
+
     }
 }
