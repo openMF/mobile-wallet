@@ -3,6 +3,10 @@ package org.mifos.mobilewallet.mifospay.bank.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +26,14 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
+import java.lang.reflect.Field;
+
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.yalantis.ucrop.UCropFragment.TAG;
 
 /**
  * Created by ankur on 13/July/2018
@@ -43,6 +51,8 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
     PinEntryEditText mPeMonth;
     @BindView(R.id.pe_year)
     PinEntryEditText mPeYear;
+
+    boolean key = false;
 
     @Override
     public void setPresenter(BankContract.DebitCardPresenter presenter) {
@@ -74,6 +84,40 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
                 return false;
             }
         });
+
+        mPeMonth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 2){
+                    mPeYear.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mPeYear.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                Log.d(TAG, "onTextChanged: "+key+" "+mPeYear.length());
+                if(keyCode == event.KEYCODE_DEL && mPeYear.length() == 0){
+                    if (key){
+                        mPeMonth.requestFocus();
+                        key = false;
+                    }
+                    key = true;
+                }
+                return false;
+            }
+        });
         return rootView;
     }
 
@@ -101,4 +145,6 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
     public void showToast(String message) {
         Toaster.showToast(getActivity(), message);
     }
+
+
 }
