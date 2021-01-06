@@ -39,7 +39,7 @@ ext {
     // App dependencies
     supportLibraryVersion = '28.0.0'
     daggerVersion = '2.11'
-    retrofitVersion = '2.2.0'
+    retrofitVersion = '2.9.0'
     okHttp3Version = '3.6.0'
     butterKnifeVersion = '8.6.0'
     dbflowVersion = '3.1.1'
