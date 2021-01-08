@@ -48,6 +48,7 @@ import okhttp3.ResponseBody;
 public class ReceiptActivity extends BaseActivity implements ReceiptContract.ReceiptView {
 
     private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 48;
+    private static final int REQUEST_WRITE_EXTERNAL_STORAGE_SHARE = 20;
 
     @Inject
     ReceiptPresenter mPresenter;
@@ -79,16 +80,14 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
     private String transactionId;
     private boolean isDebit;
     private Uri deepLinkURI;
-    private Uri data;
+
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.item_share_receipt:
-                if (data != null) {
-                    shareReceipt(data);
-                }
+                initiateShare();
                 break;
 
             default:
@@ -96,23 +95,33 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         }
         return true;
     }
+    void initiateShare() {
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
 
-    private void shareReceipt(Uri data) {
-
-        try {
-            if (data != null) {
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.putExtra(Intent.EXTRA_TITLE, "MIFOS RECEIPT UNIQUE ID");
-                intent.putExtra(Intent.EXTRA_TEXT, data.toString());
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                intent.setType("text/plain");
-                intent = Intent.createChooser(intent, "Share receipt");
-                startActivity(intent);
-            }
-
-        } catch (IndexOutOfBoundsException e) {
-            showToast(getString(R.string.invalid_link));
+            // Permission is not granted
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    REQUEST_WRITE_EXTERNAL_STORAGE_SHARE);
+        } else {
+            // Permission already granted
+            showSnackbar(getString(R.string.downloading_receipt));
+            mPresenter.downloadReceipt(transactionId, true);
         }
+    }
+
+    private void shareReceipt(Context context, File file) {
+        final Uri data = FileProvider.getUriForFile(context,
+                         "org.mifos.mobilewallet.mifospay.provider", file);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_TITLE, "MIFOS RECEIPT UNIQUE ID");
+        intent.putExtra(Intent.EXTRA_TEXT, data.toString());
+        intent.putExtra(Intent.EXTRA_STREAM, data);
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setType("application/pdf");
+        intent = Intent.createChooser(intent, getString(R.string.share_receipt));
+        context.startActivity(intent);
     }
 
     @Override
@@ -133,7 +142,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         mPresenter.attachView(this);
 
-        data = getIntent().getData();
+        Uri data = getIntent().getData();
         deepLinkURI = data;
         if (data != null) {
             String scheme = data.getScheme(); // "https"
@@ -231,11 +240,11 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
             // Permission is not granted
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_WRITE_EXTERNAL_STORAGE);
+                    REQUEST_WRITE_EXTERNAL_STORAGE_SHARE);
         } else {
             // Permission already granted
             showSnackbar(getString(R.string.downloading_receipt));
-            mPresenter.downloadReceipt(transactionId);
+            mPresenter.downloadReceipt(transactionId, false);
         }
     }
 
@@ -254,7 +263,8 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
     }
 
     @Override
-    public void writeReceiptToPDF(ResponseBody responseBody, String filename) {
+    public void writeReceiptToPDF(ResponseBody responseBody,
+                                  String filename , boolean shareReceipt) {
 
         File mifosDirectory = new File(Environment.getExternalStorageDirectory(),
                 Constants.MIFOSPAY);
@@ -265,14 +275,19 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         if (!FileUtils.writeInputStreamDataToFile(responseBody.byteStream(), documentFile)) {
             showToast(Constants.ERROR_DOWNLOADING_RECEIPT);
         } else {
-            Toaster.show(findViewById(android.R.id.content),
-                    Constants.RECEIPT_DOWNLOADED_SUCCESSFULLY, Snackbar.LENGTH_LONG, Constants.VIEW,
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            openFile(ReceiptActivity.this, documentFile);
-                        }
-                    });
+            if (shareReceipt) {
+                shareReceipt(ReceiptActivity.this, documentFile);
+            } else {
+                Toaster.show(findViewById(android.R.id.content),
+                        Constants.RECEIPT_DOWNLOADED_SUCCESSFULLY, Snackbar.LENGTH_LONG,
+                        Constants.VIEW,
+                        new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                openFile(ReceiptActivity.this, documentFile);
+                            }
+                        });
+            }
         }
     }
 
@@ -299,8 +314,17 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     showSnackbar(getString(R.string.downloading_receipt));
-                    mReceiptPresenter.downloadReceipt(transactionId);
+                    mReceiptPresenter.downloadReceipt(transactionId, false);
 
+                } else {
+                    showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_DOWNLOAD_RECEIPT);
+                }
+            }
+            case REQUEST_WRITE_EXTERNAL_STORAGE_SHARE: {
+                if (grantResults.length > 0 &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    showSnackbar(getString(R.string.downloading_receipt));
+                    mReceiptPresenter.downloadReceipt(transactionId, true);
                 } else {
                     showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_DOWNLOAD_RECEIPT);
                 }

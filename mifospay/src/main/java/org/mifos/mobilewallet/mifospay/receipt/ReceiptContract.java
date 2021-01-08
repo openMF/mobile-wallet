@@ -17,7 +17,7 @@ public interface ReceiptContract {
 
         void showSnackbar(String message);
 
-        void writeReceiptToPDF(ResponseBody responseBody, String filename);
+        void writeReceiptToPDF(ResponseBody responseBody, String filename, boolean shareReceipt);
 
         void hideProgressDialog();
 
@@ -31,7 +31,7 @@ public interface ReceiptContract {
 
     interface ReceiptPresenter extends BasePresenter {
 
-        void downloadReceipt(String transactionId);
+        void downloadReceipt(String transactionId, boolean shareReceipt);
 
         void fetchTransaction(long transactionId);
     }
