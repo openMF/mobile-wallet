@@ -16,9 +16,10 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
 
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
 
@@ -78,7 +79,47 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
     private String transactionId;
     private boolean isDebit;
     private Uri deepLinkURI;
+    private Uri data;
 
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.item_share_receipt:
+                if (data != null) {
+                    shareReceipt(data);
+                }
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    private void shareReceipt(Uri data) {
+
+        try {
+            if (data != null) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.putExtra(Intent.EXTRA_TITLE, "MIFOS RECEIPT UNIQUE ID");
+                intent.putExtra(Intent.EXTRA_TEXT, data.toString());
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                intent.setType("text/plain");
+                intent = Intent.createChooser(intent, "Share receipt");
+                startActivity(intent);
+            }
+
+        } catch (IndexOutOfBoundsException e) {
+            showToast(getString(R.string.invalid_link));
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_share_receipt, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +133,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         mPresenter.attachView(this);
 
-        Uri data = getIntent().getData();
+        data = getIntent().getData();
         deepLinkURI = data;
         if (data != null) {
             String scheme = data.getScheme(); // "https"

@@ -34,6 +34,7 @@ import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter;
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
+import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import javax.inject.Inject;
 
@@ -112,6 +113,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.VISIBLE);
+        Utils.hideSoftKeyboard(getActivity());
     }
 
     @OnClick(R.id.btn_mobile)
@@ -125,6 +127,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mTilVpa.setVisibility(View.GONE);
         btnScanQr.setVisibility(View.GONE);
         mRlMobile.setVisibility(View.VISIBLE);
+        Utils.hideSoftKeyboard(getActivity());
     }
 
     @OnClick(R.id.btn_submit)
