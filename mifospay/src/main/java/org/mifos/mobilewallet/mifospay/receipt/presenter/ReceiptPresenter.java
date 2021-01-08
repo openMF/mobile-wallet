@@ -44,7 +44,7 @@ public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
     }
 
     @Override
-    public void downloadReceipt(final String transactionId) {
+    public void downloadReceipt(final String transactionId, final boolean shareReceipt) {
 
         mUseCaseHandler.execute(mDownloadTransactionReceiptUseCase,
                 new DownloadTransactionReceipt.RequestValues(transactionId),
@@ -52,7 +52,7 @@ public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
                     @Override
                     public void onSuccess(DownloadTransactionReceipt.ResponseValue response) {
                         mReceiptView.writeReceiptToPDF(response.getResponseBody(),
-                                Constants.RECEIPT + transactionId + Constants.PDF);
+                                Constants.RECEIPT + transactionId + Constants.PDF, shareReceipt);
                     }
 
                     @Override
