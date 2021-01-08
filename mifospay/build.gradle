@@ -91,6 +91,8 @@ dependencies {
     testImplementation "junit:junit:$rootProject.junitVersion"
 
     implementation project(':core')
+
+    implementation 'com.scottyab:rootbeer-lib:0.0.8'
 }
 
 apply plugin: 'com.google.gms.google-services'

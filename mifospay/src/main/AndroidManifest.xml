@@ -148,6 +148,10 @@
         <activity
             android:name=".password.ui.EditPasswordActivity"
             android:theme="@style/AppTheme" />
+        <service android:name=".performchecks.PerformChecks"/>
+        <activity
+            android:name=".securitychecks.ui.SecurityChecksActivity"
+            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>
