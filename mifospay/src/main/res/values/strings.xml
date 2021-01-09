@@ -292,6 +292,28 @@
     <string name="enter_VPA">Please enter the VPA</string>
     <string name="amount_header">Amount:</string>
     <string name="deleted_successfully">Deleted Successfully</string>
+    <string name="edit_profile_content_desc">Edit profile save button</string>
+    <string name="sheet_dialog_button_image_view_desc">Sheet dialog button image view</string>
+    <string name="flash_on_image_view_desc">Flash on image view</string>
+    <string name="flash_off_image_view_desc">Flash off image view</string>
+    <string name="mifospay_logo_image_view_desc">MifosPay logo</string>
+    <string name="ic_download_view_desc">ic download</string>
+    <string name="qr_code_imageview_desc">QR code image view</string>
+    <string name="ic_next_imageview_desc">ic next imageview</string>
+    <string name="ic_camera_view_desc">Camera image view</string>
+    <string name="ic_change_profile_view_desc">Change profile image view</string>
+    <string name="ic_remove_profile_image_view_desc">Remove profile image view</string>
+    <string name="transaction_status_image_view_desc">Transaction status image view</string>
+    <string name="ic_person_view_desc">Person view</string>
+    <string name="ic_send_view_desc">Send view</string>
+    <string name="all">All</string>
+    <string name="credits">Credits</string>
+    <string name="debits">Debits</string>
+    <string name="ic_search_view_desc">Search view</string>
+    <string name="ic_remove_circle_desc">View Remove circle</string>
+    <string name="item_casual_list_title_desc">View item casual list title</string>
+    <string name="view_popular_bank_desc">View popular banks</string>
+    <string name="user_image_desc">View user image</string>
 
     <!-- dynamically formatted strings-->
     <string name="name_client_name">Name: %1$s</string>

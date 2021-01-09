@@ -11,7 +11,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/marginItemsInSectionSmall"
-        app:srcCompat="@drawable/shape_bottom_sheet_dialog_grip" />
+        app:srcCompat="@drawable/shape_bottom_sheet_dialog_grip"
+        android:contentDescription="@string/sheet_dialog_button_image_view_desc" />
 
     <TextView
         android:id="@+id/dialog_home_bottom_sheet_title"

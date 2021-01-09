@@ -10,7 +10,8 @@
         android:id="@+id/iv_popular_bank"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:contentDescription="@string/view_popular_bank_desc" />
 
     <TextView
         android:id="@+id/tv_popular_bank"

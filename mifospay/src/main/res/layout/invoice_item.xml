@@ -17,7 +17,7 @@
         android:layout_gravity="center_vertical"
         android:padding="@dimen/value_5dp"
         app:srcCompat="@drawable/ic_remove_circle_outline_black_24dp"
-        />
+        android:contentDescription="@string/ic_remove_circle_desc" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

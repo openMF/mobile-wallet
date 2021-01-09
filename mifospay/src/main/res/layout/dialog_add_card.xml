@@ -21,7 +21,9 @@
             android:layout_height="wrap_content"
             android:hint="@string/first_name"
             android:nextFocusForward="@id/et_lName"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="text"
+            android:importantForAutofill="no" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -37,7 +39,9 @@
             android:layout_height="wrap_content"
             android:hint="@string/last_name"
             android:nextFocusForward="@id/et_card_number"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:inputType="text"
+            android:importantForAutofill="no" />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
@@ -54,7 +58,8 @@
             android:hint="@string/credit_card_number"
             android:inputType="number"
             android:nextFocusForward="@id/spn_mm"
-            android:singleLine="true"/>
+            android:singleLine="true"
+            android:importantForAutofill="no" />
     </android.support.design.widget.TextInputLayout>
 
     <TextView
@@ -99,7 +104,8 @@
             android:inputType="numberPassword"
             android:maxLength="3"
             android:minWidth="@dimen/value_70dp"
-            android:nextFocusForward="@id/btn_add"/>
+            android:nextFocusForward="@id/btn_add"
+            android:importantForAutofill="no" />
     </android.support.design.widget.TextInputLayout>
 
     <LinearLayout
@@ -109,7 +115,8 @@
         android:layout_marginRight="@dimen/value_10dp"
         android:layout_marginTop="@dimen/value_30dp"
         android:gravity="right"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:layout_marginEnd="@dimen/value_10dp">
 
         <Button
             android:id="@+id/btn_cancel"

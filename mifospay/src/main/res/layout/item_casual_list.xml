@@ -13,7 +13,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/tv_item_casual_list_subtitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_item_casual_list_title"
-        app:srcCompat="@drawable/ic_transaction" />
+        app:srcCompat="@drawable/ic_transaction"
+        android:contentDescription="@string/item_casual_list_title_desc" />
 
     <View
         android:id="@+id/divider3"

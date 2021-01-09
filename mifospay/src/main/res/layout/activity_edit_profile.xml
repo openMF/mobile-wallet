@@ -164,6 +164,7 @@
         app:layout_anchor="@id/sv_edit_profile"
         android:tint="@color/colorPrimary"
         app:backgroundTint="@color/colorAccentBlack"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        android:contentDescription="@string/edit_profile_content_desc"/>
 
 </android.support.design.widget.CoordinatorLayout>

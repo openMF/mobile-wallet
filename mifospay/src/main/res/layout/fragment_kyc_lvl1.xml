@@ -18,7 +18,8 @@
             android:hint="@string/first_name"
             android:nextFocusForward="@id/et_lname"
             android:singleLine="true"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:theme="@style/Theme.AppCompat.Light"
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/et_lname"
@@ -28,7 +29,8 @@
             android:hint="@string/last_name"
             android:nextFocusForward="@id/et_address1"
             android:singleLine="true"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:theme="@style/Theme.AppCompat.Light"
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/et_address1"
@@ -38,7 +40,8 @@
             android:hint="@string/address_line_1"
             android:nextFocusForward="@id/et_address2"
             android:singleLine="true"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:theme="@style/Theme.AppCompat.Light"
+            android:inputType="text" />
 
         <EditText
             android:id="@+id/et_address2"
@@ -48,7 +51,8 @@
             android:hint="@string/address_line_2"
             android:nextFocusForward="@id/et_mobile_number"
             android:singleLine="true"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:theme="@style/Theme.AppCompat.Light"
+            android:inputType="text" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -88,7 +92,8 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:hint="@string/date_of_birth"
-            android:theme="@style/Theme.AppCompat.Light"/>
+            android:theme="@style/Theme.AppCompat.Light"
+            android:inputType="text" />
 
         <Button
             android:id="@+id/btn_submit"

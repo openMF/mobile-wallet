@@ -28,7 +28,8 @@
                         android:layout_width="@dimen/value_120dp"
                         android:layout_height="@dimen/value_120dp"
                         android:layout_gravity="center"
-                        app:srcCompat="@drawable/mifospay_round_logo" />
+                        app:srcCompat="@drawable/mifospay_round_logo"
+                        android:contentDescription="@string/mifospay_logo_image_view_desc" />
 
                     <TextView
                         android:id="@+id/tv_amount"
@@ -160,7 +161,8 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
         app:srcCompat="@drawable/ic_download"
-        tools:ignore="RtlHardcoded" />
+        tools:ignore="RtlHardcoded"
+        android:contentDescription="@string/ic_download_view_desc" />
 </FrameLayout>
 
 

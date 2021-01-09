@@ -14,7 +14,8 @@
         android:layout_height="30dp"
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/value_10dp"
-        app:srcCompat="@drawable/ic_search"/>
+        app:srcCompat="@drawable/ic_search"
+        android:contentDescription="@string/ic_search_view_desc" />
 
     <TextView
         android:id="@+id/tv_popular_bank"

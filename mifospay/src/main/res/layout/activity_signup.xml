@@ -76,7 +76,8 @@
                     android:hint="@string/first_name"
                     android:inputType="text"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:paddingRight="15dp"
+                    android:importantForAutofill="no" />
 
                 <EditText
                     android:id="@+id/et_last_name"
@@ -87,7 +88,8 @@
                     android:hint="@string/last_name"
                     android:inputType="text"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:paddingRight="15dp"
+                    android:importantForAutofill="no" />
 
                 <EditText
                     android:id="@+id/et_user_name"
@@ -98,7 +100,8 @@
                     android:hint="@string/username"
                     android:inputType="text"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:paddingRight="15dp"
+                    android:importantForAutofill="no" />
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/etPasswordLayout"
                     android:background="@drawable/bg_et_round_border"
@@ -158,7 +161,8 @@
                     android:background="@drawable/bg_et_round_border"
                     android:hint="@string/email"
                     android:inputType="textEmailAddress"
-                    android:paddingLeft="15dp"/>
+                    android:paddingLeft="15dp"
+                    android:importantForAutofill="no" />
 
                 <EditText
                     android:id="@+id/et_business_shop_name"
@@ -170,7 +174,8 @@
                     android:inputType="text"
                     android:paddingLeft="15dp"
                     android:paddingRight="15dp"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    android:importantForAutofill="no" />
 
                 <EditText
                     android:id="@+id/et_address_line_1"
@@ -181,7 +186,8 @@
                     android:hint="@string/address_line_1"
                     android:inputType="text"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:paddingRight="15dp"
+                    android:importantForAutofill="no" />
 
                 <EditText
                     android:id="@+id/et_address_line_2"
@@ -192,7 +198,8 @@
                     android:hint="@string/address_line_2"
                     android:inputType="text"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:paddingRight="15dp"
+                    android:importantForAutofill="no" />
 
 
                 <EditText
@@ -204,7 +211,8 @@
                     android:hint="@string/pin_code"
                     android:inputType="number"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:paddingRight="15dp"
+                    android:importantForAutofill="no" />
 
                 <EditText
                     android:id="@+id/et_state"
@@ -219,7 +227,8 @@
                     android:hint="@string/state"
                     android:inputType="text"
                     android:paddingLeft="15dp"
-                    android:paddingRight="15dp"/>
+                    android:paddingRight="15dp"
+                    android:importantForAutofill="no" />
 
             </LinearLayout>
 
@@ -241,6 +250,7 @@
         android:scaleType="center"
         android:visibility="visible"
         app:backgroundTint="@color/primaryDarkBlue"
-        app:srcCompat="@drawable/ic_next"/>
+        app:srcCompat="@drawable/ic_next"
+        android:contentDescription="@string/ic_next_imageview_desc" />
 
 </RelativeLayout>

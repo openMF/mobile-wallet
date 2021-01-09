@@ -27,7 +27,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="@dimen/value_20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_marginEnd="@dimen/value_20dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -110,7 +111,8 @@
             android:layout_marginLeft="@dimen/value_20dp"
             android:background="@drawable/button_round_stroke_primary"
             android:text="@string/setup_upi"
-            android:visibility="visible"/>
+            android:visibility="visible"
+            android:layout_marginStart="@dimen/value_20dp" />
 
         <View
             android:layout_width="match_parent"

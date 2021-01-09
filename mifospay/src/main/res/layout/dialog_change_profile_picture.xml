@@ -23,7 +23,8 @@
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_camera"
             android:layout_marginStart="@dimen/value_3dp"
-            android:layout_marginLeft="@dimen/value_3dp" />
+            android:layout_marginLeft="@dimen/value_3dp"
+            android:contentDescription="@string/ic_camera_view_desc" />
 
         <TextView
             android:id="@+id/tv_click_image_picture"
@@ -51,7 +52,8 @@
             android:id="@+id/iv_change_profile_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_photo_library" />
+            app:srcCompat="@drawable/ic_photo_library"
+            android:contentDescription="@string/ic_change_profile_view_desc" />
 
         <TextView
             android:id="@+id/tv_change_profile_image"
@@ -78,7 +80,8 @@
             android:id="@+id/iv_remove_profile_image"
             android:layout_width="@dimen/value_27dp"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_remove" />
+            app:srcCompat="@drawable/ic_remove"
+            android:contentDescription="@string/ic_remove_profile_image_view_desc" />
 
         <TextView
             android:id="@+id/tv_remove_profile_image"

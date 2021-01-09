@@ -24,11 +24,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:text="All"
+                android:text="@string/all"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:typeface="sans"
-                app:chipBackgroundColor="@color/clickedblue" />
+                app:chipBackgroundColor="@color/clickedblue"
+                android:gravity="center_horizontal" />
             <android.support.design.chip.Chip
                 android:id="@+id/btn_filter_credits"
                 android:layout_width="0dp"
@@ -36,11 +37,12 @@
                 android:layout_weight="1"
                 android:clickable="true"
                 android:padding="5dp"
-                android:text="Credits"
+                android:text="@string/credits"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:typeface="sans"
-                app:chipBackgroundColor="@color/background_chip_state" />
+                app:chipBackgroundColor="@color/background_chip_state"
+                android:gravity="center_horizontal" />
             <android.support.design.chip.Chip
                 android:id="@+id/btn_filter_debits"
                 android:layout_width="0dp"
@@ -48,11 +50,12 @@
                 android:layout_weight="1"
                 android:padding="5dp"
                 android:clickable="true"
-                android:text="Debits"
+                android:text="@string/debits"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:typeface="sans"
-                app:chipBackgroundColor="@color/background_chip_state" />
+                app:chipBackgroundColor="@color/background_chip_state"
+                android:gravity="center_horizontal" />
 
         </LinearLayout>
 
