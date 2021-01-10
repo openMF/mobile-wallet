@@ -82,6 +82,9 @@ public class Constants {
     public static final String ERROR_CHOOSING_CONTACT = "Error choosing contact";
     public static final String MAKE_TRANSFER_FRAGMENT = "Make Transfer Fragment";
     public static final String PLEASE_ENTER_ALL_THE_FIELDS = "Please enter all the fields";
+    public static final String EMPTY_AMOUNT = "Please enter amount";
+    public static final String EMPTY_VPA = "Please enter VPA";
+    public static final String EMPTY_MOBILE_NUMBER = "Please enter mobile number";
     public static final String TRANSFER = "Transfer";
     public static final String TRANSACTION_DETAILS = "Transaction Details";
     public static final String ACCOUNT_NUMBER = "Account Number : ";

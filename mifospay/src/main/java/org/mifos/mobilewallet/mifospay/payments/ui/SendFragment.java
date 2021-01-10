@@ -136,10 +136,20 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         String eamount = etAmount.getText().toString().trim();
         String mobileNumber = mEtMobileNumber.getText()
                 .toString().trim().replaceAll("\\s+", "");
-        if (eamount.equals("") || (mBtnVpa.isSelected() && externalId.equals("")) ||
-                (mBtnMobile.isSelected() && mobileNumber.equals(""))) {
+        if (eamount.equals("")) {
             Toast.makeText(getActivity(),
-                    Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
+                    Constants.EMPTY_AMOUNT, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (externalId.equals("") && mBtnVpa.isSelected()) {
+            Toast.makeText(getActivity(),
+                    Constants.EMPTY_VPA, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (mobileNumber.equals("") && mBtnMobile.isSelected()) {
+            Toast.makeText(getActivity(),
+                    Constants.EMPTY_MOBILE_NUMBER, Toast.LENGTH_SHORT).show();
+            return;
         } else {
             double amount = Double.parseDouble(eamount);
             if (amount <= 0) {
