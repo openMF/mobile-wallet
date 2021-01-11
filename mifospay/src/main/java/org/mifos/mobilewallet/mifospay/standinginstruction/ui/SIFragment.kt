@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.standinginstruction.ui
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -23,6 +24,7 @@ import javax.inject.Inject
 
 
 class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
+    val newSIActivityRequestCode = 100
 
     @Inject
     lateinit var mPresenter: StandingInstructionsPresenter
@@ -56,7 +58,7 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     private fun setUpUI() {
         fab_new_si.setOnClickListener {
             val i = Intent(activity, NewSIActivity::class.java)
-            startActivity(i)
+            startActivityForResult(i, newSIActivityRequestCode)
         }
         setUpRecyclerView()
         setupSwipeRefreshLayout()
@@ -83,6 +85,14 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
                 }))
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == newSIActivityRequestCode && resultCode == RESULT_OK) {
+            swipeRefreshLayout.isRefreshing = false
+            mStandingInstructionPresenter.getAllSI()
+        }
+    }
+
     private fun setupSwipeRefreshLayout() {
         setSwipeEnabled(true)
         swipeRefreshLayout.setOnRefreshListener {
@@ -98,21 +108,25 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     }
 
     override fun showStandingInstructions(standingInstructionList: List<StandingInstruction>) {
-        progressBar.visibility = View.GONE
-        rv_si.visibility = View.VISIBLE
-        mSIAdapter.setData(standingInstructionList)
+        if (activity != null) {
+            progressBar.visibility = View.GONE
+            rv_si.visibility = View.VISIBLE
+            mSIAdapter.setData(standingInstructionList)
+        }
     }
 
     override fun showStateView(drawable: Int, errorTitle: Int, errorMessage: Int) {
-        progressBar.visibility = View.GONE
-        rv_si.visibility = View.GONE
-        inc_state_view.visibility = View.VISIBLE
+        if (activity != null) {
+            progressBar.visibility = View.GONE
+            rv_si.visibility = View.GONE
+            inc_state_view.visibility = View.VISIBLE
 
-        // setting up state view elements
-        val res = resources
-        iv_empty_no_transaction_history
-                .setImageDrawable(res.getDrawable(drawable))
-        tv_empty_no_transaction_history_title.text = res.getString(errorTitle)
-        tv_empty_no_transaction_history_subtitle.text = res.getString(errorMessage)
+            // setting up state view elements
+            val res = resources
+            iv_empty_no_transaction_history
+                    .setImageDrawable(res.getDrawable(drawable))
+            tv_empty_no_transaction_history_title.text = res.getString(errorTitle)
+            tv_empty_no_transaction_history_subtitle.text = res.getString(errorMessage)
+        }
     }
 }

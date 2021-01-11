@@ -304,5 +304,7 @@
 
     <string name="title_activity_new_si">NewSIActivity</string>
     <string name="todo">TODO</string>
+    <string name="share_receipt">Share Receipt Link</string>
+
 
 </resources>
