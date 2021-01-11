@@ -247,10 +247,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
                 /**
                  * perform delete action only when details have been successfully fetched
                  */
-                if (this.standingInstructionId != 0L) {
-                    mStandingInstructionPresenter.deleteStandingInstruction(
-                            this.standingInstructionId)
-                }
+                showConfirmDeleteDialog()
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -262,6 +259,21 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         } else {
             super.onBackPressed()
         }
+    }
+
+    private fun showConfirmDeleteDialog() {
+        val dialogBox = DialogBox()
+        dialogBox.setOnPositiveListener { dialog, which ->
+            if (this.standingInstructionId != 0L) {
+                mStandingInstructionPresenter.deleteStandingInstruction(
+                        this.standingInstructionId)
+            }
+        }
+        dialogBox.setOnNegativeListener { dialog, which ->
+            dialog.dismiss()
+        }
+        dialogBox.show(this, R.string.delete_standing_instruction,
+                R.string.delete_standing_instruction_confirm, R.string.accept, R.string.cancel)
     }
 
     private fun showDiscardChangesDialog() {
