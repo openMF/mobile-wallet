@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.mifos.mobilewallet.core.domain.model.BankAccountDetails;
 import org.mifos.mobilewallet.mifospay.R;
@@ -149,6 +150,8 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
                 mBankAccountsAdapter.addBank(bankAccountDetails);
                 mRvLinkedBankAccounts.setVisibility(View.VISIBLE);
                 linkedAccountsText.setVisibility(View.GONE);
+                Toast.makeText(
+                        getContext(), R.string.bank_added_successfully, Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == BANK_ACCOUNT_DETAILS_REQUEST_CODE && resultCode
                 == Activity.RESULT_OK) {
