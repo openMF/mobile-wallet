@@ -56,10 +56,29 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_history"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_history"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/scroll_Indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|end"
+                android:layout_margin="10dp"
+                android:alpha="0.0"
+                app:backgroundTint="@color/clickedblue"
+                app:elevation="0dp"
+                app:fabCustomSize="28dp"
+                app:srcCompat="@drawable/ic_baseline_keyboard_arrow_down_24" />
+
+        </FrameLayout>
+
     </LinearLayout>
 
     <ProgressBar
