@@ -21,13 +21,12 @@
             <android.support.design.widget.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="wrap_content"
                 android:id="@+id/til_si_amount"
                 android:layout_marginLeft="@dimen/value_20dp"
                 android:layout_marginRight="@dimen/value_20dp"
                 android:layout_marginTop="@dimen/value_20dp"
                 android:layout_marginBottom="@dimen/value_10dp"
-                android:padding="@dimen/value_10dp"
                 android:textColorHint="@android:color/black"
                 app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
@@ -38,7 +37,7 @@
                     android:hint="@string/amount"
                     android:inputType="number"
                     android:textSize="@dimen/value_15sp"
-                    android:theme="@style/Theme.AppCompat.Light" />
+                     />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -46,12 +45,11 @@
                 android:id="@+id/til_si_vpa"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/value_20dp"
                 android:layout_marginRight="@dimen/value_20dp"
                 android:layout_marginTop="@dimen/value_10dp"
                 android:layout_marginBottom="@dimen/value_10dp"
-                android:padding="@dimen/value_10dp"
                 android:textColorHint="@android:color/black"
                 app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
@@ -61,20 +59,18 @@
                     android:layout_height="match_parent"
                     android:hint="@string/virtual_payment_address"
                     android:singleLine="true"
-                    android:textSize="@dimen/value_15sp"
-                    android:theme="@style/Theme.AppCompat.Light" />
+                    android:textSize="@dimen/value_15sp" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_si_interval"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/value_20dp"
                 android:layout_marginRight="@dimen/value_20dp"
                 android:layout_marginTop="@dimen/value_10dp"
                 android:layout_marginBottom="@dimen/value_10dp"
-                android:padding="@dimen/value_10dp"
                 android:textColorHint="@android:color/black"
                 app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
@@ -85,8 +81,7 @@
                     android:hint="Recurrence Interval (in months)"
                     android:singleLine="true"
                     android:inputType="number"
-                    android:textSize="@dimen/value_15sp"
-                    android:theme="@style/Theme.AppCompat.Light" />
+                    android:textSize="@dimen/value_15sp" />
             </android.support.design.widget.TextInputLayout>
 
 
