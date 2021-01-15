@@ -58,6 +58,8 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     @BindView(R.id.inc_account_details_mobile_number)
     View vAccountDetailsMobile;
 
+    protected static BottomSheetBehavior mBottomSheetBehavior;
+
     public static ProfileFragment newInstance(long clientId) {
 
         Bundle args = new Bundle();
@@ -95,7 +97,7 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     }
 
     private void setupBottomSheet() {
-        BottomSheetBehavior mBottomSheetBehavior = BottomSheetBehavior
+        mBottomSheetBehavior = BottomSheetBehavior
                 .from(vProfileBottomSheetDialog);
         mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
