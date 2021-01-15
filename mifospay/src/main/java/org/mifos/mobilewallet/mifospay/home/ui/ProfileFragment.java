@@ -144,6 +144,8 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
                 .width((int) getResources().getDimension(R.dimen.user_profile_image_size))
                 .height((int) getResources().getDimension(R.dimen.user_profile_image_size))
                 .endConfig().buildRound(client.getName().substring(0, 1), R.color.colorAccentBlack);
+        ImageView editableImageHint=getView().findViewById(R.id.iv_editable_image_hint);
+        editableImageHint.setVisibility(View.INVISIBLE);
         ivUserImage.setImageDrawable(drawable);
         tvUserName.setText(client.getName());
     }
