@@ -353,10 +353,12 @@ public class EditProfileActivity extends BaseActivity implements
         options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.primaryBlue));
         options.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.black));
+        options.setCropFrameColor(ContextCompat.getColor(this, R.color.clickedblue));
         options.setCircleDimmedLayer(true);
-        options.setShowCropFrame(false);
-        options.setCropGridColumnCount(0);
-        options.setCropGridRowCount(0);
+        options.setShowCropFrame(true);
+        options.setShowCropGrid(true);
+        options.setCropGridColumnCount(2);
+        options.setCropGridRowCount(2);
         return uCrop.withOptions(options);
     }
 
