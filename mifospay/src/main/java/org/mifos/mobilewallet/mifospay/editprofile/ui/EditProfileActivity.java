@@ -20,6 +20,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.hbb20.CountryCodePicker;
 import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper;
@@ -31,6 +32,7 @@ import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
+import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DialogBox;
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
@@ -55,6 +57,7 @@ public class EditProfileActivity extends BaseActivity implements
     private static final int REQUEST_READ_IMAGE = 1;
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 7;
     private static final int REQUEST_CAMERA = 0;
+    private static final int SCAN_QR_REQUEST_CODE = 666;
 
     @Inject
     EditProfilePresenter mPresenter;
@@ -81,6 +84,9 @@ public class EditProfileActivity extends BaseActivity implements
 
     @BindView(R.id.et_edit_profile_username)
     EditText etUsername;
+
+    @BindView(R.id.btn_scan_qr)
+    TextView qrScan;
 
     @BindView(R.id.et_edit_profile_email)
     EditText etEmail;
@@ -174,6 +180,23 @@ public class EditProfileActivity extends BaseActivity implements
         intent.putExtra(Constants.UPDATE_PASSCODE, true);
         startActivity(intent);
     }
+
+    @OnClick(R.id.btn_scan_qr)
+    public void scanQrClicked() {
+
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+        } else {
+
+            // Permission has already been granted
+            Intent i = new Intent(this, ReadQrActivity.class);
+            startActivityForResult(i, SCAN_QR_REQUEST_CODE);
+        }
+    }
+
 
     @OnTextChanged({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
             R.id.et_edit_profile_vpa, R.id.et_edit_profile_mobile})
@@ -313,6 +336,10 @@ public class EditProfileActivity extends BaseActivity implements
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == SCAN_QR_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            String qrData=data.getStringExtra(Constants.QR_DATA);
+            etVpa.setText(qrData);
+        }
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_READ_IMAGE && data != null) {
                 Uri selectedImageUri = data.getData();
