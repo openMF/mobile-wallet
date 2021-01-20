@@ -158,6 +158,7 @@
         android:layout_marginBottom="@dimen/paddingLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/todo"
         android:background="@color/colorAccentBlack"
         app:srcCompat="@drawable/ic_save"
         app:layout_anchorGravity="bottom|right|end"

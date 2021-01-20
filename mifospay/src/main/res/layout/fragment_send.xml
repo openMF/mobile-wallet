@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_send_container"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical">
 
@@ -11,9 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="0dp"
+        android:layout_marginLeft="0dp"
         android:layout_marginTop="0dp"
         android:layout_marginBottom="0dp"
         android:orientation="vertical"
@@ -53,7 +56,9 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:typeface="sans"
-                app:chipBackgroundColor="@color/clickedblue" />
+                app:chipBackgroundColor="@color/clickedblue"
+                android:gravity="center_horizontal"
+                android:focusable="true" />
 
             <android.support.design.chip.Chip
                 android:id="@+id/btn_mobile"
@@ -67,14 +72,15 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:clickable="true"
+                android:paddingRight="@dimen/value_10dp"
                 android:text="@string/mobile_number"
                 android:textAlignment="center"
-                android:paddingRight="@dimen/value_10dp"
                 android:textAllCaps="false"
-                android:textSize="8sp"
                 android:textColor="@android:color/black"
+                android:textSize="8sp"
                 android:typeface="sans"
-                app:chipBackgroundColor="@color/changedBackgroundColour" />
+                app:chipBackgroundColor="@color/changedBackgroundColour"
+                android:gravity="center_horizontal" />
 
         </RelativeLayout>
 
@@ -150,8 +156,8 @@
                 android:visibility="gone">
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginLeft="@dimen/value_20dp"
                     android:layout_marginRight="@dimen/value_15dp"
@@ -163,13 +169,14 @@
                         android:id="@+id/et_mobile_number"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingBottom="@dimen/value_10dp"
                         android:hint="@string/mobile_number"
                         android:inputType="number"
+                        android:maxLength="@integer/telephone_numbers_max_length_standard"
+                        android:paddingBottom="@dimen/value_10dp"
                         android:singleLine="true"
                         android:textAlignment="center"
-                        android:maxLength="@integer/telephone_numbers_max_length_standard"
-                        android:textSize="@dimen/value_15sp" />
+                        android:textSize="@dimen/value_15sp"
+                        android:gravity="center_horizontal" />
 
                 </android.support.design.widget.TextInputLayout>
 
@@ -178,8 +185,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/value_10dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/value_10dp"
                     android:background="@drawable/ic_contact"
                     android:gravity="bottom" />
             </RelativeLayout>
@@ -187,8 +194,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="@dimen/value_10dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
@@ -209,18 +216,6 @@
             android:layout_marginTop="@dimen/value_10dp"
             android:background="#44000000" />
 
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:layout_marginBottom="50dp"
-            android:orientation="horizontal">
-
-
-
-
-        </LinearLayout>
 
     </LinearLayout>
 

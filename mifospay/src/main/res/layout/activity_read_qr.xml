@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
 
     <FrameLayout
@@ -21,20 +22,23 @@
         </me.dm7.barcodescanner.zxing.ZXingScannerView>
 
         <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@null"
             android:id="@+id/btn_flash_on"
-            android:layout_gravity="bottom|center"
-            app:srcCompat="@drawable/ic_flash_on"/>
-        <ImageButton
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:background="@null"
-            android:id="@+id/btn_flash_off"
             android:layout_gravity="bottom|center"
+            android:background="@null"
+            android:contentDescription="@string/todo"
+            app:srcCompat="@drawable/ic_flash_on" />
+
+        <ImageButton
+            android:id="@+id/btn_flash_off"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="bottom|center"
+            android:background="@null"
+            android:contentDescription="@string/todo"
             android:visibility="gone"
-            app:srcCompat="@drawable/ic_flash_off"/>
+            app:srcCompat="@drawable/ic_flash_off" />
     </FrameLayout>
 
 

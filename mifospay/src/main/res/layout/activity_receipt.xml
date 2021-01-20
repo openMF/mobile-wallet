@@ -13,179 +13,190 @@
         android:orientation="vertical">
 
         <include layout="@layout/toolbar" />
+
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_marginTop="@dimen/marginItemsInSectionSmall"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/marginItemsInSectionSmall">
+
+            <LinearLayout
+                android:id="@+id/ll_receipt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="@dimen/value_120dp"
+                    android:layout_height="@dimen/value_120dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/todo"
+                    app:srcCompat="@drawable/mifospay_round_logo" />
+
+                <TextView
+                    android:id="@+id/tv_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/textH4" />
+
+                <TextView
+                    android:id="@+id/tv_operation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:textColor="#009688" />
+
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_large" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/ll_receipt"
+                    android:layout_margin="@dimen/marginItemsInSectionMedium"
                     android:orientation="vertical">
 
-                    <ImageView
-                        android:layout_width="@dimen/value_120dp"
-                        android:layout_height="@dimen/value_120dp"
-                        android:layout_gravity="center"
-                        app:srcCompat="@drawable/mifospay_round_logo" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/transaction_id"
+                        android:textColor="@color/gray_dark"
+                        android:textSize="@dimen/value_16sp" />
 
                     <TextView
-                        android:id="@+id/tv_amount"
+                        android:id="@+id/tv_transaction_ID"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/marginItemsInSectionMedium"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/value_16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/transaction_date"
+                        android:textColor="@color/gray_dark"
+                        android:textSize="@dimen/value_16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_transaction_date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/marginItemsInSectionMedium"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/value_16sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/to"
+                        android:textColor="@color/gray_dark"
+                        android:textSize="@dimen/value_16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_transaction_to_name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/textH4"
-                        android:layout_gravity="center"/>
+                        android:textSize="@dimen/value_16sp" />
 
                     <TextView
-                        android:id="@+id/tv_operation"
-                        android:layout_width="match_parent"
+                        android:id="@+id/tv_transaction_to_number"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
-                        android:textColor="#009688"
-                        android:layout_gravity="center"/>
-
-                    <TextView
-                        android:id="@+id/tv_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:gravity="center"
+                        android:layout_marginBottom="@dimen/marginItemsInSectionMedium"
                         android:textColor="@color/black"
-                        android:textSize="@dimen/text_large"
-                        android:layout_gravity="center"/>
+                        android:textSize="@dimen/value_16sp" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/marginItemsInSectionMedium"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/gray_dark"
-                            android:textSize="@dimen/value_16sp"
-                            android:text="@string/transaction_id"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tv_transaction_ID"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/value_16sp"
-                            android:layout_marginBottom="@dimen/marginItemsInSectionMedium" />
+                        android:text="@string/from"
+                        android:textColor="@color/gray_dark"
+                        android:textSize="@dimen/value_16sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/gray_dark"
-                            android:textSize="@dimen/value_16sp"
-                            android:text="@string/transaction_date"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tv_transaction_date"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/value_16sp"
-                            android:layout_marginBottom="@dimen/marginItemsInSectionMedium" />
+                    <TextView
+                        android:id="@+id/tv_transaction_from_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/value_16sp" />
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/gray_dark"
-                            android:textSize="@dimen/value_16sp"
-                            android:text="@string/to"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tv_transaction_to_name"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/value_16sp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tv_transaction_to_number"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/value_16sp"
-                            android:layout_marginBottom="@dimen/marginItemsInSectionMedium" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/gray_dark"
-                            android:textSize="@dimen/value_16sp"
-                            android:text="@string/from"/>
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tv_transaction_from_name"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/value_16sp" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tv_transaction_from_number"
-                            android:textColor="@color/black"
-                            android:textSize="@dimen/value_16sp"
-                            android:layout_marginBottom="@dimen/marginItemsInSectionMedium" />
+                    <TextView
+                        android:id="@+id/tv_transaction_from_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/marginItemsInSectionMedium"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/value_16sp" />
 
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/unique_receipt_link"
+                        android:textColor="@color/gray_dark"
+                        android:textSize="@dimen/value_16sp" />
+
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
                         <TextView
+                            android:id="@+id/tv_transaction_reciept"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/gray_dark"
+                            android:layout_marginBottom="@dimen/marginItemsInSectionMedium"
+                            android:textColor="@color/primaryBlue"
                             android:textSize="@dimen/value_16sp"
-                            android:text="@string/unique_receipt_link"/>
+                            app:layout_constrainedWidth="true"
+                            app:layout_constraintEnd_toStartOf="@id/transaction_reciept_copy"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintHorizontal_chainStyle="packed"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
 
-                        <android.support.constraint.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                        <ImageView
+                            android:id="@+id/transaction_reciept_copy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:contentDescription="@string/todo"
+                            android:fitsSystemWindows="true"
+                            app:layout_constraintEnd_toStartOf="@id/transaction_reciept_share"
+                            app:layout_constraintStart_toEndOf="@id/tv_transaction_reciept"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_baseline_content_copy_24" />
 
-                            <TextView
-                                android:id="@+id/tv_transaction_reciept"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/marginItemsInSectionMedium"
-                                android:textColor="@color/primaryBlue"
-                                android:textSize="@dimen/value_16sp"
-                                app:layout_constrainedWidth="true"
-                                app:layout_constraintEnd_toStartOf="@id/transaction_reciept_copy"
-                                app:layout_constraintHorizontal_bias="0"
-                                app:layout_constraintHorizontal_chainStyle="packed"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <ImageView
-                                android:id="@+id/transaction_reciept_copy"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:layout_marginLeft="10dp"
-                                android:background="?android:attr/selectableItemBackground"
-                                android:clickable="true"
-                                android:fitsSystemWindows="true"
-                                app:layout_constraintEnd_toStartOf="@id/transaction_reciept_share"
-                                app:layout_constraintStart_toEndOf="@id/tv_transaction_reciept"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:srcCompat="@drawable/ic_baseline_content_copy_24" />
-
-                            <ImageView
-                                android:id="@+id/transaction_reciept_share"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:layout_marginLeft="10dp"
-                                android:background="?android:attr/selectableItemBackground"
-                                android:clickable="true"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintHorizontal_bias="0.0"
-                                app:layout_constraintStart_toEndOf="@id/transaction_reciept_copy"
-                                app:layout_constraintTop_toTopOf="parent"
-                                app:srcCompat="@drawable/ic_baseline_share_24" />
-                        </android.support.constraint.ConstraintLayout>
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/transaction_reciept_share"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:contentDescription="@string/todo"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toEndOf="@id/transaction_reciept_copy"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:srcCompat="@drawable/ic_baseline_share_24" />
+                    </android.support.constraint.ConstraintLayout>
                 </LinearLayout>
+            </LinearLayout>
 
         </ScrollView>
     </LinearLayout>
@@ -199,6 +210,7 @@
         android:layout_marginEnd="@dimen/fab_margin"
         android:layout_marginRight="@dimen/fab_margin"
         android:layout_marginBottom="@dimen/fab_margin"
+        android:contentDescription="@string/todo"
         app:srcCompat="@drawable/ic_download"
         tools:ignore="RtlHardcoded" />
 </FrameLayout>

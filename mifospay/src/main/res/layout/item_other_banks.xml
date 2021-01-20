@@ -13,8 +13,10 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_gravity="center"
+        android:contentDescription="@string/todo"
         android:layout_marginLeft="@dimen/value_10dp"
-        app:srcCompat="@drawable/ic_search"/>
+        app:srcCompat="@drawable/ic_search"
+        android:layout_marginStart="@dimen/value_10dp" />
 
     <TextView
         android:id="@+id/tv_popular_bank"

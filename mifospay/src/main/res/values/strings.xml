@@ -305,5 +305,16 @@
 
     <string name="title_activity_new_si">NewSIActivity</string>
     <string name="share_receipt">Share Receipt Link</string>
+    <string name="todo">TODO</string>
+    <string name="credits">Credits</string>
+    <string name="all">All</string>
+    <string name="debits">Debits</string>
+    <string name="standing_instruction_id">Standing Instruction ID:</string>
+    <string name="valid_from">Valid From:</string>
+    <string name="valid_till_">Valid Till:</string>
+    <string name="recurrence_interval_in_months">Recurrence Interval in Months:</string>
+    <string name="status_">Status:</string>
+    <string name="recurrence_interval_in_months_">Recurrence Interval (in months)</string>
+    <string name="select_date">SELECT DATE</string>
 
 </resources>

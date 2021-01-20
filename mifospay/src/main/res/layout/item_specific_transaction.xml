@@ -24,14 +24,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_alignParentStart="true">
 
                 <ImageView
                     android:id="@+id/iv_fromImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/ic_person"/>
+                    android:background="@drawable/ic_person"
+                    android:contentDescription="@string/todo" />
 
                 <TextView
                     android:id="@+id/tv_fromClientName"
@@ -55,21 +57,24 @@
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
                 android:background="@drawable/ic_send"
-                android:foregroundGravity="center"/>
+                android:foregroundGravity="center"
+                android:contentDescription="@string/todo" />
 
             <LinearLayout
                 android:id="@+id/ll_to"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_alignParentEnd="true">
 
                 <ImageView
                     android:id="@+id/iv_toImage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:background="@drawable/ic_person"/>
+                    android:background="@drawable/ic_person"
+                    android:contentDescription="@string/todo" />
 
                 <TextView
                     android:id="@+id/tv_toClientName"
@@ -100,7 +105,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"/>
+                android:layout_centerVertical="true"
+                android:contentDescription="@string/todo"
+                android:layout_alignParentStart="true" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -108,7 +115,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/value_15dp"
                 android:layout_toRightOf="@+id/iv_transaction_status"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:layout_toEndOf="@+id/iv_transaction_status">
 
                 <TextView
                     android:id="@+id/tv_transaction_id"
@@ -140,7 +148,8 @@
                 android:layout_marginRight="@dimen/value_10dp"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/value_30sp"
-                android:textStyle="bold"/>
+                android:textStyle="bold"
+                android:layout_marginEnd="@dimen/value_10dp" />
 
         </RelativeLayout>
 

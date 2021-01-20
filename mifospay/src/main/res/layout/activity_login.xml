@@ -10,6 +10,7 @@
 
     <ImageView
         android:id="@+id/image_logo"
+        android:contentDescription="@string/todo"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/value_150dp"
         android:layout_marginBottom="@dimen/value_50dp"

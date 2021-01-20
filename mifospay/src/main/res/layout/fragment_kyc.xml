@@ -15,7 +15,8 @@
             android:layout_marginTop="@dimen/value_40dp"
             android:text="@string/complete_kyc"
             android:textAlignment="center"
-            android:textSize="@dimen/value_15sp" />
+            android:textSize="@dimen/value_15sp"
+            android:layout_gravity="center_horizontal" />
 
         <LinearLayout
             android:id="@+id/lv1"
@@ -68,7 +69,8 @@
                 android:id="@+id/tickimg2"
                 android:layout_width="@dimen/value_20sp"
                 android:layout_height="@dimen/value_20sp"
-                android:layout_marginTop="@dimen/value_13sp" />
+                android:layout_marginTop="@dimen/value_13sp"
+                android:contentDescription="@string/todo" />
 
             <TextView
                 android:id="@+id/completedtx2"
@@ -97,7 +99,8 @@
                 android:id="@+id/tickimg3"
                 android:layout_width="@dimen/value_20sp"
                 android:layout_height="@dimen/value_20sp"
-                android:layout_marginTop="@dimen/value_13sp" />
+                android:layout_marginTop="@dimen/value_13sp"
+                android:contentDescription="@string/todo" />
 
             <TextView
                 android:id="@+id/completedtx3"

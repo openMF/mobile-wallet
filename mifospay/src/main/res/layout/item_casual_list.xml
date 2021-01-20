@@ -10,6 +10,7 @@
         android:layout_height="@dimen/listImageSize"
         android:layout_marginStart="@dimen/marginItemsInSectionSmall"
         android:layout_marginLeft="@dimen/marginItemsInSectionSmall"
+        android:contentDescription="@string/todo"
         app:layout_constraintBottom_toBottomOf="@+id/tv_item_casual_list_subtitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_item_casual_list_title"

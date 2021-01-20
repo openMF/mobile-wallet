@@ -1,95 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="wrap_content">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    >
-    <ImageView
-        android:id="@+id/invoice_status_image"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
-        android:layout_gravity="center_vertical"
-        android:padding="@dimen/value_5dp"
-        app:srcCompat="@drawable/ic_remove_circle_outline_black_24dp"
-        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="@dimen/value_10dp"
-        android:orientation="vertical"
-        >
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/invoice_status_image"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center_vertical"
+            android:contentDescription="@string/todo"
+            android:padding="@dimen/value_5dp"
+            app:srcCompat="@drawable/ic_remove_circle_outline_black_24dp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="vertical"
+            android:paddingEnd="@dimen/value_10dp"
+            android:paddingRight="@dimen/value_10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tv_invoice_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1dp"
+                    android:textColor="@color/grey_900"
+                    android:textSize="16sp"
+                    tools:text="Logo for Richard" />
+
+
+                <TextView
+                    android:id="@+id/tv_invoice_amount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/gray_5"
+                    tools:text="$3000" />
+
+            </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_invoice_title"
-                android:layout_width="wrap_content"
+                android:id="@+id/tv_invoice_status"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
                 android:padding="1dp"
-                android:textColor="@color/grey_900"
-                android:textSize="16sp"
-                tools:text="Logo for Richard" />
+                android:textColor="@color/gray_5"
+                tools:text="Pending" />
 
-
-            <TextView
-                android:id="@+id/tv_invoice_amount"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="viewEnd"
-                android:textColor="@color/gray_5"
-                tools:text="$3000"
-                android:gravity="end" />
+                android:orientation="horizontal">
 
-        </LinearLayout>
-        <TextView
-            android:id="@+id/tv_invoice_status"
-            tools:text="Pending"
-            android:padding="1dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:textColor="@color/gray_5"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+                <TextView
+                    android:id="@+id/tv_invoice_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="1dp"
+                    android:textColor="@color/gray_5"
+                    tools:text="12/3/4" />
 
-        <TextView
-            android:id="@+id/tv_invoice_date"
-            tools:text="12/3/4"
-            android:padding="1dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/gray_5"/>
+                <TextView
+                    android:id="@+id/tv_invoice_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textColor="@color/gray_5"
+                    tools:text="Invoice id:12345" />
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/tv_invoice_id"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/gray_5"
-                tools:text="Invoice id:12345"
-                android:gravity="end" />
-        </LinearLayout>
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/value_10dp"
+                android:background="#8E8E8E" />
 
-        <View
-            android:layout_marginTop="@dimen/value_10dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#8E8E8E"
-            />
+        </LinearLayout>
 
     </LinearLayout>
-
-</LinearLayout>
 
 </RelativeLayout>

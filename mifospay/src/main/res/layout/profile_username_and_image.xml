@@ -19,7 +19,8 @@
         android:layout_height="@dimen/editable_image_hint_shape_size"
         android:src="@drawable/drawable_editable_image_hint"
         app:layout_constraintBottom_toBottomOf="@+id/iv_user_image"
-        app:layout_constraintEnd_toEndOf="@+id/iv_user_image" />
+        app:layout_constraintEnd_toEndOf="@+id/iv_user_image"
+        android:contentDescription="@string/todo" />
 
     <TextView
         android:id="@+id/tv_user_name"

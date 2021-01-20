@@ -165,6 +165,7 @@
         android:scaleType="center"
         android:visibility="gone"
         app:backgroundTint="@color/primaryDarkBlue"
-        app:srcCompat="@drawable/ic_next"/>
+        app:srcCompat="@drawable/ic_next"
+        android:contentDescription="@string/todo" />
 
 </RelativeLayout>

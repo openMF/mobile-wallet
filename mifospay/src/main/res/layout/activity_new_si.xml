@@ -82,7 +82,7 @@
                     android:id="@+id/et_si_interval"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="Recurrence Interval (in months)"
+                    android:hint="@string/recurrence_interval_in_months_"
                     android:singleLine="true"
                     android:inputType="number"
                     android:textSize="@dimen/value_15sp"
@@ -102,7 +102,7 @@
                 android:id="@+id/btn_valid_till"
                 android:layout_width="160dp"
                 android:layout_height="@dimen/value_50dp"
-                android:text="SELECT DATE"
+                android:text="@string/select_date"
                 android:layout_gravity="center"
                 android:layout_marginBottom="@dimen/value_20dp"
                 android:textColor="@color/white" />
