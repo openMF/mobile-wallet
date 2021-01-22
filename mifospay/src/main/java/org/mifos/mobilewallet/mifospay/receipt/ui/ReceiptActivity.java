@@ -19,7 +19,6 @@ import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.TextView;
 
-
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
@@ -274,8 +273,8 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                     showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_DOWNLOAD_RECEIPT);
                 }
             }
-
         }
+        progressDialog.dismiss();
     }
 
     @Override
