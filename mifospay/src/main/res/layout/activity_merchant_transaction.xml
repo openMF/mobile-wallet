@@ -34,7 +34,6 @@
             android:id="@+id/nsv_merchant_bottom_sheet_dialog"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/value_20dp"
             android:background="@drawable/drawable_bottom_sheet_view"
             app:behavior_hideable="false"
             app:behavior_peekHeight="@dimen/bottomSheetPeekHeight"
