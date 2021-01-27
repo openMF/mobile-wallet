@@ -52,6 +52,7 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
                     view, year, monthOfYear, dayOfMonth ->
                     btn_valid_till.text = "${dayOfMonth.toString()}-${(monthOfYear + 1)}-$year"
                 }, year, month, day)
+        picker.datePicker.minDate = System.currentTimeMillis()
         picker.show()
     }
 
