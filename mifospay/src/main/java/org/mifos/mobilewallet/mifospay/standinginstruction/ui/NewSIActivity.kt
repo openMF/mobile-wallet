@@ -11,7 +11,6 @@ import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
 import butterknife.ButterKnife
-import butterknife.OnClick
 import kotlinx.android.synthetic.main.activity_new_si.*
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
@@ -46,13 +45,21 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         setToolbarTitle(getString(R.string.tile_si_activity))
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         mPresenter.attachView(this)
+        initView()
     }
 
     override fun setPresenter(presenter: StandingInstructionContract.NewSIPresenter) {
         this.mNewSIPresenter = presenter
     }
 
-    @OnClick(R.id.btn_valid_till)
+    private fun initView() {
+        btn_valid_till.setOnClickListener { pickToDate() }
+        btn_create_si.setOnClickListener { createSI() }
+        btn_confirm.setOnClickListener { createNewStandingInstruction() }
+        btn_cancel.setOnClickListener { cancelNewStandingInstruction() }
+        btn_scan_qr.setOnClickListener { scanQrClicked() }
+    }
+
     fun pickToDate() {
         val calendar: Calendar = Calendar.getInstance()
         val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
@@ -67,7 +74,6 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         picker.show()
     }
 
-    @OnClick(R.id.btn_create_si)
     fun createSI() {
         if (et_si_amount.text.toString() == "") {
             showToast(getString(R.string.enter_amount))
@@ -108,7 +114,6 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         progressBar.visibility = View.GONE
     }
 
-    @OnClick(R.id.btn_confirm)
     fun createNewStandingInstruction() {
         ll_confirm_cancel.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
@@ -116,22 +121,16 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
                 et_si_interval.text.toString().toInt(), btn_valid_till.text.toString())
     }
 
-    @OnClick(R.id.btn_cancel)
     fun cancelNewStandingInstruction() {
         ll_confirm_transfer.visibility = View.GONE
         ll_create_si.visibility = View.VISIBLE
     }
 
-    @OnClick(R.id.btn_scan_qr)
     fun scanQrClicked() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
                         Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-
-            // Permission is not granted
             requestPermissions(arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA)
         } else {
-
-            // Permission has already been granted
             val i = Intent(this, ReadQrActivity::class.java)
             startActivityForResult(i, SCAN_QR_REQUEST_CODE)
         }
@@ -155,19 +154,13 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
                                             grantResults: IntArray) {
         when (requestCode) {
             REQUEST_CAMERA -> {
-                // If request is cancelled, the result arrays are empty.
                 if (grantResults.isNotEmpty()
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // permission was granted, yay! Do the
-                    // camera-related task you need to do.
                     val i = Intent(this, ReadQrActivity::class.java)
                     startActivityForResult(i, SCAN_QR_REQUEST_CODE)
                 } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
                     Toaster.show(findViewById(android.R.id.content), Constants.NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE)
                 }
-                return
             }
         }
     }
