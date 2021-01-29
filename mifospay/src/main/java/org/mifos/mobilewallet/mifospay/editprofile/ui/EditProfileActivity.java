@@ -15,6 +15,7 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -55,6 +56,7 @@ public class EditProfileActivity extends BaseActivity implements
     private static final int REQUEST_READ_IMAGE = 1;
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 7;
     private static final int REQUEST_CAMERA = 0;
+    private Uri capturedImageUri;
 
     @Inject
     EditProfilePresenter mPresenter;
@@ -277,6 +279,13 @@ public class EditProfileActivity extends BaseActivity implements
                     // permission was granted, yay! Do the
                     // camera-related task you need to do.
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    String destinationFileName = UUID.randomUUID().toString() + ".jpg";
+                    File destinationFile = new File(getCacheDir(), destinationFileName);
+                    capturedImageUri = FileProvider.getUriForFile(
+                            this,
+                            "org.mifos.mobilewallet.mifospay.provider",
+                            destinationFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
                     startActivityForResult(intent, REQUEST_CAMERA);
 
                 } else {
@@ -321,10 +330,8 @@ public class EditProfileActivity extends BaseActivity implements
                 }
             } else if (requestCode == UCrop.REQUEST_CROP) {
                 handleCropResult(data);
-            } else if (requestCode == REQUEST_CAMERA) {
-                Bundle extras = data.getExtras();
-                Bitmap profileBitmapImage = (Bitmap) extras.get("data");
-                ivUserImage.setImageBitmap(profileBitmapImage);
+            } else if (requestCode == REQUEST_CAMERA && capturedImageUri != null) {
+                startCrop(capturedImageUri);
             }
         }
     }
@@ -415,6 +422,13 @@ public class EditProfileActivity extends BaseActivity implements
 
             // Permission has already been granted
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            String destinationFileName = UUID.randomUUID().toString() + ".jpg";
+            File destinationFile = new File(getCacheDir(), destinationFileName);
+            capturedImageUri = FileProvider.getUriForFile(
+                    this,
+                    "org.mifos.mobilewallet.mifospay.provider",
+                    destinationFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
             startActivityForResult(intent, REQUEST_CAMERA);
         }
     }
