@@ -128,7 +128,6 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     public void onUserImageEditClicked() {
         if (getActivity() != null) {
             Intent i = new Intent(getActivity(), EditProfileActivity.class);
-            i.putExtra(Constants.CHANGE_PROFILE_IMAGE_KEY, Constants.CHANGE_PROFILE_IMAGE_VALUE);
             startActivity(i);
         }
     }

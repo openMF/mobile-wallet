@@ -154,7 +154,7 @@ public class EditProfileActivity extends BaseActivity implements
         hideKeyboard();
     }
 
-    @OnClick(R.id.iv_user_image)
+    @OnClick(R.id.iv_editable_image_hint)
     public void onProfileImageClicked() {
         bottomSheetDialog.show();
     }
