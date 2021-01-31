@@ -1,18 +1,24 @@
 package org.mifos.mobilewallet.mifospay.standinginstruction.ui
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.widget.Toast
 import butterknife.ButterKnife
-import butterknife.OnClick
 import kotlinx.android.synthetic.main.activity_new_si.*
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.NewSIPresenter
 import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils
 import java.util.*
 import javax.inject.Inject
@@ -20,6 +26,10 @@ import kotlin.properties.Delegates
 
 
 class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
+
+
+    private val REQUEST_CAMERA = 0
+    private val SCAN_QR_REQUEST_CODE = 666
 
     @Inject
     lateinit var mPresenter: NewSIPresenter
@@ -35,13 +45,21 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         setToolbarTitle(getString(R.string.tile_si_activity))
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         mPresenter.attachView(this)
+        initView()
     }
 
     override fun setPresenter(presenter: StandingInstructionContract.NewSIPresenter) {
         this.mNewSIPresenter = presenter
     }
 
-    @OnClick(R.id.btn_valid_till)
+    private fun initView() {
+        btn_valid_till.setOnClickListener { pickToDate() }
+        btn_create_si.setOnClickListener { createSI() }
+        btn_confirm.setOnClickListener { createNewStandingInstruction() }
+        btn_cancel.setOnClickListener { cancelNewStandingInstruction() }
+        btn_scan_qr.setOnClickListener { scanQrClicked() }
+    }
+
     fun pickToDate() {
         val calendar: Calendar = Calendar.getInstance()
         val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
@@ -56,7 +74,6 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         picker.show()
     }
 
-    @OnClick(R.id.btn_create_si)
     fun createSI() {
         if (et_si_amount.text.toString() == "") {
             showToast(getString(R.string.enter_amount))
@@ -97,7 +114,6 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         progressBar.visibility = View.GONE
     }
 
-    @OnClick(R.id.btn_confirm)
     fun createNewStandingInstruction() {
         ll_confirm_cancel.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
@@ -105,10 +121,48 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
                 et_si_interval.text.toString().toInt(), btn_valid_till.text.toString())
     }
 
-    @OnClick(R.id.btn_cancel)
     fun cancelNewStandingInstruction() {
         ll_confirm_transfer.visibility = View.GONE
         ll_create_si.visibility = View.VISIBLE
+    }
+
+    fun scanQrClicked() {
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA)
+        } else {
+            val i = Intent(this, ReadQrActivity::class.java)
+            startActivityForResult(i, SCAN_QR_REQUEST_CODE)
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == SCAN_QR_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            val qrData = data.getStringExtra(Constants.QR_DATA)
+            val qrDataArray = qrData?.split(", ")?.toTypedArray()
+            if (qrDataArray?.size == 1) {
+                et_si_vpa.setText(qrDataArray[0])
+            } else {
+                et_si_vpa.setText(qrDataArray?.get(0))
+                et_si_amount.setText(qrDataArray?.get(1))
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>,
+                                            grantResults: IntArray) {
+        when (requestCode) {
+            REQUEST_CAMERA -> {
+                if (grantResults.isNotEmpty()
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    val i = Intent(this, ReadQrActivity::class.java)
+                    startActivityForResult(i, SCAN_QR_REQUEST_CODE)
+                } else {
+                    Toaster.show(findViewById(android.R.id.content), Constants.NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE)
+                }
+            }
+        }
     }
 
     override fun showLoadingView() {

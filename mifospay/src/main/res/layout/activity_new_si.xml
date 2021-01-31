@@ -41,26 +41,48 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/til_si_vpa"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_20dp"
-                android:layout_marginTop="@dimen/value_10dp"
-                android:layout_marginBottom="@dimen/value_10dp"
-                android:textColorHint="@android:color/black"
-                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                android:layout_height="wrap_content">
 
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/et_si_vpa"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/til_si_vpa"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/virtual_payment_address"
-                    android:singleLine="true"
-                    android:textSize="@dimen/value_15sp" />
-            </android.support.design.widget.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/value_20dp"
+                    android:layout_marginLeft="@dimen/value_20dp"
+                    android:layout_marginTop="@dimen/value_10dp"
+                    android:layout_marginEnd="@dimen/value_15dp"
+                    android:layout_marginRight="@dimen/value_20dp"
+                    android:layout_marginBottom="@dimen/value_10dp"
+                    android:layout_toStartOf="@id/btn_scan_qr"
+                    android:layout_toLeftOf="@id/btn_scan_qr"
+                    android:textColorHint="@android:color/black"
+                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/et_si_vpa"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:hint="@string/virtual_payment_address"
+                        android:singleLine="true"
+                        android:textSize="@dimen/value_15sp" />
+                </android.support.design.widget.TextInputLayout>
+
+                <ImageView
+                    android:clickable="true"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:id="@+id/btn_scan_qr"
+                    android:layout_width="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginEnd="@dimen/value_30dp"
+                    android:layout_marginRight="@dimen/value_30dp"
+                    android:src="@drawable/qrcode_blue_selector" />
+            </RelativeLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/til_si_interval"
