@@ -91,3 +91,29 @@ jobs:
         with:
           name: PMD Report[MifosPay]
           path: mifospay/build/reports/
+
+  checkstyle:
+    name: Checkstyle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Checkstyle[Core]
+        run: ./gradlew core:checkstyle
+
+      - name: Upload Checkstyle Report[Core]
+        uses: actions/upload-artifact@v2.2.0
+        if: failure()
+        with:
+          name: Checkstyle Report[Core]
+          path: core/build/reports/
+
+      - uses: actions/checkout@v2
+      - name: Checkstyle[MifosPay]
+        run: ./gradlew mifospay:checkstyle
+
+      - name: Upload Checkstyle Report[MifosPay]
+        uses: actions/upload-artifact@v2.2.0
+        if: failure()
+        with:
+          name: Checkstyle Report[MifosPay]
+          path: mifospay/build/reports/
