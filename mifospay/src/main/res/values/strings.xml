@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Mifos Pay</string>
-
+    <string name="invalid_passcode">Invalid Passcode</string>
+    <string name="incorrect_passcode">Incorrect Passcode</string>
+    <string name="enter_passcode">Enter your passcode</string>
     <string name="open_drawer">Open Drawer</string>
     <string name="close_drawer">Close Drawer</string>
     <string name="cancel_txt">Cancel</string>
@@ -262,7 +264,7 @@
     <string name="amount">Amount</string>
     <string name="merchant_history_message">The transaction history with this merchant will be shown here</string>
     <string name="log_out_title">Do you want to logout?</string>
-    <string name="ok">Ok</string>
+    <string name="ok">OK</string>
     <string name="alert_disable_account">Are you sure you want to disable account?</string>
     <string name="alert_disable_account_desc">This will delete all the information about your account</string>
     <string name="transfer_money_to_this_merchant">Transfer money to this merchant</string>

@@ -30,6 +30,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
+import org.mifos.mobilewallet.mifospay.passcode.ui.EditPasscodeActivity;
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DialogBox;
@@ -166,13 +167,8 @@ public class EditProfileActivity extends BaseActivity implements
 
     @OnClick(R.id.btn_change_passcode)
     public void onChangePasscodeClicked() {
-        String currentPasscode = passcodePreferencesHelper.getPassCode();
-        // for re-initiating passcode generation process
-        passcodePreferencesHelper.savePassCode("");
-        Intent intent = new Intent(this, PassCodeActivity.class );
-        intent.putExtra(Constants.CURRENT_PASSCODE, currentPasscode);
-        intent.putExtra(Constants.UPDATE_PASSCODE, true);
-        startActivity(intent);
+        Intent i = new Intent(EditProfileActivity.this, EditPasscodeActivity.class);
+        startActivityForResult(i , Constants.PASSCODE_VERIFICATION);
     }
 
     @OnTextChanged({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
@@ -312,7 +308,6 @@ public class EditProfileActivity extends BaseActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_READ_IMAGE && data != null) {
                 Uri selectedImageUri = data.getData();
@@ -325,6 +320,14 @@ public class EditProfileActivity extends BaseActivity implements
                 Bundle extras = data.getExtras();
                 Bitmap profileBitmapImage = (Bitmap) extras.get("data");
                 ivUserImage.setImageBitmap(profileBitmapImage);
+            } else if ( requestCode == Constants.PASSCODE_VERIFICATION) {
+                String currentPasscode = passcodePreferencesHelper.getPassCode();
+                // for re-initiating passcode generation process
+                passcodePreferencesHelper.savePassCode("");
+                Intent intent = new Intent(this, PassCodeActivity.class );
+                intent.putExtra(Constants.CURRENT_PASSCODE, currentPasscode);
+                intent.putExtra(Constants.UPDATE_PASSCODE, true);
+                startActivity(intent);
             }
         }
     }

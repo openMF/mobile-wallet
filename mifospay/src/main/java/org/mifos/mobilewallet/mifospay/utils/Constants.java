@@ -59,6 +59,7 @@ public class Constants {
     public static final String KYC_REGISTRATION_LEVEL_3 = "KYC Registration Level 3";
     public static final String OK = "OK";
     public static final String SCAN_CODE = "Scan code";
+    public static final int PASSCODE_VERIFICATION = 299;
     public static final String QR_CODE = "QR code";
     public static final String FAILED_TO_WRITE_DATA_TO_QR = "Failed to write data to qr";
     public static final String ERROR_OCCURRED = "Error occurred";
