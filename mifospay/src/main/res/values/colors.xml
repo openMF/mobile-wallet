@@ -2,8 +2,8 @@
 <resources>
 
     <color name="colorPrimary">#ffffff</color>
-    <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#000AFF</color>
+    <color name="colorPrimaryDark">#cccccc</color>
+    <color name="colorAccent">#18e7d3</color>
     <color name="changedBackgroundColour">#ecf0f1 </color>
     <color name="clickedblue">#00bfff</color>
     <!-- 100, 87, 54 etc.. - OPACITY IN PERCENTAGE -->
@@ -19,8 +19,8 @@
     <color name="colorTextSecondary">@color/colorBlack54</color>
     <color name="colorTextDisabled">@color/colorBlack38</color>
 
-    <color name="colorAccentBlue">#000AFF</color>
-    <color name="colorAccentBlue50">#80000AFF</color>
+    <color name="colorAccentBlue">#18e7d3</color>
+    <color name="colorAccentBlue50">#19d3dc</color>
     <color name="colorAccentBlack">#2F3542</color>
     <color name="colorAccentYellow">#FFF700</color>
     <color name="colorListImageBackground">#E6E6E6</color>
@@ -45,8 +45,8 @@
     <!-- OLD COLORS ARE TEMPORARY HERE UNTIL ALL OF THE LAYOUT WON'T BE REDESIGNED TO AVOID CRASHES/BUGS/CONFLICTS -->
 
 
-    <color name="primaryBlue">#3F51B5</color>
-    <color name="primaryDarkBlue">#303F9F</color>
+    <color name="primaryBlue">#18e7d3</color>
+    <color name="primaryDarkBlue">#00b4a2</color>
 
     <color name="windowBackground">#f5f5f5</color>
 

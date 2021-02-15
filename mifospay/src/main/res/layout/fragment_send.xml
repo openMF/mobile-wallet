@@ -53,7 +53,7 @@
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:typeface="sans"
-                app:chipBackgroundColor="@color/clickedblue" />
+                app:chipBackgroundColor="@color/colorAccentBlue50" />
 
             <android.support.design.chip.Chip
                 android:id="@+id/btn_mobile"
