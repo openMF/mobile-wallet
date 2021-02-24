@@ -67,6 +67,7 @@
     </string>
     <string name="unique_payment_link">Unique Payment Link</string>
     <string name="view_receipt">View Receipt</string>
+    <string name="share_receipt">Share Receipt</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="create_one">Create one</string>
     <string name="enter_mobile_number_description">It should be currently activated on your device
