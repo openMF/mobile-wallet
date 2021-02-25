@@ -199,9 +199,16 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
 
     @OnClick(R.id.transaction_reciept_share)
     void shareReceiptLink() {
+        String shareMsgBody = Constants.RECEIPT_SHARING_MSG
+                + tvTransFromName.getText().subSequence(6, tvTransFromName.length())
+                + Constants.TO
+                + tvTransToName.getText().subSequence(6, tvTransToName.length())
+                + Constants.COLON
+                + tvReceiptLink.getText().toString();
+
         Intent intent = new Intent(Intent.ACTION_SEND)
                 .setType("text/plain")
-                .putExtra(Intent.EXTRA_TEXT, tvReceiptLink.getText().toString())
+                .putExtra(Intent.EXTRA_TEXT, shareMsgBody)
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         intent = Intent.createChooser(intent, getString(R.string.share_receipt));

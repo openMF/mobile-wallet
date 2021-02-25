@@ -199,4 +199,10 @@ public class Constants {
     public static final String SI_ID = "standing_instruction_id";
     public static final String UNAUTHORIZED_ERROR = "401 Unauthorized";
 
+    // Constants for message body for sharing receipt link
+    public static final String RECEIPT_SHARING_MSG =
+            "Here's the receipt link for the transaction made using MifosPay from ";
+    public static final String TO = " to ";
+    public static final String COLON = " : ";
+
 }
