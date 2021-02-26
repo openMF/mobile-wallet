@@ -19,6 +19,7 @@ import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.StandingIns
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.DialogBox
 import org.mifos.mobilewallet.mifospay.utils.Utils
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -40,6 +41,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     lateinit var mPresenter: StandingInstructionDetailsPresenter
     private lateinit var mStandingInstructionPresenter:
             StandingInstructionContract.StandingInstructorDetailsPresenter
+    private lateinit var mOptionsMenu: Menu
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +70,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
                     DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
                         tv_valid_till.text = "$dayOfMonth-${(monthOfYear + 1)}-$year"
                     }, year, month, day)
+            picker.datePicker.minDate = SimpleDateFormat("dd-MM-yyyy",Locale.getDefault()).parse(tv_valid_from.text.toString()).time
             picker.show()
         }
 
