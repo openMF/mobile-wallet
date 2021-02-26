@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.utils;
 
+import org.mifos.mobilewallet.mifospay.R;
+
 /**
  * Created by naman on 17/6/17.
  */
@@ -49,7 +51,6 @@ public class Constants {
     public static final String ERROR_ADDING_CARD = "Error adding card.";
     public static final String CARD_ADDED_SUCCESSFULLY = "Card added successfully.";
     public static final String ADDING_CARD = "Adding Card..";
-    public static final String ERROR_FETCHING_CARDS = "Error fetching cards.";
 
     public static final String ADD_CARD_DIALOG = "Add Card Dialog";
     public static final String EDIT_CARD_DIALOG = "Edit Card Dialog";
@@ -70,6 +71,7 @@ public class Constants {
     public static final String SENDING_MONEY = "Sending money...";
     public static final String INSUFFICIENT_BALANCE = "Insufficient balance";
     public static final String ERROR_FINDING_VPA = "Error finding Virtual Payment Address";
+    public static final String ERROR_FINDING_MOBILE_NUMBER = "Error finding Mobile Number";
     public static final String PLEASE_ENTER_VALID_AMOUNT = "Please enter a valid amount";
     public static final String SELF_ACCOUNT_ERROR = "Self Account transfer is not allowed";
     public static final String PLEASE_ENTER_AMOUNT =
@@ -119,8 +121,6 @@ public class Constants {
     public static final String MIFOSPAY = "mifospay";
     public static final String RECEIPT = "Receipt";
     public static final String PDF = ".pdf";
-    public static final String INVOICES = "Invoices";
-    public static final String ERROR_FETCHING_INVOICES = "Error fetching invoices";
     public static final String ERROR_FETCHING_RECEIPT = "Error fetching receipt";
     public static final String INVOICE_DOMAIN = "https://invoice.mifospay.com/";
 
@@ -146,7 +146,6 @@ public class Constants {
     public static final String NEW_BANK_ACCOUNT = "newBankAccount";
     public static final String VERIFYING_MOBILE_NUMBER = "Verifying mobile number..";
     public static final String MIFOS_SAVINGS_PRODUCT_ID = "Mifos Savings Product Id";
-    public static final String ERROR_FETCHING_MERCHANTS = "Error fetching merchants";
     public static final String MERCHANTS = "Merchants";
     public static final String UPI_PIN = "UPI PIN";
     public static final String STEP = "step";
@@ -181,9 +180,23 @@ public class Constants {
 
     public static final String ERROR_FIELDS_CANNOT_BE_EMPTY = "Fields cannot be empty";
     public static final String ERROR_VALIDATING_PASSWORD = "Passwords are not the same";
+    public static final String ERROR_PASSWORDS_CANT_BE_SAME =
+            "New password can't be the same as old password.";
 
     public static final String CHANGE_PROFILE_IMAGE_KEY = "CHANGE_PROFILE_IMAGE_KEY";
     public static final String CHANGE_PROFILE_IMAGE_VALUE = "CHANGE_PROFILE_IMAGE_VALUE";
     public static final String TAP_TO_REVEAL = "Tap to Reveal";
     public static final String NAME = "Name : ";
+    public static final String ERROR_FETCHING_TRANSACTION_DETAILS = "Error fetching details";
+
+    public static final int WHITE_BACK_BUTTON = R.drawable.ic_arrow_back_white_24dp;
+    public static final int BLACK_BACK_BUTTON = R.drawable.ic_arrow_back_black_24dp;
+    public static final String VIEW = "View";
+
+    public static final String CURRENT_PASSCODE = "current passcode";
+    public static final String UPDATE_PASSCODE = "update passcode";
+    public static final String SELECT_DATE = "SELECT DATE";
+    public static final String SI_ID = "standing_instruction_id";
+    public static final String UNAUTHORIZED_ERROR = "401 Unauthorized";
+
 }

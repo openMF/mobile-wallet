@@ -16,11 +16,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".merchants.ui.MerchantTransferActivity"></activity>
+
+        <activity android:name=".standinginstruction.ui.SIDetailsActivity"></activity>
         <activity
-            android:name=".auth.ui.LoginActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateVisible">
+            android:name=".standinginstruction.ui.NewSIActivity"
+            android:label="@string/title_activity_new_si"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".merchants.ui.MerchantTransferActivity" />
+	    <activity
+            android:name=".SplashScreenActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,17 +33,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".home.ui.MainActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".auth.ui.LoginActivity"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".history.ui.TransactionsHistoryActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".home.ui.MainActivity"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".common.ui.SearchActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".qr.ui.ShowQrActivity"
             android:theme="@style/AppTheme" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="org.mifos.mobilewallet.mifospay.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
         <activity
             android:name=".qr.ui.ReadQrActivity"
             android:theme="@style/AppTheme" />
@@ -47,8 +65,8 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".receipt.ui.ReceiptActivity"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -62,8 +80,8 @@
         </activity>
         <activity
             android:name=".invoice.ui.InvoiceActivity"
-            android:theme="@style/AppTheme"
-            android:launchMode="singleTask">
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -85,11 +103,6 @@
         <service android:name=".data.firebase.api.services.MifosPayMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-        <service android:name=".data.firebase.api.services.MifosPayInstanceIDService">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>
 

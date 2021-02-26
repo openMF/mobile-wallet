@@ -53,7 +53,6 @@ public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
                     public void onSuccess(DownloadTransactionReceipt.ResponseValue response) {
                         mReceiptView.writeReceiptToPDF(response.getResponseBody(),
                                 Constants.RECEIPT + transactionId + Constants.PDF);
-                        mReceiptView.showSnackbar(Constants.RECEIPT_DOWNLOADED_SUCCESSFULLY);
                     }
 
                     @Override
@@ -77,8 +76,12 @@ public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
 
                     @Override
                     public void onError(String message) {
-                        mReceiptView.hideProgressDialog();
-                        mReceiptView.showSnackbar("Error fetching Transaction");
+                        if (message.equals(Constants.UNAUTHORIZED_ERROR)) {
+                            mReceiptView.openPassCodeActivity();
+                        } else {
+                            mReceiptView.hideProgressDialog();
+                            mReceiptView.showSnackbar("Error fetching Transaction");
+                        }
                     }
                 }
         );

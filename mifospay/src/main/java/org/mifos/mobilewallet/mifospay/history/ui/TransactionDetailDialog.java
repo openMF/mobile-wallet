@@ -23,6 +23,8 @@ import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.presenter.TransactionDetailPresenter;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.Utils;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.ArrayList;
 
@@ -90,8 +92,8 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
     LinearLayout mLlFrom;
     @BindView(R.id.ll_to)
     LinearLayout mLlTo;
-    @BindView(R.id.progressBar)
-    ProgressBar mProgressBar;
+    @BindView(R.id.pb_transaction_detail)
+    ProgressBar progressBar;
     Unbinder unbinder;
     @BindView(R.id.ll_main)
     LinearLayout mLlMain;
@@ -133,8 +135,8 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
 
         tvTransactionId.setText(Constants.TRANSACTION_ID + ": " + transaction.getTransactionId());
         tvTransactionDate.setText(Constants.DATE + ": " + transaction.getDate());
-        tvTransactionAmount.setText(
-                transaction.getCurrency().getCode() + " " + transaction.getAmount());
+        tvTransactionAmount.setText(Utils.getFormattedAccountBalance(
+                transaction.getAmount(), transaction.getCurrency().getCode()));
 
         mPresenter.getTransferDetail(transaction.getTransferId());
 
@@ -210,5 +212,20 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
             tvToClientName.setText(transferDetail.getToClient().getDisplayName());
             tvToAccountNo.setText(transferDetail.getToAccount().getAccountNo());
         }
+    }
+
+    @Override
+    public void showProgressBar() {
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgressBar() {
+        progressBar.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showToast(String message) {
+        Toaster.showToast(getActivity() , message);
     }
 }

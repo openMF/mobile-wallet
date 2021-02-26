@@ -15,7 +15,8 @@ import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
 import org.mifos.mobilewallet.mifospay.invoice.ui.InvoicesFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.RequestFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
-
+import org.mifos.mobilewallet.mifospay.standinginstruction.ui.SIFragment;
+import org.mifos.mobilewallet.mifospay.utils.Utils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -43,6 +44,24 @@ public class PaymentsFragment extends BaseFragment {
         setupUi();
         setupViewPager();
         tilTabLayout.setupWithViewPager(vpTabLayout);
+        vpTabLayout.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+                if (getActivity() != null) {
+                    Utils.hideSoftKeyboard(getActivity());
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
 
         return rootView;
     }
@@ -59,6 +78,7 @@ public class PaymentsFragment extends BaseFragment {
         tabLayoutAdapter.addFragment(new SendFragment(), getString(R.string.send));
         tabLayoutAdapter.addFragment(new RequestFragment(), getString(R.string.request));
         tabLayoutAdapter.addFragment(new HistoryFragment(), getString(R.string.history));
+        tabLayoutAdapter.addFragment(new SIFragment(), getString(R.string.standing_instruction));
         tabLayoutAdapter.addFragment(new InvoicesFragment(), getString(R.string.invoices));
         vpTabLayout.setAdapter(tabLayoutAdapter);
     }

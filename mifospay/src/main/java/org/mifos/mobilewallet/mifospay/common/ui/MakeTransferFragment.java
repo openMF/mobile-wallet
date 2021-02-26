@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
@@ -22,6 +23,7 @@ import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
 
@@ -184,6 +186,25 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
             getTargetFragment().onActivityResult(SendFragment.REQUEST_SHOW_DETAILS,
                     Activity.RESULT_CANCELED, null);
             dismiss();
+        } else {
+            Toaster.showToast(getContext(), "Invalid");
+            dismiss();
         }
     }
+
+    @Override
+    public void enableDragging(final boolean enable) {
+        mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                if (newState == BottomSheetBehavior.STATE_DRAGGING && !enable) {
+                    mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) { }
+        });
+    }
+
 }

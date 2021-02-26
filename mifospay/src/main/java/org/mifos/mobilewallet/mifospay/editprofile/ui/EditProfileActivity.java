@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
@@ -21,12 +22,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.hbb20.CountryCodePicker;
+import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper;
 import com.yalantis.ucrop.UCrop;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter;
+import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DialogBox;
@@ -51,6 +54,7 @@ public class EditProfileActivity extends BaseActivity implements
 
     private static final int REQUEST_READ_IMAGE = 1;
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 7;
+    private static final int REQUEST_CAMERA = 0;
 
     @Inject
     EditProfilePresenter mPresenter;
@@ -96,6 +100,7 @@ public class EditProfileActivity extends BaseActivity implements
 
     private BottomSheetDialog bottomSheetDialog;
     public DialogBox dialogBox = new DialogBox();
+    private PasscodePreferencesHelper passcodePreferencesHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +112,7 @@ public class EditProfileActivity extends BaseActivity implements
         mPresenter.attachView(this);
         ccpCountryCode.registerCarrierNumberEditText(etMobileNumber);
         mEditProfilePresenter.fetchUserDetails();
-
+        passcodePreferencesHelper = new PasscodePreferencesHelper(this);
         if (isChangeImageRequestFromProfile()) {
             bottomSheetDialog.show();
         }
@@ -161,7 +166,13 @@ public class EditProfileActivity extends BaseActivity implements
 
     @OnClick(R.id.btn_change_passcode)
     public void onChangePasscodeClicked() {
-        // TODO: it's not supported by the api???
+        String currentPasscode = passcodePreferencesHelper.getPassCode();
+        // for re-initiating passcode generation process
+        passcodePreferencesHelper.savePassCode("");
+        Intent intent = new Intent(this, PassCodeActivity.class );
+        intent.putExtra(Constants.CURRENT_PASSCODE, currentPasscode);
+        intent.putExtra(Constants.UPDATE_PASSCODE, true);
+        startActivity(intent);
     }
 
     @OnTextChanged({R.id.et_edit_profile_username, R.id.et_edit_profile_email,
@@ -259,6 +270,23 @@ public class EditProfileActivity extends BaseActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
+            case REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // camera-related task you need to do.
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toaster.showToast(this,
+                            getString(R.string.need_camera_permission_to_click_profile_picture));
+                }
+                return;
+            }
             case REQUEST_READ_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
@@ -276,7 +304,6 @@ public class EditProfileActivity extends BaseActivity implements
                     showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_IMAGES);
                 }
             }
-
             // other 'case' lines to check for other
             // permissions this app might request.
         }
@@ -294,6 +321,10 @@ public class EditProfileActivity extends BaseActivity implements
                 }
             } else if (requestCode == UCrop.REQUEST_CROP) {
                 handleCropResult(data);
+            } else if (requestCode == REQUEST_CAMERA) {
+                Bundle extras = data.getExtras();
+                Bitmap profileBitmapImage = (Bitmap) extras.get("data");
+                ivUserImage.setImageBitmap(profileBitmapImage);
             }
         }
     }
@@ -339,6 +370,11 @@ public class EditProfileActivity extends BaseActivity implements
         pickImageFromGallery();
     }
 
+    @Override
+    public void clickProfileImage() {
+        clickProfilePicFromCamera();
+    }
+
     private void pickImageFromGallery() {
         if (Build.VERSION.SDK_INT >= 23 &&
                 ContextCompat.checkSelfPermission(getApplicationContext(),
@@ -365,6 +401,21 @@ public class EditProfileActivity extends BaseActivity implements
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
             ivUserImage.setImageURI(resultUri);
+        }
+    }
+
+    public void clickProfilePicFromCamera() {
+
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+        } else {
+
+            // Permission has already been granted
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent, REQUEST_CAMERA);
         }
     }
 
@@ -448,6 +499,12 @@ public class EditProfileActivity extends BaseActivity implements
         @OnClick(R.id.ll_remove_profile_image_dialog_row)
         public void onRemoveProfileImageClicked() {
             mEditProfilePresenter.handleProfileImageRemoved();
+            bottomSheetDialog.dismiss();
+        }
+
+        @OnClick(R.id.ll_click_profile_image_dialog_row)
+        public void onClickProfileImageClicked() {
+            mEditProfilePresenter.handleClickProfileImageRequest();
             bottomSheetDialog.dismiss();
         }
     }

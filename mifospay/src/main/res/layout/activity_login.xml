@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:onClick="backgroundScreenClicked"
+    android:id="@+id/bg_screen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -10,31 +10,17 @@
 
     <ImageView
         android:id="@+id/image_logo"
-        android:layout_width="300dp"
-        android:layout_height="160dp"
-        android:src="@drawable/mifos_icon"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView3"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="@dimen/value_10dp"
-        android:layout_marginTop="22dp"
-        android:layout_marginBottom="26dp"
-        android:text="@string/mifos_pay"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/textH4"
+        android:layout_height="@dimen/value_150dp"
+        android:layout_marginBottom="@dimen/value_50dp"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image_logo" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.774"
+        app:srcCompat="@drawable/ic_logo_outline" />
 
     <android.support.design.widget.TextInputLayout
-
         android:id="@+id/textInputLayout2"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
@@ -85,7 +71,7 @@
     <LinearLayout
         android:id="@+id/ll_signup"
         android:layout_width="0dp"
-        android:layout_height="16dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/marginItemsInSectionLarge"
         android:gravity="center_horizontal"
         android:orientation="horizontal"

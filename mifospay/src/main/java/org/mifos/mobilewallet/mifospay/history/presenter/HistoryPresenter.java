@@ -6,6 +6,7 @@ import org.mifos.mobilewallet.core.base.UseCaseFactory;
 import org.mifos.mobilewallet.core.base.UseCaseHandler;
 import org.mifos.mobilewallet.core.domain.model.Account;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
+import org.mifos.mobilewallet.core.domain.model.TransactionType;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions;
 import org.mifos.mobilewallet.mifospay.R;
@@ -14,9 +15,12 @@ import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.TransactionsHistory;
 
+import java.util.ArrayList;
+
 import java.util.List;
 
 import javax.inject.Inject;
+
 
 public class HistoryPresenter implements
         HistoryContract.TransactionsHistoryPresenter,
@@ -36,6 +40,8 @@ public class HistoryPresenter implements
     TransactionsHistory mTransactionsHistory;
     private HistoryContract.HistoryView mHistoryView;
     private Account mAccount;
+    private List<Transaction> allTransactions;
+
 
     @Inject
     public HistoryPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
@@ -71,12 +77,28 @@ public class HistoryPresenter implements
     }
 
     @Override
+    public void filterTransactionType(TransactionType type) {
+        if (type != null) {
+            List<Transaction> filterTransactions = new ArrayList<>();
+            for (Transaction transaction : allTransactions) {
+                if (transaction.getTransactionType() == type) {
+                    filterTransactions.add(transaction);
+                }
+            }
+            mHistoryView.refreshTransactions(filterTransactions);
+        } else {
+            mHistoryView.refreshTransactions(allTransactions);
+        }
+    }
+
+    @Override
     public void onTransactionsFetchCompleted(List<Transaction> transactions) {
         if (transactions == null) {
             showErrorStateView();
         } else {
             int transactionsAmount = transactions.size();
             if (transactionsAmount > 0) {
+                this.allTransactions = transactions;
                 mHistoryView.showTransactions(transactions);
             } else {
                 showEmptyStateView();
@@ -100,4 +122,5 @@ public class HistoryPresenter implements
                 R.string.empty_no_transaction_history_title,
                 R.string.empty_no_transaction_history_subtitle);
     }
+
 }

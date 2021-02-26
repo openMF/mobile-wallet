@@ -31,7 +31,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
         setContentView(R.layout.activity_settings);
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
-        showBackButton();
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         setToolbarTitle(Constants.SETTINGS);
         mPresenter.attachView(this);
     }
@@ -46,13 +46,13 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog);
         builder.setTitle(R.string.log_out_title);
         builder.setCancelable(false)
-                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         showProgressDialog(Constants.LOGGING_OUT);
                         mPresenter.logout();
                     }
                 })
-                .setNegativeButton("No", null);
+                .setNegativeButton(R.string.no, null);
         AlertDialog alert = builder.create();
         alert.show();
     }

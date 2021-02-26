@@ -30,6 +30,10 @@ public interface CardsContract {
 
         void hideProgressDialog();
 
+        void showErrorStateView(int drawable, int title, int subtitle);
+
+        void showFetchingProcess();
+
         void hideSwipeProgress();
     }
 

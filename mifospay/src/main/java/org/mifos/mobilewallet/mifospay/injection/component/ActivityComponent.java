@@ -41,6 +41,9 @@ import org.mifos.mobilewallet.mifospay.registration.ui.MobileVerificationActivit
 import org.mifos.mobilewallet.mifospay.registration.ui.SignupActivity;
 import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsFragment;
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
+import org.mifos.mobilewallet.mifospay.standinginstruction.ui.NewSIActivity;
+import org.mifos.mobilewallet.mifospay.standinginstruction.ui.SIDetailsActivity;
+import org.mifos.mobilewallet.mifospay.standinginstruction.ui.SIFragment;
 
 import dagger.Component;
 
@@ -125,4 +128,11 @@ public interface ActivityComponent {
     void inject(NotificationActivity notificationActivity);
 
     void inject(MerchantTransferActivity merchantTransferActivity);
+
+    void inject (NewSIActivity newSIActivity);
+
+    void inject (SIFragment siFragment);
+
+    void inject (SIDetailsActivity siDetailsActivity);
+
 }

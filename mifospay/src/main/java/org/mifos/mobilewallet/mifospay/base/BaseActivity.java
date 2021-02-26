@@ -43,8 +43,8 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        swipeLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_layout);
+        toolbar = findViewById(R.id.toolbar);
+        swipeLayout = findViewById(R.id.swipe_layout);
         if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
@@ -113,9 +113,9 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
     }
 
     @Override
-    public void showBackButton() {
+    public void showColoredBackButton(int drawable) {
         showHomeButton();
-        setToolbarIcon(R.drawable.ic_arrow_back);
+        setToolbarIcon(drawable);
     }
 
     @Override
