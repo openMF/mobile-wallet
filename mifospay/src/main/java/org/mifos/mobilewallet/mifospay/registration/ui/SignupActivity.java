@@ -223,9 +223,9 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         if (mEtPassword.getText().toString().length() < 6) {
             showToast("Password should contain more than 6 characters");
             
-             //when toast message is being shown then progressdialog of "please wait " must not be shown or it should be
-            //cancelled automatically after toast message
-            hideProgressDialog();////
+           
+            //hide dilaog after toast message
+            hideProgressDialog();
             
             return;
         }
