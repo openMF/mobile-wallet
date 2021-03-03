@@ -225,7 +225,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
             //hide automatically after toast message
             hideProgressDialog();
             return;
-            }
+        }
 
         String firstName = mEtFirstName.getText().toString();
         String lastName = mEtLastName.getText().toString();
