@@ -130,6 +130,8 @@
                     android:gravity="center"
                     android:visibility="gone"
                     android:layout_marginBottom="8dp"
+                    android:paddingBottom="4dp"
+                    android:paddingTop="4dp"
                     android:layout_height="wrap_content" />
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/etPasswordLayout2"
