@@ -222,6 +222,9 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         }
         if (mEtPassword.getText().toString().length() < 6) {
             showToast("Password should contain more than 6 characters");
+            
+             //hide automatically after toast message
+            hideProgressDialog();////
             return;
         }
 
