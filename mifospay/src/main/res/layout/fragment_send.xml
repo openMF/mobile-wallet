@@ -168,7 +168,6 @@
                         android:inputType="number"
                         android:singleLine="true"
                         android:textAlignment="center"
-                        android:maxLength="@integer/telephone_numbers_max_length_standard"
                         android:textSize="@dimen/value_15sp" />
 
                 </android.support.design.widget.TextInputLayout>
