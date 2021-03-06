@@ -94,10 +94,16 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
     }
 
     @Override
-    public void verifyDebitCardError(String message) {
+    public void verifyDebitCardError(String message, int viewNumber) {
         hideProgressDialog();
-        mEtDebitCardNumber.requestFocusFromTouch();
         showToast(message);
+        if (viewNumber == 1) {
+            mEtDebitCardNumber.requestFocusFromTouch();
+        } else if (viewNumber == 2) {
+            mPeMonth.requestFocusFromTouch();
+        } else if (viewNumber == 3) {
+            mPeYear.requestFocusFromTouch();
+        }
     }
 
     public void showToast(String message) {

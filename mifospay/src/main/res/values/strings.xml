@@ -160,6 +160,8 @@
     <string name="log_out">Log out</string>
     <string name="debit_card_details">Debit Card Details</string>
     <string name="debit_card_error_message">Invalid Debit Card Number</string>
+    <string name="expiry_month_error_message">Invalid Expiry Month</string>
+    <string name="expiry_year_error_message">Invalid Expiry Year</string>
     <string name="one_time_password">One Time Password</string>
     <string name="upi_pin_setup">UPI PIN Setup</string>
     <string name="all_fields_are_mandatory">All fields are mandatory.</string>

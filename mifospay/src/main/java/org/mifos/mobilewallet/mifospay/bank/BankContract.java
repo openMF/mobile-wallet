@@ -50,7 +50,7 @@ public interface BankContract {
 
         void verifyDebitCardSuccess(String otp);
 
-        void verifyDebitCardError(String message);
+        void verifyDebitCardError(String message, int viewNumber);
     }
 
     interface UpiPinPresenter extends BasePresenter {
