@@ -182,8 +182,15 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                     REQUEST_WRITE_EXTERNAL_STORAGE);
         } else {
             // Permission already granted
-            showSnackbar(getString(R.string.downloading_receipt));
-            mPresenter.downloadReceipt(transactionId);
+            File file = new File(Environment.getExternalStorageDirectory()
+                    + Constants.MIFOSPAY,
+                    Constants.RECEIPT + transactionId + Constants.PDF);
+            if (file.exists()) {
+                openFile(ReceiptActivity.this, file);
+            } else {
+                showSnackbar(getString(R.string.downloading_receipt));
+                mPresenter.downloadReceipt(transactionId);
+            }
         }
     }
 
