@@ -293,6 +293,7 @@
     <string name="enter_VPA">Please enter the VPA</string>
     <string name="amount_header">Amount:</string>
     <string name="deleted_successfully">Deleted Successfully</string>
+    <string name="error_kyc_details">Couldn\'t fetch KYC details. Please try again.</string>
 
     <!-- dynamically formatted strings-->
     <string name="name_client_name">Name: %1$s</string>
@@ -305,5 +306,7 @@
 
     <string name="title_activity_new_si">NewSIActivity</string>
     <string name="share_receipt">Share Receipt Link</string>
+
+
 
 </resources>
