@@ -78,7 +78,7 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         if (et_si_amount.text.toString() == "") {
             showToast(getString(R.string.enter_amount))
             return
-        } else if (et_si_amount.text.toString().toInt() <= 0) {
+        } else if (et_si_amount.text.toString().toDouble() <= 0) {
             showToast(getString(R.string.enter_valid_amount))
             return
         }
