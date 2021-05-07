@@ -35,7 +35,7 @@ jobs:
 
         # Upload Built APK
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v2.2.3
         with:
           name: mobile-wallet
           path: mifospay/build/outputs/apk/debug/
@@ -49,7 +49,7 @@ jobs:
         run: ./gradlew core:lint
 
       - name: Upload Static Analysis Report For Core Module
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v2.2.3
         if: failure()
         with:
           name: Static Analysis Report[Core]
@@ -60,7 +60,7 @@ jobs:
         run: ./gradlew mifospay:lint
 
       - name: Upload Static Analysis Report For MifosPay Module
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v2.2.3
         if: failure()
         with:
           name: Static Analysis Report[Mifospay]
@@ -75,7 +75,7 @@ jobs:
         run: ./gradlew core:pmd
 
       - name: Upload PMD Report[Core]
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v2.2.3
         if: failure()
         with:
           name: PMD Report[Core]
@@ -86,7 +86,7 @@ jobs:
         run: ./gradlew mifospay:pmd
 
       - name: Upload PMD Report[MifosPay]
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v2.2.3
         if: failure()
         with:
           name: PMD Report[MifosPay]
@@ -101,7 +101,7 @@ jobs:
         run: ./gradlew core:checkstyle
 
       - name: Upload Checkstyle Report[Core]
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v2.2.3
         if: failure()
         with:
           name: Checkstyle Report[Core]
@@ -112,7 +112,7 @@ jobs:
         run: ./gradlew mifospay:checkstyle
 
       - name: Upload Checkstyle Report[MifosPay]
-        uses: actions/upload-artifact@v2.2.0
+        uses: actions/upload-artifact@v2.2.3
         if: failure()
         with:
           name: Checkstyle Report[MifosPay]
