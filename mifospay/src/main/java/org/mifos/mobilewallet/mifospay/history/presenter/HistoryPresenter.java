@@ -54,7 +54,8 @@ public class HistoryPresenter implements
     public void fetchTransactions() {
         mHistoryView.showHistoryFetchingProgress();
         mUseCaseHandler.execute(mFetchSelfAccountUseCase,
-                new FetchSelfAccount.RequestValues(mLocalRepository.getClientDetails().getClientId()),
+                new FetchSelfAccount.RequestValues(
+                        mLocalRepository.getClientDetails().getClientId()),
                 new UseCase.UseCaseCallback<FetchSelfAccount.ResponseValue>() {
                     @Override
                     public void onSuccess(FetchSelfAccount.ResponseValue response) {

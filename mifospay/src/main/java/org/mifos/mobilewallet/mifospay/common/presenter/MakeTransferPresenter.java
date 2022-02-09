@@ -111,6 +111,12 @@ public class MakeTransferPresenter implements TransferContract.TransferPresenter
                 });
     }
 
+    @Override
+    public void makeTransferUsingMsisdn(String msisdnNumber, double amount) {
+        Identifier payeeIdentifier = new Identifier(IdentifierType.MSISDN, msisdnNumber);
+        makeTransfer(payeeIdentifier, amount);
+    }
+
     private void makeTransfer(Identifier payeeIdentifier, double amount) {
         PartyIdInfo payeeParty = new PartyIdInfo(
                 payeeIdentifier.getIdType(),

@@ -75,6 +75,7 @@ public interface BaseHomeContract {
         void fetchMobile();
 
         void checkBalanceAvailability(String externalId, double transferAmount);
+
     }
 
     interface ProfileView extends BaseView<ProfilePresenter> {

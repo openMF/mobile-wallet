@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.mifos.mobilewallet.core.domain.model.PaymentMethod;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.common.TransferContract;
@@ -74,12 +75,16 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     private BottomSheetBehavior mBehavior;
     private long toClientId;
     private double amount;
+    private String toClientIdentifier;
+    private PaymentMethod paymentMethod;
 
-    public static MakeTransferFragment newInstance(String toClientIdentifier, double amount) {
+    public static MakeTransferFragment newInstance(
+            String toClientIdentifier, PaymentMethod paymentMethod, double amount) {
 
         Bundle args = new Bundle();
         args.putString(Constants.TO_CLIENT_IDENTIFIER, toClientIdentifier);
         args.putDouble(Constants.AMOUNT, amount);
+        args.putSerializable(Constants.PAYMENT_METHOD, paymentMethod);
         MakeTransferFragment fragment = new MakeTransferFragment();
         fragment.setArguments(args);
         return fragment;
@@ -109,8 +114,13 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         mPresenter.attachView(this);
 
         amount = getArguments().getDouble(Constants.AMOUNT);
-
-        mTransferPresenter.fetchClient(getArguments().getString(Constants.TO_CLIENT_IDENTIFIER));
+        paymentMethod = (PaymentMethod) getArguments().getSerializable(Constants.PAYMENT_METHOD);
+        toClientIdentifier = getArguments().getString(Constants.TO_CLIENT_IDENTIFIER);
+        if (paymentMethod == PaymentMethod.VPA) {
+            mTransferPresenter.fetchClient(toClientIdentifier);
+        } else {
+            showConfirmMsisdnScreen(toClientIdentifier);
+        }
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,14 +132,26 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTransferPresenter.fetchToClientAccount(toClientId, amount);
                 tvTransferStatus.setText(Constants.SENDING_MONEY);
                 progressBar.setVisibility(View.VISIBLE);
                 contentView.setVisibility(View.GONE);
+                if (paymentMethod == PaymentMethod.VPA) {
+                    mTransferPresenter.fetchToClientAccount(toClientId, amount);
+                } else {
+                    mTransferPresenter.makeTransferUsingMsisdn(toClientIdentifier, amount);
+                }
             }
         });
 
         return dialog;
+    }
+
+    private void showConfirmMsisdnScreen(String msisdnNumber) {
+        tvClientName.setText(msisdnNumber);
+        tvAmount.setText(Constants.RUPEE + " " + amount);
+
+        contentView.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
@@ -172,7 +194,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     @Override
     public void showVpaNotFoundSnackbar() {
-        if (getTargetFragment() != null) {
+        if (getTargetFragment() != null && paymentMethod == PaymentMethod.VPA) {
             getTargetFragment().onActivityResult(SendFragment.REQUEST_SHOW_DETAILS,
                     Activity.RESULT_CANCELED, null);
             dismiss();
