@@ -16,7 +16,9 @@
             android:background="@color/primaryDarkBlue">
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+
+                android:id="@+id/toolbar_mobile_verification"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/primaryDarkBlue"
