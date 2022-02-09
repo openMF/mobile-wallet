@@ -274,6 +274,7 @@
     <string name="no_bank_account">No bank found</string>
     <string name="error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
     <string name="fetching_history">Fetching History...</string>
+    <string name="please_enter_valid_vpa">Please enter a valid VPA</string>
     <string name="tile_si_activity">Create Standing Instruction</string>
     <string name="standing_instruction">SI</string>
     <string name="valid_till">Valid till :</string>

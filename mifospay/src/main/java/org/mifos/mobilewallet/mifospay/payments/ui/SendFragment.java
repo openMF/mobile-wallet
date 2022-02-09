@@ -146,6 +146,10 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 showSnackbar(Constants.PLEASE_ENTER_VALID_AMOUNT);
                 return;
             }
+            if (!externalId.matches(Constants.VPA_VALIDATION_REGEX)) {
+                showSnackbar(getString(R.string.please_enter_valid_vpa));
+                return;
+            }
             if (!mTransferPresenter.checkSelfTransfer(externalId)) {
                 mTransferPresenter.checkBalanceAvailability(externalId, amount);
             } else {
