@@ -1,9 +1,11 @@
 package org.mifos.mobilewallet.mifospay.home.ui;
 
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +19,7 @@ import org.mifos.mobilewallet.mifospay.payments.ui.RequestFragment;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
 import org.mifos.mobilewallet.mifospay.standinginstruction.ui.SIFragment;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -40,7 +43,17 @@ public class PaymentsFragment extends BaseFragment {
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_finance, container, false);
         ButterKnife.bind(this, rootView);
-
+        float dim = 5f;
+        float bDim = 12f;
+        Resources r = getResources();
+        float px = TypedValue.applyDimension(
+                TypedValue.COMPLEX_UNIT_DIP,
+                dim,
+                r.getDisplayMetrics()
+        );
+        vpTabLayout.setPadding((int) px, 0 , (int) px , 0);
+        vpTabLayout.setClipToPadding(false);
+        vpTabLayout.setPageMargin((int) bDim);
         setupUi();
         setupViewPager();
         tilTabLayout.setupWithViewPager(vpTabLayout);
