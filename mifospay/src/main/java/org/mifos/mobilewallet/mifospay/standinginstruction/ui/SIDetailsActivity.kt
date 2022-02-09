@@ -106,17 +106,8 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
                 mStandingInstructionPresenter.updateStandingInstruction(this.standingInstruction)
             }
         } else {
-            doSave = true
             fab.hide()
-            fab.setImageDrawable(res.getDrawable(R.drawable.ic_save))
-
-            tv_si_amount.visibility = View.GONE
-            til_si_edit_amount.visibility = View.VISIBLE
-
-            tv_edit_pick.visibility = View.VISIBLE
-
-            tv_recurrence_interval.visibility = View.GONE
-            til_si_edit_interval.visibility = View.VISIBLE
+            editDetails(true);
         }
     }
 
@@ -267,6 +258,9 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     override fun onBackPressed() {
         if (isDataSaveNecessary()) {
             showDiscardChangesDialog()
+        } else if (!isDataSaveNecessary() && fab.isOrWillBeHidden) {
+            editDetails(false)
+            fab.show()
         } else {
             super.onBackPressed()
         }
@@ -290,13 +284,51 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     private fun showDiscardChangesDialog() {
         val dialogBox = DialogBox()
         dialogBox.setOnPositiveListener { dialog, which ->
+            fab.hide()
             dialog.dismiss()
-            finish()
+            editDetails(false)
+            revertLocalChanges()
+            fab.show()
         }
         dialogBox.setOnNegativeListener { dialog, which ->
             dialog.dismiss()
         }
         dialogBox.show(this, R.string.discard_changes_and_exit,
                 R.string.discard_and_exit, R.string.accept, R.string.cancel)
+    }
+
+    private fun editDetails(doEdit : Boolean) {
+        if (doEdit) {
+            doSave = true
+
+            fab.setImageDrawable(res.getDrawable(R.drawable.ic_save))
+
+            tv_si_amount.visibility = View.GONE
+            til_si_edit_amount.visibility = View.VISIBLE
+
+            tv_edit_pick.visibility = View.VISIBLE
+
+            tv_recurrence_interval.visibility = View.GONE
+            til_si_edit_interval.visibility = View.VISIBLE
+        } else {
+            doSave = false
+
+            fab.setImageDrawable(res.getDrawable(R.drawable.ic_edit))
+
+            tv_si_amount.visibility = View.VISIBLE
+            til_si_edit_amount.visibility = View.GONE
+
+            tv_edit_pick.visibility = View.GONE
+
+            tv_recurrence_interval.visibility = View.VISIBLE
+            til_si_edit_interval.visibility = View.GONE
+        }
+    }
+
+    private fun revertLocalChanges() {
+        et_si_edit_amount.setText(this.standingInstruction.amount.toString());
+        et_si_edit_interval.setText(this.standingInstruction.recurrenceInterval.toString());
+        tv_valid_till.setText("${standingInstruction.validTill?.get(2)}-" +
+                "${standingInstruction.validTill?.get(1)}-${standingInstruction.validTill?.get(0)}")
     }
 }
