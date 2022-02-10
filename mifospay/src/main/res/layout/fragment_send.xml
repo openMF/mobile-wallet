@@ -163,7 +163,6 @@
                         android:id="@+id/et_mobile_number"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingBottom="@dimen/value_10dp"
                         android:hint="@string/mobile_number"
                         android:inputType="number"
                         android:singleLine="true"
