@@ -3,6 +3,8 @@ package org.mifos.mobilewallet.mifospay.bank.fragment;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +46,8 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
     @BindView(R.id.pe_year)
     PinEntryEditText mPeYear;
 
+    boolean key = false;
+
     @Override
     public void setPresenter(BankContract.DebitCardPresenter presenter) {
         mDebitCardPresenter = presenter;
@@ -70,6 +74,42 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     okayClicked();
                     return true;
+                }
+                return false;
+            }
+        });
+
+        mPeMonth.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() == 2) {
+                    mPeYear.requestFocus();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        mPeYear.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if (keyCode == event.KEYCODE_DEL && mPeYear.length() == 0) {
+                    if (key) {
+                        mPeMonth.requestFocus();
+                        mPeMonth.dispatchKeyEvent(
+                                new KeyEvent(event.ACTION_DOWN, event.KEYCODE_DEL));
+                        key = false;
+                        return false;
+                    }
+                    key = true;
                 }
                 return false;
             }
@@ -103,4 +143,6 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
     public void showToast(String message) {
         Toaster.showToast(getActivity(), message);
     }
+
+
 }
