@@ -28,6 +28,7 @@
 
     <dimen name="marginTopUserProfile">70dp</dimen>
 
+    <dimen name="value_8dp">8dp</dimen>
     <dimen name="value_10dp">10dp</dimen>
     <dimen name="value_10sp">10sp</dimen>
     <dimen name="value_16dp">16dp</dimen>
@@ -65,6 +66,7 @@
     <dimen name="marginItemsInSectionExtraSmall">8dp</dimen>
     <dimen name="value_120dp">120dp</dimen>
     <dimen name="value_250dp">250dp</dimen>
+    <dimen name="value_200dp">200dp</dimen>
 
     <dimen name="value_60dp">60dp</dimen>
     <dimen name="value_24sp">24sp</dimen>
