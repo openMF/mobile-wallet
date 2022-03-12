@@ -141,12 +141,16 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
         }
     }
 
-    void showSetAmountDialog (final String qrData) {
+    void showSetAmountDialog(final String qrData) {
         final AlertDialog.Builder editTextDialog = new AlertDialog.Builder(this);
         editTextDialog.setCancelable(false);
         editTextDialog.setTitle("Enter Amount");
-        View view= LayoutInflater.from(getApplicationContext()).inflate(R.layout.dialog_set_amt, (ViewGroup) findViewById(android.R.id.content),false);
-        final TextInputEditText edittext =view.findViewById(R.id.editText_set_amt);
+        View view = LayoutInflater.from(getApplicationContext()).inflate(
+                R.layout.dialog_set_amt,
+                (ViewGroup) findViewById(android.R.id.content),
+                false
+        );
+        final TextInputEditText edittext = view.findViewById(R.id.editText_set_amt);
         edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
         editTextDialog.setView(view);
         if (mAmount != null) {
@@ -164,7 +168,12 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                     return;
                 }
                 mAmount = amount;
-                tvQrData.setText(String.format("%s: %s\n%s: %s", getString(R.string.vpa), qrData, getString(R.string.amount), mAmount));
+                tvQrData.setText(String.format(
+                        "%s: %s\n%s: %s",
+                        getString(R.string.vpa),
+                        qrData,
+                        getString(R.string.amount),
+                        mAmount));
                 generateQR(qrData + ", " + mAmount);
             }
         });

@@ -22,8 +22,9 @@ import org.mifos.mobilewallet.mifospay.injection.component.DaggerActivityCompone
 import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract;
 import org.mifos.mobilewallet.mifospay.passcode.presenter.PassCodePresenter;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
+import org.mifos.mobilewallet.mifospay.utils.Constants;
+
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;

@@ -2,7 +2,6 @@ package org.mifos.mobilewallet.mifospay.standinginstruction.ui
 
 import android.Manifest
 import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -65,16 +64,16 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
         val month: Int = calendar.get(Calendar.MONTH)
         val year: Int = calendar.get(Calendar.YEAR)
-        val picker = DatePickerDialog(this,
-                OnDateSetListener {
-                    view, year, monthOfYear, dayOfMonth ->
-                    btn_valid_till.text = "${dayOfMonth.toString()}-${(monthOfYear + 1)}-$year"
-                }, year, month, day)
+        val picker = DatePickerDialog(
+            this, { view, year, monthOfYear, dayOfMonth ->
+                btn_valid_till.text = "$dayOfMonth-${(monthOfYear + 1)}-$year"
+            }, year, month, day
+        )
         picker.datePicker.minDate = System.currentTimeMillis()
         picker.show()
     }
 
-    fun createSI() {
+    private fun createSI() {
         if (et_si_amount.text.toString() == "") {
             showToast(getString(R.string.enter_amount))
             return
@@ -105,8 +104,10 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         this.clientId = clientId
         tv_client_name.text = name
         tv_client_vpa.text = externalId
-        tv_amount.text = resources.getString(R.string.currency_amount,
-                Constants.RUPEE, et_si_amount.text)
+        tv_amount.text = resources.getString(
+            R.string.currency_amount,
+            Constants.RUPEE, et_si_amount.text
+        )
 
         ll_create_si.visibility = View.GONE
         ll_confirm_transfer.visibility = View.VISIBLE
@@ -117,8 +118,10 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
     fun createNewStandingInstruction() {
         ll_confirm_cancel.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
-        mNewSIPresenter.createNewSI(clientId, (et_si_amount.text.toString()).toDouble(),
-                et_si_interval.text.toString().toInt(), btn_valid_till.text.toString())
+        mNewSIPresenter.createNewSI(
+            clientId, (et_si_amount.text.toString()).toDouble(),
+            et_si_interval.text.toString().toInt(), btn_valid_till.text.toString()
+        )
     }
 
     fun cancelNewStandingInstruction() {
@@ -127,8 +130,11 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
     }
 
     fun scanQrClicked() {
-        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
             requestPermissions(arrayOf(Manifest.permission.CAMERA), REQUEST_CAMERA)
         } else {
             val i = Intent(this, ReadQrActivity::class.java)
@@ -150,16 +156,22 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String?>,
-                                            grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String?>,
+        grantResults: IntArray
+    ) {
         when (requestCode) {
             REQUEST_CAMERA -> {
                 if (grantResults.isNotEmpty()
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
                     val i = Intent(this, ReadQrActivity::class.java)
                     startActivityForResult(i, SCAN_QR_REQUEST_CODE)
                 } else {
-                    Toaster.show(findViewById(android.R.id.content), Constants.NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE)
+                    Toaster.show(
+                        findViewById(android.R.id.content),
+                        Constants.NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE
+                    )
                 }
             }
         }

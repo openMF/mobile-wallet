@@ -41,7 +41,6 @@
     <dimen name="value_5dp">5dp</dimen>
     <dimen name="value_3dp">3dp</dimen>
     <dimen name="value_7dp">7dp</dimen>
-    <dimen name="value_8dp">8dp</dimen>
     <dimen name="value_12dp">12dp</dimen>
     <dimen name="value_15dp">15dp</dimen>
     <dimen name="value_30dp">30dp</dimen>

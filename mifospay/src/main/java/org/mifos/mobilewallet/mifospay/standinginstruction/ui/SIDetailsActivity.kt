@@ -3,6 +3,7 @@ package org.mifos.mobilewallet.mifospay.standinginstruction.ui
 import android.app.DatePickerDialog
 import android.content.res.Resources
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -65,10 +66,12 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
             val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
             val month: Int = calendar.get(Calendar.MONTH)
             val year: Int = calendar.get(Calendar.YEAR)
-            val picker = DatePickerDialog(this,
-                    DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-                        tv_valid_till.text = "$dayOfMonth-${(monthOfYear + 1)}-$year"
-                    }, year, month, day)
+            val picker = DatePickerDialog(
+                this,
+                { view, year, monthOfYear, dayOfMonth ->
+                    tv_valid_till.text = "$dayOfMonth-${(monthOfYear + 1)}-$year"
+                }, year, month, day
+            )
             picker.show()
         }
 
@@ -77,8 +80,10 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         }
     }
 
-    override fun setPresenter(presenter:
-                              StandingInstructionContract.StandingInstructorDetailsPresenter) {
+    override fun setPresenter(
+        presenter:
+        StandingInstructionContract.StandingInstructorDetailsPresenter
+    ) {
         this.mStandingInstructionPresenter = presenter
     }
 
@@ -98,7 +103,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
 
                 this.standingInstruction.amount = et_si_edit_amount.text.toString().toDouble()
                 this.standingInstruction.recurrenceInterval =
-                        et_si_edit_interval.text.toString().toInt()
+                    et_si_edit_interval.text.toString().toInt()
                 val validTillArray = tv_valid_till.text.split("-")
                 this.standingInstruction.validTill = validTillArray.map { it.toInt() }
 
@@ -107,7 +112,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
             }
         } else {
             fab.hide()
-            editDetails(true);
+            editDetails(true)
         }
     }
 
@@ -143,26 +148,40 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         /**
          * Using hardcoded Currency as response doesn't return the currency
          */
-        tv_si_amount.text = res.getString(R.string.currency_amount, Constants.RUPEE,
-                standingInstruction.amount.toString())
+        tv_si_amount.text = res.getString(
+            R.string.currency_amount, Constants.RUPEE,
+            standingInstruction.amount.toString()
+        )
 
-        tv_valid_from.text = res.getString(R.string.date_formatted,
-                standingInstruction.validFrom[2].toString(),
-                standingInstruction.validFrom[1].toString(),
-                standingInstruction.validFrom[0].toString())
-        tv_valid_till.text = res.getString(R.string.date_formatted,
-                standingInstruction.validTill?.get(2).toString(),
-                standingInstruction.validTill?.get(1).toString(),
-                standingInstruction.validTill?.get(0).toString())
+        tv_valid_from.text = res.getString(
+            R.string.date_formatted,
+            standingInstruction.validFrom[2].toString(),
+            standingInstruction.validFrom[1].toString(),
+            standingInstruction.validFrom[0].toString()
+        )
+        tv_valid_till.text = res.getString(
+            R.string.date_formatted,
+            standingInstruction.validTill?.get(2).toString(),
+            standingInstruction.validTill?.get(1).toString(),
+            standingInstruction.validTill?.get(0).toString()
+        )
 
-        tv_si_from_name.text = res.getString(R.string.name_client_name,
-                standingInstruction.fromClient.displayName)
-        tv_si_from_number.text = res.getString(R.string.number_account_number,
-                standingInstruction.fromAccount.accountNo)
-        tv_si_to_name.text = res.getString(R.string.name_client_name,
-                standingInstruction.toClient.displayName)
-        tv_si_to_number.text = res.getString(R.string.number_account_number,
-                standingInstruction.toAccount.accountNo)
+        tv_si_from_name.text = res.getString(
+            R.string.name_client_name,
+            standingInstruction.fromClient.displayName
+        )
+        tv_si_from_number.text = res.getString(
+            R.string.number_account_number,
+            standingInstruction.fromAccount.accountNo
+        )
+        tv_si_to_name.text = res.getString(
+            R.string.name_client_name,
+            standingInstruction.toClient.displayName
+        )
+        tv_si_to_number.text = res.getString(
+            R.string.number_account_number,
+            standingInstruction.toAccount.accountNo
+        )
 
         tv_si_status.text = standingInstruction.status.value
         if (standingInstruction.status.value == "Deleted") {
@@ -214,7 +233,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         inc_state_view.visibility = View.VISIBLE
 
         iv_empty_no_transaction_history
-                    .setImageDrawable(res.getDrawable(drawable))
+            .setImageDrawable(ResourcesCompat.getDrawable(res, drawable))
         tv_empty_no_transaction_history_title.text = res.getString(errorTitle)
         tv_empty_no_transaction_history_subtitle.text = res.getString(errorMessage)
     }
@@ -271,14 +290,17 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         dialogBox.setOnPositiveListener { dialog, which ->
             if (this.standingInstructionId != 0L) {
                 mStandingInstructionPresenter.deleteStandingInstruction(
-                        this.standingInstructionId)
+                    this.standingInstructionId
+                )
             }
         }
         dialogBox.setOnNegativeListener { dialog, which ->
             dialog.dismiss()
         }
-        dialogBox.show(this, R.string.delete_standing_instruction,
-                R.string.delete_standing_instruction_confirm, R.string.accept, R.string.cancel)
+        dialogBox.show(
+            this, R.string.delete_standing_instruction,
+            R.string.delete_standing_instruction_confirm, R.string.accept, R.string.cancel
+        )
     }
 
     private fun showDiscardChangesDialog() {
@@ -293,15 +315,17 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         dialogBox.setOnNegativeListener { dialog, which ->
             dialog.dismiss()
         }
-        dialogBox.show(this, R.string.discard_changes_and_exit,
-                R.string.discard_and_exit, R.string.accept, R.string.cancel)
+        dialogBox.show(
+            this, R.string.discard_changes_and_exit,
+            R.string.discard_and_exit, R.string.accept, R.string.cancel
+        )
     }
 
-    private fun editDetails(doEdit : Boolean) {
+    private fun editDetails(doEdit: Boolean) {
         if (doEdit) {
             doSave = true
 
-            fab.setImageDrawable(res.getDrawable(R.drawable.ic_save))
+            fab.setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_save))
 
             tv_si_amount.visibility = View.GONE
             til_si_edit_amount.visibility = View.VISIBLE
@@ -313,7 +337,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         } else {
             doSave = false
 
-            fab.setImageDrawable(res.getDrawable(R.drawable.ic_edit))
+            fab.setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_edit))
 
             tv_si_amount.visibility = View.VISIBLE
             til_si_edit_amount.visibility = View.GONE
@@ -328,7 +352,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     private fun revertLocalChanges() {
         et_si_edit_amount.setText(this.standingInstruction.amount.toString());
         et_si_edit_interval.setText(this.standingInstruction.recurrenceInterval.toString());
-        tv_valid_till.setText("${standingInstruction.validTill?.get(2)}-" +
-                "${standingInstruction.validTill?.get(1)}-${standingInstruction.validTill?.get(0)}")
+        tv_valid_till.text = "${standingInstruction.validTill?.get(2)}-" +
+                "${standingInstruction.validTill?.get(1)}-${standingInstruction.validTill?.get(0)}"
     }
 }
