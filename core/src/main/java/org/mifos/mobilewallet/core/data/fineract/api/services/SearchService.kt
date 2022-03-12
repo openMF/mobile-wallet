@@ -1,22 +1,19 @@
-package org.mifos.mobilewallet.core.data.fineract.api.services;
+package org.mifos.mobilewallet.core.data.fineract.api.services
 
-import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
-import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
-
-import java.util.List;
-
-import retrofit2.http.GET;
-import retrofit2.http.Query;
-import rx.Observable;
+import retrofit2.http.GET
+import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
+import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity
+import retrofit2.http.Query
+import rx.Observable
 
 /**
  * Created by naman on 19/8/17.
  */
-
-public interface SearchService {
-
+interface SearchService {
     @GET(ApiEndPoints.SEARCH)
-    Observable<List<SearchedEntity>> searchResources(@Query("query") String query,
-            @Query("resource") String resources,
-            @Query("exactMatch") Boolean exactMatch);
+    fun searchResources(
+        @Query("query") query: String?,
+        @Query("resource") resources: String?,
+        @Query("exactMatch") exactMatch: Boolean?
+    ): Observable<List<SearchedEntity?>?>?
 }

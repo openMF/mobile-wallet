@@ -1,56 +1,52 @@
-package org.mifos.mobilewallet.core.data.fineract.api.services;
+package org.mifos.mobilewallet.core.data.fineract.api.services
 
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
+import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
+import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
+import org.mifos.mobilewallet.core.data.fineract.entity.Page
+import org.mifos.mobilewallet.core.data.fineract.entity.client.Client
+import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts
+import org.mifos.mobilewallet.core.domain.model.client.NewClient
+import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient
+import org.mifos.mobilewallet.core.domain.model.NewAccount
+import retrofit2.http.*
+import rx.Observable
 
-import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
-import org.mifos.mobilewallet.core.data.fineract.entity.Page;
-import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
-import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
-import org.mifos.mobilewallet.core.domain.model.NewAccount;
-import org.mifos.mobilewallet.core.domain.model.client.NewClient;
-import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient;
-
-import okhttp3.MultipartBody;
-import okhttp3.ResponseBody;
-import retrofit2.http.Body;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Part;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
-import rx.Observable;
-
-public interface ClientService {
-
-    @GET(ApiEndPoints.CLIENTS)
-    Observable<Page<Client>> getClients();
+interface ClientService {
+    @get:GET(ApiEndPoints.CLIENTS)
+    val clients: Observable<Page<Client?>?>?
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}")
-    Observable<Client> getClientForId(@Path("clientId") long clientId);
+    fun getClientForId(@Path("clientId") clientId: Long): Observable<Client?>?
 
     @PUT(ApiEndPoints.CLIENTS + "/{clientId}")
-    Observable<ResponseBody> updateClient(@Path("clientId") long clientId,
-            @Body Object payload);
+    fun updateClient(
+        @Path("clientId") clientId: Long,
+        @Body payload: Any?
+    ): Observable<ResponseBody?>?
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/images")
-    Observable<ResponseBody> getClientImage(@Path("clientId") long clientId);
+    fun getClientImage(@Path("clientId") clientId: Long): Observable<ResponseBody?>?
 
     @PUT(ApiEndPoints.CLIENTS + "/{clientId}/images")
-    Observable<GenericResponse> updateClientImage(
-            @Path("clientId") long clientId,
-            @Part() MultipartBody.Part typedFile);
+    fun updateClientImage(
+        @Path("clientId") clientId: Long,
+        @Part typedFile: MultipartBody.Part?
+    ): Observable<GenericResponse?>?
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
-    Observable<ClientAccounts> getClientAccounts(@Path("clientId") long clientId);
+    fun getClientAccounts(@Path("clientId") clientId: Long): Observable<ClientAccounts?>?
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
-    Observable<ClientAccounts> getAccounts(@Path("clientId") long clientId,
-            @Query("fields") String accountType);
+    fun getAccounts(
+        @Path("clientId") clientId: Long,
+        @Query("fields") accountType: String?
+    ): Observable<ClientAccounts?>?
 
     @POST(ApiEndPoints.CLIENTS)
-    Observable<CreateClient.ResponseValue> createClient(@Body NewClient newClient);
+    fun createClient(@Body newClient: NewClient?): Observable<CreateClient.ResponseValue?>?
 
     @POST
-    Observable<GenericResponse> createAccount(@Body NewAccount newAccount);
+    fun createAccount(@Body newAccount: NewAccount?): Observable<GenericResponse?>?
 }

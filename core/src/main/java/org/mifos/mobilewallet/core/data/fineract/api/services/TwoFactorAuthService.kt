@@ -1,29 +1,23 @@
-package org.mifos.mobilewallet.core.data.fineract.api.services;
+package org.mifos.mobilewallet.core.data.fineract.api.services
 
-import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
-import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken;
-import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod;
-
-import java.util.List;
-
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.Query;
-import rx.Observable;
+import retrofit2.http.GET
+import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
+import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod
+import retrofit2.http.POST
+import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken
+import retrofit2.http.Query
+import rx.Observable
 
 /**
  * Created by ankur on 01/June/2018
  */
-
-public interface TwoFactorAuthService {
-
-    @GET(ApiEndPoints.TWOFACTOR)
-    Observable<List<DeliveryMethod>> getDeliveryMethods();
+interface TwoFactorAuthService {
+    @get:GET(ApiEndPoints.TWOFACTOR)
+    val deliveryMethods: Observable<List<DeliveryMethod?>?>?
 
     @POST(ApiEndPoints.TWOFACTOR)
-    Observable<String> requestOTP(@Query("deliveryMethod") String deliveryMethod);
+    fun requestOTP(@Query("deliveryMethod") deliveryMethod: String?): Observable<String?>?
 
     @POST(ApiEndPoints.TWOFACTOR + "/validate")
-    Observable<AccessToken> validateToken(@Query("token") String token);
-
+    fun validateToken(@Query("token") token: String?): Observable<AccessToken?>?
 }

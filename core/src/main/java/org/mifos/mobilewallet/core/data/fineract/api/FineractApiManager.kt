@@ -1,190 +1,166 @@
-package org.mifos.mobilewallet.core.data.fineract.api;
+package org.mifos.mobilewallet.core.data.fineract.api
 
-import android.util.Base64;
-
-import org.mifos.mobilewallet.core.data.fineract.api.services.AccountTransfersService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.AuthenticationService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.DocumentService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.InvoiceService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.KYCLevel1Service;
-import org.mifos.mobilewallet.core.data.fineract.api.services.NotificationService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.RunReportService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.SavedCardService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.SavingsAccountsService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.SearchService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.StandingInstructionService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.ThirdPartyTransferService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.TwoFactorAuthService;
-import org.mifos.mobilewallet.core.data.fineract.api.services.UserService;
-import org.mifos.mobilewallet.core.utils.Constants;
-
-import java.nio.charset.Charset;
-import java.util.concurrent.TimeUnit;
-
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
+import android.util.Base64
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import org.mifos.mobilewallet.core.data.fineract.api.services.*
+import org.mifos.mobilewallet.core.utils.Constants
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
+import java.nio.charset.Charset
+import java.util.concurrent.TimeUnit
 
 /**
  * Created by naman on 17/6/17.
  */
+class FineractApiManager {
+    val authenticationApi: AuthenticationService?
+        get() = Companion.authenticationApi
+    val clientsApi: ClientService?
+        get() = Companion.clientsApi
+    val registrationAPi: RegistrationService?
+        get() = Companion.registrationAPi
+    val searchApi: SearchService?
+        get() = Companion.searchApi
+    val documentApi: DocumentService?
+        get() = Companion.documentApi
+    val runReportApi: RunReportService?
+        get() = Companion.runReportApi
+    val twoFactorAuthApi: TwoFactorAuthService?
+        get() = Companion.twoFactorAuthApi
+    val accountTransfersApi: AccountTransfersService?
+        get() = Companion.accountTransfersApi
+    val savedCardApi: SavedCardService?
+        get() = Companion.savedCardApi
+    val kycLevel1Api: KYCLevel1Service?
+        get() = Companion.kycLevel1Api
+    val invoiceApi: InvoiceService?
+        get() = Companion.invoiceApi
+    val userApi: UserService?
+        get() = Companion.userApi
+    val thirdPartyTransferApi: ThirdPartyTransferService?
+        get() = Companion.thirdPartyTransferApi
+    val notificationApi: NotificationService?
+        get() = Companion.notificationApi
 
-public class FineractApiManager {
+    companion object {
+        const val DEFAULT = "default"
+        const val BASIC = "Basic "
+        private val baseUrl = BaseURL()
+        private val BASE_URL = baseUrl.url
+        private var retrofit: Retrofit? = null
+        private var authenticationApi: AuthenticationService? = null
+        private var clientsApi: ClientService? = null
+        var savingAccountsListApi: SavingsAccountsService? = null
+            get() = field
+            private set
+        private var registrationAPi: RegistrationService? = null
+        private var searchApi: SearchService? = null
+        private var savedCardApi: SavedCardService? = null
+        private var documentApi: DocumentService? = null
+        private var twoFactorAuthApi: TwoFactorAuthService? = null
+        private var accountTransfersApi: AccountTransfersService? = null
+        private var runReportApi: RunReportService? = null
+        private var kycLevel1Api: KYCLevel1Service? = null
+        private var invoiceApi: InvoiceService? = null
+        private var userApi: UserService? = null
+        private var thirdPartyTransferApi: ThirdPartyTransferService? = null
+        private var notificationApi: NotificationService? = null
+        var standingInstructionApi: StandingInstructionService? = null
+            get() = field
+            private set
+        var selfApiManager: SelfServiceApiManager? = null
+            private set
 
-    public static final String DEFAULT = "default";
-    public static final String BASIC = "Basic ";
-    private static BaseURL baseUrl = new BaseURL();
-    private static final String BASE_URL = baseUrl.getUrl();
-
-    private static Retrofit retrofit;
-    private static AuthenticationService authenticationApi;
-    private static ClientService clientsApi;
-    private static SavingsAccountsService savingsAccountsApi;
-    private static RegistrationService registrationAPi;
-    private static SearchService searchApi;
-    private static SavedCardService savedCardApi;
-    private static DocumentService documentApi;
-    private static TwoFactorAuthService twoFactorAuthApi;
-    private static AccountTransfersService accountTransfersApi;
-    private static RunReportService runReportApi;
-    private static KYCLevel1Service kycLevel1Api;
-    private static InvoiceService invoiceApi;
-    private static UserService userApi;
-    private static ThirdPartyTransferService thirdPartyTransferApi;
-    private static NotificationService notificationApi;
-    private static StandingInstructionService standingInstructionService;
-    private static SelfServiceApiManager sSelfInstance;
-
-    public FineractApiManager() {
-        String authToken = BASIC + Base64.encodeToString(Constants.MIFOS_PASSWORD
-                        .getBytes(Charset.forName("UTF-8")), Base64.NO_WRAP);
-        createService(authToken);
-
-        if (sSelfInstance == null) {
-            sSelfInstance = new SelfServiceApiManager();
+        private fun init() {
+            authenticationApi = createApi(
+                AuthenticationService::class.java
+            )
+            clientsApi = createApi(
+                ClientService::class.java
+            )
+            savingAccountsListApi = createApi(
+                SavingsAccountsService::class.java
+            )
+            registrationAPi = createApi(
+                RegistrationService::class.java
+            )
+            searchApi = createApi(
+                SearchService::class.java
+            )
+            savedCardApi = createApi(
+                SavedCardService::class.java
+            )
+            documentApi = createApi(
+                DocumentService::class.java
+            )
+            twoFactorAuthApi = createApi(
+                TwoFactorAuthService::class.java
+            )
+            accountTransfersApi = createApi(
+                AccountTransfersService::class.java
+            )
+            runReportApi = createApi(
+                RunReportService::class.java
+            )
+            kycLevel1Api = createApi(
+                KYCLevel1Service::class.java
+            )
+            invoiceApi = createApi(
+                InvoiceService::class.java
+            )
+            userApi = createApi(
+                UserService::class.java
+            )
+            thirdPartyTransferApi = createApi(
+                ThirdPartyTransferService::class.java
+            )
+            notificationApi = createApi(
+                NotificationService::class.java
+            )
+            standingInstructionApi = createApi(
+                StandingInstructionService::class.java
+            )
         }
-    }
 
-    private static void init() {
-        authenticationApi = createApi(AuthenticationService.class);
-        clientsApi = createApi(ClientService.class);
-        savingsAccountsApi = createApi(SavingsAccountsService.class);
-        registrationAPi = createApi(RegistrationService.class);
-        searchApi = createApi(SearchService.class);
-        savedCardApi = createApi(SavedCardService.class);
-        documentApi = createApi(DocumentService.class);
-        twoFactorAuthApi = createApi(TwoFactorAuthService.class);
-        accountTransfersApi = createApi(AccountTransfersService.class);
-        runReportApi = createApi(RunReportService.class);
-        kycLevel1Api = createApi(KYCLevel1Service.class);
-        invoiceApi = createApi(InvoiceService.class);
-        userApi = createApi(UserService.class);
-        thirdPartyTransferApi = createApi(ThirdPartyTransferService.class);
-        notificationApi = createApi(NotificationService.class);
-        standingInstructionService = createApi(StandingInstructionService.class);
-    }
+        private fun <T> createApi(clazz: Class<T>): T {
+            return retrofit!!.create(clazz)
+        }
 
-    private static <T> T createApi(Class<T> clazz) {
-        return retrofit.create(clazz);
-    }
-
-    public static void createService(String authToken) {
-
-        HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
-        interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+        fun createService(authToken: String?) {
+            val interceptor = HttpLoggingInterceptor()
+            interceptor.level = HttpLoggingInterceptor.Level.BODY
+            val okHttpClient = OkHttpClient.Builder()
                 .readTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
-                .build();
-
-        retrofit = new Retrofit.Builder()
+                .addInterceptor(ApiInterceptor(authToken!!, DEFAULT))
+                .build()
+            retrofit = Retrofit.Builder()
                 .baseUrl(BASE_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .client(okHttpClient)
-                .build();
+                .build()
+            init()
+        }
 
-        init();
+        @JvmStatic
+        fun createSelfService(authToken: String?) {
+            SelfServiceApiManager.createService(authToken)
+        }
     }
 
-    public static void createSelfService(String authToken) {
-        SelfServiceApiManager.createService(authToken);
+    init {
+        val authToken = BASIC + Base64.encodeToString(
+            Constants.MIFOS_PASSWORD
+                .toByteArray(Charset.forName("UTF-8")), Base64.NO_WRAP
+        )
+        createService(authToken)
+        if (selfApiManager == null) {
+            selfApiManager = SelfServiceApiManager()
+        }
     }
-
-    public static SelfServiceApiManager getSelfApiManager() {
-        return sSelfInstance;
-    }
-
-    public AuthenticationService getAuthenticationApi() {
-        return authenticationApi;
-    }
-
-    public ClientService getClientsApi() {
-        return clientsApi;
-    }
-
-    public SavingsAccountsService getSavingAccountsListApi() {
-        return savingsAccountsApi;
-    }
-
-    public RegistrationService getRegistrationAPi() {
-        return registrationAPi;
-    }
-
-    public SearchService getSearchApi() {
-        return searchApi;
-    }
-
-    public DocumentService getDocumentApi() {
-        return documentApi;
-    }
-
-    public RunReportService getRunReportApi() {
-        return runReportApi;
-    }
-
-    public TwoFactorAuthService getTwoFactorAuthApi() {
-        return twoFactorAuthApi;
-    }
-
-    public AccountTransfersService getAccountTransfersApi() {
-        return accountTransfersApi;
-    }
-
-    public SavedCardService getSavedCardApi() {
-        return savedCardApi;
-    }
-
-    public KYCLevel1Service getKycLevel1Api() {
-        return kycLevel1Api;
-    }
-
-    public InvoiceService getInvoiceApi() {
-        return invoiceApi;
-    }
-
-    public UserService getUserApi() {
-        return userApi;
-    }
-
-    public ThirdPartyTransferService getThirdPartyTransferApi() {
-        return thirdPartyTransferApi;
-    }
-
-    public NotificationService getNotificationApi() {
-        return notificationApi;
-    }
-
-    public StandingInstructionService getStandingInstructionApi() {
-        return standingInstructionService;
-    }
-
 }

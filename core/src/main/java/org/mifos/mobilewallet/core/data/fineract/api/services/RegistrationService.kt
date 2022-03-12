@@ -1,19 +1,17 @@
-package org.mifos.mobilewallet.core.data.fineract.api.services;
+package org.mifos.mobilewallet.core.data.fineract.api.services
 
-import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
-import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
-import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
+import okhttp3.ResponseBody
+import retrofit2.http.POST
+import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
+import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload
+import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify
+import retrofit2.http.Body
+import rx.Observable
 
-import okhttp3.ResponseBody;
-import retrofit2.http.Body;
-import retrofit2.http.POST;
-import rx.Observable;
-
-public interface RegistrationService {
-
+interface RegistrationService {
     @POST(ApiEndPoints.REGISTRATION)
-    Observable<ResponseBody> registerUser(@Body RegisterPayload registerPayload);
+    fun registerUser(@Body registerPayload: RegisterPayload?): Observable<ResponseBody?>?
 
     @POST(ApiEndPoints.REGISTRATION + "/user")
-    Observable<ResponseBody> verifyUser(@Body UserVerify userVerify);
+    fun verifyUser(@Body userVerify: UserVerify?): Observable<ResponseBody?>?
 }

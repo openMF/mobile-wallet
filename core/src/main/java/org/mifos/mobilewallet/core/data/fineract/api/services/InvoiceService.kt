@@ -1,46 +1,40 @@
-package org.mifos.mobilewallet.core.data.fineract.api.services;
+package org.mifos.mobilewallet.core.data.fineract.api.services
 
-import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints;
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
-import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
-
-import java.util.List;
-
-import retrofit2.http.Body;
-import retrofit2.http.DELETE;
-import retrofit2.http.GET;
-import retrofit2.http.POST;
-import retrofit2.http.PUT;
-import retrofit2.http.Path;
-import rx.Observable;
+import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
+import org.mifos.mobilewallet.core.data.fineract.entity.Invoice
+import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
+import retrofit2.http.*
+import rx.Observable
 
 /**
  * Created by ankur on 07/June/2018
  */
-
-public interface InvoiceService {
-
+interface InvoiceService {
     @POST(ApiEndPoints.DATATABLES + "/invoices/{clientId}")
-    Observable<GenericResponse> addInvoice(
-            @Path("clientId") String clientId,
-            @Body Invoice invoice);
+    fun addInvoice(
+        @Path("clientId") clientId: String?,
+        @Body invoice: Invoice?
+    ): Observable<GenericResponse?>?
 
     @GET(ApiEndPoints.DATATABLES + "/invoices/{clientId}")
-    Observable<List<Invoice>> getInvoices(@Path("clientId") String clientId);
+    fun getInvoices(@Path("clientId") clientId: String?): Observable<List<Invoice?>?>?
 
     @GET(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
-    Observable<List<Invoice>> getInvoice(
-            @Path("clientId") String clientId,
-            @Path("invoiceId") String invoiceId);
+    fun getInvoice(
+        @Path("clientId") clientId: String?,
+        @Path("invoiceId") invoiceId: String?
+    ): Observable<List<Invoice?>?>?
 
     @DELETE(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
-    Observable<GenericResponse> deleteInvoice(@Path("clientId") String clientId,
-            @Path("invoiceId") int invoiceId);
+    fun deleteInvoice(
+        @Path("clientId") clientId: String?,
+        @Path("invoiceId") invoiceId: Int
+    ): Observable<GenericResponse?>?
 
     @PUT(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
-    Observable<GenericResponse> updateInvoice(
-            @Path("clientId") String clientId,
-            @Path("invoiceId") long invoiceId,
-            @Body Invoice invoice);
-
+    fun updateInvoice(
+        @Path("clientId") clientId: String?,
+        @Path("invoiceId") invoiceId: Long,
+        @Body invoice: Invoice?
+    ): Observable<GenericResponse?>?
 }
