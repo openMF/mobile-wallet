@@ -233,7 +233,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         inc_state_view.visibility = View.VISIBLE
 
         iv_empty_no_transaction_history
-            .setImageDrawable(ResourcesCompat.getDrawable(res, drawable))
+            .setImageDrawable(ResourcesCompat.getDrawable(res, drawable, null))
         tv_empty_no_transaction_history_title.text = res.getString(errorTitle)
         tv_empty_no_transaction_history_subtitle.text = res.getString(errorMessage)
     }
@@ -325,7 +325,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         if (doEdit) {
             doSave = true
 
-            fab.setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_save))
+            fab.setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_save, null))
 
             tv_si_amount.visibility = View.GONE
             til_si_edit_amount.visibility = View.VISIBLE
@@ -337,7 +337,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         } else {
             doSave = false
 
-            fab.setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_edit))
+            fab.setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_edit, null))
 
             tv_si_amount.visibility = View.VISIBLE
             til_si_edit_amount.visibility = View.GONE
