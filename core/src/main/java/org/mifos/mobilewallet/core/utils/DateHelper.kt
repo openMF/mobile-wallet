@@ -1,26 +1,22 @@
-package org.mifos.mobilewallet.core.utils;
+package org.mifos.mobilewallet.core.utils
 
-import android.util.Log;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import android.util.Log
+import java.lang.StringBuilder
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * Created by ishankhanna on 30/05/14.
- * <p>This is a helper class that will be used to convert List<Interger> Type Dates
- * from MifosX into Simple Strings or Date Formats</p>
+ *
+ * This is a helper class that will be used to convert List<Interger> Type Dates
+ * from MifosX into Simple Strings or Date Formats</Interger>
  */
-public class DateHelper {
-
-    public static final String LOG_TAG = DateHelper.class.getSimpleName();
-
-    public static final String FORMAT_dd_MMMM_yyyy = "dd MMMM yyyy";
-    public static final String DD_MMM_YYYY = "dd MMM yyyy";
-    public static final String DD_MM_YYYY = "dd-MM-yyyy";
+object DateHelper {
+    val LOG_TAG = DateHelper::class.java.simpleName
+    const val FORMAT_dd_MMMM_yyyy = "dd MMMM yyyy"
+    const val DD_MMM_YYYY = "dd MMM yyyy"
+    const val DD_MM_YYYY = "dd-MM-yyyy"
 
     /**
      * the result string uses the list given in a reverse order ([x, y, z] results in "z y x")
@@ -28,23 +24,21 @@ public class DateHelper {
      * @param integersOfDate [year-month-day] (ex [2016, 4, 14])
      * @return date in the format day month year (ex 14 Apr 2016)
      */
-    public static String getDateAsString(List<Integer> integersOfDate) {
-
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(integersOfDate.get(2))
-                .append(' ')
-                .append(getMonthName(integersOfDate.get(1)))
-                .append(' ')
-                .append(integersOfDate.get(0));
-
-        return stringBuilder.toString();
-
+    fun getDateAsString(integersOfDate: List<Int>): String {
+        val stringBuilder = StringBuilder()
+        stringBuilder.append(integersOfDate[2])
+            .append(' ')
+            .append(getMonthName(integersOfDate[1]))
+            .append(' ')
+            .append(integersOfDate[0])
+        return stringBuilder.toString()
     }
 
-    public static String getDateAsString(List<Integer> integersOfDate, String pattern) {
-        return DateHelper.getFormatConverter(DD_MMM_YYYY,
-                pattern, DateHelper.getDateAsString(integersOfDate));
-
+    fun getDateAsString(integersOfDate: List<Int>, pattern: String?): String {
+        return getFormatConverter(
+            DD_MMM_YYYY,
+            pattern, getDateAsString(integersOfDate)
+        )
     }
 
     /**
@@ -54,112 +48,87 @@ public class DateHelper {
      * @param dateString date string
      * @return dd MMMM yyyy format date string.
      */
-    public static String getSpecificFormat(String format, String dateString) {
-        SimpleDateFormat pickerFormat = new SimpleDateFormat(DD_MM_YYYY, Locale.ENGLISH);
-        SimpleDateFormat finalFormat = new SimpleDateFormat(format, Locale.ENGLISH);
-        Date date = null;
+    fun getSpecificFormat(format: String?, dateString: String?): String {
+        val pickerFormat = SimpleDateFormat(DD_MM_YYYY, Locale.ENGLISH)
+        val finalFormat = SimpleDateFormat(format, Locale.ENGLISH)
+        var date: Date? = null
         try {
-            date = pickerFormat.parse(dateString);
-        } catch (ParseException e) {
-            Log.d(LOG_TAG, e.getLocalizedMessage());
+            date = pickerFormat.parse(dateString)
+        } catch (e: ParseException) {
+            Log.d(LOG_TAG, e.localizedMessage)
         }
-        return finalFormat.format(date);
+        return finalFormat.format(date)
     }
 
-    public static String getFormatConverter(String currentFormat, String requiredFormat,
-            String dateString) {
-        SimpleDateFormat pickerFormat = new SimpleDateFormat(currentFormat, Locale.ENGLISH);
-        SimpleDateFormat finalFormat = new SimpleDateFormat(requiredFormat, Locale.ENGLISH);
-        Date date = null;
+    fun getFormatConverter(
+        currentFormat: String?, requiredFormat: String?,
+        dateString: String?
+    ): String {
+        val pickerFormat = SimpleDateFormat(currentFormat, Locale.ENGLISH)
+        val finalFormat = SimpleDateFormat(requiredFormat, Locale.ENGLISH)
+        var date: Date? = null
         try {
-            date = pickerFormat.parse(dateString);
-        } catch (ParseException e) {
-            Log.d(LOG_TAG, e.getLocalizedMessage());
+            date = pickerFormat.parse(dateString)
+        } catch (e: ParseException) {
+            Log.d(LOG_TAG, e.localizedMessage)
         }
-        return finalFormat.format(date);
+        return finalFormat.format(date)
     }
 
     /**
      * @param month an integer from 1 to 12
      * @return string representation of the month like Jan or Feb..etc
      */
-    public static String getMonthName(int month) {
-        String monthName = "";
-        switch (month) {
-            case 1:
-                monthName = "Jan";
-                break;
-            case 2:
-                monthName = "Feb";
-                break;
-            case 3:
-                monthName = "Mar";
-                break;
-            case 4:
-                monthName = "Apr";
-                break;
-            case 5:
-                monthName = "May";
-                break;
-            case 6:
-                monthName = "Jun";
-                break;
-            case 7:
-                monthName = "Jul";
-                break;
-            case 8:
-                monthName = "Aug";
-                break;
-            case 9:
-                monthName = "Sep";
-                break;
-            case 10:
-                monthName = "Oct";
-                break;
-            case 11:
-                monthName = "Nov";
-                break;
-            case 12:
-                monthName = "Dec";
-                break;
+    fun getMonthName(month: Int): String {
+        var monthName = ""
+        when (month) {
+            1 -> monthName = "Jan"
+            2 -> monthName = "Feb"
+            3 -> monthName = "Mar"
+            4 -> monthName = "Apr"
+            5 -> monthName = "May"
+            6 -> monthName = "Jun"
+            7 -> monthName = "Jul"
+            8 -> monthName = "Aug"
+            9 -> monthName = "Sep"
+            10 -> monthName = "Oct"
+            11 -> monthName = "Nov"
+            12 -> monthName = "Dec"
         }
-        return monthName;
+        return monthName
     }
 
-    public static long getDateAsLongFromString(String dateStr, String pattern) {
-        SimpleDateFormat sdf = new SimpleDateFormat(pattern);
-        Date date = null;
-
+    fun getDateAsLongFromString(dateStr: String?, pattern: String?): Long {
+        val sdf = SimpleDateFormat(pattern)
+        var date: Date? = null
         try {
-            date = sdf.parse(dateStr);
-        } catch (ParseException e) {
-            Log.d("TAG", e.getMessage());
+            date = sdf.parse(dateStr)
+        } catch (e: ParseException) {
+            Log.d("TAG", e.message)
         }
-        return date.getTime();
+        return date!!.time
     }
 
-
-    public static long getDateAsLongFromList(List<Integer> integersOfDate) {
-        String dateStr = getDateAsString(integersOfDate);
-        return getDateAsLongFromString(dateStr, DD_MMM_YYYY);
+    fun getDateAsLongFromList(integersOfDate: List<Int>): Long {
+        val dateStr = getDateAsString(integersOfDate)
+        return getDateAsLongFromString(dateStr, DD_MMM_YYYY)
     }
 
-    public static long subtractWeeks(int number) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.WEEK_OF_YEAR, -number);
-        return calendar.getTimeInMillis();
+    fun subtractWeeks(number: Int): Long {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.WEEK_OF_YEAR, -number)
+        return calendar.timeInMillis
     }
 
-
-    public static long subtractMonths(int number) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, -number);
-        return calendar.getTimeInMillis();
+    fun subtractMonths(number: Int): Long {
+        val calendar = Calendar.getInstance()
+        calendar.add(Calendar.MONTH, -number)
+        return calendar.timeInMillis
     }
 
-    public static String getDateAsStringFromLong(long timeInMillis) {
-        SimpleDateFormat sdf = new SimpleDateFormat(DD_MMM_YYYY);
-        return sdf.format(new Date(timeInMillis));
+    @JvmStatic
+    fun getDateAsStringFromLong(timeInMillis: Long): String {
+        val sdf = SimpleDateFormat(DD_MMM_YYYY)
+        return sdf.format(Date(timeInMillis))
     }
-
 }

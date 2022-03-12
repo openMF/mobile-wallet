@@ -16,8 +16,6 @@ import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.StandingInstructionDetailsPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
-import org.mifos.mobilewallet.mifospay.utils.DialogBox
 import org.mifos.mobilewallet.mifospay.utils.Utils
 import java.util.*
 import javax.inject.Inject

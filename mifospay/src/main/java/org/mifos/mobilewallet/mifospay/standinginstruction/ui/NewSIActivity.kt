@@ -17,8 +17,6 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.NewSIPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
-import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils
 import java.util.*
 import javax.inject.Inject
