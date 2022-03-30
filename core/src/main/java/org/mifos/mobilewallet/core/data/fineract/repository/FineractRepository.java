@@ -12,18 +12,19 @@ import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions;
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
+import org.mifos.mobilewallet.core.data.fineract.entity.authentication.AuthenticationPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUpdatePayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
 import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
+import org.mifos.mobilewallet.core.data.fineract.entity.payload.StandingInstructionPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.SDIResponse;
-import org.mifos.mobilewallet.core.data.fineract.entity.payload.StandingInstructionPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction;
 import org.mifos.mobilewallet.core.domain.model.NewAccount;
 import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
@@ -86,7 +87,7 @@ public class FineractRepository {
     }
 
     public Observable<List<SearchedEntity>> searchResources(String query, String resources,
-            Boolean exactMatch) {
+                                                            Boolean exactMatch) {
         return fineractApiManager.getSearchApi().searchResources(query, resources, exactMatch);
     }
 
@@ -126,7 +127,7 @@ public class FineractRepository {
     }
 
     public Observable<GenericResponse> addSavedCards(long clientId,
-            Card card) {
+                                                     Card card) {
         return fineractApiManager.getSavedCardApi().addSavedCard((int) clientId, card);
     }
 
@@ -143,7 +144,7 @@ public class FineractRepository {
     }
 
     public Observable<GenericResponse> uploadKYCDocs(String entityType, long entityId, String name,
-            String desc, MultipartBody.Part file) {
+                                                     String desc, MultipartBody.Part file) {
         return fineractApiManager.getDocumentApi().createDocument(entityType, entityId, name, desc,
                 file);
     }
@@ -153,7 +154,7 @@ public class FineractRepository {
     }
 
     public Observable<GenericResponse> uploadKYCLevel1Details(int clientId,
-            KYCLevel1Details kycLevel1Details) {
+                                                              KYCLevel1Details kycLevel1Details) {
         return fineractApiManager.getKycLevel1Api().addKYCLevel1Details(clientId,
                 kycLevel1Details);
     }
@@ -163,7 +164,7 @@ public class FineractRepository {
     }
 
     public Observable<GenericResponse> updateKYCLevel1Details(int clientId,
-            KYCLevel1Details kycLevel1Details) {
+                                                              KYCLevel1Details kycLevel1Details) {
         return fineractApiManager.getKycLevel1Api().updateKYCLevel1Details(clientId,
                 kycLevel1Details);
     }
@@ -185,7 +186,7 @@ public class FineractRepository {
     }
 
     public Observable<ResponseBody> getTransactionReceipt(String outputType,
-            String transactionId) {
+                                                          String transactionId) {
         return fineractApiManager.getRunReportApi().getTransactionReceipt(outputType,
                 transactionId);
     }
@@ -239,7 +240,7 @@ public class FineractRepository {
     }
 
     public Observable<GenericResponse> updateStandingInstruction(long standingInstructionId,
-                              StandingInstructionPayload standingInstructionPayload) {
+                                                                 StandingInstructionPayload standingInstructionPayload) {
         return fineractApiManager.getStandingInstructionApi().updateStandingInstruction(
                 standingInstructionId, standingInstructionPayload, "update");
     }
@@ -251,8 +252,8 @@ public class FineractRepository {
 
     //self user apis
 
-    public Observable<UserEntity> loginSelf(String username, String password) {
-        return selfApiManager.getAuthenticationApi().authenticate(username, password);
+    public Observable<UserEntity> loginSelf(AuthenticationPayload payload) {
+        return selfApiManager.getAuthenticationApi().authenticate(payload);
     }
 
     public Observable<Client> getSelfClientDetails(long clientId) {
@@ -289,7 +290,7 @@ public class FineractRepository {
     }
 
     public Observable<ResponseBody> updateBeneficiary(long beneficiaryId,
-            BeneficiaryUpdatePayload payload) {
+                                                      BeneficiaryUpdatePayload payload) {
         return selfApiManager.getBeneficiaryApi().updateBeneficiary(beneficiaryId, payload);
     }
 }
