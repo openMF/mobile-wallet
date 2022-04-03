@@ -18,8 +18,6 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
 import org.mifos.mobilewallet.mifospay.standinginstruction.adapter.StandingInstructionAdapter
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.StandingInstructionsPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import javax.inject.Inject
 
 
