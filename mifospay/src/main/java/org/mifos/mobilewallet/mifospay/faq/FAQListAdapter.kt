@@ -1,17 +1,12 @@
-package org.mifos.mobilewallet.mifospay.faq;
+package org.mifos.mobilewallet.mifospay.faq
 
-import android.content.Context;
-import android.graphics.Typeface;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.TextView;
-
-import org.mifos.mobilewallet.mifospay.R;
-
-import java.util.HashMap;
-import java.util.List;
+import android.content.Context
+import android.graphics.Typeface
+import android.view.View
+import android.view.ViewGroup
+import android.widget.BaseExpandableListAdapter
+import android.widget.TextView
+import org.mifos.mobilewallet.mifospay.R
 
 /**
  * This class is the Adapter class for FAQ Section.
@@ -19,99 +14,66 @@ import java.util.List;
  * @author ankur
  * @since 11/July/2018
  */
-public class FAQListAdapter extends BaseExpandableListAdapter {
-
-    private Context context;
-
-    // group titles
-    private List<String> listDataGroup;
-
+class FAQListAdapter(
+    private val context: Context, // group titles
+    private val listDataGroup: List<String>,
     // child data
-    private HashMap<String, List<String>> listDataChild;
-
-    public FAQListAdapter(Context context, List<String> listDataGroup,
-            HashMap<String, List<String>> listChildData) {
-        this.context = context;
-        this.listDataGroup = listDataGroup;
-        this.listDataChild = listChildData;
+    private val listDataChild: HashMap<String, List<String>>
+) : BaseExpandableListAdapter() {
+    override fun getChild(groupPosition: Int, childPosititon: Int): Any {
+        return listDataChild[listDataGroup[groupPosition]]!![childPosititon]
     }
 
-    @Override
-    public Object getChild(int groupPosition, int childPosititon) {
-        return this.listDataChild.get(this.listDataGroup.get(groupPosition))
-                .get(childPosititon);
+    override fun getChildId(groupPosition: Int, childPosition: Int): Long {
+        return childPosition.toLong()
     }
 
-    @Override
-    public long getChildId(int groupPosition, int childPosition) {
-        return childPosition;
+    override fun getChildView(
+        groupPosition: Int, childPosition: Int,
+        isLastChild: Boolean, convertView: View, parent: ViewGroup
+    ): View {
+        val convertView = convertView
+        val childText = getChild(groupPosition, childPosition) as String
+        val textViewChild = convertView
+            .findViewById<TextView>(R.id.faq_list_child)
+        textViewChild.text = childText
+        return convertView
     }
 
-    @Override
-    public View getChildView(int groupPosition, final int childPosition,
-            boolean isLastChild, View convertView, ViewGroup parent) {
-
-        final String childText = (String) getChild(groupPosition, childPosition);
-
-        if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.faq_list_child, null);
-        }
-
-        TextView textViewChild = convertView
-                .findViewById(R.id.faq_list_child);
-
-        textViewChild.setText(childText);
-        return convertView;
+    override fun getChildrenCount(groupPosition: Int): Int {
+        return listDataChild[listDataGroup[groupPosition]]!!.size
     }
 
-    @Override
-    public int getChildrenCount(int groupPosition) {
-        return this.listDataChild.get(this.listDataGroup.get(groupPosition))
-                .size();
+    override fun getGroup(groupPosition: Int): Any {
+        return listDataGroup[groupPosition]
     }
 
-    @Override
-    public Object getGroup(int groupPosition) {
-        return this.listDataGroup.get(groupPosition);
+    override fun getGroupCount(): Int {
+        return listDataGroup.size
     }
 
-    @Override
-    public int getGroupCount() {
-        return this.listDataGroup.size();
+    override fun getGroupId(groupPosition: Int): Long {
+        return groupPosition.toLong()
     }
 
-    @Override
-    public long getGroupId(int groupPosition) {
-        return groupPosition;
+    override fun getGroupView(
+        groupPosition: Int, isExpanded: Boolean,
+        convertView: View, parent: ViewGroup
+    ): View {
+        val convertView = convertView
+        val headerTitle = getGroup(groupPosition) as String
+        val textViewGroup = convertView
+            .findViewById<TextView>(R.id.faq_list_group)
+        textViewGroup.setTypeface(null, Typeface.BOLD)
+        textViewGroup.text = headerTitle
+        return convertView
     }
 
-    @Override
-    public View getGroupView(int groupPosition, boolean isExpanded,
-            View convertView, ViewGroup parent) {
-        String headerTitle = (String) getGroup(groupPosition);
-        if (convertView == null) {
-            LayoutInflater layoutInflater = (LayoutInflater) this.context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = layoutInflater.inflate(R.layout.faq_list_group, null);
-        }
-
-        TextView textViewGroup = convertView
-                .findViewById(R.id.faq_list_group);
-        textViewGroup.setTypeface(null, Typeface.BOLD);
-        textViewGroup.setText(headerTitle);
-
-        return convertView;
+    override fun hasStableIds(): Boolean {
+        return false
     }
 
-    @Override
-    public boolean hasStableIds() {
-        return false;
-    }
-
-    @Override
-    public boolean isChildSelectable(int groupPosition, int childPosition) {
-        return true;
+    override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
+        return true
     }
 }
