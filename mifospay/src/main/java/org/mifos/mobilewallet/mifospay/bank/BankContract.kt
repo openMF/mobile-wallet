@@ -1,80 +1,50 @@
-package org.mifos.mobilewallet.mifospay.bank;
+package org.mifos.mobilewallet.mifospay.bank
 
-import org.mifos.mobilewallet.core.domain.model.BankAccountDetails;
-import org.mifos.mobilewallet.mifospay.base.BasePresenter;
-import org.mifos.mobilewallet.mifospay.base.BaseView;
-
-import java.util.List;
+import org.mifos.mobilewallet.core.domain.model.BankAccountDetails
+import org.mifos.mobilewallet.mifospay.base.BasePresenter
+import org.mifos.mobilewallet.mifospay.base.BaseView
 
 /**
  * Created by ankur on 09/July/2018
  */
-
-public interface BankContract {
-
-    interface BankAccountsPresenter extends BasePresenter {
-
-        void fetchLinkedBankAccounts();
+interface BankContract {
+    interface BankAccountsPresenter : BasePresenter {
+        fun fetchLinkedBankAccounts()
     }
 
-    interface BankAccountsView extends BaseView<BankAccountsPresenter> {
-
-        void showLinkedBankAccounts(List<BankAccountDetails> bankAccountList);
+    interface BankAccountsView : BaseView<BankAccountsPresenter?> {
+        fun showLinkedBankAccounts(bankAccountList: MutableList<BankAccountDetails>?)
     }
 
-    interface LinkBankAccountPresenter extends BasePresenter {
-
-        void fetchBankAccountDetails(String bankName);
+    interface LinkBankAccountPresenter : BasePresenter {
+        fun fetchBankAccountDetails(bankName: String?)
     }
 
-    interface LinkBankAccountView extends BaseView<LinkBankAccountPresenter> {
-
-        void addBankAccount(BankAccountDetails bankAccountDetails);
+    interface LinkBankAccountView : BaseView<LinkBankAccountPresenter?> {
+        fun addBankAccount(bankAccountDetails: BankAccountDetails?)
     }
 
-    interface BankAccountDetailPresenter extends BasePresenter {
-
+    interface BankAccountDetailPresenter : BasePresenter
+    interface BankAccountDetailView : BaseView<BankAccountDetailPresenter?>
+    interface DebitCardPresenter : BasePresenter {
+        fun verifyDebitCard(s: String?, s1: String?, s2: String?)
     }
 
-    interface BankAccountDetailView extends BaseView<BankAccountDetailPresenter> {
-
+    interface DebitCardView : BaseView<DebitCardPresenter?> {
+        fun verifyDebitCardSuccess(otp: String?)
+        fun verifyDebitCardError(message: String?)
     }
 
-
-    interface DebitCardPresenter extends BasePresenter {
-
-        void verifyDebitCard(String s, String s1, String s2);
+    interface UpiPinPresenter : BasePresenter
+    interface UpiPinView : BaseView<UpiPinPresenter?>
+    interface SetupUpiPinPresenter : BasePresenter {
+        fun setupUpiPin(bankAccountDetails: BankAccountDetails?, upiPin: String?)
+        fun requestOtp(bankAccountDetails: BankAccountDetails?)
     }
 
-    interface DebitCardView extends BaseView<DebitCardPresenter> {
-
-        void verifyDebitCardSuccess(String otp);
-
-        void verifyDebitCardError(String message);
+    interface SetupUpiPinView : BaseView<SetupUpiPinPresenter?> {
+        fun debitCardVerified(otp: String?)
+        fun setupUpiPinSuccess(mSetupUpiPin: String?)
+        fun setupUpiPinError(message: String?)
     }
-
-    interface UpiPinPresenter extends BasePresenter {
-
-    }
-
-    interface UpiPinView extends BaseView<UpiPinPresenter> {
-
-    }
-
-    interface SetupUpiPinPresenter extends BasePresenter {
-
-        void setupUpiPin(BankAccountDetails bankAccountDetails, String upiPin);
-
-        void requestOtp(BankAccountDetails bankAccountDetails);
-    }
-
-    interface SetupUpiPinView extends BaseView<SetupUpiPinPresenter> {
-
-        void debitCardVerified(String otp);
-
-        void setupUpiPinSuccess(String mSetupUpiPin);
-
-        void setupUpiPinError(String message);
-    }
-
 }

@@ -1,38 +1,31 @@
-package org.mifos.mobilewallet.mifospay.bank.adapters;
+package org.mifos.mobilewallet.mifospay.bank.adapters
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
 
 /**
  * Created by ankur on 13/July/2018
  */
-
-public class UpiPinPagerAdapter extends FragmentPagerAdapter {
-
-    private int noOfFragments;
-    private Fragment[] mFragments;
-
-    public UpiPinPagerAdapter(FragmentManager fm, Fragment[] fragments) {
-        super(fm);
-        this.noOfFragments = fragments.length;
-        mFragments = fragments;
+class UpiPinPagerAdapter(fm: FragmentManager?, fragments: Array<Fragment?>) :
+    FragmentPagerAdapter(fm) {
+    private val noOfFragments: Int
+    private var mFragments: Array<Fragment?>
+    fun setFragments(fragments: Array<Fragment?>) {
+        mFragments = fragments
+        notifyDataSetChanged()
     }
 
-    public void setFragments(Fragment[] fragments) {
-        mFragments = fragments;
-        notifyDataSetChanged();
+    override fun getItem(position: Int): Fragment? {
+        return mFragments[position]
     }
 
-    @Override
-    public Fragment getItem(int position) {
-        return mFragments[position];
+    override fun getCount(): Int {
+        return noOfFragments
     }
 
-    @Override
-    public int getCount() {
-        return noOfFragments;
+    init {
+        noOfFragments = fragments.size
+        mFragments = fragments
     }
-
-
 }

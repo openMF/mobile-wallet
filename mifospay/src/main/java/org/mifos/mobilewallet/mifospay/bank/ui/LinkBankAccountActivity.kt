@@ -1,234 +1,220 @@
-package org.mifos.mobilewallet.mifospay.bank.ui;
+package org.mifos.mobilewallet.mifospay.bank.ui
 
-import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
-import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
+import android.content.Intent
+import android.os.Bundle
+import android.os.Handler
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.View
+import android.widget.EditText
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
+import org.json.JSONObject
+import org.mifos.mobilewallet.core.domain.model.BankAccountDetails
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.bank.BankContract
+import org.mifos.mobilewallet.mifospay.bank.BankContract.LinkBankAccountView
+import org.mifos.mobilewallet.mifospay.bank.adapters.OtherBankAdapter
+import org.mifos.mobilewallet.mifospay.bank.adapters.PopularBankAdapter
+import org.mifos.mobilewallet.mifospay.bank.presenter.LinkBankAccountPresenter
+import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.domain.model.Bank
+import org.mifos.mobilewallet.mifospay.utils.*
+import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener.SimpleOnItemClickListener
+import org.mifos.mobilewallet.mifospay.utils.Utils.isBlank
+import javax.inject.Inject
 
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import org.json.JSONObject;
-import org.mifos.mobilewallet.core.domain.model.BankAccountDetails;
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.bank.BankContract;
-import org.mifos.mobilewallet.mifospay.bank.adapters.OtherBankAdapter;
-import org.mifos.mobilewallet.mifospay.bank.adapters.PopularBankAdapter;
-import org.mifos.mobilewallet.mifospay.bank.presenter.LinkBankAccountPresenter;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.domain.model.Bank;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class LinkBankAccountActivity extends BaseActivity implements
-        BankContract.LinkBankAccountView {
-
+class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
+    @JvmField
     @Inject
-    LinkBankAccountPresenter mPresenter;
-    BankContract.LinkBankAccountPresenter mLinkBankAccountPresenter;
+    var mPresenter: LinkBankAccountPresenter? = null
+    var mLinkBankAccountPresenter: BankContract.LinkBankAccountPresenter? = null
+
+    @JvmField
     @BindView(R.id.et_search_bank)
-    EditText mEtSearchBank;
+    var mEtSearchBank: EditText? = null
+
+    @JvmField
     @BindView(R.id.rv_popular_banks)
-    RecyclerView mRvPopularBanks;
+    var mRvPopularBanks: RecyclerView? = null
+
+    @JvmField
     @BindView(R.id.rv_other_banks)
-    RecyclerView mRvOtherBanks;
+    var mRvOtherBanks: RecyclerView? = null
+
+    @JvmField
     @BindView(R.id.popular_banks)
-    TextView mPopularBanks;
+    var mPopularBanks: TextView? = null
+
+    @JvmField
     @BindView(R.id.other_banks)
-    TextView mOtherBanks;
+    var mOtherBanks: TextView? = null
+
+    @JvmField
     @BindView(R.id.no_bank_found)
-    TextView mNoBankFound;
+    var mNoBankFound: TextView? = null
 
+    @JvmField
     @Inject
-    PopularBankAdapter mPopularBankAdapter;
+    var mPopularBankAdapter: PopularBankAdapter? = null
+
+    @JvmField
     @Inject
-    OtherBankAdapter mOtherBankAdapter;
-    private ArrayList<Bank> banksList;
-    private ArrayList<Bank> popularBanks;
-
-    private String bankSelected;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_link_bank_account);
-        getActivityComponent().inject(this);
-        ButterKnife.bind(this);
-        setToolbarTitle("Link Bank Account");
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        mPresenter.attachView(this);
-
-        showProgressDialog(Constants.PLEASE_WAIT);
-        setupRecyclerview();
-        mRvOtherBanks.setNestedScrollingEnabled(false);
-        setupAdapterData();
-        hideProgressDialog();
+    var mOtherBankAdapter: OtherBankAdapter? = null
+    private var banksList: ArrayList<Bank>? = null
+    private var popularBanks: ArrayList<Bank>? = null
+    private var bankSelected: String? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_link_bank_account)
+        activityComponent.inject(this)
+        ButterKnife.bind(this)
+        setToolbarTitle("Link Bank Account")
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        mPresenter!!.attachView(this)
+        showProgressDialog(Constants.PLEASE_WAIT)
+        setupRecyclerview()
+        mRvOtherBanks!!.isNestedScrollingEnabled = false
+        setupAdapterData()
+        hideProgressDialog()
     }
 
-    private void setupRecyclerview() {
-        LinearLayoutManager gridManager = new GridLayoutManager(this, 3);
-        gridManager.setOrientation(GridLayoutManager.VERTICAL);
-        mRvPopularBanks.setLayoutManager(gridManager);
-        mRvPopularBanks.setHasFixedSize(true);
-        mPopularBankAdapter.setContext(this);
-        mRvPopularBanks.setAdapter(mPopularBankAdapter);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
-        mRvOtherBanks.setLayoutManager(layoutManager);
-        mRvOtherBanks.setHasFixedSize(true);
-        mOtherBankAdapter.setContext(this);
-        mRvOtherBanks.setAdapter(mOtherBankAdapter);
-        mRvOtherBanks.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL));
-
-        mRvPopularBanks.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.SimpleOnItemClickListener() {
-                    @Override
-                    public void onItemClick(View childView, int position) {
-                        Bank bank = mPopularBankAdapter.getBank(position);
-                        bankSelected = bank.getName();
-
-                        ChooseSimDialog chooseSimDialog = new ChooseSimDialog();
-                        chooseSimDialog.show(getSupportFragmentManager(), "Choose Sim Dialog");
+    private fun setupRecyclerview() {
+        val gridManager: LinearLayoutManager = GridLayoutManager(this, 3)
+        gridManager.orientation = GridLayoutManager.VERTICAL
+        mRvPopularBanks!!.layoutManager = gridManager
+        mRvPopularBanks!!.setHasFixedSize(true)
+        mPopularBankAdapter!!.setContext(this)
+        mRvPopularBanks!!.adapter = mPopularBankAdapter
+        val layoutManager = LinearLayoutManager(this)
+        layoutManager.orientation = LinearLayoutManager.VERTICAL
+        mRvOtherBanks!!.layoutManager = layoutManager
+        mRvOtherBanks!!.setHasFixedSize(true)
+        mOtherBankAdapter!!.setContext(this)
+        mRvOtherBanks!!.adapter = mOtherBankAdapter
+        mRvOtherBanks!!.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
+        mRvPopularBanks!!.addOnItemTouchListener(
+            RecyclerItemClickListener(this,
+                object : SimpleOnItemClickListener() {
+                    override fun onItemClick(childView: View, position: Int) {
+                        val bank = mPopularBankAdapter!!.getBank(position)
+                        bankSelected = bank.name
+                        val chooseSimDialog = ChooseSimDialog()
+                        chooseSimDialog.show(supportFragmentManager, "Choose Sim Dialog")
                     }
-                }));
-
-        mRvOtherBanks.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.SimpleOnItemClickListener() {
-                    @Override
-                    public void onItemClick(View childView, int position) {
-                        Bank bank = mOtherBankAdapter.getBank(position);
-                        bankSelected = bank.getName();
-
-                        ChooseSimDialog chooseSimDialog = new ChooseSimDialog();
-                        chooseSimDialog.show(getSupportFragmentManager(), "Choose Sim Dialog");
+                })
+        )
+        mRvOtherBanks!!.addOnItemTouchListener(
+            RecyclerItemClickListener(this,
+                object : SimpleOnItemClickListener() {
+                    override fun onItemClick(childView: View, position: Int) {
+                        val bank = mOtherBankAdapter!!.getBank(position)
+                        bankSelected = bank.name
+                        val chooseSimDialog = ChooseSimDialog()
+                        chooseSimDialog.show(supportFragmentManager, "Choose Sim Dialog")
                     }
-                }));
-
-        mEtSearchBank.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                })
+        )
+        mEtSearchBank!!.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 //                Log.d("qxz", "onTextChanged: " + s.toString());
 //                mOtherBankAdapter.getFilter().filter(mEtSearchBank.getText().toString());
-                filter(mEtSearchBank.getText().toString());
+                filter(mEtSearchBank!!.text.toString())
             }
 
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
+            override fun afterTextChanged(s: Editable) {}
+        })
     }
 
-    private void filter(String text) {
-        List<Bank> filteredList = new ArrayList<>();
-
-        if (isBlank(text)) {
-            mRvPopularBanks.setVisibility(View.VISIBLE);
-            mPopularBanks.setVisibility(View.VISIBLE);
-            filteredList = banksList;
+    private fun filter(text: String) {
+        var filteredList: MutableList<Bank>? = ArrayList()
+        if (text.isBlank()) {
+            mRvPopularBanks!!.visibility = View.VISIBLE
+            mPopularBanks!!.visibility = View.VISIBLE
+            filteredList = banksList
         } else {
-            mRvPopularBanks.setVisibility(View.GONE);
-            mPopularBanks.setVisibility(View.GONE);
-            for (Bank bank : banksList) {
-                if (bank.getName().toLowerCase().contains(text.toLowerCase())) {
-                    filteredList.add(bank);
+            mRvPopularBanks!!.visibility = View.GONE
+            mPopularBanks!!.visibility = View.GONE
+            for (bank in banksList!!) {
+                if (bank.name.toLowerCase().contains(text.toLowerCase())) {
+                    filteredList!!.add(bank)
                 }
             }
         }
-        mOtherBankAdapter.filterList(filteredList);
-        if (filteredList.isEmpty()) {
-            mNoBankFound.setVisibility(View.VISIBLE);
-            mOtherBanks.setVisibility(View.GONE);
+        mOtherBankAdapter!!.filterList(filteredList)
+        if (filteredList!!.isEmpty()) {
+            mNoBankFound!!.visibility = View.VISIBLE
+            mOtherBanks!!.visibility = View.GONE
         } else {
-            mNoBankFound.setVisibility(View.GONE);
-            mOtherBanks.setVisibility(View.GONE);
+            mNoBankFound!!.visibility = View.GONE
+            mOtherBanks!!.visibility = View.GONE
         }
     }
 
-    private void setupAdapterData() {
-        JSONObject jsonObject;
+    private fun setupAdapterData() {
+        val jsonObject: JSONObject
         try {
-            jsonObject = readJson(this, "banks.json");
-            banksList = new ArrayList<>();
-            for (int i = 0; i < jsonObject.getJSONArray("banks").length(); i++) {
-                banksList.add(new Bank((String) jsonObject.getJSONArray("banks").get(i),
-                        R.drawable.ic_bank, 1));
+            jsonObject = FileUtils.readJson(this, "banks.json")
+            banksList = ArrayList()
+            for (i in 0 until jsonObject.getJSONArray("banks").length()) {
+                banksList!!.add(
+                    Bank(
+                        jsonObject.getJSONArray("banks")[i] as String,
+                        R.drawable.ic_bank, 1
+                    )
+                )
             }
-
-            popularBanks = new ArrayList<>();
-            popularBanks.add(new Bank("RBL Bank", R.drawable.logo_rbl, 0));
-            popularBanks.add(new Bank("SBI Bank", R.drawable.logo_sbi, 0));
-            popularBanks.add(new Bank("PNB Bank", R.drawable.logo_pnb, 0));
-            popularBanks.add(new Bank("HDFC Bank", R.drawable.logo_hdfc, 0));
-            popularBanks.add(new Bank("ICICI Bank", R.drawable.logo_icici, 0));
-            popularBanks.add(new Bank("AXIS Bank", R.drawable.logo_axis, 0));
-
-
-            DebugUtil.log(popularBanks, banksList);
-            mPopularBankAdapter.setData(popularBanks);
-            mOtherBankAdapter.setData(banksList);
-
-        } catch (Exception e) {
-            DebugUtil.log(e.getMessage());
+            popularBanks = ArrayList()
+            popularBanks!!.add(Bank("RBL Bank", R.drawable.logo_rbl, 0))
+            popularBanks!!.add(Bank("SBI Bank", R.drawable.logo_sbi, 0))
+            popularBanks!!.add(Bank("PNB Bank", R.drawable.logo_pnb, 0))
+            popularBanks!!.add(Bank("HDFC Bank", R.drawable.logo_hdfc, 0))
+            popularBanks!!.add(Bank("ICICI Bank", R.drawable.logo_icici, 0))
+            popularBanks!!.add(Bank("AXIS Bank", R.drawable.logo_axis, 0))
+            DebugUtil.log(popularBanks, banksList)
+            mPopularBankAdapter!!.setData(popularBanks)
+            mOtherBankAdapter!!.setData(banksList)
+        } catch (e: Exception) {
+            DebugUtil.log(e.message)
         }
     }
 
-    @Override
-    public void setPresenter(BankContract.LinkBankAccountPresenter presenter) {
-        mLinkBankAccountPresenter = presenter;
+    override fun setPresenter(presenter: BankContract.LinkBankAccountPresenter?) {
+        mLinkBankAccountPresenter = presenter
     }
 
-    public void linkBankAccount(int selectedSim) {
-        showProgressDialog(Constants.VERIFYING_MOBILE_NUMBER);
-        mLinkBankAccountPresenter.fetchBankAccountDetails(bankSelected);
+    fun linkBankAccount(selectedSim: Int) {
+        showProgressDialog(Constants.VERIFYING_MOBILE_NUMBER)
+        mLinkBankAccountPresenter!!.fetchBankAccountDetails(bankSelected)
     }
 
-    @Override
-    public void addBankAccount(final BankAccountDetails bankAccountDetails) {
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent();
-                intent.putExtra(Constants.NEW_BANK_ACCOUNT, bankAccountDetails);
-                setResult(Activity.RESULT_OK, intent);
-                hideProgressDialog();
-                finish();
-            }
-        }, 1500);
-
+    override fun addBankAccount(bankAccountDetails: BankAccountDetails?) {
+        val handler = Handler()
+        handler.postDelayed({
+            val intent = Intent()
+            intent.putExtra(Constants.NEW_BANK_ACCOUNT, bankAccountDetails)
+            setResult(RESULT_OK, intent)
+            hideProgressDialog()
+            finish()
+        }, 1500)
     }
 
-    @Override
-    public void onBackPressed() {
-        if (mEtSearchBank.getText().length() != 0) {
-            mEtSearchBank.getText().clear();
+    override fun onBackPressed() {
+        if (mEtSearchBank!!.text.length != 0) {
+            mEtSearchBank!!.text.clear()
         } else {
-            super.onBackPressed();
+            super.onBackPressed()
         }
     }
 }

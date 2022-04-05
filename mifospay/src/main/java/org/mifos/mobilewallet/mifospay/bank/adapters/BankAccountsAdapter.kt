@@ -1,97 +1,91 @@
-package org.mifos.mobilewallet.mifospay.bank.adapters;
+package org.mifos.mobilewallet.mifospay.bank.adapters
 
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import org.mifos.mobilewallet.core.domain.model.BankAccountDetails;
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
+import org.mifos.mobilewallet.core.domain.model.BankAccountDetails
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.utils.DebugUtil
+import javax.inject.Inject
 
 /**
  * Created by ankur on 09/July/2018
  */
-
-public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapter.ViewHolder> {
-
-    private List<BankAccountDetails> mBankAccountDetailsList;
-
-
-    @Inject
-    public BankAccountsAdapter() {
-        mBankAccountDetailsList = new ArrayList<>();
+class BankAccountsAdapter @Inject constructor() :
+    RecyclerView.Adapter<BankAccountsAdapter.ViewHolder>() {
+    private var mBankAccountDetailsList: MutableList<BankAccountDetails>?
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(
+            R.layout.item_casual_list,
+            parent, false
+        )
+        return ViewHolder(v)
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_casual_list,
-                parent, false);
-        return new ViewHolder(v);
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val bankAccountDetails = mBankAccountDetailsList!![position]
+        holder.mTvBankName!!.text = bankAccountDetails.bankName
+        holder.mTvAccountHolderName!!.text = bankAccountDetails.accountholderName
+        holder.mTvBranch!!.text = bankAccountDetails.branch
+        holder.imageViewAccount!!.setImageResource(R.drawable.ic_bank)
     }
 
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-        final BankAccountDetails bankAccountDetails = mBankAccountDetailsList.get(position);
-        holder.mTvBankName.setText(bankAccountDetails.getBankName());
-        holder.mTvAccountHolderName.setText(bankAccountDetails.getAccountholderName());
-        holder.mTvBranch.setText(bankAccountDetails.getBranch());
-        holder.imageViewAccount.setImageResource(R.drawable.ic_bank);
-    }
-
-    @Override
-    public int getItemCount() {
-        if (mBankAccountDetailsList != null) {
-            return mBankAccountDetailsList.size();
+    override fun getItemCount(): Int {
+        return if (mBankAccountDetailsList != null) {
+            mBankAccountDetailsList!!.size
         } else {
-            return 0;
+            0
         }
     }
 
-    public void setData(List<BankAccountDetails> bankAccountDetailsList) {
-        this.mBankAccountDetailsList = bankAccountDetailsList;
-        notifyDataSetChanged();
+    fun setData(bankAccountDetailsList: MutableList<BankAccountDetails>?) {
+        mBankAccountDetailsList = bankAccountDetailsList
+        notifyDataSetChanged()
     }
 
-    public BankAccountDetails getBankDetails(int position) {
-        return mBankAccountDetailsList.get(position);
+    fun getBankDetails(position: Int): BankAccountDetails {
+        return mBankAccountDetailsList!![position]
     }
 
-    public void addBank(BankAccountDetails bankAccountDetails) {
-        mBankAccountDetailsList.add(bankAccountDetails);
-        notifyDataSetChanged();
-        DebugUtil.log(mBankAccountDetailsList.size());
+    fun addBank(bankAccountDetails: BankAccountDetails) {
+        mBankAccountDetailsList!!.add(bankAccountDetails)
+        notifyDataSetChanged()
+        DebugUtil.log(mBankAccountDetailsList!!.size)
     }
 
-    public void setBankDetails(int index, BankAccountDetails bankAccountDetails) {
-        mBankAccountDetailsList.set(index, bankAccountDetails);
-        notifyDataSetChanged();
+    fun setBankDetails(index: Int, bankAccountDetails: BankAccountDetails) {
+        mBankAccountDetailsList!![index] = bankAccountDetails
+        notifyDataSetChanged()
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
+    inner class ViewHolder(v: View?) : RecyclerView.ViewHolder(v!!) {
+        @JvmField
         @BindView(R.id.tv_item_casual_list_title)
-        TextView mTvBankName;
-        @BindView(R.id.tv_item_casual_list_subtitle)
-        TextView mTvAccountHolderName;
-        @BindView(R.id.tv_item_casual_list_optional_caption)
-        TextView mTvBranch;
-        @BindView(R.id.iv_item_casual_list_icon)
-        ImageView imageViewAccount;
+        var mTvBankName: TextView? = null
 
-        public ViewHolder(View v) {
-            super(v);
-            ButterKnife.bind(this, v);
+        @JvmField
+        @BindView(R.id.tv_item_casual_list_subtitle)
+        var mTvAccountHolderName: TextView? = null
+
+        @JvmField
+        @BindView(R.id.tv_item_casual_list_optional_caption)
+        var mTvBranch: TextView? = null
+
+        @JvmField
+        @BindView(R.id.iv_item_casual_list_icon)
+        var imageViewAccount: ImageView? = null
+
+        init {
+            ButterKnife.bind(this, v!!)
         }
+    }
+
+    init {
+        mBankAccountDetailsList = ArrayList()
     }
 }
