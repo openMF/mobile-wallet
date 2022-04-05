@@ -1,58 +1,52 @@
-package org.mifos.mobilewallet.mifospay.editprofile.presenter;
+package org.mifos.mobilewallet.mifospay.editprofile.presenter
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.model.client.UpdateClientEntityMobile;
-import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityEmail;
-import org.mifos.mobilewallet.core.domain.usecase.client.UpdateClient;
-import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
-import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser;
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseView;
-import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
-import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
-
-import javax.inject.Inject;
+import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
+import org.mifos.mobilewallet.core.base.UseCaseHandler
+import org.mifos.mobilewallet.core.domain.model.client.UpdateClientEntityMobile
+import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityEmail
+import org.mifos.mobilewallet.core.domain.usecase.client.UpdateClient
+import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
+import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.base.BaseView
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract
+import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract.EditProfileView
+import javax.inject.Inject
 
 /**
  * Created by ankur on 27/June/2018
  */
+class EditProfilePresenter @Inject constructor(
+    private val mUseCaseHandler: UseCaseHandler,
+    private val mPreferencesHelper: PreferencesHelper
+) : EditProfileContract.EditProfilePresenter {
+    @JvmField
+    @Inject
+    var updateUserUseCase: UpdateUser? = null
 
-public class EditProfilePresenter implements EditProfileContract.EditProfilePresenter {
+    @JvmField
+    @Inject
+    var updateClientUseCase: UpdateClient? = null
 
-    private final UseCaseHandler mUseCaseHandler;
-    private final PreferencesHelper mPreferencesHelper;
+    @JvmField
     @Inject
-    UpdateUser updateUserUseCase;
-    @Inject
-    UpdateClient updateClientUseCase;
-    @Inject
-    AuthenticateUser authenticateUserUseCase;
-    private EditProfileContract.EditProfileView mEditProfileView;
-
-    @Inject
-    public EditProfilePresenter(UseCaseHandler useCaseHandler,
-            PreferencesHelper preferencesHelper) {
-        mUseCaseHandler = useCaseHandler;
-        mPreferencesHelper = preferencesHelper;
+    var authenticateUserUseCase: AuthenticateUser? = null
+    private var mEditProfileView: EditProfileView? = null
+    override fun attachView(baseView: BaseView<*>?) {
+        mEditProfileView = baseView as EditProfileView?
+        mEditProfileView!!.setPresenter(this)
     }
 
-    @Override
-    public void attachView(BaseView baseView) {
-        mEditProfileView = (EditProfileContract.EditProfileView) baseView;
-        mEditProfileView.setPresenter(this);
+    override fun fetchUserDetails() {
+        showUserImageOrDefault()
+        showUsernameIfNotEmpty()
+        showEmailIfNotEmpty()
+        showVpaIfNotEmpty()
+        showMobielIfNotEmpty()
     }
 
-    @Override
-    public void fetchUserDetails() {
-        showUserImageOrDefault();
-        showUsernameIfNotEmpty();
-        showEmailIfNotEmpty();
-        showVpaIfNotEmpty();
-        showMobielIfNotEmpty();
-    }
-
-    private void showUserImageOrDefault() {
+    private fun showUserImageOrDefault() {
         /*
             TODO:
 
@@ -60,129 +54,113 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
             and show the custom image on success or default on error/if user doesn't have one
 
          */
-        mEditProfileView.showDefaultImageByUsername(mPreferencesHelper.getFullName());
+        mEditProfileView!!.showDefaultImageByUsername(mPreferencesHelper.fullName)
     }
 
-    private void showUsernameIfNotEmpty() {
-        if (!mPreferencesHelper.getUsername().isEmpty()) {
-            mEditProfileView.showUsername(mPreferencesHelper.getUsername());
+    private fun showUsernameIfNotEmpty() {
+        if (mPreferencesHelper.username.isNotEmpty()) {
+            mEditProfileView!!.showUsername(mPreferencesHelper.username)
         }
     }
 
-    private void showEmailIfNotEmpty() {
-        if (!mPreferencesHelper.getEmail().isEmpty()) {
-            mEditProfileView.showEmail(mPreferencesHelper.getEmail());
+    private fun showEmailIfNotEmpty() {
+        if (mPreferencesHelper.email.isNotEmpty()) {
+            mEditProfileView!!.showEmail(mPreferencesHelper.email)
         }
     }
 
-    private void showVpaIfNotEmpty() {
-        if (!mPreferencesHelper.getClientVpa().isEmpty()) {
-            mEditProfileView.showVpa(mPreferencesHelper.getClientVpa());
+    private fun showVpaIfNotEmpty() {
+        if (mPreferencesHelper.clientVpa.isNotEmpty()) {
+            mEditProfileView!!.showVpa(mPreferencesHelper.clientVpa)
         }
     }
 
-    private void showMobielIfNotEmpty() {
-        if (!mPreferencesHelper.getMobile().isEmpty()) {
-            mEditProfileView.showMobileNumber(mPreferencesHelper.getMobile());
+    private fun showMobielIfNotEmpty() {
+        if (mPreferencesHelper.mobile.isNotEmpty()) {
+            mEditProfileView!!.showMobileNumber(mPreferencesHelper.mobile)
         }
     }
 
-    @Override
-    public void updateInputById(int id, String content) {
-        switch (id) {
-            case R.id.et_edit_profile_username:
-                break;
-            case R.id.et_edit_profile_email:
-                updateEmail(content);
-                break;
-            case R.id.et_edit_profile_vpa:
-                break;
-            case R.id.et_edit_profile_mobile:
-                updateMobile(content);
-                break;
+    override fun updateInputById(id: Int, content: String) {
+        when (id) {
+            R.id.et_edit_profile_username -> {}
+            R.id.et_edit_profile_email -> updateEmail(content)
+            R.id.et_edit_profile_vpa -> {}
+            R.id.et_edit_profile_mobile -> updateMobile(content)
         }
     }
 
-    @Override
-    public void updateEmail(final String email) {
-        mEditProfileView.startProgressBar();
+    override fun updateEmail(email: String) {
+        mEditProfileView!!.startProgressBar()
         mUseCaseHandler.execute(updateUserUseCase,
-                new UpdateUser.RequestValues(new UpdateUserEntityEmail(email),
-                        (int) mPreferencesHelper.getUserId()),
-                new UseCase.UseCaseCallback<UpdateUser.ResponseValue>() {
-                    @Override
-                    public void onSuccess(UpdateUser.ResponseValue response) {
-                        mPreferencesHelper.saveEmail(email);
-                        showEmailIfNotEmpty();
-                        mEditProfileView.stopProgressBar();
-                    }
+            UpdateUser.RequestValues(
+                UpdateUserEntityEmail(email),
+                mPreferencesHelper.userId.toInt()
+            ),
+            object : UseCaseCallback<UpdateUser.ResponseValue?> {
+                override fun onSuccess(response: UpdateUser.ResponseValue?) {
+                    mPreferencesHelper.saveEmail(email)
+                    showEmailIfNotEmpty()
+                    mEditProfileView!!.stopProgressBar()
+                }
 
-                    @Override
-                    public void onError(String message) {
-                        mEditProfileView.onUpdateEmailError(message);
-                        mEditProfileView.showFab();
-                        mEditProfileView.stopProgressBar();
-                    }
-                });
+                override fun onError(message: String) {
+                    mEditProfileView!!.onUpdateEmailError(message)
+                    mEditProfileView!!.showFab()
+                    mEditProfileView!!.stopProgressBar()
+                }
+            })
     }
 
-    @Override
-    public void updateMobile(final String fullNumber) {
-        mEditProfileView.startProgressBar();
+    override fun updateMobile(fullNumber: String) {
+        mEditProfileView!!.startProgressBar()
         mUseCaseHandler.execute(updateClientUseCase,
-                new UpdateClient.RequestValues(new UpdateClientEntityMobile(fullNumber),
-                        (int) mPreferencesHelper.getClientId()),
-                new UseCase.UseCaseCallback<UpdateClient.ResponseValue>() {
-                    @Override
-                    public void onSuccess(UpdateClient.ResponseValue response) {
-                        mPreferencesHelper.saveMobile(fullNumber);
-                        showMobielIfNotEmpty();
-                        mEditProfileView.stopProgressBar();
-                    }
+            UpdateClient.RequestValues(
+                UpdateClientEntityMobile(fullNumber),
+                mPreferencesHelper.clientId.toInt().toLong()
+            ),
+            object : UseCaseCallback<UpdateClient.ResponseValue?> {
+                override fun onSuccess(response: UpdateClient.ResponseValue?) {
+                    mPreferencesHelper.saveMobile(fullNumber)
+                    showMobielIfNotEmpty()
+                    mEditProfileView!!.stopProgressBar()
+                }
 
-                    @Override
-                    public void onError(String message) {
-                        mEditProfileView.onUpdateMobileError(message);
-                        mEditProfileView.showFab();
-                        mEditProfileView.stopProgressBar();
-                    }
-                });
+                override fun onError(message: String) {
+                    mEditProfileView!!.onUpdateMobileError(message)
+                    mEditProfileView!!.showFab()
+                    mEditProfileView!!.stopProgressBar()
+                }
+            })
     }
 
-    @Override
-    public void handleProfileImageChangeRequest() {
-        mEditProfileView.changeProfileImage();
+    override fun handleProfileImageChangeRequest() {
+        mEditProfileView!!.changeProfileImage()
     }
 
-    @Override
-    public void handleProfileImageRemoved() {
-        mEditProfileView.removeProfileImage();
-        mEditProfileView.showDefaultImageByUsername(mPreferencesHelper.getFullName());
+    override fun handleProfileImageRemoved() {
+        mEditProfileView!!.removeProfileImage()
+        mEditProfileView!!.showDefaultImageByUsername(mPreferencesHelper.fullName)
     }
 
-    @Override
-    public void handleClickProfileImageRequest() {
-        mEditProfileView.clickProfileImage();
+    override fun handleClickProfileImageRequest() {
+        mEditProfileView!!.clickProfileImage()
     }
 
-    @Override
-    public void handleNecessaryDataSave() {
-        mEditProfileView.showFab();
+    override fun handleNecessaryDataSave() {
+        mEditProfileView!!.showFab()
     }
 
-    @Override
-    public void handleExitOnUnsavedChanges() {
-        mEditProfileView.hideFab();
-        mEditProfileView.showDiscardChangesDialog();
+    override fun handleExitOnUnsavedChanges() {
+        mEditProfileView!!.hideFab()
+        mEditProfileView!!.showDiscardChangesDialog()
     }
 
-    @Override
-    public void onDialogNegative() {
-        mEditProfileView.showFab();
+    override fun onDialogNegative() {
+        mEditProfileView!!.showFab()
     }
 
-    @Override
-    public void onDialogPositive() {
-        mEditProfileView.closeActivity();
+    override fun onDialogPositive() {
+        mEditProfileView!!.closeActivity()
     }
 }
