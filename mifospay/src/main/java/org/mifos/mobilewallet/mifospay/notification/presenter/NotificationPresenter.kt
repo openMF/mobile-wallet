@@ -1,53 +1,46 @@
-package org.mifos.mobilewallet.mifospay.notification.presenter;
+package org.mifos.mobilewallet.mifospay.notification.presenter
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.notification.FetchNotifications;
-import org.mifos.mobilewallet.mifospay.base.BaseView;
-import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.notification.NotificationContract;
-
-import javax.inject.Inject;
+import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
+import org.mifos.mobilewallet.core.base.UseCaseHandler
+import org.mifos.mobilewallet.core.domain.usecase.notification.FetchNotifications
+import org.mifos.mobilewallet.mifospay.base.BaseView
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
+import org.mifos.mobilewallet.mifospay.notification.NotificationContract
+import org.mifos.mobilewallet.mifospay.notification.NotificationContract.NotificationView
+import javax.inject.Inject
 
 /**
  * Created by ankur on 24/July/2018
  */
+class NotificationPresenter @Inject constructor(
+    private val mUseCaseHandler: UseCaseHandler,
+    private val mLocalRepository: LocalRepository
+) : NotificationContract.NotificationPresenter {
+    var mNotificationView: NotificationView? = null
 
-public class NotificationPresenter implements NotificationContract.NotificationPresenter {
-
-    private final UseCaseHandler mUseCaseHandler;
-    private final LocalRepository mLocalRepository;
-    NotificationContract.NotificationView mNotificationView;
+    @JvmField
     @Inject
-    FetchNotifications fetchNotificationsUseCase;
-
-    @Inject
-    public NotificationPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
-        mUseCaseHandler = useCaseHandler;
-        mLocalRepository = localRepository;
+    var fetchNotificationsUseCase: FetchNotifications? = null
+    override fun attachView(baseView: BaseView<*>?) {
+        mNotificationView = baseView as NotificationView?
+        mNotificationView!!.setPresenter(this)
     }
 
-    @Override
-    public void attachView(BaseView baseView) {
-        mNotificationView = (NotificationContract.NotificationView) baseView;
-        mNotificationView.setPresenter(this);
-    }
-
-    public void fetchNotifications() {
+    override fun fetchNotifications() {
         mUseCaseHandler.execute(fetchNotificationsUseCase,
-                new FetchNotifications.RequestValues(
-                        mLocalRepository.getClientDetails().getClientId()),
-                new UseCase.UseCaseCallback<FetchNotifications.ResponseValue>() {
-                    @Override
-                    public void onSuccess(FetchNotifications.ResponseValue response) {
-                        mNotificationView.fetchNotificationsSuccess(
-                                response.getNotificationPayloadList());
-                    }
+            FetchNotifications.RequestValues(
+                mLocalRepository.clientDetails.clientId
+            ),
+            object : UseCaseCallback<FetchNotifications.ResponseValue?> {
+                override fun onSuccess(response: FetchNotifications.ResponseValue?) {
+                    mNotificationView!!.fetchNotificationsSuccess(
+                        response?.notificationPayloadList
+                    )
+                }
 
-                    @Override
-                    public void onError(String message) {
-                        mNotificationView.fetchNotificationsError(message);
-                    }
-                });
+                override fun onError(message: String) {
+                    mNotificationView!!.fetchNotificationsError(message)
+                }
+            })
     }
 }

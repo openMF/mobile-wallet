@@ -1,125 +1,119 @@
-package org.mifos.mobilewallet.mifospay.base;
+package org.mifos.mobilewallet.mifospay.base
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.app.Activity
+import android.content.Context
+import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 
 /**
  * Created by naman on 17/6/17.
  */
+open class BaseFragment : Fragment() {
+    private var callback: BaseActivityCallback? = null
 
-public class BaseFragment extends Fragment {
-
-    private BaseActivityCallback callback;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    protected void setToolbarTitle(String title) {
+    protected fun setToolbarTitle(title: String?) {
         if (callback != null) {
-            callback.setToolbarTitle(title);
+            callback!!.setToolbarTitle(title)
         }
     }
 
-    protected void showBackButton(int drawable) {
+    protected fun showBackButton(drawable: Int) {
         if (callback != null) {
-            callback.showColoredBackButton(drawable);
+            callback!!.showColoredBackButton(drawable)
         }
     }
 
-    protected void hideBackButton() {
+    protected fun hideBackButton() {
         if (callback != null) {
-            callback.hideBackButton();
+            callback!!.hideBackButton()
         }
     }
 
-    protected void showSwipeProgress() {
+    protected fun showSwipeProgress() {
         if (callback != null) {
-            callback.showSwipeProgress();
+            callback!!.showSwipeProgress()
         }
     }
 
-    public void hideSwipeProgress() {
+    open fun hideSwipeProgress() {
         if (callback != null) {
-            callback.hideSwipeProgress();
+            callback!!.hideSwipeProgress()
         }
     }
 
-    protected void showProgressDialog(String message) {
-        callback.showProgressDialog(message);
+    protected open fun showProgressDialog(message: String?) {
+        callback!!.showProgressDialog(message)
     }
 
-    protected void hideProgressDialog() {
-        callback.hideProgressDialog();
+    protected open fun hideProgressDialog() {
+        callback!!.hideProgressDialog()
     }
 
-    protected void setSwipeEnabled(boolean enabled) {
+    protected fun setSwipeEnabled(enabled: Boolean) {
         if (callback != null) {
-            callback.setSwipeRefreshEnabled(enabled);
+            callback!!.setSwipeRefreshEnabled(enabled)
         }
     }
 
-    protected SwipeRefreshLayout getSwipeRefreshLayout() {
-        if (callback != null) {
-            return callback.getSwipeRefreshLayout();
-        }
-        return null;
-    }
+    protected val swipeRefreshLayout: SwipeRefreshLayout?
+        get() = if (callback != null) {
+            callback!!.swipeRefreshLayout
+        } else null
 
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        Activity activity = context instanceof Activity ? (Activity) context : null;
-        try {
-            callback = (BaseActivityCallback) activity;
-        } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
-                    + " must implement BaseActivityCallback methods");
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val activity = if (context is Activity) context else null
+        callback = try {
+            activity as BaseActivityCallback?
+        } catch (e: ClassCastException) {
+            throw ClassCastException(
+                activity.toString()
+                        + " must implement BaseActivityCallback methods"
+            )
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        callback = null;
+    override fun onDetach() {
+        super.onDetach()
+        callback = null
     }
 
-    public void replaceFragmentUsingFragmentManager(Fragment fragment, boolean addToBackStack,
-            int containerId) {
-        String backStateName = fragment.getClass().getName();
-        boolean fragmentPopped = getFragmentManager().popBackStackImmediate(backStateName,
-                0);
-
-        if (!fragmentPopped && getFragmentManager().findFragmentByTag(backStateName) ==
-                null) {
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
-            transaction.replace(containerId, fragment, backStateName);
+    fun replaceFragmentUsingFragmentManager(
+        fragment: Fragment, addToBackStack: Boolean,
+        containerId: Int
+    ) {
+        val backStateName = fragment.javaClass.name
+        val fragmentPopped = fragmentManager!!.popBackStackImmediate(
+            backStateName,
+            0
+        )
+        if (!fragmentPopped && fragmentManager!!.findFragmentByTag(backStateName) ==
+            null
+        ) {
+            val transaction = fragmentManager!!.beginTransaction()
+            transaction.replace(containerId, fragment, backStateName)
             if (addToBackStack) {
-                transaction.addToBackStack(backStateName);
+                transaction.addToBackStack(backStateName)
             }
-            transaction.commit();
+            transaction.commit()
         }
     }
 
-    public void replaceFragment(Fragment fragment, boolean addToBackStack, int containerId) {
-        String backStateName = fragment.getClass().getName();
-        boolean fragmentPopped = getChildFragmentManager().popBackStackImmediate(backStateName,
-                0);
-
-        if (!fragmentPopped && getChildFragmentManager().findFragmentByTag(backStateName) ==
-                null) {
-            FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-            transaction.replace(containerId, fragment, backStateName);
+    fun replaceFragment(fragment: Fragment, addToBackStack: Boolean, containerId: Int) {
+        val backStateName = fragment.javaClass.name
+        val fragmentPopped = childFragmentManager.popBackStackImmediate(
+            backStateName,
+            0
+        )
+        if (!fragmentPopped && childFragmentManager.findFragmentByTag(backStateName) ==
+            null
+        ) {
+            val transaction = childFragmentManager.beginTransaction()
+            transaction.replace(containerId, fragment, backStateName)
             if (addToBackStack) {
-                transaction.addToBackStack(backStateName);
+                transaction.addToBackStack(backStateName)
             }
-            transaction.commit();
+            transaction.commit()
         }
     }
 }

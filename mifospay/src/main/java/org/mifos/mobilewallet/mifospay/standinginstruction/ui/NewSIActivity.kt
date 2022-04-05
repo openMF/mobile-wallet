@@ -39,7 +39,7 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_new_si)
-        activityComponent.inject(this)
+        activityComponent?.inject(this)
         ButterKnife.bind(this)
         setToolbarTitle(getString(R.string.tile_si_activity))
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)

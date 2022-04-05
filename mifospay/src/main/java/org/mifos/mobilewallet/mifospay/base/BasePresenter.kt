@@ -1,6 +1,5 @@
-package org.mifos.mobilewallet.mifospay.base;
+package org.mifos.mobilewallet.mifospay.base
 
-public interface BasePresenter {
-
-    void attachView(BaseView baseView);
+interface BasePresenter {
+    fun attachView(baseView: BaseView<*>?)
 }

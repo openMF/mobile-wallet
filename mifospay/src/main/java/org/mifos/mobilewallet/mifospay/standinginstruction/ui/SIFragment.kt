@@ -8,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_si.*
-import kotlinx.android.synthetic.main.fragment_si.inc_state_view
-import kotlinx.android.synthetic.main.fragment_si.progressBar
 import kotlinx.android.synthetic.main.placeholder_state.*
 import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.mifospay.R
@@ -24,7 +22,7 @@ import javax.inject.Inject
 
 
 class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
-    val newSIActivityRequestCode = 100
+    private val newSIActivityRequestCode = 100
 
     @Inject
     lateinit var mPresenter: StandingInstructionsPresenter
@@ -35,7 +33,7 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity).activityComponent.inject(this)
+        (activity as BaseActivity).activityComponent?.inject(this)
         mSIAdapter = StandingInstructionAdapter(activity as BaseActivity)
     }
 
@@ -88,15 +86,15 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == newSIActivityRequestCode && resultCode == RESULT_OK) {
-            swipeRefreshLayout.isRefreshing = false
+            swipeRefreshLayout?.isRefreshing = false
             mStandingInstructionPresenter.getAllSI()
         }
     }
 
     private fun setupSwipeRefreshLayout() {
         setSwipeEnabled(true)
-        swipeRefreshLayout.setOnRefreshListener {
-            swipeRefreshLayout.isRefreshing = false
+        swipeRefreshLayout?.setOnRefreshListener {
+            swipeRefreshLayout?.isRefreshing = false
             mStandingInstructionPresenter.getAllSI()
         }
     }
