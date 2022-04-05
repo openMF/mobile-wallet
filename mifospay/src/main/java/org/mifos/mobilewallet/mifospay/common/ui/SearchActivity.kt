@@ -1,100 +1,86 @@
-package org.mifos.mobilewallet.mifospay.common.ui;
+package org.mifos.mobilewallet.mifospay.common.ui
 
-import static org.mifos.mobilewallet.mifospay.MifosPayApp.getContext;
-
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.widget.EditText;
-
-import org.mifos.mobilewallet.core.domain.model.SearchResult;
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.common.SearchContract;
-import org.mifos.mobilewallet.mifospay.common.presenter.SearchPresenter;
-import org.mifos.mobilewallet.mifospay.common.ui.adapter.SearchAdapter;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.Toaster;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnTextChanged;
+import android.os.Bundle
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.widget.EditText
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnTextChanged
+import org.mifos.mobilewallet.core.domain.model.SearchResult
+import org.mifos.mobilewallet.mifospay.MifosPayApp
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.common.SearchContract
+import org.mifos.mobilewallet.mifospay.common.presenter.SearchPresenter
+import org.mifos.mobilewallet.mifospay.common.ui.adapter.SearchAdapter
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.utils.Toaster
+import javax.inject.Inject
 
 /**
  * Created by naman on 21/8/17.
  */
-
-public class SearchActivity extends BaseActivity implements SearchContract.SearchView {
-
+class SearchActivity : BaseActivity(), SearchContract.SearchView {
+    @JvmField
     @Inject
-    SearchPresenter mPresenter;
+    var mPresenter: SearchPresenter? = null
+    var mSearchPresenter: SearchContract.SearchPresenter? = null
 
-    SearchContract.SearchPresenter mSearchPresenter;
-
+    @JvmField
     @BindView(R.id.et_search)
-    EditText etSearch;
+    var etSearch: EditText? = null
 
+    @JvmField
     @BindView(R.id.rv_search_result)
-    RecyclerView rvSearchResults;
+    var rvSearchResults: RecyclerView? = null
 
+    @JvmField
     @Inject
-    SearchAdapter searchAdapter;
-
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
-        setContentView(R.layout.activity_search);
-        ButterKnife.bind(this);
-
-        setToolbarTitle("");
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-
-        mPresenter.attachView(this);
-
-        rvSearchResults.setLayoutManager(new LinearLayoutManager(this));
-        rvSearchResults.setAdapter(searchAdapter);
-        rvSearchResults.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL));
-
+    var searchAdapter: SearchAdapter? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activityComponent.inject(this)
+        setContentView(R.layout.activity_search)
+        ButterKnife.bind(this)
+        setToolbarTitle("")
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        mPresenter!!.attachView(this)
+        rvSearchResults!!.layoutManager = LinearLayoutManager(this)
+        rvSearchResults!!.adapter = searchAdapter
+        rvSearchResults!!.addItemDecoration(
+            DividerItemDecoration(
+                this,
+                DividerItemDecoration.VERTICAL
+            )
+        )
     }
 
     @OnTextChanged(R.id.et_search)
-    public void searchTextChanged() {
-        if (etSearch.getText().toString().length() > 3) {
-            showSwipeProgress();
-            mSearchPresenter.performSearch(etSearch.getText().toString());
+    fun searchTextChanged() {
+        if (etSearch!!.text.toString().length > 3) {
+            showSwipeProgress()
+            mSearchPresenter!!.performSearch(etSearch!!.text.toString())
         } else {
-            searchAdapter.clearData();
+            searchAdapter!!.clearData()
         }
     }
 
-    @Override
-    public void setPresenter(SearchContract.SearchPresenter presenter) {
-        this.mSearchPresenter = presenter;
+    override fun setPresenter(presenter: SearchContract.SearchPresenter?) {
+        mSearchPresenter = presenter
     }
 
-    @Override
-    public void showSearchResult(List<SearchResult> searchResults) {
-        searchAdapter.setData(searchResults);
-        hideSwipeProgress();
+    override fun showSearchResult(searchResults: MutableList<SearchResult>?) {
+        searchAdapter!!.setData(searchResults)
+        hideSwipeProgress()
     }
 
-    @Override
-    public void showToast(String message) {
-        Toaster.showToast(getContext(), message);
+    override fun showToast(message: String?) {
+        Toaster.showToast(MifosPayApp.getContext(), message)
     }
 
-    @Override
-    public void showSnackbar(String message) {
-        Toaster.show(findViewById(android.R.id.content), message);
+    override fun showSnackbar(message: String?) {
+        Toaster.show(findViewById(android.R.id.content), message)
     }
-
 }

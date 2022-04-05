@@ -1,210 +1,190 @@
-package org.mifos.mobilewallet.mifospay.common.ui;
+package org.mifos.mobilewallet.mifospay.common.ui
 
-import android.app.Activity;
-import android.app.Dialog;
-import android.content.DialogInterface;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.transition.TransitionManager;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.common.TransferContract;
-import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter;
-import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.Toaster;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import android.app.Activity
+import android.app.Dialog
+import android.content.DialogInterface
+import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetBehavior.BottomSheetCallback
+import android.support.design.widget.BottomSheetDialog
+import android.support.design.widget.BottomSheetDialogFragment
+import android.support.transition.TransitionManager
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ProgressBar
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.common.TransferContract
+import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
+import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.utils.Toaster
+import javax.inject.Inject
 
 /**
  * Created by naman on 30/8/17.
  */
-
-public class MakeTransferFragment extends BottomSheetDialogFragment
-        implements TransferContract.TransferView {
-
+class MakeTransferFragment : BottomSheetDialogFragment(), TransferContract.TransferView {
+    @JvmField
     @Inject
-    MakeTransferPresenter mPresenter;
+    var mPresenter: MakeTransferPresenter? = null
 
+    @JvmField
     @Inject
-    LocalRepository localRepository;
+    var localRepository: LocalRepository? = null
+    var mTransferPresenter: TransferContract.TransferPresenter? = null
 
-    TransferContract.TransferPresenter mTransferPresenter;
-
+    @JvmField
     @BindView(R.id.ll_make_transfer_container)
-    ViewGroup makeTransferContainer;
+    var makeTransferContainer: ViewGroup? = null
+
+    @JvmField
     @BindView(R.id.btn_confirm)
-    Button btnConfirm;
+    var btnConfirm: Button? = null
 
+    @JvmField
     @BindView(R.id.btn_cancel)
-    Button btnCancel;
+    var btnCancel: Button? = null
 
+    @JvmField
     @BindView(R.id.progressBar)
-    ProgressBar progressBar;
+    var progressBar: ProgressBar? = null
 
+    @JvmField
     @BindView(R.id.tv_amount)
-    TextView tvAmount;
+    var tvAmount: TextView? = null
 
+    @JvmField
     @BindView(R.id.tv_client_name)
-    TextView tvClientName;
+    var tvClientName: TextView? = null
 
+    @JvmField
     @BindView(R.id.tv_client_vpa)
-    TextView tvClientVpa;
+    var tvClientVpa: TextView? = null
 
+    @JvmField
     @BindView(R.id.tv_transfer_status)
-    TextView tvTransferStatus;
+    var tvTransferStatus: TextView? = null
 
+    @JvmField
     @BindView(R.id.ll_content)
-    View contentView;
+    var contentView: View? = null
 
+    @JvmField
     @BindView(R.id.view_transfer_success)
-    View viewTransferSuccess;
+    var viewTransferSuccess: View? = null
 
+    @JvmField
     @BindView(R.id.view_transfer_failure)
-    View viewTransferFailure;
-
-    private BottomSheetBehavior mBehavior;
-    private long toClientId;
-    private double amount;
-
-    public static MakeTransferFragment newInstance(String toExternalId, double amount) {
-
-        Bundle args = new Bundle();
-        args.putString(Constants.TO_EXTERNAL_ID, toExternalId);
-        args.putDouble(Constants.AMOUNT, amount);
-        MakeTransferFragment fragment = new MakeTransferFragment();
-        fragment.setArguments(args);
-        return fragment;
+    var viewTransferFailure: View? = null
+    private var mBehavior: BottomSheetBehavior<*>? = null
+    private var toClientId: Long = 0
+    private var amount = 0.0
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity as BaseActivity?)!!.activityComponent.inject(this)
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
     }
 
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState) as BottomSheetDialog
+        val view = View.inflate(context, R.layout.fragment_make_transfer, null)
+        dialog.setContentView(view)
+        mBehavior = BottomSheetBehavior.from(view.parent as View)
+        ButterKnife.bind(this, view)
+        mPresenter!!.attachView(this)
+        amount = arguments!!.getDouble(Constants.AMOUNT)
+        mTransferPresenter!!.fetchClient(arguments!!.getString(Constants.TO_EXTERNAL_ID))
+        btnCancel!!.setOnClickListener { dismiss() }
+        btnConfirm!!.setOnClickListener {
+            mTransferPresenter!!.makeTransfer(
+                localRepository!!.clientDetails.clientId,
+                toClientId, amount
+            )
+            TransitionManager.beginDelayedTransition(
+                makeTransferContainer!!
+            )
+            tvTransferStatus!!.text = Constants.SENDING_MONEY
+            progressBar!!.visibility = View.VISIBLE
+            contentView!!.visibility = View.GONE
+        }
+        return dialog
     }
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        BottomSheetDialog dialog = (BottomSheetDialog) super.onCreateDialog(savedInstanceState);
-
-        View view = View.inflate(getContext(), R.layout.fragment_make_transfer, null);
-
-        dialog.setContentView(view);
-        mBehavior = BottomSheetBehavior.from((View) view.getParent());
-
-        ButterKnife.bind(this, view);
-        mPresenter.attachView(this);
-
-        amount = getArguments().getDouble(Constants.AMOUNT);
-
-        mTransferPresenter.fetchClient(getArguments().getString(Constants.TO_EXTERNAL_ID));
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dismiss();
-            }
-        });
-
-        btnConfirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mTransferPresenter.makeTransfer(localRepository.getClientDetails().getClientId(),
-                        toClientId, amount);
-                TransitionManager.beginDelayedTransition(makeTransferContainer);
-                tvTransferStatus.setText(Constants.SENDING_MONEY);
-                progressBar.setVisibility(View.VISIBLE);
-                contentView.setVisibility(View.GONE);
-            }
-        });
-
-        return dialog;
+    override fun showToClientDetails(clientId: Long, name: String?, externalId: String?) {
+        toClientId = clientId
+        TransitionManager.beginDelayedTransition(makeTransferContainer!!)
+        tvClientName!!.text = name
+        tvAmount!!.text = Constants.RUPEE + " " + amount
+        tvClientVpa!!.text = externalId
+        contentView!!.visibility = View.VISIBLE
+        progressBar!!.visibility = View.GONE
     }
 
-    @Override
-    public void showToClientDetails(long clientId, String name, String externalId) {
-        this.toClientId = clientId;
-
-        TransitionManager.beginDelayedTransition(makeTransferContainer);
-        tvClientName.setText(name);
-        tvAmount.setText(Constants.RUPEE + " " + amount);
-        tvClientVpa.setText(externalId);
-
-        contentView.setVisibility(View.VISIBLE);
-        progressBar.setVisibility(View.GONE);
-
+    override fun transferSuccess() {
+        tvTransferStatus!!.text = Constants.TRANSACTION_SUCCESSFUL
+        progressBar!!.visibility = View.GONE
+        viewTransferSuccess!!.visibility = View.VISIBLE
     }
 
-    @Override
-    public void transferSuccess() {
-        tvTransferStatus.setText(Constants.TRANSACTION_SUCCESSFUL);
-        progressBar.setVisibility(View.GONE);
-        viewTransferSuccess.setVisibility(View.VISIBLE);
+    override fun transferFailure() {
+        TransitionManager.beginDelayedTransition(makeTransferContainer!!)
+        tvTransferStatus!!.text = Constants.UNABLE_TO_PROCESS_TRANSFER
+        progressBar!!.visibility = View.GONE
+        viewTransferFailure!!.visibility = View.VISIBLE
     }
 
-    @Override
-    public void transferFailure() {
-        TransitionManager.beginDelayedTransition(makeTransferContainer);
-        tvTransferStatus.setText(Constants.UNABLE_TO_PROCESS_TRANSFER);
-        progressBar.setVisibility(View.GONE);
-        viewTransferFailure.setVisibility(View.VISIBLE);
+    override fun onStart() {
+        super.onStart()
+        mBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    override fun setPresenter(presenter: TransferContract.TransferPresenter?) {
+        mTransferPresenter = presenter
     }
 
-    @Override
-    public void setPresenter(TransferContract.TransferPresenter presenter) {
-        this.mTransferPresenter = presenter;
-    }
-
-    @Override
-    public void showVpaNotFoundSnackbar() {
-        if (getTargetFragment() != null) {
-            getTargetFragment().onActivityResult(SendFragment.REQUEST_SHOW_DETAILS,
-                    Activity.RESULT_CANCELED, null);
-            dismiss();
+    override fun showVpaNotFoundSnackbar() {
+        if (targetFragment != null) {
+            targetFragment!!.onActivityResult(
+                SendFragment.REQUEST_SHOW_DETAILS,
+                Activity.RESULT_CANCELED, null
+            )
+            dismiss()
         } else {
-            Toaster.showToast(getContext(), "Invalid");
-            dismiss();
+            Toaster.showToast(context, "Invalid")
+            dismiss()
         }
     }
 
-    @Override
-    public void enableDragging(final boolean enable) {
-        mBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+    override fun enableDragging(enable: Boolean) {
+        mBehavior!!.setBottomSheetCallback(object : BottomSheetCallback() {
+            override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_DRAGGING && !enable) {
-                    mBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    mBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
                 }
             }
 
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) { }
-        });
+            override fun onSlide(bottomSheet: View, slideOffset: Float) {}
+        })
     }
 
+    companion object {
+        @JvmStatic
+        fun newInstance(toExternalId: String?, amount: Double): MakeTransferFragment {
+            val args = Bundle()
+            args.putString(Constants.TO_EXTERNAL_ID, toExternalId)
+            args.putDouble(Constants.AMOUNT, amount)
+            val fragment = MakeTransferFragment()
+            fragment.arguments = args
+            return fragment
+        }
+    }
 }

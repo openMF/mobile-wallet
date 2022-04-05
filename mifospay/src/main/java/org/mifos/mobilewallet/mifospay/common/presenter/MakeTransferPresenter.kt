@@ -1,75 +1,62 @@
-package org.mifos.mobilewallet.mifospay.common.presenter;
+package org.mifos.mobilewallet.mifospay.common.presenter
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.model.SearchResult;
-import org.mifos.mobilewallet.core.domain.usecase.account.TransferFunds;
-import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient;
-import org.mifos.mobilewallet.mifospay.base.BaseView;
-import org.mifos.mobilewallet.mifospay.common.TransferContract;
-
-import javax.inject.Inject;
+import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
+import org.mifos.mobilewallet.core.base.UseCaseHandler
+import org.mifos.mobilewallet.core.domain.usecase.account.TransferFunds
+import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient
+import org.mifos.mobilewallet.mifospay.base.BaseView
+import org.mifos.mobilewallet.mifospay.common.TransferContract
+import javax.inject.Inject
 
 /**
  * Created by naman on 30/8/17.
  */
-
-public class MakeTransferPresenter implements TransferContract.TransferPresenter {
-
-    private final UseCaseHandler mUsecaseHandler;
+class MakeTransferPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHandler) :
+    TransferContract.TransferPresenter {
+    @JvmField
     @Inject
-    TransferFunds transferFunds;
-    @Inject
-    SearchClient searchClient;
-    private TransferContract.TransferView mTransferView;
+    var transferFunds: TransferFunds? = null
 
+    @JvmField
     @Inject
-    public MakeTransferPresenter(UseCaseHandler useCaseHandler) {
-        this.mUsecaseHandler = useCaseHandler;
+    var searchClient: SearchClient? = null
+    private var mTransferView: TransferContract.TransferView? = null
+    override fun attachView(baseView: BaseView<*>?) {
+        mTransferView = baseView as TransferContract.TransferView?
+        mTransferView!!.setPresenter(this)
     }
 
-    @Override
-    public void attachView(BaseView baseView) {
-        mTransferView = (TransferContract.TransferView) baseView;
-        mTransferView.setPresenter(this);
+    override fun fetchClient(externalId: String?) {
+        mUsecaseHandler.execute(searchClient, SearchClient.RequestValues(externalId),
+            object : UseCaseCallback<SearchClient.ResponseValue?> {
+                override fun onSuccess(response: SearchClient.ResponseValue?) {
+                    val searchResult = response!!.results[0]
+                    mTransferView!!.showToClientDetails(
+                        searchResult.resultId.toLong(),
+                        searchResult.resultName, externalId
+                    )
+                }
+
+                override fun onError(message: String) {
+                    mTransferView!!.showVpaNotFoundSnackbar()
+                }
+            })
     }
 
-    @Override
-    public void fetchClient(final String externalId) {
-        mUsecaseHandler.execute(searchClient, new SearchClient.RequestValues(externalId),
-                new UseCase.UseCaseCallback<SearchClient.ResponseValue>() {
-                    @Override
-                    public void onSuccess(SearchClient.ResponseValue response) {
-                        SearchResult searchResult = response.getResults().get(0);
-                        mTransferView.showToClientDetails(searchResult.getResultId(),
-                                searchResult.getResultName(), externalId);
-                    }
-
-                    @Override
-                    public void onError(String message) {
-                        mTransferView.showVpaNotFoundSnackbar();
-                    }
-                });
-    }
-
-    @Override
-    public void makeTransfer(long fromClientId, long toClientId, double amount) {
-        mTransferView.enableDragging(false);
+    override fun makeTransfer(fromClientId: Long, toClientId: Long, amount: Double) {
+        mTransferView!!.enableDragging(false)
         mUsecaseHandler.execute(transferFunds,
-                new TransferFunds.RequestValues(fromClientId, toClientId, amount),
-                new UseCase.UseCaseCallback<TransferFunds.ResponseValue>() {
-                    @Override
-                    public void onSuccess(TransferFunds.ResponseValue response) {
-                        mTransferView.enableDragging(true);
-                        mTransferView.transferSuccess();
-                    }
+            TransferFunds.RequestValues(fromClientId, toClientId, amount),
+            object : UseCaseCallback<TransferFunds.ResponseValue?> {
+                override fun onSuccess(response: TransferFunds.ResponseValue?) {
+                    mTransferView!!.enableDragging(true)
+                    mTransferView!!.transferSuccess()
+                }
 
-                    @Override
-                    public void onError(String message) {
-                        mTransferView.enableDragging(true);
-                        mTransferView.transferFailure();
-                    }
-                });
+                override fun onError(message: String) {
+                    mTransferView!!.enableDragging(true)
+                    mTransferView!!.transferFailure()
+                }
+            })
     }
 }
-

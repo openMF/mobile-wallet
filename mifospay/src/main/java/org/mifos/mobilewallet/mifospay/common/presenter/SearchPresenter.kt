@@ -1,48 +1,34 @@
-package org.mifos.mobilewallet.mifospay.common.presenter;
+package org.mifos.mobilewallet.mifospay.common.presenter
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient;
-import org.mifos.mobilewallet.mifospay.base.BaseView;
-import org.mifos.mobilewallet.mifospay.common.SearchContract;
-
-import javax.inject.Inject;
+import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
+import org.mifos.mobilewallet.core.base.UseCaseHandler
+import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient
+import org.mifos.mobilewallet.mifospay.base.BaseView
+import org.mifos.mobilewallet.mifospay.common.SearchContract
+import javax.inject.Inject
 
 /**
  * Created by naman on 21/8/17.
  */
-
-public class SearchPresenter implements SearchContract.SearchPresenter {
-
-    private final UseCaseHandler mUsecaseHandler;
+class SearchPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHandler) :
+    SearchContract.SearchPresenter {
+    @JvmField
     @Inject
-    SearchClient searchClient;
-    private SearchContract.SearchView mSearchView;
-
-    @Inject
-    public SearchPresenter(UseCaseHandler useCaseHandler) {
-        this.mUsecaseHandler = useCaseHandler;
+    var searchClient: SearchClient? = null
+    private var mSearchView: SearchContract.SearchView? = null
+    override fun attachView(baseView: BaseView<*>?) {
+        mSearchView = baseView as SearchContract.SearchView?
+        mSearchView!!.setPresenter(this)
     }
 
-    @Override
-    public void attachView(BaseView baseView) {
-        mSearchView = (SearchContract.SearchView) baseView;
-        mSearchView.setPresenter(this);
-    }
+    override fun performSearch(query: String?) {
+        mUsecaseHandler.execute(searchClient, SearchClient.RequestValues(query),
+            object : UseCaseCallback<SearchClient.ResponseValue?> {
+                override fun onSuccess(response: SearchClient.ResponseValue?) {
+                    mSearchView!!.showSearchResult(response!!.results)
+                }
 
-    @Override
-    public void performSearch(String query) {
-        mUsecaseHandler.execute(searchClient, new SearchClient.RequestValues(query),
-                new UseCase.UseCaseCallback<SearchClient.ResponseValue>() {
-                    @Override
-                    public void onSuccess(SearchClient.ResponseValue response) {
-                        mSearchView.showSearchResult(response.getResults());
-                    }
-
-                    @Override
-                    public void onError(String message) {
-
-                    }
-                });
+                override fun onError(message: String) {}
+            })
     }
 }
