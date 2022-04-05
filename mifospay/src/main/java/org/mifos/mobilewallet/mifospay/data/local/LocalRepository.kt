@@ -1,39 +1,26 @@
-package org.mifos.mobilewallet.mifospay.data.local;
+package org.mifos.mobilewallet.mifospay.data.local
 
-import org.mifos.mobilewallet.core.domain.model.client.Client;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import org.mifos.mobilewallet.core.domain.model.client.Client
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by naman on 17/6/17.
  */
-
 @Singleton
-public class LocalRepository {
+class LocalRepository @Inject constructor(val preferencesHelper: PreferencesHelper) {
+    val clientDetails: Client
+        get() {
+            val details = Client()
+            details.name = preferencesHelper.fullName
+            details.clientId = preferencesHelper.clientId
+            details.externalId = preferencesHelper.clientVpa
+            return details
+        }
 
-    private final PreferencesHelper preferencesHelper;
-
-    @Inject
-    public LocalRepository(PreferencesHelper preferencesHelper) {
-        this.preferencesHelper = preferencesHelper;
-    }
-
-    public Client getClientDetails() {
-        Client details = new Client();
-        details.setName(preferencesHelper.getFullName());
-        details.setClientId(preferencesHelper.getClientId());
-        details.setExternalId(preferencesHelper.getClientVpa());
-        return details;
-    }
-
-    public void saveClientData(Client client) {
-        preferencesHelper.saveFullName(client.getName());
-        preferencesHelper.setClientId(client.getClientId());
-        preferencesHelper.setClientVpa(client.getExternalId());
-    }
-
-    public PreferencesHelper getPreferencesHelper() {
-        return preferencesHelper;
+    fun saveClientData(client: Client) {
+        preferencesHelper.saveFullName(client.name)
+        preferencesHelper.clientId = client.clientId
+        preferencesHelper.clientVpa = client.externalId
     }
 }

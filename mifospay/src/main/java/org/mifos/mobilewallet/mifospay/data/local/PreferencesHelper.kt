@@ -1,152 +1,123 @@
-package org.mifos.mobilewallet.mifospay.data.local;
+package org.mifos.mobilewallet.mifospay.data.local
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-
-import org.mifos.mobilewallet.mifospay.injection.ApplicationContext;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import static org.mifos.mobilewallet.mifospay.utils.Constants.ACCOUNT_ID;
+import android.content.Context
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
+import org.mifos.mobilewallet.mifospay.injection.ApplicationContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by naman on 17/6/17.
  */
-
 @Singleton
-public class PreferencesHelper {
+class PreferencesHelper @Inject constructor(@ApplicationContext context: Context?) {
+    private val sharedPreferences: SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
 
-    private static final String TOKEN = "preferences_token";
-    private static final String NAME = "preferences_name";
-    private static final String USERNAME = "preferences_user_name";
-    private static final String EMAIL = "preferences_email";
-    private static final String CLIENT_ID = "preferences_client";
-    private static final String USER_ID = "preferences_user_id";
-    private static final String CLIENT_VPA = "preferences_client_vpa";
-    private static final String MOBILE_NO = "preferences_mobile_no";
-    private static final String FIREBASE_REG_ID = "preferences_firebase_reg_id";
-    private static final String ACCOUNT_ID = "preferences_account_id";
-
-    private SharedPreferences sharedPreferences;
-
-    @Inject
-    public PreferencesHelper(@ApplicationContext Context context) {
-        this.sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    fun clear() {
+        sharedPreferences.edit().clear().apply()
     }
 
-    public void clear() {
-        sharedPreferences.edit().clear().apply();
+    fun getInt(preferenceKey: String?, preferenceDefaultValue: Int): Int {
+        return sharedPreferences.getInt(preferenceKey, preferenceDefaultValue)
     }
 
-
-    public int getInt(String preferenceKey, int preferenceDefaultValue) {
-        return sharedPreferences.getInt(preferenceKey, preferenceDefaultValue);
+    fun putInt(preferenceKey: String?, preferenceValue: Int) {
+        sharedPreferences.edit().putInt(preferenceKey, preferenceValue).apply()
     }
 
-    public void putInt(String preferenceKey, int preferenceValue) {
-        sharedPreferences.edit().putInt(preferenceKey, preferenceValue).apply();
+    private fun getLong(preferenceKey: String?, preferenceDefaultValue: Long): Long {
+        return sharedPreferences.getLong(preferenceKey, preferenceDefaultValue)
     }
 
-    public long getLong(String preferenceKey, long preferenceDefaultValue) {
-        return sharedPreferences.getLong(preferenceKey, preferenceDefaultValue);
+    private fun putLong(preferenceKey: String?, preferenceValue: Long) {
+        sharedPreferences.edit().putLong(preferenceKey, preferenceValue).apply()
     }
 
-    public void putLong(String preferenceKey, long preferenceValue) {
-        sharedPreferences.edit().putLong(preferenceKey, preferenceValue).apply();
+    fun getString(preferenceKey: String?, preferenceDefaultValue: String?): String? {
+        return sharedPreferences.getString(preferenceKey, preferenceDefaultValue)
     }
 
-    public String getString(String preferenceKey, String preferenceDefaultValue) {
-        return sharedPreferences.getString(preferenceKey, preferenceDefaultValue);
+    fun putString(preferenceKey: String?, preferenceValue: String?) {
+        sharedPreferences.edit().putString(preferenceKey, preferenceValue).apply()
     }
 
-    public void putString(String preferenceKey, String preferenceValue) {
-        sharedPreferences.edit().putString(preferenceKey, preferenceValue).apply();
+    fun saveToken(token: String?) {
+        putString(TOKEN, token)
     }
 
-    public void saveToken(String token) {
-        putString(TOKEN, token);
+    fun clearToken() {
+        putString(TOKEN, "")
     }
 
-    public void clearToken() {
-        putString(TOKEN, "");
+    val token: String?
+        get() = getString(TOKEN, "")
+
+    fun saveFullName(name: String?) {
+        putString(NAME, name)
     }
 
-    public String getToken() {
-        return getString(TOKEN, "");
+    val fullName: String?
+        get() = getString(NAME, "")
+
+    fun saveUsername(name: String?) {
+        putString(USERNAME, name)
     }
 
-    public void saveFullName(String name) {
-        putString(NAME, name);
+    val username: String?
+        get() = getString(USERNAME, "")
+
+    fun saveEmail(email: String?) {
+        putString(EMAIL, email)
     }
 
-    public String getFullName() {
-        return getString(NAME, "");
+    val email: String?
+        get() = getString(EMAIL, "")
+
+    fun saveMobile(mobile: String?) {
+        putString(MOBILE_NO, mobile)
     }
 
-    public void saveUsername(String name) {
-        putString(USERNAME, name);
-    }
+    val mobile: String?
+        get() = getString(MOBILE_NO, "")
+    var userId: Long
+        get() = getLong(USER_ID, -1)
+        set(id) {
+            putLong(USER_ID, id)
+        }
+    var clientId: Long
+        get() = getLong(CLIENT_ID, 1)
+        set(clientId) {
+            putLong(CLIENT_ID, clientId)
+        }
+    var clientVpa: String?
+        get() = getString(CLIENT_VPA, "")
+        set(vpa) {
+            putString(CLIENT_VPA, vpa)
+        }
+    var accountId: Long
+        get() = getLong(ACCOUNT_ID, 0)
+        set(accountId) {
+            putLong(ACCOUNT_ID, accountId)
+        }
+    var firebaseRegId: String?
+        get() = getString(FIREBASE_REG_ID, "")
+        set(firebaseRegId) {
+            putString(FIREBASE_REG_ID, firebaseRegId)
+        }
 
-    public String getUsername() {
-        return getString(USERNAME, "");
-    }
-
-    public void saveEmail(String email) {
-        putString(EMAIL, email);
-    }
-
-    public String getEmail() {
-        return getString(EMAIL, "");
-    }
-
-    public void saveMobile(String mobile) {
-        putString(MOBILE_NO, mobile);
-    }
-
-    public String getMobile() {
-        return getString(MOBILE_NO, "");
-    }
-
-    public long getUserId() {
-        return getLong(USER_ID, -1);
-    }
-
-    public void setUserId(long id) {
-        putLong(USER_ID, id);
-    }
-
-    public long getClientId() {
-        return getLong(CLIENT_ID, 1);
-    }
-
-    public void setClientId(long clientId) {
-        putLong(CLIENT_ID, clientId);
-    }
-
-    public String getClientVpa() {
-        return getString(CLIENT_VPA, "");
-    }
-
-    public void setClientVpa(String vpa) {
-        putString(CLIENT_VPA, vpa);
-    }
-
-    public void setAccountId(long accountId) {
-        putLong(ACCOUNT_ID, accountId);
-    }
-
-    public Long getAccountId() {
-        return getLong(ACCOUNT_ID, 0);
-    }
-
-    public String getFirebaseRegId() {
-        return getString(FIREBASE_REG_ID, "");
-    }
-
-    public void setFirebaseRegId(String firebaseRegId) {
-        putString(FIREBASE_REG_ID, firebaseRegId);
+    companion object {
+        private const val TOKEN = "preferences_token"
+        private const val NAME = "preferences_name"
+        private const val USERNAME = "preferences_user_name"
+        private const val EMAIL = "preferences_email"
+        private const val CLIENT_ID = "preferences_client"
+        private const val USER_ID = "preferences_user_id"
+        private const val CLIENT_VPA = "preferences_client_vpa"
+        private const val MOBILE_NO = "preferences_mobile_no"
+        private const val FIREBASE_REG_ID = "preferences_firebase_reg_id"
+        private const val ACCOUNT_ID = "preferences_account_id"
     }
 
 }
