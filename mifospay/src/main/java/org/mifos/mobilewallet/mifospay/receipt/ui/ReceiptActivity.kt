@@ -1,299 +1,331 @@
-package org.mifos.mobilewallet.mifospay.receipt.ui;
+package org.mifos.mobilewallet.mifospay.receipt.ui
 
-import android.Manifest;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Environment;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
-import android.view.View;
-import android.widget.TextView;
+import android.Manifest
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
+import android.support.design.widget.Snackbar
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.FileProvider
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
+import com.mifos.mobile.passcode.utils.PassCodeConstants
+import okhttp3.ResponseBody
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail
+import org.mifos.mobilewallet.core.domain.model.Transaction
+import org.mifos.mobilewallet.core.domain.model.TransactionType
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
+import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract
+import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract.ReceiptView
+import org.mifos.mobilewallet.mifospay.receipt.presenter.ReceiptPresenter
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.utils.FileUtils
+import org.mifos.mobilewallet.mifospay.utils.Toaster
+import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance
+import java.io.File
+import javax.inject.Inject
 
-
-import com.mifos.mobile.passcode.utils.PassCodeConstants;
-
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
-import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract;
-import org.mifos.mobilewallet.mifospay.receipt.presenter.ReceiptPresenter;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.FileUtils;
-import org.mifos.mobilewallet.mifospay.utils.Toaster;
-import org.mifos.mobilewallet.mifospay.utils.Utils;
-
-import java.io.File;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import okhttp3.ResponseBody;
-
-public class ReceiptActivity extends BaseActivity implements ReceiptContract.ReceiptView {
-
-    private static final int REQUEST_WRITE_EXTERNAL_STORAGE = 48;
-
+class ReceiptActivity : BaseActivity(), ReceiptView {
+    @JvmField
     @Inject
-    ReceiptPresenter mPresenter;
+    var mPresenter: ReceiptPresenter? = null
+    var mReceiptPresenter: ReceiptContract.ReceiptPresenter? = null
 
-    ReceiptContract.ReceiptPresenter mReceiptPresenter;
-
-
+    @JvmField
     @BindView(R.id.tv_amount)
-    TextView tvAmount;
+    var tvAmount: TextView? = null
+
+    @JvmField
     @BindView(R.id.tv_operation)
-    TextView tvOperation;
+    var tvOperation: TextView? = null
+
+    @JvmField
     @BindView(R.id.tv_name)
-    TextView tvPaidToName;
+    var tvPaidToName: TextView? = null
+
+    @JvmField
     @BindView(R.id.tv_transaction_ID)
-    TextView tvTransactionID;
+    var tvTransactionID: TextView? = null
+
+    @JvmField
     @BindView(R.id.tv_transaction_date)
-    TextView tvDate;
+    var tvDate: TextView? = null
+
+    @JvmField
     @BindView(R.id.tv_transaction_to_name)
-    TextView tvTransToName;
+    var tvTransToName: TextView? = null
+
+    @JvmField
     @BindView(R.id.tv_transaction_to_number)
-    TextView tvTransToNumber;
+    var tvTransToNumber: TextView? = null
+
+    @JvmField
     @BindView(R.id.tv_transaction_from_name)
-    TextView tvTransFromName;
+    var tvTransFromName: TextView? = null
+
+    @JvmField
     @BindView(R.id.tv_transaction_from_number)
-    TextView tvTransFromNumber;
+    var tvTransFromNumber: TextView? = null
+
+    @JvmField
     @BindView(R.id.tv_transaction_reciept)
-    TextView tvReceiptLink;
-
-    private String transactionId;
-    private boolean isDebit;
-    private Uri deepLinkURI;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
-
-        setContentView(R.layout.activity_receipt);
-
-        ButterKnife.bind(this);
-        setToolbarTitle(Constants.RECEIPT);
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        mPresenter.attachView(this);
-
-        Uri data = getIntent().getData();
-        deepLinkURI = data;
+    var tvReceiptLink: TextView? = null
+    private var transactionId: String? = null
+    private var isDebit = false
+    private var deepLinkURI: Uri? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activityComponent.inject(this)
+        setContentView(R.layout.activity_receipt)
+        ButterKnife.bind(this)
+        setToolbarTitle(Constants.RECEIPT)
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        mPresenter!!.attachView(this)
+        val data = intent.data
+        deepLinkURI = data
         if (data != null) {
-            String scheme = data.getScheme(); // "https"
-            String host = data.getHost(); // "receipt.mifospay.com"
-            List<String> params;
+            val scheme = data.scheme // "https"
+            val host = data.host // "receipt.mifospay.com"
+            val params: List<String>
             try {
-                params = data.getPathSegments();
-                transactionId = params.get(0); // "transactionId"
-                tvReceiptLink.setText(data.toString());
-            } catch (IndexOutOfBoundsException e) {
-                showToast(getString(R.string.invalid_link));
+                params = data.pathSegments
+                transactionId = params[0] // "transactionId"
+                tvReceiptLink!!.text = data.toString()
+            } catch (e: IndexOutOfBoundsException) {
+                showToast(getString(R.string.invalid_link))
             }
-            showProgressDialog(Constants.PLEASE_WAIT);
-            mPresenter.fetchTransaction(Long.parseLong(transactionId));
+            showProgressDialog(Constants.PLEASE_WAIT)
+            mPresenter!!.fetchTransaction(transactionId!!.toLong())
         }
     }
 
-    @Override
-    public void openPassCodeActivity() {
-        Intent i = new Intent(this, PassCodeActivity.class);
-        i.putExtra("uri", deepLinkURI.toString());
-
+    override fun openPassCodeActivity() {
+        val i = Intent(this, PassCodeActivity::class.java)
+        i.putExtra("uri", deepLinkURI.toString())
         /**
          * this is actually not true but has to be set true so as to make the passcode
          * open a new receipt activity
          */
-        i.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true);
-        startActivity(i);
-        finish();
+        i.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
+        startActivity(i)
+        finish()
     }
 
-
-    @Override
-    public void showTransactionDetail(Transaction transaction) {
-        tvAmount.setText(Utils.getFormattedAccountBalance(
-                transaction.getAmount(), transaction.getCurrency().getCode()));
-        tvDate.setText(transaction.getDate());
-        tvReceiptLink.setText(Constants.RECEIPT_DOMAIN + transaction.getTransactionId());
-        tvTransactionID.setText(String.valueOf(transaction.getTransactionId()));
-
-
-        switch (transaction.getTransactionType()) {
-            case DEBIT:
-                isDebit = true;
-                tvOperation.setText(R.string.paid_to);
-                tvOperation.setTextColor(getResources().getColor(R.color.colorDebit));
-                break;
-            case CREDIT:
-                isDebit = false;
-                tvOperation.setText(R.string.credited_by);
-                tvOperation.setTextColor(getResources().getColor(R.color.colorCredit));
-                break;
-            case OTHER:
-                isDebit = false;
-                tvOperation.setText(Constants.OTHER);
-                tvOperation.setTextColor(Color.YELLOW);
-                break;
+    override fun showTransactionDetail(transaction: Transaction?) {
+        if (transaction != null) {
+            tvAmount!!.text = getFormattedAccountBalance(
+                transaction.amount, transaction.currency.code
+            )
         }
-
+        if (transaction != null) {
+            tvDate!!.text = transaction.date
+        }
+        if (transaction != null) {
+            tvReceiptLink!!.text =
+                Constants.RECEIPT_DOMAIN + transaction.transactionId
+        }
+        if (transaction != null) {
+            tvTransactionID!!.text = transaction.transactionId.toString()
+        }
+        if (transaction != null) {
+            when (transaction.transactionType) {
+                TransactionType.DEBIT -> {
+                    isDebit = true
+                    tvOperation!!.setText(R.string.paid_to)
+                    tvOperation!!.setTextColor(resources.getColor(R.color.colorDebit))
+                }
+                TransactionType.CREDIT -> {
+                    isDebit = false
+                    tvOperation!!.setText(R.string.credited_by)
+                    tvOperation!!.setTextColor(resources.getColor(R.color.colorCredit))
+                }
+                TransactionType.OTHER -> {
+                    isDebit = false
+                    tvOperation!!.text = Constants.OTHER
+                    tvOperation!!.setTextColor(Color.YELLOW)
+                }
+            }
+        }
     }
 
-    @Override
-    public void showTransferDetail(TransferDetail transferDetail) {
+    override fun showTransferDetail(transferDetail: TransferDetail?) {
         if (isDebit) {
-            tvPaidToName.setText(transferDetail.getToClient().getDisplayName());
+            if (transferDetail != null) {
+                tvPaidToName!!.text = transferDetail.toClient.displayName
+            }
         } else {
-            tvPaidToName.setText(transferDetail.getFromClient().getDisplayName());
+            if (transferDetail != null) {
+                tvPaidToName!!.text = transferDetail.fromClient.displayName
+            }
         }
-        tvTransToName.setText(Constants.NAME + transferDetail.getToClient().getDisplayName());
-        tvTransToNumber.setText(Constants.ACCOUNT_NUMBER + transferDetail
-                .getToAccount().getAccountNo());
-        tvTransFromName.setText(Constants.NAME + transferDetail.getFromClient().getDisplayName());
-        tvTransFromNumber.setText(Constants.ACCOUNT_NUMBER + transferDetail
-                .getFromAccount().getAccountNo());
-        dismissProgressDialog();
+        if (transferDetail != null) {
+            tvTransToName!!.text =
+                Constants.NAME + transferDetail.toClient.displayName
+        }
+        if (transferDetail != null) {
+            tvTransToNumber!!.text =
+                Constants.ACCOUNT_NUMBER + transferDetail
+                    .toAccount.accountNo
+        }
+        if (transferDetail != null) {
+            tvTransFromName!!.text =
+                Constants.NAME + transferDetail.fromClient.displayName
+        }
+        tvTransFromNumber!!.text =
+            Constants.ACCOUNT_NUMBER + transferDetail
+                ?.fromAccount!!.accountNo
+        dismissProgressDialog()
     }
 
     @OnClick(R.id.fab_download)
-    void initiateDownload() {
-        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
+    fun initiateDownload() {
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+            != PackageManager.PERMISSION_GRANTED
+        ) {
 
             // Permission is not granted
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                    REQUEST_WRITE_EXTERNAL_STORAGE);
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                REQUEST_WRITE_EXTERNAL_STORAGE
+            )
         } else {
             // Permission already granted
-            File file = new File(Environment.getExternalStorageDirectory()
-                    + Constants.MIFOSPAY,
-                    Constants.RECEIPT + transactionId + Constants.PDF);
+            val file = File(
+                Environment.getExternalStorageDirectory()
+                    .toString() + Constants.MIFOSPAY,
+                Constants.RECEIPT + transactionId + Constants.PDF
+            )
             if (file.exists()) {
-                openFile(ReceiptActivity.this, file);
+                openFile(this@ReceiptActivity, file)
             } else {
-                showSnackbar(getString(R.string.downloading_receipt));
-                mPresenter.downloadReceipt(transactionId);
+                showSnackbar(getString(R.string.downloading_receipt))
+                mPresenter!!.downloadReceipt(transactionId!!)
             }
         }
     }
 
     @OnClick(R.id.transaction_reciept_copy)
-    void copyReceiptLink() {
-        ClipboardManager cm = (ClipboardManager) getSystemService(
-                Context.CLIPBOARD_SERVICE);
-        ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_RECEIPT_LINK,
-                tvReceiptLink.getText().toString());
-        cm.setPrimaryClip(clipData);
-        showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
+    fun copyReceiptLink() {
+        val cm = getSystemService(
+            CLIPBOARD_SERVICE
+        ) as ClipboardManager
+        val clipData = ClipData.newPlainText(
+            Constants.UNIQUE_RECEIPT_LINK,
+            tvReceiptLink!!.text.toString()
+        )
+        cm.setPrimaryClip(clipData)
+        showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD)
     }
 
     @OnClick(R.id.transaction_reciept_share)
-    void shareReceiptLink() {
-        Intent intent = new Intent(Intent.ACTION_SEND)
-                .setType("text/plain")
-                .putExtra(Intent.EXTRA_TEXT, tvReceiptLink.getText().toString())
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        intent = Intent.createChooser(intent, getString(R.string.share_receipt));
-        startActivity(intent);
+    fun shareReceiptLink() {
+        var intent: Intent? = Intent(Intent.ACTION_SEND)
+            .setType("text/plain")
+            .putExtra(Intent.EXTRA_TEXT, tvReceiptLink!!.text.toString())
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent = Intent.createChooser(intent, getString(R.string.share_receipt))
+        startActivity(intent)
     }
 
-    @Override
-    public void setPresenter(ReceiptContract.ReceiptPresenter presenter) {
-        mReceiptPresenter = presenter;
+    override fun setPresenter(presenter: ReceiptContract.ReceiptPresenter?) {
+        mReceiptPresenter = presenter
     }
 
-    public void showToast(String message) {
-        Toaster.showToast(this, message);
+    fun showToast(message: String?) {
+        Toaster.showToast(this, message)
     }
 
-    @Override
-    public void showSnackbar(String message) {
-        Toaster.show(findViewById(android.R.id.content), message);
+    override fun showSnackbar(message: String?) {
+        Toaster.show(findViewById(android.R.id.content), message)
     }
 
-    @Override
-    public void writeReceiptToPDF(ResponseBody responseBody, String filename) {
-
-        File mifosDirectory = new File(Environment.getExternalStorageDirectory(),
-                Constants.MIFOSPAY);
+    override fun writeReceiptToPDF(responseBody: ResponseBody?, filename: String?) {
+        val mifosDirectory = File(
+            Environment.getExternalStorageDirectory(),
+            Constants.MIFOSPAY
+        )
         if (!mifosDirectory.exists()) {
-            mifosDirectory.mkdirs();
+            mifosDirectory.mkdirs()
         }
-        final File documentFile = new File(mifosDirectory.getPath(), filename);
-        if (!FileUtils.writeInputStreamDataToFile(responseBody.byteStream(), documentFile)) {
-            showToast(Constants.ERROR_DOWNLOADING_RECEIPT);
-        } else {
-            Toaster.show(findViewById(android.R.id.content),
-                    Constants.RECEIPT_DOWNLOADED_SUCCESSFULLY, Snackbar.LENGTH_LONG, Constants.VIEW,
-                    new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            openFile(ReceiptActivity.this, documentFile);
-                        }
-                    });
-        }
-    }
-
-    private void openFile(Context context, File file) {
-        final Uri data = FileProvider.getUriForFile(context,
-                "org.mifos.mobilewallet.mifospay.provider", file);
-        context.grantUriPermission(context.getPackageName(),
-                data, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        Intent intent = new Intent(Intent.ACTION_VIEW)
-                .setDataAndType(data, "application/pdf")
-                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-        intent = Intent.createChooser(intent, getString(R.string.view_receipt));
-        context.startActivity(intent);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_WRITE_EXTERNAL_STORAGE: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    showSnackbar(getString(R.string.downloading_receipt));
-                    mReceiptPresenter.downloadReceipt(transactionId);
-
-                } else {
-                    showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_DOWNLOAD_RECEIPT);
+        val documentFile = filename?.let { File(mifosDirectory.path, it) }
+        if (responseBody != null) {
+            if (!FileUtils.writeInputStreamDataToFile(responseBody.byteStream(), documentFile)) {
+                showToast(Constants.ERROR_DOWNLOADING_RECEIPT)
+            } else {
+                Toaster.show(
+                    findViewById(android.R.id.content),
+                    Constants.RECEIPT_DOWNLOADED_SUCCESSFULLY, Snackbar.LENGTH_LONG, Constants.VIEW
+                ) {
+                    if (documentFile != null) {
+                        openFile(this@ReceiptActivity, documentFile)
+                    }
                 }
             }
-
         }
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        dismissProgressDialog();
+    private fun openFile(context: Context, file: File) {
+        val data = FileProvider.getUriForFile(
+            context,
+            "org.mifos.mobilewallet.mifospay.provider", file
+        )
+        context.grantUriPermission(
+            context.packageName,
+            data, Intent.FLAG_GRANT_READ_URI_PERMISSION
+        )
+        var intent: Intent? = Intent(Intent.ACTION_VIEW)
+            .setDataAndType(data, "application/pdf")
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent = Intent.createChooser(intent, getString(R.string.view_receipt))
+        context.startActivity(intent)
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        dismissProgressDialog();
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            REQUEST_WRITE_EXTERNAL_STORAGE -> {
+
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.isNotEmpty()
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    showSnackbar(getString(R.string.downloading_receipt))
+                    mReceiptPresenter!!.downloadReceipt(transactionId)
+                } else {
+                    showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_DOWNLOAD_RECEIPT)
+                }
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        dismissProgressDialog()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        dismissProgressDialog()
+    }
+
+    companion object {
+        private const val REQUEST_WRITE_EXTERNAL_STORAGE = 48
     }
 }
