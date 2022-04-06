@@ -1,78 +1,66 @@
-package org.mifos.mobilewallet.mifospay.payments.presenter;
+package org.mifos.mobilewallet.mifospay.payments.presenter
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount;
-import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData;
-import org.mifos.mobilewallet.mifospay.base.BaseView;
-import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-
-import javax.inject.Inject;
+import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
+import org.mifos.mobilewallet.core.base.UseCaseHandler
+import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
+import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData
+import org.mifos.mobilewallet.mifospay.base.BaseView
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import javax.inject.Inject
 
 /**
  * Created by naman on 30/8/17.
  */
-
-public class TransferPresenter implements BaseHomeContract.TransferPresenter {
-
-    private final UseCaseHandler mUsecaseHandler;
-    private final LocalRepository localRepository;
+class TransferPresenter @Inject constructor(
+    private val mUsecaseHandler: UseCaseHandler,
+    private val localRepository: LocalRepository
+) : BaseHomeContract.TransferPresenter {
+    @JvmField
     @Inject
-    FetchClientData fetchClientData;
+    var fetchClientData: FetchClientData? = null
+
+    @JvmField
     @Inject
-    FetchAccount mFetchAccount;
-
-    private BaseHomeContract.TransferView mTransferView;
-
-    @Inject
-    public TransferPresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository) {
-        this.mUsecaseHandler = useCaseHandler;
-        this.localRepository = localRepository;
+    var mFetchAccount: FetchAccount? = null
+    private var mTransferView: BaseHomeContract.TransferView? = null
+    override fun attachView(baseView: BaseView<*>?) {
+        mTransferView = baseView as BaseHomeContract.TransferView?
+        mTransferView!!.setPresenter(this)
     }
 
-    @Override
-    public void attachView(BaseView baseView) {
-        mTransferView = (BaseHomeContract.TransferView) baseView;
-        mTransferView.setPresenter(this);
+    override fun fetchVpa() {
+        mTransferView!!.showVpa(localRepository.clientDetails.externalId)
     }
 
-    @Override
-    public void fetchVpa() {
-        mTransferView.showVpa(localRepository.getClientDetails().getExternalId());
+    override fun fetchMobile() {
+        mTransferView!!.showMobile(localRepository.preferencesHelper.mobile)
     }
 
-    @Override
-    public void fetchMobile() {
-        mTransferView.showMobile(localRepository.getPreferencesHelper().getMobile());
+    override fun checkSelfTransfer(externalId: String): Boolean {
+        return externalId == localRepository.clientDetails.externalId
     }
 
-    @Override
-    public boolean checkSelfTransfer(String externalId) {
-        return (externalId.equals(localRepository.getClientDetails().getExternalId()));
-    }
-
-    @Override
-    public void checkBalanceAvailability(final String externalId, final double transferAmount) {
+    override fun checkBalanceAvailability(externalId: String, transferAmount: Double) {
         mUsecaseHandler.execute(mFetchAccount,
-                new FetchAccount.RequestValues(localRepository.getClientDetails().getClientId()),
-                new UseCase.UseCaseCallback<FetchAccount.ResponseValue>() {
-                    @Override
-                    public void onSuccess(FetchAccount.ResponseValue response) {
-                        mTransferView.hideSwipeProgress();
-                        if (transferAmount > response.getAccount().getBalance()) {
-                            mTransferView.showSnackbar(Constants.INSUFFICIENT_BALANCE);
+            FetchAccount.RequestValues(localRepository.clientDetails.clientId),
+            object : UseCaseCallback<FetchAccount.ResponseValue?> {
+                override fun onSuccess(response: FetchAccount.ResponseValue?) {
+                    mTransferView!!.hideSwipeProgress()
+                    if (response != null) {
+                        if (transferAmount > response.account.balance) {
+                            mTransferView!!.showSnackbar(Constants.INSUFFICIENT_BALANCE)
                         } else {
-                            mTransferView.showClientDetails(externalId, transferAmount);
+                            mTransferView!!.showClientDetails(externalId, transferAmount)
                         }
                     }
+                }
 
-                    @Override
-                    public void onError(String message) {
-                        mTransferView.hideSwipeProgress();
-                        mTransferView.showToast(Constants.ERROR_FETCHING_BALANCE);
-                    }
-                });
+                override fun onError(message: String) {
+                    mTransferView!!.hideSwipeProgress()
+                    mTransferView!!.showToast(Constants.ERROR_FETCHING_BALANCE)
+                }
+            })
     }
 }

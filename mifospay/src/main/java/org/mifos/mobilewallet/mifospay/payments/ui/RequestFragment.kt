@@ -1,116 +1,98 @@
-package org.mifos.mobilewallet.mifospay.payments.ui;
+package org.mifos.mobilewallet.mifospay.payments.ui
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import android.content.Intent
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
+import io.michaelrocks.libphonenumber.android.NumberParseException
+import io.michaelrocks.libphonenumber.android.PhoneNumberUtil
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.base.BaseFragment
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
+import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter
+import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.utils.Toaster
+import java.util.*
+import javax.inject.Inject
 
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.base.BaseFragment;
-import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
-import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter;
-import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.Toaster;
-
-import java.util.Locale;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import io.michaelrocks.libphonenumber.android.NumberParseException;
-import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
-import io.michaelrocks.libphonenumber.android.Phonenumber;
-
-public class RequestFragment extends BaseFragment implements BaseHomeContract.TransferView {
-
+class RequestFragment : BaseFragment(), BaseHomeContract.TransferView {
+    @JvmField
     @Inject
-    TransferPresenter mPresenter;
+    var mPresenter: TransferPresenter? = null
+    var mTransferPresenter: BaseHomeContract.TransferPresenter? = null
 
-    BaseHomeContract.TransferPresenter mTransferPresenter;
-
+    @JvmField
     @BindView(R.id.tv_client_mobile)
-    TextView mTvClientMobile;
+    var mTvClientMobile: TextView? = null
 
+    @JvmField
     @BindView(R.id.tv_client_vpa)
-    TextView tvClientVpa;
+    var tvClientVpa: TextView? = null
 
+    @JvmField
     @BindView(R.id.btn_show_qr)
-    TextView btnShowQr;
-
-    private String vpa;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
+    var btnShowQr: TextView? = null
+    private var vpa: String? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity as BaseActivity?)!!.activityComponent.inject(this)
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_request, container, false);
-        ButterKnife.bind(this, root);
-        mPresenter.attachView(this);
-        mPresenter.fetchVpa();
-        mPresenter.fetchMobile();
-        return root;
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val root = inflater.inflate(R.layout.fragment_request, container, false)
+        ButterKnife.bind(this, root)
+        mPresenter!!.attachView(this)
+        mPresenter!!.fetchVpa()
+        mPresenter!!.fetchMobile()
+        return root
     }
 
-    @Override
-    public void setPresenter(BaseHomeContract.TransferPresenter presenter) {
-        this.mTransferPresenter = presenter;
+    override fun setPresenter(presenter: BaseHomeContract.TransferPresenter) {
+        mTransferPresenter = presenter
     }
 
     @OnClick(R.id.btn_show_qr)
-    public void showQrClicked() {
-        Intent intent = new Intent(getActivity(), ShowQrActivity.class);
-        intent.putExtra(Constants.QR_DATA, vpa);
-        startActivity(intent);
+    fun showQrClicked() {
+        val intent = Intent(activity, ShowQrActivity::class.java)
+        intent.putExtra(Constants.QR_DATA, vpa)
+        startActivity(intent)
     }
 
-    @Override
-    public void showVpa(String vpa) {
-        this.vpa = vpa;
-        tvClientVpa.setText(vpa);
-        btnShowQr.setClickable(true);
+    override fun showVpa(vpa: String) {
+        this.vpa = vpa
+        tvClientVpa!!.text = vpa
+        btnShowQr!!.isClickable = true
     }
 
-
-    @Override
-    public void showMobile(String mobileNo) {
-        PhoneNumberUtil phoneNumberUtil =
-                PhoneNumberUtil.createInstance(mTvClientMobile.getContext());
+    override fun showMobile(mobileNo: String) {
+        val phoneNumberUtil = PhoneNumberUtil.createInstance(mTvClientMobile!!.context)
         try {
-            Phonenumber.PhoneNumber phoneNumber =
-                    phoneNumberUtil.parse(mobileNo, Locale.getDefault().getCountry());
-            mTvClientMobile.setText(phoneNumberUtil.format(phoneNumber,
-                    PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL));
-        } catch (NumberParseException e) {
-            mTvClientMobile.setText(mobileNo); // If mobile number is not parsed properly
+            val phoneNumber = phoneNumberUtil.parse(mobileNo, Locale.getDefault().country)
+            mTvClientMobile!!.text = phoneNumberUtil.format(
+                phoneNumber,
+                PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL
+            )
+        } catch (e: NumberParseException) {
+            mTvClientMobile!!.text = mobileNo // If mobile number is not parsed properly
         }
     }
 
-    @Override
-    public void showClientDetails(String externalId, double amount) {
-
+    override fun showClientDetails(externalId: String, amount: Double) {}
+    override fun showToast(message: String) {
+        Toaster.showToast(context, message)
     }
 
-    @Override
-    public void showToast(String message) {
-        Toaster.showToast(getContext(), message);
-    }
-
-    @Override
-    public void showSnackbar(String message) {
-        Toaster.show(getView(), message);
+    override fun showSnackbar(message: String) {
+        Toaster.show(view, message)
     }
 }
