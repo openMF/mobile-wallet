@@ -1,121 +1,117 @@
-package org.mifos.mobilewallet.mifospay.password.presenter;
+package org.mifos.mobilewallet.mifospay.password.presenter
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityPassword;
-import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser;
-import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser;
-import org.mifos.mobilewallet.mifospay.base.BaseView;
-import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
-import org.mifos.mobilewallet.mifospay.password.EditPasswordContract;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
+import org.mifos.mobilewallet.core.base.UseCaseHandler
+import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityPassword
+import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
+import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
+import org.mifos.mobilewallet.mifospay.base.BaseView
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.password.EditPasswordContract
+import org.mifos.mobilewallet.mifospay.password.EditPasswordContract.EditPasswordView
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import javax.inject.Inject
 
-import javax.inject.Inject;
-
-public class EditPasswordPresenter implements EditPasswordContract.EditPasswordPresenter {
-
-    private final UseCaseHandler mUseCaseHandler;
-    private final PreferencesHelper mPreferencesHelper;
-
+class EditPasswordPresenter @Inject constructor(
+    private val mUseCaseHandler: UseCaseHandler,
+    private val mPreferencesHelper: PreferencesHelper
+) : EditPasswordContract.EditPasswordPresenter {
+    @JvmField
     @Inject
-    UpdateUser updateUserUseCase;
+    var updateUserUseCase: UpdateUser? = null
 
+    @JvmField
     @Inject
-    AuthenticateUser authenticateUserUseCase;
-
-    private EditPasswordContract.EditPasswordView mEditPasswordView;
-
-    @Inject
-    public EditPasswordPresenter(UseCaseHandler useCaseHandler,
-            PreferencesHelper preferencesHelper) {
-        mUseCaseHandler = useCaseHandler;
-        mPreferencesHelper = preferencesHelper;
+    var authenticateUserUseCase: AuthenticateUser? = null
+    private var mEditPasswordView: EditPasswordView? = null
+    override fun attachView(baseView: BaseView<*>?) {
+        mEditPasswordView = baseView as EditPasswordView?
+        mEditPasswordView!!.setPresenter(this)
     }
 
-    @Override
-    public void attachView(BaseView baseView) {
-        mEditPasswordView = (EditPasswordContract.EditPasswordView) baseView;
-        mEditPasswordView.setPresenter(this);
-    }
-
-    @Override
-    public void handleSavePasswordButtonStatus(String currentPassword,
-                                               String newPassword,
-                                               String newPasswordRepeat) {
-        if (currentPassword.equals("") || newPassword.equals("") ||
-                newPasswordRepeat.equals("")) {
-            mEditPasswordView.disableSavePasswordButton();
+    override fun handleSavePasswordButtonStatus(
+        currentPassword: String?,
+        newPassword: String?,
+        newPasswordRepeat: String?
+    ) {
+        if (currentPassword == "" || newPassword == "" || newPasswordRepeat == "") {
+            mEditPasswordView!!.disableSavePasswordButton()
         } else {
-            if (newPassword.equals(newPasswordRepeat)) {
-                mEditPasswordView.enableSavePasswordButton();
+            if (newPassword == newPasswordRepeat) {
+                mEditPasswordView!!.enableSavePasswordButton()
             } else {
-                mEditPasswordView.disableSavePasswordButton();
+                mEditPasswordView!!.disableSavePasswordButton()
             }
         }
     }
 
-    @Override
-    public void updatePassword(String currentPassword, final String newPassword,
-            final String newPasswordRepeat) {
-        mEditPasswordView.startProgressBar();
+    override fun updatePassword(
+        currentPassword: String?,
+        newPassword: String?,
+        newPasswordRepeat: String?
+    ) {
+        mEditPasswordView!!.startProgressBar()
         if (isNotEmpty(currentPassword) && isNotEmpty(newPassword)
-                && isNotEmpty(newPasswordRepeat)) {
-            if (currentPassword.equals(newPassword)) {
-                mEditPasswordView.stopProgressBar();
-                mEditPasswordView.showError(Constants.ERROR_PASSWORDS_CANT_BE_SAME);
-            } else if (isNewPasswordValid(newPassword, newPasswordRepeat)) {
-                updatePassword(currentPassword, newPassword);
-            } else {
-                mEditPasswordView.stopProgressBar();
-                mEditPasswordView.showError(Constants.ERROR_VALIDATING_PASSWORD);
+            && isNotEmpty(newPasswordRepeat)
+        ) {
+            when {
+                currentPassword == newPassword -> {
+                    mEditPasswordView!!.stopProgressBar()
+                    mEditPasswordView!!.showError(Constants.ERROR_PASSWORDS_CANT_BE_SAME)
+                }
+                isNewPasswordValid(newPassword!!, newPasswordRepeat!!) -> {
+                    updatePassword(currentPassword!!, newPassword)
+                }
+                else -> {
+                    mEditPasswordView!!.stopProgressBar()
+                    mEditPasswordView!!.showError(Constants.ERROR_VALIDATING_PASSWORD)
+                }
             }
         } else {
-            mEditPasswordView.stopProgressBar();
-            mEditPasswordView.showError(Constants.ERROR_FIELDS_CANNOT_BE_EMPTY);
+            mEditPasswordView!!.stopProgressBar()
+            mEditPasswordView!!.showError(Constants.ERROR_FIELDS_CANNOT_BE_EMPTY)
         }
     }
 
-    private boolean isNotEmpty(String str) {
-        return !(str == null || str.isEmpty());
+    private fun isNotEmpty(str: String?): Boolean {
+        return !(str == null || str.isEmpty())
     }
 
-    private boolean isNewPasswordValid(String newPassword, String newPasswordRepeat) {
-        return newPassword.equals(newPasswordRepeat);
+    private fun isNewPasswordValid(newPassword: String, newPasswordRepeat: String): Boolean {
+        return newPassword == newPasswordRepeat
     }
 
-    private void updatePassword(String currentPassword, final String newPassword) {
+    private fun updatePassword(currentPassword: String, newPassword: String) {
         // authenticate and then update
         mUseCaseHandler.execute(authenticateUserUseCase,
-                new AuthenticateUser.RequestValues(mPreferencesHelper.getUsername(),
-                        currentPassword),
-                new UseCase.UseCaseCallback<AuthenticateUser.ResponseValue>() {
-                    @Override
-                    public void onSuccess(AuthenticateUser.ResponseValue response) {
+            AuthenticateUser.RequestValues(
+                mPreferencesHelper.username,
+                currentPassword
+            ),
+            object : UseCaseCallback<AuthenticateUser.ResponseValue?> {
+                override fun onSuccess(response: AuthenticateUser.ResponseValue?) {
+                    mUseCaseHandler.execute(updateUserUseCase,
+                        UpdateUser.RequestValues(
+                            UpdateUserEntityPassword(newPassword),
+                            mPreferencesHelper.userId.toInt()
+                        ),
+                        object : UseCaseCallback<UpdateUser.ResponseValue?> {
+                            override fun onSuccess(response: UpdateUser.ResponseValue?) {
+                                mEditPasswordView!!.stopProgressBar()
+                                mEditPasswordView!!.closeActivity()
+                            }
 
-                        mUseCaseHandler.execute(updateUserUseCase,
-                                new UpdateUser.RequestValues(
-                                        new UpdateUserEntityPassword(newPassword),
-                                        (int) mPreferencesHelper.getUserId()),
-                                new UseCase.UseCaseCallback<UpdateUser.ResponseValue>() {
-                                    @Override
-                                    public void onSuccess(UpdateUser.ResponseValue response) {
-                                        mEditPasswordView.stopProgressBar();
-                                        mEditPasswordView.closeActivity();
-                                    }
+                            override fun onError(message: String) {
+                                mEditPasswordView!!.stopProgressBar()
+                                mEditPasswordView!!.showError(message)
+                            }
+                        })
+                }
 
-                                    @Override
-                                    public void onError(String message) {
-                                        mEditPasswordView.stopProgressBar();
-                                        mEditPasswordView.showError(message);
-                                    }
-                                });
-                    }
-
-                    @Override
-                    public void onError(String message) {
-                        mEditPasswordView.stopProgressBar();
-                        mEditPasswordView.showError("Wrong password");
-                    }
-                });
+                override fun onError(message: String) {
+                    mEditPasswordView!!.stopProgressBar()
+                    mEditPasswordView!!.showError("Wrong password")
+                }
+            })
     }
 }
