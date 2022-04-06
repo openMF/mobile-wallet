@@ -102,7 +102,7 @@ class PassCodeActivity : MifosPassCodeActivity(), PassCodeView {
         return EncryptionUtil.DEFAULT
     }
 
-    override fun setPresenter(presenter: PassCodeContract.PassCodePresenter) {
+    override fun setPresenter(presenter: PassCodeContract.PassCodePresenter?) {
         mPassCodePresenter = mPresenter
     }
 
