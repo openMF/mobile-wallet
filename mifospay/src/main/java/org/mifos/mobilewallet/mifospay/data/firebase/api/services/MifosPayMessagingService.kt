@@ -174,7 +174,7 @@ class MifosPayMessagingService : FirebaseMessagingService() {
      * Handles data messages.
      */
     private fun handleDataMessage(json: JSONObject) {
-        Log.e(TAG, "push json: $json")
+        Log.d(TAG, "push json: $json")
         try {
             val data = json.getJSONObject("data")
             val title = data.getString("title")
@@ -183,14 +183,14 @@ class MifosPayMessagingService : FirebaseMessagingService() {
             val type = data.getString("type")
             val timestamp = data.getString("timestamp")
             val payload = data.getJSONObject("payload")
-            Log.e(TAG, "title: $title")
-            Log.e(TAG, "message: $message")
-            Log.e(TAG, "type: $type")
+            Log.d(TAG, "title: $title")
+            Log.d(TAG, "message: $message")
+            Log.d(TAG, "type: $type")
             // payload can be used when one needs to show specific notification with some data
             // and process it
-            Log.e(TAG, "payload: $payload")
-            Log.e(TAG, "imageUrl: $imageUrl")
-            Log.e(TAG, "timestamp: $timestamp")
+            Log.d(TAG, "payload: $payload")
+            Log.d(TAG, "imageUrl: $imageUrl")
+            Log.d(TAG, "timestamp: $timestamp")
             sendNotification(title, message)
 
             // Below code can be used when you want to show notification with Image.
