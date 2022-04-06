@@ -1,165 +1,147 @@
-package org.mifos.mobilewallet.mifospay.qr.ui;
+package org.mifos.mobilewallet.mifospay.qr.ui
 
-import android.app.Activity;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.ImageButton;
-import android.widget.Toast;
-
-import com.google.zxing.BinaryBitmap;
-import com.google.zxing.LuminanceSource;
-import com.google.zxing.MultiFormatReader;
-import com.google.zxing.RGBLuminanceSource;
-import com.google.zxing.Reader;
-import com.google.zxing.Result;
-import com.google.zxing.common.HybridBinarizer;
-
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.qr.QrContract;
-import org.mifos.mobilewallet.mifospay.qr.presenter.ReadQrPresenter;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.os.Bundle
+import android.view.View
+import android.widget.ImageButton
+import android.widget.Toast
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
+import com.google.zxing.*
+import com.google.zxing.common.HybridBinarizer
+import me.dm7.barcodescanner.zxing.ZXingScannerView
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.qr.QrContract
+import org.mifos.mobilewallet.mifospay.qr.QrContract.ReadQrView
+import org.mifos.mobilewallet.mifospay.qr.presenter.ReadQrPresenter
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import java.io.FileNotFoundException
+import javax.inject.Inject
 
 /**
  * Created by naman on 7/9/17.
  */
-
-public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrView,
-        ZXingScannerView.ResultHandler {
-
+class ReadQrActivity : BaseActivity(), ReadQrView, ZXingScannerView.ResultHandler {
+    @JvmField
     @Inject
-    ReadQrPresenter mPresenter;
+    var mPresenter: ReadQrPresenter? = null
+    private var mReadQrPresenter: QrContract.ReadQrPresenter? = null
 
-    QrContract.ReadQrPresenter mReadQrPresenter;
-
+    @JvmField
     @BindView(R.id.scannerView)
-    ZXingScannerView mScannerView;
+    var mScannerView: ZXingScannerView? = null
+
+    @JvmField
     @BindView(R.id.btn_flash_on)
-    ImageButton mFlashOn;
+    var mFlashOn: ImageButton? = null
+
+    @JvmField
     @BindView(R.id.btn_flash_off)
-    ImageButton mFlashOff;
+    var mFlashOff: ImageButton? = null
+
+    @JvmField
     @BindView(R.id.btn_open_gallery)
-    ImageButton mOpenGallery;
-    private static final int SELECT_PHOTO = 100;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
-
-        setContentView(R.layout.activity_read_qr);
-
-        ButterKnife.bind(ReadQrActivity.this);
-
-        setToolbarTitle(Constants.SCAN_CODE);
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        mPresenter.attachView(this);
-
-        mScannerView.setAutoFocus(true);
+    var mOpenGallery: ImageButton? = null
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activityComponent.inject(this)
+        setContentView(R.layout.activity_read_qr)
+        ButterKnife.bind(this@ReadQrActivity)
+        setToolbarTitle(Constants.SCAN_CODE)
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        mPresenter!!.attachView(this)
+        mScannerView!!.setAutoFocus(true)
     }
 
     @OnClick(R.id.btn_flash_on)
-    void turnOnFlash() {
-        mScannerView.setFlash(true);
-        mFlashOn.setVisibility(View.GONE);
-        mFlashOff.setVisibility(View.VISIBLE);
+    fun turnOnFlash() {
+        mScannerView!!.flash = true
+        mFlashOn!!.visibility = View.GONE
+        mFlashOff!!.visibility = View.VISIBLE
     }
 
     @OnClick(R.id.btn_flash_off)
-    void turnOffFlash() {
-        mScannerView.setFlash(false);
-        mFlashOn.setVisibility(View.VISIBLE);
-        mFlashOff.setVisibility(View.GONE);
+    fun turnOffFlash() {
+        mScannerView!!.flash = false
+        mFlashOn!!.visibility = View.VISIBLE
+        mFlashOff!!.visibility = View.GONE
     }
 
     @OnClick(R.id.btn_open_gallery)
-    public void openGallery() {
-        Intent photoPic = new Intent(Intent.ACTION_PICK);
-        photoPic.setType("image/*");
-        startActivityForResult(photoPic, SELECT_PHOTO);
+    fun openGallery() {
+        val photoPic = Intent(Intent.ACTION_PICK)
+        photoPic.type = "image/*"
+        startActivityForResult(photoPic, SELECT_PHOTO)
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mScannerView.setResultHandler(this);
-        mScannerView.startCamera();
+    public override fun onResume() {
+        super.onResume()
+        mScannerView!!.setResultHandler(this)
+        mScannerView!!.startCamera()
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        mScannerView.stopCamera();
+    public override fun onPause() {
+        super.onPause()
+        mScannerView!!.stopCamera()
     }
 
-    @Override
-    public void handleResult(Result result) {
-        String qrData = result.getText();
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra(Constants.QR_DATA, qrData);
-        setResult(Activity.RESULT_OK, returnIntent);
-        finish();
-
+    override fun handleResult(result: Result) {
+        val qrData = result.text
+        val returnIntent = Intent()
+        returnIntent.putExtra(Constants.QR_DATA, qrData)
+        setResult(RESULT_OK, returnIntent)
+        finish()
     }
 
-    @Override
-    public void setPresenter(QrContract.ReadQrPresenter presenter) {
-        this.mReadQrPresenter = presenter;
+    override fun setPresenter(presenter: QrContract.ReadQrPresenter?) {
+        mReadQrPresenter = presenter
     }
 
-    public String scanQRImage(Bitmap bMap) {
-        String contents = null;
-        int[] intArray = new int[bMap.getWidth() * bMap.getHeight()];
-        bMap.getPixels(intArray, 0, bMap.getWidth(), 0, 0, bMap.getWidth(), bMap.getHeight());
-        LuminanceSource source =
-                new RGBLuminanceSource(bMap.getWidth(), bMap.getHeight(), intArray);
-        BinaryBitmap bitmap =
-                new BinaryBitmap(new HybridBinarizer(source));
-        Reader reader = new MultiFormatReader();
+    private fun scanQRImage(bMap: Bitmap): String? {
+        var contents: String? = null
+        val intArray = IntArray(bMap.width * bMap.height)
+        bMap.getPixels(intArray, 0, bMap.width, 0, 0, bMap.width, bMap.height)
+        val source: LuminanceSource = RGBLuminanceSource(bMap.width, bMap.height, intArray)
+        val bitmap = BinaryBitmap(HybridBinarizer(source))
+        val reader: Reader = MultiFormatReader()
         try {
-            Result result = reader.decode(bitmap);
-            contents = result.getText();
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra(Constants.QR_DATA, contents);
-            setResult(Activity.RESULT_OK, returnIntent);
-            finish();
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(),
-                    "Error! " + e.toString(), Toast.LENGTH_SHORT).show();
+            val result = reader.decode(bitmap)
+            contents = result.text
+            val returnIntent = Intent()
+            returnIntent.putExtra(Constants.QR_DATA, contents)
+            setResult(RESULT_OK, returnIntent)
+            finish()
+        } catch (e: Exception) {
+            Toast.makeText(
+                applicationContext,
+                "Error! $e", Toast.LENGTH_SHORT
+            ).show()
         }
-        return contents;
+        return contents
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
             try {
-                Uri selectedImage = data.getData();
+                val selectedImage = data!!.data
                 if (selectedImage != null) {
-                    InputStream imageStream = getContentResolver().openInputStream(selectedImage);
-                    Bitmap bMap = BitmapFactory.decodeStream(imageStream);
-                    scanQRImage(bMap);
+                    val imageStream = contentResolver.openInputStream(selectedImage)
+                    val bMap = BitmapFactory.decodeStream(imageStream)
+                    scanQRImage(bMap)
                 }
-            } catch (FileNotFoundException e) {
-                Toast.makeText(getApplicationContext(), "File not found", Toast.LENGTH_SHORT)
-                        .show();
+            } catch (e: FileNotFoundException) {
+                Toast.makeText(applicationContext, "File not found", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
+    }
+
+    companion object {
+        private const val SELECT_PHOTO = 100
     }
 }

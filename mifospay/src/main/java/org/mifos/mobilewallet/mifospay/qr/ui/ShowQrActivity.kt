@@ -1,216 +1,178 @@
-package org.mifos.mobilewallet.mifospay.qr.ui;
+package org.mifos.mobilewallet.mifospay.qr.ui
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.content.FileProvider;
-import android.support.v7.app.AlertDialog;
-import android.text.InputType;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.qr.QrContract;
-import org.mifos.mobilewallet.mifospay.qr.presenter.ShowQrPresenter;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import android.content.DialogInterface
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
+import android.os.Bundle
+import android.support.design.widget.TextInputEditText
+import android.support.v4.content.FileProvider
+import android.support.v7.app.AlertDialog
+import android.text.InputType
+import android.view.*
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import android.widget.Toast
+import butterknife.BindView
+import butterknife.ButterKnife
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.qr.QrContract
+import org.mifos.mobilewallet.mifospay.qr.QrContract.ShowQrView
+import org.mifos.mobilewallet.mifospay.qr.presenter.ShowQrPresenter
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import javax.inject.Inject
 
 /**
  * Created by naman on 8/7/17.
  */
-
-public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrView {
-
+class ShowQrActivity : BaseActivity(), ShowQrView {
+    @JvmField
     @Inject
-    ShowQrPresenter mPresenter;
+    var mPresenter: ShowQrPresenter? = null
+    private var mShowQrPresenter: QrContract.ShowQrPresenter? = null
 
-    QrContract.ShowQrPresenter mShowQrPresenter;
-
+    @JvmField
     @BindView(R.id.iv_qr_code)
-    ImageView ivQrCode;
+    var ivQrCode: ImageView? = null
 
+    @JvmField
     @BindView(R.id.tv_qr_vpa)
-    TextView tvQrData;
+    var tvQrData: TextView? = null
 
+    @JvmField
     @BindView(R.id.btn_set_amount)
-    Button btnSetAmount;
+    var btnSetAmount: Button? = null
+    private var mAmount: String? = null
+    private var mBitmap: Bitmap? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activityComponent.inject(this)
+        setContentView(R.layout.activity_show_qr)
+        ButterKnife.bind(this@ShowQrActivity)
+        setToolbarTitle(Constants.QR_CODE)
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        mPresenter!!.attachView(this)
+        val qrData = intent.getStringExtra(Constants.QR_DATA)
+        mShowQrPresenter!!.generateQr(qrData)
+        tvQrData!!.text = String.format("%s: %s", getString(R.string.vpa), qrData)
+        val layout = window.attributes
+        layout.screenBrightness = 1f
+        window.attributes = layout
+        btnSetAmount!!.setOnClickListener { showSetAmountDialog(qrData) }
+    }
 
-    private String mAmount = null;
-    private Bitmap mBitmap;
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_share_qr, menu)
+        return true
+    }
 
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
-
-        setContentView(R.layout.activity_show_qr);
-
-        ButterKnife.bind(ShowQrActivity.this);
-
-        setToolbarTitle(Constants.QR_CODE);
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        mPresenter.attachView(this);
-
-        final String qrData = getIntent().getStringExtra(Constants.QR_DATA);
-        mShowQrPresenter.generateQr(qrData);
-        tvQrData.setText(String.format("%s: %s", getString(R.string.vpa), qrData));
-
-        WindowManager.LayoutParams layout = getWindow().getAttributes();
-        layout.screenBrightness = 1F;
-        getWindow().setAttributes(layout);
-
-        btnSetAmount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSetAmountDialog(qrData);
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_share_qr -> if (mBitmap != null) {
+                val imageUri = saveImage(mBitmap!!)
+                shareQr(imageUri)
             }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_share_qr, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item_share_qr:
-                if (mBitmap != null) {
-                    Uri imageUri = saveImage(mBitmap);
-                    shareQr(imageUri);
-                }
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+            else -> return super.onOptionsItemSelected(item)
         }
-        return true;
+        return true
     }
 
-    private Uri saveImage(Bitmap bitmap) {
-        File imagesFolder = new File(getCacheDir(), "codes");
-        Uri uri = null;
+    private fun saveImage(bitmap: Bitmap): Uri? {
+        val imagesFolder = File(cacheDir, "codes")
+        var uri: Uri? = null
         try {
-            imagesFolder.mkdirs();
-            File file = new File(imagesFolder, "shared_code.png");
-
-            FileOutputStream stream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
-            stream.flush();
-            stream.close();
-            uri = FileProvider.getUriForFile(this,
-                    "org.mifos.mobilewallet.mifospay.provider", file);
-
-        } catch (IOException e) {
-            e.printStackTrace();
+            imagesFolder.mkdirs()
+            val file = File(imagesFolder, "shared_code.png")
+            val stream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream)
+            stream.flush()
+            stream.close()
+            uri = FileProvider.getUriForFile(
+                this,
+                "org.mifos.mobilewallet.mifospay.provider", file
+            )
+        } catch (e: IOException) {
+            e.printStackTrace()
         }
-
-        return uri;
+        return uri
     }
 
-    private void shareQr(Uri uri) {
+    private fun shareQr(uri: Uri?) {
         if (uri != null) {
-            Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.putExtra(Intent.EXTRA_STREAM, uri);
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            intent.setType("image/png");
-            intent = Intent.createChooser(intent, "Share Qr code");
-            startActivity(intent);
+            var intent = Intent(Intent.ACTION_SEND)
+            intent.putExtra(Intent.EXTRA_STREAM, uri)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            intent.type = "image/png"
+            intent = Intent.createChooser(intent, "Share Qr code")
+            startActivity(intent)
         }
     }
 
-    void showSetAmountDialog(final String qrData) {
-        final AlertDialog.Builder editTextDialog = new AlertDialog.Builder(this);
-        editTextDialog.setCancelable(false);
-        editTextDialog.setTitle("Enter Amount");
-        View view = LayoutInflater.from(getApplicationContext()).inflate(
-                R.layout.dialog_set_amt,
-                (ViewGroup) findViewById(android.R.id.content),
-                false
-        );
-        final TextInputEditText edittext = view.findViewById(R.id.editText_set_amt);
-        edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
-        editTextDialog.setView(view);
+    private fun showSetAmountDialog(qrData: String?) {
+        val editTextDialog = AlertDialog.Builder(this)
+        editTextDialog.setCancelable(false)
+        editTextDialog.setTitle("Enter Amount")
+        val view = LayoutInflater.from(applicationContext).inflate(
+            R.layout.dialog_set_amt,
+            findViewById<View>(android.R.id.content) as ViewGroup,
+            false
+        )
+        val edittext: TextInputEditText = view.findViewById(R.id.editText_set_amt)
+        edittext.inputType = InputType.TYPE_CLASS_NUMBER
+        editTextDialog.setView(view)
         if (mAmount != null) {
-            edittext.setText(mAmount);
+            edittext.setText(mAmount)
         }
-        editTextDialog.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String amount = edittext.getText().toString();
-                if (amount.equals("")) {
-                    showToast(getString(R.string.enter_amount));
-                    return;
-                } else if (Double.parseDouble(amount) <= 0) {
-                    showToast(Constants.PLEASE_ENTER_VALID_AMOUNT);
-                    return;
+        editTextDialog.setPositiveButton(
+            R.string.confirm,
+            DialogInterface.OnClickListener { dialog, which ->
+                val amount = edittext.text.toString()
+                if (amount == "") {
+                    showToast(getString(R.string.enter_amount))
+                    return@OnClickListener
+                } else if (amount.toDouble() <= 0) {
+                    showToast(Constants.PLEASE_ENTER_VALID_AMOUNT)
+                    return@OnClickListener
                 }
-                mAmount = amount;
-                tvQrData.setText(String.format(
-                        "%s: %s\n%s: %s",
-                        getString(R.string.vpa),
-                        qrData,
-                        getString(R.string.amount),
-                        mAmount));
-                generateQR(qrData + ", " + mAmount);
-            }
-        });
-        editTextDialog.setNeutralButton(R.string.reset, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                mAmount = null;
-                tvQrData.setText(String.format("%s: %s", getString(R.string.vpa), qrData));
-                generateQR(qrData);
-                showToast("Reset Amount Successful");
-            }
-        });
-        editTextDialog.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        editTextDialog.show();
+                mAmount = amount
+                tvQrData!!.text = String.format(
+                    "%s: %s\n%s: %s",
+                    getString(R.string.vpa),
+                    qrData,
+                    getString(R.string.amount),
+                    mAmount
+                )
+                generateQR("$qrData, $mAmount")
+            })
+        editTextDialog.setNeutralButton(R.string.reset) { dialog, which ->
+            mAmount = null
+            tvQrData!!.text = String.format("%s: %s", getString(R.string.vpa), qrData)
+            generateQR(qrData)
+            showToast("Reset Amount Successful")
+        }
+        editTextDialog.setNegativeButton(R.string.cancel) { dialog, which -> dialog.dismiss() }
+        editTextDialog.show()
     }
 
-    @Override
-    public void setPresenter(QrContract.ShowQrPresenter presenter) {
-        this.mShowQrPresenter = presenter;
+    override fun setPresenter(presenter: QrContract.ShowQrPresenter?) {
+        mShowQrPresenter = presenter
     }
 
-    @Override
-    public void showGeneratedQr(Bitmap bitmap) {
-        ivQrCode.setImageBitmap(bitmap);
-        this.mBitmap = bitmap;
+    override fun showGeneratedQr(bitmap: Bitmap?) {
+        ivQrCode!!.setImageBitmap(bitmap)
+        mBitmap = bitmap
     }
 
-    void showToast(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    fun showToast(message: String?) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
     }
 
-    void generateQR(String qrData) {
-        mShowQrPresenter.generateQr(qrData);
+    private fun generateQR(qrData: String?) {
+        mShowQrPresenter!!.generateQr(qrData)
     }
 }
