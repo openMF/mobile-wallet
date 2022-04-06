@@ -1,198 +1,176 @@
-package org.mifos.mobilewallet.mifospay.home.ui;
+package org.mifos.mobilewallet.mifospay.home.ui
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import org.mifos.mobilewallet.core.domain.model.client.Client;
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.base.BaseFragment;
-import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity;
-import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
-import org.mifos.mobilewallet.mifospay.home.presenter.ProfilePresenter;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
-import org.mifos.mobilewallet.mifospay.utils.Toaster;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import okhttp3.ResponseBody;
+import android.content.Intent
+import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetBehavior.BottomSheetCallback
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
+import okhttp3.ResponseBody
+import org.mifos.mobilewallet.core.domain.model.client.Client
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.base.BaseFragment
+import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.ProfileView
+import org.mifos.mobilewallet.mifospay.home.presenter.ProfilePresenter
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.utils.TextDrawable
+import org.mifos.mobilewallet.mifospay.utils.Toaster
+import javax.inject.Inject
 
 /**
  * Created by naman on 7/9/17.
  */
-
-public class ProfileFragment extends BaseFragment implements BaseHomeContract.ProfileView {
-
+class ProfileFragment : BaseFragment(), ProfileView {
+    @JvmField
     @Inject
-    ProfilePresenter mPresenter;
+    var mPresenter: ProfilePresenter? = null
+    var mProfilePresenter: BaseHomeContract.ProfilePresenter? = null
 
-    BaseHomeContract.ProfilePresenter mProfilePresenter;
-
+    @JvmField
     @BindView(R.id.iv_user_image)
-    ImageView ivUserImage;
+    var ivUserImage: ImageView? = null
 
+    @JvmField
     @BindView(R.id.tv_user_name)
-    TextView tvUserName;
+    var tvUserName: TextView? = null
 
+    @JvmField
     @BindView(R.id.nsv_profile_bottom_sheet_dialog)
-    View vProfileBottomSheetDialog;
+    var vProfileBottomSheetDialog: View? = null
 
+    @JvmField
     @BindView(R.id.inc_account_details_email)
-    View vAccountDetailsEmail;
+    var vAccountDetailsEmail: View? = null
 
+    @JvmField
     @BindView(R.id.inc_account_details_vpa)
-    View vAccountDetailsVpa;
+    var vAccountDetailsVpa: View? = null
 
+    @JvmField
     @BindView(R.id.inc_account_details_mobile_number)
-    View vAccountDetailsMobile;
-
-    protected static BottomSheetBehavior mBottomSheetBehavior;
-
-    public static ProfileFragment newInstance(long clientId) {
-
-        Bundle args = new Bundle();
-        args.putLong(Constants.CLIENT_ID, clientId);
-        ProfileFragment fragment = new ProfileFragment();
-        fragment.setArguments(args);
-        return fragment;
+    var vAccountDetailsMobile: View? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        (activity as BaseActivity?)!!.activityComponent.inject(this)
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val rootView = inflater.inflate(R.layout.fragment_profile, container, false)
+        ButterKnife.bind(this, rootView)
+        mPresenter!!.attachView(this)
+        setupUi()
+        return rootView
     }
 
-    @Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
-            @Nullable Bundle savedInstanceState) {
-
-        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
-        ButterKnife.bind(this, rootView);
-        mPresenter.attachView(this);
-
-        setupUi();
-
-        return rootView;
+    private fun setupUi() {
+        setToolbarTitle(Constants.PROFILE)
+        setSwipeEnabled(false)
+        hideBackButton()
+        setupBottomSheet()
     }
 
-    private void setupUi() {
-        setToolbarTitle(Constants.PROFILE);
-        setSwipeEnabled(false);
-        hideBackButton();
-        setupBottomSheet();
-    }
-
-    private void setupBottomSheet() {
+    private fun setupBottomSheet() {
         mBottomSheetBehavior = BottomSheetBehavior
-                .from(vProfileBottomSheetDialog);
-        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View view, int newState) {
-            }
-
-            @Override
-            public void onSlide(@NonNull View view, float v) {
-
-            }
-        });
+            .from(vProfileBottomSheetDialog)
+        mBottomSheetBehavior?.setBottomSheetCallback(object : BottomSheetCallback() {
+            override fun onStateChanged(view: View, newState: Int) {}
+            override fun onSlide(view: View, v: Float) {}
+        })
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        mProfilePresenter.fetchProfile();
-        mProfilePresenter.fetchAccountDetails();
-        mProfilePresenter.fetchClientImage();
+    override fun onResume() {
+        super.onResume()
+        mProfilePresenter!!.fetchProfile()
+        mProfilePresenter!!.fetchAccountDetails()
+        mProfilePresenter!!.fetchClientImage()
     }
 
-    @Override
-    public void setPresenter(BaseHomeContract.ProfilePresenter presenter) {
-        this.mProfilePresenter = presenter;
+    override fun setPresenter(presenter: BaseHomeContract.ProfilePresenter?) {
+        mProfilePresenter = presenter
     }
 
     @OnClick(R.id.iv_user_image)
-    public void onUserImageEditClicked() {
-        if (getActivity() != null) {
-            Intent i = new Intent(getActivity(), EditProfileActivity.class);
-            i.putExtra(Constants.CHANGE_PROFILE_IMAGE_KEY, Constants.CHANGE_PROFILE_IMAGE_VALUE);
-            startActivity(i);
+    fun onUserImageEditClicked() {
+        if (activity != null) {
+            val i = Intent(activity, EditProfileActivity::class.java)
+            i.putExtra(Constants.CHANGE_PROFILE_IMAGE_KEY, Constants.CHANGE_PROFILE_IMAGE_VALUE)
+            startActivity(i)
         }
     }
 
     @OnClick(R.id.btn_profile_bottom_sheet_action)
-    public void onEditProfileClicked() {
-        if (getActivity() != null) {
-            getActivity().startActivity(new Intent(getActivity(), EditProfileActivity.class));
+    fun onEditProfileClicked() {
+        if (activity != null) {
+            activity!!.startActivity(Intent(activity, EditProfileActivity::class.java))
         }
     }
 
-    @Override
-    public void showProfile(Client client) {
-        TextDrawable drawable = TextDrawable.builder().beginConfig()
-                .width((int) getResources().getDimension(R.dimen.user_profile_image_size))
-                .height((int) getResources().getDimension(R.dimen.user_profile_image_size))
-                .endConfig().buildRound(client.getName().substring(0, 1), R.color.colorAccentBlack);
-        ivUserImage.setImageDrawable(drawable);
-        tvUserName.setText(client.getName());
+    override fun showProfile(client: Client?) {
+        val drawable = TextDrawable.builder().beginConfig()
+            .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())
+            .height(resources.getDimension(R.dimen.user_profile_image_size).toInt())
+            .endConfig().buildRound(client!!.name.substring(0, 1), R.color.colorAccentBlack)
+        ivUserImage!!.setImageDrawable(drawable)
+        tvUserName!!.text = client.name
     }
 
-    @Override
-    public void showEmail(String email) {
-        ((ImageView) vAccountDetailsEmail.findViewById(R.id.iv_item_casual_list_icon))
-                .setImageDrawable(getResources().getDrawable(R.drawable.ic_email));
-        ((TextView) vAccountDetailsEmail.findViewById(R.id.tv_item_casual_list_title))
-                .setText(email);
-        ((TextView) vAccountDetailsEmail.findViewById(R.id.tv_item_casual_list_subtitle))
-                .setText(getResources().getString(R.string.email));
+    override fun showEmail(email: String?) {
+        (vAccountDetailsEmail!!.findViewById<View>(R.id.iv_item_casual_list_icon) as ImageView)
+            .setImageDrawable(resources.getDrawable(R.drawable.ic_email))
+        (vAccountDetailsEmail!!.findViewById<View>(R.id.tv_item_casual_list_title) as TextView).text =
+            email
+        (vAccountDetailsEmail!!.findViewById<View>(R.id.tv_item_casual_list_subtitle) as TextView).text =
+            resources.getString(R.string.email)
     }
 
-    @Override
-    public void showVpa(String vpa) {
-        ((ImageView) vAccountDetailsVpa.findViewById(R.id.iv_item_casual_list_icon))
-                .setImageDrawable(getResources().getDrawable(R.drawable.ic_transaction));
-        ((TextView) vAccountDetailsVpa.findViewById(R.id.tv_item_casual_list_title))
-                .setText(vpa);
-        ((TextView) vAccountDetailsVpa.findViewById(R.id.tv_item_casual_list_subtitle))
-                .setText(getResources().getString(R.string.vpa));
+    override fun showVpa(vpa: String?) {
+        (vAccountDetailsVpa!!.findViewById<View>(R.id.iv_item_casual_list_icon) as ImageView)
+            .setImageDrawable(resources.getDrawable(R.drawable.ic_transaction))
+        (vAccountDetailsVpa!!.findViewById<View>(R.id.tv_item_casual_list_title) as TextView).text =
+            vpa
+        (vAccountDetailsVpa!!.findViewById<View>(R.id.tv_item_casual_list_subtitle) as TextView).text =
+            resources.getString(R.string.vpa)
     }
 
-    @Override
-    public void showMobile(String mobile) {
-        ((ImageView) vAccountDetailsMobile.findViewById(R.id.iv_item_casual_list_icon))
-                .setImageDrawable(getResources().getDrawable(R.drawable.ic_mobile));
-        ((TextView) vAccountDetailsMobile.findViewById(R.id.tv_item_casual_list_title))
-                .setText(mobile);
-        ((TextView) vAccountDetailsMobile.findViewById(R.id.tv_item_casual_list_subtitle))
-                .setText(getResources().getString(R.string.mobile));
+    override fun showMobile(mobile: String?) {
+        (vAccountDetailsMobile!!.findViewById<View>(R.id.iv_item_casual_list_icon) as ImageView)
+            .setImageDrawable(resources.getDrawable(R.drawable.ic_mobile))
+        (vAccountDetailsMobile!!.findViewById<View>(R.id.tv_item_casual_list_title) as TextView).text =
+            mobile
+        (vAccountDetailsMobile!!.findViewById<View>(R.id.tv_item_casual_list_subtitle) as TextView).text =
+            resources.getString(R.string.mobile)
     }
 
-    @Override
-    public void fetchImageSuccess(ResponseBody responseBody) {
-
+    override fun fetchImageSuccess(responseBody: ResponseBody?) {}
+    override fun showToast(message: String?) {
+        Toaster.showToast(activity, message)
     }
 
-    @Override
-    public void showToast(String message) {
-        Toaster.showToast(getActivity(), message);
+    override fun showSnackbar(message: String?) {
+        Toaster.show(view, message)
     }
 
-    @Override
-    public void showSnackbar(String message) {
-        Toaster.show(getView(), message);
+    companion object {
+        @JvmField
+        var mBottomSheetBehavior: BottomSheetBehavior<*>? = null
+        fun newInstance(clientId: Long): ProfileFragment {
+            val args = Bundle()
+            args.putLong(Constants.CLIENT_ID, clientId)
+            val fragment = ProfileFragment()
+            fragment.arguments = args
+            return fragment
+        }
     }
-
 }

@@ -1,169 +1,149 @@
-package org.mifos.mobilewallet.mifospay.home.ui;
+package org.mifos.mobilewallet.mifospay.home.ui
 
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.BottomNavigationView;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.v4.app.Fragment;
-import android.view.Menu;
-import android.view.MenuItem;
-
-import org.mifos.mobilewallet.core.domain.model.client.Client;
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.faq.ui.FAQActivity;
-import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
-import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
-import org.mifos.mobilewallet.mifospay.home.presenter.MainPresenter;
-import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment;
-import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import android.content.Intent
+import android.os.Bundle
+import android.support.design.widget.BottomNavigationView
+import android.support.design.widget.BottomSheetBehavior
+import android.view.Menu
+import android.view.MenuItem
+import butterknife.BindView
+import butterknife.ButterKnife
+import org.mifos.mobilewallet.core.domain.model.client.Client
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
+import org.mifos.mobilewallet.mifospay.faq.ui.FAQActivity
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.BaseHomePresenter
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.BaseHomeView
+import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter
+import org.mifos.mobilewallet.mifospay.home.presenter.MainPresenter
+import org.mifos.mobilewallet.mifospay.home.ui.HomeFragment.Companion.newInstance
+import org.mifos.mobilewallet.mifospay.home.ui.PaymentsFragment.Companion.newInstance
+import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment
+import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import javax.inject.Inject
 
 /**
  * Created by naman on 17/6/17.
  */
-
-public class MainActivity extends BaseActivity implements BaseHomeContract.BaseHomeView {
-
+class MainActivity : BaseActivity(), BaseHomeView {
+    @JvmField
     @Inject
-    MainPresenter mPresenter;
+    var mPresenter: MainPresenter? = null
 
+    @JvmField
     @Inject
-    LocalRepository localRepository;
+    var localRepository: LocalRepository? = null
 
+    @JvmField
     @BindView(R.id.bottom_navigation)
-    BottomNavigationView bottomNavigationView;
-
-    BaseHomeContract.BaseHomePresenter mHomePresenter;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
-        setContentView(R.layout.activity_home);
-
-        ButterKnife.bind(this);
-
-        mPresenter.attachView(this);
-        mHomePresenter.fetchClientDetails();
-        bottomNavigationView.setOnNavigationItemSelectedListener(
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        navigateFragment(item.getItemId(), false);
-                        return true;
-                    }
-                });
-        bottomNavigationView.setSelectedItemId(R.id.action_home);
-        setToolbarTitle(Constants.HOME);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_overflow, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.item_faq:
-                startActivity(new Intent(getApplicationContext(), FAQActivity.class));
-                break;
-            case R.id.item_profile_setting:
-                startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
-                break;
-            default:
-                return super.onOptionsItemSelected(item);
+    var bottomNavigationView: BottomNavigationView? = null
+    private var mHomePresenter: BaseHomePresenter? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activityComponent.inject(this)
+        setContentView(R.layout.activity_home)
+        ButterKnife.bind(this)
+        mPresenter!!.attachView(this)
+        mHomePresenter!!.fetchClientDetails()
+        bottomNavigationView!!.setOnNavigationItemSelectedListener { item ->
+            navigateFragment(item.itemId, false)
+            true
         }
-        return true;
+        bottomNavigationView!!.selectedItemId = R.id.action_home
+        setToolbarTitle(Constants.HOME)
     }
 
-    @Override
-    public void setPresenter(BaseHomeContract.BaseHomePresenter presenter) {
-        mHomePresenter = presenter;
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_overflow, menu)
+        return true
     }
 
-    @Override
-    public void showClientDetails(Client client) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_faq -> startActivity(Intent(applicationContext, FAQActivity::class.java))
+            R.id.item_profile_setting -> startActivity(
+                Intent(
+                    applicationContext,
+                    SettingsActivity::class.java
+                )
+            )
+            else -> return super.onOptionsItemSelected(item)
+        }
+        return true
+    }
+
+    override fun setPresenter(presenter: BaseHomePresenter?) {
+        mHomePresenter = presenter
+    }
+
+    override fun showClientDetails(client: Client?) {
 //        tvUserName.setText(client.getName());
 //        TextDrawable drawable = TextDrawable.builder()
 //                .buildRound(client.getName().substring(0, 1), R.color.colorPrimary);
 //        ivUserImage.setImageDrawable(drawable);
     }
 
-    @Override
-    public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager()
-                .findFragmentById(R.id.bottom_navigation_fragment_container);
-        if ((fragment instanceof FinanceFragment) && fragment.isVisible()) {
-            FinanceFragment financeFragment = (FinanceFragment) fragment;
-            if (((TabLayoutAdapter) financeFragment.vpTabLayout.getAdapter())
-                    .getItem(financeFragment.vpTabLayout.getCurrentItem())
-                    instanceof MerchantsFragment) {
-                MerchantsFragment merchantsFragment = (MerchantsFragment)
-                        ((TabLayoutAdapter) financeFragment.vpTabLayout.getAdapter())
-                                .getItem(financeFragment.vpTabLayout.getCurrentItem());
-                if (!merchantsFragment.etMerchantSearch.getText().toString().isEmpty()) {
-                    merchantsFragment.etMerchantSearch.setText("");
-                    return;
+    override fun onBackPressed() {
+        val fragment = supportFragmentManager
+            .findFragmentById(R.id.bottom_navigation_fragment_container)
+        if (fragment is FinanceFragment && fragment.isVisible()) {
+            if ((fragment.vpTabLayout?.adapter as TabLayoutAdapter?)
+                    ?.getItem(fragment.vpTabLayout!!.currentItem) is MerchantsFragment
+            ) {
+                val merchantsFragment = (fragment.vpTabLayout?.adapter as TabLayoutAdapter?)
+                    ?.getItem(fragment.vpTabLayout!!.currentItem) as MerchantsFragment
+                if (merchantsFragment.etMerchantSearch?.text.toString().isNotEmpty()) {
+                    merchantsFragment.etMerchantSearch?.setText("")
+                    return
                 }
             }
         }
-        if (fragment != null && !(fragment instanceof HomeFragment) && fragment.isVisible()) {
-            if (fragment instanceof ProfileFragment &&
-                    ProfileFragment.mBottomSheetBehavior.getState()
-                            != BottomSheetBehavior.STATE_COLLAPSED) {
-                ProfileFragment.mBottomSheetBehavior
-                        .setState(BottomSheetBehavior.STATE_COLLAPSED);
-                return;
+        if (fragment != null && fragment !is HomeFragment && fragment.isVisible) {
+            if (fragment is ProfileFragment &&
+                ProfileFragment.mBottomSheetBehavior!!.state
+                != BottomSheetBehavior.STATE_COLLAPSED
+            ) {
+                ProfileFragment.mBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+                return
             }
-            navigateFragment(R.id.action_home, true);
-            return;
-        } else if (fragment != null && (fragment instanceof HomeFragment) && fragment.isVisible()
-                && HomeFragment.mBottomSheetBehavior.getState()
-                != BottomSheetBehavior.STATE_COLLAPSED) {
-            HomeFragment.mBottomSheetBehavior
-                    .setState(BottomSheetBehavior.STATE_COLLAPSED);
-            return;
+            navigateFragment(R.id.action_home, true)
+            return
+        } else if (fragment != null && fragment is HomeFragment && fragment.isVisible()
+            && (HomeFragment.mBottomSheetBehavior!!.state
+                    != BottomSheetBehavior.STATE_COLLAPSED)
+        ) {
+            HomeFragment.mBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            return
         }
-        super.onBackPressed();
+        super.onBackPressed()
     }
 
-    private void navigateFragment(int id, boolean shouldSelect) {
+    private fun navigateFragment(id: Int, shouldSelect: Boolean) {
         if (shouldSelect) {
-            bottomNavigationView.setSelectedItemId(id);
+            bottomNavigationView!!.selectedItemId = id
         } else {
-            switch (id) {
-                case R.id.action_home:
-                    replaceFragment(HomeFragment.newInstance(localRepository.getClientDetails()
-                                    .getClientId()), false,
-                            R.id.bottom_navigation_fragment_container);
-                    break;
-
-                case R.id.action_payments:
-                    replaceFragment(PaymentsFragment.newInstance(), false,
-                            R.id.bottom_navigation_fragment_container);
-                    break;
-
-                case R.id.action_finance:
-                    replaceFragment(FinanceFragment.newInstance(), false,
-                            R.id.bottom_navigation_fragment_container);
-                    break;
-
-                case R.id.action_profile:
-                    replaceFragment(new ProfileFragment(), false,
-                            R.id.bottom_navigation_fragment_container);
-                    break;
-
+            when (id) {
+                R.id.action_home -> replaceFragment(
+                    newInstance(
+                        localRepository!!.clientDetails
+                            .clientId
+                    ), false,
+                    R.id.bottom_navigation_fragment_container
+                )
+                R.id.action_payments -> replaceFragment(
+                    newInstance(), false,
+                    R.id.bottom_navigation_fragment_container
+                )
+                R.id.action_finance -> replaceFragment(
+                    FinanceFragment.newInstance(), false,
+                    R.id.bottom_navigation_fragment_container
+                )
+                R.id.action_profile -> replaceFragment(
+                    ProfileFragment(), false,
+                    R.id.bottom_navigation_fragment_container
+                )
             }
         }
     }

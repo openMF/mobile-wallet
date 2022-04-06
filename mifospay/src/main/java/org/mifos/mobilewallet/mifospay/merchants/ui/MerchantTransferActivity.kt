@@ -1,198 +1,195 @@
-package org.mifos.mobilewallet.mifospay.merchants.ui;
+package org.mifos.mobilewallet.mifospay.merchants.ui
 
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.TextInputEditText;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
-import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
-import org.mifos.mobilewallet.mifospay.history.ui.adapter.SpecificTransactionsAdapter;
-import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
-import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantTransferPresenter;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
-import org.mifos.mobilewallet.mifospay.utils.Toaster;
-
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-import static org.mifos.mobilewallet.mifospay.MifosPayApp.getContext;
+import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.BottomSheetBehavior.BottomSheetCallback
+import android.support.design.widget.TextInputEditText
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.view.View
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
+import butterknife.OnClick
+import org.mifos.mobilewallet.core.domain.model.Transaction
+import org.mifos.mobilewallet.mifospay.MifosPayApp
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment
+import org.mifos.mobilewallet.mifospay.history.ui.adapter.SpecificTransactionsAdapter
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.MerchantTransferView
+import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantTransferPresenter
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.utils.TextDrawable
+import org.mifos.mobilewallet.mifospay.utils.Toaster
+import javax.inject.Inject
 
 /**
  * Created by Shivansh Tiwari on 06/07/19.
  */
+class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
+    private var mBottomSheetBehavior: BottomSheetBehavior<*>? = null
 
-public class MerchantTransferActivity extends BaseActivity implements
-        BaseHomeContract.MerchantTransferView {
-
-    private BottomSheetBehavior mBottomSheetBehavior;
-
+    @JvmField
     @BindView(R.id.nsv_merchant_bottom_sheet_dialog)
-    View vMerchantBottomSheetDialog;
+    var vMerchantBottomSheetDialog: View? = null
 
+    @JvmField
     @BindView(R.id.iv_merchant_image)
-    ImageView ivMerchantImage;
+    var ivMerchantImage: ImageView? = null
+
+    @JvmField
     @BindView(R.id.tv_pay_to_name)
-    TextView tvMerchantName;
+    var tvMerchantName: TextView? = null
+
+    @JvmField
     @BindView(R.id.tv_pay_to_vpa)
-    TextView tvMerchantVPA;
+    var tvMerchantVPA: TextView? = null
+
+    @JvmField
     @BindView(R.id.et_merchant_amount)
-    TextInputEditText etAmount;
+    var etAmount: TextInputEditText? = null
+
+    @JvmField
     @BindView(R.id.btn_submit)
-    Button btnSubmit;
+    var btnSubmit: Button? = null
 
+    @JvmField
     @BindView(R.id.rv_merchant_history)
-    RecyclerView rvMerchantHistory;
+    var rvMerchantHistory: RecyclerView? = null
 
+    @JvmField
     @BindView(R.id.inc_empty_transactions_state_view)
-    View vEmptyState;
+    var vEmptyState: View? = null
+
+    @JvmField
     @BindView(R.id.iv_empty_no_transaction_history)
-    ImageView ivTransactionsStateIcon;
+    var ivTransactionsStateIcon: ImageView? = null
+
+    @JvmField
     @BindView(R.id.tv_empty_no_transaction_history_title)
-    TextView tvTransactionsStateTitle;
+    var tvTransactionsStateTitle: TextView? = null
+
+    @JvmField
     @BindView(R.id.tv_empty_no_transaction_history_subtitle)
-    TextView tvTransactionsStateSubtitle;
+    var tvTransactionsStateSubtitle: TextView? = null
 
+    @JvmField
     @Inject
-    MerchantTransferPresenter mPresenter;
-    BaseHomeContract.MerchantTransferPresenter mTransferPresenter;
-    private String merchantAccountNumber;
+    var mPresenter: MerchantTransferPresenter? = null
+    var mTransferPresenter: BaseHomeContract.MerchantTransferPresenter? = null
+    private var merchantAccountNumber: String? = null
 
+    @JvmField
     @Inject
-    SpecificTransactionsAdapter mMerchantHistoryAdapter;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        getActivityComponent().inject(this);
-
-        setContentView(R.layout.activity_merchant_transaction);
-        ButterKnife.bind(this);
-        setToolbarTitle("Merchant Transaction");
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setupUI();
-        mPresenter.attachView(this);
-        mPresenter.fetchMerchantTransfers(merchantAccountNumber);
+    var mMerchantHistoryAdapter: SpecificTransactionsAdapter? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        activityComponent.inject(this)
+        setContentView(R.layout.activity_merchant_transaction)
+        ButterKnife.bind(this)
+        setToolbarTitle("Merchant Transaction")
+        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        setupUI()
+        mPresenter!!.attachView(this)
+        mPresenter!!.fetchMerchantTransfers(merchantAccountNumber)
     }
 
-    private void setupUI() {
-        setupBottomSheet();
-        this.merchantAccountNumber = getIntent().getStringExtra(Constants.MERCHANT_ACCOUNT_NO);
-        tvMerchantName.setText(getIntent().getStringExtra(Constants.MERCHANT_NAME));
-        tvMerchantVPA.setText(getIntent().getStringExtra(Constants.MERCHANT_VPA));
-        TextDrawable drawable = TextDrawable.builder().beginConfig()
-                .width((int) getResources().getDimension(R.dimen.user_profile_image_size))
-                .height((int) getResources().getDimension(R.dimen.user_profile_image_size))
-                .endConfig().buildRound(getIntent().getStringExtra(Constants.MERCHANT_NAME)
-                        .substring(0, 1), R.color.colorPrimary);
-        ivMerchantImage.setImageDrawable(drawable);
-        showTransactionFetching();
-        setUpRecycleView();
+    private fun setupUI() {
+        setupBottomSheet()
+        merchantAccountNumber = intent.getStringExtra(Constants.MERCHANT_ACCOUNT_NO)
+        tvMerchantName!!.text =
+            intent.getStringExtra(Constants.MERCHANT_NAME)
+        tvMerchantVPA!!.text = intent.getStringExtra(Constants.MERCHANT_VPA)
+        val drawable = TextDrawable.builder().beginConfig()
+            .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())
+            .height(resources.getDimension(R.dimen.user_profile_image_size).toInt())
+            .endConfig().buildRound(
+                intent.getStringExtra(Constants.MERCHANT_NAME)
+                    ?.substring(0, 1), R.color.colorPrimary
+            )
+        ivMerchantImage!!.setImageDrawable(drawable)
+        showTransactionFetching()
+        setUpRecycleView()
     }
 
-    private void setUpRecycleView() {
-        mMerchantHistoryAdapter.setContext(this);
-        rvMerchantHistory.setLayoutManager(new LinearLayoutManager(getContext()));
-        rvMerchantHistory.setAdapter(mMerchantHistoryAdapter);
+    private fun setUpRecycleView() {
+        mMerchantHistoryAdapter!!.setContext(this)
+        rvMerchantHistory!!.layoutManager = LinearLayoutManager(MifosPayApp.getContext())
+        rvMerchantHistory!!.adapter = mMerchantHistoryAdapter
     }
 
-    @Override
-    public void setPresenter(BaseHomeContract.MerchantTransferPresenter presenter) {
-        this.mTransferPresenter = presenter;
+    override fun setPresenter(presenter: BaseHomeContract.MerchantTransferPresenter?) {
+        mTransferPresenter = presenter
     }
 
-
-    private void setupBottomSheet() {
-        mBottomSheetBehavior = BottomSheetBehavior.from(vMerchantBottomSheetDialog);
-        mBottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View view, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                        break;
-                    default:
-                        break;
+    private fun setupBottomSheet() {
+        mBottomSheetBehavior = BottomSheetBehavior.from(vMerchantBottomSheetDialog)
+        mBottomSheetBehavior?.setBottomSheetCallback(object : BottomSheetCallback() {
+            override fun onStateChanged(view: View, newState: Int) {
+                when (newState) {
+                    BottomSheetBehavior.STATE_COLLAPSED -> {}
+                    else -> {}
                 }
             }
-            @Override
-            public void onSlide(@NonNull View view, float v) {
 
-            }
-        });
+            override fun onSlide(view: View, v: Float) {}
+        })
     }
+
     @OnClick(R.id.btn_submit)
-    public void makeTransaction() {
-        String externalId = tvMerchantVPA.getText().toString().trim();
-        String amount = etAmount.getText().toString().trim();
-
+    fun makeTransaction() {
+        val externalId = tvMerchantVPA!!.text.toString().trim { it <= ' ' }
+        val amount = etAmount!!.text.toString().trim { it <= ' ' }
         if (amount.isEmpty()) {
-            showToast(Constants.PLEASE_ENTER_ALL_THE_FIELDS);
-            return;
-        } else if (Double.parseDouble(amount) <= 0) {
-            showToast(Constants.PLEASE_ENTER_VALID_AMOUNT);
-            return;
+            showToast(Constants.PLEASE_ENTER_ALL_THE_FIELDS)
+            return
+        } else if (amount.toDouble() <= 0) {
+            showToast(Constants.PLEASE_ENTER_VALID_AMOUNT)
+            return
         }
-        mTransferPresenter.checkBalanceAvailability(externalId, Double.parseDouble(amount));
+        mTransferPresenter!!.checkBalanceAvailability(externalId, amount.toDouble())
     }
 
-    @Override
-    public void onBackPressed() {
-        if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED) {
-            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-            return;
+    override fun onBackPressed() {
+        if (mBottomSheetBehavior!!.state != BottomSheetBehavior.STATE_COLLAPSED) {
+            mBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            return
         }
-        super.onBackPressed();
+        super.onBackPressed()
     }
 
-    @Override
-    public void showToast(String message) {
-        Toaster.showToast(getContext(), message);
+    override fun showToast(message: String?) {
+        Toaster.showToast(MifosPayApp.getContext(), message)
     }
 
-    @Override
-    public void showPaymentDetails(String externalId, double amount) {
-        MakeTransferFragment fragment = MakeTransferFragment.newInstance(externalId, amount);
-        fragment.show(getSupportFragmentManager(), "tag");
+    override fun showPaymentDetails(externalId: String?, amount: Double) {
+        val fragment = MakeTransferFragment.newInstance(externalId, amount)
+        fragment.show(supportFragmentManager, "tag")
     }
 
-    @Override
-    public void showTransactionFetching() {
-        rvMerchantHistory.setVisibility(View.GONE);
-        tvTransactionsStateTitle.setText(getResources().getString(R.string.fetching));
-        tvTransactionsStateSubtitle.setVisibility(View.GONE);
-        ivTransactionsStateIcon.setVisibility(View.GONE);
+    override fun showTransactionFetching() {
+        rvMerchantHistory!!.visibility = View.GONE
+        tvTransactionsStateTitle!!.text = resources.getString(R.string.fetching)
+        tvTransactionsStateSubtitle!!.visibility = View.GONE
+        ivTransactionsStateIcon!!.visibility = View.GONE
     }
 
-    @Override
-    public void showTransactions(List<Transaction> transactions) {
-        vEmptyState.setVisibility(View.GONE);
-        rvMerchantHistory.setVisibility(View.VISIBLE);
-        mMerchantHistoryAdapter.setData(transactions);
+    override fun showTransactions(transactions: List<Transaction?>?) {
+        vEmptyState!!.visibility = View.GONE
+        rvMerchantHistory!!.visibility = View.VISIBLE
+        mMerchantHistoryAdapter!!.setData(transactions)
     }
 
-    @Override
-    public void showSpecificView(int drawable, int title, int subtitle) {
-        rvMerchantHistory.setVisibility(View.GONE);
-        tvTransactionsStateSubtitle.setVisibility(View.VISIBLE);
-        ivTransactionsStateIcon.setVisibility(View.VISIBLE);
-        tvTransactionsStateTitle.setText(title);
-        tvTransactionsStateSubtitle.setText(subtitle);
-        ivTransactionsStateIcon
-                .setImageDrawable(getResources().getDrawable(drawable));
+    override fun showSpecificView(drawable: Int, title: Int, subtitle: Int) {
+        rvMerchantHistory!!.visibility = View.GONE
+        tvTransactionsStateSubtitle!!.visibility = View.VISIBLE
+        ivTransactionsStateIcon!!.visibility = View.VISIBLE
+        tvTransactionsStateTitle!!.setText(title)
+        tvTransactionsStateSubtitle!!.setText(subtitle)
+        ivTransactionsStateIcon?.setImageDrawable(resources.getDrawable(drawable))
     }
-
 }

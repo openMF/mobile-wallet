@@ -1,137 +1,85 @@
-package org.mifos.mobilewallet.mifospay.home;
+package org.mifos.mobilewallet.mifospay.home
 
-import org.mifos.mobilewallet.core.domain.model.Account;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.model.client.Client;
-import org.mifos.mobilewallet.mifospay.base.BasePresenter;
-import org.mifos.mobilewallet.mifospay.base.BaseView;
-
-import java.util.List;
-
-import okhttp3.ResponseBody;
+import okhttp3.ResponseBody
+import org.mifos.mobilewallet.core.domain.model.Account
+import org.mifos.mobilewallet.core.domain.model.Transaction
+import org.mifos.mobilewallet.core.domain.model.client.Client
+import org.mifos.mobilewallet.mifospay.base.BasePresenter
+import org.mifos.mobilewallet.mifospay.base.BaseView
 
 /**
  * Created by naman on 17/6/17.
  */
-
-public interface BaseHomeContract {
-
-    interface BaseHomeView extends BaseView<BaseHomePresenter> {
-
-        void showClientDetails(Client client);
+interface BaseHomeContract {
+    interface BaseHomeView : BaseView<BaseHomePresenter?> {
+        fun showClientDetails(client: Client?)
     }
 
-    interface BaseHomePresenter extends BasePresenter {
-
-        void fetchClientDetails();
+    interface BaseHomePresenter : BasePresenter {
+        fun fetchClientDetails()
     }
 
-    interface HomeView extends BaseView<HomePresenter> {
-
-        void showSnackbar(String message);
-
-        void setAccountBalance(Account account);
-
-        void showTransactionsHistory(List<Transaction> transactions);
-
-        void showTransactionsError();
-
-        void showTransactionsEmpty();
-
-        void showBottomSheetActionButton();
-
-        void hideBottomSheetActionButton();
-
-        void showToast(String message);
-
-        void hideSwipeProgress();
-
-        void hideTransactionLoading();
+    interface HomeView : BaseView<HomePresenter?> {
+        fun showSnackbar(message: String?)
+        fun setAccountBalance(account: Account?)
+        fun showTransactionsHistory(transactions: List<Transaction?>?)
+        fun showTransactionsError()
+        fun showTransactionsEmpty()
+        fun showBottomSheetActionButton()
+        fun hideBottomSheetActionButton()
+        fun showToast(message: String?)
+        fun hideSwipeProgress()
+        fun hideTransactionLoading()
     }
 
-    interface HomePresenter extends BasePresenter {
-
-        void fetchAccountDetails();
-
-        void showMoreHistory(int existingItemsCount);
-
+    interface HomePresenter : BasePresenter {
+        fun fetchAccountDetails()
+        fun showMoreHistory(existingItemsCount: Int)
     }
 
-    interface TransferView extends BaseView<TransferPresenter> {
-
-        void showVpa(String vpa);
-
-        void showToast(String message);
-
-        void showSnackbar(String message);
-
-        void showMobile(String mobileNo);
-
-        void hideSwipeProgress();
-
-        void showClientDetails(String externalId, double amount);
+    interface TransferView : BaseView<TransferPresenter?> {
+        fun showVpa(vpa: String?)
+        fun showToast(message: String?)
+        fun showSnackbar(message: String?)
+        fun showMobile(mobileNo: String?)
+        fun hideSwipeProgress()
+        fun showClientDetails(externalId: String?, amount: Double)
     }
 
-    interface TransferPresenter extends BasePresenter {
-
-        void fetchVpa();
-
-        boolean checkSelfTransfer(String externalId);
-
-        void fetchMobile();
-
-        void checkBalanceAvailability(String externalId, double transferAmount);
+    interface TransferPresenter : BasePresenter {
+        fun fetchVpa()
+        fun checkSelfTransfer(externalId: String?): Boolean
+        fun fetchMobile()
+        fun checkBalanceAvailability(externalId: String?, transferAmount: Double)
     }
 
-    interface MerchantTransferView extends BaseView<MerchantTransferPresenter> {
-
-        void showToast(String message);
-
-        void hideSwipeProgress();
-
-        void showPaymentDetails(String externalId, double amount);
-
-        void showTransactionFetching();
-
-        void showTransactions(List<Transaction> transactions);
-
-        void showSpecificView(int drawable, int title, int subtitle);
-
+    interface MerchantTransferView : BaseView<MerchantTransferPresenter?> {
+        fun showToast(message: String?)
+        fun hideSwipeProgress()
+        fun showPaymentDetails(externalId: String?, amount: Double)
+        fun showTransactionFetching()
+        fun showTransactions(transactions: List<Transaction?>?)
+        fun showSpecificView(drawable: Int, title: Int, subtitle: Int)
     }
 
-    interface MerchantTransferPresenter extends BasePresenter {
-
-        void checkBalanceAvailability(String externalId, double transferAmount);
-
-        void fetchMerchantTransfers(String merchantAccountNo);
-
+    interface MerchantTransferPresenter : BasePresenter {
+        fun checkBalanceAvailability(externalId: String?, transferAmount: Double)
+        fun fetchMerchantTransfers(merchantAccountNo: String?)
     }
 
-    interface ProfileView extends BaseView<ProfilePresenter> {
-
-        void showProfile(Client client);
-
-        void showEmail(String email);
-
-        void showVpa(String vpa);
-
-        void showMobile(String mobile);
-
-        void showToast(String message);
-
-        void showSnackbar(String message);
-
-        void fetchImageSuccess(ResponseBody responseBody);
+    interface ProfileView : BaseView<ProfilePresenter?> {
+        fun showProfile(client: Client?)
+        fun showEmail(email: String?)
+        fun showVpa(vpa: String?)
+        fun showMobile(mobile: String?)
+        fun showToast(message: String?)
+        fun showSnackbar(message: String?)
+        fun fetchImageSuccess(responseBody: ResponseBody?)
     }
 
-    interface ProfilePresenter extends BasePresenter {
-
-        void fetchProfile();
-
-        void fetchAccountDetails();
-
-        void fetchClientImage();
+    interface ProfilePresenter : BasePresenter {
+        fun fetchProfile()
+        fun fetchAccountDetails()
+        fun fetchClientImage()
     }
-
-
 }

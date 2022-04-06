@@ -1,38 +1,26 @@
-package org.mifos.mobilewallet.mifospay.home.adapter;
+package org.mifos.mobilewallet.mifospay.home.adapter
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
+import android.support.v4.app.FragmentPagerAdapter
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class TabLayoutAdapter extends FragmentPagerAdapter {
-
-    private final List<Fragment> mFragmentList = new ArrayList<>();
-    private final List<String> mFragmentTitleList = new ArrayList<>();
-
-    public TabLayoutAdapter(FragmentManager fragmentManager) {
-        super(fragmentManager);
+class TabLayoutAdapter(fragmentManager: FragmentManager?) : FragmentPagerAdapter(fragmentManager) {
+    private val mFragmentList: MutableList<Fragment> = ArrayList()
+    private val mFragmentTitleList: MutableList<String> = ArrayList()
+    fun addFragment(fragment: Fragment, title: String) {
+        mFragmentList.add(fragment)
+        mFragmentTitleList.add(title)
     }
 
-    public void addFragment(Fragment fragment, String title) {
-        mFragmentList.add(fragment);
-        mFragmentTitleList.add(title);
+    override fun getItem(i: Int): Fragment {
+        return mFragmentList[i]
     }
 
-    @Override
-    public Fragment getItem(int i) {
-        return mFragmentList.get(i);
+    override fun getCount(): Int {
+        return mFragmentList.size
     }
 
-    @Override
-    public int getCount() {
-        return mFragmentList.size();
-    }
-
-    @Override
-    public CharSequence getPageTitle(int position) {
-        return mFragmentTitleList.get(position);
+    override fun getPageTitle(position: Int): CharSequence {
+        return mFragmentTitleList[position]
     }
 }

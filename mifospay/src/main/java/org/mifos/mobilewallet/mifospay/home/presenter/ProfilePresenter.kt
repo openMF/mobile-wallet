@@ -1,74 +1,57 @@
-package org.mifos.mobilewallet.mifospay.home.presenter;
+package org.mifos.mobilewallet.mifospay.home.presenter
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientImage;
-import org.mifos.mobilewallet.mifospay.base.BaseView;
-import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
-import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
-import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
-
-import javax.inject.Inject;
+import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
+import org.mifos.mobilewallet.core.base.UseCaseHandler
+import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientImage
+import org.mifos.mobilewallet.mifospay.base.BaseView
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
+import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.ProfileView
+import org.mifos.mobilewallet.mifospay.utils.DebugUtil
+import javax.inject.Inject
 
 /**
  * Created by naman on 7/9/17.
  */
-
-public class ProfilePresenter implements BaseHomeContract.ProfilePresenter {
-
-    private final UseCaseHandler mUsecaseHandler;
-    private final LocalRepository localRepository;
-    private final PreferencesHelper mPreferencesHelper;
-
+class ProfilePresenter @Inject constructor(
+    private val mUsecaseHandler: UseCaseHandler, private val localRepository: LocalRepository,
+    private val mPreferencesHelper: PreferencesHelper
+) : BaseHomeContract.ProfilePresenter {
+    @JvmField
     @Inject
-    FetchClientImage fetchClientImageUseCase;
-    private BaseHomeContract.ProfileView mProfileView;
-
-    @Inject
-    public ProfilePresenter(UseCaseHandler useCaseHandler, LocalRepository localRepository,
-            PreferencesHelper preferencesHelper) {
-        this.mUsecaseHandler = useCaseHandler;
-        this.localRepository = localRepository;
-        this.mPreferencesHelper = preferencesHelper;
+    var fetchClientImageUseCase: FetchClientImage? = null
+    private var mProfileView: ProfileView? = null
+    override fun attachView(baseView: BaseView<*>?) {
+        mProfileView = baseView as ProfileView?
+        mProfileView!!.setPresenter(this)
     }
 
-    @Override
-    public void attachView(BaseView baseView) {
-        mProfileView = (BaseHomeContract.ProfileView) baseView;
-        mProfileView.setPresenter(this);
+    override fun fetchProfile() {
+        mProfileView!!.showProfile(localRepository.clientDetails)
     }
 
-    @Override
-    public void fetchProfile() {
-        mProfileView.showProfile(localRepository.getClientDetails());
+    override fun fetchAccountDetails() {
+        val email = mPreferencesHelper.email
+        val vpa = mPreferencesHelper.clientVpa
+        val mobile = mPreferencesHelper.mobile
+        mProfileView!!.showEmail(email.ifEmpty { "-" })
+        mProfileView!!.showVpa(vpa.ifEmpty { "-" })
+        mProfileView!!.showMobile(mobile.ifEmpty { "-" })
     }
 
-    @Override
-    public void fetchAccountDetails() {
-        String email = mPreferencesHelper.getEmail();
-        String vpa = mPreferencesHelper.getClientVpa();
-        String mobile = mPreferencesHelper.getMobile();
-        mProfileView.showEmail(email.isEmpty() ? "-" : email);
-        mProfileView.showVpa(vpa.isEmpty() ? "-" : vpa);
-        mProfileView.showMobile(mobile.isEmpty() ? "-" : mobile);
-    }
-
-    @Override
-    public void fetchClientImage() {
+    override fun fetchClientImage() {
         mUsecaseHandler.execute(fetchClientImageUseCase,
-                new FetchClientImage.RequestValues(localRepository.getClientDetails().getClientId()
-                ), new UseCase.UseCaseCallback<FetchClientImage.ResponseValue>() {
-                    @Override
-                    public void onSuccess(FetchClientImage.ResponseValue response) {
-                        mProfileView.fetchImageSuccess(response.getResponseBody());
+            FetchClientImage.RequestValues(
+                localRepository.clientDetails.clientId
+            ), object : UseCaseCallback<FetchClientImage.ResponseValue?> {
+                override fun onSuccess(response: FetchClientImage.ResponseValue?) {
+                    mProfileView!!.fetchImageSuccess(response?.responseBody)
+                }
 
-                    }
-
-                    @Override
-                    public void onError(String message) {
-                        DebugUtil.log("image", message);
-                    }
-                });
+                override fun onError(message: String) {
+                    DebugUtil.log("image", message)
+                }
+            })
     }
 }

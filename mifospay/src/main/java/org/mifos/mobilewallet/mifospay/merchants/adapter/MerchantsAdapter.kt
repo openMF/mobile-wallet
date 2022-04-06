@@ -1,115 +1,102 @@
-package org.mifos.mobilewallet.mifospay.merchants.adapter;
+package org.mifos.mobilewallet.mifospay.merchants.adapter
 
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.support.v7.widget.RecyclerView
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
+import android.widget.ImageView
+import android.widget.TextView
+import butterknife.BindView
+import butterknife.ButterKnife
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.utils.TextDrawable
+import javax.inject.Inject
 
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.utils.TextDrawable;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-public class MerchantsAdapter extends RecyclerView.Adapter<MerchantsAdapter.ViewHolder> implements
-        Filterable {
-
-    private List<SavingsWithAssociations> mMerchantsList;
-    private List<SavingsWithAssociations> mMerchantsFilteredList;
-
-    @Inject
-    public MerchantsAdapter() {
+class MerchantsAdapter @Inject constructor() : RecyclerView.Adapter<MerchantsAdapter.ViewHolder>(),
+    Filterable {
+    var merchants: List<SavingsWithAssociations>? = null
+        private set
+    private var mMerchantsFilteredList: List<SavingsWithAssociations>? = null
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val v = LayoutInflater.from(parent.context).inflate(
+            R.layout.item_casual_list,
+            parent, false
+        )
+        return ViewHolder(v)
     }
 
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_casual_list,
-                parent, false);
-        return new ViewHolder(v);
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val mMerchant = merchants!![position]
+        val iconDrawable = TextDrawable.builder().beginConfig()
+            .endConfig().buildRound(
+                mMerchant.clientName
+                    .substring(0, 1), R.color.colorAccentBlack
+            )
+        holder.mTvMerchantIcon!!.setImageDrawable(iconDrawable)
+        holder.mTvMerchantName!!.text = mMerchant.clientName
+        holder.mTvMerchantExternalId!!.text = mMerchant.externalId
     }
 
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        SavingsWithAssociations mMerchant = mMerchantsList.get(position);
-        TextDrawable iconDrawable = TextDrawable.builder().beginConfig()
-                .endConfig().buildRound(mMerchant.getClientName()
-                        .substring(0, 1), R.color.colorAccentBlack);
-        holder.mTvMerchantIcon.setImageDrawable(iconDrawable);
-        holder.mTvMerchantName.setText(mMerchant.getClientName());
-        holder.mTvMerchantExternalId.setText(mMerchant.getExternalId());
+    override fun getItemCount(): Int {
+        return if (merchants != null) merchants!!.size else 0
     }
 
-    @Override
-    public int getItemCount() {
-        return mMerchantsList != null ? mMerchantsList.size() : 0;
+    fun setData(mMerchantsList: List<SavingsWithAssociations>?) {
+        merchants = mMerchantsList
+        notifyDataSetChanged()
     }
 
-    public void setData(List<SavingsWithAssociations> mMerchantsList) {
-        this.mMerchantsList = mMerchantsList;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                String charString = constraint.toString();
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence): FilterResults {
+                val charString = constraint.toString()
                 if (charString.isEmpty()) {
-                    mMerchantsFilteredList = mMerchantsList;
+                    mMerchantsFilteredList = merchants
                 } else {
-                    List<SavingsWithAssociations> filteredList = new ArrayList<>();
-                    for (SavingsWithAssociations merchant : mMerchantsList) {
-                        if (merchant.getClientName().toLowerCase().contains(
-                                charString.toLowerCase())
-                                || merchant.getExternalId().toLowerCase().contains(
-                                charString.toLowerCase())) {
-                            filteredList.add(merchant);
+                    val filteredList: MutableList<SavingsWithAssociations> = ArrayList()
+                    for (merchant in merchants!!) {
+                        if (merchant.clientName.toLowerCase().contains(
+                                charString.toLowerCase()
+                            )
+                            || merchant.externalId.toLowerCase().contains(
+                                charString.toLowerCase()
+                            )
+                        ) {
+                            filteredList.add(merchant)
                         }
                     }
-
-                    mMerchantsFilteredList = filteredList;
+                    mMerchantsFilteredList = filteredList
                 }
-
-                FilterResults filterResults = new FilterResults();
-                filterResults.values = mMerchantsFilteredList;
-                return filterResults;
+                val filterResults = FilterResults()
+                filterResults.values = mMerchantsFilteredList
+                return filterResults
             }
 
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                mMerchantsFilteredList = (List<SavingsWithAssociations>) results.values;
-                notifyDataSetChanged();
+            override fun publishResults(constraint: CharSequence, results: FilterResults) {
+                mMerchantsFilteredList = results.values as List<SavingsWithAssociations>
+                notifyDataSetChanged()
             }
-        };
+        }
     }
 
-    public List<SavingsWithAssociations> getMerchants() {
-        return mMerchantsList;
-    }
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
-
+    inner class ViewHolder(v: View?) : RecyclerView.ViewHolder(v!!) {
+        @JvmField
         @BindView(R.id.iv_item_casual_list_icon)
-        ImageView mTvMerchantIcon;
-        @BindView(R.id.tv_item_casual_list_title)
-        TextView mTvMerchantName;
-        @BindView(R.id.tv_item_casual_list_subtitle)
-        TextView mTvMerchantExternalId;
+        var mTvMerchantIcon: ImageView? = null
 
-        public ViewHolder(View v) {
-            super(v);
-            ButterKnife.bind(this, v);
+        @JvmField
+        @BindView(R.id.tv_item_casual_list_title)
+        var mTvMerchantName: TextView? = null
+
+        @JvmField
+        @BindView(R.id.tv_item_casual_list_subtitle)
+        var mTvMerchantExternalId: TextView? = null
+
+        init {
+            ButterKnife.bind(this, v!!)
         }
     }
 }
