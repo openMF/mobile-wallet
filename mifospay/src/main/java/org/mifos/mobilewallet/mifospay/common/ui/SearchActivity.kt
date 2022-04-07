@@ -46,10 +46,10 @@ class SearchActivity : BaseActivity(), SearchContract.SearchView {
         ButterKnife.bind(this)
         setToolbarTitle("")
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
-        mPresenter!!.attachView(this)
-        rvSearchResults!!.layoutManager = LinearLayoutManager(this)
-        rvSearchResults!!.adapter = searchAdapter
-        rvSearchResults!!.addItemDecoration(
+        mPresenter?.attachView(this)
+        rvSearchResults?.layoutManager = LinearLayoutManager(this)
+        rvSearchResults?.adapter = searchAdapter
+        rvSearchResults?.addItemDecoration(
             DividerItemDecoration(
                 this,
                 DividerItemDecoration.VERTICAL
@@ -59,11 +59,11 @@ class SearchActivity : BaseActivity(), SearchContract.SearchView {
 
     @OnTextChanged(R.id.et_search)
     fun searchTextChanged() {
-        if (etSearch!!.text.toString().length > 3) {
+        if (etSearch?.text.toString().length > 3) {
             showSwipeProgress()
-            mSearchPresenter!!.performSearch(etSearch!!.text.toString())
+            mSearchPresenter?.performSearch(etSearch?.text.toString())
         } else {
-            searchAdapter!!.clearData()
+            searchAdapter?.clearData()
         }
     }
 
@@ -72,7 +72,7 @@ class SearchActivity : BaseActivity(), SearchContract.SearchView {
     }
 
     override fun showSearchResult(searchResults: MutableList<SearchResult>?) {
-        searchAdapter!!.setData(searchResults)
+        searchAdapter?.setData(searchResults)
         hideSwipeProgress()
     }
 

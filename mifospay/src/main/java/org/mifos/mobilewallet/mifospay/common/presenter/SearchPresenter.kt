@@ -18,14 +18,14 @@ class SearchPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHa
     private var mSearchView: SearchContract.SearchView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mSearchView = baseView as SearchContract.SearchView?
-        mSearchView!!.setPresenter(this)
+        mSearchView?.setPresenter(this)
     }
 
     override fun performSearch(query: String?) {
         mUsecaseHandler.execute(searchClient, SearchClient.RequestValues(query),
             object : UseCaseCallback<SearchClient.ResponseValue?> {
                 override fun onSuccess(response: SearchClient.ResponseValue?) {
-                    mSearchView!!.showSearchResult(response!!.results)
+                    mSearchView?.showSearchResult(response?.results)
                 }
 
                 override fun onError(message: String) {}

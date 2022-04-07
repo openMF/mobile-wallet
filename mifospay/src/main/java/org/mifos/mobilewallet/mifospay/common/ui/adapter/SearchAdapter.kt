@@ -24,25 +24,23 @@ class SearchAdapter @Inject constructor() : RecyclerView.Adapter<SearchAdapter.V
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.tvSearchResult!!.text = results!![position].resultName
+        holder.tvSearchResult?.text = results?.get(position)?.resultName
     }
 
     override fun getItemCount(): Int {
-        return if (results != null) {
-            results!!.size
-        } else {
-            0
-        }
+        return results?.size ?: 0
     }
 
     fun setData(results: MutableList<SearchResult>?) {
-        this.results = results
-        notifyDataSetChanged()
+        if (results != null) {
+            this.results = results
+            notifyItemChanged(results.size)
+        }
     }
 
     fun clearData() {
-        results!!.clear()
-        notifyDataSetChanged()
+        results?.clear()
+        results?.let { notifyItemRemoved(it.size) }
     }
 
     fun getResults(): List<SearchResult>? {
@@ -55,7 +53,9 @@ class SearchAdapter @Inject constructor() : RecyclerView.Adapter<SearchAdapter.V
         var tvSearchResult: TextView? = null
 
         init {
-            ButterKnife.bind(this, v!!)
+            if (v != null) {
+                ButterKnife.bind(this, v)
+            }
         }
     }
 }

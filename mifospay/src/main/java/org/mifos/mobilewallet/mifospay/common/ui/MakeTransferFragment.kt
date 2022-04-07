@@ -87,7 +87,7 @@ class MakeTransferFragment : BottomSheetDialogFragment(), TransferContract.Trans
     private var amount = 0.0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)!!.activityComponent.inject(this)
+        (activity as BaseActivity?)?.activityComponent?.inject(this)
     }
 
     override fun onDismiss(dialog: DialogInterface) {
@@ -100,51 +100,53 @@ class MakeTransferFragment : BottomSheetDialogFragment(), TransferContract.Trans
         dialog.setContentView(view)
         mBehavior = BottomSheetBehavior.from(view.parent as View)
         ButterKnife.bind(this, view)
-        mPresenter!!.attachView(this)
-        amount = arguments!!.getDouble(Constants.AMOUNT)
-        mTransferPresenter!!.fetchClient(arguments!!.getString(Constants.TO_EXTERNAL_ID))
-        btnCancel!!.setOnClickListener { dismiss() }
-        btnConfirm!!.setOnClickListener {
-            mTransferPresenter!!.makeTransfer(
-                localRepository!!.clientDetails.clientId,
+        mPresenter?.attachView(this)
+        amount = arguments?.getDouble(Constants.AMOUNT) ?: 0.0
+        mTransferPresenter?.fetchClient(arguments?.getString(Constants.TO_EXTERNAL_ID))
+        btnCancel?.setOnClickListener { dismiss() }
+        btnConfirm?.setOnClickListener {
+            mTransferPresenter?.makeTransfer(
+                localRepository?.clientDetails?.clientId ?: 0,
                 toClientId, amount
             )
-            TransitionManager.beginDelayedTransition(
-                makeTransferContainer!!
-            )
-            tvTransferStatus!!.text = Constants.SENDING_MONEY
-            progressBar!!.visibility = View.VISIBLE
-            contentView!!.visibility = View.GONE
+            makeTransferContainer?.let { it1 ->
+                TransitionManager.beginDelayedTransition(
+                    it1
+                )
+            }
+            tvTransferStatus?.text = Constants.SENDING_MONEY
+            progressBar?.visibility = View.VISIBLE
+            contentView?.visibility = View.GONE
         }
         return dialog
     }
 
     override fun showToClientDetails(clientId: Long, name: String?, externalId: String?) {
         toClientId = clientId
-        TransitionManager.beginDelayedTransition(makeTransferContainer!!)
-        tvClientName!!.text = name
-        tvAmount!!.text = Constants.RUPEE + " " + amount
-        tvClientVpa!!.text = externalId
-        contentView!!.visibility = View.VISIBLE
-        progressBar!!.visibility = View.GONE
+        makeTransferContainer?.let { TransitionManager.beginDelayedTransition(it) }
+        tvClientName?.text = name
+        tvAmount?.text = Constants.RUPEE + " " + amount
+        tvClientVpa?.text = externalId
+        contentView?.visibility = View.VISIBLE
+        progressBar?.visibility = View.GONE
     }
 
     override fun transferSuccess() {
-        tvTransferStatus!!.text = Constants.TRANSACTION_SUCCESSFUL
-        progressBar!!.visibility = View.GONE
-        viewTransferSuccess!!.visibility = View.VISIBLE
+        tvTransferStatus?.text = Constants.TRANSACTION_SUCCESSFUL
+        progressBar?.visibility = View.GONE
+        viewTransferSuccess?.visibility = View.VISIBLE
     }
 
     override fun transferFailure() {
-        TransitionManager.beginDelayedTransition(makeTransferContainer!!)
-        tvTransferStatus!!.text = Constants.UNABLE_TO_PROCESS_TRANSFER
-        progressBar!!.visibility = View.GONE
-        viewTransferFailure!!.visibility = View.VISIBLE
+        makeTransferContainer?.let { TransitionManager.beginDelayedTransition(it) }
+        tvTransferStatus?.text = Constants.UNABLE_TO_PROCESS_TRANSFER
+        progressBar?.visibility = View.GONE
+        viewTransferFailure?.visibility = View.VISIBLE
     }
 
     override fun onStart() {
         super.onStart()
-        mBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
+        mBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     override fun setPresenter(presenter: TransferContract.TransferPresenter?) {
@@ -153,7 +155,7 @@ class MakeTransferFragment : BottomSheetDialogFragment(), TransferContract.Trans
 
     override fun showVpaNotFoundSnackbar() {
         if (targetFragment != null) {
-            targetFragment!!.onActivityResult(
+            targetFragment?.onActivityResult(
                 SendFragment.REQUEST_SHOW_DETAILS,
                 Activity.RESULT_CANCELED, null
             )
@@ -165,10 +167,10 @@ class MakeTransferFragment : BottomSheetDialogFragment(), TransferContract.Trans
     }
 
     override fun enableDragging(enable: Boolean) {
-        mBehavior!!.setBottomSheetCallback(object : BottomSheetCallback() {
+        mBehavior?.setBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 if (newState == BottomSheetBehavior.STATE_DRAGGING && !enable) {
-                    mBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
+                    mBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
                 }
             }
 
