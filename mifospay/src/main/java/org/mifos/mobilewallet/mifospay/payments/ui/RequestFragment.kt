@@ -42,7 +42,7 @@ class RequestFragment : BaseFragment(), BaseHomeContract.TransferView {
     private var vpa: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)!!.activityComponent.inject(this)
+        (activity as BaseActivity?)?.activityComponent?.inject(this)
     }
 
     override fun onCreateView(
@@ -51,9 +51,9 @@ class RequestFragment : BaseFragment(), BaseHomeContract.TransferView {
     ): View? {
         val root = inflater.inflate(R.layout.fragment_request, container, false)
         ButterKnife.bind(this, root)
-        mPresenter!!.attachView(this)
-        mPresenter!!.fetchVpa()
-        mPresenter!!.fetchMobile()
+        mPresenter?.attachView(this)
+        mPresenter?.fetchVpa()
+        mPresenter?.fetchMobile()
         return root
     }
 
@@ -70,20 +70,20 @@ class RequestFragment : BaseFragment(), BaseHomeContract.TransferView {
 
     override fun showVpa(vpa: String) {
         this.vpa = vpa
-        tvClientVpa!!.text = vpa
-        btnShowQr!!.isClickable = true
+        tvClientVpa?.text = vpa
+        btnShowQr?.isClickable = true
     }
 
     override fun showMobile(mobileNo: String) {
-        val phoneNumberUtil = PhoneNumberUtil.createInstance(mTvClientMobile!!.context)
+        val phoneNumberUtil = PhoneNumberUtil.createInstance(mTvClientMobile?.context)
         try {
             val phoneNumber = phoneNumberUtil.parse(mobileNo, Locale.getDefault().country)
-            mTvClientMobile!!.text = phoneNumberUtil.format(
+            mTvClientMobile?.text = phoneNumberUtil.format(
                 phoneNumber,
                 PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL
             )
         } catch (e: NumberParseException) {
-            mTvClientMobile!!.text = mobileNo // If mobile number is not parsed properly
+            mTvClientMobile?.text = mobileNo // If mobile number is not parsed properly
         }
     }
 

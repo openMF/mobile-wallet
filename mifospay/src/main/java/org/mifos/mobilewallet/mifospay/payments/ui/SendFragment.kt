@@ -87,7 +87,7 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
     private var vpa: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)!!.activityComponent.inject(this)
+        (activity as BaseActivity?)?.activityComponent?.inject(this)
     }
 
     override fun onCreateView(
@@ -100,48 +100,48 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
         )
         ButterKnife.bind(this, rootView)
         setSwipeEnabled(false)
-        mPresenter!!.attachView(this)
-        mEtMobileNumber!!.addTextChangedListener(PhoneNumberFormattingTextWatcher())
-        mBtnVpa!!.isSelected = true
+        mPresenter?.attachView(this)
+        mEtMobileNumber?.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+        mBtnVpa?.isSelected = true
         return rootView
     }
 
     @OnClick(R.id.btn_vpa)
     fun onVPASelected() {
-        TransitionManager.beginDelayedTransition(sendContainer!!)
-        mBtnVpa!!.isSelected = true
-        mBtnVpa!!.isFocusable = true
-        mBtnVpa!!.setChipBackgroundColorResource(R.color.clickedblue)
-        mBtnMobile!!.isSelected = false
-        mBtnMobile!!.setChipBackgroundColorResource(R.color.changedBackgroundColour)
-        btnScanQr!!.visibility = View.VISIBLE
-        mRlMobile!!.visibility = View.GONE
-        mTilVpa!!.visibility = View.VISIBLE
-        hideSoftKeyboard(activity!!)
+        sendContainer?.let { TransitionManager.beginDelayedTransition(it) }
+        mBtnVpa?.isSelected = true
+        mBtnVpa?.isFocusable = true
+        mBtnVpa?.setChipBackgroundColorResource(R.color.clickedblue)
+        mBtnMobile?.isSelected = false
+        mBtnMobile?.setChipBackgroundColorResource(R.color.changedBackgroundColour)
+        btnScanQr?.visibility = View.VISIBLE
+        mRlMobile?.visibility = View.GONE
+        mTilVpa?.visibility = View.VISIBLE
+        activity?.let { hideSoftKeyboard(it) }
     }
 
     @OnClick(R.id.btn_mobile)
     fun onMobileSelected() {
-        TransitionManager.beginDelayedTransition(sendContainer!!)
-        mBtnMobile!!.isSelected = true
-        mBtnMobile!!.isFocusable = true
-        mBtnMobile!!.setChipBackgroundColorResource(R.color.clickedblue)
-        mBtnVpa!!.isSelected = false
-        mBtnVpa!!.setChipBackgroundColorResource(R.color.changedBackgroundColour)
-        mTilVpa!!.visibility = View.GONE
-        btnScanQr!!.visibility = View.GONE
-        mRlMobile!!.visibility = View.VISIBLE
-        hideSoftKeyboard(activity!!)
+        sendContainer?.let { TransitionManager.beginDelayedTransition(it) }
+        mBtnMobile?.isSelected = true
+        mBtnMobile?.isFocusable = true
+        mBtnMobile?.setChipBackgroundColorResource(R.color.clickedblue)
+        mBtnVpa?.isSelected = false
+        mBtnVpa?.setChipBackgroundColorResource(R.color.changedBackgroundColour)
+        mTilVpa?.visibility = View.GONE
+        btnScanQr?.visibility = View.GONE
+        mRlMobile?.visibility = View.VISIBLE
+        activity?.let { hideSoftKeyboard(it) }
     }
 
     @OnClick(R.id.btn_submit)
     fun transferClicked() {
-        val externalId = etVpa!!.text.toString().trim { it <= ' ' }
-        val eamount = etAmount!!.text.toString().trim { it <= ' ' }
-        val mobileNumber = mEtMobileNumber!!.text
+        val externalId = etVpa?.text.toString().trim { it <= ' ' }
+        val eamount = etAmount?.text.toString().trim { it <= ' ' }
+        val mobileNumber = mEtMobileNumber?.text
             .toString().trim { it <= ' ' }.replace("\\s+".toRegex(), "")
-        if (eamount == "" || mBtnVpa!!.isSelected && externalId == "" ||
-            mBtnMobile!!.isSelected && mobileNumber == ""
+        if (eamount == "" || mBtnVpa?.isSelected == true && externalId == "" ||
+            mBtnMobile?.isSelected == true && mobileNumber == ""
         ) {
             Toast.makeText(
                 activity,
@@ -157,8 +157,8 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
                 showSnackbar(getString(R.string.please_enter_valid_vpa))
                 return
             }
-            if (!mTransferPresenter!!.checkSelfTransfer(externalId)) {
-                mTransferPresenter!!.checkBalanceAvailability(externalId, amount)
+            if (mTransferPresenter?.checkSelfTransfer(externalId) == false) {
+                mTransferPresenter?.checkBalanceAvailability(externalId, amount)
             } else {
                 showSnackbar(Constants.SELF_ACCOUNT_ERROR)
             }
@@ -167,10 +167,12 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
 
     @OnClick(R.id.btn_scan_qr)
     fun scanQrClicked() {
-        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(
-                activity!!,
-                Manifest.permission.CAMERA
-            ) != PackageManager.PERMISSION_GRANTED
+        if (Build.VERSION.SDK_INT >= 23 && activity?.let {
+                ContextCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.CAMERA
+                )
+            } != PackageManager.PERMISSION_GRANTED
         ) {
 
             // Permission is not granted
@@ -193,10 +195,12 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
 
     @OnClick(R.id.btn_search_contact)
     fun searchContactClicked() {
-        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(
-                activity!!,
-                Manifest.permission.READ_CONTACTS
-            ) != PackageManager.PERMISSION_GRANTED
+        if (Build.VERSION.SDK_INT >= 23 && activity?.let {
+                ContextCompat.checkSelfPermission(
+                    it,
+                    Manifest.permission.READ_CONTACTS
+                )
+            } != PackageManager.PERMISSION_GRANTED
         ) {
 
             // Permission is not granted
@@ -218,21 +222,23 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
         if (requestCode == SCAN_QR_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val qrData = data.getStringExtra(Constants.QR_DATA)
-            val qrDataArray = qrData!!.split(", ".toRegex()).toTypedArray()
-            if (qrDataArray.size == 1) {
-                etVpa!!.setText(qrDataArray[0])
-            } else {
-                etVpa!!.setText(qrDataArray[0])
-                etAmount!!.setText(qrDataArray[1])
+            val qrDataArray = qrData?.split(", ".toRegex())?.toTypedArray()
+            if (qrDataArray != null) {
+                if (qrDataArray.size == 1) {
+                    etVpa?.setText(qrDataArray[0])
+                } else {
+                    etVpa?.setText(qrDataArray[0])
+                    etAmount?.setText(qrDataArray[1])
+                }
             }
-            val externalId = etVpa!!.text.toString()
-            if (etAmount!!.text.toString().isEmpty()) {
+            val externalId = etVpa?.text.toString()
+            if (etAmount?.text.toString().isEmpty()) {
                 showSnackbar(Constants.PLEASE_ENTER_AMOUNT)
                 return
             }
-            val amount = etAmount!!.text.toString().toDouble()
-            if (!mTransferPresenter!!.checkSelfTransfer(externalId)) {
-                mTransferPresenter!!.checkBalanceAvailability(externalId, amount)
+            val amount = etAmount?.text.toString().toDouble()
+            if (mTransferPresenter?.checkSelfTransfer(externalId) == false) {
+                mTransferPresenter?.checkBalanceAvailability(externalId, amount)
             } else {
                 showSnackbar(Constants.SELF_ACCOUNT_ERROR)
             }
@@ -244,24 +250,24 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
                 // getData() method will have the Content Uri of the selected contact
                 val uri = data.data
                 //Query the content uri
-                cursor = context!!.contentResolver.query(uri!!, null, null, null, null)
-                cursor!!.moveToFirst()
+                cursor = uri?.let { context?.contentResolver?.query(it, null, null, null, null) }
+                cursor?.moveToFirst()
                 // column index of the phone number
-                val phoneIndex = cursor.getColumnIndex(
+                val phoneIndex = cursor?.getColumnIndex(
                     ContactsContract.CommonDataKinds.Phone.NUMBER
                 )
                 // column index of the contact name
-                val nameIndex = cursor.getColumnIndex(
+                val nameIndex = cursor?.getColumnIndex(
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
                 )
-                phoneNo = cursor.getString(phoneIndex)
-                name = cursor.getString(nameIndex)
-                mEtMobileNumber!!.setText(phoneNo)
+                phoneNo = phoneIndex?.let { cursor.getString(it) }
+                name = nameIndex?.let { cursor.getString(it) }
+                mEtMobileNumber?.setText(phoneNo)
             } catch (e: Exception) {
                 showToast(Constants.ERROR_CHOOSING_CONTACT)
             }
         } else if (requestCode == REQUEST_SHOW_DETAILS && resultCode == Activity.RESULT_CANCELED) {
-            if (mBtnMobile!!.isSelected) {
+            if (mBtnMobile?.isSelected == true) {
                 showSnackbar(Constants.ERROR_FINDING_MOBILE_NUMBER)
             } else {
                 showSnackbar(Constants.ERROR_FINDING_VPA)
@@ -277,7 +283,7 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
             REQUEST_CAMERA -> {
 
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.size > 0
+                if (grantResults.isNotEmpty()
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     // permission was granted, yay! Do the
@@ -328,7 +334,7 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
         fragment.setTargetFragment(this, REQUEST_SHOW_DETAILS)
         if (parentFragment != null) {
             fragment.show(
-                parentFragment!!.childFragmentManager,
+                parentFragment?.childFragmentManager,
                 Constants.MAKE_TRANSFER_FRAGMENT
             )
         }
