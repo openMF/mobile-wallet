@@ -240,7 +240,8 @@ public class FineractRepository {
     }
 
     public Observable<GenericResponse> updateStandingInstruction(long standingInstructionId,
-                                                                 StandingInstructionPayload standingInstructionPayload) {
+                                                                 StandingInstructionPayload
+                                                                         standingInstructionPayload) {
         return fineractApiManager.getStandingInstructionApi().updateStandingInstruction(
                 standingInstructionId, standingInstructionPayload, "update");
     }
