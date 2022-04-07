@@ -65,7 +65,7 @@ class PassCodeActivity : MifosPassCodeActivity(), PassCodeView {
 
     override fun startNextActivity() {
         // authenticate user with saved Preferences
-        mPresenter!!.createAuthenticatedService()
+        mPresenter?.createAuthenticatedService()
         if (deepLinkURI != null) {
             val uri = Uri.parse(deepLinkURI)
             val intent = Intent(this@PassCodeActivity, ReceiptActivity::class.java)
@@ -107,7 +107,7 @@ class PassCodeActivity : MifosPassCodeActivity(), PassCodeView {
     }
 
     private fun saveCurrentPasscode() {
-        if (updatePassword && currPass!!.isNotEmpty()) {
+        if (updatePassword && currPass?.isNotEmpty() == true) {
             val helper = PasscodePreferencesHelper(this)
             helper.savePassCode(currPass)
         }

@@ -27,7 +27,7 @@ class PassCodePresenter @Inject constructor(
     private var mPassCodeView: PassCodeView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mPassCodeView = baseView as PassCodeView?
-        mPassCodeView!!.setPresenter(this)
+        mPassCodeView?.setPresenter(this)
     }
 
     fun createAuthenticatedService() {
