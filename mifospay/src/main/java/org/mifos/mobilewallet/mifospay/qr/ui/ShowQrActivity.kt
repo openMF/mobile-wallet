@@ -10,14 +10,10 @@ import android.support.v4.content.FileProvider
 import android.support.v7.app.AlertDialog
 import android.text.InputType
 import android.view.*
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
-import butterknife.BindView
-import butterknife.ButterKnife
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.databinding.ActivityShowQrBinding
 import org.mifos.mobilewallet.mifospay.qr.QrContract
 import org.mifos.mobilewallet.mifospay.qr.QrContract.ShowQrView
 import org.mifos.mobilewallet.mifospay.qr.presenter.ShowQrPresenter
@@ -36,34 +32,26 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
     var mPresenter: ShowQrPresenter? = null
     private var mShowQrPresenter: QrContract.ShowQrPresenter? = null
 
-    @JvmField
-    @BindView(R.id.iv_qr_code)
-    var ivQrCode: ImageView? = null
-
-    @JvmField
-    @BindView(R.id.tv_qr_vpa)
-    var tvQrData: TextView? = null
-
-    @JvmField
-    @BindView(R.id.btn_set_amount)
-    var btnSetAmount: Button? = null
     private var mAmount: String? = null
     private var mBitmap: Bitmap? = null
+
+    private lateinit var binding: ActivityShowQrBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent.inject(this)
-        setContentView(R.layout.activity_show_qr)
-        ButterKnife.bind(this@ShowQrActivity)
+        binding = ActivityShowQrBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         setToolbarTitle(Constants.QR_CODE)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         mPresenter?.attachView(this)
         val qrData = intent.getStringExtra(Constants.QR_DATA)
         mShowQrPresenter?.generateQr(qrData)
-        tvQrData?.text = String.format("%s: %s", getString(R.string.vpa), qrData)
+        binding.tvQrVpa.text = String.format("%s: %s", getString(R.string.vpa), qrData)
         val layout = window.attributes
         layout.screenBrightness = 1f
         window.attributes = layout
-        btnSetAmount?.setOnClickListener { showSetAmountDialog(qrData) }
+        binding.btnSetAmount.setOnClickListener { showSetAmountDialog(qrData) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -140,7 +128,7 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
                     return@OnClickListener
                 }
                 mAmount = amount
-                tvQrData?.text = String.format(
+                binding.tvQrVpa.text = String.format(
                     "%s: %s\n%s: %s",
                     getString(R.string.vpa),
                     qrData,
@@ -151,7 +139,7 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
             })
         editTextDialog.setNeutralButton(R.string.reset) { dialog, which ->
             mAmount = null
-            tvQrData?.text = String.format("%s: %s", getString(R.string.vpa), qrData)
+            binding.tvQrVpa.text = String.format("%s: %s", getString(R.string.vpa), qrData)
             generateQR(qrData)
             showToast("Reset Amount Successful")
         }
@@ -164,7 +152,7 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
     }
 
     override fun showGeneratedQr(bitmap: Bitmap?) {
-        ivQrCode?.setImageBitmap(bitmap)
+        binding.ivQrCode.setImageBitmap(bitmap)
         mBitmap = bitmap
     }
 

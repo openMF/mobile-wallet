@@ -5,16 +5,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
 import android.widget.Toast
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
 import me.dm7.barcodescanner.zxing.ZXingScannerView
-import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.databinding.ActivityReadQrBinding
 import org.mifos.mobilewallet.mifospay.qr.QrContract
 import org.mifos.mobilewallet.mifospay.qr.QrContract.ReadQrView
 import org.mifos.mobilewallet.mifospay.qr.presenter.ReadQrPresenter
@@ -31,47 +27,44 @@ class ReadQrActivity : BaseActivity(), ReadQrView, ZXingScannerView.ResultHandle
     var mPresenter: ReadQrPresenter? = null
     private var mReadQrPresenter: QrContract.ReadQrPresenter? = null
 
-    @JvmField
-    @BindView(R.id.scannerView)
-    var mScannerView: ZXingScannerView? = null
-
-    @JvmField
-    @BindView(R.id.btn_flash_on)
-    var mFlashOn: ImageButton? = null
-
-    @JvmField
-    @BindView(R.id.btn_flash_off)
-    var mFlashOff: ImageButton? = null
-
-    @JvmField
-    @BindView(R.id.btn_open_gallery)
-    var mOpenGallery: ImageButton? = null
+    private lateinit var binding: ActivityReadQrBinding
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent.inject(this)
-        setContentView(R.layout.activity_read_qr)
-        ButterKnife.bind(this@ReadQrActivity)
+        binding = ActivityReadQrBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         setToolbarTitle(Constants.SCAN_CODE)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         mPresenter?.attachView(this)
-        mScannerView?.setAutoFocus(true)
+        binding.scannerView.setAutoFocus(true)
+
+        binding.btnFlashOn.setOnClickListener {
+            turnOnFlash()
+        }
+
+        binding.btnFlashOff.setOnClickListener {
+            turnOffFlash()
+        }
+
+        binding.btnOpenGallery.setOnClickListener {
+            openGallery()
+        }
+
     }
 
-    @OnClick(R.id.btn_flash_on)
     fun turnOnFlash() {
-        mScannerView?.flash = true
-        mFlashOn?.visibility = View.GONE
-        mFlashOff?.visibility = View.VISIBLE
+        binding.scannerView.flash = true
+        binding.btnFlashOn.visibility = View.GONE
+        binding.btnFlashOff.visibility = View.VISIBLE
     }
 
-    @OnClick(R.id.btn_flash_off)
     fun turnOffFlash() {
-        mScannerView?.flash = false
-        mFlashOn?.visibility = View.VISIBLE
-        mFlashOff?.visibility = View.GONE
+        binding.scannerView.flash = false
+        binding.btnFlashOn.visibility = View.VISIBLE
+        binding.btnFlashOff.visibility = View.GONE
     }
 
-    @OnClick(R.id.btn_open_gallery)
     fun openGallery() {
         val photoPic = Intent(Intent.ACTION_PICK)
         photoPic.type = "image/*"
@@ -80,13 +73,13 @@ class ReadQrActivity : BaseActivity(), ReadQrView, ZXingScannerView.ResultHandle
 
     public override fun onResume() {
         super.onResume()
-        mScannerView?.setResultHandler(this)
-        mScannerView?.startCamera()
+        binding.scannerView.setResultHandler(this)
+        binding.scannerView.startCamera()
     }
 
     public override fun onPause() {
         super.onPause()
-        mScannerView?.stopCamera()
+        binding.scannerView.stopCamera()
     }
 
     override fun handleResult(result: Result) {
