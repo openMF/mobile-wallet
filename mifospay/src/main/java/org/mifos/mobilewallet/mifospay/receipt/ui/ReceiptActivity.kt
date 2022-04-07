@@ -15,10 +15,6 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
 import com.mifos.mobile.passcode.utils.PassCodeConstants
 import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail
@@ -26,6 +22,7 @@ import org.mifos.mobilewallet.core.domain.model.Transaction
 import org.mifos.mobilewallet.core.domain.model.TransactionType
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.databinding.ActivityReceiptBinding
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract.ReceiptView
@@ -41,55 +38,19 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
     @JvmField
     @Inject
     var mPresenter: ReceiptPresenter? = null
-    var mReceiptPresenter: ReceiptContract.ReceiptPresenter? = null
+    private var mReceiptPresenter: ReceiptContract.ReceiptPresenter? = null
 
-    @JvmField
-    @BindView(R.id.tv_amount)
-    var tvAmount: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_operation)
-    var tvOperation: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_name)
-    var tvPaidToName: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_transaction_ID)
-    var tvTransactionID: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_transaction_date)
-    var tvDate: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_transaction_to_name)
-    var tvTransToName: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_transaction_to_number)
-    var tvTransToNumber: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_transaction_from_name)
-    var tvTransFromName: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_transaction_from_number)
-    var tvTransFromNumber: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_transaction_reciept)
-    var tvReceiptLink: TextView? = null
     private var transactionId: String? = null
     private var isDebit = false
     private var deepLinkURI: Uri? = null
+    private lateinit var binding: ActivityReceiptBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent.inject(this)
-        setContentView(R.layout.activity_receipt)
-        ButterKnife.bind(this)
+        binding = ActivityReceiptBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         setToolbarTitle(Constants.RECEIPT)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         mPresenter?.attachView(this)
@@ -102,12 +63,24 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
             try {
                 params = data.pathSegments
                 transactionId = params[0] // "transactionId"
-                tvReceiptLink?.text = data.toString()
+                binding.tvTransactionReciept.text = data.toString()
             } catch (e: IndexOutOfBoundsException) {
                 showToast(getString(R.string.invalid_link))
             }
             showProgressDialog(Constants.PLEASE_WAIT)
             transactionId?.toLong()?.let { mPresenter?.fetchTransaction(it) }
+        }
+
+        binding.fabDownload.setOnClickListener {
+            initiateDownload()
+        }
+
+        binding.transactionRecieptCopy.setOnClickListener {
+            copyReceiptLink()
+        }
+
+        binding.transactionRecieptShare.setOnClickListener {
+            shareReceiptLink()
         }
     }
 
@@ -125,36 +98,36 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
 
     override fun showTransactionDetail(transaction: Transaction?) {
         if (transaction != null) {
-            tvAmount?.text = getFormattedAccountBalance(
+            binding.tvAmount.text = getFormattedAccountBalance(
                 transaction.amount, transaction.currency.code
             )
         }
         if (transaction != null) {
-            tvDate?.text = transaction.date
+            binding.tvTransactionDate.text = transaction.date
         }
         if (transaction != null) {
-            tvReceiptLink?.text =
+            binding.tvTransactionReciept.text =
                 Constants.RECEIPT_DOMAIN + transaction.transactionId
         }
         if (transaction != null) {
-            tvTransactionID?.text = transaction.transactionId.toString()
+            binding.tvTransactionID.text = transaction.transactionId.toString()
         }
         if (transaction != null) {
             when (transaction.transactionType) {
                 TransactionType.DEBIT -> {
                     isDebit = true
-                    tvOperation?.setText(R.string.paid_to)
-                    tvOperation?.setTextColor(resources.getColor(R.color.colorDebit))
+                    binding.tvOperation.setText(R.string.paid_to)
+                    binding.tvOperation.setTextColor(resources.getColor(R.color.colorDebit))
                 }
                 TransactionType.CREDIT -> {
                     isDebit = false
-                    tvOperation?.setText(R.string.credited_by)
-                    tvOperation?.setTextColor(resources.getColor(R.color.colorCredit))
+                    binding.tvOperation.setText(R.string.credited_by)
+                    binding.tvOperation.setTextColor(resources.getColor(R.color.colorCredit))
                 }
                 TransactionType.OTHER -> {
                     isDebit = false
-                    tvOperation?.text = Constants.OTHER
-                    tvOperation?.setTextColor(Color.YELLOW)
+                    binding.tvOperation.text = Constants.OTHER
+                    binding.tvOperation.setTextColor(Color.YELLOW)
                 }
             }
         }
@@ -162,18 +135,20 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
 
     override fun showTransferDetail(transferDetail: TransferDetail?) {
         if (isDebit) {
-            tvPaidToName?.text = transferDetail?.toClient?.displayName
+            binding.tvName.text = transferDetail?.toClient?.displayName
         } else {
-            tvPaidToName?.text = transferDetail?.fromClient?.displayName
+            binding.tvName.text = transferDetail?.fromClient?.displayName
         }
-        tvTransToName?.text = Constants.NAME + transferDetail?.toClient?.displayName
-        tvTransToNumber?.text = Constants.ACCOUNT_NUMBER + transferDetail?.toAccount?.accountNo
-        tvTransFromName?.text = Constants.NAME + transferDetail?.fromClient?.displayName
-        tvTransFromNumber?.text = Constants.ACCOUNT_NUMBER + transferDetail?.fromAccount?.accountNo
+        binding.tvTransactionToName.text = Constants.NAME + transferDetail?.toClient?.displayName
+        binding.tvTransactionToNumber.text =
+            Constants.ACCOUNT_NUMBER + transferDetail?.toAccount?.accountNo
+        binding.tvTransactionFromName.text =
+            Constants.NAME + transferDetail?.fromClient?.displayName
+        binding.tvTransactionFromNumber.text =
+            Constants.ACCOUNT_NUMBER + transferDetail?.fromAccount?.accountNo
         dismissProgressDialog()
     }
 
-    @OnClick(R.id.fab_download)
     fun initiateDownload() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(
                 this,
@@ -203,24 +178,22 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
         }
     }
 
-    @OnClick(R.id.transaction_reciept_copy)
     fun copyReceiptLink() {
         val cm = getSystemService(
             CLIPBOARD_SERVICE
         ) as ClipboardManager
         val clipData = ClipData.newPlainText(
             Constants.UNIQUE_RECEIPT_LINK,
-            tvReceiptLink?.text.toString()
+            binding.tvTransactionReciept.text.toString()
         )
         cm.setPrimaryClip(clipData)
         showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD)
     }
 
-    @OnClick(R.id.transaction_reciept_share)
     fun shareReceiptLink() {
         var intent: Intent? = Intent(Intent.ACTION_SEND)
             .setType("text/plain")
-            .putExtra(Intent.EXTRA_TEXT, tvReceiptLink?.text.toString())
+            .putExtra(Intent.EXTRA_TEXT, binding.tvTransactionReciept.text.toString())
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent = Intent.createChooser(intent, getString(R.string.share_receipt))
         startActivity(intent)
