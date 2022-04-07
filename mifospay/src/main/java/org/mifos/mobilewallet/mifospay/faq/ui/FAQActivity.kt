@@ -68,7 +68,7 @@ class FAQActivity : BaseActivity(), FAQView {
         faqListAdapter = FAQListAdapter(this, listDataGroup as ArrayList<String>, listDataChild!!)
 
         // setting list adapter
-        expandableListView!!.setAdapter(faqListAdapter)
+        expandableListView?.setAdapter(faqListAdapter)
     }
 
     /**
@@ -79,10 +79,10 @@ class FAQActivity : BaseActivity(), FAQView {
 
 
         // Adding group data
-        listDataGroup!!.add(getString(R.string.question1))
-        listDataGroup!!.add(getString(R.string.question2))
-        listDataGroup!!.add(getString(R.string.question3))
-        listDataGroup!!.add(getString(R.string.question4))
+        listDataGroup?.add(getString(R.string.question1))
+        listDataGroup?.add(getString(R.string.question2))
+        listDataGroup?.add(getString(R.string.question3))
+        listDataGroup?.add(getString(R.string.question4))
 
         // list of alcohol
         val question1List: MutableList<String> = ArrayList()
@@ -109,6 +109,6 @@ class FAQActivity : BaseActivity(), FAQView {
         listDataChild!![listDataGroup!![3]] = question4List
 
         // notify the adapter
-        faqListAdapter!!.notifyDataSetChanged()
+        faqListAdapter?.notifyDataSetChanged()
     }
 }

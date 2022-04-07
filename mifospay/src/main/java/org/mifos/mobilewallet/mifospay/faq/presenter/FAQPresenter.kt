@@ -20,6 +20,6 @@ class FAQPresenter @Inject constructor(
     var mSettingsView: FAQView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mSettingsView = baseView as FAQView?
-        mSettingsView!!.setPresenter(this)
+        mSettingsView?.setPresenter(this)
     }
 }

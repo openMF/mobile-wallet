@@ -21,7 +21,7 @@ class FAQListAdapter(
     private val listDataChild: HashMap<String, List<String>>
 ) : BaseExpandableListAdapter() {
     override fun getChild(groupPosition: Int, childPosititon: Int): Any {
-        return listDataChild[listDataGroup[groupPosition]]!![childPosititon]
+        return listDataChild[listDataGroup[groupPosition]]?.get(childPosititon) ?: 0
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {
@@ -41,7 +41,7 @@ class FAQListAdapter(
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
-        return listDataChild[listDataGroup[groupPosition]]!!.size
+        return listDataChild[listDataGroup[groupPosition]]?.size ?: 0
     }
 
     override fun getGroup(groupPosition: Int): Any {
