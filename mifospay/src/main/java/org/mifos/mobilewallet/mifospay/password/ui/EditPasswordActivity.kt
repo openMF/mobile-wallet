@@ -2,10 +2,11 @@ package org.mifos.mobilewallet.mifospay.password.ui
 
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
-import butterknife.*
+import butterknife.OnFocusChange
+import butterknife.OnTextChanged
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.databinding.ActivityEditPasswordBinding
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract.EditPasswordView
 import org.mifos.mobilewallet.mifospay.password.presenter.EditPasswordPresenter
@@ -19,25 +20,24 @@ class EditPasswordActivity : BaseActivity(), EditPasswordView {
     var mPresenter: EditPasswordPresenter? = null
     private var mEditPasswordPresenter: EditPasswordContract.EditPasswordPresenter? = null
 
-    @JvmField
-    @BindView(R.id.et_edit_password_current)
-    var etCurrentPassword: EditText? = null
-
-    @JvmField
-    @BindView(R.id.et_edit_password_new)
-    var etNewPassword: EditText? = null
-
-    @JvmField
-    @BindView(R.id.et_edit_password_new_repeat)
-    var etNewPasswordRepeat: EditText? = null
+    private lateinit var binding: ActivityEditPasswordBinding
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_password)
-        activityComponent.inject(this)
-        ButterKnife.bind(this)
+        binding = ActivityEditPasswordBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
         setupUi()
         mPresenter?.attachView(this)
         disableSavePasswordButton()
+
+        binding.btnCancel.setOnClickListener {
+            onCancelClicked()
+        }
+
+        binding.btnSave.setOnClickListener {
+            onSaveClicked()
+        }
+
     }
 
     @OnFocusChange(
@@ -59,9 +59,9 @@ class EditPasswordActivity : BaseActivity(), EditPasswordView {
     }
 
     private fun handlePasswordInputChanged() {
-        val currentPassword = etCurrentPassword?.text.toString()
-        val newPassword = etNewPassword?.text.toString()
-        val newPasswordRepeat = etNewPasswordRepeat?.text.toString()
+        val currentPassword = binding.etEditPasswordCurrent.text.toString()
+        val newPassword = binding.etEditPasswordNew.text.toString()
+        val newPasswordRepeat = binding.etEditPasswordNewRepeat.text.toString()
         mPresenter?.handleSavePasswordButtonStatus(currentPassword, newPassword, newPasswordRepeat)
     }
 
@@ -70,7 +70,7 @@ class EditPasswordActivity : BaseActivity(), EditPasswordView {
     }
 
     override fun disableSavePasswordButton() {
-        findViewById<View>(R.id.btn_save).isEnabled = false
+        binding.btnSave.isEnabled = false
     }
 
     private fun setupUi() {
@@ -78,16 +78,14 @@ class EditPasswordActivity : BaseActivity(), EditPasswordView {
         setToolbarTitle(getString(R.string.change_password))
     }
 
-    @OnClick(R.id.btn_cancel)
     fun onCancelClicked() {
         closeActivity()
     }
 
-    @OnClick(R.id.btn_save)
     fun onSaveClicked() {
-        val currentPassword = etCurrentPassword?.text.toString()
-        val newPassword = etCurrentPassword?.text.toString()
-        val newPasswordRepeat = etCurrentPassword?.text.toString()
+        val currentPassword = binding.etEditPasswordCurrent.text.toString()
+        val newPassword = binding.etEditPasswordCurrent.text.toString()
+        val newPasswordRepeat = binding.etEditPasswordCurrent.text.toString()
         mPresenter?.updatePassword(currentPassword, newPassword, newPasswordRepeat)
     }
 
