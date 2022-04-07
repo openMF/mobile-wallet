@@ -46,50 +46,50 @@ open class BaseActivity : BasePassCodeActivity(), BaseActivityCallback {
 
     override fun showSwipeProgress() {
         if (swipeRefreshLayout != null) {
-            swipeRefreshLayout!!.isEnabled = true
-            swipeRefreshLayout!!.isRefreshing = true
+            swipeRefreshLayout?.isEnabled = true
+            swipeRefreshLayout?.isRefreshing = true
         }
     }
 
     override fun hideSwipeProgress() {
         if (swipeRefreshLayout != null) {
-            swipeRefreshLayout!!.isRefreshing = false
+            swipeRefreshLayout?.isRefreshing = false
         }
     }
 
     override fun setSwipeRefreshEnabled(enabled: Boolean) {
         if (swipeRefreshLayout != null) {
-            swipeRefreshLayout!!.isEnabled = enabled
+            swipeRefreshLayout?.isEnabled = enabled
         }
     }
 
     override fun showProgressDialog(message: String?) {
         if (progressDialog != null) {
-            progressDialog!!.setMessage(message)
-            progressDialog!!.show()
+            progressDialog?.setMessage(message)
+            progressDialog?.show()
         } else {
             progressDialog = ProgressDialog(this)
-            progressDialog!!.setCanceledOnTouchOutside(false)
-            progressDialog!!.setMessage(message)
-            progressDialog!!.show()
+            progressDialog?.setCanceledOnTouchOutside(false)
+            progressDialog?.setMessage(message)
+            progressDialog?.show()
         }
     }
 
     override fun hideProgressDialog() {
         if (progressDialog != null) {
-            progressDialog!!.hide()
+            progressDialog?.hide()
         }
     }
 
     override fun cancelProgressDialog() {
-        if (progressDialog != null && progressDialog!!.isShowing) {
-            progressDialog!!.cancel()
+        if (progressDialog != null && progressDialog?.isShowing == true) {
+            progressDialog?.cancel()
         }
     }
 
     override fun dismissProgressDialog() {
-        if (progressDialog != null && progressDialog!!.isShowing) {
-            progressDialog!!.dismiss()
+        if (progressDialog != null && progressDialog?.isShowing == true) {
+            progressDialog?.dismiss()
         }
     }
 
@@ -111,21 +111,21 @@ open class BaseActivity : BasePassCodeActivity(), BaseActivityCallback {
 
     private fun showHomeButton() {
         if (supportActionBar != null) {
-            supportActionBar!!.setHomeButtonEnabled(true)
-            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setHomeButtonEnabled(true)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
     }
 
     private fun setToolbarIcon(res: Int) {
         if (supportActionBar != null) {
-            supportActionBar!!.setHomeAsUpIndicator(res)
+            supportActionBar?.setHomeAsUpIndicator(res)
         }
     }
 
     override fun hideBackButton() {
         if (supportActionBar != null) {
-            supportActionBar!!.setHomeButtonEnabled(false)
-            supportActionBar!!.setDisplayHomeAsUpEnabled(false)
+            supportActionBar?.setHomeButtonEnabled(false)
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
     }
 
@@ -138,7 +138,7 @@ open class BaseActivity : BasePassCodeActivity(), BaseActivityCallback {
 
     fun addFragment(fragment: Fragment?, containerId: Int) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.add(containerId, fragment!!)
+        fragment?.let { transaction.add(containerId, it) }
         transaction.commit()
     }
 

@@ -13,51 +13,51 @@ open class BaseFragment : Fragment() {
 
     protected fun setToolbarTitle(title: String?) {
         if (callback != null) {
-            callback!!.setToolbarTitle(title)
+            callback?.setToolbarTitle(title)
         }
     }
 
     protected fun showBackButton(drawable: Int) {
         if (callback != null) {
-            callback!!.showColoredBackButton(drawable)
+            callback?.showColoredBackButton(drawable)
         }
     }
 
     protected fun hideBackButton() {
         if (callback != null) {
-            callback!!.hideBackButton()
+            callback?.hideBackButton()
         }
     }
 
     protected fun showSwipeProgress() {
         if (callback != null) {
-            callback!!.showSwipeProgress()
+            callback?.showSwipeProgress()
         }
     }
 
     open fun hideSwipeProgress() {
         if (callback != null) {
-            callback!!.hideSwipeProgress()
+            callback?.hideSwipeProgress()
         }
     }
 
     protected open fun showProgressDialog(message: String?) {
-        callback!!.showProgressDialog(message)
+        callback?.showProgressDialog(message)
     }
 
     protected open fun hideProgressDialog() {
-        callback!!.hideProgressDialog()
+        callback?.hideProgressDialog()
     }
 
     protected fun setSwipeEnabled(enabled: Boolean) {
         if (callback != null) {
-            callback!!.setSwipeRefreshEnabled(enabled)
+            callback?.setSwipeRefreshEnabled(enabled)
         }
     }
 
     protected val swipeRefreshLayout: SwipeRefreshLayout?
         get() = if (callback != null) {
-            callback!!.swipeRefreshLayout
+            callback?.swipeRefreshLayout
         } else null
 
     override fun onAttach(context: Context) {
@@ -83,19 +83,19 @@ open class BaseFragment : Fragment() {
         containerId: Int
     ) {
         val backStateName = fragment.javaClass.name
-        val fragmentPopped = fragmentManager!!.popBackStackImmediate(
+        val fragmentPopped = fragmentManager?.popBackStackImmediate(
             backStateName,
             0
         )
-        if (!fragmentPopped && fragmentManager!!.findFragmentByTag(backStateName) ==
+        if (fragmentPopped == false && fragmentManager?.findFragmentByTag(backStateName) ==
             null
         ) {
-            val transaction = fragmentManager!!.beginTransaction()
-            transaction.replace(containerId, fragment, backStateName)
+            val transaction = fragmentManager?.beginTransaction()
+            transaction?.replace(containerId, fragment, backStateName)
             if (addToBackStack) {
-                transaction.addToBackStack(backStateName)
+                transaction?.addToBackStack(backStateName)
             }
-            transaction.commit()
+            transaction?.commit()
         }
     }
 

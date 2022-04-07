@@ -28,17 +28,13 @@ class NotificationAdapter @Inject constructor() :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.mTvBody!!.text = mNotificationPayloadList!![position].body
-        holder.mTvTitle!!.text = mNotificationPayloadList!![position].title
-        holder.mTvTimestamp!!.text = mNotificationPayloadList!![position].timestamp
+        holder.mTvBody?.text = mNotificationPayloadList?.get(position)?.body
+        holder.mTvTitle?.text = mNotificationPayloadList?.get(position)?.title
+        holder.mTvTimestamp?.text = mNotificationPayloadList?.get(position)?.timestamp
     }
 
     override fun getItemCount(): Int {
-        return if (mNotificationPayloadList != null) {
-            mNotificationPayloadList!!.size
-        } else {
-            0
-        }
+        return mNotificationPayloadList?.size ?: 0
     }
 
     fun setNotificationPayloadList(notificationPayloadList: List<NotificationPayload>?) {
@@ -60,7 +56,7 @@ class NotificationAdapter @Inject constructor() :
         var mTvTimestamp: TextView? = null
 
         init {
-            ButterKnife.bind(this, v!!)
+            v?.let { ButterKnife.bind(this, it) }
         }
     }
 

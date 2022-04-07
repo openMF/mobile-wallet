@@ -28,7 +28,7 @@ class NotificationActivity : BaseActivity(), NotificationView {
     @JvmField
     @Inject
     var mPresenter: NotificationPresenter? = null
-    var mNotificationPresenter: NotificationContract.NotificationPresenter? = null
+    private var mNotificationPresenter: NotificationContract.NotificationPresenter? = null
 
     @JvmField
     @BindView(R.id.rv_notification)
@@ -47,18 +47,18 @@ class NotificationActivity : BaseActivity(), NotificationView {
         ButterKnife.bind(this)
         setToolbarTitle("Notifications")
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
-        activityComponent!!.inject(this)
+        activityComponent?.inject(this)
         setupRecyclerView()
         setupSwipeRefreshLayout()
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         showSwipeProgress()
-        mNotificationPresenter!!.fetchNotifications()
+        mNotificationPresenter?.fetchNotifications()
     }
 
     private fun setupRecyclerView() {
-        mRvNotification!!.layoutManager = LinearLayoutManager(this)
-        mRvNotification!!.adapter = mNotificationAdapter
-        mRvNotification!!.addItemDecoration(
+        mRvNotification?.layoutManager = LinearLayoutManager(this)
+        mRvNotification?.adapter = mNotificationAdapter
+        mRvNotification?.addItemDecoration(
             DividerItemDecoration(
                 this,
                 DividerItemDecoration.VERTICAL
@@ -68,7 +68,7 @@ class NotificationActivity : BaseActivity(), NotificationView {
 
     private fun setupSwipeRefreshLayout() {
         setSwipeRefreshEnabled(true)
-        swipeRefreshLayout!!.setOnRefreshListener { mNotificationPresenter!!.fetchNotifications() }
+        swipeRefreshLayout?.setOnRefreshListener { mNotificationPresenter?.fetchNotifications() }
     }
 
     override fun setPresenter(presenter: NotificationContract.NotificationPresenter?) {
@@ -79,15 +79,15 @@ class NotificationActivity : BaseActivity(), NotificationView {
         hideSwipeProgress()
         if (notificationPayloadList?.isEmpty() == true) {
             DebugUtil.log("null")
-            mRvNotification!!.visibility = View.GONE
-            tvplaceholder!!.visibility = View.VISIBLE
+            mRvNotification?.visibility = View.GONE
+            tvplaceholder?.visibility = View.VISIBLE
         } else {
             DebugUtil.log("yes")
-            mRvNotification!!.visibility = View.VISIBLE
-            tvplaceholder!!.visibility = View.GONE
-            mNotificationAdapter!!.setNotificationPayloadList(notificationPayloadList)
+            mRvNotification?.visibility = View.VISIBLE
+            tvplaceholder?.visibility = View.GONE
+            mNotificationAdapter?.setNotificationPayloadList(notificationPayloadList)
         }
-        mNotificationAdapter!!.setNotificationPayloadList(notificationPayloadList)
+        mNotificationAdapter?.setNotificationPayloadList(notificationPayloadList)
     }
 
     override fun fetchNotificationsError(message: String?) {

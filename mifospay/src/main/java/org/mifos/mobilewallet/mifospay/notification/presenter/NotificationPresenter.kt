@@ -23,7 +23,7 @@ class NotificationPresenter @Inject constructor(
     var fetchNotificationsUseCase: FetchNotifications? = null
     override fun attachView(baseView: BaseView<*>?) {
         mNotificationView = baseView as NotificationView?
-        mNotificationView!!.setPresenter(this)
+        mNotificationView?.setPresenter(this)
     }
 
     override fun fetchNotifications() {
@@ -33,13 +33,13 @@ class NotificationPresenter @Inject constructor(
             ),
             object : UseCaseCallback<FetchNotifications.ResponseValue?> {
                 override fun onSuccess(response: FetchNotifications.ResponseValue?) {
-                    mNotificationView!!.fetchNotificationsSuccess(
+                    mNotificationView?.fetchNotificationsSuccess(
                         response?.notificationPayloadList
                     )
                 }
 
                 override fun onError(message: String) {
-                    mNotificationView!!.fetchNotificationsError(message)
+                    mNotificationView?.fetchNotificationsError(message)
                 }
             })
     }
