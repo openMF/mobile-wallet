@@ -117,16 +117,16 @@ class SignupActivity : BaseActivity(), SignupView {
         setContentView(R.layout.activity_signup)
         activityComponent.inject(this)
         ButterKnife.bind(this)
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         setToolbarTitle("Registration")
         mifosSavingProductId = intent.getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0)
         if (mifosSavingProductId
             == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
         ) {
-            mEtBusinessShopLayout!!.visibility = View.VISIBLE
+            mEtBusinessShopLayout?.visibility = View.VISIBLE
         } else {
-            mEtBusinessShopLayout!!.visibility = View.GONE
+            mEtBusinessShopLayout?.visibility = View.GONE
         }
         mobileNumber = intent.getStringExtra(Constants.MOBILE_NUMBER)
         countryName = intent.getStringExtra(Constants.COUNTRY)
@@ -136,21 +136,21 @@ class SignupActivity : BaseActivity(), SignupView {
         val lastName = intent.getStringExtra(Constants.GOOGLE_FAMILY_NAME)
         val photoUri = intent.getParcelableExtra<Uri>(Constants.GOOGLE_PHOTO_URI)
         if (displayName != null) {
-            mEtBusinessShopName!!.setText(displayName)
+            mEtBusinessShopName?.setText(displayName)
         }
         if (email != null) {
-            mEtEmail!!.setText(email)
-            mEtUserName!!.setText(email.substring(0, email.indexOf('@')))
+            mEtEmail?.setText(email)
+            mEtUserName?.setText(email.substring(0, email.indexOf('@')))
         }
         if (firstName != null) {
-            mEtFirstName!!.setText(firstName)
+            mEtFirstName?.setText(firstName)
         }
         if (lastName != null) {
-            mEtLastName!!.setText(lastName)
+            mEtLastName?.setText(lastName)
         }
-        mEtPassword!!.addTextChangedListener(object : TextWatcher {
+        mEtPassword?.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                mPresenter!!.checkPasswordStrength(s.toString())
+                mPresenter?.checkPasswordStrength(s.toString())
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -187,8 +187,8 @@ class SignupActivity : BaseActivity(), SignupView {
                 this@SignupActivity, statesList,
                 "Select or Search State", R.style.DialogAnimations_SmileWindow, "Close"
             )
-            spinnerDialog!!.bindOnSpinerListener { item, position -> mEtCity!!.setText(item) }
-            mEtCity!!.setOnClickListener { spinnerDialog!!.showSpinerDialog() }
+            spinnerDialog?.bindOnSpinerListener { item, position -> mEtCity?.setText(item) }
+            mEtCity?.setOnClickListener { spinnerDialog?.showSpinerDialog() }
             hideProgressDialog()
         } catch (e: Exception) {
             Log.d("qxz", e.toString() + " " + e.message)
@@ -220,23 +220,25 @@ class SignupActivity : BaseActivity(), SignupView {
             hideProgressDialog()
             return
         }
-        if (mEtPassword!!.text.toString().length < 6) {
+        if (mEtPassword?.text.toString().length < 6) {
             showToast("Password should contain more than 6 characters")
             return
         }
-        val firstName = mEtFirstName!!.text.toString()
-        val lastName = mEtLastName!!.text.toString()
-        val email = mEtEmail!!.text.toString()
-        val businessName = mEtBusinessShopName!!.text.toString()
-        val addressline1 = mEtAddressLine1!!.text.toString()
-        val addressline2 = mEtAddressLine2!!.text.toString()
-        val pincode = mEtPinCode!!.text.toString()
-        val city = mEtCity!!.text.toString()
-        val username = mEtUserName!!.text.toString()
-        val password = mEtPassword!!.text.toString()
-        val confirmPassword = mEtConfirmPassword!!.text.toString()
+        val firstName = mEtFirstName?.text.toString()
+        val lastName = mEtLastName?.text.toString()
+        val email = mEtEmail?.text.toString()
+        val businessName = mEtBusinessShopName?.text.toString()
+        val addressline1 = mEtAddressLine1?.text.toString()
+        val addressline2 = mEtAddressLine2?.text.toString()
+        val pincode = mEtPinCode?.text.toString()
+        val city = mEtCity?.text.toString()
+        val username = mEtUserName?.text.toString()
+        val password = mEtPassword?.text.toString()
+        val confirmPassword = mEtConfirmPassword?.text.toString()
         if (!email.isValidEmail()) {
-            Snackbar.make(container!!, R.string.validate_email, Snackbar.LENGTH_SHORT).show()
+            container?.let {
+                Snackbar.make(it, R.string.validate_email, Snackbar.LENGTH_SHORT).show()
+            }
             hideProgressDialog()
             return
         }
@@ -245,7 +247,7 @@ class SignupActivity : BaseActivity(), SignupView {
             hideProgressDialog()
             return
         }
-        mSignupPresenter!!.registerUser(
+        mSignupPresenter?.registerUser(
             firstName, lastName, mobileNumber, email, businessName,
             addressline1, addressline2, pincode, city, countryName, username, password, stateId,
             countryId, mifosSavingProductId
@@ -264,18 +266,18 @@ class SignupActivity : BaseActivity(), SignupView {
     }
 
     override fun updatePasswordStrength(stringRes: Int, colorRes: Int, value: Int) {
-        TransitionManager.beginDelayedTransition(container!!)
-        passwordStrengthText!!.visibility = View.VISIBLE
+        container?.let { TransitionManager.beginDelayedTransition(it) }
+        passwordStrengthText?.visibility = View.VISIBLE
         if (value == 0) {
-            passwordStrengthText!!.text = "Password should contain more than 6 characters"
+            passwordStrengthText?.text = "Password should contain more than 6 characters"
             return
         }
-        passwordStrengthProgress!!.visibility = View.VISIBLE
-        passwordStrengthProgress!!.progressDrawable.setColorFilter(
+        passwordStrengthProgress?.visibility = View.VISIBLE
+        passwordStrengthProgress?.progressDrawable?.setColorFilter(
             colorRes, PorterDuff.Mode.SRC_IN
         )
-        passwordStrengthProgress!!.progress = value
-        passwordStrengthText!!.setText(stringRes)
+        passwordStrengthProgress?.progress = value
+        passwordStrengthText?.setText(stringRes)
     }
 
     override fun loginSuccess() {
@@ -293,7 +295,7 @@ class SignupActivity : BaseActivity(), SignupView {
     }
 
     private fun isEmpty(etText: EditText?): Boolean {
-        return etText!!.text.toString().trim { it <= ' ' }.isEmpty()
+        return etText?.text.toString().trim { it <= ' ' }.isEmpty()
     }
 
     override fun showToast(s: String?) {

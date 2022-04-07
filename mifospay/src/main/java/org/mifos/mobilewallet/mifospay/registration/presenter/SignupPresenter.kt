@@ -79,12 +79,12 @@ class SignupPresenter @Inject constructor(
     private var mifosSavingsProductId = 0
     override fun attachView(baseView: BaseView<*>?) {
         mSignupView = baseView as SignupView?
-        mSignupView!!.setPresenter(this)
+        mSignupView?.setPresenter(this)
     }
 
     override fun checkPasswordStrength(password: String?) {
         val p = PasswordStrength(password)
-        mSignupView!!.updatePasswordStrength(
+        mSignupView?.updatePasswordStrength(
             p.strengthStringId,
             p.colorResId, p.value
         )
@@ -132,7 +132,7 @@ class SignupPresenter @Inject constructor(
             SearchClient.RequestValues("$username@mifos"),
             object : UseCaseCallback<SearchClient.ResponseValue?> {
                 override fun onSuccess(response: SearchClient.ResponseValue?) {
-                    mSignupView!!.onRegisterFailed("Username already exists.")
+                    mSignupView?.onRegisterFailed("Username already exists.")
                 }
 
                 override fun onError(message: String) {
@@ -153,7 +153,7 @@ class SignupPresenter @Inject constructor(
 
                 override fun onError(message: String) {
                     DebugUtil.log(message)
-                    mSignupView!!.onRegisterFailed(message)
+                    mSignupView?.onRegisterFailed(message)
                 }
             })
     }
@@ -182,7 +182,7 @@ class SignupPresenter @Inject constructor(
                 override fun onError(message: String) {
                     // delete user
                     DebugUtil.log(message)
-                    mSignupView!!.onRegisterFailed(message)
+                    mSignupView?.onRegisterFailed(message)
                     deleteUser(userId)
                 }
             })
@@ -199,15 +199,16 @@ class SignupPresenter @Inject constructor(
                 override fun onError(message: String) {
                     // connect client later
                     DebugUtil.log(message)
-                    mSignupView!!.onRegisterSuccess("update client error")
+                    mSignupView?.onRegisterSuccess("update client error")
                 }
             })
     }
 
     private fun loginUser(username: String?, password: String?) {
-        authenticateUserUseCase!!.requestValues = AuthenticateUser.RequestValues(username, password)
-        val requestValue = authenticateUserUseCase!!.requestValues
-        mUseCaseHandler.execute(authenticateUserUseCase, requestValue,
+        authenticateUserUseCase?.requestValues = AuthenticateUser.RequestValues(username, password)
+        val requestValue = authenticateUserUseCase?.requestValues
+        mUseCaseHandler.execute(
+            authenticateUserUseCase, requestValue,
             object : UseCaseCallback<AuthenticateUser.ResponseValue?> {
                 override fun onSuccess(response: AuthenticateUser.ResponseValue?) {
                     if (response != null) {
@@ -220,7 +221,7 @@ class SignupPresenter @Inject constructor(
                 }
 
                 override fun onError(message: String) {
-                    mSignupView!!.onRegisterSuccess("Login Failed")
+                    mSignupView?.onRegisterSuccess("Login Failed")
                 }
             })
     }
@@ -250,13 +251,13 @@ class SignupPresenter @Inject constructor(
                     }
                     if (response != null) {
                         if (response.userDetails.name != "") {
-                            mSignupView!!.loginSuccess()
+                            mSignupView?.loginSuccess()
                         }
                     }
                 }
 
                 override fun onError(message: String) {
-                    mSignupView!!.onRegisterSuccess("Fetch Client Error")
+                    mSignupView?.onRegisterSuccess("Fetch Client Error")
                 }
             })
     }

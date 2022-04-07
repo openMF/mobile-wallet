@@ -65,11 +65,11 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
         setContentView(R.layout.activity_mobile_verification)
         activityComponent.inject(this)
         ButterKnife.bind(this)
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         setToolbarTitle("")
         showColoredBackButton(Constants.WHITE_BACK_BUTTON)
-        mCcpCode!!.registerCarrierNumberEditText(mEtMobileNumber)
-        mCcpCountry!!.setCustomMasterCountries(null)
+        mCcpCode?.registerCarrierNumberEditText(mEtMobileNumber)
+        mCcpCountry?.setCustomMasterCountries(null)
     }
 
     override fun setPresenter(presenter: RegistrationContract.MobileVerificationPresenter?) {
@@ -79,13 +79,13 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
     @OnClick(R.id.btn_get_otp)
     fun onGetOTp() {
         hideSoftKeyboard(this)
-        if (mCcpCode!!.isValidFullNumber) {
+        if (mCcpCode?.isValidFullNumber == true) {
             showProgressDialog(Constants.SENDING_OTP_TO_YOUR_MOBILE_NUMBER)
             val handler = Handler()
             handler.postDelayed({
-                mMobileVerificationPresenter!!.requestOTPfromServer(
-                    mCcpCode!!.fullNumber,
-                    mEtMobileNumber!!.text.toString()
+                mMobileVerificationPresenter?.requestOTPfromServer(
+                    mCcpCode?.fullNumber,
+                    mEtMobileNumber?.text.toString()
                 )
             }, 1500)
         } else {
@@ -95,14 +95,14 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
 
     override fun onRequestOtpSuccess() {
         hideProgressDialog()
-        mEtMobileNumber!!.isClickable = false
-        mEtMobileNumber!!.isFocusableInTouchMode = false
-        mEtMobileNumber!!.isFocusable = false
-        mCcpCode!!.setCcpClickable(false)
-        mEtOtp!!.visibility = View.VISIBLE
-        mBtnGetOtp!!.isClickable = false
-        mBtnGetOtp!!.setBackgroundResource(R.drawable.ic_done)
-        mFabNext!!.visibility = View.VISIBLE
+        mEtMobileNumber?.isClickable = false
+        mEtMobileNumber?.isFocusableInTouchMode = false
+        mEtMobileNumber?.isFocusable = false
+        mCcpCode?.setCcpClickable(false)
+        mEtOtp?.visibility = View.VISIBLE
+        mBtnGetOtp?.isClickable = false
+        mBtnGetOtp?.setBackgroundResource(R.drawable.ic_done)
+        mFabNext?.visibility = View.VISIBLE
     }
 
     override fun onRequestOtpFailed(s: String?) {
@@ -113,15 +113,15 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
     @OnClick(R.id.fab_next)
     fun onNextClicked() {
         hideSoftKeyboard(this)
-        mFabNext!!.isClickable = false
-        mProgressBar!!.visibility = View.VISIBLE
-        mTvVerifyingOtp!!.visibility = View.VISIBLE
-        mEtOtp!!.isClickable = false
-        mEtOtp!!.isFocusableInTouchMode = false
-        mEtOtp!!.isFocusable = false
+        mFabNext?.isClickable = false
+        mProgressBar?.visibility = View.VISIBLE
+        mTvVerifyingOtp?.visibility = View.VISIBLE
+        mEtOtp?.isClickable = false
+        mEtOtp?.isFocusableInTouchMode = false
+        mEtOtp?.isFocusable = false
         val handler = Handler()
         handler.postDelayed(
-            { mMobileVerificationPresenter!!.verifyOTP(mEtOtp!!.text.toString()) },
+            { mMobileVerificationPresenter?.verifyOTP(mEtOtp?.text.toString()) },
             1500
         )
     }
@@ -153,19 +153,19 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
             Constants.GOOGLE_GIVEN_NAME,
             getIntent().getStringExtra(Constants.GOOGLE_GIVEN_NAME)
         )
-        intent.putExtra(Constants.COUNTRY, mCcpCountry!!.selectedCountryName)
-        intent.putExtra(Constants.MOBILE_NUMBER, mCcpCode!!.fullNumber)
+        intent.putExtra(Constants.COUNTRY, mCcpCountry?.selectedCountryName)
+        intent.putExtra(Constants.MOBILE_NUMBER, mCcpCode?.fullNumber)
         startActivity(intent)
         finish()
     }
 
     override fun onOtpVerificationFailed(s: String?) {
-        mFabNext!!.isClickable = true
-        mProgressBar!!.visibility = View.GONE
-        mTvVerifyingOtp!!.visibility = View.GONE
-        mEtOtp!!.isClickable = true
-        mEtOtp!!.isFocusableInTouchMode = true
-        mEtOtp!!.isFocusable = true
+        mFabNext?.isClickable = true
+        mProgressBar?.visibility = View.GONE
+        mTvVerifyingOtp?.visibility = View.GONE
+        mEtOtp?.isClickable = true
+        mEtOtp?.isFocusableInTouchMode = true
+        mEtOtp?.isFocusable = true
         showToast(s)
     }
 

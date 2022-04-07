@@ -37,19 +37,19 @@ class SignupMethod : BottomSheetDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        mBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
+        mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     @OnClick(R.id.btn_merchant)
     fun onMerchantClicked() {
         dismiss()
         if (activity is LoginActivity) {
-            if (mCbGoogleAccount!!.isChecked) {
-                (activity as LoginActivity?)!!.signupUsingGoogleAccount(
+            if (mCbGoogleAccount?.isChecked == true) {
+                (activity as LoginActivity?)?.signupUsingGoogleAccount(
                     Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
                 )
             } else {
-                (activity as LoginActivity?)!!.signup(Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID)
+                (activity as LoginActivity?)?.signup(Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID)
             }
         }
     }
@@ -58,12 +58,12 @@ class SignupMethod : BottomSheetDialogFragment() {
     fun onCustomerClicked() {
         dismiss()
         if (activity is LoginActivity) {
-            if (mCbGoogleAccount!!.isChecked) {
-                (activity as LoginActivity?)!!.signupUsingGoogleAccount(
+            if (mCbGoogleAccount?.isChecked == true) {
+                (activity as LoginActivity?)?.signupUsingGoogleAccount(
                     Constants.MIFOS_CONSUMER_SAVINGS_PRODUCT_ID
                 )
             } else {
-                (activity as LoginActivity?)!!.signup(Constants.MIFOS_CONSUMER_SAVINGS_PRODUCT_ID)
+                (activity as LoginActivity?)?.signup(Constants.MIFOS_CONSUMER_SAVINGS_PRODUCT_ID)
             }
         }
     }
