@@ -60,7 +60,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     var vAccountDetailsMobile: View? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)!!.activityComponent.inject(this)
+        (activity as BaseActivity?)?.activityComponent?.inject(this)
     }
 
     override fun onCreateView(
@@ -69,7 +69,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_profile, container, false)
         ButterKnife.bind(this, rootView)
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         setupUi()
         return rootView
     }
@@ -92,9 +92,9 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
     override fun onResume() {
         super.onResume()
-        mProfilePresenter!!.fetchProfile()
-        mProfilePresenter!!.fetchAccountDetails()
-        mProfilePresenter!!.fetchClientImage()
+        mProfilePresenter?.fetchProfile()
+        mProfilePresenter?.fetchAccountDetails()
+        mProfilePresenter?.fetchClientImage()
     }
 
     override fun setPresenter(presenter: BaseHomeContract.ProfilePresenter?) {
@@ -113,7 +113,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @OnClick(R.id.btn_profile_bottom_sheet_action)
     fun onEditProfileClicked() {
         if (activity != null) {
-            activity!!.startActivity(Intent(activity, EditProfileActivity::class.java))
+            activity?.startActivity(Intent(activity, EditProfileActivity::class.java))
         }
     }
 
@@ -121,35 +121,35 @@ class ProfileFragment : BaseFragment(), ProfileView {
         val drawable = TextDrawable.builder().beginConfig()
             .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())
             .height(resources.getDimension(R.dimen.user_profile_image_size).toInt())
-            .endConfig().buildRound(client!!.name.substring(0, 1), R.color.colorAccentBlack)
-        ivUserImage!!.setImageDrawable(drawable)
-        tvUserName!!.text = client.name
+            .endConfig().buildRound(client?.name?.substring(0, 1), R.color.colorAccentBlack)
+        ivUserImage?.setImageDrawable(drawable)
+        tvUserName?.text = client?.name
     }
 
     override fun showEmail(email: String?) {
-        (vAccountDetailsEmail!!.findViewById<View>(R.id.iv_item_casual_list_icon) as ImageView)
+        (vAccountDetailsEmail?.findViewById<View>(R.id.iv_item_casual_list_icon) as ImageView)
             .setImageDrawable(resources.getDrawable(R.drawable.ic_email))
-        (vAccountDetailsEmail!!.findViewById<View>(R.id.tv_item_casual_list_title) as TextView).text =
+        (vAccountDetailsEmail?.findViewById<View>(R.id.tv_item_casual_list_title) as TextView).text =
             email
-        (vAccountDetailsEmail!!.findViewById<View>(R.id.tv_item_casual_list_subtitle) as TextView).text =
+        (vAccountDetailsEmail?.findViewById<View>(R.id.tv_item_casual_list_subtitle) as TextView).text =
             resources.getString(R.string.email)
     }
 
     override fun showVpa(vpa: String?) {
-        (vAccountDetailsVpa!!.findViewById<View>(R.id.iv_item_casual_list_icon) as ImageView)
+        (vAccountDetailsVpa?.findViewById<View>(R.id.iv_item_casual_list_icon) as ImageView)
             .setImageDrawable(resources.getDrawable(R.drawable.ic_transaction))
-        (vAccountDetailsVpa!!.findViewById<View>(R.id.tv_item_casual_list_title) as TextView).text =
+        (vAccountDetailsVpa?.findViewById<View>(R.id.tv_item_casual_list_title) as TextView).text =
             vpa
-        (vAccountDetailsVpa!!.findViewById<View>(R.id.tv_item_casual_list_subtitle) as TextView).text =
+        (vAccountDetailsVpa?.findViewById<View>(R.id.tv_item_casual_list_subtitle) as TextView).text =
             resources.getString(R.string.vpa)
     }
 
     override fun showMobile(mobile: String?) {
-        (vAccountDetailsMobile!!.findViewById<View>(R.id.iv_item_casual_list_icon) as ImageView)
+        (vAccountDetailsMobile?.findViewById<View>(R.id.iv_item_casual_list_icon) as ImageView)
             .setImageDrawable(resources.getDrawable(R.drawable.ic_mobile))
-        (vAccountDetailsMobile!!.findViewById<View>(R.id.tv_item_casual_list_title) as TextView).text =
+        (vAccountDetailsMobile?.findViewById<View>(R.id.tv_item_casual_list_title) as TextView).text =
             mobile
-        (vAccountDetailsMobile!!.findViewById<View>(R.id.tv_item_casual_list_subtitle) as TextView).text =
+        (vAccountDetailsMobile?.findViewById<View>(R.id.tv_item_casual_list_subtitle) as TextView).text =
             resources.getString(R.string.mobile)
     }
 

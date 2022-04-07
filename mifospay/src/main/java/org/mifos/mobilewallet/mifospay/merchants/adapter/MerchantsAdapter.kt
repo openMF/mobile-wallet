@@ -13,6 +13,7 @@ import butterknife.ButterKnife
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable
+import java.util.*
 import javax.inject.Inject
 
 class MerchantsAdapter @Inject constructor() : RecyclerView.Adapter<MerchantsAdapter.ViewHolder>(),
@@ -29,15 +30,15 @@ class MerchantsAdapter @Inject constructor() : RecyclerView.Adapter<MerchantsAda
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val mMerchant = merchants!![position]
+        val mMerchant = merchants?.get(position)
         val iconDrawable = TextDrawable.builder().beginConfig()
             .endConfig().buildRound(
-                mMerchant.clientName
-                    .substring(0, 1), R.color.colorAccentBlack
+                mMerchant?.clientName
+                    ?.substring(0, 1), R.color.colorAccentBlack
             )
-        holder.mTvMerchantIcon!!.setImageDrawable(iconDrawable)
-        holder.mTvMerchantName!!.text = mMerchant.clientName
-        holder.mTvMerchantExternalId!!.text = mMerchant.externalId
+        holder.mTvMerchantIcon?.setImageDrawable(iconDrawable)
+        holder.mTvMerchantName?.text = mMerchant?.clientName
+        holder.mTvMerchantExternalId?.text = mMerchant?.externalId
     }
 
     override fun getItemCount(): Int {
@@ -46,7 +47,7 @@ class MerchantsAdapter @Inject constructor() : RecyclerView.Adapter<MerchantsAda
 
     fun setData(mMerchantsList: List<SavingsWithAssociations>?) {
         merchants = mMerchantsList
-        notifyDataSetChanged()
+        notifyItemChanged(merchants?.size?.minus(1) ?: 0)
     }
 
     override fun getFilter(): Filter {
@@ -58,11 +59,11 @@ class MerchantsAdapter @Inject constructor() : RecyclerView.Adapter<MerchantsAda
                 } else {
                     val filteredList: MutableList<SavingsWithAssociations> = ArrayList()
                     for (merchant in merchants!!) {
-                        if (merchant.clientName.toLowerCase().contains(
-                                charString.toLowerCase()
+                        if (merchant.clientName.toLowerCase(Locale.ROOT).contains(
+                                charString.toLowerCase(Locale.ROOT)
                             )
-                            || merchant.externalId.toLowerCase().contains(
-                                charString.toLowerCase()
+                            || merchant.externalId.toLowerCase(Locale.ROOT).contains(
+                                charString.toLowerCase(Locale.ROOT)
                             )
                         ) {
                             filteredList.add(merchant)
@@ -96,7 +97,9 @@ class MerchantsAdapter @Inject constructor() : RecyclerView.Adapter<MerchantsAda
         var mTvMerchantExternalId: TextView? = null
 
         init {
-            ButterKnife.bind(this, v!!)
+            if (v != null) {
+                ButterKnife.bind(this, v)
+            }
         }
     }
 }

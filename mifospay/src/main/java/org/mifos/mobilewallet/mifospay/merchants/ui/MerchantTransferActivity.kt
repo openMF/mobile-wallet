@@ -94,16 +94,16 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
         setToolbarTitle("Merchant Transaction")
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         setupUI()
-        mPresenter!!.attachView(this)
-        mPresenter!!.fetchMerchantTransfers(merchantAccountNumber)
+        mPresenter?.attachView(this)
+        mPresenter?.fetchMerchantTransfers(merchantAccountNumber)
     }
 
     private fun setupUI() {
         setupBottomSheet()
         merchantAccountNumber = intent.getStringExtra(Constants.MERCHANT_ACCOUNT_NO)
-        tvMerchantName!!.text =
+        tvMerchantName?.text =
             intent.getStringExtra(Constants.MERCHANT_NAME)
-        tvMerchantVPA!!.text = intent.getStringExtra(Constants.MERCHANT_VPA)
+        tvMerchantVPA?.text = intent.getStringExtra(Constants.MERCHANT_VPA)
         val drawable = TextDrawable.builder().beginConfig()
             .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())
             .height(resources.getDimension(R.dimen.user_profile_image_size).toInt())
@@ -111,15 +111,15 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
                 intent.getStringExtra(Constants.MERCHANT_NAME)
                     ?.substring(0, 1), R.color.colorPrimary
             )
-        ivMerchantImage!!.setImageDrawable(drawable)
+        ivMerchantImage?.setImageDrawable(drawable)
         showTransactionFetching()
         setUpRecycleView()
     }
 
     private fun setUpRecycleView() {
-        mMerchantHistoryAdapter!!.setContext(this)
-        rvMerchantHistory!!.layoutManager = LinearLayoutManager(MifosPayApp.getContext())
-        rvMerchantHistory!!.adapter = mMerchantHistoryAdapter
+        mMerchantHistoryAdapter?.setContext(this)
+        rvMerchantHistory?.layoutManager = LinearLayoutManager(MifosPayApp.getContext())
+        rvMerchantHistory?.adapter = mMerchantHistoryAdapter
     }
 
     override fun setPresenter(presenter: BaseHomeContract.MerchantTransferPresenter?) {
@@ -142,8 +142,8 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
 
     @OnClick(R.id.btn_submit)
     fun makeTransaction() {
-        val externalId = tvMerchantVPA!!.text.toString().trim { it <= ' ' }
-        val amount = etAmount!!.text.toString().trim { it <= ' ' }
+        val externalId = tvMerchantVPA?.text.toString().trim { it <= ' ' }
+        val amount = etAmount?.text.toString().trim { it <= ' ' }
         if (amount.isEmpty()) {
             showToast(Constants.PLEASE_ENTER_ALL_THE_FIELDS)
             return
@@ -151,12 +151,12 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
             showToast(Constants.PLEASE_ENTER_VALID_AMOUNT)
             return
         }
-        mTransferPresenter!!.checkBalanceAvailability(externalId, amount.toDouble())
+        mTransferPresenter?.checkBalanceAvailability(externalId, amount.toDouble())
     }
 
     override fun onBackPressed() {
-        if (mBottomSheetBehavior!!.state != BottomSheetBehavior.STATE_COLLAPSED) {
-            mBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+        if (mBottomSheetBehavior?.state != BottomSheetBehavior.STATE_COLLAPSED) {
+            mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
             return
         }
         super.onBackPressed()
@@ -172,24 +172,24 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
     }
 
     override fun showTransactionFetching() {
-        rvMerchantHistory!!.visibility = View.GONE
-        tvTransactionsStateTitle!!.text = resources.getString(R.string.fetching)
-        tvTransactionsStateSubtitle!!.visibility = View.GONE
-        ivTransactionsStateIcon!!.visibility = View.GONE
+        rvMerchantHistory?.visibility = View.GONE
+        tvTransactionsStateTitle?.text = resources.getString(R.string.fetching)
+        tvTransactionsStateSubtitle?.visibility = View.GONE
+        ivTransactionsStateIcon?.visibility = View.GONE
     }
 
     override fun showTransactions(transactions: List<Transaction?>?) {
-        vEmptyState!!.visibility = View.GONE
-        rvMerchantHistory!!.visibility = View.VISIBLE
-        mMerchantHistoryAdapter!!.setData(transactions)
+        vEmptyState?.visibility = View.GONE
+        rvMerchantHistory?.visibility = View.VISIBLE
+        mMerchantHistoryAdapter?.setData(transactions)
     }
 
     override fun showSpecificView(drawable: Int, title: Int, subtitle: Int) {
-        rvMerchantHistory!!.visibility = View.GONE
-        tvTransactionsStateSubtitle!!.visibility = View.VISIBLE
-        ivTransactionsStateIcon!!.visibility = View.VISIBLE
-        tvTransactionsStateTitle!!.setText(title)
-        tvTransactionsStateSubtitle!!.setText(subtitle)
+        rvMerchantHistory?.visibility = View.GONE
+        tvTransactionsStateSubtitle?.visibility = View.VISIBLE
+        ivTransactionsStateIcon?.visibility = View.VISIBLE
+        tvTransactionsStateTitle?.setText(title)
+        tvTransactionsStateSubtitle?.setText(subtitle)
         ivTransactionsStateIcon?.setImageDrawable(resources.getDrawable(drawable))
     }
 }

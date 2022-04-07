@@ -22,7 +22,7 @@ class MainPresenter @Inject constructor(
     private var mHomeView: BaseHomeView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mHomeView = baseView as BaseHomeView?
-        mHomeView!!.setPresenter(this)
+        mHomeView?.setPresenter(this)
     }
 
     override fun fetchClientDetails() {
@@ -32,7 +32,7 @@ class MainPresenter @Inject constructor(
                 override fun onSuccess(response: FetchClientData.ResponseValue?) {
                     localRepository.saveClientData(response?.userDetails)
                     if (response?.userDetails?.name != "") {
-                        mHomeView!!.showClientDetails(response?.userDetails)
+                        mHomeView?.showClientDetails(response?.userDetails)
                     }
                 }
 

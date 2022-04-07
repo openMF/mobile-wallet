@@ -32,7 +32,7 @@ class FinanceFragment : BaseFragment() {
         ButterKnife.bind(this, rootView)
         setupUi()
         setupViewPager()
-        tilTabLayout!!.setupWithViewPager(vpTabLayout)
+        tilTabLayout?.setupWithViewPager(vpTabLayout)
         return rootView
     }
 
@@ -42,13 +42,13 @@ class FinanceFragment : BaseFragment() {
     }
 
     private fun setupViewPager() {
-        vpTabLayout!!.offscreenPageLimit = 1
+        vpTabLayout?.offscreenPageLimit = 1
         val tabLayoutAdapter = TabLayoutAdapter(childFragmentManager)
         tabLayoutAdapter.addFragment(AccountsFragment(), getString(R.string.accounts))
         tabLayoutAdapter.addFragment(CardsFragment(), getString(R.string.cards))
         tabLayoutAdapter.addFragment(MerchantsFragment(), getString(R.string.merchants))
         tabLayoutAdapter.addFragment(KYCDescriptionFragment(), getString(R.string.kyc))
-        vpTabLayout!!.adapter = tabLayoutAdapter
+        vpTabLayout?.adapter = tabLayoutAdapter
     }
 
     companion object {

@@ -36,7 +36,7 @@ class HomeFragment : BaseFragment(), HomeView {
     @JvmField
     @Inject
     var mPresenter: HomePresenter? = null
-    var mHomePresenter: BaseHomeContract.HomePresenter? = null
+    private var mHomePresenter: BaseHomeContract.HomePresenter? = null
 
     @JvmField
     @Inject
@@ -93,7 +93,7 @@ class HomeFragment : BaseFragment(), HomeView {
     private var accountBalance: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)!!.activityComponent.inject(this)
+        (activity as BaseActivity?)?.activityComponent?.inject(this)
     }
 
     override fun onCreateView(
@@ -103,40 +103,42 @@ class HomeFragment : BaseFragment(), HomeView {
         val rootView = inflater.inflate(R.layout.fragment_home, container, false)
         setToolbarTitle(Constants.HOME)
         ButterKnife.bind(this, rootView)
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         setUpSwipeRefresh()
         setupUi()
         showSwipeProgress()
-        mHomePresenter!!.fetchAccountDetails()
-        mTvAccountBalance!!.setOnClickListener {
-            if (mTvAccountBalance!!.text.toString() == Constants.TAP_TO_REVEAL) {
-                TransitionManager.beginDelayedTransition(
-                    homeScreenContainer!!
-                )
-                mTvAccountBalance!!.text = accountBalance
-                tvHideBalance!!.visibility = View.VISIBLE
+        mHomePresenter?.fetchAccountDetails()
+        mTvAccountBalance?.setOnClickListener {
+            if (mTvAccountBalance?.text.toString() == Constants.TAP_TO_REVEAL) {
+                homeScreenContainer?.let { it1 ->
+                    TransitionManager.beginDelayedTransition(
+                        it1
+                    )
+                }
+                mTvAccountBalance?.text = accountBalance
+                tvHideBalance?.visibility = View.VISIBLE
             }
         }
-        tvHideBalance!!.setOnClickListener {
-            TransitionManager.beginDelayedTransition(homeScreenContainer!!)
-            mTvAccountBalance!!.text = Constants.TAP_TO_REVEAL
-            tvHideBalance!!.visibility = View.INVISIBLE
+        tvHideBalance?.setOnClickListener {
+            homeScreenContainer?.let { it1 -> TransitionManager.beginDelayedTransition(it1) }
+            mTvAccountBalance?.text = Constants.TAP_TO_REVEAL
+            tvHideBalance?.visibility = View.INVISIBLE
         }
-        btnShowMoreTransactionsHistory!!.setOnClickListener {
-            TransitionManager.beginDelayedTransition(homeScreenContainer!!)
-            mHomePresenter!!.showMoreHistory(mHistoryAdapter!!.itemCount)
+        btnShowMoreTransactionsHistory?.setOnClickListener {
+            homeScreenContainer?.let { it1 -> TransitionManager.beginDelayedTransition(it1) }
+            mHistoryAdapter?.let { it1 -> mHomePresenter?.showMoreHistory(it1.itemCount) }
         }
         return rootView
     }
 
     private fun setUpSwipeRefresh() {
         swipeRefreshLayout.setOnRefreshListener {
-            vStateView!!.visibility = View.GONE
-            rvHomeBottomSheetContent!!.visibility = View.GONE
-            btnShowMoreTransactionsHistory!!.visibility = View.GONE
-            tvLoadingTransactions!!.visibility = View.VISIBLE
-            progressBar!!.visibility = View.VISIBLE
-            mHomePresenter!!.fetchAccountDetails()
+            vStateView?.visibility = View.GONE
+            rvHomeBottomSheetContent?.visibility = View.GONE
+            btnShowMoreTransactionsHistory?.visibility = View.GONE
+            tvLoadingTransactions?.visibility = View.VISIBLE
+            progressBar?.visibility = View.VISIBLE
+            mHomePresenter?.fetchAccountDetails()
         }
     }
 
@@ -145,8 +147,8 @@ class HomeFragment : BaseFragment(), HomeView {
         setupBottomSheet()
         setupRecyclerView()
         hideBottomSheetActionButton()
-        rvHomeBottomSheetContent!!.visibility = View.GONE
-        vStateView!!.visibility = View.GONE
+        rvHomeBottomSheetContent?.visibility = View.GONE
+        vStateView?.visibility = View.GONE
     }
 
     private fun setupBottomSheet() {
@@ -164,9 +166,9 @@ class HomeFragment : BaseFragment(), HomeView {
     }
 
     private fun setupRecyclerView() {
-        rvHomeBottomSheetContent!!.layoutManager = LinearLayoutManager(context)
-        mHistoryAdapter!!.setContext(activity)
-        rvHomeBottomSheetContent!!.adapter = mHistoryAdapter
+        rvHomeBottomSheetContent?.layoutManager = LinearLayoutManager(context)
+        mHistoryAdapter?.setContext(activity)
+        rvHomeBottomSheetContent?.adapter = mHistoryAdapter
     }
 
     override fun setPresenter(presenter: BaseHomeContract.HomePresenter?) {
@@ -175,40 +177,40 @@ class HomeFragment : BaseFragment(), HomeView {
 
     override fun setAccountBalance(account: Account?) {
         this.account = account
-        val currencyCode = account!!.currency.code
-        accountBalance = getFormattedAccountBalance(account.balance, currencyCode)
+        val currencyCode = account?.currency?.code
+        accountBalance = getFormattedAccountBalance(account?.balance, currencyCode)
         hideSwipeProgress()
-        TransitionManager.beginDelayedTransition(homeScreenContainer!!)
-        mTvAccountBalance!!.text = Constants.TAP_TO_REVEAL
-        tvHideBalance!!.visibility = View.INVISIBLE
+        homeScreenContainer?.let { TransitionManager.beginDelayedTransition(it) }
+        mTvAccountBalance?.text = Constants.TAP_TO_REVEAL
+        tvHideBalance?.visibility = View.INVISIBLE
     }
 
     override fun showTransactionsHistory(transactions: List<Transaction?>?) {
-        vStateView!!.visibility = View.GONE
+        vStateView?.visibility = View.GONE
         hideTransactionLoading()
-        btnShowMoreTransactionsHistory!!.visibility = View.VISIBLE
-        rvHomeBottomSheetContent!!.visibility = View.VISIBLE
-        mHistoryAdapter!!.setData(transactions)
+        btnShowMoreTransactionsHistory?.visibility = View.VISIBLE
+        rvHomeBottomSheetContent?.visibility = View.VISIBLE
+        mHistoryAdapter?.setData(transactions)
     }
 
     override fun showTransactionsError() {
-        rvHomeBottomSheetContent!!.visibility = View.GONE
+        rvHomeBottomSheetContent?.visibility = View.GONE
         setupErrorStateView()
-        vStateView!!.visibility = View.VISIBLE
+        vStateView?.visibility = View.VISIBLE
     }
 
     override fun showTransactionsEmpty() {
-        rvHomeBottomSheetContent!!.visibility = View.GONE
+        rvHomeBottomSheetContent?.visibility = View.GONE
         setupEmptyStateView()
-        vStateView!!.visibility = View.VISIBLE
+        vStateView?.visibility = View.VISIBLE
     }
 
     override fun showBottomSheetActionButton() {
-        btnShowMoreTransactionsHistory!!.visibility = View.VISIBLE
+        btnShowMoreTransactionsHistory?.visibility = View.VISIBLE
     }
 
     override fun hideBottomSheetActionButton() {
-        btnShowMoreTransactionsHistory!!.visibility = View.GONE
+        btnShowMoreTransactionsHistory?.visibility = View.GONE
     }
 
     override fun hideSwipeProgress() {
@@ -216,8 +218,8 @@ class HomeFragment : BaseFragment(), HomeView {
     }
 
     override fun hideTransactionLoading() {
-        tvLoadingTransactions!!.visibility = View.GONE
-        progressBar!!.visibility = View.GONE
+        tvLoadingTransactions?.visibility = View.GONE
+        progressBar?.visibility = View.GONE
     }
 
     override fun showToast(message: String?) {

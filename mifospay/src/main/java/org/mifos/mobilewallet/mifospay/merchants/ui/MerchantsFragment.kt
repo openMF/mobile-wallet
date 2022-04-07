@@ -24,6 +24,7 @@ import org.mifos.mobilewallet.mifospay.merchants.adapter.MerchantsAdapter
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantsPresenter
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
+import java.util.*
 import javax.inject.Inject
 
 class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
@@ -80,7 +81,7 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val rootView: View = inflater.inflate(R.layout.fragment_merchants, container, false)
         ButterKnife.bind(this, rootView)
         mPresenter?.attachView(this)
@@ -102,23 +103,25 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
                 activity,
                 object : RecyclerItemClickListener.OnItemClickListener {
                     override fun onItemClick(childView: View, position: Int) {
-                        val merchantVPA: String = mMerchantsAdapter?.merchants
-                            ?.get(position)!!.externalId
+                        val merchantVPA: String? = mMerchantsAdapter?.merchants
+                            ?.get(position)?.externalId
                         val intent = Intent(
                             activity,
                             MerchantTransferActivity::class.java
                         )
                         intent.putExtra(
                             Constants.MERCHANT_NAME, mMerchantsAdapter
-                                ?.merchants!![position].clientName
+                                ?.merchants?.get(position)?.clientName
                         )
                         intent.putExtra(
                             Constants.MERCHANT_VPA, mMerchantsAdapter
-                                ?.merchants!![position].externalId
+                                ?.merchants?.get(
+                                    position
+                                )?.externalId
                         )
                         intent.putExtra(
                             Constants.MERCHANT_ACCOUNT_NO, mMerchantsAdapter
-                                ?.merchants!![position].accountNo
+                                ?.merchants?.get(position)?.accountNo
                         )
                         startActivity(intent)
                     }
@@ -126,8 +129,8 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
                     override fun onItemLongPress(childView: View, position: Int) {
                         val clipboard = activity
                             ?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-                        val merchantVPA: String = mMerchantsAdapter?.merchants
-                            ?.get(position)!!.externalId
+                        val merchantVPA: String? = mMerchantsAdapter?.merchants
+                            ?.get(position)?.externalId
                         val clip: ClipData = ClipData.newPlainText("VPA", merchantVPA)
                         clipboard.setPrimaryClip(clip)
                         Toast.makeText(
@@ -152,7 +155,7 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
         mRvMerchants?.visibility = View.GONE
         mMerchantProgressBar?.visibility = View.GONE
         hideSwipeProgress()
-        vStateView!!.visibility = View.VISIBLE
+        vStateView?.visibility = View.VISIBLE
         if (activity != null) {
             val res: Resources = resources
             ivTransactionsStateIcon
@@ -163,10 +166,10 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
     }
 
     override fun showEmptyStateView() {
-        mMerchantFragmentLayout!!.visibility = View.GONE
+        mMerchantFragmentLayout?.visibility = View.GONE
         mMerchantProgressBar?.visibility = View.GONE
         if (activity != null) {
-            vStateView!!.visibility = View.VISIBLE
+            vStateView?.visibility = View.VISIBLE
             val res: Resources = resources
             ivTransactionsStateIcon
                 ?.setImageDrawable(res.getDrawable(R.drawable.ic_merchants))
@@ -176,8 +179,8 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
     }
 
     override fun showMerchants() {
-        mMerchantFragmentLayout!!.visibility = View.VISIBLE
-        vStateView!!.visibility = View.GONE
+        mMerchantFragmentLayout?.visibility = View.VISIBLE
+        vStateView?.visibility = View.GONE
         mMerchantProgressBar?.visibility = View.GONE
         searchView?.visibility = View.VISIBLE
     }
@@ -194,15 +197,19 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
                 merchantsList
             } else {
                 val filteredList: MutableList<SavingsWithAssociations> =
-                    ArrayList<SavingsWithAssociations>()
+                    ArrayList()
                 for (merchant in merchantsList!!) {
                     if (merchant.externalId != null &&
-                        merchant.externalId.toLowerCase().contains(text.toLowerCase())
+                        merchant.externalId.toLowerCase(Locale.ROOT).contains(
+                            text.toLowerCase(
+                                Locale.ROOT
+                            )
+                        )
                     ) {
                         filteredList.add(merchant)
                     }
-                    if (merchant.clientName.toLowerCase().contains(
-                            text.toLowerCase()
+                    if (merchant.clientName.toLowerCase(Locale.ROOT).contains(
+                            text.toLowerCase(Locale.ROOT)
                         )
                     ) {
                         filteredList.add(merchant)
@@ -225,8 +232,8 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
 
     override fun showMerchantFetchProcess() {
         searchView?.visibility = View.GONE
-        mMerchantFragmentLayout!!.visibility = View.GONE
-        vStateView!!.visibility = View.GONE
+        mMerchantFragmentLayout?.visibility = View.GONE
+        vStateView?.visibility = View.GONE
         mMerchantProgressBar?.visibility = View.VISIBLE
     }
 }

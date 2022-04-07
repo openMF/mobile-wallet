@@ -24,20 +24,20 @@ class ProfilePresenter @Inject constructor(
     private var mProfileView: ProfileView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mProfileView = baseView as ProfileView?
-        mProfileView!!.setPresenter(this)
+        mProfileView?.setPresenter(this)
     }
 
     override fun fetchProfile() {
-        mProfileView!!.showProfile(localRepository.clientDetails)
+        mProfileView?.showProfile(localRepository.clientDetails)
     }
 
     override fun fetchAccountDetails() {
         val email = mPreferencesHelper.email
         val vpa = mPreferencesHelper.clientVpa
         val mobile = mPreferencesHelper.mobile
-        mProfileView!!.showEmail(email.ifEmpty { "-" })
-        mProfileView!!.showVpa(vpa.ifEmpty { "-" })
-        mProfileView!!.showMobile(mobile.ifEmpty { "-" })
+        mProfileView?.showEmail(email.ifEmpty { "-" })
+        mProfileView?.showVpa(vpa.ifEmpty { "-" })
+        mProfileView?.showMobile(mobile.ifEmpty { "-" })
     }
 
     override fun fetchClientImage() {
@@ -46,7 +46,7 @@ class ProfilePresenter @Inject constructor(
                 localRepository.clientDetails.clientId
             ), object : UseCaseCallback<FetchClientImage.ResponseValue?> {
                 override fun onSuccess(response: FetchClientImage.ResponseValue?) {
-                    mProfileView!!.fetchImageSuccess(response?.responseBody)
+                    mProfileView?.fetchImageSuccess(response?.responseBody)
                 }
 
                 override fun onError(message: String) {

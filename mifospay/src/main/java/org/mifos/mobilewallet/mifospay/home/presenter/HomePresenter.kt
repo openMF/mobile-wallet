@@ -47,8 +47,8 @@ class HomePresenter @Inject constructor(
     private var transactionList: List<Transaction>? = null
     override fun attachView(baseView: BaseView<*>?) {
         mHomeView = baseView as HomeView?
-        mHomeView!!.setPresenter(this)
-        transactionsHistory!!.delegate = this
+        mHomeView?.setPresenter(this)
+        transactionsHistory?.delegate = this
     }
 
     override fun fetchAccountDetails() {
@@ -56,18 +56,18 @@ class HomePresenter @Inject constructor(
             FetchAccount.RequestValues(localRepository.clientDetails.clientId),
             object : UseCaseCallback<FetchAccount.ResponseValue?> {
                 override fun onSuccess(response: FetchAccount.ResponseValue?) {
-                    preferencesHelper.accountId = response?.account!!.id
-                    mHomeView!!.setAccountBalance(response.account)
-                    transactionsHistory!!.fetchTransactionsHistory(response.account!!.id)
-                    mHomeView!!.hideSwipeProgress()
+                    preferencesHelper.accountId = response?.account?.id
+                    mHomeView?.setAccountBalance(response?.account)
+                    response?.account?.id?.let { transactionsHistory?.fetchTransactionsHistory(it) }
+                    mHomeView?.hideSwipeProgress()
                 }
 
                 override fun onError(message: String) {
-                    mHomeView!!.hideBottomSheetActionButton()
-                    mHomeView!!.showTransactionsError()
-                    mHomeView!!.showToast(message)
-                    mHomeView!!.hideSwipeProgress()
-                    mHomeView!!.hideTransactionLoading()
+                    mHomeView?.hideBottomSheetActionButton()
+                    mHomeView?.showTransactionsError()
+                    mHomeView?.showToast(message)
+                    mHomeView?.hideSwipeProgress()
+                    mHomeView?.hideTransactionLoading()
                 }
             })
     }
@@ -75,37 +75,39 @@ class HomePresenter @Inject constructor(
     override fun onTransactionsFetchCompleted(transactions: List<Transaction>) {
         transactionList = transactions
         if (transactionList == null) {
-            mHomeView!!.hideBottomSheetActionButton()
-            mHomeView!!.showTransactionsError()
+            mHomeView?.hideBottomSheetActionButton()
+            mHomeView?.showTransactionsError()
         } else {
             handleTransactionsHistory(0)
         }
     }
 
     private fun handleTransactionsHistory(existingItemCount: Int) {
-        val transactionsAmount = transactionList!!.size - existingItemCount
-        if (transactionsAmount > Constants.HOME_HISTORY_TRANSACTIONS_LIMIT) {
-            val showList = transactionList!!.subList(
-                0,
-                Constants.HOME_HISTORY_TRANSACTIONS_LIMIT + existingItemCount
-            )
-            mHomeView!!.showTransactionsHistory(showList)
-            mHomeView!!.showBottomSheetActionButton()
-        } else {
-            if (transactionsAmount <= Constants.HOME_HISTORY_TRANSACTIONS_LIMIT
-                && transactionsAmount > 0
-            ) {
-                mHomeView!!.showTransactionsHistory(transactionList)
-                mHomeView!!.hideBottomSheetActionButton()
+        val transactionsAmount = transactionList?.size?.minus(existingItemCount)
+        if (transactionsAmount != null) {
+            if (transactionsAmount > Constants.HOME_HISTORY_TRANSACTIONS_LIMIT) {
+                val showList = transactionList?.subList(
+                    0,
+                    Constants.HOME_HISTORY_TRANSACTIONS_LIMIT + existingItemCount
+                )
+                mHomeView?.showTransactionsHistory(showList)
+                mHomeView?.showBottomSheetActionButton()
             } else {
-                mHomeView!!.showTransactionsEmpty()
+                if (transactionsAmount <= Constants.HOME_HISTORY_TRANSACTIONS_LIMIT
+                    && transactionsAmount > 0
+                ) {
+                    mHomeView?.showTransactionsHistory(transactionList)
+                    mHomeView?.hideBottomSheetActionButton()
+                } else {
+                    mHomeView?.showTransactionsEmpty()
+                }
             }
         }
     }
 
     override fun showMoreHistory(existingItemCount: Int) {
-        if (transactionList!!.size == existingItemCount) {
-            mHomeView!!.showToast("No more History Available")
+        if (transactionList?.size == existingItemCount) {
+            mHomeView?.showToast("No more History Available")
         } else {
             handleTransactionsHistory(existingItemCount)
         }

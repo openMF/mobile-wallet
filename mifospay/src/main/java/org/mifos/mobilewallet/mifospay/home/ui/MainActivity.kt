@@ -45,13 +45,13 @@ class MainActivity : BaseActivity(), BaseHomeView {
         activityComponent.inject(this)
         setContentView(R.layout.activity_home)
         ButterKnife.bind(this)
-        mPresenter!!.attachView(this)
-        mHomePresenter!!.fetchClientDetails()
-        bottomNavigationView!!.setOnNavigationItemSelectedListener { item ->
+        mPresenter?.attachView(this)
+        mHomePresenter?.fetchClientDetails()
+        bottomNavigationView?.setOnNavigationItemSelectedListener { item ->
             navigateFragment(item.itemId, false)
             true
         }
-        bottomNavigationView!!.selectedItemId = R.id.action_home
+        bottomNavigationView?.selectedItemId = R.id.action_home
         setToolbarTitle(Constants.HOME)
     }
 
@@ -89,11 +89,13 @@ class MainActivity : BaseActivity(), BaseHomeView {
         val fragment = supportFragmentManager
             .findFragmentById(R.id.bottom_navigation_fragment_container)
         if (fragment is FinanceFragment && fragment.isVisible()) {
-            if ((fragment.vpTabLayout?.adapter as TabLayoutAdapter?)
-                    ?.getItem(fragment.vpTabLayout!!.currentItem) is MerchantsFragment
+            if (fragment.vpTabLayout?.currentItem?.let {
+                    (fragment.vpTabLayout?.adapter as TabLayoutAdapter?)
+                        ?.getItem(it)
+                } is MerchantsFragment
             ) {
                 val merchantsFragment = (fragment.vpTabLayout?.adapter as TabLayoutAdapter?)
-                    ?.getItem(fragment.vpTabLayout!!.currentItem) as MerchantsFragment
+                    ?.getItem(fragment.vpTabLayout?.currentItem ?: 0) as MerchantsFragment
                 if (merchantsFragment.etMerchantSearch?.text.toString().isNotEmpty()) {
                     merchantsFragment.etMerchantSearch?.setText("")
                     return
@@ -102,19 +104,19 @@ class MainActivity : BaseActivity(), BaseHomeView {
         }
         if (fragment != null && fragment !is HomeFragment && fragment.isVisible) {
             if (fragment is ProfileFragment &&
-                ProfileFragment.mBottomSheetBehavior!!.state
+                ProfileFragment.mBottomSheetBehavior?.state
                 != BottomSheetBehavior.STATE_COLLAPSED
             ) {
-                ProfileFragment.mBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+                ProfileFragment.mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
                 return
             }
             navigateFragment(R.id.action_home, true)
             return
         } else if (fragment != null && fragment is HomeFragment && fragment.isVisible()
-            && (HomeFragment.mBottomSheetBehavior!!.state
+            && (HomeFragment.mBottomSheetBehavior?.state
                     != BottomSheetBehavior.STATE_COLLAPSED)
         ) {
-            HomeFragment.mBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
+            HomeFragment.mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
             return
         }
         super.onBackPressed()
@@ -122,14 +124,16 @@ class MainActivity : BaseActivity(), BaseHomeView {
 
     private fun navigateFragment(id: Int, shouldSelect: Boolean) {
         if (shouldSelect) {
-            bottomNavigationView!!.selectedItemId = id
+            bottomNavigationView?.selectedItemId = id
         } else {
             when (id) {
                 R.id.action_home -> replaceFragment(
-                    newInstance(
-                        localRepository!!.clientDetails
-                            .clientId
-                    ), false,
+                    localRepository?.clientDetails?.let {
+                        newInstance(
+                            it
+                                .clientId
+                        )
+                    }, false,
                     R.id.bottom_navigation_fragment_container
                 )
                 R.id.action_payments -> replaceFragment(

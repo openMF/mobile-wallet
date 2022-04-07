@@ -41,18 +41,16 @@ class PaymentsFragment : BaseFragment() {
             dim,
             r.displayMetrics
         )
-        vpTabLayout!!.setPadding(px.toInt(), 0, px.toInt(), 0)
-        vpTabLayout!!.clipToPadding = false
-        vpTabLayout!!.pageMargin = bDim.toInt()
+        vpTabLayout?.setPadding(px.toInt(), 0, px.toInt(), 0)
+        vpTabLayout?.clipToPadding = false
+        vpTabLayout?.pageMargin = bDim.toInt()
         setupUi()
         setupViewPager()
-        tilTabLayout!!.setupWithViewPager(vpTabLayout)
-        vpTabLayout!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+        tilTabLayout?.setupWithViewPager(vpTabLayout)
+        vpTabLayout?.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
             override fun onPageScrolled(i: Int, v: Float, i1: Int) {}
             override fun onPageSelected(i: Int) {
-                if (activity != null) {
-                    hideSoftKeyboard(activity!!)
-                }
+                activity?.let { hideSoftKeyboard(it) }
             }
 
             override fun onPageScrollStateChanged(i: Int) {}
@@ -66,14 +64,14 @@ class PaymentsFragment : BaseFragment() {
     }
 
     private fun setupViewPager() {
-        vpTabLayout!!.offscreenPageLimit = 1
+        vpTabLayout?.offscreenPageLimit = 1
         val tabLayoutAdapter = TabLayoutAdapter(childFragmentManager)
         tabLayoutAdapter.addFragment(SendFragment(), getString(R.string.send))
         tabLayoutAdapter.addFragment(RequestFragment(), getString(R.string.request))
         tabLayoutAdapter.addFragment(HistoryFragment(), getString(R.string.history))
         tabLayoutAdapter.addFragment(SIFragment(), getString(R.string.standing_instruction))
         tabLayoutAdapter.addFragment(InvoicesFragment(), getString(R.string.invoices))
-        vpTabLayout!!.adapter = tabLayoutAdapter
+        vpTabLayout?.adapter = tabLayoutAdapter
     }
 
     companion object {
