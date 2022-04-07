@@ -23,12 +23,12 @@ class SettingsPresenter @Inject constructor(
     var blockUnblockCommandUseCase: BlockUnblockCommand? = null
     override fun attachView(baseView: BaseView<*>?) {
         mSettingsView = baseView as SettingsView?
-        mSettingsView!!.setPresenter(this)
+        mSettingsView?.setPresenter(this)
     }
 
     override fun logout() {
         mLocalRepository.preferencesHelper.clear()
-        mSettingsView!!.startLoginActivity()
+        mSettingsView?.startLoginActivity()
     }
 
     override fun disableAccount() {

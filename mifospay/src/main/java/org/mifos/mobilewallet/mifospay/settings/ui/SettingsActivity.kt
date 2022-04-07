@@ -29,7 +29,7 @@ class SettingsActivity : BaseActivity(), SettingsView {
         ButterKnife.bind(this)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         setToolbarTitle(Constants.SETTINGS)
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
     }
 
     override fun setPresenter(presenter: SettingsContract.SettingsPresenter?) {
@@ -43,7 +43,7 @@ class SettingsActivity : BaseActivity(), SettingsView {
         builder.setCancelable(false)
             .setPositiveButton(R.string.yes) { dialog, id ->
                 showProgressDialog(Constants.LOGGING_OUT)
-                mPresenter!!.logout()
+                mPresenter?.logout()
             }
             .setNegativeButton(R.string.no, null)
         val alert = builder.create()
@@ -52,7 +52,7 @@ class SettingsActivity : BaseActivity(), SettingsView {
 
     @OnClick(R.id.btn_disable_account)
     fun onDisableAccountClicked() {
-        dialogBox.setOnPositiveListener { dialog, which -> mSettingsPresenter!!.disableAccount() }
+        dialogBox.setOnPositiveListener { dialog, which -> mSettingsPresenter?.disableAccount() }
         dialogBox.setOnNegativeListener { dialog, which -> dialog.dismiss() }
         dialogBox.show(
             this, R.string.alert_disable_account,
