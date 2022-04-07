@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".registration.ui.MobileVerificationActivity">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -37,15 +39,14 @@
                     app:ccp_showFullName="true"
                     app:ccp_showNameCode="false"
                     app:ccp_showPhoneCode="false"
-                    app:ccp_textGravity="CENTER"/>
+                    app:ccp_textGravity="CENTER" />
 
             </android.support.v7.widget.Toolbar>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_30dp"
-                android:layout_marginRight="@dimen/value_20dp"
+                android:layout_marginHorizontal="@dimen/value_30dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -62,11 +63,11 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/value_10dp"
                     android:layout_marginTop="@dimen/value_5dp"
+                    android:layout_marginBottom="@dimen/value_10dp"
                     android:text="@string/enter_mobile_number_description"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/value_14sp"/>
+                    android:textSize="@dimen/value_14sp" />
 
             </LinearLayout>
 
@@ -76,8 +77,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/value_20dp"
-            android:layout_marginRight="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_20dp"
+            android:layout_marginRight="@dimen/value_20dp"
             android:orientation="horizontal">
 
             <com.hbb20.CountryCodePicker
@@ -87,20 +88,20 @@
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
                 app:ccp_autoDetectCountry="true"
-                app:ccp_autoFormatNumber="false"/>
+                app:ccp_autoFormatNumber="false" />
 
             <android.support.design.widget.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="@dimen/value_160dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/mobile" >
+                android:hint="@string/mobile">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/et_mobile_number"
                     android:layout_width="@dimen/value_160dp"
                     android:layout_height="wrap_content"
-                    android:maxLength="@integer/telephone_numbers_max_length_standard"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="@integer/telephone_numbers_max_length_standard" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -108,9 +109,10 @@
                 android:id="@+id/btn_get_otp"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:layout_gravity="right|center_vertical|center_horizontal"
+                android:layout_gravity="end|center_vertical|center_horizontal"
+                android:layout_marginStart="@dimen/value_10dp"
                 android:layout_marginLeft="@dimen/value_10dp"
-                android:background="@drawable/ic_right_arrow"/>
+                android:background="@drawable/ic_right_arrow" />
 
         </LinearLayout>
 
@@ -118,8 +120,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/value_20dp"
-            android:layout_marginRight="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_10dp"
+            android:layout_marginRight="@dimen/value_20dp"
             android:orientation="horizontal">
 
 
@@ -127,15 +129,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/value_48dp"
-                android:hint="@string/otp" >
+                android:hint="@string/otp">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/et_otp"
                     android:layout_width="@dimen/value_120dp"
-                    android:visibility="gone"
                     android:layout_height="wrap_content"
+                    android:inputType="number"
                     android:maxLength="@integer/telephone_numbers_max_length_standard"
-                    android:inputType="number" />
+                    android:visibility="gone" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -144,17 +146,19 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_marginStart="@dimen/value_10dp"
                 android:layout_marginLeft="@dimen/value_10dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/tv_verifying_otp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/value_10dp"
                 android:layout_marginLeft="@dimen/value_10dp"
                 android:text="@string/verifying_otp_please_wait"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
         </LinearLayout>
 
@@ -164,16 +168,18 @@
         android:id="@+id/fab_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/value_20dp"
+        android:layout_marginEnd="@dimen/value_20dp"
         android:layout_marginRight="@dimen/value_20dp"
+        android:layout_marginBottom="@dimen/value_20dp"
         android:backgroundTint="@color/primaryDarkBlue"
         android:foregroundTint="@color/primaryDarkBlue"
         android:scaleType="center"
         android:visibility="gone"
         app:backgroundTint="@color/primaryDarkBlue"
-        app:srcCompat="@drawable/ic_next"/>
+        app:srcCompat="@drawable/ic_next" />
 
 </RelativeLayout>

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/rr_container"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView android:layout_width="match_parent"
-                android:layout_height="match_parent">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
@@ -24,13 +25,12 @@
                     android:layout_height="wrap_content"
                     android:background="@color/primaryDarkBlue"
                     android:theme="@style/Theme.AppCompat"
-                    app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar"/>
+                    app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/value_30dp"
-                    android:layout_marginRight="@dimen/value_20dp"
+                    android:layout_marginHorizontal="@dimen/value_30dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -47,11 +47,11 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/value_10dp"
                         android:layout_marginTop="@dimen/value_5dp"
+                        android:layout_marginBottom="@dimen/value_10dp"
                         android:text="@string/all_fields_are_mandatory"
                         android:textColor="@color/white"
-                        android:textSize="@dimen/value_14sp"/>
+                        android:textSize="@dimen/value_14sp" />
 
                 </LinearLayout>
 
@@ -61,17 +61,18 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/value_20dp"
                 android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_20dp"
                 android:layout_marginTop="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/value_20dp"
+                android:layout_marginBottom="@dimen/value_20dp"
                 android:orientation="vertical">
+
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/et_first_name_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_marginBottom="@dimen/value_10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/value_10dp">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_first_name"
@@ -80,15 +81,15 @@
                         android:hint="@string/first_name"
                         android:inputType="textPersonName"
                         android:paddingLeft="@dimen/value_15dp"
-                        android:paddingRight="@dimen/value_15dp"/>
+                        android:paddingRight="@dimen/value_15dp" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/et_last_name_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_marginBottom="@dimen/value_10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/value_10dp">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_last_name"
@@ -97,15 +98,15 @@
                         android:hint="@string/last_name"
                         android:inputType="textPersonName"
                         android:paddingLeft="@dimen/value_15dp"
-                        android:paddingRight="@dimen/value_15dp"/>
+                        android:paddingRight="@dimen/value_15dp" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/et_user_name_layout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_marginBottom="@dimen/value_10dp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/value_10dp">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_user_name"
@@ -114,44 +115,48 @@
                         android:hint="@string/username"
                         android:inputType="text"
                         android:paddingLeft="@dimen/value_15dp"
-                        android:paddingRight="@dimen/value_15dp"/>
+                        android:paddingRight="@dimen/value_15dp" />
                 </android.support.design.widget.TextInputLayout>
+
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/etPasswordLayout"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_marginBottom="@dimen/value_10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/value_10dp"
                     app:passwordToggleEnabled="true">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_password"
-                        android:paddingLeft="@dimen/value_15dp"
-                        android:paddingRight="@dimen/value_15dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/password"
-                        android:inputType="textPassword"/>
+                        android:inputType="textPassword"
+                        android:paddingLeft="@dimen/value_15dp"
+                        android:paddingRight="@dimen/value_15dp" />
                 </android.support.design.widget.TextInputLayout>
+
                 <ProgressBar
-                    android:layout_width="match_parent"
                     android:id="@+id/pb_password_strength"
-                    android:visibility="gone"
                     style="?android:attr/progressBarStyleHorizontal"
-                    android:padding="@dimen/value_8dp"
-                    android:layout_height="match_parent" />
-                <TextView
                     android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="@dimen/value_8dp"
+                    android:visibility="gone" />
+
+                <TextView
                     android:id="@+id/tv_password_strength"
-                    android:gravity="center"
-                    android:visibility="gone"
-                    android:layout_marginBottom="@dimen/value_8dp"
-                    android:layout_height="wrap_content" />
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/etPasswordLayout2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/value_8dp"
+                    android:gravity="center"
+                    android:visibility="gone" />
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/etPasswordLayout2"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/value_10dp"
                     app:passwordToggleEnabled="true">
 
@@ -162,14 +167,14 @@
                         android:hint="@string/confirm_password"
                         android:inputType="textPassword"
                         android:paddingLeft="@dimen/value_15dp"
-                        android:paddingRight="@dimen/value_15dp"/>
+                        android:paddingRight="@dimen/value_15dp" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/etEmailLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_marginBottom="@dimen/value_10dp">
 
                     <android.support.design.widget.TextInputEditText
@@ -179,14 +184,14 @@
                         android:hint="@string/email"
                         android:inputType="textEmailAddress"
                         android:paddingLeft="@dimen/value_15dp"
-                        android:paddingRight="@dimen/value_15dp"/>
+                        android:paddingRight="@dimen/value_15dp" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/et_business_shop_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_marginBottom="@dimen/value_10dp"
                     android:visibility="gone">
 
@@ -197,14 +202,14 @@
                         android:hint="@string/name_of_business"
                         android:inputType="text"
                         android:paddingLeft="@dimen/value_15dp"
-                        android:paddingRight="@dimen/value_15dp"/>
+                        android:paddingRight="@dimen/value_15dp" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/et_address_Layout1"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_marginBottom="@dimen/value_10dp">
 
                     <android.support.design.widget.TextInputEditText
@@ -214,14 +219,14 @@
                         android:hint="@string/address_line_1"
                         android:inputType="text"
                         android:paddingLeft="@dimen/value_15dp"
-                        android:paddingRight="@dimen/value_15dp"/>
+                        android:paddingRight="@dimen/value_15dp" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/et_address_Layout2"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_marginBottom="@dimen/value_10dp">
 
                     <android.support.design.widget.TextInputEditText
@@ -231,14 +236,14 @@
                         android:hint="@string/address_line_2"
                         android:inputType="text"
                         android:paddingLeft="@dimen/value_15dp"
-                        android:paddingRight="@dimen/value_15dp"/>
+                        android:paddingRight="@dimen/value_15dp" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/et_pin_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_marginBottom="@dimen/value_10dp">
 
                     <android.support.design.widget.TextInputEditText
@@ -248,29 +253,29 @@
                         android:hint="@string/pin_code"
                         android:inputType="number"
                         android:paddingLeft="@dimen/value_15dp"
-                        android:paddingRight="@dimen/value_15dp"/>
+                        android:paddingRight="@dimen/value_15dp" />
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
                     android:id="@+id/et_state_layout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_marginBottom="@dimen/value_10dp">
 
                     <android.support.design.widget.TextInputEditText
                         android:id="@+id/et_state"
                         android:layout_width="wrap_content"
-                        android:minWidth="@dimen/value_100dp"
                         android:layout_height="wrap_content"
                         android:clickable="true"
                         android:cursorVisible="false"
-                        android:focusable="false"
-                        android:hint="@string/state"
+                        android:focusable="true"
                         android:focusableInTouchMode="false"
+                        android:hint="@string/state"
                         android:inputType="text"
+                        android:minWidth="@dimen/value_100dp"
                         android:paddingLeft="@dimen/value_15dp"
-                        android:paddingRight="@dimen/value_15dp"/>
+                        android:paddingRight="@dimen/value_15dp" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>
@@ -283,17 +288,18 @@
         android:id="@+id/fab_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/value_20dp"
+        android:layout_marginEnd="@dimen/value_20dp"
         android:layout_marginRight="@dimen/value_20dp"
+        android:layout_marginBottom="@dimen/value_20dp"
         android:backgroundTint="@color/primaryDarkBlue"
         android:foregroundTint="@color/primaryDarkBlue"
         android:scaleType="center"
         android:visibility="visible"
         app:backgroundTint="@color/primaryDarkBlue"
-        app:srcCompat="@drawable/ic_next"
-        android:layout_alignParentEnd="true" />
+        app:srcCompat="@drawable/ic_next" />
 
 </RelativeLayout>

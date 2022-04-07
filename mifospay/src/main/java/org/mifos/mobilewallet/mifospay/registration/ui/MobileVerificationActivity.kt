@@ -4,17 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Parcelable
-import android.support.design.widget.FloatingActionButton
 import android.view.View
-import android.widget.EditText
-import android.widget.ProgressBar
-import android.widget.TextView
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
-import com.hbb20.CountryCodePicker
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.databinding.ActivityMobileVerificationBinding
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract.MobileVerificationView
 import org.mifos.mobilewallet.mifospay.registration.presenter.MobileVerificationPresenter
@@ -27,65 +20,44 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
     @JvmField
     @Inject
     var mPresenter: MobileVerificationPresenter? = null
-    var mMobileVerificationPresenter: RegistrationContract.MobileVerificationPresenter? = null
+    private var mMobileVerificationPresenter: RegistrationContract.MobileVerificationPresenter? =
+        null
 
-    @JvmField
-    @BindView(R.id.ccp_code)
-    var mCcpCode: CountryCodePicker? = null
-
-    @JvmField
-    @BindView(R.id.et_mobile_number)
-    var mEtMobileNumber: EditText? = null
-
-    @JvmField
-    @BindView(R.id.btn_get_otp)
-    var mBtnGetOtp: TextView? = null
-
-    @JvmField
-    @BindView(R.id.et_otp)
-    var mEtOtp: EditText? = null
-
-    @JvmField
-    @BindView(R.id.fab_next)
-    var mFabNext: FloatingActionButton? = null
-
-    @JvmField
-    @BindView(R.id.progressBar)
-    var mProgressBar: ProgressBar? = null
-
-    @JvmField
-    @BindView(R.id.tv_verifying_otp)
-    var mTvVerifyingOtp: TextView? = null
-
-    @JvmField
-    @BindView(R.id.ccp_country)
-    var mCcpCountry: CountryCodePicker? = null
+    private lateinit var binding: ActivityMobileVerificationBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mobile_verification)
-        activityComponent.inject(this)
-        ButterKnife.bind(this)
+        binding = ActivityMobileVerificationBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+
         mPresenter?.attachView(this)
         setToolbarTitle("")
         showColoredBackButton(Constants.WHITE_BACK_BUTTON)
-        mCcpCode?.registerCarrierNumberEditText(mEtMobileNumber)
-        mCcpCountry?.setCustomMasterCountries(null)
+        binding.ccpCode.registerCarrierNumberEditText(binding.etMobileNumber)
+        binding.ccpCountry.setCustomMasterCountries(null)
+
+        binding.btnGetOtp.setOnClickListener {
+            onGetOTp()
+        }
+
+        binding.fabNext.setOnClickListener {
+            onNextClicked()
+        }
     }
 
     override fun setPresenter(presenter: RegistrationContract.MobileVerificationPresenter?) {
         mMobileVerificationPresenter = presenter
     }
 
-    @OnClick(R.id.btn_get_otp)
-    fun onGetOTp() {
+    private fun onGetOTp() {
         hideSoftKeyboard(this)
-        if (mCcpCode?.isValidFullNumber == true) {
+        if (binding.ccpCode.isValidFullNumber) {
             showProgressDialog(Constants.SENDING_OTP_TO_YOUR_MOBILE_NUMBER)
             val handler = Handler()
             handler.postDelayed({
                 mMobileVerificationPresenter?.requestOTPfromServer(
-                    mCcpCode?.fullNumber,
-                    mEtMobileNumber?.text.toString()
+                    binding.ccpCode.fullNumber,
+                    binding.etMobileNumber.text.toString()
                 )
             }, 1500)
         } else {
@@ -95,14 +67,14 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
 
     override fun onRequestOtpSuccess() {
         hideProgressDialog()
-        mEtMobileNumber?.isClickable = false
-        mEtMobileNumber?.isFocusableInTouchMode = false
-        mEtMobileNumber?.isFocusable = false
-        mCcpCode?.setCcpClickable(false)
-        mEtOtp?.visibility = View.VISIBLE
-        mBtnGetOtp?.isClickable = false
-        mBtnGetOtp?.setBackgroundResource(R.drawable.ic_done)
-        mFabNext?.visibility = View.VISIBLE
+        binding.etMobileNumber.isClickable = false
+        binding.etMobileNumber.isFocusableInTouchMode = false
+        binding.etMobileNumber.isFocusable = false
+        binding.ccpCode.setCcpClickable(false)
+        binding.etOtp.visibility = View.VISIBLE
+        binding.btnGetOtp.isClickable = false
+        binding.btnGetOtp.setBackgroundResource(R.drawable.ic_done)
+        binding.fabNext.visibility = View.VISIBLE
     }
 
     override fun onRequestOtpFailed(s: String?) {
@@ -110,18 +82,17 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
         showToast(s)
     }
 
-    @OnClick(R.id.fab_next)
-    fun onNextClicked() {
+    private fun onNextClicked() {
         hideSoftKeyboard(this)
-        mFabNext?.isClickable = false
-        mProgressBar?.visibility = View.VISIBLE
-        mTvVerifyingOtp?.visibility = View.VISIBLE
-        mEtOtp?.isClickable = false
-        mEtOtp?.isFocusableInTouchMode = false
-        mEtOtp?.isFocusable = false
+        binding.fabNext.isClickable = false
+        binding.progressBar.visibility = View.VISIBLE
+        binding.tvVerifyingOtp.visibility = View.VISIBLE
+        binding.etOtp.isClickable = false
+        binding.etOtp.isFocusableInTouchMode = false
+        binding.etOtp.isFocusable = false
         val handler = Handler()
         handler.postDelayed(
-            { mMobileVerificationPresenter?.verifyOTP(mEtOtp?.text.toString()) },
+            { mMobileVerificationPresenter?.verifyOTP(binding.etOtp.text.toString()) },
             1500
         )
     }
@@ -153,19 +124,19 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
             Constants.GOOGLE_GIVEN_NAME,
             getIntent().getStringExtra(Constants.GOOGLE_GIVEN_NAME)
         )
-        intent.putExtra(Constants.COUNTRY, mCcpCountry?.selectedCountryName)
-        intent.putExtra(Constants.MOBILE_NUMBER, mCcpCode?.fullNumber)
+        intent.putExtra(Constants.COUNTRY, binding.ccpCountry.selectedCountryName)
+        intent.putExtra(Constants.MOBILE_NUMBER, binding.ccpCode.fullNumber)
         startActivity(intent)
         finish()
     }
 
     override fun onOtpVerificationFailed(s: String?) {
-        mFabNext?.isClickable = true
-        mProgressBar?.visibility = View.GONE
-        mTvVerifyingOtp?.visibility = View.GONE
-        mEtOtp?.isClickable = true
-        mEtOtp?.isFocusableInTouchMode = true
-        mEtOtp?.isFocusable = true
+        binding.fabNext.isClickable = true
+        binding.progressBar.visibility = View.GONE
+        binding.tvVerifyingOtp.visibility = View.GONE
+        binding.etOtp.isClickable = true
+        binding.etOtp.isFocusableInTouchMode = true
+        binding.etOtp.isFocusable = true
         showToast(s)
     }
 
