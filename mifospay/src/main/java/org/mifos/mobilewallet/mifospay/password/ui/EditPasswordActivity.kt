@@ -36,7 +36,7 @@ class EditPasswordActivity : BaseActivity(), EditPasswordView {
         activityComponent.inject(this)
         ButterKnife.bind(this)
         setupUi()
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         disableSavePasswordButton()
     }
 
@@ -59,10 +59,10 @@ class EditPasswordActivity : BaseActivity(), EditPasswordView {
     }
 
     private fun handlePasswordInputChanged() {
-        val currentPassword = etCurrentPassword!!.text.toString()
-        val newPassword = etNewPassword!!.text.toString()
-        val newPasswordRepeat = etNewPasswordRepeat!!.text.toString()
-        mPresenter!!.handleSavePasswordButtonStatus(currentPassword, newPassword, newPasswordRepeat)
+        val currentPassword = etCurrentPassword?.text.toString()
+        val newPassword = etNewPassword?.text.toString()
+        val newPasswordRepeat = etNewPasswordRepeat?.text.toString()
+        mPresenter?.handleSavePasswordButtonStatus(currentPassword, newPassword, newPasswordRepeat)
     }
 
     override fun enableSavePasswordButton() {
@@ -85,10 +85,10 @@ class EditPasswordActivity : BaseActivity(), EditPasswordView {
 
     @OnClick(R.id.btn_save)
     fun onSaveClicked() {
-        val currentPassword = etCurrentPassword!!.text.toString()
-        val newPassword = etCurrentPassword!!.text.toString()
-        val newPasswordRepeat = etCurrentPassword!!.text.toString()
-        mPresenter!!.updatePassword(currentPassword, newPassword, newPasswordRepeat)
+        val currentPassword = etCurrentPassword?.text.toString()
+        val newPassword = etCurrentPassword?.text.toString()
+        val newPasswordRepeat = etCurrentPassword?.text.toString()
+        mPresenter?.updatePassword(currentPassword, newPassword, newPasswordRepeat)
     }
 
     override fun setPresenter(presenter: EditPasswordContract.EditPasswordPresenter?) {

@@ -26,7 +26,7 @@ class EditPasswordPresenter @Inject constructor(
     private var mEditPasswordView: EditPasswordView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mEditPasswordView = baseView as EditPasswordView?
-        mEditPasswordView!!.setPresenter(this)
+        mEditPasswordView?.setPresenter(this)
     }
 
     override fun handleSavePasswordButtonStatus(
@@ -35,12 +35,12 @@ class EditPasswordPresenter @Inject constructor(
         newPasswordRepeat: String?
     ) {
         if (currentPassword == "" || newPassword == "" || newPasswordRepeat == "") {
-            mEditPasswordView!!.disableSavePasswordButton()
+            mEditPasswordView?.disableSavePasswordButton()
         } else {
             if (newPassword == newPasswordRepeat) {
-                mEditPasswordView!!.enableSavePasswordButton()
+                mEditPasswordView?.enableSavePasswordButton()
             } else {
-                mEditPasswordView!!.disableSavePasswordButton()
+                mEditPasswordView?.disableSavePasswordButton()
             }
         }
     }
@@ -50,26 +50,35 @@ class EditPasswordPresenter @Inject constructor(
         newPassword: String?,
         newPasswordRepeat: String?
     ) {
-        mEditPasswordView!!.startProgressBar()
+        mEditPasswordView?.startProgressBar()
         if (isNotEmpty(currentPassword) && isNotEmpty(newPassword)
             && isNotEmpty(newPasswordRepeat)
         ) {
             when {
                 currentPassword == newPassword -> {
-                    mEditPasswordView!!.stopProgressBar()
-                    mEditPasswordView!!.showError(Constants.ERROR_PASSWORDS_CANT_BE_SAME)
+                    mEditPasswordView?.stopProgressBar()
+                    mEditPasswordView?.showError(Constants.ERROR_PASSWORDS_CANT_BE_SAME)
                 }
-                isNewPasswordValid(newPassword!!, newPasswordRepeat!!) -> {
-                    updatePassword(currentPassword!!, newPassword)
+                newPassword?.let {
+                    newPasswordRepeat?.let { it1 ->
+                        isNewPasswordValid(
+                            it,
+                            it1
+                        )
+                    }
+                } == true -> {
+                    if (currentPassword != null) {
+                        updatePassword(currentPassword, newPassword)
+                    }
                 }
                 else -> {
-                    mEditPasswordView!!.stopProgressBar()
-                    mEditPasswordView!!.showError(Constants.ERROR_VALIDATING_PASSWORD)
+                    mEditPasswordView?.stopProgressBar()
+                    mEditPasswordView?.showError(Constants.ERROR_VALIDATING_PASSWORD)
                 }
             }
         } else {
-            mEditPasswordView!!.stopProgressBar()
-            mEditPasswordView!!.showError(Constants.ERROR_FIELDS_CANNOT_BE_EMPTY)
+            mEditPasswordView?.stopProgressBar()
+            mEditPasswordView?.showError(Constants.ERROR_FIELDS_CANNOT_BE_EMPTY)
         }
     }
 
@@ -97,20 +106,20 @@ class EditPasswordPresenter @Inject constructor(
                         ),
                         object : UseCaseCallback<UpdateUser.ResponseValue?> {
                             override fun onSuccess(response: UpdateUser.ResponseValue?) {
-                                mEditPasswordView!!.stopProgressBar()
-                                mEditPasswordView!!.closeActivity()
+                                mEditPasswordView?.stopProgressBar()
+                                mEditPasswordView?.closeActivity()
                             }
 
                             override fun onError(message: String) {
-                                mEditPasswordView!!.stopProgressBar()
-                                mEditPasswordView!!.showError(message)
+                                mEditPasswordView?.stopProgressBar()
+                                mEditPasswordView?.showError(message)
                             }
                         })
                 }
 
                 override fun onError(message: String) {
-                    mEditPasswordView!!.stopProgressBar()
-                    mEditPasswordView!!.showError("Wrong password")
+                    mEditPasswordView?.stopProgressBar()
+                    mEditPasswordView?.showError("Wrong password")
                 }
             })
     }
