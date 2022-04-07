@@ -41,7 +41,7 @@ class ChooseSimDialog : BottomSheetDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        mBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
+        mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     @OnClick(R.id.tv_sim1, R.id.tv_sim2)
@@ -49,22 +49,22 @@ class ChooseSimDialog : BottomSheetDialogFragment() {
         when (view.id) {
             R.id.tv_sim1 -> {
                 selectedSim = 1
-                mTvSim1!!.setCompoundDrawablesWithIntrinsicBounds(
+                mTvSim1?.setCompoundDrawablesWithIntrinsicBounds(
                     null,
                     resources.getDrawable(R.drawable.sim_card_selected), null, null
                 )
-                mTvSim2!!.setCompoundDrawablesWithIntrinsicBounds(
+                mTvSim2?.setCompoundDrawablesWithIntrinsicBounds(
                     null,
                     resources.getDrawable(R.drawable.sim_card_unselected), null, null
                 )
             }
             R.id.tv_sim2 -> {
                 selectedSim = 2
-                mTvSim2!!.setCompoundDrawablesWithIntrinsicBounds(
+                mTvSim2?.setCompoundDrawablesWithIntrinsicBounds(
                     null,
                     resources.getDrawable(R.drawable.sim_card_selected), null, null
                 )
-                mTvSim1!!.setCompoundDrawablesWithIntrinsicBounds(
+                mTvSim1?.setCompoundDrawablesWithIntrinsicBounds(
                     null,
                     resources.getDrawable(R.drawable.sim_card_unselected), null, null
                 )
@@ -76,7 +76,7 @@ class ChooseSimDialog : BottomSheetDialogFragment() {
     fun onConfirmClicked() {
         dismiss()
         if (activity is LinkBankAccountActivity) {
-            (activity as LinkBankAccountActivity?)!!.linkBankAccount(selectedSim)
+            (activity as LinkBankAccountActivity?)?.linkBankAccount(selectedSim)
         }
     }
 }

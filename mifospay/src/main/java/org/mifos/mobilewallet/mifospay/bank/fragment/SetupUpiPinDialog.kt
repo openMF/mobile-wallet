@@ -28,7 +28,7 @@ class SetupUpiPinDialog : BottomSheetDialogFragment() {
     private var upiPinPagerAdapter: UpiPinPagerAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)!!.activityComponent.inject(this)
+        (activity as BaseActivity?)?.activityComponent?.inject(this)
     }
 
     override fun onCreateView(
@@ -52,7 +52,7 @@ class SetupUpiPinDialog : BottomSheetDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        mBottomSheetBehavior!!.state = BottomSheetBehavior.STATE_EXPANDED
+        mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     companion object {

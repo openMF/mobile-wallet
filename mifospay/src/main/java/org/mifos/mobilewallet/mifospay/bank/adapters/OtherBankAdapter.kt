@@ -14,6 +14,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.domain.model.Bank
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -33,18 +34,17 @@ class OtherBankAdapter @Inject constructor() : RecyclerView.Adapter<OtherBankAda
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.ivPopularBank!!.setImageDrawable(
-            ContextCompat.getDrawable(context!!, otherBanks!![position].image)
+        holder.ivPopularBank?.setImageDrawable(
+            context?.let {
+                otherBanks?.get(position)
+                    ?.let { it1 -> ContextCompat.getDrawable(it, it1.image) }
+            }
         )
-        holder.tvPopularBank!!.text = otherBanks!![position].name
+        holder.tvPopularBank?.text = otherBanks?.get(position)?.name
     }
 
     override fun getItemCount(): Int {
-        return if (otherBanks != null) {
-            otherBanks!!.size
-        } else {
-            0
-        }
+        return otherBanks?.size ?: 0
     }
 
     fun setContext(context: Context?) {
@@ -53,11 +53,11 @@ class OtherBankAdapter @Inject constructor() : RecyclerView.Adapter<OtherBankAda
 
     fun setData(banks: List<Bank>?) {
         otherBanks = banks
-        notifyDataSetChanged()
+        notifyItemChanged(banks?.size?.minus(1) ?: 0)
     }
 
-    fun getBank(position: Int): Bank {
-        return otherBanks!![position]
+    fun getBank(position: Int): Bank? {
+        return otherBanks?.get(position)
     }
 
     override fun getFilter(): Filter {
@@ -69,7 +69,9 @@ class OtherBankAdapter @Inject constructor() : RecyclerView.Adapter<OtherBankAda
                 } else {
                     val filteredList: MutableList<Bank> = ArrayList()
                     for (bank in otherBanks!!) {
-                        if (bank.name.toLowerCase().contains(charString.toLowerCase())) {
+                        if (bank.name.toLowerCase(Locale.ROOT)
+                                .contains(charString.toLowerCase(Locale.ROOT))
+                        ) {
                             filteredList.add(bank)
                         }
                     }
@@ -82,14 +84,14 @@ class OtherBankAdapter @Inject constructor() : RecyclerView.Adapter<OtherBankAda
 
             override fun publishResults(constraint: CharSequence, results: FilterResults) {
                 filteredBanks = results.values as List<Bank>
-                notifyDataSetChanged()
+                notifyItemChanged(filteredBanks?.size?.minus(1) ?: 0)
             }
         }
     }
 
     fun filterList(filterdNames: List<Bank>?) {
         otherBanks = filterdNames
-        notifyDataSetChanged()
+
     }
 
     inner class ViewHolder(v: View?) : RecyclerView.ViewHolder(v!!) {

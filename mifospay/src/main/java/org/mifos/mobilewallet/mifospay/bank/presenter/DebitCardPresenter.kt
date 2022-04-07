@@ -14,18 +14,18 @@ class DebitCardPresenter @Inject constructor() : BankContract.DebitCardPresenter
     private var mDebitCardView: DebitCardView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mDebitCardView = baseView as DebitCardView?
-        mDebitCardView!!.setPresenter(this)
+        mDebitCardView?.setPresenter(this)
     }
 
     override fun verifyDebitCard(s: String?, s1: String?, s2: String?) {
         val otp = "0000"
-        if (s!!.length < 12 || s.length > 19) {
-            mDebitCardView!!.verifyDebitCardError(
+        if (s != null && (s.length < 12 || s.length > 19)) {
+            mDebitCardView?.verifyDebitCardError(
                 MifosPayApp.getContext()
                     .getString(R.string.debit_card_error_message)
             )
         } else {
-            mDebitCardView!!.verifyDebitCardSuccess(otp)
+            mDebitCardView?.verifyDebitCardSuccess(otp)
         }
     }
 }

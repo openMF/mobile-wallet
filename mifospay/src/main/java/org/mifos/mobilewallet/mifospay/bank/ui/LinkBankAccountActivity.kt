@@ -24,16 +24,20 @@ import org.mifos.mobilewallet.mifospay.bank.adapters.PopularBankAdapter
 import org.mifos.mobilewallet.mifospay.bank.presenter.LinkBankAccountPresenter
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.domain.model.Bank
-import org.mifos.mobilewallet.mifospay.utils.*
+import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.utils.DebugUtil
+import org.mifos.mobilewallet.mifospay.utils.FileUtils
+import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener.SimpleOnItemClickListener
 import org.mifos.mobilewallet.mifospay.utils.Utils.isBlank
+import java.util.*
 import javax.inject.Inject
 
 class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
     @JvmField
     @Inject
     var mPresenter: LinkBankAccountPresenter? = null
-    var mLinkBankAccountPresenter: BankContract.LinkBankAccountPresenter? = null
+    private var mLinkBankAccountPresenter: BankContract.LinkBankAccountPresenter? = null
 
     @JvmField
     @BindView(R.id.et_search_bank)
@@ -76,10 +80,10 @@ class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
         ButterKnife.bind(this)
         setToolbarTitle("Link Bank Account")
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         showProgressDialog(Constants.PLEASE_WAIT)
         setupRecyclerview()
-        mRvOtherBanks!!.isNestedScrollingEnabled = false
+        mRvOtherBanks?.isNestedScrollingEnabled = false
         setupAdapterData()
         hideProgressDialog()
     }
@@ -87,50 +91,50 @@ class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
     private fun setupRecyclerview() {
         val gridManager: LinearLayoutManager = GridLayoutManager(this, 3)
         gridManager.orientation = GridLayoutManager.VERTICAL
-        mRvPopularBanks!!.layoutManager = gridManager
-        mRvPopularBanks!!.setHasFixedSize(true)
-        mPopularBankAdapter!!.setContext(this)
-        mRvPopularBanks!!.adapter = mPopularBankAdapter
+        mRvPopularBanks?.layoutManager = gridManager
+        mRvPopularBanks?.setHasFixedSize(true)
+        mPopularBankAdapter?.setContext(this)
+        mRvPopularBanks?.adapter = mPopularBankAdapter
         val layoutManager = LinearLayoutManager(this)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        mRvOtherBanks!!.layoutManager = layoutManager
-        mRvOtherBanks!!.setHasFixedSize(true)
-        mOtherBankAdapter!!.setContext(this)
-        mRvOtherBanks!!.adapter = mOtherBankAdapter
-        mRvOtherBanks!!.addItemDecoration(
+        mRvOtherBanks?.layoutManager = layoutManager
+        mRvOtherBanks?.setHasFixedSize(true)
+        mOtherBankAdapter?.setContext(this)
+        mRvOtherBanks?.adapter = mOtherBankAdapter
+        mRvOtherBanks?.addItemDecoration(
             DividerItemDecoration(
                 this,
                 DividerItemDecoration.VERTICAL
             )
         )
-        mRvPopularBanks!!.addOnItemTouchListener(
+        mRvPopularBanks?.addOnItemTouchListener(
             RecyclerItemClickListener(this,
                 object : SimpleOnItemClickListener() {
                     override fun onItemClick(childView: View, position: Int) {
-                        val bank = mPopularBankAdapter!!.getBank(position)
-                        bankSelected = bank.name
+                        val bank = mPopularBankAdapter?.getBank(position)
+                        bankSelected = bank?.name
                         val chooseSimDialog = ChooseSimDialog()
                         chooseSimDialog.show(supportFragmentManager, "Choose Sim Dialog")
                     }
                 })
         )
-        mRvOtherBanks!!.addOnItemTouchListener(
+        mRvOtherBanks?.addOnItemTouchListener(
             RecyclerItemClickListener(this,
                 object : SimpleOnItemClickListener() {
                     override fun onItemClick(childView: View, position: Int) {
-                        val bank = mOtherBankAdapter!!.getBank(position)
-                        bankSelected = bank.name
+                        val bank = mOtherBankAdapter?.getBank(position)
+                        bankSelected = bank?.name
                         val chooseSimDialog = ChooseSimDialog()
                         chooseSimDialog.show(supportFragmentManager, "Choose Sim Dialog")
                     }
                 })
         )
-        mEtSearchBank!!.addTextChangedListener(object : TextWatcher {
+        mEtSearchBank?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
 //                Log.d("qxz", "onTextChanged: " + s.toString());
 //                mOtherBankAdapter.getFilter().filter(mEtSearchBank.getText().toString());
-                filter(mEtSearchBank!!.text.toString())
+                filter(mEtSearchBank?.text.toString())
             }
 
             override fun afterTextChanged(s: Editable) {}
@@ -140,25 +144,25 @@ class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
     private fun filter(text: String) {
         var filteredList: MutableList<Bank>? = ArrayList()
         if (text.isBlank()) {
-            mRvPopularBanks!!.visibility = View.VISIBLE
-            mPopularBanks!!.visibility = View.VISIBLE
+            mRvPopularBanks?.visibility = View.VISIBLE
+            mPopularBanks?.visibility = View.VISIBLE
             filteredList = banksList
         } else {
-            mRvPopularBanks!!.visibility = View.GONE
-            mPopularBanks!!.visibility = View.GONE
+            mRvPopularBanks?.visibility = View.GONE
+            mPopularBanks?.visibility = View.GONE
             for (bank in banksList!!) {
-                if (bank.name.toLowerCase().contains(text.toLowerCase())) {
-                    filteredList!!.add(bank)
+                if (bank.name.toLowerCase(Locale.ROOT).contains(text.toLowerCase(Locale.ROOT))) {
+                    filteredList?.add(bank)
                 }
             }
         }
-        mOtherBankAdapter!!.filterList(filteredList)
-        if (filteredList!!.isEmpty()) {
-            mNoBankFound!!.visibility = View.VISIBLE
-            mOtherBanks!!.visibility = View.GONE
+        mOtherBankAdapter?.filterList(filteredList)
+        if (filteredList?.isEmpty() == true) {
+            mNoBankFound?.visibility = View.VISIBLE
+            mOtherBanks?.visibility = View.GONE
         } else {
-            mNoBankFound!!.visibility = View.GONE
-            mOtherBanks!!.visibility = View.GONE
+            mNoBankFound?.visibility = View.GONE
+            mOtherBanks?.visibility = View.GONE
         }
     }
 
@@ -168,7 +172,7 @@ class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
             jsonObject = FileUtils.readJson(this, "banks.json")
             banksList = ArrayList()
             for (i in 0 until jsonObject.getJSONArray("banks").length()) {
-                banksList!!.add(
+                banksList?.add(
                     Bank(
                         jsonObject.getJSONArray("banks")[i] as String,
                         R.drawable.ic_bank, 1
@@ -176,15 +180,15 @@ class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
                 )
             }
             popularBanks = ArrayList()
-            popularBanks!!.add(Bank("RBL Bank", R.drawable.logo_rbl, 0))
-            popularBanks!!.add(Bank("SBI Bank", R.drawable.logo_sbi, 0))
-            popularBanks!!.add(Bank("PNB Bank", R.drawable.logo_pnb, 0))
-            popularBanks!!.add(Bank("HDFC Bank", R.drawable.logo_hdfc, 0))
-            popularBanks!!.add(Bank("ICICI Bank", R.drawable.logo_icici, 0))
-            popularBanks!!.add(Bank("AXIS Bank", R.drawable.logo_axis, 0))
+            popularBanks?.add(Bank("RBL Bank", R.drawable.logo_rbl, 0))
+            popularBanks?.add(Bank("SBI Bank", R.drawable.logo_sbi, 0))
+            popularBanks?.add(Bank("PNB Bank", R.drawable.logo_pnb, 0))
+            popularBanks?.add(Bank("HDFC Bank", R.drawable.logo_hdfc, 0))
+            popularBanks?.add(Bank("ICICI Bank", R.drawable.logo_icici, 0))
+            popularBanks?.add(Bank("AXIS Bank", R.drawable.logo_axis, 0))
             DebugUtil.log(popularBanks, banksList)
-            mPopularBankAdapter!!.setData(popularBanks)
-            mOtherBankAdapter!!.setData(banksList)
+            mPopularBankAdapter?.setData(popularBanks)
+            mOtherBankAdapter?.setData(banksList)
         } catch (e: Exception) {
             DebugUtil.log(e.message)
         }
@@ -196,7 +200,7 @@ class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
 
     fun linkBankAccount(selectedSim: Int) {
         showProgressDialog(Constants.VERIFYING_MOBILE_NUMBER)
-        mLinkBankAccountPresenter!!.fetchBankAccountDetails(bankSelected)
+        mLinkBankAccountPresenter?.fetchBankAccountDetails(bankSelected)
     }
 
     override fun addBankAccount(bankAccountDetails: BankAccountDetails?) {
@@ -211,8 +215,8 @@ class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
     }
 
     override fun onBackPressed() {
-        if (mEtSearchBank!!.text.length != 0) {
-            mEtSearchBank!!.text.clear()
+        if (mEtSearchBank?.text?.length != 0) {
+            mEtSearchBank?.text?.clear()
         } else {
             super.onBackPressed()
         }

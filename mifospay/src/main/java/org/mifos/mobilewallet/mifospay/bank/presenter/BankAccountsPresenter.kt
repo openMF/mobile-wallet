@@ -19,7 +19,7 @@ class BankAccountsPresenter @Inject constructor(
     var mBankAccountsView: BankAccountsView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mBankAccountsView = baseView as BankAccountsView?
-        mBankAccountsView!!.setPresenter(this)
+        mBankAccountsView?.setPresenter(this)
     }
 
     override fun fetchLinkedBankAccounts() {
@@ -88,7 +88,7 @@ class BankAccountsPresenter @Inject constructor(
                 "Savings"
             )
         )
-        mBankAccountsView!!.showLinkedBankAccounts(bankAccountDetailsList)
+        mBankAccountsView?.showLinkedBankAccounts(bankAccountDetailsList)
     }
 
     companion object {

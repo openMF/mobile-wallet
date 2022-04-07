@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentPagerAdapter
  */
 class UpiPinPagerAdapter(fm: FragmentManager?, fragments: Array<Fragment?>) :
     FragmentPagerAdapter(fm) {
-    private val noOfFragments: Int
+    private val noOfFragments: Int = fragments.size
     private var mFragments: Array<Fragment?>
     fun setFragments(fragments: Array<Fragment?>) {
         mFragments = fragments
@@ -25,7 +25,6 @@ class UpiPinPagerAdapter(fm: FragmentManager?, fragments: Array<Fragment?>) :
     }
 
     init {
-        noOfFragments = fragments.size
         mFragments = fragments
     }
 }

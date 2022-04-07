@@ -13,12 +13,12 @@ class SetupUpiPinPresenter @Inject constructor() : BankContract.SetupUpiPinPrese
     private var mSetupUpiPinView: SetupUpiPinView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mSetupUpiPinView = baseView as SetupUpiPinView?
-        mSetupUpiPinView!!.setPresenter(this)
+        mSetupUpiPinView?.setPresenter(this)
     }
 
     override fun setupUpiPin(bankAccountDetails: BankAccountDetails?, upiPin: String?) {
         // TODO:: Setup UPI PIN Api
-        mSetupUpiPinView!!.setupUpiPinSuccess(upiPin)
+        mSetupUpiPinView?.setupUpiPinSuccess(upiPin)
 
 //        String message = "error";
 //        mBankAccountDetailView.setupUpiPinError(message);
@@ -26,7 +26,7 @@ class SetupUpiPinPresenter @Inject constructor() : BankContract.SetupUpiPinPrese
 
     override fun requestOtp(bankAccountDetails: BankAccountDetails?) {
         val otp = "0000"
-        mSetupUpiPinView!!.debitCardVerified(otp)
+        mSetupUpiPinView?.debitCardVerified(otp)
 
 //        String message = "error";
     }

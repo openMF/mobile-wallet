@@ -51,7 +51,7 @@ class DebitCardFragment : BaseFragment(), DebitCardView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)!!.activityComponent.inject(this)
+        (activity as BaseActivity?)?.activityComponent?.inject(this)
     }
 
     override fun onCreateView(
@@ -63,29 +63,29 @@ class DebitCardFragment : BaseFragment(), DebitCardView {
             container, false
         ) as ViewGroup
         ButterKnife.bind(this, rootView)
-        mPresenter!!.attachView(this)
-        mPeYear!!.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+        mPresenter?.attachView(this)
+        mPeYear?.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 okayClicked()
                 return@OnEditorActionListener true
             }
             false
         })
-        mPeMonth!!.addTextChangedListener(object : TextWatcher {
+        mPeMonth?.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 if (s.length == 2) {
-                    mPeYear!!.requestFocus()
+                    mPeYear?.requestFocus()
                 }
             }
 
             override fun afterTextChanged(s: Editable) {}
         })
-        mPeYear!!.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_DEL && mPeYear!!.length() == 0) {
+        mPeYear?.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_DEL && mPeYear?.length() == 0) {
                 if (key) {
-                    mPeMonth!!.requestFocus()
-                    mPeMonth!!.dispatchKeyEvent(
+                    mPeMonth?.requestFocus()
+                    mPeMonth?.dispatchKeyEvent(
                         KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL)
                     )
                     key = false
@@ -100,22 +100,22 @@ class DebitCardFragment : BaseFragment(), DebitCardView {
 
     private fun okayClicked() {
         showProgressDialog(Constants.PLEASE_WAIT)
-        mDebitCardPresenter!!.verifyDebitCard(
-            mEtDebitCardNumber!!.text
-                .toString(), mPeMonth!!.text.toString(), mPeYear!!.text.toString()
+        mDebitCardPresenter?.verifyDebitCard(
+            mEtDebitCardNumber?.text
+                .toString(), mPeMonth?.text.toString(), mPeYear?.text.toString()
         )
     }
 
     override fun verifyDebitCardSuccess(otp: String?) {
         hideProgressDialog()
         if (activity is SetupUpiPinActivity) {
-            (activity as SetupUpiPinActivity?)!!.debitCardVerified(otp)
+            (activity as SetupUpiPinActivity?)?.debitCardVerified(otp)
         }
     }
 
     override fun verifyDebitCardError(message: String?) {
         hideProgressDialog()
-        mEtDebitCardNumber!!.requestFocusFromTouch()
+        mEtDebitCardNumber?.requestFocusFromTouch()
         showToast(message)
     }
 

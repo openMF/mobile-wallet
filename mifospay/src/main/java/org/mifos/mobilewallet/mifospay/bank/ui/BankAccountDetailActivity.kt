@@ -75,22 +75,22 @@ class BankAccountDetailActivity : BaseActivity(), BankAccountDetailView {
         ButterKnife.bind(this)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         setToolbarTitle(Constants.BANK_ACCOUNT_DETAILS)
-        mPresenter!!.attachView(this)
-        bankAccountDetails = intent.extras!!.getParcelable(Constants.BANK_ACCOUNT_DETAILS)
-        index = intent.extras!!.getInt(Constants.INDEX)
+        mPresenter?.attachView(this)
+        bankAccountDetails = intent.extras?.getParcelable(Constants.BANK_ACCOUNT_DETAILS)
+        index = intent.extras?.getInt(Constants.INDEX) ?: 0
         if (bankAccountDetails != null) {
-            if (bankAccountDetails!!.isUpiEnabled) {
-                mBtnSetupUpiPin!!.visibility = View.GONE
+            if (bankAccountDetails?.isUpiEnabled == true) {
+                mBtnSetupUpiPin?.visibility = View.GONE
             } else {
-                mBtnSetupUpiPin!!.visibility = View.VISIBLE
-                mCvChangeUpiPin!!.visibility = View.GONE
-                mCvForgotUpiPin!!.visibility = View.GONE
+                mBtnSetupUpiPin?.visibility = View.VISIBLE
+                mCvChangeUpiPin?.visibility = View.GONE
+                mCvForgotUpiPin?.visibility = View.GONE
             }
-            mTvBankName!!.text = bankAccountDetails!!.bankName
-            mTvAccountHolderName!!.text = bankAccountDetails!!.accountholderName
-            mTvBranch!!.text = bankAccountDetails!!.branch
-            mTvIfsc!!.text = bankAccountDetails!!.ifsc
-            mTvType!!.text = bankAccountDetails!!.type
+            mTvBankName?.text = bankAccountDetails?.bankName
+            mTvAccountHolderName?.text = bankAccountDetails?.accountholderName
+            mTvBranch?.text = bankAccountDetails?.branch
+            mTvIfsc?.text = bankAccountDetails?.ifsc
+            mTvType?.text = bankAccountDetails?.type
         } else {
             finish()
         }
@@ -107,7 +107,7 @@ class BankAccountDetailActivity : BaseActivity(), BankAccountDetailView {
 
     @OnClick(R.id.cv_change_upi_pin)
     fun onChangeUpiPinClicked() {
-        if (bankAccountDetails!!.isUpiEnabled) {
+        if (bankAccountDetails?.isUpiEnabled == true) {
             startSetupActivity(Constants.CHANGE, index)
         } else {
             showToast(Constants.SETUP_UPI_PIN)
@@ -116,7 +116,7 @@ class BankAccountDetailActivity : BaseActivity(), BankAccountDetailView {
 
     @OnClick(R.id.cv_forgot_upi_pin)
     fun onForgotUpiPinClicked() {
-        if (bankAccountDetails!!.isUpiEnabled) {
+        if (bankAccountDetails?.isUpiEnabled == true) {
             startSetupActivity(Constants.FORGOT, index)
         } else {
             showToast(Constants.SETUP_UPI_PIN)
@@ -139,15 +139,15 @@ class BankAccountDetailActivity : BaseActivity(), BankAccountDetailView {
         super.onActivityResult(requestCode, resultCode, data)
         DebugUtil.log("rescode ", resultCode)
         if (requestCode == SETUP_UPI_REQUEST_CODE && resultCode == RESULT_OK) {
-            val bundle = data!!.extras
+            val bundle = data?.extras
             DebugUtil.log("bundle", bundle)
             if (bundle != null) {
                 bankAccountDetails = bundle.getParcelable(Constants.UPDATED_BANK_ACCOUNT)
                 index = bundle.getInt(Constants.INDEX)
-                if (bankAccountDetails!!.isUpiEnabled) {
-                    mBtnSetupUpiPin!!.visibility = View.GONE
-                    mCvChangeUpiPin!!.visibility = View.VISIBLE
-                    mCvForgotUpiPin!!.visibility = View.VISIBLE
+                if (bankAccountDetails?.isUpiEnabled == true) {
+                    mBtnSetupUpiPin?.visibility = View.GONE
+                    mCvChangeUpiPin?.visibility = View.VISIBLE
+                    mCvForgotUpiPin?.visibility = View.VISIBLE
                 }
             }
         }

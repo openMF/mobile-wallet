@@ -62,7 +62,7 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
     var tvTransactionsStateSubtitle: TextView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)!!.activityComponent.inject(this)
+        (activity as BaseActivity?)?.activityComponent?.inject(this)
     }
 
     override fun onCreateView(
@@ -73,29 +73,29 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
         ButterKnife.bind(this, rootView)
         setupRecycletView()
         setUpSwipeRefresh()
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         showSwipeProgress()
-        mBankAccountsPresenter!!.fetchLinkedBankAccounts()
+        mBankAccountsPresenter?.fetchLinkedBankAccounts()
         return rootView
     }
 
     private fun setUpSwipeRefresh() {
-        swipeRefreshLayout.setOnRefreshListener { mBankAccountsPresenter!!.fetchLinkedBankAccounts() }
+        swipeRefreshLayout.setOnRefreshListener { mBankAccountsPresenter?.fetchLinkedBankAccounts() }
     }
 
     private fun setupRecycletView() {
         val layoutManager = LinearLayoutManager(context)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        mRvLinkedBankAccounts!!.layoutManager = layoutManager
-        mRvLinkedBankAccounts!!.setHasFixedSize(true)
-        mRvLinkedBankAccounts!!.adapter = mBankAccountsAdapter
-        mRvLinkedBankAccounts!!.addItemDecoration(
+        mRvLinkedBankAccounts?.layoutManager = layoutManager
+        mRvLinkedBankAccounts?.setHasFixedSize(true)
+        mRvLinkedBankAccounts?.adapter = mBankAccountsAdapter
+        mRvLinkedBankAccounts?.addItemDecoration(
             DividerItemDecoration(
                 context,
                 DividerItemDecoration.VERTICAL
             )
         )
-        mRvLinkedBankAccounts!!.addOnItemTouchListener(
+        mRvLinkedBankAccounts?.addOnItemTouchListener(
             RecyclerItemClickListener(
                 activity,
                 object : RecyclerItemClickListener.OnItemClickListener {
@@ -106,7 +106,7 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
                         )
                         intent.putExtra(
                             Constants.BANK_ACCOUNT_DETAILS,
-                            mBankAccountsAdapter!!.getBankDetails(position)
+                            mBankAccountsAdapter?.getBankDetails(position)
                         )
                         intent.putExtra(Constants.INDEX, position)
                         startActivityForResult(intent, BANK_ACCOUNT_DETAILS_REQUEST_CODE)
@@ -129,10 +129,10 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
                 )
                 DebugUtil.log("details", bankAccountDetails)
                 if (bankAccountDetails != null) {
-                    mBankAccountsAdapter!!.addBank(bankAccountDetails)
+                    mBankAccountsAdapter?.addBank(bankAccountDetails)
                 }
-                mRvLinkedBankAccounts!!.visibility = View.VISIBLE
-                linkedAccountsText!!.visibility = View.GONE
+                mRvLinkedBankAccounts?.visibility = View.VISIBLE
+                linkedAccountsText?.visibility = View.GONE
             }
         } else if (requestCode == BANK_ACCOUNT_DETAILS_REQUEST_CODE && resultCode
             == Activity.RESULT_OK
@@ -145,7 +145,7 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
                 )
                 val index = bundle.getInt(Constants.INDEX)
                 if (bankAccountDetails != null) {
-                    mBankAccountsAdapter!!.setBankDetails(index, bankAccountDetails)
+                    mBankAccountsAdapter?.setBankDetails(index, bankAccountDetails)
                 }
             }
         }
@@ -157,7 +157,7 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
 
     private fun showEmptyStateView() {
         if (activity != null) {
-            vStateView!!.visibility = View.VISIBLE
+            vStateView?.visibility = View.VISIBLE
             val res = resources
             ivTransactionsStateIcon
                 ?.setImageDrawable(res.getDrawable(R.drawable.ic_accounts))
@@ -167,20 +167,20 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
     }
 
     private fun hideEmptyStateView() {
-        vStateView!!.visibility = View.GONE
+        vStateView?.visibility = View.GONE
     }
 
     override fun showLinkedBankAccounts(bankAccountList: MutableList<BankAccountDetails>?) {
         if (bankAccountList != null) {
             if (bankAccountList.isEmpty()) {
-                mRvLinkedBankAccounts!!.visibility = View.GONE
-                linkedAccountsText!!.visibility = View.GONE
+                mRvLinkedBankAccounts?.visibility = View.GONE
+                linkedAccountsText?.visibility = View.GONE
                 setupUi()
             } else {
                 hideEmptyStateView()
-                mRvLinkedBankAccounts!!.visibility = View.VISIBLE
-                linkedAccountsText!!.visibility = View.VISIBLE
-                mBankAccountsAdapter!!.setData(bankAccountList)
+                mRvLinkedBankAccounts?.visibility = View.VISIBLE
+                linkedAccountsText?.visibility = View.VISIBLE
+                mBankAccountsAdapter?.setData(bankAccountList)
             }
         }
         hideSwipeProgress()

@@ -41,7 +41,7 @@ class UpiPinFragment : BaseFragment(), UpiPinView {
     private var upiPin: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)!!.activityComponent.inject(this)
+        (activity as BaseActivity?)?.activityComponent?.inject(this)
     }
 
     override fun onCreateView(
@@ -53,36 +53,36 @@ class UpiPinFragment : BaseFragment(), UpiPinView {
             container, false
         ) as ViewGroup
         ButterKnife.bind(this, rootView)
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         val b = arguments
         if (b != null) {
             step = b.getInt(Constants.STEP, 0)
             upiPin = b.getString(Constants.UPI_PIN, null)
-            mTvTitle!!.setText(R.string.reenter_upi)
+            mTvTitle?.setText(R.string.reenter_upi)
         }
-        mPeUpiPin!!.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+        mPeUpiPin?.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 okayClicked()
                 return@OnEditorActionListener true
             }
             false
         })
-        mPeUpiPin!!.requestFocus()
+        mPeUpiPin?.requestFocus()
         return rootView
     }
 
     private fun okayClicked() {
         if (activity is SetupUpiPinActivity) {
-            if (mPeUpiPin!!.text.toString().length == 4) {
+            if (mPeUpiPin?.text.toString().length == 4) {
                 if (step == 1) {
-                    if (upiPin == mPeUpiPin!!.text.toString()) {
-                        (activity as SetupUpiPinActivity?)!!.upiPinConfirmed(upiPin)
+                    if (upiPin == mPeUpiPin?.text.toString()) {
+                        (activity as SetupUpiPinActivity?)?.upiPinConfirmed(upiPin)
                     } else {
                         showToast(getString(R.string.upi_pin_mismatch))
                     }
                 } else {
-                    (activity as SetupUpiPinActivity?)!!.upiPinEntered(
-                        mPeUpiPin!!.text.toString()
+                    (activity as SetupUpiPinActivity?)?.upiPinEntered(
+                        mPeUpiPin?.text.toString()
                     )
                 }
             } else {

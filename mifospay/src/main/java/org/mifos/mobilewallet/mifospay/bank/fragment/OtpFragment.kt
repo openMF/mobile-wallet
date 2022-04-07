@@ -31,33 +31,33 @@ class OtpFragment : BaseFragment() {
     private var otp: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)!!.activityComponent.inject(this)
+        (activity as BaseActivity?)?.activityComponent?.inject(this)
         if (arguments != null) {
-            otp = arguments!!.getString(Constants.OTP)
+            otp = arguments?.getString(Constants.OTP)
         }
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val rootView = inflater.inflate(R.layout.fragment_otp, container, false) as ViewGroup
         ButterKnife.bind(this, rootView)
-        mPeOtp!!.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+        mPeOtp?.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 okayClicked()
                 return@OnEditorActionListener true
             }
             false
         })
-        mPeOtp!!.requestFocus()
+        mPeOtp?.requestFocus()
         return rootView
     }
 
     fun okayClicked() {
         if (activity is SetupUpiPinActivity) {
-            if (mPeOtp!!.text.toString() == otp) {
-                (activity as SetupUpiPinActivity?)!!.otpVerified()
+            if (mPeOtp?.text.toString() == otp) {
+                (activity as SetupUpiPinActivity?)?.otpVerified()
             } else {
                 showToast(getString(R.string.wrong_otp))
             }

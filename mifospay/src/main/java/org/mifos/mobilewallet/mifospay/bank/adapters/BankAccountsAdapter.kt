@@ -28,39 +28,35 @@ class BankAccountsAdapter @Inject constructor() :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val bankAccountDetails = mBankAccountDetailsList!![position]
-        holder.mTvBankName!!.text = bankAccountDetails.bankName
-        holder.mTvAccountHolderName!!.text = bankAccountDetails.accountholderName
-        holder.mTvBranch!!.text = bankAccountDetails.branch
-        holder.imageViewAccount!!.setImageResource(R.drawable.ic_bank)
+        val bankAccountDetails = mBankAccountDetailsList?.get(position)
+        holder.mTvBankName?.text = bankAccountDetails?.bankName
+        holder.mTvAccountHolderName?.text = bankAccountDetails?.accountholderName
+        holder.mTvBranch?.text = bankAccountDetails?.branch
+        holder.imageViewAccount?.setImageResource(R.drawable.ic_bank)
     }
 
     override fun getItemCount(): Int {
-        return if (mBankAccountDetailsList != null) {
-            mBankAccountDetailsList!!.size
-        } else {
-            0
-        }
+        return mBankAccountDetailsList?.size ?: 0
     }
 
     fun setData(bankAccountDetailsList: MutableList<BankAccountDetails>?) {
         mBankAccountDetailsList = bankAccountDetailsList
-        notifyDataSetChanged()
+        notifyItemChanged(mBankAccountDetailsList?.size?.minus(1) ?: 0)
     }
 
-    fun getBankDetails(position: Int): BankAccountDetails {
-        return mBankAccountDetailsList!![position]
+    fun getBankDetails(position: Int): BankAccountDetails? {
+        return mBankAccountDetailsList?.get(position)
     }
 
     fun addBank(bankAccountDetails: BankAccountDetails) {
-        mBankAccountDetailsList!!.add(bankAccountDetails)
-        notifyDataSetChanged()
-        DebugUtil.log(mBankAccountDetailsList!!.size)
+        mBankAccountDetailsList?.add(bankAccountDetails)
+        notifyItemChanged(mBankAccountDetailsList?.size?.minus(1) ?: 0)
+        DebugUtil.log(mBankAccountDetailsList?.size)
     }
 
     fun setBankDetails(index: Int, bankAccountDetails: BankAccountDetails) {
-        mBankAccountDetailsList!![index] = bankAccountDetails
-        notifyDataSetChanged()
+        mBankAccountDetailsList?.set(index, bankAccountDetails)
+        notifyItemChanged(mBankAccountDetailsList?.size?.minus(1) ?: 0)
     }
 
     inner class ViewHolder(v: View?) : RecyclerView.ViewHolder(v!!) {

@@ -14,12 +14,12 @@ class LinkBankAccountPresenter @Inject constructor() : BankContract.LinkBankAcco
     private var mLinkBankAccountView: LinkBankAccountView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mLinkBankAccountView = baseView as LinkBankAccountView?
-        mLinkBankAccountView!!.setPresenter(this)
+        mLinkBankAccountView?.setPresenter(this)
     }
 
     override fun fetchBankAccountDetails(bankName: String?) {
         // TODO:: UPI API implement
-        mLinkBankAccountView!!.addBankAccount(
+        mLinkBankAccountView?.addBankAccount(
             BankAccountDetails(
                 bankName,
                 "Ankur Sharma",

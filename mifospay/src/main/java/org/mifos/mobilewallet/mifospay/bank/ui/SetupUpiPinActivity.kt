@@ -28,7 +28,7 @@ class SetupUpiPinActivity : BaseActivity(), SetupUpiPinView {
     @JvmField
     @Inject
     var mPresenter: SetupUpiPinPresenter? = null
-    var mSetupUpiPinPresenter: BankContract.SetupUpiPinPresenter? = null
+    private var mSetupUpiPinPresenter: BankContract.SetupUpiPinPresenter? = null
 
     @JvmField
     @BindView(R.id.fl_debit_card)
@@ -71,24 +71,28 @@ class SetupUpiPinActivity : BaseActivity(), SetupUpiPinView {
         ButterKnife.bind(this)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         setToolbarTitle(Constants.SETUP_UPI_PIN)
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         val b = intent.extras
-        bankAccountDetails = b!!.getParcelable(Constants.BANK_ACCOUNT_DETAILS)
-        index = b.getInt(Constants.INDEX)
-        type = b.getString(Constants.TYPE)
-        if (type == Constants.CHANGE) {
-            mSetupUpiPinPresenter!!.requestOtp(bankAccountDetails)
-            mFlDebitCard!!.visibility = View.GONE
-            mCvDebitCard!!.visibility = View.GONE
-            setToolbarTitle(Constants.CHANGE_UPI_PIN)
-        } else if (type == Constants.FORGOT) {
-            mFlDebitCard!!.visibility = View.VISIBLE
-            mCvDebitCard!!.visibility = View.VISIBLE
-            setToolbarTitle(Constants.FORGOT_UPI_PIN)
-        } else {
-            mFlDebitCard!!.visibility = View.VISIBLE
-            mCvDebitCard!!.visibility = View.VISIBLE
-            setToolbarTitle(Constants.SETUP_UPI_PIN)
+        bankAccountDetails = b?.getParcelable(Constants.BANK_ACCOUNT_DETAILS)
+        index = b?.getInt(Constants.INDEX) ?: 0
+        type = b?.getString(Constants.TYPE)
+        when (type) {
+            Constants.CHANGE -> {
+                mSetupUpiPinPresenter?.requestOtp(bankAccountDetails)
+                mFlDebitCard?.visibility = View.GONE
+                mCvDebitCard?.visibility = View.GONE
+                setToolbarTitle(Constants.CHANGE_UPI_PIN)
+            }
+            Constants.FORGOT -> {
+                mFlDebitCard?.visibility = View.VISIBLE
+                mCvDebitCard?.visibility = View.VISIBLE
+                setToolbarTitle(Constants.FORGOT_UPI_PIN)
+            }
+            else -> {
+                mFlDebitCard?.visibility = View.VISIBLE
+                mCvDebitCard?.visibility = View.VISIBLE
+                setToolbarTitle(Constants.SETUP_UPI_PIN)
+            }
         }
         addFragment(DebitCardFragment(), R.id.fl_debit_card)
     }
@@ -98,14 +102,14 @@ class SetupUpiPinActivity : BaseActivity(), SetupUpiPinView {
     }
 
     override fun debitCardVerified(otp: String?) {
-        mTvDebitCard!!.visibility = View.VISIBLE
+        mTvDebitCard?.visibility = View.VISIBLE
         addFragment(newInstance(otp), R.id.fl_otp)
         AnimationUtil.collapse(mFlDebitCard)
         AnimationUtil.expand(mFlOtp)
     }
 
     fun otpVerified() {
-        mTvOtp!!.visibility = View.VISIBLE
+        mTvOtp?.visibility = View.VISIBLE
         addFragment(UpiPinFragment(), R.id.fl_upi_pin)
         AnimationUtil.expand(mFlUpiPin)
         AnimationUtil.collapse(mFlOtp)
@@ -116,14 +120,14 @@ class SetupUpiPinActivity : BaseActivity(), SetupUpiPinView {
     }
 
     fun upiPinConfirmed(upiPin: String?) {
-        mTvUpi!!.visibility = View.VISIBLE
+        mTvUpi?.visibility = View.VISIBLE
         showProgressDialog(Constants.SETTING_UP_UPI_PIN)
-        mSetupUpiPinPresenter!!.setupUpiPin(bankAccountDetails, upiPin)
+        mSetupUpiPinPresenter?.setupUpiPin(bankAccountDetails, upiPin)
     }
 
     override fun setupUpiPinSuccess(mSetupUpiPin: String?) {
-        bankAccountDetails!!.isUpiEnabled = true
-        bankAccountDetails!!.upiPin = mSetupUpiPin
+        bankAccountDetails?.isUpiEnabled = true
+        bankAccountDetails?.upiPin = mSetupUpiPin
         hideProgressDialog()
         showToast(Constants.UPI_PIN_SETUP_COMPLETED_SUCCESSFULLY)
         val intent = Intent()

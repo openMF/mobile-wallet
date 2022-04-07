@@ -30,19 +30,19 @@ class PopularBankAdapter @Inject constructor() :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.ivPopularBank!!.setImageDrawable(
-            ContextCompat
-                .getDrawable(context!!, popularBanks!![position].image)
+        holder.ivPopularBank?.setImageDrawable(
+            context?.let {
+                popularBanks?.get(position)?.let { it1 ->
+                    ContextCompat
+                        .getDrawable(it, it1.image)
+                }
+            }
         )
-        holder.tvPopularBank!!.text = popularBanks!![position].name
+        holder.tvPopularBank?.text = popularBanks?.get(position)?.name
     }
 
     override fun getItemCount(): Int {
-        return if (popularBanks != null) {
-            popularBanks!!.size
-        } else {
-            0
-        }
+        return popularBanks?.size ?: 0
     }
 
     fun setContext(context: Context?) {
@@ -51,11 +51,13 @@ class PopularBankAdapter @Inject constructor() :
 
     fun setData(banks: List<Bank>?) {
         popularBanks = banks
-        notifyDataSetChanged()
+        if (banks != null) {
+            notifyItemChanged(banks.size - 1)
+        }
     }
 
-    fun getBank(position: Int): Bank {
-        return popularBanks!![position]
+    fun getBank(position: Int): Bank? {
+        return popularBanks?.get(position)
     }
 
     inner class ViewHolder(v: View?) : RecyclerView.ViewHolder(v!!) {

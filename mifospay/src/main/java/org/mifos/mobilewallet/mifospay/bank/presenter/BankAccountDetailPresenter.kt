@@ -12,6 +12,6 @@ class BankAccountDetailPresenter @Inject constructor() : BankContract.BankAccoun
     var mBankAccountDetailView: BankAccountDetailView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mBankAccountDetailView = baseView as BankAccountDetailView?
-        mBankAccountDetailView!!.setPresenter(this)
+        mBankAccountDetailView?.setPresenter(this)
     }
 }
