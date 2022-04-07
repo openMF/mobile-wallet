@@ -19,7 +19,7 @@ class ShowQrPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHa
     private var mShowQrView: ShowQrView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mShowQrView = baseView as ShowQrView?
-        mShowQrView!!.setPresenter(this)
+        mShowQrView?.setPresenter(this)
     }
 
     override fun generateQr(data: String?) {
@@ -27,7 +27,7 @@ class ShowQrPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHa
             object : UseCaseCallback<GenerateQr.ResponseValue?> {
                 override fun onSuccess(response: GenerateQr.ResponseValue?) {
                     if (response != null) {
-                        mShowQrView!!.showGeneratedQr(response.bitmap)
+                        mShowQrView?.showGeneratedQr(response.bitmap)
                     }
                 }
 

@@ -56,14 +56,14 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
         ButterKnife.bind(this@ShowQrActivity)
         setToolbarTitle(Constants.QR_CODE)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         val qrData = intent.getStringExtra(Constants.QR_DATA)
-        mShowQrPresenter!!.generateQr(qrData)
-        tvQrData!!.text = String.format("%s: %s", getString(R.string.vpa), qrData)
+        mShowQrPresenter?.generateQr(qrData)
+        tvQrData?.text = String.format("%s: %s", getString(R.string.vpa), qrData)
         val layout = window.attributes
         layout.screenBrightness = 1f
         window.attributes = layout
-        btnSetAmount!!.setOnClickListener { showSetAmountDialog(qrData) }
+        btnSetAmount?.setOnClickListener { showSetAmountDialog(qrData) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -140,7 +140,7 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
                     return@OnClickListener
                 }
                 mAmount = amount
-                tvQrData!!.text = String.format(
+                tvQrData?.text = String.format(
                     "%s: %s\n%s: %s",
                     getString(R.string.vpa),
                     qrData,
@@ -151,7 +151,7 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
             })
         editTextDialog.setNeutralButton(R.string.reset) { dialog, which ->
             mAmount = null
-            tvQrData!!.text = String.format("%s: %s", getString(R.string.vpa), qrData)
+            tvQrData?.text = String.format("%s: %s", getString(R.string.vpa), qrData)
             generateQR(qrData)
             showToast("Reset Amount Successful")
         }
@@ -164,7 +164,7 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
     }
 
     override fun showGeneratedQr(bitmap: Bitmap?) {
-        ivQrCode!!.setImageBitmap(bitmap)
+        ivQrCode?.setImageBitmap(bitmap)
         mBitmap = bitmap
     }
 
@@ -173,6 +173,6 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
     }
 
     private fun generateQR(qrData: String?) {
-        mShowQrPresenter!!.generateQr(qrData)
+        mShowQrPresenter?.generateQr(qrData)
     }
 }

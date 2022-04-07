@@ -14,6 +14,6 @@ class ReadQrPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHa
     private var mReadQrView: ReadQrView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mReadQrView = baseView as ReadQrView?
-        mReadQrView!!.setPresenter(this)
+        mReadQrView?.setPresenter(this)
     }
 }

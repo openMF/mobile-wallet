@@ -53,22 +53,22 @@ class ReadQrActivity : BaseActivity(), ReadQrView, ZXingScannerView.ResultHandle
         ButterKnife.bind(this@ReadQrActivity)
         setToolbarTitle(Constants.SCAN_CODE)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
-        mPresenter!!.attachView(this)
-        mScannerView!!.setAutoFocus(true)
+        mPresenter?.attachView(this)
+        mScannerView?.setAutoFocus(true)
     }
 
     @OnClick(R.id.btn_flash_on)
     fun turnOnFlash() {
-        mScannerView!!.flash = true
-        mFlashOn!!.visibility = View.GONE
-        mFlashOff!!.visibility = View.VISIBLE
+        mScannerView?.flash = true
+        mFlashOn?.visibility = View.GONE
+        mFlashOff?.visibility = View.VISIBLE
     }
 
     @OnClick(R.id.btn_flash_off)
     fun turnOffFlash() {
-        mScannerView!!.flash = false
-        mFlashOn!!.visibility = View.VISIBLE
-        mFlashOff!!.visibility = View.GONE
+        mScannerView?.flash = false
+        mFlashOn?.visibility = View.VISIBLE
+        mFlashOff?.visibility = View.GONE
     }
 
     @OnClick(R.id.btn_open_gallery)
@@ -80,13 +80,13 @@ class ReadQrActivity : BaseActivity(), ReadQrView, ZXingScannerView.ResultHandle
 
     public override fun onResume() {
         super.onResume()
-        mScannerView!!.setResultHandler(this)
-        mScannerView!!.startCamera()
+        mScannerView?.setResultHandler(this)
+        mScannerView?.startCamera()
     }
 
     public override fun onPause() {
         super.onPause()
-        mScannerView!!.stopCamera()
+        mScannerView?.stopCamera()
     }
 
     override fun handleResult(result: Result) {
@@ -128,7 +128,7 @@ class ReadQrActivity : BaseActivity(), ReadQrView, ZXingScannerView.ResultHandle
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == SELECT_PHOTO && resultCode == RESULT_OK) {
             try {
-                val selectedImage = data!!.data
+                val selectedImage = data?.data
                 if (selectedImage != null) {
                     val imageStream = contentResolver.openInputStream(selectedImage)
                     val bMap = BitmapFactory.decodeStream(imageStream)
