@@ -92,7 +92,7 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
         ButterKnife.bind(this)
         setToolbarTitle(Constants.RECEIPT)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
-        mPresenter!!.attachView(this)
+        mPresenter?.attachView(this)
         val data = intent.data
         deepLinkURI = data
         if (data != null) {
@@ -102,12 +102,12 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
             try {
                 params = data.pathSegments
                 transactionId = params[0] // "transactionId"
-                tvReceiptLink!!.text = data.toString()
+                tvReceiptLink?.text = data.toString()
             } catch (e: IndexOutOfBoundsException) {
                 showToast(getString(R.string.invalid_link))
             }
             showProgressDialog(Constants.PLEASE_WAIT)
-            mPresenter!!.fetchTransaction(transactionId!!.toLong())
+            transactionId?.toLong()?.let { mPresenter?.fetchTransaction(it) }
         }
     }
 
@@ -125,36 +125,36 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
 
     override fun showTransactionDetail(transaction: Transaction?) {
         if (transaction != null) {
-            tvAmount!!.text = getFormattedAccountBalance(
+            tvAmount?.text = getFormattedAccountBalance(
                 transaction.amount, transaction.currency.code
             )
         }
         if (transaction != null) {
-            tvDate!!.text = transaction.date
+            tvDate?.text = transaction.date
         }
         if (transaction != null) {
-            tvReceiptLink!!.text =
+            tvReceiptLink?.text =
                 Constants.RECEIPT_DOMAIN + transaction.transactionId
         }
         if (transaction != null) {
-            tvTransactionID!!.text = transaction.transactionId.toString()
+            tvTransactionID?.text = transaction.transactionId.toString()
         }
         if (transaction != null) {
             when (transaction.transactionType) {
                 TransactionType.DEBIT -> {
                     isDebit = true
-                    tvOperation!!.setText(R.string.paid_to)
-                    tvOperation!!.setTextColor(resources.getColor(R.color.colorDebit))
+                    tvOperation?.setText(R.string.paid_to)
+                    tvOperation?.setTextColor(resources.getColor(R.color.colorDebit))
                 }
                 TransactionType.CREDIT -> {
                     isDebit = false
-                    tvOperation!!.setText(R.string.credited_by)
-                    tvOperation!!.setTextColor(resources.getColor(R.color.colorCredit))
+                    tvOperation?.setText(R.string.credited_by)
+                    tvOperation?.setTextColor(resources.getColor(R.color.colorCredit))
                 }
                 TransactionType.OTHER -> {
                     isDebit = false
-                    tvOperation!!.text = Constants.OTHER
-                    tvOperation!!.setTextColor(Color.YELLOW)
+                    tvOperation?.text = Constants.OTHER
+                    tvOperation?.setTextColor(Color.YELLOW)
                 }
             }
         }
@@ -162,30 +162,14 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
 
     override fun showTransferDetail(transferDetail: TransferDetail?) {
         if (isDebit) {
-            if (transferDetail != null) {
-                tvPaidToName!!.text = transferDetail.toClient.displayName
-            }
+            tvPaidToName?.text = transferDetail?.toClient?.displayName
         } else {
-            if (transferDetail != null) {
-                tvPaidToName!!.text = transferDetail.fromClient.displayName
-            }
+            tvPaidToName?.text = transferDetail?.fromClient?.displayName
         }
-        if (transferDetail != null) {
-            tvTransToName!!.text =
-                Constants.NAME + transferDetail.toClient.displayName
-        }
-        if (transferDetail != null) {
-            tvTransToNumber!!.text =
-                Constants.ACCOUNT_NUMBER + transferDetail
-                    .toAccount.accountNo
-        }
-        if (transferDetail != null) {
-            tvTransFromName!!.text =
-                Constants.NAME + transferDetail.fromClient.displayName
-        }
-        tvTransFromNumber!!.text =
-            Constants.ACCOUNT_NUMBER + transferDetail
-                ?.fromAccount!!.accountNo
+        tvTransToName?.text = Constants.NAME + transferDetail?.toClient?.displayName
+        tvTransToNumber?.text = Constants.ACCOUNT_NUMBER + transferDetail?.toAccount?.accountNo
+        tvTransFromName?.text = Constants.NAME + transferDetail?.fromClient?.displayName
+        tvTransFromNumber?.text = Constants.ACCOUNT_NUMBER + transferDetail?.fromAccount?.accountNo
         dismissProgressDialog()
     }
 
@@ -214,7 +198,7 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
                 openFile(this@ReceiptActivity, file)
             } else {
                 showSnackbar(getString(R.string.downloading_receipt))
-                mPresenter!!.downloadReceipt(transactionId!!)
+                mPresenter?.downloadReceipt(transactionId)
             }
         }
     }
@@ -226,7 +210,7 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
         ) as ClipboardManager
         val clipData = ClipData.newPlainText(
             Constants.UNIQUE_RECEIPT_LINK,
-            tvReceiptLink!!.text.toString()
+            tvReceiptLink?.text.toString()
         )
         cm.setPrimaryClip(clipData)
         showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD)
@@ -236,7 +220,7 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
     fun shareReceiptLink() {
         var intent: Intent? = Intent(Intent.ACTION_SEND)
             .setType("text/plain")
-            .putExtra(Intent.EXTRA_TEXT, tvReceiptLink!!.text.toString())
+            .putExtra(Intent.EXTRA_TEXT, tvReceiptLink?.text.toString())
             .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         intent = Intent.createChooser(intent, getString(R.string.share_receipt))
         startActivity(intent)
@@ -307,7 +291,7 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     showSnackbar(getString(R.string.downloading_receipt))
-                    mReceiptPresenter!!.downloadReceipt(transactionId)
+                    mReceiptPresenter?.downloadReceipt(transactionId)
                 } else {
                     showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_DOWNLOAD_RECEIPT)
                 }

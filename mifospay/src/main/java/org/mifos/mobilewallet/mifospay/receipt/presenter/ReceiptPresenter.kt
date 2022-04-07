@@ -33,7 +33,7 @@ class ReceiptPresenter @Inject constructor(
     private var mReceiptView: ReceiptView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mReceiptView = baseView as ReceiptView?
-        mReceiptView!!.setPresenter(this)
+        mReceiptView?.setPresenter(this)
     }
 
     override fun downloadReceipt(transactionId: String?) {
@@ -42,7 +42,7 @@ class ReceiptPresenter @Inject constructor(
             object : UseCaseCallback<DownloadTransactionReceipt.ResponseValue?> {
                 override fun onSuccess(response: DownloadTransactionReceipt.ResponseValue?) {
                     if (response != null) {
-                        mReceiptView!!.writeReceiptToPDF(
+                        mReceiptView?.writeReceiptToPDF(
                             response.responseBody,
                             Constants.RECEIPT + transactionId + Constants.PDF
                         )
@@ -50,7 +50,7 @@ class ReceiptPresenter @Inject constructor(
                 }
 
                 override fun onError(message: String) {
-                    mReceiptView!!.showSnackbar(Constants.ERROR_FETCHING_RECEIPT)
+                    mReceiptView?.showSnackbar(Constants.ERROR_FETCHING_RECEIPT)
                 }
             })
     }
@@ -62,7 +62,7 @@ class ReceiptPresenter @Inject constructor(
             object : UseCaseCallback<FetchAccountTransaction.ResponseValue?> {
                 override fun onSuccess(response: FetchAccountTransaction.ResponseValue?) {
                     if (response != null) {
-                        mReceiptView!!.showTransactionDetail(response.transaction)
+                        mReceiptView?.showTransactionDetail(response.transaction)
                     }
                     if (response != null) {
                         fetchTransfer(response.transaction.transferId)
@@ -71,10 +71,10 @@ class ReceiptPresenter @Inject constructor(
 
                 override fun onError(message: String) {
                     if (message == Constants.UNAUTHORIZED_ERROR) {
-                        mReceiptView!!.openPassCodeActivity()
+                        mReceiptView?.openPassCodeActivity()
                     } else {
-                        mReceiptView!!.hideProgressDialog()
-                        mReceiptView!!.showSnackbar("Error fetching Transaction")
+                        mReceiptView?.hideProgressDialog()
+                        mReceiptView?.showSnackbar("Error fetching Transaction")
                     }
                 }
             }
@@ -86,12 +86,12 @@ class ReceiptPresenter @Inject constructor(
             FetchAccountTransfer.RequestValues(transferId),
             object : UseCaseCallback<FetchAccountTransfer.ResponseValue?> {
                 override fun onSuccess(response: FetchAccountTransfer.ResponseValue?) {
-                    mReceiptView!!.showTransferDetail(response?.transferDetail)
+                    mReceiptView?.showTransferDetail(response?.transferDetail)
                 }
 
                 override fun onError(message: String) {
-                    mReceiptView!!.hideProgressDialog()
-                    mReceiptView!!.showSnackbar("Error fetching Account Transfer")
+                    mReceiptView?.hideProgressDialog()
+                    mReceiptView?.showSnackbar("Error fetching Account Transfer")
                 }
             })
     }
