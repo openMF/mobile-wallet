@@ -19,7 +19,7 @@
         android:scrollbars="vertical" />
 
     <include
-        android:id="@+id/inc_state_view"
+        android:id="@+id/inc_state_view_1"
         layout="@layout/placeholder_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -36,7 +36,7 @@
         app:srcCompat="@drawable/ic_add_white" />
 
     <include
-        android:id="@+id/inc_state_view"
+        android:id="@+id/inc_state_view_2"
         layout="@layout/placeholder_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

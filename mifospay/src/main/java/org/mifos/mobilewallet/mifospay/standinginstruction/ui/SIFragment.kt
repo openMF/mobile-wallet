@@ -8,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_si.*
-import kotlinx.android.synthetic.main.fragment_si.inc_state_view
-import kotlinx.android.synthetic.main.fragment_si.progressBar
 import kotlinx.android.synthetic.main.placeholder_state.*
 import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.mifospay.R
@@ -102,7 +100,7 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     }
 
     override fun showLoadingView() {
-        inc_state_view.visibility = View.GONE
+        inc_state_view_1.visibility = View.GONE
         rv_si.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
     }
@@ -119,7 +117,7 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
         if (activity != null) {
             progressBar.visibility = View.GONE
             rv_si.visibility = View.GONE
-            inc_state_view.visibility = View.VISIBLE
+            inc_state_view_2.visibility = View.VISIBLE
 
             // setting up state view elements
             val res = resources
