@@ -8,83 +8,36 @@ import android.database.Cursor
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.support.design.chip.Chip
-import android.support.design.widget.TextInputLayout
 import android.support.transition.TransitionManager
 import android.support.v4.content.ContextCompat
 import android.telephony.PhoneNumberFormattingTextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import butterknife.BindView
-import butterknife.ButterKnife
-import butterknife.OnClick
+import android.widget.Toast
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment
+import org.mifos.mobilewallet.mifospay.databinding.FragmentSendBinding
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
 import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
-import org.mifos.mobilewallet.mifospay.utils.Utils.hideSoftKeyboard
-import javax.inject.Inject
+import org.mifos.mobilewallet.mifospay.utils.Utils
 
 /**
  * Created by naman on 30/8/17.
  */
 class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
-    @JvmField
-    @Inject
-    var mPresenter: TransferPresenter? = null
-    var mTransferPresenter: BaseHomeContract.TransferPresenter? = null
 
-    @JvmField
-    @BindView(R.id.rl_send_container)
-    var sendContainer: ViewGroup? = null
+    private lateinit var mPresenter: TransferPresenter
+    private lateinit var mTransferPresenter: BaseHomeContract.TransferPresenter
+    private lateinit var vpa: String
+    private var _binding: FragmentSendBinding? = null
+    private val binding get() = _binding!!
 
-    @JvmField
-    @BindView(R.id.et_amount)
-    var etAmount: EditText? = null
-
-    @JvmField
-    @BindView(R.id.et_vpa)
-    var etVpa: EditText? = null
-
-    @JvmField
-    @BindView(R.id.btn_submit)
-    var btnTransfer: Button? = null
-
-    @JvmField
-    @BindView(R.id.btn_scan_qr)
-    var btnScanQr: TextView? = null
-
-    @JvmField
-    @BindView(R.id.btn_vpa)
-    var mBtnVpa: Chip? = null
-
-    @JvmField
-    @BindView(R.id.btn_mobile)
-    var mBtnMobile: Chip? = null
-
-    @JvmField
-    @BindView(R.id.et_mobile_number)
-    var mEtMobileNumber: EditText? = null
-
-    @JvmField
-    @BindView(R.id.btn_search_contact)
-    var mBtnSearchContact: TextView? = null
-
-    @JvmField
-    @BindView(R.id.rl_mobile)
-    var mRlMobile: RelativeLayout? = null
-
-    @JvmField
-    @BindView(R.id.til_vpa)
-    var mTilVpa: TextInputLayout? = null
-    private var vpa: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as BaseActivity?)?.activityComponent?.inject(this)
@@ -93,55 +46,74 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val rootView = inflater.inflate(
-            R.layout.fragment_send, container,
-            false
-        )
-        ButterKnife.bind(this, rootView)
+    ): View {
+        _binding = FragmentSendBinding.inflate(inflater, container, false)
         setSwipeEnabled(false)
-        mPresenter?.attachView(this)
-        mEtMobileNumber?.addTextChangedListener(PhoneNumberFormattingTextWatcher())
-        mBtnVpa?.isSelected = true
-        return rootView
+        mPresenter.attachView(this)
+        _binding?.etMobileNumber?.addTextChangedListener(PhoneNumberFormattingTextWatcher())
+        _binding?.btnVpa?.isSelected = true
+
+
+        _binding?.btnVpa?.setOnClickListener {
+            onVPASelected()
+        }
+
+        _binding?.btnMobile?.setOnClickListener {
+            onMobileSelected()
+        }
+
+        _binding?.btnSubmit?.setOnClickListener {
+            transferClicked()
+        }
+
+        _binding?.btnScanQr?.setOnClickListener {
+            scanQrClicked()
+        }
+
+        _binding?.btnSearchContact?.setOnClickListener {
+            searchContactClicked()
+        }
+        return binding.root
     }
 
-    @OnClick(R.id.btn_vpa)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     fun onVPASelected() {
-        sendContainer?.let { TransitionManager.beginDelayedTransition(it) }
-        mBtnVpa?.isSelected = true
-        mBtnVpa?.isFocusable = true
-        mBtnVpa?.setChipBackgroundColorResource(R.color.clickedblue)
-        mBtnMobile?.isSelected = false
-        mBtnMobile?.setChipBackgroundColorResource(R.color.changedBackgroundColour)
-        btnScanQr?.visibility = View.VISIBLE
-        mRlMobile?.visibility = View.GONE
-        mTilVpa?.visibility = View.VISIBLE
-        activity?.let { hideSoftKeyboard(it) }
+        _binding?.rlSendContainer?.let { TransitionManager.beginDelayedTransition(it) }
+        _binding?.btnVpa?.isSelected = true
+        _binding?.btnVpa?.isFocusable = true
+        _binding?.btnVpa?.setChipBackgroundColorResource(R.color.clickedblue)
+        _binding?.btnMobile?.isSelected = false
+        _binding?.btnMobile?.setChipBackgroundColorResource(R.color.changedBackgroundColour)
+        _binding?.btnScanQr?.visibility = View.VISIBLE
+        _binding?.rlMobile?.visibility = View.GONE
+        _binding?.tilVpa?.visibility = View.VISIBLE
+        activity?.let { Utils.hideSoftKeyboard(it) }
     }
 
-    @OnClick(R.id.btn_mobile)
     fun onMobileSelected() {
-        sendContainer?.let { TransitionManager.beginDelayedTransition(it) }
-        mBtnMobile?.isSelected = true
-        mBtnMobile?.isFocusable = true
-        mBtnMobile?.setChipBackgroundColorResource(R.color.clickedblue)
-        mBtnVpa?.isSelected = false
-        mBtnVpa?.setChipBackgroundColorResource(R.color.changedBackgroundColour)
-        mTilVpa?.visibility = View.GONE
-        btnScanQr?.visibility = View.GONE
-        mRlMobile?.visibility = View.VISIBLE
-        activity?.let { hideSoftKeyboard(it) }
+        _binding?.rlSendContainer?.let { TransitionManager.beginDelayedTransition(it) }
+        _binding?.btnMobile?.isSelected = true
+        _binding?.btnMobile?.isFocusable = true
+        _binding?.btnMobile?.setChipBackgroundColorResource(R.color.clickedblue)
+        _binding?.btnVpa?.isSelected = false
+        _binding?.btnVpa?.setChipBackgroundColorResource(R.color.changedBackgroundColour)
+        _binding?.tilVpa?.visibility = View.GONE
+        _binding?.btnScanQr?.visibility = View.GONE
+        _binding?.rlMobile?.visibility = View.VISIBLE
+        activity?.let { Utils.hideSoftKeyboard(it) }
     }
 
-    @OnClick(R.id.btn_submit)
     fun transferClicked() {
-        val externalId = etVpa?.text.toString().trim { it <= ' ' }
-        val eamount = etAmount?.text.toString().trim { it <= ' ' }
-        val mobileNumber = mEtMobileNumber?.text
+        val externalId = _binding?.etVpa?.text.toString().trim { it <= ' ' }
+        val eamount = _binding?.etAmount?.text.toString().trim { it <= ' ' }
+        val mobileNumber = _binding?.etMobileNumber?.text
             .toString().trim { it <= ' ' }.replace("\\s+".toRegex(), "")
-        if (eamount == "" || mBtnVpa?.isSelected == true && externalId == "" ||
-            mBtnMobile?.isSelected == true && mobileNumber == ""
+        if (eamount == "" || _binding?.btnVpa?.isSelected == true && externalId == "" ||
+            _binding?.btnMobile?.isSelected == true && mobileNumber == ""
         ) {
             Toast.makeText(
                 activity,
@@ -157,15 +129,14 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
                 showSnackbar(getString(R.string.please_enter_valid_vpa))
                 return
             }
-            if (mTransferPresenter?.checkSelfTransfer(externalId) == false) {
-                mTransferPresenter?.checkBalanceAvailability(externalId, amount)
+            if (!mTransferPresenter.checkSelfTransfer(externalId)) {
+                mTransferPresenter.checkBalanceAvailability(externalId, amount)
             } else {
                 showSnackbar(Constants.SELF_ACCOUNT_ERROR)
             }
         }
     }
 
-    @OnClick(R.id.btn_scan_qr)
     fun scanQrClicked() {
         if (Build.VERSION.SDK_INT >= 23 && activity?.let {
                 ContextCompat.checkSelfPermission(
@@ -193,7 +164,6 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
         mTransferPresenter = presenter
     }
 
-    @OnClick(R.id.btn_search_contact)
     fun searchContactClicked() {
         if (Build.VERSION.SDK_INT >= 23 && activity?.let {
                 ContextCompat.checkSelfPermission(
@@ -225,20 +195,20 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
             val qrDataArray = qrData?.split(", ".toRegex())?.toTypedArray()
             if (qrDataArray != null) {
                 if (qrDataArray.size == 1) {
-                    etVpa?.setText(qrDataArray[0])
+                    _binding?.etVpa?.setText(qrDataArray[0])
                 } else {
-                    etVpa?.setText(qrDataArray[0])
-                    etAmount?.setText(qrDataArray[1])
+                    _binding?.etVpa?.setText(qrDataArray[0])
+                    _binding?.etAmount?.setText(qrDataArray[1])
                 }
             }
-            val externalId = etVpa?.text.toString()
-            if (etAmount?.text.toString().isEmpty()) {
+            val externalId = _binding?.etVpa?.text.toString()
+            if (_binding?.etAmount?.text.toString().isEmpty()) {
                 showSnackbar(Constants.PLEASE_ENTER_AMOUNT)
                 return
             }
-            val amount = etAmount?.text.toString().toDouble()
-            if (mTransferPresenter?.checkSelfTransfer(externalId) == false) {
-                mTransferPresenter?.checkBalanceAvailability(externalId, amount)
+            val amount = _binding?.etAmount?.text.toString().toDouble()
+            if (!mTransferPresenter.checkSelfTransfer(externalId)) {
+                mTransferPresenter.checkBalanceAvailability(externalId, amount)
             } else {
                 showSnackbar(Constants.SELF_ACCOUNT_ERROR)
             }
@@ -262,12 +232,12 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
                 )
                 phoneNo = phoneIndex?.let { cursor.getString(it) }
                 name = nameIndex?.let { cursor.getString(it) }
-                mEtMobileNumber?.setText(phoneNo)
+                _binding?.etMobileNumber?.setText(phoneNo)
             } catch (e: Exception) {
                 showToast(Constants.ERROR_CHOOSING_CONTACT)
             }
         } else if (requestCode == REQUEST_SHOW_DETAILS && resultCode == Activity.RESULT_CANCELED) {
-            if (mBtnMobile?.isSelected == true) {
+            if (_binding?.btnMobile?.isSelected == true) {
                 showSnackbar(Constants.ERROR_FINDING_MOBILE_NUMBER)
             } else {
                 showSnackbar(Constants.ERROR_FINDING_VPA)

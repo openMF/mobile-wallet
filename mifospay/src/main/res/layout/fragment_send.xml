@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_send_container"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="@color/colorPrimary"
     android:orientation="vertical">
 
@@ -11,11 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
         android:orientation="vertical"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp">
@@ -23,6 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/value_20dp"
             android:layout_marginLeft="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_20dp"
             android:text="@string/select_transfer_method"
@@ -47,8 +47,9 @@
                 android:layout_marginStart="11dp"
                 android:layout_marginLeft="11dp"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="1"
                 android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_horizontal"
                 android:text="@string/vpa"
                 android:textAlignment="center"
                 android:textAllCaps="false"
@@ -65,16 +66,18 @@
                 android:layout_marginEnd="61dp"
                 android:layout_marginRight="70dp"
                 android:layout_marginBottom="10dp"
-                android:layout_weight="1"
                 android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_horizontal"
+                android:paddingHorizontal="@dimen/value_10dp"
                 android:text="@string/mobile_number"
                 android:textAlignment="center"
-                android:paddingRight="@dimen/value_10dp"
                 android:textAllCaps="false"
-                android:textSize="8sp"
                 android:textColor="@android:color/black"
+                android:textSize="8sp"
                 android:typeface="sans"
-                app:chipBackgroundColor="@color/changedBackgroundColour" />
+                app:chipBackgroundColor="@color/changedBackgroundColour"
+                tools:ignore="SmallSp" />
 
         </RelativeLayout>
 
@@ -112,6 +115,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="270dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/value_20dp"
                     android:layout_marginLeft="@dimen/value_20dp"
                     android:textColorHint="@android:color/black"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
@@ -128,10 +132,11 @@
 
                 <TextView
                     android:id="@+id/btn_scan_qr"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical|center_horizontal"
                     android:layout_marginTop="@dimen/value_10dp"
+                    android:layout_marginEnd="@dimen/value_50dp"
                     android:layout_marginRight="@dimen/value_50dp"
                     android:layout_marginBottom="@dimen/value_5dp"
                     android:layout_weight="0.5"
@@ -150,11 +155,14 @@
                 android:visibility="gone">
 
                 <android.support.design.widget.TextInputLayout
-                    android:layout_width="match_parent"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:layout_marginStart="@dimen/value_20dp"
                     android:layout_marginLeft="@dimen/value_20dp"
+                    android:layout_marginEnd="@dimen/value_15dp"
                     android:layout_marginRight="@dimen/value_15dp"
+                    android:layout_toStartOf="@+id/btn_search_contact"
                     android:layout_toLeftOf="@+id/btn_search_contact"
                     android:textColorHint="@android:color/black"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
@@ -165,8 +173,8 @@
                         android:layout_height="match_parent"
                         android:hint="@string/mobile_number"
                         android:inputType="number"
-                        android:singleLine="true"
                         android:maxLength="@integer/telephone_numbers_max_length_standard"
+                        android:singleLine="true"
                         android:textSize="@dimen/value_15sp" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -175,9 +183,11 @@
                     android:id="@+id/btn_search_contact"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/value_10dp"
                     android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/value_10dp"
+                    android:layout_marginRight="@dimen/value_10dp"
                     android:background="@drawable/ic_contact"
                     android:gravity="bottom" />
             </RelativeLayout>
@@ -185,8 +195,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
                 android:layout_marginTop="@dimen/value_10dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button
@@ -206,19 +216,6 @@
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/value_10dp"
             android:background="#44000000" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:layout_marginBottom="50dp"
-            android:orientation="horizontal">
-
-
-
-
-        </LinearLayout>
 
     </LinearLayout>
 

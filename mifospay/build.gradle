@@ -33,6 +33,10 @@ android {
         disable 'InvalidPackage'
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     compileOptions.incremental = false
 }
 

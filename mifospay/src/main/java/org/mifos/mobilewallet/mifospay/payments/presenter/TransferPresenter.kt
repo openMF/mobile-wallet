@@ -17,25 +17,21 @@ class TransferPresenter @Inject constructor(
     private val mUsecaseHandler: UseCaseHandler,
     private val localRepository: LocalRepository
 ) : BaseHomeContract.TransferPresenter {
-    @JvmField
-    @Inject
-    var fetchClientData: FetchClientData? = null
+    private lateinit var fetchClientData: FetchClientData
+    private lateinit var mFetchAccount: FetchAccount
+    private lateinit var mTransferView: BaseHomeContract.TransferView
 
-    @JvmField
-    @Inject
-    var mFetchAccount: FetchAccount? = null
-    private var mTransferView: BaseHomeContract.TransferView? = null
     override fun attachView(baseView: BaseView<*>?) {
-        mTransferView = baseView as BaseHomeContract.TransferView?
-        mTransferView?.setPresenter(this)
+        mTransferView = baseView as BaseHomeContract.TransferView
+        mTransferView.setPresenter(this)
     }
 
     override fun fetchVpa() {
-        mTransferView?.showVpa(localRepository.clientDetails.externalId)
+        mTransferView.showVpa(localRepository.clientDetails.externalId)
     }
 
     override fun fetchMobile() {
-        mTransferView?.showMobile(localRepository.preferencesHelper.mobile)
+        mTransferView.showMobile(localRepository.preferencesHelper.mobile)
     }
 
     override fun checkSelfTransfer(externalId: String): Boolean {
@@ -47,19 +43,19 @@ class TransferPresenter @Inject constructor(
             FetchAccount.RequestValues(localRepository.clientDetails.clientId),
             object : UseCaseCallback<FetchAccount.ResponseValue?> {
                 override fun onSuccess(response: FetchAccount.ResponseValue?) {
-                    mTransferView?.hideSwipeProgress()
+                    mTransferView.hideSwipeProgress()
                     if (response != null) {
                         if (transferAmount > response.account.balance) {
-                            mTransferView?.showSnackbar(Constants.INSUFFICIENT_BALANCE)
+                            mTransferView.showSnackbar(Constants.INSUFFICIENT_BALANCE)
                         } else {
-                            mTransferView?.showClientDetails(externalId, transferAmount)
+                            mTransferView.showClientDetails(externalId, transferAmount)
                         }
                     }
                 }
 
                 override fun onError(message: String) {
-                    mTransferView?.hideSwipeProgress()
-                    mTransferView?.showToast(Constants.ERROR_FETCHING_BALANCE)
+                    mTransferView.hideSwipeProgress()
+                    mTransferView.showToast(Constants.ERROR_FETCHING_BALANCE)
                 }
             })
     }
