@@ -100,7 +100,7 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     }
 
     override fun showLoadingView() {
-        inc_state_view_1.visibility = View.GONE
+        inc_state_view.visibility = View.GONE
         rv_si.visibility = View.GONE
         progressBar.visibility = View.VISIBLE
     }
@@ -117,7 +117,7 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
         if (activity != null) {
             progressBar.visibility = View.GONE
             rv_si.visibility = View.GONE
-            inc_state_view_2.visibility = View.VISIBLE
+            inc_state_view.visibility = View.VISIBLE
 
             // setting up state view elements
             val res = resources
