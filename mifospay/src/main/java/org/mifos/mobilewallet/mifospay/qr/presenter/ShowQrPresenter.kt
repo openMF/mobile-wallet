@@ -13,21 +13,20 @@ import javax.inject.Inject
  */
 class ShowQrPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHandler) :
     QrContract.ShowQrPresenter {
-    @JvmField
-    @Inject
-    var generateQrUseCase: GenerateQr? = null
-    private var mShowQrView: ShowQrView? = null
+    private lateinit var generateQrUseCase: GenerateQr
+    private lateinit var mShowQrView: ShowQrView
     override fun attachView(baseView: BaseView<*>?) {
-        mShowQrView = baseView as ShowQrView?
-        mShowQrView?.setPresenter(this)
+        mShowQrView = baseView as ShowQrView
+        mShowQrView.setPresenter(this)
     }
 
     override fun generateQr(data: String?) {
-        mUsecaseHandler.execute(generateQrUseCase, data?.let { GenerateQr.RequestValues(it) },
+        mUsecaseHandler.execute(
+            generateQrUseCase, data?.let { GenerateQr.RequestValues(it) },
             object : UseCaseCallback<GenerateQr.ResponseValue?> {
                 override fun onSuccess(response: GenerateQr.ResponseValue?) {
                     if (response != null) {
-                        mShowQrView?.showGeneratedQr(response.bitmap)
+                        mShowQrView.showGeneratedQr(response.bitmap)
                     }
                 }
 

@@ -16,18 +16,15 @@ import org.mifos.mobilewallet.mifospay.qr.QrContract.ReadQrView
 import org.mifos.mobilewallet.mifospay.qr.presenter.ReadQrPresenter
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import java.io.FileNotFoundException
-import javax.inject.Inject
 
 /**
  * Created by naman on 7/9/17.
  */
 class ReadQrActivity : BaseActivity(), ReadQrView, ZXingScannerView.ResultHandler {
-    @JvmField
-    @Inject
-    var mPresenter: ReadQrPresenter? = null
-    private var mReadQrPresenter: QrContract.ReadQrPresenter? = null
-
+    private lateinit var mPresenter: ReadQrPresenter
+    private lateinit var mReadQrPresenter: QrContract.ReadQrPresenter
     private lateinit var binding: ActivityReadQrBinding
+
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityReadQrBinding.inflate(layoutInflater)
@@ -36,7 +33,7 @@ class ReadQrActivity : BaseActivity(), ReadQrView, ZXingScannerView.ResultHandle
 
         setToolbarTitle(Constants.SCAN_CODE)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
-        mPresenter?.attachView(this)
+        mPresenter.attachView(this)
         binding.scannerView.setAutoFocus(true)
 
         binding.btnFlashOn.setOnClickListener {
@@ -91,7 +88,9 @@ class ReadQrActivity : BaseActivity(), ReadQrView, ZXingScannerView.ResultHandle
     }
 
     override fun setPresenter(presenter: QrContract.ReadQrPresenter?) {
-        mReadQrPresenter = presenter
+        if (presenter != null) {
+            mReadQrPresenter = presenter
+        }
     }
 
     private fun scanQRImage(bMap: Bitmap): String? {

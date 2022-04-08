@@ -21,21 +21,17 @@ import org.mifos.mobilewallet.mifospay.utils.Constants
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import javax.inject.Inject
 
 /**
  * Created by naman on 8/7/17.
  */
 class ShowQrActivity : BaseActivity(), ShowQrView {
-    @JvmField
-    @Inject
-    var mPresenter: ShowQrPresenter? = null
-    private var mShowQrPresenter: QrContract.ShowQrPresenter? = null
-
-    private var mAmount: String? = null
-    private var mBitmap: Bitmap? = null
-
+    private lateinit var mPresenter: ShowQrPresenter
+    private lateinit var mShowQrPresenter: QrContract.ShowQrPresenter
+    private lateinit var mAmount: String
+    private lateinit var mBitmap: Bitmap
     private lateinit var binding: ActivityShowQrBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityShowQrBinding.inflate(layoutInflater)
@@ -44,9 +40,9 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
 
         setToolbarTitle(Constants.QR_CODE)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
-        mPresenter?.attachView(this)
+        mPresenter.attachView(this)
         val qrData = intent.getStringExtra(Constants.QR_DATA)
-        mShowQrPresenter?.generateQr(qrData)
+        mShowQrPresenter.generateQr(qrData)
         binding.tvQrVpa.text = String.format("%s: %s", getString(R.string.vpa), qrData)
         val layout = window.attributes
         layout.screenBrightness = 1f
@@ -61,10 +57,9 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.item_share_qr -> if (mBitmap != null) {
-                val imageUri = saveImage(mBitmap!!)
+            R.id.item_share_qr ->
+                val imageUri = saveImage(mBitmap)
                 shareQr(imageUri)
-            }
             else -> return super.onOptionsItemSelected(item)
         }
         return true
@@ -113,9 +108,7 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
         val edittext: TextInputEditText = view.findViewById(R.id.editText_set_amt)
         edittext.inputType = InputType.TYPE_CLASS_NUMBER
         editTextDialog.setView(view)
-        if (mAmount != null) {
-            edittext.setText(mAmount)
-        }
+        edittext.setText(mAmount)
         editTextDialog.setPositiveButton(
             R.string.confirm,
             DialogInterface.OnClickListener { dialog, which ->
@@ -138,7 +131,7 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
                 generateQR("$qrData, $mAmount")
             })
         editTextDialog.setNeutralButton(R.string.reset) { dialog, which ->
-            mAmount = null
+            mAmount = null.toString()
             binding.tvQrVpa.text = String.format("%s: %s", getString(R.string.vpa), qrData)
             generateQR(qrData)
             showToast("Reset Amount Successful")
@@ -148,12 +141,16 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
     }
 
     override fun setPresenter(presenter: QrContract.ShowQrPresenter?) {
-        mShowQrPresenter = presenter
+        if (presenter != null) {
+            mShowQrPresenter = presenter
+        }
     }
 
     override fun showGeneratedQr(bitmap: Bitmap?) {
         binding.ivQrCode.setImageBitmap(bitmap)
-        mBitmap = bitmap
+        if (bitmap != null) {
+            mBitmap = bitmap
+        }
     }
 
     fun showToast(message: String?) {
@@ -161,6 +158,6 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
     }
 
     private fun generateQR(qrData: String?) {
-        mShowQrPresenter?.generateQr(qrData)
+        mShowQrPresenter.generateQr(qrData)
     }
 }

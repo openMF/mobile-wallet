@@ -11,9 +11,9 @@ import javax.inject.Inject
  */
 class ReadQrPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHandler) :
     QrContract.ReadQrPresenter {
-    private var mReadQrView: ReadQrView? = null
+    private lateinit var mReadQrView: ReadQrView
     override fun attachView(baseView: BaseView<*>?) {
-        mReadQrView = baseView as ReadQrView?
-        mReadQrView?.setPresenter(this)
+        mReadQrView = baseView as ReadQrView
+        mReadQrView.setPresenter(this)
     }
 }
