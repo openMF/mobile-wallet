@@ -27,20 +27,15 @@ import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import org.mifos.mobilewallet.mifospay.utils.FileUtils
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.ValidateUtil.isValidEmail
-import javax.inject.Inject
 
 class SignupActivity : BaseActivity(), SignupView {
-    @JvmField
-    @Inject
-    var mPresenter: SignupPresenter? = null
-    private var mSignupPresenter: RegistrationContract.SignupPresenter? = null
-    private var spinnerDialog: SpinnerDialog? = null
-
-
-    private var countryName: String? = null
-    private var mobileNumber: String? = null
-    private var countryId: String? = null
-    private var stateId: String? = null
+    private lateinit var mPresenter: SignupPresenter
+    private lateinit var mSignupPresenter: RegistrationContract.SignupPresenter
+    private lateinit var spinnerDialog: SpinnerDialog
+    private lateinit var countryName: String
+    private lateinit var mobileNumber: String
+    private lateinit var countryId: String
+    private lateinit var stateId: String
     private var mifosSavingProductId = 0
 
     private lateinit var binding: ActivitySignupBinding
@@ -50,7 +45,7 @@ class SignupActivity : BaseActivity(), SignupView {
         val view = binding.root
         setContentView(view)
 
-        mPresenter?.attachView(this)
+        mPresenter.attachView(this)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         setToolbarTitle("Registration")
         mifosSavingProductId = intent.getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0)
@@ -61,8 +56,8 @@ class SignupActivity : BaseActivity(), SignupView {
         } else {
             binding.etBusinessShopLayout.visibility = View.GONE
         }
-        mobileNumber = intent.getStringExtra(Constants.MOBILE_NUMBER)
-        countryName = intent.getStringExtra(Constants.COUNTRY)
+        mobileNumber = intent.getStringExtra(Constants.MOBILE_NUMBER).toString()
+        countryName = intent.getStringExtra(Constants.COUNTRY).toString()
         val email = intent.getStringExtra(Constants.GOOGLE_EMAIL)
         val displayName = intent.getStringExtra(Constants.GOOGLE_DISPLAY_NAME)
         val firstName = intent.getStringExtra(Constants.GOOGLE_GIVEN_NAME)
@@ -79,7 +74,7 @@ class SignupActivity : BaseActivity(), SignupView {
         binding.etLastName.setText(lastName)
         binding.etPassword.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                mPresenter?.checkPasswordStrength(s.toString())
+                mPresenter.checkPasswordStrength(s.toString())
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
@@ -120,8 +115,8 @@ class SignupActivity : BaseActivity(), SignupView {
                 this@SignupActivity, statesList,
                 "Select or Search State", R.style.DialogAnimations_SmileWindow, "Close"
             )
-            spinnerDialog?.bindOnSpinerListener { item, position -> binding.etState.setText(item) }
-            binding.etState.setOnClickListener { spinnerDialog?.showSpinerDialog() }
+            spinnerDialog.bindOnSpinerListener { item, position -> binding.etState.setText(item) }
+            binding.etState.setOnClickListener { spinnerDialog.showSpinerDialog() }
             hideProgressDialog()
         } catch (e: Exception) {
             Log.d("qxz", e.toString() + " " + e.message)
@@ -129,7 +124,9 @@ class SignupActivity : BaseActivity(), SignupView {
     }
 
     override fun setPresenter(presenter: RegistrationContract.SignupPresenter?) {
-        mSignupPresenter = presenter
+        if (presenter != null) {
+            mSignupPresenter = presenter
+        }
     }
 
     fun onNextClicked() {
@@ -178,7 +175,7 @@ class SignupActivity : BaseActivity(), SignupView {
             hideProgressDialog()
             return
         }
-        mSignupPresenter?.registerUser(
+        mSignupPresenter.registerUser(
             firstName, lastName, mobileNumber, email, businessName,
             addressline1, addressline2, pincode, city, countryName, username, password, stateId,
             countryId, mifosSavingProductId

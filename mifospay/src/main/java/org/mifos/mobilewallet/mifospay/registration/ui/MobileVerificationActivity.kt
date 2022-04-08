@@ -14,23 +14,19 @@ import org.mifos.mobilewallet.mifospay.registration.presenter.MobileVerification
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils.hideSoftKeyboard
-import javax.inject.Inject
 
 class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
-    @JvmField
-    @Inject
-    var mPresenter: MobileVerificationPresenter? = null
-    private var mMobileVerificationPresenter: RegistrationContract.MobileVerificationPresenter? =
-        null
-
+    private lateinit var mPresenter: MobileVerificationPresenter
+    private lateinit var mMobileVerificationPresenter: RegistrationContract.MobileVerificationPresenter
     private lateinit var binding: ActivityMobileVerificationBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMobileVerificationBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
-        mPresenter?.attachView(this)
+        mPresenter.attachView(this)
         setToolbarTitle("")
         showColoredBackButton(Constants.WHITE_BACK_BUTTON)
         binding.ccpCode.registerCarrierNumberEditText(binding.etMobileNumber)
@@ -46,7 +42,9 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
     }
 
     override fun setPresenter(presenter: RegistrationContract.MobileVerificationPresenter?) {
-        mMobileVerificationPresenter = presenter
+        if (presenter != null) {
+            mMobileVerificationPresenter = presenter
+        }
     }
 
     private fun onGetOTp() {
@@ -55,7 +53,7 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
             showProgressDialog(Constants.SENDING_OTP_TO_YOUR_MOBILE_NUMBER)
             val handler = Handler()
             handler.postDelayed({
-                mMobileVerificationPresenter?.requestOTPfromServer(
+                mMobileVerificationPresenter.requestOTPfromServer(
                     binding.ccpCode.fullNumber,
                     binding.etMobileNumber.text.toString()
                 )
@@ -92,7 +90,7 @@ class MobileVerificationActivity : BaseActivity(), MobileVerificationView {
         binding.etOtp.isFocusable = false
         val handler = Handler()
         handler.postDelayed(
-            { mMobileVerificationPresenter?.verifyOTP(binding.etOtp.text.toString()) },
+            { mMobileVerificationPresenter.verifyOTP(binding.etOtp.text.toString()) },
             1500
         )
     }

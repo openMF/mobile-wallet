@@ -16,12 +16,11 @@ import org.mifos.mobilewallet.mifospay.databinding.DialogChooseSignupMethodBindi
  * Created by ankur on 26/June/2018
  */
 class SignupMethod : BottomSheetDialogFragment() {
-
     private var binding: DialogChooseSignupMethodBinding? = null
+    private lateinit var mBottomSheetBehavior: BottomSheetBehavior<*>
+    private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var account: GoogleSignInAccount
 
-    private var mBottomSheetBehavior: BottomSheetBehavior<*>? = null
-    private val googleSignInClient: GoogleSignInClient? = null
-    private val account: GoogleSignInAccount? = null
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         binding = DialogChooseSignupMethodBinding
             .inflate(LayoutInflater.from(context))
@@ -40,7 +39,7 @@ class SignupMethod : BottomSheetDialogFragment() {
 
     override fun onStart() {
         super.onStart()
-        mBottomSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        mBottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun onMerchantClicked() {
