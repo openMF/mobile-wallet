@@ -32,17 +32,14 @@ import org.mifos.mobilewallet.mifospay.utils.FileUtils
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance
 import java.io.File
-import javax.inject.Inject
 
 class ReceiptActivity : BaseActivity(), ReceiptView {
-    @JvmField
-    @Inject
-    var mPresenter: ReceiptPresenter? = null
-    private var mReceiptPresenter: ReceiptContract.ReceiptPresenter? = null
+    private lateinit var mPresenter: ReceiptPresenter
+    private lateinit var mReceiptPresenter: ReceiptContract.ReceiptPresenter
 
-    private var transactionId: String? = null
-    private var isDebit = false
-    private var deepLinkURI: Uri? = null
+    private lateinit var transactionId: String
+    private var isDebit: Boolean = false
+    private lateinit var deepLinkURI: Uri
     private lateinit var binding: ActivityReceiptBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,9 +50,11 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
 
         setToolbarTitle(Constants.RECEIPT)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
-        mPresenter?.attachView(this)
+        mPresenter.attachView(this)
         val data = intent.data
-        deepLinkURI = data
+        if (data != null) {
+            deepLinkURI = data
+        }
         if (data != null) {
             val scheme = data.scheme // "https"
             val host = data.host // "receipt.mifospay.com"
@@ -68,7 +67,7 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
                 showToast(getString(R.string.invalid_link))
             }
             showProgressDialog(Constants.PLEASE_WAIT)
-            transactionId?.toLong()?.let { mPresenter?.fetchTransaction(it) }
+            transactionId.toLong().let { mPresenter.fetchTransaction(it) }
         }
 
         binding.fabDownload.setOnClickListener {
@@ -173,7 +172,7 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
                 openFile(this@ReceiptActivity, file)
             } else {
                 showSnackbar(getString(R.string.downloading_receipt))
-                mPresenter?.downloadReceipt(transactionId)
+                mPresenter.downloadReceipt(transactionId)
             }
         }
     }
@@ -200,7 +199,9 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
     }
 
     override fun setPresenter(presenter: ReceiptContract.ReceiptPresenter?) {
-        mReceiptPresenter = presenter
+        if (presenter != null) {
+            mReceiptPresenter = presenter
+        }
     }
 
     fun showToast(message: String?) {
@@ -264,7 +265,7 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     showSnackbar(getString(R.string.downloading_receipt))
-                    mReceiptPresenter?.downloadReceipt(transactionId)
+                    mReceiptPresenter.downloadReceipt(transactionId)
                 } else {
                     showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_DOWNLOAD_RECEIPT)
                 }
