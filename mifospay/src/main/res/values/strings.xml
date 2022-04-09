@@ -81,6 +81,7 @@
         SMS from \n your phone*
     </string>
     <string name="choose_your_sim">Please choose your SIM</string>
+    <string name="choose_a_sim">Please choose a SIM</string>
     <string name="regular_charges_will_apply">*Regular charges will apply</string>
     <string name="send_sms">Send SMS</string>
     <string name="or">or</string>
