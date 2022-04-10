@@ -3,6 +3,8 @@ package org.mifos.mobilewallet.mifospay.common.ui;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,14 +16,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.common.TransferContract;
 import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment;
+import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
@@ -74,12 +79,28 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     @BindView(R.id.view_transfer_success)
     View viewTransferSuccess;
 
+    @BindView(R.id.payment_success)
+    TextView amountTransfered;
+
+    @BindView(R.id.receiver_name)
+    TextView receiverName;
+
+    @BindView(R.id.transction_id)
+    TextView transactionId;
+
+    @BindView(R.id.show_receipt)
+    Button showReceipt;
+
+    @BindView(R.id.layout_success)
+    RelativeLayout relativeLayout;
+
     @BindView(R.id.view_transfer_failure)
     View viewTransferFailure;
 
     private BottomSheetBehavior mBehavior;
     private long toClientId;
     private double amount;
+    private String name;
 
     public static MakeTransferFragment newInstance(String toExternalId, double amount) {
 
@@ -143,7 +164,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     @Override
     public void showToClientDetails(long clientId, String name, String externalId) {
         this.toClientId = clientId;
-
+        this.name = name;
         TransitionManager.beginDelayedTransition(makeTransferContainer);
         tvClientName.setText(name);
         tvAmount.setText(Constants.RUPEE + " " + amount);
@@ -156,9 +177,27 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     @Override
     public void transferSuccess() {
+        relativeLayout.setVisibility(View.VISIBLE);
+        final Transaction transaction;
+        Bundle bundle = this.getArguments();
+        transaction = bundle.getParcelable(Constants.TRANSACTION);
+        amountTransfered.setText(Constants.RUPEE + " " + amount);
+        receiverName.setText("To " + name);
+        transactionId.setText("-Transaction Id-");
+        if (transaction != null) {
+            showReceipt.setOnClickListener(new View.OnClickListener() {
+                @Override public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), ReceiptActivity.class);
+                    intent.setData(
+                            Uri.parse(Constants.RECEIPT_DOMAIN + transaction.getTransactionId()));
+                    startActivity(intent);
+                }
+            });
+        }
         tvTransferStatus.setText(Constants.TRANSACTION_SUCCESSFUL);
         progressBar.setVisibility(View.GONE);
         viewTransferSuccess.setVisibility(View.VISIBLE);
+
     }
 
     @Override
