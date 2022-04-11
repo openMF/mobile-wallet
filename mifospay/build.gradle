@@ -28,6 +28,10 @@ android {
         cruncherEnabled = false
     }
 
+    buildFeatures {
+        viewBinding true
+    }
+
     lintOptions {
         abortOnError false
         disable 'InvalidPackage'
