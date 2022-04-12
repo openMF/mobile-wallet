@@ -52,6 +52,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     @BindView(R.id.ll_make_transfer_container)
     ViewGroup makeTransferContainer;
+
     @BindView(R.id.btn_confirm)
     Button btnConfirm;
 
@@ -79,7 +80,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     @BindView(R.id.view_transfer_success)
     View viewTransferSuccess;
 
-    @BindView(R.id.payment_success)
+    @BindView(R.id.view_transfer_amount)
     TextView amountTransfered;
 
     @BindView(R.id.receiver_name)
@@ -92,7 +93,7 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
     Button showReceipt;
 
     @BindView(R.id.layout_success)
-    RelativeLayout relativeLayout;
+    RelativeLayout successLayout;
 
     @BindView(R.id.view_transfer_failure)
     View viewTransferFailure;
@@ -179,10 +180,9 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
 
     @Override
     public void transferSuccess() {
-        relativeLayout.setVisibility(View.VISIBLE);
-        Transaction transaction;
+        successLayout.setVisibility(View.VISIBLE);
         Bundle bundle = this.getArguments();
-        transaction = bundle.getParcelable(Constants.TRANSACTION);
+        Transaction transaction = bundle.getParcelable(Constants.TRANSACTION);
         amountTransfered.setText(Constants.RUPEE + " " + amount);
         receiverName.setText("To " + name);
         transactionId.setText("-Transaction Id-");
