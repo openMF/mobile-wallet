@@ -118,7 +118,7 @@
             android:id="@+id/layout_success"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <View
                 android:id="@+id/view_transfer_success"
@@ -192,8 +192,7 @@
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:visibility="gone" />
+            android:layout_gravity="center" />
 
 
     </FrameLayout>
