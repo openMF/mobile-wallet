@@ -183,9 +183,10 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
         successLayout.setVisibility(View.VISIBLE);
         Bundle bundle = this.getArguments();
         Transaction transaction = bundle.getParcelable(Constants.TRANSACTION);
-        amountTransfered.setText(Constants.RUPEE + " " + amount);
-        receiverName.setText("To " + name);
-        transactionId.setText("-Transaction Id-");
+        tvTransferStatus.setText(Constants.TRANSACTION_SUCCESSFUL);
+        transactionId.setText("Transaction Id: " + transaction.getTransactionId());
+        receiverName.setText("Transferred To: " + name);
+        amountTransfered.setText("Amount: " + Constants.RUPEE + amount);
         if (transaction != null) {
             showReceipt.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
@@ -196,7 +197,6 @@ public class MakeTransferFragment extends BottomSheetDialogFragment
                 }
             });
         }
-        tvTransferStatus.setText(Constants.TRANSACTION_SUCCESSFUL);
         progressBar.setVisibility(View.GONE);
         viewTransferSuccess.setVisibility(View.VISIBLE);
     }

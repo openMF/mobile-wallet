@@ -66,7 +66,7 @@ public class Constants {
     public static final String PROFILE = "Profile";
     public static final String ERROR_FETCHING_BALANCE = "Error fetching balance";
     public static final String UNABLE_TO_PROCESS_TRANSFER = "Unable to process transfer";
-    public static final String TRANSACTION_SUCCESSFUL = "Transaction successful";
+    public static final String TRANSACTION_SUCCESSFUL = "Transaction Successful";
     public static final String SENDING_MONEY = "Sending money...";
     public static final String INSUFFICIENT_BALANCE = "Insufficient balance";
     public static final String ERROR_FINDING_VPA = "Error finding Virtual Payment Address";
