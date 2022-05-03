@@ -185,7 +185,7 @@
                 android:textColor="@android:color/white"/>
 
             <Button
-                android:id="@+id/btn_okay"
+                android:id="@+id/btn_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"

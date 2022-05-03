@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:context=".bank.ui.BankAccountsActivity">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/toolbar"/>
+            <include layout="@layout/toolbar" />
 
         </android.support.design.widget.AppBarLayout>
 
@@ -24,7 +22,7 @@
             android:id="@+id/rv_linked_bank_accounts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clipToPadding="false"/>
+            android:clipToPadding="false" />
 
         <TextView
             android:id="@+id/tv_placeholder"
@@ -35,7 +33,7 @@
             android:text="@string/no_linked_bank_accounts"
             android:textColor="@color/grey_900"
             android:textSize="18sp"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
     </LinearLayout>
 
@@ -44,12 +42,12 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="@dimen/value_30dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="@dimen/value_30dp"
         android:layout_marginStart="30dp"
+        android:layout_marginLeft="30dp"
         android:layout_marginTop="@dimen/value_20dp"
+        android:layout_marginEnd="@dimen/value_30dp"
+        android:layout_marginRight="@dimen/value_30dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/button_round_stroke_primary"
         android:clickable="false"
         android:focusable="true"
@@ -57,7 +55,6 @@
         android:text="@string/link_your_bank_account"
         android:textAllCaps="false"
         android:textColor="@color/primaryBlue"
-        android:typeface="sans"/>
-
+        android:typeface="sans" />
 
 </RelativeLayout>

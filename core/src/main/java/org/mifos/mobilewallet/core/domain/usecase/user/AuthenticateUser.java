@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.core.domain.usecase.user;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity;
+import org.mifos.mobilewallet.core.data.fineract.entity.authentication.AuthenticationPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.UserEntityMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.domain.model.user.User;
@@ -30,12 +31,12 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
         this.apiRepository = apiRepository;
     }
 
-
     @Override
     protected void executeUseCase(RequestValues requestValues) {
 
-        apiRepository.loginSelf(requestValues.username,
-                requestValues.password).observeOn(AndroidSchedulers.mainThread())
+        apiRepository
+                .loginSelf(requestValues.authPayload)
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new Subscriber<UserEntity>() {
                     @Override
@@ -59,11 +60,10 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
 
     public static final class RequestValues implements UseCase.RequestValues {
 
-        private final String username, password;
+        private AuthenticationPayload authPayload;
 
         public RequestValues(String username, String password) {
-            this.username = username;
-            this.password = password;
+            authPayload = new AuthenticationPayload(username, password);
         }
     }
 

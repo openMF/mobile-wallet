@@ -150,6 +150,15 @@ public class MerchantTransferActivity extends BaseActivity implements
     }
 
     @Override
+    public void onBackPressed() {
+        if (mBottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED) {
+            mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
     public void showToast(String message) {
         Toaster.showToast(getContext(), message);
     }

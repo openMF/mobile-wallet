@@ -32,7 +32,6 @@ public class Constants {
             "Error adding KYC Level 1 details.";
     public static final String KYC_LEVEL_1_DETAILS_ADDED_SUCCESSFULLY =
             "KYC Level 1 details added successfully.";
-    public static final String PLEASE_TRY_AGAIN_LATER = "Please try again later.";
     public static final String PLEASE_WAIT = "Please wait..";
     public static final String COMPLETE_KYC = "Complete KYC";
     public static final String NEED_EXTERNAL_STORAGE_PERMISSION_TO_BROWSE_DOCUMENTS =
@@ -73,6 +72,7 @@ public class Constants {
     public static final String ERROR_FINDING_VPA = "Error finding Virtual Payment Address";
     public static final String ERROR_FINDING_MOBILE_NUMBER = "Error finding Mobile Number";
     public static final String PLEASE_ENTER_VALID_AMOUNT = "Please enter a valid amount";
+    public static final String VPA_VALIDATION_REGEX = "^\\w.+@\\w+$";
     public static final String SELF_ACCOUNT_ERROR = "Self Account transfer is not allowed";
     public static final String PLEASE_ENTER_AMOUNT =
             "Please enter a valid amount before making the transfer";

@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/marginItemsInSectionMedium"
                     android:textColor="@color/black"
-                    android:textSize="40sp"
+                    android:textSize="@dimen/value_30sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="match_parent"
-              android:orientation="vertical">
+    android:orientation="vertical">
 
     <include layout="@layout/toolbar"/>
 
@@ -20,21 +20,37 @@
 
         </me.dm7.barcodescanner.zxing.ZXingScannerView>
 
-        <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@null"
-            android:id="@+id/btn_flash_on"
-            android:layout_gravity="bottom|center"
-            app:srcCompat="@drawable/ic_flash_on"/>
-        <ImageButton
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:background="@null"
-            android:id="@+id/btn_flash_off"
-            android:layout_gravity="bottom|center"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic_flash_off"/>
+        <LinearLayout
+            android:layout_gravity="center|bottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageButton
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@null"
+                    android:id="@+id/btn_flash_on"
+                    app:srcCompat="@drawable/ic_flash_on"/>
+                <ImageButton
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:background="@null"
+                    android:id="@+id/btn_flash_off"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_flash_off"/>
+            </FrameLayout>
+            <ImageButton
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:background="@null"
+                android:id="@+id/btn_open_gallery"
+                app:srcCompat="@drawable/ic_baseline_insert_photo_24"/>
+        </LinearLayout>
+
     </FrameLayout>
 
 

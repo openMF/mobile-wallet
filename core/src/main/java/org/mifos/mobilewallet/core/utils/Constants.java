@@ -15,7 +15,7 @@ public class Constants {
     public static final String SAVINGS = "savingsAccounts";
     public static final String TRANSACTIONS = "transactions";
 
-    public static final int WALLET_ACCOUNT_SAVINGS_PRODUCT_ID = 165;
+    public static final int WALLET_ACCOUNT_SAVINGS_PRODUCT_ID = 35;
 
     public static final int MIFOS_MERCHANT_SAVINGS_PRODUCT_ID = 165; // 372
     public static final int MIFOS_CONSUMER_SAVINGS_PRODUCT_ID = 165; // 373

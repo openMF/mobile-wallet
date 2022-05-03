@@ -1,9 +1,10 @@
 package org.mifos.mobilewallet.mifospay.kyc.ui;
 
-import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +12,15 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
-import org.mifos.mobilewallet.mifospay.home.ui.MainActivity;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCDescriptionPresenter;
-import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
 
@@ -48,6 +48,24 @@ public class KYCDescriptionFragment extends
 
     @BindView(R.id.lv3)
     LinearLayout lv3;
+
+    @BindView(R.id.inc_state_view)
+    View vStateView;
+
+    @BindView(R.id.pb_kyc)
+    ProgressBar pbKyc;
+
+    @BindView(R.id.iv_empty_no_transaction_history)
+    ImageView ivTransactionsStateIcon;
+
+    @BindView(R.id.tv_empty_no_transaction_history_title)
+    TextView tvTransactionsStateTitle;
+
+    @BindView(R.id.tv_empty_no_transaction_history_subtitle)
+    TextView tvTransactionsStateSubtitle;
+
+    @BindView(R.id.levelcontainer)
+    FrameLayout frameLayout;
 
     @BindView(R.id.blv1)
     Button btnLvl1;
@@ -107,15 +125,13 @@ public class KYCDescriptionFragment extends
         btnLvl1.setEnabled(false);
         btnLvl2.setEnabled(false);
         btnLvl3.setEnabled(false);
-        showSwipeProgress();
+        setUpSwipeRefreshLayout();
         mKYCDescriptionPresenter.fetchCurrentLevel();
-
         return rootView;
     }
 
     @OnClick(R.id.blv1)
     public void onLevel1Clicked() {
-        FrameLayout frameLayout = getView().findViewById(R.id.levelcontainer);
         frameLayout.removeAllViews();
         replaceFragmentUsingFragmentManager(KYCLevel1Fragment.newInstance(), true,
                 R.id.levelcontainer);
@@ -123,7 +139,6 @@ public class KYCDescriptionFragment extends
 
     @OnClick(R.id.blv2)
     public void onLevel2Clicked() {
-        FrameLayout frameLayout = getView().findViewById(R.id.levelcontainer);
         frameLayout.removeAllViews();
         replaceFragmentUsingFragmentManager(KYCLevel1Fragment.newInstance(), true,
                 R.id.levelcontainer);
@@ -133,7 +148,6 @@ public class KYCDescriptionFragment extends
 
     @OnClick(R.id.blv3)
     public void onLevel3Clicked() {
-        FrameLayout frameLayout = getView().findViewById(R.id.levelcontainer);
         frameLayout.removeAllViews();
         replaceFragmentUsingFragmentManager(KYCLevel1Fragment.newInstance(), true,
                 R.id.levelcontainer);
@@ -143,8 +157,30 @@ public class KYCDescriptionFragment extends
 
 
     @Override
+    public void showFetchingProcess() {
+        frameLayout.setVisibility(View.GONE);
+        vStateView.setVisibility(View.GONE);
+        pbKyc.setVisibility(View.VISIBLE);
+    }
+
+    private void setUpSwipeRefreshLayout() {
+        setSwipeEnabled(true);
+        getSwipeRefreshLayout().setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getSwipeRefreshLayout().setRefreshing(false);
+                mPresenter.fetchCurrentLevel();
+            }
+        });
+    }
+
+    @Override
     public void onFetchLevelSuccess(KYCLevel1Details kycLevel1Details) {
         hideSwipeProgress();
+        pbKyc.setVisibility(View.GONE);
+        vStateView.setVisibility(View.GONE);
+        frameLayout.setVisibility(View.VISIBLE);
+
         int currentLevel = Integer.parseInt(kycLevel1Details.getCurrentLevel());
 
         if (currentLevel >= 0) {
@@ -179,21 +215,20 @@ public class KYCDescriptionFragment extends
         }
     }
 
-    @Override
-    public void showToast(String message) {
-        Toaster.showToast(getContext(), message);
-    }
 
     @Override
-    public void gotoHome() {
-        Intent intent = new Intent(getActivity(), MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
-                Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-    }
-
-    @Override
-    public void hideProgressDialog() {
-        super.hideProgressDialog();
+    public void showErrorState(int drawable, int errorTitle, int errorMessage) {
+        if (getActivity() != null) {
+            frameLayout.setVisibility(View.GONE);
+            pbKyc.setVisibility(View.GONE);
+            vStateView.setVisibility(View.VISIBLE);
+            Resources res = getResources();
+            ivTransactionsStateIcon
+                    .setImageDrawable(res.getDrawable(drawable));
+            tvTransactionsStateTitle
+                    .setText(errorTitle);
+            tvTransactionsStateSubtitle
+                    .setText(errorMessage);
+        }
     }
 }

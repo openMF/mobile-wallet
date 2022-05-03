@@ -5,6 +5,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.transition.TransitionManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -44,32 +46,34 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
     RegistrationContract.SignupPresenter mSignupPresenter;
     @BindView(R.id.et_first_name)
-    EditText mEtFirstName;
+    TextInputEditText mEtFirstName;
     @BindView(R.id.et_last_name)
-    EditText mEtLastName;
+    TextInputEditText mEtLastName;
     @BindView(R.id.et_email)
-    EditText mEtEmail;
+    TextInputEditText mEtEmail;
     @BindView(R.id.et_business_shop_name)
-    EditText mEtBusinessShopName;
+    TextInputEditText mEtBusinessShopName;
+    @BindView(R.id.et_business_shop_layout)
+    TextInputLayout mEtBusinessShopLayout;
     @BindView(R.id.et_address_line_1)
-    EditText mEtAddressLine1;
+    TextInputEditText mEtAddressLine1;
     @BindView(R.id.et_address_line_2)
-    EditText mEtAddressLine2;
+    TextInputEditText mEtAddressLine2;
     @BindView(R.id.et_pin_code)
-    EditText mEtPinCode;
+    TextInputEditText mEtPinCode;
     @BindView(R.id.et_state)
-    EditText mEtCity;
+    TextInputEditText mEtCity;
     @BindView(R.id.fab_next)
     FloatingActionButton mFabNext;
 
 
     SpinnerDialog spinnerDialog;
     @BindView(R.id.et_user_name)
-    EditText mEtUserName;
+    TextInputEditText mEtUserName;
     @BindView(R.id.et_password)
-    EditText mEtPassword;
+    TextInputEditText mEtPassword;
     @BindView(R.id.et_confirm_password)
-    EditText mEtConfirmPassword;
+    TextInputEditText mEtConfirmPassword;
     @BindView(R.id.rr_container)
     ViewGroup container;
     @BindView(R.id.pb_password_strength)
@@ -99,9 +103,9 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         mifosSavingProductId = getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0);
         if (mifosSavingProductId
                 == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID) {
-            mEtBusinessShopName.setVisibility(View.VISIBLE);
+            mEtBusinessShopLayout.setVisibility(View.VISIBLE);
         } else {
-            mEtBusinessShopName.setVisibility(View.GONE);
+            mEtBusinessShopLayout.setVisibility(View.GONE);
         }
         mobileNumber = getIntent().getStringExtra(Constants.MOBILE_NUMBER);
         countryName = getIntent().getStringExtra(Constants.COUNTRY);

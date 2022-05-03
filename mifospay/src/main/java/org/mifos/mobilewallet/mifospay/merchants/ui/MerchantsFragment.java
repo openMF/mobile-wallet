@@ -67,7 +67,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     @BindView(R.id.pb_merchants)
     ProgressBar mMerchantProgressBar;
     @BindView(R.id.et_search_merchant)
-    EditText etMerchantSearch;
+    public EditText etMerchantSearch;
 
     @BindView(R.id.ll_search_merchant)
     LinearLayout searchView;

@@ -102,18 +102,6 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                 params = data.getPathSegments();
                 transactionId = params.get(0); // "transactionId"
                 tvReceiptLink.setText(data.toString());
-                tvReceiptLink.setOnLongClickListener(new View.OnLongClickListener() {
-                    @Override
-                    public boolean onLongClick(View v) {
-                        ClipboardManager cm = (ClipboardManager) getSystemService(
-                                Context.CLIPBOARD_SERVICE);
-                        ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_RECEIPT_LINK,
-                                tvReceiptLink.getText().toString());
-                        cm.setPrimaryClip(clipData);
-                        showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
-                        return true;
-                    }
-                });
             } catch (IndexOutOfBoundsException e) {
                 showToast(getString(R.string.invalid_link));
             }
@@ -121,6 +109,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
             mPresenter.fetchTransaction(Long.parseLong(transactionId));
         }
     }
+
     @Override
     public void openPassCodeActivity() {
         Intent i = new Intent(this, PassCodeActivity.class);
@@ -178,7 +167,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         tvTransFromName.setText(Constants.NAME + transferDetail.getFromClient().getDisplayName());
         tvTransFromNumber.setText(Constants.ACCOUNT_NUMBER + transferDetail
                 .getFromAccount().getAccountNo());
-        hideProgressDialog();
+        dismissProgressDialog();
     }
 
     @OnClick(R.id.fab_download)
@@ -193,9 +182,37 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                     REQUEST_WRITE_EXTERNAL_STORAGE);
         } else {
             // Permission already granted
-            showSnackbar(getString(R.string.downloading_receipt));
-            mPresenter.downloadReceipt(transactionId);
+            File file = new File(Environment.getExternalStorageDirectory()
+                    + Constants.MIFOSPAY,
+                    Constants.RECEIPT + transactionId + Constants.PDF);
+            if (file.exists()) {
+                openFile(ReceiptActivity.this, file);
+            } else {
+                showSnackbar(getString(R.string.downloading_receipt));
+                mPresenter.downloadReceipt(transactionId);
+            }
         }
+    }
+
+    @OnClick(R.id.transaction_reciept_copy)
+    void copyReceiptLink() {
+        ClipboardManager cm = (ClipboardManager) getSystemService(
+                Context.CLIPBOARD_SERVICE);
+        ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_RECEIPT_LINK,
+                tvReceiptLink.getText().toString());
+        cm.setPrimaryClip(clipData);
+        showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
+    }
+
+    @OnClick(R.id.transaction_reciept_share)
+    void shareReceiptLink() {
+        Intent intent = new Intent(Intent.ACTION_SEND)
+                .setType("text/plain")
+                .putExtra(Intent.EXTRA_TEXT, tvReceiptLink.getText().toString())
+                .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        intent = Intent.createChooser(intent, getString(R.string.share_receipt));
+        startActivity(intent);
     }
 
     @Override

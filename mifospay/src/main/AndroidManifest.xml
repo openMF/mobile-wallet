@@ -17,15 +17,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".standinginstruction.ui.SIDetailsActivity"></activity>
+        <activity android:name=".standinginstruction.ui.SIDetailsActivity" />
         <activity
             android:name=".standinginstruction.ui.NewSIActivity"
             android:label="@string/title_activity_new_si"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".merchants.ui.MerchantTransferActivity" />
-	    <activity
+        <activity
             android:name=".SplashScreenActivity"
-            android:theme="@style/SplashTheme">
+            android:theme="@style/SplashTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -66,7 +67,8 @@
         <activity
             android:name=".receipt.ui.ReceiptActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -81,7 +83,8 @@
         <activity
             android:name=".invoice.ui.InvoiceActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme">
+            android:theme="@style/AppTheme"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -96,11 +99,9 @@
         <activity
             android:name=".history.ui.SpecificTransactionsActivity"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".invoice.ui.InvoicesFragment"
-            android:theme="@style/AppTheme" />
 
-        <service android:name=".data.firebase.api.services.MifosPayMessagingService">
+        <service android:name=".data.firebase.api.services.MifosPayMessagingService"
+            android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>

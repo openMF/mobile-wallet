@@ -53,12 +53,14 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$rootProject.supportLibraryVersion"
     api "com.android.support:design:$rootProject.supportLibraryVersion"
 
-
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     kapt "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
 
     implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    kapt  "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    kapt  "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
+    implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
+    kapt  "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
 
     implementation("com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion") {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import

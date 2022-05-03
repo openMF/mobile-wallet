@@ -138,7 +138,7 @@ public class MobileVerificationActivity extends BaseActivity implements
         intent.putExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID,
                 getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0));
         intent.putExtra(Constants.GOOGLE_PHOTO_URI,
-                getIntent().getParcelableExtra(Constants.GOOGLE_PHOTO_URI));
+                String.valueOf(getIntent().getParcelableExtra(Constants.GOOGLE_PHOTO_URI)));
         intent.putExtra(Constants.GOOGLE_DISPLAY_NAME,
                 getIntent().getStringExtra(Constants.GOOGLE_DISPLAY_NAME));
         intent.putExtra(Constants.GOOGLE_EMAIL,

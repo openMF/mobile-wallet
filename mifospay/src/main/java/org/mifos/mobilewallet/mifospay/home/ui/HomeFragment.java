@@ -87,7 +87,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
 
     private Account account;
 
-    private BottomSheetBehavior mBottomSheetBehavior;
+    protected static BottomSheetBehavior mBottomSheetBehavior;
 
     private String accountBalance;
 

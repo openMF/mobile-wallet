@@ -4,16 +4,22 @@ import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.content.FileProvider;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
+import android.support.v4.content.FileProvider;
+import android.support.v7.app.AlertDialog;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,7 +78,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
 
         final String qrData = getIntent().getStringExtra(Constants.QR_DATA);
         mShowQrPresenter.generateQr(qrData);
-        tvQrData.setText(getString(R.string.vpa) + ": " + qrData);
+        tvQrData.setText(String.format("%s: %s", getString(R.string.vpa), qrData));
 
         WindowManager.LayoutParams layout = getWindow().getAttributes();
         layout.screenBrightness = 1F;
@@ -140,8 +146,21 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
     }
 
     void showSetAmountDialog(final String qrData) {
+
         final EditText edittext = new EditText(this);
         edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+        final AlertDialog.Builder editTextDialog = new AlertDialog.Builder(this);
+        editTextDialog.setCancelable(false);
+        editTextDialog.setTitle("Enter Amount");
+        View view = LayoutInflater.from(getApplicationContext()).inflate(
+                R.layout.dialog_set_amt,
+                (ViewGroup) findViewById(android.R.id.content),
+                false
+        );
+        final TextInputEditText edittext = view.findViewById(R.id.editText_set_amt);
+        edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
+        editTextDialog.setView(view);
         if (mAmount != null) {
             edittext.setText(mAmount);
         }
@@ -158,8 +177,12 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
                     return;
                 }
                 mAmount = amount;
-                tvQrData.setText(getString(R.string.vpa) + ": " + qrData +
-                        "\n" + getString(R.string.amount) + ": " + mAmount);
+                tvQrData.setText(String.format(
+                        "%s: %s\n%s: %s",
+                        getString(R.string.vpa),
+                        qrData,
+                        getString(R.string.amount),
+                        mAmount));
                 generateQR(qrData + ", " + mAmount);
             }
         });
@@ -167,7 +190,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 mAmount = null;
-                tvQrData.setText(getString(R.string.vpa) + ": " + qrData);
+                tvQrData.setText(String.format("%s: %s", getString(R.string.vpa), qrData));
                 generateQR(qrData);
                 showToast("Reset Amount Successful");
             }

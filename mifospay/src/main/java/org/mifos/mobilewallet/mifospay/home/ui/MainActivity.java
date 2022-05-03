@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.v4.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,7 +16,9 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.faq.ui.FAQActivity;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;
+import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter;
 import org.mifos.mobilewallet.mifospay.home.presenter.MainPresenter;
+import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment;
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
@@ -101,8 +104,35 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentById(R.id.bottom_navigation_fragment_container);
+        if ((fragment instanceof FinanceFragment) && fragment.isVisible()) {
+            FinanceFragment financeFragment = (FinanceFragment) fragment;
+            if (((TabLayoutAdapter) financeFragment.vpTabLayout.getAdapter())
+                    .getItem(financeFragment.vpTabLayout.getCurrentItem())
+                    instanceof MerchantsFragment) {
+                MerchantsFragment merchantsFragment = (MerchantsFragment)
+                        ((TabLayoutAdapter) financeFragment.vpTabLayout.getAdapter())
+                                .getItem(financeFragment.vpTabLayout.getCurrentItem());
+                if (!merchantsFragment.etMerchantSearch.getText().toString().isEmpty()) {
+                    merchantsFragment.etMerchantSearch.setText("");
+                    return;
+                }
+            }
+        }
         if (fragment != null && !(fragment instanceof HomeFragment) && fragment.isVisible()) {
+            if (fragment instanceof ProfileFragment &&
+                    ProfileFragment.mBottomSheetBehavior.getState()
+                            != BottomSheetBehavior.STATE_COLLAPSED) {
+                ProfileFragment.mBottomSheetBehavior
+                        .setState(BottomSheetBehavior.STATE_COLLAPSED);
+                return;
+            }
             navigateFragment(R.id.action_home, true);
+            return;
+        } else if (fragment != null && (fragment instanceof HomeFragment) && fragment.isVisible()
+                && HomeFragment.mBottomSheetBehavior.getState()
+                != BottomSheetBehavior.STATE_COLLAPSED) {
+            HomeFragment.mBottomSheetBehavior
+                    .setState(BottomSheetBehavior.STATE_COLLAPSED);
             return;
         }
         super.onBackPressed();
