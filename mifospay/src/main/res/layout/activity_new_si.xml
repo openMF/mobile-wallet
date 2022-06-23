@@ -8,7 +8,7 @@
 
     <include layout="@layout/toolbar"/>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -30,7 +30,7 @@
                 android:textColorHint="@android:color/black"
                 app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_si_amount"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -39,13 +39,13 @@
                     android:textSize="@dimen/value_15sp"
                      />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <android.support.design.widget.TextInputLayout
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_si_vpa"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
@@ -61,14 +61,14 @@
                     android:textColorHint="@android:color/black"
                     app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                    <android.support.design.widget.TextInputEditText
+                    <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_si_vpa"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:hint="@string/virtual_payment_address"
                         android:singleLine="true"
                         android:textSize="@dimen/value_15sp" />
-                </android.support.design.widget.TextInputLayout>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageView
                     android:clickable="true"
@@ -84,7 +84,7 @@
                     android:src="@drawable/qrcode_blue_selector" />
             </RelativeLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_si_interval"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -96,7 +96,7 @@
                 android:textColorHint="@android:color/black"
                 app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_si_interval"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -104,7 +104,7 @@
                     android:singleLine="true"
                     android:inputType="number"
                     android:textSize="@dimen/value_15sp" />
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
             <TextView
@@ -220,6 +220,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:visibility="gone" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>

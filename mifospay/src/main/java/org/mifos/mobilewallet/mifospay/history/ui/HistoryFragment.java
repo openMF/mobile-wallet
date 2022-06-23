@@ -1,12 +1,10 @@
 package org.mifos.mobilewallet.mifospay.history.ui;
 
+import static org.mifos.mobilewallet.core.domain.model.TransactionType.CREDIT;
+import static org.mifos.mobilewallet.core.domain.model.TransactionType.DEBIT;
+
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.design.chip.Chip;
-import android.support.transition.TransitionManager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.google.android.material.chip.Chip;
 
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
@@ -23,24 +23,23 @@ import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.presenter.HistoryPresenter;
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.transition.TransitionManager;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-import static org.mifos.mobilewallet.core.domain.model.TransactionType.CREDIT;
-import static org.mifos.mobilewallet.core.domain.model.TransactionType.DEBIT;
-
 public class HistoryFragment extends BaseFragment
         implements HistoryContract.HistoryView {
 
-    @Inject
     HistoryAdapter mHistoryAdapter;
 
     @Inject
@@ -93,6 +92,8 @@ public class HistoryFragment extends BaseFragment
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         ButterKnife.bind(this, rootView);
+
+        mHistoryAdapter = new HistoryAdapter(position -> mPresenter.handleTransactionClick(position));
         mPresenter.attachView(this);
 
         setupUi();
@@ -113,18 +114,6 @@ public class HistoryFragment extends BaseFragment
         }
         rvHistory.setLayoutManager(new LinearLayoutManager(getContext()));
         rvHistory.setAdapter(mHistoryAdapter);
-        rvHistory.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View childView, int position) {
-                        mPresenter.handleTransactionClick(position);
-                    }
-
-                    @Override
-                    public void onItemLongPress(View childView, int position) {
-
-                    }
-                }));
     }
 
     @Override

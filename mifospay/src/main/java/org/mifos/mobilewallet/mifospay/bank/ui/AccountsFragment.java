@@ -4,10 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,12 +19,15 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,7 +53,6 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
     @BindView(R.id.tv_empty_no_transaction_history_title)
     TextView tvTransactionsStateTitle;
 
-    @Inject
     BankAccountsAdapter mBankAccountsAdapter;
 
 
@@ -74,6 +72,13 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_accounts, container, false);
+        mBankAccountsAdapter = new BankAccountsAdapter(position -> {
+            Intent intent = new Intent(getActivity(),BankAccountDetailActivity.class);
+            intent.putExtra(Constants.BANK_ACCOUNT_DETAILS,
+                    mBankAccountsAdapter.getBankDetails(position));
+            intent.putExtra(Constants.INDEX, position);
+            startActivityForResult(intent, BANK_ACCOUNT_DETAILS_REQUEST_CODE);
+        });
         ButterKnife.bind(this, rootView);
         setupRecycletView();
         setUpSwipeRefresh();
@@ -101,23 +106,6 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
         mRvLinkedBankAccounts.addItemDecoration(new DividerItemDecoration(getContext(),
                 DividerItemDecoration.VERTICAL));
 
-        mRvLinkedBankAccounts.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View childView, int position) {
-                        Intent intent = new Intent(getActivity(),
-                                BankAccountDetailActivity.class);
-                        intent.putExtra(Constants.BANK_ACCOUNT_DETAILS,
-                                mBankAccountsAdapter.getBankDetails(position));
-                        intent.putExtra(Constants.INDEX, position);
-                        startActivityForResult(intent, BANK_ACCOUNT_DETAILS_REQUEST_CODE);
-                    }
-
-                    @Override
-                    public void onItemLongPress(View childView, int position) {
-
-                    }
-                }));
     }
 
     @Override

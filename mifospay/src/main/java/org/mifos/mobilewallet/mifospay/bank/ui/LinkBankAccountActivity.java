@@ -7,10 +7,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -28,13 +24,16 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.domain.model.Bank;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -57,9 +56,7 @@ public class LinkBankAccountActivity extends BaseActivity implements
     @BindView(R.id.no_bank_found)
     TextView mNoBankFound;
 
-    @Inject
     PopularBankAdapter mPopularBankAdapter;
-    @Inject
     OtherBankAdapter mOtherBankAdapter;
     private ArrayList<Bank> banksList;
     private ArrayList<Bank> popularBanks;
@@ -70,6 +67,20 @@ public class LinkBankAccountActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_link_bank_account);
+        mPopularBankAdapter = new PopularBankAdapter(position -> {
+            Bank bank = mPopularBankAdapter.getBank(position);
+            bankSelected = bank.getName();
+
+            ChooseSimDialog chooseSimDialog = new ChooseSimDialog();
+            chooseSimDialog.show(getSupportFragmentManager(), "Choose Sim Dialog");
+        });
+        mOtherBankAdapter = new OtherBankAdapter(position -> {
+            Bank bank = mOtherBankAdapter.getBank(position);
+            bankSelected = bank.getName();
+
+            ChooseSimDialog chooseSimDialog = new ChooseSimDialog();
+            chooseSimDialog.show(getSupportFragmentManager(), "Choose Sim Dialog");
+        });
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
         setToolbarTitle("Link Bank Account");
@@ -100,29 +111,6 @@ public class LinkBankAccountActivity extends BaseActivity implements
         mRvOtherBanks.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL));
 
-        mRvPopularBanks.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.SimpleOnItemClickListener() {
-                    @Override
-                    public void onItemClick(View childView, int position) {
-                        Bank bank = mPopularBankAdapter.getBank(position);
-                        bankSelected = bank.getName();
-
-                        ChooseSimDialog chooseSimDialog = new ChooseSimDialog();
-                        chooseSimDialog.show(getSupportFragmentManager(), "Choose Sim Dialog");
-                    }
-                }));
-
-        mRvOtherBanks.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.SimpleOnItemClickListener() {
-                    @Override
-                    public void onItemClick(View childView, int position) {
-                        Bank bank = mOtherBankAdapter.getBank(position);
-                        bankSelected = bank.getName();
-
-                        ChooseSimDialog chooseSimDialog = new ChooseSimDialog();
-                        chooseSimDialog.show(getSupportFragmentManager(), "Choose Sim Dialog");
-                    }
-                }));
 
         mEtSearchBank.addTextChangedListener(new TextWatcher() {
             @Override

@@ -2,12 +2,14 @@ package org.mifos.mobilewallet.mifospay.savedcards.ui;
 
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.design.chip.Chip;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,7 +28,6 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
 import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.ArrayList;
@@ -71,11 +72,10 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     @BindView(R.id.pb_cards)
     ProgressBar pbCards;
 
-    @Inject
     CardsAdapter mCardsAdapter;
 
     @BindView(R.id.btn_add_card)
-    Chip addCard;
+    MaterialButton addCard;
 
     @BindView(R.id.et_search_cards)
     EditText etCardSearch;
@@ -108,6 +108,40 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         rootView = inflater.inflate(R.layout.fragment_cards, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
+        mCardsAdapter = new CardsAdapter((view, position) -> {
+            PopupMenu savedCardMenu = new PopupMenu(getContext(), view);
+            savedCardMenu.getMenuInflater().inflate(R.menu.menu_saved_card,
+                    savedCardMenu.getMenu());
+
+            savedCardMenu.setOnMenuItemClickListener(
+                    item -> {
+                        switch (item.getItemId()) {
+                            case R.id.edit_card:
+                                AddCardDialog addCardDialog = new AddCardDialog();
+
+                                addCardDialog.forEdit = true;
+
+                                addCardDialog.editCard =
+                                        mCardsAdapter.getCards().get(position);
+
+                                addCardDialog.setCardsPresenter(mCardsPresenter);
+
+                                addCardDialog.show(getFragmentManager(),
+                                        Constants.EDIT_CARD_DIALOG);
+                                break;
+                            case R.id.delete_card:
+                                mCardsPresenter.deleteCard(
+                                        mCardsAdapter.getCards().get(
+                                                position).getId());
+                                break;
+                            case R.id.cancel:
+                                break;
+                        }
+                        return true;
+                    });
+
+            savedCardMenu.show();
+        });
         setUpSwipeRefresh();
         setupCardsRecyclerView();
         showSwipeProgress();
@@ -181,54 +215,6 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         rvCards.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL));
         rvCards.setAdapter(mCardsAdapter);
-
-        rvCards.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(final View childView, final int position) {
-
-                        PopupMenu savedCardMenu = new PopupMenu(getContext(), childView);
-                        savedCardMenu.getMenuInflater().inflate(R.menu.menu_saved_card,
-                                savedCardMenu.getMenu());
-
-                        savedCardMenu.setOnMenuItemClickListener(
-                                new PopupMenu.OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(MenuItem item) {
-                                        switch (item.getItemId()) {
-                                            case R.id.edit_card:
-                                                AddCardDialog addCardDialog = new AddCardDialog();
-
-                                                addCardDialog.forEdit = true;
-
-                                                addCardDialog.editCard =
-                                                        mCardsAdapter.getCards().get(position);
-
-                                                addCardDialog.setCardsPresenter(mCardsPresenter);
-
-                                                addCardDialog.show(getFragmentManager(),
-                                                        Constants.EDIT_CARD_DIALOG);
-                                                break;
-                                            case R.id.delete_card:
-                                                mCardsPresenter.deleteCard(
-                                                        mCardsAdapter.getCards().get(
-                                                                position).getId());
-                                                break;
-                                            case R.id.cancel:
-                                                break;
-                                        }
-                                        return true;
-                                    }
-                                });
-
-                        savedCardMenu.show();
-                    }
-
-                    @Override
-                    public void onItemLongPress(View childView, int position) {
-
-                    }
-                }));
     }
 
     /**

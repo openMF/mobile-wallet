@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.mifospay.standinginstruction.ui
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +17,6 @@ import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionCo
 import org.mifos.mobilewallet.mifospay.standinginstruction.adapter.StandingInstructionAdapter
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.StandingInstructionsPresenter
 import org.mifos.mobilewallet.mifospay.utils.Constants
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import javax.inject.Inject
 
 
@@ -34,7 +33,15 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         (activity as BaseActivity).activityComponent.inject(this)
-        mSIAdapter = StandingInstructionAdapter(activity as BaseActivity)
+        mSIAdapter = StandingInstructionAdapter(onClick = { position ->
+            val intent = Intent(activity, SIDetailsActivity::class.java)
+            val standingInstructionId =
+                mSIAdapter.getStandingInstruction(position)?.id
+            standingInstructionId?. let {
+                intent.putExtra(Constants.SI_ID, standingInstructionId)
+                startActivity(intent)
+            }
+        })
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -65,22 +72,6 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     private fun setUpRecyclerView() {
         rv_si.layoutManager = LinearLayoutManager(context)
         rv_si.adapter = mSIAdapter
-        rv_si.addOnItemTouchListener(RecyclerItemClickListener(context,
-                object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemLongPress(childView: View?, position: Int) {
-
-                    }
-
-                    override fun onItemClick(childView: View, position: Int) {
-                        val intent = Intent(activity, SIDetailsActivity::class.java)
-                        val standingInstructionId =
-                                mSIAdapter.getStandingInstruction(position)?.id
-                        standingInstructionId?. let {
-                            intent.putExtra(Constants.SI_ID, standingInstructionId)
-                            startActivity(intent)
-                        }
-                    }
-                }))
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

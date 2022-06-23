@@ -1,20 +1,26 @@
 package org.mifos.mobilewallet.mifospay.payments.ui;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.chip.Chip;
-import android.support.design.widget.TextInputLayout;
-import android.support.transition.TransitionManager;
-import android.support.v4.content.ContextCompat;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.chip.Chip;
+
+import com.google.android.material.chip.Chip;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.transition.TransitionManager;
+import androidx.core.content.ContextCompat;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,9 +74,9 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     @BindView(R.id.btn_scan_qr)
     TextView btnScanQr;
     @BindView(R.id.btn_vpa)
-    Chip mBtnVpa;
+    MaterialButton mBtnVpa;
     @BindView(R.id.btn_mobile)
-    Chip mBtnMobile;
+    MaterialButton mBtnMobile;
     @BindView(R.id.et_mobile_number)
     EditText mEtMobileNumber;
     @BindView(R.id.btn_search_contact)
@@ -102,28 +108,26 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         return rootView;
     }
 
+    @SuppressLint("ResourceAsColor")
     @OnClick(R.id.btn_vpa)
     public void onVPASelected() {
         TransitionManager.beginDelayedTransition(sendContainer);
-        mBtnVpa.setSelected(true);
         mBtnVpa.setFocusable(true);
-        mBtnVpa.setChipBackgroundColorResource(R.color.clickedblue);
-        mBtnMobile.setSelected(false);
-        mBtnMobile.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        mBtnVpa.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.clickedblue)));
+        mBtnMobile.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.changedBackgroundColour)));
         btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.VISIBLE);
         Utils.hideSoftKeyboard(getActivity());
     }
 
+    @SuppressLint("ResourceAsColor")
     @OnClick(R.id.btn_mobile)
     public void onMobileSelected() {
         TransitionManager.beginDelayedTransition(sendContainer);
-        mBtnMobile.setSelected(true);
         mBtnMobile.setFocusable(true);
-        mBtnMobile.setChipBackgroundColorResource(R.color.clickedblue);
-        mBtnVpa.setSelected(false);
-        mBtnVpa.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        mBtnMobile.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.clickedblue)));
+        mBtnVpa.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.changedBackgroundColour)));
         mTilVpa.setVisibility(View.GONE);
         btnScanQr.setVisibility(View.GONE);
         mRlMobile.setVisibility(View.VISIBLE);

@@ -6,9 +6,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +27,6 @@ import org.mifos.mobilewallet.mifospay.merchants.MerchantsContract;
 import org.mifos.mobilewallet.mifospay.merchants.adapter.MerchantsAdapter;
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantsPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import java.util.ArrayList;
@@ -45,7 +44,6 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     MerchantsPresenter mPresenter;
     MerchantsContract.MerchantsPresenter mMerchantsPresenter;
 
-    @Inject
     MerchantsAdapter mMerchantsAdapter;
 
     @BindView(R.id.inc_state_view)
@@ -84,6 +82,43 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_merchants, container, false);
         ButterKnife.bind(this, rootView);
+        mMerchantsAdapter = new MerchantsAdapter(
+                position -> {
+                    String merchantVPA = mMerchantsAdapter.getMerchants()
+                            .get(position).getExternalId();
+                    if (merchantVPA == null) {
+                        Toast.makeText(getActivity(),
+                                R.string.vpa_null_no_transactions,
+                                Toast.LENGTH_LONG).show();
+                    } else {
+                        Intent intent = new Intent(getActivity(),
+                                MerchantTransferActivity.class);
+                        intent.putExtra(Constants.MERCHANT_NAME, mMerchantsAdapter
+                                .getMerchants().get(position).getClientName());
+                        intent.putExtra(Constants.MERCHANT_VPA, mMerchantsAdapter
+                                .getMerchants().get(position).getExternalId());
+                        intent.putExtra(Constants.MERCHANT_ACCOUNT_NO, mMerchantsAdapter
+                                .getMerchants().get(position).getAccountNo());
+                        startActivity(intent);
+                    }
+                },
+                position -> {
+                    ClipboardManager clipboard = (ClipboardManager) getActivity()
+                            .getSystemService(Context.CLIPBOARD_SERVICE);
+                    String merchantVPA = mMerchantsAdapter.getMerchants()
+                            .get(position).getExternalId();
+                    if (merchantVPA == null) {
+                        Toast.makeText(getActivity(),
+                                R.string.vpa_null_cant_copy, Toast.LENGTH_LONG).show();
+                    } else {
+                        ClipData clip = ClipData.newPlainText("VPA", merchantVPA);
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(getActivity(),
+                                R.string.vpa_copy_success,
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+        );
         mPresenter.attachView(this);
         mMerchantsPresenter.fetchMerchants();
         setupUi();
@@ -99,47 +134,6 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
 
         mRvMerchants.setLayoutManager(new LinearLayoutManager(getContext()));
         mRvMerchants.setAdapter(mMerchantsAdapter);
-        mRvMerchants.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View childView, int position) {
-                        String merchantVPA = mMerchantsAdapter.getMerchants()
-                                .get(position).getExternalId();
-                        if (merchantVPA == null) {
-                            Toast.makeText(getActivity(),
-                                    R.string.vpa_null_no_transactions,
-                                    Toast.LENGTH_LONG).show();
-                        } else {
-                            Intent intent = new Intent(getActivity(),
-                                    MerchantTransferActivity.class);
-                            intent.putExtra(Constants.MERCHANT_NAME, mMerchantsAdapter
-                                    .getMerchants().get(position).getClientName());
-                            intent.putExtra(Constants.MERCHANT_VPA, mMerchantsAdapter
-                                    .getMerchants().get(position).getExternalId());
-                            intent.putExtra(Constants.MERCHANT_ACCOUNT_NO, mMerchantsAdapter
-                                    .getMerchants().get(position).getAccountNo());
-                            startActivity(intent);
-                        }
-                    }
-
-                    @Override
-                    public void onItemLongPress(View childView, int position) {
-                        ClipboardManager clipboard = (ClipboardManager) getActivity()
-                                .getSystemService(Context.CLIPBOARD_SERVICE);
-                        String merchantVPA = mMerchantsAdapter.getMerchants()
-                                .get(position).getExternalId();
-                        if (merchantVPA == null) {
-                            Toast.makeText(getActivity(),
-                                    R.string.vpa_null_cant_copy, Toast.LENGTH_LONG).show();
-                        } else {
-                            ClipData clip = ClipData.newPlainText("VPA", merchantVPA);
-                            clipboard.setPrimaryClip(clip);
-                            Toast.makeText(getActivity(),
-                                    R.string.vpa_copy_success,
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    }
-                }));
     }
 
     private void setUpSwipeRefreshLayout() {

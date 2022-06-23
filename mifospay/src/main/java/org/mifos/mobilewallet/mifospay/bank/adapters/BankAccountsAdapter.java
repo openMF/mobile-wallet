@@ -1,6 +1,5 @@
 package org.mifos.mobilewallet.mifospay.bank.adapters;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,12 +9,12 @@ import android.widget.TextView;
 import org.mifos.mobilewallet.core.domain.model.BankAccountDetails;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
+import org.mifos.mobilewallet.mifospay.utils.ListItemOnClick;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-
+import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -25,11 +24,14 @@ import butterknife.ButterKnife;
 
 public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapter.ViewHolder> {
 
+    private final ListItemOnClick onClickListener;
+
     private List<BankAccountDetails> mBankAccountDetailsList;
 
 
-    @Inject
-    public BankAccountsAdapter() {
+
+    public BankAccountsAdapter(ListItemOnClick onClickListener) {
+        this.onClickListener = onClickListener;
         mBankAccountDetailsList = new ArrayList<>();
     }
 
@@ -37,7 +39,9 @@ public class BankAccountsAdapter extends RecyclerView.Adapter<BankAccountsAdapte
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_casual_list,
                 parent, false);
-        return new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v);
+        v.setOnClickListener(v1 -> onClickListener.onClick(vh.getBindingAdapterPosition()));
+        return vh;
     }
 
     @Override

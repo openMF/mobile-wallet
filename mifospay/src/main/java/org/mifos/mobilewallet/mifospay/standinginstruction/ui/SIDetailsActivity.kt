@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.mifospay.standinginstruction.ui
 import android.app.DatePickerDialog
 import android.content.res.Resources
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
+import androidx.core.content.res.ResourcesCompat
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View

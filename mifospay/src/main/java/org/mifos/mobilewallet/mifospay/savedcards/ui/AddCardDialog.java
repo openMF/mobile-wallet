@@ -3,11 +3,11 @@ package org.mifos.mobilewallet.mifospay.savedcards.ui;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
-import android.support.design.widget.BottomSheetDialogFragment;
-import android.support.design.widget.TextInputLayout;
+import androidx.annotation.NonNull;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputLayout;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -27,6 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
+import butterknife.Action;
 import butterknife.OnClick;
 
 /**
@@ -62,8 +63,8 @@ public class AddCardDialog extends BottomSheetDialogFragment {
     List<TextInputLayout> mTextInputLayouts;
     private BottomSheetBehavior mBottomSheetBehavior;
     private boolean fieldsValid;
-    private final ButterKnife.Action<TextInputLayout> CHECK_ERROR =
-            new ButterKnife.Action<TextInputLayout>() {
+    private final butterknife.Action<TextInputLayout> CHECK_ERROR =
+            new butterknife.Action<TextInputLayout>() {
                 @Override
                 public void apply(@NonNull TextInputLayout view, int index) {
                     EditText editText = view.getEditText();
@@ -172,7 +173,7 @@ public class AddCardDialog extends BottomSheetDialogFragment {
      */
     private boolean areFieldsValid() {
         fieldsValid = true;
-        ButterKnife.apply(mTextInputLayouts, CHECK_ERROR);
+        butterknife.ViewCollections.run(mTextInputLayouts, CHECK_ERROR);
         int expiryMonth = Integer.parseInt(spnMM.getSelectedItem().toString());
         int expiryYear = Integer.parseInt(spnYY.getSelectedItem().toString());
         Calendar calendar = Calendar.getInstance();

@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.mifospay.standinginstruction.adapter
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +13,9 @@ import org.mifos.mobilewallet.mifospay.utils.Constants
 /**
  * Created by Devansh on 08/06/2020
  */
-class StandingInstructionAdapter(private val context: Context) :
+class StandingInstructionAdapter(
+    private val onClick: (position: Int) -> Unit
+) :
         RecyclerView.Adapter<StandingInstructionAdapter.ViewHolder>() {
 
     private var standingInstructions: List<StandingInstruction>?= null
@@ -21,7 +23,11 @@ class StandingInstructionAdapter(private val context: Context) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val v: View = LayoutInflater.from(parent.context).inflate(
                 R.layout.item_si, parent, false)
-        return ViewHolder(v, context)
+        val vh =  ViewHolder(v, parent.context)
+        v.setOnClickListener {
+            onClick(vh.bindingAdapterPosition)
+        }
+        return vh
     }
 
     class ViewHolder(itemView: View, val context: Context) : RecyclerView.ViewHolder(itemView) {

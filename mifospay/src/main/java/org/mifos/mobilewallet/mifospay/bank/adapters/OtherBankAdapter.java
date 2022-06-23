@@ -1,8 +1,8 @@
 package org.mifos.mobilewallet.mifospay.bank.adapters;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.domain.model.Bank;
+import org.mifos.mobilewallet.mifospay.utils.ListItemOnClick;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,16 +33,19 @@ public class OtherBankAdapter extends RecyclerView.Adapter<OtherBankAdapter.View
     private Context context;
     private List<Bank> otherBanks;
     private List<Bank> filteredBanks;
+    private final ListItemOnClick onClickListener;
 
-    @Inject
-    public OtherBankAdapter() {
+    public OtherBankAdapter(ListItemOnClick onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_other_banks, parent,
                 false);
-        return new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v);
+        v.setOnClickListener(v1 -> onClickListener.onClick(vh.getBindingAdapterPosition()));
+        return vh;
     }
 
     @Override

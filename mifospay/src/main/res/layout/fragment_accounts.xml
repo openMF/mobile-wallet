@@ -23,7 +23,7 @@
         android:layout_marginStart="@dimen/paddingLayout"
         android:textColor="@color/colorTextPrimary"
         android:layout_marginLeft="@dimen/paddingLayout" />
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_accounts"
         android:layout_below="@id/linked_bank_account_text"
         android:layout_marginTop="@dimen/marginBetweenSections"
@@ -33,18 +33,18 @@
         android:clipToPadding="false"
         android:scrollbars="vertical"/>
 
-    <android.support.design.chip.Chip
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/addaccountbutton"
-        android:layout_width="wrap_content"
-        app:chipBackgroundColor="@color/black"
-        android:layout_height="35dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="23dp"
+        android:layout_width="wrap_content"
         android:text="@string/add_account"
-        app:chipIcon="@drawable/ic_add"
-        app:chipIconTint="@color/colorPrimary"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary" />
+        app:cornerRadius="@dimen/value_50dp"
+        android:textColor="@color/colorPrimary"
+        app:backgroundTint="@color/black"
+        app:icon="@drawable/ic_add"
+        app:iconTint="@color/colorPrimary" />
 
 </RelativeLayout>

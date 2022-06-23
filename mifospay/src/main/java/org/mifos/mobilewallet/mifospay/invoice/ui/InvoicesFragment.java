@@ -3,12 +3,6 @@ package org.mifos.mobilewallet.mifospay.invoice.ui;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,13 +18,18 @@ import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract;
 import org.mifos.mobilewallet.mifospay.invoice.presenter.InvoicesPresenter;
 import org.mifos.mobilewallet.mifospay.invoice.ui.adapter.InvoicesAdapter;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -65,7 +64,6 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
     @BindView(R.id.pb_invoices)
     ProgressBar pbInvoices;
 
-    @Inject
     InvoicesAdapter mInvoicesAdapter;
 
     @Override
@@ -81,6 +79,13 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
         View root = inflater.inflate(R.layout.fragment_invoices, container, false);
         ButterKnife.bind(this, root);
         mPresenter.attachView(this);
+        mInvoicesAdapter = new InvoicesAdapter(position -> {
+            Intent intent = new Intent(getActivity(), InvoiceActivity.class);
+            // incomplete
+            intent.setData(mInvoicesPresenter.getUniqueInvoiceLink(
+                    mInvoicesAdapter.getInvoiceList().get(position).getId()));
+            startActivity(intent);
+        });
 
         setupRecyclerView();
         setUpSwipeRefresh();
@@ -97,22 +102,6 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
         mRvInvoices.addItemDecoration(new DividerItemDecoration(getActivity(),
                 DividerItemDecoration.VERTICAL));
 
-        mRvInvoices.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View childView, int position) {
-                        Intent intent = new Intent(getActivity(), InvoiceActivity.class);
-                        // incomplete
-                        intent.setData(mInvoicesPresenter.getUniqueInvoiceLink(
-                                mInvoicesAdapter.getInvoiceList().get(position).getId()));
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onItemLongPress(View childView, int position) {
-
-                    }
-                }));
     }
 
 

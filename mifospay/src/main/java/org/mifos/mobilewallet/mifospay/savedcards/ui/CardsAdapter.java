@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.mifospay.savedcards.ui;
 
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +8,9 @@ import android.widget.TextView;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.merchants.adapter.MerchantsAdapter;
+import org.mifos.mobilewallet.mifospay.utils.ListItemOnClick;
+import org.mifos.mobilewallet.mifospay.utils.ListItemOnClickWithView;
 
 import java.util.List;
 
@@ -26,16 +29,19 @@ import butterknife.ButterKnife;
 public class CardsAdapter extends RecyclerView.Adapter<CardsAdapter.ViewHolder> {
 
     private List<Card> cards;
+    private final ListItemOnClickWithView onClickListener;
 
-    @Inject
-    public CardsAdapter() {
+    public CardsAdapter(ListItemOnClickWithView onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_card, parent, false);
-        return new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v);
+        v.setOnClickListener(v1 -> onClickListener.onClick(v, vh.getBindingAdapterPosition()));
+        return vh;
     }
 
     @Override

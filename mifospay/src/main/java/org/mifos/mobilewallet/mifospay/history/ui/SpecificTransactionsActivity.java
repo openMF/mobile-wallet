@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.widget.DividerItemDecoration;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -20,7 +20,6 @@ import org.mifos.mobilewallet.mifospay.history.presenter.SpecificTransactionsPre
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.SpecificTransactionsAdapter;
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener;
 
 import java.util.ArrayList;
 
@@ -37,7 +36,6 @@ public class SpecificTransactionsActivity extends BaseActivity implements
 
     HistoryContract.SpecificTransactionsPresenter mSpecificTransactionsPresenter;
 
-    @Inject
     SpecificTransactionsAdapter mSpecificTransactionsAdapter;
 
     @BindView(R.id.rv_transactions)
@@ -67,6 +65,15 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         setContentView(R.layout.activity_specific_transactions);
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
+        mSpecificTransactionsAdapter = new SpecificTransactionsAdapter(position -> {
+            Intent intent = new Intent(SpecificTransactionsActivity.this,
+                    ReceiptActivity.class);
+            intent.setData(Uri.parse(
+                    Constants.RECEIPT_DOMAIN
+                            + mSpecificTransactionsAdapter.getTransaction(
+                            position).getTransactionId()));
+            startActivity(intent);
+        });
         mPresenter.attachView(this);
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         setToolbarTitle(Constants.SPECIFIC_TRANSACTIONS);
@@ -85,25 +92,6 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         mRvTransactions.setAdapter(mSpecificTransactionsAdapter);
         mRvTransactions.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL));
-
-        mRvTransactions.addOnItemTouchListener(new RecyclerItemClickListener(this,
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View childView, int position) {
-                        Intent intent = new Intent(SpecificTransactionsActivity.this,
-                                ReceiptActivity.class);
-                        intent.setData(Uri.parse(
-                                Constants.RECEIPT_DOMAIN
-                                        + mSpecificTransactionsAdapter.getTransaction(
-                                        position).getTransactionId()));
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onItemLongPress(View childView, int position) {
-
-                    }
-                }));
 
     }
 

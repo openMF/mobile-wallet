@@ -1,10 +1,12 @@
 package org.mifos.mobilewallet.mifospay.utils;
 
-import android.support.v7.app.AlertDialog;
+import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
 import org.mifos.mobilewallet.mifospay.R;
+
+import androidx.appcompat.app.AlertDialog;
 
 
 public class DialogBox {

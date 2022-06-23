@@ -2,7 +2,6 @@ package org.mifos.mobilewallet.mifospay;
 
 import android.app.Application;
 import android.content.Context;
-import android.support.v7.app.AppCompatDelegate;
 
 import com.mifos.mobile.passcode.utils.ForegroundChecker;
 
@@ -10,6 +9,7 @@ import org.mifos.mobilewallet.mifospay.injection.component.ApplicationComponent;
 import org.mifos.mobilewallet.mifospay.injection.component.DaggerApplicationComponent;
 import org.mifos.mobilewallet.mifospay.injection.module.ApplicationModule;
 
+import androidx.appcompat.app.AppCompatDelegate;
 import butterknife.ButterKnife;
 
 /**

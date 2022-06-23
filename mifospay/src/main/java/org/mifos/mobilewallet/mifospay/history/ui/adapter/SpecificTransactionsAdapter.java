@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.history.ui.adapter;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +14,7 @@ import android.widget.TextView;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.utils.ListItemOnClick;
 import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import java.util.ArrayList;
@@ -31,18 +32,22 @@ import butterknife.ButterKnife;
 public class SpecificTransactionsAdapter
         extends RecyclerView.Adapter<SpecificTransactionsAdapter.ViewHolder> {
 
+
+    private final ListItemOnClick onClickListener;
     private Context context;
     private List<Transaction> transactions;
 
-    @Inject
-    public SpecificTransactionsAdapter() {
+    public SpecificTransactionsAdapter(ListItemOnClick onClickListener) {
+        this.onClickListener = onClickListener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.item_specific_transaction, parent, false);
-        return new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v);
+        v.setOnClickListener(v1 -> onClickListener.onClick(vh.getBindingAdapterPosition()));
+        return vh;
     }
 
     @Override
