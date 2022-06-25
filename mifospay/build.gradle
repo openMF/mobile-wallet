@@ -52,6 +52,8 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     api 'com.google.android.material:material:1.6.1'
+    implementation 'androidx.core:core-splashscreen:1.0.0-beta02'
+
 
     implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
     kapt "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
@@ -93,6 +95,7 @@ dependencies {
     testImplementation "junit:junit:$rootProject.junitVersion"
 
     implementation project(':core')
+    implementation project(':uihouse')
 }
 
 apply plugin: 'com.google.gms.google-services'

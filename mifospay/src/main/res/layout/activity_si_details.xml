@@ -85,7 +85,7 @@
                             android:layout_width="@dimen/value_100dp"
                             android:layout_height="wrap_content"
                             android:textColorHint="@android:color/black"
-                            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                            >
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/et_si_edit_amount"
@@ -210,7 +210,7 @@
                             android:layout_width="@dimen/value_100dp"
                             android:layout_height="wrap_content"
                             android:textColorHint="@android:color/black"
-                            app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                            >
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:id="@+id/et_si_edit_interval"

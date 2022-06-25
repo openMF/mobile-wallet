@@ -102,7 +102,7 @@
                     android:layout_marginRight="@dimen/value_20dp"
                     android:padding="@dimen/value_10dp"
                     android:textColorHint="@android:color/black"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_merchant_amount"

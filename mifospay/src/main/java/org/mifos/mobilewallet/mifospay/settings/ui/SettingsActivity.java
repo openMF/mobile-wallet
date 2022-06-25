@@ -55,7 +55,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
 
     @OnClick(R.id.btn_logout)
     public void onLogoutClicked() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog);
+        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(this);
         builder.setTitle(R.string.log_out_title);
         builder.setCancelable(false)
                 .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {

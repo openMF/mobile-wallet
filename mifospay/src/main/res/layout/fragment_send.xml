@@ -91,7 +91,7 @@
                 android:layout_marginLeft="@dimen/value_20dp"
                 android:layout_marginRight="@dimen/value_20dp"
                 android:textColorHint="@android:color/black"
-                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_amount"
@@ -114,7 +114,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/value_20dp"
                     android:textColorHint="@android:color/black"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_vpa"
@@ -157,7 +157,7 @@
                     android:layout_marginRight="@dimen/value_15dp"
                     android:layout_toLeftOf="@+id/btn_search_contact"
                     android:textColorHint="@android:color/black"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_mobile_number"

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColorHint="@android:color/black"
-        app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+        >
 
         <EditText
             android:id="@+id/et_idname"

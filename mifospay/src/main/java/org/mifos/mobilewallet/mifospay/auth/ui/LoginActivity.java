@@ -32,6 +32,7 @@ import org.mifos.mobilewallet.mifospay.utils.Utils;
 
 import javax.inject.Inject;
 
+import androidx.core.splashscreen.SplashScreen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -64,6 +65,8 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        SplashScreen.installSplashScreen(this);
+
         super.onCreate(savedInstanceState);
         getActivityComponent().inject(this);
         setContentView(R.layout.activity_login);

@@ -4,6 +4,8 @@ import androidx.appcompat.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import org.mifos.mobilewallet.mifospay.R;
 
 import androidx.appcompat.app.AlertDialog;
@@ -25,7 +27,7 @@ public class DialogBox {
 
     public void show(final Context context, int title, int message, int positive,
                      int negative) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.AppTheme_Dialog);
+        AlertDialog.Builder builder = new MaterialAlertDialogBuilder(context);
         builder.setTitle(title);
         builder.setMessage(message);
         builder.setCancelable(true);

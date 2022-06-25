@@ -20,23 +20,18 @@
         <activity android:name=".standinginstruction.ui.SIDetailsActivity" />
         <activity
             android:name=".standinginstruction.ui.NewSIActivity"
-            android:label="@string/title_activity_new_si"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/title_activity_new_si" />
         <activity android:name=".merchants.ui.MerchantTransferActivity" />
         <activity
-            android:name=".SplashScreenActivity"
-            android:theme="@style/SplashTheme"
+            android:name=".auth.ui.LoginActivity"
+            android:theme="@style/AppTheme.Starting"
+            android:windowSoftInputMode="stateVisible"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".auth.ui.LoginActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".home.ui.MainActivity"
             android:theme="@style/AppTheme"

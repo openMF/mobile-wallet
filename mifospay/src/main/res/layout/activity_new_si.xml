@@ -28,7 +28,7 @@
                 android:layout_marginTop="@dimen/value_20dp"
                 android:layout_marginBottom="@dimen/value_10dp"
                 android:textColorHint="@android:color/black"
-                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_si_amount"
@@ -59,7 +59,7 @@
                     android:layout_toStartOf="@id/btn_scan_qr"
                     android:layout_toLeftOf="@id/btn_scan_qr"
                     android:textColorHint="@android:color/black"
-                    app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_si_vpa"
@@ -94,7 +94,7 @@
                 android:layout_marginTop="@dimen/value_10dp"
                 android:layout_marginBottom="@dimen/value_10dp"
                 android:textColorHint="@android:color/black"
-                app:hintTextAppearance="@style/TextAppearance.App.TextInputLayout">
+                >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_si_interval"
