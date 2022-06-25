@@ -199,4 +199,8 @@ public class Constants {
     public static final String SI_ID = "standing_instruction_id";
     public static final String UNAUTHORIZED_ERROR = "401 Unauthorized";
 
+    public static final String SYSTEM_THEME = "system theme";
+    public static final String LIGHT_THEME = "light theme";
+    public static final String DARK_THEME = "dark theme";
+
 }

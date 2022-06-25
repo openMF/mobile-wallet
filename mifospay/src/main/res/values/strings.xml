@@ -309,6 +309,11 @@
     <string name="title_activity_new_si">NewSIActivity</string>
     <string name="share_receipt">Share Receipt Link</string>
 
+    <string name="application_theme">Application Theme</string>
+    <string name="select_theme">Select Application Theme</string>
+    <string name="light_theme">Light</string>
+    <string name="dark_theme">Dark</string>
+    <string name="system_theme">System Default</string>
 
 
 </resources>
