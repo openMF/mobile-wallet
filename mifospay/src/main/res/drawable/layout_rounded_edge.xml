@@ -3,7 +3,7 @@
 
     <stroke
         android:width="1dp"
-        android:color="@color/primaryDarkBlue"/>
+        android:color="?attr/colorPrimaryVariant"/>
 
     <solid android:color="@color/colorPrimary"/>
 

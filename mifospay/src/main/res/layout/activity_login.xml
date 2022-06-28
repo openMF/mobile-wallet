@@ -1,101 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/bg_screen"
-    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    android:padding="@dimen/paddingLayout">
-
-    <ImageView
-        android:id="@+id/image_logo"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/value_150dp"
-        android:layout_marginBottom="@dimen/value_50dp"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.774"
-        app:srcCompat="@drawable/ic_logo_outline" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/marginItemsInSectionLarge"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/username"
-            android:inputType="textEmailAddress" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/marginBetweenSections"
-        app:layout_constraintBottom_toTopOf="@+id/btn_login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:passwordToggleEnabled="true">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/et_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:inputType="textPassword" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/marginBetweenSections"
-        android:background="@drawable/button_round_black"
-        android:text="@string/login"
-        app:layout_constraintBottom_toTopOf="@+id/ll_signup"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    android:layout_width="match_parent"
+    android:id="@+id/bg_screen">
 
     <LinearLayout
-        android:id="@+id/ll_signup"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/marginItemsInSectionLarge"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin">
 
-        <TextView
-            android:id="@+id/tv_no_acct"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginLeft="0dp"
-            android:layout_marginEnd="@dimen/marginBetweenWords"
-            android:layout_marginRight="@dimen/marginBetweenWords"
-            android:text="@string/don_t_have_an_account"
-            android:textColor="@color/colorTextSecondary" />
 
-        <TextView
-            android:id="@+id/tv_create_account"
+        <ImageView
+            android:id="@+id/image_logo"
+            android:layout_height="@dimen/Mifos.DesignSystem.Size.LogoImageSize"
+            android:layout_margin="@dimen/Mifos.DesignSystem.Size.LogoImageVerticalMargin"
             android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            app:srcCompat="@drawable/ic_logo_outline" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout2"
             android:layout_height="wrap_content"
-            android:text="@string/create_one"
-            android:textColor="@color/colorAccent" />
+            android:layout_width="match_parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:hint="@string/username"
+                android:id="@+id/et_username"
+                android:inputType="textEmailAddress"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+            android:layout_width="match_parent"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:hint="@string/password"
+                android:id="@+id/et_password"
+                android:inputType="textPassword"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+            android:layout_width="match_parent"
+            android:text="@string/login" />
+
+        <LinearLayout
+            android:gravity="center_vertical"
+            android:id="@+id/or_text_layout"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.marginBetweenSectionsHalf"
+            android:layout_width="match_parent"
+            android:orientation="horizontal">
+
+            <View
+                android:background="?attr/colorOnSurfaceVariant"
+                android:id="@+id/le"
+                android:layout_height="@dimen/Mifos.DesignSystem.Size.SpacerThickness"
+                android:layout_weight="1"
+                android:layout_width="0dp" />
+
+            <TextView
+                android:id="@+id/or_text"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.marginWords"
+                android:layout_width="wrap_content"
+                android:text="@string/or" />
+
+            <View
+                android:background="?attr/colorOnSurfaceVariant"
+                android:layout_height="@dimen/Mifos.DesignSystem.Size.SpacerThickness"
+                android:layout_weight="1"
+                android:layout_width="0dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:gravity="center_horizontal"
+            android:id="@+id/ll_signup"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_no_acct"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/Mifos.DesignSystem.Spacing.marginWords"
+                android:layout_marginLeft="0dp"
+                android:layout_marginRight="@dimen/Mifos.DesignSystem.Spacing.marginWords"
+                android:layout_marginStart="0dp"
+                android:layout_width="wrap_content"
+                android:text="@string/don_t_have_an_account"
+                android:alpha="@dimen/alpha_low_emphasis"/>
+
+            <TextView
+                android:id="@+id/tv_create_account"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:text="@string/create_one"
+                android:textColor="@color/Mifos.DesignSystem.Color.Link" />
+
+        </LinearLayout>
+
 
     </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

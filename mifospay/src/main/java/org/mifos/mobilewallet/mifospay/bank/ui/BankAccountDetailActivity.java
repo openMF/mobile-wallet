@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.mifospay.bank.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.cardview.widget.CardView;
+import com.google.android.material.card.MaterialCardView;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -48,9 +48,9 @@ public class BankAccountDetailActivity extends BaseActivity implements
     @BindView(R.id.btn_setup_upi_pin)
     Button mBtnSetupUpiPin;
     @BindView(R.id.cv_change_upi_pin)
-    CardView mCvChangeUpiPin;
+    MaterialCardView mCvChangeUpiPin;
     @BindView(R.id.cv_forgot_upi_pin)
-    CardView mCvForgotUpiPin;
+    MaterialCardView mCvForgotUpiPin;
     @BindView(R.id.btn_delete_bank)
     Button mBtnDeleteBank;
 

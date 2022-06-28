@@ -68,36 +68,31 @@
                 <TextView
                     android:id="@+id/tv_bank_name"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/grey_900"/>
+                    android:layout_height="wrap_content"/>
 
                 <TextView
                     android:id="@+id/tv_account_holder_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:textColor="@color/grey_900"/>
+                    android:layout_marginTop="@dimen/value_10dp"/>
 
                 <TextView
                     android:id="@+id/tv_branch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:textColor="@color/grey_900"/>
+                    android:layout_marginTop="@dimen/value_10dp"/>
 
                 <TextView
                     android:id="@+id/tv_ifsc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:textColor="@color/grey_900"/>
+                    android:layout_marginTop="@dimen/value_10dp"/>
 
                 <TextView
                     android:id="@+id/tv_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:textColor="@color/grey_900"/>
+                    android:layout_marginTop="@dimen/value_10dp"/>
 
             </LinearLayout>
 
@@ -113,7 +108,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/value_20dp"
-                android:background="@drawable/button_round_stroke_primary"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:text="@string/setup_upi"
                 android:visibility="visible"/>
 
@@ -122,7 +117,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/value_20dp"
-                android:background="@drawable/button_round_stroke_primary"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:text="@string/delete_bank"
                 android:visibility="visible"/>
 
@@ -133,7 +128,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="@dimen/value_20dp"
-            android:background="#44000000"/>
+            android:background="?attr/colorOnBackground"
+            android:alpha="@dimen/alpha_least_emphasis"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -141,20 +137,20 @@
             android:orientation="vertical"
             android:padding="@dimen/value_20dp">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_change_upi_pin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardElevation="1dp"
-                app:cardUseCompatPadding="true">
+                app:cardUseCompatPadding="true"
+                style="@style/Widget.Material3.CardView.Filled">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_20dp"
                     android:text="@string/change_upi_pin"
-                    android:textColor="@color/grey_900"
-                    android:textSize="17sp"/>
+
+                    style="@style/TextAppearance.Material3.TitleMedium"/>
 
                 <ImageView
                     android:layout_width="@dimen/value_15dp"
@@ -163,14 +159,14 @@
                     android:layout_margin="@dimen/value_20dp"
                     android:layout_gravity="right|center" />
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_forgot_upi_pin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_20dp"
-                app:cardElevation="1dp"
+                style="@style/Widget.Material3.CardView.Filled"
                 app:cardUseCompatPadding="true">
 
                 <TextView
@@ -178,8 +174,8 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_20dp"
                     android:text="@string/forgot_upi_pin"
-                    android:textColor="@color/grey_900"
-                    android:textSize="17sp"/>
+
+                    style="@style/TextAppearance.Material3.TitleMedium"/>
 
                 <ImageView
                     android:layout_width="@dimen/value_15dp"
@@ -188,7 +184,7 @@
                     android:layout_margin="@dimen/value_20dp"
                     android:layout_gravity="right|center" />
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
         </LinearLayout>
 

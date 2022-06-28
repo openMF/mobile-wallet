@@ -21,7 +21,7 @@
         android:orientation="vertical"
         android:padding="@dimen/value_20dp">
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_debit_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -42,11 +42,11 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_width="wrap_content"
                         android:text="@string/debit_card_details"
-                        android:textColor="@color/grey_900"
-                        android:textSize="17sp"/>
+
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/tv_debit_card"
@@ -66,9 +66,9 @@
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/value_20dp"
@@ -92,7 +92,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/one_time_password"
-                        android:textColor="@color/grey_900"
+
                         android:textSize="17sp"/>
 
                     <TextView
@@ -113,9 +113,9 @@
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/value_20dp"
@@ -139,7 +139,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/upi_pin_setup"
-                        android:textColor="@color/grey_900"
+
                         android:textSize="17sp"/>
 
                     <TextView
@@ -161,7 +161,7 @@
 
             </LinearLayout>
 
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 

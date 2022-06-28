@@ -48,7 +48,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable-animated:1.0.0'
     implementation 'androidx.media:media:1.0.0'
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.6.1'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     api 'com.google.android.material:material:1.6.1'
@@ -95,7 +95,7 @@ dependencies {
     testImplementation "junit:junit:$rootProject.junitVersion"
 
     implementation project(':core')
-    implementation project(':uihouse')
+    implementation 'com.github.rahul-gill:mifos-ui-library:publish-SNAPSHOT'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -6,8 +6,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_user_image"
-        android:layout_width="@dimen/user_profile_image_size"
-        android:layout_height="@dimen/user_profile_image_size"
+        android:layout_width="@dimen/Mifos.DesignSystem.Size.LogoImageSize"
+        android:layout_height="@dimen/Mifos.DesignSystem.Size.LogoImageSize"
         android:layout_gravity="center_horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -15,20 +15,20 @@
 
     <ImageView
         android:id="@+id/iv_editable_image_hint"
-        android:layout_width="@dimen/editable_image_hint_shape_size"
-        android:layout_height="@dimen/editable_image_hint_shape_size"
+        android:layout_width="?attr/minTouchTargetSize"
+        android:layout_height="?attr/minTouchTargetSize"
         android:src="@drawable/drawable_editable_image_hint"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_user_image"
-        app:layout_constraintEnd_toEndOf="@+id/iv_user_image" />
+        app:layout_constraintTop_toTopOf="@+id/iv_user_image"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Size.UserImageEditTopStartMargins"
+        android:layout_marginStart="@dimen/Mifos.DesignSystem.Size.UserImageEditTopStartMargins"
+        app:layout_constraintStart_toStartOf="@+id/iv_user_image" />
 
     <TextView
         android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/marginItemsInSectionSmall"
-        app:fontFamily="@font/roboto_medium"
-        android:textColor="@color/colorBlack87"
-        android:textSize="@dimen/textH6"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
+        style="@style/TextAppearance.Material3.TitleLarge"
         app:layout_constraintEnd_toEndOf="@+id/iv_user_image"
         app:layout_constraintStart_toStartOf="@+id/iv_user_image"
         app:layout_constraintTop_toBottomOf="@+id/iv_user_image" />

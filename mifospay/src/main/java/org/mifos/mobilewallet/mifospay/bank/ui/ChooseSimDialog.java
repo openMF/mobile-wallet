@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import org.mifos.mobilewallet.mifospay.R;
 
+import androidx.core.content.res.ResourcesCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -58,17 +59,20 @@ public class ChooseSimDialog extends BottomSheetDialogFragment {
             case R.id.tv_sim1:
                 selectedSim = 1;
                 mTvSim1.setCompoundDrawablesWithIntrinsicBounds(null,
-                        getResources().getDrawable(R.drawable.sim_card_selected), null, null);
+                        ResourcesCompat.getDrawable(getResources(), R.drawable.sim_card_selected,requireContext().getTheme()),
+                        null, null);
                 mTvSim2.setCompoundDrawablesWithIntrinsicBounds(null,
-                        getResources().getDrawable(R.drawable.sim_card_unselected), null, null);
-
+                        ResourcesCompat.getDrawable(getResources(), R.drawable.sim_card_unselected,requireContext().getTheme()),
+                          null, null);
                 break;
             case R.id.tv_sim2:
                 selectedSim = 2;
-                mTvSim2.setCompoundDrawablesWithIntrinsicBounds(null,
-                        getResources().getDrawable(R.drawable.sim_card_selected), null, null);
                 mTvSim1.setCompoundDrawablesWithIntrinsicBounds(null,
-                        getResources().getDrawable(R.drawable.sim_card_unselected), null, null);
+                        ResourcesCompat.getDrawable(getResources(), R.drawable.sim_card_unselected,requireContext().getTheme()),
+                        null, null);
+                mTvSim2.setCompoundDrawablesWithIntrinsicBounds(null,
+                        ResourcesCompat.getDrawable(getResources(), R.drawable.sim_card_selected,requireContext().getTheme()),
+                        null, null);
                 break;
         }
     }

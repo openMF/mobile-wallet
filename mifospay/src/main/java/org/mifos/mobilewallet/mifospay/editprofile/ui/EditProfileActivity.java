@@ -27,6 +27,7 @@ import com.hbb20.CountryCodePicker;
 import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper;
 import com.yalantis.ucrop.UCrop;
 
+import org.mifos.mobile.ui.ColorUtilsKt;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract;
@@ -213,7 +214,7 @@ public class EditProfileActivity extends BaseActivity implements
         TextDrawable drawable = TextDrawable.builder().beginConfig()
                 .width((int) getResources().getDimension(R.dimen.user_profile_image_size))
                 .height((int) getResources().getDimension(R.dimen.user_profile_image_size))
-                .endConfig().buildRound(fullName.substring(0, 1), R.color.colorPrimary);
+                .endConfig().buildRound(fullName.substring(0, 1), ColorUtilsKt.getThemeAttributeColor(this, R.attr.colorPrimaryVariant));
         ivUserImage.setImageDrawable(drawable);
     }
 

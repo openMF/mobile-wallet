@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <include layout="@layout/profile_username_and_image"
-        android:layout_marginTop="@dimen/marginTopUserProfile"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Size.LogoImageVerticalMargin"
         android:layout_height="wrap_content"
         android:layout_width="match_parent" />
 
@@ -14,10 +14,8 @@
         android:id="@+id/nsv_profile_bottom_sheet_dialog"
         app:layout_behavior="@string/bottom_sheet_behavior"
         android:layout_width="match_parent"
-        android:background="@drawable/drawable_bottom_sheet_view"
-        app:behavior_hideable="false"
-        app:behavior_peekHeight="@dimen/bottomSheetPeekHeight"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        style="@style/Mifos.DesignSystem.Components.BottomSheet">
 
         <include
             android:layout_width="match_parent"

@@ -1,98 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    tools:context=".settings.ui.SettingsActivity">
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/collapsingToolbarLayoutMediumSize">
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:elevation="0dp"
+                app:title="@string/settings"
+                app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+                android:layout_height="?attr/actionBarSize" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin"
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <include layout="@layout/toolbar" />
-
-        <LinearLayout
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_notification_setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:orientation="vertical"
-            android:padding="@dimen/value_20dp">
+            style="@style/Widget.Material3.CardView.Filled">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_notification_setting"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardElevation="1dp"
-                app:cardBackgroundColor="@color/colorCardBackground"
-                app:cardUseCompatPadding="true">
+                android:layout_margin="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger"
+                android:text="@string/notification_settings"
+                style="@style/TextAppearance.Material3.TitleMedium"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/value_20dp"
-                    android:text="@string/notification_settings"
-                    android:textColor="@color/grey_900"
-                    android:textSize="17sp" />
+        </com.google.android.material.card.MaterialCardView>
 
-            </androidx.cardview.widget.CardView>
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cv_select_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+            style="@style/Widget.Material3.CardView.Filled">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_select_theme"
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/colorCardBackground"
-                app:cardElevation="1dp"
-                app:cardUseCompatPadding="true">
+                android:layout_margin="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger"
+                android:text="@string/application_theme"
+                style="@style/TextAppearance.Material3.TitleMedium"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/value_20dp"
-                    android:text="@string/application_theme"
-                    android:textColor="@color/colorTextPrimary"
-                    android:textSize="17sp"/>
+        </com.google.android.material.card.MaterialCardView>
 
-            </androidx.cardview.widget.CardView>
 
-        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
+        <Button
+            android:id="@+id/btn_disable_account"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/Mifos.DesignSystem.Size.LargerButtonHeight"
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+            style="@style/Mifos.DesignSystem.Components.Button.Red"
+            android:text="@string/disable_account"/>
+
+        <Button
+            android:id="@+id/btn_logout"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/Mifos.DesignSystem.Size.LargerButtonHeight"
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenSections"
+            style="@style/Mifos.DesignSystem.Components.Button.Neutral"
+            android:text="@string/log_out" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/btn_disable_account"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginLeft="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/default_margin"
-        android:layout_marginRight="@dimen/default_margin"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:background="@android:color/holo_red_light"
-        android:text="@string/disable_account"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toTopOf="@+id/btn_logout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:layout_marginStart="@dimen/default_margin"
-        android:layout_marginLeft="@dimen/default_margin"
-        android:layout_marginEnd="@dimen/default_margin"
-        android:layout_marginRight="@dimen/default_margin"
-        android:layout_marginBottom="@dimen/default_margin"
-        android:background="@color/grey_900"
-        android:text="@string/log_out"
-        android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

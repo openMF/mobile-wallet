@@ -15,7 +15,7 @@
         android:focusableInTouchMode="true"
         android:text="@string/send_money"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textColor="@android:color/black"
+
         android:textStyle="bold"/>
 
     <FrameLayout
@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sending_to"
-                    android:textColor="@color/primaryDarkBlue"
+                    android:textColor="?attr/colorPrimaryVariant"
                     android:textSize="@dimen/value_15sp"/>
 
                 <TextView
@@ -51,7 +51,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/value_10dp"
-                    android:textColor="@android:color/black"
+
                     android:textSize="@dimen/value_20sp"/>
 
                 <TextView
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/value_20dp"
                     android:text="@string/amount"
-                    android:textColor="@color/primaryDarkBlue"
+                    android:textColor="?attr/colorPrimaryVariant"
                     android:textSize="@dimen/value_15sp"/>
 
                 <TextView
@@ -74,7 +74,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/value_10dp"
-                    android:textColor="@android:color/black"
+
                     android:textSize="@dimen/value_20sp"/>
 
             </LinearLayout>
@@ -92,7 +92,7 @@
                     android:id="@+id/btn_cancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@color/grey_900"
+                    android:background="?attr/colorOnBackground"
                     android:text="@string/cancel"
                     android:textColor="@android:color/white"/>
 
@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginLeft="@dimen/value_30dp"
-                    android:background="@color/primaryDarkBlue"
+                    android:background="?attr/colorPrimaryVariant"
                     android:text="@string/confirm"
                     android:textColor="@android:color/white"/>
 

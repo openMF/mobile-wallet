@@ -2,50 +2,43 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/primaryDarkBlue">
+            android:layout_height="wrap_content">
 
-            <androidx.appcompat.widget.Toolbar
-
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar_mobile_verification"
-
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/primaryDarkBlue"
-                android:theme="@style/Theme.AppCompat"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar">
+                android:layout_height="wrap_content">
 
                 <com.hbb20.CountryCodePicker
                     android:id="@+id/ccp_country"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    app:ccpDialog_backgroundColor="@color/white"
                     app:ccp_autoDetectCountry="true"
                     app:ccp_autoFormatNumber="false"
-                    app:ccp_contentColor="@color/white"
+                    style="@style/Mifos.DesignSystem.Components.CountryCodePicker"
                     app:ccp_showFullName="true"
                     app:ccp_showNameCode="false"
                     app:ccp_showPhoneCode="false"
                     app:ccp_textGravity="CENTER"/>
 
-            </androidx.appcompat.widget.Toolbar>
+            </com.google.android.material.appbar.MaterialToolbar>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_30dp"
-                android:layout_marginRight="@dimen/value_20dp"
                 android:orientation="vertical">
 
                 <TextView
@@ -54,8 +47,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:text="@string/enter_mobile_number"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/value_20sp">
+                    style="@style/TextAppearance.Material3.TitleLarge">
 
                 </TextView>
 
@@ -65,8 +57,7 @@
                     android:layout_marginBottom="@dimen/value_10dp"
                     android:layout_marginTop="@dimen/value_5dp"
                     android:text="@string/enter_mobile_number_description"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/value_14sp"/>
+                    style="@style/TextAppearance.Material3.BodyMedium"/>
 
             </LinearLayout>
 
@@ -75,30 +66,32 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/value_20dp"
-            android:layout_marginRight="@dimen/value_20dp"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenSections"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
             <com.hbb20.CountryCodePicker
                 android:id="@+id/ccp_code"
                 android:layout_width="wrap_content"
-                android:layout_height="48dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
+                app:ccp_showFlag="false"
+                app:ccp_showNameCode="false"
                 app:ccp_autoDetectCountry="true"
-                app:ccp_autoFormatNumber="false"/>
+                app:ccp_autoFormatNumber="false"
+                style="@style/Mifos.DesignSystem.Components.CountryCodePicker"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="@dimen/value_160dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:hint="@string/mobile" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_mobile_number"
-                    android:layout_width="@dimen/value_160dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:maxLength="@integer/telephone_numbers_max_length_standard"
                     android:inputType="number" />
 
@@ -109,7 +102,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_gravity="right|center_vertical|center_horizontal"
-                android:layout_marginLeft="@dimen/value_10dp"
+                android:layout_marginLeft="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+                android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
                 android:background="@drawable/ic_right_arrow"/>
 
         </LinearLayout>
@@ -117,21 +111,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/value_20dp"
-            android:layout_marginRight="@dimen/value_20dp"
-            android:layout_marginTop="@dimen/value_10dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/value_48dp"
+                android:layout_height="wrap_content"
                 android:hint="@string/otp" >
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_otp"
-                    android:layout_width="@dimen/value_120dp"
+                    android:layout_width="@dimen/Mifos.DesignSystem.Size.SmallerTextFieldWidth"
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:maxLength="@integer/telephone_numbers_max_length_standard"
@@ -144,7 +137,8 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center_vertical|center_horizontal"
-                android:layout_marginLeft="@dimen/value_10dp"
+                android:layout_marginLeft="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+                android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
                 android:visibility="gone"/>
 
             <TextView
@@ -152,7 +146,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/value_10dp"
+                android:layout_marginLeft="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+                android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
                 android:text="@string/verifying_otp_please_wait"
                 android:visibility="gone"/>
 
@@ -167,13 +162,10 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/value_20dp"
-        android:layout_marginRight="@dimen/value_20dp"
-        android:backgroundTint="@color/primaryDarkBlue"
-        android:foregroundTint="@color/primaryDarkBlue"
+        android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.FabMargin"
+        android:layout_marginRight="@dimen/Mifos.DesignSystem.Spacing.FabMargin"
         android:scaleType="center"
         android:visibility="gone"
-        app:backgroundTint="@color/primaryDarkBlue"
         app:srcCompat="@drawable/ic_next"/>
 
 </RelativeLayout>

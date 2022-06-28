@@ -1,33 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:focusableInTouchMode="true"
     android:focusable="true"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/colorPrimary"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        app:elevation="0dp"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content">
 
-        <include layout="@layout/toolbar"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent" />
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
+            app:contentScrim="?attr/colorPrimaryContainer"
+            style="?attr/collapsingToolbarLayoutMediumStyle"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                app:layout_collapseMode="pin"
+                android:layout_width="match_parent"
+                android:elevation="0dp"
+                app:title="@string/edit_profile"
+                app:navigationIcon="@drawable/ic_close"
+                android:layout_height="?attr/actionBarSize" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:id="@+id/sv_edit_profile"
-        android:paddingLeft="@dimen/paddingLayout"
-        android:paddingRight="@dimen/paddingLayout"
-        android:paddingEnd="@dimen/paddingLayout"
-        android:paddingStart="@dimen/paddingLayout"
         android:scrollbars="none"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
@@ -35,19 +39,19 @@
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+                android:paddingTop="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin">
 
                 <include
                     layout="@layout/profile_username_and_image"
                     android:id="@+id/include"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginTopUserProfile" />
+                    android:layout_height="wrap_content" />
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:id="@+id/til_edit_profile_username"
-                    android:layout_marginTop="@dimen/marginItemsInSectionLarge"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
                     android:layout_width="match_parent"
                     app:helperText="@string/username"
                     android:hint="@string/username"
@@ -62,8 +66,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_marginTop="@dimen/marginItemsInSectionMedium"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
                     android:layout_width="match_parent"
                     android:id="@+id/til_edit_profile_email"
                     app:layout_anchor="@id/til_edit_profile_username"
@@ -80,8 +83,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_marginTop="@dimen/marginItemsInSectionMedium"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
                     android:id="@+id/til_edit_profile_vpa"
                     android:layout_width="match_parent"
                     app:helperText="@string/vpa"
@@ -97,7 +99,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
-                    android:layout_marginTop="@dimen/marginItemsInSectionMedium"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
                     android:gravity="center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -108,15 +110,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
+                        style="@style/Mifos.DesignSystem.Components.CountryCodePicker"
                         app:ccp_autoDetectCountry="true"
                         app:ccp_autoFormatNumber="false" />
 
                     <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                         android:id="@+id/til_edit_profile_mobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:helperText="@string/mobile"
                         android:hint="@string/mobile" >
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -136,7 +137,7 @@
                     android:id="@+id/btn_change_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginBetweenSections" />
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenSections" />
 
                 <Button
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
@@ -144,26 +145,21 @@
                     android:id="@+id/btn_change_passcode"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginItemsInSectionExtraSmall"
-                    android:layout_marginBottom="@dimen/paddingLayout" />
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
+                    android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.VerticalSpaceForFab" />
             </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_edit_profile_save_changes"
-        style="@style/Widget.MaterialComponents.FloatingActionButton"
-        android:layout_marginRight="@dimen/paddingLayout"
-        android:layout_marginEnd="@dimen/paddingLayout"
-        android:layout_marginBottom="@dimen/paddingLayout"
+        android:layout_marginRight="@dimen/Mifos.DesignSystem.Spacing.FabMargin"
+        android:layout_marginEnd="@dimen/Mifos.DesignSystem.Spacing.FabMargin"
+        android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.FabMargin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/colorAccentBlack"
         app:srcCompat="@drawable/ic_save"
         app:layout_anchorGravity="bottom|right|end"
-        app:layout_anchor="@id/sv_edit_profile"
-        android:tint="@color/colorPrimary"
-        app:backgroundTint="@color/colorAccentBlack"
-        app:fabSize="normal" />
+        app:layout_anchor="@id/sv_edit_profile" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

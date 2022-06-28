@@ -54,7 +54,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tv_si_id"
-                        android:textColor="@color/colorAccent"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="@dimen/value_16sp"
                         android:layout_marginBottom="@dimen/marginItemsInSectionMedium" />
 
@@ -93,7 +93,7 @@
                                 android:layout_height="match_parent"
                                 android:inputType="numberDecimal"
                                 android:textSize="@dimen/value_15sp"
-                                android:theme="@style/Theme.AppCompat.Light" />
+                                 />
 
                         </com.google.android.material.textfield.TextInputLayout>
 
@@ -218,7 +218,7 @@
                                 android:layout_height="match_parent"
                                 android:inputType="number"
                                 android:textSize="@dimen/value_15sp"
-                                android:theme="@style/Theme.AppCompat.Light" />
+                                 />
 
                         </com.google.android.material.textfield.TextInputLayout>
 

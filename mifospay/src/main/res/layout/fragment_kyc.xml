@@ -25,8 +25,8 @@
 
             <Button
                 android:id="@+id/blv1"
-                style="@style/Widget.MaterialComponents.Button"
-                android:background="@color/colorAccent"
+
+                android:background="?attr/colorPrimary"
                 android:layout_width="@dimen/value_100dp"
                 android:layout_height="@dimen/value_50dp"
                 android:layout_marginLeft="@dimen/value_20dp"
@@ -57,7 +57,7 @@
 
             <Button
                 android:id="@+id/blv2"
-                style="@style/Widget.MaterialComponents.Button"
+
                 android:layout_width="@dimen/value_100dp"
                 android:layout_height="@dimen/value_50dp"
                 android:layout_marginLeft="@dimen/value_20dp"
@@ -86,7 +86,7 @@
 
             <Button
                 android:id="@+id/blv3"
-                style="@style/Widget.MaterialComponents.Button"
+
                 android:layout_width="@dimen/value_100dp"
                 android:layout_height="@dimen/value_50dp"
                 android:layout_marginLeft="@dimen/value_20dp"

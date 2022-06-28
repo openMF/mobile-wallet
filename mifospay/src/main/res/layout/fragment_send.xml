@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_send_container"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+
     android:orientation="vertical">
 
     <LinearLayout
@@ -52,7 +52,7 @@
                 app:cornerRadius="@dimen/value_50dp"
                 android:textAllCaps="false"
                 android:typeface="sans"
-                android:textColor="@color/black"
+                android:textColor="?attr/colorOnBackground"
                 app:backgroundTint="@color/clickedblue" />
 
             <com.google.android.material.button.MaterialButton
@@ -71,8 +71,8 @@
                 android:text="@string/mobile_number"
                 android:textAlignment="center"
                 android:textAllCaps="false"
-                android:textColor="@android:color/black"
                 android:typeface="sans"
+                android:textColor="?attr/colorOnBackground"
                 app:backgroundTint="@color/changedBackgroundColour"
                 app:cornerRadius="@dimen/value_50dp" />
 
@@ -137,7 +137,7 @@
                     android:layout_weight="0.5"
                     android:drawableTop="@drawable/qrcode_blue_selector"
                     android:gravity="center_horizontal"
-                    android:textColor="@color/primaryDarkBlue" />
+                    android:textColor="?attr/colorPrimaryVariant" />
 
             </LinearLayout>
 

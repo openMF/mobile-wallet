@@ -7,7 +7,7 @@
                android:shape="oval"
                android:useLevel="false">
 
-            <solid android:color="@color/primaryDarkBlue"/>
+            <solid android:color="?attr/colorPrimaryVariant"/>
 
         </shape>
 

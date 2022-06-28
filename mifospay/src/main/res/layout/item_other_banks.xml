@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="?android:attr/selectableItemBackground"
     android:orientation="horizontal"
-    android:padding="@dimen/value_10dp">
+    android:padding="@dimen/value_20dp">
 
     <ImageView
         android:id="@+id/iv_popular_bank"
@@ -23,7 +23,7 @@
         android:layout_gravity="center"
         android:layout_marginLeft="@dimen/value_10dp"
         android:layout_marginStart="40dp"
-        android:textColor="@android:color/black"
+
         android:textSize="@dimen/value_15sp"/>
 
 </LinearLayout>

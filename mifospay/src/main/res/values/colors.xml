@@ -30,10 +30,6 @@
 
     <color name="colorExpandableBottomSheetDialogGrip">@color/colorBlack38</color>
 
-    <color name="colorDivider">@color/colorBlack12</color>
-
-    <color name="colorFABBackground">@color/colorAccentBlack</color>
-    <color name="colorFABContent">@color/colorPrimary</color>
 
     <color name="colorChangeProfileImageShapeBackground">@color/colorAccentBlack</color>
     <color name="colorChangeProfileImageShapeText">@color/colorPrimary</color>

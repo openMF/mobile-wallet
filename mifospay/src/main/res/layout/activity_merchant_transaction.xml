@@ -111,8 +111,7 @@
                         android:hint="@string/amount"
                         android:inputType="number"
                         android:paddingBottom="@dimen/value_20dp"
-                        android:textSize="@dimen/value_15sp"
-                        android:theme="@style/Theme.AppCompat.Light" />
+                        android:textSize="@dimen/value_15sp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <Button

@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.mifos.mobile.ui.ColorUtilsKt;
 import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -24,6 +25,7 @@ import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
 
+import androidx.core.content.res.ResourcesCompat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -145,7 +147,7 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
         TextDrawable drawable = TextDrawable.builder().beginConfig()
                 .width((int) getResources().getDimension(R.dimen.user_profile_image_size))
                 .height((int) getResources().getDimension(R.dimen.user_profile_image_size))
-                .endConfig().buildRound(client.getName().substring(0, 1), R.color.colorAccentBlack);
+                .endConfig().buildRound(client.getName().substring(0, 1), ColorUtilsKt.getThemeAttributeColor(requireContext(), R.attr.colorPrimaryVariant));
         ivUserImage.setImageDrawable(drawable);
         tvUserName.setText(client.getName());
     }
@@ -153,7 +155,8 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     @Override
     public void showEmail(String email) {
         ((ImageView) vAccountDetailsEmail.findViewById(R.id.iv_item_casual_list_icon))
-                .setImageDrawable(getResources().getDrawable(R.drawable.ic_email));
+                .setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_email,
+                        requireContext().getTheme()));
         ((TextView) vAccountDetailsEmail.findViewById(R.id.tv_item_casual_list_title))
                 .setText(email);
         ((TextView) vAccountDetailsEmail.findViewById(R.id.tv_item_casual_list_subtitle))
@@ -163,7 +166,8 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     @Override
     public void showVpa(String vpa) {
         ((ImageView) vAccountDetailsVpa.findViewById(R.id.iv_item_casual_list_icon))
-                .setImageDrawable(getResources().getDrawable(R.drawable.ic_transaction));
+                .setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_transaction,
+                        requireContext().getTheme()));
         ((TextView) vAccountDetailsVpa.findViewById(R.id.tv_item_casual_list_title))
                 .setText(vpa);
         ((TextView) vAccountDetailsVpa.findViewById(R.id.tv_item_casual_list_subtitle))
@@ -173,7 +177,8 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
     @Override
     public void showMobile(String mobile) {
         ((ImageView) vAccountDetailsMobile.findViewById(R.id.iv_item_casual_list_icon))
-                .setImageDrawable(getResources().getDrawable(R.drawable.ic_mobile));
+                .setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_mobile,
+                        requireContext().getTheme()));
         ((TextView) vAccountDetailsMobile.findViewById(R.id.tv_item_casual_list_title))
                 .setText(mobile);
         ((TextView) vAccountDetailsMobile.findViewById(R.id.tv_item_casual_list_subtitle))

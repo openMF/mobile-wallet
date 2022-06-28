@@ -39,7 +39,7 @@
                 android:layout_marginTop="@dimen/value_10dp"
                 android:gravity="center_horizontal"
                 android:text="@string/no_notification_found"
-                android:textColor="@color/grey_900"
+
                 android:textSize="18sp"
                 android:visibility="gone"/>
 

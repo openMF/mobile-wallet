@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import org.json.JSONObject;
+import org.mifos.mobile.ui.DimenUtilsKt;
+import org.mifos.mobile.ui.GridSpacingItemDecoration;
 import org.mifos.mobilewallet.core.domain.model.BankAccountDetails;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.bank.BankContract;
@@ -97,6 +99,12 @@ public class LinkBankAccountActivity extends BaseActivity implements
     private void setupRecyclerview() {
         LinearLayoutManager gridManager = new GridLayoutManager(this, 3);
         gridManager.setOrientation(GridLayoutManager.VERTICAL);
+        mRvPopularBanks.addItemDecoration(
+                new GridSpacingItemDecoration(
+                        3,
+                        (int) DimenUtilsKt.getDp(getResources().getDimension(R.dimen.default_margin)),
+                        true)
+        );
         mRvPopularBanks.setLayoutManager(gridManager);
         mRvPopularBanks.setHasFixedSize(true);
         mPopularBankAdapter.setContext(this);

@@ -14,7 +14,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/enter_otp"
-        android:textColor="@color/primaryDarkBlue"
+        android:textColor="?attr/colorPrimaryVariant"
         android:textSize="18sp"/>
 
     <com.alimuzaffar.lib.pin.PinEntryEditText

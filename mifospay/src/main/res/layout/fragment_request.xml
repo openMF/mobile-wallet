@@ -10,7 +10,7 @@
         android:layout_marginLeft="@dimen/value_20dp"
         android:layout_marginTop="@dimen/value_30dp"
         android:text="@string/receive"
-        android:textColor="@color/primaryDarkBlue"
+        android:textColor="?attr/colorPrimaryVariant"
         android:textSize="@dimen/value_18sp"/>
 
     <LinearLayout
@@ -37,7 +37,7 @@
                 android:id="@+id/tv_client_vpa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
+
                 android:textSize="@dimen/value_18sp"/>
 
             <TextView
@@ -50,7 +50,7 @@
                 android:id="@+id/tv_client_mobile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
+
                 android:textSize="@dimen/value_18sp"/>
 
         </LinearLayout>
@@ -65,7 +65,7 @@
             android:drawableTop="@drawable/qrcode_blue_selector"
             android:gravity="center_horizontal|center_vertical"
             android:text="@string/show_code"
-            android:textColor="@color/primaryDarkBlue"/>
+            android:textColor="?attr/colorPrimaryVariant"/>
 
     </LinearLayout>
 

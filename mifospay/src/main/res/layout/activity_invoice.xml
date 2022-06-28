@@ -70,7 +70,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
                 android:text="@string/transaction_id"
-                android:textColor="@color/primaryDarkBlue"
+                android:textColor="?attr/colorPrimaryVariant"
                 android:visibility="gone"/>
 
             <TextView
@@ -129,7 +129,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
                 android:text="@string/link"
-                android:textColor="@color/primaryDarkBlue"/>
+                android:textColor="?attr/colorPrimaryVariant"/>
 
         </LinearLayout>
 
@@ -163,7 +163,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:textColor="@color/primaryDarkBlue"/>
+                android:textColor="?attr/colorPrimaryVariant"/>
 
         </LinearLayout>
 

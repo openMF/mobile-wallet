@@ -3,7 +3,7 @@
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
               android:layout_marginTop="@dimen/appBarTopMargin"
-              android:background="@color/colorPrimary"
+
               android:gravity="center_vertical|bottom"
               android:orientation="horizontal"
               android:paddingBottom="30dp"

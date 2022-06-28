@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cv_item"
@@ -63,38 +63,38 @@
                 android:id="@+id/tv_bank_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/grey_900"/>
+                />
 
             <TextView
                 android:id="@+id/tv_account_holder_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:textColor="@color/grey_900"/>
+                />
 
             <TextView
                 android:id="@+id/tv_branch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:textColor="@color/grey_900"/>
+                />
 
             <TextView
                 android:id="@+id/tv_ifsc"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:textColor="@color/grey_900"/>
+                />
 
             <TextView
                 android:id="@+id/tv_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/value_10dp"
-                android:textColor="@color/grey_900"/>
+                />
 
         </LinearLayout>
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

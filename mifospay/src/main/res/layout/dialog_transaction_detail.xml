@@ -43,7 +43,7 @@
                     android:id="@+id/tv_transaction_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primaryDarkBlue"/>
+                    android:textColor="?attr/colorPrimaryVariant"/>
 
                 <TextView
                     android:id="@+id/tv_transaction_date"
@@ -56,7 +56,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:textColor="@color/grey_900"
+
                     android:visibility="gone"/>
 
                 <TextView
@@ -75,7 +75,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/value_10dp"
-                android:textColor="@android:color/black"
+
                 android:textSize="@dimen/value_30sp"
                 android:textStyle="bold"/>
 
@@ -116,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/client_name"
-                    android:textColor="@color/grey_900"/>
+                    />
 
                 <TextView
                     android:id="@+id/tv_fromAccountNo"
@@ -124,7 +124,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/account"
-                    android:textColor="@color/grey_900"/>
+                    />
 
             </LinearLayout>
 
@@ -156,7 +156,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/client_name"
-                    android:textColor="@color/grey_900"/>
+                    />
 
                 <TextView
                     android:id="@+id/tv_toAccountNo"
@@ -164,7 +164,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="@string/account"
-                    android:textColor="@color/grey_900"/>
+                    />
 
             </LinearLayout>
 
@@ -188,7 +188,7 @@
             android:foregroundGravity="center"
             android:gravity="center"
             android:text="@string/view_receipt"
-            android:textColor="@color/primaryDarkBlue"
+            android:textColor="?attr/colorPrimaryVariant"
             android:textStyle="bold"/>
 
     </LinearLayout>

@@ -8,7 +8,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="org.mifos.mobilewallet.mifospay.home.ui.MainActivity"
 
-    android:background="@color/colorPrimary">
+    >
 
     <TextView
         android:id="@+id/tv_account_balance"
@@ -18,8 +18,8 @@
         android:layout_gravity="center_horizontal|top"
         android:layout_marginTop="@dimen/marginBetweenLogoAndLoginInput"
         android:text="@string/fetching"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/textH4"
+        android:textColor="?attr/colorPrimary"
+        style="@style/TextAppearance.Material3.DisplaySmall"
         app:fontFamily="@font/montserrat" />
 
     <TextView
@@ -32,18 +32,18 @@
         android:layout_marginTop="8dp"
         android:text="@string/balance_hint"
         android:textAllCaps="true"
-        android:textColor="@color/colorBlack54"
-        android:textSize="@dimen/textOverline" />
+        android:alpha="@dimen/alpha_low_emphasis"
+        style="@style/TextAppearance.Material3.LabelSmall" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/hide_balance"
-        android:textSize="20sp"
+        style="@style/TextAppearance.Material3.TitleMedium"
         android:id="@+id/tv_hide_balance"
         android:layout_marginTop="40dp"
         android:fontFamily="sans-serf-black"
-        android:textColor="@color/colorAccent"
+        android:textColor="?attr/colorPrimary"
         android:visibility="gone"
         android:layout_gravity="center|bottom"
         app:layout_anchorGravity="bottom|center_horizontal"
@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/marginItemsInSectionSmall"
                 android:text="@string/transaction_history"
-                android:textColor="@color/colorTextPrimary"
+
                 android:textSize="@dimen/textBody1" />
 
             <ProgressBar
@@ -95,7 +95,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:text="@string/fetching_history"
-                android:textColor="@color/colorAccent"
+                android:textColor="?attr/colorPrimary"
                 android:textSize="@dimen/textH6"
                 app:fontFamily="@font/montserrat" />
 

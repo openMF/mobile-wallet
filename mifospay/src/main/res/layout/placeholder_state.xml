@@ -18,7 +18,7 @@
         android:id="@+id/tv_empty_no_transaction_history_title"
         android:layout_marginTop="@dimen/marginItemsInSectionLarge"
         android:text="@string/error_oops"
-        android:textColor="@color/colorTextPrimary"
+
         android:textSize="@dimen/textBody1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

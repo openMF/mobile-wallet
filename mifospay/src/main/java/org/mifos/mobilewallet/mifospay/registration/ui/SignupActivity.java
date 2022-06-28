@@ -1,31 +1,27 @@
 package org.mifos.mobilewallet.mifospay.registration.ui;
 
+import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
+
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import androidx.transition.TransitionManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
-import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
-import in.galaxyofandroid.spinerdialog.SpinnerDialog;
-import java.util.ArrayList;
-import javax.inject.Inject;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.mifos.mobilewallet.mifospay.R;
@@ -39,7 +35,16 @@ import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 import org.mifos.mobilewallet.mifospay.utils.ValidateUtil;
 
-import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
+import java.util.ArrayList;
+
+import javax.inject.Inject;
+
+import androidx.transition.TransitionManager;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
+import in.galaxyofandroid.spinerdialog.SpinnerDialog;
 
 public class SignupActivity extends BaseActivity implements RegistrationContract.SignupView {
 
@@ -63,8 +68,6 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     TextInputEditText mEtAddressLine2;
     @BindView(R.id.et_pin_code)
     TextInputEditText mEtPinCode;
-    @BindView(R.id.et_state)
-    TextInputEditText mEtCity;
     @BindView(R.id.fab_next)
     FloatingActionButton mFabNext;
 
@@ -82,6 +85,8 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     ProgressBar passwordStrengthProgress;
     @BindView(R.id.tv_password_strength)
     TextView passwordStrengthText;
+    @BindView(R.id.et_state_layout)
+    TextInputLayout stateFill;
 
     private String countryName;
     private String mobileNumber;
@@ -100,7 +105,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         mPresenter.attachView(this);
 
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setToolbarTitle("Registration");
+        setSupportActionBar(toolbar);
 
         mifosSavingProductId = getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0);
         if (mifosSavingProductId
@@ -177,23 +182,9 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
                     stateId = statesJsonObject.getString("id");
                 }
             }
-
-            spinnerDialog = new SpinnerDialog(SignupActivity.this, statesList,
-                    "Select or Search State", R.style.DialogAnimations_SmileWindow, "Close");
-
-            spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
-                @Override
-                public void onClick(String item, int position) {
-                    mEtCity.setText(item);
-                }
-            });
-
-            mEtCity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    spinnerDialog.showSpinerDialog();
-                }
-            });
+            MaterialAutoCompleteTextView stateFillView = (MaterialAutoCompleteTextView)stateFill.getEditText();
+            if(stateFillView != null)
+                stateFillView.setSimpleItems(statesList.toArray(new String[0]));
 
             hideProgressDialog();
 
@@ -220,7 +211,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         }
         if (isEmpty(mEtFirstName) || isEmpty(mEtLastName) || isEmpty(mEtEmail)
                 || isEmpty(mEtAddressLine1) || isEmpty(mEtAddressLine2)
-                || isEmpty(mEtPinCode) || isEmpty(mEtCity) || isEmpty(mEtUserName) || isEmpty(
+                || isEmpty(mEtPinCode) || isEmpty(stateFill.getEditText()) || isEmpty(mEtUserName) || isEmpty(
                 mEtPassword) || isEmpty(mEtConfirmPassword)) {
             Toaster.showToast(this, "All fields are mandatory");
             hideProgressDialog();
@@ -238,7 +229,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         String addressline1 = mEtAddressLine1.getText().toString();
         String addressline2 = mEtAddressLine2.getText().toString();
         String pincode = mEtPinCode.getText().toString();
-        String city = mEtCity.getText().toString();
+        String city = stateFill.getEditText().getText().toString();
         String username = mEtUserName.getText().toString();
         String password = mEtPassword.getText().toString();
         String confirmPassword = mEtConfirmPassword.getText().toString();

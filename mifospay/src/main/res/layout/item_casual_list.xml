@@ -6,10 +6,10 @@
 
     <ImageView
         android:id="@+id/iv_item_casual_list_icon"
-        android:layout_width="@dimen/listImageSize"
-        android:layout_height="@dimen/listImageSize"
-        android:layout_marginStart="@dimen/marginItemsInSectionSmall"
-        android:layout_marginLeft="@dimen/marginItemsInSectionSmall"
+        android:layout_width="@dimen/Mifos.DesignSystem.Size.ListItemsIconSize"
+        android:layout_height="@dimen/Mifos.DesignSystem.Size.ListItemsIconSize"
+        android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding"
+        android:layout_marginLeft="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding"
         app:layout_constraintBottom_toBottomOf="@+id/tv_item_casual_list_subtitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_item_casual_list_title"
@@ -18,8 +18,8 @@
     <View
         android:id="@+id/divider3"
         android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="@dimen/Mifos.DesignSystem.Size.SpacerThickness"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.BetweenListCardItemsHalf"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_item_casual_list_subtitle"
@@ -29,11 +29,10 @@
         android:id="@+id/tv_item_casual_list_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/marginItemsInSectionSmall"
-        android:layout_marginLeft="@dimen/marginItemsInSectionSmall"
-        android:layout_marginTop="@dimen/marginItemsInSectionSmall"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="@dimen/textBody1"
+        android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.BetweenCardImageTitle"
+        android:layout_marginLeft="@dimen/Mifos.DesignSystem.Spacing.BetweenCardImageTitle"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding"
+        style="@style/Mifos.DesignSystem.TextStyle.CardTitle"
         app:layout_constraintStart_toEndOf="@+id/iv_item_casual_list_icon"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,8 +40,8 @@
         android:id="@+id/tv_item_casual_list_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textColor="@color/colorTextSecondary"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.BetweenCardTitleSubtitle"
+        style="@style/Mifos.DesignSystem.TextStyle.CardSubtitle"
         app:layout_constraintStart_toStartOf="@+id/tv_item_casual_list_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_item_casual_list_title" />
 
@@ -50,11 +49,8 @@
         android:id="@+id/tv_item_casual_list_optional_caption"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="@dimen/marginItemsInSectionSmall"
-        android:layout_marginRight="@dimen/marginItemsInSectionSmall"
-        android:layout_marginBottom="8dp"
-        android:textSize="@dimen/textCaption"
+        android:layout_marginEnd="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding"
+        style="@style/TextAppearance.Material3.BodySmall"
         app:layout_constraintBottom_toBottomOf="@+id/tv_item_casual_list_subtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_item_casual_list_title" />

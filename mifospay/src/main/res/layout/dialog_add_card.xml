@@ -115,7 +115,7 @@
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/grey_900"
+            android:background="?attr/colorOnBackground"
             android:text="@string/cancel_txt"
             android:textColor="@android:color/white"/>
 

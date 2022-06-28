@@ -97,7 +97,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/enter_otp"
-                android:textColor="@color/primaryDarkBlue"
+                android:textColor="?attr/colorPrimaryVariant"
                 android:textSize="18sp"/>
 
             <com.alimuzaffar.lib.pin.PinEntryEditText
@@ -140,7 +140,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/enter_upi_pin"
-                android:textColor="@color/primaryDarkBlue"
+                android:textColor="?attr/colorPrimaryVariant"
                 android:textSize="18sp"/>
 
             <com.alimuzaffar.lib.pin.PinEntryEditText
@@ -180,7 +180,7 @@
                 android:id="@+id/btn_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@color/grey_900"
+                android:background="?attr/colorOnBackground"
                 android:text="@string/cancel_txt"
                 android:textColor="@android:color/white"/>
 

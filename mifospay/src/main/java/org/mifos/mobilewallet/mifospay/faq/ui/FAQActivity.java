@@ -38,9 +38,6 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_faq);
 
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setToolbarTitle(Constants.FAQ);
-
         // initializing the views
         initViews();
 

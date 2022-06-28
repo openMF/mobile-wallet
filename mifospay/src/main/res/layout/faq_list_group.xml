@@ -8,10 +8,8 @@
         android:id="@+id/faq_list_group"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="?android:attr/expandableListPreferredChildPaddingLeft"
+        android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
         android:layout_weight="8"
-        android:textColor="@android:color/black" />
+         />
 </LinearLayout>

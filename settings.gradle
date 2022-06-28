@@ -1,1 +1,1 @@
-include ':core', ':mifospay', ':uihouse'
+include ':core', ':mifospay'

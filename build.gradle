@@ -29,13 +29,14 @@ task clean(type: Delete) {
 
 ext {
     // Sdk and tools
-    minSdkVersion = 16
+    minSdkVersion = 22
     targetSdkVersion = 31
     compileSdkVersion = 31
     buildToolsVersion = '30.0.3'
     kotlinVersion = "1.6.21"
 
     // App dependencies
+    core_version = "1.8.0"
     supportLibraryVersion = '1.4.2'
     daggerVersion = '2.18'
     retrofitVersion = '2.2.0'

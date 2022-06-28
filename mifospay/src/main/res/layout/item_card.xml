@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
+<com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -26,7 +26,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAllCaps="true"
-                android:textColor="@color/grey_900"/>
+                />
 
             <TextView
                 android:id="@+id/tv_lName"
@@ -35,7 +35,7 @@
                 android:layout_marginLeft="@dimen/value_10dp"
                 android:layout_marginStart="@dimen/value_10dp"
                 android:textAllCaps="true"
-                android:textColor="@color/grey_900"/>
+                />
 
         </LinearLayout>
 
@@ -46,8 +46,7 @@
             android:background="@android:color/transparent"
             android:text="@string/credit_card_number"
             android:textColor="@color/gray_5"
-            android:textSize="@dimen/value_20sp"
-            android:theme="@style/Theme.AppCompat"/>
+            android:textSize="@dimen/value_20sp"/>
 
 
         <TextView
@@ -62,4 +61,4 @@
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

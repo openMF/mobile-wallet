@@ -28,8 +28,6 @@ public class FinanceFragment extends BaseFragment {
     @BindView(R.id.tl_tab_layout)
     TabLayout tilTabLayout;
 
-    private TabLayoutAdapter tabLayoutAdapter;
-
     public static FinanceFragment newInstance() {
         Bundle args = new Bundle();
         FinanceFragment fragment = new FinanceFragment();
@@ -45,27 +43,11 @@ public class FinanceFragment extends BaseFragment {
 
         setupUi();
         setupViewPager();
-        checkFixedScroll();
 
         tilTabLayout.setupWithViewPager(vpTabLayout);
 
         return rootView;
     }
-
-    private void checkFixedScroll() {
-        int totalWidth = 0;
-        int maxWidth = 0;
-        for (int i = 0; i <= tilTabLayout.getTabCount(); i++) {
-            int tabWidth = tilTabLayout.getChildAt(i).getWidth();
-            totalWidth += tabWidth;
-            maxWidth = Math.max(maxWidth, tabWidth);
-        }
-        int screenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
-        if (totalWidth < screenWidth && screenWidth / tabLayoutAdapter.getCount() >= maxWidth) {
-            tilTabLayout.setTabMode(TabLayout.MODE_FIXED);
-        }
-    }
-
 
 
     private void setupUi() {
@@ -75,7 +57,7 @@ public class FinanceFragment extends BaseFragment {
 
     private void setupViewPager() {
         vpTabLayout.setOffscreenPageLimit(1);
-        tabLayoutAdapter = new TabLayoutAdapter(getChildFragmentManager());
+        TabLayoutAdapter tabLayoutAdapter = new TabLayoutAdapter(getChildFragmentManager());
         tabLayoutAdapter.addFragment(new AccountsFragment(), getString(R.string.accounts));
         tabLayoutAdapter.addFragment(new CardsFragment(), getString(R.string.cards));
         tabLayoutAdapter.addFragment(new MerchantsFragment(), getString(R.string.merchants));

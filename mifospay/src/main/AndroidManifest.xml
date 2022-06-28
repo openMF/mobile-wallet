@@ -34,14 +34,11 @@
         </activity>
         <activity
             android:name=".home.ui.MainActivity"
-            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".common.ui.SearchActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".common.ui.SearchActivity"/>
         <activity
-            android:name=".qr.ui.ShowQrActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".qr.ui.ShowQrActivity"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -54,15 +51,13 @@
         </provider>
 
         <activity
-            android:name=".qr.ui.ReadQrActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".qr.ui.ReadQrActivity"/>
         <activity
-            android:name=".passcode.ui.PassCodeActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".passcode.ui.PassCodeActivity"/>
         <activity
             android:name=".receipt.ui.ReceiptActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme"
+            
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -78,7 +73,7 @@
         <activity
             android:name=".invoice.ui.InvoiceActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme"
+            
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -92,8 +87,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".history.ui.SpecificTransactionsActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".history.ui.SpecificTransactionsActivity"/>
 
         <service android:name=".data.firebase.api.services.MifosPayMessagingService"
             android:exported="false">
@@ -110,40 +104,29 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".registration.ui.SignupActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".registration.ui.SignupActivity"/>
         <activity
-            android:name=".registration.ui.MobileVerificationActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".registration.ui.MobileVerificationActivity"/>
         <activity
             android:name=".editprofile.ui.EditProfileActivity"
-            android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".settings.ui.SettingsActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".settings.ui.SettingsActivity"/>
         <activity
-            android:name=".faq.ui.FAQActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".faq.ui.FAQActivity"/>
         <activity
-            android:name=".bank.ui.LinkBankAccountActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".bank.ui.LinkBankAccountActivity"/>
         <activity
-            android:name=".bank.ui.BankAccountDetailActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".bank.ui.BankAccountDetailActivity"/>
         <activity
-            android:name=".bank.ui.SetupUpiPinActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".bank.ui.SetupUpiPinActivity"/>
         <activity
-            android:name=".notification.ui.NotificationActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".notification.ui.NotificationActivity"/>
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
+            android:screenOrientation="portrait"/>
         <activity
-            android:name=".password.ui.EditPasswordActivity"
-            android:theme="@style/AppTheme" />
+            android:name=".password.ui.EditPasswordActivity" />
     </application>
 
 </manifest>

@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.mifospay.bank.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.cardview.widget.CardView;
+import com.google.android.material.card.MaterialCardView;
 import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -23,7 +23,7 @@ import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
 
-import androidx.cardview.widget.CardView;
+import com.google.android.material.card.MaterialCardView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -41,7 +41,7 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
     @BindView(R.id.fl_upi_pin)
     FrameLayout mFlUpiPin;
     @BindView(R.id.cv_debit_card)
-    CardView mCvDebitCard;
+    MaterialCardView mCvDebitCard;
     @BindView(R.id.tv_debit_card)
     TextView mTvDebitCard;
     @BindView(R.id.tv_otp)

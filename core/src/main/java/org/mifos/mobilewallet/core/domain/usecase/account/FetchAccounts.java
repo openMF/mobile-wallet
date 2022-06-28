@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.core.domain.usecase.account;
 
+import android.util.Log;
+
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.AccountMapper;

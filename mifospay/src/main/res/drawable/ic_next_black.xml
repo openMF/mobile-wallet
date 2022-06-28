@@ -3,10 +3,11 @@
         android:width="20dp"
         android:height="20dp"
         android:viewportHeight="492.004"
-        android:viewportWidth="492.004">
+        android:viewportWidth="492.004"
+        android:tint="?attr/colorControlNormal">
 
     <path
-        android:fillColor="@color/grey_900"
+        android:fillColor="?attr/colorOnBackground"
         android:pathData="M382.678,226.804 L163.73,7.86 C158.666,2.792,151.906,0,144.698,0
 S130.73,2.792,125.666,7.86 L109.542,23.98
 C99.05,34.484,99.05,51.556,109.542,62.044 L293.398,245.9 L109.338,429.96

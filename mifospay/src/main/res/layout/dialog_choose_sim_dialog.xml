@@ -20,7 +20,7 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_marginTop="50dp"
                 android:text="@string/verify_mobile_number"
-                android:textColor="@color/primaryDarkBlue"
+                android:textColor="?attr/colorPrimaryVariant"
                 android:textSize="25sp"/>
 
             <TextView
@@ -30,7 +30,7 @@
                 android:layout_marginTop="@dimen/value_15dp"
                 android:gravity="center"
                 android:text="@string/confirm_mobile_number_message"
-                android:textColor="@color/primaryDarkBlue"/>
+                android:textColor="?attr/colorPrimaryVariant"/>
 
 
             <TextView
@@ -42,7 +42,7 @@
                 android:layout_marginTop="@dimen/value_30dp"
                 android:lines="4"
                 android:text="@string/bank_account_mobile_verification_conditions"
-                android:textColor="@color/grey_900"/>
+                />
 
 
             <LinearLayout
@@ -61,14 +61,14 @@
                     android:drawablePadding="@dimen/value_15dp"
                     android:drawableTop="@drawable/sim_card_unselected"
                     android:gravity="center"
-                    android:textColor="@color/primaryDarkBlue"/>
+                    android:textColor="?attr/colorPrimaryVariant"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="@string/or"
-                    android:textColor="@color/grey_900"/>
+                    />
 
                 <TextView
                     android:id="@+id/tv_sim2"
@@ -79,7 +79,7 @@
                     android:drawablePadding="@dimen/value_15dp"
                     android:drawableTop="@drawable/sim_card_unselected"
                     android:gravity="center"
-                    android:textColor="@color/primaryDarkBlue"/>
+                    android:textColor="?attr/colorPrimaryVariant"/>
 
             </LinearLayout>
 
@@ -90,7 +90,7 @@
                 android:layout_marginTop="@dimen/value_30dp"
                 android:gravity="center"
                 android:text="@string/regular_charges_will_apply"
-                android:textColor="@android:color/black"/>
+                />
 
             <Button
                 android:id="@+id/btn_confirm"
@@ -99,12 +99,7 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_marginBottom="@dimen/value_10dp"
                 android:layout_marginTop="@dimen/value_30dp"
-                android:background="@drawable/button_round_primary"
-                android:clickable="true"
-                android:text="@string/confirm"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                android:typeface="sans"/>
+                android:text="@string/confirm"/>
 
         </LinearLayout>
     </ScrollView>

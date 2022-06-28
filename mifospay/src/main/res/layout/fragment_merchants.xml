@@ -32,7 +32,7 @@
             android:textSize="@dimen/textBody1"
             android:layout_marginTop="@dimen/value_20dp"
             android:layout_marginStart="@dimen/paddingLayout"
-            android:textColor="@color/colorTextPrimary"
+
             android:layout_marginLeft="@dimen/paddingLayout" />
 
         <LinearLayout

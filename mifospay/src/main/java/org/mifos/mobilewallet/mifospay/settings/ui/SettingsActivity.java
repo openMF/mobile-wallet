@@ -43,8 +43,7 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
         setContentView(R.layout.activity_settings);
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setToolbarTitle(Constants.SETTINGS);
+        setSupportActionBar(findViewById(R.id.toolbar));
         mPresenter.attachView(this);
     }
 

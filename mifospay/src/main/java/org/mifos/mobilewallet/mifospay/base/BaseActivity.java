@@ -76,7 +76,7 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
     @Override
     public void showProgressDialog(String message) {
         if (progressDialog == null) {
-            progressDialog = new ProgressDialog(this, R.style.Widget_Material3_CircularProgressIndicator);
+            progressDialog = new ProgressDialog(this);
             progressDialog.setCanceledOnTouchOutside(false);
         }
         progressDialog.setMessage(message);

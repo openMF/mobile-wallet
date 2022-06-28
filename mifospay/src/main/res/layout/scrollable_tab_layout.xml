@@ -7,8 +7,7 @@
     <com.google.android.material.appbar.AppBarLayout
         app:elevation="0dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tl_tab_layout"

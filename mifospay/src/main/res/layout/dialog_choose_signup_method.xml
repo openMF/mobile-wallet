@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/marginItemsInSectionSmall"
             android:text="@string/create_an_account"
-            android:textColor="@color/colorTextPrimary"
+
             android:textSize="@dimen/textBody1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -65,7 +65,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             android:text="@string/or"
-            android:textColor="@color/grey_900"
+
             app:layout_constraintEnd_toStartOf="@+id/divider2"
             app:layout_constraintStart_toEndOf="@+id/divider"
             app:layout_constraintTop_toBottomOf="@+id/btn_merchant" />
@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/marginItemsInSectionLarge"
             android:layout_marginBottom="@dimen/marginBetweenSections"
-            android:buttonTint="@color/colorAccent"
+            android:buttonTint="?attr/colorPrimary"
             android:checked="true"
             android:text="@string/ease_my_sign_up_using_google_account"
             android:visibility="visible"
