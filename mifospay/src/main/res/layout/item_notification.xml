@@ -1,28 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:padding="@dimen/value_10dp">
+    android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/value_18sp"/>
+        tools:text="Title"
+        style="@style/TextAppearance.Material3.TitleLarge" />
 
     <TextView
         android:id="@+id/tv_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
-        android:textSize="@dimen/value_16sp"/>
+        tools:text="This is sample body text"
+        style="@style/TextAppearance.Material3.BodyMedium"/>
 
     <TextView
         android:id="@+id/tv_timestamp"
+        tools:text="17-2-2002"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/value_10sp"/>
+        style="@style/TextAppearance.Material3.LabelSmall" />
 
 </LinearLayout>

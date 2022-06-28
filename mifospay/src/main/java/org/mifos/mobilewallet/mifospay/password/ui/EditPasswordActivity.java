@@ -40,7 +40,6 @@ public class EditPasswordActivity extends BaseActivity implements
         setContentView(R.layout.activity_edit_password);
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
-        setupUi();
         mPresenter.attachView(this);
 
         disableSavePasswordButton();
@@ -75,10 +74,6 @@ public class EditPasswordActivity extends BaseActivity implements
         findViewById(R.id.btn_save).setEnabled(false);
     }
 
-    private void setupUi() {
-        showCloseButton();
-        setToolbarTitle(getString(R.string.change_password));
-    }
 
     @OnClick(R.id.btn_cancel)
     public void onCancelClicked() {

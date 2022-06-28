@@ -1,98 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:orientation="vertical">
+<androidx.coordinatorlayout.widget.CoordinatorLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-    <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:title="@string/link_your_bank_account"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            app:layout_scrollFlags="scroll|enterAlways" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:startIconDrawable="@drawable/et_search"
+            app:placeholderText="@string/search"
+            android:hint="@string/search"
+            style="@style/Mifos.DesignSystem.Components.NoBorderTextField"
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_search_bank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <com.google.android.material.appbar.AppBarLayout
+        android:scrollbars="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingVertical="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin"
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin">
 
-            <include layout="@layout/toolbar"/>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical">
-
-            <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                          android:layout_width="match_parent"
-                          android:layout_height="match_parent"
-                          android:orientation="vertical">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:startIconDrawable="@drawable/et_search"
-                    android:hint="@string/search"
-                    android:layout_margin="@dimen/value_10dp">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/et_search_bank"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"/>
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    style="@style/TextAppearance.AppCompat.Small"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/popular_banks"
-                    android:padding="@dimen/value_15dp"
-                    android:text="@string/popular_banks"
-                    />
+            <TextView
+                style="@style/TextAppearance.Material3.LabelLarge"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/popular_banks"
+                android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.listHeaderSpacing"
+                android:text="@string/popular_banks"/>
 
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_popular_banks"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="vertical"
-                    android:layout_margin="@dimen/value_10dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_popular_banks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical"/>
 
 
-                <TextView
-                    android:id="@+id/no_bank_found"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/no_bank_account"
-                    android:padding="@dimen/value_15dp"
-                    android:gravity="center"
-                    android:textSize="@dimen/value_15dp"
-                    android:visibility="gone"
-                    />
+            <TextView
+                android:id="@+id/no_bank_found"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/no_bank_account"
+                android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding"
+                android:gravity="center"
+                style="@style/TextAppearance.Material3.LabelSmall"
+                android:visibility="gone"/>
 
-                <TextView
-                    style="@style/TextAppearance.AppCompat.Small"
-                    android:layout_width="match_parent"
-                    android:id="@+id/other_banks"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/value_15dp"
-                    android:text="@string/other_banks"
-                    />
+            <TextView
+                android:layout_width="match_parent"
+                android:id="@+id/other_banks"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+                android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.listHeaderSpacing"
+                style="@style/TextAppearance.Material3.LabelLarge"
+                android:text="@string/other_banks"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rv_other_banks"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_other_banks"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
 
 
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>
-
-    </LinearLayout>
-
-</RelativeLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

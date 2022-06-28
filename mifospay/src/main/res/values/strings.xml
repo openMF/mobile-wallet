@@ -315,6 +315,11 @@
     <string name="dark_theme">Dark</string>
     <string name="system_theme">System Default</string>
     <string name="faq_text">Frequent Asked Questions</string>
+    <string name="bank_account_details">Bank Account Details</string>
+    <string name="create_standing_instruction">Create Standing Instruction</string>
+    <string name="recurrence_interval_in_months">Recurrence Interval (in months)</string>
+    <string name="select_date">Select date</string>
+    <string name="standing_instruction_id">Standing Instruction ID:</string>
 
 
 </resources>

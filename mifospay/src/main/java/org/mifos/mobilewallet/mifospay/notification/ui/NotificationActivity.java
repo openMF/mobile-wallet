@@ -50,8 +50,6 @@ public class NotificationActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
         ButterKnife.bind(this);
-        setToolbarTitle("Notifications");
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         getActivityComponent().inject(this);
 
         setupRecyclerView();

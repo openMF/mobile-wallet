@@ -1,224 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:id="@+id/rr_container"
+    android:layout_height="match_parent">
 
-    <include layout="@layout/toolbar"/>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <LinearLayout
-            android:id="@+id/ll_create_si"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_height="?attr/collapsingToolbarLayoutMediumSize"
+            app:contentScrim="?attr/colorPrimaryContainer"
+            style="?attr/collapsingToolbarLayoutMediumStyle"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                app:layout_collapseMode="pin"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/til_si_amount"
-                android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_20dp"
-                android:layout_marginTop="@dimen/value_20dp"
-                android:layout_marginBottom="@dimen/value_10dp"
-                android:textColorHint="@android:color/black"
-                >
+                android:elevation="0dp"
+                app:title="@string/create_standing_instruction"
+                app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+                android:layout_height="?attr/actionBarSize" />
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_si_amount"
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+            android:paddingVertical="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin">
+
+            <LinearLayout
+                android:id="@+id/ll_create_si"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/til_si_amount"
                     android:hint="@string/amount"
-                    android:inputType="number"
-                    android:textSize="@dimen/value_15sp"
-                     />
+                    android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge">
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_si_amount"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/til_si_vpa"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/value_20dp"
-                    android:layout_marginLeft="@dimen/value_20dp"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:layout_marginEnd="@dimen/value_15dp"
-                    android:layout_marginRight="@dimen/value_20dp"
-                    android:layout_marginBottom="@dimen/value_10dp"
-                    android:layout_toStartOf="@id/btn_scan_qr"
-                    android:layout_toLeftOf="@id/btn_scan_qr"
-                    android:textColorHint="@android:color/black"
-                    >
+                    android:hint="@string/virtual_payment_address"
+                    app:endIconDrawable="@drawable/qrcode_black"
+                    app:endIconMode="custom"
+                    app:endIconContentDescription="@string/scan_code"
+                    android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_si_vpa"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="@string/virtual_payment_address"
-                        android:singleLine="true"
-                        android:textSize="@dimen/value_15sp" />
+                        android:singleLine="true"/>
                 </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageView
-                    android:clickable="true"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:id="@+id/btn_scan_qr"
-                    android:layout_width="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginEnd="@dimen/value_30dp"
-                    android:layout_marginRight="@dimen/value_30dp"
-                    android:src="@drawable/qrcode_blue_selector" />
-            </RelativeLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_si_interval"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_20dp"
-                android:layout_marginTop="@dimen/value_10dp"
-                android:layout_marginBottom="@dimen/value_10dp"
-                android:textColorHint="@android:color/black"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_si_interval"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/til_si_interval"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="Recurrence Interval (in months)"
-                    android:singleLine="true"
-                    android:inputType="number"
-                    android:textSize="@dimen/value_15sp" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+                    android:hint="@string/recurrence_interval_in_months">
 
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/et_si_interval"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:singleLine="true"
+                        android:inputType="number"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/valid_till"
-                android:layout_marginBottom="@dimen/value_10dp"
-                android:textColor="@color/black"
-                android:textSize="@dimen/value_16sp"
-                android:layout_gravity="center" />
-            <Button
-                android:id="@+id/btn_valid_till"
-                android:layout_width="160dp"
-                android:layout_height="@dimen/value_50dp"
-                android:text="SELECT DATE"
-                android:layout_gravity="center"
-                android:layout_marginBottom="@dimen/value_20dp"
-                android:textColor="@color/white" />
-            <Button
-                android:id="@+id/btn_create_si"
-                android:layout_width="260dp"
-                android:layout_height="@dimen/value_50dp"
-                android:text="@string/submit"
-                android:layout_gravity="center"
-                android:textColor="@color/white" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_confirm_transfer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone"
-            android:padding="@dimen/value_20dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sending_to"
-                android:textColor="?attr/colorPrimaryVariant"
-                android:textSize="@dimen/value_15sp"/>
-
-            <TextView
-                android:id="@+id/tv_client_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/value_10dp"
-
-                android:textSize="@dimen/value_20sp"/>
-
-            <TextView
-                android:id="@+id/tv_client_vpa"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/value_5dp"
-                android:textSize="@dimen/value_18sp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/value_20dp"
-                android:text="@string/amount"
-                android:textColor="?attr/colorPrimaryVariant"
-                android:textSize="@dimen/value_15sp"/>
-
-            <TextView
-                android:id="@+id/tv_amount"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingTop="@dimen/value_10dp"
-
-                android:textSize="@dimen/value_20sp"/>
-
-            <LinearLayout
-                android:id="@+id/ll_confirm_cancel"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/value_10dp"
-                android:layout_marginTop="@dimen/value_30dp"
-                android:gravity="right"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_cancel"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorOnBackground"
-                    android:text="@string/cancel"
-                    android:textColor="@android:color/white"/>
-
+                    android:text="@string/valid_till"
+                    android:layout_marginBottom="@dimen/marginItemsInSectionSmall"
+                    style="@style/TextAppearance.Material3.BodyLarge"
+                    android:layout_gravity="center" />
                 <Button
-                    android:id="@+id/btn_confirm"
+                    android:id="@+id/btn_valid_till"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="@dimen/value_30dp"
-                    android:background="?attr/colorPrimaryVariant"
-                    android:text="@string/confirm"
-                    android:textColor="@android:color/white"/>
-
+                    android:text="@string/select_date"
+                    android:textAllCaps="true"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenSections" />
+                <Button
+                    android:id="@+id/btn_create_si"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/submit"
+                    android:layout_gravity="center" />
             </LinearLayout>
 
+            <LinearLayout
+
+                android:id="@+id/ll_confirm_transfer"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:padding="@dimen/value_20dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/sending_to"
+                    style="@style/Mifos.DesignSystem.TextStyle.PrimaryColorBody"/>
+
+                <TextView
+                    android:id="@+id/tv_client_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/TextAppearance.Material3.TitleLarge"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"/>
+
+                <TextView
+                    android:id="@+id/tv_client_vpa"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
+                    style="@style/TextAppearance.Material3.TitleMedium"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+                    android:text="@string/amount"
+                    style="@style/Mifos.DesignSystem.TextStyle.PrimaryColorBody"/>
+
+                <TextView
+                    android:id="@+id/tv_amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
+                    style="@style/TextAppearance.Material3.TitleLarge"/>
+
+                <LinearLayout
+                    android:id="@+id/ll_confirm_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/btn_cancel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/cancel"
+                        style="@style/Widget.Material3.Button.OutlinedButton"/>
+
+                    <Button
+                        android:id="@+id/btn_confirm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+                        android:text="@string/confirm"/>
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <com.google.android.material.progressindicator.CircularProgressIndicator
+                android:id="@+id/progressBar"
+                android:indeterminate="true"
+                android:layout_gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/Mifos.DesignSystem.Size.LogoImageVerticalMargin"
+                android:visibility="gone" />
+
         </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
 
-        <ProgressBar
-            android:id="@+id/progressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:visibility="gone" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

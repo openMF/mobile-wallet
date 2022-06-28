@@ -13,20 +13,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <include layout="@layout/toolbar"/>
-
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar"
+                app:titleCentered="true"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="@string/bank_account_details"
+                app:navigationIcon="@drawable/ic_arrow_back_white_24dp"/>
         </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="@dimen/value_20dp">
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge">
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/value_20dp"
+                android:layout_marginRight="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
                 android:orientation="vertical">
 
                 <TextView
@@ -37,25 +43,25 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                     android:text="@string/ac_holder_name"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                     android:text="@string/branch_name"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                     android:text="@string/ifsc"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                     android:text="@string/type"/>
 
             </LinearLayout>
@@ -74,25 +80,25 @@
                     android:id="@+id/tv_account_holder_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"/>
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"/>
 
                 <TextView
                     android:id="@+id/tv_branch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"/>
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"/>
 
                 <TextView
                     android:id="@+id/tv_ifsc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"/>
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"/>
 
                 <TextView
                     android:id="@+id/tv_type"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"/>
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"/>
 
             </LinearLayout>
 
@@ -107,7 +113,7 @@
                 android:id="@+id/btn_setup_upi_pin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginLeft="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:text="@string/setup_upi"
                 android:visibility="visible"/>
@@ -116,7 +122,7 @@
                 android:id="@+id/btn_delete_bank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginLeft="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
                 style="@style/Widget.Material3.Button.OutlinedButton"
                 android:text="@string/delete_bank"
                 android:visibility="visible"/>
@@ -127,7 +133,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="@dimen/value_20dp"
+            android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.marginBetweenSectionsHalf"
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
             android:background="?attr/colorOnBackground"
             android:alpha="@dimen/alpha_least_emphasis"/>
 
@@ -135,28 +142,25 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/value_20dp">
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin">
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cv_change_upi_pin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardUseCompatPadding="true"
+                app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger"
                 style="@style/Widget.Material3.CardView.Filled">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/value_20dp"
                     android:text="@string/change_upi_pin"
-
                     style="@style/TextAppearance.Material3.TitleMedium"/>
 
                 <ImageView
-                    android:layout_width="@dimen/value_15dp"
-                    android:layout_height="@dimen/value_15dp"
+                    android:layout_width="@dimen/Mifos.DesignSystem.Size.SmallIcon"
+                    android:layout_height="@dimen/Mifos.DesignSystem.Size.SmallIcon"
                     app:srcCompat="@drawable/ic_next_black"
-                    android:layout_margin="@dimen/value_20dp"
                     android:layout_gravity="right|center" />
 
             </com.google.android.material.card.MaterialCardView>
@@ -165,23 +169,20 @@
                 android:id="@+id/cv_forgot_upi_pin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/value_20dp"
+                android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
                 style="@style/Widget.Material3.CardView.Filled"
-                app:cardUseCompatPadding="true">
+                app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/value_20dp"
                     android:text="@string/forgot_upi_pin"
-
                     style="@style/TextAppearance.Material3.TitleMedium"/>
 
                 <ImageView
-                    android:layout_width="@dimen/value_15dp"
-                    android:layout_height="@dimen/value_15dp"
+                    android:layout_width="@dimen/Mifos.DesignSystem.Size.SmallIcon"
+                    android:layout_height="@dimen/Mifos.DesignSystem.Size.SmallIcon"
                     app:srcCompat="@drawable/ic_next_black"
-                    android:layout_margin="@dimen/value_20dp"
                     android:layout_gravity="right|center" />
 
             </com.google.android.material.card.MaterialCardView>

@@ -4,16 +4,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
+    style="@style/Mifos.DesignSystem.Components.OutlinedCard.Clickable"
     android:orientation="horizontal"
-    android:padding="@dimen/value_20dp">
+    android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding">
 
     <ImageView
         android:id="@+id/iv_popular_bank"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="@dimen/Mifos.DesignSystem.Size.ListItemsIconSize"
+        android:layout_height="@dimen/Mifos.DesignSystem.Size.ListItemsIconSize"
         android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/value_10dp"
         app:srcCompat="@drawable/ic_search"/>
 
     <TextView
@@ -21,9 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/value_10dp"
-        android:layout_marginStart="40dp"
-
-        android:textSize="@dimen/value_15sp"/>
+        android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+        style="@style/TextAppearance.Material3.BodyLarge"/>
 
 </LinearLayout>

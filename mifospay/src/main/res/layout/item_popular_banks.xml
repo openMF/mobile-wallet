@@ -1,29 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="85dp"
-    android:layout_width="85dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="@dimen/Mifos.DesignSystem.Size.BankCardSize"
+    android:layout_width="@dimen/Mifos.DesignSystem.Size.BankCardSize"
     android:clickable="true"
     android:focusable="true"
-    style="@style/Widget.Material3.CardView.Filled">
+    style="@style/Widget.Material3.CardView.Filled"
+    app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding">
     <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/value_10dp"
         android:gravity="center_horizontal">
 
         <ImageView
             android:id="@+id/iv_popular_bank"
             android:layout_gravity="center"
-            android:layout_height="40dp"
-            android:layout_width="40dp" />
+            android:layout_height="@dimen/Mifos.DesignSystem.Size.BankLogoSize"
+            android:layout_width="@dimen/Mifos.DesignSystem.Size.BankLogoSize" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
 
         <TextView
             android:id="@+id/tv_popular_bank"
-            android:layout_gravity="center"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:paddingTop="@dimen/value_5dp"/>
+            android:layout_width="wrap_content"/>
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

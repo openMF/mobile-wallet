@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.mifospay.standinginstruction.ui
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,7 +10,12 @@ import android.os.Bundle
 import androidx.core.content.ContextCompat
 import android.view.View
 import android.widget.Toast
+import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.datepicker.MaterialStyledDatePickerDialog
+import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.activity_new_si.*
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
@@ -19,6 +25,10 @@ import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.NewSIPresen
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 import javax.inject.Inject
 import kotlin.properties.Delegates
@@ -41,8 +51,6 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         setContentView(R.layout.activity_new_si)
         activityComponent.inject(this)
         ButterKnife.bind(this)
-        setToolbarTitle(getString(R.string.tile_si_activity))
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         mPresenter.attachView(this)
         initView()
     }
@@ -55,22 +63,32 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         btn_valid_till.setOnClickListener { pickToDate() }
         btn_create_si.setOnClickListener { createSI() }
         btn_confirm.setOnClickListener { createNewStandingInstruction() }
+        findViewById<TextInputLayout>(R.id.til_si_vpa).setEndIconOnClickListener {
+            scanQrClicked()
+        }
         btn_cancel.setOnClickListener { cancelNewStandingInstruction() }
-        btn_scan_qr.setOnClickListener { scanQrClicked() }
     }
 
+    @SuppressLint("SetTextI18n")
     fun pickToDate() {
-        val calendar: Calendar = Calendar.getInstance()
-        val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
-        val month: Int = calendar.get(Calendar.MONTH)
-        val year: Int = calendar.get(Calendar.YEAR)
-        val picker = DatePickerDialog(
-            this, { view, year, monthOfYear, dayOfMonth ->
+        val constraintsBuilder = CalendarConstraints.Builder()
+                .setStart(Calendar.getInstance().timeInMillis)
+
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .setCalendarConstraints(constraintsBuilder.build())
+            .build()
+
+        datePicker.addOnPositiveButtonClickListener { selectedDateInMillis ->
+            Calendar.getInstance().run{
+                if(timeInMillis < selectedDateInMillis)
+                    return@run
+                timeInMillis = selectedDateInMillis
+                val (dayOfMonth, monthOfYear, year) = listOf(get(Calendar.DAY_OF_MONTH), get(Calendar.MONTH), get(Calendar.YEAR))
                 btn_valid_till.text = "$dayOfMonth-${(monthOfYear + 1)}-$year"
-            }, year, month, day
-        )
-        picker.datePicker.minDate = System.currentTimeMillis()
-        picker.show()
+            }
+        }
+        datePicker.show(supportFragmentManager, "MaterialDatePicker")
     }
 
     private fun createSI() {

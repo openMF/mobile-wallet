@@ -10,7 +10,11 @@ import android.view.View
 import android.widget.Toast
 import butterknife.ButterKnife
 import butterknife.OnTextChanged
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.android.synthetic.main.activity_new_si.*
 import kotlinx.android.synthetic.main.activity_si_details.*
+import kotlinx.android.synthetic.main.activity_si_details.progressBar
 import kotlinx.android.synthetic.main.placeholder_state.*
 import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.mifospay.R
@@ -62,17 +66,25 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
 
     private fun setUpUI() {
         tv_edit_pick.setOnClickListener {
-            val calendar: Calendar = Calendar.getInstance()
-            val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
-            val month: Int = calendar.get(Calendar.MONTH)
-            val year: Int = calendar.get(Calendar.YEAR)
-            val picker = DatePickerDialog(
-                this,
-                { view, year, monthOfYear, dayOfMonth ->
-                    tv_valid_till.text = "$dayOfMonth-${(monthOfYear + 1)}-$year"
-                }, year, month, day
-            )
-            picker.show()
+            val constraintsBuilder = CalendarConstraints.Builder()
+                .setStart(Calendar.getInstance().timeInMillis)
+
+            val datePicker = MaterialDatePicker.Builder.datePicker()
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setCalendarConstraints(constraintsBuilder.build())
+                .build()
+
+            datePicker.addOnPositiveButtonClickListener { selectedDateInMillis ->
+                Calendar.getInstance().run{
+                    if(timeInMillis < selectedDateInMillis)
+                        return@run
+                    timeInMillis = selectedDateInMillis
+                    val (dayOfMonth, monthOfYear, year) = listOf(get(Calendar.DAY_OF_MONTH), get(Calendar.MONTH), get(Calendar.YEAR))
+                    btn_valid_till.text = "$dayOfMonth-${(monthOfYear + 1)}-$year"
+                }
+            }
+            datePicker.show(supportFragmentManager, "MaterialDatePicker")
+
         }
 
         fab.setOnClickListener {

@@ -60,8 +60,8 @@ public class SelfServiceApiManager {
                 .readTimeout(60, TimeUnit.SECONDS)
                 .connectTimeout(60, TimeUnit.SECONDS)
                 .writeTimeout(60, TimeUnit.SECONDS)
-                .addInterceptor(interceptor)
                 .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
+                .addInterceptor(interceptor)
                 .build();
 
         retrofit = new Retrofit.Builder()

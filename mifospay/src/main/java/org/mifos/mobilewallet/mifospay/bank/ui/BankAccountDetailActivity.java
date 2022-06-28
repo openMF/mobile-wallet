@@ -63,8 +63,6 @@ public class BankAccountDetailActivity extends BaseActivity implements
         setContentView(R.layout.activity_bank_account_detail);
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setToolbarTitle(Constants.BANK_ACCOUNT_DETAILS);
         mPresenter.attachView(this);
 
         bankAccountDetails = getIntent().getExtras().getParcelable(Constants.BANK_ACCOUNT_DETAILS);
