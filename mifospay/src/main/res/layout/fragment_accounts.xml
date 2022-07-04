@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <include
@@ -9,25 +10,22 @@
         layout="@layout/placeholder_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/marginItemsInSectionLarge"
         android:visibility="gone" />
 
     <TextView
         android:id="@+id/linked_bank_account_text"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/paddingLayout"
-        android:layout_marginStart="@dimen/paddingLayout"
-        android:layout_marginTop="@dimen/default_margin"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin"
         android:layout_width="wrap_content"
         android:text="@string/linked_bank_account"
-
-        android:textSize="@dimen/textBody1" />
+        style="@style/TextAppearance.Material3.BodyLarge" />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_accounts"
         android:layout_below="@id/linked_bank_account_text"
-        android:layout_marginTop="@dimen/default_margin"
-        android:paddingBottom="@dimen/value_70dp"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.listHeaderSpacing"
+        android:paddingBottom="@dimen/Mifos.DesignSystem.Spacing.VerticalSpaceForFab"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
@@ -38,8 +36,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/fab_margin"
-        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.FabMargin"
+        android:layout_marginEnd="@dimen/Mifos.DesignSystem.Spacing.FabMargin"
         android:layout_width="wrap_content"
         android:text="@string/add_account"
         app:icon="@drawable/ic_add" />

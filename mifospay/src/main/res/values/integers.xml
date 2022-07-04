@@ -2,42 +2,4 @@
 <resources>
     <integer name="telephone_numbers_max_length_standard">10</integer>
     <integer name="bottom_view_transition_duration">200</integer>
-
-    <dimen name="Mifos.DesignSystem.Size.SmallIcon">15dp</dimen>
-    <dimen name="Mifos.DesignSystem.Size.BankCardSize">85dp</dimen>
-    <dimen name="Mifos.DesignSystem.Size.BankLogoSize">45dp</dimen>
-
-    <style name="Mifos.DesignSystem.Components.NoBorderTextField" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeWidth">0dp</item>
-        <item name="boxStrokeWidthFocused">0dp</item>
-        <item name="hintTextColor">@android:color/transparent</item>
-    </style>
-
-    <dimen name="Mifos.DesignSystem.Size.UserImageEditTopStartMargins">56dp</dimen>
-
-    <style name="Mifos.DesignSystem.TextStyle.PrimaryColorBody" parent="TextAppearance.Material3.BodyMedium">
-        <item name="android:textColor">?attr/colorPrimary</item>
-    </style>
-
-    <style name="Mifos.DesignSystem.TextStyle.PrimaryColorBodyLarger" parent="TextAppearance.Material3.BodyLarge">
-        <item name="android:textColor">?attr/colorPrimary</item>
-    </style>
-    <dimen name="Mifos.DesignSystem.Size.emptyStateImageSize">64dp</dimen>
-
-    <style name="Mifos.DesignSystem.Components.HorizontalSpacer" parent="android:Widget">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/Mifos.DesignSystem.Size.SpacerThickness</item>
-        <item name="android:background">?attr/colorOnSurface</item>
-        <item name="alpha">@dimen/alpha_least_emphasis</item>
-    </style>
-    <style name="Mifos.DesignSystem.Components.VerticalSpacer" parent="android:Widget">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:width">@dimen/Mifos.DesignSystem.Size.SpacerThickness</item>
-        <item name="android:background">?attr/colorOnSurface</item>
-        <item name="alpha">@dimen/alpha_least_emphasis</item>
-    </style>
-
-    <dimen name="Mifos.DesignSystem.Size.BottomSheetPeakHeight">175dp</dimen>
-
-    <style name="Mifos.DesignSystem.Components.IconButton" parent="Widget.Material3.Button.IconButton"/>
 </resources>

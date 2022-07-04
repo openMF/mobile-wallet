@@ -2,19 +2,17 @@
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/value_10dp"
-    android:layout_marginRight="@dimen/value_10dp"
-    android:layout_marginTop="@dimen/value_10dp"
-    android:orientation="vertical"
-    app:cardCornerRadius="@dimen/value_10dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+    app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/button_round_stroke_gray"
-        android:orientation="vertical"
-        android:padding="@dimen/value_10dp">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -26,16 +24,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAllCaps="true"
-                />
+                style="@style/TextAppearance.Material3.BodyMedium"
+                tools:text="Rahul"/>
 
             <TextView
                 android:id="@+id/tv_lName"
+                android:layout_height="match_parent"
+                tools:text="Gill"
+                android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginWords"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_10dp"
-                android:layout_marginStart="@dimen/value_10dp"
-                android:textAllCaps="true"
-                />
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:textAllCaps="true" />
 
         </LinearLayout>
 
@@ -44,19 +43,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:text="@string/credit_card_number"
-            android:textColor="@color/gray_5"
-            android:textSize="@dimen/value_20sp"/>
+            style="@style/TextAppearance.Material3.TitleLarge"
+            tools:text="8754753895326"
+            android:textColor="@color/gray_5"/>
 
 
         <TextView
             android:id="@+id/tv_expiry_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:text="@string/expiry_date"
-            android:textColor="@color/gray_5"
-            android:theme="@style/Theme.AppCompat"/>
+            tools:text="Expiry date: 22 June 2099"
+            android:alpha="@dimen/alpha_low_emphasis"/>
 
 
     </LinearLayout>

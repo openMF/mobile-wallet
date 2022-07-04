@@ -2,43 +2,50 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-        <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin">
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ll_search_cards"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:id="@+id/ll_search_cards"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_search"/>
-            <EditText
-                android:layout_width="match_parent"
+            android:orientation="vertical"
+            app:startIconDrawable="@drawable/et_search"
+            app:placeholderText="@string/search"
+            android:hint="@string/search"
+            style="@style/Mifos.DesignSystem.Components.NoBorderTextField"
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall">
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_search_cards"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_cards"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:baselineAligned="false"
             android:clipToPadding="false"
-            android:paddingBottom="60dp"/>
+            android:id="@+id/rv_cards"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:paddingBottom="@dimen/Mifos.DesignSystem.Spacing.VerticalSpaceForFab"
+            tools:listitem="@layout/item_card" />
     </LinearLayout>
 
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/pb_cards"
-        style="@style/Widget.AppCompat.ProgressBar"
+        android:indeterminate="true"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -49,23 +56,19 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/marginItemsInSectionLarge"
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
         android:visibility="gone" />
 
-    <com.google.android.material.button.MaterialButton
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/btn_add_card"
-        android:layout_width="155dp"
-        app:backgroundTint="@color/black"
+        android:layout_gravity="end|bottom"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="23dp"
+        android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.FabMargin"
+        android:layout_marginEnd="@dimen/Mifos.DesignSystem.Spacing.FabMargin"
+        android:layout_width="wrap_content"
         android:text="@string/add_card"
-        app:cornerRadius="@dimen/value_50dp"
-        app:icon="@drawable/ic_add"
-        app:iconTint="@color/colorPrimary"
-        android:textAlignment="center"
-        android:textColor="@color/colorPrimary" />
+        app:icon="@drawable/ic_add" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -8,6 +8,8 @@ import android.os.Bundle;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.button.MaterialButton;
+
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -87,7 +89,7 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
     View vRule2;
 
     @BindView(R.id.tv_viewReceipt)
-    TextView tvViewReceipt;
+    MaterialButton tvViewReceipt;
     @BindView(R.id.ll_from)
     LinearLayout mLlFrom;
     @BindView(R.id.ll_to)

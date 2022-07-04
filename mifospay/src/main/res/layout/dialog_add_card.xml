@@ -7,7 +7,8 @@
     android:focusableInTouchMode="true"
     android:focusedByDefault="true"
     android:orientation="vertical"
-    android:padding="@dimen/value_20dp">
+    android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+    android:paddingVertical="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_fName"
@@ -15,7 +16,7 @@
         android:layout_height="wrap_content"
         app:errorEnabled="true">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_fName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,10 +29,10 @@
         android:id="@+id/til_lName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/value_5dp"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
         app:errorEnabled="true">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_lName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -44,10 +45,10 @@
         android:id="@+id/til_card_number"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/value_10dp"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
         app:errorEnabled="true">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_card_number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -60,13 +61,14 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/value_10dp"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
+        style="@style/TextAppearance.Material3.TitleSmall"
         android:text="@string/expiry_date"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/value_10dp"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
         android:orientation="horizontal">
 
         <Spinner
@@ -74,13 +76,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:entries="@array/months_array"
-            android:padding="@dimen/value_10dp"/>
+            android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding"/>
 
         <Spinner
             android:id="@+id/spn_yy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/value_10dp"/>
+            android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding"/>
 
     </LinearLayout>
 
@@ -88,46 +90,40 @@
         android:id="@+id/til_cvv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/value_10dp"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
         app:errorEnabled="true">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_cvv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:hint="@string/cvv"
             android:inputType="numberPassword"
             android:maxLength="3"
-            android:minWidth="@dimen/value_70dp"
+            android:minWidth="@dimen/Mifos.DesignSystem.Size.SmallerTextFieldWidth"
             android:nextFocusForward="@id/btn_add"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/value_20dp"
-        android:layout_marginRight="@dimen/value_10dp"
-        android:layout_marginTop="@dimen/value_30dp"
-        android:gravity="right"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+        android:gravity="end"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="?attr/colorOnBackground"
             android:text="@string/cancel_txt"
-            android:textColor="@android:color/white"/>
+            style="@style/Widget.Material3.Button.OutlinedButton"/>
 
         <Button
             android:id="@+id/btn_add"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginLeft="@dimen/value_30dp"
-            android:background="@color/primaryBlue"
-            android:text="@string/add"
-            android:textColor="@android:color/white"/>
+            android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+            android:text="@string/add"/>
 
     </LinearLayout>
 </LinearLayout>

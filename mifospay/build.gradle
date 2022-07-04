@@ -95,7 +95,7 @@ dependencies {
     testImplementation "junit:junit:$rootProject.junitVersion"
 
     implementation project(':core')
-    implementation 'com.github.rahul-gill:mifos-ui-library:publish-SNAPSHOT'
+    implementation 'com.github.rahul-gill:mifos-ui-library:main-SNAPSHOT'
 }
 
 apply plugin: 'com.google.gms.google-services'

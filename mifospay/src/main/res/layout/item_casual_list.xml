@@ -18,9 +18,8 @@
     <View
         android:id="@+id/divider3"
         android:layout_width="0dp"
-        android:layout_height="@dimen/Mifos.DesignSystem.Size.SpacerThickness"
+        style="@style/Mifos.DesignSystem.Components.HorizontalSpacer"
         android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.BetweenListCardItemsHalf"
-        android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_item_casual_list_subtitle"
         app:layout_constraintTop_toBottomOf="@+id/tv_item_casual_list_subtitle" />

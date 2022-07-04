@@ -16,10 +16,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/value_20dp"
+            android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger"
             android:visibility="gone">
 
-            <EditText
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_debit_card_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
                     android:id="@+id/pe_month"
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                     android:cursorVisible="false"
                     android:digits="1234567890"
                     android:gravity="center"
@@ -52,17 +52,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginLeft="@dimen/value_10dp"
-                    android:layout_marginRight="@dimen/value_10dp"
+                    android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                     android:gravity="bottom"
                     android:text="@string/slash"
-                    android:textSize="30sp"/>
+                    style="@style/TextAppearance.Material3.HeadlineLarge" />
 
                 <com.alimuzaffar.lib.pin.PinEntryEditText
                     android:id="@+id/pe_year"
                     android:layout_width="160dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/value_10dp"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                     android:cursorVisible="false"
                     android:digits="1234567890"
                     android:gravity="center"
@@ -75,10 +74,8 @@
             </LinearLayout>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/value_10dp"
-                android:background="#44000000"/>
+                android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+                style="@style/Mifos.DesignSystem.Components.HorizontalSpacer"/>
 
         </LinearLayout>
 
@@ -87,8 +84,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/value_20dp"
-            android:visibility="gone">
+            android:visibility="gone"
+            android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger">
 
             <TextView
                 android:id="@+id/tv_otp_title"
@@ -97,15 +94,14 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/enter_otp"
-                android:textColor="?attr/colorPrimaryVariant"
-                android:textSize="18sp"/>
+                style="@style/TextAppearance.Material3.TitleLarge"/>
 
             <com.alimuzaffar.lib.pin.PinEntryEditText
                 android:id="@+id/pe_otp"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/value_10dp"
+                android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                 android:cursorVisible="false"
                 android:digits="1234567890"
                 android:gravity="center"
@@ -118,10 +114,8 @@
                 app:pinLineStrokeSelected="4dp"/>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/value_10dp"
-                android:background="#44000000"/>
+                android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+                style="@style/Mifos.DesignSystem.Components.HorizontalSpacer"/>
 
         </LinearLayout>
 
@@ -130,7 +124,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="@dimen/value_20dp"
+            android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger"
             android:visibility="gone">
 
             <TextView
@@ -140,8 +134,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/enter_upi_pin"
-                android:textColor="?attr/colorPrimaryVariant"
-                android:textSize="18sp"/>
+                style="@style/TextAppearance.Material3.TitleLarge"/>
 
             <com.alimuzaffar.lib.pin.PinEntryEditText
                 android:id="@+id/pe_upi_pin"
@@ -161,38 +154,33 @@
                 app:pinLineStrokeSelected="4dp"/>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="@dimen/value_10dp"
-                android:background="#44000000"/>
+                android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+                style="@style/Mifos.DesignSystem.Components.HorizontalSpacer"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:layout_marginRight="@dimen/value_10dp"
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
             android:gravity="right"
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btn_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?attr/colorOnBackground"
                 android:text="@string/cancel_txt"
-                android:textColor="@android:color/white"/>
+                style="@style/Widget.Material3.Button.OutlinedButton"/>
 
             <Button
                 android:id="@+id/btn_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_marginLeft="@dimen/value_30dp"
-                android:background="@color/primaryBlue"
-                android:text="@string/next"
-                android:textColor="@android:color/white"/>
+                android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+                android:text="@string/next"/>
 
         </LinearLayout>
 

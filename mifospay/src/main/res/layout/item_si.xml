@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding">
 
     <View
         android:id="@+id/divider3"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="?android:attr/listDivider"
+        style="@style/Mifos.DesignSystem.Components.HorizontalSpacer"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_valid_till_date" />
 
@@ -18,10 +17,8 @@
         android:id="@+id/tv_from_client_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/value_10dp"
-
-        android:textSize="@dimen/textBody1"
-        android:text="dadas"
+        tools:text="From: Rahul Gill"
+        style="@style/TextAppearance.Material3.BodyLarge"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,20 +26,20 @@
         android:id="@+id/tv_to_client_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/value_20dp"
-        android:layout_marginStart="@dimen/value_10dp"
-
-        android:text="dadsdasdasd"
-        android:textSize="@dimen/textBody1"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
+        tools:text="To: Rakesh Kumar"
+        style="@style/TextAppearance.Material3.BodyLarge"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/tv_from_client_name" />
+        app:layout_constraintTop_toBottomOf="@id/tv_from_client_name" />
 
     <TextView
         android:id="@+id/tv_valid_till_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:textColor="@color/colorTextSecondary"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginWords"
+        tools:text="Valid till: 30-6-2022"
+        style="@style/TextAppearance.Material3.BodyMedium"
+        android:alpha="@dimen/alpha_low_emphasis"
         app:layout_constraintStart_toStartOf="@+id/tv_to_client_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_to_client_name" />
 
@@ -50,12 +47,8 @@
         android:id="@+id/tv_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="@dimen/marginItemsInSectionSmall"
-        android:layout_marginRight="@dimen/marginItemsInSectionSmall"
-        android:layout_marginBottom="8dp"
-        android:textSize="@dimen/value_16sp"
-        android:textColor="?attr/colorPrimary"
+        style="@style/Mifos.DesignSystem.TextStyle.PrimaryColorBodyLarger"
+        tools:text="$100"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

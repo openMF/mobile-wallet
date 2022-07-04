@@ -25,3 +25,14 @@ public class BaseURL {
         return PROTOCOL_HTTPS + API_ENDPOINT_SELF + API_PATH_SELF;
     }
 }
+
+/**
+ *   public static final String PROTOCOL_HTTPS = "https://";
+ *
+ * -    public static final String API_ENDPOINT = "demo.mifos.io";
+ *      public static final String API_PATH = "/fineract-provider/api/v1/";
+ *
+ *      //self service url
+ * -    public static final String API_ENDPOINT_SELF = "demo.mifos.io";
+ * -    public static final String API_PATH_SELF = "/fineract-provider/api/v1/self/";
+ */

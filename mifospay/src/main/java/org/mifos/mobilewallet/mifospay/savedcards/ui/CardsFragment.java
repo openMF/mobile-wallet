@@ -6,6 +6,11 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.android.material.progressindicator.CircularProgressIndicator;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -70,18 +75,18 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
     RecyclerView rvCards;
 
     @BindView(R.id.pb_cards)
-    ProgressBar pbCards;
+    CircularProgressIndicator pbCards;
 
     CardsAdapter mCardsAdapter;
 
     @BindView(R.id.btn_add_card)
-    MaterialButton addCard;
+    ExtendedFloatingActionButton addCard;
 
     @BindView(R.id.et_search_cards)
-    EditText etCardSearch;
+    TextInputEditText etCardSearch;
 
     @BindView(R.id.ll_search_cards)
-    LinearLayout searchView;
+    TextInputLayout searchView;
 
     private List<Card> cardsList;
 

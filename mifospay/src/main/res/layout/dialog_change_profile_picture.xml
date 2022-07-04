@@ -3,34 +3,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+    android:paddingVertical="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin"
     android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/ll_click_profile_image_dialog_row"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/value_8dp"
-        android:layout_marginStart="@dimen/value_5dp"
-        android:layout_marginEnd="@dimen/value_8dp"
-        android:layout_marginBottom="@dimen/value_8dp"
-        android:layout_marginLeft="@dimen/value_5dp"
-        android:layout_marginTop="@dimen/value_16dp"
-        android:layout_marginRight="@dimen/value_8dp">
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding">
 
         <ImageView
+            android:baselineAligned="false"
             android:id="@+id/iv_click_image_picture"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_camera"
-            android:layout_marginStart="@dimen/value_3dp"
-            android:layout_marginLeft="@dimen/value_3dp" />
+            android:layout_width="wrap_content"
+            app:srcCompat="@drawable/ic_camera" />
 
         <TextView
             android:id="@+id/tv_click_image_picture"
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/value_8dp"
-            android:layout_marginRight="@dimen/value_8dp"
+            android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
+            android:layout_width="wrap_content"
             android:text="@string/click_profile_picture" />
 
     </LinearLayout>
@@ -39,13 +34,9 @@
         android:id="@+id/ll_change_profile_image_dialog_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:padding="@dimen/value_8dp"
-        android:layout_marginEnd="@dimen/value_8dp"
-        android:layout_marginLeft="@dimen/value_8dp"
-        android:layout_marginBottom="@dimen/value_8dp"
-        android:layout_marginTop="@dimen/value_16dp"
-        android:layout_marginRight="@dimen/value_8dp">
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+        android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding">
 
         <ImageView
             android:id="@+id/iv_change_profile_image"
@@ -57,8 +48,7 @@
             android:id="@+id/tv_change_profile_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/value_8dp"
-            android:layout_marginRight="@dimen/value_8dp"
+            android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
             android:text="@string/change_profile_picture" />
 
     </LinearLayout>
@@ -67,16 +57,13 @@
         android:id="@+id/ll_remove_profile_image_dialog_row"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/value_8dp"
-        android:layout_marginStart="@dimen/value_8dp"
-        android:layout_marginEnd="@dimen/value_8dp"
-        android:layout_marginBottom="@dimen/value_8dp"
-        android:layout_marginLeft="@dimen/value_8dp"
-        android:layout_marginTop="@dimen/value_16dp" >
+        android:gravity="center_vertical"
+        android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium">
 
         <ImageView
             android:id="@+id/iv_remove_profile_image"
-            android:layout_width="@dimen/value_27dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@drawable/ic_remove" />
 
@@ -84,8 +71,7 @@
             android:id="@+id/tv_remove_profile_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/value_8dp"
-            android:layout_marginRight="@dimen/value_8dp"
+            android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
             android:text="@string/remove_profile_picture" />
 
     </LinearLayout>

@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/iv_empty_no_transaction_history"
-        android:layout_width="@dimen/Mifos.DesignSystem.Size.emptyStateImageSize"
-        android:layout_height="@dimen/Mifos.DesignSystem.Size.emptyStateImageSize"
+        android:layout_width="@dimen/Mifos.DesignSystem.Size.errorInfoImageSize"
+        android:layout_height="@dimen/Mifos.DesignSystem.Size.errorInfoImageSize"
         android:scaleType="fitCenter"
         app:srcCompat="@drawable/ic_error_state"
         android:contentDescription="@string/content_description_placeholder" />

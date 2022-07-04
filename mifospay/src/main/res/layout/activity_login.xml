@@ -64,9 +64,8 @@
             android:orientation="horizontal">
 
             <View
-                android:background="?attr/colorOnSurfaceVariant"
+                style="@style/Mifos.DesignSystem.Components.HorizontalSpacer"
                 android:id="@+id/le"
-                android:layout_height="@dimen/Mifos.DesignSystem.Size.SpacerThickness"
                 android:layout_weight="1"
                 android:layout_width="0dp" />
 
@@ -78,8 +77,7 @@
                 android:text="@string/or" />
 
             <View
-                android:background="?attr/colorOnSurfaceVariant"
-                android:layout_height="@dimen/Mifos.DesignSystem.Size.SpacerThickness"
+                style="@style/Mifos.DesignSystem.Components.HorizontalSpacer"
                 android:layout_weight="1"
                 android:layout_width="0dp" />
         </LinearLayout>

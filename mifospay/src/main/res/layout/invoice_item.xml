@@ -12,16 +12,14 @@
     >
     <ImageView
         android:id="@+id/invoice_status_image"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:layout_width="@dimen/Mifos.DesignSystem.Size.ListItemsIconSize"
+        android:layout_height="@dimen/Mifos.DesignSystem.Size.ListItemsIconSize"
         android:layout_gravity="center_vertical"
-        android:padding="@dimen/value_5dp"
-        app:srcCompat="@drawable/ic_remove_circle_outline_black_24dp"
-        />
+        app:srcCompat="@drawable/ic_remove_circle_outline_black_24dp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingRight="@dimen/value_10dp"
+        android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
         android:orientation="vertical"
         >
         <LinearLayout
@@ -34,9 +32,7 @@
                 android:id="@+id/tv_invoice_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="1dp"
-
-                android:textSize="16sp"
+                style="@style/TextAppearance.Material3.BodyLarge"
                 tools:text="Logo for Richard" />
 
 
@@ -45,7 +41,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewEnd"
-                android:textColor="@color/gray_5"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:alpha="@dimen/alpha_low_emphasis"
                 tools:text="$3000"
                 android:gravity="end" />
 
@@ -53,39 +50,40 @@
         <TextView
             android:id="@+id/tv_invoice_status"
             tools:text="Pending"
-            android:padding="1dp"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginWords"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:textColor="@color/gray_5"/>
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:alpha="@dimen/alpha_low_emphasis"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginWords"
             >
 
         <TextView
             android:id="@+id/tv_invoice_date"
             tools:text="12/3/4"
-            android:padding="1dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/gray_5"/>
+            style="@style/TextAppearance.Material3.BodyMedium"
+            android:alpha="@dimen/alpha_low_emphasis"/>
 
             <TextView
                 android:id="@+id/tv_invoice_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/gray_5"
                 tools:text="Invoice id:12345"
+                style="@style/TextAppearance.Material3.BodyMedium"
+                android:alpha="@dimen/alpha_low_emphasis"
                 android:gravity="end" />
         </LinearLayout>
 
         <View
-            android:layout_marginTop="@dimen/value_10dp"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#8E8E8E"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
+            style="@style/Mifos.DesignSystem.Components.HorizontalSpacer"
             />
 
     </LinearLayout>
