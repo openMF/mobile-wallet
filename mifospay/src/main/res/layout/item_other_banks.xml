@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     style="@style/Mifos.DesignSystem.Components.OutlinedCard.Clickable"
@@ -13,7 +13,7 @@
         android:layout_width="@dimen/Mifos.DesignSystem.Size.ListItemsIconSize"
         android:layout_height="@dimen/Mifos.DesignSystem.Size.ListItemsIconSize"
         android:layout_gravity="center"
-        app:srcCompat="@drawable/ic_search"/>
+        app:srcCompat="@drawable/ic_bank"/>
 
     <TextView
         android:id="@+id/tv_popular_bank"
@@ -21,6 +21,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+        tools:text="Sample National Bank"
         style="@style/TextAppearance.Material3.BodyLarge"/>
 
 </LinearLayout>

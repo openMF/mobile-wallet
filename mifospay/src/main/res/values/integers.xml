@@ -23,4 +23,21 @@
         <item name="android:textColor">?attr/colorPrimary</item>
     </style>
     <dimen name="Mifos.DesignSystem.Size.emptyStateImageSize">64dp</dimen>
+
+    <style name="Mifos.DesignSystem.Components.HorizontalSpacer" parent="android:Widget">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/Mifos.DesignSystem.Size.SpacerThickness</item>
+        <item name="android:background">?attr/colorOnSurface</item>
+        <item name="alpha">@dimen/alpha_least_emphasis</item>
+    </style>
+    <style name="Mifos.DesignSystem.Components.VerticalSpacer" parent="android:Widget">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:width">@dimen/Mifos.DesignSystem.Size.SpacerThickness</item>
+        <item name="android:background">?attr/colorOnSurface</item>
+        <item name="alpha">@dimen/alpha_least_emphasis</item>
+    </style>
+
+    <dimen name="Mifos.DesignSystem.Size.BottomSheetPeakHeight">175dp</dimen>
+
+    <style name="Mifos.DesignSystem.Components.IconButton" parent="Widget.Material3.Button.IconButton"/>
 </resources>

@@ -75,8 +75,6 @@ public class SpecificTransactionsActivity extends BaseActivity implements
             startActivity(intent);
         });
         mPresenter.attachView(this);
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setToolbarTitle(Constants.SPECIFIC_TRANSACTIONS);
 
         transactions = getIntent().getParcelableArrayListExtra(Constants.TRANSACTIONS);
         secondAccountNumber = getIntent().getStringExtra(Constants.ACCOUNT_NUMBER);

@@ -59,8 +59,6 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
         setContentView(R.layout.activity_setup_upi_pin);
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setToolbarTitle(Constants.SETUP_UPI_PIN);
         mPresenter.attachView(this);
 
         Bundle b = getIntent().getExtras();

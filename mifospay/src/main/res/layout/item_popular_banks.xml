@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="@dimen/Mifos.DesignSystem.Size.BankCardSize"
     android:layout_width="@dimen/Mifos.DesignSystem.Size.BankCardSize"
     android:clickable="true"
@@ -17,7 +18,8 @@
             android:id="@+id/iv_popular_bank"
             android:layout_gravity="center"
             android:layout_height="@dimen/Mifos.DesignSystem.Size.BankLogoSize"
-            android:layout_width="@dimen/Mifos.DesignSystem.Size.BankLogoSize" />
+            android:layout_width="@dimen/Mifos.DesignSystem.Size.BankLogoSize"
+            tools:src="@drawable/logo_pnb"/>
 
         <View
             android:layout_width="0dp"
@@ -27,7 +29,8 @@
         <TextView
             android:id="@+id/tv_popular_bank"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"/>
+            android:layout_width="wrap_content"
+            tools:text="PNB"/>
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

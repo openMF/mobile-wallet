@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent" android:layout_height="match_parent"
-              android:orientation="vertical">
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -10,29 +11,35 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content" >
 
-            <EditText
-                android:id="@+id/et_search"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_10dp"
-                android:layout_marginRight="@dimen/value_10dp"
-                android:background="@android:color/transparent"
-                android:drawableLeft="@drawable/ic_search"
-                android:drawablePadding="@dimen/value_10dp"
+                android:orientation="vertical"
+                app:startIconDrawable="@drawable/et_search"
+                app:placeholderText="@string/enter_name_or_vpa"
                 android:hint="@string/enter_name_or_vpa"
-                android:padding="@dimen/value_10dp"/>
+                style="@style/Mifos.DesignSystem.Components.NoBorderTextField"
+                android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin">
 
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_search"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
         </com.google.android.material.appbar.MaterialToolbar>
-
 
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+        android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_search_result"

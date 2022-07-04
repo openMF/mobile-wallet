@@ -6,12 +6,18 @@
               android:focusable="true"
               android:focusableInTouchMode="true"
               android:orientation="vertical">
-
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <include layout="@layout/toolbar"/>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            app:titleCentered="true"
+            android:layout_width="match_parent"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            app:title="@string/setup_upi"
+            android:layout_height="wrap_content" />
+
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -19,22 +25,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="@dimen/value_20dp">
+        android:paddingHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+        android:paddingVertical="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin">
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cv_debit_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardElevation="1dp"
-            app:cardUseCompatPadding="true">
+            style="@style/Widget.Material3.CardView.Filled"
+            app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/value_15dp"
-                android:layout_marginLeft="@dimen/value_10dp"
-                android:layout_marginRight="@dimen/value_10dp"
-                android:layout_marginTop="@dimen/value_15dp"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -45,13 +48,12 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="@string/debit_card_details"
-
-                        android:textSize="17sp" />
+                        style="@style/TextAppearance.Material3.BodyLarge"/>
 
                     <TextView
                         android:id="@+id/tv_debit_card"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:background="@drawable/ic_verify"
                         android:visibility="gone"/>
@@ -68,37 +70,32 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/value_20dp"
-            app:cardElevation="1dp"
-            app:cardUseCompatPadding="true">
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+            style="@style/Widget.Material3.CardView.Filled"
+            app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/value_15dp"
-                android:layout_marginLeft="@dimen/value_10dp"
-                android:layout_marginRight="@dimen/value_10dp"
-                android:layout_marginTop="@dimen/value_15dp"
                 android:orientation="vertical">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/one_time_password"
-
-                        android:textSize="17sp"/>
+                        style="@style/TextAppearance.Material3.BodyLarge"/>
 
                     <TextView
                         android:id="@+id/tv_otp"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:background="@drawable/ic_verify"
                         android:visibility="gone"/>
@@ -115,20 +112,18 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/value_20dp"
-            app:cardElevation="1dp"
-            app:cardUseCompatPadding="true">
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+            style="@style/Widget.Material3.CardView.Filled"
+            app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/value_15dp"
-                android:layout_marginLeft="@dimen/value_10dp"
-                android:layout_marginRight="@dimen/value_10dp"
-                android:layout_marginTop="@dimen/value_15dp"
                 android:orientation="vertical">
 
                 <RelativeLayout
@@ -139,13 +134,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/upi_pin_setup"
-
-                        android:textSize="17sp"/>
+                        style="@style/TextAppearance.Material3.BodyLarge"/>
 
                     <TextView
                         android:id="@+id/tv_upi"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
                         android:background="@drawable/ic_verify"
                         android:visibility="gone"/>

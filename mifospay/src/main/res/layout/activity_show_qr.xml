@@ -2,9 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            app:titleCentered="true"
+            app:title="@string/qr_code"
+            app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -20,7 +31,7 @@
         android:id="@+id/btn_set_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
         android:background="@drawable/button_round_black"
         android:layout_gravity="center"
         android:text="@string/set_amount" />
@@ -32,29 +43,26 @@
         android:orientation="vertical">
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#44000000"/>
+            style="@style/Mifos.DesignSystem.Components.HorizontalSpacer"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:padding="@dimen/value_20dp">
+            android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="@string/qr_code_details"
-                android:textStyle="bold"/>
+                style="@style/TextAppearance.Material3.TitleSmall"
+                android:text="@string/qr_code_details"/>
 
             <TextView
                 android:id="@+id/tv_qr_vpa"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/value_20dp"/>
+                android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"/>
 
         </LinearLayout>
     </LinearLayout>

@@ -88,8 +88,6 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         setContentView(R.layout.activity_receipt);
 
         ButterKnife.bind(this);
-        setToolbarTitle(Constants.RECEIPT);
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         mPresenter.attachView(this);
 
         Uri data = getIntent().getData();

@@ -62,9 +62,7 @@
     <string name="show_code">Show code</string>
     <string name="unique_receipt_link">Unique Receipt Link</string>
     <string name="invoice_details">Invoice details</string>
-    <string name="payment_options_will_be_fetched_from_upi">Payment Options (will be fetched from
-        UPI)
-    </string>
+    <string name="payment_options_will_be_fetched_from_upi">Payment Options (will be fetched from UPI) </string>
     <string name="unique_payment_link">Unique Payment Link</string>
     <string name="view_receipt">View Receipt</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
@@ -320,6 +318,11 @@
     <string name="recurrence_interval_in_months">Recurrence Interval (in months)</string>
     <string name="select_date">Select date</string>
     <string name="standing_instruction_id">Standing Instruction ID:</string>
+    <string name="invoice">Invoice</string>
+    <string name="merchant_transaction">Merchant Transaction</string>
+    <string name="scan_qr_code">Scan QR code</string>
+    <string name="receipt">Receipt</string>
+    <string name="specific_transaction_history">Specific Transactions History</string>
 
 
 </resources>

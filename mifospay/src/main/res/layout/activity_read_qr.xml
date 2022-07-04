@@ -1,16 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
-
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleCentered="true"
+        app:title="@string/scan_qr_code"
+        app:navigationIcon="@drawable/ic_arrow_back_white_24dp" />
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-
 
         <me.dm7.barcodescanner.zxing.ZXingScannerView
             android:id="@+id/scannerView"
@@ -30,23 +35,23 @@
                 android:layout_height="wrap_content">
 
                 <ImageButton
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@null"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Mifos.DesignSystem.Components.IconButton"
                     android:id="@+id/btn_flash_on"
                     app:srcCompat="@drawable/ic_flash_on"/>
                 <ImageButton
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:background="@null"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/Mifos.DesignSystem.Components.IconButton"
                     android:id="@+id/btn_flash_off"
                     android:visibility="gone"
                     app:srcCompat="@drawable/ic_flash_off"/>
             </FrameLayout>
             <ImageButton
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:background="@null"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/Mifos.DesignSystem.Components.IconButton"
                 android:id="@+id/btn_open_gallery"
                 app:srcCompat="@drawable/ic_baseline_insert_photo_24"/>
         </LinearLayout>
