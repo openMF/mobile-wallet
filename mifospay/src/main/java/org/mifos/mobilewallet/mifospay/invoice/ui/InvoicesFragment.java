@@ -52,12 +52,6 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
     @BindView(R.id.tv_empty_no_transaction_history_subtitle)
     TextView tvTransactionsStateSubtitle;
 
-    @BindView(R.id.tv_account_number)
-    TextView mTvAccountNumber;
-
-    @BindView(R.id.tv_account_balance)
-    TextView mTvAccountBalance;
-
     @BindView(R.id.rv_invoices)
     RecyclerView mRvInvoices;
 

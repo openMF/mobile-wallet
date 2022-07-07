@@ -8,97 +8,122 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="@dimen/value_20dp">
-
-        <EditText
-            android:id="@+id/et_fname"
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+        android:paddingTop="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin"
+        android:paddingBottom="@dimen/Mifos.DesignSystem.Spacing.VerticalSpaceForFab">
+        
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:hint="@string/first_name"
-            android:nextFocusForward="@id/et_lname"
-            android:singleLine="true"
-            />
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_fname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/first_name"
+                android:nextFocusForward="@id/et_lname"
+                android:singleLine="true"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/et_lname"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:hint="@string/last_name"
-            android:nextFocusForward="@id/et_address1"
-            android:singleLine="true"
-            />
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_lname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/last_name"
+                android:nextFocusForward="@id/et_address1"
+                android:singleLine="true"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/et_address1"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:hint="@string/address_line_1"
-            android:nextFocusForward="@id/et_address2"
-            android:singleLine="true"
-            />
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_address1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/address_line_1"
+                android:nextFocusForward="@id/et_address2"
+                android:singleLine="true"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/et_address2"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:hint="@string/address_line_2"
-            android:nextFocusForward="@id/et_mobile_number"
-            android:singleLine="true"
-            />
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+            android:layout_height="wrap_content">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_address2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/address_line_2"
+                android:nextFocusForward="@id/et_mobile_number"
+                android:singleLine="true"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/value_20dp"
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
             android:orientation="horizontal">
 
             <com.hbb20.CountryCodePicker
                 android:id="@+id/ccp_code"
                 android:layout_width="wrap_content"
+                style="@style/Mifos.DesignSystem.Components.CountryPhoneCodePicker"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
                 app:ccp_autoDetectCountry="true"
                 app:ccp_autoFormatNumber="false"/>
-
-            <EditText
-                android:id="@+id/et_mobile_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_5dp"
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="0dp"
                 android:layout_weight="1"
                 android:hint="@string/mobile_number"
-                android:inputType="number"
-                android:maxLength="@integer/telephone_numbers_max_length_standard"
-                android:nextFocusDown="@id/et_dob"
-                android:nextFocusForward="@id/et_dob"/>
+                android:layout_height="wrap_content">
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_mobile_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/mobile_number"
+                    android:inputType="number"
+                    android:maxLength="@integer/telephone_numbers_max_length_standard"
+                    android:nextFocusDown="@id/et_dob"
+                    android:nextFocusForward="@id/et_dob"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/et_dob"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:clickable="true"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:hint="@string/date_of_birth"
-            />
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge">
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_dob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:cursorVisible="false"
+                android:focusable="true"
+                android:focusableInTouchMode="false"
+                android:hint="@string/date_of_birth"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/btn_submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:background="@drawable/button_round_black"
-            android:text="@string/submit"
-            android:textColor="@color/white"/>
+            android:text="@string/submit"/>
     </LinearLayout>
 
 </ScrollView>

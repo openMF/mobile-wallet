@@ -1,20 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/value_20dp"
-    android:layout_marginRight="@dimen/value_20dp"
-    android:layout_marginTop="@dimen/value_20dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+    android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.marginBetweenSections"
     android:orientation="vertical">
 
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColorHint="@android:color/black"
-        >
+        android:layout_height="wrap_content">
 
-        <EditText
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_idname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -25,22 +23,23 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/value_20dp"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btn_browse"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginRight="@dimen/value_10dp"
-            android:background="@drawable/button_round_gray"
-            android:text="@string/browse"
-            android:textColor="@color/black"/>
+            android:layout_marginEnd="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
+            android:text="@string/browse"/>
 
         <TextView
             android:id="@+id/tv_filename"
+            tools:text="/storage/emulated/0/Whatsapp/Media/Whatsapp Images/id.jpg"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            style="@style/TextAppearance.Material3.BodyMedium"/>
 
     </LinearLayout>
 
@@ -49,9 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="@dimen/value_20dp"
-        android:background="@drawable/button_round_black"
-        android:text="@string/submit"
-        android:textColor="@color/white"/>
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+        android:text="@string/submit"/>
 
 </LinearLayout>

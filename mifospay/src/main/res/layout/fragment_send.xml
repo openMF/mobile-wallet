@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/rl_send_container"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <LinearLayout
@@ -13,211 +13,108 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginBottom="0dp"
         android:orientation="vertical"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+        android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/value_20dp"
-            android:layout_marginTop="@dimen/value_20dp"
             android:text="@string/select_transfer_method"
-            android:textSize="@dimen/value_18sp" />
+            style="@style/TextAppearance.Material3.BodyLarge"/>
 
-        <RelativeLayout
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/transfer_method_toggle"
             android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_marginLeft="@dimen/value_20dp"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:layout_marginRight="@dimen/value_20dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
             android:orientation="horizontal"
-            android:padding="5dp">
+            app:singleSelection="true"
+            app:selectionRequired="true">
 
-            <com.google.android.material.button.MaterialButton
+            <Button
                 android:id="@+id/btn_vpa"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="11dp"
-                android:layout_marginStart="11dp"
                 android:layout_weight="1"
-                android:layout_width="80dp"
+                android:layout_width="0dp"
                 android:text="@string/vpa"
-                app:cornerRadius="@dimen/value_50dp"
-                android:textAllCaps="false"
-                android:typeface="sans"
-                android:textColor="?attr/colorOnBackground"
-                app:backgroundTint="@color/clickedblue" />
+                style="?attr/materialButtonOutlinedStyle"/>
 
-            <com.google.android.material.button.MaterialButton
-                android:clickable="true"
+
+            <Button
                 android:id="@+id/btn_mobile"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:layout_marginEnd="61dp"
-                android:layout_marginRight="70dp"
                 android:layout_weight="1"
-                android:layout_width="140dp"
-                android:paddingRight="@dimen/value_10dp"
+                android:layout_width="0dp"
                 android:text="@string/mobile_number"
                 android:textAlignment="center"
-                android:textAllCaps="false"
-                android:typeface="sans"
-                android:textColor="?attr/colorOnBackground"
-                app:backgroundTint="@color/changedBackgroundColour"
-                app:cornerRadius="@dimen/value_50dp" />
+                style="?attr/materialButtonOutlinedStyle"/>
 
-        </RelativeLayout>
+        </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/value_20dp"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_20dp"
-                android:textColorHint="@android:color/black"
-                >
+                android:layout_height="wrap_content">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_amount"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:hint="@string/amount"
-                    android:inputType="number"
-                    android:textSize="@dimen/value_15sp" />
+                    android:inputType="number"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:layout_width="400dp"
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/til_vpa"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/value_10dp">
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/qrcode_blue_selector">
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/til_vpa"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="270dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/value_20dp"
-                    android:textColorHint="@android:color/black"
-                    >
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_vpa"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/virtual_payment_address"
+                    android:singleLine="true" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_vpa"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="@string/virtual_payment_address"
-                        android:paddingBottom="@dimen/value_20dp"
-                        android:singleLine="true"
-                        android:textSize="@dimen/value_15sp" />
-                </com.google.android.material.textfield.TextInputLayout>
 
-                <TextView
-                    android:id="@+id/btn_scan_qr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical|center_horizontal"
-                    android:layout_marginTop="@dimen/value_10dp"
-                    android:layout_marginRight="@dimen/value_50dp"
-                    android:layout_marginBottom="@dimen/value_5dp"
-                    android:layout_weight="0.5"
-                    android:drawableTop="@drawable/qrcode_blue_selector"
-                    android:gravity="center_horizontal"
-                    android:textColor="?attr/colorPrimaryVariant" />
-
-            </LinearLayout>
-
-            <RelativeLayout
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/rl_mobile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:visibility="gone">
+                android:visibility="gone"
+                app:endIconDrawable="@drawable/ic_contact"
+                app:endIconMode="custom"
+                android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge">
 
-                <com.google.android.material.textfield.TextInputLayout
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_mobile_number"
                     android:layout_width="match_parent"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_height="60dp"
-                    android:layout_marginLeft="@dimen/value_20dp"
-                    android:layout_marginRight="@dimen/value_15dp"
-                    android:layout_toLeftOf="@+id/btn_search_contact"
-                    android:textColorHint="@android:color/black"
-                    >
+                    android:layout_height="match_parent"
+                    android:hint="@string/mobile_number"
+                    android:inputType="number"
+                    android:singleLine="true"
+                    android:maxLength="@integer/telephone_numbers_max_length_standard" />
 
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/et_mobile_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:hint="@string/mobile_number"
-                        android:inputType="number"
-                        android:singleLine="true"
-                        android:maxLength="@integer/telephone_numbers_max_length_standard"
-                        android:textSize="@dimen/value_15sp" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <TextView
-                    android:id="@+id/btn_search_contact"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/value_10dp"
-                    android:layout_centerVertical="true"
-                    android:background="@drawable/ic_contact"
-                    android:gravity="bottom" />
-            </RelativeLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
+            <Button
+                android:id="@+id/btn_submit"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginTop="@dimen/value_10dp"
-                android:orientation="horizontal">
-
-                <Button
-                    android:id="@+id/btn_submit"
-                    android:layout_width="@dimen/value_100dp"
-                    android:layout_height="@dimen/value_50dp"
-                    android:layout_marginTop="@dimen/value_20dp"
-                    android:layout_marginBottom="@dimen/value_20dp"
-                    android:text="@string/submit"
-                    android:textColor="@color/white" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="@dimen/value_10dp"
-            android:background="#44000000" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:layout_marginBottom="50dp"
-            android:orientation="horizontal">
-
-
-
-
+                android:layout_gravity="center"
+                android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+                android:text="@string/submit" />
         </LinearLayout>
 
     </LinearLayout>

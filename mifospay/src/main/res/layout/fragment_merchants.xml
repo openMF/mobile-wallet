@@ -11,11 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/marginItemsInSectionLarge"
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
         android:visibility="gone" />
-    <ProgressBar
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/pb_merchants"
-        style="@style/Widget.AppCompat.ProgressBar"
+        android:indeterminate="true"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -29,30 +29,27 @@
             android:layout_height="wrap_content"
             android:id="@+id/trusted_merchant_text"
             android:text="@string/trusted_merchants"
-            android:textSize="@dimen/textBody1"
-            android:layout_marginTop="@dimen/value_20dp"
-            android:layout_marginStart="@dimen/paddingLayout"
+            style="@style/TextAppearance.Material3.BodyLarge"
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin"/>
 
-            android:layout_marginLeft="@dimen/paddingLayout" />
-
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/ll_search_merchant"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="15dp"
-            android:id="@+id/ll_search_merchant"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_search"/>
-            <EditText
-                android:layout_width="match_parent"
+            android:orientation="vertical"
+            app:startIconDrawable="@drawable/et_search"
+            app:placeholderText="@string/search"
+            android:hint="@string/search"
+            style="@style/Mifos.DesignSystem.Components.NoBorderTextField"
+            android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall">
+            <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_search_merchant"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
 
+        </com.google.android.material.textfield.TextInputLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_merchants"

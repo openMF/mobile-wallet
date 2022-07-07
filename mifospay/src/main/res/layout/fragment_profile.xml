@@ -12,10 +12,9 @@
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nsv_profile_bottom_sheet_dialog"
-        app:layout_behavior="@string/bottom_sheet_behavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        style="@style/Mifos.DesignSystem.Components.BottomSheet">
+        style="@style/Mifos.DesignSystem.Components.BottomSheet.NoExpandedOffset">
 
         <include
             android:layout_width="match_parent"

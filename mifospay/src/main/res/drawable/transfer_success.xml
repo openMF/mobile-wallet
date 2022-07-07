@@ -2,12 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
 
-        <shape xmlns:android="http://schemas.android.com/apk/res/android"
-               android:innerRadius="0dp"
-               android:shape="oval"
-               android:useLevel="false">
+        <shape
+            android:innerRadius="0dp"
+            android:shape="oval"
+            android:useLevel="false">
 
-            <solid android:color="?attr/colorPrimaryVariant"/>
+            <solid android:color="?attr/colorPrimaryVariant" />
 
         </shape>
 
@@ -15,9 +15,11 @@
 
     <item
         android:bottom="10dp"
-        android:drawable="@drawable/ic_done" android:gravity="center"
-        android:left="10dp" android:right="10dp"
-        android:top="10dp"/>
+        android:drawable="@drawable/ic_done"
+        android:gravity="center"
+        android:left="10dp"
+        android:right="10dp"
+        android:top="10dp" />
 
 
 </layer-list>

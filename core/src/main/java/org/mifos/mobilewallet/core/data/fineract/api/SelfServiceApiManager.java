@@ -63,13 +63,6 @@ public class SelfServiceApiManager {
                 .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
                 .addInterceptor(interceptor)
                 .build();
-        /**
-         *      .writeTimeout(60, TimeUnit.SECONDS)
-         * -    .addInterceptor(interceptor)
-         *      .addInterceptor(new ApiInterceptor(authToken, DEFAULT))
-         * +    .addInterceptor(interceptor)
-         *      .build();
-         */
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

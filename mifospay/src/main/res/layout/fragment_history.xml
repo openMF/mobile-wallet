@@ -8,63 +8,62 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
             android:id="@+id/ll_filter_options"
             android:orientation="horizontal">
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/btn_filter_all"
-                android:layout_width="0dp"
-                android:padding="5dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:clickable="true"
                 android:text="All"
                 android:textAlignment="center"
-                android:textAllCaps="false"
-                android:typeface="sans"
-                app:chipBackgroundColor="@color/clickedblue" />
+                android:checked="true"
+                style="@style/Widget.Material3.Chip.Filter"
+                android:focusable="true" />
             <com.google.android.material.chip.Chip
                 android:id="@+id/btn_filter_credits"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:padding="5dp"
                 android:text="Credits"
                 android:textAlignment="center"
-                android:textAllCaps="false"
-                android:typeface="sans"
-                app:chipBackgroundColor="@color/background_chip_state" />
+                style="@style/Widget.Material3.Chip.Filter"
+                android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
+                android:focusable="true" />
             <com.google.android.material.chip.Chip
                 android:id="@+id/btn_filter_debits"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:padding="5dp"
                 android:clickable="true"
                 android:text="Debits"
                 android:textAlignment="center"
-                android:textAllCaps="false"
-                android:typeface="sans"
-                app:chipBackgroundColor="@color/background_chip_state" />
+                style="@style/Widget.Material3.Chip.Filter"
+                android:focusable="true" />
 
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_history"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin"
+            android:clipToPadding="false"/>
     </LinearLayout>
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/pb_history"
-        style="@style/Widget.AppCompat.ProgressBar"
+        android:indeterminate="true"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -75,6 +74,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/marginItemsInSectionLarge" />
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -4,47 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/levelcontainer"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/value_40dp"
             android:text="@string/complete_kyc"
             android:textAlignment="center"
-            android:textSize="@dimen/value_15sp" />
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin"
+            style="@style/TextAppearance.Material3.BodyLarge"/>
 
         <LinearLayout
             android:id="@+id/lv1"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/value_70dp"
-            android:layout_marginTop="130dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/blv1"
-
-                android:background="?attr/colorPrimary"
-                android:layout_width="@dimen/value_100dp"
-                android:layout_height="@dimen/value_50dp"
-                android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_50dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
                 android:text="@string/level_1" />
-
-            <ImageView
-                android:id="@+id/tickimg1"
-                android:layout_width="@dimen/value_20sp"
-                android:layout_height="@dimen/value_20sp"
-                android:layout_marginTop="@dimen/value_13sp"
-                />
 
             <TextView
                 android:id="@+id/completedtx1"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_20dp"
+                android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
                 />
 
         </LinearLayout>
@@ -52,65 +45,53 @@
         <LinearLayout
             android:id="@+id/lv2"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/value_70dp"
-            android:layout_marginTop="210dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/blv2"
-
-                android:layout_width="@dimen/value_100dp"
-                android:layout_height="@dimen/value_50dp"
-                android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_50dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
+                android:layout_height="wrap_content"
                 android:text="@string/level_2" />
-
-            <ImageView
-                android:id="@+id/tickimg2"
-                android:layout_width="@dimen/value_20sp"
-                android:layout_height="@dimen/value_20sp"
-                android:layout_marginTop="@dimen/value_13sp" />
 
             <TextView
                 android:id="@+id/completedtx2"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_20dp" />
+                android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge" />
 
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/lv3"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/value_70dp"
-            android:layout_marginTop="290dp">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/blv3"
-
-                android:layout_width="@dimen/value_100dp"
-                android:layout_height="@dimen/value_50dp"
-                android:layout_marginLeft="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_50dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
                 android:text="@string/level_3" />
-
-            <ImageView
-                android:id="@+id/tickimg3"
-                android:layout_width="@dimen/value_20sp"
-                android:layout_height="@dimen/value_20sp"
-                android:layout_marginTop="@dimen/value_13sp" />
 
             <TextView
                 android:id="@+id/completedtx3"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="0.4"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/value_20dp" />
+                android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge" />
 
         </LinearLayout>
-    </FrameLayout>
+    </LinearLayout>
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/pb_kyc"
-        style="@style/Widget.AppCompat.ProgressBar"
+        android:indeterminate="true"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -121,7 +102,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/marginItemsInSectionLarge"
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
         android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

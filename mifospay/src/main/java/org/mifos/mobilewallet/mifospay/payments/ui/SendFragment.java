@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.chip.Chip;
 
 import com.google.android.material.chip.Chip;
@@ -71,20 +72,18 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     EditText etVpa;
     @BindView(R.id.btn_submit)
     Button btnTransfer;
-    @BindView(R.id.btn_scan_qr)
-    TextView btnScanQr;
     @BindView(R.id.btn_vpa)
-    MaterialButton mBtnVpa;
+    Button mBtnVpa;
     @BindView(R.id.btn_mobile)
-    MaterialButton mBtnMobile;
+    Button mBtnMobile;
     @BindView(R.id.et_mobile_number)
     EditText mEtMobileNumber;
-    @BindView(R.id.btn_search_contact)
-    TextView mBtnSearchContact;
     @BindView(R.id.rl_mobile)
-    RelativeLayout mRlMobile;
+    TextInputLayout mRlMobile;
     @BindView(R.id.til_vpa)
     TextInputLayout mTilVpa;
+    @BindView(R.id.transfer_method_toggle)
+    MaterialButtonToggleGroup transferMethodToggle;
 
     private String vpa;
 
@@ -105,31 +104,32 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         mPresenter.attachView(this);
         mEtMobileNumber.addTextChangedListener(new PhoneNumberFormattingTextWatcher());
         mBtnVpa.setSelected(true);
+
+        mTilVpa.setEndIconOnClickListener(v -> scanQrClicked());
+        mRlMobile.setEndIconOnClickListener(v -> searchContactClicked());
+        transferMethodToggle.check(R.id.btn_vpa);
+        transferMethodToggle.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if(group.getCheckedButtonId() == R.id.btn_vpa)
+                onVPASelected();
+            else
+                onMobileSelected();
+        });
+
         return rootView;
     }
 
-    @SuppressLint("ResourceAsColor")
-    @OnClick(R.id.btn_vpa)
     public void onVPASelected() {
         TransitionManager.beginDelayedTransition(sendContainer);
         mBtnVpa.setFocusable(true);
-        mBtnVpa.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.clickedblue)));
-        mBtnMobile.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.changedBackgroundColour)));
-        btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.VISIBLE);
         Utils.hideSoftKeyboard(getActivity());
     }
 
-    @SuppressLint("ResourceAsColor")
-    @OnClick(R.id.btn_mobile)
     public void onMobileSelected() {
         TransitionManager.beginDelayedTransition(sendContainer);
         mBtnMobile.setFocusable(true);
-        mBtnMobile.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.clickedblue)));
-        mBtnVpa.setBackgroundTintList(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.changedBackgroundColour)));
         mTilVpa.setVisibility(View.GONE);
-        btnScanQr.setVisibility(View.GONE);
         mRlMobile.setVisibility(View.VISIBLE);
         Utils.hideSoftKeyboard(getActivity());
     }
@@ -138,10 +138,11 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     public void transferClicked() {
         String externalId = etVpa.getText().toString().trim();
         String eamount = etAmount.getText().toString().trim();
+        boolean isVpaSelected = transferMethodToggle.getCheckedButtonId() == R.id.btn_vpa;
         String mobileNumber = mEtMobileNumber.getText()
                 .toString().trim().replaceAll("\\s+", "");
-        if (eamount.equals("") || (mBtnVpa.isSelected() && externalId.equals("")) ||
-                (mBtnMobile.isSelected() && mobileNumber.equals(""))) {
+        if (eamount.equals("") || (isVpaSelected && externalId.equals("")) ||
+                (!isVpaSelected && mobileNumber.equals(""))) {
             Toast.makeText(getActivity(),
                     Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT).show();
         } else {
@@ -162,7 +163,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         }
     }
 
-    @OnClick(R.id.btn_scan_qr)
     public void scanQrClicked() {
 
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getActivity(),
@@ -188,7 +188,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         this.mTransferPresenter = presenter;
     }
 
-    @OnClick(R.id.btn_search_contact)
     public void searchContactClicked() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(getActivity(),
                 Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {

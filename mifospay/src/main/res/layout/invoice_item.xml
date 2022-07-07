@@ -82,7 +82,7 @@
         </LinearLayout>
 
         <View
-            android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
+            android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
             style="@style/Mifos.DesignSystem.Components.HorizontalSpacer"
             />
 

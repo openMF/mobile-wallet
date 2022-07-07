@@ -5,6 +5,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
+
+import androidx.core.content.res.ResourcesCompat;
 import androidx.transition.TransitionManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -278,10 +280,11 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     }
 
     private void setupEmptyStateView() {
+        hideTransactionLoading();
         if (getActivity() != null) {
             Resources res = getResources();
             ivTransactionsStateIcon
-                    .setImageDrawable(res.getDrawable(R.drawable.ic_empty_state));
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_empty_state,requireActivity().getTheme()) );
             tvTransactionsStateTitle
                     .setText(res.getString(R.string.empty_no_transaction_history_title));
             tvTransactionsStateSubtitle
@@ -290,6 +293,7 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
     }
 
     private void setupErrorStateView() {
+        hideTransactionLoading();
         if (getActivity() != null) {
             Resources res = getResources();
             ivTransactionsStateIcon

@@ -19,6 +19,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
+
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -68,7 +71,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
     public EditText etMerchantSearch;
 
     @BindView(R.id.ll_search_merchant)
-    LinearLayout searchView;
+    TextInputLayout searchView;
     private List<SavingsWithAssociations> merchantsList;
 
     @Override

@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent" android:layout_height="match_parent"
-              android:orientation="vertical"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
     android:id="@+id/ll_make_transfer_container"
-              android:padding="@dimen/value_20dp">
+    android:paddingHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+    android:paddingVertical="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin">
 
     <TextView
         android:id="@+id/tv_transfer_status"
         android:layout_width="match_parent"
         android:gravity="center"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/value_10dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:text="@string/send_money"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-
-        android:textStyle="bold"/>
+        style="@style/TextAppearance.Material3.TitleMedium"/>
 
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/value_10dp"
-        android:minHeight="270dp">
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall">
 
         <LinearLayout
             android:id="@+id/ll_content"
@@ -34,77 +34,68 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_20dp"
-                android:layout_marginTop="@dimen/value_20dp"
+                android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sending_to"
-                    android:textColor="?attr/colorPrimaryVariant"
-                    android:textSize="@dimen/value_15sp"/>
+                    style="@style/Mifos.DesignSystem.TextStyle.PrimaryColorBody" />
 
                 <TextView
                     android:id="@+id/tv_client_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/value_10dp"
-
-                    android:textSize="@dimen/value_20sp"/>
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginWords"
+                    tools:text="Alex Chi"
+                    style="@style/TextAppearance.Material3.TitleLarge" />
 
                 <TextView
                     android:id="@+id/tv_client_vpa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/value_5dp"
-                    android:textSize="@dimen/value_18sp"/>
+                    tools:text="VPA: 232r32"
+                    style="@style/TextAppearance.Material3.BodyLarge"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginWords"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/value_20dp"
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
                     android:text="@string/amount"
-                    android:textColor="?attr/colorPrimaryVariant"
-                    android:textSize="@dimen/value_15sp"/>
+                    style="@style/Mifos.DesignSystem.TextStyle.PrimaryColorBody"/>
 
                 <TextView
                     android:id="@+id/tv_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingTop="@dimen/value_10dp"
-
-                    android:textSize="@dimen/value_20sp"/>
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginWords"
+                    tools:text="$ 1000"
+                    style="@style/TextAppearance.Material3.TitleLarge"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/value_20dp"
-                android:layout_marginRight="@dimen/value_10dp"
-                android:layout_marginTop="@dimen/value_30dp"
-                android:gravity="right"
+                android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+                android:gravity="end"
                 android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/btn_cancel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="?attr/colorOnBackground"
                     android:text="@string/cancel"
-                    android:textColor="@android:color/white"/>
+                    style="@style/Widget.Material3.Button.OutlinedButton"/>
 
                 <Button
                     android:id="@+id/btn_confirm"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right"
-                    android:layout_marginLeft="@dimen/value_30dp"
-                    android:background="?attr/colorPrimaryVariant"
-                    android:text="@string/confirm"
-                    android:textColor="@android:color/white"/>
+                    android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
+                    android:text="@string/confirm"/>
 
             </LinearLayout>
 
@@ -112,26 +103,25 @@
 
         <View
             android:id="@+id/view_transfer_success"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_width="@dimen/Mifos.DesignSystem.Size.CircularUserImageSize"
+            android:layout_height="@dimen/Mifos.DesignSystem.Size.CircularUserImageSize"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:layout_marginTop="@dimen/value_20dp"
+            android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
             android:background="@drawable/transfer_success"
             android:visibility="gone"/>
 
         <View
             android:id="@+id/view_transfer_failure"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
+            android:layout_width="@dimen/Mifos.DesignSystem.Size.CircularUserImageSize"
+            android:layout_height="@dimen/Mifos.DesignSystem.Size.CircularUserImageSize"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/value_20dp"
-            android:layout_marginTop="@dimen/value_20dp"
+            android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
             android:background="@drawable/transfer_failure"
             android:visibility="gone"/>
 
-        <ProgressBar
+        <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progressBar"
+            android:indeterminate="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"/>

@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
+
 import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -65,16 +67,16 @@ public class KYCDescriptionFragment extends
     TextView tvTransactionsStateSubtitle;
 
     @BindView(R.id.levelcontainer)
-    FrameLayout frameLayout;
+    LinearLayout frameLayout;
 
     @BindView(R.id.blv1)
-    Button btnLvl1;
+    MaterialButton btnLvl1;
 
     @BindView(R.id.blv2)
-    Button btnLvl2;
+    MaterialButton btnLvl2;
 
     @BindView(R.id.blv3)
-    Button btnLvl3;
+    MaterialButton btnLvl3;
 
     @BindView(R.id.completedtx1)
     TextView completedTxt1;
@@ -85,14 +87,6 @@ public class KYCDescriptionFragment extends
     @BindView(R.id.completedtx3)
     TextView completedTxt3;
 
-    @BindView(R.id.tickimg1)
-    ImageView tickImg1;
-
-    @BindView(R.id.tickimg2)
-    ImageView tickImg2;
-
-    @BindView(R.id.tickimg3)
-    ImageView tickImg3;
 
     public static KYCDescriptionFragment newInstance() {
 
@@ -190,28 +184,19 @@ public class KYCDescriptionFragment extends
         if (currentLevel >= 1) {
             btnLvl1.setEnabled(false);
             btnLvl2.setEnabled(true);
-            tickImg1.setImageResource(R.drawable.ic_tick);
+            btnLvl1.setIconResource(R.drawable.ic_tick);
             completedTxt1.setText(R.string.completion);
-            btnLvl1.setTextColor(getResources().getColor(R.color.colorAccent));
-            btnLvl1.getBackground().setColorFilter(getResources()
-                    .getColor(R.color.changedBackgroundColour), PorterDuff.Mode.MULTIPLY);
         }
         if (currentLevel >= 2) {
             btnLvl2.setEnabled(false);
             btnLvl3.setEnabled(true);
-            tickImg2.setImageResource(R.drawable.ic_tick);
+            btnLvl2.setIconResource(R.drawable.ic_tick);
             completedTxt2.setText(R.string.completion);
-            btnLvl2.setTextColor(getResources().getColor(R.color.colorAccent));
-            btnLvl2.getBackground().setColorFilter(getResources()
-                    .getColor(R.color.changedBackgroundColour), PorterDuff.Mode.MULTIPLY);
         }
         if (currentLevel >= 3) {
             btnLvl3.setEnabled(false);
-            tickImg3.setImageResource(R.drawable.ic_tick);
+            btnLvl3.setIconResource(R.drawable.ic_tick);
             completedTxt3.setText(R.string.completion);
-            btnLvl3.setTextColor(getResources().getColor(R.color.colorAccent));
-            btnLvl3.getBackground().setColorFilter(getResources()
-                    .getColor(R.color.changedBackgroundColour), PorterDuff.Mode.MULTIPLY);
         }
     }
 

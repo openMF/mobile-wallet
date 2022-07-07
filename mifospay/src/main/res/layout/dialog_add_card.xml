@@ -7,7 +7,7 @@
     android:focusableInTouchMode="true"
     android:focusedByDefault="true"
     android:orientation="vertical"
-    android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+    android:paddingHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
     android:paddingVertical="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin">
 
     <com.google.android.material.textfield.TextInputLayout

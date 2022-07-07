@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ProgressBar
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBar"
-        style="@style/Widget.AppCompat.ProgressBar"
+        android:indeterminate="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -16,14 +16,18 @@
         android:id="@+id/rv_si"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:paddingHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
+        android:paddingBottom="@dimen/Mifos.DesignSystem.Spacing.VerticalSpaceForFab"
+        android:clipToPadding="false"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_new_si"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_margin="20dp"
+        android:layout_marginEnd="@dimen/Mifos.DesignSystem.Spacing.FabMargin"
+        android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.FabMargin"
         app:srcCompat="@drawable/ic_add_white" />
 
     <include
@@ -32,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_margin="@dimen/marginItemsInSectionLarge"
+        android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
         android:visibility="gone" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

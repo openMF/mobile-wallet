@@ -2,4 +2,12 @@
 <resources>
     <integer name="telephone_numbers_max_length_standard">10</integer>
     <integer name="bottom_view_transition_duration">200</integer>
+
+    <style name="Mifos.DesignSystem.Components.CountryPhoneCodePicker" parent="android:Widget">
+        <item name="ccp_contentColor">?attr/colorOnBackground</item>
+        <item name="ccpDialog_searchEditTextTint">?attr/colorOnBackground</item>
+        <item name="ccpDialog_textColor">?attr/colorOnBackground</item>
+        <item name="ccp_showFlag">false</item>
+        <item name="ccp_showNameCode">false</item>
+    </style>
 </resources>

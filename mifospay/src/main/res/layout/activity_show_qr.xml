@@ -32,7 +32,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
-        android:background="@drawable/button_round_black"
         android:layout_gravity="center"
         android:text="@string/set_amount" />
 
