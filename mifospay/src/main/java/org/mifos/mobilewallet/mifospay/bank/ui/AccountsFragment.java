@@ -24,6 +24,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -161,7 +163,8 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
             vStateView.setVisibility(View.VISIBLE);
             Resources res = getResources();
             ivTransactionsStateIcon
-                    .setImageDrawable(res.getDrawable(R.drawable.ic_accounts));
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_accounts,
+                            requireActivity().getTheme()));
             tvTransactionsStateTitle
                     .setText(res.getString(R.string.empty_no_accounts_title));
             tvTransactionsStateSubtitle

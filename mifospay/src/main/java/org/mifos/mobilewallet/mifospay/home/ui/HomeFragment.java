@@ -297,7 +297,8 @@ public class HomeFragment extends BaseFragment implements BaseHomeContract.HomeV
         if (getActivity() != null) {
             Resources res = getResources();
             ivTransactionsStateIcon
-                    .setImageDrawable(res.getDrawable(R.drawable.ic_error_state));
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_error_state,
+                            requireActivity().getTheme()));
             tvTransactionsStateTitle
                     .setText(res.getString(R.string.error_oops));
             tvTransactionsStateSubtitle

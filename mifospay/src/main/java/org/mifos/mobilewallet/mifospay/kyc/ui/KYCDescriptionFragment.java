@@ -4,6 +4,7 @@ import android.content.res.Resources;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -209,7 +210,8 @@ public class KYCDescriptionFragment extends
             vStateView.setVisibility(View.VISIBLE);
             Resources res = getResources();
             ivTransactionsStateIcon
-                    .setImageDrawable(res.getDrawable(drawable));
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, drawable,
+                            requireActivity().getTheme()));
             tvTransactionsStateTitle
                     .setText(errorTitle);
             tvTransactionsStateSubtitle

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+
+import androidx.core.content.res.ResourcesCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -159,7 +161,8 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
         if (getActivity() != null) {
             Resources res = getResources();
             ivTransactionsStateIcon
-                    .setImageDrawable(res.getDrawable(drawable));
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, drawable,
+                            requireActivity().getTheme()) );
             tvTransactionsStateTitle
                     .setText(res.getString(title));
             tvTransactionsStateSubtitle
@@ -175,7 +178,8 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
             vStateView.setVisibility(View.VISIBLE);
             Resources res = getResources();
             ivTransactionsStateIcon
-                    .setImageDrawable(res.getDrawable(R.drawable.ic_merchants));
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_merchants,
+                            requireActivity().getTheme()) );
             tvTransactionsStateTitle
                     .setText(res.getString(R.string.empty_no_merchants_title));
             tvTransactionsStateSubtitle

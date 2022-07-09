@@ -11,6 +11,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -171,7 +172,8 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
             pbCards.setVisibility(View.GONE);
             Resources res = getResources();
             ivTransactionsStateIcon
-                    .setImageDrawable(res.getDrawable(R.drawable.ic_cards));
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_cards,
+                            requireActivity().getTheme()) );
             tvTransactionsStateTitle
                     .setText(res.getString(R.string.empty_no_cards_title));
             tvTransactionsStateSubtitle
@@ -187,7 +189,8 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         if (getActivity() != null) {
             Resources res = getResources();
             ivTransactionsStateIcon
-                    .setImageDrawable(res.getDrawable(drawable));
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, drawable,
+                            requireActivity().getTheme()) );
             tvTransactionsStateTitle
                     .setText(res.getString(title));
             tvTransactionsStateSubtitle

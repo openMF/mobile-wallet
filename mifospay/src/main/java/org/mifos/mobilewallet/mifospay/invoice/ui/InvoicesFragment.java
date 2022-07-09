@@ -26,6 +26,7 @@ import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -139,7 +140,8 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
             vStateView.setVisibility(View.VISIBLE);
             Resources res = getResources();
             ivTransactionsStateIcon
-                    .setImageDrawable(res.getDrawable(R.drawable.ic_invoices));
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_invoices,
+                            requireActivity().getTheme()) );
             tvTransactionsStateTitle
                     .setText(res.getString(R.string.empty_no_invoices_title));
             tvTransactionsStateSubtitle
@@ -156,7 +158,8 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
         if (getActivity() != null) {
             Resources res = getResources();
             ivTransactionsStateIcon
-                    .setImageDrawable(res.getDrawable(drawable));
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, drawable,
+                            requireActivity().getTheme()));
             tvTransactionsStateTitle
                     .setText(res.getString(title));
             tvTransactionsStateSubtitle

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
+
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -125,7 +127,7 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         errorStateView.setVisibility(View.VISIBLE);
         Resources res = getResources();
         ivStateIcon
-                .setImageDrawable(res.getDrawable(drawable));
+                .setImageDrawable(ResourcesCompat.getDrawable(res, drawable, getTheme()));
         tvStateTitle
                 .setText(res.getString(title));
         tvStateSubtitle

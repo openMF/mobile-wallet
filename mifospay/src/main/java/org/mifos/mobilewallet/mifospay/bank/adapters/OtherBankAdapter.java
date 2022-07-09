@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.bank.adapters;
 
 import android.content.Context;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;

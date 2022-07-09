@@ -3,10 +3,11 @@ package org.mifos.mobilewallet.mifospay.standinginstruction.ui
 import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.res.ResourcesCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_si.*
 import kotlinx.android.synthetic.main.placeholder_state.*
 import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
@@ -113,7 +114,7 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
             // setting up state view elements
             val res = resources
             iv_empty_no_transaction_history
-                    .setImageDrawable(res.getDrawable(drawable))
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, drawable,requireActivity().theme))
             tv_empty_no_transaction_history_title.text = res.getString(errorTitle)
             tv_empty_no_transaction_history_subtitle.text = res.getString(errorMessage)
         }

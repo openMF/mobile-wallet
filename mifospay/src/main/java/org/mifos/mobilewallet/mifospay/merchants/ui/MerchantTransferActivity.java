@@ -6,6 +6,8 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import com.google.android.material.textfield.TextInputEditText;
 import android.os.Bundle;
+
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.view.View;
@@ -194,7 +196,7 @@ public class MerchantTransferActivity extends BaseActivity implements
         tvTransactionsStateTitle.setText(title);
         tvTransactionsStateSubtitle.setText(subtitle);
         ivTransactionsStateIcon
-                .setImageDrawable(getResources().getDrawable(drawable));
+                .setImageDrawable(ResourcesCompat.getDrawable(getResources(), drawable, getTheme()) );
     }
 
 }

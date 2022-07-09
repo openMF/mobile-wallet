@@ -29,6 +29,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -160,7 +161,8 @@ public class HistoryFragment extends BaseFragment
         if (getActivity() != null) {
             Resources res = getResources();
             ivTransactionsStateIcon
-                    .setImageDrawable(res.getDrawable(drawable));
+                    .setImageDrawable(ResourcesCompat.getDrawable(res, drawable,
+                            requireActivity().getTheme()));
             tvTransactionsStateTitle
                     .setText(res.getString(title));
             tvTransactionsStateSubtitle
