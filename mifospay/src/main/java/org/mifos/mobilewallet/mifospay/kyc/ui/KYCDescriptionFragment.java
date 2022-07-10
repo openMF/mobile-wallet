@@ -176,7 +176,7 @@ public class KYCDescriptionFragment extends
         vStateView.setVisibility(View.GONE);
         frameLayout.setVisibility(View.VISIBLE);
 
-        int currentLevel = Integer.parseInt(kycLevel1Details.getCurrentLevel());
+        int currentLevel = kycLevel1Details == null ? 0: Integer.parseInt(kycLevel1Details.getCurrentLevel());
 
         if (currentLevel >= 0) {
 

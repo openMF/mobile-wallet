@@ -31,7 +31,7 @@ public class KYCLevel1Details implements Parcelable {
     String addressLine1;
     @SerializedName("addressLine2")
     String addressLine2;
-    @SerializedName("mobileNo")
+    @SerializedName("mobileNumber")
     String mobileNo;
     @SerializedName("dob")
     String dob;

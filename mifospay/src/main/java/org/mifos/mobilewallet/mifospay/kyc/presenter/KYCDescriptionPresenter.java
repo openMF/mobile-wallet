@@ -52,8 +52,9 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
                             mKYCDescriptionView.onFetchLevelSuccess(
                                     response.getKYCLevel1DetailsList().get(0));
                         } else {
-                            mKYCDescriptionView.showErrorState(R.drawable.ic_error_state,
-                                    R.string.error_oops, R.string.error_kyc_details);
+                            mKYCDescriptionView.onFetchLevelSuccess(null);
+//                            mKYCDescriptionView.showErrorState(R.drawable.ic_error_state,
+//                                    R.string.error_oops, R.string.error_kyc_details);
                         }
                     }
 
