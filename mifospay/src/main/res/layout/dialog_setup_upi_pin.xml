@@ -84,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone"
+            android:visibility="visible"
             android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger">
 
             <TextView
@@ -98,20 +98,9 @@
 
             <com.alimuzaffar.lib.pin.PinEntryEditText
                 android:id="@+id/pe_otp"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
+                style="@style/Mifos.DesignSystem.Components.FourDigitPinEntry"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
-                android:cursorVisible="false"
-                android:digits="1234567890"
-                android:gravity="center"
-                android:inputType="numberPassword"
-                android:maxLength="4"
-                android:textIsSelectable="false"
-                android:textSize="20sp"
-                app:pinAnimationType="fromBottom"
-                app:pinLineStroke="2dp"
-                app:pinLineStrokeSelected="4dp"/>
+                android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall" />
 
             <View
                 android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
@@ -138,20 +127,9 @@
 
             <com.alimuzaffar.lib.pin.PinEntryEditText
                 android:id="@+id/pe_upi_pin"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
+                style="@style/Mifos.DesignSystem.Components.FourDigitPinEntry"
                 android:layout_gravity="center"
-                android:layout_marginTop="@dimen/value_10dp"
-                android:cursorVisible="false"
-                android:digits="1234567890"
-                android:gravity="center"
-                android:inputType="numberPassword"
-                android:maxLength="4"
-                android:textIsSelectable="false"
-                android:textSize="20sp"
-                app:pinAnimationType="fromBottom"
-                app:pinLineStroke="2dp"
-                app:pinLineStrokeSelected="4dp"/>
+                android:layout_marginTop="@dimen/value_10dp" />
 
             <View
                 android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"

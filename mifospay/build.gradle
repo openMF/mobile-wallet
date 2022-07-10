@@ -29,8 +29,11 @@ android {
     }
 
     lintOptions {
-        abortOnError false
         disable 'InvalidPackage'
+    }
+
+    applicationVariants.all {
+        assembleProvider.get().dependsOn(tasks["lint${name.capitalize()}"])
     }
 
     compileOptions.incremental = false
@@ -95,7 +98,9 @@ dependencies {
     testImplementation "junit:junit:$rootProject.junitVersion"
 
     implementation project(':core')
-    implementation 'com.github.rahul-gill:mifos-ui-library:main-SNAPSHOT'
+
+    implementation 'com.github.rahul-gill.mifos-ui-library:uihouse:alpha-test'
+    lintChecks 'com.github.rahul-gill.mifos-ui-library:lint:alpha-test'
 }
 
 apply plugin: 'com.google.gms.google-services'

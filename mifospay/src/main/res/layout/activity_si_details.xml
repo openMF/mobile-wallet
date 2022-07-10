@@ -77,8 +77,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tv_si_amount"
-                        style="@style/TextAppearance.Material3.TitleMedium"
-                        android:textSize="@dimen/value_16sp" />
+                        style="@style/TextAppearance.Material3.TitleMedium" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/til_si_edit_amount"

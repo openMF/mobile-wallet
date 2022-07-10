@@ -44,8 +44,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             style="@style/TextAppearance.Material3.TitleLarge"
-            tools:text="8754753895326"
-            android:textColor="@color/gray_5"/>
+            tools:text="8754753895326"/>
 
 
         <TextView

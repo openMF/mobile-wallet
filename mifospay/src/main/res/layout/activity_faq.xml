@@ -20,7 +20,6 @@
                 android:id="@+id/toolbar"
                 app:layout_collapseMode="pin"
                 android:layout_width="match_parent"
-                android:elevation="0dp"
                 app:title="@string/faq_text"
                 app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
                 android:layout_height="?attr/actionBarSize" />

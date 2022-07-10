@@ -105,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"
                 android:text="@string/create_one"
-                android:textColor="@color/Mifos.DesignSystem.Color.Link" />
+                style="@style/Mifos.DesignSystem.TextStyle.Link" />
 
         </LinearLayout>
 

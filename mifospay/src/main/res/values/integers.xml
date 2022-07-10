@@ -10,4 +10,19 @@
         <item name="ccp_showFlag">false</item>
         <item name="ccp_showNameCode">false</item>
     </style>
+
+    <style name="Mifos.DesignSystem.Components.FourDigitPinEntry" parent="android:Widget">
+        <item name="android:inputType">numberPassword</item>
+        <item name="android:maxLength">4</item>
+        <item name="android:textIsSelectable">false</item>
+        <item name="android:textSize">20sp</item>
+        <item name="pinAnimationType">fromBottom</item>
+        <item name="pinLineStroke">2dp</item>
+        <item name="pinLineStrokeSelected">4dp</item>
+        <item name="android:cursorVisible">false</item>
+        <item name="android:digits">1234567890</item>
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">160dp</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 </resources>

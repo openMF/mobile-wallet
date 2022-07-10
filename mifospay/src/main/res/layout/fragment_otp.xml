@@ -17,22 +17,11 @@
 
     <com.alimuzaffar.lib.pin.PinEntryEditText
         android:id="@+id/pe_otp"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
+        style="@style/Mifos.DesignSystem.Components.FourDigitPinEntry"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
-        android:cursorVisible="false"
-        android:digits="1234567890"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:gravity="center"
-        android:imeOptions="actionDone"
-        android:inputType="number"
-        android:maxLength="4"
-        android:textIsSelectable="false"
-        android:textSize="20sp"
-        app:pinAnimationType="fromBottom"
-        app:pinLineStroke="2dp"
-        app:pinLineStrokeSelected="4dp"/>
+        android:imeOptions="actionDone"/>
 
 </LinearLayout>

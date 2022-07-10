@@ -14,27 +14,14 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="@string/enter_upi_pin"
-        android:textColor="?attr/colorPrimaryVariant"
-        android:textSize="18sp"/>
+        style="@style/Mifos.DesignSystem.TextStyle.PrimaryColorBodyLarger"/>
 
     <com.alimuzaffar.lib.pin.PinEntryEditText
         android:id="@+id/pe_upi_pin"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
+        style="@style/Mifos.DesignSystem.Components.FourDigitPinEntry"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/value_10dp"
-        android:cursorVisible="false"
-        android:digits="1234567890"
+        android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
         android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:gravity="center"
-        android:imeOptions="actionDone"
-        android:inputType="numberPassword"
-        android:maxLength="4"
-        android:textIsSelectable="false"
-        android:textSize="20sp"
-        app:pinAnimationType="fromBottom"
-        app:pinLineStroke="2dp"
-        app:pinLineStrokeSelected="4dp"/>
+        android:focusableInTouchMode="true"/>
 
 </LinearLayout>

@@ -34,7 +34,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
         <CheckBox
-            android:buttonTint="?attr/colorPrimary"
             android:checked="true"
             android:id="@+id/cb_google_account"
             android:layout_height="wrap_content"

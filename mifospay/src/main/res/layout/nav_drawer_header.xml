@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:layout_marginTop="@dimen/appBarTopMargin"
-
-              android:gravity="center_vertical|bottom"
-              android:orientation="horizontal"
-              android:paddingBottom="30dp"
-              android:paddingTop="30dp">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="@dimen/appBarTopMargin"
+    android:gravity="center_vertical|bottom"
+    android:orientation="horizontal"
+    android:paddingBottom="30dp"
+    android:paddingTop="30dp">
 
     <ImageView
         android:id="@+id/iv_user_image"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        tools:src="@tools:sample/avatars"
         android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"/>
 
@@ -30,9 +31,8 @@
             android:layout_marginLeft="20dp"
             android:ellipsize="end"
             android:lines="1"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/black"
-            android:textSize="17sp"/>
+            tools:text="Sample Name"
+            style="@style/TextAppearance.Material3.BodyLarge"/>
 
         <TextView
             android:id="@+id/tv_user_email"
@@ -41,10 +41,9 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="3dp"
             android:ellipsize="end"
+            tools:text="sample@samplemail.com"
             android:lines="1"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@color/black"
-            android:textSize="11sp"/>
+            style="@style/TextAppearance.Material3.BodySmall"/>
 
     </LinearLayout>
 

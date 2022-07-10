@@ -178,6 +178,7 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         requestCode: Int, permissions: Array<String?>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_CAMERA -> {
                 if (grantResults.isNotEmpty()

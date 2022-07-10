@@ -20,13 +20,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/value_30dp"
-            app:cardCornerRadius="@dimen/value_10dp">
+            style="@style/Widget.Material3.CardView.Filled">
 
             <LinearLayout
                 android:id="@+id/ll_lvl1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/cardview_round_blue"
                 android:orientation="vertical"
                 android:padding="@dimen/value_10dp">
 
@@ -35,8 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_10dp"
                     android:text="@string/level_1"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/value_25sp"/>
+                    style="@style/TextAppearance.Material3.HeadlineMedium"/>
 
                 <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->
@@ -57,13 +55,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/value_30dp"
-            app:cardCornerRadius="@dimen/value_10dp">
+            style="@style/Widget.Material3.CardView.Filled"
+            >
 
             <LinearLayout
                 android:id="@+id/ll_lvl2"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/cardview_round_blue"
                 android:orientation="vertical"
                 android:padding="@dimen/value_10dp">
 
@@ -72,8 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_10dp"
                     android:text="@string/level_2"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/value_25sp"/>
+                    style="@style/TextAppearance.Material3.HeadlineMedium"/>
 
                 <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->
@@ -94,13 +91,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/value_30dp"
-            app:cardCornerRadius="@dimen/value_10dp">
+            style="@style/Widget.Material3.CardView.Filled"
+            >
 
             <LinearLayout
                 android:id="@+id/ll_lvl3"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/cardview_round_blue"
                 android:orientation="vertical"
                 android:padding="@dimen/value_10dp">
 
@@ -109,8 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_10dp"
                     android:text="@string/level_3"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/value_25sp"/>
+                    style="@style/TextAppearance.Material3.HeadlineMedium"/>
 
                 <!--<TextView-->
                 <!--android:layout_width="wrap_content"-->

@@ -21,7 +21,6 @@
                 android:id="@+id/toolbar"
                 app:layout_collapseMode="pin"
                 android:layout_width="match_parent"
-                android:elevation="0dp"
                 app:title="@string/edit_profile"
                 app:navigationIcon="@drawable/ic_close"
                 android:layout_height="?attr/actionBarSize" />
