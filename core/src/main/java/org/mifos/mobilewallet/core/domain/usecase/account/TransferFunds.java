@@ -124,8 +124,8 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
                         if (accounts != null && accounts.size() != 0) {
                             SavingAccount walletAccount = null;
                             for (SavingAccount account : accounts) {
-                                if (account.getProductId() ==
-                                        Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
+                                if (account.isActive() &&
+                                        account.getProductId() == Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
                                     walletAccount = account;
                                     break;
                                 }
@@ -164,8 +164,8 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
                         if (accounts != null && accounts.size() != 0) {
                             SavingAccount walletAccount = null;
                             for (SavingAccount account : accounts) {
-                                if (account.getProductId() ==
-                                        Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
+                                if (account.isActive() &&
+                                        account.getProductId() == Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
                                     walletAccount = account;
                                     break;
                                 }

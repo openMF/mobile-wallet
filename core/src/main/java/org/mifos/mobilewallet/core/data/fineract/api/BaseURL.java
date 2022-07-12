@@ -13,7 +13,7 @@ public class BaseURL {
 
     //self service url
     public static final String API_ENDPOINT_SELF = "mobile.mifos.io";
-    public static final String API_PATH_SELF = "/fineract-provider/api/v1/self/";
+    public static final String API_PATH_SELF = "/fineract-provider/api/v1/";
 
 
     public String getUrl() {

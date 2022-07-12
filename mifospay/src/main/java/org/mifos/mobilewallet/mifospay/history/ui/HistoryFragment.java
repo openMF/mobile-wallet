@@ -202,27 +202,27 @@ public class HistoryFragment extends BaseFragment
     @OnClick(R.id.btn_filter_all)
     void displayAll() {
         btnFilterAll.setFocusable(true);
-        btnFilterAll.setChipBackgroundColorResource(R.color.clickedblue);
-        btnFilterCredits.setChipBackgroundColorResource(R.color.changedBackgroundColour);
-        btnFilterDebits.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        btnFilterAll.setChecked(true);
+        btnFilterCredits.setChecked(false);
+        btnFilterDebits.setChecked(false);
         mTransactionsHistoryPresenter.filterTransactionType(null);
     }
 
     @OnClick(R.id.btn_filter_credits)
     void displayCredits() {
         btnFilterCredits.setFocusable(true);
-        btnFilterCredits.setChipBackgroundColorResource(R.color.clickedblue);
-        btnFilterAll.setChipBackgroundColorResource(R.color.changedBackgroundColour);
-        btnFilterDebits.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        btnFilterAll.setChecked(false);
+        btnFilterCredits.setChecked(true);
+        btnFilterDebits.setChecked(false);
         mTransactionsHistoryPresenter.filterTransactionType(CREDIT);
 
     }
     @OnClick(R.id.btn_filter_debits)
     void displayDebits() {
         btnFilterDebits.setFocusable(true);
-        btnFilterDebits.setChipBackgroundColorResource(R.color.clickedblue);
-        btnFilterAll.setChipBackgroundColorResource(R.color.changedBackgroundColour);
-        btnFilterCredits.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        btnFilterAll.setChecked(false);
+        btnFilterCredits.setChecked(false);
+        btnFilterDebits.setChecked(true);
         mTransactionsHistoryPresenter.filterTransactionType(DEBIT);
     }
 

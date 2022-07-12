@@ -323,6 +323,7 @@
     <string name="scan_qr_code">Scan QR code</string>
     <string name="receipt">Receipt</string>
     <string name="specific_transaction_history">Specific Transactions History</string>
+    <string name="click_to_select_state">Click to select your state</string>
 
 
 </resources>

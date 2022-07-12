@@ -128,7 +128,8 @@
                     android:visibility="gone"
                     android:layout_height="wrap_content"
                     android:maxLength="@integer/telephone_numbers_max_length_standard"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:imeOptions="actionDone"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 

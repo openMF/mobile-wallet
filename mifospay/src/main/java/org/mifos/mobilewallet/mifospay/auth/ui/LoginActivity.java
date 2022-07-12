@@ -110,7 +110,7 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
                 etPassword.getText().toString());
     }
 
-    @OnClick(R.id.ll_signup)
+    @OnClick(R.id.tv_create_account)
     public void onSignupClicked() {
         SignupMethod signupMethod = new SignupMethod();
         signupMethod.show(getSupportFragmentManager(), Constants.CHOOSE_SIGNUP_METHOD);

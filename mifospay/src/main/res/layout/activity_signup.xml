@@ -107,11 +107,10 @@
                         android:hint="@string/password"
                         android:inputType="textPassword"/>
                 </com.google.android.material.textfield.TextInputLayout>
-                <ProgressBar
+                <com.google.android.material.progressindicator.LinearProgressIndicator
                     android:layout_width="match_parent"
                     android:id="@+id/pb_password_strength"
                     android:visibility="gone"
-                    style="?android:attr/progressBarStyleHorizontal"
                     android:layout_height="match_parent" />
                 <TextView
                     android:layout_width="match_parent"
@@ -182,7 +181,8 @@
                     android:id="@+id/et_address_Layout2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium">
+                    android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+                    android:nextFocusDown="@id/et_state_layout">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_address_line_2"
@@ -197,7 +197,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium">
+                    android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
+                    app:placeholderText="@string/click_to_select_state">
 
                     <AutoCompleteTextView
                         android:layout_width="match_parent"

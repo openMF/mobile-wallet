@@ -23,7 +23,7 @@ public class TransferPayload implements Parcelable {
                     return new TransferPayload[size];
                 }
             };
-    public static final String DD_MMMM_YYYY = "dd MMMM yyyy";
+    public static final String DD_MMMM_YYYY = "dd MMM yyyy";
     @SerializedName("fromOfficeId")
     Integer fromOfficeId;
     @SerializedName("fromClientId")

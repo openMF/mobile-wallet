@@ -7,6 +7,8 @@ import com.google.gson.annotations.SerializedName;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.client.DepositType;
 
+import java.util.Objects;
+
 /**
  * @author Vishwajeet
  * @since 22/06/16
@@ -228,5 +230,28 @@ public class SavingAccount implements Parcelable {
         dest.writeParcelable(this.status, flags);
         dest.writeParcelable(this.currency, flags);
         dest.writeParcelable(this.depositType, flags);
+    }
+
+    public boolean isActive(){
+        return Objects.equals(status.id, SavingsAccountStatusType.ACTIVE.value);
+    }
+
+    public enum SavingsAccountStatusType {
+        INVALID(0),
+        SUBMITTED_AND_PENDING_APPROVAL(100),
+        APPROVED(200),
+        ACTIVE(300),
+        TRANSFER_IN_PROGRESS(303),
+        TRANSFER_ON_HOLD(304),
+        WITHDRAWN_BY_APPLICANT(400),
+        REJECTED(500),
+        CLOSED(600),
+        PRE_MATURE_CLOSURE(700);
+
+        public final Integer value;
+
+        SavingsAccountStatusType(int value) {
+            this.value = value;
+        }
     }
 }

@@ -29,6 +29,8 @@ public class AccountMapper {
                 && clientAccounts.getSavingsAccounts().size() != 0) {
 
             for (SavingAccount savingAccount : clientAccounts.getSavingsAccounts()) {
+                if(!savingAccount.isActive())
+                    continue;
                 Account account = new Account();
                 account.setName(savingAccount.getProductName());
                 account.setNumber(savingAccount.getAccountNo());

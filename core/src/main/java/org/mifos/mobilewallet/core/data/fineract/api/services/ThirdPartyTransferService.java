@@ -19,6 +19,6 @@ public interface ThirdPartyTransferService {
     @GET(ApiEndPoints.ACCOUNT_TRANSFER + "/template?type=tpt")
     Observable<AccountOptionsTemplate> getAccountTransferTemplate();
 
-    @POST(ApiEndPoints.ACCOUNT_TRANSFER + "?type=\"tpt\"")
+    @POST(ApiEndPoints.ACCOUNT_TRANSFER)
     Observable<TPTResponse> makeTransfer(@Body TransferPayload transferPayload);
 }
