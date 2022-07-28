@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -38,7 +39,7 @@ public class MobileVerificationActivity extends BaseActivity implements
     @BindView(R.id.et_mobile_number)
     EditText mEtMobileNumber;
     @BindView(R.id.btn_get_otp)
-    TextView mBtnGetOtp;
+    ImageView mBtnGetOtp;
     @BindView(R.id.et_otp)
     EditText mEtOtp;
     @BindView(R.id.fab_next)
