@@ -29,6 +29,7 @@ android {
     }
 
     lintOptions {
+        abortOnError false
         disable 'InvalidPackage'
     }
 
@@ -99,8 +100,8 @@ dependencies {
 
     implementation project(':core')
 
-    implementation 'com.github.rahul-gill.mifos-ui-library:uihouse:alpha-test'
-    lintChecks 'com.github.rahul-gill.mifos-ui-library:lint:alpha-test'
+    implementation 'com.github.rahul-gill.mifos-ui-library:uihouse:alpha-2.1'
+    lintChecks 'com.github.rahul-gill.mifos-ui-library:lint:alpha-2.1'
 }
 
 apply plugin: 'com.google.gms.google-services'

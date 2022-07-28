@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="From: Rahul Gill"
-        style="@style/TextAppearance.Material3.BodyLarge"
+        style="@style/Mifos.DesignSystem.TextStyle.CardTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
         tools:text="To: Rakesh Kumar"
-        style="@style/TextAppearance.Material3.BodyLarge"
+        style="@style/Mifos.DesignSystem.TextStyle.CardTitle"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_from_client_name" />
 
@@ -38,8 +38,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginWords"
         tools:text="Valid till: 30-6-2022"
-        style="@style/TextAppearance.Material3.BodyMedium"
-        android:alpha="@dimen/alpha_low_emphasis"
+        style="@style/Mifos.DesignSystem.TextStyle.Label"
         app:layout_constraintStart_toStartOf="@+id/tv_to_client_name"
         app:layout_constraintTop_toBottomOf="@+id/tv_to_client_name" />
 

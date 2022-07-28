@@ -20,7 +20,7 @@
         android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin"
         android:layout_width="wrap_content"
         android:text="@string/linked_bank_account"
-        style="@style/TextAppearance.Material3.BodyLarge" />
+        style="@style/Mifos.DesignSystem.TextStyle.BodyLarger"/>
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_accounts"
         android:layout_below="@id/linked_bank_account_text"

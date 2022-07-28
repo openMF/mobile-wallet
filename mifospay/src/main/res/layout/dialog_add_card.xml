@@ -62,7 +62,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
-        style="@style/TextAppearance.Material3.TitleSmall"
         android:text="@string/expiry_date"/>
 
     <LinearLayout
@@ -116,7 +115,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cancel_txt"
-            style="@style/Widget.Material3.Button.OutlinedButton"/>
+            style="@style/Mifos.DesignSystem.Components.Button.Outline"/>
 
         <Button
             android:id="@+id/btn_add"

@@ -29,7 +29,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/trusted_merchant_text"
             android:text="@string/trusted_merchants"
-            style="@style/TextAppearance.Material3.BodyLarge"
+            style="@style/Mifos.DesignSystem.TextStyle.BodyLarger"
             android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
             android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.screenVerticalMargin"/>
 

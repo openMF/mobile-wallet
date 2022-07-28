@@ -22,6 +22,6 @@
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
         tools:text="Sample National Bank"
-        style="@style/TextAppearance.Material3.BodyLarge"/>
+        style="@style/Mifos.DesignSystem.TextStyle.CardTitle"/>
 
 </LinearLayout>

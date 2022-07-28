@@ -6,7 +6,7 @@
     android:layout_width="@dimen/Mifos.DesignSystem.Size.BankCardSize"
     android:clickable="true"
     android:focusable="true"
-    style="@style/Widget.Material3.CardView.Filled"
+    style="@style/Mifos.DesignSystem.Components.Cards.Filled"
     app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding">
     <LinearLayout
         android:layout_height="match_parent"

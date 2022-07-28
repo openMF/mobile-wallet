@@ -32,7 +32,7 @@
                 android:id="@+id/tv_invoice_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.Material3.BodyLarge"
+                style="@style/Mifos.DesignSystem.TextStyle.CardTitle"
                 tools:text="Logo for Richard" />
 
 
@@ -41,8 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="viewEnd"
-                style="@style/TextAppearance.Material3.BodyMedium"
-                android:alpha="@dimen/alpha_low_emphasis"
+                style="@style/Mifos.DesignSystem.TextStyle.Label"
                 tools:text="$3000"
                 android:gravity="end" />
 
@@ -54,8 +53,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:alpha="@dimen/alpha_low_emphasis"/>
+            style="@style/Mifos.DesignSystem.TextStyle.Label"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -68,16 +66,14 @@
             tools:text="12/3/4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/TextAppearance.Material3.BodyMedium"
-            android:alpha="@dimen/alpha_low_emphasis"/>
+            style="@style/Mifos.DesignSystem.TextStyle.Label"/>
 
             <TextView
                 android:id="@+id/tv_invoice_id"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="Invoice id:12345"
-                style="@style/TextAppearance.Material3.BodyMedium"
-                android:alpha="@dimen/alpha_low_emphasis"
+                style="@style/Mifos.DesignSystem.TextStyle.Label"
                 android:gravity="end" />
         </LinearLayout>
 

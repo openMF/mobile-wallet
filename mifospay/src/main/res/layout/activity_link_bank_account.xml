@@ -53,7 +53,7 @@
             android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin">
 
             <TextView
-                style="@style/TextAppearance.Material3.LabelLarge"
+                style="@style/Mifos.DesignSystem.TextStyle.BodyLarger"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/popular_banks"
@@ -75,7 +75,7 @@
                 android:text="@string/no_bank_account"
                 android:padding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding"
                 android:gravity="center"
-                style="@style/TextAppearance.Material3.LabelSmall"
+                style="@style/Mifos.DesignSystem.TextStyle.Label"
                 android:visibility="gone"/>
 
             <TextView
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
                 android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.listHeaderSpacing"
-                style="@style/TextAppearance.Material3.LabelLarge"
+                style="@style/Mifos.DesignSystem.TextStyle.BodyLarger"
                 android:text="@string/other_banks"/>
 
             <androidx.recyclerview.widget.RecyclerView

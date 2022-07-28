@@ -55,7 +55,7 @@
                     android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                     android:gravity="bottom"
                     android:text="@string/slash"
-                    style="@style/TextAppearance.Material3.HeadlineLarge" />
+                    style="@style/Mifos.DesignSystem.TextStyle.Heading"/>
 
                 <com.alimuzaffar.lib.pin.PinEntryEditText
                     android:id="@+id/pe_year"
@@ -94,7 +94,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/enter_otp"
-                style="@style/TextAppearance.Material3.TitleLarge"/>
+                style="@style/Mifos.DesignSystem.TextStyle.Heading"/>
 
             <com.alimuzaffar.lib.pin.PinEntryEditText
                 android:id="@+id/pe_otp"
@@ -123,7 +123,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/enter_upi_pin"
-                style="@style/TextAppearance.Material3.TitleLarge"/>
+                style="@style/Mifos.DesignSystem.TextStyle.Heading"/>
 
             <com.alimuzaffar.lib.pin.PinEntryEditText
                 android:id="@+id/pe_upi_pin"
@@ -150,7 +150,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/cancel_txt"
-                style="@style/Widget.Material3.Button.OutlinedButton"/>
+                style="@style/Mifos.DesignSystem.Components.Button.Outline"/>
 
             <Button
                 android:id="@+id/btn_next"

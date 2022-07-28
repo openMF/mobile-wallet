@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
-        style="@style/TextAppearance.Material3.TitleLarge"
+        style="@style/Mifos.DesignSystem.TextStyle.CardTitle"
         app:layout_constraintEnd_toEndOf="@+id/iv_user_image"
         app:layout_constraintStart_toStartOf="@+id/iv_user_image"
         app:layout_constraintTop_toBottomOf="@+id/iv_user_image" />

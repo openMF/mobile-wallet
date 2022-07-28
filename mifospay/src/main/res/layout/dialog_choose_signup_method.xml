@@ -12,7 +12,7 @@
         android:layout_width="match_parent">
 
         <Button
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/Mifos.DesignSystem.Components.Button.Outline"
             android:id="@+id/btn_merchant"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
@@ -23,7 +23,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
         <Button
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/Mifos.DesignSystem.Components.Button.Outline"
             android:id="@+id/btn_customer"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenSectionsHalf"

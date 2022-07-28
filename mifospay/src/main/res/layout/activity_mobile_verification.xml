@@ -47,7 +47,7 @@
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:text="@string/enter_mobile_number"
-                    style="@style/TextAppearance.Material3.TitleLarge">
+                    style="@style/Mifos.DesignSystem.TextStyle.Heading">
 
                 </TextView>
 
@@ -56,8 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/value_10dp"
                     android:layout_marginTop="@dimen/value_5dp"
-                    android:text="@string/enter_mobile_number_description"
-                    style="@style/TextAppearance.Material3.BodyMedium"/>
+                    android:text="@string/enter_mobile_number_description" />
 
             </LinearLayout>
 

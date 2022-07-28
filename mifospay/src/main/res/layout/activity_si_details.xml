@@ -37,7 +37,7 @@
                 android:id="@+id/tv_si_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.Material3.HeadlineLarge"
+                style="@style/Mifos.DesignSystem.TextStyle.Heading"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,8 +51,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyLarge"
-                    android:alpha="@dimen/alpha_low_emphasis"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="@string/standing_instruction_id"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -64,8 +63,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyLarge"
-                    android:alpha="@dimen/alpha_low_emphasis"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="@string/amount_header"/>
                 <LinearLayout
                     android:orientation="horizontal"
@@ -76,8 +74,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tv_si_amount"
-                        style="@style/TextAppearance.Material3.TitleMedium" />
+                        android:id="@+id/tv_si_amount" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/til_si_edit_amount"
@@ -100,21 +97,18 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyLarge"
-                    android:alpha="@dimen/alpha_low_emphasis"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="Valid From:"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_valid_from"
-                    style="@style/TextAppearance.Material3.BodyLarge"
                     android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyLarge"
-                    android:alpha="@dimen/alpha_low_emphasis"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="Valid Till:"/>
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -126,7 +120,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tv_valid_till"
-                        style="@style/TextAppearance.Material3.BodyLarge"
                         android:layout_marginRight="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"/>
 
                     <TextView
@@ -142,44 +135,37 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyLarge"
-                    android:alpha="@dimen/alpha_low_emphasis"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="@string/to"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_si_to_name"
-                    style="@style/TextAppearance.Material3.BodyLarge"/>
+                    android:id="@+id/tv_si_to_name"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_si_to_number"
-                    style="@style/TextAppearance.Material3.BodyLarge"
                     android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyLarge"
-                    android:alpha="@dimen/alpha_low_emphasis"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="@string/from"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_si_from_name"
-                    style="@style/TextAppearance.Material3.BodyLarge"/>
+                    android:id="@+id/tv_si_from_name"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_si_from_number"
-                    style="@style/TextAppearance.Material3.BodyLarge"
                     android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyLarge"
-                    android:alpha="@dimen/alpha_low_emphasis"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="Recurrence Interval in Months:"/>
                 <LinearLayout
                     android:orientation="horizontal"
@@ -190,8 +176,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tv_recurrence_interval"
-                        style="@style/TextAppearance.Material3.BodyLarge"/>
+                        android:id="@+id/tv_recurrence_interval"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/til_si_edit_interval"
@@ -212,8 +197,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyLarge"
-                    android:alpha="@dimen/alpha_low_emphasis"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="Status:"/>
                 <TextView
                     android:layout_width="wrap_content"

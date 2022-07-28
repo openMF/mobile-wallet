@@ -24,7 +24,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAllCaps="true"
-                style="@style/TextAppearance.Material3.BodyMedium"
                 tools:text="Rahul"/>
 
             <TextView
@@ -33,7 +32,6 @@
                 tools:text="Gill"
                 android:layout_marginStart="@dimen/Mifos.DesignSystem.Spacing.marginWords"
                 android:layout_width="wrap_content"
-                style="@style/TextAppearance.Material3.BodyMedium"
                 android:textAllCaps="true" />
 
         </LinearLayout>
@@ -43,7 +41,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            style="@style/TextAppearance.Material3.TitleLarge"
+            style="@style/Mifos.DesignSystem.TextStyle.Heading"
             tools:text="8754753895326"/>
 
 
@@ -52,7 +50,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Expiry date: 22 June 2099"
-            android:alpha="@dimen/alpha_low_emphasis"/>
+            style="@style/Mifos.DesignSystem.TextStyle.Label"/>
 
 
     </LinearLayout>

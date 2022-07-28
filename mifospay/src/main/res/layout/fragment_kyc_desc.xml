@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/value_30dp"
-            style="@style/Widget.Material3.CardView.Filled">
+            style="@style/Mifos.DesignSystem.Components.Cards.Filled">
 
             <LinearLayout
                 android:id="@+id/ll_lvl1"
@@ -34,17 +34,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_10dp"
                     android:text="@string/level_1"
-                    style="@style/TextAppearance.Material3.HeadlineMedium"/>
-
-                <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="@dimen/value_5dp"-->
-                <!--android:layout_marginLeft="@dimen/value_10dp"-->
-                <!--android:layout_marginRight="@dimen/value_10dp"-->
-                <!--android:layout_marginTop="@dimen/value_10dp"-->
-                <!--android:text="@string/level_1_description"-->
-                <!--android:textColor="@color/gray"/>-->
+                    style="@style/Mifos.DesignSystem.TextStyle.CardTitle"/>
 
             </LinearLayout>
 
@@ -55,7 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/value_30dp"
-            style="@style/Widget.Material3.CardView.Filled"
+            style="@style/Mifos.DesignSystem.Components.Cards.Filled"
             >
 
             <LinearLayout
@@ -70,17 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_10dp"
                     android:text="@string/level_2"
-                    style="@style/TextAppearance.Material3.HeadlineMedium"/>
-
-                <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="@dimen/value_5dp"-->
-                <!--android:layout_marginLeft="@dimen/value_10dp"-->
-                <!--android:layout_marginRight="@dimen/value_10dp"-->
-                <!--android:layout_marginTop="@dimen/value_10dp"-->
-                <!--android:text="@string/level_2_description"-->
-                <!--android:textColor="@color/gray"/>-->
+                    style="@style/Mifos.DesignSystem.TextStyle.CardTitle"/>
 
             </LinearLayout>
 
@@ -91,7 +71,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/value_30dp"
-            style="@style/Widget.Material3.CardView.Filled"
+            style="@style/Mifos.DesignSystem.Components.Cards.Filled"
             >
 
             <LinearLayout
@@ -106,17 +86,7 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="@dimen/value_10dp"
                     android:text="@string/level_3"
-                    style="@style/TextAppearance.Material3.HeadlineMedium"/>
-
-                <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="@dimen/value_5dp"-->
-                <!--android:layout_marginLeft="@dimen/value_10dp"-->
-                <!--android:layout_marginRight="@dimen/value_10dp"-->
-                <!--android:layout_marginTop="@dimen/value_10dp"-->
-                <!--android:text="@string/level_3_description"-->
-                <!--android:textColor="@color/gray"/>-->
+                    style="@style/Mifos.DesignSystem.TextStyle.CardTitle"/>
 
             </LinearLayout>
 

@@ -30,7 +30,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.Material3.LabelLarge"
+                style="@style/Mifos.DesignSystem.TextStyle.Label"
                 android:text="@string/virtual_payment_address_vpa"/>
 
             <TextView
@@ -38,13 +38,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="fwef3w"
-                style="@style/TextAppearance.Material3.BodyLarge"/>
+                style="@style/Mifos.DesignSystem.TextStyle.Body"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
-                style="@style/TextAppearance.Material3.LabelLarge"
+                style="@style/Mifos.DesignSystem.TextStyle.Label"
                 android:text="@string/mobile_number"/>
 
             <TextView
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="+911234567890"
-                style="@style/TextAppearance.Material3.BodyLarge"/>
+                style="@style/Mifos.DesignSystem.TextStyle.Body"/>
 
         </LinearLayout>
 

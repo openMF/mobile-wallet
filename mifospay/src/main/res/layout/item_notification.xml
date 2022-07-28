@@ -11,20 +11,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:text="Title"
-        style="@style/TextAppearance.Material3.TitleLarge" />
+        style="@style/Mifos.DesignSystem.TextStyle.Heading"/>
 
     <TextView
         android:id="@+id/tv_body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:text="This is sample body text"
-        style="@style/TextAppearance.Material3.BodyMedium"/>
+        tools:text="This is sample body text"/>
 
     <TextView
         android:id="@+id/tv_timestamp"
         tools:text="17-2-2002"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.Material3.LabelSmall" />
+        style="@style/Mifos.DesignSystem.TextStyle.Label"/>
 
 </LinearLayout>

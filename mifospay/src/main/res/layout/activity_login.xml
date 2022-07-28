@@ -98,7 +98,7 @@
                 android:layout_marginStart="0dp"
                 android:layout_width="wrap_content"
                 android:text="@string/don_t_have_an_account"
-                android:alpha="@dimen/alpha_low_emphasis"/>
+                style="@style/Mifos.DesignSystem.TextStyle.Label"/>
 
             <TextView
                 android:id="@+id/tv_create_account"

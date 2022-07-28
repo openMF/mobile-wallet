@@ -48,7 +48,7 @@
                 android:id="@+id/tv_amount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.Material3.DisplaySmall"/>
+                style="@style/Mifos.DesignSystem.TextStyle.Heading"/>
 
             <TextView
                 android:id="@+id/tv_operation"
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                 android:gravity="center"
-                style="@style/TextAppearance.Material3.TitleLarge"
+                style="@style/Mifos.DesignSystem.TextStyle.BodyLarger"
                 android:layout_gravity="center"/>
 
             <LinearLayout
@@ -73,72 +73,60 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyMedium"
-                    android:alpha="@dimen/alpha_low_emphasis"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="@string/transaction_id"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_transaction_ID"
-                    style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:alpha="@dimen/alpha_low_emphasis"
-                    style="@style/TextAppearance.Material3.BodyMedium"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="@string/transaction_date"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_transaction_date"
-                    style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:alpha="@dimen/alpha_low_emphasis"
-                    style="@style/TextAppearance.Material3.BodyMedium"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="@string/to"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_transaction_to_name"
-                    style="@style/TextAppearance.Material3.BodyMedium" />
+                    android:id="@+id/tv_transaction_to_name" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_transaction_to_number"
-                    style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:alpha="@dimen/alpha_low_emphasis"
-                    style="@style/TextAppearance.Material3.BodyMedium"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="@string/from"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tv_transaction_from_name"
-                    style="@style/TextAppearance.Material3.BodyMedium" />
+                    android:id="@+id/tv_transaction_from_name" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/tv_transaction_from_number"
-
-                    style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium" />
 
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:alpha="@dimen/alpha_low_emphasis"
-                    style="@style/TextAppearance.Material3.BodyMedium"
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"
                     android:text="@string/unique_receipt_link"/>
 
                 <androidx.constraintlayout.widget.ConstraintLayout

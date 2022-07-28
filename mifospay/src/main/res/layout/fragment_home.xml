@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|top"
             android:text="@string/fetching"
-            style="@style/TextAppearance.Material3.DisplaySmall" />
+            style="@style/Mifos.DesignSystem.TextStyle.Heading"/>
 
         <TextView
             android:layout_gravity="center|bottom"
@@ -32,8 +32,7 @@
             android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
             android:text="@string/balance_hint"
             android:textAllCaps="true"
-            android:alpha="@dimen/alpha_low_emphasis"
-            style="@style/TextAppearance.Material3.LabelSmall" />
+            style="@style/Mifos.DesignSystem.TextStyle.Label"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -112,7 +111,7 @@
 
             <Button
                 android:visibility="gone"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Mifos.DesignSystem.Components.Button.Outline"
                 android:layout_gravity="center_horizontal"
                 android:id="@+id/btn_home_bottom_sheet_action"
                 android:layout_width="wrap_content"

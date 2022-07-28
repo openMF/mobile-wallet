@@ -9,6 +9,6 @@
         android:id="@+id/tv_search_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        style="@style/TextAppearance.Material3.BodyLarge"/>
+        style="@style/Mifos.DesignSystem.TextStyle.CardTitle"/>
 
 </LinearLayout>

@@ -50,7 +50,7 @@
             android:layout_marginRight="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
             android:gravity="bottom"
             android:text="@string/slash"
-            style="@style/TextAppearance.Material3.HeadlineLarge"/>
+            style="@style/Mifos.DesignSystem.TextStyle.Heading"/>
 
         <com.alimuzaffar.lib.pin.PinEntryEditText
             android:id="@+id/pe_year"

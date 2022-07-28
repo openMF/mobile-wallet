@@ -44,8 +44,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/no_notification_found"
-        style="@style/TextAppearance.Material3.BodyLarge"
-        android:alpha="@dimen/alpha_low_emphasis"
+        style="@style/Mifos.DesignSystem.TextStyle.Label"
         android:visibility="gone"/>
 
 

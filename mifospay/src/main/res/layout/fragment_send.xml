@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/select_transfer_method"
-            style="@style/TextAppearance.Material3.BodyLarge"/>
+            style="@style/Mifos.DesignSystem.TextStyle.BodyLarger"/>
 
         <com.google.android.material.button.MaterialButtonToggleGroup
             android:id="@+id/transfer_method_toggle"

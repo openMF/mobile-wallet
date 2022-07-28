@@ -42,7 +42,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/all_fields_are_mandatory"
-                style="@style/TextAppearance.Material3.LabelSmall"/>
+                style="@style/Mifos.DesignSystem.TextStyle.Label"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -196,7 +196,7 @@
                     android:id="@+id/et_state_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                    style="@style/Mifos.DesignSystem.Components.ExposedDropdownMenuField"
                     android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
                     app:placeholderText="@string/click_to_select_state">
 

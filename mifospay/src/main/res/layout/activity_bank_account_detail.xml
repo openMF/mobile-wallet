@@ -114,7 +114,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Mifos.DesignSystem.Components.Button.Outline"
                 android:text="@string/setup_upi"
                 android:visibility="visible"/>
 
@@ -123,7 +123,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
-                style="@style/Widget.Material3.Button.OutlinedButton"
+                style="@style/Mifos.DesignSystem.Components.Button.Outline"
                 android:text="@string/delete_bank"
                 android:visibility="visible"/>
 
@@ -131,12 +131,9 @@
 
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
+            style="@style/Mifos.DesignSystem.Components.HorizontalSpacer"
             android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.marginBetweenSectionsHalf"
-            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"
-            android:background="?attr/colorOnBackground"
-            android:alpha="@dimen/alpha_least_emphasis"/>
+            android:layout_marginHorizontal="@dimen/Mifos.DesignSystem.Spacing.screenHorizontalMargin"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -149,13 +146,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger"
-                style="@style/Widget.Material3.CardView.Filled">
+                style="@style/Mifos.DesignSystem.Components.Cards.Filled">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/change_upi_pin"
-                    style="@style/TextAppearance.Material3.TitleMedium"/>
+                    style="@style/Mifos.DesignSystem.TextStyle.CardTitle"/>
 
                 <ImageView
                     android:layout_width="@dimen/Mifos.DesignSystem.Size.SmallIcon"
@@ -170,14 +167,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"
-                style="@style/Widget.Material3.CardView.Filled"
+                style="@style/Mifos.DesignSystem.Components.Cards.Filled"
                 app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/forgot_upi_pin"
-                    style="@style/TextAppearance.Material3.TitleMedium"/>
+                    style="@style/Mifos.DesignSystem.TextStyle.CardTitle"/>
 
                 <ImageView
                     android:layout_width="@dimen/Mifos.DesignSystem.Size.SmallIcon"

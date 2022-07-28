@@ -18,7 +18,7 @@
         android:id="@+id/tv_empty_no_transaction_history_title"
         android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
         android:text="@string/error_oops"
-        style="@style/TextAppearance.Material3.BodyLarge"
+        style="@style/Mifos.DesignSystem.TextStyle.CardTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -30,6 +30,5 @@
         android:layout_marginBottom="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
         android:text="@string/unexpected_error_subtitle"
         android:textAlignment="center"
-        android:alpha="@dimen/alpha_low_emphasis"
-        style="@style/TextAppearance.Material3.BodyMedium" />
+        style="@style/Mifos.DesignSystem.TextStyle.Label"/>
 </LinearLayout>

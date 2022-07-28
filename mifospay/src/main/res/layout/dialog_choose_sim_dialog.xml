@@ -21,13 +21,12 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenSections"
                 android:text="@string/verify_mobile_number"
-                style="@style/TextAppearance.Material3.TitleLarge"/>
+                style="@style/Mifos.DesignSystem.TextStyle.Heading"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical|center_horizontal"
-                style="@style/TextAppearance.Material3.BodyMedium"
                 android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                 android:gravity="center"
                 android:text="@string/confirm_mobile_number_message" />

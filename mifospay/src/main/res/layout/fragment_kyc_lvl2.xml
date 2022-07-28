@@ -38,8 +38,7 @@
             tools:text="/storage/emulated/0/Whatsapp/Media/Whatsapp Images/id.jpg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            style="@style/TextAppearance.Material3.BodyMedium"/>
+            android:layout_gravity="center_vertical"/>
 
     </LinearLayout>
 

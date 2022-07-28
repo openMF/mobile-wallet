@@ -28,15 +28,13 @@
                 android:id="@+id/tv_fromClientName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                style="@style/TextAppearance.Material3.BodyMedium"/>
+                android:layout_gravity="center"/>
 
             <TextView
                 android:id="@+id/tv_fromAccountNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                style="@style/TextAppearance.Material3.BodyMedium"/>
+                android:layout_gravity="center"/>
 
         </LinearLayout>
 
@@ -66,15 +64,14 @@
                 android:id="@+id/tv_toClientName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                style="@style/TextAppearance.Material3.BodyMedium"/>
+                android:layout_gravity="center"/>
 
             <TextView
                 android:id="@+id/tv_toAccountNo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                style="@style/TextAppearance.Material3.BodyMedium"/>
+                />
 
         </LinearLayout>
 
@@ -110,15 +107,13 @@
                 android:id="@+id/tv_transaction_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextAppearance.Material3.BodyMedium"
-                android:alpha="@dimen/alpha_low_emphasis"/>
+                style="@style/Mifos.DesignSystem.TextStyle.Label"/>
 
             <TextView
                 android:id="@+id/tv_transaction_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                style="@style/TextAppearance.Material3.BodyMedium"/>
+                android:layout_gravity="bottom"/>
 
         </LinearLayout>
 

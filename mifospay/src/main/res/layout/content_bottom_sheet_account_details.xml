@@ -45,7 +45,7 @@
 
     <Button
         android:id="@+id/btn_profile_bottom_sheet_action"
-        style="@style/Widget.Material3.Button.OutlinedButton"
+        style="@style/Mifos.DesignSystem.Components.Button.Outline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenSections"

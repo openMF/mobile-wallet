@@ -17,7 +17,7 @@
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:text="@string/send_money"
-        style="@style/TextAppearance.Material3.TitleMedium"/>
+        style="@style/Mifos.DesignSystem.TextStyle.BodyLarger"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -49,14 +49,14 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginWords"
                     tools:text="Alex Chi"
-                    style="@style/TextAppearance.Material3.TitleLarge" />
+                    style="@style/Mifos.DesignSystem.TextStyle.Heading"/>
 
                 <TextView
                     android:id="@+id/tv_client_vpa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="VPA: 232r32"
-                    style="@style/TextAppearance.Material3.BodyLarge"
+                    style="@style/Mifos.DesignSystem.TextStyle.SubHeading"
                     android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginWords"/>
 
                 <TextView
@@ -72,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginWords"
                     tools:text="$ 1000"
-                    style="@style/TextAppearance.Material3.TitleLarge"/>
+                    style="@style/Mifos.DesignSystem.TextStyle.Heading"/>
 
             </LinearLayout>
 
@@ -88,7 +88,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/cancel"
-                    style="@style/Widget.Material3.Button.OutlinedButton"/>
+                    style="@style/Mifos.DesignSystem.Components.Button.Outline"/>
 
                 <Button
                     android:id="@+id/btn_confirm"

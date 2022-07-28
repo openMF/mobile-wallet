@@ -41,13 +41,12 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.LabelLarge"
+                    style="@style/Mifos.DesignSystem.TextStyle.BodyLarger"
                     android:text="@string/invoice_details" />
 
                 <TextView
                     android:id="@+id/tv_merchantId"
                     android:layout_width="match_parent"
-                    style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsMedium"/>
 
@@ -55,21 +54,18 @@
                     android:id="@+id/tv_consumerId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"/>
 
                 <TextView
                     android:id="@+id/tv_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"/>
 
                 <TextView
                     android:id="@+id/tv_itemsBought"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                     android:text="@string/items_bought"/>
 
@@ -77,7 +73,6 @@
                     android:id="@+id/tv_status"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.BodyMedium"
                     android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                     android:text="@string/status"/>
 
@@ -95,7 +90,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
-                    style="@style/TextAppearance.Material3.BodyMedium"
                     android:text="@string/date"/>
 
             </LinearLayout>
@@ -108,8 +102,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:layout_marginVertical="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
-                android:text="@string/payment_options_will_be_fetched_from_upi"
-                style="@style/TextAppearance.Material3.LabelLarge"/>
+                android:text="@string/payment_options_will_be_fetched_from_upi" />
 
 
             <View
@@ -121,7 +114,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/unique_payment_link"
                 android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
-                style="@style/TextAppearance.Material3.LabelLarge"/>
+                style="@style/Mifos.DesignSystem.TextStyle.BodyLarger"/>
 
             <TextView
                 android:id="@+id/tv_paymentLink"
@@ -150,8 +143,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/unique_receipt_link"
-                    style="@style/TextAppearance.Material3.LabelLarge"/>
+                    android:text="@string/unique_receipt_link"/>
 
                 <TextView
                     android:id="@+id/tv_receiptLink"

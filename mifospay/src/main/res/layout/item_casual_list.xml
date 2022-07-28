@@ -49,7 +49,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/Mifos.DesignSystem.Spacing.CardInnerPadding"
-        style="@style/TextAppearance.Material3.BodySmall"
         app:layout_constraintBottom_toBottomOf="@+id/tv_item_casual_list_subtitle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_item_casual_list_title" />

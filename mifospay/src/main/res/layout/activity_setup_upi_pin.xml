@@ -32,7 +32,7 @@
             android:id="@+id/cv_debit_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/Widget.Material3.CardView.Filled"
+            style="@style/Mifos.DesignSystem.Components.Cards.Filled"
             app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger">
 
             <LinearLayout
@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_width="wrap_content"
                         android:text="@string/debit_card_details"
-                        style="@style/TextAppearance.Material3.BodyLarge"/>
+                        style="@style/Mifos.DesignSystem.TextStyle.CardTitle"/>
 
                     <TextView
                         android:id="@+id/tv_debit_card"
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
-            style="@style/Widget.Material3.CardView.Filled"
+            style="@style/Mifos.DesignSystem.Components.Cards.Filled"
             app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger">
 
             <LinearLayout
@@ -90,7 +90,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/one_time_password"
-                        style="@style/TextAppearance.Material3.BodyLarge"/>
+                        style="@style/Mifos.DesignSystem.TextStyle.CardTitle"/>
 
                     <TextView
                         android:id="@+id/tv_otp"
@@ -118,7 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
-            style="@style/Widget.Material3.CardView.Filled"
+            style="@style/Mifos.DesignSystem.Components.Cards.Filled"
             app:contentPadding="@dimen/Mifos.DesignSystem.Spacing.CardInnerPaddingLarger">
 
             <LinearLayout
@@ -134,7 +134,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/upi_pin_setup"
-                        style="@style/TextAppearance.Material3.BodyLarge"/>
+                        style="@style/Mifos.DesignSystem.TextStyle.CardTitle"/>
 
                     <TextView
                         android:id="@+id/tv_upi"

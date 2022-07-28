@@ -95,7 +95,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/valid_till"
                     android:layout_marginBottom="@dimen/marginItemsInSectionSmall"
-                    style="@style/TextAppearance.Material3.BodyLarge"
+                    style="@style/Mifos.DesignSystem.TextStyle.BodyLarger"
                     android:layout_gravity="center" />
                 <Button
                     android:id="@+id/btn_valid_till"
@@ -126,35 +126,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sending_to"
-                    style="@style/Mifos.DesignSystem.TextStyle.PrimaryColorBody"/>
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"/>
 
                 <TextView
                     android:id="@+id/tv_client_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    style="@style/TextAppearance.Material3.TitleLarge"
                     android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"/>
 
                 <TextView
                     android:id="@+id/tv_client_vpa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
-                    style="@style/TextAppearance.Material3.TitleMedium"/>
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsLarge"
                     android:text="@string/amount"
-                    style="@style/Mifos.DesignSystem.TextStyle.PrimaryColorBody"/>
+                    style="@style/Mifos.DesignSystem.TextStyle.Label"/>
 
                 <TextView
                     android:id="@+id/tv_amount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
-                    style="@style/TextAppearance.Material3.TitleLarge"/>
+                    android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"/>
 
                 <LinearLayout
                     android:id="@+id/ll_confirm_cancel"
@@ -169,7 +166,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/cancel"
-                        style="@style/Widget.Material3.Button.OutlinedButton"/>
+                        style="@style/Mifos.DesignSystem.Components.Button.Outline"/>
 
                     <Button
                         android:id="@+id/btn_confirm"

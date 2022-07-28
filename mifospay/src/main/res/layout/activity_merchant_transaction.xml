@@ -87,7 +87,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/Mifos.DesignSystem.Spacing.marginBetweenItemsSmall"
                 android:text="@string/test_user"
-                style="@style/TextAppearance.Material3.TitleLarge" />
+                style="@style/Mifos.DesignSystem.TextStyle.Heading" />
 
             <TextView
                 android:id="@+id/tv_pay_to_vpa"
@@ -96,8 +96,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="@dimen/marginItemsInSectionSmall"
                 android:text="@string/test_vpa"
-                style="@style/TextAppearance.Material3.TitleLarge"
-                android:alpha="@dimen/alpha_low_emphasis"/>
+                style="@style/Mifos.DesignSystem.TextStyle.SubHeading"/>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/et_amount"
