@@ -78,7 +78,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
     private String transactionId;
     private boolean isDebit;
     private Uri deepLinkURI;
-
+    private String shareMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,6 +107,12 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
             }
             showProgressDialog(Constants.PLEASE_WAIT);
             mPresenter.fetchTransaction(Long.parseLong(transactionId));
+            shareMessage = Constants.RECEIPT_SHARING_MESSAGE
+                    + tvTransFromName.getText()
+                    + Constants.TO
+                    + tvTransToName.getText()
+                    + Constants.COLON
+                    + tvReceiptLink.getText().toString();
         }
     }
 
@@ -204,11 +210,12 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
     }
 
+
     @OnClick(R.id.transaction_reciept_share)
     void shareReceiptLink() {
         Intent intent = new Intent(Intent.ACTION_SEND)
                 .setType("text/plain")
-                .putExtra(Intent.EXTRA_TEXT, tvReceiptLink.getText().toString())
+                .putExtra(Intent.EXTRA_TEXT, shareMessage)
                 .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
         intent = Intent.createChooser(intent, getString(R.string.share_receipt));
