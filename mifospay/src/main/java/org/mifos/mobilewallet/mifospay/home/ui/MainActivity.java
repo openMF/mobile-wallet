@@ -93,14 +93,6 @@ public class MainActivity extends BaseActivity implements BaseHomeContract.BaseH
     }
 
     @Override
-    public void showClientDetails(Client client) {
-//        tvUserName.setText(client.getName());
-//        TextDrawable drawable = TextDrawable.builder()
-//                .buildRound(client.getName().substring(0, 1), R.color.colorPrimary);
-//        ivUserImage.setImageDrawable(drawable);
-    }
-
-    @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager()
                 .findFragmentById(R.id.bottom_navigation_fragment_container);
