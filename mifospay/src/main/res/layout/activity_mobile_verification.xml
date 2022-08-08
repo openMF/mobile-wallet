@@ -62,8 +62,8 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/value_10dp"
                     android:layout_marginTop="@dimen/value_5dp"
+                    android:layout_marginBottom="@dimen/value_10dp"
                     android:text="@string/enter_mobile_number_description"
                     android:textColor="@color/white"
                     android:textSize="@dimen/value_14sp"/>
@@ -76,40 +76,44 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/value_20dp"
-            android:layout_marginRight="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_20dp"
-            android:orientation="horizontal">
+            android:layout_marginRight="@dimen/value_20dp"
+            android:orientation="horizontal"
+            android:weightSum="7">
 
             <com.hbb20.CountryCodePicker
                 android:id="@+id/ccp_code"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="48dp"
                 android:layout_gravity="center_vertical"
+                android:layout_weight="2.9"
                 android:gravity="center_vertical"
                 app:ccp_autoDetectCountry="true"
                 app:ccp_autoFormatNumber="false"/>
 
             <android.support.design.widget.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="@dimen/value_160dp"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:hint="@string/mobile" >
+                android:layout_weight="3.2"
+                android:hint="@string/mobile">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/et_mobile_number"
-                    android:layout_width="@dimen/value_160dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxLength="@integer/telephone_numbers_max_length_standard"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:maxLength="@integer/telephone_numbers_max_length_standard"/>
 
             </android.support.design.widget.TextInputLayout>
 
             <TextView
                 android:id="@+id/btn_get_otp"
-                android:layout_width="40dp"
+                android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_gravity="right|center_vertical|center_horizontal"
                 android:layout_marginLeft="@dimen/value_10dp"
+                android:layout_weight=".9"
                 android:background="@drawable/ic_right_arrow"/>
 
         </LinearLayout>
@@ -118,8 +122,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/value_20dp"
-            android:layout_marginRight="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_10dp"
+            android:layout_marginRight="@dimen/value_20dp"
             android:orientation="horizontal">
 
 
@@ -127,15 +131,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/value_48dp"
-                android:hint="@string/otp" >
+                android:hint="@string/otp">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/et_otp"
                     android:layout_width="@dimen/value_120dp"
-                    android:visibility="gone"
                     android:layout_height="wrap_content"
+                    android:inputType="number"
                     android:maxLength="@integer/telephone_numbers_max_length_standard"
-                    android:inputType="number" />
+                    android:visibility="gone"/>
 
             </android.support.design.widget.TextInputLayout>
 
