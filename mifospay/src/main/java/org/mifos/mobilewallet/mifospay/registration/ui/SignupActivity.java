@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,6 +81,9 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     ProgressBar passwordStrengthProgress;
     @BindView(R.id.tv_password_strength)
     TextView passwordStrengthText;
+    @BindView(R.id.etPasswordLayout2)
+    TextInputLayout mEtPasswordLayout;
+
 
     private String countryName;
     private String mobileNumber;
@@ -272,9 +276,12 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
     @Override
     public void updatePasswordStrength(int stringRes, int colorRes, int value) {
+        TableLayout.LayoutParams params = new TableLayout.LayoutParams();
+        params.setMargins(0, 12, 0, 0);
         TransitionManager.beginDelayedTransition(container);
         passwordStrengthText.setVisibility(View.VISIBLE);
         if (value == 0) {
+            mEtPasswordLayout.setLayoutParams(params);
             passwordStrengthText.setText("Password should contain more than 6 characters");
             return;
         }
@@ -283,6 +290,9 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
                 colorRes, android.graphics.PorterDuff.Mode.SRC_IN);
         passwordStrengthProgress.setProgress(value);
         passwordStrengthText.setText(stringRes);
+        if (passwordStrengthText.getVisibility() == View.VISIBLE && passwordStrengthProgress.getVisibility() == View.VISIBLE) {
+            mEtPasswordLayout.setLayoutParams(params);
+        }
     }
 
     @Override
