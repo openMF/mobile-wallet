@@ -9,11 +9,13 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -53,6 +55,8 @@ public class EditProfileActivity extends BaseActivity implements
 
     private static final int REQUEST_READ_IMAGE = 1;
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 7;
+    private static final int REQUEST_CAMERA = 0;
+    private Uri capturedImageUri;
 
     @Inject
     EditProfilePresenter mPresenter;
@@ -268,6 +272,30 @@ public class EditProfileActivity extends BaseActivity implements
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
+            case REQUEST_CAMERA: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // permission was granted, yay! Do the
+                    // camera-related task you need to do.
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    String destinationFileName = UUID.randomUUID().toString() + ".jpg";
+                    File destinationFile = new File(getCacheDir(), destinationFileName);
+                    capturedImageUri = FileProvider.getUriForFile(
+                            this,
+                            "org.mifos.mobilewallet.mifospay.provider",
+                            destinationFile);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
+                    startActivityForResult(intent, REQUEST_CAMERA);
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toaster.showToast(this,
+                            getString(R.string.need_camera_permission_to_click_profile_picture));
+                }
+                return;
+            }
             case REQUEST_READ_EXTERNAL_STORAGE: {
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
@@ -286,7 +314,6 @@ public class EditProfileActivity extends BaseActivity implements
                             R.string.need_external_storage_permission_to_browse_images));
                 }
             }
-
             // other 'case' lines to check for other
             // permissions this app might request.
         }
@@ -304,6 +331,8 @@ public class EditProfileActivity extends BaseActivity implements
                 }
             } else if (requestCode == UCrop.REQUEST_CROP) {
                 handleCropResult(data);
+            } else if (requestCode == REQUEST_CAMERA && capturedImageUri != null) {
+                startCrop(capturedImageUri);
             }
         }
     }
@@ -332,10 +361,12 @@ public class EditProfileActivity extends BaseActivity implements
         options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.primaryBlue));
         options.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.black));
+        options.setCropFrameColor(ContextCompat.getColor(this, R.color.clickedblue));
         options.setCircleDimmedLayer(true);
-        options.setShowCropFrame(false);
-        options.setCropGridColumnCount(0);
-        options.setCropGridRowCount(0);
+        options.setShowCropFrame(true);
+        options.setShowCropGrid(true);
+        options.setCropGridColumnCount(2);
+        options.setCropGridRowCount(2);
         return uCrop.withOptions(options);
     }
 
@@ -347,6 +378,11 @@ public class EditProfileActivity extends BaseActivity implements
     @Override
     public void changeProfileImage() {
         pickImageFromGallery();
+    }
+
+    @Override
+    public void clickProfileImage() {
+        clickProfilePicFromCamera();
     }
 
     private void pickImageFromGallery() {
@@ -375,6 +411,28 @@ public class EditProfileActivity extends BaseActivity implements
         final Uri resultUri = UCrop.getOutput(result);
         if (resultUri != null) {
             ivUserImage.setImageURI(resultUri);
+        }
+    }
+
+    public void clickProfilePicFromCamera() {
+
+        if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+
+            // Permission is not granted
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CAMERA);
+        } else {
+
+            // Permission has already been granted
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            String destinationFileName = UUID.randomUUID().toString() + ".jpg";
+            File destinationFile = new File(getCacheDir(), destinationFileName);
+            capturedImageUri = FileProvider.getUriForFile(
+                    this,
+                    "org.mifos.mobilewallet.mifospay.provider",
+                    destinationFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
+            startActivityForResult(intent, REQUEST_CAMERA);
         }
     }
 
@@ -458,6 +516,12 @@ public class EditProfileActivity extends BaseActivity implements
         @OnClick(R.id.ll_remove_profile_image_dialog_row)
         public void onRemoveProfileImageClicked() {
             mEditProfilePresenter.handleProfileImageRemoved();
+            bottomSheetDialog.dismiss();
+        }
+
+        @OnClick(R.id.ll_click_profile_image_dialog_row)
+        public void onClickProfileImageClicked() {
+            mEditProfilePresenter.handleClickProfileImageRequest();
             bottomSheetDialog.dismiss();
         }
     }

@@ -47,8 +47,6 @@ public class MobileVerificationActivity extends BaseActivity implements
     ProgressBar mProgressBar;
     @BindView(R.id.tv_verifying_otp)
     TextView mTvVerifyingOtp;
-    @BindView(R.id.ccp_country)
-    CountryCodePicker mCcpCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,7 +61,6 @@ public class MobileVerificationActivity extends BaseActivity implements
         showColoredBackButton(Constants.WHITE_BACK_BUTTON);
 
         mCcpCode.registerCarrierNumberEditText(mEtMobileNumber);
-        mCcpCountry.setCustomMasterCountries(null);
     }
 
     @Override
@@ -138,7 +135,7 @@ public class MobileVerificationActivity extends BaseActivity implements
         intent.putExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID,
                 getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0));
         intent.putExtra(Constants.GOOGLE_PHOTO_URI,
-                getIntent().getParcelableExtra(Constants.GOOGLE_PHOTO_URI));
+                String.valueOf(getIntent().getParcelableExtra(Constants.GOOGLE_PHOTO_URI)));
         intent.putExtra(Constants.GOOGLE_DISPLAY_NAME,
                 getIntent().getStringExtra(Constants.GOOGLE_DISPLAY_NAME));
         intent.putExtra(Constants.GOOGLE_EMAIL,
@@ -148,7 +145,7 @@ public class MobileVerificationActivity extends BaseActivity implements
         intent.putExtra(Constants.GOOGLE_GIVEN_NAME,
                 getIntent().getStringExtra(Constants.GOOGLE_GIVEN_NAME));
 
-        intent.putExtra(Constants.COUNTRY, mCcpCountry.getSelectedCountryName());
+        intent.putExtra(Constants.COUNTRY, mCcpCode.getSelectedCountryName());
         intent.putExtra(Constants.MOBILE_NUMBER, mCcpCode.getFullNumber());
 
         startActivity(intent);

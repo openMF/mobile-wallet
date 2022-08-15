@@ -161,6 +161,11 @@ public class EditProfilePresenter implements EditProfileContract.EditProfilePres
     }
 
     @Override
+    public void handleClickProfileImageRequest() {
+        mEditProfileView.clickProfileImage();
+    }
+
+    @Override
     public void handleNecessaryDataSave() {
         mEditProfileView.showFab();
     }

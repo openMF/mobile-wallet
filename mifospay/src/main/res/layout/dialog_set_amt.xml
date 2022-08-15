@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/Theme.AppCompat.Dialog"
+    android:orientation="vertical">
+    <android.support.design.widget.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:boxStrokeColor="@color/primaryDarkBlue"
+        android:hint="@string/enter_amount"
+        android:textColorHint="@color/grey_900"
+        android:layout_margin="@dimen/value_20dp"
+        >
+        <android.support.design.widget.TextInputEditText
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:inputType="number"
+            android:textColor="@color/colorTextPrimary"
+            android:textColorHint="@color/gray_9"
+            android:id="@+id/editText_set_amt"
+            android:layout_height="wrap_content"/>
+    </android.support.design.widget.TextInputLayout>
+
+</LinearLayout>

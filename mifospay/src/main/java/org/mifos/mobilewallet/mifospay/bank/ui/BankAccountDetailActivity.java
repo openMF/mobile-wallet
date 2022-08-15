@@ -51,8 +51,8 @@ public class BankAccountDetailActivity extends BaseActivity implements
     CardView mCvChangeUpiPin;
     @BindView(R.id.cv_forgot_upi_pin)
     CardView mCvForgotUpiPin;
-    @BindView(R.id.cv_delete_bank)
-    CardView mCvDeleteBank;
+    @BindView(R.id.btn_delete_bank)
+    Button mBtnDeleteBank;
 
     private BankAccountDetails bankAccountDetails;
     private int index;
@@ -75,6 +75,8 @@ public class BankAccountDetailActivity extends BaseActivity implements
                 mBtnSetupUpiPin.setVisibility(View.GONE);
             } else {
                 mBtnSetupUpiPin.setVisibility(View.VISIBLE);
+                mCvChangeUpiPin.setVisibility(View.GONE);
+                mCvForgotUpiPin.setVisibility(View.GONE);
             }
 
             mTvBankName.setText(bankAccountDetails.getBankName());
@@ -140,6 +142,8 @@ public class BankAccountDetailActivity extends BaseActivity implements
                 index = bundle.getInt(Constants.INDEX);
                 if (bankAccountDetails.isUpiEnabled()) {
                     mBtnSetupUpiPin.setVisibility(View.GONE);
+                    mCvChangeUpiPin.setVisibility(View.VISIBLE);
+                    mCvForgotUpiPin.setVisibility(View.VISIBLE);
                 }
             }
         }

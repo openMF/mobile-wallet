@@ -25,6 +25,8 @@ public interface EditProfileContract {
 
         void handleProfileImageRemoved();
 
+        void handleClickProfileImageRequest();
+
         void handleExitOnUnsavedChanges();
 
         void onDialogNegative();
@@ -47,6 +49,8 @@ public interface EditProfileContract {
         void removeProfileImage();
 
         void changeProfileImage();
+
+        void clickProfileImage();
 
         void onUpdateEmailError(String message);
 

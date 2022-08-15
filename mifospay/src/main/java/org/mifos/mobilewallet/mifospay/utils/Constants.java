@@ -22,6 +22,11 @@ public class Constants {
     public static final String MULTIPART_FORM_DATA = "multipart/form-data";
     public static final String IMAGE = "image/*";
     public static final String APPLICATION_PDF = "application/pdf";
+    public static final String ERROR_ADDING_KYC_LEVEL_1_DETAILS =
+            "Error adding KYC Level 1 details.";
+    public static final String KYC_LEVEL_1_DETAILS_ADDED_SUCCESSFULLY =
+            "KYC Level 1 details added successfully.";
+    public static final String PLEASE_WAIT = "Please wait..";
     public static final String COMPLETE_KYC = "Complete KYC";
     public static final String KYC_REGISTRATION_LEVEL_2 = "KYC Registration Level 2";
     public static final String KYC_REGISTRATION_LEVEL_1 = "KYC Registration Level 1";
@@ -32,6 +37,25 @@ public class Constants {
     public static final String KYC_REGISTRATION_LEVEL_3 = "KYC Registration Level 3";
     public static final String FAILED_TO_WRITE_DATA_TO_QR = "Failed to write data to qr";
     public static final String ERROR_OCCURRED = "Error occurred";
+    public static final String LOGGING_IN = "Logging in..";
+    public static final String HOME = "Home";
+    public static final String PROFILE = "Profile";
+    public static final String ERROR_FETCHING_BALANCE = "Error fetching balance";
+    public static final String UNABLE_TO_PROCESS_TRANSFER = "Unable to process transfer";
+    public static final String TRANSACTION_SUCCESSFUL = "Transaction successful";
+    public static final String SENDING_MONEY = "Sending money...";
+    public static final String INSUFFICIENT_BALANCE = "Insufficient balance";
+    public static final String ERROR_FINDING_VPA = "Error finding Virtual Payment Address";
+    public static final String ERROR_FINDING_MOBILE_NUMBER = "Error finding Mobile Number";
+    public static final String PLEASE_ENTER_VALID_AMOUNT = "Please enter a valid amount";
+    public static final String VPA_VALIDATION_REGEX = "^\\w.+@\\w+$";
+    public static final String SELF_ACCOUNT_ERROR = "Self Account transfer is not allowed";
+    public static final String PLEASE_ENTER_AMOUNT =
+            "Please enter a valid amount before making the transfer";
+    public static final String NEED_READ_CONTACTS_PERMISSION = "Need read contacts permission";
+    public static final String NEED_CAMERA_PERMISSION_TO_SCAN_QR_CODE =
+            "Need camera permission to scan qr code.";
+    public static final String ERROR_CHOOSING_CONTACT = "Error choosing contact";
     public static final String MAKE_TRANSFER_FRAGMENT = "Make Transfer Fragment";
     public static final String TRANSACTION_DETAILS = "Transaction Details";
     public static final String ACCOUNT_NUMBER = "Account Number : ";
@@ -89,5 +113,9 @@ public class Constants {
     public static final String SELECT_DATE = "SELECT DATE";
     public static final String SI_ID = "standing_instruction_id";
     public static final String UNAUTHORIZED_ERROR = "401 Unauthorized";
+
+    public static final String RECEIPT_SHARING_MESSAGE = "Here's the receipt link for the transaction made using MifosPay from ";
+    public static final String TO = " to ";
+    public static final String COLON = " : ";
 
 }

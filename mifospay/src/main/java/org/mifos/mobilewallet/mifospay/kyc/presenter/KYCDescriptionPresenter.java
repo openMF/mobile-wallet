@@ -37,7 +37,7 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
 
     @Override
     public void fetchCurrentLevel() {
-
+        mKYCDescriptionView.showFetchingProcess();
         fetchKYCLevel1DetailsUseCase.setRequestValues(new FetchKYCLevel1Details.RequestValues(
                 (int) mLocalRepository.getClientDetails().getClientId()));
 
@@ -52,16 +52,15 @@ public class KYCDescriptionPresenter implements KYCContract.KYCDescriptionPresen
                             mKYCDescriptionView.onFetchLevelSuccess(
                                     response.getKYCLevel1DetailsList().get(0));
                         } else {
-                            mKYCDescriptionView.hideProgressDialog();
+                            mKYCDescriptionView.showErrorState(R.drawable.ic_error_state,
+                                    R.string.error_oops, R.string.error_kyc_details);
                         }
                     }
 
                     @Override
                     public void onError(String message) {
-                        mKYCDescriptionView.showToast(mKYCDescriptionView.getContext()
-                                .getString(R.string.please_try_again_later));
-                        mKYCDescriptionView.hideProgressDialog();
-                        mKYCDescriptionView.gotoHome();
+                        mKYCDescriptionView.showErrorState(R.drawable.ic_error_state,
+                                R.string.error_oops, R.string.error_kyc_details);
                     }
                 });
     }

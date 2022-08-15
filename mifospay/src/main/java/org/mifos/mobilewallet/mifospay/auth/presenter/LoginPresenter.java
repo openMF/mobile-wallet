@@ -79,8 +79,6 @@ public class LoginPresenter implements AuthContract.LoginPresenter {
                         mLoginView.loginFail(message);
                     }
                 });
-
-
     }
 
     private void fetchUserDetails(final User user) {

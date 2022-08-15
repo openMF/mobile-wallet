@@ -43,8 +43,8 @@ class StandingInstructionAdapter(private val context: Context) :
 
             val validTill  = context.resources.getString(R.string.date_formatted,
                     standingInstruction.validTill?.get(2).toString(),
-                    standingInstruction.validTill?.get(2).toString(),
-                    standingInstruction.validTill?.get(2).toString())
+                    standingInstruction.validTill?.get(1).toString(),
+                    standingInstruction.validTill?.get(0).toString())
             tvValidTill.text = context.getString(R.string.valid_till_date, validTill)
         }
     }

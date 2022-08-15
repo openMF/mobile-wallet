@@ -108,4 +108,20 @@
         </LinearLayout>
     </FrameLayout>
 
+    <ProgressBar
+        android:id="@+id/pb_kyc"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <include
+        android:id="@+id/inc_state_view"
+        layout="@layout/placeholder_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/marginItemsInSectionLarge"
+        android:visibility="gone" />
+
 </android.support.design.widget.CoordinatorLayout>
