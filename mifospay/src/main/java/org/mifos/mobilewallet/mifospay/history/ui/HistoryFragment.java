@@ -3,6 +3,7 @@ package org.mifos.mobilewallet.mifospay.history.ui;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.chip.Chip;
+import android.support.design.widget.FloatingActionButton;
 import android.support.transition.TransitionManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
@@ -80,7 +82,11 @@ public class HistoryFragment extends BaseFragment
     @BindView(R.id.btn_filter_debits)
     Chip btnFilterDebits;
 
+    @BindView(R.id.scroll_Indicator)
+    FloatingActionButton scrollIndicator;
 
+    private LinearLayoutManager rVLinearLayoutManager;
+    private int currentDirection = 1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,7 +117,8 @@ public class HistoryFragment extends BaseFragment
         if (getActivity() != null) {
             mHistoryAdapter.setContext(getActivity());
         }
-        rvHistory.setLayoutManager(new LinearLayoutManager(getContext()));
+        rVLinearLayoutManager = new LinearLayoutManager(getContext());
+        rvHistory.setLayoutManager(rVLinearLayoutManager);
         rvHistory.setAdapter(mHistoryAdapter);
         rvHistory.addOnItemTouchListener(new RecyclerItemClickListener(getContext(),
                 new RecyclerItemClickListener.OnItemClickListener() {
@@ -125,6 +132,13 @@ public class HistoryFragment extends BaseFragment
 
                     }
                 }));
+        rvHistory.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NotNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                renderScroller();
+            }
+        });
     }
 
     @Override
@@ -183,11 +197,48 @@ public class HistoryFragment extends BaseFragment
     public void showTransactions(List<Transaction> transactions) {
         showRecyclerView();
         mHistoryAdapter.setData(transactions);
+        renderScroller();
     }
 
     @Override
     public void refreshTransactions(List<Transaction> newTransactions) {
         mHistoryAdapter.setData(newTransactions);
+        renderScroller();
+    }
+
+    private void renderScroller() {
+        if (!rvHistory.canScrollVertically(1) && !rvHistory.canScrollVertically(-1)) {
+            scrollIndicator.animate().alpha(0.0f);
+        } else {
+            if (!rvHistory.canScrollVertically(1)) {
+                if (currentDirection != -1) {
+                    scrollIndicator.animate().rotation(180).start();
+                    currentDirection = -1;
+                }
+            } else if (!rvHistory.canScrollVertically(-1)) {
+                if (currentDirection != 1) {
+                    scrollIndicator.animate().rotation(360).start();
+                    currentDirection = 1;
+                }
+            } else {
+                int currentItem =
+                        (rVLinearLayoutManager.findFirstCompletelyVisibleItemPosition() +
+                                rVLinearLayoutManager.findLastCompletelyVisibleItemPosition()) / 2;
+                int totalItems = rvHistory.getLayoutManager().getItemCount();
+                if (currentItem < totalItems / 2) {
+                    if (currentDirection != 1) {
+                        scrollIndicator.animate().rotation(360).start();
+                        currentDirection = 1;
+                    }
+                } else {
+                    if (currentDirection != -1) {
+                        scrollIndicator.animate().rotation(180).start();
+                        currentDirection = -1;
+                    }
+                }
+            }
+            scrollIndicator.animate().alpha(1.0f);
+        }
     }
 
     @Override
@@ -224,8 +275,8 @@ public class HistoryFragment extends BaseFragment
         btnFilterAll.setChipBackgroundColorResource(R.color.changedBackgroundColour);
         btnFilterDebits.setChipBackgroundColorResource(R.color.changedBackgroundColour);
         mTransactionsHistoryPresenter.filterTransactionType(CREDIT);
-
     }
+
     @OnClick(R.id.btn_filter_debits)
     void displayDebits() {
         btnFilterDebits.setFocusable(true);
@@ -235,5 +286,12 @@ public class HistoryFragment extends BaseFragment
         mTransactionsHistoryPresenter.filterTransactionType(DEBIT);
     }
 
-
+    @OnClick(R.id.scroll_Indicator)
+    void scrollUp() {
+        if (currentDirection == -1) {
+            rvHistory.smoothScrollToPosition(0);
+        } else {
+            rvHistory.smoothScrollToPosition(mHistoryAdapter.getItemCount() - 1);
+        }
+    }
 }
