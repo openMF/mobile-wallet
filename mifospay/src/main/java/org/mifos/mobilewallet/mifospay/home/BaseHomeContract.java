@@ -17,8 +17,6 @@ import okhttp3.ResponseBody;
 public interface BaseHomeContract {
 
     interface BaseHomeView extends BaseView<BaseHomePresenter> {
-
-        void showClientDetails(Client client);
     }
 
     interface BaseHomePresenter extends BasePresenter {

@@ -41,9 +41,6 @@ public class MainPresenter implements BaseHomeContract.BaseHomePresenter {
                     @Override
                     public void onSuccess(FetchClientData.ResponseValue response) {
                         localRepository.saveClientData(response.getUserDetails());
-                        if (!response.getUserDetails().getName().equals("")) {
-                            mHomeView.showClientDetails(response.getUserDetails());
-                        }
                     }
 
                     @Override
