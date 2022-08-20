@@ -88,7 +88,7 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
     @Override
     public void hideProgressDialog() {
         if (progressDialog != null) {
-            progressDialog.hide();
+            progressDialog.dismiss();
         }
     }
 
