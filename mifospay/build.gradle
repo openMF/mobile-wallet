@@ -100,8 +100,8 @@ dependencies {
 
     implementation project(':core')
 
-    implementation 'com.github.rahul-gill.mifos-ui-library:uihouse:alpha-2.1'
-    lintChecks 'com.github.rahul-gill.mifos-ui-library:lint:alpha-2.1'
+    implementation 'com.github.openMF.mifos-ui-library:uihouse:1.0.0-alpha1'
+    lintChecks 'com.github.openMF.mifos-ui-library:uihouse:1.0.0-alpha1'
 }
 
 apply plugin: 'com.google.gms.google-services'
