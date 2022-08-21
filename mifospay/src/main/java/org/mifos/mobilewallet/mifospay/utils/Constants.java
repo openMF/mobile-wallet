@@ -203,4 +203,6 @@ public class Constants {
     public static final String TO = " to ";
     public static final String COLON = " : ";
 
+    public static final String SCAN_MIFOS_QR ="Scan this QR code to pay through MifosPay";
+
 }
