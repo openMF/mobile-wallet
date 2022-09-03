@@ -33,6 +33,7 @@
         android:layout_marginBottom="@dimen/marginItemsInSectionLarge"
         android:text="@string/unexpected_error_subtitle"
         android:textAlignment="center"
+        android:gravity="center_horizontal"
         android:textColor="@color/colorTextSecondary"
         android:textSize="@dimen/textBody2" />
 </LinearLayout>
