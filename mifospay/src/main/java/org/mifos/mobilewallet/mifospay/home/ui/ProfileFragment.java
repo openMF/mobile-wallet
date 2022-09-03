@@ -40,10 +40,10 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
 
     BaseHomeContract.ProfilePresenter mProfilePresenter;
 
-    @BindView(R.id.iv_user_image)
+    @BindView(R.id.iv_user_image_two)
     ImageView ivUserImage;
 
-    @BindView(R.id.tv_user_name)
+    @BindView(R.id.tv_user_name_two)
     TextView tvUserName;
 
     @BindView(R.id.nsv_profile_bottom_sheet_dialog)
@@ -124,7 +124,8 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
         this.mProfilePresenter = presenter;
     }
 
-    @OnClick(R.id.iv_user_image)
+//    @OnClick(R.id.iv_user_image_two)
+    @OnClick(R.id.iv_user_image_two)
     public void onUserImageEditClicked() {
         if (getActivity() != null) {
             Intent i = new Intent(getActivity(), EditProfileActivity.class);
@@ -148,8 +149,6 @@ public class ProfileFragment extends BaseFragment implements BaseHomeContract.Pr
                 .endConfig().buildRound(client.getName().substring(0, 1), R.color.colorAccentBlack);
         ivUserImage.setImageDrawable(drawable);
         tvUserName.setText(client.getName());
-        ImageView editableImageHint = getView().findViewById(R.id.iv_editable_image_hint);
-        editableImageHint.setVisibility(View.INVISIBLE);
     }
 
     @Override
