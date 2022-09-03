@@ -100,13 +100,15 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     }
 
     override fun showLoadingView() {
-        inc_state_view.visibility = View.GONE
-        rv_si.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
+        if (activity != null && isAdded && isVisible && userVisibleHint) {
+            inc_state_view.visibility = View.GONE
+            rv_si.visibility = View.GONE
+            progressBar.visibility = View.VISIBLE
+        }
     }
 
     override fun showStandingInstructions(standingInstructionList: List<StandingInstruction>) {
-        if (activity != null) {
+        if (activity != null && isAdded && isVisible && userVisibleHint) {
             progressBar.visibility = View.GONE
             rv_si.visibility = View.VISIBLE
             mSIAdapter.setData(standingInstructionList)
@@ -114,7 +116,7 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     }
 
     override fun showStateView(drawable: Int, errorTitle: Int, errorMessage: Int) {
-        if (activity != null) {
+        if (activity != null && isAdded && isVisible && userVisibleHint) {
             progressBar.visibility = View.GONE
             rv_si.visibility = View.GONE
             inc_state_view.visibility = View.VISIBLE
