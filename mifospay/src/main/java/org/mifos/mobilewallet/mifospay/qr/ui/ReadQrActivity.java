@@ -55,6 +55,9 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
     ImageButton mFlashOff;
     @BindView(R.id.btn_open_gallery)
     ImageButton mOpenGallery;
+    @BindView(R.id.btn_exit_scan)
+    ImageButton mExitBtn;
+
     private static final int SELECT_PHOTO = 100;
 
     @Override
@@ -71,7 +74,14 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
         mPresenter.attachView(this);
 
         mScannerView.setAutoFocus(true);
+
     }
+
+    @OnClick(R.id.btn_exit_scan)
+        void onExitButtonClicked(){
+        onBackPressed();
+    }
+
 
     @OnClick(R.id.btn_flash_on)
     void turnOnFlash() {
