@@ -1,6 +1,7 @@
 package org.mifos.mobilewallet.mifospay.bank.ui;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -16,6 +17,7 @@ import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountDetailPresenter
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
+import org.mifos.mobilewallet.mifospay.utils.DialogBox;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
@@ -147,6 +149,25 @@ public class BankAccountDetailActivity extends BaseActivity implements
                 }
             }
         }
+    }
+
+    @OnClick(R.id.btn_delete_bank)
+    public void onDeleteCardPress() {
+        DialogBox dialogBox = new DialogBox();
+        dialogBox.show(BankAccountDetailActivity.this, R.string.alert_delete_bank,
+                R.string.alert_delete_bank_desc, R.string.confirm, R.string.cancel);
+        dialogBox.setOnPositiveListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialogBox.setOnNegativeListener(new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
     }
 
     @Override
