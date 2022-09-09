@@ -37,6 +37,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LinkBankAccountActivity extends BaseActivity implements
         BankContract.LinkBankAccountView {
@@ -141,6 +142,11 @@ public class LinkBankAccountActivity extends BaseActivity implements
             public void afterTextChanged(Editable s) {
             }
         });
+    }
+
+    @OnClick(R.id.et_cross_bank)
+    public void onCrossBtn(){
+        mEtSearchBank.getText().clear();
     }
 
     private void filter(String text) {
