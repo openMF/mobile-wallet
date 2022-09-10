@@ -1,6 +1,8 @@
 package org.mifos.mobilewallet.mifospay.auth.ui;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -103,8 +105,29 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     public void onLoginClicked() {
         Utils.hideSoftKeyboard(this);
         showProgressDialog(Constants.LOGGING_IN);
+        if (!haveNetwork()) {
+            loginFail(getString(R.string.no_internet_connection));
+            return;
+        }
         mLoginPresenter.loginUser(etUsername.getText().toString(),
                 etPassword.getText().toString());
+    }
+
+    private boolean haveNetwork() {
+        boolean hasWifi = false;
+        boolean hasMobileData = false;
+        ConnectivityManager connectivityManager = (ConnectivityManager)
+                getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo[] networkInfos = connectivityManager.getAllNetworkInfo();
+        for (NetworkInfo info : networkInfos) {
+            if (info.getTypeName().equalsIgnoreCase("Wifi") && info.isConnected()) {
+                hasWifi = true;
+            }
+            if (info.getTypeName().equalsIgnoreCase("Mobile") && info.isConnected()) {
+                hasMobileData = true;
+            }
+        }
+        return hasWifi || hasMobileData;
     }
 
     @OnClick(R.id.ll_signup)
