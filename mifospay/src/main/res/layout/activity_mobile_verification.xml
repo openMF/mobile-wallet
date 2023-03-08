@@ -114,13 +114,13 @@
             <android.support.design.widget.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/value_48dp"
+                android:layout_height="wrap_content"
                 android:hint="@string/otp">
 
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/et_otp"
                     android:layout_width="@dimen/value_120dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/value_60dp"
                     android:inputType="number"
                     android:maxLength="@integer/telephone_numbers_max_length_standard"
                     android:visibility="gone"/>
