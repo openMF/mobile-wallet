@@ -85,7 +85,15 @@ public class HistoryPresenter implements
                     filterTransactions.add(transaction);
                 }
             }
-            mHistoryView.refreshTransactions(filterTransactions);
+
+            if (filterTransactions.isEmpty()) {
+
+                showEmptyTransactionTypeStateView(type.toString().toLowerCase());
+
+            } else {
+                mHistoryView.refreshTransactions(filterTransactions);
+
+            }
         } else {
             mHistoryView.refreshTransactions(allTransactions);
         }
@@ -121,6 +129,12 @@ public class HistoryPresenter implements
         mHistoryView.showStateView(R.drawable.ic_history,
                 R.string.empty_no_transaction_history_title,
                 R.string.empty_no_transaction_history_subtitle);
+    }
+
+    private void showEmptyTransactionTypeStateView(String type) {
+        mHistoryView.showEmptyTransactionTypeStateView(R.drawable.ic_history,
+                "You have no " + type + " transactions",
+                "Every " + type + " transaction will be displaying here");
     }
 
 }

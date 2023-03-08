@@ -81,7 +81,6 @@ public class HistoryFragment extends BaseFragment
     Chip btnFilterDebits;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +89,7 @@ public class HistoryFragment extends BaseFragment
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_history, container, false);
         ButterKnife.bind(this, rootView);
         mPresenter.attachView(this);
@@ -180,6 +179,25 @@ public class HistoryFragment extends BaseFragment
     }
 
     @Override
+    public void showEmptyTransactionTypeStateView(int drawable, String title, String subtitle) {
+        TransitionManager.beginDelayedTransition(historyContainer);
+        rvHistory.setVisibility(View.GONE);
+        pbHistory.setVisibility(View.GONE);
+        filterLayout.setVisibility(View.VISIBLE);
+        vStateView.setVisibility(View.VISIBLE);
+
+        if (getActivity() != null) {
+            Resources res = getResources();
+            ivTransactionsStateIcon
+                    .setImageDrawable(res.getDrawable(drawable));
+            tvTransactionsStateTitle
+                    .setText(title);
+            tvTransactionsStateSubtitle
+                    .setText(subtitle);
+        }
+    }
+
+    @Override
     public void showTransactions(List<Transaction> transactions) {
         showRecyclerView();
         mHistoryAdapter.setData(transactions);
@@ -187,6 +205,7 @@ public class HistoryFragment extends BaseFragment
 
     @Override
     public void refreshTransactions(List<Transaction> newTransactions) {
+        showRecyclerView();
         mHistoryAdapter.setData(newTransactions);
     }
 
@@ -226,6 +245,7 @@ public class HistoryFragment extends BaseFragment
         mTransactionsHistoryPresenter.filterTransactionType(CREDIT);
 
     }
+
     @OnClick(R.id.btn_filter_debits)
     void displayDebits() {
         btnFilterDebits.setFocusable(true);
