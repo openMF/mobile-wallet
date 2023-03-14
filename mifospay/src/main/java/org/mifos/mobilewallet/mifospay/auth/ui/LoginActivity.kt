@@ -35,10 +35,9 @@ import javax.inject.Inject
  * Created by naman on 16/6/17.
  */
 class LoginActivity : BaseActivity(), LoginView {
-    @JvmField
     @Inject
-    var mPresenter: LoginPresenter? = null
-    var mLoginPresenter: AuthContract.LoginPresenter? = null
+    lateinit var mPresenter: LoginPresenter
+    lateinit var mLoginPresenter: AuthContract.LoginPresenter
 
     //ViewBinding
     private lateinit var binding: ActivityLoginBinding
@@ -51,7 +50,7 @@ class LoginActivity : BaseActivity(), LoginView {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         activityComponent.inject(this)
         setContentView(binding.root)
-        mPresenter!!.attachView(this)
+        mPresenter.attachView(this)
         val pref = PasscodePreferencesHelper(applicationContext)
         if (pref.passCode.isNotEmpty()) {
             startPassCodeActivity()
@@ -90,33 +89,25 @@ class LoginActivity : BaseActivity(), LoginView {
         mLoginPresenter = presenter
     }
 
-//    @OnTextChanged(R.id.et_username, R.id.et_password)
-//    fun onLoginInputTextChanged() {
-//        handleLoginInputChanged()
-//    }
-
     private fun handleLoginInputChanged() {
         val usernameContent = binding.etUsername.text.toString()
         val passwordContent = binding.etPassword.text.toString()
-        mPresenter!!.handleLoginButtonStatus(usernameContent, passwordContent)
+        mPresenter.handleLoginButtonStatus(usernameContent, passwordContent)
     }
 
-//    @OnClick(R.id.btn_login)
     fun onLoginClicked() {
         hideSoftKeyboard(this)
         showProgressDialog(Constants.LOGGING_IN)
-        mLoginPresenter!!.loginUser(
+        mLoginPresenter.loginUser(
             binding.etUsername.text.toString(), binding.etPassword.text.toString()
         )
     }
 
-//    @OnClick(R.id.ll_signup)
     fun onSignupClicked() {
         val signupMethod = SignupMethod()
         signupMethod.show(supportFragmentManager, Constants.CHOOSE_SIGNUP_METHOD)
     }
 
-//    @OnClick(R.id.bg_screen)
     fun backgroundScreenClicked() {
         if (this.currentFocus != null) {
             hideSoftKeyboard(this)
