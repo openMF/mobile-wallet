@@ -10,9 +10,9 @@
         android:layout_height="@dimen/listImageSize"
         android:layout_marginStart="@dimen/marginItemsInSectionSmall"
         android:layout_marginLeft="@dimen/marginItemsInSectionSmall"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_item_casual_list_subtitle"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_item_casual_list_title"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_item_casual_list_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_item_casual_list_subtitle"
         app:srcCompat="@drawable/ic_transaction" />
 
     <View
@@ -22,29 +22,29 @@
         android:layout_marginTop="8dp"
         android:background="?android:attr/listDivider"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/tv_item_casual_list_subtitle"
-        app:layout_constraintTop_toBottomOf="@+id/tv_item_casual_list_subtitle" />
-
-    <TextView
-        android:id="@+id/tv_item_casual_list_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/marginItemsInSectionSmall"
-        android:layout_marginLeft="@dimen/marginItemsInSectionSmall"
-        android:layout_marginTop="@dimen/marginItemsInSectionSmall"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="@dimen/textBody1"
-        app:layout_constraintStart_toEndOf="@+id/iv_item_casual_list_icon"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toStartOf="@+id/tv_item_casual_list_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_casual_list_title" />
 
     <TextView
         android:id="@+id/tv_item_casual_list_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="@dimen/marginItemsInSectionSmall"
+        android:layout_marginLeft="@dimen/marginItemsInSectionSmall"
+        android:layout_marginTop="@dimen/marginItemsInSectionSmall"
         android:textColor="@color/colorTextSecondary"
-        app:layout_constraintStart_toStartOf="@+id/tv_item_casual_list_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_item_casual_list_title" />
+        app:layout_constraintStart_toEndOf="@+id/iv_item_casual_list_icon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_item_casual_list_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="@dimen/textBody1"
+        app:layout_constraintStart_toStartOf="@+id/tv_item_casual_list_subtitle"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_casual_list_subtitle" />
 
     <TextView
         android:id="@+id/tv_item_casual_list_optional_caption"
@@ -55,9 +55,8 @@
         android:layout_marginRight="@dimen/marginItemsInSectionSmall"
         android:layout_marginBottom="8dp"
         android:textSize="@dimen/textCaption"
-        app:layout_constraintBottom_toBottomOf="@+id/tv_item_casual_list_subtitle"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_item_casual_list_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_item_casual_list_title" />
-
+        app:layout_constraintTop_toTopOf="@+id/tv_item_casual_list_subtitle" />
 
 </android.support.constraint.ConstraintLayout>
