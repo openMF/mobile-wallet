@@ -198,8 +198,8 @@ public class Constants {
     public static final String SELECT_DATE = "SELECT DATE";
     public static final String SI_ID = "standing_instruction_id";
     public static final String UNAUTHORIZED_ERROR = "401 Unauthorized";
-
     public static final String RECEIPT_SHARING_MESSAGE = "Receipt link for the transaction ";
+
     public static final String TO = " to ";
     public static final String COLON = " : ";
 
