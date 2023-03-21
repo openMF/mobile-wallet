@@ -29,11 +29,13 @@ public interface HistoryContract {
 
         void showTransactions(List<Transaction> transactions);
 
+        void showEmptyTransactionTypeStateView(int drawable, String title, String subtitle);
+
         void showTransactionDetailDialog(int transactionIndex, String accountNumber);
 
         void showHistoryFetchingProgress();
 
-        void refreshTransactions (List<Transaction> transactions);
+        void refreshTransactions(List<Transaction> transactions);
     }
 
     interface TransactionsHistoryPresenter extends BasePresenter {
