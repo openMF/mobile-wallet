@@ -1,7 +1,7 @@
-FROM openjdk:11-jdk
+FROM openjdk:8-jdk
 
 ENV GRADLE_HOME /opt/gradle
-ENV GRADLE_VERSION 6.7.1
+ENV GRADLE_VERSION 4.6
 
 RUN set -o errexit -o nounset \
 	&& echo "Downloading Gradle" \
