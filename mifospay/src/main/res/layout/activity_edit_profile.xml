@@ -33,120 +33,126 @@
         android:layout_height="wrap_content" >
 
         <LinearLayout
-                android:orientation="vertical"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <include
+                layout="@layout/profile_username_and_image"
+                android:id="@+id/include"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginTopUserProfile" />
 
-                <include
-                    layout="@layout/profile_username_and_image"
-                    android:id="@+id/include"
+            <TextView
+                android:id="@+id/tv_edit_profile_username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginItemsInSectionSmall"
+                android:layout_marginLeft="@dimen/marginItemsInSectionExtraSmall"
+                android:text="@string/username"
+                android:textColorHint="@color/colorTextSecondary"
+                android:layout_marginStart="@dimen/marginItemsInSectionExtraSmall" />
+
+            <EditText
+                android:id="@+id/et_edit_profile_username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/username"
+                android:textColorHint="@color/black"
+                android:inputType="text"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_edit_profile_username" />
+
+
+            <TextView
+                android:id="@+id/tv_edit_profile_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginItemsInSectionSmall"
+                android:layout_marginLeft="@dimen/marginItemsInSectionExtraSmall"
+                android:text="@string/email"
+                android:textColorHint="@color/colorTextSecondary"
+                android:layout_marginStart="@dimen/marginItemsInSectionExtraSmall" />
+
+            <EditText
+                android:id="@+id/et_edit_profile_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/email"
+                android:textColorHint="@color/black"
+                android:inputType="textEmailAddress"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_edit_profile_email" />
+
+            <TextView
+                android:id="@+id/tv_edit_profile_vpa"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginItemsInSectionSmall"
+                android:layout_marginLeft="@dimen/marginItemsInSectionExtraSmall"
+                android:text="@string/vpa"
+                android:textColorHint="@color/colorTextSecondary"
+                android:layout_marginStart="@dimen/marginItemsInSectionExtraSmall" />
+
+            <EditText
+                android:id="@+id/et_edit_profile_vpa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/vpa"
+                android:textColorHint="@color/black"
+                android:inputType="text"
+                app:layout_constraintBaseline_toBaselineOf="@id/tv_edit_profile_vpa" />
+
+            <TextView
+                android:id="@+id/tv_edit_profile_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginItemsInSectionSmall"
+                android:layout_marginLeft="@dimen/marginItemsInSectionExtraSmall"
+                android:text="@string/mobile"
+                android:textColorHint="@color/colorTextSecondary"
+                android:layout_marginStart="@dimen/marginItemsInSectionExtraSmall"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginItemsInSectionExtraSmall"
+                android:orientation="horizontal">
+
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/ccp_new_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_autoFormatNumber="false" />
+
+                <EditText
+                    android:id="@+id/et_edit_profile_mobile"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginTopUserProfile" />
+                    android:hint="@string/mobile"
+                    android:textColorHint="@color/black"
+                    android:inputType="number"/>
 
-                <android.support.design.widget.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:id="@+id/til_edit_profile_username"
-                    android:layout_marginTop="@dimen/marginItemsInSectionLarge"
-                    android:layout_width="match_parent"
-                    app:helperText="@string/username"
-                    android:hint="@string/username"
-                    android:layout_height="wrap_content" >
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/et_edit_profile_username"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"/>
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_marginTop="@dimen/marginItemsInSectionMedium"
-                    android:layout_width="match_parent"
-                    android:id="@+id/til_edit_profile_email"
-                    app:layout_anchor="@id/til_edit_profile_username"
-                    app:helperText="@string/email"
-                    android:hint="@string/email"
-                    android:layout_height="wrap_content" >
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/et_edit_profile_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress"/>
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_marginTop="@dimen/marginItemsInSectionMedium"
-                    android:id="@+id/til_edit_profile_vpa"
-                    android:layout_width="match_parent"
-                    app:helperText="@string/vpa"
-                    android:hint="@string/vpa"
-                    android:layout_height="wrap_content" >
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/et_edit_profile_vpa"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"/>
-
-                </android.support.design.widget.TextInputLayout>
-
-                <LinearLayout
-                    android:layout_marginTop="@dimen/marginItemsInSectionMedium"
-                    android:gravity="center_vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.hbb20.CountryCodePicker
-                        android:id="@+id/ccp_new_code"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        app:ccp_autoDetectCountry="true"
-                        app:ccp_autoFormatNumber="false" />
-
-                    <android.support.design.widget.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:id="@+id/til_edit_profile_mobile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:helperText="@string/mobile"
-                        android:hint="@string/mobile" >
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_edit_profile_mobile"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLength="@integer/telephone_numbers_max_length_standard"
-                            android:inputType="number" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                </LinearLayout>
-
-                <Button
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:text="@string/change_password"
-                    android:id="@+id/btn_change_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginBetweenSections" />
-
-                <Button
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:text="@string/change_passcode"
-                    android:id="@+id/btn_change_passcode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginItemsInSectionExtraSmall"
-                    android:layout_marginBottom="@dimen/paddingLayout" />
             </LinearLayout>
+
+            <Button
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:text="@string/change_password"
+                android:id="@+id/btn_change_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginBetweenSections" />
+
+            <Button
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:text="@string/change_passcode"
+                android:id="@+id/btn_change_passcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginItemsInSectionSmall"
+                android:layout_marginBottom="@dimen/paddingLayout" />
+        </LinearLayout>
 
     </ScrollView>
 
@@ -164,6 +170,7 @@
         app:layout_anchor="@id/sv_edit_profile"
         android:tint="@color/colorPrimary"
         app:backgroundTint="@color/colorAccentBlack"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        android:contentDescription="Save Changes" />
 
 </android.support.design.widget.CoordinatorLayout>

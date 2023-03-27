@@ -13,7 +13,6 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
@@ -68,18 +67,6 @@ public class EditProfileActivity extends BaseActivity implements
 
     @BindView(R.id.iv_user_image)
     ImageView ivUserImage;
-
-    @BindView(R.id.til_edit_profile_username)
-    TextInputLayout tilUsername;
-
-    @BindView(R.id.til_edit_profile_email)
-    TextInputLayout tilEmail;
-
-    @BindView(R.id.til_edit_profile_vpa)
-    TextInputLayout tilVpa;
-
-    @BindView(R.id.til_edit_profile_mobile)
-    TextInputLayout tilMobileNumber;
 
     @BindView(R.id.et_edit_profile_username)
     EditText etUsername;
@@ -219,25 +206,25 @@ public class EditProfileActivity extends BaseActivity implements
 
     @Override
     public void showUsername(String username) {
-        tilUsername.setHint(username);
+        etUsername.setHint(username);
         handleUpdatedInput(etUsername);
     }
 
     @Override
     public void showEmail(String email) {
-        tilEmail.setHint(email);
+        etEmail.setHint(email);
         handleUpdatedInput(etEmail);
     }
 
     @Override
     public void showVpa(String vpa) {
-        tilVpa.setHint(vpa);
+        etVpa.setHint(vpa);
         handleUpdatedInput(etVpa);
     }
 
     @Override
     public void showMobileNumber(String mobileNumber) {
-        tilMobileNumber.setHint(mobileNumber);
+        etMobileNumber.setHint(mobileNumber);
         handleUpdatedInput(etMobileNumber);
     }
 
