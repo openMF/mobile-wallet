@@ -7,7 +7,7 @@ import org.mifos.mobilewallet.core.domain.usecase.kyc.UploadKYCLevel1Details;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.R;
 
 import javax.inject.Inject;
 
@@ -56,7 +56,7 @@ public class KYCLevel1Presenter implements KYCContract.KYCLevel1Presenter {
 
                         mKYCLevel1View.hideProgressDialog();
                         mKYCLevel1View.showToast(
-                                Constants.KYC_LEVEL_1_DETAILS_ADDED_SUCCESSFULLY);
+                                mKYCLevel1View.getContext().getString(R.string.KYC_level_1_details_added_successfully));
                         mKYCLevel1View.goBack();
                     }
 
@@ -64,7 +64,7 @@ public class KYCLevel1Presenter implements KYCContract.KYCLevel1Presenter {
                     public void onError(String message) {
 
                         mKYCLevel1View.hideProgressDialog();
-                        mKYCLevel1View.showToast(Constants.ERROR_ADDING_KYC_LEVEL_1_DETAILS);
+                        mKYCLevel1View.showToast(mKYCLevel1View.getContext().getString(R.string.error_adding_KYC_level_1_details));
                     }
                 }
         );

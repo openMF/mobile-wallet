@@ -39,6 +39,7 @@ public class MobileVerificationPresenter implements
                     @Override
                     public void onSuccess(SearchClient.ResponseValue response) {
                         mMobileVerificationView.onRequestOtpFailed("Mobile number already exists.");
+
                     }
 
                     @Override
@@ -52,12 +53,15 @@ public class MobileVerificationPresenter implements
     @Override
     public void verifyOTP(String otp) {
         // TODO:: verify OTP
-        mMobileVerificationView.onOtpVerificationSuccess();
+
+            mMobileVerificationView.onOtpVerificationSuccess();
+
 
         // TODO::
 
-//        if (false) { // on error
-//            mMobileVerificationView.onOtpVerificationFailed("OTP Verification Failed.");
-//        }
+//       if(false){
+//           mMobileVerificationView.onOtpVerificationFailed("OTP Verification Failed.");
+//       }
+
     }
 }

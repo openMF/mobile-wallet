@@ -6,7 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.MifosPayApp;
 
 /**
@@ -33,7 +33,9 @@ public class Toaster {
     }
 
     public static void show(View view, String text, int duration) {
-        show(view, text, duration, Constants.OK, new View.OnClickListener() {
+
+        show(view, text, duration, MifosPayApp.getContext()
+                .getString(R.string.OK), new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 

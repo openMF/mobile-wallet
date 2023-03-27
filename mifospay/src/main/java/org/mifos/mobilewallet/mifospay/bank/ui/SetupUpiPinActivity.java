@@ -59,7 +59,7 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setToolbarTitle(Constants.SETUP_UPI_PIN);
+        setToolbarTitle(getString(R.string.setup_upi_pin));
         mPresenter.attachView(this);
 
         Bundle b = getIntent().getExtras();
@@ -72,15 +72,15 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
             mSetupUpiPinPresenter.requestOtp(bankAccountDetails);
             mFlDebitCard.setVisibility(View.GONE);
             mCvDebitCard.setVisibility(View.GONE);
-            setToolbarTitle(Constants.CHANGE_UPI_PIN);
+            setToolbarTitle(getString(R.string.change_upi_pin));
         } else if (type.equals(Constants.FORGOT)) {
             mFlDebitCard.setVisibility(View.VISIBLE);
             mCvDebitCard.setVisibility(View.VISIBLE);
-            setToolbarTitle(Constants.FORGOT_UPI_PIN);
+            setToolbarTitle(getString(R.string.forgot_upi_pin));
         } else {
             mFlDebitCard.setVisibility(View.VISIBLE);
             mCvDebitCard.setVisibility(View.VISIBLE);
-            setToolbarTitle(Constants.SETUP_UPI_PIN);
+            setToolbarTitle(getString(R.string.setup_upi_pin));
         }
 
         addFragment(new DebitCardFragment(), R.id.fl_debit_card);
@@ -112,7 +112,7 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
 
     public void upiPinConfirmed(String upiPin) {
         mTvUpi.setVisibility(View.VISIBLE);
-        showProgressDialog(Constants.SETTING_UP_UPI_PIN);
+        showProgressDialog(getString(R.string.setting_up_upi_pin));
         mSetupUpiPinPresenter.setupUpiPin(bankAccountDetails, upiPin);
     }
 
@@ -121,7 +121,7 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
         bankAccountDetails.setUpiEnabled(true);
         bankAccountDetails.setUpiPin(mSetupUpiPin);
         hideProgressDialog();
-        showToast(Constants.UPI_PIN_SETUP_COMPLETED_SUCCESSFULLY);
+        showToast(getString(R.string.upi_pin_setup_completed_successfully));
         Intent intent = new Intent();
         intent.putExtra(Constants.UPDATED_BANK_ACCOUNT, bankAccountDetails);
         intent.putExtra(Constants.INDEX, index);
@@ -132,7 +132,7 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
     @Override
     public void setupUpiPinError(String message) {
         hideProgressDialog();
-        showToast(Constants.ERROR_WHILE_SETTING_UP_UPI_PIN);
+        showToast(getString(R.string.error_while_setting_up_upi_pin));
     }
 
     public void showToast(String message) {

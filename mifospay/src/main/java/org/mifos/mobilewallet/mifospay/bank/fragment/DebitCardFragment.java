@@ -21,7 +21,7 @@ import org.mifos.mobilewallet.mifospay.bank.presenter.DebitCardPresenter;
 import org.mifos.mobilewallet.mifospay.bank.ui.SetupUpiPinActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
+
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
@@ -118,8 +118,7 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
     }
 
     public void okayClicked() {
-        showProgressDialog(Constants.PLEASE_WAIT);
-
+        showProgressDialog(this.getResources().getString(R.string.please_wait));
         mDebitCardPresenter.verifyDebitCard(mEtDebitCardNumber.getText()
                 .toString(), mPeMonth.getText().toString(), mPeYear.getText().toString());
 

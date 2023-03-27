@@ -76,7 +76,7 @@ public class LinkBankAccountActivity extends BaseActivity implements
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         mPresenter.attachView(this);
 
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
         setupRecyclerview();
         mRvOtherBanks.setNestedScrollingEnabled(false);
         setupAdapterData();
@@ -203,7 +203,7 @@ public class LinkBankAccountActivity extends BaseActivity implements
     }
 
     public void linkBankAccount(int selectedSim) {
-        showProgressDialog(Constants.VERIFYING_MOBILE_NUMBER);
+        showProgressDialog(getString(R.string.verify_mobile_number));
         mLinkBankAccountPresenter.fetchBankAccountDetails(bankSelected);
     }
 

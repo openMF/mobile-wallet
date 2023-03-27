@@ -7,7 +7,7 @@ import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract;
 import org.mifos.mobilewallet.mifospay.password.presenter.EditPasswordPresenter;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
+import android.content.Context;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import javax.inject.Inject;
@@ -92,6 +92,10 @@ public class EditPasswordActivity extends BaseActivity implements
         String newPasswordRepeat = etCurrentPassword.getText().toString();
         mPresenter.updatePassword(currentPassword, newPassword, newPasswordRepeat);
     }
+    @Override
+    public Context getContext() {
+        return this;
+    }
 
     @Override
     public void setPresenter(EditPasswordContract.EditPasswordPresenter presenter) {
@@ -100,7 +104,7 @@ public class EditPasswordActivity extends BaseActivity implements
 
     @Override
     public void startProgressBar() {
-        showProgressDialog(Constants.PLEASE_WAIT);
+        showProgressDialog(getString(R.string.please_wait));
     }
 
     @Override

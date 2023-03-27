@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.registration.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -72,7 +73,7 @@ public class MobileVerificationActivity extends BaseActivity implements
     public void onGetOTp() {
         Utils.hideSoftKeyboard(this);
         if (mCcpCode.isValidFullNumber()) {
-            showProgressDialog(Constants.SENDING_OTP_TO_YOUR_MOBILE_NUMBER);
+            showProgressDialog(getString(R.string.sending_otp_to_your_mobile_number));
 
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -80,6 +81,7 @@ public class MobileVerificationActivity extends BaseActivity implements
                 public void run() {
                     mMobileVerificationPresenter.requestOTPfromServer(mCcpCode.getFullNumber(),
                             mEtMobileNumber.getText().toString());
+
                 }
             }, 1500);
 
@@ -87,6 +89,7 @@ public class MobileVerificationActivity extends BaseActivity implements
             showToast(getString(R.string.enter_valid_mob_num));
         }
     }
+
 
     @Override
     public void onRequestOtpSuccess() {

@@ -39,7 +39,7 @@ public class FAQActivity extends BaseActivity implements FAQContract.FAQView {
         setContentView(R.layout.activity_faq);
 
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setToolbarTitle(Constants.FAQ);
+        setToolbarTitle(getString(R.string.frequent_asked_questions));
 
         // initializing the views
         initViews();

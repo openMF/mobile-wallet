@@ -6,6 +6,8 @@ import org.mifos.mobilewallet.core.domain.model.client.Client;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
 
+import android.content.Context;
+
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -57,6 +59,7 @@ public interface BaseHomeContract {
 
     interface TransferView extends BaseView<TransferPresenter> {
 
+        Context getContext();
         void showVpa(String vpa);
 
         void showToast(String message);
@@ -83,6 +86,7 @@ public interface BaseHomeContract {
 
     interface MerchantTransferView extends BaseView<MerchantTransferPresenter> {
 
+        Context getContext();
         void showToast(String message);
 
         void hideSwipeProgress();

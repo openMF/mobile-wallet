@@ -12,6 +12,7 @@ import android.widget.Toast
 import butterknife.ButterKnife
 import kotlinx.android.synthetic.main.activity_new_si.*
 import org.mifos.mobilewallet.mifospay.R
+
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
@@ -106,7 +107,7 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         tv_client_vpa.text = externalId
         tv_amount.text = resources.getString(
             R.string.currency_amount,
-            Constants.RUPEE, et_si_amount.text
+            R.string.rupee.toString(),  et_si_amount.text
         )
 
         ll_create_si.visibility = View.GONE

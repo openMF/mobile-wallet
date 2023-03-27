@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.password;
 
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
+import android.content.Context;
 
 /**
  * Created by ankur on 27/June/2018
@@ -20,6 +21,7 @@ public interface EditPasswordContract {
 
     interface EditPasswordView extends BaseView<EditPasswordPresenter> {
 
+        Context getContext();
         void closeActivity();
 
         void startProgressBar();

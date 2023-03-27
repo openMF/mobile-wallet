@@ -5,6 +5,7 @@ import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.core.domain.model.TransactionType;
 import org.mifos.mobilewallet.mifospay.base.BasePresenter;
 import org.mifos.mobilewallet.mifospay.base.BaseView;
+import android.content.Context;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public interface HistoryContract {
 
     interface TransactionDetailView extends BaseView<TransactionDetailPresenter> {
 
+        Context getContext();
         void showTransferDetail(TransferDetail transferDetail);
 
         void showProgressBar();

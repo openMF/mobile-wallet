@@ -17,7 +17,6 @@ import android.widget.Spinner;
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
-import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import java.util.ArrayList;
@@ -133,7 +132,7 @@ public class AddCardDialog extends BottomSheetDialogFragment {
             int currentYear = Calendar.getInstance().get(Calendar.YEAR);
             spnMM.setSelection(Integer.parseInt(expiryDate[0]) - 1);
             spnYY.setSelection(Integer.parseInt(expiryDate[1]) - currentYear);
-            btnAdd.setText(Constants.UPDATE);
+            btnAdd.setText(getString(R.string.update));
         }
     }
 

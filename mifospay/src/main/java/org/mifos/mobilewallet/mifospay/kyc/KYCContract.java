@@ -17,6 +17,8 @@ public interface KYCContract {
 
         void showFetchingProcess();
 
+        Context getContext();
+
         void onFetchLevelSuccess(KYCLevel1Details kycLevel1Details);
 
         void showErrorState(int drawable, int errorTitle, int errorMessage);
@@ -29,6 +31,8 @@ public interface KYCContract {
 
     interface KYCLevel1View extends BaseView<KYCLevel1Presenter> {
 
+
+        Context getContext();
         void showToast(String message);
 
         void hideProgressDialog();

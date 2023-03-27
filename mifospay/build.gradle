@@ -93,6 +93,8 @@ dependencies {
     testImplementation "junit:junit:$rootProject.junitVersion"
 
     implementation project(':core')
+
+
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -88,7 +88,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         setContentView(R.layout.activity_receipt);
 
         ButterKnife.bind(this);
-        setToolbarTitle(Constants.RECEIPT);
+        setToolbarTitle(getString(R.string.receipt));
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         mPresenter.attachView(this);
 
@@ -105,7 +105,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
             } catch (IndexOutOfBoundsException e) {
                 showToast(getString(R.string.invalid_link));
             }
-            showProgressDialog(Constants.PLEASE_WAIT);
+            showProgressDialog(getString(R.string.please_wait));
             mPresenter.fetchTransaction(Long.parseLong(transactionId));
             shareMessage = Constants.RECEIPT_SHARING_MESSAGE
                     + tvTransFromName.getText()
@@ -153,7 +153,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                 break;
             case OTHER:
                 isDebit = false;
-                tvOperation.setText(Constants.OTHER);
+                tvOperation.setText(getString(R.string.other));
                 tvOperation.setTextColor(Color.YELLOW);
                 break;
         }
@@ -167,11 +167,15 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         } else {
             tvPaidToName.setText(transferDetail.getFromClient().getDisplayName());
         }
-        tvTransToName.setText(Constants.NAME + transferDetail.getToClient().getDisplayName());
-        tvTransToNumber.setText(Constants.ACCOUNT_NUMBER + transferDetail
+        tvTransToName.setText(getString(R.string.name)
+                + transferDetail.getToClient().getDisplayName());
+        tvTransToNumber.setText(
+                getString(R.string.account_number) + transferDetail
                 .getToAccount().getAccountNo());
-        tvTransFromName.setText(Constants.NAME + transferDetail.getFromClient().getDisplayName());
-        tvTransFromNumber.setText(Constants.ACCOUNT_NUMBER + transferDetail
+        tvTransFromName.setText(getString(R.string.name)
+                + transferDetail.getFromClient().getDisplayName());
+        tvTransFromNumber.setText(
+                getString(R.string.account_number) + transferDetail
                 .getFromAccount().getAccountNo());
         dismissProgressDialog();
     }
@@ -204,10 +208,10 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
     void copyReceiptLink() {
         ClipboardManager cm = (ClipboardManager) getSystemService(
                 Context.CLIPBOARD_SERVICE);
-        ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_RECEIPT_LINK,
+        ClipData clipData = ClipData.newPlainText(getString(R.string.unique_receipt_link),
                 tvReceiptLink.getText().toString());
         cm.setPrimaryClip(clipData);
-        showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
+        showSnackbar( getString(R.string.unique_receipt_link_copied_to_clipboard));
     }
 
 
@@ -225,6 +229,11 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
     @Override
     public void setPresenter(ReceiptContract.ReceiptPresenter presenter) {
         mReceiptPresenter = presenter;
+    }
+
+    @Override
+    public Context getContext() {
+        return this;
     }
 
     public void showToast(String message) {
@@ -246,10 +255,11 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         }
         final File documentFile = new File(mifosDirectory.getPath(), filename);
         if (!FileUtils.writeInputStreamDataToFile(responseBody.byteStream(), documentFile)) {
-            showToast(Constants.ERROR_DOWNLOADING_RECEIPT);
+            showToast(getString(R.string.error_downloading_receipt));
         } else {
             Toaster.show(findViewById(android.R.id.content),
-                    Constants.RECEIPT_DOWNLOADED_SUCCESSFULLY, Snackbar.LENGTH_LONG, Constants.VIEW,
+                    getString(R.string.receipt_downloaded_successfully)
+                    , Snackbar.LENGTH_LONG, getString(R.string.view),
                     new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -285,7 +295,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                     mReceiptPresenter.downloadReceipt(transactionId);
 
                 } else {
-                    showToast(Constants.NEED_EXTERNAL_STORAGE_PERMISSION_TO_DOWNLOAD_RECEIPT);
+                    showToast(getString(R.string.need_external_storage_permission_to_download_receipt));
                 }
             }
 

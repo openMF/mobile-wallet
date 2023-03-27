@@ -133,8 +133,9 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
         }
         mPresenter.attachView(this);
 
-        tvTransactionId.setText(Constants.TRANSACTION_ID + ": " + transaction.getTransactionId());
-        tvTransactionDate.setText(Constants.DATE + ": " + transaction.getDate());
+        tvTransactionId.setText(getString(R.string.transaction_id)
+                + ": " + transaction.getTransactionId());
+        tvTransactionDate.setText(getString(R.string.date) + ": " + transaction.getDate());
         tvTransactionAmount.setText(Utils.getFormattedAccountBalance(
                 transaction.getAmount(), transaction.getCurrency().getCode()));
 
@@ -142,20 +143,20 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
 
         if (transaction.getReceiptId() != null) {
             tvReceiptId.setVisibility(View.VISIBLE);
-            tvReceiptId.setText(Constants.RECEIPT_ID + ": " + transaction.getReceiptId());
+            tvReceiptId.setText(getString(R.string.receipt_id) + ": " + transaction.getReceiptId());
         }
 
         switch (transaction.getTransactionType()) {
             case DEBIT:
-                tvTransactionStatus.setText(Constants.DEBIT);
+                tvTransactionStatus.setText(getString(R.string.debit));
                 tvTransactionAmount.setTextColor(Color.RED);
                 break;
             case CREDIT:
-                tvTransactionStatus.setText(Constants.CREDIT);
+                tvTransactionStatus.setText(getString(R.string.credit));
                 tvTransactionAmount.setTextColor(Color.parseColor("#009688"));
                 break;
             case OTHER:
-                tvTransactionStatus.setText(Constants.OTHER);
+                tvTransactionStatus.setText(getString(R.string.other));
                 tvTransactionAmount.setTextColor(Color.YELLOW);
                 break;
         }

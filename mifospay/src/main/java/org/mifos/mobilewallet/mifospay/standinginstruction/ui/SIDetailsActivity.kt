@@ -149,7 +149,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
          * Using hardcoded Currency as response doesn't return the currency
          */
         tv_si_amount.text = res.getString(
-            R.string.currency_amount, Constants.RUPEE,
+            R.string.currency_amount , R.string.rupee.toString(),
             standingInstruction.amount.toString()
         )
 
@@ -196,7 +196,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         /**
          * Using hardcoded Currency as response doesn't return the currency
          */
-        til_si_edit_amount.hint = "${Constants.RUPEE} ${standingInstruction.amount}"
+        til_si_edit_amount.hint = "${res.getString(R.string.rupee)} ${standingInstruction.amount}"
         til_si_edit_interval.hint = standingInstruction.recurrenceInterval.toString()
         et_si_edit_amount.setText(standingInstruction.amount.toString())
         et_si_edit_interval.setText(standingInstruction.recurrenceInterval.toString())

@@ -69,7 +69,7 @@ public class SpecificTransactionsActivity extends BaseActivity implements
         ButterKnife.bind(this);
         mPresenter.attachView(this);
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        setToolbarTitle(Constants.SPECIFIC_TRANSACTIONS);
+        setToolbarTitle(getString(R.string.specific_transactions));
 
         transactions = getIntent().getParcelableArrayListExtra(Constants.TRANSACTIONS);
         secondAccountNumber = getIntent().getStringExtra(Constants.ACCOUNT_NUMBER);

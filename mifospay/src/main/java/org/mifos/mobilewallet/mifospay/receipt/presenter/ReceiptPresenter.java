@@ -10,6 +10,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseView;
 import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
+import org.mifos.mobilewallet.mifospay.R;
 
 import javax.inject.Inject;
 
@@ -57,7 +58,7 @@ public class ReceiptPresenter implements ReceiptContract.ReceiptPresenter {
 
                     @Override
                     public void onError(String message) {
-                        mReceiptView.showSnackbar(Constants.ERROR_FETCHING_RECEIPT);
+                        mReceiptView.showSnackbar(mReceiptView.getContext().getString(R.string.error_fetching_receipt));
                     }
                 });
     }
