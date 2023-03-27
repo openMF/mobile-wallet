@@ -224,7 +224,7 @@
     <string name="vpa_null_cant_copy">VPA is Null. Can\'t copy.</string>
     <string name="vpa_copy_success">VPA copied to Clipboard Successfully</string>
     <string name="rupee">₹</string>
-    <string name="default_web_client_id">default web client id</string>
+
     <string name="choose_a_file_to_upload">Choose a file to upload.</string>
     <string name="fetching">Fetching…</string>
     <string name="empty_no_transaction_history_title">Your history is empty</string>
