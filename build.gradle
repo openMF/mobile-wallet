@@ -41,7 +41,7 @@ ext {
     daggerVersion = '2.18'
     retrofitVersion = '2.2.0'
     okHttp3Version = '3.6.0'
-    butterKnifeVersion = '8.6.0'
+    butterKnifeVersion = '8.8.1'
     dbflowVersion = '3.1.1'
     espressoVersion = '2.2.2'
     rxandroidVersion = '1.1.0'
