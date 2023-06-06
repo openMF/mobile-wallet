@@ -79,7 +79,7 @@ public class MobileVerificationActivity extends BaseActivity implements
                 @Override
                 public void run() {
                     mMobileVerificationPresenter.requestOTPfromServer(mCcpCode.getFullNumber(),
-                            mEtMobileNumber.getText().toString());
+                            mEtMobileNumber.getText().toString().trim());
                 }
             }, 1500);
 
@@ -123,7 +123,7 @@ public class MobileVerificationActivity extends BaseActivity implements
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mMobileVerificationPresenter.verifyOTP(mEtOtp.getText().toString());
+                mMobileVerificationPresenter.verifyOTP(mEtOtp.getText().toString().trim());
             }
         }, 1500);
     }

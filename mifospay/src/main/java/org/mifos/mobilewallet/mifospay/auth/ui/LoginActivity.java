@@ -94,8 +94,8 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     }
 
     private void handleLoginInputChanged() {
-        String usernameContent = etUsername.getText().toString();
-        String passwordContent = etPassword.getText().toString();
+        String usernameContent = etUsername.getText().toString().trim();
+        String passwordContent = etPassword.getText().toString().trim();
         mPresenter.handleLoginButtonStatus(usernameContent, passwordContent);
     }
 
@@ -103,8 +103,8 @@ public class LoginActivity extends BaseActivity implements AuthContract.LoginVie
     public void onLoginClicked() {
         Utils.hideSoftKeyboard(this);
         showProgressDialog(Constants.LOGGING_IN);
-        mLoginPresenter.loginUser(etUsername.getText().toString(),
-                etPassword.getText().toString());
+        mLoginPresenter.loginUser(etUsername.getText().toString().trim(),
+                etPassword.getText().toString().trim());
     }
 
     @OnClick(R.id.ll_signup)

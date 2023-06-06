@@ -112,7 +112,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
                     + Constants.TO
                     + tvTransToName.getText()
                     + Constants.COLON
-                    + tvReceiptLink.getText().toString();
+                    + tvReceiptLink.getText().toString().trim();
         }
     }
 
@@ -205,7 +205,7 @@ public class ReceiptActivity extends BaseActivity implements ReceiptContract.Rec
         ClipboardManager cm = (ClipboardManager) getSystemService(
                 Context.CLIPBOARD_SERVICE);
         ClipData clipData = ClipData.newPlainText(Constants.UNIQUE_RECEIPT_LINK,
-                tvReceiptLink.getText().toString());
+                tvReceiptLink.getText().toString().trim());
         cm.setPrimaryClip(clipData);
         showSnackbar(Constants.UNIQUE_RECEIPT_LINK_COPIED_TO_CLIPBOARD);
     }
