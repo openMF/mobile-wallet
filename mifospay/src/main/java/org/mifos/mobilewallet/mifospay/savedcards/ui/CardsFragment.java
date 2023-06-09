@@ -274,7 +274,7 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
 
     @OnTextChanged(R.id.et_search_cards)
     void filterCards() {
-        String text = etCardSearch.getText().toString();
+        String text = etCardSearch.getText().toString().trim();
         List<Card> filteredList = new ArrayList<>();
 
         if (cardsList  != null) {

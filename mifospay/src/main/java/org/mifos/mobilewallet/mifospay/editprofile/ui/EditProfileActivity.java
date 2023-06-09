@@ -149,7 +149,7 @@ public class EditProfileActivity extends BaseActivity implements
     public void onSaveChangesClicked() {
         for (EditText input : userDetailsInputs) {
             if (isDataSaveNecessary(input)) {
-                mPresenter.updateInputById(input.getId(), input.getText().toString());
+                mPresenter.updateInputById(input.getId(), input.getText().toString().trim());
             }
         }
         hideFab();
@@ -191,8 +191,8 @@ public class EditProfileActivity extends BaseActivity implements
     }
 
     private boolean isDataSaveNecessary(EditText input) {
-        String content = input.getText().toString();
-        String currentContent = input.getHint().toString();
+        String content = input.getText().toString().trim();
+        String currentContent = input.getHint().toString().trim();
         return !(TextUtils.isEmpty(content) || content.equals(currentContent));
     }
 

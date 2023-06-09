@@ -159,7 +159,7 @@ public class ShowQrActivity extends BaseActivity implements QrContract.ShowQrVie
         editTextDialog.setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                String amount = edittext.getText().toString();
+                String amount = edittext.getText().toString().trim();
                 if (amount.equals("")) {
                     showToast(getString(R.string.enter_amount));
                     return;

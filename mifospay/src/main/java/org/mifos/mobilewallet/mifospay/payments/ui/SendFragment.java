@@ -213,12 +213,12 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 etVpa.setText(qrDataArray[0]);
                 etAmount.setText(qrDataArray[1]);
             }
-            String externalId = etVpa.getText().toString();
+            String externalId = etVpa.getText().toString().trim();
             if (etAmount.getText().toString().isEmpty()) {
                 showSnackbar(Constants.PLEASE_ENTER_AMOUNT);
                 return;
             }
-            double amount = Double.parseDouble(etAmount.getText().toString());
+            double amount = Double.parseDouble(etAmount.getText().toString().toString());
             if (!mTransferPresenter.checkSelfTransfer(externalId)) {
                 mTransferPresenter.checkBalanceAvailability(externalId, amount);
             } else {

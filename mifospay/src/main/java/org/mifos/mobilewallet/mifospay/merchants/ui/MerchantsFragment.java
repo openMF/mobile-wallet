@@ -196,7 +196,7 @@ public class MerchantsFragment extends BaseFragment implements MerchantsContract
 
     @OnTextChanged(R.id.et_search_merchant)
     void filerMerchants() {
-        filterList(etMerchantSearch.getText().toString());
+        filterList(etMerchantSearch.getText().toString().trim());
     }
 
     public void filterList(String text) {
