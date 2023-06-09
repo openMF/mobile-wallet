@@ -22,6 +22,7 @@
                 android:drawableLeft="@drawable/ic_search"
                 android:drawablePadding="@dimen/value_10dp"
                 android:hint="@string/enter_name_or_vpa"
+                android:inputType="text"
                 android:padding="@dimen/value_10dp"/>
 
         </android.support.v7.widget.Toolbar>

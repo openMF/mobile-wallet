@@ -21,6 +21,7 @@
             android:layout_height="wrap_content"
             android:hint="@string/first_name"
             android:nextFocusForward="@id/et_lName"
+            android:inputType="textPersonName"
             android:singleLine="true"/>
     </android.support.design.widget.TextInputLayout>
 
@@ -36,6 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/last_name"
+            android:inputType="textPersonName"
             android:nextFocusForward="@id/et_card_number"
             android:singleLine="true"/>
     </android.support.design.widget.TextInputLayout>
