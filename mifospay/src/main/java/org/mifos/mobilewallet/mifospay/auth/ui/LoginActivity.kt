@@ -90,8 +90,8 @@ class LoginActivity : BaseActivity(), LoginView {
     }
 
     private fun handleLoginInputChanged() {
-        val usernameContent = binding.etUsername.text.toString()
-        val passwordContent = binding.etPassword.text.toString()
+        val usernameContent = binding.etUsername.text.toString().trim()
+        val passwordContent = binding.etPassword.text.toString().trim()
         mPresenter.handleLoginButtonStatus(usernameContent, passwordContent)
     }
 
@@ -99,7 +99,7 @@ class LoginActivity : BaseActivity(), LoginView {
         hideSoftKeyboard(this)
         showProgressDialog(Constants.LOGGING_IN)
         mLoginPresenter.loginUser(
-            binding.etUsername.text.toString(), binding.etPassword.text.toString()
+            binding.etUsername.text.toString().trim(), binding.etPassword.text.toString().trim()
         )
     }
 
