@@ -18,7 +18,6 @@ public class FetchAccountTransfer extends
         UseCase<FetchAccountTransfer.RequestValues, FetchAccountTransfer.ResponseValue> {
 
     private final FineractRepository mFineractRepository;
-    
     @Inject
     public FetchAccountTransfer(FineractRepository fineractRepository) {
         mFineractRepository = fineractRepository;
