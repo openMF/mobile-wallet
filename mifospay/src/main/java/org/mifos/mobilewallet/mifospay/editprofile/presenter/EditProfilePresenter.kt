@@ -20,20 +20,14 @@ class EditProfilePresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper
 ) : EditProfileContract.EditProfilePresenter {
-    @JvmField
-    @Inject
-    var updateUserUseCase: UpdateUser? = null
+    lateinit var updateUserUseCase: UpdateUser
 
-    @JvmField
-    @Inject
-    var updateClientUseCase: UpdateClient? = null
+    lateinit var updateClientUseCase: UpdateClient
 
-    @JvmField
-    @Inject
-    var authenticateUserUseCase: AuthenticateUser? = null
-    private var mEditProfileView: EditProfileView? = null
+    lateinit var authenticateUserUseCase: AuthenticateUser
+    private lateinit var mEditProfileView: EditProfileContract.EditProfileView
     override fun attachView(baseView: BaseView<*>?) {
-        mEditProfileView = baseView as EditProfileView?
+        mEditProfileView = baseView as EditProfileContract.EditProfileView
         mEditProfileView.setPresenter(this)
     }
 
@@ -80,7 +74,7 @@ class EditProfilePresenter @Inject constructor(
         }
     }
 
-    override fun updateInputById(id: Int, content: String) {
+    override fun updateInputById(id: Int, content: String?) {
         when (id) {
             R.id.et_edit_profile_username -> {}
             R.id.et_edit_profile_email -> updateEmail(content)
@@ -89,7 +83,7 @@ class EditProfilePresenter @Inject constructor(
         }
     }
 
-    override fun updateEmail(email: String) {
+    override fun updateEmail(email: String?) {
         mEditProfileView.startProgressBar()
         mUseCaseHandler.execute(updateUserUseCase,
             UpdateUser.RequestValues(
@@ -111,7 +105,7 @@ class EditProfilePresenter @Inject constructor(
             })
     }
 
-    override fun updateMobile(fullNumber: String) {
+    override fun updateMobile(fullNumber: String?) {
         mEditProfileView.startProgressBar()
         mUseCaseHandler.execute(updateClientUseCase,
             UpdateClient.RequestValues(
