@@ -85,8 +85,10 @@ class LoginActivity : BaseActivity(), LoginView {
         binding.bgScreen.setOnClickListener{backgroundScreenClicked()}
     }
 
-    override fun setPresenter(presenter: AuthContract.LoginPresenter) {
-        mLoginPresenter = presenter
+    override fun setPresenter(presenter: AuthContract.LoginPresenter?) {
+        if (presenter != null) {
+            mLoginPresenter = presenter
+        }
     }
 
     private fun handleLoginInputChanged() {
@@ -128,7 +130,7 @@ class LoginActivity : BaseActivity(), LoginView {
         startPassCodeActivity()
     }
 
-    override fun loginFail(message: String) {
+    override fun loginFail(message: String?) {
         hideSoftKeyboard(this)
         hideProgressDialog()
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
