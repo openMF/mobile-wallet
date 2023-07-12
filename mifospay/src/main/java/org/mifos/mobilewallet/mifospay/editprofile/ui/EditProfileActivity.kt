@@ -33,6 +33,7 @@ import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.DialogBox
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable
 import org.mifos.mobilewallet.mifospay.utils.Toaster
+import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract.EditProfileView
 import java.io.File
 import java.util.*
 import javax.inject.Inject
@@ -108,7 +109,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
         setupUi()
         mPresenter!!.attachView(this)
         ccpCountryCode!!.registerCarrierNumberEditText(etMobileNumber)
-        mEditProfilePresenter.fetchUserDetails()
+        mEditProfilePresenter!!.fetchUserDetails()
         passcodePreferencesHelper = PasscodePreferencesHelper(this)
         if (isChangeImageRequestFromProfile) {
             bottomSheetDialog!!.show()
@@ -134,7 +135,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     private val isChangeImageRequestFromProfile: Boolean
         private get() = intent.getStringExtra(Constants.CHANGE_PROFILE_IMAGE_KEY) != null
 
-    override fun setPresenter(presenter: EditProfileContract.EditProfilePresenter) {
+    override fun setPresenter(presenter: EditProfileContract.EditProfilePresenter?) {
         mEditProfilePresenter = presenter
     }
 
@@ -190,7 +191,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     private fun isDataSaveNecessary(input: EditText): Boolean {
         val content = input.text.toString().trim { it <= ' ' }
         val currentContent = input.hint.toString().trim { it <= ' ' }
-        return (TextUtils.isEmpty(content) || content) != currentContent
+        return (TextUtils.isEmpty(content) || content != currentContent)
     }
 
     @OnFocusChange(
@@ -209,30 +210,30 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
         }
     }
 
-    override fun showDefaultImageByUsername(fullName: String) {
+    override fun showDefaultImageByUsername(fullName: String?) {
         val drawable = TextDrawable.builder().beginConfig()
             .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())
             .height(resources.getDimension(R.dimen.user_profile_image_size).toInt())
-            .endConfig().buildRound(fullName.substring(0, 1), R.color.colorPrimary)
+            .endConfig().buildRound(fullName!!.substring(0, 1), R.color.colorPrimary)
         ivUserImage!!.setImageDrawable(drawable)
     }
 
-    override fun showUsername(username: String) {
+    override fun showUsername(username: String?) {
         tilUsername!!.hint = username
         handleUpdatedInput(etUsername)
     }
 
-    override fun showEmail(email: String) {
+    override fun showEmail(email: String?) {
         tilEmail!!.hint = email
         handleUpdatedInput(etEmail)
     }
 
-    override fun showVpa(vpa: String) {
+    override fun showVpa(vpa: String?) {
         tilVpa!!.hint = vpa
         handleUpdatedInput(etVpa)
     }
 
-    override fun showMobileNumber(mobileNumber: String) {
+    override fun showMobileNumber(mobileNumber: String?) {
         tilMobileNumber!!.hint = mobileNumber
         handleUpdatedInput(etMobileNumber)
     }
@@ -348,7 +349,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
         options.setCompressionFormat(Bitmap.CompressFormat.JPEG)
         options.setCompressionQuality(80)
         options.setToolbarColor(ContextCompat.getColor(this, R.color.colorPrimary))
-        arrayOf.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+        options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
         options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.primaryBlue))
         options.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.black))
         options.setCropFrameColor(ContextCompat.getColor(this, R.color.clickedblue))
@@ -448,15 +449,15 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
         )
     }
 
-    override fun onUpdateEmailError(message: String) {
+    override fun onUpdateEmailError(message: String?) {
         showToast(message)
     }
 
-    override fun onUpdateMobileError(message: String) {
+    override fun onUpdateMobileError(message: String?) {
         showToast(message)
     }
 
-    override fun showToast(message: String) {
+    override fun showToast(message: String?) {
         Toaster.showToast(this, message)
     }
 
@@ -497,13 +498,13 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
 
         @OnClick(R.id.ll_remove_profile_image_dialog_row)
         fun onRemoveProfileImageClicked() {
-            mEditProfilePresenter.handleProfileImageRemoved()
+            mEditProfilePresenter!!.handleProfileImageRemoved()
             bottomSheetDialog!!.dismiss()
         }
 
         @OnClick(R.id.ll_click_profile_image_dialog_row)
         fun onClickProfileImageClicked() {
-            mEditProfilePresenter.handleClickProfileImageRequest()
+            mEditProfilePresenter!!.handleClickProfileImageRequest()
             bottomSheetDialog!!.dismiss()
         }
     }
