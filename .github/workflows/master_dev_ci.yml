@@ -13,7 +13,7 @@ jobs:
     name: Build APK
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
         # Set up JDK
       - name: Set Up JDK 11
@@ -44,7 +44,7 @@ jobs:
     name: StaticAnalysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Static Analysis[Core]
         run: ./gradlew core:lint
 
@@ -55,7 +55,7 @@ jobs:
           name: Static Analysis Report[Core]
           path: core/build/reports/
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Static Analysis[Mifospay]
         run: ./gradlew mifospay:lint
 
@@ -70,7 +70,7 @@ jobs:
     name: PMD
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: PMD Check[Core]
         run: ./gradlew core:pmd
 
@@ -81,7 +81,7 @@ jobs:
           name: PMD Report[Core]
           path: core/build/reports/
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: PMD Check[MifosPay]
         run: ./gradlew mifospay:pmd
 
@@ -96,7 +96,7 @@ jobs:
     name: Checkstyle
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Checkstyle[Core]
         run: ./gradlew core:checkstyle
 
@@ -107,7 +107,7 @@ jobs:
           name: Checkstyle Report[Core]
           path: core/build/reports/
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Checkstyle[MifosPay]
         run: ./gradlew mifospay:checkstyle
 
