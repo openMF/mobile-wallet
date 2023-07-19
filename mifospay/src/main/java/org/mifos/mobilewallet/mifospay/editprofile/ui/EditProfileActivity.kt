@@ -1,7 +1,6 @@
 package org.mifos.mobilewallet.mifospay.editprofile.ui
 
 import android.Manifest
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -13,7 +12,6 @@ import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.FloatingActionButton
 import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.FileProvider
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -25,7 +23,9 @@ import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
 import com.yalantis.ucrop.UCrop
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.databinding.ActivityEditProfileBinding
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract
+import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract.EditProfileView
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity
@@ -33,82 +33,30 @@ import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.DialogBox
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable
 import org.mifos.mobilewallet.mifospay.utils.Toaster
-import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract.EditProfileView
 import java.io.File
 import java.util.*
 import javax.inject.Inject
 
 class EditProfileActivity : BaseActivity(), EditProfileView {
-    private var capturedImageUri: Uri? = null
+    val binding = ActivityEditProfileBinding.inflate(layoutInflater)
 
     @JvmField
     @Inject
     var mPresenter: EditProfilePresenter? = null
     var mEditProfilePresenter: EditProfileContract.EditProfilePresenter? = null
 
-    @JvmField
-    @BindView(R.id.ccp_new_code)
-    var ccpCountryCode: CountryCodePicker? = null
-
-    @JvmField
-    @BindView(R.id.iv_user_image)
-    var ivUserImage: ImageView? = null
-
-    @JvmField
-    @BindView(R.id.til_edit_profile_username)
-    var tilUsername: TextInputLayout? = null
-
-    @JvmField
-    @BindView(R.id.til_edit_profile_email)
-    var tilEmail: TextInputLayout? = null
-
-    @JvmField
-    @BindView(R.id.til_edit_profile_vpa)
-    var tilVpa: TextInputLayout? = null
-
-    @JvmField
-    @BindView(R.id.til_edit_profile_mobile)
-    var tilMobileNumber: TextInputLayout? = null
-
-    @JvmField
-    @BindView(R.id.et_edit_profile_username)
-    var etUsername: EditText? = null
-
-    @JvmField
-    @BindView(R.id.et_edit_profile_email)
-    var etEmail: EditText? = null
-
-    @JvmField
-    @BindView(R.id.et_edit_profile_vpa)
-    var etVpa: EditText? = null
-
-    @JvmField
-    @BindView(R.id.et_edit_profile_mobile)
-    var etMobileNumber: EditText? = null
-
-    @JvmField
-    @BindView(R.id.fab_edit_profile_save_changes)
-    var fabSaveChanges: FloatingActionButton? = null
-
-    @JvmField
-    @BindViews(
-        R.id.et_edit_profile_username,
-        R.id.et_edit_profile_email,
-        R.id.et_edit_profile_vpa,
-        R.id.et_edit_profile_mobile
-    )
     var userDetailsInputs: List<EditText>? = null
     private var bottomSheetDialog: BottomSheetDialog? = null
-    var dialogBox: DialogBox? = DialogBox()
+    private var dialogBox: DialogBox? = DialogBox()
     private var passcodePreferencesHelper: PasscodePreferencesHelper? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_edit_profile)
+        setContentView(binding.root)
         activityComponent.inject(this)
         ButterKnife.bind(this)
         setupUi()
         mPresenter!!.attachView(this)
-        ccpCountryCode!!.registerCarrierNumberEditText(etMobileNumber)
+        binding.ccpNewCode!!.registerCarrierNumberEditText(binding.etEditProfileMobile)
         mEditProfilePresenter!!.fetchUserDetails()
         passcodePreferencesHelper = PasscodePreferencesHelper(this)
         if (isChangeImageRequestFromProfile) {
@@ -133,7 +81,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     }
 
     private val isChangeImageRequestFromProfile: Boolean
-        private get() = intent.getStringExtra(Constants.CHANGE_PROFILE_IMAGE_KEY) != null
+        get() = intent.getStringExtra(Constants.CHANGE_PROFILE_IMAGE_KEY) != null
 
     override fun setPresenter(presenter: EditProfileContract.EditProfilePresenter?) {
         mEditProfilePresenter = presenter
@@ -143,7 +91,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     fun onSaveChangesClicked() {
         for (input in userDetailsInputs!!) {
             if (isDataSaveNecessary(input)) {
-                mPresenter!!.updateInputById(input.id, input.text.toString().trim { it <= ' ' })
+                mPresenter!!.updateInputById(input.id, input.text.toString())
             }
         }
         hideFab()
@@ -180,7 +128,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     fun onUserDetailsChanged() {
         for (et in userDetailsInputs!!) {
             if (isDataSaveNecessary(et)) {
-                mPresenter!!.handleNecessaryDataSave()
+                mPresenter?.handleNecessaryDataSave()
                 break
             } else {
                 hideFab()
@@ -189,9 +137,9 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     }
 
     private fun isDataSaveNecessary(input: EditText): Boolean {
-        val content = input.text.toString().trim { it <= ' ' }
-        val currentContent = input.hint.toString().trim { it <= ' ' }
-        return (TextUtils.isEmpty(content) || content != currentContent)
+        val content = input.text.toString()
+        val currentContent = input.hint.toString()
+        return !(TextUtils.isEmpty(content) || content == currentContent)
     }
 
     @OnFocusChange(
@@ -214,52 +162,50 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
         val drawable = TextDrawable.builder().beginConfig()
             .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())
             .height(resources.getDimension(R.dimen.user_profile_image_size).toInt())
-            .endConfig().buildRound(fullName!!.substring(0, 1), R.color.colorPrimary)
-        ivUserImage!!.setImageDrawable(drawable)
+            .endConfig().buildRound(fullName?.substring(0, 1), R.color.colorPrimary)
+        binding.include.ivUserImage?.setImageDrawable(drawable)
     }
 
     override fun showUsername(username: String?) {
-        tilUsername!!.hint = username
-        handleUpdatedInput(etUsername)
+        binding.tilEditProfileUsername?.hint = username
+        handleUpdatedInput(binding.etEditProfileUsername)
     }
 
     override fun showEmail(email: String?) {
-        tilEmail!!.hint = email
-        handleUpdatedInput(etEmail)
+        binding.tilEditProfileEmail?.hint = email
+        handleUpdatedInput(binding.etEditProfileEmail)
     }
 
     override fun showVpa(vpa: String?) {
-        tilVpa!!.hint = vpa
-        handleUpdatedInput(etVpa)
+        binding.tilEditProfileVpa?.hint = vpa
+        handleUpdatedInput(binding.etEditProfileVpa)
     }
 
     override fun showMobileNumber(mobileNumber: String?) {
-        tilMobileNumber!!.hint = mobileNumber
-        handleUpdatedInput(etMobileNumber)
+        binding.tilEditProfileMobile?.hint = mobileNumber
+        handleUpdatedInput(binding.etEditProfileMobile)
     }
 
     private fun handleUpdatedInput(input: EditText?) {
-        input!!.clearFocus()
-        input.text.clear()
+        input?.clearFocus()
+        input?.text?.clear()
     }
 
     override fun showFab() {
-        fabSaveChanges!!.show()
+        binding.fabEditProfileSaveChanges?.show()
     }
 
     override fun hideFab() {
-        fabSaveChanges!!.hide()
+        binding.fabEditProfileSaveChanges?.hide()
     }
 
     override fun hideKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         var view = currentFocus
-        if (imm != null) {
-            if (view == null) {
-                view = View(this)
-            }
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        if (view == null) {
+            view = View(this)
         }
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     override fun onRequestPermissionsResult(
@@ -270,20 +216,12 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
             REQUEST_CAMERA -> {
 
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.size > 0
+                if (grantResults.isNotEmpty()
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     // permission was granted, yay! Do the
                     // camera-related task you need to do.
                     val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-                    val destinationFileName = UUID.randomUUID().toString() + ".jpg"
-                    val destinationFile = File(cacheDir, destinationFileName)
-                    capturedImageUri = FileProvider.getUriForFile(
-                        this,
-                        "org.mifos.mobilewallet.mifospay.provider",
-                        destinationFile
-                    )
-                    intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri)
                     startActivityForResult(intent, REQUEST_CAMERA)
                 } else {
                     // permission denied, boo! Disable the
@@ -298,7 +236,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
             REQUEST_READ_EXTERNAL_STORAGE -> {
 
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.size > 0
+                if (grantResults.isNotEmpty()
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
                     // permission was granted, yay! Do the
@@ -325,8 +263,10 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
                 selectedImageUri?.let { startCrop(it) }
             } else if (requestCode == UCrop.REQUEST_CROP) {
                 handleCropResult(data!!)
-            } else if (requestCode == REQUEST_CAMERA && capturedImageUri != null) {
-                startCrop(capturedImageUri!!)
+            } else if (requestCode == REQUEST_CAMERA) {
+                val extras = data!!.extras
+                val profileBitmapImage = extras!!["data"] as Bitmap?
+                binding.include.ivUserImage!!.setImageBitmap(profileBitmapImage)
             }
         }
     }
@@ -352,12 +292,10 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
         options.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
         options.setActiveWidgetColor(ContextCompat.getColor(this, R.color.primaryBlue))
         options.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.black))
-        options.setCropFrameColor(ContextCompat.getColor(this, R.color.clickedblue))
         options.setCircleDimmedLayer(true)
-        options.setShowCropFrame(true)
-        options.setShowCropGrid(true)
-        options.setCropGridColumnCount(2)
-        options.setCropGridRowCount(2)
+        options.setShowCropFrame(false)
+        options.setCropGridColumnCount(0)
+        options.setCropGridRowCount(0)
         return uCrop.withOptions(options)
     }
 
@@ -405,11 +343,11 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     private fun handleCropResult(result: Intent) {
         val resultUri = UCrop.getOutput(result)
         if (resultUri != null) {
-            ivUserImage!!.setImageURI(resultUri)
+            binding.include.ivUserImage!!.setImageURI(resultUri)
         }
     }
 
-    fun clickProfilePicFromCamera() {
+    private fun clickProfilePicFromCamera() {
         if (Build.VERSION.SDK_INT >= 23 && ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.CAMERA
@@ -422,27 +360,19 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
 
             // Permission has already been granted
             val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            val destinationFileName = UUID.randomUUID().toString() + ".jpg"
-            val destinationFile = File(cacheDir, destinationFileName)
-            capturedImageUri = FileProvider.getUriForFile(
-                this,
-                "org.mifos.mobilewallet.mifospay.provider",
-                destinationFile
-            )
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri)
             startActivityForResult(intent, REQUEST_CAMERA)
         }
     }
 
     override fun showDiscardChangesDialog() {
-        dialogBox!!.setOnPositiveListener(DialogInterface.OnClickListener { dialog, which ->
+        dialogBox!!.setOnPositiveListener { dialog, which ->
             mPresenter!!.onDialogPositive()
             dialog.dismiss()
-        })
-        dialogBox!!.setOnNegativeListener(DialogInterface.OnClickListener { dialog, which ->
+        }
+        dialogBox!!.setOnNegativeListener { dialog, which ->
             mPresenter!!.onDialogNegative()
             dialog.dismiss()
-        })
+        }
         dialogBox!!.show(
             this, R.string.discard_changes_and_exit,
             R.string.discard_changes_and_exit_description, R.string.accept, R.string.cancel
@@ -474,7 +404,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     }
 
     override fun onBackPressed() {
-        if (fabSaveChanges!!.isOrWillBeShown) {
+        if (binding.fabEditProfileSaveChanges!!.isOrWillBeShown) {
             mPresenter!!.handleExitOnUnsavedChanges()
         } else {
             super.onBackPressed()

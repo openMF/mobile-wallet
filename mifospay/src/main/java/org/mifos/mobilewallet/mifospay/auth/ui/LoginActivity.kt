@@ -37,7 +37,7 @@ import javax.inject.Inject
 class LoginActivity : BaseActivity(), LoginView {
     @Inject
     lateinit var mPresenter: LoginPresenter
-    lateinit var mLoginPresenter: AuthContract.LoginPresenter
+    var mLoginPresenter: AuthContract.LoginPresenter? = null
 
     //ViewBinding
     private lateinit var binding: ActivityLoginBinding
@@ -85,8 +85,8 @@ class LoginActivity : BaseActivity(), LoginView {
         binding.bgScreen.setOnClickListener{backgroundScreenClicked()}
     }
 
-    override fun setPresenter(presenter: AuthContract.LoginPresenter) {
-        mLoginPresenter = presenter
+    override fun setPresenter(presenter: AuthContract.LoginPresenter?) {
+        mLoginPresenter = presenter!!
     }
 
     private fun handleLoginInputChanged() {
@@ -98,7 +98,7 @@ class LoginActivity : BaseActivity(), LoginView {
     fun onLoginClicked() {
         hideSoftKeyboard(this)
         showProgressDialog(Constants.LOGGING_IN)
-        mLoginPresenter.loginUser(
+        mLoginPresenter?.loginUser(
             binding.etUsername.text.toString().trim(), binding.etPassword.text.toString().trim()
         )
     }
@@ -128,7 +128,7 @@ class LoginActivity : BaseActivity(), LoginView {
         startPassCodeActivity()
     }
 
-    override fun loginFail(message: String) {
+    override fun loginFail(message: String?) {
         hideSoftKeyboard(this)
         hideProgressDialog()
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
