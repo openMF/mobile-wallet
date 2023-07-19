@@ -198,7 +198,10 @@ In some cases, your pull request might encounter merge conflicts when the change
     
 Your pull request will be updated with the resolved conflicts, and the reviewers can proceed with the review process. Again, don’t forget to squash your commits.
 
-### Instructions to get the latest APK
+### Conclusion
+By following these contribution guidelines, you're all set to start contributing to the Mobile Wallet (Mifos Pay) project. We appreciate your efforts and look forward to your valuable contributions. Happy coding!
+
+## Instructions to get the latest APK
 
 To get the latest apk fom the Github actions artifacts, follow these steps:
 
@@ -207,21 +210,21 @@ To get the latest apk fom the Github actions artifacts, follow these steps:
 3. Scroll down to the **Artifacts** section and click the **mobile-wallet** hyperlink.
 4. After successful download, extract the zip file to your preferred location.
 
-### Wiki
+## Wiki
 
 https://github.com/openMF/mobile-wallet/wiki
 
 
-### Screenshots
+## Screenshots
 
 <p>
   <img src="https://user-images.githubusercontent.com/37406965/51085243-86f2cd00-175c-11e9-9f5e-8a2324cfda4a.jpg" width="288" height="500" />
   <img src="https://user-images.githubusercontent.com/37406965/51085245-8823fa00-175c-11e9-949a-c5292037b970.jpg" width="288" height="500" /> 
   <img src="https://user-images.githubusercontent.com/37406965/51085246-89552700-175c-11e9-9a5b-5a85ecb5bfae.jpg" width="288" height="500" />
 </p>
-<p align="center">
+
+<p>
   Click <a href= "https://github.com/openMF/mobile-wallet/blob/dev/Screenshot.md">here </a> for more screenshots
 </p>
 
-### Conclusion
-By following these contribution guidelines, you're all set to start contributing to the Mobile Wallet (Mifos Pay) project. We appreciate your efforts and look forward to your valuable contributions. Happy coding!
+
