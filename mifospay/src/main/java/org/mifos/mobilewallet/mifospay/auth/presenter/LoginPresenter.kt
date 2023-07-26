@@ -39,8 +39,8 @@ class LoginPresenter @Inject constructor(
         mLoginView.setPresenter(this)
     }
 
-    override fun handleLoginButtonStatus(usernameContent: String, passwordContent: String) {
-        if (usernameContent.isEmpty() || passwordContent.isEmpty()) {
+    override fun handleLoginButtonStatus(usernameContent: String?, passwordContent: String?) {
+        if (usernameContent!!.isEmpty() || passwordContent!!.isEmpty()) {
             mLoginView.disableLoginButton()
         } else {
             mLoginView.enableLoginButton()
@@ -49,7 +49,7 @@ class LoginPresenter @Inject constructor(
 
 
 
-    override fun loginUser(username: String, password: String) {
+    override fun loginUser(username: String?, password: String?) {
         authenticateUserUseCase.requestValues = AuthenticateUser.RequestValues(username, password)
 
         val requestValue = authenticateUserUseCase.requestValues
