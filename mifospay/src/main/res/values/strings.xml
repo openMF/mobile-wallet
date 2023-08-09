@@ -26,6 +26,7 @@
     <string name="add_card">Add Card</string>
     <string name="id_type">ID Type</string>
     <string name="vpaname">VPA</string>
+    <string name="phoneNumber">Phone Number</string>
     <string name="browse">Browse</string>
     <string name="submit">Submit</string>
     <string name="credit_card_number">Credit Card Number</string>
@@ -37,6 +38,10 @@
     <string name="profile">Profile</string>
     <string name="mifos_pay">Mifos Pay</string>
     <string name="login">Login</string>
+    <string name="login_underlined"><u>Login</u></string>
+    <string name="register">Register</string>
+    <string name="fullName">Full Name</string>
+    <string name="onboard_greeting">We\'re here to help you get onboard!</string>
     <string name="enter_name_or_vpa">Enter name or vpa</string>
     <string name="balance_hint">Total balance</string>
     <string name="show_more">Show more</string>
@@ -69,6 +74,7 @@
     <string name="view_receipt">View Receipt</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
     <string name="create_one">Create one</string>
+    <string name="already_have_an_acount">Already have an account?</string>
     <string name="enter_mobile_number_description">It should be currently activated on your device
         and linked with your bank account as well.
     </string>
