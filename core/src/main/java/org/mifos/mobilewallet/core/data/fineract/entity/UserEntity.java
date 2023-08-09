@@ -9,7 +9,7 @@ public class UserEntity {
     private boolean authenticated;
     private String username;
     private String base64EncodedAuthenticationKey;
-    private List<String> permissions = new ArrayList<String>();
+    private final List<String> permissions = new ArrayList<String>();
 
     public String getUserName() {
         return username;

@@ -59,7 +59,7 @@ public class FetchClientDetails extends
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private Client mClient;
+        private final Client mClient;
 
         public ResponseValue(Client client) {
             mClient = client;

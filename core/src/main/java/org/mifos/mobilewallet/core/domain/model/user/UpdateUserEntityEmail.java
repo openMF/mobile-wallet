@@ -6,7 +6,7 @@ package org.mifos.mobilewallet.core.domain.model.user;
 
 public class UpdateUserEntityEmail {
 
-    private String email;
+    private final String email;
 
     public UpdateUserEntityEmail(String email) {
         this.email = email;

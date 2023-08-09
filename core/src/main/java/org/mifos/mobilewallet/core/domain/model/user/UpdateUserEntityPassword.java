@@ -5,8 +5,8 @@ package org.mifos.mobilewallet.core.domain.model.user;
  */
 
 public class UpdateUserEntityPassword {
-    private String password;
-    private String repeatPassword;
+    private final String password;
+    private final String repeatPassword;
 
     public UpdateUserEntityPassword(String password) {
         this.password = password;

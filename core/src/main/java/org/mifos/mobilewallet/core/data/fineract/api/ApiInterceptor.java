@@ -17,8 +17,8 @@ public class ApiInterceptor implements Interceptor {
 
     public static final String HEADER_TENANT = "Fineract-Platform-TenantId";
     public static final String HEADER_AUTH = "Authorization";
-    private String authToken;
-    private String headerTenant;
+    private final String authToken;
+    private final String headerTenant;
 
     public ApiInterceptor(String authToken, String headerTenant) {
         this.authToken = authToken;

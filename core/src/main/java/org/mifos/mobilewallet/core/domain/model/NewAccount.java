@@ -8,10 +8,10 @@ import java.util.Date;
 
 public class NewAccount {
 
-    private int clientId;
+    private final int clientId;
     private String productId;
     private Date submittedOnDate;
-    private String accountNo;
+    private final String accountNo;
     private String locale;
     private String dateFormat;
 

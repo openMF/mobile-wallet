@@ -60,7 +60,7 @@ public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
 
     public static final class RequestValues implements UseCase.RequestValues {
 
-        private AuthenticationPayload authPayload;
+        private final AuthenticationPayload authPayload;
 
         public RequestValues(String username, String password) {
             authPayload = new AuthenticationPayload(username, password);

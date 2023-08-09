@@ -84,9 +84,9 @@ public class DepositType implements Parcelable {
         FIXED(200, "depositAccountType.fixedDeposit", ApiEndPoints.SAVINGS_ACCOUNTS),
         RECURRING(300, "depositAccountType.recurringDeposit", ApiEndPoints.RECURRING_ACCOUNTS);
 
-        private Integer id;
-        private String code;
-        private String endpoint;
+        private final Integer id;
+        private final String code;
+        private final String endpoint;
 
         ServerTypes(Integer id, String code, String endpoint) {
             this.id = id;

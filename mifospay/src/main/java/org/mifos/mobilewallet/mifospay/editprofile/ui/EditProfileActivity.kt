@@ -56,7 +56,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
         ButterKnife.bind(this)
         setupUi()
         mPresenter!!.attachView(this)
-        binding.ccpNewCode!!.registerCarrierNumberEditText(binding.etEditProfileMobile)
+        binding.ccpNewCode.registerCarrierNumberEditText(binding.etEditProfileMobile)
         mEditProfilePresenter!!.fetchUserDetails()
         passcodePreferencesHelper = PasscodePreferencesHelper(this)
         if (isChangeImageRequestFromProfile) {
@@ -163,26 +163,26 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
             .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())
             .height(resources.getDimension(R.dimen.user_profile_image_size).toInt())
             .endConfig().buildRound(fullName?.substring(0, 1), R.color.colorPrimary)
-        binding.include.ivUserImage?.setImageDrawable(drawable)
+        binding.include.ivUserImage.setImageDrawable(drawable)
     }
 
     override fun showUsername(username: String?) {
-        binding.tilEditProfileUsername?.hint = username
+        binding.tilEditProfileUsername.hint = username
         handleUpdatedInput(binding.etEditProfileUsername)
     }
 
     override fun showEmail(email: String?) {
-        binding.tilEditProfileEmail?.hint = email
+        binding.tilEditProfileEmail.hint = email
         handleUpdatedInput(binding.etEditProfileEmail)
     }
 
     override fun showVpa(vpa: String?) {
-        binding.tilEditProfileVpa?.hint = vpa
+        binding.tilEditProfileVpa.hint = vpa
         handleUpdatedInput(binding.etEditProfileVpa)
     }
 
     override fun showMobileNumber(mobileNumber: String?) {
-        binding.tilEditProfileMobile?.hint = mobileNumber
+        binding.tilEditProfileMobile.hint = mobileNumber
         handleUpdatedInput(binding.etEditProfileMobile)
     }
 
@@ -192,11 +192,11 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     }
 
     override fun showFab() {
-        binding.fabEditProfileSaveChanges?.show()
+        binding.fabEditProfileSaveChanges.show()
     }
 
     override fun hideFab() {
-        binding.fabEditProfileSaveChanges?.hide()
+        binding.fabEditProfileSaveChanges.hide()
     }
 
     override fun hideKeyboard() {
@@ -266,7 +266,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
             } else if (requestCode == REQUEST_CAMERA) {
                 val extras = data!!.extras
                 val profileBitmapImage = extras!!["data"] as Bitmap?
-                binding.include.ivUserImage!!.setImageBitmap(profileBitmapImage)
+                binding.include.ivUserImage.setImageBitmap(profileBitmapImage)
             }
         }
     }
@@ -343,7 +343,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     private fun handleCropResult(result: Intent) {
         val resultUri = UCrop.getOutput(result)
         if (resultUri != null) {
-            binding.include.ivUserImage!!.setImageURI(resultUri)
+            binding.include.ivUserImage.setImageURI(resultUri)
         }
     }
 
@@ -404,7 +404,7 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     }
 
     override fun onBackPressed() {
-        if (binding.fabEditProfileSaveChanges!!.isOrWillBeShown) {
+        if (binding.fabEditProfileSaveChanges.isOrWillBeShown) {
             mPresenter!!.handleExitOnUnsavedChanges()
         } else {
             super.onBackPressed()

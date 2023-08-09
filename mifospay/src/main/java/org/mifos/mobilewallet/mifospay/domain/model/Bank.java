@@ -6,11 +6,11 @@ package org.mifos.mobilewallet.mifospay.domain.model;
 
 public class Bank {
 
-    private String name;
-    private int image;
+    private final String name;
+    private final int image;
 
     // 0= popular, 1 = other
-    private int type;
+    private final int type;
 
     public Bank(String name, int image, int type) {
         this.name = name;

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class UpdateUserEntityClients {
 
-    private ArrayList<Integer> clients;
+    private final ArrayList<Integer> clients;
 
     public UpdateUserEntityClients(ArrayList<Integer> clients) {
         this.clients = clients;

@@ -62,7 +62,7 @@ public class FetchClientImage extends
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private ResponseBody mResponseBody;
+        private final ResponseBody mResponseBody;
 
         public ResponseValue(ResponseBody responseBody) {
             mResponseBody = responseBody;

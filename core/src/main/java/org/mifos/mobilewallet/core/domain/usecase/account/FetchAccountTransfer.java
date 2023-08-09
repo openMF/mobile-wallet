@@ -67,7 +67,7 @@ public class FetchAccountTransfer extends
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private TransferDetail transferDetail;
+        private final TransferDetail transferDetail;
 
         public ResponseValue(
                 TransferDetail transferDetail) {

@@ -140,7 +140,7 @@ public class ReadQrActivity extends BaseActivity implements QrContract.ReadQrVie
             finish();
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(),
-                    "Error! " + e.toString(), Toast.LENGTH_SHORT).show();
+                    "Error! " + e, Toast.LENGTH_SHORT).show();
         }
         return contents;
     }

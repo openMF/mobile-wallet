@@ -218,7 +218,7 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
                 showSnackbar(Constants.PLEASE_ENTER_AMOUNT);
                 return;
             }
-            double amount = Double.parseDouble(etAmount.getText().toString().toString());
+            double amount = Double.parseDouble(etAmount.getText().toString());
             if (!mTransferPresenter.checkSelfTransfer(externalId)) {
                 mTransferPresenter.checkBalanceAvailability(externalId, amount);
             } else {

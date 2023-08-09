@@ -6,7 +6,7 @@ package org.mifos.mobilewallet.core.domain.model.client;
 
 public class UpdateClientEntityMobile {
 
-    private String mobileNo;
+    private final String mobileNo;
 
     public UpdateClientEntityMobile(String mobileNo) {
         this.mobileNo = mobileNo;

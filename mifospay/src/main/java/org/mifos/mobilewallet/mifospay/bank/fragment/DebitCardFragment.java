@@ -101,11 +101,11 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
         mPeYear.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if (keyCode == event.KEYCODE_DEL && mPeYear.length() == 0) {
+                if (keyCode == KeyEvent.KEYCODE_DEL && mPeYear.length() == 0) {
                     if (key) {
                         mPeMonth.requestFocus();
                         mPeMonth.dispatchKeyEvent(
-                                new KeyEvent(event.ACTION_DOWN, event.KEYCODE_DEL));
+                                new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_DEL));
                         key = false;
                         return false;
                     }

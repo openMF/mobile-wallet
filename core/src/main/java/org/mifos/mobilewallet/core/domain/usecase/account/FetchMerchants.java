@@ -70,7 +70,7 @@ public class FetchMerchants extends
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private List<SavingsWithAssociations> mSavingsWithAssociationsList;
+        private final List<SavingsWithAssociations> mSavingsWithAssociationsList;
 
         public ResponseValue(
                 List<SavingsWithAssociations> savingsWithAssociationsList) {

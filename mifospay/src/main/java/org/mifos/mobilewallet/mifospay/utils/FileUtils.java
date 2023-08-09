@@ -23,6 +23,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 
 public class FileUtils {
 
@@ -36,7 +37,7 @@ public class FileUtils {
             byte[] buffer = new byte[size];
             is.read(buffer);
             is.close();
-            jsonObject = new JSONObject(new String(buffer, "UTF-8"));
+            jsonObject = new JSONObject(new String(buffer, StandardCharsets.UTF_8));
         } catch (Exception e) {
             DebugUtil.log(e.toString(), e.getMessage());
         }

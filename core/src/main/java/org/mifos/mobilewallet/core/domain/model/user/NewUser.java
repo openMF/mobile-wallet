@@ -11,16 +11,16 @@ import static org.mifos.mobilewallet.core.utils.Constants.NEW_USER_ROLE_IDS;
 
 public class NewUser {
 
-    private String username;
-    private String firstname;
-    private String lastname;
-    private String email;
-    private String officeId = "1";
-    private List<Integer> roles = new ArrayList<>();
-    private boolean sendPasswordToEmail = false;
-    private boolean isSelfServiceUser = true;
-    private String password;
-    private String repeatPassword;
+    private final String username;
+    private final String firstname;
+    private final String lastname;
+    private final String email;
+    private final String officeId = "1";
+    private final List<Integer> roles = new ArrayList<>();
+    private final boolean sendPasswordToEmail = false;
+    private final boolean isSelfServiceUser = true;
+    private final String password;
+    private final String repeatPassword;
 
     public NewUser(String username, String firstname, String lastname, String email,
             String password) {

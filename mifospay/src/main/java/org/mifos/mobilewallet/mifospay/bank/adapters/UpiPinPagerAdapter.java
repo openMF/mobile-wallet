@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class UpiPinPagerAdapter extends FragmentPagerAdapter {
 
-    private int noOfFragments;
+    private final int noOfFragments;
     private Fragment[] mFragments;
 
     public UpiPinPagerAdapter(FragmentManager fm, Fragment[] fragments) {

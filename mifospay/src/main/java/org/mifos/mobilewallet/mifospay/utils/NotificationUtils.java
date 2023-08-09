@@ -38,7 +38,7 @@ public class NotificationUtils {
 
     private static final String TAG = NotificationUtils.class.getSimpleName();
 
-    private Context mContext;
+    private final Context mContext;
 
     public NotificationUtils(Context mContext) {
         this.mContext = mContext;

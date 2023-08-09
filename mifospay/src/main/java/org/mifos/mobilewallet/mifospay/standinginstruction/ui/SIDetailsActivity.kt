@@ -187,7 +187,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         if (standingInstruction.status.value == "Deleted") {
             if (this::mOptionsMenu.isInitialized) {
                 val nav_dashboard = mOptionsMenu.findItem(R.id.item_delete)
-                nav_dashboard.setVisible(false)
+                nav_dashboard.isVisible = false
             }
         }
         tv_recurrence_interval.text = standingInstruction.recurrenceInterval.toString()
@@ -350,8 +350,8 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     }
 
     private fun revertLocalChanges() {
-        et_si_edit_amount.setText(this.standingInstruction.amount.toString());
-        et_si_edit_interval.setText(this.standingInstruction.recurrenceInterval.toString());
+        et_si_edit_amount.setText(this.standingInstruction.amount.toString())
+        et_si_edit_interval.setText(this.standingInstruction.recurrenceInterval.toString())
         tv_valid_till.text = "${standingInstruction.validTill?.get(2)}-" +
                 "${standingInstruction.validTill?.get(1)}-${standingInstruction.validTill?.get(0)}"
     }

@@ -196,7 +196,7 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
             hideProgressDialog();
 
         } catch (Exception e) {
-            Log.d("qxz", e.toString() + " " + e.getMessage());
+            Log.d("qxz", e + " " + e.getMessage());
         }
     }
 

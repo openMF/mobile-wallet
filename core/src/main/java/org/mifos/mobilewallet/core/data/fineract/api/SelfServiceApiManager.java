@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class SelfServiceApiManager {
 
     public static final String DEFAULT = "default";
-    private static BaseURL baseUrl = new BaseURL();
+    private static final BaseURL baseUrl = new BaseURL();
     private static final String BASE_URL = baseUrl.getSelfServiceUrl();
 
     private static Retrofit retrofit;

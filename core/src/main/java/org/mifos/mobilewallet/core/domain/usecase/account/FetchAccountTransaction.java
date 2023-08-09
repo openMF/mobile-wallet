@@ -84,7 +84,7 @@ public class FetchAccountTransaction extends UseCase<FetchAccountTransaction.Req
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private Transaction transaction;
+        private final Transaction transaction;
 
         public ResponseValue(Transaction transaction) {
             this.transaction = transaction;

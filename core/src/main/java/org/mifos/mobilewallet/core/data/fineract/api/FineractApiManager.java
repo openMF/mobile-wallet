@@ -21,6 +21,7 @@ import org.mifos.mobilewallet.core.data.fineract.api.services.UserService;
 import org.mifos.mobilewallet.core.utils.Constants;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.TimeUnit;
 
 import okhttp3.OkHttpClient;
@@ -37,7 +38,7 @@ public class FineractApiManager {
 
     public static final String DEFAULT = "default";
     public static final String BASIC = "Basic ";
-    private static BaseURL baseUrl = new BaseURL();
+    private static final BaseURL baseUrl = new BaseURL();
     private static final String BASE_URL = baseUrl.getUrl();
 
     private static Retrofit retrofit;
@@ -61,7 +62,7 @@ public class FineractApiManager {
 
     public FineractApiManager() {
         String authToken = BASIC + Base64.encodeToString(Constants.MIFOS_PASSWORD
-                        .getBytes(Charset.forName("UTF-8")), Base64.NO_WRAP);
+                        .getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
         createService(authToken);
 
         if (sSelfInstance == null) {

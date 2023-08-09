@@ -216,7 +216,7 @@ public class MifosPayMessagingService extends FirebaseMessagingService {
             // payload can be used when one needs to show specific notification with some data
             // and process it
             if (payload != null) {
-                Log.e(TAG, "payload: " + payload.toString());
+                Log.e(TAG, "payload: " + payload);
             }
             Log.e(TAG, "imageUrl: " + imageUrl);
             Log.e(TAG, "timestamp: " + timestamp);

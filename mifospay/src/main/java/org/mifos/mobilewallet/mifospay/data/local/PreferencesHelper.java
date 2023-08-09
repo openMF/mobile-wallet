@@ -29,7 +29,7 @@ public class PreferencesHelper {
     private static final String FIREBASE_REG_ID = "preferences_firebase_reg_id";
     private static final String ACCOUNT_ID = "preferences_account_id";
 
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
 
     @Inject
     public PreferencesHelper(@ApplicationContext Context context) {

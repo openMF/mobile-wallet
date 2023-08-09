@@ -78,7 +78,7 @@ public class FetchAccountTransactions extends UseCase<FetchAccountTransactions.R
 
     public static final class ResponseValue implements UseCase.ResponseValue {
 
-        private List<Transaction> transactions;
+        private final List<Transaction> transactions;
 
         public ResponseValue(List<Transaction> transactions) {
             this.transactions = transactions;

@@ -11,7 +11,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
 
     protected OnItemClickListener listener;
 
-    private GestureDetector gestureDetector;
+    private final GestureDetector gestureDetector;
 
     @Nullable
     private View childView;

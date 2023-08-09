@@ -7,10 +7,10 @@ import org.mifos.mobilewallet.mifospay.R;
 
 public class PasswordStrength {
 
-    private int strengthStringId;
-    private int colorResId;
+    private final int strengthStringId;
+    private final int colorResId;
     private int currentScore = 0;
-    private int value;
+    private final int value;
 
     public PasswordStrength(String password) {
 

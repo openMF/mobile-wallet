@@ -12,17 +12,17 @@ import java.util.List;
 
 public class NewClient {
 
-    private String fullname;
-    private String externalId;
-    private String officeId = "1";
-    private boolean active = true;
-    private String activationDate;
-    private List<Address> address = new ArrayList<>();
-    private String mobileNo;
-    private String dateFormat = "dd MMMM yyyy";
-    private String locale = "en";
-    private String submittedOnDate;
-    private int savingsProductId;
+    private final String fullname;
+    private final String externalId;
+    private final String officeId = "1";
+    private final boolean active = true;
+    private final String activationDate;
+    private final List<Address> address = new ArrayList<>();
+    private final String mobileNo;
+    private final String dateFormat = "dd MMMM yyyy";
+    private final String locale = "en";
+    private final String submittedOnDate;
+    private final int savingsProductId;
 //    List<CustomDataTable> datatables = new ArrayList<>();
 
     public NewClient(String fullname, String externalId, String addressLine1,
@@ -67,8 +67,8 @@ class Address {
 }
 
 class CustomDataTable {
-    private String registeredTableName = "client_info";
-    private HashMap<String, Object> data;
+    private final String registeredTableName = "client_info";
+    private final HashMap<String, Object> data;
 
     public CustomDataTable() {
         data = new HashMap<>();

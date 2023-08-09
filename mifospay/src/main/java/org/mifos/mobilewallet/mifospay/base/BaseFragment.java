@@ -79,7 +79,7 @@ public class BaseFragment extends Fragment {
         try {
             callback = (BaseActivityCallback) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString()
+            throw new ClassCastException(activity
                     + " must implement BaseActivityCallback methods");
         }
     }

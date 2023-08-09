@@ -150,7 +150,7 @@ class LoginActivity : BaseActivity(), LoginView {
             GoogleSignInOptions.DEFAULT_SIGN_IN
         ).requestIdToken(getString(R.string.default_web_client_id)).requestEmail().build()
         googleSignInClient = GoogleSignIn.getClient(this, gso)
-        val signInIntent = googleSignInClient!!.getSignInIntent()
+        val signInIntent = googleSignInClient!!.signInIntent
         hideProgressDialog()
         startActivityForResult(signInIntent, 11)
     }
