@@ -4,9 +4,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+//import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
+//import android.support.design.widget.TextInputLayout;
 import android.support.transition.TransitionManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,9 +18,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+//import butterknife.OnClick;
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
-import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
+//import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
 import in.galaxyofandroid.spinerdialog.SpinnerDialog;
 import java.util.ArrayList;
 import javax.inject.Inject;
@@ -35,7 +35,7 @@ import org.mifos.mobilewallet.mifospay.registration.presenter.SignupPresenter;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
-import org.mifos.mobilewallet.mifospay.utils.ValidateUtil;
+//import org.mifos.mobilewallet.mifospay.utils.ValidateUtil;
 
 import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
 
@@ -102,10 +102,10 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 
         mifosSavingProductId = getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0);
 //        if (mifosSavingProductId
-//                == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID) {
+//            == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID) {
 //            mEtBusinessShopLayout.setVisibility(View.VISIBLE);
 //        } else {
-//            mEtBusinessShopLayout.setVisibility(View.GONE);
+//         mEtBusinessShopLayout.setVisibility(View.GONE);
 //        }
         mobileNumber = getIntent().getStringExtra(Constants.MOBILE_NUMBER);
         countryName = getIntent().getStringExtra(Constants.COUNTRY);
@@ -254,9 +254,9 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
 //        }
 //
 //        mSignupPresenter.registerUser(firstName, lastName, mobileNumber, email, businessName,
-//                addressline1, addressline2, pincode, city, countryName, username, password, stateId,
+//             addressline1, addressline2, pincode, city, countryName, username, password, stateId,
 //                countryId, mifosSavingProductId);
-//    }
+//   }
 
     @Override
     public void onRegisterSuccess(String s) {
