@@ -45,24 +45,24 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
     SignupPresenter mPresenter;
 
     RegistrationContract.SignupPresenter mSignupPresenter;
-    @BindView(R.id.et_first_name)
-    TextInputEditText mEtFirstName;
-    @BindView(R.id.et_last_name)
-    TextInputEditText mEtLastName;
-    @BindView(R.id.et_email)
-    TextInputEditText mEtEmail;
-    @BindView(R.id.et_business_shop_name)
-    TextInputEditText mEtBusinessShopName;
-    @BindView(R.id.et_business_shop_layout)
-    TextInputLayout mEtBusinessShopLayout;
-    @BindView(R.id.et_address_line_1)
-    TextInputEditText mEtAddressLine1;
-    @BindView(R.id.et_address_line_2)
-    TextInputEditText mEtAddressLine2;
-    @BindView(R.id.et_pin_code)
-    TextInputEditText mEtPinCode;
-    @BindView(R.id.et_state)
-    TextInputEditText mEtCity;
+//    @BindView(R.id.et_first_name)
+//    TextInputEditText mEtFirstName;
+//    @BindView(R.id.et_last_name)
+//    TextInputEditText mEtLastName;
+//    @BindView(R.id.et_email)
+//    TextInputEditText mEtEmail;
+//    @BindView(R.id.et_business_shop_name)
+//    TextInputEditText mEtBusinessShopName;
+//    @BindView(R.id.et_business_shop_layout)
+//    TextInputLayout mEtBusinessShopLayout;
+//    @BindView(R.id.et_address_line_1)
+//    TextInputEditText mEtAddressLine1;
+//    @BindView(R.id.et_address_line_2)
+//    TextInputEditText mEtAddressLine2;
+//    @BindView(R.id.et_pin_code)
+//    TextInputEditText mEtPinCode;
+//    @BindView(R.id.et_state)
+//    TextInputEditText mEtCity;
     @BindView(R.id.fab_next)
     FloatingActionButton mFabNext;
 
@@ -101,12 +101,12 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         setToolbarTitle("Registration");
 
         mifosSavingProductId = getIntent().getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0);
-        if (mifosSavingProductId
-                == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID) {
-            mEtBusinessShopLayout.setVisibility(View.VISIBLE);
-        } else {
-            mEtBusinessShopLayout.setVisibility(View.GONE);
-        }
+//        if (mifosSavingProductId
+//                == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID) {
+//            mEtBusinessShopLayout.setVisibility(View.VISIBLE);
+//        } else {
+//            mEtBusinessShopLayout.setVisibility(View.GONE);
+//        }
         mobileNumber = getIntent().getStringExtra(Constants.MOBILE_NUMBER);
         countryName = getIntent().getStringExtra(Constants.COUNTRY);
 
@@ -116,19 +116,19 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         String lastName = getIntent().getStringExtra(Constants.GOOGLE_FAMILY_NAME);
         Uri photoUri = getIntent().getParcelableExtra(Constants.GOOGLE_PHOTO_URI);
 
-        if (displayName != null) {
-            mEtBusinessShopName.setText(displayName);
-        }
-        if (email != null) {
-            mEtEmail.setText(email);
-            mEtUserName.setText(email.substring(0, email.indexOf('@')));
-        }
-        if (firstName != null) {
-            mEtFirstName.setText(firstName);
-        }
-        if (lastName != null) {
-            mEtLastName.setText(lastName);
-        }
+//        if (displayName != null) {
+//            mEtBusinessShopName.setText(displayName);
+//        }
+//        if (email != null) {
+//            mEtEmail.setText(email);
+//            mEtUserName.setText(email.substring(0, email.indexOf('@')));
+//        }
+//        if (firstName != null) {
+//            mEtFirstName.setText(firstName);
+//        }
+//        if (lastName != null) {
+//            mEtLastName.setText(lastName);
+//        }
 
         mEtPassword.addTextChangedListener(new TextWatcher() {
             @Override
@@ -179,19 +179,19 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
             spinnerDialog = new SpinnerDialog(SignupActivity.this, statesList,
                     "Select or Search State", R.style.DialogAnimations_SmileWindow, "Close");
 
-            spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
-                @Override
-                public void onClick(String item, int position) {
-                    mEtCity.setText(item);
-                }
-            });
+//            spinnerDialog.bindOnSpinerListener(new OnSpinerItemClick() {
+//                @Override
+//                public void onClick(String item, int position) {
+//                    mEtCity.setText(item);
+//                }
+//            });
 
-            mEtCity.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    spinnerDialog.showSpinerDialog();
-                }
-            });
+//            mEtCity.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    spinnerDialog.showSpinerDialog();
+//                }
+//            });
 
             hideProgressDialog();
 
@@ -205,58 +205,58 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         mSignupPresenter = presenter;
     }
 
-    @OnClick(R.id.fab_next)
-    public void onNextClicked() {
-        showProgressDialog(Constants.PLEASE_WAIT);
-
-        if (mifosSavingProductId
-                == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
-                && isEmpty(mEtBusinessShopName)) {
-            Toaster.showToast(this, "All fields are mandatory");
-            hideProgressDialog();
-            return;
-        }
-        if (isEmpty(mEtFirstName) || isEmpty(mEtLastName) || isEmpty(mEtEmail)
-                || isEmpty(mEtAddressLine1) || isEmpty(mEtAddressLine2)
-                || isEmpty(mEtPinCode) || isEmpty(mEtCity) || isEmpty(mEtUserName) || isEmpty(
-                mEtPassword) || isEmpty(mEtConfirmPassword)) {
-            Toaster.showToast(this, "All fields are mandatory");
-            hideProgressDialog();
-            return;
-        }
-        if (mEtPassword.getText().toString().length() < 6) {
-            showToast("Password should contain more than 6 characters");
-            return;
-        }
-
-        String firstName = mEtFirstName.getText().toString().trim();
-        String lastName = mEtLastName.getText().toString().trim();
-        String email = mEtEmail.getText().toString().trim();
-        String businessName = mEtBusinessShopName.getText().toString().trim();
-        String addressline1 = mEtAddressLine1.getText().toString().trim();
-        String addressline2 = mEtAddressLine2.getText().toString().trim();
-        String pincode = mEtPinCode.getText().toString().trim();
-        String city = mEtCity.getText().toString().trim();
-        String username = mEtUserName.getText().toString().trim();
-        String password = mEtPassword.getText().toString();
-        String confirmPassword = mEtConfirmPassword.getText().toString();
-
-        if (!ValidateUtil.INSTANCE.isValidEmail(email)) {
-            Snackbar.make(container, R.string.validate_email, Snackbar.LENGTH_SHORT).show();
-            hideProgressDialog();
-            return;
-        }
-
-        if (!password.equals(confirmPassword)) {
-            Toaster.showToast(this, "Password is not same as Confirm Password");
-            hideProgressDialog();
-            return;
-        }
-
-        mSignupPresenter.registerUser(firstName, lastName, mobileNumber, email, businessName,
-                addressline1, addressline2, pincode, city, countryName, username, password, stateId,
-                countryId, mifosSavingProductId);
-    }
+//    @OnClick(R.id.fab_next)
+//    public void onNextClicked() {
+//        showProgressDialog(Constants.PLEASE_WAIT);
+//
+//        if (mifosSavingProductId
+//                == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
+//                && isEmpty(mEtBusinessShopName)) {
+//            Toaster.showToast(this, "All fields are mandatory");
+//            hideProgressDialog();
+//            return;
+//        }
+//        if (isEmpty(mEtFirstName) || isEmpty(mEtLastName) || isEmpty(mEtEmail)
+//                || isEmpty(mEtAddressLine1) || isEmpty(mEtAddressLine2)
+//                || isEmpty(mEtPinCode) || isEmpty(mEtCity) || isEmpty(mEtUserName) || isEmpty(
+//                mEtPassword) || isEmpty(mEtConfirmPassword)) {
+//            Toaster.showToast(this, "All fields are mandatory");
+//            hideProgressDialog();
+//            return;
+//        }
+//        if (mEtPassword.getText().toString().length() < 6) {
+//            showToast("Password should contain more than 6 characters");
+//            return;
+//        }
+//
+//        String firstName = mEtFirstName.getText().toString().trim();
+//        String lastName = mEtLastName.getText().toString().trim();
+//        String email = mEtEmail.getText().toString().trim();
+//        String businessName = mEtBusinessShopName.getText().toString().trim();
+//        String addressline1 = mEtAddressLine1.getText().toString().trim();
+//        String addressline2 = mEtAddressLine2.getText().toString().trim();
+//        String pincode = mEtPinCode.getText().toString().trim();
+//        String city = mEtCity.getText().toString().trim();
+//        String username = mEtUserName.getText().toString().trim();
+//        String password = mEtPassword.getText().toString();
+//        String confirmPassword = mEtConfirmPassword.getText().toString();
+//
+//        if (!ValidateUtil.INSTANCE.isValidEmail(email)) {
+//            Snackbar.make(container, R.string.validate_email, Snackbar.LENGTH_SHORT).show();
+//            hideProgressDialog();
+//            return;
+//        }
+//
+//        if (!password.equals(confirmPassword)) {
+//            Toaster.showToast(this, "Password is not same as Confirm Password");
+//            hideProgressDialog();
+//            return;
+//        }
+//
+//        mSignupPresenter.registerUser(firstName, lastName, mobileNumber, email, businessName,
+//                addressline1, addressline2, pincode, city, countryName, username, password, stateId,
+//                countryId, mifosSavingProductId);
+//    }
 
     @Override
     public void onRegisterSuccess(String s) {
