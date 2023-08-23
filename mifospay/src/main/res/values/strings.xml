@@ -42,6 +42,7 @@
     <string name="register">Register</string>
     <string name="fullName">Full Name</string>
     <string name="onboard_greeting">We\'re here to help you get onboard!</string>
+    <string name="glad_to_see_you_again">Glad to see you again!</string>
     <string name="enter_name_or_vpa">Enter name or vpa</string>
     <string name="balance_hint">Total balance</string>
     <string name="show_more">Show more</string>
