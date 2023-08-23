@@ -1,176 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.design.widget.CoordinatorLayout
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorPrimary"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-    <data>
-
-    </data>
-
-    <android.support.design.widget.CoordinatorLayout
-        android:focusableInTouchMode="true"
-        android:focusable="true"
-        android:background="@color/colorPrimary"
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        app:elevation="0dp"
+        android:layout_height="wrap_content" >
 
-        <android.support.design.widget.AppBarLayout
+        <include layout="@layout/toolbar"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <ScrollView
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:id="@+id/sv_edit_profile"
+        android:paddingLeft="@dimen/paddingLayout"
+        android:paddingRight="@dimen/paddingLayout"
+        android:paddingEnd="@dimen/paddingLayout"
+        android:paddingStart="@dimen/paddingLayout"
+        android:scrollbars="none"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            app:elevation="0dp"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content" >
 
             <include
-                layout="@layout/toolbar"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                layout="@layout/profile_username_and_image"
+                android:id="@+id/include"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent" />
+                android:layout_marginTop="@dimen/marginTopUserProfile" />
 
-        </android.support.design.widget.AppBarLayout>
+            <android.support.design.widget.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:id="@+id/til_edit_profile_username"
+                android:layout_marginTop="@dimen/marginItemsInSectionLarge"
+                android:layout_width="match_parent"
+                app:helperText="@string/username"
+                android:hint="@string/username"
+                android:layout_height="wrap_content" >
 
-        <ScrollView
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:id="@+id/sv_edit_profile"
-            android:paddingLeft="@dimen/paddingLayout"
-            android:paddingRight="@dimen/paddingLayout"
-            android:paddingEnd="@dimen/paddingLayout"
-            android:paddingStart="@dimen/paddingLayout"
-            android:scrollbars="none"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_edit_profile_username"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="@dimen/marginItemsInSectionMedium"
+                android:layout_width="match_parent"
+                android:id="@+id/til_edit_profile_email"
+                app:layout_anchor="@id/til_edit_profile_username"
+                app:helperText="@string/email"
+                android:hint="@string/email"
+                android:layout_height="wrap_content" >
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_edit_profile_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_marginTop="@dimen/marginItemsInSectionMedium"
+                android:id="@+id/til_edit_profile_vpa"
+                android:layout_width="match_parent"
+                app:helperText="@string/vpa"
+                android:hint="@string/vpa"
+                android:layout_height="wrap_content" >
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/et_edit_profile_vpa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text"/>
+
+            </android.support.design.widget.TextInputLayout>
 
             <LinearLayout
-                android:orientation="vertical"
+                android:layout_marginTop="@dimen/marginItemsInSectionMedium"
+                android:gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                <include
-                    layout="@layout/profile_username_and_image"
-                    android:id="@+id/include"
-                    android:layout_width="match_parent"
+                <com.hbb20.CountryCodePicker
+                    android:id="@+id/ccp_new_code"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginTopUserProfile" />
+                    android:layout_gravity="center_vertical"
+                    app:ccp_autoDetectCountry="true"
+                    app:ccp_autoFormatNumber="false" />
 
                 <android.support.design.widget.TextInputLayout
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:id="@+id/til_edit_profile_username"
-                    android:layout_marginTop="@dimen/marginItemsInSectionLarge"
+                    android:id="@+id/til_edit_profile_mobile"
                     android:layout_width="match_parent"
-                    app:helperText="@string/username"
-                    android:hint="@string/username"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:helperText="@string/mobile"
+                    android:hint="@string/mobile" >
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/et_edit_profile_username"
+                        android:id="@+id/et_edit_profile_mobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="text" />
+                        android:maxLength="@integer/telephone_numbers_max_length_standard"
+                        android:inputType="number" />
 
                 </android.support.design.widget.TextInputLayout>
 
-                <android.support.design.widget.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_marginTop="@dimen/marginItemsInSectionMedium"
-                    android:layout_width="match_parent"
-                    android:id="@+id/til_edit_profile_email"
-                    app:layout_anchor="@id/til_edit_profile_username"
-                    app:helperText="@string/email"
-                    android:hint="@string/email"
-                    android:layout_height="wrap_content">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/et_edit_profile_email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_marginTop="@dimen/marginItemsInSectionMedium"
-                    android:id="@+id/til_edit_profile_vpa"
-                    android:layout_width="match_parent"
-                    app:helperText="@string/vpa"
-                    android:hint="@string/vpa"
-                    android:layout_height="wrap_content">
-
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/et_edit_profile_vpa"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="text" />
-
-                </android.support.design.widget.TextInputLayout>
-
-                <LinearLayout
-                    android:layout_marginTop="@dimen/marginItemsInSectionMedium"
-                    android:gravity="center_vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <com.hbb20.CountryCodePicker
-                        android:id="@+id/ccp_new_code"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        app:ccp_autoDetectCountry="true"
-                        app:ccp_autoFormatNumber="false" />
-
-                    <android.support.design.widget.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:id="@+id/til_edit_profile_mobile"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:helperText="@string/mobile"
-                        android:hint="@string/mobile">
-
-                        <android.support.design.widget.TextInputEditText
-                            android:id="@+id/et_edit_profile_mobile"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:maxLength="@integer/telephone_numbers_max_length_standard"
-                            android:inputType="number" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                </LinearLayout>
-
-                <Button
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:text="@string/change_password"
-                    android:id="@+id/btn_change_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginBetweenSections" />
-
-                <Button
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:text="@string/change_passcode"
-                    android:id="@+id/btn_change_passcode"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/marginItemsInSectionExtraSmall"
-                    android:layout_marginBottom="@dimen/paddingLayout" />
             </LinearLayout>
 
-        </ScrollView>
+            <Button
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:text="@string/change_password"
+                android:id="@+id/btn_change_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginBetweenSections" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_edit_profile_save_changes"
-            style="@style/Widget.MaterialComponents.FloatingActionButton"
-            android:layout_marginRight="@dimen/paddingLayout"
-            android:layout_marginEnd="@dimen/paddingLayout"
-            android:layout_marginBottom="@dimen/paddingLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@color/colorAccentBlack"
-            app:srcCompat="@drawable/ic_save"
-            app:layout_anchorGravity="bottom|right|end"
-            app:layout_anchor="@id/sv_edit_profile"
-            android:tint="@color/colorPrimary"
-            app:backgroundTint="@color/colorAccentBlack"
-            app:fabSize="normal" />
+            <Button
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:text="@string/change_passcode"
+                android:id="@+id/btn_change_passcode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/marginItemsInSectionExtraSmall"
+                android:layout_marginBottom="@dimen/paddingLayout" />
+        </LinearLayout>
 
-    </android.support.design.widget.CoordinatorLayout>
-</layout>
+    </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_edit_profile_save_changes"
+        style="@style/Widget.MaterialComponents.FloatingActionButton"
+        android:layout_marginRight="@dimen/paddingLayout"
+        android:layout_marginEnd="@dimen/paddingLayout"
+        android:layout_marginBottom="@dimen/paddingLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/colorAccentBlack"
+        app:srcCompat="@drawable/ic_save"
+        app:layout_anchorGravity="bottom|right|end"
+        app:layout_anchor="@id/sv_edit_profile"
+        android:tint="@color/colorPrimary"
+        app:backgroundTint="@color/colorAccentBlack"
+        app:fabSize="normal" />
+
+</android.support.design.widget.CoordinatorLayout>
