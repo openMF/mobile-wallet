@@ -11,6 +11,9 @@ Development | Chat |
 |-----------------|-----------------|
 ![Mobile-Wallet CI[Master/Dev]](https://github.com/openMF/mobile-wallet/workflows/Mobile-Wallet%20CI%5BMaster/Dev%5D/badge.svg?branch=dev) | [![Join the chat at https://gitter.im/openMF/mobile-wallet](https://badges.gitter.im/openMF/mobile-wallet.svg)](https://gitter.im/openMF/mobile-wallet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
 
+## Figma File for Redesign Mockups
+https://www.figma.com/file/0wj2eCGQ2KVK1NaTJ4BtbC/mobile-wallet?type=design&node-id=0%3A1&mode=design&t=fBHjrHGBuUlM4UWG-1
+
 ## How to Contribute
 
 Thank you for your interest in contributing to the Mobile Wallet project by Mifos! We welcome all contributions and encourage you to follow these guidelines to ensure a smooth and efficient collaboration process.
