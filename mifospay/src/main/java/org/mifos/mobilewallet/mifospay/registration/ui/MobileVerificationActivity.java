@@ -114,6 +114,7 @@ public class MobileVerificationActivity extends BaseActivity implements
 
         if (mEtOtp.getText().toString().trim().isEmpty()) {
             showToast("OTP not Entered");
+            mEtOtp.requestFocus();
         } else {
             mFabNext.setClickable(false);
             mProgressBar.setVisibility(View.VISIBLE);
