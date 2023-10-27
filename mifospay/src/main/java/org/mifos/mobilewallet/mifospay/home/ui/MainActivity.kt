@@ -2,8 +2,8 @@ package org.mifos.mobilewallet.mifospay.home.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomNavigationView
-import android.support.design.widget.BottomSheetBehavior
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import android.view.Menu
 import android.view.MenuItem
 import butterknife.BindView

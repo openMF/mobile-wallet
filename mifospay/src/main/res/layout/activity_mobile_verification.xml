@@ -10,12 +10,12 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <android.support.design.widget.AppBarLayout
+        <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primaryDarkBlue">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
 
                 android:id="@+id/toolbar_mobile_verification"
 
@@ -54,7 +54,7 @@
 
             </LinearLayout>
 
-        </android.support.design.widget.AppBarLayout>
+        </com.google.android.material.appbar.AppBarLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,21 +75,21 @@
                 app:ccp_autoDetectCountry="true"
                 app:ccp_autoFormatNumber="false"/>
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3.2"
                 android:hint="@string/mobile">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_mobile_number"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:maxLength="@integer/telephone_numbers_max_length_standard"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/btn_get_otp"
@@ -111,13 +111,13 @@
             android:orientation="horizontal">
 
 
-            <android.support.design.widget.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/otp">
 
-                <android.support.design.widget.TextInputEditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_otp"
                     android:layout_width="@dimen/value_120dp"
                     android:layout_height="@dimen/value_60dp"
@@ -125,7 +125,7 @@
                     android:maxLength="@integer/telephone_numbers_max_length_standard"
                     android:visibility="gone"/>
 
-            </android.support.design.widget.TextInputLayout>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <ProgressBar
                 android:id="@+id/progressBar"
@@ -148,7 +148,7 @@
 
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_next"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

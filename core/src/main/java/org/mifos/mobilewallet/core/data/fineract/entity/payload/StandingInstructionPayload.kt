@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.payload
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class StandingInstructionPayload(var fromOfficeId : Int, var fromClientId : Int,

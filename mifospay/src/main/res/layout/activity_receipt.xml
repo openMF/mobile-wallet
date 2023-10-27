@@ -138,7 +138,7 @@
                             android:textSize="@dimen/value_16sp"
                             android:text="@string/unique_receipt_link"/>
 
-                        <android.support.constraint.ConstraintLayout
+                        <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="@dimen/value_80dp">
@@ -184,7 +184,7 @@
                                 app:layout_constraintStart_toEndOf="@id/transaction_reciept_copy"
                                 app:layout_constraintTop_toTopOf="parent"
                                 app:srcCompat="@drawable/ic_baseline_share_24" />
-                        </android.support.constraint.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -192,7 +192,7 @@
     </LinearLayout>
 
 
-    <android.support.design.widget.FloatingActionButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_download"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

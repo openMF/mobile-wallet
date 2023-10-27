@@ -6,8 +6,8 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.Resources
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -96,7 +96,8 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
     }
 
     private fun setUpRecyclerView() {
-        mRvMerchants?.layoutManager = LinearLayoutManager(context)
+        mRvMerchants?.layoutManager =
+            LinearLayoutManager(context)
         mRvMerchants?.adapter = mMerchantsAdapter
         mRvMerchants?.addOnItemTouchListener(
             RecyclerItemClickListener(

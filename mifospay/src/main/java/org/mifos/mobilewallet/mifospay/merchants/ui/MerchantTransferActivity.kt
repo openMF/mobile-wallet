@@ -1,11 +1,11 @@
 package org.mifos.mobilewallet.mifospay.merchants.ui
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetBehavior.BottomSheetCallback
-import android.support.design.widget.TextInputEditText
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import com.google.android.material.textfield.TextInputEditText
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -118,7 +118,8 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
 
     private fun setUpRecycleView() {
         mMerchantHistoryAdapter?.setContext(this)
-        rvMerchantHistory?.layoutManager = LinearLayoutManager(MifosPayApp.getContext())
+        rvMerchantHistory?.layoutManager =
+            LinearLayoutManager(MifosPayApp.getContext())
         rvMerchantHistory?.adapter = mMerchantHistoryAdapter
     }
 
@@ -127,7 +128,7 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
     }
 
     private fun setupBottomSheet() {
-        mBottomSheetBehavior = BottomSheetBehavior.from(vMerchantBottomSheetDialog)
+        mBottomSheetBehavior = BottomSheetBehavior.from(vMerchantBottomSheetDialog!!)
         mBottomSheetBehavior?.setBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(view: View, newState: Int) {
                 when (newState) {

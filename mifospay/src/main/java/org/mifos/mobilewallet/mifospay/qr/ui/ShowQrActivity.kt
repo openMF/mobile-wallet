@@ -5,9 +5,9 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
-import android.support.v4.content.FileProvider
-import android.support.v7.app.AlertDialog
+import com.google.android.material.textfield.TextInputEditText
+import androidx.core.content.FileProvider
+import androidx.appcompat.app.AlertDialog
 import android.text.InputType
 import android.view.*
 import android.widget.Button

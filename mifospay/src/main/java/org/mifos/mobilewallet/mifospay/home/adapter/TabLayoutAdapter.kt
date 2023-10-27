@@ -1,10 +1,10 @@
 package org.mifos.mobilewallet.mifospay.home.adapter
 
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentManager
-import android.support.v4.app.FragmentPagerAdapter
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 
-class TabLayoutAdapter(fragmentManager: FragmentManager?) : FragmentPagerAdapter(fragmentManager) {
+class TabLayoutAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager) {
     private val mFragmentList: MutableList<Fragment> = ArrayList()
     private val mFragmentTitleList: MutableList<String> = ArrayList()
     fun addFragment(fragment: Fragment, title: String) {

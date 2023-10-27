@@ -3,18 +3,18 @@ package org.mifos.mobilewallet.mifospay.standinginstruction.ui
 import android.app.DatePickerDialog
 import android.content.res.Resources
 import android.os.Bundle
-import android.support.v4.content.res.ResourcesCompat
+import androidx.core.content.res.ResourcesCompat
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import butterknife.ButterKnife
 import butterknife.OnTextChanged
-import kotlinx.android.synthetic.main.activity_si_details.*
-import kotlinx.android.synthetic.main.placeholder_state.*
 import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.databinding.ActivitySiDetailsBinding
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.StandingInstructionDetailsPresenter
 import org.mifos.mobilewallet.mifospay.utils.Constants
@@ -31,6 +31,8 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     private lateinit var standingInstruction: StandingInstruction
     private lateinit var res: Resources
 
+    lateinit var binding: ActivitySiDetailsBinding
+
     /**
      * This variable is used to overload fab to both save unsaved changes and to enter into edit
      * details screen. On start, its set to false to allow user to go to edit screen
@@ -45,7 +47,8 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_si_details)
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_si_details);
+        setContentView(binding.root)
         activityComponent.inject(this)
         ButterKnife.bind(this)
         setToolbarTitle(getString(R.string.details))
@@ -61,7 +64,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     }
 
     private fun setUpUI() {
-        tv_edit_pick.setOnClickListener {
+        binding.tvEditPick.setOnClickListener {
             val calendar: Calendar = Calendar.getInstance()
             val day: Int = calendar.get(Calendar.DAY_OF_MONTH)
             val month: Int = calendar.get(Calendar.MONTH)
@@ -69,13 +72,13 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
             val picker = DatePickerDialog(
                 this,
                 { view, year, monthOfYear, dayOfMonth ->
-                    tv_valid_till.text = "$dayOfMonth-${(monthOfYear + 1)}-$year"
+                    binding.tvValidTill.text = "$dayOfMonth-${(monthOfYear + 1)}-$year"
                 }, year, month, day
             )
             picker.show()
         }
 
-        fab.setOnClickListener {
+        binding.fab.setOnClickListener {
             fabOnClickAction()
         }
     }
@@ -88,9 +91,9 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     }
 
     override fun showLoadingView() {
-        layout_si_details.visibility = View.GONE
-        inc_state_view.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
+        binding.layoutSiDetails.visibility = View.GONE
+        binding.incStateView.root.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     /**
@@ -101,17 +104,17 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
             if (checkInput()) {
                 Utils.hideSoftKeyboard(this)
 
-                this.standingInstruction.amount = et_si_edit_amount.text.toString().toDouble()
+                this.standingInstruction.amount = binding.etSiEditAmount.text.toString().toDouble()
                 this.standingInstruction.recurrenceInterval =
-                    et_si_edit_interval.text.toString().toInt()
-                val validTillArray = tv_valid_till.text.split("-")
+                    binding.etSiEditInterval.text.toString().toInt()
+                val validTillArray = binding.tvValidTill.text.split("-")
                 this.standingInstruction.validTill = validTillArray.map { it.toInt() }
 
                 // passing the updated standing instruction
                 mStandingInstructionPresenter.updateStandingInstruction(this.standingInstruction)
             }
         } else {
-            fab.hide()
+            binding.fab.hide()
             editDetails(true)
         }
     }
@@ -120,17 +123,17 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
      * Checks the input from the user and returns false if the input is invalid otherwise true
      */
     private fun checkInput(): Boolean {
-        if (et_si_edit_amount.text.toString() == "") {
+        if (binding.etSiEditAmount.text.toString() == "") {
             showToast(getString(R.string.enter_amount))
             return false
-        } else if (et_si_edit_amount.text.toString().toDouble() <= 0) {
+        } else if (binding.etSiEditAmount.text.toString().toDouble() <= 0) {
             showToast(getString(R.string.enter_valid_amount))
             return false
         }
-        if (et_si_edit_interval.text.toString() == "") {
+        if (binding.etSiEditInterval.text.toString() == "") {
             showToast(getString(R.string.enter_recurrence_interval))
             return false
-        } else if (et_si_edit_interval.text.toString().toInt() <= 1) {
+        } else if (binding.etSiEditInterval.text.toString().toInt() <= 1) {
             showToast(getString(R.string.invalid_recurrence_interval))
             return false
         }
@@ -140,77 +143,77 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     override fun showSIDetails(standingInstruction: StandingInstruction) {
         this.standingInstruction = standingInstruction
         hideProgressBar()
-        layout_si_details.visibility = View.VISIBLE
+        binding.layoutSiDetails.visibility = View.VISIBLE
 
         // setting up the layout
-        tv_si_name.text = standingInstruction.name
-        tv_si_id.text = standingInstruction.id.toString()
+        binding.tvSiName.text = standingInstruction.name
+        binding.tvSiId.text = standingInstruction.id.toString()
         /**
          * Using hardcoded Currency as response doesn't return the currency
          */
-        tv_si_amount.text = res.getString(
+        binding.tvSiAmount.text = res.getString(
             R.string.currency_amount, Constants.RUPEE,
             standingInstruction.amount.toString()
         )
 
-        tv_valid_from.text = res.getString(
+        binding.tvValidFrom.text = res.getString(
             R.string.date_formatted,
             standingInstruction.validFrom[2].toString(),
             standingInstruction.validFrom[1].toString(),
             standingInstruction.validFrom[0].toString()
         )
-        tv_valid_till.text = res.getString(
+        binding.tvValidTill.text = res.getString(
             R.string.date_formatted,
             standingInstruction.validTill?.get(2).toString(),
             standingInstruction.validTill?.get(1).toString(),
             standingInstruction.validTill?.get(0).toString()
         )
 
-        tv_si_from_name.text = res.getString(
+        binding.tvSiFromName.text = res.getString(
             R.string.name_client_name,
             standingInstruction.fromClient.displayName
         )
-        tv_si_from_number.text = res.getString(
+        binding.tvSiFromNumber.text = res.getString(
             R.string.number_account_number,
             standingInstruction.fromAccount.accountNo
         )
-        tv_si_to_name.text = res.getString(
+        binding.tvSiToName.text = res.getString(
             R.string.name_client_name,
             standingInstruction.toClient.displayName
         )
-        tv_si_to_number.text = res.getString(
+        binding.tvSiToName.text = res.getString(
             R.string.number_account_number,
             standingInstruction.toAccount.accountNo
         )
 
-        tv_si_status.text = standingInstruction.status.value
+        binding.tvSiStatus.text = standingInstruction.status.value
         if (standingInstruction.status.value == "Deleted") {
             if (this::mOptionsMenu.isInitialized) {
                 val nav_dashboard = mOptionsMenu.findItem(R.id.item_delete)
                 nav_dashboard.setVisible(false)
             }
         }
-        tv_recurrence_interval.text = standingInstruction.recurrenceInterval.toString()
+        binding.tvRecurrenceInterval.text = standingInstruction.recurrenceInterval.toString()
 
         // setting up TextInputLayouts
         /**
          * Using hardcoded Currency as response doesn't return the currency
          */
-        til_si_edit_amount.hint = "${Constants.RUPEE} ${standingInstruction.amount}"
-        til_si_edit_interval.hint = standingInstruction.recurrenceInterval.toString()
-        et_si_edit_amount.setText(standingInstruction.amount.toString())
-        et_si_edit_interval.setText(standingInstruction.recurrenceInterval.toString())
+        binding.tilSiEditAmount.hint = "${Constants.RUPEE} ${standingInstruction.amount}"
+        binding.tilSiEditInterval.hint = standingInstruction.recurrenceInterval.toString()
+        binding.etSiEditAmount.setText(standingInstruction.amount.toString())
+        binding.etSiEditInterval.setText(standingInstruction.recurrenceInterval.toString())
     }
 
     @OnTextChanged(R.id.et_si_edit_amount, R.id.et_si_edit_interval, R.id.tv_valid_till)
     fun onDetailsChanged() {
         if (isDataSaveNecessary()) {
-            fab.show()
+            binding.fab.show()
         } else if (!doSave) {
             // for initial state
-            fab.show()
+            binding.fab.show()
         } else {
-            fab.hide()
+            binding.fab.hide()
         }
     }
 
@@ -221,21 +224,20 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         val originalValidTillDate = "${standingInstruction.validTill?.get(2)}-" +
                 "${standingInstruction.validTill?.get(1)}-${standingInstruction.validTill?.get(0)}"
 
-        return !((this.standingInstruction.amount.toString() == et_si_edit_amount.text.toString())
+        return !((this.standingInstruction.amount.toString() == binding.etSiEditAmount.text.toString())
                 && (this.standingInstruction.recurrenceInterval.toString()
-                == et_si_edit_interval.text.toString())
-                && (originalValidTillDate == tv_valid_till.text.toString()))
+                == binding.etSiEditInterval.text.toString())
+                && (originalValidTillDate == binding.tvValidTill.text.toString()))
     }
 
     override fun showStateView(drawable: Int, errorTitle: Int, errorMessage: Int) {
         hideProgressBar()
-        layout_si_details.visibility = View.GONE
-        inc_state_view.visibility = View.VISIBLE
+        binding.layoutSiDetails.visibility = View.GONE
+        binding.incStateView.root.visibility = View.VISIBLE
 
-        iv_empty_no_transaction_history
-            .setImageDrawable(ResourcesCompat.getDrawable(res, drawable, null))
-        tv_empty_no_transaction_history_title.text = res.getString(errorTitle)
-        tv_empty_no_transaction_history_subtitle.text = res.getString(errorMessage)
+        binding.incStateView.ivEmptyNoTransactionHistory.setImageDrawable(ResourcesCompat.getDrawable(res, drawable, null))
+        binding.incStateView.tvEmptyNoTransactionHistoryTitle.text = res.getString(errorTitle)
+        binding.incStateView.tvEmptyNoTransactionHistorySubtitle.text = res.getString(errorMessage)
     }
 
     override fun siDeletedSuccessfully() {
@@ -245,11 +247,11 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
 
     override fun updateDeleteFailure() {
         hideProgressBar()
-        layout_si_details.visibility = View.VISIBLE
+        binding.layoutSiDetails.visibility = View.VISIBLE
     }
 
     private fun hideProgressBar() {
-        progressBar.visibility = View.GONE
+        binding.progressBar.visibility = View.GONE
     }
 
     override fun showToast(message: String) {
@@ -277,9 +279,9 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     override fun onBackPressed() {
         if (isDataSaveNecessary()) {
             showDiscardChangesDialog()
-        } else if (!isDataSaveNecessary() && fab.isOrWillBeHidden) {
+        } else if (!isDataSaveNecessary() && binding.fab.isOrWillBeHidden) {
             editDetails(false)
-            fab.show()
+            binding.fab.show()
         } else {
             super.onBackPressed()
         }
@@ -306,11 +308,11 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
     private fun showDiscardChangesDialog() {
         val dialogBox = DialogBox()
         dialogBox.setOnPositiveListener { dialog, which ->
-            fab.hide()
+            binding.fab.hide()
             dialog.dismiss()
             editDetails(false)
             revertLocalChanges()
-            fab.show()
+            binding.fab.show()
         }
         dialogBox.setOnNegativeListener { dialog, which ->
             dialog.dismiss()
@@ -325,34 +327,34 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         if (doEdit) {
             doSave = true
 
-            fab.setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_save, null))
+            binding.fab.setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_save, null))
 
-            tv_si_amount.visibility = View.GONE
-            til_si_edit_amount.visibility = View.VISIBLE
+            binding.tvSiAmount.visibility = View.GONE
+            binding.tilSiEditAmount.visibility = View.VISIBLE
 
-            tv_edit_pick.visibility = View.VISIBLE
+            binding.tvEditPick.visibility = View.VISIBLE
 
-            tv_recurrence_interval.visibility = View.GONE
-            til_si_edit_interval.visibility = View.VISIBLE
+            binding.tvRecurrenceInterval.visibility = View.GONE
+            binding.tilSiEditInterval.visibility = View.VISIBLE
         } else {
             doSave = false
 
-            fab.setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_edit, null))
+            binding.fab.setImageDrawable(ResourcesCompat.getDrawable(res, R.drawable.ic_edit, null))
 
-            tv_si_amount.visibility = View.VISIBLE
-            til_si_edit_amount.visibility = View.GONE
+            binding.tvSiAmount.visibility = View.VISIBLE
+            binding.tilSiEditAmount.visibility = View.GONE
 
-            tv_edit_pick.visibility = View.GONE
+            binding.tvEditPick.visibility = View.GONE
 
-            tv_recurrence_interval.visibility = View.VISIBLE
-            til_si_edit_interval.visibility = View.GONE
+            binding.tvRecurrenceInterval.visibility = View.VISIBLE
+            binding.tilSiEditInterval.visibility = View.GONE
         }
     }
 
     private fun revertLocalChanges() {
-        et_si_edit_amount.setText(this.standingInstruction.amount.toString());
-        et_si_edit_interval.setText(this.standingInstruction.recurrenceInterval.toString());
-        tv_valid_till.text = "${standingInstruction.validTill?.get(2)}-" +
+        binding.etSiEditAmount.setText(this.standingInstruction.amount.toString());
+        binding.etSiEditInterval.setText(this.standingInstruction.recurrenceInterval.toString());
+        binding.tvValidTill.text = "${standingInstruction.validTill?.get(2)}-" +
                 "${standingInstruction.validTill?.get(1)}-${standingInstruction.validTill?.get(0)}"
     }
 }
