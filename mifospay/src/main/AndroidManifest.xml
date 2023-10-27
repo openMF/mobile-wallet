@@ -24,7 +24,7 @@
         <activity android:name=".merchants.ui.MerchantTransferActivity" />
         <activity
             android:name=".SplashScreenActivity"
-            android:theme="@style/SplashTheme"
+            android:theme="@style/SplashScreenTheme"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
