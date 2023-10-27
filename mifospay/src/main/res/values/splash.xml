@@ -1,8 +1,8 @@
 <resources>
 
-    <style name="Theme.SplashScreen.MySplash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#FFD0BCFF</item>
-        <!--<item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>-->
+    <style name="Theme.SplashScreen.MifosSplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#000000</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splash_icon</item>
         <item name="postSplashScreenTheme">@style/Theme.SplashScreen</item>
     </style>
 </resources>
