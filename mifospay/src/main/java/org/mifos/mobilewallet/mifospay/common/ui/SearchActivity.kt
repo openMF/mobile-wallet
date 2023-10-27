@@ -1,9 +1,9 @@
 package org.mifos.mobilewallet.mifospay.common.ui
 
 import android.os.Bundle
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -47,7 +47,8 @@ class SearchActivity : BaseActivity(), SearchContract.SearchView {
         setToolbarTitle("")
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         mPresenter?.attachView(this)
-        rvSearchResults?.layoutManager = LinearLayoutManager(this)
+        rvSearchResults?.layoutManager =
+            LinearLayoutManager(this)
         rvSearchResults?.adapter = searchAdapter
         rvSearchResults?.addItemDecoration(
             DividerItemDecoration(

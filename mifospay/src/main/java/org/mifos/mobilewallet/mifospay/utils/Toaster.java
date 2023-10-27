@@ -2,12 +2,13 @@ package org.mifos.mobilewallet.mifospay.utils;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.support.design.widget.Snackbar;
+import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import org.mifos.mobilewallet.mifospay.MifosPayApp;
+import org.mifos.mobilewallet.mifospay.R;
 
 /**
  * Created by ankur on 23/May/2018
@@ -24,7 +25,7 @@ public class Toaster {
         if (view != null) {
             final Snackbar snackbar = Snackbar.make(view, text, duration);
             View sbView = snackbar.getView();
-            TextView textView = sbView.findViewById(android.support.design.R.id.snackbar_text);
+            TextView textView = sbView.findViewById(R.id.snackbar_text);
             textView.setTextColor(Color.WHITE);
             textView.setTextSize(12);
             snackbar.setAction(actionText, clickListener);

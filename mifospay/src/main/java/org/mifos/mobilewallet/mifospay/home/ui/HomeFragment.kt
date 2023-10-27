@@ -1,11 +1,11 @@
 package org.mifos.mobilewallet.mifospay.home.ui
 
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetBehavior.BottomSheetCallback
-import android.support.transition.TransitionManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
+import androidx.transition.TransitionManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -152,7 +152,7 @@ class HomeFragment : BaseFragment(), HomeView {
     }
 
     private fun setupBottomSheet() {
-        mBottomSheetBehavior = BottomSheetBehavior.from(vHomeBottomSheetDialog)
+        mBottomSheetBehavior = BottomSheetBehavior.from(vHomeBottomSheetDialog!!)
         mBottomSheetBehavior?.setBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(view: View, newState: Int) {
                 when (newState) {
@@ -166,7 +166,8 @@ class HomeFragment : BaseFragment(), HomeView {
     }
 
     private fun setupRecyclerView() {
-        rvHomeBottomSheetContent?.layoutManager = LinearLayoutManager(context)
+        rvHomeBottomSheetContent?.layoutManager =
+            LinearLayoutManager(context)
         mHistoryAdapter?.setContext(activity)
         rvHomeBottomSheetContent?.adapter = mHistoryAdapter
     }

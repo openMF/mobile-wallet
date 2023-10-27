@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cc_history_container"
@@ -17,7 +17,7 @@
             android:id="@+id/ll_filter_options"
             android:orientation="horizontal">
 
-            <android.support.design.chip.Chip
+            <com.google.android.material.chip.Chip
                 android:id="@+id/btn_filter_all"
                 android:layout_width="0dp"
                 android:padding="5dp"
@@ -29,7 +29,7 @@
                 android:textAllCaps="false"
                 android:typeface="sans"
                 app:chipBackgroundColor="@color/clickedblue" />
-            <android.support.design.chip.Chip
+            <com.google.android.material.chip.Chip
                 android:id="@+id/btn_filter_credits"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:textAllCaps="false"
                 android:typeface="sans"
                 app:chipBackgroundColor="@color/background_chip_state" />
-            <android.support.design.chip.Chip
+            <com.google.android.material.chip.Chip
                 android:id="@+id/btn_filter_debits"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
 
         </LinearLayout>
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_history"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
@@ -77,4 +77,4 @@
         android:layout_gravity="center"
         android:layout_margin="@dimen/marginItemsInSectionLarge" />
 
-</android.support.design.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

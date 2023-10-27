@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.android.parcel.Parcelize
+import kotlinx.parcelize.Parcelize
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount
 import org.mifos.mobilewallet.core.data.fineract.entity.client.Client
 import org.mifos.mobilewallet.core.data.fineract.entity.client.Status

@@ -2,8 +2,8 @@ package org.mifos.mobilewallet.mifospay.home.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.BottomSheetBehavior.BottomSheetCallback
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -83,7 +83,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
 
     private fun setupBottomSheet() {
         mBottomSheetBehavior = BottomSheetBehavior
-            .from(vProfileBottomSheetDialog)
+            .from(vProfileBottomSheetDialog!!)
         mBottomSheetBehavior?.setBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(view: View, newState: Int) {}
             override fun onSlide(view: View, v: Float) {}

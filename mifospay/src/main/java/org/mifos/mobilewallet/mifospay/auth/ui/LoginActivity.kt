@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.auth.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.design.widget.TextInputEditText
+import com.google.android.material.textfield.TextInputEditText
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button

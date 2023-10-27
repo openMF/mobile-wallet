@@ -23,7 +23,7 @@
         android:layout_marginStart="@dimen/paddingLayout"
         android:textColor="@color/colorTextPrimary"
         android:layout_marginLeft="@dimen/paddingLayout" />
-    <android.support.v7.widget.RecyclerView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_accounts"
         android:layout_below="@id/linked_bank_account_text"
         android:layout_marginTop="@dimen/marginBetweenSections"
@@ -33,7 +33,7 @@
         android:clipToPadding="false"
         android:scrollbars="vertical"/>
 
-    <android.support.design.chip.Chip
+    <com.google.android.material.chip.Chip
         android:id="@+id/addaccountbutton"
         android:layout_width="wrap_content"
         app:chipBackgroundColor="@color/black"

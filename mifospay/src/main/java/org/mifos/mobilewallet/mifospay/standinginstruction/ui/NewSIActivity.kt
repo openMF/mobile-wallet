@@ -6,13 +6,16 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.support.v4.content.ContextCompat
+import androidx.core.content.ContextCompat
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import butterknife.ButterKnife
-import kotlinx.android.synthetic.main.activity_new_si.*
+import com.google.android.gms.common.util.DataUtils
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
+import org.mifos.mobilewallet.mifospay.databinding.ActivityNewSiBinding
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.NewSIPresenter
@@ -36,9 +39,14 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
 
     private var clientId by Delegates.notNull<Long>()
 
+    lateinit var binding: ActivityNewSiBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_new_si)
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_new_si);
+
+        setContentView(binding.root)
+
         activityComponent.inject(this)
         ButterKnife.bind(this)
         setToolbarTitle(getString(R.string.tile_si_activity))
@@ -52,11 +60,11 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
     }
 
     private fun initView() {
-        btn_valid_till.setOnClickListener { pickToDate() }
-        btn_create_si.setOnClickListener { createSI() }
-        btn_confirm.setOnClickListener { createNewStandingInstruction() }
-        btn_cancel.setOnClickListener { cancelNewStandingInstruction() }
-        btn_scan_qr.setOnClickListener { scanQrClicked() }
+        binding.btnValidTill.setOnClickListener { pickToDate() }
+        binding.btnCreateSi.setOnClickListener { createSI() }
+        binding.btnConfirm.setOnClickListener { createNewStandingInstruction() }
+        binding.btnCancel.setOnClickListener { cancelNewStandingInstruction() }
+        binding.btnScanQr.setOnClickListener { scanQrClicked() }
     }
 
     fun pickToDate() {
@@ -66,7 +74,7 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         val year: Int = calendar.get(Calendar.YEAR)
         val picker = DatePickerDialog(
             this, { view, year, monthOfYear, dayOfMonth ->
-                btn_valid_till.text = "$dayOfMonth-${(monthOfYear + 1)}-$year"
+                binding.btnValidTill.text = "$dayOfMonth-${(monthOfYear + 1)}-$year"
             }, year, month, day
         )
         picker.datePicker.minDate = System.currentTimeMillis()
@@ -74,59 +82,59 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
     }
 
     private fun createSI() {
-        if (et_si_amount.text.toString() == "") {
+        if (binding.etSiAmount.text.toString() == "") {
             showToast(getString(R.string.enter_amount))
             return
-        } else if (et_si_amount.text.toString().toDouble() <= 0) {
+        } else if (binding.etSiAmount.text.toString().toDouble() <= 0) {
             showToast(getString(R.string.enter_valid_amount))
             return
         }
-        if (et_si_vpa.text.toString() == "") {
+        if (binding.etSiVpa.text.toString() == "") {
             showToast(getString(R.string.enter_VPA))
             return
         }
-        if (et_si_interval.text.toString() == "") {
+        if (binding.etSiInterval.text.toString() == "") {
             showToast(getString(R.string.enter_recurrence_interval))
             return
-        } else if (et_si_interval.text.toString().toInt() <= 1) {
+        } else if (binding.etSiInterval.text.toString().toInt() <= 1) {
             showToast(getString(R.string.invalid_recurrence_interval))
             return
         }
-        if (btn_valid_till.text == Constants.SELECT_DATE) {
+        if (binding.btnValidTill.text == Constants.SELECT_DATE) {
             showToast(getString(R.string.select_till_date))
             return
         }
         Utils.hideSoftKeyboard(this)
-        mNewSIPresenter.fetchClient(et_si_vpa.text.toString())
+        mNewSIPresenter.fetchClient(binding.etSiVpa.text.toString())
     }
 
     override fun showClientDetails(clientId: Long, name: String, externalId: String) {
         this.clientId = clientId
-        tv_client_name.text = name
-        tv_client_vpa.text = externalId
-        tv_amount.text = resources.getString(
+        binding.tvClientName.text = name
+        binding.tvClientVpa.text = externalId
+        binding.tvAmount.text = resources.getString(
             R.string.currency_amount,
-            Constants.RUPEE, et_si_amount.text
+            Constants.RUPEE, binding.etSiAmount.text
         )
 
-        ll_create_si.visibility = View.GONE
-        ll_confirm_transfer.visibility = View.VISIBLE
-        ll_confirm_cancel.visibility = View.VISIBLE
-        progressBar.visibility = View.GONE
+        binding.llCreateSi.visibility = View.GONE
+        binding.llConfirmTransfer.visibility = View.VISIBLE
+        binding.llConfirmCancel.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
     }
 
     fun createNewStandingInstruction() {
-        ll_confirm_cancel.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
+        binding.llConfirmCancel.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
         mNewSIPresenter.createNewSI(
-            clientId, (et_si_amount.text.toString()).toDouble(),
-            et_si_interval.text.toString().toInt(), btn_valid_till.text.toString()
+            clientId, (binding.etSiAmount.text.toString()).toDouble(),
+            binding.etSiInterval.text.toString().toInt(), binding.btnValidTill.text.toString()
         )
     }
 
     fun cancelNewStandingInstruction() {
-        ll_confirm_transfer.visibility = View.GONE
-        ll_create_si.visibility = View.VISIBLE
+        binding.llConfirmTransfer.visibility = View.GONE
+        binding.llCreateSi.visibility = View.VISIBLE
     }
 
     fun scanQrClicked() {
@@ -148,10 +156,10 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
             val qrData = data.getStringExtra(Constants.QR_DATA)
             val qrDataArray = qrData?.split(", ")?.toTypedArray()
             if (qrDataArray?.size == 1) {
-                et_si_vpa.setText(qrDataArray[0])
+                binding.etSiVpa.setText(qrDataArray[0])
             } else {
-                et_si_vpa.setText(qrDataArray?.get(0))
-                et_si_amount.setText(qrDataArray?.get(1))
+                binding.etSiVpa.setText(qrDataArray?.get(0))
+                binding.etSiAmount.setText(qrDataArray?.get(1))
             }
         }
     }
@@ -160,6 +168,7 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
         requestCode: Int, permissions: Array<String?>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_CAMERA -> {
                 if (grantResults.isNotEmpty()
@@ -178,15 +187,15 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
     }
 
     override fun showLoadingView() {
-        ll_create_si.visibility = View.GONE
-        ll_confirm_cancel.visibility = View.GONE
-        ll_confirm_transfer.visibility = View.GONE
-        progressBar.visibility = View.VISIBLE
+        binding.llCreateSi.visibility = View.GONE
+        binding.llConfirmCancel.visibility = View.GONE
+        binding.llConfirmTransfer.visibility = View.GONE
+        binding.progressBar.visibility = View.VISIBLE
     }
 
     override fun showFailureSearchingClient(message: String) {
-        progressBar.visibility = View.GONE
-        ll_create_si.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+        binding.llCreateSi.visibility = View.VISIBLE
         showToast(message)
     }
 
@@ -201,9 +210,9 @@ class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
     }
 
     override fun showFailureCreatingNewSI(message: String) {
-        ll_confirm_transfer.visibility = View.VISIBLE
-        progressBar.visibility = View.GONE
-        ll_confirm_cancel.visibility = View.VISIBLE
+        binding.llConfirmTransfer.visibility = View.VISIBLE
+        binding.progressBar.visibility = View.GONE
+        binding.llConfirmCancel.visibility = View.VISIBLE
         showToast(message)
     }
 
