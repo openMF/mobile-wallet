@@ -32,7 +32,7 @@ import org.mifos.mobilewallet.mifospay.theme.styleNormal18sp
 
 @Composable
 fun LoginScreen(
-    login: () -> Unit,
+    login: (username: String, password: String) -> Unit,
     signUp: () -> Unit
 ) {
     var userName by rememberSaveable { mutableStateOf("") }
@@ -83,7 +83,7 @@ fun LoginScreen(
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Black),
                 enabled = userName.isNotEmpty() && password.isNotEmpty(),
                 onClick = {
-                    login.invoke()
+                    login.invoke(userName, password)
                 }
             ) {
                 Text(text = "Login", style = styleMedium16sp.copy(color = Color.White))
@@ -134,5 +134,5 @@ fun LoginScreen(
 @Preview(showSystemUi = true, device = "id:pixel_5")
 @Composable
 fun LoanScreenPreview() {
-    LoginScreen({}, {})
+    LoginScreen({ _, _ -> }, {})
 }
