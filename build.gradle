@@ -47,7 +47,7 @@ ext {
     butterKnifeVersion = '10.2.3'
     dbflowVersion = '3.1.1'
     espressoVersion = '2.2.2'
-    rxandroidVersion = '1.1.0'
+    rxandroidVersion = '1.2.1'
     rxjavaVersion = '1.1.4'
     junitVersion = '4.12'
 }
