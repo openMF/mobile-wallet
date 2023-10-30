@@ -2,12 +2,10 @@ package org.mifos.mobilewallet.mifospay.auth.ui
 
 import android.content.Intent
 import android.os.Bundle
-import com.google.android.material.textfield.TextInputEditText
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Button
 import android.widget.Toast
-import butterknife.*
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -25,6 +23,7 @@ import org.mifos.mobilewallet.mifospay.databinding.ActivityLoginBinding
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.registration.ui.MobileVerificationActivity
 import org.mifos.mobilewallet.mifospay.registration.ui.SignupMethod
+import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import org.mifos.mobilewallet.mifospay.utils.Toaster
@@ -51,6 +50,20 @@ class LoginActivity : BaseActivity(), LoginView {
         activityComponent.inject(this)
         setContentView(binding.root)
         mPresenter.attachView(this)
+
+        binding.loginCompose.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                MifosTheme {
+                    LoginScreen({
+                        onLoginClicked()
+                    }, {
+                        onSignupClicked()
+                    })
+                }
+            }
+        }
+
         val pref = PasscodePreferencesHelper(applicationContext)
         if (pref.passCode.isNotEmpty()) {
             startPassCodeActivity()
