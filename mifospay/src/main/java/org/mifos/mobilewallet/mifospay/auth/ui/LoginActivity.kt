@@ -44,6 +44,10 @@ class LoginActivity : BaseActivity(), LoginView {
     private var googleSignInClient: GoogleSignInClient? = null
     private var account: GoogleSignInAccount? = null
     private var mMifosSavingProductId = 0
+
+    private var usernameContent: String = ""
+    private var passwordContent: String = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -55,7 +59,9 @@ class LoginActivity : BaseActivity(), LoginView {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MifosTheme {
-                    LoginScreen({
+                    LoginScreen({ username, password ->
+                        usernameContent = username
+                        passwordContent = password
                         onLoginClicked()
                     }, {
                         onSignupClicked()
@@ -105,17 +111,13 @@ class LoginActivity : BaseActivity(), LoginView {
     }
 
     private fun handleLoginInputChanged() {
-        val usernameContent = binding.etUsername.text.toString().trim()
-        val passwordContent = binding.etPassword.text.toString().trim()
         mPresenter.handleLoginButtonStatus(usernameContent, passwordContent)
     }
 
     fun onLoginClicked() {
         hideSoftKeyboard(this)
         showProgressDialog(Constants.LOGGING_IN)
-        mLoginPresenter.loginUser(
-            binding.etUsername.text.toString().trim(), binding.etPassword.text.toString().trim()
-        )
+        mLoginPresenter.loginUser(usernameContent, passwordContent)
     }
 
     fun onSignupClicked() {
