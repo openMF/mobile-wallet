@@ -309,6 +309,7 @@
     <string name="title_activity_new_si">NewSIActivity</string>
     <string name="share_receipt">Share Receipt Link</string>
     <string name="default_web_client_id"></string>
+    <string name="pay">Pay</string>
 
 
 

@@ -102,9 +102,11 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         TransitionManager.beginDelayedTransition(sendContainer);
         mBtnVpa.setSelected(true);
         mBtnVpa.setFocusable(true);
-        mBtnVpa.setChipBackgroundColorResource(R.color.clickedblue);
+        mBtnVpa.setChipBackgroundColorResource(R.color.black);
+        mBtnVpa.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
         mBtnMobile.setSelected(false);
         mBtnMobile.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        mBtnMobile.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
         btnScanQr.setVisibility(View.VISIBLE);
         mRlMobile.setVisibility(View.GONE);
         mTilVpa.setVisibility(View.VISIBLE);
@@ -116,9 +118,11 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
         TransitionManager.beginDelayedTransition(sendContainer);
         mBtnMobile.setSelected(true);
         mBtnMobile.setFocusable(true);
-        mBtnMobile.setChipBackgroundColorResource(R.color.clickedblue);
+        mBtnMobile.setChipBackgroundColorResource(R.color.black);
+        mBtnMobile.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
         mBtnVpa.setSelected(false);
         mBtnVpa.setChipBackgroundColorResource(R.color.changedBackgroundColour);
+        mBtnVpa.setTextColor(ContextCompat.getColor(requireContext(), R.color.black));
         mTilVpa.setVisibility(View.GONE);
         btnScanQr.setVisibility(View.GONE);
         mRlMobile.setVisibility(View.VISIBLE);

@@ -48,6 +48,11 @@
             android:exported="true"
             android:theme="@style/AppTheme" />
 
+        <activity
+            android:name=".payments.ui.SendActivity"
+            android:exported="true"
+            android:theme="@style/AppTheme" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="org.mifos.mobilewallet.mifospay.provider"

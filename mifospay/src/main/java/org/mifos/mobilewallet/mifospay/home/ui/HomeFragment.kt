@@ -28,6 +28,7 @@ import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.HomeView
 import org.mifos.mobilewallet.mifospay.home.presenter.HomeViewModel
+import org.mifos.mobilewallet.mifospay.payments.ui.SendActivity
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
@@ -121,7 +122,7 @@ class HomeFragment : BaseFragment(), HomeView {
                         })
                     },
                     onPay = {
-
+                        startActivity(Intent(this@HomeFragment.requireContext(), SendActivity::class.java))
                     })
             }
         }
