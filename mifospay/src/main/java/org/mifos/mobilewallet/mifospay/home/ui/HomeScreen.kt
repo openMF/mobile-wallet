@@ -14,12 +14,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,25 +28,32 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.lazy.items
-import androidx.compose.runtime.getValue
-import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.mifos.mobilewallet.core.domain.model.Account
 import org.mifos.mobilewallet.core.domain.model.Transaction
 import org.mifos.mobilewallet.core.domain.model.TransactionType
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.home.presenter.HomeUiState
+import org.mifos.mobilewallet.mifospay.common.compose.ChildLayout
+import org.mifos.mobilewallet.mifospay.common.compose.LoadItemAfterSafeCast
+import org.mifos.mobilewallet.mifospay.common.compose.VerticalScrollLayout
 import org.mifos.mobilewallet.mifospay.home.presenter.HomeViewModel
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.theme.border
 import org.mifos.mobilewallet.mifospay.theme.lightGrey
 import org.mifos.mobilewallet.mifospay.theme.styleMedium16sp
 import org.mifos.mobilewallet.mifospay.utils.Utils
+
+enum class HomeScreenContents {
+    HOME_CARD,
+    PAY_CARD,
+    TRANSACTIONS_HEADER,
+    TRANSACTIONS
+}
 
 @Composable
 fun HomeScreenDashboard(
@@ -73,94 +81,114 @@ fun HomeScreen(
     onPay: () -> Unit
 ) {
     MifosTheme {
-        Column(
-            modifier = Modifier
-                .background(color = Color.White)
-                .padding(start = 32.dp, end = 32.dp)
-        ) {
-            Card(
+        Surface(modifier = Modifier.fillMaxWidth()) {
+            VerticalScrollLayout(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(225.dp)
-                    .padding(top = 20.dp, bottom = 32.dp),
-                colors = CardDefaults.cardColors(containerColor = Color.Black)
-            ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .padding(start = 36.dp),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    val walletBalanceLabel =
-                        if (account != null) "(${account.currency?.displayLabel})" else ""
-                    Text(
-                        text = "Wallet Balance $walletBalanceLabel",
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight.W400,
-                            color = lightGrey
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    val accountBalance = if (account != null) Utils.getFormattedAccountBalance(
-                        account.balance, account.currency?.code
-                    ) else "0"
-                    Text(
-                        text = accountBalance,
-                        style = TextStyle(
-                            fontSize = 42.sp,
-                            fontWeight = FontWeight(600),
-                            color = Color.White
-                        )
-                    )
-                    Spacer(modifier = Modifier.height(10.dp))
-                    val currencyEqual = if (account != null) {
-                        "${account.currency.code}1 ${account.currency?.displayLabel}"
-                    } else ""
-                    Text(
-                        text = currencyEqual,
-                        style = TextStyle(
-                            fontSize = 12.sp,
-                            fontWeight = FontWeight(500),
-                            color = lightGrey
-                        )
-                    )
-                }
-            }
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                PayCard(
-                    modifier = Modifier.weight(1f),
-                    title = "Request",
-                    icon = R.drawable.money_in
-                ) {
-                    onRequest.invoke()
-                }
-                Spacer(modifier = Modifier.width(16.dp))
-                PayCard(
-                    modifier = Modifier.weight(1f),
-                    title = "Pay",
-                    icon = R.drawable.money_out
-                ) {
-                    onPay.invoke()
-                }
-            }
-
-            if (transactions.isNotEmpty()) {
-                Text(
-                    modifier = Modifier.padding(top = 32.dp),
-                    text = "Recent Transactions",
-                    style = styleMedium16sp
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                LazyColumn {
-                    items(transactions) { transaction ->
-                        ItemTransaction(transaction = transaction)
+                    .background(color = Color.White)
+                    .padding(start = 32.dp, end = 32.dp),
+                ChildLayout(
+                    contentType = HomeScreenContents.HOME_CARD.toString(),
+                    content = {
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(225.dp)
+                                .padding(top = 20.dp, bottom = 32.dp),
+                            colors = CardDefaults.cardColors(containerColor = Color.Black)
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxHeight()
+                                    .padding(start = 36.dp),
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                val walletBalanceLabel =
+                                    if (account != null) "(${account.currency?.displayLabel})" else ""
+                                Text(
+                                    text = "Wallet Balance $walletBalanceLabel",
+                                    style = TextStyle(
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight.W400,
+                                        color = lightGrey
+                                    )
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                                val accountBalance =
+                                    if (account != null) Utils.getFormattedAccountBalance(
+                                        account.balance, account.currency?.code
+                                    ) else "0"
+                                Text(
+                                    text = accountBalance,
+                                    style = TextStyle(
+                                        fontSize = 42.sp,
+                                        fontWeight = FontWeight(600),
+                                        color = Color.White
+                                    )
+                                )
+                                Spacer(modifier = Modifier.height(10.dp))
+                                val currencyEqual = if (account != null) {
+                                    "${account.currency.code}1 ${account.currency?.displayLabel}"
+                                } else ""
+                                Text(
+                                    text = currencyEqual,
+                                    style = TextStyle(
+                                        fontSize = 12.sp,
+                                        fontWeight = FontWeight(500),
+                                        color = lightGrey
+                                    )
+                                )
+                            }
+                        }
                     }
-                }
-            }
+                ),
+                ChildLayout(
+                    contentType = HomeScreenContents.PAY_CARD.toString(),
+                    content = {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            PayCard(
+                                modifier = Modifier.weight(1f),
+                                title = "Request",
+                                icon = R.drawable.money_in
+                            ) {
+                                onRequest.invoke()
+                            }
+                            Spacer(modifier = Modifier.width(16.dp))
+                            PayCard(
+                                modifier = Modifier.weight(1f),
+                                title = "Pay",
+                                icon = R.drawable.money_out
+                            ) {
+                                onPay.invoke()
+                            }
+                        }
+                    }
+                ),
+                ChildLayout(
+                    contentType = HomeScreenContents.TRANSACTIONS_HEADER.toString(),
+                    content = {
+                        if (transactions.isNotEmpty()) {
+                            Text(
+                                modifier = Modifier.padding(top = 32.dp),
+                                text = "Recent Transactions",
+                                style = styleMedium16sp
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
+                    }
+                ),
+                ChildLayout(
+                    contentType = HomeScreenContents.TRANSACTIONS.toString(),
+                    items = transactions,
+                    content = { item ->
+                        LoadItemAfterSafeCast<Transaction>(item) { safeTransaction ->
+                            ItemTransaction(transaction = safeTransaction)
+                        }
+                    }
+                )
+            )
         }
     }
 }

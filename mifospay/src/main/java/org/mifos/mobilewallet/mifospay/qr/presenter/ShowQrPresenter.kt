@@ -13,7 +13,10 @@ import javax.inject.Inject
  */
 class ShowQrPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHandler) :
     QrContract.ShowQrPresenter {
-    private lateinit var generateQrUseCase: GenerateQr
+
+    @Inject
+    lateinit var generateQrUseCase: GenerateQr
+
     private lateinit var mShowQrView: ShowQrView
     override fun attachView(baseView: BaseView<*>?) {
         mShowQrView = baseView as ShowQrView
