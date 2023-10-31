@@ -24,7 +24,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class MobileVerificationActivity extends BaseActivity implements
         RegistrationContract.MobileVerificationView {
 
@@ -53,7 +55,6 @@ public class MobileVerificationActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mobile_verification);
 
-        getActivityComponent().inject(this);
         ButterKnife.bind(this);
         mPresenter.attachView(this);
 

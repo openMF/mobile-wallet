@@ -12,6 +12,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.domain.model.client.Client
 import org.mifos.mobilewallet.mifospay.R
@@ -29,6 +30,7 @@ import javax.inject.Inject
 /**
  * Created by naman on 7/9/17.
  */
+@AndroidEntryPoint
 class ProfileFragment : BaseFragment(), ProfileView {
     @JvmField
     @Inject
@@ -58,10 +60,6 @@ class ProfileFragment : BaseFragment(), ProfileView {
     @JvmField
     @BindView(R.id.inc_account_details_mobile_number)
     var vAccountDetailsMobile: View? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)?.activityComponent?.inject(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

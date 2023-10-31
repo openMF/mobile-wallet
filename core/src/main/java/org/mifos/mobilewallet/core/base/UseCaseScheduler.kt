@@ -1,17 +1,17 @@
-package org.mifos.mobilewallet.core.base;
+package org.mifos.mobilewallet.core.base
+
+import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 
 /**
- * Interface for schedulers, see {@link UseCaseThreadPoolScheduler}.
+ * Interface for schedulers, see [UseCaseThreadPoolScheduler].
  */
-public interface UseCaseScheduler {
+interface UseCaseScheduler {
+    fun execute(runnable: Runnable?)
+    fun <V : UseCase.ResponseValue?> notifyResponse(
+        response: V, useCaseCallback: UseCaseCallback<V>?
+    )
 
-    void execute(Runnable runnable);
-
-    <V extends UseCase.ResponseValue> void notifyResponse(final V response,
-            final UseCase.UseCaseCallback<V>
-                    useCaseCallback);
-
-    <V extends UseCase.ResponseValue> void onError(final String message,
-            final UseCase.UseCaseCallback<V>
-                    useCaseCallback);
+    fun <V : UseCase.ResponseValue?> onError(
+        message: String?, useCaseCallback: UseCaseCallback<V>?
+    )
 }

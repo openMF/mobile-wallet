@@ -41,11 +41,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by naman on 30/8/17.
  */
-
+@AndroidEntryPoint
 public class SendFragment extends BaseFragment implements BaseHomeContract.TransferView {
 
     public static final int REQUEST_SHOW_DETAILS = 3;
@@ -81,12 +82,6 @@ public class SendFragment extends BaseFragment implements BaseHomeContract.Trans
     TextInputLayout mTilVpa;
 
     private String vpa;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
-    }
 
     @Nullable
     @Override

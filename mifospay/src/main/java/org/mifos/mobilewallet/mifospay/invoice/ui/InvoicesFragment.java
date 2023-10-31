@@ -33,7 +33,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class InvoicesFragment extends BaseFragment implements InvoiceContract.InvoicesView {
 
     @Inject
@@ -67,12 +69,6 @@ public class InvoicesFragment extends BaseFragment implements InvoiceContract.In
 
     @Inject
     InvoicesAdapter mInvoicesAdapter;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
-    }
 
     @Nullable
     @Override

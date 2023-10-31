@@ -37,7 +37,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class LinkBankAccountActivity extends BaseActivity implements
         BankContract.LinkBankAccountView {
 
@@ -70,7 +72,6 @@ public class LinkBankAccountActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_link_bank_account);
-        getActivityComponent().inject(this);
         ButterKnife.bind(this);
         setToolbarTitle("Link Bank Account");
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);

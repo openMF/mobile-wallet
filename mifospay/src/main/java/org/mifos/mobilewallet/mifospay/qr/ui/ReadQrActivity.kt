@@ -12,6 +12,7 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.google.zxing.*
 import com.google.zxing.common.HybridBinarizer
+import dagger.hilt.android.AndroidEntryPoint
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import me.dm7.barcodescanner.zxing.ZXingScannerView.ResultHandler
 import org.mifos.mobilewallet.mifospay.R
@@ -26,6 +27,7 @@ import javax.inject.Inject
 /**
  * Created by naman on 7/9/17.
  */
+@AndroidEntryPoint
 class ReadQrActivity : BaseActivity(), ReadQrView, ResultHandler {
     @JvmField
     @Inject
@@ -49,7 +51,6 @@ class ReadQrActivity : BaseActivity(), ReadQrView, ResultHandler {
     var mOpenGallery: ImageButton? = null
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent.inject(this)
         setContentView(R.layout.activity_read_qr)
         ButterKnife.bind(this@ReadQrActivity)
         setToolbarTitle(Constants.SCAN_CODE)

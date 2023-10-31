@@ -8,6 +8,7 @@ import android.view.Menu
 import android.view.MenuItem
 import butterknife.BindView
 import butterknife.ButterKnife
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.core.domain.model.client.Client
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
@@ -27,6 +28,7 @@ import javax.inject.Inject
 /**
  * Created by naman on 17/6/17.
  */
+@AndroidEntryPoint
 class MainActivity : BaseActivity(), BaseHomeView {
     @JvmField
     @Inject
@@ -42,7 +44,6 @@ class MainActivity : BaseActivity(), BaseHomeView {
     private var mHomePresenter: BaseHomePresenter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent.inject(this)
         setContentView(R.layout.activity_home)
         ButterKnife.bind(this)
         mPresenter?.attachView(this)

@@ -49,7 +49,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import butterknife.OnTextChanged;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class EditProfileActivity extends BaseActivity implements
         EditProfileContract.EditProfileView {
 
@@ -108,7 +110,6 @@ public class EditProfileActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-        getActivityComponent().inject(this);
         ButterKnife.bind(this);
         setupUi();
         mPresenter.attachView(this);

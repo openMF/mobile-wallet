@@ -20,6 +20,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import com.mifos.mobile.passcode.utils.PassCodeConstants;
+
+import dagger.hilt.android.AndroidEntryPoint;
 import in.galaxyofandroid.spinerdialog.OnSpinerItemClick;
 import in.galaxyofandroid.spinerdialog.SpinnerDialog;
 import java.util.ArrayList;
@@ -39,6 +41,7 @@ import org.mifos.mobilewallet.mifospay.utils.ValidateUtil;
 
 import static org.mifos.mobilewallet.mifospay.utils.FileUtils.readJson;
 
+@AndroidEntryPoint
 public class SignupActivity extends BaseActivity implements RegistrationContract.SignupView {
 
     @Inject
@@ -92,7 +95,6 @@ public class SignupActivity extends BaseActivity implements RegistrationContract
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-        getActivityComponent().inject(this);
         ButterKnife.bind(this);
 
         mPresenter.attachView(this);

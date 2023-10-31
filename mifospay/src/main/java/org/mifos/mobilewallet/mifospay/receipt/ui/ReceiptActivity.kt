@@ -21,6 +21,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import com.mifos.mobile.passcode.utils.PassCodeConstants
+import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail
 import org.mifos.mobilewallet.core.domain.model.Transaction
@@ -38,6 +39,7 @@ import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance
 import java.io.File
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class ReceiptActivity : BaseActivity(), ReceiptView {
     @JvmField
     @Inject
@@ -89,7 +91,6 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
     private var shareMessage: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent.inject(this)
         setContentView(R.layout.activity_receipt)
         ButterKnife.bind(this)
         setToolbarTitle(Constants.RECEIPT)

@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import butterknife.ButterKnife
 import butterknife.OnTextChanged
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
@@ -23,6 +24,7 @@ import org.mifos.mobilewallet.mifospay.utils.Utils
 import java.util.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsView {
 
     // using 0 as default values
@@ -49,7 +51,6 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         super.onCreate(savedInstanceState)
         binding= DataBindingUtil.setContentView(this,R.layout.activity_si_details);
         setContentView(binding.root)
-        activityComponent.inject(this)
         ButterKnife.bind(this)
         setToolbarTitle(getString(R.string.details))
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)

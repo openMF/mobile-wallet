@@ -16,6 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.qr.QrContract
@@ -30,6 +31,7 @@ import javax.inject.Inject
 /**
  * Created by naman on 8/7/17.
  */
+@AndroidEntryPoint
 class ShowQrActivity : BaseActivity(), ShowQrView {
     @JvmField
     @Inject
@@ -51,7 +53,6 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
     private var mBitmap: Bitmap? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent.inject(this)
         setContentView(R.layout.activity_show_qr)
         ButterKnife.bind(this@ShowQrActivity)
         setToolbarTitle(Constants.QR_CODE)

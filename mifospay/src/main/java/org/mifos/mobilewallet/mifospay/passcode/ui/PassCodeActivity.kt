@@ -11,13 +11,10 @@ import com.mifos.mobile.passcode.MifosPassCodeActivity
 import com.mifos.mobile.passcode.utils.EncryptionUtil
 import com.mifos.mobile.passcode.utils.PassCodeConstants
 import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
-import org.mifos.mobilewallet.mifospay.MifosPayApp
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity
 import org.mifos.mobilewallet.mifospay.home.ui.MainActivity
-import org.mifos.mobilewallet.mifospay.injection.component.ActivityComponent
-import org.mifos.mobilewallet.mifospay.injection.component.DaggerActivityComponent
-import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract.PassCodeView
 import org.mifos.mobilewallet.mifospay.passcode.presenter.PassCodePresenter
@@ -28,13 +25,14 @@ import javax.inject.Inject
 /**
  * Created by ankur on 15/May/2018
  */
+
+@AndroidEntryPoint
 class PassCodeActivity : MifosPassCodeActivity(), PassCodeView {
     @JvmField
     @Inject
     var mPresenter: PassCodePresenter? = null
     private var mPassCodePresenter: PassCodeContract.PassCodePresenter? = null
     private var deepLinkURI: String? = null
-    private var mActivityComponent: ActivityComponent? = null
     private var currPass: String? = ""
     private var updatePassword = false
     private var isInitialScreen = false
@@ -42,15 +40,11 @@ class PassCodeActivity : MifosPassCodeActivity(), PassCodeView {
         super.onCreate(savedInstanceState)
 
         // can't call getActivityComponent b/c PassCodeActivity class does not extend BaseActivity
-        mActivityComponent = DaggerActivityComponent.builder()
-            .activityModule(ActivityModule(this))
-            .applicationComponent(MifosPayApp.get(this).component())
-            .build()
+
         isInitialScreen = intent.getBooleanExtra(
             PassCodeConstants.PASSCODE_INITIAL_LOGIN,
             false
         )
-        mActivityComponent?.inject(this)
         if (intent != null) {
             currPass = intent.getStringExtra(Constants.CURRENT_PASSCODE)
             updatePassword = intent.getBooleanExtra(Constants.UPDATE_PASSCODE, false)

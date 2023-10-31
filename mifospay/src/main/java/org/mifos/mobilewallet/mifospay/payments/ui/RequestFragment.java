@@ -25,10 +25,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.hilt.android.AndroidEntryPoint;
 import io.michaelrocks.libphonenumber.android.NumberParseException;
 import io.michaelrocks.libphonenumber.android.PhoneNumberUtil;
 import io.michaelrocks.libphonenumber.android.Phonenumber;
 
+@AndroidEntryPoint
 public class RequestFragment extends BaseFragment implements BaseHomeContract.TransferView {
 
     @Inject
@@ -46,12 +48,6 @@ public class RequestFragment extends BaseFragment implements BaseHomeContract.Tr
     TextView btnShowQr;
 
     private String vpa;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
-    }
 
     @Nullable
     @Override

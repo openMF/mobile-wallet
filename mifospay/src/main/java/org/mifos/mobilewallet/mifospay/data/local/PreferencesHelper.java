@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import org.mifos.mobilewallet.mifospay.injection.ApplicationContext;
-
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import static org.mifos.mobilewallet.mifospay.utils.Constants.ACCOUNT_ID;
+import dagger.hilt.android.qualifiers.ApplicationContext;
 
 /**
  * Created by naman on 17/6/17.

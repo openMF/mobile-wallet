@@ -8,6 +8,7 @@ import android.widget.EditText
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnTextChanged
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.core.domain.model.SearchResult
 import org.mifos.mobilewallet.mifospay.MifosPayApp
 import org.mifos.mobilewallet.mifospay.R
@@ -22,6 +23,7 @@ import javax.inject.Inject
 /**
  * Created by naman on 21/8/17.
  */
+@AndroidEntryPoint
 class SearchActivity : BaseActivity(), SearchContract.SearchView {
     @JvmField
     @Inject
@@ -41,7 +43,6 @@ class SearchActivity : BaseActivity(), SearchContract.SearchView {
     var searchAdapter: SearchAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent.inject(this)
         setContentView(R.layout.activity_search)
         ButterKnife.bind(this)
         setToolbarTitle("")

@@ -18,11 +18,13 @@ import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by ankur on 16/July/2018
  */
 
+@AndroidEntryPoint
 public class SetupUpiPinDialog extends BottomSheetDialogFragment {
 
     @BindView(R.id.vp_setup_upi_pin)
@@ -40,12 +42,6 @@ public class SetupUpiPinDialog extends BottomSheetDialogFragment {
         SetupUpiPinDialog fragment = new SetupUpiPinDialog();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
     }
 
     @Nullable

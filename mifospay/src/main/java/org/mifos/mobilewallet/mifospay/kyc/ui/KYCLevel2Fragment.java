@@ -28,11 +28,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by ankur on 17/May/2018
  */
-
+@AndroidEntryPoint
 public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLevel2View {
 
     private static final int REQUEST_READ_EXTERNAL_STORAGE = 1;
@@ -66,12 +67,6 @@ public class KYCLevel2Fragment extends BaseFragment implements KYCContract.KYCLe
     @Override
     public void setPresenter(KYCContract.KYCLevel2Presenter presenter) {
         mKYCLevel2Presenter = presenter;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
     }
 
     @Nullable

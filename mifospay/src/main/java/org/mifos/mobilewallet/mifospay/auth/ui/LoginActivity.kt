@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.mifos.mobile.passcode.utils.PassCodeConstants
 import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.auth.AuthContract
 import org.mifos.mobilewallet.mifospay.auth.AuthContract.LoginView
@@ -33,6 +34,7 @@ import javax.inject.Inject
 /**
  * Created by naman on 16/6/17.
  */
+@AndroidEntryPoint
 class LoginActivity : BaseActivity(), LoginView {
     @Inject
     lateinit var mPresenter: LoginPresenter
@@ -51,7 +53,6 @@ class LoginActivity : BaseActivity(), LoginView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
-        activityComponent.inject(this)
         setContentView(binding.root)
         mPresenter.attachView(this)
 

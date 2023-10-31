@@ -25,7 +25,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class SetupUpiPinActivity extends BaseActivity implements BankContract.SetupUpiPinView {
 
     @Inject
@@ -56,7 +58,6 @@ public class SetupUpiPinActivity extends BaseActivity implements BankContract.Se
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setup_upi_pin);
-        getActivityComponent().inject(this);
         ButterKnife.bind(this);
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         setToolbarTitle(Constants.SETUP_UPI_PIN);

@@ -15,10 +15,10 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.core.domain.model.Account
 import org.mifos.mobilewallet.core.domain.model.Transaction
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
@@ -32,10 +32,13 @@ import javax.inject.Inject
 /**
  * Created by naman on 17/8/17.
  */
+@AndroidEntryPoint
 class HomeFragment : BaseFragment(), HomeView {
+
     @JvmField
     @Inject
     var mPresenter: HomePresenter? = null
+
     private var mHomePresenter: BaseHomeContract.HomePresenter? = null
 
     @JvmField
@@ -89,12 +92,9 @@ class HomeFragment : BaseFragment(), HomeView {
     @JvmField
     @BindView(R.id.pb_loading_history)
     var progressBar: ProgressBar? = null
+
     private var account: Account? = null
     private var accountBalance: String? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)?.activityComponent?.inject(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

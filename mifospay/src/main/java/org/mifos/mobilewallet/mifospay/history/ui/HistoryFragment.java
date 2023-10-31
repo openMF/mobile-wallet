@@ -33,10 +33,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.hilt.android.AndroidEntryPoint;
 
 import static org.mifos.mobilewallet.core.domain.model.TransactionType.CREDIT;
 import static org.mifos.mobilewallet.core.domain.model.TransactionType.DEBIT;
 
+@AndroidEntryPoint
 public class HistoryFragment extends BaseFragment
         implements HistoryContract.HistoryView {
 
@@ -79,13 +81,6 @@ public class HistoryFragment extends BaseFragment
 
     @BindView(R.id.btn_filter_debits)
     Chip btnFilterDebits;
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

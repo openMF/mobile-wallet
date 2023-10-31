@@ -24,7 +24,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class InvoiceActivity extends BaseActivity implements InvoiceContract.InvoiceView {
 
     @Inject
@@ -70,8 +72,6 @@ public class InvoiceActivity extends BaseActivity implements InvoiceContract.Inv
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_invoice);
-
-        getActivityComponent().inject(this);
         ButterKnife.bind(this);
         setToolbarTitle(Constants.INVOICE);
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
