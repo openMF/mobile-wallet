@@ -1,41 +1,59 @@
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    android:id="@+id/swipe_layout"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/colorPrimary" >
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <include layout="@layout/toolbar"
-            android:layout_height="wrap_content"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_marginEnd="@dimen/paddingLayout"
-            android:layout_marginRight="@dimen/paddingLayout"
-            android:layout_marginLeft="@dimen/paddingLayout"
-            android:layout_marginStart="@dimen/paddingLayout" />
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-        <FrameLayout
-            android:id="@+id/bottom_navigation_fragment_container"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/colorPrimary"
+                android:orientation="vertical">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/colorPrimary"
-            app:elevation="25dp"
-            app:itemIconTint="@drawable/bottomview_selector"
-            app:itemTextColor="@drawable/bottomview_selector"
-            app:menu="@menu/bottom_navigation_main" />
+                <include
+                    layout="@layout/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/paddingLayout"
+                    android:layout_marginLeft="@dimen/paddingLayout"
+                    android:layout_marginEnd="@dimen/paddingLayout"
+                    android:layout_marginRight="@dimen/paddingLayout" />
 
-    </LinearLayout>
+                <FrameLayout
+                    android:id="@+id/bottom_navigation_fragment_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1" />
 
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                <com.google.android.material.bottomnavigation.BottomNavigationView
+                    android:id="@+id/bottom_navigation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@color/colorPrimary"
+                    app:elevation="25dp"
+                    app:itemIconTint="@drawable/bottomview_selector"
+                    app:itemTextColor="@drawable/bottomview_selector"
+                    app:menu="@menu/bottom_navigation_main" />
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
