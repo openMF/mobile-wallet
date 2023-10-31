@@ -21,11 +21,13 @@ import org.mifos.mobilewallet.mifospay.utils.Toaster;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by ankur on 13/July/2018
  */
 
+@AndroidEntryPoint
 public class OtpFragment extends BaseFragment {
 
     @BindView(R.id.tv_title)
@@ -49,7 +51,6 @@ public class OtpFragment extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
 
         if (getArguments() != null) {
             otp = getArguments().getString(Constants.OTP);

@@ -4,6 +4,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-parcelize'
+apply plugin: 'com.google.dagger.hilt.android'
 
 android {
     compileSdk rootProject.ext.compileSdkVersion
@@ -87,8 +88,8 @@ dependencies {
     runtimeOnly("androidx.compose.runtime:runtime:$compose_version")
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
 
-    implementation "com.google.dagger:dagger:$rootProject.daggerVersion"
-    kapt "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    implementation "com.google.dagger:hilt-android:2.48"
+    kapt "com.google.dagger:hilt-compiler:2.48"
 
     implementation("com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion") {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import

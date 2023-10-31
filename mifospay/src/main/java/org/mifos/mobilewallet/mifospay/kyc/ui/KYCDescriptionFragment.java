@@ -27,11 +27,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by ankur on 17/May/2018
  */
-
+@AndroidEntryPoint
 public class KYCDescriptionFragment extends
         BaseFragment implements KYCContract.KYCDescriptionView {
 
@@ -106,12 +107,6 @@ public class KYCDescriptionFragment extends
     @Override
     public void setPresenter(KYCContract.KYCDescriptionPresenter presenter) {
         mKYCDescriptionPresenter = presenter;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
     }
 
     @Nullable

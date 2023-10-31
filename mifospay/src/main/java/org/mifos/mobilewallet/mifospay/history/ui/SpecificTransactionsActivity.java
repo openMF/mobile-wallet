@@ -28,7 +28,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class SpecificTransactionsActivity extends BaseActivity implements
         HistoryContract.SpecificTransactionsView {
 
@@ -65,7 +67,6 @@ public class SpecificTransactionsActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_specific_transactions);
-        getActivityComponent().inject(this);
         ButterKnife.bind(this);
         mPresenter.attachView(this);
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);

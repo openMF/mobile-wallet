@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.home.presenter
 
+import dagger.hilt.android.lifecycle.HiltViewModel
 import org.mifos.mobilewallet.core.base.TaskLooper
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseFactory
@@ -24,6 +25,7 @@ class HomePresenter @Inject constructor(
     private val mUsecaseHandler: UseCaseHandler, private val localRepository: LocalRepository,
     private val preferencesHelper: PreferencesHelper
 ) : BaseHomeContract.HomePresenter, TransactionsHistoryAsync {
+
     @JvmField
     @Inject
     var mFetchAccountUseCase: FetchAccount? = null
@@ -45,6 +47,7 @@ class HomePresenter @Inject constructor(
     var transactionsHistory: TransactionsHistory? = null
     private var mHomeView: HomeView? = null
     private var transactionList: List<Transaction>? = null
+
     override fun attachView(baseView: BaseView<*>?) {
         mHomeView = baseView as HomeView?
         mHomeView?.setPresenter(this)

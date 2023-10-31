@@ -17,7 +17,9 @@ import javax.inject.Inject;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class SettingsActivity extends BaseActivity implements SettingsContract.SettingsView {
     public DialogBox dialogBox = new DialogBox();
 
@@ -29,7 +31,6 @@ public class SettingsActivity extends BaseActivity implements SettingsContract.S
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        getActivityComponent().inject(this);
         ButterKnife.bind(this);
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
         setToolbarTitle(Constants.SETTINGS);

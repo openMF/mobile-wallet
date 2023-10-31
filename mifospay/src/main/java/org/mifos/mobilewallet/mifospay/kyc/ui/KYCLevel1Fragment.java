@@ -30,11 +30,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by ankur on 17/May/2018
  */
-
+@AndroidEntryPoint
 public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLevel1View {
 
     @Inject
@@ -76,12 +77,6 @@ public class KYCLevel1Fragment extends BaseFragment implements KYCContract.KYCLe
         KYCLevel1Fragment fragment = new KYCLevel1Fragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
     }
 
     @Nullable

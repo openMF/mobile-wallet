@@ -28,11 +28,13 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by ankur on 13/July/2018
  */
 
+@AndroidEntryPoint
 public class DebitCardFragment extends BaseFragment implements BankContract.DebitCardView {
 
     @Inject
@@ -51,12 +53,6 @@ public class DebitCardFragment extends BaseFragment implements BankContract.Debi
     @Override
     public void setPresenter(BankContract.DebitCardPresenter presenter) {
         mDebitCardPresenter = presenter;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
     }
 
     @Nullable

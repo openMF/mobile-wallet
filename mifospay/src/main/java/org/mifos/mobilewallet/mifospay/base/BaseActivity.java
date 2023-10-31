@@ -8,14 +8,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.appcompat.widget.Toolbar;
 import android.view.MenuItem;
-
 import com.mifos.mobile.passcode.BasePassCodeActivity;
-
-import org.mifos.mobilewallet.mifospay.MifosPayApp;
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.injection.component.ActivityComponent;
-import org.mifos.mobilewallet.mifospay.injection.component.DaggerActivityComponent;
-import org.mifos.mobilewallet.mifospay.injection.module.ActivityModule;
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity;
 
 /**
@@ -27,17 +21,6 @@ public class BaseActivity extends BasePassCodeActivity implements BaseActivityCa
     public Toolbar toolbar;
     public SwipeRefreshLayout swipeLayout;
     public ProgressDialog progressDialog;
-    private ActivityComponent activityComponent;
-
-    public ActivityComponent getActivityComponent() {
-        if (activityComponent == null) {
-            activityComponent = DaggerActivityComponent.builder()
-                    .activityModule(new ActivityModule(this))
-                    .applicationComponent(MifosPayApp.get(this).component())
-                    .build();
-        }
-        return activityComponent;
-    }
 
     @Override
     public void setContentView(int layoutResID) {

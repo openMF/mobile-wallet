@@ -13,6 +13,7 @@ import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.core.domain.model.Transaction
 import org.mifos.mobilewallet.mifospay.MifosPayApp
 import org.mifos.mobilewallet.mifospay.R
@@ -30,6 +31,7 @@ import javax.inject.Inject
 /**
  * Created by Shivansh Tiwari on 06/07/19.
  */
+@AndroidEntryPoint
 class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
     private var mBottomSheetBehavior: BottomSheetBehavior<*>? = null
 
@@ -88,7 +90,6 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
     var mMerchantHistoryAdapter: SpecificTransactionsAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        activityComponent.inject(this)
         setContentView(R.layout.activity_merchant_transaction)
         ButterKnife.bind(this)
         setToolbarTitle("Merchant Transaction")

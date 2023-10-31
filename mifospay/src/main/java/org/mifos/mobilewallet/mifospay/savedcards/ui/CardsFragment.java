@@ -38,6 +38,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
+import dagger.hilt.android.AndroidEntryPoint;
 
 import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
 
@@ -46,6 +47,7 @@ import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
  * @author ankur
  * @since 21/May/2018
  */
+@AndroidEntryPoint
 public class CardsFragment extends BaseFragment implements CardsContract.CardsView {
 
     @Inject
@@ -93,12 +95,6 @@ public class CardsFragment extends BaseFragment implements CardsContract.CardsVi
         CardsFragment fragment = new CardsFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
     }
 
     @Nullable

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import butterknife.OnFocusChange
 import butterknife.OnTextChanged
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.databinding.ActivityEditPasswordBinding
@@ -14,6 +15,7 @@ import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class EditPasswordActivity : BaseActivity(), EditPasswordView {
     @JvmField
     @Inject

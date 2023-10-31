@@ -15,6 +15,7 @@ import android.widget.*
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnTextChanged
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
@@ -27,6 +28,7 @@ import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import java.util.*
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
     @JvmField
     @Inject
@@ -73,10 +75,6 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
     @BindView(R.id.ll_search_merchant)
     var searchView: LinearLayout? = null
     private var merchantsList: List<SavingsWithAssociations>? = null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity as BaseActivity).activityComponent.inject(this)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
@@ -21,7 +22,7 @@ import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     val newSIActivityRequestCode = 100
 
@@ -36,7 +37,6 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        (activity as BaseActivity).activityComponent.inject(this)
         mSIAdapter = StandingInstructionAdapter(activity as BaseActivity)
     }
 

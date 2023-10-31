@@ -15,11 +15,12 @@ import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCLevel3Presenter;
 import javax.inject.Inject;
 
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by ankur on 17/May/2018
  */
-
+@AndroidEntryPoint
 public class KYCLevel3Fragment extends BaseFragment implements KYCContract.KYCLevel3View {
 
     @Inject
@@ -39,12 +40,6 @@ public class KYCLevel3Fragment extends BaseFragment implements KYCContract.KYCLe
     @Override
     public void setPresenter(KYCContract.KYCLevel3Presenter presenter) {
         mKYCLevel3Presenter = presenter;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
     }
 
     @Nullable

@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * This activity is to view notifications record.
@@ -30,6 +31,7 @@ import butterknife.ButterKnife;
  * This feature is yet to be implemented on the server side.
  */
 
+@AndroidEntryPoint
 public class NotificationActivity extends BaseActivity implements
         NotificationContract.NotificationView {
 
@@ -52,7 +54,6 @@ public class NotificationActivity extends BaseActivity implements
         ButterKnife.bind(this);
         setToolbarTitle("Notifications");
         showColoredBackButton(Constants.BLACK_BACK_BUTTON);
-        getActivityComponent().inject(this);
 
         setupRecyclerView();
         setupSwipeRefreshLayout();

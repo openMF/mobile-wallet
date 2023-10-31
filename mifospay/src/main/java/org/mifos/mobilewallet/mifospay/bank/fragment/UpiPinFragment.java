@@ -25,11 +25,13 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by ankur on 13/July/2018
  */
 
+@AndroidEntryPoint
 public class UpiPinFragment extends BaseFragment implements BankContract.UpiPinView {
 
     @Inject
@@ -54,12 +56,6 @@ public class UpiPinFragment extends BaseFragment implements BankContract.UpiPinV
         UpiPinFragment fragment = new UpiPinFragment();
         fragment.setArguments(args);
         return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
     }
 
     @Nullable

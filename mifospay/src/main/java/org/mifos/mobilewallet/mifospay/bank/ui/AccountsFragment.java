@@ -32,7 +32,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import dagger.hilt.android.AndroidEntryPoint;
 
+@AndroidEntryPoint
 public class AccountsFragment extends BaseFragment implements BankContract.BankAccountsView {
 
     public static final int LINK_BANK_ACCOUNT_REQUEST_CODE = 1;
@@ -63,12 +65,6 @@ public class AccountsFragment extends BaseFragment implements BankContract.BankA
 
     @BindView(R.id.tv_empty_no_transaction_history_subtitle)
     TextView tvTransactionsStateSubtitle;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

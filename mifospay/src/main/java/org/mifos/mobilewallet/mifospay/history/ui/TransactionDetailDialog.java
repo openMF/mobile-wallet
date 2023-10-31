@@ -34,11 +34,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by ankur on 06/June/2018
  */
-
+@AndroidEntryPoint
 public class TransactionDetailDialog extends BottomSheetDialogFragment implements
         HistoryContract.TransactionDetailView {
 
@@ -119,7 +120,6 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
         dialog.setContentView(view);
         mBottomSheetBehavior = BottomSheetBehavior.from((View) view.getParent());
 
-        ((BaseActivity) getActivity()).getActivityComponent().inject(this);
         ButterKnife.bind(this, view);
 
         Bundle bundle = this.getArguments();

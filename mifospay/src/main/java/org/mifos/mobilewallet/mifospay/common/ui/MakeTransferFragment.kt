@@ -16,6 +16,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.common.TransferContract
@@ -29,6 +30,7 @@ import javax.inject.Inject
 /**
  * Created by naman on 30/8/17.
  */
+@AndroidEntryPoint
 class MakeTransferFragment : BottomSheetDialogFragment(), TransferContract.TransferView {
     @JvmField
     @Inject
@@ -85,10 +87,6 @@ class MakeTransferFragment : BottomSheetDialogFragment(), TransferContract.Trans
     private var mBehavior: BottomSheetBehavior<*>? = null
     private var toClientId: Long = 0
     private var amount = 0.0
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity as BaseActivity?)?.activityComponent?.inject(this)
-    }
 
     override fun onDismiss(dialog: DialogInterface) {
         super.onDismiss(dialog)

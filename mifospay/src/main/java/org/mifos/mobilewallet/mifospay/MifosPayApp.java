@@ -6,16 +6,14 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.mifos.mobile.passcode.utils.ForegroundChecker;
 
-import org.mifos.mobilewallet.mifospay.injection.component.ApplicationComponent;
-import org.mifos.mobilewallet.mifospay.injection.component.DaggerApplicationComponent;
-import org.mifos.mobilewallet.mifospay.injection.module.ApplicationModule;
-
 import butterknife.ButterKnife;
+import dagger.hilt.android.HiltAndroidApp;
 
 /**
  * Created by naman on 17/8/17.
  */
 
+@HiltAndroidApp
 public class MifosPayApp extends Application {
 
     private static MifosPayApp instance;
@@ -23,8 +21,6 @@ public class MifosPayApp extends Application {
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
-
-    ApplicationComponent applicationComponent;
 
     public static MifosPayApp get(Context context) {
         return (MifosPayApp) context.getApplicationContext();
@@ -44,20 +40,6 @@ public class MifosPayApp extends Application {
 
         //Initialize ForegroundChecker
         ForegroundChecker.init(this);
-    }
-
-    public ApplicationComponent component() {
-        if (applicationComponent == null) {
-            applicationComponent = DaggerApplicationComponent.builder()
-                    .applicationModule(new ApplicationModule(this))
-                    .build();
-        }
-        return applicationComponent;
-    }
-
-    // Needed to replace the component with a test specific one
-    public void setComponent(ApplicationComponent applicationComponent) {
-        this.applicationComponent = applicationComponent;
     }
 }
 

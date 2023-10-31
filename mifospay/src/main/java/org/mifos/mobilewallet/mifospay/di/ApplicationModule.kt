@@ -1,37 +1,47 @@
-package org.mifos.mobilewallet.mifospay.injection.component;
+package org.mifos.mobilewallet.mifospay.di
 
-import android.app.Application;
-import android.content.Context;
+import android.content.Context
+import dagger.Module
+import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import org.mifos.mobilewallet.core.base.UseCaseHandler
+import org.mifos.mobilewallet.core.base.UseCaseThreadPoolScheduler
+import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager
+import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
+import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
+import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper
 
-import org.mifos.mobilewallet.core.base.UseCaseHandler;
-import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
-import org.mifos.mobilewallet.mifospay.data.local.LocalRepository;
-import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper;
-import org.mifos.mobilewallet.mifospay.injection.ApplicationContext;
-import org.mifos.mobilewallet.mifospay.injection.module.ApplicationModule;
+@Module
+@InstallIn(SingletonComponent::class)
+class ApplicationModule {
 
-import javax.inject.Singleton;
+    @Provides
+    fun provideUseCaseThreadPoolScheduler() : UseCaseThreadPoolScheduler = UseCaseThreadPoolScheduler()
 
-import dagger.Component;
+    @Provides
+    fun providesUseCaseHandler(useCaseThreadPoolScheduler: UseCaseThreadPoolScheduler): UseCaseHandler {
+        return UseCaseHandler(useCaseThreadPoolScheduler)
+    }
 
-@Singleton
-@Component(modules = {ApplicationModule.class})
-public interface ApplicationComponent {
+    @Provides
+    fun providesFineractApiManager(): FineractApiManager {
+        return FineractApiManager()
+    }
 
-    @ApplicationContext
-    Context context();
+    @Provides
+    fun providesFineractRepository(fineractApiManager: FineractApiManager): FineractRepository {
+        return FineractRepository(fineractApiManager)
+    }
 
+    @Provides
+    fun prefManager(@ApplicationContext context: Context): PreferencesHelper {
+        return PreferencesHelper(context)
+    }
 
-    Application application();
-
-    UseCaseHandler usecasehandler();
-
-    FineractApiManager fineractApiManager();
-
-    FineractRepository fineractRepository();
-
-    PreferencesHelper prefManager();
-
-    LocalRepository localRepository();
+    @Provides
+    fun providesLocalRepository(preferencesHelper: PreferencesHelper): LocalRepository {
+        return LocalRepository(preferencesHelper)
+    }
 }
