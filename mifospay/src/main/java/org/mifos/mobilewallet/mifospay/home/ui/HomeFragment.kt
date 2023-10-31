@@ -1,5 +1,6 @@
 package org.mifos.mobilewallet.mifospay.home.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +28,7 @@ import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.HomeView
 import org.mifos.mobilewallet.mifospay.home.presenter.HomeViewModel
+import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance
@@ -114,7 +116,9 @@ class HomeFragment : BaseFragment(), HomeView {
                 HomeScreenDashboard(
                     homeViewModel,
                     onRequest = {
-
+                        startActivity(Intent(this@HomeFragment.requireContext(), ShowQrActivity::class.java).apply {
+                            putExtra(Constants.QR_DATA, homeViewModel.homeUIState.value.vpa)
+                        })
                     },
                     onPay = {
 
@@ -126,6 +130,7 @@ class HomeFragment : BaseFragment(), HomeView {
         setupUi()
         showSwipeProgress()
         mHomePresenter?.fetchAccountDetails()
+        mHomePresenter?.fetchVpa()
         mTvAccountBalance?.setOnClickListener {
             if (mTvAccountBalance?.text.toString() == Constants.TAP_TO_REVEAL) {
                 homeScreenContainer?.let { it1 ->

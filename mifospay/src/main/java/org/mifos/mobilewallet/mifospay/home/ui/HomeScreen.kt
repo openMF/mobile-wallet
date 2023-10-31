@@ -3,6 +3,7 @@ package org.mifos.mobilewallet.mifospay.home.ui
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -199,7 +200,8 @@ fun HomeScreen(
 fun PayCard(modifier: Modifier, title: String, icon: Int, onClickCard: () -> Unit) {
     Card(
         modifier = modifier
-            .height(144.dp),
+            .height(144.dp)
+            .clickable { onClickCard.invoke() },
         border = BorderStroke(1.dp, border),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
