@@ -1,11 +1,6 @@
 package org.mifos.mobilewallet.mifospay.home.ui
 
 import android.os.Bundle
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
-import androidx.transition.TransitionManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,17 +8,25 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.core.domain.model.Account
 import org.mifos.mobilewallet.core.domain.model.Transaction
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
+import org.mifos.mobilewallet.mifospay.databinding.FragmentHomeBinding
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.HomeView
-import org.mifos.mobilewallet.mifospay.home.presenter.HomePresenter
+import org.mifos.mobilewallet.mifospay.home.presenter.HomeViewModel
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance
@@ -35,9 +38,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeFragment : BaseFragment(), HomeView {
 
-    @JvmField
-    @Inject
-    var mPresenter: HomePresenter? = null
+    private val homeViewModel: HomeViewModel by viewModels()
 
     private var mHomePresenter: BaseHomeContract.HomePresenter? = null
 
@@ -96,14 +97,31 @@ class HomeFragment : BaseFragment(), HomeView {
     private var account: Account? = null
     private var accountBalance: String? = null
 
+    private lateinit var binding: FragmentHomeBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_home, container, false)
+    ): View {
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
         setToolbarTitle(Constants.HOME)
-        ButterKnife.bind(this, rootView)
-        mPresenter?.attachView(this)
+        ButterKnife.bind(this, binding.root)
+        homeViewModel.attachView(this)
+
+        binding.homeCompose.apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner))
+            setContent {
+                HomeScreenDashboard(
+                    homeViewModel,
+                    onRequest = {
+
+                    },
+                    onPay = {
+
+                    })
+            }
+        }
+
         setUpSwipeRefresh()
         setupUi()
         showSwipeProgress()
@@ -128,7 +146,7 @@ class HomeFragment : BaseFragment(), HomeView {
             homeScreenContainer?.let { it1 -> TransitionManager.beginDelayedTransition(it1) }
             mHistoryAdapter?.let { it1 -> mHomePresenter?.showMoreHistory(it1.itemCount) }
         }
-        return rootView
+        return binding.root
     }
 
     private fun setUpSwipeRefresh() {
