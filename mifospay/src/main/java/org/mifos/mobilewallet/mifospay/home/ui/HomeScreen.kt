@@ -44,7 +44,9 @@ import org.mifos.mobilewallet.mifospay.common.compose.VerticalScrollLayout
 import org.mifos.mobilewallet.mifospay.home.presenter.HomeViewModel
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.theme.border
+import org.mifos.mobilewallet.mifospay.theme.green
 import org.mifos.mobilewallet.mifospay.theme.lightGrey
+import org.mifos.mobilewallet.mifospay.theme.red
 import org.mifos.mobilewallet.mifospay.theme.styleMedium16sp
 import org.mifos.mobilewallet.mifospay.utils.Utils
 
@@ -253,7 +255,7 @@ fun ItemTransaction(transaction: Transaction) {
                 .weight(.3f)
         ) {
             Text(
-                text = "Payment Title",
+                text = transaction.transactionType.toString(),
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight(400),
@@ -262,7 +264,7 @@ fun ItemTransaction(transaction: Transaction) {
                     )
             )
             Text(
-                text = "16th September",
+                text = transaction.date.toString(),
                 style = TextStyle(
                     fontSize = 10.sp,
                     fontWeight = FontWeight(400),
@@ -270,13 +272,28 @@ fun ItemTransaction(transaction: Transaction) {
                 )
             )
         }
+        val amount = when (transaction.transactionType) {
+            TransactionType.DEBIT -> {
+                "- ${transaction.currency.displaySymbol} ${transaction.amount}"
+            }
+            TransactionType.CREDIT -> {
+                "+ ${transaction.currency.displaySymbol} ${transaction.amount}"
+            }
+            else -> {
+                "${transaction.currency.displaySymbol} ${transaction.amount}"
+            }
+        }
         Text(
             modifier = Modifier.weight(.3f),
-            text = "+ ₦ 150 ",
+            text = amount,
             style = TextStyle(
-                fontSize = 18.sp,
-                fontWeight = FontWeight(400),
-                color = Color(0xFF008135),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal,
+                color = when (transaction.transactionType) {
+                    TransactionType.DEBIT -> red
+                    TransactionType.CREDIT -> green
+                    else -> Color.Black
+                },
                 textAlign = TextAlign.End,
             )
         )
