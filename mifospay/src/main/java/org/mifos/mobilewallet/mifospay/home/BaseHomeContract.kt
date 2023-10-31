@@ -31,6 +31,7 @@ interface BaseHomeContract {
 
     interface HomePresenter : BasePresenter {
         fun fetchAccountDetails()
+        fun fetchVpa()
         fun showMoreHistory(existingItemsCount: Int)
     }
 

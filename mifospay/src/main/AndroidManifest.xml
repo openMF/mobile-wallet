@@ -45,6 +45,7 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".qr.ui.ShowQrActivity"
+            android:exported="true"
             android:theme="@style/AppTheme" />
 
         <provider

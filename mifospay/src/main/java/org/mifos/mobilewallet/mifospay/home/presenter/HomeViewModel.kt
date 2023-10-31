@@ -29,7 +29,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val mUsecaseHandler: UseCaseHandler, private val localRepository: LocalRepository,
+    private val mUsecaseHandler: UseCaseHandler,
+    private val localRepository: LocalRepository,
     private val preferencesHelper: PreferencesHelper
 ) : ViewModel(), BaseHomeContract.HomePresenter, TransactionsHistoryAsync {
 
@@ -137,9 +138,16 @@ class HomeViewModel @Inject constructor(
             handleTransactionsHistory(existingItemCount)
         }
     }
+
+    override fun fetchVpa() {
+        _homeUIState.update { currentState ->
+            currentState.copy(vpa = localRepository.clientDetails.externalId)
+        }
+    }
 }
 
 data class HomeUiState(
     val account: Account? = null,
     val transactions: List<Transaction> = emptyList(),
+    val vpa: String? = null
 )
