@@ -3,7 +3,7 @@
 
     <color name="colorPrimary">#ffffff</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
-    <color name="colorAccent">#000AFF</color>
+    <color name="colorAccent">#000000</color>
     <color name="changedBackgroundColour">#ecf0f1 </color>
     <color name="clickedblue">#00bfff</color>
     <!-- 100, 87, 54 etc.. - OPACITY IN PERCENTAGE -->

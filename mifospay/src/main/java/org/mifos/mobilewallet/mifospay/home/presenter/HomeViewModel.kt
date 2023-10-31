@@ -1,10 +1,16 @@
 package org.mifos.mobilewallet.mifospay.home.presenter
 
+import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import org.mifos.mobilewallet.core.base.TaskLooper
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseFactory
 import org.mifos.mobilewallet.core.base.UseCaseHandler
+import org.mifos.mobilewallet.core.domain.model.Account
 import org.mifos.mobilewallet.core.domain.model.Transaction
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions
@@ -21,10 +27,11 @@ import javax.inject.Inject
 /**
  * Created by naman on 17/8/17.
  */
-class HomePresenter @Inject constructor(
+@HiltViewModel
+class HomeViewModel @Inject constructor(
     private val mUsecaseHandler: UseCaseHandler, private val localRepository: LocalRepository,
     private val preferencesHelper: PreferencesHelper
-) : BaseHomeContract.HomePresenter, TransactionsHistoryAsync {
+) : ViewModel(), BaseHomeContract.HomePresenter, TransactionsHistoryAsync {
 
     @JvmField
     @Inject
@@ -48,6 +55,10 @@ class HomePresenter @Inject constructor(
     private var mHomeView: HomeView? = null
     private var transactionList: List<Transaction>? = null
 
+    // Expose screen UI state
+    private val _homeUIState = MutableStateFlow(HomeUiState())
+    val homeUIState: StateFlow<HomeUiState> = _homeUIState.asStateFlow()
+
     override fun attachView(baseView: BaseView<*>?) {
         mHomeView = baseView as HomeView?
         mHomeView?.setPresenter(this)
@@ -60,6 +71,11 @@ class HomePresenter @Inject constructor(
             object : UseCaseCallback<FetchAccount.ResponseValue?> {
                 override fun onSuccess(response: FetchAccount.ResponseValue?) {
                     preferencesHelper.accountId = response?.account?.id
+
+                    _homeUIState.update { currentState ->
+                        currentState.copy(account = response?.account)
+                    }
+
                     mHomeView?.setAccountBalance(response?.account)
                     response?.account?.id?.let { transactionsHistory?.fetchTransactionsHistory(it) }
                     mHomeView?.hideSwipeProgress()
@@ -93,12 +109,18 @@ class HomePresenter @Inject constructor(
                     0,
                     Constants.HOME_HISTORY_TRANSACTIONS_LIMIT + existingItemCount
                 )
+                _homeUIState.update { currentState ->
+                    currentState.copy(transactions = showList ?: emptyList())
+                }
                 mHomeView?.showTransactionsHistory(showList)
                 mHomeView?.showBottomSheetActionButton()
             } else {
                 if (transactionsAmount <= Constants.HOME_HISTORY_TRANSACTIONS_LIMIT
                     && transactionsAmount > 0
                 ) {
+                    _homeUIState.update { currentState ->
+                        currentState.copy(transactions = transactionList ?: emptyList())
+                    }
                     mHomeView?.showTransactionsHistory(transactionList)
                     mHomeView?.hideBottomSheetActionButton()
                 } else {
@@ -116,3 +138,8 @@ class HomePresenter @Inject constructor(
         }
     }
 }
+
+data class HomeUiState(
+    val account: Account? = null,
+    val transactions: List<Transaction> = emptyList(),
+)
