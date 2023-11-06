@@ -53,5 +53,5 @@ ext {
     espressoVersion = '2.2.2'
     rxandroidVersion = '1.1.0'
     rxjavaVersion = '1.1.4'
-    junitVersion = '4.12'
+    junitVersion = '4.13.2'
 }
