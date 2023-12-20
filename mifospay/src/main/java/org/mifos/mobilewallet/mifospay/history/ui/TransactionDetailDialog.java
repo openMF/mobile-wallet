@@ -136,7 +136,7 @@ public class TransactionDetailDialog extends BottomSheetDialogFragment implement
         tvTransactionId.setText(Constants.TRANSACTION_ID + ": " + transaction.getTransactionId());
         tvTransactionDate.setText(Constants.DATE + ": " + transaction.getDate());
         tvTransactionAmount.setText(Utils.getFormattedAccountBalance(
-                transaction.getAmount(), transaction.getCurrency().getCode()));
+                transaction.getAmount(), transaction.getCurrency().getCode(), 0));
 
         mPresenter.getTransferDetail(transaction.getTransferId());
 

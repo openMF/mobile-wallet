@@ -53,7 +53,7 @@ public class SpecificTransactionsAdapter
                 Constants.TRANSACTION_ID + ": " + transaction.getTransactionId());
         holder.mTvTransactionDate.setText(Constants.DATE + ": " + transaction.getDate());
         holder.mTvTransactionAmount.setText(Utils.getFormattedAccountBalance(
-                transaction.getAmount(), transaction.getCurrency().getCode()));
+                transaction.getAmount(), transaction.getCurrency().getCode(), 0));
 
         holder.mTvFromClientName.setText(
                 transaction.getTransferDetail().getFromClient().getDisplayName());

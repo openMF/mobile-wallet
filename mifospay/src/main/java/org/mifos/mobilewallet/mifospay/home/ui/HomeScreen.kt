@@ -50,6 +50,7 @@ import org.mifos.mobilewallet.mifospay.theme.lightGrey
 import org.mifos.mobilewallet.mifospay.theme.red
 import org.mifos.mobilewallet.mifospay.theme.styleMedium16sp
 import org.mifos.mobilewallet.mifospay.utils.Utils
+import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance
 
 enum class HomeScreenContents {
     HOME_CARD,
@@ -274,16 +275,11 @@ fun ItemTransaction(transaction: Transaction) {
                 )
             )
         }
+        val formattedAmount = getFormattedAccountBalance(transaction.amount, transaction.currency.code, 2)
         val amount = when (transaction.transactionType) {
-            TransactionType.DEBIT -> {
-                "- ${transaction.currency.displaySymbol} ${transaction.amount}"
-            }
-            TransactionType.CREDIT -> {
-                "+ ${transaction.currency.displaySymbol} ${transaction.amount}"
-            }
-            else -> {
-                "${transaction.currency.displaySymbol} ${transaction.amount}"
-            }
+            TransactionType.DEBIT -> "- $formattedAmount"
+            TransactionType.CREDIT -> "+ $formattedAmount"
+            else ->  formattedAmount
         }
         Text(
             modifier = Modifier.weight(.3f),
