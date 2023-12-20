@@ -9,6 +9,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.textfield.TextInputLayout;
+import androidx.transition.TransitionManager;
+import androidx.core.content.ContextCompat;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,15 +25,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.transition.TransitionManager;
-
-import com.google.android.material.chip.Chip;
-import com.google.android.material.textfield.TextInputLayout;
-
 import org.mifos.mobilewallet.mifospay.R;
+import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment;
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract;

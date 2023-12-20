@@ -37,4 +37,8 @@ public interface SavingsAccountsService {
             + "/{transactionId}")
     Observable<Transactions> getSavingAccountTransaction(@Path("accountId") long accountId,
                                                          @Path("transactionId") long transactionId);
+
+    @POST(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}/" + ApiEndPoints.TRANSACTIONS
+            + "?command=deposit")
+    Observable<Transactions> payViaMobile(@Path("accountId") long accountId);
 }

@@ -8,6 +8,7 @@ import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPa
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUpdatePayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
 import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
+import org.mifos.mobilewallet.core.data.fineract.entity.payload.PayResponse;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.utils.Constants;
@@ -312,6 +313,10 @@ public class TransferFunds extends UseCase<TransferFunds.RequestValues,
                 });
     }
 
+    /*public PayResponse payViaMobile() {
+
+    }
+*/
     public static final class RequestValues implements UseCase.RequestValues {
 
         private final long fromClientId, toClientId;

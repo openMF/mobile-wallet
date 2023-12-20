@@ -24,9 +24,9 @@ object Utils {
     fun String.isBlank() = this.isEmpty() || indices.all { this[it].isWhitespace() }
 
     @JvmStatic
-    fun getFormattedAccountBalance(balance: Double?, currencyCode: String?): String {
+    fun getFormattedAccountBalance(balance: Double?, currencyCode: String?, maximumFractionDigits: Int? = 0): String {
         val accountBalanceFormatter = NumberFormat.getCurrencyInstance()
-        accountBalanceFormatter.maximumFractionDigits = 0
+        accountBalanceFormatter.maximumFractionDigits = maximumFractionDigits ?: 0
         accountBalanceFormatter.currency = Currency.getInstance(currencyCode)
         return accountBalanceFormatter.format(balance)
     }
