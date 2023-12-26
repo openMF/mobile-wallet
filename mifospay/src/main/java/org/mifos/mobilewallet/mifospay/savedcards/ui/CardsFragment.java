@@ -1,13 +1,9 @@
 package org.mifos.mobilewallet.mifospay.savedcards.ui;
 
+import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
+
 import android.content.res.Resources;
 import android.os.Bundle;
-import androidx.annotation.Nullable;
-import com.google.android.material.chip.Chip;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +15,16 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.google.android.material.chip.Chip;
+
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract;
 import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsPresenter;
@@ -39,8 +42,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnTextChanged;
 import dagger.hilt.android.AndroidEntryPoint;
-
-import static org.mifos.mobilewallet.mifospay.utils.Utils.isBlank;
 
 /**
  * This is the UI component of the SavedCards Architecture.

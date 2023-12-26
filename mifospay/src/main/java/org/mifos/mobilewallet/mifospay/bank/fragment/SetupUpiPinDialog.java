@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.bank.adapters.UpiPinPagerAdapter;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 
 import butterknife.BindView;
