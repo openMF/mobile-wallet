@@ -3,16 +3,18 @@ package org.mifos.mobilewallet.mifospay.savedcards.ui;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
-import com.google.android.material.textfield.TextInputLayout;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import androidx.annotation.NonNull;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
 import org.mifos.mobilewallet.mifospay.R;
@@ -24,11 +26,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import butterknife.Action;
 import butterknife.BindView;
 import butterknife.BindViews;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Action;
 
 /**
  * This is a Dialog class to add a new card.
@@ -63,8 +65,8 @@ public class AddCardDialog extends BottomSheetDialogFragment {
     List<TextInputLayout> mTextInputLayouts;
     private BottomSheetBehavior mBottomSheetBehavior;
     private boolean fieldsValid;
-    private final butterknife.Action<TextInputLayout> CHECK_ERROR =
-            new butterknife.Action<TextInputLayout>() {
+    private final Action<TextInputLayout> CHECK_ERROR =
+            new Action<TextInputLayout>() {
                 @Override
                 public void apply(@NonNull TextInputLayout view, int index) {
                     EditText editText = view.getEditText();

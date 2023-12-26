@@ -1,12 +1,10 @@
 package org.mifos.mobilewallet.mifospay.history.ui;
 
+import static org.mifos.mobilewallet.core.domain.model.TransactionType.CREDIT;
+import static org.mifos.mobilewallet.core.domain.model.TransactionType.DEBIT;
+
 import android.content.res.Resources;
 import android.os.Bundle;
-import com.google.android.material.chip.Chip;
-import androidx.transition.TransitionManager;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +13,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.transition.TransitionManager;
+
+import com.google.android.material.chip.Chip;
+
 import org.mifos.mobilewallet.core.domain.model.Transaction;
 import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.history.HistoryContract;
 import org.mifos.mobilewallet.mifospay.history.presenter.HistoryPresenter;
@@ -34,9 +38,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import dagger.hilt.android.AndroidEntryPoint;
-
-import static org.mifos.mobilewallet.core.domain.model.TransactionType.CREDIT;
-import static org.mifos.mobilewallet.core.domain.model.TransactionType.DEBIT;
 
 @AndroidEntryPoint
 public class HistoryFragment extends BaseFragment

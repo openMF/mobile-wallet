@@ -1,8 +1,6 @@
 package org.mifos.mobilewallet.mifospay.bank.fragment;
 
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,13 +8,15 @@ import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.alimuzaffar.lib.pin.PinEntryEditText;
 
 import org.mifos.mobilewallet.mifospay.R;
 import org.mifos.mobilewallet.mifospay.bank.BankContract;
 import org.mifos.mobilewallet.mifospay.bank.presenter.UpiPinPresenter;
 import org.mifos.mobilewallet.mifospay.bank.ui.SetupUpiPinActivity;
-import org.mifos.mobilewallet.mifospay.base.BaseActivity;
 import org.mifos.mobilewallet.mifospay.base.BaseFragment;
 import org.mifos.mobilewallet.mifospay.utils.Constants;
 import org.mifos.mobilewallet.mifospay.utils.Toaster;
