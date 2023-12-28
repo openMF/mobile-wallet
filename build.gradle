@@ -42,7 +42,7 @@ ext {
     lifecycle_version = '2.6.2'
     lifecycleExtensionsVersion = '2.2.0'
     activity_version = '1.5.0'
-    fragment_version = '1.5.0'
+    fragment_version = '1.6.2'
 
     // App dependencies
     supportLibraryVersion = '28.0.0'
