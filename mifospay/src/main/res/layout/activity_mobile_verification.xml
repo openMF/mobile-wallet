@@ -94,7 +94,7 @@
             <TextView
                 android:id="@+id/btn_get_otp"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="47dp"
                 android:layout_gravity="right|center_vertical|center_horizontal"
                 android:layout_marginLeft="@dimen/value_10dp"
                 android:layout_weight=".9"
