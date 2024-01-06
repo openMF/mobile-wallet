@@ -77,9 +77,24 @@ class MerchantTransferPresenter @Inject constructor(
         this.merchantAccountNumber = merchantAccountNumber
     }
 
-    override fun onTransactionsFetchCompleted(transactions: List<Transaction>) {
+    private fun showErrorStateView() {
+        mMerchantTransferView!!.showSpecificView(
+            R.drawable.ic_error_state, R.string.error_oops,
+            R.string.error_no_transaction_history_subtitle
+        )
+    }
+
+    private fun showEmptyStateView() {
+        mMerchantTransferView!!.showSpecificView(
+            R.drawable.ic_history,
+            R.string.empty_no_transaction_history_title,
+            R.string.empty_no_transaction_history_subtitle
+        )
+    }
+
+    override fun onTransactionsFetchCompleted(transactions: List<Transaction>?) {
         val specificTransactions = ArrayList<Transaction?>()
-        if (transactions != null && transactions.size > 0) {
+        if (!transactions.isNullOrEmpty()) {
             for (i in transactions.indices) {
                 val transaction = transactions[i]
                 if (transaction.transferDetail == null
@@ -88,7 +103,7 @@ class MerchantTransferPresenter @Inject constructor(
                     val transferId = transaction.transferId
                     mTaskLooper!!.addTask(
                         mUseCaseFactory!!.getUseCase(org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER_USECASE),
-                        FetchAccountTransfer.RequestValues(transferId),
+                        transferId.let { FetchAccountTransfer.RequestValues(it) },
                         TaskData(Constants.TRANSFER_DETAILS, i)
                     )
                 }
@@ -127,20 +142,5 @@ class MerchantTransferPresenter @Inject constructor(
                 }
             })
         }
-    }
-
-    private fun showErrorStateView() {
-        mMerchantTransferView!!.showSpecificView(
-            R.drawable.ic_error_state, R.string.error_oops,
-            R.string.error_no_transaction_history_subtitle
-        )
-    }
-
-    private fun showEmptyStateView() {
-        mMerchantTransferView!!.showSpecificView(
-            R.drawable.ic_history,
-            R.string.empty_no_transaction_history_title,
-            R.string.empty_no_transaction_history_subtitle
-        )
     }
 }

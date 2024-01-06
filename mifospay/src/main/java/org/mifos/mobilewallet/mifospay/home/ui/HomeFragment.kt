@@ -210,7 +210,7 @@ class HomeFragment : BaseFragment(), HomeView {
         tvHideBalance?.visibility = View.INVISIBLE
     }
 
-    override fun showTransactionsHistory(transactions: List<Transaction?>?) {
+    override fun showTransactionsHistory(transactions: List<Transaction>?) {
         vStateView?.visibility = View.GONE
         hideTransactionLoading()
         btnShowMoreTransactionsHistory?.visibility = View.VISIBLE
