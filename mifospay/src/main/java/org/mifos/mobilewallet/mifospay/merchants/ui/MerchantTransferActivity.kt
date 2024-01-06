@@ -183,7 +183,7 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
     override fun showTransactions(transactions: List<Transaction?>?) {
         vEmptyState?.visibility = View.GONE
         rvMerchantHistory?.visibility = View.VISIBLE
-        mMerchantHistoryAdapter?.setData(transactions)
+        mMerchantHistoryAdapter?.setData(transactions as List<Transaction>)
     }
 
     override fun showSpecificView(drawable: Int, title: Int, subtitle: Int) {
