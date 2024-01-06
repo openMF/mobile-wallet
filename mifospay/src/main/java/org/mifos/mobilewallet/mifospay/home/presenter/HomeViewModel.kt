@@ -92,16 +92,6 @@ class HomeViewModel @Inject constructor(
             })
     }
 
-    override fun onTransactionsFetchCompleted(transactions: List<Transaction>) {
-        transactionList = transactions
-        if (transactionList == null) {
-            mHomeView?.hideBottomSheetActionButton()
-            mHomeView?.showTransactionsError()
-        } else {
-            handleTransactionsHistory(0)
-        }
-    }
-
     private fun handleTransactionsHistory(existingItemCount: Int) {
         val transactionsAmount = transactionList?.size?.minus(existingItemCount)
         if (transactionsAmount != null) {
@@ -142,6 +132,16 @@ class HomeViewModel @Inject constructor(
     override fun fetchVpa() {
         _homeUIState.update { currentState ->
             currentState.copy(vpa = localRepository.clientDetails.externalId)
+        }
+    }
+
+    override fun onTransactionsFetchCompleted(transactions: List<Transaction>?) {
+        transactionList = transactions
+        if (transactionList == null) {
+            mHomeView?.hideBottomSheetActionButton()
+            mHomeView?.showTransactionsError()
+        } else {
+            handleTransactionsHistory(0)
         }
     }
 }

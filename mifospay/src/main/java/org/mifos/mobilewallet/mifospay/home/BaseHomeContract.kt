@@ -19,7 +19,7 @@ interface BaseHomeContract {
     interface HomeView : BaseView<HomePresenter?> {
         fun showSnackbar(message: String?)
         fun setAccountBalance(account: Account?)
-        fun showTransactionsHistory(transactions: List<Transaction?>?)
+        fun showTransactionsHistory(transactions: List<Transaction>?)
         fun showTransactionsError()
         fun showTransactionsEmpty()
         fun showBottomSheetActionButton()
