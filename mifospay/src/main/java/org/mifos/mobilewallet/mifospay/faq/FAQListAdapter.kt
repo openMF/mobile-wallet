@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.faq
 
 import android.content.Context
 import android.graphics.Typeface
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
@@ -16,12 +17,17 @@ import org.mifos.mobilewallet.mifospay.R
  */
 class FAQListAdapter(
     private val context: Context, // group titles
-    private val listDataGroup: List<String>,
+    private var listDataGroup: List<String>,
     // child data
-    private val listDataChild: HashMap<String, List<String>>
+    private var listDataChild: HashMap<String, List<String>>
 ) : BaseExpandableListAdapter() {
+    init {
+        listDataChild = listDataChild
+    }
+
     override fun getChild(groupPosition: Int, childPosititon: Int): Any {
-        return listDataChild[listDataGroup[groupPosition]]?.get(childPosititon) ?: 0
+        return listDataChild[listDataGroup[groupPosition]]
+            ?.get(childPosititon)!!
     }
 
     override fun getChildId(groupPosition: Int, childPosition: Int): Long {
@@ -30,18 +36,24 @@ class FAQListAdapter(
 
     override fun getChildView(
         groupPosition: Int, childPosition: Int,
-        isLastChild: Boolean, convertView: View, parent: ViewGroup
-    ): View {
-        val convertView = convertView
+        isLastChild: Boolean, convertView: View?, parent: ViewGroup
+    ): View? {
+        var convertView = convertView
         val childText = getChild(groupPosition, childPosition) as String
+        if (convertView == null) {
+            val layoutInflater = context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            convertView = layoutInflater.inflate(R.layout.faq_list_child, parent,false)
+        }
         val textViewChild = convertView
-            .findViewById<TextView>(R.id.faq_list_child)
-        textViewChild.text = childText
+            ?.findViewById<TextView>(R.id.faq_list_child)
+        textViewChild?.text = childText
         return convertView
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
-        return listDataChild[listDataGroup[groupPosition]]?.size ?: 0
+        return listDataChild[listDataGroup[groupPosition]]
+            ?.size!!
     }
 
     override fun getGroup(groupPosition: Int): Any {
@@ -58,14 +70,19 @@ class FAQListAdapter(
 
     override fun getGroupView(
         groupPosition: Int, isExpanded: Boolean,
-        convertView: View, parent: ViewGroup
-    ): View {
-        val convertView = convertView
+        convertView: View?, parent: ViewGroup
+    ): View? {
+        var convertView = convertView
         val headerTitle = getGroup(groupPosition) as String
+        if (convertView == null) {
+            val layoutInflater = context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            convertView = layoutInflater.inflate(R.layout.faq_list_group, parent,false)
+        }
         val textViewGroup = convertView
-            .findViewById<TextView>(R.id.faq_list_group)
-        textViewGroup.setTypeface(null, Typeface.BOLD)
-        textViewGroup.text = headerTitle
+            ?.findViewById<TextView>(R.id.faq_list_group)
+        textViewGroup?.setTypeface(null, Typeface.BOLD)
+        textViewGroup?.text = headerTitle
         return convertView
     }
 
