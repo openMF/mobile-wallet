@@ -74,6 +74,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version")
     implementation "androidx.compose.material:material-icons-extended:$compose_version"
 
+    // Biometric Authentication
+    implementation "androidx.biometric:biometric:$rootProject.biometric"
 
     // ViewModel
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"

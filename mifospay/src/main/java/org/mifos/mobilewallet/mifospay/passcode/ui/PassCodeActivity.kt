@@ -3,9 +3,12 @@ package org.mifos.mobilewallet.mifospay.passcode.ui
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatButton
+import butterknife.BindView
 import butterknife.ButterKnife
 import com.mifos.mobile.passcode.MifosPassCodeActivity
 import com.mifos.mobile.passcode.utils.EncryptionUtil
@@ -19,6 +22,8 @@ import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract.PassCodeView
 import org.mifos.mobilewallet.mifospay.passcode.presenter.PassCodePresenter
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity
+import org.mifos.mobilewallet.mifospay.utils.BiometricAuthentication
+import org.mifos.mobilewallet.mifospay.utils.BiometricCapability
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import javax.inject.Inject
 
@@ -36,9 +41,16 @@ class PassCodeActivity : MifosPassCodeActivity(), PassCodeView {
     private var currPass: String? = ""
     private var updatePassword = false
     private var isInitialScreen = false
+
+    @JvmField
+    @BindView(R.id.btn_save)
+    var btnSave: AppCompatButton? = null
+
+    private var biometricAuthentication: BiometricAuthentication? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        biometricAuthentication = BiometricAuthentication(this)
         // can't call getActivityComponent b/c PassCodeActivity class does not extend BaseActivity
 
         isInitialScreen = intent.getBooleanExtra(
@@ -50,6 +62,20 @@ class PassCodeActivity : MifosPassCodeActivity(), PassCodeView {
             updatePassword = intent.getBooleanExtra(Constants.UPDATE_PASSCODE, false)
         }
         ButterKnife.bind(this)
+        if (btnSave?.text?.equals(getString(R.string.use_touch_id)) == true) {
+            biometricAuthentication?.authenticateWithBiometrics()
+        }
+        if (biometricAuthentication?.getBiometricCapabilities() == BiometricCapability.HAS_BIOMETRIC_AUTH) {
+            if (btnSave?.visibility == View.GONE) {
+                btnSave?.visibility = View.VISIBLE
+                btnSave?.text = getString(R.string.use_touch_id)
+                btnSave?.setOnClickListener {
+                    biometricAuthentication?.authenticateWithBiometrics()
+                }
+            }
+        } else if (biometricAuthentication?.getBiometricCapabilities() == BiometricCapability.NOT_SUPPORTED) {
+            startActivity(Intent(Settings.ACTION_SECURITY_SETTINGS))
+        }
         deepLinkURI = intent.getStringExtra("uri")
     }
 
@@ -113,6 +139,13 @@ class PassCodeActivity : MifosPassCodeActivity(), PassCodeView {
             startNextActivity()
         }
         finish()
+    }
+
+    override fun onResume() {
+        if (btnSave?.text?.equals(getString(R.string.use_touch_id)) == true) {
+            biometricAuthentication?.authenticateWithBiometrics()
+        }
+        super.onResume()
     }
 
     override fun onBackPressed() {

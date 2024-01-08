@@ -312,6 +312,9 @@
     <string name="pay">Pay</string>
     <string name="welcome_back">Welcome back!</string>
     <string name="sign_up">Sign up.</string>
+    <string name="sign_in_fingerprint">Sign in using fingerprint</string>
+    <string name="scan_your_fingerprint">Scan your fingerprint</string>
+    <string name="use_touch_id">Use Touch Id</string>
 
 
 </resources>
