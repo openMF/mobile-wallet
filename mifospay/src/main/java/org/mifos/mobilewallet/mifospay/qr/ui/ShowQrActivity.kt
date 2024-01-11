@@ -55,7 +55,7 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_qr)
         ButterKnife.bind(this@ShowQrActivity)
-        setToolbarTitle(Constants.QR_CODE)
+        setToolbarTitle(getString(R.string.request))
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         mPresenter!!.attachView(this)
         val qrData = intent.getStringExtra(Constants.QR_DATA)

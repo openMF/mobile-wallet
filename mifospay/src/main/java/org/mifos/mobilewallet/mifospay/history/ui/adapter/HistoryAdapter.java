@@ -50,7 +50,7 @@ public class HistoryAdapter
         Double balance = transaction.getAmount();
         String currencyCode = transaction.getCurrency().getCode();
         holder.tvTransactionAmount
-                .setText(getFormattedAccountBalance(balance, currencyCode));
+                .setText(getFormattedAccountBalance(balance, currencyCode, 0));
         holder.tvTransactionDate.setText(transaction.getDate());
 
         if (balance > 0 && context != null) {
