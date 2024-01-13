@@ -22,10 +22,8 @@ jobs:
           java-version: 17
 
         # Install NDK
-      - name: Set up NDK
-        uses: android/setup-ndk@v2
-        with:
-          ndk-version: '26.1.10909125'   
+      - name: Install NDK
+        run: echo "y" | ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT} 
 
         # Update Gradle Permission
       - name: Change gradlew Permission
