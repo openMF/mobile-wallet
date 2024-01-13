@@ -76,7 +76,7 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
     }
 
     private fun setUpSwipeRefresh() {
-        swipeRefreshLayout.setOnRefreshListener { mBankAccountsPresenter!!.fetchLinkedBankAccounts() }
+        swipeRefreshLayout?.setOnRefreshListener { mBankAccountsPresenter!!.fetchLinkedBankAccounts() }
     }
 
     private fun setupRecycletView() {

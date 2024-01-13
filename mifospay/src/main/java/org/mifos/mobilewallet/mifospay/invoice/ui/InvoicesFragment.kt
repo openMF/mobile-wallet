@@ -110,8 +110,8 @@ class InvoicesFragment : BaseFragment(), InvoicesView {
     }
 
     private fun setUpSwipeRefresh() {
-        swipeRefreshLayout.setOnRefreshListener {
-            swipeRefreshLayout.isRefreshing = false
+        swipeRefreshLayout?.setOnRefreshListener {
+            swipeRefreshLayout?.isRefreshing = false
             mInvoicesPresenter!!.fetchInvoices()
         }
     }

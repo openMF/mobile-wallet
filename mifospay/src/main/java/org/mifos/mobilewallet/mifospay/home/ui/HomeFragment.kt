@@ -156,7 +156,7 @@ class HomeFragment : BaseFragment(), HomeView {
     }
 
     private fun setUpSwipeRefresh() {
-        swipeRefreshLayout.setOnRefreshListener {
+        swipeRefreshLayout?.setOnRefreshListener {
             vStateView?.visibility = View.GONE
             rvHomeBottomSheetContent?.visibility = View.GONE
             btnShowMoreTransactionsHistory?.visibility = View.GONE

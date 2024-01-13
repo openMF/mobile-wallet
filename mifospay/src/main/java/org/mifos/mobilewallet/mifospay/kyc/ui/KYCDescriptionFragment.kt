@@ -163,8 +163,8 @@ class KYCDescriptionFragment : BaseFragment(), KYCDescriptionView {
 
     private fun setUpSwipeRefreshLayout() {
         setSwipeEnabled(true)
-        swipeRefreshLayout.setOnRefreshListener {
-            swipeRefreshLayout.isRefreshing = false
+        swipeRefreshLayout?.setOnRefreshListener {
+            swipeRefreshLayout?.isRefreshing = false
             mPresenter!!.fetchCurrentLevel()
         }
     }
