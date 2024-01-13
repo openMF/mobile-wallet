@@ -8,12 +8,11 @@ apply plugin: 'com.google.dagger.hilt.android'
 group='com.github.ankurs287'
 
 android {
-    compileSdk rootProject.ext.compileSdkVersion
+    compileSdk 34
     namespace 'org.mifos.mobilewallet.core'
     defaultConfig {
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-
+        minSdkVersion 24
+        targetSdkVersion 34
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
     }
@@ -27,17 +26,23 @@ android {
         }
     }
 
-    lintOptions {
-        abortOnError false
-        disable 'InvalidPackage'
-    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
     buildFeatures{
         dataBinding true
+        buildConfig true
+    }
+
+    lint {
+        abortOnError false
+        disable 'InvalidPackage'
     }
 }
 
@@ -48,21 +53,21 @@ dependencies {
     implementation "com.google.dagger:hilt-android:2.48"
     kapt "com.google.dagger:hilt-compiler:2.48"
 
-    implementation ("com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion") {
+    implementation(libs.squareup.retrofit2) {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
         exclude module: 'okhttp'
     }
-    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava:$rootProject.retrofitVersion"
-    implementation "com.squareup.okhttp3:okhttp:$rootProject.okHttp3Version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttp3Version"
+    implementation(libs.squareup.retrofit.adapter.rxjava)
+    implementation(libs.squareup.retrofit.converter.gson)
+    implementation(libs.squareup.okhttp)
+    implementation(libs.squareup.logging.interceptor)
 
-    implementation "io.reactivex:rxandroid:$rootProject.rxandroidVersion"
-    implementation "io.reactivex:rxjava:$rootProject.rxjavaVersion"
+    implementation(libs.reactivex.rxjava.android)
+    implementation(libs.reactivex.rxjava)
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${rootProject.kotlinVersion}"
+    implementation(libs.jetbrains.kotlin.jdk7)
 
-    testImplementation "junit:junit:$rootProject.junitVersion"
+    testImplementation(libs.junit)
     androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
