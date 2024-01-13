@@ -119,7 +119,7 @@ class KYCLevel1Fragment : BaseFragment(), KYCLevel1View {
         Toaster.show(view, s)
     }
 
-    public override fun showProgressDialog(message: String) {
+    public override fun showProgressDialog(message: String?) {
         super.showProgressDialog(message)
     }
 

@@ -99,8 +99,8 @@ class CardsFragment : BaseFragment(), CardsView {
     }
 
     private fun setUpSwipeRefresh() {
-        swipeRefreshLayout.setOnRefreshListener {
-            swipeRefreshLayout.isRefreshing = false
+        swipeRefreshLayout?.setOnRefreshListener {
+            swipeRefreshLayout?.isRefreshing = false
             mCardsPresenter!!.fetchSavedCards()
         }
     }

@@ -92,15 +92,15 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == newSIActivityRequestCode && resultCode == RESULT_OK) {
-            swipeRefreshLayout.isRefreshing = false
+            swipeRefreshLayout?.isRefreshing = false
             mStandingInstructionPresenter.getAllSI()
         }
     }
 
     private fun setupSwipeRefreshLayout() {
         setSwipeEnabled(true)
-        swipeRefreshLayout.setOnRefreshListener {
-            swipeRefreshLayout.isRefreshing = false
+        swipeRefreshLayout?.setOnRefreshListener {
+            swipeRefreshLayout?.isRefreshing = false
             mStandingInstructionPresenter.getAllSI()
         }
     }

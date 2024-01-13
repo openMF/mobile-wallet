@@ -129,15 +129,17 @@ class MainActivity : BaseActivity(), BaseHomeView {
             bottomNavigationView?.selectedItemId = id
         } else {
             when (id) {
-                R.id.action_home -> replaceFragment(
-                    localRepository?.clientDetails?.let {
-                        newInstance(
-                            it
-                                .clientId
-                        )
-                    }, false,
-                    R.id.bottom_navigation_fragment_container
-                )
+                R.id.action_home -> localRepository?.clientDetails?.let {
+                    newInstance(
+                        it
+                            .clientId
+                    )
+                }?.let {
+                    replaceFragment(
+                        it, false,
+                        R.id.bottom_navigation_fragment_container
+                    )
+                }
                 R.id.action_payments -> replaceFragment(
                     newInstance(), false,
                     R.id.bottom_navigation_fragment_container

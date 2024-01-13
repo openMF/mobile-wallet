@@ -69,7 +69,7 @@ class NotificationActivity : BaseActivity(), NotificationView {
 
     private fun setupSwipeRefreshLayout() {
         setSwipeRefreshEnabled(true)
-        swipeLayout.setOnRefreshListener { mNotificationPresenter?.fetchNotifications() }
+        swipeRefreshLayout?.setOnRefreshListener { mNotificationPresenter?.fetchNotifications() }
     }
 
     override fun fetchNotificationsSuccess(notificationPayloadList: List<NotificationPayload?>?) {

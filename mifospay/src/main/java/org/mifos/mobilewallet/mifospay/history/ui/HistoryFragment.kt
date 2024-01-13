@@ -121,8 +121,8 @@ class HistoryFragment : BaseFragment(), HistoryView {
 
     private fun setupSwipeRefreshLayout() {
         setSwipeEnabled(true)
-        swipeRefreshLayout.setOnRefreshListener {
-            swipeRefreshLayout.isRefreshing = false
+        swipeRefreshLayout?.setOnRefreshListener {
+            swipeRefreshLayout?.isRefreshing = false
             mPresenter!!.fetchTransactions()
             displayAll()
         }

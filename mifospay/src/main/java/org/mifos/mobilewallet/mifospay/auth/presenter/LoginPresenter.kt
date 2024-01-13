@@ -34,11 +34,6 @@ class LoginPresenter @Inject constructor(
     lateinit var fetchUserDetailsUseCase: FetchUserDetails
     private lateinit var mLoginView: LoginView
 
-    override fun attachView(baseView: BaseView<*>) {
-        mLoginView = baseView as LoginView
-        mLoginView.setPresenter(this)
-    }
-
     override fun handleLoginButtonStatus(usernameContent: String?, passwordContent: String?) {
         if (usernameContent!!.isEmpty() || passwordContent!!.isEmpty()) {
             mLoginView.disableLoginButton()
@@ -65,6 +60,11 @@ class LoginPresenter @Inject constructor(
                     mLoginView.loginFail(message)
                 }
             })
+    }
+
+    override fun attachView(baseView: BaseView<*>?) {
+        mLoginView = baseView as LoginView
+        mLoginView.setPresenter(this)
     }
 
     private fun fetchUserDetails(user: User) {
