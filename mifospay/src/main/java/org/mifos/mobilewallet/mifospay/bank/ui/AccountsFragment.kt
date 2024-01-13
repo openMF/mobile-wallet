@@ -21,7 +21,6 @@ import org.mifos.mobilewallet.mifospay.bank.BankContract
 import org.mifos.mobilewallet.mifospay.bank.BankContract.BankAccountsView
 import org.mifos.mobilewallet.mifospay.bank.adapters.BankAccountsAdapter
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountsPresenter
-import org.mifos.mobilewallet.mifospay.bank.ui.BankAccountDetailActivity
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
@@ -143,7 +142,9 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
                     Constants.NEW_BANK_ACCOUNT
                 )
                 DebugUtil.log("details", bankAccountDetails)
-                mBankAccountsAdapter!!.addBank(bankAccountDetails)
+                if (bankAccountDetails != null) {
+                    mBankAccountsAdapter!!.addBank(bankAccountDetails)
+                }
                 mRvLinkedBankAccounts!!.visibility = View.VISIBLE
                 linkedAccountsText!!.visibility = View.GONE
             }
@@ -157,7 +158,9 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
                     Constants.UPDATED_BANK_ACCOUNT
                 )
                 val index = bundle.getInt(Constants.INDEX)
-                mBankAccountsAdapter!!.setBankDetails(index, bankAccountDetails)
+                if (bankAccountDetails != null) {
+                    mBankAccountsAdapter!!.setBankDetails(index, bankAccountDetails)
+                }
             }
         }
     }
