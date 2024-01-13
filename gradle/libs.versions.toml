@@ -1,0 +1,108 @@
+[versions]
+compileSdk = "34"
+minSdk = "24"
+targetSdk = "34"
+androidGradlePlugin = "8.2.1"
+androidxActivity = "1.7.2"
+androidxComposeBom = "2023.10.01"
+androidxComposeCompiler = "1.5.1"
+androidxCore = "1.10.1"
+androidxHilt = "1.1.0-alpha01"
+androidxLifecycle = "2.6.1"
+androidxNavigation = "2.7.0"
+androidxRoom = "2.5.1"
+androidxTestCore = "1.5.0"
+androidxTestExt = "1.1.5"
+androidxTestRunner = "1.5.2"
+coroutines = "1.7.3"
+hilt = "2.47"
+junit = "4.13.2"
+kotlin = "1.9.20"
+ksp = "1.9.0-1.0.12"
+amplify = "2.11.1"
+coreLibraryDesugaring = "1.1.5"
+androidxWork = "2.9.0-alpha01"
+hiltWorker = "1.0.0"
+coil = "2.4.0"
+okhttp = "4.10.0"
+lottie = "6.1.0"
+firebaseBom = "31.2.0"
+firebaseCrashlyticsPlugin = "2.9.2"
+gmsPlugin = "4.3.14"
+butterknifePlugin = "10.2.3"
+secrets = "2.0.1"
+androidxDataStore = "1.0.0"
+gmsAdmob = "22.0.0"
+userMessagingPlatform = "2.1.0"
+
+## Sdk and tools
+buildToolsVersion = "30.0.3"
+composeVersion = "1.5.4"
+lifecycleVersion = "2.6.2"
+lifecycleExtensionsVersion = "2.2.0"
+activityVersion = "1.5.0"
+fragmentVersion = "1.5.0"
+
+## App dependencies
+supportLibraryVersion = "28.0.0"
+retrofitVersion = "2.2.0"
+okHttp3Version = "3.6.0"
+butterKnifeVersion = "10.2.3"
+dbflowVersion = "3.1.1"
+espressoVersion = "2.2.2"
+rxandroidVersion = "1.1.0"
+rxjavaVersion = "1.1.4"
+junitVersion = "4.12"
+
+[libraries]
+androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityVersion" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentVersion" }
+androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "androidxComposeBom" }
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
+androidx-compose-compiler = { module = "androidx.compose.compiler:compiler", version.ref = "androidxComposeCompiler" }
+androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3"}
+androidx-compose-ui = { group = "androidx.compose.ui", name = "ui"}
+androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4"}
+androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest"}
+androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling"}
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
+
+androidx-compose-material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended"}
+androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview"}
+androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util"}
+androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "androidxHilt" }
+androidx-lifecycle-runtime-compose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
+androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
+androidx-lifecycle-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleVersion" }
+androidx-lifecycle-extensions = { module = "androidx.lifecycle:lifecycle-extensions", version.ref = "lifecycleExtensionsVersion" }
+
+jakewharton-butterknife = { module = "com.jakewharton:butterknife", version.ref = "butterKnifeVersion" }
+jakewharton-compiler = { module = "com.jakewharton:butterknife-compiler", version.ref = "butterKnifeVersion" }
+squareup-retrofit2 = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofitVersion" }
+squareup-retrofit-adapter-rxjava = { module = "com.squareup.retrofit2:adapter-rxjava", version.ref = "retrofitVersion" }
+squareup-retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofitVersion" }
+squareup-okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okHttp3Version" }
+squareup-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okHttp3Version" }
+
+reactivex-rxjava-android = { module = "io.reactivex:rxandroid", version.ref = "rxandroidVersion" }
+reactivex-rxjava = { module = "io.reactivex:rxjava", version.ref = "rxjavaVersion" }
+
+junit = { module = "junit:junit", version.ref = "junitVersion"}
+
+jetbrains-kotlin-jdk7 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk7", version.ref = "kotlin" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
+secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+butterknife = { id = "com.jakewharton.butterknife-gradle-plugin", version.ref = "butterknifePlugin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
+hilt-gradle = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}

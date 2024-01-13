@@ -7,12 +7,12 @@ apply plugin: 'kotlin-parcelize'
 apply plugin: 'com.google.dagger.hilt.android'
 
 android {
-    compileSdk rootProject.ext.compileSdkVersion
+    compileSdk 34
     namespace 'org.mifos.mobilewallet.mifospay'
     defaultConfig {
         applicationId "org.mifos.mobilewallet.mifospay"
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
+        minSdkVersion 24
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -27,25 +27,26 @@ android {
     buildFeatures{
         dataBinding true
         compose = true
+        buildConfig true
     }
 
     composeOptions {
-        kotlinCompilerExtensionVersion "1.5.3"
-    }
-
-    aaptOptions {
-        cruncherEnabled = false
-    }
-
-    lintOptions {
-        abortOnError false
-        disable 'InvalidPackage'
+        kotlinCompilerExtensionVersion "1.5.5"
     }
 
     compileOptions {
         incremental = false
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
+
+    lint {
+        abortOnError false
+        disable 'InvalidPackage'
     }
 }
 
@@ -56,8 +57,8 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation "androidx.core:core-ktx:1.12.0"
-    implementation "androidx.activity:activity-ktx:$activity_version"
-    implementation "androidx.fragment:fragment-ktx:$fragment_version"
+    implementation libs.androidx.activity.ktx
+    implementation libs.androidx.fragment.ktx
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.vectordrawable:vectordrawable-animated:1.1.0'
     implementation 'androidx.media:media:1.6.0'
@@ -66,24 +67,26 @@ dependencies {
     api 'com.google.android.material:material:1.0.0' // update require alot of UI changes
 
     // Compose
-    implementation "androidx.compose.ui:ui:$compose_version"
-    implementation "androidx.compose.material:material:$compose_version"
-    implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation "androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version"
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle_version")
-    implementation "androidx.compose.material:material-icons-extended:$compose_version"
+    def composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.compose.material.icons.extended)
 
 
     // ViewModel
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-extensions:$rootProject.lifecycleExtensionsVersion"
+    implementation(libs.androidx.lifecycle.ktx)
+    implementation(libs.androidx.lifecycle.extensions)
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
 
-    implementation "com.jakewharton:butterknife:$rootProject.butterKnifeVersion"
-    kapt "com.jakewharton:butterknife-compiler:$rootProject.butterKnifeVersion"
+    implementation(libs.jakewharton.butterknife)
+    implementation(libs.jakewharton.compiler)
 
     // Splash API
     implementation("androidx.core:core-splashscreen:1.0.1")
@@ -96,25 +99,26 @@ dependencies {
     implementation("androidx.compose.material3:material3")
 
     implementation("androidx.activity:activity-compose:1.8.0")
-    runtimeOnly("androidx.compose.runtime:runtime:$compose_version")
-    debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
+
+    runtimeOnly(libs.androidx.compose.runtime)
+    debugImplementation(libs.androidx.compose.ui.tooling)
 
     implementation "com.google.dagger:hilt-android:2.48"
     kapt "com.google.dagger:hilt-compiler:2.48"
 
-    implementation("com.squareup.retrofit2:retrofit:$rootProject.retrofitVersion") {
+    implementation(libs.squareup.retrofit2) {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
         exclude module: 'okhttp'
     }
-    implementation "com.squareup.retrofit2:converter-gson:$rootProject.retrofitVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava:$rootProject.retrofitVersion"
-    implementation "com.squareup.okhttp3:okhttp:$rootProject.okHttp3Version"
-    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.okHttp3Version"
+    implementation(libs.squareup.retrofit.adapter.rxjava)
+    implementation(libs.squareup.retrofit.converter.gson)
+    implementation(libs.squareup.okhttp)
+    implementation(libs.squareup.logging.interceptor)
 
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
-    implementation "io.reactivex:rxandroid:$rootProject.rxandroidVersion"
-    implementation "io.reactivex:rxjava:$rootProject.rxjavaVersion"
+    implementation(libs.reactivex.rxjava.android)
+    implementation(libs.reactivex.rxjava)
 
     implementation "io.michaelrocks:libphonenumber-android:8.11.0"
 
@@ -124,6 +128,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-core:16.0.1'
+    implementation 'com.google.guava:guava:27.0.1-android'
 
     implementation 'com.hbb20:ccp:2.2.0'
     implementation 'com.github.MdFarhanRaja:SearchableSpinner:1.9'
@@ -135,7 +140,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
-    testImplementation "junit:junit:$rootProject.junitVersion"
+    testImplementation(libs.junit)
 }
 
 kapt {
