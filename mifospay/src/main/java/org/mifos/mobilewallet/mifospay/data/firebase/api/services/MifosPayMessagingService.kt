@@ -13,47 +13,37 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.mifos.mobilewallet.mifospay.data.firebase.api.services
 
-package org.mifos.mobilewallet.mifospay.data.firebase.api.services;
-
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
-import androidx.core.app.NotificationCompat;
-import android.util.Log;
-
-import com.google.firebase.messaging.FirebaseMessagingService;
-import com.google.firebase.messaging.RemoteMessage;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.mifos.mobilewallet.mifospay.R;
-import org.mifos.mobilewallet.mifospay.notification.ui.NotificationActivity;
-import org.mifos.mobilewallet.mifospay.utils.NotificationUtils;
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.media.RingtoneManager
+import android.os.Build
+import android.util.Log
+import androidx.core.app.NotificationCompat
+import com.google.firebase.messaging.FirebaseMessagingService
+import com.google.firebase.messaging.RemoteMessage
+import org.json.JSONException
+import org.json.JSONObject
+import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.notification.ui.NotificationActivity
+import org.mifos.mobilewallet.mifospay.utils.NotificationUtils
 
 /**
  * Created by ankur on 20/June/2018
  */
-
-public class MifosPayMessagingService extends FirebaseMessagingService {
-
-    private static final String TAG = "MifosPayFCM";
-
-
+class MifosPayMessagingService : FirebaseMessagingService() {
     /**
      * Called if InstanceID token is updated. This may occur if the security of
      * the previous token had been compromised. Note that this is called when the InstanceID token
      * is initially generated so this is where you would retrieve the token.
      */
-    @Override
-    public void onNewToken(String token) {
-        super.onNewToken(token);
-        Log.d(TAG, "Refreshed token: " + token);
+    override fun onNewToken(token: String) {
+        super.onNewToken(token)
+        Log.d(TAG, "Refreshed token: $token")
         // If you want to send messages to this application instance or
         // manage this apps subscriptions on the server side, send the
         // Instance ID token to your app server.
@@ -65,8 +55,7 @@ public class MifosPayMessagingService extends FirebaseMessagingService {
      * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
      */
     // [START receive_message]
-    @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
         // [START_EXCLUDE]
         // There are two types of messages data messages and notification messages. Data messages
         // are handled
@@ -84,18 +73,17 @@ public class MifosPayMessagingService extends FirebaseMessagingService {
         // [END_EXCLUDE]
 
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        Log.d(TAG, "From: " + remoteMessage.from)
 
         // Check if message contains a data payload.
         // We will use data messages and hence our messages will be handled here
-        if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
+        if (remoteMessage.data.size > 0) {
+            Log.d(TAG, "Message data payload: " + remoteMessage.data)
             try {
-                JSONObject json = new JSONObject(remoteMessage.getData().toString());
-                handleDataMessage(json);
-            } catch (Exception e) {
-                Log.e(TAG, "Exception: " + e.getMessage());
+                val json = JSONObject(remoteMessage.data.toString())
+                handleDataMessage(json)
+            } catch (e: Exception) {
+                Log.e(TAG, "Exception: " + e.message)
             }
 
 //            if (/* Check if data needs to be processed by long running job */ true) {
@@ -119,18 +107,16 @@ public class MifosPayMessagingService extends FirebaseMessagingService {
         // Also if you intend on generating your own notifications as a result of a received FCM
         // message, here is where that should be initiated. See sendNotification method below.
     }
+
     // [END receive_message]
-
-
-    @Override
-    public void onDeletedMessages() {
-        super.onDeletedMessages();
+    override fun onDeletedMessages() {
+        super.onDeletedMessages()
     }
 
     /**
      * Schedule a job using FirebaseJobDispatcher.
      */
-    private void scheduleJob() {
+    private fun scheduleJob() {
         // [START dispatch_job]
 //        FirebaseJobDispatcher dispatcher = new FirebaseJobDispatcher(new GooglePlayDriver(this));
 //        Job myJob = dispatcher.newJobBuilder()
@@ -144,9 +130,8 @@ public class MifosPayMessagingService extends FirebaseMessagingService {
     /**
      * Handle time allotted to BroadcastReceivers.
      */
-    private void handleNow() {
-
-        Log.d(TAG, "Short lived task is done.");
+    private fun handleNow() {
+        Log.d(TAG, "Short lived task is done.")
     }
 
     /**
@@ -154,74 +139,67 @@ public class MifosPayMessagingService extends FirebaseMessagingService {
      *
      * @param messageBody FCM message body received.
      */
-    private void sendNotification(String title, String messageBody) {
-        Intent intent = new Intent(this, NotificationActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent;
-        pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */,
-                intent,
-                PendingIntent.FLAG_ONE_SHOT);
-
-        String channelId = getString(R.string.app_name);
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        NotificationCompat.Builder notificationBuilder =
-                new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.ic_bank)
-                        .setContentTitle(title)
-                        .setContentText(messageBody)
-                        .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent);
-
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+    private fun sendNotification(title: String, messageBody: String) {
+        val intent = Intent(this, NotificationActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent: PendingIntent
+        pendingIntent = PendingIntent.getActivity(
+            this, 0 /* Request code */,
+            intent,
+            PendingIntent.FLAG_ONE_SHOT
+        )
+        val channelId = getString(R.string.app_name)
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.ic_bank)
+            .setContentTitle(title)
+            .setContentText(messageBody)
+            .setAutoCancel(true)
+            .setSound(defaultSoundUri)
+            .setContentIntent(pendingIntent)
+        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
+            val channel = NotificationChannel(
+                channelId,
+                "Channel human readable title",
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+            notificationManager.createNotificationChannel(channel)
         }
-
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
     }
 
     /**
      * Handles notification messages.
      */
-    private void handleNotification(String title, String message) {
-
-    }
+    private fun handleNotification(title: String, message: String) {}
 
     /**
      * Handles data messages.
      */
-    private void handleDataMessage(JSONObject json) {
-        Log.e(TAG, "push json: " + json.toString());
-
+    private fun handleDataMessage(json: JSONObject) {
+        Log.e(TAG, "push json: $json")
         try {
-            JSONObject data = json.getJSONObject("data");
-
-            String title = data.getString("title");
-            String message = data.getString("message");
-            String imageUrl = data.getString("image");
-            String type = data.getString("type");
-            String timestamp = data.getString("timestamp");
-            JSONObject payload = data.getJSONObject("payload");
-
-            Log.e(TAG, "title: " + title);
-            Log.e(TAG, "message: " + message);
-            Log.e(TAG, "type: " + type);
+            val data = json.getJSONObject("data")
+            val title = data.getString("title")
+            val message = data.getString("message")
+            val imageUrl = data.getString("image")
+            val type = data.getString("type")
+            val timestamp = data.getString("timestamp")
+            val payload = data.getJSONObject("payload")
+            Log.e(TAG, "title: $title")
+            Log.e(TAG, "message: $message")
+            Log.e(TAG, "type: $type")
             // payload can be used when one needs to show specific notification with some data
             // and process it
             if (payload != null) {
-                Log.e(TAG, "payload: " + payload.toString());
+                Log.e(TAG, "payload: $payload")
             }
-            Log.e(TAG, "imageUrl: " + imageUrl);
-            Log.e(TAG, "timestamp: " + timestamp);
-
-            sendNotification(title, message);
+            Log.e(TAG, "imageUrl: $imageUrl")
+            Log.e(TAG, "timestamp: $timestamp")
+            sendNotification(title, message)
 
             // Below code can be used when you want to show notification with Image.
 
@@ -237,31 +215,38 @@ public class MifosPayMessagingService extends FirebaseMessagingService {
 //                showNotificationMessageWithBigImage(getApplicationContext(), title, message,
 //                        timestamp, resultIntent, imageUrl);
 //            }
-
-        } catch (JSONException e) {
-            Log.e(TAG, "Json Exception: " + e.getMessage());
-        } catch (Exception e) {
-            Log.e(TAG, "Exception: " + e.getMessage());
+        } catch (e: JSONException) {
+            Log.e(TAG, "Json Exception: " + e.message)
+        } catch (e: Exception) {
+            Log.e(TAG, "Exception: " + e.message)
         }
     }
 
     /**
      * Showing notification with text only
      */
-    private void showNotificationMessage(Context context, String title, String message,
-            String timeStamp, Intent intent) {
-        NotificationUtils notificationUtils = new NotificationUtils(context);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        notificationUtils.showNotificationMessage(title, message, timeStamp, intent);
+    private fun showNotificationMessage(
+        context: Context, title: String, message: String,
+        timeStamp: String, intent: Intent
+    ) {
+        val notificationUtils = NotificationUtils(context)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        notificationUtils.showNotificationMessage(title, message, timeStamp, intent)
     }
 
     /**
      * Showing notification with text and image
      */
-    private void showNotificationMessageWithBigImage(Context context, String title, String message,
-            String timeStamp, Intent intent, String imageUrl) {
-        NotificationUtils notificationUtils = new NotificationUtils(context);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl);
+    private fun showNotificationMessageWithBigImage(
+        context: Context, title: String, message: String,
+        timeStamp: String, intent: Intent, imageUrl: String
+    ) {
+        val notificationUtils = NotificationUtils(context)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        notificationUtils.showNotificationMessage(title, message, timeStamp, intent, imageUrl)
+    }
+
+    companion object {
+        private const val TAG = "MifosPayFCM"
     }
 }

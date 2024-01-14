@@ -71,14 +71,14 @@ class HomeViewModel @Inject constructor(
             FetchAccount.RequestValues(localRepository.clientDetails.clientId),
             object : UseCaseCallback<FetchAccount.ResponseValue?> {
                 override fun onSuccess(response: FetchAccount.ResponseValue?) {
-                    preferencesHelper.accountId = response?.account?.id
+                    preferencesHelper.accountId = response?.account?.id!!
 
                     _homeUIState.update { currentState ->
-                        currentState.copy(account = response?.account)
+                        currentState.copy(account = response.account)
                     }
 
-                    mHomeView?.setAccountBalance(response?.account)
-                    response?.account?.id?.let { transactionsHistory?.fetchTransactionsHistory(it) }
+                    mHomeView?.setAccountBalance(response.account)
+                    response.account?.id?.let { transactionsHistory?.fetchTransactionsHistory(it) }
                     mHomeView?.hideSwipeProgress()
                 }
 
