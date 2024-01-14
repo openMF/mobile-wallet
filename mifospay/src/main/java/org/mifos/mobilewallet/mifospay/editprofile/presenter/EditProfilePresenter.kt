@@ -58,25 +58,25 @@ class EditProfilePresenter @Inject constructor(
     }
 
     private fun showUsernameIfNotEmpty() {
-        if (!mPreferencesHelper.username.isEmpty()) {
+        if (mPreferencesHelper.username?.isNotEmpty() == true) {
             mEditProfileView!!.showUsername(mPreferencesHelper.username)
         }
     }
 
     private fun showEmailIfNotEmpty() {
-        if (!mPreferencesHelper.email.isEmpty()) {
+        if (mPreferencesHelper.email?.isNotEmpty() == true) {
             mEditProfileView!!.showEmail(mPreferencesHelper.email)
         }
     }
 
     private fun showVpaIfNotEmpty() {
-        if (!mPreferencesHelper.clientVpa.isEmpty()) {
+        if (mPreferencesHelper.clientVpa?.isNotEmpty() == true) {
             mEditProfileView!!.showVpa(mPreferencesHelper.clientVpa)
         }
     }
 
     private fun showMobielIfNotEmpty() {
-        if (!mPreferencesHelper.mobile.isEmpty()) {
+        if (mPreferencesHelper.mobile?.isNotEmpty() == true) {
             mEditProfileView!!.showMobileNumber(mPreferencesHelper.mobile)
         }
     }

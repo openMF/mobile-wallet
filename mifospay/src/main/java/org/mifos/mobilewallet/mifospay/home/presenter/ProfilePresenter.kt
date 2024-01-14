@@ -35,9 +35,9 @@ class ProfilePresenter @Inject constructor(
         val email = mPreferencesHelper.email
         val vpa = mPreferencesHelper.clientVpa
         val mobile = mPreferencesHelper.mobile
-        mProfileView?.showEmail(email.ifEmpty { "-" })
-        mProfileView?.showVpa(vpa.ifEmpty { "-" })
-        mProfileView?.showMobile(mobile.ifEmpty { "-" })
+        mProfileView?.showEmail(email?.ifEmpty { "-" })
+        mProfileView?.showVpa(vpa?.ifEmpty { "-" })
+        mProfileView?.showMobile(mobile?.ifEmpty { "-" })
     }
 
     override fun fetchClientImage() {
