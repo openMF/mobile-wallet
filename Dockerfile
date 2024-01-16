@@ -22,7 +22,7 @@ RUN set -o errexit -o nounset \
     && echo "Symlinking root Gradle cache to gradle Gradle cache" \
     && ln -s /home/gradle/.gradle /root/.gradle
 
-USER gradle
+USER root
 WORKDIR /home/gradle
 
 ENV ANDROID_HOME="/home/gradle/android-sdk-linux"
