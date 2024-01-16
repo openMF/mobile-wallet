@@ -1,7 +1,7 @@
-FROM openjdk:8-jdk
+FROM openjdk:17-jdk
 
 ENV GRADLE_HOME /opt/gradle
-ENV GRADLE_VERSION 4.6
+ENV GRADLE_VERSION 8.2
 
 RUN set -o errexit -o nounset \
 	&& echo "Downloading Gradle" \
@@ -37,7 +37,7 @@ RUN mkdir "$ANDROID_HOME" .android \
 ENV PATH="/home/gradle/gradle/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/tools/bin:${PATH}"
 
 RUN sdkmanager 'platform-tools'
-RUN sdkmanager 'platforms;android-28'
+RUN sdkmanager 'platforms;android-34'
 RUN sdkmanager 'build-tools;27.0.3'
 RUN sdkmanager 'extras;google;m2repository'
 RUN sdkmanager 'extras;android;m2repository'
