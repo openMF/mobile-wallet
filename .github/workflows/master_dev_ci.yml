@@ -23,7 +23,7 @@ jobs:
 
         # Install NDK
       - name: Install NDK
-        run: echo "y" | ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;21.3.6528147" --sdk_root=${ANDROID_SDK_ROOT}
+        run: echo "y" | ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;26.1.10909125" --sdk_root=${ANDROID_SDK_ROOT}
 
         # Update Gradle Permission
       - name: Change gradlew Permission
