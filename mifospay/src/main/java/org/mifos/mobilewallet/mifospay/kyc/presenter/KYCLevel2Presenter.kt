@@ -28,7 +28,7 @@ class KYCLevel2Presenter @Inject constructor(
     private val preferencesHelper: PreferencesHelper,
 ) : KYCContract.KYCLevel2Presenter {
 
-    override val context: Context = MifosPayApp.getContext()
+    override val context: Context = MifosPayApp.context!!
 
     @JvmField
     @Inject
