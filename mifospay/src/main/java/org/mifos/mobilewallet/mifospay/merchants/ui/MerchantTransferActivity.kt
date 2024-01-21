@@ -120,7 +120,7 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
     private fun setUpRecycleView() {
         mMerchantHistoryAdapter?.setContext(this)
         rvMerchantHistory?.layoutManager =
-            LinearLayoutManager(MifosPayApp.getContext())
+            LinearLayoutManager(MifosPayApp.context)
         rvMerchantHistory?.adapter = mMerchantHistoryAdapter
     }
 
@@ -165,7 +165,7 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
     }
 
     override fun showToast(message: String?) {
-        Toaster.showToast(MifosPayApp.getContext(), message)
+        Toaster.showToast(MifosPayApp.context, message)
     }
 
     override fun showPaymentDetails(externalId: String?, amount: Double) {

@@ -79,7 +79,7 @@ class SearchActivity : BaseActivity(), SearchContract.SearchView {
     }
 
     override fun showToast(message: String?) {
-        Toaster.showToast(MifosPayApp.getContext(), message)
+        Toaster.showToast(MifosPayApp.context, message)
     }
 
     override fun showSnackbar(message: String?) {

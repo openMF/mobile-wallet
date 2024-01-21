@@ -21,8 +21,8 @@ class DebitCardPresenter @Inject constructor() : BankContract.DebitCardPresenter
         val otp = "0000"
         if (s!!.length < 12 || s.length > 19) {
             mDebitCardView!!.verifyDebitCardError(
-                MifosPayApp.getContext()
-                    .getString(R.string.debit_card_error_message)
+                MifosPayApp.context
+                    ?.getString(R.string.debit_card_error_message)
             )
         } else {
             mDebitCardView!!.verifyDebitCardSuccess(otp)
