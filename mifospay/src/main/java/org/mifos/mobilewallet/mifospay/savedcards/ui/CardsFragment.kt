@@ -162,7 +162,7 @@ class CardsFragment : BaseFragment(), CardsView {
             RecyclerItemClickListener(
                 activity,
                 object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(childView: View, position: Int) {
+                    override fun onItemClick(childView: View?, position: Int) {
                         val savedCardMenu = PopupMenu(context, childView)
                         savedCardMenu.menuInflater.inflate(
                             R.menu.menu_saved_card,
@@ -192,7 +192,7 @@ class CardsFragment : BaseFragment(), CardsView {
                         savedCardMenu.show()
                     }
 
-                    override fun onItemLongPress(childView: View, position: Int) {}
+                    override fun onItemLongPress(childView: View?, position: Int) {}
                 })
         )
     }

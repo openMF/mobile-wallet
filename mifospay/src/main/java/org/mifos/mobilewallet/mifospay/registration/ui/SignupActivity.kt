@@ -158,7 +158,6 @@ class SignupActivity : BaseActivity(), SignupView {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {}
         })
-        DebugUtil.log(mobileNumber, countryName, email, displayName, firstName, lastName, photoUri)
         showProgressDialog(Constants.PLEASE_WAIT)
         initSearchableStateSpinner()
     }
@@ -168,17 +167,17 @@ class SignupActivity : BaseActivity(), SignupView {
         try {
             countryId = ""
             jsonObject = FileUtils.readJson(this, "countries.json")
-            val countriesArray = jsonObject.getJSONArray("countries")
-            for (i in 0 until countriesArray.length()) {
+            val countriesArray = jsonObject?.getJSONArray("countries")
+            for (i in 0 until countriesArray?.length()!!) {
                 if (countriesArray.getJSONObject(i).getString("name") == countryName) {
                     countryId = countriesArray.getJSONObject(i).getString("id")
                     break
                 }
             }
             jsonObject = FileUtils.readJson(this, "states.json")
-            val statesJson = jsonObject.getJSONArray("states")
+            val statesJson = jsonObject?.getJSONArray("states")
             val statesList = ArrayList<String>()
-            for (i in 0 until statesJson.length()) {
+            for (i in 0 until statesJson?.length()!!) {
                 val statesJsonObject = statesJson.getJSONObject(i)
                 if (statesJsonObject.getString("country_id") == countryId) {
                     statesList.add(statesJsonObject.getString("name"))

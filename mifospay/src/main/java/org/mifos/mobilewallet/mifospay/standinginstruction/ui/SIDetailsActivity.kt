@@ -290,14 +290,14 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
 
     private fun showConfirmDeleteDialog() {
         val dialogBox = DialogBox()
-        dialogBox.setOnPositiveListener { dialog, which ->
+        dialogBox.setPositiveListener() { dialog, which ->
             if (this.standingInstructionId != 0L) {
                 mStandingInstructionPresenter.deleteStandingInstruction(
                     this.standingInstructionId
                 )
             }
         }
-        dialogBox.setOnNegativeListener { dialog, which ->
+        dialogBox.setNegativeListener() { dialog, which ->
             dialog.dismiss()
         }
         dialogBox.show(
@@ -308,14 +308,14 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
 
     private fun showDiscardChangesDialog() {
         val dialogBox = DialogBox()
-        dialogBox.setOnPositiveListener { dialog, which ->
+        dialogBox.setPositiveListener() { dialog, which ->
             binding.fab.hide()
             dialog.dismiss()
             editDetails(false)
             revertLocalChanges()
             binding.fab.show()
         }
-        dialogBox.setOnNegativeListener { dialog, which ->
+        dialogBox.setNegativeListener() { dialog, which ->
             dialog.dismiss()
         }
         dialogBox.show(

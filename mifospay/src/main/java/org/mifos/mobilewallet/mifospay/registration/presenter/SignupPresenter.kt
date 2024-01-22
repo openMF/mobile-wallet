@@ -87,11 +87,13 @@ class SignupPresenter @Inject constructor(
     }
 
     override fun checkPasswordStrength(password: String?) {
-        val p = PasswordStrength(password)
-        mSignupView!!.updatePasswordStrength(
-            p.strengthStringId,
-            p.colorResId, p.value
-        )
+        val p = password?.let { PasswordStrength(it) }
+        if (p != null) {
+            mSignupView!!.updatePasswordStrength(
+                p.strengthStringId,
+                p.colorResId, p.value
+            )
+        }
     }
 
     override fun registerUser(
@@ -151,7 +153,6 @@ class SignupPresenter @Inject constructor(
     }
 
     private fun createClient(userId: Int) {
-        DebugUtil.log("mob::::: ", mobileNumber)
         val newClient = NewClient(
             businessName, username, addressLine1,
             addressLine2, city, pincode, stateId, countryId, mobileNumber,
@@ -161,7 +162,7 @@ class SignupPresenter @Inject constructor(
             CreateClient.RequestValues(newClient),
             object : UseCaseCallback<CreateClient.ResponseValue?> {
                 override fun onSuccess(response: CreateClient.ResponseValue?) {
-                    DebugUtil.log(response?.clientId)
+                    response?.clientId?.let { DebugUtil.log(it) }
                     val clients = ArrayList<Int>()
                     response?.clientId?.let { clients.add(it) }
                     updateClient(clients, userId)

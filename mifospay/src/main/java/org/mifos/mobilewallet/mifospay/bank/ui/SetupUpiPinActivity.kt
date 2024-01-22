@@ -96,15 +96,15 @@ class SetupUpiPinActivity : BaseActivity(), SetupUpiPinView {
     override fun debitCardVerified(otp: String?) {
         mTvDebitCard!!.visibility = View.VISIBLE
         addFragment(OtpFragment.newInstance(otp), R.id.fl_otp)
-        AnimationUtil.collapse(mFlDebitCard)
-        AnimationUtil.expand(mFlOtp)
+        mFlDebitCard?.let { AnimationUtil.collapse(it) }
+        mFlOtp?.let { AnimationUtil.expand(it) }
     }
 
     fun otpVerified() {
         mTvOtp!!.visibility = View.VISIBLE
         addFragment(UpiPinFragment(), R.id.fl_upi_pin)
-        AnimationUtil.expand(mFlUpiPin)
-        AnimationUtil.collapse(mFlOtp)
+        mFlUpiPin?.let { AnimationUtil.expand(it) }
+        mFlOtp?.let { AnimationUtil.collapse(it) }
     }
 
     fun upiPinEntered(upiPin: String?) {

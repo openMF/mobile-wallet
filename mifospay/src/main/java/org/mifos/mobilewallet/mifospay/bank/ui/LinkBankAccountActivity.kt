@@ -111,7 +111,7 @@ class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
         mRvPopularBanks!!.addOnItemTouchListener(
             RecyclerItemClickListener(this,
                 object : SimpleOnItemClickListener() {
-                    override fun onItemClick(childView: View, position: Int) {
+                    override fun onItemClick(childView: View?, position: Int) {
                         val bank = mPopularBankAdapter!!.getBank(position)
                         bankSelected = bank.name
                         val chooseSimDialog = ChooseSimDialog()
@@ -122,7 +122,7 @@ class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
         mRvOtherBanks!!.addOnItemTouchListener(
             RecyclerItemClickListener(this,
                 object : SimpleOnItemClickListener() {
-                    override fun onItemClick(childView: View, position: Int) {
+                    override fun onItemClick(childView: View?, position: Int) {
                         val bank = mOtherBankAdapter!!.getBank(position)
                         bankSelected = bank.name
                         val chooseSimDialog = ChooseSimDialog()
@@ -172,7 +172,7 @@ class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
     private fun setupAdapterData() {
         val jsonObject: JSONObject
         try {
-            jsonObject = FileUtils.readJson(this, "banks.json")
+            jsonObject = FileUtils.readJson(this, "banks.json")!!
             banksList = ArrayList()
             for (i in 0 until jsonObject.getJSONArray("banks").length()) {
                 banksList!!.add(
@@ -189,11 +189,11 @@ class LinkBankAccountActivity : BaseActivity(), LinkBankAccountView {
             popularBanks!!.add(Bank("HDFC Bank", R.drawable.logo_hdfc, 0))
             popularBanks!!.add(Bank("ICICI Bank", R.drawable.logo_icici, 0))
             popularBanks!!.add(Bank("AXIS Bank", R.drawable.logo_axis, 0))
-            DebugUtil.log(popularBanks, banksList)
+            DebugUtil.log(popularBanks!!, banksList!!)
             mPopularBankAdapter!!.setData(popularBanks)
             mOtherBankAdapter!!.setData(banksList)
         } catch (e: Exception) {
-            DebugUtil.log(e.message)
+            e.message?.let { DebugUtil.log(it) }
         }
     }
 

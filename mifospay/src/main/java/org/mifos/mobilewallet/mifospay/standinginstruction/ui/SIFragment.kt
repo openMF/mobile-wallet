@@ -73,11 +73,9 @@ class SIFragment : BaseFragment(), StandingInstructionContract.SIListView {
         binding.rvSi.adapter = mSIAdapter
         binding.rvSi.addOnItemTouchListener(RecyclerItemClickListener(context,
                 object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemLongPress(childView: View?, position: Int) {
+                    override fun onItemLongPress(childView: View?, position: Int) {}
 
-                    }
-
-                    override fun onItemClick(childView: View, position: Int) {
+                    override fun onItemClick(childView: View?, position: Int) {
                         val intent = Intent(activity, SIDetailsActivity::class.java)
                         val standingInstructionId =
                                 mSIAdapter.getStandingInstruction(position)?.id
