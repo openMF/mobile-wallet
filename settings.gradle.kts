@@ -1,4 +1,5 @@
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         gradlePluginPortal()
         google()
@@ -18,5 +19,7 @@ dependencyResolutionManagement {
 }
 rootProject.name = "mobile-wallet"
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":mifospay")
 include(":core")
+include(":main-core:datastore")

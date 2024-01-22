@@ -36,6 +36,7 @@ import javax.inject.Inject
  */
 @AndroidEntryPoint
 class LoginActivity : BaseActivity(), LoginView {
+
     @Inject
     lateinit var mPresenter: LoginPresenter
     lateinit var mLoginPresenter: AuthContract.LoginPresenter
