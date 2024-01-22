@@ -1,23 +1,18 @@
-@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.hilt.gradle)
-    alias(libs.plugins.gms)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.mifospay.android.application)
+    alias(libs.plugins.mifospay.android.application.compose)
+    alias(libs.plugins.mifospay.android.hilt)
+    alias(libs.plugins.mifospay.android.application.firebase)
+    id("com.google.android.gms.oss-licenses-plugin")
+    alias(libs.plugins.roborazzi)
 }
 
 apply(from = "../config/quality/quality.gradle")
 
 android {
-    compileSdk = libs.versions.compileSdk.get().toInt()
     namespace = "org.mifos.mobilewallet.mifospay"
     defaultConfig {
         applicationId = "org.mifos.mobilewallet.mifospay"
-        minSdk = libs.versions.minSdk.get().toInt()
-        targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -33,40 +28,29 @@ android {
 
     buildFeatures {
         dataBinding = true
-        compose = true
         buildConfig = true
-        renderScript = false
-        shaders = false
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.7"
+    packaging {
+        resources {
+            excludes.add("/META-INF/{AL2.0,LGPL2.1}")
+        }
     }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = "17"
-    }
-
-    lint {
-        abortOnError =  false
-        disable += "InvalidPackage"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
     }
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation(projects.core)
+    implementation(libs.androidx.constraintlayout)
 
-    implementation("androidx.appcompat:appcompat:1.6.1")
-    implementation("androidx.core:core-ktx:1.12.0")
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.fragment.ktx)
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.vectordrawable:vectordrawable-animated:1.1.0")
     implementation("androidx.media:media:1.6.0")
     implementation("androidx.cardview:cardview:1.0.0")
@@ -74,14 +58,12 @@ dependencies {
     api("com.google.android.material:material:1.0.0") // update require alot of UI changes
 
     // Compose
-    val composeBom = platform(libs.androidx.compose.bom)
-    implementation(composeBom)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.lifecycle.runtime.compose)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.androidx.compose.material.icons.extended)
 
 
@@ -110,9 +92,6 @@ dependencies {
     runtimeOnly(libs.androidx.compose.runtime)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    implementation("com.google.dagger:hilt-android:2.48")
-    kapt("com.google.dagger:hilt-compiler:2.48")
-
     implementation(libs.squareup.retrofit2) {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
         exclude(module = "okhttp")
@@ -132,9 +111,8 @@ dependencies {
     implementation("me.dm7.barcodescanner:zxing:1.9.13")
 
     implementation("com.mifos.mobile:mifos-passcode:0.3.0")
-    implementation("com.google.firebase:firebase-messaging:17.3.4")
-    implementation("com.google.android.gms:play-services-auth:16.0.1")
-    implementation("com.google.firebase:firebase-core:16.0.1")
+
+    implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.guava:guava:27.0.1-android")
 
     implementation("com.hbb20:ccp:2.2.0")
@@ -143,13 +121,7 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.github.yalantis:ucrop:2.2.2")
 
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.1.0") {
-        exclude(group = "com.android.support", module = "support-annotations")
-    }
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     testImplementation(libs.junit)
-}
-
-kapt {
-    correctErrorTypes = true
 }

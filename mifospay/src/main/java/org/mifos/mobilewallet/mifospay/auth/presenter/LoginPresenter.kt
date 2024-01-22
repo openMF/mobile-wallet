@@ -24,6 +24,7 @@ class LoginPresenter @Inject constructor(
     private val mUsecaseHandler: UseCaseHandler,
     private val preferencesHelper: PreferencesHelper
 ) : AuthContract.LoginPresenter {
+
     @Inject
     lateinit var authenticateUserUseCase: AuthenticateUser
 
