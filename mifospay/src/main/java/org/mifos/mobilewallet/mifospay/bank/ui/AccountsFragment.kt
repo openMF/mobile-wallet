@@ -95,7 +95,7 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
             RecyclerItemClickListener(
                 activity,
                 object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(childView: View, position: Int) {
+                    override fun onItemClick(childView: View?, position: Int) {
                         val intent = Intent(
                             activity,
                             BankAccountDetailActivity::class.java
@@ -108,7 +108,7 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
                         startActivityForResult(intent, BANK_ACCOUNT_DETAILS_REQUEST_CODE)
                     }
 
-                    override fun onItemLongPress(childView: View, position: Int) {}
+                    override fun onItemLongPress(childView: View?, position: Int) {}
                 })
         )
     }
@@ -136,12 +136,16 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
         DebugUtil.log("rescode ", resultCode)
         if (requestCode == LINK_BANK_ACCOUNT_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             val bundle = data!!.extras
-            DebugUtil.log("bundle", bundle)
+            if (bundle != null) {
+                DebugUtil.log("bundle", bundle)
+            }
             if (bundle != null) {
                 val bankAccountDetails = bundle.getParcelable<BankAccountDetails>(
                     Constants.NEW_BANK_ACCOUNT
                 )
-                DebugUtil.log("details", bankAccountDetails)
+                if (bankAccountDetails != null) {
+                    DebugUtil.log("details", bankAccountDetails)
+                }
                 if (bankAccountDetails != null) {
                     mBankAccountsAdapter!!.addBank(bankAccountDetails)
                 }
@@ -152,7 +156,9 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
             == Activity.RESULT_OK
         ) {
             val bundle = data!!.extras
-            DebugUtil.log("bundle", bundle)
+            if (bundle != null) {
+                DebugUtil.log("bundle", bundle)
+            }
             if (bundle != null) {
                 val bankAccountDetails = bundle.getParcelable<BankAccountDetails>(
                     Constants.UPDATED_BANK_ACCOUNT

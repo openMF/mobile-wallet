@@ -95,7 +95,7 @@ class InvoicesFragment : BaseFragment(), InvoicesView {
             RecyclerItemClickListener(
                 activity,
                 object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(childView: View, position: Int) {
+                    override fun onItemClick(childView: View?, position: Int) {
                         val intent = Intent(activity, InvoiceActivity::class.java)
                         // incomplete
                         intent.data = mInvoicesPresenter!!.getUniqueInvoiceLink(
@@ -104,7 +104,7 @@ class InvoicesFragment : BaseFragment(), InvoicesView {
                         startActivity(intent)
                     }
 
-                    override fun onItemLongPress(childView: View, position: Int) {}
+                    override fun onItemLongPress(childView: View?, position: Int) {}
                 })
         )
     }

@@ -49,8 +49,8 @@ class SettingsActivity : BaseActivity(), SettingsView {
 
     @OnClick(R.id.btn_disable_account)
     fun onDisableAccountClicked() {
-        dialogBox.setOnPositiveListener { dialog, which -> mSettingsPresenter!!.disableAccount() }
-        dialogBox.setOnNegativeListener { dialog, which -> dialog.dismiss() }
+        dialogBox.setPositiveListener() { dialog, which -> mSettingsPresenter!!.disableAccount() }
+        dialogBox.setNegativeListener() { dialog, which -> dialog.dismiss() }
         dialogBox.show(
             this, R.string.alert_disable_account,
             R.string.alert_disable_account_desc, R.string.ok, R.string.cancel

@@ -137,7 +137,9 @@ class BankAccountDetailActivity : BaseActivity(), BankAccountDetailView {
         DebugUtil.log("rescode ", resultCode)
         if (requestCode == SETUP_UPI_REQUEST_CODE && resultCode == RESULT_OK) {
             val bundle = data!!.extras
-            DebugUtil.log("bundle", bundle)
+            if (bundle != null) {
+                DebugUtil.log("bundle", bundle)
+            }
             if (bundle != null) {
                 bankAccountDetails = bundle.getParcelable(Constants.UPDATED_BANK_ACCOUNT)
                 index = bundle.getInt(Constants.INDEX)

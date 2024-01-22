@@ -31,11 +31,13 @@ class MerchantsAdapter @Inject constructor() : RecyclerView.Adapter<MerchantsAda
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val mMerchant = merchants?.get(position)
-        val iconDrawable = TextDrawable.builder().beginConfig()
-            .endConfig().buildRound(
-                mMerchant?.clientName
-                    ?.substring(0, 1), R.color.colorAccentBlack
-            )
+        val iconDrawable = mMerchant?.clientName
+            ?.substring(0, 1)?.let {
+                TextDrawable.builder().beginConfig()
+                .endConfig().buildRound(
+                        it, R.color.colorAccentBlack
+                )
+            }
         holder.mTvMerchantIcon?.setImageDrawable(iconDrawable)
         holder.mTvMerchantName?.text = mMerchant?.clientName
         holder.mTvMerchantExternalId?.text = mMerchant?.externalId

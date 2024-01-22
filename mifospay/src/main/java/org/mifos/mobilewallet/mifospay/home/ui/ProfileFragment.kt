@@ -116,10 +116,12 @@ class ProfileFragment : BaseFragment(), ProfileView {
     }
 
     override fun showProfile(client: Client?) {
-        val drawable = TextDrawable.builder().beginConfig()
-            .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())
-            .height(resources.getDimension(R.dimen.user_profile_image_size).toInt())
-            .endConfig().buildRound(client?.name?.substring(0, 1), R.color.colorAccentBlack)
+        val drawable = client?.name?.substring(0, 1)?.let {
+            TextDrawable.builder().beginConfig()
+                .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())
+                .height(resources.getDimension(R.dimen.user_profile_image_size).toInt())
+                .endConfig().buildRound(it, R.color.colorAccentBlack)
+        }
         ivUserImage?.setImageDrawable(drawable)
         tvUserName?.text = client?.name
     }

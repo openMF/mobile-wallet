@@ -101,7 +101,7 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
             RecyclerItemClickListener(
                 activity,
                 object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(childView: View, position: Int) {
+                    override fun onItemClick(childView: View?, position: Int) {
                         val merchantVPA: String? = mMerchantsAdapter?.merchants
                             ?.get(position)?.externalId
                         val intent = Intent(
@@ -125,7 +125,7 @@ class MerchantsFragment : BaseFragment(), MerchantsContract.MerchantsView {
                         startActivity(intent)
                     }
 
-                    override fun onItemLongPress(childView: View, position: Int) {
+                    override fun onItemLongPress(childView: View?, position: Int) {
                         val clipboard = activity
                             ?.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
                         val merchantVPA: String? = mMerchantsAdapter?.merchants

@@ -187,7 +187,7 @@ class LoginActivity : BaseActivity(), LoginView {
                 signup(mMifosSavingProductId)
             } catch (e: Exception) {
                 // Google Sign In failed, update UI appropriately
-                DebugUtil.log(Constants.GOOGLE_SIGN_IN_FAILED, e.message)
+                e.message?.let { DebugUtil.log(Constants.GOOGLE_SIGN_IN_FAILED, it) }
                 Toaster.showToast(this, Constants.GOOGLE_SIGN_IN_FAILED)
                 hideProgressDialog()
             }

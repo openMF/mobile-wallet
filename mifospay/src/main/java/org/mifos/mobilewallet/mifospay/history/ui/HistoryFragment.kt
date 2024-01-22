@@ -110,11 +110,11 @@ class HistoryFragment : BaseFragment(), HistoryView {
             RecyclerItemClickListener(
                 context,
                 object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(childView: View, position: Int) {
+                    override fun onItemClick(childView: View?, position: Int) {
                         mPresenter!!.handleTransactionClick(position)
                     }
 
-                    override fun onItemLongPress(childView: View, position: Int) {}
+                    override fun onItemLongPress(childView: View?, position: Int) {}
                 })
         )
     }

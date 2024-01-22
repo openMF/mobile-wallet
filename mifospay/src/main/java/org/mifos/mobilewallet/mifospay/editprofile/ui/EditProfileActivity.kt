@@ -436,11 +436,11 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
     }
 
     override fun showDiscardChangesDialog() {
-        dialogBox!!.setOnPositiveListener { dialog, _ ->
+        dialogBox!!.setPositiveListener { dialog, _ ->
             mPresenter!!.onDialogPositive()
             dialog.dismiss()
         }
-        dialogBox!!.setOnNegativeListener { dialog, which ->
+        dialogBox!!.setNegativeListener { dialog, which ->
             mPresenter!!.onDialogNegative()
             dialog.dismiss()
         }

@@ -62,7 +62,7 @@ class KYCLevel2Presenter @Inject constructor(
     override fun updateFile(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
             val uri = data.data
-            file = File(FileUtils.getPath(context, uri))
+            file = File(uri?.let { FileUtils.getPath(context, it) })
             mKYCLevel2View!!.setFilename(file!!.path)
         }
     }

@@ -86,7 +86,7 @@ class SpecificTransactionsActivity : BaseActivity(), SpecificTransactionsView {
         mRvTransactions!!.addOnItemTouchListener(
             RecyclerItemClickListener(this,
                 object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(childView: View, position: Int) {
+                    override fun onItemClick(childView: View?, position: Int) {
                         val intent = Intent(
                             this@SpecificTransactionsActivity,
                             ReceiptActivity::class.java
@@ -100,7 +100,7 @@ class SpecificTransactionsActivity : BaseActivity(), SpecificTransactionsView {
                         startActivity(intent)
                     }
 
-                    override fun onItemLongPress(childView: View, position: Int) {}
+                    override fun onItemLongPress(childView: View?, position: Int) {}
                 })
         )
     }

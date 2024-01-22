@@ -105,13 +105,15 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
         tvMerchantName?.text =
             intent.getStringExtra(Constants.MERCHANT_NAME)
         tvMerchantVPA?.text = intent.getStringExtra(Constants.MERCHANT_VPA)
-        val drawable = TextDrawable.builder().beginConfig()
-            .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())
-            .height(resources.getDimension(R.dimen.user_profile_image_size).toInt())
-            .endConfig().buildRound(
-                intent.getStringExtra(Constants.MERCHANT_NAME)
-                    ?.substring(0, 1), R.color.colorPrimary
-            )
+        val drawable = intent.getStringExtra(Constants.MERCHANT_NAME)
+            ?.substring(0, 1)?.let {
+                TextDrawable.builder().beginConfig()
+                .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())
+                .height(resources.getDimension(R.dimen.user_profile_image_size).toInt())
+                .endConfig().buildRound(
+                        it, R.color.colorPrimary
+                )
+            }
         ivMerchantImage?.setImageDrawable(drawable)
         showTransactionFetching()
         setUpRecycleView()
