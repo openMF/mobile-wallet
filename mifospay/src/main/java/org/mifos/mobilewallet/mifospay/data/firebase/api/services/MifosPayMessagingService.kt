@@ -142,11 +142,14 @@ class MifosPayMessagingService : FirebaseMessagingService() {
     private fun sendNotification(title: String, messageBody: String) {
         val intent = Intent(this, NotificationActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent: PendingIntent
-        pendingIntent = PendingIntent.getActivity(
+        val pendingIntent: PendingIntent = PendingIntent.getActivity(
             this, 0 /* Request code */,
             intent,
-            PendingIntent.FLAG_ONE_SHOT
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT }
+            else {
+                PendingIntent.FLAG_ONE_SHOT
+            }
         )
         val channelId = getString(R.string.app_name)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)

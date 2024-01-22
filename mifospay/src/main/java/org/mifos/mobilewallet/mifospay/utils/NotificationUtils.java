@@ -113,7 +113,7 @@ public class NotificationUtils {
                         mContext,
                         0,
                         intent,
-                        PendingIntent.FLAG_CANCEL_CURRENT
+                        PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE
                 );
 
         final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
