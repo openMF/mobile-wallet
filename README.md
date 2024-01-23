@@ -228,3 +228,17 @@ https://github.com/openMF/mobile-wallet/wiki
 </p>
 
 
+## Join Us on Slack
+
+Mifos boasts an active and vibrant contributor community, Please join us on [slack](https://mifos.slack.com/). Once you've joined the mifos slack community, please join the `#mobile-wallet` channel to engage with mobile-wallet development.
+
+
+## Contributors
+
+Special thanks to the incredible code contributors who continue to drive this project forward.
+
+<a href="https://github.com/openMF/mobile-wallet/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=openMF/mobile-wallet" />
+</a>
+
+
