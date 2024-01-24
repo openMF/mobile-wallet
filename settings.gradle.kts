@@ -16,7 +16,7 @@ dependencyResolutionManagement {
         maven("https://plugins.gradle.org/m2/")
     }
 }
-rootProject.name = "Mobile-Wallet"
+rootProject.name = "mobile-wallet"
 
 include(":mifospay")
 include(":core")
