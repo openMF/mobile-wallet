@@ -9,7 +9,13 @@ that can be used as a dependency in any other wallet based project. It is develo
 
 Development | Chat |
 |-----------------|-----------------|
-![Mobile-Wallet CI[Master/Dev]](https://github.com/openMF/mobile-wallet/workflows/Mobile-Wallet%20CI%5BMaster/Dev%5D/badge.svg?branch=dev) | [![Join the chat at https://gitter.im/openMF/mobile-wallet](https://badges.gitter.im/openMF/mobile-wallet.svg)](https://gitter.im/openMF/mobile-wallet?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) |
+![Mobile-Wallet CI[Master/Dev]](https://github.com/openMF/mobile-wallet/workflows/Mobile-Wallet%20CI%5BMaster/Dev%5D/badge.svg?branch=dev) | [![Join the chat at https://mifos.slack.com/](https://img.shields.io/badge/Join%20Our%20Community-Slack-blue)](https://mifos.slack.com/) |
+
+
+## Join Us on Slack
+
+Mifos boasts an active and vibrant contributor community, Please join us on [slack](https://mifos.slack.com/). Once you've joined the mifos slack community, please join the `#mobile-wallet` channel to engage with mobile-wallet development.
+
 
 ## How to Contribute
 
@@ -39,8 +45,10 @@ We have the following branches :
 
 ### Demo credentials
 Fineract Instance: demo.mifos.io
-username: demoUser123
-password: password
+
+Username: `venus`
+
+Password: `Venus2023#`
    
 ### Development Setup
 
@@ -226,11 +234,6 @@ https://github.com/openMF/mobile-wallet/wiki
 <p>
   Click <a href= "https://github.com/openMF/mobile-wallet/blob/dev/Screenshot.md">here </a> for more screenshots
 </p>
-
-
-## Join Us on Slack
-
-Mifos boasts an active and vibrant contributor community, Please join us on [slack](https://mifos.slack.com/). Once you've joined the mifos slack community, please join the `#mobile-wallet` channel to engage with mobile-wallet development.
 
 
 ## Contributors
