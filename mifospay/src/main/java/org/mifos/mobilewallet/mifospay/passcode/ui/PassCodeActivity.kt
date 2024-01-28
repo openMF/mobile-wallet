@@ -59,7 +59,6 @@ class PassCodeActivity : MifosPassCodeActivity(), PassCodeView {
 
     override fun startNextActivity() {
         // authenticate user with saved Preferences
-        mPresenter?.createAuthenticatedService()
         if (deepLinkURI != null) {
             val uri = Uri.parse(deepLinkURI)
             val intent = Intent(this@PassCodeActivity, ReceiptActivity::class.java)

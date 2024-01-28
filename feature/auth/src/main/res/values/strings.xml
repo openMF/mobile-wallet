@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_auth_login">Login</string>
+    <string name="feature_auth_welcome_back">Welcome back!</string>
+    <string name="feature_auth_sign_up">Sign up.</string>
+    <string name="feature_auth_password">Password</string>
+    <string name="feature_auth_username">Username</string>
+</resources>

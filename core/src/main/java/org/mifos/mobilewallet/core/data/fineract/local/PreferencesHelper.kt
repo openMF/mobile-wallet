@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.data.local
+package org.mifos.mobilewallet.core.data.fineract.local
 
 import android.content.Context
 import android.content.SharedPreferences

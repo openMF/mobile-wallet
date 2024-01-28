@@ -1,296 +1,304 @@
-package org.mifos.mobilewallet.core.data.fineract.repository;
+package org.mifos.mobilewallet.core.data.fineract.repository
 
-import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager;
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse;
-import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager;
-import org.mifos.mobilewallet.core.data.fineract.entity.Invoice;
-import org.mifos.mobilewallet.core.data.fineract.entity.Page;
-import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
-import org.mifos.mobilewallet.core.data.fineract.entity.TPTResponse;
-import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity;
-import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole;
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions;
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail;
-import org.mifos.mobilewallet.core.data.fineract.entity.authentication.AuthenticationPayload;
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary;
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPayload;
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUpdatePayload;
-import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
-import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
-import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details;
-import org.mifos.mobilewallet.core.data.fineract.entity.payload.StandingInstructionPayload;
-import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
-import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload;
-import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
-import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card;
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.SDIResponse;
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction;
-import org.mifos.mobilewallet.core.domain.model.NewAccount;
-import org.mifos.mobilewallet.core.domain.model.NotificationPayload;
-import org.mifos.mobilewallet.core.domain.model.client.NewClient;
-import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken;
-import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod;
-import org.mifos.mobilewallet.core.domain.model.user.NewUser;
-import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient;
-import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser;
-import org.mifos.mobilewallet.core.utils.Constants;
-
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-import okhttp3.MultipartBody;
-import okhttp3.ResponseBody;
-import rx.Observable;
-import rx.functions.Func1;
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
+import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager
+import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
+import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager
+import org.mifos.mobilewallet.core.data.fineract.entity.Invoice
+import org.mifos.mobilewallet.core.data.fineract.entity.Page
+import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity
+import org.mifos.mobilewallet.core.data.fineract.entity.TPTResponse
+import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity
+import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions
+import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail
+import org.mifos.mobilewallet.core.data.fineract.entity.authentication.AuthenticationPayload
+import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary
+import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPayload
+import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUpdatePayload
+import org.mifos.mobilewallet.core.data.fineract.entity.client.Client
+import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts
+import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details
+import org.mifos.mobilewallet.core.data.fineract.entity.payload.StandingInstructionPayload
+import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload
+import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload
+import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify
+import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card
+import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.SDIResponse
+import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
+import org.mifos.mobilewallet.core.domain.model.NewAccount
+import org.mifos.mobilewallet.core.domain.model.NotificationPayload
+import org.mifos.mobilewallet.core.domain.model.client.NewClient
+import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken
+import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod
+import org.mifos.mobilewallet.core.domain.model.user.NewUser
+import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient
+import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser
+import org.mifos.mobilewallet.core.utils.Constants
+import rx.Observable
+import javax.inject.Inject
+import javax.inject.Singleton
 
 /**
  * Created by naman on 16/6/17.
  */
-
 @Singleton
-public class FineractRepository {
-
-    private final FineractApiManager fineractApiManager;
-    private final SelfServiceApiManager selfApiManager;
-
-    @Inject
-    public FineractRepository(FineractApiManager fineractApiManager) {
-        this.fineractApiManager = fineractApiManager;
-        this.selfApiManager = FineractApiManager.getSelfApiManager();
+class FineractRepository @Inject constructor(
+    private val fineractApiManager: FineractApiManager,
+    private val selfApiManager: SelfServiceApiManager
+) {
+    fun createClient(newClient: NewClient): Observable<CreateClient.ResponseValue> {
+        return fineractApiManager.clientsApi.createClient(newClient)
     }
 
-    public Observable<CreateClient.ResponseValue> createClient(NewClient newClient) {
-        return fineractApiManager.getClientsApi().createClient(newClient);
+    fun createUser(user: NewUser): Observable<CreateUser.ResponseValue> {
+        return fineractApiManager.userApi.createUser(user)
     }
 
-    public Observable<CreateUser.ResponseValue> createUser(NewUser user) {
-        return fineractApiManager.getUserApi().createUser(user);
+    fun updateUser(updateUserEntity: Any, userId: Int): Observable<GenericResponse> {
+        return fineractApiManager.userApi.updateUser(userId, updateUserEntity)
     }
 
-    public Observable<GenericResponse> updateUser(Object updateUserEntity, int userId) {
-        return fineractApiManager.getUserApi().updateUser(userId, updateUserEntity);
+    fun registerUser(registerPayload: RegisterPayload): Observable<ResponseBody> {
+        return fineractApiManager.registrationAPi.registerUser(registerPayload)
     }
 
-    public Observable<ResponseBody> registerUser(RegisterPayload registerPayload) {
-        return fineractApiManager.getRegistrationAPi().registerUser(registerPayload);
+    fun deleteUser(userId: Int): Observable<GenericResponse> {
+        return fineractApiManager.userApi.deleteUser(userId)
     }
 
-    public Observable<GenericResponse> deleteUser(int userId) {
-        return fineractApiManager.getUserApi().deleteUser(userId);
+    fun verifyUser(userVerify: UserVerify): Observable<ResponseBody> {
+        return fineractApiManager.registrationAPi.verifyUser(userVerify)
     }
 
-    public Observable<ResponseBody> verifyUser(UserVerify userVerify) {
-        return fineractApiManager.getRegistrationAPi().verifyUser(userVerify);
+    fun searchResources(
+        query: String, resources: String,
+        exactMatch: Boolean
+    ): Observable<List<SearchedEntity>> {
+        return fineractApiManager.searchApi.searchResources(query, resources, exactMatch)
     }
 
-    public Observable<List<SearchedEntity>> searchResources(String query, String resources,
-                                                            Boolean exactMatch) {
-        return fineractApiManager.getSearchApi().searchResources(query, resources, exactMatch);
+    fun updateClient(clientId: Long, payload: Any): Observable<ResponseBody> {
+        return fineractApiManager.clientsApi.updateClient(clientId, payload)
+            .map { responseBody -> responseBody }
     }
 
-    public Observable<ResponseBody> updateClient(long clientId, Object payload) {
-        return fineractApiManager.getClientsApi().updateClient(clientId, payload)
-                .map(new Func1<ResponseBody, ResponseBody>() {
-                    @Override
-                    public ResponseBody call(ResponseBody responseBody) {
-                        return responseBody;
-                    }
-                });
+    fun createSavingsAccount(newAccount: NewAccount?): Observable<GenericResponse> {
+        return fineractApiManager.clientsApi.createAccount(newAccount)
     }
 
-    public Observable<GenericResponse> createSavingsAccount(NewAccount newAccount) {
-        return fineractApiManager.getClientsApi().createAccount(newAccount);
+    fun getAccounts(clientId: Long): Observable<ClientAccounts> {
+        return fineractApiManager.clientsApi.getAccounts(clientId, Constants.SAVINGS)
     }
 
-    public Observable<ClientAccounts> getAccounts(long clientId) {
-        return fineractApiManager.getClientsApi().getAccounts(clientId, Constants.SAVINGS);
+    val savingsAccounts: Observable<Page<SavingsWithAssociations>>
+        get() = fineractApiManager.savingsAccountsApi.getSavingsAccounts(-1)
+
+    fun blockUnblockAccount(accountId: Long, command: String?): Observable<GenericResponse> {
+        return fineractApiManager.savingsAccountsApi.blockUnblockAccount(
+            accountId,
+            command
+        )
     }
 
-    public Observable<Page<SavingsWithAssociations>> getSavingsAccounts() {
-        return fineractApiManager.getSavingAccountsListApi().getSavingsAccounts(-1);
+    fun getClientDetails(clientId: Long): Observable<Client> {
+        return fineractApiManager.clientsApi.getClientForId(clientId)
     }
 
-    public Observable<GenericResponse> blockUnblockAccount(long accountId, String command) {
-        return fineractApiManager.getSavingAccountsListApi().blockUnblockAccount(accountId,
-                command);
+    fun getClientImage(clientId: Long): Observable<ResponseBody> {
+        return fineractApiManager.clientsApi.getClientImage(clientId)
     }
 
-    public Observable<Client> getClientDetails(long clientId) {
-        return fineractApiManager.getClientsApi().getClientForId(clientId);
+    fun addSavedCards(
+        clientId: Long,
+        card: Card
+    ): Observable<GenericResponse> {
+        return fineractApiManager.savedCardApi.addSavedCard(clientId.toInt(), card)
     }
 
-    public Observable<ResponseBody> getClientImage(long clientId) {
-        return fineractApiManager.getClientsApi().getClientImage(clientId);
+    fun fetchSavedCards(clientId: Long): Observable<List<Card>> {
+        return fineractApiManager.savedCardApi.getSavedCards(clientId.toInt())
     }
 
-    public Observable<GenericResponse> addSavedCards(long clientId,
-                                                     Card card) {
-        return fineractApiManager.getSavedCardApi().addSavedCard((int) clientId, card);
+    fun editSavedCard(clientId: Int, card: Card): Observable<GenericResponse> {
+        return fineractApiManager.savedCardApi.updateCard(clientId, card.id, card)
     }
 
-    public Observable<List<Card>> fetchSavedCards(long clientId) {
-        return fineractApiManager.getSavedCardApi().getSavedCards((int) clientId);
+    fun deleteSavedCard(clientId: Int, cardId: Int): Observable<GenericResponse> {
+        return fineractApiManager.savedCardApi.deleteCard(clientId, cardId)
     }
 
-    public Observable<GenericResponse> editSavedCard(int clientId, Card card) {
-        return fineractApiManager.getSavedCardApi().updateCard(clientId, card.getId(), card);
+    fun uploadKYCDocs(
+        entityType: String, entityId: Long, name: String,
+        desc: String, file: MultipartBody.Part
+    ): Observable<GenericResponse> {
+        return fineractApiManager.documentApi.createDocument(
+            entityType, entityId, name, desc,
+            file
+        )
     }
 
-    public Observable<GenericResponse> deleteSavedCard(int clientId, int cardId) {
-        return fineractApiManager.getSavedCardApi().deleteCard(clientId, cardId);
+    fun getAccountTransfer(transferId: Long): Observable<TransferDetail> {
+        return fineractApiManager.accountTransfersApi.getAccountTransfer(transferId)
     }
 
-    public Observable<GenericResponse> uploadKYCDocs(String entityType, long entityId, String name,
-                                                     String desc, MultipartBody.Part file) {
-        return fineractApiManager.getDocumentApi().createDocument(entityType, entityId, name, desc,
-                file);
+    fun uploadKYCLevel1Details(
+        clientId: Int,
+        kycLevel1Details: KYCLevel1Details
+    ): Observable<GenericResponse> {
+        return fineractApiManager.kycLevel1Api.addKYCLevel1Details(
+            clientId,
+            kycLevel1Details
+        )
     }
 
-    public Observable<TransferDetail> getAccountTransfer(long transferId) {
-        return fineractApiManager.getAccountTransfersApi().getAccountTransfer(transferId);
+    fun fetchKYCLevel1Details(clientId: Int): Observable<List<KYCLevel1Details>> {
+        return fineractApiManager.kycLevel1Api.fetchKYCLevel1Details(clientId)
     }
 
-    public Observable<GenericResponse> uploadKYCLevel1Details(int clientId,
-                                                              KYCLevel1Details kycLevel1Details) {
-        return fineractApiManager.getKycLevel1Api().addKYCLevel1Details(clientId,
-                kycLevel1Details);
+    fun updateKYCLevel1Details(
+        clientId: Int,
+        kycLevel1Details: KYCLevel1Details
+    ): Observable<GenericResponse> {
+        return fineractApiManager.kycLevel1Api.updateKYCLevel1Details(
+            clientId,
+            kycLevel1Details
+        )
     }
 
-    public Observable<List<KYCLevel1Details>> fetchKYCLevel1Details(int clientId) {
-        return fineractApiManager.getKycLevel1Api().fetchKYCLevel1Details(clientId);
+    fun fetchNotifications(clientId: Long): Observable<List<NotificationPayload>> {
+        return fineractApiManager.notificationApi.fetchNotifications(clientId)
     }
 
-    public Observable<GenericResponse> updateKYCLevel1Details(int clientId,
-                                                              KYCLevel1Details kycLevel1Details) {
-        return fineractApiManager.getKycLevel1Api().updateKYCLevel1Details(clientId,
-                kycLevel1Details);
+    val deliveryMethods: Observable<List<DeliveryMethod>>
+        get() = fineractApiManager.twoFactorAuthApi.deliveryMethods
+
+    fun requestOTP(deliveryMethod: String): Observable<String> {
+        return fineractApiManager.twoFactorAuthApi.requestOTP(deliveryMethod)
     }
 
-    public Observable<List<NotificationPayload>> fetchNotifications(long clientId) {
-        return fineractApiManager.getNotificationApi().fetchNotifications(clientId);
+    fun validateToken(token: String): Observable<AccessToken> {
+        return fineractApiManager.twoFactorAuthApi.validateToken(token)
     }
 
-    public Observable<List<DeliveryMethod>> getDeliveryMethods() {
-        return fineractApiManager.getTwoFactorAuthApi().getDeliveryMethods();
+    fun getTransactionReceipt(
+        outputType: String,
+        transactionId: String
+    ): Observable<ResponseBody> {
+        return fineractApiManager.runReportApi.getTransactionReceipt(
+            outputType,
+            transactionId
+        )
     }
 
-    public Observable<String> requestOTP(String deliveryMethod) {
-        return fineractApiManager.getTwoFactorAuthApi().requestOTP(deliveryMethod);
+    fun addInvoice(clientId: String, invoice: Invoice?): Observable<GenericResponse> {
+        return fineractApiManager.invoiceApi.addInvoice(clientId, invoice)
     }
 
-    public Observable<AccessToken> validateToken(String token) {
-        return fineractApiManager.getTwoFactorAuthApi().validateToken(token);
+    fun fetchInvoices(clientId: String): Observable<List<Invoice>> {
+        return fineractApiManager.invoiceApi.getInvoices(clientId)
     }
 
-    public Observable<ResponseBody> getTransactionReceipt(String outputType,
-                                                          String transactionId) {
-        return fineractApiManager.getRunReportApi().getTransactionReceipt(outputType,
-                transactionId);
+    fun fetchInvoice(clientId: String, invoiceId: String): Observable<List<Invoice>> {
+        return fineractApiManager.invoiceApi.getInvoice(clientId, invoiceId)
     }
 
-    public Observable<GenericResponse> addInvoice(String clientId, Invoice invoice) {
-        return fineractApiManager.getInvoiceApi().addInvoice(clientId, invoice);
+    fun editInvoice(clientId: String, invoice: Invoice): Observable<GenericResponse> {
+        return fineractApiManager.invoiceApi.updateInvoice(clientId, invoice.id, invoice)
     }
 
-    public Observable<List<Invoice>> fetchInvoices(String clientId) {
-        return fineractApiManager.getInvoiceApi().getInvoices(clientId);
+    fun deleteInvoice(clientId: String, invoiceId: Int): Observable<GenericResponse> {
+        return fineractApiManager.invoiceApi.deleteInvoice(clientId, invoiceId)
     }
 
-    public Observable<List<Invoice>> fetchInvoice(String clientId, String invoiceId) {
-        return fineractApiManager.getInvoiceApi().getInvoice(clientId, invoiceId);
+    val users: Observable<List<UserWithRole>>
+        get() = fineractApiManager.userApi.users
+
+    fun getUser(userId: Long): Observable<UserWithRole> {
+        return fineractApiManager.userApi.getUser(userId)
     }
 
-
-    public Observable<GenericResponse> editInvoice(String clientId, Invoice invoice) {
-        return fineractApiManager.getInvoiceApi().updateInvoice(clientId, invoice.getId(), invoice);
+    fun makeThirdPartyTransfer(transferPayload: TransferPayload): Observable<TPTResponse> {
+        return fineractApiManager.thirdPartyTransferApi.makeTransfer(transferPayload)
     }
 
-    public Observable<GenericResponse> deleteInvoice(String clientId, int invoiceId) {
-        return fineractApiManager.getInvoiceApi().deleteInvoice(clientId, invoiceId);
+    fun createStandingInstruction(
+        standingInstructionPayload: StandingInstructionPayload
+    ): Observable<SDIResponse> {
+        return fineractApiManager.standingInstructionApi
+            .createStandingInstruction(standingInstructionPayload)
     }
 
-    public Observable<List<UserWithRole>> getUsers() {
-        return fineractApiManager.getUserApi().getUsers();
+    fun getAllStandingInstructions(clientId: Long): Observable<Page<StandingInstruction>> {
+        return fineractApiManager.standingInstructionApi.getAllStandingInstructions(clientId)
     }
 
-    public Observable<UserWithRole> getUser(long userId) {
-        return fineractApiManager.getUserApi().getUser(userId);
+    fun getStandingInstruction(standingInstructionId: Long): Observable<StandingInstruction> {
+        return fineractApiManager.standingInstructionApi
+            .getStandingInstruction(standingInstructionId)
     }
 
-    public Observable<TPTResponse> makeThirdPartyTransfer(TransferPayload transferPayload) {
-        return fineractApiManager.getThirdPartyTransferApi().makeTransfer(transferPayload);
+    fun updateStandingInstruction(
+        standingInstructionId: Long,
+        data: StandingInstructionPayload
+    ): Observable<GenericResponse> {
+        return fineractApiManager.standingInstructionApi.updateStandingInstruction(
+            standingInstructionId, data, "update"
+        )
     }
 
-    public Observable<SDIResponse> createStandingInstruction(
-            StandingInstructionPayload standingInstructionPayload) {
-        return fineractApiManager.getStandingInstructionApi()
-                .createStandingInstruction(standingInstructionPayload);
-    }
-
-    public Observable<Page<StandingInstruction>> getAllStandingInstructions(long clientId) {
-        return fineractApiManager.getStandingInstructionApi().getAllStandingInstructions(clientId);
-    }
-
-    public Observable<StandingInstruction> getStandingInstruction(long standingInstructionId) {
-        return fineractApiManager.getStandingInstructionApi()
-                .getStandingInstruction(standingInstructionId);
-    }
-
-    public Observable<GenericResponse> updateStandingInstruction(long standingInstructionId,
-                                                                 StandingInstructionPayload data) {
-        return fineractApiManager.getStandingInstructionApi().updateStandingInstruction(
-                standingInstructionId, data, "update");
-    }
-
-    public Observable<GenericResponse> deleteStandingInstruction(long standingInstruction) {
-        return fineractApiManager.getStandingInstructionApi().deleteStandingInstruction(
-                standingInstruction, "delete");
+    fun deleteStandingInstruction(standingInstruction: Long): Observable<GenericResponse> {
+        return fineractApiManager.standingInstructionApi.deleteStandingInstruction(
+            standingInstruction, "delete"
+        )
     }
 
     //self user apis
-
-    public Observable<UserEntity> loginSelf(AuthenticationPayload payload) {
-        return selfApiManager.getAuthenticationApi().authenticate(payload);
+    fun loginSelf(payload: AuthenticationPayload): Observable<UserEntity> {
+        return selfApiManager.authenticationApi.authenticate(payload)
     }
 
-    public Observable<Client> getSelfClientDetails(long clientId) {
-        return selfApiManager.getClientsApi().getClientForId(clientId);
+    fun getSelfClientDetails(clientId: Long): Observable<Client> {
+        return selfApiManager.clientsApi.getClientForId(clientId)
     }
 
-    public Observable<Page<Client>> getSelfClientDetails() {
-        return selfApiManager.getClientsApi().getClients();
+    val selfClientDetails: Observable<Page<Client>>
+        get() = selfApiManager.clientsApi.clients
+
+    fun getSelfAccountTransactions(accountId: Long): Observable<SavingsWithAssociations> {
+        return selfApiManager.savingAccountsListApi.getSavingsWithAssociations(
+            accountId,
+            Constants.TRANSACTIONS
+        )
     }
 
-    public Observable<SavingsWithAssociations> getSelfAccountTransactions(long accountId) {
-        return selfApiManager
-                .getSavingAccountsListApi().getSavingsWithAssociations(accountId,
-                        Constants.TRANSACTIONS);
+    fun getSelfAccountTransactionFromId(
+        accountId: Long,
+        transactionId: Long
+    ): Observable<Transactions> {
+        return selfApiManager.savingAccountsListApi.getSavingAccountTransaction(
+            accountId,
+            transactionId
+        )
     }
 
-    public Observable<Transactions> getSelfAccountTransactionFromId(long accountId,
-                                                                    long transactionId) {
-        return selfApiManager
-                .getSavingAccountsListApi().getSavingAccountTransaction(accountId,
-                        transactionId);
+    fun getSelfAccounts(clientId: Long): Observable<ClientAccounts> {
+        return selfApiManager.clientsApi.getAccounts(clientId, Constants.SAVINGS)
     }
 
-    public Observable<ClientAccounts> getSelfAccounts(long clientId) {
-        return selfApiManager.getClientsApi().getAccounts(clientId, Constants.SAVINGS);
+    val beneficiaryList: Observable<List<Beneficiary>>
+        get() = selfApiManager.beneficiaryApi.beneficiaryList
+
+    fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload): Observable<ResponseBody> {
+        return selfApiManager.beneficiaryApi.createBeneficiary(beneficiaryPayload)
     }
 
-    public Observable<List<Beneficiary>> getBeneficiaryList() {
-        return selfApiManager.getBeneficiaryApi().getBeneficiaryList();
-    }
-
-    public Observable<ResponseBody> createBeneficiary(BeneficiaryPayload beneficiaryPayload) {
-        return selfApiManager.getBeneficiaryApi().createBeneficiary(beneficiaryPayload);
-    }
-
-    public Observable<ResponseBody> updateBeneficiary(long beneficiaryId,
-                                                      BeneficiaryUpdatePayload payload) {
-        return selfApiManager.getBeneficiaryApi().updateBeneficiary(beneficiaryId, payload);
+    fun updateBeneficiary(
+        beneficiaryId: Long,
+        payload: BeneficiaryUpdatePayload
+    ): Observable<ResponseBody> {
+        return selfApiManager.beneficiaryApi.updateBeneficiary(beneficiaryId, payload)
     }
 }

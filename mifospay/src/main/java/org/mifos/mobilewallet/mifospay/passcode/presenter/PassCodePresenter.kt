@@ -13,7 +13,7 @@ import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 
 import org.mifos.mobilewallet.mifospay.base.BaseView
 
-import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper
+import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
 
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract
 
@@ -62,14 +62,4 @@ class PassCodePresenter @Inject constructor(
         mPassCodeView?.setPresenter(this)
 
     }
-
-
-
-
-    fun createAuthenticatedService() {
-
-        FineractApiManager.createSelfService(preferencesHelper.token)
-
-    }
-
 }
