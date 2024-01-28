@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.auth.login
+package org.mifos.mobilewallet.mifospay.feature.auth.login
 
 import android.content.Intent
 import android.os.Bundle

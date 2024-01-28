@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.auth.login
+package org.mifos.mobilewallet.mifospay.feature.auth.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -32,10 +32,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.mifos.mobilewallet.mifospay.auth.R
+import org.mifos.mobilewallet.mifospay.feature.auth.R
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosOutlinedTextField
 import org.mifos.mobilewallet.mifospay.designsystem.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.designsystem.theme.grey
@@ -123,7 +124,7 @@ fun LoginScreen(
                 )
             }
             // Hide reset password for now
-            /*Text(
+            Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 32.dp),
@@ -140,7 +141,7 @@ fun LoginScreen(
                 text = "OR",
                 textAlign = TextAlign.Center,
                 style = styleMedium16sp.copy(color = grey)
-            )*/
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

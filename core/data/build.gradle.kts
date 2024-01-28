@@ -5,7 +5,7 @@ plugins {
     id("kotlinx-serialization")
 }
 
-apply(from = "../config/quality/quality.gradle")
+//apply(from = "../config/quality/quality.gradle")
 
 group = "com.github.ankurs287"
 
@@ -20,7 +20,7 @@ android {
 }
 
 dependencies {
-    //implementation(libs.androidx.appcompat)
+    api(projects.core.common)
 
     implementation(libs.squareup.retrofit2) {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
