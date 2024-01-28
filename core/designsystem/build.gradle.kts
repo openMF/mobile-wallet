@@ -11,7 +11,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.core)
+    //implementation(projects.mainCore.data)
 
     api(libs.androidx.compose.foundation)
     api(libs.androidx.compose.foundation.layout)

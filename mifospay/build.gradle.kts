@@ -44,7 +44,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.core)
+    implementation(projects.core.data)
     implementation(libs.androidx.constraintlayout)
 
     implementation(libs.androidx.appcompat)

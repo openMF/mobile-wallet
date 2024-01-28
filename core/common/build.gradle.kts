@@ -4,22 +4,10 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.mobilewallet.mifospay.data"
-
-    defaultConfig {
-        testOptions {
-            unitTests {
-                isIncludeAndroidResources = true
-                isReturnDefaultValues = true
-            }
-        }
-    }
+    namespace = "org.mifos.mobilewallet.mifospay.common"
 }
 
 dependencies {
-    api(projects.mainCore.common)
-    api(projects.mainCore.datastore)
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

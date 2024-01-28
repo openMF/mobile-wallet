@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.data
+package org.mifos.mobilewallet.mifospay.feature.auth
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("org.mifos.mobilewallet.mifospay.data", appContext.packageName)
+        assertEquals("org.mifos.mobilewallet.mifospay.auth.test", appContext.packageName)
     }
 }

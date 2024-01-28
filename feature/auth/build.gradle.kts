@@ -4,12 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.mobilewallet.mifospay.auth"
+    namespace = "org.mifos.mobilewallet.mifospay.feature.auth"
 }
 
 dependencies {
-    implementation(projects.core)
-    implementation(projects.mainCore.data)
+    implementation(projects.core.data)
 
     implementation("com.mifos.mobile:mifos-passcode:0.3.0")
 

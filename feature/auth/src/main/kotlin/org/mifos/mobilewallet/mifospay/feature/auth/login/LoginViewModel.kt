@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.auth.login
+package org.mifos.mobilewallet.mifospay.feature.auth.login
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -7,16 +7,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager
 import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole
+import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
 import org.mifos.mobilewallet.core.domain.model.client.Client
 import org.mifos.mobilewallet.core.domain.model.user.User
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails
 import org.mifos.mobilewallet.core.utils.Constants
-import org.mifos.mobilewallet.datastore.PreferencesHelper
-import org.mifos.mobilewallet.mifospay.common.DebugUtil
 import javax.inject.Inject
 
 @HiltViewModel
@@ -58,7 +56,7 @@ class LoginViewModel @Inject constructor(
                 }
 
                 override fun onError(message: String) {
-                    DebugUtil.log(message)
+                    //DebugUtil.log(message)
                 }
             })
     }
@@ -81,7 +79,7 @@ class LoginViewModel @Inject constructor(
         val authToken = Constants.BASIC +
                 user.authenticationKey
         preferencesHelper.saveToken(authToken)
-        FineractApiManager.createSelfService(preferencesHelper.token)
+        //FineractApiManager.createSelfService(preferencesHelper.token)
     }
 
     private fun saveUserDetails(
