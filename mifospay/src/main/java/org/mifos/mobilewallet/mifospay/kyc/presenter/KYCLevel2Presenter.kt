@@ -12,7 +12,7 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.kyc.UploadKYCDocs
 import org.mifos.mobilewallet.mifospay.MifosPayApp
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper
+import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract.KYCLevel2View
 import org.mifos.mobilewallet.mifospay.utils.Constants

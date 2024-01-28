@@ -6,7 +6,7 @@ import org.mifos.mobilewallet.core.domain.model.SearchResult
 import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient
 import org.mifos.mobilewallet.core.domain.usecase.standinginstruction.CreateStandingTransaction
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper
+import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,7 +16,8 @@ import javax.inject.Inject
  * Created by Shivansh
  */
 class NewSIPresenter @Inject constructor (val mUseCaseHandler: UseCaseHandler,
-                                          val preferencesHelper: PreferencesHelper)
+                                          val preferencesHelper: PreferencesHelper
+)
     : StandingInstructionContract.NewSIPresenter {
 
     lateinit var mNewSIView: StandingInstructionContract.NewSIView

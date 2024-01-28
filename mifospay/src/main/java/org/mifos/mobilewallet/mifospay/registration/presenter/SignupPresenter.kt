@@ -18,7 +18,7 @@ import org.mifos.mobilewallet.core.domain.usecase.user.DeleteUser
 import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.mifospay.data.local.PreferencesHelper
+import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract.SignupView
 import org.mifos.mobilewallet.mifospay.utils.Constants
@@ -240,10 +240,8 @@ class SignupPresenter @Inject constructor(
     }
 
     private fun createAuthenticatedService(user: User) {
-        val authToken = Constants.BASIC +
-                user.authenticationKey
+        val authToken = Constants.BASIC + user.authenticationKey
         mPreferencesHelper.saveToken(authToken)
-        FineractApiManager.createSelfService(mPreferencesHelper.token)
     }
 
     private fun saveUserDetails(
