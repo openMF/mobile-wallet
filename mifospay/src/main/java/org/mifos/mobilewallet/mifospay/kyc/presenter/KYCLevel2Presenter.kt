@@ -69,31 +69,33 @@ class KYCLevel2Presenter @Inject constructor(
 
     override fun uploadKYCDocs(identityType: String?) {
         if (file != null) {
-            uploadKYCDocsUseCase!!.requestValues = UploadKYCDocs.RequestValues(
-                org.mifos.mobilewallet.core.utils.Constants.ENTITY_TYPE_CLIENTS,
-                preferencesHelper.clientId, file!!.name, identityType,
-                getRequestFileBody(file!!)
-            )
+            uploadKYCDocsUseCase!!.requestValues = identityType?.let {
+                UploadKYCDocs.RequestValues(
+                    org.mifos.mobilewallet.core.utils.Constants.ENTITY_TYPE_CLIENTS,
+                    preferencesHelper.clientId, file!!.name, it,
+                    getRequestFileBody(file!!)
+                )
+            }
             val requestValues = uploadKYCDocsUseCase!!.requestValues
             mUseCaseHandler.execute(uploadKYCDocsUseCase, requestValues,
                 object : UseCaseCallback<UploadKYCDocs.ResponseValue?> {
                     override fun onSuccess(response: UploadKYCDocs.ResponseValue?) {
-                        mKYCLevel2View!!.hideProgressDialog()
-                        mKYCLevel2View!!.showToast(
+                        mKYCLevel2View?.hideProgressDialog()
+                        mKYCLevel2View?.showToast(
                             Constants.KYC_LEVEL_2_DOCUMENTS_ADDED_SUCCESSFULLY
                         )
-                        mKYCLevel2View!!.goBack()
+                        mKYCLevel2View?.goBack()
                     }
 
                     override fun onError(message: String) {
-                        mKYCLevel2View!!.hideProgressDialog()
-                        mKYCLevel2View!!.showToast(Constants.ERROR_UPLOADING_DOCS)
+                        mKYCLevel2View?.hideProgressDialog()
+                        mKYCLevel2View?.showToast(Constants.ERROR_UPLOADING_DOCS)
                     }
                 })
         } else {
             // choose a file first
-            mKYCLevel2View!!.showToast(Constants.CHOOSE_A_FILE_TO_UPLOAD)
-            mKYCLevel2View!!.hideProgressDialog()
+            mKYCLevel2View?.showToast(Constants.CHOOSE_A_FILE_TO_UPLOAD)
+            mKYCLevel2View?.hideProgressDialog()
         }
     }
 
