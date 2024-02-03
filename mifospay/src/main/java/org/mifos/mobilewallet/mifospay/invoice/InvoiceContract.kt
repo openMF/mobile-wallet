@@ -16,7 +16,7 @@ interface InvoiceContract {
     }
 
     interface InvoicePresenter : BasePresenter {
-        fun getInvoiceDetails(data: Uri?)
+        fun getInvoiceDetails(data: Uri)
     }
 
     interface InvoicesView : BaseView<InvoicesPresenter?> {

@@ -27,11 +27,11 @@ class InvoicePresenter @Inject constructor(
         mInvoiceView!!.setPresenter(this)
     }
 
-    override fun getInvoiceDetails(data: Uri?) {
-        mUseCaseHandler.execute(fetchInvoiceUseCase, data?.let { FetchInvoice.RequestValues(it) },
+    override fun getInvoiceDetails(data: Uri) {
+        mUseCaseHandler.execute(fetchInvoiceUseCase, FetchInvoice.RequestValues(data),
             object : UseCaseCallback<FetchInvoice.ResponseValue?> {
                 override fun onSuccess(response: FetchInvoice.ResponseValue?) {
-                    mInvoiceView!!.showInvoiceDetails(
+                    mInvoiceView?.showInvoiceDetails(
                         response?.invoices?.get(0),
                         mPreferencesHelper.fullName + " "
                                 + mPreferencesHelper.clientId, data.toString()

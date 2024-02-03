@@ -14,19 +14,19 @@ import javax.inject.Inject
  * Created by ankur on 07/June/2018
  */
 class FetchInvoice @Inject constructor(private val mFineractRepository: FineractRepository) :
-    UseCase<FetchInvoice.RequestValues?, FetchInvoice.ResponseValue?>() {
+    UseCase<FetchInvoice.RequestValues, FetchInvoice.ResponseValue>() {
 
     class RequestValues(val uniquePaymentLink: Uri) : UseCase.RequestValues
     class ResponseValue(
         val invoices: List<Invoice?>
     ) : UseCase.ResponseValue
 
-    override fun executeUseCase(requestValues: RequestValues?) {
-        val paymentLink = requestValues?.uniquePaymentLink
-        val scheme = paymentLink?.scheme // "https"
-        val host = paymentLink?.host // "invoice.mifospay.com"
+    override fun executeUseCase(requestValues: RequestValues) {
+        val paymentLink = requestValues.uniquePaymentLink
+        val scheme = paymentLink.scheme // "https"
+        val host = paymentLink.host // "invoice.mifospay.com"
         try {
-            val params = paymentLink?.pathSegments
+            val params = paymentLink.pathSegments
             val clientId = params?.get(0) // "clientId"
             val invoiceId = params?.get(1) // "invoiceId"
             if (clientId != null && invoiceId != null) {
