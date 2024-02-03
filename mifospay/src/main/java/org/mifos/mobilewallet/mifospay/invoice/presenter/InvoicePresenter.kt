@@ -28,7 +28,7 @@ class InvoicePresenter @Inject constructor(
     }
 
     override fun getInvoiceDetails(data: Uri?) {
-        mUseCaseHandler.execute(fetchInvoiceUseCase, FetchInvoice.RequestValues(data),
+        mUseCaseHandler.execute(fetchInvoiceUseCase, data?.let { FetchInvoice.RequestValues(it) },
             object : UseCaseCallback<FetchInvoice.ResponseValue?> {
                 override fun onSuccess(response: FetchInvoice.ResponseValue?) {
                     mInvoiceView!!.showInvoiceDetails(
