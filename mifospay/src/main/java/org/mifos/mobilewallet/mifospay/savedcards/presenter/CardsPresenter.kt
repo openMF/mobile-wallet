@@ -58,7 +58,7 @@ class CardsPresenter @Inject constructor(
         mUseCaseHandler.execute(fetchSavedCardsUseCase, requestValues,
             object : UseCaseCallback<FetchSavedCards.ResponseValue?> {
                 override fun onSuccess(response: FetchSavedCards.ResponseValue?) {
-                    response?.cardList?.let { mCardsView!!.showSavedCards(it) }
+                    response?.cardList?.let { mCardsView!!.showSavedCards(it as List<Card>) }
                 }
 
                 override fun onError(message: String) {
