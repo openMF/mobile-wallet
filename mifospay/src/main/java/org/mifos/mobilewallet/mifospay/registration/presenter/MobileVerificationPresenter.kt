@@ -13,33 +13,35 @@ import javax.inject.Inject
  */
 class MobileVerificationPresenter @Inject constructor(private val mUseCaseHandler: UseCaseHandler) :
     RegistrationContract.MobileVerificationPresenter {
-    var mMobileVerificationView: MobileVerificationView? = null
+
+    lateinit var mMobileVerificationView: MobileVerificationView
 
     @JvmField
     @Inject
     var searchClientUseCase: SearchClient? = null
     override fun attachView(baseView: BaseView<*>?) {
-        mMobileVerificationView = baseView as MobileVerificationView?
-        mMobileVerificationView!!.setPresenter(this)
+        mMobileVerificationView = baseView as MobileVerificationView
+        mMobileVerificationView.setPresenter(this)
     }
 
     override fun requestOTPfromServer(fullNumber: String?, mobileNo: String?) {
-        mUseCaseHandler.execute(searchClientUseCase, SearchClient.RequestValues(mobileNo),
+        mUseCaseHandler.execute(searchClientUseCase,
+            mobileNo?.let { SearchClient.RequestValues(it) },
             object : UseCaseCallback<SearchClient.ResponseValue?> {
                 override fun onSuccess(response: SearchClient.ResponseValue?) {
-                    mMobileVerificationView!!.onRequestOtpFailed("Mobile number already exists.")
+                    mMobileVerificationView.onRequestOtpFailed("Mobile number already exists.")
                 }
 
                 override fun onError(message: String) {
                     // TODO:: request OTP
-                    mMobileVerificationView!!.onRequestOtpSuccess()
+                    mMobileVerificationView.onRequestOtpSuccess()
                 }
             })
     }
 
     override fun verifyOTP(otp: String?) {
         // TODO:: verify OTP
-        mMobileVerificationView!!.onOtpVerificationSuccess()
+        mMobileVerificationView.onOtpVerificationSuccess()
 
         // TODO::
 
