@@ -16,7 +16,7 @@ interface TransferContract {
     }
 
     interface TransferPresenter : BasePresenter {
-        fun fetchClient(externalId: String?)
+        fun fetchClient(externalId: String)
         fun makeTransfer(fromClientId: Long, toClientId: Long, amount: Double)
     }
 }

@@ -100,7 +100,7 @@ class MakeTransferFragment : BottomSheetDialogFragment(), TransferContract.Trans
         ButterKnife.bind(this, view)
         mPresenter?.attachView(this)
         amount = arguments?.getDouble(Constants.AMOUNT) ?: 0.0
-        mTransferPresenter?.fetchClient(arguments?.getString(Constants.TO_EXTERNAL_ID))
+        mTransferPresenter?.fetchClient(arguments?.getString(Constants.TO_EXTERNAL_ID).toString())
         btnCancel?.setOnClickListener { dismiss() }
         btnConfirm?.setOnClickListener {
             mTransferPresenter?.makeTransfer(

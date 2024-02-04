@@ -13,20 +13,20 @@ import javax.inject.Inject
  */
 class MakeTransferPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHandler) :
     TransferContract.TransferPresenter {
-    @JvmField
-    @Inject
-    var transferFunds: TransferFunds? = null
 
-    @JvmField
     @Inject
-    var searchClient: SearchClient? = null
+    lateinit var transferFunds: TransferFunds
+
+    @Inject
+    lateinit var searchClient: SearchClient
+
     private var mTransferView: TransferContract.TransferView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mTransferView = baseView as TransferContract.TransferView?
         mTransferView?.setPresenter(this)
     }
 
-    override fun fetchClient(externalId: String?) {
+    override fun fetchClient(externalId: String) {
         mUsecaseHandler.execute(searchClient, SearchClient.RequestValues(externalId),
             object : UseCaseCallback<SearchClient.ResponseValue?> {
                 override fun onSuccess(response: SearchClient.ResponseValue?) {
@@ -57,7 +57,7 @@ class MakeTransferPresenter @Inject constructor(private val mUsecaseHandler: Use
 
                 override fun onError(message: String) {
                     mTransferView?.enableDragging(true)
-                    mTransferView!!.transferFailure()
+                    mTransferView?.transferFailure()
                 }
             })
     }

@@ -12,20 +12,20 @@ import javax.inject.Inject
  */
 class SearchPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHandler) :
     SearchContract.SearchPresenter {
-    @JvmField
+
     @Inject
-    var searchClient: SearchClient? = null
-    private var mSearchView: SearchContract.SearchView? = null
+    lateinit var searchClient: SearchClient
+    private lateinit var mSearchView: SearchContract.SearchView
     override fun attachView(baseView: BaseView<*>?) {
-        mSearchView = baseView as SearchContract.SearchView?
-        mSearchView?.setPresenter(this)
+        mSearchView = baseView as SearchContract.SearchView
+        mSearchView.setPresenter(this)
     }
 
-    override fun performSearch(query: String?) {
+    override fun performSearch(query: String) {
         mUsecaseHandler.execute(searchClient, SearchClient.RequestValues(query),
             object : UseCaseCallback<SearchClient.ResponseValue?> {
                 override fun onSuccess(response: SearchClient.ResponseValue?) {
-                    mSearchView?.showSearchResult(response?.results)
+                    mSearchView.showSearchResult(response?.results?.toMutableList())
                 }
 
                 override fun onError(message: String) {}

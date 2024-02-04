@@ -15,6 +15,6 @@ interface SearchContract {
     }
 
     interface SearchPresenter : BasePresenter {
-        fun performSearch(query: String?)
+        fun performSearch(query: String)
     }
 }
