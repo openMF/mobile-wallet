@@ -8,7 +8,7 @@ that can be used as a dependency in any other wallet based project. It is develo
 
 ## Notice
 
-:warning: We are fully committed to implement `[Jetpack Compose](https://developer.android.com/jetpack/compose)` and moving ourself to support 
+:warning: We are fully committed to implement [Jetpack Compose](https://developer.android.com/jetpack/compose) and moving ourself to support 
 `kotlin multi-platform`. **If you are sending any PR regarding `XML changes` we will `not` consider at this moment but converting XML to jetpack compose are most welcome.** If you sending any PR regarding logical changes in Activity/Fragment you are most welcome. 
 
 
