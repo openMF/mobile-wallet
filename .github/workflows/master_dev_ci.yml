@@ -41,37 +41,30 @@ jobs:
           path: mifospay/build/outputs/apk/debug/
 
   lintCheck:
-    name: StaticAnalysis
+    name: Static Analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        # Setup JDK 17
       - name: Setup JDK 17
         uses: actions/setup-java@v1
         with:
           java-version: 17
 
-      - name: Static Analysis[Core]
-        run: ./gradlew core:lint
+      - name: Run lint on all modules
+        run: ./gradlew runLintOnAllModules
 
-      - name: Upload Static Analysis Report For Core Module
+      # Upload lint reports for all modules
+      - name: Upload Static Analysis Reports
         uses: actions/upload-artifact@v2.2.0
         if: failure()
         with:
-          name: Static Analysis Report[Core]
-          path: core/build/reports/
-
-      - uses: actions/checkout@v2
-      - name: Static Analysis[Mifospay]
-        run: ./gradlew mifospay:lint
-
-      - name: Upload Static Analysis Report For MifosPay Module
-        uses: actions/upload-artifact@v2.2.0
-        if: failure()
-        with:
-          name: Static Analysis Report[Mifospay]
-          path: mifospay/build/reports/
+          name: Static Analysis Reports
+          path: |
+            **/build/reports/lint-results*.html
+            **/build/reports/lint-results*.xml
+  
 
   pmd:
     name: PMD
