@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.commonizer.OptimisticNumberCommonizationEnabledKey.alias
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     repositories {
@@ -30,26 +28,4 @@ plugins {
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.kotlin.android) apply false
-}
-
-val runLintOnAllModules by tasks.registering {
-    group = "verification"
-    description = "Runs the Android lint task on all submodules."
-    doLast {
-        println("Lint checks completed for all modules.")
-    }
-}
-
-subprojects {
-    afterEvaluate {
-        if (plugins.hasPlugin("com.android.application") || plugins.hasPlugin("com.android.library")) {
-            val lintTaskName = "lintDebug${name.capitalize()}"
-            val subprojectPath = path
-            tasks.register(lintTaskName) {
-                group = "verification"
-                description = "Runs lintDebug on the $name module."
-                dependsOn("$subprojectPath:lintDebug")
-            }
-        }
-    }
 }

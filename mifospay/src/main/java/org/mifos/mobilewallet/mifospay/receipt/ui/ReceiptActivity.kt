@@ -275,6 +275,7 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
         requestCode: Int, permissions: Array<String>,
         grantResults: IntArray
     ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         when (requestCode) {
             REQUEST_WRITE_EXTERNAL_STORAGE -> {
 
