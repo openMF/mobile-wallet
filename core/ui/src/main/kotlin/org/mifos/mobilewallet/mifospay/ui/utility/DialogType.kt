@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.settings.ui
+package org.mifos.mobilewallet.mifospay.ui.utility
 
 enum class DialogType {
     NONE,

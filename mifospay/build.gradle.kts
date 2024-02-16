@@ -47,6 +47,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(libs.androidx.constraintlayout)
 
+    implementation(projects.core.ui)
     implementation(projects.core.designsystem)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
