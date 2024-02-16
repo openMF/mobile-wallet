@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.mifospay.android.library.compose)
 }
 
+apply(from = "${project.rootDir}/config/quality/quality.gradle")
+
 android {
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

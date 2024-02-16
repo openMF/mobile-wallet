@@ -90,16 +90,6 @@ jobs:
         with:
           java-version: 17
 
-      - name: PMD Check[Core]
-        run: ./gradlew core:pmd
-
-      - name: Upload PMD Report[Core]
-        uses: actions/upload-artifact@v3.1.3
-        if: failure()
-        with:
-          name: PMD Report[Core]
-          path: core/build/reports/
-
       - uses: actions/checkout@v4
       - name: PMD Check[MifosPay]
         run: ./gradlew mifospay:pmd
@@ -110,6 +100,21 @@ jobs:
         with:
           name: PMD Report[MifosPay]
           path: mifospay/build/reports/
+
+      - name: Static Analysis[Core:Datastore]
+        run: ./gradlew core:datastore:pmd
+
+      - name: Static Analysis[Core:Data]
+        run: ./gradlew core:data:pmd
+
+      - name: Static Analysis[Core:DesignSystem]
+        run: ./gradlew core:designsystem:pmd
+
+      - name: Static Analysis[Core:Common]
+        run: ./gradlew core:common:pmd
+
+      - name: Static Analysis[Feature:Auth]
+        run: ./gradlew feature:auth:pmd
 
   checkstyle:
     name: Checkstyle
@@ -123,16 +128,6 @@ jobs:
         with:
           java-version: 17
 
-      - name: Checkstyle[Core]
-        run: ./gradlew core:checkstyle
-
-      - name: Upload Checkstyle Report[Core]
-        uses: actions/upload-artifact@v2.2.0
-        if: failure()
-        with:
-          name: Checkstyle Report[Core]
-          path: core/build/reports/
-
       - uses: actions/checkout@v2
       - name: Checkstyle[MifosPay]
         run: ./gradlew mifospay:checkstyle
@@ -143,3 +138,18 @@ jobs:
         with:
           name: Checkstyle Report[MifosPay]
           path: mifospay/build/reports/
+
+      - name: Static Analysis[Core:Datastore]
+        run: ./gradlew core:datastore:checkstyle
+
+      - name: Static Analysis[Core:Data]
+        run: ./gradlew core:data:checkstyle
+
+      - name: Static Analysis[Core:DesignSystem]
+        run: ./gradlew core:designsystem:checkstyle
+
+      - name: Static Analysis[Core:Common]
+        run: ./gradlew core:common:checkstyle
+
+      - name: Static Analysis[Feature:Auth]
+        run: ./gradlew feature:auth:checkstyle

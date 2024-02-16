@@ -5,7 +5,7 @@ plugins {
     id("kotlinx-serialization")
 }
 
-//apply(from = "../config/quality/quality.gradle")
+apply(from = "${project.rootDir}/config/quality/quality.gradle")
 
 group = "com.github.ankurs287"
 
