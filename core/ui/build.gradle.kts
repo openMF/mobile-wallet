@@ -33,6 +33,8 @@ android {
     }
 }
 
+apply(from = "${project.rootDir}/config/quality/quality.gradle")
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)

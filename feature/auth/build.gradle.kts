@@ -7,6 +7,8 @@ android {
     namespace = "org.mifos.mobilewallet.mifospay.feature.auth"
 }
 
+apply(from = "${project.rootDir}/config/quality/quality.gradle")
+
 dependencies {
     implementation(projects.core.data)
 

@@ -17,7 +17,7 @@ dependencyResolutionManagement {
         maven("https://plugins.gradle.org/m2/")
     }
 }
-rootProject.name = "mobile-wallet"
+rootProject.name = "Mobile-Wallet"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":mifospay")
