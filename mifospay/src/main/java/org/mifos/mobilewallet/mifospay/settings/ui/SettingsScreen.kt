@@ -1,6 +1,5 @@
 package org.mifos.mobilewallet.mifospay.settings.ui
 
-import MifosDialogBox
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +26,13 @@ import org.mifos.mobilewallet.mifospay.designsystem.component.MifosItemCard
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosTopBar
 import org.mifos.mobilewallet.mifospay.designsystem.theme.mifosText
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleSettingsButton
+import org.mifos.mobilewallet.mifospay.ui.utility.DialogState
+import org.mifos.mobilewallet.mifospay.ui.utility.DialogType
+
+/**
+ * @author pratyush
+ * @since 12/02/2024
+ */
 
 @Composable
 fun SettingsScreen(
@@ -34,7 +40,12 @@ fun SettingsScreen(
     disable: () -> Unit,
     logout: () -> Unit
 ) {
-    var currentDialog by remember { mutableStateOf(DialogType.NONE) }
+    var dialogState by remember { mutableStateOf(DialogState()) }
+
+    DialogManager(
+        dialogState = dialogState,
+        onDismiss = { dialogState = DialogState(type = DialogType.NONE) }
+    )
 
     Scaffold(
         topBar = {
@@ -69,7 +80,12 @@ fun SettingsScreen(
 
             Row(modifier = Modifier.padding(8.dp)) {
                 MifosItemCard(
-                    onClick = { currentDialog = DialogType.DISABLE_ACCOUNT },
+                    onClick = {
+                        dialogState = DialogState(
+                            type = DialogType.DISABLE_ACCOUNT,
+                            onConfirm = { disable.invoke() }
+                        )
+                    },
                     colors = CardDefaults.cardColors(Color.Black)
                 ) {
                     Text(
@@ -84,7 +100,12 @@ fun SettingsScreen(
 
             Row(modifier = Modifier.padding(8.dp)) {
                 MifosItemCard(
-                    onClick = { currentDialog = DialogType.LOGOUT },
+                    onClick = {
+                        dialogState = DialogState(
+                            type = DialogType.LOGOUT,
+                            onConfirm = { logout() }
+                        )
+                    },
                     colors = CardDefaults.cardColors(Color.Black)
                 ) {
                     Text(
@@ -97,40 +118,6 @@ fun SettingsScreen(
                 }
             }
         }
-    }
-
-    if (currentDialog != DialogType.NONE) {
-        MifosDialogBox(
-            showDialog = true,
-            onDismiss = { currentDialog = DialogType.NONE },
-            title = when (currentDialog) {
-                DialogType.DISABLE_ACCOUNT -> R.string.alert_disable_account
-                DialogType.LOGOUT -> R.string.log_out_title
-                else -> R.string.empty
-            },
-            message = when (currentDialog) {
-                DialogType.DISABLE_ACCOUNT -> R.string.alert_disable_account_desc
-                else -> R.string.empty
-            },
-            confirmButtonText = when (currentDialog) {
-                DialogType.DISABLE_ACCOUNT -> R.string.ok
-                DialogType.LOGOUT -> R.string.yes
-                else -> R.string.empty
-            },
-            dismissButtonText = when (currentDialog) {
-                DialogType.DISABLE_ACCOUNT -> R.string.cancel
-                DialogType.LOGOUT -> R.string.no
-                else -> R.string.empty
-            },
-            onConfirm = {
-                when (currentDialog) {
-                    DialogType.DISABLE_ACCOUNT -> disable()
-                    DialogType.LOGOUT -> logout()
-                    else -> {}
-                }
-                currentDialog = DialogType.NONE
-            }
-        )
     }
 
 }

@@ -2,11 +2,17 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.stringResource
+
+/**
+ * @author pratyush
+ * @since 12/02/2024
+ */
 
 @Composable
 fun MifosDialogBox(
-    showDialog: Boolean,
+    showDialogState: MutableState<Boolean>,
     onDismiss: () -> Unit,
     title: Int,
     message: Int? = null,
@@ -14,7 +20,7 @@ fun MifosDialogBox(
     onConfirm: () -> Unit,
     dismissButtonText: Int
 ) {
-    if (showDialog) {
+    if (showDialogState.value) {
         AlertDialog(
             onDismissRequest = onDismiss,
             title = { Text(text = stringResource(id = title)) },
