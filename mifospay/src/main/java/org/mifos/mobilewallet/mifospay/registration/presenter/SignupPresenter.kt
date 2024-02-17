@@ -2,13 +2,10 @@ package org.mifos.mobilewallet.mifospay.registration.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager
 import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole
-import org.mifos.mobilewallet.core.domain.model.client.Client
-import org.mifos.mobilewallet.core.domain.model.client.NewClient
-import org.mifos.mobilewallet.core.domain.model.user.NewUser
-import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityClients
-import org.mifos.mobilewallet.core.domain.model.user.User
+import com.mifos.mobilewallet.model.domain.user.NewUser
+import com.mifos.mobilewallet.model.domain.user.UpdateUserEntityClients
+import com.mifos.mobilewallet.model.domain.user.User
 import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData
 import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient
@@ -138,7 +135,13 @@ class SignupPresenter @Inject constructor(
     }
 
     private fun createUser() {
-        val newUser = NewUser(username, firstName, lastName, email, password)
+        val newUser = NewUser(
+            username,
+            firstName,
+            lastName,
+            email,
+            password
+        )
         mUseCaseHandler.execute(createUserUseCase, CreateUser.RequestValues(newUser),
             object : UseCaseCallback<CreateUser.ResponseValue?> {
                 override fun onSuccess(response: CreateUser.ResponseValue?) {
@@ -153,7 +156,7 @@ class SignupPresenter @Inject constructor(
     }
 
     private fun createClient(userId: Int) {
-        val newClient = NewClient(
+        val newClient = com.mifos.mobilewallet.model.domain.client.NewClient(
             businessName, username, addressLine1,
             addressLine2, city, pincode, stateId, countryId, mobileNumber,
             mifosSavingsProductId
@@ -179,7 +182,10 @@ class SignupPresenter @Inject constructor(
 
     private fun updateClient(clients: ArrayList<Int>, userId: Int) {
         mUseCaseHandler.execute(updateUserUseCase,
-            UpdateUser.RequestValues(UpdateUserEntityClients(clients), userId),
+            UpdateUser.RequestValues(
+                UpdateUserEntityClients(
+                    clients
+                ), userId),
             object : UseCaseCallback<UpdateUser.ResponseValue?> {
                 override fun onSuccess(response: UpdateUser.ResponseValue?) {
                     loginUser(username, password)
@@ -256,7 +262,7 @@ class SignupPresenter @Inject constructor(
         mPreferencesHelper.saveEmail(userWithRole.email)
     }
 
-    private fun saveClientDetails(client: Client) {
+    private fun saveClientDetails(client: com.mifos.mobilewallet.model.domain.client.Client) {
         mPreferencesHelper.saveFullName(client.name)
         mPreferencesHelper.clientId = client.clientId
         mPreferencesHelper.saveMobile(client.mobileNo)

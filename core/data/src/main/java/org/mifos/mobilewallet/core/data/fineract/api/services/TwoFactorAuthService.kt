@@ -1,8 +1,8 @@
 package org.mifos.mobilewallet.core.data.fineract.api.services
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
-import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken
-import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod
+import com.mifos.mobilewallet.model.domain.twofactor.AccessToken
+import com.mifos.mobilewallet.model.domain.twofactor.DeliveryMethod
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Query

@@ -1,9 +1,8 @@
 package org.mifos.mobilewallet.mifospay.home
 
 import okhttp3.ResponseBody
-import org.mifos.mobilewallet.core.domain.model.Account
-import org.mifos.mobilewallet.core.domain.model.Transaction
-import org.mifos.mobilewallet.core.domain.model.client.Client
+import com.mifos.mobilewallet.model.domain.Account
+import com.mifos.mobilewallet.model.domain.Transaction
 import org.mifos.mobilewallet.mifospay.base.BasePresenter
 import org.mifos.mobilewallet.mifospay.base.BaseView
 
@@ -66,7 +65,7 @@ interface BaseHomeContract {
     }
 
     interface ProfileView : BaseView<ProfilePresenter?> {
-        fun showProfile(client: Client?)
+        fun showProfile(client: com.mifos.mobilewallet.model.domain.client.Client?)
         fun showEmail(email: String?)
         fun showVpa(vpa: String?)
         fun showMobile(mobile: String?)

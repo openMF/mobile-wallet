@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.api.services
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
-import org.mifos.mobilewallet.core.domain.model.NotificationPayload
+import com.mifos.mobilewallet.model.domain.NotificationPayload
 import retrofit2.http.GET
 import retrofit2.http.Path
 import rx.Observable

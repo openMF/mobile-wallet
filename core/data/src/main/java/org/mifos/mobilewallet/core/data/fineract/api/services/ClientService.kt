@@ -5,10 +5,9 @@ import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
 import org.mifos.mobilewallet.core.data.fineract.entity.Page
-import org.mifos.mobilewallet.core.data.fineract.entity.client.Client
-import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts
-import org.mifos.mobilewallet.core.domain.model.NewAccount
-import org.mifos.mobilewallet.core.domain.model.client.NewClient
+import com.mifos.mobilewallet.model.entity.client.Client
+import com.mifos.mobilewallet.model.entity.client.ClientAccounts
+import com.mifos.mobilewallet.model.domain.NewAccount
 import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -51,7 +50,7 @@ interface ClientService {
     ): Observable<ClientAccounts>
 
     @POST(ApiEndPoints.CLIENTS)
-    fun createClient(@Body newClient: NewClient): Observable<CreateClient.ResponseValue>
+    fun createClient(@Body newClient: com.mifos.mobilewallet.model.domain.client.NewClient): Observable<CreateClient.ResponseValue>
 
     @POST
     fun createAccount(@Body newAccount: NewAccount?): Observable<GenericResponse>

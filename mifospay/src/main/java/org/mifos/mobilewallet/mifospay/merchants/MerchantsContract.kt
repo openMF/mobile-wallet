@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.mifospay.merchants
 
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations
+import com.mifos.mobilewallet.model.entity.accounts.savings.SavingsWithAssociations
 import org.mifos.mobilewallet.mifospay.base.BasePresenter
 import org.mifos.mobilewallet.mifospay.base.BaseView
 

@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import org.mifos.mobilewallet.core.domain.model.NotificationPayload
+import com.mifos.mobilewallet.model.domain.NotificationPayload
 import org.mifos.mobilewallet.mifospay.R
 import javax.inject.Inject
 

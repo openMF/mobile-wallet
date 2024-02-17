@@ -9,7 +9,6 @@ import android.view.MenuItem
 import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifos.mobilewallet.core.domain.model.client.Client
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository

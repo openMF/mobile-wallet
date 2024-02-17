@@ -6,7 +6,7 @@ import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseFactory
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.domain.model.Transaction
+import com.mifos.mobilewallet.model.domain.Transaction
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
 import org.mifos.mobilewallet.mifospay.R

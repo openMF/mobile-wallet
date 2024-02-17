@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import org.mifos.mobilewallet.core.data.fineract.entity.Invoice
-import org.mifos.mobilewallet.core.utils.DateHelper
+import com.mifos.mobilewallet.model.utils.DateHelper
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import javax.inject.Inject

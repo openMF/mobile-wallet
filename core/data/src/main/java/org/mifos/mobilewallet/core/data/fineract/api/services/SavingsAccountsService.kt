@@ -3,9 +3,9 @@ package org.mifos.mobilewallet.core.data.fineract.api.services
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
 import org.mifos.mobilewallet.core.data.fineract.entity.Page
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions
+import com.mifos.mobilewallet.model.entity.accounts.savings.SavingAccount
+import com.mifos.mobilewallet.model.entity.accounts.savings.SavingsWithAssociations
+import com.mifos.mobilewallet.model.entity.accounts.savings.Transactions
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

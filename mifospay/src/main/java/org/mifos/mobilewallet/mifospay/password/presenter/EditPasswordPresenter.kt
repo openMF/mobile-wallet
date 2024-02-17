@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.password.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityPassword
+import com.mifos.mobilewallet.model.domain.user.UpdateUserEntityPassword
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
 import org.mifos.mobilewallet.mifospay.base.BaseView
@@ -101,7 +101,9 @@ class EditPasswordPresenter @Inject constructor(
                 override fun onSuccess(response: AuthenticateUser.ResponseValue?) {
                     mUseCaseHandler.execute(updateUserUseCase,
                         UpdateUser.RequestValues(
-                            UpdateUserEntityPassword(newPassword),
+                            UpdateUserEntityPassword(
+                                newPassword
+                            ),
                             mPreferencesHelper.userId.toInt()
                         ),
                         object : UseCaseCallback<UpdateUser.ResponseValue?> {

@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.mifospay.bank.presenter
 
-import org.mifos.mobilewallet.core.domain.model.BankAccountDetails
+import com.mifos.mobilewallet.model.domain.BankAccountDetails
 import org.mifos.mobilewallet.mifospay.bank.BankContract
 import org.mifos.mobilewallet.mifospay.bank.BankContract.LinkBankAccountView
 import org.mifos.mobilewallet.mifospay.base.BaseView

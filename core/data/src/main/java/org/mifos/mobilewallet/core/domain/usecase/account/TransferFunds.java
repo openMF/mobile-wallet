@@ -2,16 +2,16 @@ package org.mifos.mobilewallet.core.domain.usecase.account;
 
 import org.mifos.mobilewallet.core.base.UseCase;
 import org.mifos.mobilewallet.core.data.fineract.entity.TPTResponse;
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
+import com.mifos.mobilewallet.model.entity.accounts.savings.SavingAccount;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUpdatePayload;
-import org.mifos.mobilewallet.core.data.fineract.entity.client.Client;
-import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
+import com.mifos.mobilewallet.model.entity.client.Client;
+import com.mifos.mobilewallet.model.entity.client.ClientAccounts;
 import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.utils.Constants;
-import org.mifos.mobilewallet.core.utils.DateHelper;
+import com.mifos.mobilewallet.model.utils.DateHelper;
 
 import java.util.List;
 
