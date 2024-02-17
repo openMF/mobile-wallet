@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.core.domain.usecase.notification
 
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
-import org.mifos.mobilewallet.core.domain.model.NotificationPayload
+import com.mifos.mobilewallet.model.domain.NotificationPayload
 import org.mifos.mobilewallet.core.utils.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers

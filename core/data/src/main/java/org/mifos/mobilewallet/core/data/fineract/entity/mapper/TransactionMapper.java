@@ -1,10 +1,10 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.mapper;
 
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations;
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions;
-import org.mifos.mobilewallet.core.domain.model.Transaction;
-import org.mifos.mobilewallet.core.domain.model.TransactionType;
-import org.mifos.mobilewallet.core.utils.DateHelper;
+import com.mifos.mobilewallet.model.entity.accounts.savings.SavingsWithAssociations;
+import com.mifos.mobilewallet.model.entity.accounts.savings.Transactions;
+import com.mifos.mobilewallet.model.domain.Transaction;
+import com.mifos.mobilewallet.model.domain.TransactionType;
+import com.mifos.mobilewallet.model.utils.DateHelper;
 
 import java.util.ArrayList;
 import java.util.List;

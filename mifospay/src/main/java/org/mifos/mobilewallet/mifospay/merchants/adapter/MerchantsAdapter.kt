@@ -10,7 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations
+import com.mifos.mobilewallet.model.entity.accounts.savings.SavingsWithAssociations
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable
 import java.util.*

@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.core.domain.usecase.client
 
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.data.fineract.entity.Page
-import org.mifos.mobilewallet.core.data.fineract.entity.client.Client
+import com.mifos.mobilewallet.model.entity.client.Client
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.ClientDetailsMapper
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
 import org.mifos.mobilewallet.core.utils.Constants
@@ -66,6 +66,6 @@ class FetchClientData @Inject constructor(private val fineractRepository: Finera
     }
 
     data class RequestValues(val clientid: Long) : UseCase.RequestValues
-    data class ResponseValue(val userDetails: org.mifos.mobilewallet.core.domain.model.client.Client) :
+    data class ResponseValue(val userDetails: com.mifos.mobilewallet.model.domain.client.Client) :
         UseCase.ResponseValue
 }

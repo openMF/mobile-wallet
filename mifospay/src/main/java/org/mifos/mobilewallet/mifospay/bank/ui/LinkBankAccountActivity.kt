@@ -16,7 +16,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
-import org.mifos.mobilewallet.core.domain.model.BankAccountDetails
+import com.mifos.mobilewallet.model.domain.BankAccountDetails
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.bank.BankContract
 import org.mifos.mobilewallet.mifospay.bank.BankContract.LinkBankAccountView

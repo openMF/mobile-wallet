@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.mifospay.notification
 
-import org.mifos.mobilewallet.core.domain.model.NotificationPayload
+import com.mifos.mobilewallet.model.domain.NotificationPayload
 import org.mifos.mobilewallet.mifospay.base.BasePresenter
 import org.mifos.mobilewallet.mifospay.base.BaseView
 

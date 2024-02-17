@@ -4,9 +4,9 @@ import org.mifos.mobilewallet.core.base.TaskLooper
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseFactory
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.domain.model.Account
-import org.mifos.mobilewallet.core.domain.model.Transaction
-import org.mifos.mobilewallet.core.domain.model.TransactionType
+import com.mifos.mobilewallet.model.domain.Account
+import com.mifos.mobilewallet.model.domain.Transaction
+import com.mifos.mobilewallet.model.domain.TransactionType
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions
 import org.mifos.mobilewallet.mifospay.R

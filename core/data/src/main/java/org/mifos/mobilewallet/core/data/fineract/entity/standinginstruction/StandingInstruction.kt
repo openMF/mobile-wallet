@@ -3,9 +3,9 @@ package org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount
-import org.mifos.mobilewallet.core.data.fineract.entity.client.Client
-import org.mifos.mobilewallet.core.data.fineract.entity.client.Status
+import com.mifos.mobilewallet.model.entity.accounts.savings.SavingAccount
+import com.mifos.mobilewallet.model.entity.client.Client
+import com.mifos.mobilewallet.model.entity.client.Status
 
 /**
  * Created by Devansh 08/06/2020
@@ -13,26 +13,26 @@ import org.mifos.mobilewallet.core.data.fineract.entity.client.Status
 
 @Parcelize
 data class StandingInstruction(
-        val id: Long,
-        @SerializedName("name")
+    val id: Long,
+    @SerializedName("name")
         val name: String,
-        @SerializedName("fromClient")
+    @SerializedName("fromClient")
         val fromClient: Client,
-        @SerializedName("fromAccount")
+    @SerializedName("fromAccount")
         val fromAccount: SavingAccount,
-        @SerializedName("toClient")
+    @SerializedName("toClient")
         val toClient: Client,
-        @SerializedName("toAccount")
+    @SerializedName("toAccount")
         val toAccount: SavingAccount,
-        @SerializedName("status")
+    @SerializedName("status")
         val status: Status,
-        @SerializedName("amount")
+    @SerializedName("amount")
         var amount: Double,
-        @SerializedName("validFrom")
+    @SerializedName("validFrom")
         val validFrom: List<Int>,
-        @SerializedName("validTill")
+    @SerializedName("validTill")
         var validTill: List<Int>?,
-        @SerializedName("recurrenceInterval")
+    @SerializedName("recurrenceInterval")
         var recurrenceInterval: Int,
-        @SerializedName("recurrenceOnMonthDay")
+    @SerializedName("recurrenceOnMonthDay")
         val recurrenceOnMonthDay: List<Int>) : Parcelable

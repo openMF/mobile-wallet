@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.mapper;
 
-import org.mifos.mobilewallet.core.domain.model.client.Client;
+import com.mifos.mobilewallet.model.domain.client.Client;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,13 +17,12 @@ public class ClientDetailsMapper {
     public ClientDetailsMapper() {
     }
 
-    public List<Client> transformList(List<org.mifos.mobilewallet.core.data
-            .fineract.entity.client.Client> clients) {
+    public List<Client> transformList(List<com.mifos.mobilewallet.model.entity.client.Client> clients) {
 
         List<Client> clientList = new ArrayList<>();
 
         if (clients != null && clients.size() != 0) {
-            for (org.mifos.mobilewallet.core.data.fineract.entity.client.Client client : clients) {
+            for (com.mifos.mobilewallet.model.entity.client.Client client : clients) {
                 clientList.add(transform(client));
             }
 
@@ -31,7 +30,7 @@ public class ClientDetailsMapper {
         return clientList;
     }
 
-    public Client transform(org.mifos.mobilewallet.core.data.fineract.entity.client.Client client) {
+    public Client transform(com.mifos.mobilewallet.model.entity.client.Client client) {
         Client clientDetails = new Client();
 
         if (client != null) {

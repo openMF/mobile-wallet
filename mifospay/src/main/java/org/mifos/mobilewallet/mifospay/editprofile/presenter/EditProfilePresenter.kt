@@ -2,8 +2,7 @@ package org.mifos.mobilewallet.mifospay.editprofile.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.domain.model.client.UpdateClientEntityMobile
-import org.mifos.mobilewallet.core.domain.model.user.UpdateUserEntityEmail
+import com.mifos.mobilewallet.model.domain.user.UpdateUserEntityEmail
 import org.mifos.mobilewallet.core.domain.usecase.client.UpdateClient
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
@@ -94,7 +93,9 @@ class EditProfilePresenter @Inject constructor(
         mEditProfileView!!.startProgressBar()
         mUseCaseHandler.execute(updateUserUseCase,
             UpdateUser.RequestValues(
-                UpdateUserEntityEmail(email),
+                UpdateUserEntityEmail(
+                    email
+                ),
                 mPreferencesHelper.userId.toInt()
             ),
             object : UseCaseCallback<UpdateUser.ResponseValue?> {
@@ -116,7 +117,9 @@ class EditProfilePresenter @Inject constructor(
         mEditProfileView!!.startProgressBar()
         mUseCaseHandler.execute(updateClientUseCase,
             UpdateClient.RequestValues(
-                UpdateClientEntityMobile(fullNumber),
+                com.mifos.mobilewallet.model.domain.client.UpdateClientEntityMobile(
+                    fullNumber!!
+                ),
                 mPreferencesHelper.clientId.toInt().toLong()
             ),
             object : UseCaseCallback<UpdateClient.ResponseValue?> {

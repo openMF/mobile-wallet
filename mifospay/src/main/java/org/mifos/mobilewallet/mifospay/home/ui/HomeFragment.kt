@@ -19,8 +19,8 @@ import butterknife.ButterKnife
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifos.mobilewallet.core.domain.model.Account
-import org.mifos.mobilewallet.core.domain.model.Transaction
+import com.mifos.mobilewallet.model.domain.Account
+import com.mifos.mobilewallet.model.domain.Transaction
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.databinding.FragmentHomeBinding

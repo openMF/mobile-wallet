@@ -14,9 +14,8 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import dagger.hilt.android.AndroidEntryPoint
 import okhttp3.ResponseBody
-import org.mifos.mobilewallet.core.domain.model.client.Client
+import com.mifos.mobilewallet.model.domain.client.Client
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
@@ -115,7 +114,7 @@ class ProfileFragment : BaseFragment(), ProfileView {
         }
     }
 
-    override fun showProfile(client: Client?) {
+    override fun showProfile(client: com.mifos.mobilewallet.model.domain.client.Client?) {
         val drawable = client?.name?.substring(0, 1)?.let {
             TextDrawable.builder().beginConfig()
                 .width(resources.getDimension(R.dimen.user_profile_image_size).toInt())

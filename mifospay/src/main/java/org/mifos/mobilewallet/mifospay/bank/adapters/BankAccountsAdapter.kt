@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import org.mifos.mobilewallet.core.domain.model.BankAccountDetails
+import com.mifos.mobilewallet.model.domain.BankAccountDetails
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import javax.inject.Inject
