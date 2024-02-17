@@ -18,7 +18,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.textfield.TextInputLayout
-import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card
+import com.mifos.mobilewallet.model.entity.savedcards.Card
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract
 import org.mifos.mobilewallet.mifospay.utils.Constants
@@ -160,11 +160,13 @@ class AddCardDialog : BottomSheetDialogFragment() {
         if (!areFieldsValid()) {
             return
         }
-        val card = Card(etCardNumber!!.text.toString().trim { it <= ' ' },
-            etCVV!!.text.toString(),
-            spnMM!!.selectedItem.toString() + "/" + spnYY!!.selectedItem,
-            etFname!!.text.toString().trim { it <= ' ' },
-            etLname!!.text.toString().trim { it <= ' ' })
+        val card =
+            Card(etCardNumber!!.text.toString()
+                .trim { it <= ' ' },
+                etCVV!!.text.toString(),
+                spnMM!!.selectedItem.toString() + "/" + spnYY!!.selectedItem,
+                etFname!!.text.toString().trim { it <= ' ' },
+                etLname!!.text.toString().trim { it <= ' ' })
         if (forEdit) {
             card.id = editCard!!.id
             mCardsPresenter!!.editCard(card)

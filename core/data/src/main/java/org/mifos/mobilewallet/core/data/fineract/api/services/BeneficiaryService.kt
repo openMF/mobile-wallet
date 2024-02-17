@@ -2,10 +2,10 @@ package org.mifos.mobilewallet.core.data.fineract.api.services
 
 import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPayload
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUpdatePayload
-import org.mifos.mobilewallet.core.data.fineract.entity.templates.beneficiary.BeneficiaryTemplate
+import com.mifos.mobilewallet.model.entity.beneficary.Beneficiary
+import com.mifos.mobilewallet.model.entity.beneficary.BeneficiaryPayload
+import com.mifos.mobilewallet.model.entity.beneficary.BeneficiaryUpdatePayload
+import com.mifos.mobilewallet.model.entity.templates.beneficiary.BeneficiaryTemplate
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

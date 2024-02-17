@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card
+import com.mifos.mobilewallet.model.entity.savedcards.Card
 import org.mifos.mobilewallet.mifospay.R
 import javax.inject.Inject
 

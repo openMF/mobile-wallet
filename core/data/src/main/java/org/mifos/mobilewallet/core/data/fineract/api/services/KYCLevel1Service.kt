@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.core.data.fineract.api.services
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details
+import com.mifos.mobilewallet.model.entity.kyc.KYCLevel1Details
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

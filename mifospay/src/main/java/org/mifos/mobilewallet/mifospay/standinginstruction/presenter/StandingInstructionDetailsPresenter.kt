@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.standinginstruction.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
+import com.mifos.mobilewallet.model.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.core.domain.usecase.standinginstruction.FetchStandingInstruction
 import org.mifos.mobilewallet.core.domain.usecase.standinginstruction.DeleteStandingInstruction
 import org.mifos.mobilewallet.core.domain.usecase.standinginstruction.UpdateStandingInstruction

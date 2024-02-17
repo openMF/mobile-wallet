@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.kyc.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details
+import com.mifos.mobilewallet.model.entity.kyc.KYCLevel1Details
 import org.mifos.mobilewallet.core.domain.usecase.kyc.UploadKYCLevel1Details
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
@@ -31,10 +31,11 @@ class KYCLevel1Presenter @Inject constructor(
         fname: String?, lname: String?, address1: String?, address2: String?,
         phoneno: String?, dob: String?
     ) {
-        val kycLevel1Details = KYCLevel1Details(
-            fname, lname, address1,
-            address2, phoneno, dob, "1"
-        )
+        val kycLevel1Details =
+            KYCLevel1Details(
+                fname, lname, address1,
+                address2, phoneno, dob, "1"
+            )
         uploadKYCLevel1DetailsUseCase!!.requestValues = UploadKYCLevel1Details.RequestValues(
             mLocalRepository.clientDetails.clientId.toInt(),
             kycLevel1Details

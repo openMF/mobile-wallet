@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.domain.usecase.invoice
 
 import org.mifos.mobilewallet.core.base.UseCase
-import org.mifos.mobilewallet.core.data.fineract.entity.Invoice
+import com.mifos.mobilewallet.model.entity.Invoice
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers

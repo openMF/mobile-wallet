@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import org.mifos.mobilewallet.core.data.fineract.entity.Invoice
+import com.mifos.mobilewallet.model.entity.Invoice
 import com.mifos.mobilewallet.model.utils.DateHelper
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.utils.Constants

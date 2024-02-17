@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.mifospay.standinginstruction
 
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
+import com.mifos.mobilewallet.model.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.mifospay.base.BasePresenter
 import org.mifos.mobilewallet.mifospay.base.BaseView
 

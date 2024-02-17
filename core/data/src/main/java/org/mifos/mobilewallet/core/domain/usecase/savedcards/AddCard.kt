@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.core.domain.usecase.savedcards
 
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card
+import com.mifos.mobilewallet.model.entity.savedcards.Card
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers

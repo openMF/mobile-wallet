@@ -1,14 +1,14 @@
 package org.mifos.mobilewallet.core.domain.usecase.account;
 
 import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.data.fineract.entity.TPTResponse;
+import com.mifos.mobilewallet.model.entity.TPTResponse;
 import com.mifos.mobilewallet.model.entity.accounts.savings.SavingAccount;
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary;
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPayload;
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUpdatePayload;
+import com.mifos.mobilewallet.model.entity.beneficary.Beneficiary;
+import com.mifos.mobilewallet.model.entity.beneficary.BeneficiaryPayload;
+import com.mifos.mobilewallet.model.entity.beneficary.BeneficiaryUpdatePayload;
 import com.mifos.mobilewallet.model.entity.client.Client;
 import com.mifos.mobilewallet.model.entity.client.ClientAccounts;
-import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload;
+import com.mifos.mobilewallet.model.entity.payload.TransferPayload;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.utils.Constants;
 import com.mifos.mobilewallet.model.utils.DateHelper;
