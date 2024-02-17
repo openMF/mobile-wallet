@@ -10,7 +10,7 @@ import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails
 import org.mifos.mobilewallet.mifospay.auth.AuthContract
 import org.mifos.mobilewallet.mifospay.auth.AuthContract.LoginView
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
+import org.mifos.mobilewallet.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import javax.inject.Inject

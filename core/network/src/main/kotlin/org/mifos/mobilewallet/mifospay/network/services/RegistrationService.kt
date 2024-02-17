@@ -1,9 +1,9 @@
-package org.mifos.mobilewallet.core.data.fineract.api.services
+package org.mifos.mobilewallet.mifospay.network.services
 
 import okhttp3.ResponseBody
-import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
 import com.mifos.mobilewallet.model.entity.register.RegisterPayload
 import com.mifos.mobilewallet.model.entity.register.UserVerify
+import org.mifos.mobilewallet.mifospay.network.ApiEndPoints
 import retrofit2.http.Body
 import retrofit2.http.POST
 import rx.Observable

@@ -1,10 +1,10 @@
 package org.mifos.mobilewallet.core.data.fineract.repository
 
-import okhttp3.MultipartBody
-import okhttp3.ResponseBody
-import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
-import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager
+import com.mifos.mobilewallet.model.domain.NewAccount
+import com.mifos.mobilewallet.model.domain.NotificationPayload
+import com.mifos.mobilewallet.model.domain.twofactor.AccessToken
+import com.mifos.mobilewallet.model.domain.twofactor.DeliveryMethod
+import com.mifos.mobilewallet.model.domain.user.NewUser
 import com.mifos.mobilewallet.model.entity.Invoice
 import com.mifos.mobilewallet.model.entity.Page
 import com.mifos.mobilewallet.model.entity.SearchedEntity
@@ -28,14 +28,14 @@ import com.mifos.mobilewallet.model.entity.register.UserVerify
 import com.mifos.mobilewallet.model.entity.savedcards.Card
 import com.mifos.mobilewallet.model.entity.standinginstruction.SDIResponse
 import com.mifos.mobilewallet.model.entity.standinginstruction.StandingInstruction
-import com.mifos.mobilewallet.model.domain.NewAccount
-import com.mifos.mobilewallet.model.domain.NotificationPayload
-import com.mifos.mobilewallet.model.domain.twofactor.AccessToken
-import com.mifos.mobilewallet.model.domain.twofactor.DeliveryMethod
-import com.mifos.mobilewallet.model.domain.user.NewUser
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient
 import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser
 import org.mifos.mobilewallet.core.utils.Constants
+import org.mifos.mobilewallet.mifospay.network.FineractApiManager
+import org.mifos.mobilewallet.mifospay.network.GenericResponse
+import org.mifos.mobilewallet.mifospay.network.SelfServiceApiManager
 import rx.Observable
 import javax.inject.Inject
 import javax.inject.Singleton

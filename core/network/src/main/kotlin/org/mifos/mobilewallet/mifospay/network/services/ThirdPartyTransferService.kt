@@ -1,9 +1,9 @@
-package org.mifos.mobilewallet.core.data.fineract.api.services
+package org.mifos.mobilewallet.mifospay.network.services
 
-import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
 import com.mifos.mobilewallet.model.entity.TPTResponse
 import com.mifos.mobilewallet.model.entity.payload.TransferPayload
 import com.mifos.mobilewallet.model.entity.templates.account.AccountOptionsTemplate
+import org.mifos.mobilewallet.mifospay.network.ApiEndPoints
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

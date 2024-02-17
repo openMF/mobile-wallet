@@ -1,14 +1,11 @@
-package org.mifos.mobilewallet.core.data.fineract.api.services
+package org.mifos.mobilewallet.mifospay.network.services
 
-import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
 import com.mifos.mobilewallet.model.entity.SearchedEntity
+import org.mifos.mobilewallet.mifospay.network.ApiEndPoints
 import retrofit2.http.GET
 import retrofit2.http.Query
 import rx.Observable
 
-/**
- * Created by naman on 19/8/17.
- */
 interface SearchService {
     @GET(ApiEndPoints.SEARCH)
     fun searchResources(

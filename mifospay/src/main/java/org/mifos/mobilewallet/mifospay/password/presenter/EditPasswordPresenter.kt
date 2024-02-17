@@ -6,7 +6,7 @@ import com.mifos.mobilewallet.model.domain.user.UpdateUserEntityPassword
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
+import org.mifos.mobilewallet.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract.EditPasswordView
 import org.mifos.mobilewallet.mifospay.utils.Constants

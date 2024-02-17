@@ -1,31 +1,29 @@
-package org.mifos.mobilewallet.mifospay.di
+package org.mifos.mobilewallet.mifospay.network.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.mifos.mobilewallet.core.data.fineract.api.BaseURL
-import org.mifos.mobilewallet.core.data.fineract.api.MifosWalletOkHttpClient
-import org.mifos.mobilewallet.core.data.fineract.api.services.AccountTransfersService
-import org.mifos.mobilewallet.core.data.fineract.api.services.AuthenticationService
-import org.mifos.mobilewallet.core.data.fineract.api.services.BeneficiaryService
-import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService
-import org.mifos.mobilewallet.core.data.fineract.api.services.DocumentService
-import org.mifos.mobilewallet.core.data.fineract.api.services.InvoiceService
-import org.mifos.mobilewallet.core.data.fineract.api.services.KYCLevel1Service
-import org.mifos.mobilewallet.core.data.fineract.api.services.NotificationService
-import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService
-import org.mifos.mobilewallet.core.data.fineract.api.services.RunReportService
-import org.mifos.mobilewallet.core.data.fineract.api.services.SavedCardService
-import org.mifos.mobilewallet.core.data.fineract.api.services.SavingsAccountsService
-import org.mifos.mobilewallet.core.data.fineract.api.services.SearchService
-import org.mifos.mobilewallet.core.data.fineract.api.services.StandingInstructionService
-import org.mifos.mobilewallet.core.data.fineract.api.services.ThirdPartyTransferService
-import org.mifos.mobilewallet.core.data.fineract.api.services.TwoFactorAuthService
-import org.mifos.mobilewallet.core.data.fineract.api.services.UserService
-import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
-import org.mifos.mobilewallet.core.di.FineractApi
-import org.mifos.mobilewallet.core.di.SelfServiceApi
+import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.network.BaseURL
+import org.mifos.mobilewallet.mifospay.network.MifosWalletOkHttpClient
+import org.mifos.mobilewallet.mifospay.network.services.AccountTransfersService
+import org.mifos.mobilewallet.mifospay.network.services.AuthenticationService
+import org.mifos.mobilewallet.mifospay.network.services.BeneficiaryService
+import org.mifos.mobilewallet.mifospay.network.services.ClientService
+import org.mifos.mobilewallet.mifospay.network.services.DocumentService
+import org.mifos.mobilewallet.mifospay.network.services.InvoiceService
+import org.mifos.mobilewallet.mifospay.network.services.KYCLevel1Service
+import org.mifos.mobilewallet.mifospay.network.services.NotificationService
+import org.mifos.mobilewallet.mifospay.network.services.RegistrationService
+import org.mifos.mobilewallet.mifospay.network.services.RunReportService
+import org.mifos.mobilewallet.mifospay.network.services.SavedCardService
+import org.mifos.mobilewallet.mifospay.network.services.SavingsAccountsService
+import org.mifos.mobilewallet.mifospay.network.services.SearchService
+import org.mifos.mobilewallet.mifospay.network.services.StandingInstructionService
+import org.mifos.mobilewallet.mifospay.network.services.ThirdPartyTransferService
+import org.mifos.mobilewallet.mifospay.network.services.TwoFactorAuthService
+import org.mifos.mobilewallet.mifospay.network.services.UserService
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -58,6 +56,66 @@ class NetworkModule {
             .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
             .client(MifosWalletOkHttpClient(preferencesHelper).mifosOkHttpClient)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun providesFineractApiManager(
+        @Named("FineractAuthenticationService") authenticationService: AuthenticationService,
+        @Named("FineractClientService") clientService: ClientService,
+        @Named("FineractSavingsAccountsService") savingsAccountsService: SavingsAccountsService,
+        @Named("FineractRegistrationService") registrationService: RegistrationService,
+        searchService: SearchService,
+        documentService: DocumentService,
+        runReportService: RunReportService,
+        twoFactorAuthService: TwoFactorAuthService,
+        accountTransfersService: AccountTransfersService,
+        savedCardService: SavedCardService,
+        kYCLevel1Service: KYCLevel1Service,
+        invoiceService: InvoiceService,
+        userService: UserService,
+        @Named("FineractThirdPartyTransferService") thirdPartyTransferService: ThirdPartyTransferService,
+        standingInstructionService: StandingInstructionService,
+        notificationService: NotificationService,
+    ): org.mifos.mobilewallet.mifospay.network.FineractApiManager {
+        return org.mifos.mobilewallet.mifospay.network.FineractApiManager(
+            authenticationService,
+            clientService,
+            savingsAccountsService,
+            registrationService,
+            searchService,
+            documentService,
+            runReportService,
+            twoFactorAuthService,
+            accountTransfersService,
+            savedCardService,
+            kYCLevel1Service,
+            invoiceService,
+            userService,
+            thirdPartyTransferService,
+            standingInstructionService,
+            notificationService
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun providesSelfServiceApiManager(
+        @Named("SelfServiceAuthenticationService") authenticationService: AuthenticationService,
+        @Named("SelfServiceClientService") clientService: ClientService,
+        @Named("SelfServiceSavingsAccountsService") savingsAccountsService: SavingsAccountsService,
+        @Named("SelfServiceRegistrationService") registrationService: RegistrationService,
+        beneficiaryService: BeneficiaryService,
+        @Named("SelfServiceThirdPartyTransferService") thirdPartyTransferService: ThirdPartyTransferService,
+    ): org.mifos.mobilewallet.mifospay.network.SelfServiceApiManager {
+        return org.mifos.mobilewallet.mifospay.network.SelfServiceApiManager(
+            authenticationService,
+            clientService,
+            savingsAccountsService,
+            registrationService,
+            beneficiaryService,
+            thirdPartyTransferService
+        )
     }
 
     //-----Fineract API Service---------//
