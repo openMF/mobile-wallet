@@ -5,7 +5,7 @@ import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.invoice.FetchInvoice
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
+import org.mifos.mobilewallet.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract.InvoiceView
 import javax.inject.Inject

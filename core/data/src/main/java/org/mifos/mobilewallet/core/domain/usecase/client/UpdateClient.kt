@@ -30,7 +30,7 @@ class UpdateClient @Inject constructor(private val fineractRepository: FineractR
                 override fun onError(e: Throwable) {
                     var message: String
                     try {
-                        message = (e as HttpException).response().errorBody().string()
+                        message = (e as HttpException).response()?.errorBody()?.string().toString()
                         message = getUserMessage(message)
                     } catch (e1: Exception) {
                         message = "Error"

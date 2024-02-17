@@ -12,7 +12,7 @@ import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
-import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
+import org.mifos.mobilewallet.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.history.HistoryContract.TransactionsHistoryAsync
 import org.mifos.mobilewallet.mifospay.history.TransactionsHistory
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract

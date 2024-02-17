@@ -5,7 +5,7 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientImage
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
-import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
+import org.mifos.mobilewallet.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.ProfileView
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil

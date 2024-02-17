@@ -24,10 +24,20 @@ dependencies {
     api(projects.core.datastore)
 
     implementation(libs.kotlinx.serialization.json)
+    
     implementation(libs.squareup.okhttp)
     implementation(libs.squareup.logging.interceptor)
+
     implementation(libs.squareup.retrofit2)
     implementation(libs.retrofit.kotlin.serialization)
+    implementation(libs.squareup.retrofit.adapter.rxjava)
+    implementation(libs.squareup.retrofit.converter.gson)
+
+    implementation(libs.reactivex.rxjava.android)
+    implementation(libs.reactivex.rxjava)
+
+    implementation(libs.jetbrains.kotlin.jdk7)
+
 
     testImplementation(libs.kotlinx.coroutines.test)
 }

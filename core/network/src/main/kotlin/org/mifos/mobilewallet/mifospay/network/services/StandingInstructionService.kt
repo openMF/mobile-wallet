@@ -1,11 +1,11 @@
-package org.mifos.mobilewallet.core.data.fineract.api.services
+package org.mifos.mobilewallet.mifospay.network.services
 
-import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
 import com.mifos.mobilewallet.model.entity.Page
 import com.mifos.mobilewallet.model.entity.standinginstruction.SDIResponse
 import com.mifos.mobilewallet.model.entity.payload.StandingInstructionPayload
 import com.mifos.mobilewallet.model.entity.standinginstruction.StandingInstruction
+import org.mifos.mobilewallet.mifospay.network.ApiEndPoints
+import org.mifos.mobilewallet.mifospay.network.GenericResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST

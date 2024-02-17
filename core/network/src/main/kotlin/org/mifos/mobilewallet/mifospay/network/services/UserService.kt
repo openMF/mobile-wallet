@@ -1,10 +1,9 @@
-package org.mifos.mobilewallet.core.data.fineract.api.services
+package org.mifos.mobilewallet.mifospay.network.services
 
-import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
 import com.mifos.mobilewallet.model.entity.UserWithRole
 import com.mifos.mobilewallet.model.domain.user.NewUser
-import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser
+import org.mifos.mobilewallet.mifospay.network.ApiEndPoints
+import org.mifos.mobilewallet.mifospay.network.GenericResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -21,7 +20,7 @@ interface UserService {
     val users: Observable<List<UserWithRole>>
 
     @POST(ApiEndPoints.USER)
-    fun createUser(@Body user: NewUser): Observable<CreateUser.ResponseValue>
+    fun <T> createUser(@Body user: NewUser): Observable<T>
 
     @PUT(ApiEndPoints.USER + "/{userId}")
     fun updateUser(

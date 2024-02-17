@@ -8,7 +8,7 @@ import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
+import org.mifos.mobilewallet.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract.EditProfileView
 import javax.inject.Inject

@@ -1,26 +1,23 @@
-package org.mifos.mobilewallet.core.data.fineract.api
+package org.mifos.mobilewallet.mifospay.network
 
-import org.mifos.mobilewallet.core.data.fineract.api.services.AccountTransfersService
-import org.mifos.mobilewallet.core.data.fineract.api.services.AuthenticationService
-import org.mifos.mobilewallet.core.data.fineract.api.services.ClientService
-import org.mifos.mobilewallet.core.data.fineract.api.services.DocumentService
-import org.mifos.mobilewallet.core.data.fineract.api.services.InvoiceService
-import org.mifos.mobilewallet.core.data.fineract.api.services.KYCLevel1Service
-import org.mifos.mobilewallet.core.data.fineract.api.services.NotificationService
-import org.mifos.mobilewallet.core.data.fineract.api.services.RegistrationService
-import org.mifos.mobilewallet.core.data.fineract.api.services.RunReportService
-import org.mifos.mobilewallet.core.data.fineract.api.services.SavedCardService
-import org.mifos.mobilewallet.core.data.fineract.api.services.SavingsAccountsService
-import org.mifos.mobilewallet.core.data.fineract.api.services.SearchService
-import org.mifos.mobilewallet.core.data.fineract.api.services.StandingInstructionService
-import org.mifos.mobilewallet.core.data.fineract.api.services.ThirdPartyTransferService
-import org.mifos.mobilewallet.core.data.fineract.api.services.TwoFactorAuthService
-import org.mifos.mobilewallet.core.data.fineract.api.services.UserService
+import org.mifos.mobilewallet.mifospay.network.services.AccountTransfersService
+import org.mifos.mobilewallet.mifospay.network.services.AuthenticationService
+import org.mifos.mobilewallet.mifospay.network.services.ClientService
+import org.mifos.mobilewallet.mifospay.network.services.DocumentService
+import org.mifos.mobilewallet.mifospay.network.services.InvoiceService
+import org.mifos.mobilewallet.mifospay.network.services.KYCLevel1Service
+import org.mifos.mobilewallet.mifospay.network.services.NotificationService
+import org.mifos.mobilewallet.mifospay.network.services.RegistrationService
+import org.mifos.mobilewallet.mifospay.network.services.RunReportService
+import org.mifos.mobilewallet.mifospay.network.services.SavedCardService
+import org.mifos.mobilewallet.mifospay.network.services.SavingsAccountsService
+import org.mifos.mobilewallet.mifospay.network.services.SearchService
+import org.mifos.mobilewallet.mifospay.network.services.StandingInstructionService
+import org.mifos.mobilewallet.mifospay.network.services.ThirdPartyTransferService
+import org.mifos.mobilewallet.mifospay.network.services.TwoFactorAuthService
+import org.mifos.mobilewallet.mifospay.network.services.UserService
 import javax.inject.Inject
 
-/**
- * Created by naman on 17/6/17.
- */
 class FineractApiManager @Inject constructor(
     private val authenticationService: AuthenticationService,
     private val clientService: ClientService,

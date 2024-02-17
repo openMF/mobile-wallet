@@ -1,8 +1,8 @@
-package org.mifos.mobilewallet.core.data.fineract.api.services
+package org.mifos.mobilewallet.mifospay.network.services
 
-import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
 import com.mifos.mobilewallet.model.entity.kyc.KYCLevel1Details
+import org.mifos.mobilewallet.mifospay.network.ApiEndPoints
+import org.mifos.mobilewallet.mifospay.network.GenericResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -10,9 +10,6 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import rx.Observable
 
-/**
- * Created by ankur on 07/June/2018
- */
 interface KYCLevel1Service {
     @POST(ApiEndPoints.DATATABLES + "/kyc_level1_details/{clientId}")
     fun addKYCLevel1Details(

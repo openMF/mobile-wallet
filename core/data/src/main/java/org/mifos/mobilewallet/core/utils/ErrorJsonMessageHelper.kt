@@ -20,7 +20,7 @@ object ErrorJsonMessageHelper {
     fun getUserMessage(e: Throwable): String? {
         var message: String? = "Error"
         try {
-            message = (e as HttpException).response().errorBody().string()
+            message = (e as HttpException).response()?.errorBody()?.string().toString()
             message = getUserMessage(message)
         } catch (e1: Exception) {
             message = "Error"
