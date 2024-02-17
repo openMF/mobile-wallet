@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.savedcards.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card
+import com.mifos.mobilewallet.model.entity.savedcards.Card
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.AddCard
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.DeleteCard
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.EditCard

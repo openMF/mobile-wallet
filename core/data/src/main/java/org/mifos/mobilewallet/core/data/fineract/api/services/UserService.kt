@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.core.data.fineract.api.services
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole
+import com.mifos.mobilewallet.model.entity.UserWithRole
 import com.mifos.mobilewallet.model.domain.user.NewUser
 import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser
 import retrofit2.http.Body

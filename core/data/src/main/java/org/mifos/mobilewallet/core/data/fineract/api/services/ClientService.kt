@@ -4,7 +4,7 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.Page
+import com.mifos.mobilewallet.model.entity.Page
 import com.mifos.mobilewallet.model.entity.client.Client
 import com.mifos.mobilewallet.model.entity.client.ClientAccounts
 import com.mifos.mobilewallet.model.domain.NewAccount

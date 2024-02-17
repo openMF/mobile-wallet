@@ -2,8 +2,8 @@ package org.mifos.mobilewallet.core.domain.usecase.standinginstruction
 
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.payload.StandingInstructionPayload
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
+import com.mifos.mobilewallet.model.entity.payload.StandingInstructionPayload
+import com.mifos.mobilewallet.model.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
@@ -72,7 +72,8 @@ class UpdateStandingInstruction @Inject constructor(
     }
 
     class RequestValues(val standingInstructionId: Long,
-                        val standingInstruction: StandingInstruction) : UseCase.RequestValues
+                        val standingInstruction: StandingInstruction
+    ) : UseCase.RequestValues
 
     class ResponseValue : UseCase.ResponseValue
 

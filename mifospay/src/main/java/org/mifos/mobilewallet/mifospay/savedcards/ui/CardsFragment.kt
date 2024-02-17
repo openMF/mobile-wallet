@@ -19,7 +19,7 @@ import butterknife.OnClick
 import butterknife.OnTextChanged
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card
+import com.mifos.mobilewallet.model.entity.savedcards.Card
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract

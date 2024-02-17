@@ -4,7 +4,7 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.noncore.Document
+import com.mifos.mobilewallet.model.entity.noncore.Document
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart

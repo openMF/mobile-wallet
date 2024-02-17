@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.core.data.fineract.api.services
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.Invoice
+import com.mifos.mobilewallet.model.entity.Invoice
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

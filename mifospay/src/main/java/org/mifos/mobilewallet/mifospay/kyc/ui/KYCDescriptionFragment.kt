@@ -15,7 +15,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details
+import com.mifos.mobilewallet.model.entity.kyc.KYCLevel1Details
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract

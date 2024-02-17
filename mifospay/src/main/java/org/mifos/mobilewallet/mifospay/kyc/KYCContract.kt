@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.kyc
 
 import android.content.Context
 import android.content.Intent
-import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details
+import com.mifos.mobilewallet.model.entity.kyc.KYCLevel1Details
 import org.mifos.mobilewallet.mifospay.base.BasePresenter
 import org.mifos.mobilewallet.mifospay.base.BaseView
 

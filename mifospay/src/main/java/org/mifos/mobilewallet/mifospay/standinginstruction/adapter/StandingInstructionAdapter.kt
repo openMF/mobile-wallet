@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
+import com.mifos.mobilewallet.model.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.utils.Constants
 

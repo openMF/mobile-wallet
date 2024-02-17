@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.domain.usecase.client
 
 import org.mifos.mobilewallet.core.base.UseCase
-import org.mifos.mobilewallet.core.data.fineract.entity.Page
+import com.mifos.mobilewallet.model.entity.Page
 import com.mifos.mobilewallet.model.entity.client.Client
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.ClientDetailsMapper
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository

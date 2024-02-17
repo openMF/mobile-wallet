@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.api.services
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
-import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity
+import com.mifos.mobilewallet.model.entity.SearchedEntity
 import retrofit2.http.GET
 import retrofit2.http.Query
 import rx.Observable

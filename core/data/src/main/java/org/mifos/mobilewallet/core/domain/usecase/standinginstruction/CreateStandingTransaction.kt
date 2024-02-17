@@ -4,8 +4,8 @@ import org.mifos.mobilewallet.core.base.UseCase
 import com.mifos.mobilewallet.model.entity.accounts.savings.SavingAccount
 import com.mifos.mobilewallet.model.entity.client.Client
 import com.mifos.mobilewallet.model.entity.client.ClientAccounts
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.SDIResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.payload.StandingInstructionPayload
+import com.mifos.mobilewallet.model.entity.standinginstruction.SDIResponse
+import com.mifos.mobilewallet.model.entity.payload.StandingInstructionPayload
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
 import org.mifos.mobilewallet.core.utils.Constants
 import rx.Subscriber

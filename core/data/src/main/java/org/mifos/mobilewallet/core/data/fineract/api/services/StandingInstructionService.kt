@@ -2,10 +2,10 @@ package org.mifos.mobilewallet.core.data.fineract.api.services
 
 import org.mifos.mobilewallet.core.data.fineract.api.ApiEndPoints
 import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.Page
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.SDIResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.payload.StandingInstructionPayload
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
+import com.mifos.mobilewallet.model.entity.Page
+import com.mifos.mobilewallet.model.entity.standinginstruction.SDIResponse
+import com.mifos.mobilewallet.model.entity.payload.StandingInstructionPayload
+import com.mifos.mobilewallet.model.entity.standinginstruction.StandingInstruction
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -45,8 +45,8 @@ interface StandingInstructionService {
 
     @PUT("${ApiEndPoints.STANDING_INSTRUCTION}/{standingInstructionId}")
     fun updateStandingInstruction(
-            @Path("standingInstructionId") standingInstructionId: Long,
-            @Body standingInstructionPayload: StandingInstructionPayload,
-            @Query("command") command: String): Observable<GenericResponse>
+        @Path("standingInstructionId") standingInstructionId: Long,
+        @Body standingInstructionPayload: StandingInstructionPayload,
+        @Query("command") command: String): Observable<GenericResponse>
 
 }
