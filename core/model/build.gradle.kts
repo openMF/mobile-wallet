@@ -8,6 +8,8 @@ android {
     namespace = "org.mifos.mobilewallet.core.model"
 }
 
+apply(from = "${project.rootDir}/config/quality/quality.gradle")
+
 dependencies {
     api(libs.kotlinx.datetime)
     implementation(libs.jetbrains.kotlin.jdk7)
