@@ -14,30 +14,13 @@ import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.designsystem.component.FaqItemScreen
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosTopBar
 import org.mifos.mobilewallet.mifospay.faq.presenter.FAQViewModel
-import org.mifos.mobilewallet.mifospay.utils.FAQUtils.getFAQPreviewList
 
 @Composable
 fun FaqScreen(
     navigateBack: () -> Unit,
     faqViewModel: FAQViewModel = hiltViewModel()
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        MifosTopBar(
-            topBarTitle = R.string.frequently_asked_questions,
-            backPress = { navigateBack.invoke() })
-        LazyColumn(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-        ) {
-            itemsIndexed(items = faqViewModel.getFAQ()) { _, faqItem ->
-                FaqItemScreen(
-                    question = stringResource(id = faqItem.question),
-                    answer = faqItem.answer?.let { stringResource(id = it) }
-                )
-            }
-        }
-    }
+    FaqScreen(navigateBack = { navigateBack.invoke() }, faqViewModel.getFAQ())
 }
 
 @Composable
@@ -67,5 +50,12 @@ fun FaqScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun FaqScreenPreview() {
-    FaqScreen({}, getFAQPreviewList())
+    FaqScreen(
+        {}, listOf(
+            FAQ(R.string.question1, R.string.answer1),
+            FAQ(R.string.question2, R.string.answer2),
+            FAQ(R.string.question3, R.string.answer3),
+            FAQ(R.string.question4, R.string.answer4)
+        )
+    )
 }
