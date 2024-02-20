@@ -70,18 +70,28 @@ class HistoryPresenter @Inject constructor(
             })
     }
 
-    override fun filterTransactionType(type: TransactionType?) {
+    override fun filterTransactionType(type: TransactionType) {
         val filterTransactions: MutableList<Transaction> = ArrayList()
-        for (transaction in allTransactions!!) {
-            if (transaction.transactionType == type) {
-                filterTransactions.add(transaction)
+
+        if (type == TransactionType.OTHER) {
+            if (allTransactions!!.isNotEmpty()) {
+                mHistoryView!!.refreshTransactions(allTransactions)
+            } else {
+                showEmptyStateView()
+            }
+        } else {
+            for (transaction in allTransactions!!) {
+                if (transaction.transactionType == type) {
+                    filterTransactions.add(transaction)
+                }
+            }
+            if (filterTransactions.isEmpty()) {
+                showEmptyTransactionTypeStateView(type.toString().lowercase(Locale.getDefault()))
+            } else {
+                mHistoryView!!.refreshTransactions(filterTransactions)
             }
         }
-        if (filterTransactions.isEmpty()) {
-            showEmptyTransactionTypeStateView(type.toString().lowercase(Locale.getDefault()))
-        } else {
-            mHistoryView!!.refreshTransactions(filterTransactions)
-        }
+
     }
 
     override fun handleTransactionClick(transactionIndex: Int) {
