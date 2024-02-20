@@ -216,7 +216,7 @@ class HistoryFragment : BaseFragment(), HistoryView {
         btnFilterAll!!.setChipBackgroundColorResource(R.color.clickedblue)
         btnFilterCredits!!.setChipBackgroundColorResource(R.color.changedBackgroundColour)
         btnFilterDebits!!.setChipBackgroundColorResource(R.color.changedBackgroundColour)
-        mTransactionsHistoryPresenter!!.filterTransactionType(null)
+        mTransactionsHistoryPresenter!!.filterTransactionType(TransactionType.OTHER)
     }
 
     @OnClick(R.id.btn_filter_credits)

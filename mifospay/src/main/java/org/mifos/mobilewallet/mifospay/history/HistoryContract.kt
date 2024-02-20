@@ -26,7 +26,7 @@ interface HistoryContract {
 
     interface TransactionsHistoryPresenter : BasePresenter {
         fun fetchTransactions()
-        fun filterTransactionType(type: TransactionType?)
+        fun filterTransactionType(type: TransactionType)
         fun handleTransactionClick(transactionIndex: Int)
     }
 
