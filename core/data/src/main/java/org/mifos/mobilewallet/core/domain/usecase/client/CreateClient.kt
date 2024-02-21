@@ -2,7 +2,6 @@ package org.mifos.mobilewallet.core.domain.usecase.client
 
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
-import org.mifos.mobilewallet.core.domain.model.client.NewClient
 import org.mifos.mobilewallet.core.utils.ErrorJsonMessageHelper.getUserMessage
 import retrofit2.HttpException
 import rx.Subscriber
@@ -16,7 +15,7 @@ import javax.inject.Inject
 class CreateClient @Inject constructor(private val apiRepository: FineractRepository) :
     UseCase<CreateClient.RequestValues, CreateClient.ResponseValue>() {
 
-    data class RequestValues(val client: NewClient) : UseCase.RequestValues
+    data class RequestValues(val client: com.mifos.mobilewallet.model.domain.client.NewClient) : UseCase.RequestValues
     data class ResponseValue(val clientId: Int) : UseCase.ResponseValue
 
     override fun executeUseCase(requestValues: RequestValues) {
@@ -28,7 +27,7 @@ class CreateClient @Inject constructor(private val apiRepository: FineractReposi
                 override fun onError(e: Throwable) {
                     var message: String
                     try {
-                        message = (e as HttpException).response().errorBody().string()
+                        message = (e as HttpException).response()?.errorBody()?.string().toString()
                         message = getUserMessage(message)
                     } catch (e1: Exception) {
                         message = "Error"

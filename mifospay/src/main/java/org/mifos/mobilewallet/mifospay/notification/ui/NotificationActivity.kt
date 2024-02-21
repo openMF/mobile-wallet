@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifos.mobilewallet.core.domain.model.NotificationPayload
+import com.mifos.mobilewallet.model.domain.NotificationPayload
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.notification.NotificationContract

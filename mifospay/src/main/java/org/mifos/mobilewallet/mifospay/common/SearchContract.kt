@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.mifospay.common
 
-import org.mifos.mobilewallet.core.domain.model.SearchResult
+import com.mifos.mobilewallet.model.domain.SearchResult
 import org.mifos.mobilewallet.mifospay.base.BasePresenter
 import org.mifos.mobilewallet.mifospay.base.BaseView
 

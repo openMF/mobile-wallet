@@ -7,10 +7,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole
-import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
-import org.mifos.mobilewallet.core.domain.model.client.Client
-import org.mifos.mobilewallet.core.domain.model.user.User
+import com.mifos.mobilewallet.model.entity.UserWithRole
+import org.mifos.mobilewallet.datastore.PreferencesHelper
+import com.mifos.mobilewallet.model.domain.user.User
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails
@@ -93,7 +92,7 @@ class LoginViewModel @Inject constructor(
         preferencesHelper.saveEmail(userWithRole.email)
     }
 
-    private fun saveClientDetails(client: Client) {
+    private fun saveClientDetails(client: com.mifos.mobilewallet.model.domain.client.Client) {
         preferencesHelper.saveFullName(client.name)
         preferencesHelper.clientId = client.clientId
         preferencesHelper.saveMobile(client.mobileNo)

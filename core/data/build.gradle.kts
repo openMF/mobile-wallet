@@ -21,6 +21,8 @@ android {
 
 dependencies {
     api(projects.core.common)
+    api(projects.core.model)
+    api(projects.core.network)
 
     implementation(libs.squareup.retrofit2) {
         // exclude Retrofit’s OkHttp peer-dependency module and define your own module import

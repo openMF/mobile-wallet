@@ -35,9 +35,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.mifos.mobilewallet.core.domain.model.Account
-import org.mifos.mobilewallet.core.domain.model.Transaction
-import org.mifos.mobilewallet.core.domain.model.TransactionType
+import com.mifos.mobilewallet.model.domain.Account
+import com.mifos.mobilewallet.model.domain.Transaction
+import com.mifos.mobilewallet.model.domain.TransactionType
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.common.compose.ChildLayout
 import org.mifos.mobilewallet.mifospay.common.compose.LoadItemAfterSafeCast

@@ -1,11 +1,11 @@
 package org.mifos.mobilewallet.core.domain.usecase.user;
 
 import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity;
-import org.mifos.mobilewallet.core.data.fineract.entity.authentication.AuthenticationPayload;
+import com.mifos.mobilewallet.model.entity.UserEntity;
+import com.mifos.mobilewallet.model.entity.authentication.AuthenticationPayload;
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.UserEntityMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
-import org.mifos.mobilewallet.core.domain.model.user.User;
+import com.mifos.mobilewallet.model.domain.user.User;
 import org.mifos.mobilewallet.core.utils.Constants;
 
 import javax.inject.Inject;

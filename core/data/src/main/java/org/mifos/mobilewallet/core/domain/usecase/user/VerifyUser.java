@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.domain.usecase.user;
 
 import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify;
+import com.mifos.mobilewallet.model.entity.register.UserVerify;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import org.mifos.mobilewallet.core.utils.Constants;
 

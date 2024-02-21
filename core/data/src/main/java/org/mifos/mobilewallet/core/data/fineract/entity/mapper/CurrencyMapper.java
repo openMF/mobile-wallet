@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.mapper;
 
-import org.mifos.mobilewallet.core.domain.model.Currency;
+import com.mifos.mobilewallet.model.domain.Currency;
 
 import javax.inject.Inject;
 
@@ -14,8 +14,7 @@ public class CurrencyMapper {
     CurrencyMapper() {
     }
 
-    public Currency transform(org.mifos.mobilewallet.core.data.fineract
-            .entity.accounts.savings.Currency savingsCurrency) {
+    public Currency transform(com.mifos.mobilewallet.model.entity.accounts.savings.Currency savingsCurrency) {
 
         Currency currency = new Currency();
         currency.setCode(savingsCurrency.getCode());

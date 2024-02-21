@@ -2,11 +2,11 @@ package org.mifos.mobilewallet.mifospay.standinginstruction.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.domain.model.SearchResult
+import com.mifos.mobilewallet.model.domain.SearchResult
 import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient
 import org.mifos.mobilewallet.core.domain.usecase.standinginstruction.CreateStandingTransaction
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
+import org.mifos.mobilewallet.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
 import java.text.SimpleDateFormat
 import java.util.*

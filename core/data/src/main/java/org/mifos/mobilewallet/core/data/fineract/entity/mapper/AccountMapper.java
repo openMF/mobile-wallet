@@ -1,8 +1,8 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.mapper;
 
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingAccount;
-import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts;
-import org.mifos.mobilewallet.core.domain.model.Account;
+import com.mifos.mobilewallet.model.entity.accounts.savings.SavingAccount;
+import com.mifos.mobilewallet.model.entity.client.ClientAccounts;
+import com.mifos.mobilewallet.model.domain.Account;
 
 import java.util.ArrayList;
 import java.util.List;

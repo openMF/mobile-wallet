@@ -16,8 +16,8 @@ import butterknife.ButterKnife
 import butterknife.OnClick
 import com.google.android.material.chip.Chip
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifos.mobilewallet.core.domain.model.Transaction
-import org.mifos.mobilewallet.core.domain.model.TransactionType
+import com.mifos.mobilewallet.model.domain.Transaction
+import com.mifos.mobilewallet.model.domain.TransactionType
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.history.HistoryContract.HistoryView

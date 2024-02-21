@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.mapper;
 
-import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity;
-import org.mifos.mobilewallet.core.domain.model.SearchResult;
+import com.mifos.mobilewallet.model.entity.SearchedEntity;
+import com.mifos.mobilewallet.model.domain.SearchResult;
 
 import java.util.ArrayList;
 import java.util.List;

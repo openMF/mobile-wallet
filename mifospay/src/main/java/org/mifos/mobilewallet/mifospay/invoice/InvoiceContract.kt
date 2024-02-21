@@ -1,7 +1,7 @@
 package org.mifos.mobilewallet.mifospay.invoice
 
 import android.net.Uri
-import org.mifos.mobilewallet.core.data.fineract.entity.Invoice
+import com.mifos.mobilewallet.model.entity.Invoice
 import org.mifos.mobilewallet.mifospay.base.BasePresenter
 import org.mifos.mobilewallet.mifospay.base.BaseView
 

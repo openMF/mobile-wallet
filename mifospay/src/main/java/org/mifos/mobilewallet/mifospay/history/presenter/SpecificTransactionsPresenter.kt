@@ -5,7 +5,7 @@ import org.mifos.mobilewallet.core.base.TaskLooper.TaskData
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseFactory
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-import org.mifos.mobilewallet.core.domain.model.Transaction
+import com.mifos.mobilewallet.model.domain.Transaction
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
 import org.mifos.mobilewallet.core.utils.Constants
 import org.mifos.mobilewallet.mifospay.R

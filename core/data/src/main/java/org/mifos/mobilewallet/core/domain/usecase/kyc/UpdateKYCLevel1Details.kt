@@ -1,9 +1,9 @@
 package org.mifos.mobilewallet.core.domain.usecase.kyc
 
 import org.mifos.mobilewallet.core.base.UseCase
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details
+import com.mifos.mobilewallet.model.entity.kyc.KYCLevel1Details
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
+import org.mifos.mobilewallet.mifospay.network.GenericResponse
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers

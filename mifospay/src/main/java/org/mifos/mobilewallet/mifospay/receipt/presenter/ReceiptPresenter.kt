@@ -6,7 +6,7 @@ import org.mifos.mobilewallet.core.domain.usecase.account.DownloadTransactionRec
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransaction
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.core.data.fineract.local.PreferencesHelper
+import org.mifos.mobilewallet.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract.ReceiptView
 import org.mifos.mobilewallet.mifospay.utils.Constants

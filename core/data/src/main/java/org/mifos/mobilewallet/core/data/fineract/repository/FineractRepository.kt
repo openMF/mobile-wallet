@@ -1,42 +1,41 @@
 package org.mifos.mobilewallet.core.data.fineract.repository
 
+import com.mifos.mobilewallet.model.domain.NewAccount
+import com.mifos.mobilewallet.model.domain.NotificationPayload
+import com.mifos.mobilewallet.model.domain.twofactor.AccessToken
+import com.mifos.mobilewallet.model.domain.twofactor.DeliveryMethod
+import com.mifos.mobilewallet.model.domain.user.NewUser
+import com.mifos.mobilewallet.model.entity.Invoice
+import com.mifos.mobilewallet.model.entity.Page
+import com.mifos.mobilewallet.model.entity.SearchedEntity
+import com.mifos.mobilewallet.model.entity.TPTResponse
+import com.mifos.mobilewallet.model.entity.UserEntity
+import com.mifos.mobilewallet.model.entity.UserWithRole
+import com.mifos.mobilewallet.model.entity.accounts.savings.SavingsWithAssociations
+import com.mifos.mobilewallet.model.entity.accounts.savings.Transactions
+import com.mifos.mobilewallet.model.entity.accounts.savings.TransferDetail
+import com.mifos.mobilewallet.model.entity.authentication.AuthenticationPayload
+import com.mifos.mobilewallet.model.entity.beneficary.Beneficiary
+import com.mifos.mobilewallet.model.entity.beneficary.BeneficiaryPayload
+import com.mifos.mobilewallet.model.entity.beneficary.BeneficiaryUpdatePayload
+import com.mifos.mobilewallet.model.entity.client.Client
+import com.mifos.mobilewallet.model.entity.client.ClientAccounts
+import com.mifos.mobilewallet.model.entity.kyc.KYCLevel1Details
+import com.mifos.mobilewallet.model.entity.payload.StandingInstructionPayload
+import com.mifos.mobilewallet.model.entity.payload.TransferPayload
+import com.mifos.mobilewallet.model.entity.register.RegisterPayload
+import com.mifos.mobilewallet.model.entity.register.UserVerify
+import com.mifos.mobilewallet.model.entity.savedcards.Card
+import com.mifos.mobilewallet.model.entity.standinginstruction.SDIResponse
+import com.mifos.mobilewallet.model.entity.standinginstruction.StandingInstruction
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
-import org.mifos.mobilewallet.core.data.fineract.api.FineractApiManager
-import org.mifos.mobilewallet.core.data.fineract.api.GenericResponse
-import org.mifos.mobilewallet.core.data.fineract.api.SelfServiceApiManager
-import org.mifos.mobilewallet.core.data.fineract.entity.Invoice
-import org.mifos.mobilewallet.core.data.fineract.entity.Page
-import org.mifos.mobilewallet.core.data.fineract.entity.SearchedEntity
-import org.mifos.mobilewallet.core.data.fineract.entity.TPTResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.UserEntity
-import org.mifos.mobilewallet.core.data.fineract.entity.UserWithRole
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.SavingsWithAssociations
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.Transactions
-import org.mifos.mobilewallet.core.data.fineract.entity.accounts.savings.TransferDetail
-import org.mifos.mobilewallet.core.data.fineract.entity.authentication.AuthenticationPayload
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.Beneficiary
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryPayload
-import org.mifos.mobilewallet.core.data.fineract.entity.beneficary.BeneficiaryUpdatePayload
-import org.mifos.mobilewallet.core.data.fineract.entity.client.Client
-import org.mifos.mobilewallet.core.data.fineract.entity.client.ClientAccounts
-import org.mifos.mobilewallet.core.data.fineract.entity.kyc.KYCLevel1Details
-import org.mifos.mobilewallet.core.data.fineract.entity.payload.StandingInstructionPayload
-import org.mifos.mobilewallet.core.data.fineract.entity.payload.TransferPayload
-import org.mifos.mobilewallet.core.data.fineract.entity.register.RegisterPayload
-import org.mifos.mobilewallet.core.data.fineract.entity.register.UserVerify
-import org.mifos.mobilewallet.core.data.fineract.entity.savedcards.Card
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.SDIResponse
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
-import org.mifos.mobilewallet.core.domain.model.NewAccount
-import org.mifos.mobilewallet.core.domain.model.NotificationPayload
-import org.mifos.mobilewallet.core.domain.model.client.NewClient
-import org.mifos.mobilewallet.core.domain.model.twofactor.AccessToken
-import org.mifos.mobilewallet.core.domain.model.twofactor.DeliveryMethod
-import org.mifos.mobilewallet.core.domain.model.user.NewUser
 import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient
 import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser
 import org.mifos.mobilewallet.core.utils.Constants
+import org.mifos.mobilewallet.mifospay.network.FineractApiManager
+import org.mifos.mobilewallet.mifospay.network.GenericResponse
+import org.mifos.mobilewallet.mifospay.network.SelfServiceApiManager
 import rx.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -49,7 +48,7 @@ class FineractRepository @Inject constructor(
     private val fineractApiManager: FineractApiManager,
     private val selfApiManager: SelfServiceApiManager
 ) {
-    fun createClient(newClient: NewClient): Observable<CreateClient.ResponseValue> {
+    fun createClient(newClient: com.mifos.mobilewallet.model.domain.client.NewClient): Observable<CreateClient.ResponseValue> {
         return fineractApiManager.clientsApi.createClient(newClient)
     }
 

@@ -9,7 +9,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifos.mobilewallet.core.domain.model.SearchResult
+import com.mifos.mobilewallet.model.domain.SearchResult
 import org.mifos.mobilewallet.mifospay.MifosPayApp
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity

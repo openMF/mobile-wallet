@@ -113,6 +113,12 @@ jobs:
       - name: Static Analysis[Core:Common]
         run: ./gradlew core:common:pmd
 
+      - name: Static Analysis[Core:Network]
+        run: ./gradlew core:network:pmd
+
+      - name: Static Analysis[Core:Model]
+        run: ./gradlew core:model:pmd
+
       - name: Static Analysis[Feature:Auth]
         run: ./gradlew feature:auth:pmd
 
@@ -150,6 +156,12 @@ jobs:
 
       - name: Static Analysis[Core:Common]
         run: ./gradlew core:common:checkstyle
+
+      - name: Static Analysis[Core:Network]
+        run: ./gradlew core:network:checkstyle
+
+      - name: Static Analysis[Core:Model]
+        run: ./gradlew core:model:checkstyle
 
       - name: Static Analysis[Feature:Auth]
         run: ./gradlew feature:auth:checkstyle

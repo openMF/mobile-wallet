@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import butterknife.BindView
 import butterknife.ButterKnife
-import org.mifos.mobilewallet.core.domain.model.SearchResult
+import com.mifos.mobilewallet.model.domain.SearchResult
 import org.mifos.mobilewallet.mifospay.R
 import javax.inject.Inject
 

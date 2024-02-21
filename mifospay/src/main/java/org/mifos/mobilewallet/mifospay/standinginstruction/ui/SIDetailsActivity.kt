@@ -12,7 +12,7 @@ import androidx.databinding.DataBindingUtil
 import butterknife.ButterKnife
 import butterknife.OnTextChanged
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifos.mobilewallet.core.data.fineract.entity.standinginstruction.StandingInstruction
+import com.mifos.mobilewallet.model.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.databinding.ActivitySiDetailsBinding
