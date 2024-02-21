@@ -43,7 +43,7 @@ class SignupMethod : BottomSheetDialogFragment() {
     @OnClick(R.id.btn_merchant)
     fun onMerchantClicked() {
         dismiss()
-        if (activity is LoginActivity) {
+        /*if (activity is LoginActivity) {
             if (mCbGoogleAccount!!.isChecked) {
                 (activity as LoginActivity?)!!.signupUsingGoogleAccount(
                     Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
@@ -51,13 +51,13 @@ class SignupMethod : BottomSheetDialogFragment() {
             } else {
                 (activity as LoginActivity?)!!.signup(Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID)
             }
-        }
+        }*/
     }
 
     @OnClick(R.id.btn_customer)
     fun onCustomerClicked() {
         dismiss()
-        if (activity is LoginActivity) {
+        /*if (activity is LoginActivity) {
             if (mCbGoogleAccount!!.isChecked) {
                 (activity as LoginActivity?)!!.signupUsingGoogleAccount(
                     Constants.MIFOS_CONSUMER_SAVINGS_PRODUCT_ID
@@ -65,6 +65,6 @@ class SignupMethod : BottomSheetDialogFragment() {
             } else {
                 (activity as LoginActivity?)!!.signup(Constants.MIFOS_CONSUMER_SAVINGS_PRODUCT_ID)
             }
-        }
+        }*/
     }
 }

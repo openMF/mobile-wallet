@@ -36,6 +36,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.registration.SignupMethodContentScreen
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.theme.grey
 import org.mifos.mobilewallet.mifospay.theme.styleMedium16sp
@@ -47,6 +48,9 @@ fun LoginScreen(
     login: (username: String, password: String) -> Unit,
     signUp: () -> Unit
 ) {
+
+    var showSignUpScreen by rememberSaveable { mutableStateOf(false) }
+
     var userName by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(
             TextFieldValue("")
@@ -58,6 +62,12 @@ fun LoginScreen(
         )
     }
     var passwordVisibility: Boolean by remember { mutableStateOf(false) }
+
+    if (showSignUpScreen) {
+        SignupMethodContentScreen {
+            showSignUpScreen = false
+        }
+    }
 
     MifosTheme {
         Column(
@@ -152,7 +162,8 @@ fun LoginScreen(
                 )
                 Text(
                     modifier = Modifier.clickable {
-                        signUp.invoke()
+                        showSignUpScreen = true
+                        //signUp.invoke()
                     },
                     text = stringResource(id = R.string.sign_up),
                     style = styleMedium16sp.copy(

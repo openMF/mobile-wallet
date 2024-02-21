@@ -33,16 +33,6 @@ class LoginPresenter @Inject constructor(
     lateinit var fetchUserDetailsUseCase: FetchUserDetails
     private lateinit var mLoginView: LoginView
 
-    override fun handleLoginButtonStatus(usernameContent: String?, passwordContent: String?) {
-        if (usernameContent!!.isEmpty() || passwordContent!!.isEmpty()) {
-            mLoginView.disableLoginButton()
-        } else {
-            mLoginView.enableLoginButton()
-        }
-    }
-
-
-
     override fun loginUser(username: String?, password: String?) {
         authenticateUserUseCase.requestValues = AuthenticateUser.RequestValues(username, password)
 
