@@ -11,14 +11,11 @@ import org.mifos.mobilewallet.mifospay.base.BaseView
  */
 interface AuthContract {
     interface LoginView : BaseView<LoginPresenter?> {
-        fun disableLoginButton()
-        fun enableLoginButton()
         fun loginSuccess()
         fun loginFail(message: String?)
     }
 
     interface LoginPresenter : BasePresenter {
-        fun handleLoginButtonStatus(usernameContent: String?, passwordContent: String?)
         fun loginUser(username: String?, password: String?)
     }
 }
