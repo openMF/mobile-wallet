@@ -22,6 +22,7 @@
     <string name="level_3_description">Level 3 Description</string>
     <string name="code">Code</string>
     <string name="linked_bank_account">Linked bank accounts</string>
+    <string name="link_bank_account">Link Bank Account</string>
     <string name="date_of_birth">Date of Birth</string>
     <string name="add_card">Add Card</string>
     <string name="id_type">ID Type</string>
@@ -44,6 +45,7 @@
     <string name="request">Request</string>
     <string name="bank_account">Bank Account</string>
     <string name="qr_code">QR code</string>
+    <string name="personal_qr_code">Personal QR Code</string>
     <string name="complete_kyc">Complete the KYC process</string>
     <string name="saved_cards">Saved Cards</string>
     <string name="qr_code_details">QR code details</string>
