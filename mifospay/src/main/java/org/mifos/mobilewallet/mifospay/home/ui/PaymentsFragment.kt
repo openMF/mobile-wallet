@@ -1,63 +1,45 @@
 package org.mifos.mobilewallet.mifospay.home.ui
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import com.google.android.material.tabs.TabLayout
-import androidx.viewpager.widget.ViewPager
-import android.util.TypedValue
+import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import butterknife.BindView
-import butterknife.ButterKnife
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
-import org.mifos.mobilewallet.mifospay.history.ui.HistoryFragment
-import org.mifos.mobilewallet.mifospay.home.adapter.TabLayoutAdapter
-import org.mifos.mobilewallet.mifospay.invoice.ui.InvoicesFragment
-import org.mifos.mobilewallet.mifospay.payments.ui.RequestFragment
-import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment
-import org.mifos.mobilewallet.mifospay.standinginstruction.ui.SIFragment
-import org.mifos.mobilewallet.mifospay.utils.Utils.hideSoftKeyboard
+import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter
+import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
+import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity
+import org.mifos.mobilewallet.mifospay.theme.MifosTheme
+import org.mifos.mobilewallet.mifospay.utils.Constants
 
+@AndroidEntryPoint
 class PaymentsFragment : BaseFragment() {
-    @JvmField
-    @BindView(R.id.vp_tab_layout)
-    var vpTabLayout: ViewPager? = null
 
-    @JvmField
-    @BindView(R.id.tl_tab_layout)
-    var tilTabLayout: TabLayout? = null
+    private val transferPresenter: TransferPresenter by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_finance, container, false)
-        ButterKnife.bind(this, rootView)
-        val dim = 5f
-        val bDim = 12f
-        val r = resources
-        val px = TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP,
-            dim,
-            r.displayMetrics
-        )
-        vpTabLayout!!.setPadding(px.toInt(), 0, px.toInt(), 0)
-        vpTabLayout!!.clipToPadding = false
-        vpTabLayout!!.pageMargin = bDim.toInt()
+    ): View {
         setupUi()
-        setupViewPager()
-        tilTabLayout!!.setupWithViewPager(vpTabLayout)
-        vpTabLayout!!.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageScrolled(i: Int, v: Float, i1: Int) {}
-            override fun onPageSelected(i: Int) {
-                if (activity != null) {
-                    hideSoftKeyboard(activity!!)
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                MifosTheme {
+                    PaymentsScreen(showQr = { showQrClicked() })
                 }
             }
-
-            override fun onPageScrollStateChanged(i: Int) {}
-        })
-        return rootView
+        }
     }
 
     private fun setupUi() {
@@ -65,15 +47,10 @@ class PaymentsFragment : BaseFragment() {
         setToolbarTitle(getString(R.string.payments))
     }
 
-    private fun setupViewPager() {
-        vpTabLayout!!.offscreenPageLimit = 1
-        val tabLayoutAdapter = TabLayoutAdapter(childFragmentManager)
-        tabLayoutAdapter.addFragment(SendFragment(), getString(R.string.send))
-        tabLayoutAdapter.addFragment(RequestFragment(), getString(R.string.request))
-        tabLayoutAdapter.addFragment(HistoryFragment(), getString(R.string.history))
-        tabLayoutAdapter.addFragment(SIFragment(), getString(R.string.standing_instruction))
-        tabLayoutAdapter.addFragment(InvoicesFragment(), getString(R.string.invoices))
-        vpTabLayout!!.adapter = tabLayoutAdapter
+    private fun showQrClicked() {
+        val intent = Intent(activity, ShowQrActivity::class.java)
+        intent.putExtra(Constants.QR_DATA, transferPresenter.vpa.value)
+        startActivity(intent)
     }
 
     companion object {
