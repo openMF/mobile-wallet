@@ -49,8 +49,8 @@ public class FetchUsers extends
                     public void onNext(List<UserWithRole> userWithRoles) {
                         List<UserWithRole> tbp = new ArrayList<>();
                         for (UserWithRole userWithRole : userWithRoles) {
-                            for (Role role : userWithRole.getSelectedRoles()) {
-                                if (role.getName().equals(Constants.MERCHANT)) {
+                            for (Role role : userWithRole.selectedRoles) {
+                                if (role.name.equals(Constants.MERCHANT)) {
                                     tbp.add(userWithRole);
                                     break;
                                 }

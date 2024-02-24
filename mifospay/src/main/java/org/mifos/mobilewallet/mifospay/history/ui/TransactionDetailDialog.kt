@@ -141,7 +141,8 @@ class TransactionDetailDialog : BottomSheetDialogFragment(), TransactionDetailVi
             Constants.DATE + ": " + transaction!!.date
         tvTransactionAmount!!.text =
             getFormattedAccountBalance(
-                transaction!!.amount, transaction!!.currency.code
+                transaction!!.amount, transaction!!.currency
+                    .code
             )
         mPresenter!!.getTransferDetail(transaction!!.transferId)
         if (transaction!!.receiptId != null) {

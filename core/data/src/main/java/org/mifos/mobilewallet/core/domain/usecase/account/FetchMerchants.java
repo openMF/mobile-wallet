@@ -49,11 +49,11 @@ public class FetchMerchants extends
                     @Override
                     public void onNext(Page<SavingsWithAssociations> savingsWithAssociationsPage) {
                         List<SavingsWithAssociations> savingsWithAssociationsList =
-                                savingsWithAssociationsPage.getPageItems();
+                                savingsWithAssociationsPage.pageItems;
                         List<SavingsWithAssociations> merchantsList = new ArrayList<>();
 
                         for (int i = 0; i < savingsWithAssociationsList.size(); i++) {
-                            if (savingsWithAssociationsList.get(i).getSavingsProductId() ==
+                            if (savingsWithAssociationsList.get(i).savingsProductId ==
                                     Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID) {
                                 merchantsList.add(savingsWithAssociationsList.get(i));
                             }
