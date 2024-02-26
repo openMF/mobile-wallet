@@ -46,13 +46,13 @@ class FetchAccount @Inject constructor(private val fineractRepository: FineractR
                             useCaseCallback.onError(Constants.NO_ACCOUNT_FOUND)
                         }
                     } else {
-                        useCaseCallback.onError(Constants.ERROR_FETCHING_ACCOUNT)
+                        useCaseCallback.onError(Constants.NO_ACCOUNTS_FOUND)
                     }
                 }
             })
     }
 
-    class RequestValues(val clientId: Long) : UseCase.RequestValues
+   data  class RequestValues(val clientId: Long) : UseCase.RequestValues
 
-    class ResponseValue(val account: Account) : UseCase.ResponseValue
+    data class ResponseValue(val account: Account) : UseCase.ResponseValue
 }
