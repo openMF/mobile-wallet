@@ -1,14 +1,14 @@
 package org.mifos.mobilewallet.core.data.fineract.entity.mapper
 
-import com.mifos.mobilewallet.model.entity.client.Client
+import com.mifos.mobilewallet.model.entity.client.Client 
 import javax.inject.Inject
-
+import com.mifos.mobilewallet.model.domain.client.Client as DomainClient
 /**
  * Created by naman on 10/7/17.
  */
 class ClientDetailsMapper @Inject constructor() {
-    fun transformList(clients: List<Client?>?): List<com.mifos.mobilewallet.model.domain.client.Client> {
-        val clientList: MutableList<com.mifos.mobilewallet.model.domain.client.Client> = ArrayList()
+    fun transformList(clients: List<Client?>?): List<DomainClient> {
+        val clientList: MutableList<DomainClient> = ArrayList()
         if (clients != null && clients.size != 0) {
             for (client in clients) {
                 clientList.add(transform(client))
@@ -17,8 +17,8 @@ class ClientDetailsMapper @Inject constructor() {
         return clientList
     }
 
-    fun transform(client: Client?): com.mifos.mobilewallet.model.domain.client.Client {
-        val clientDetails = com.mifos.mobilewallet.model.domain.client.Client()
+    fun transform(client: Client?): DomainClient {
+        val clientDetails = DomainClient()
         if (client != null) {
             clientDetails.name = client.displayName
             clientDetails.clientId = client.id.toLong()
