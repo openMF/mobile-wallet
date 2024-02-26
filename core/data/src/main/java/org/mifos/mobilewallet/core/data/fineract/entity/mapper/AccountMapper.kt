@@ -10,8 +10,8 @@ class AccountMapper @Inject constructor(private val currencyMapper: CurrencyMapp
     fun transform(clientAccounts: ClientAccounts?): List<Account> {
         val accountList = mutableListOf<Account>()
 
-        if (clientAccounts != null && clientAccounts.savingsAccounts != null
-            && clientAccounts.savingsAccounts.isNotEmpty()) {
+        if (clientAccounts != null
+            && !clientAccounts.savingsAccounts.isNullOrEmpty()) {
 
             for (savingAccount in clientAccounts.savingsAccounts) {
                 val account = Account().apply {

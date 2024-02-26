@@ -32,7 +32,7 @@ class FetchAccount @Inject constructor(private val fineractRepository: FineractR
 
                 override fun onNext(clientAccounts: ClientAccounts) {
                     val accounts = accountMapper.transform(clientAccounts)
-                    if (accounts != null && accounts.isNotEmpty()) {
+                    if (!accounts.isNullOrEmpty()) {
                         var walletAccount: Account? = null
                         for (account in accounts) {
                             if (account.productId.toInt() == Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
