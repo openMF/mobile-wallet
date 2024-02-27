@@ -9,10 +9,8 @@ import com.mifos.mobilewallet.model.domain.client.Client as DomainClient
 class ClientDetailsMapper @Inject constructor() {
     fun transformList(clients: List<Client?>?): List<DomainClient> {
         val clientList: MutableList<DomainClient> = ArrayList()
-        if (clients != null && clients.size != 0) {
-            for (client in clients) {
-                clientList.add(transform(client))
-            }
+        clients?.forEach { client ->
+            clientList.add(transform(client))
         }
         return clientList
     }

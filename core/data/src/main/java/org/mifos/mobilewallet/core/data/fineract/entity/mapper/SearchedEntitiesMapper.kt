@@ -10,11 +10,11 @@ import javax.inject.Inject
 class SearchedEntitiesMapper @Inject internal constructor() {
     fun transformList(searchedEntities: List<SearchedEntity>?): List<SearchResult> {
         val searchResults: MutableList<SearchResult> = ArrayList()
-        if (!searchedEntities.isNullOrEmpty()) {
-            for (entity in searchedEntities) {
-                searchResults.add(transform(entity))
-            }
+
+        searchedEntities?.forEach { entity ->
+            searchResults.add(transform(entity))
         }
+
         return searchResults
     }
 
