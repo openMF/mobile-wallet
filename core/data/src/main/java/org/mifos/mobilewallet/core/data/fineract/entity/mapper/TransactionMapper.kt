@@ -12,10 +12,8 @@ class TransactionMapper @Inject constructor(private val currencyMapper: Currency
     fun transformTransactionList(savingsWithAssociations: SavingsWithAssociations?): List<Transaction> {
         val transactionList = ArrayList<Transaction>()
 
-        if (savingsWithAssociations != null && !savingsWithAssociations.transactions.isNullOrEmpty()) {
-            for (transactions in savingsWithAssociations.transactions) {
-                transactionList.add(transformInvoice(transactions))
-            }
+        savingsWithAssociations?.transactions?.forEach { transaction ->
+            transactionList.add(transformInvoice(transaction))
         }
         return transactionList
     }
