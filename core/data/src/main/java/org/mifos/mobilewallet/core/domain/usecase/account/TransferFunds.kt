@@ -111,7 +111,7 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
 
                 override fun onNext(clientAccounts: ClientAccounts) {
                     val accounts = clientAccounts.savingsAccounts
-                    if (accounts != null && accounts.isNotEmpty()) {
+                    if (!accounts.isNullOrEmpty()) {
                         var walletAccount: SavingAccount? = null
                         for (account in accounts) {
                             if (account.productId == Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
