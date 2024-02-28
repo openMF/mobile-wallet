@@ -13,6 +13,4 @@ data class Account(
     var id: Long=0L,
     var productId: Long=0L,
     var currency: Currency,
-) : Parcelable {
-//    constructor() : this("", "", "", 0.0, 0L, 0L, Currency())
-}
+) : Parcelable
