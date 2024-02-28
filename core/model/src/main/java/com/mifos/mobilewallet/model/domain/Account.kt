@@ -6,7 +6,7 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class Account(
-    var image: String,
+    var image: String="",
     var name: String,
     var number: String,
     var balance: Double=0.0,
@@ -14,5 +14,5 @@ data class Account(
     var productId: Long=0L,
     var currency: Currency,
 ) : Parcelable {
-    constructor() : this("", "", "", 0.0, 0L, 0L, Currency())
+//    constructor() : this("", "", "", 0.0, 0L, 0L, Currency())
 }

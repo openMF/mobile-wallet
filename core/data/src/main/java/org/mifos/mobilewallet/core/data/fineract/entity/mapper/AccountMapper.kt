@@ -11,14 +11,14 @@ class AccountMapper @Inject constructor(private val currencyMapper: CurrencyMapp
         val accountList = mutableListOf<Account>()
 
         clientAccounts?.savingsAccounts?.forEach { savingAccount ->
-            val account = Account().apply {
-                name = savingAccount.productName
-                number = savingAccount.accountNo
-                id = savingAccount.id
-                balance = savingAccount.accountBalance
-                currency = currencyMapper.transform(savingAccount.currency)
-                productId = savingAccount.productId.toLong()
-            }
+            val account = Account(
+                name = savingAccount.productName,
+                number = savingAccount.accountNo,
+                id = savingAccount.id,
+                balance = savingAccount.accountBalance,
+                currency = currencyMapper.transform(savingAccount.currency),
+                productId = savingAccount.productId.toLong(),
+            )
             accountList.add(account)
         }
         return accountList
