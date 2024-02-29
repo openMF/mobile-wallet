@@ -1,29 +1,28 @@
 package com.mifos.mobilewallet.model.entity.client
 
-import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Currency (
+data class Currency(
     @SerializedName("code")
-    var code: String?=null,
+    var code: String? = null,
 
     @SerializedName("name")
-    var name: String?=null,
+    var name: String? = null,
 
     @SerializedName("decimalPlaces")
-    var decimalPlaces: Int?=null,
+    var decimalPlaces: Int? = null,
 
     @SerializedName("displaySymbol")
-    var displaySymbol: String?=null,
+    var displaySymbol: String? = null,
 
     @SerializedName("nameCode")
-    var nameCode: String?=null,
+    var nameCode: String? = null,
 
     @SerializedName("displayLabel")
-    var displayLabel: String?=null,
-    ) : Parcelable {
+    var displayLabel: String? = null,
+) : Parcelable {
     constructor() : this(null, null, null, null, null, null)
-    }
+}

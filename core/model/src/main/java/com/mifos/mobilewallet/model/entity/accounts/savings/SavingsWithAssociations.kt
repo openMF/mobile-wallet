@@ -1,84 +1,105 @@
 package com.mifos.mobilewallet.model.entity.accounts.savings
 
-import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mifos.mobilewallet.model.entity.client.DepositType
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class SavingsWithAssociations (
+data class SavingsWithAssociations(
+
     @SerializedName("id")
-    var id: Long=0L,
+    var id: Long = 0L,
 
     @SerializedName("accountNo")
-    var accountNo: String?=null,
+    var accountNo: String? = null,
 
     @SerializedName("depositType")
-    var depositType: DepositType?=null,
+    var depositType: DepositType? = null,
 
     @SerializedName("externalId")
-    var externalId: String=" ",
+    var externalId: String = " ",
 
     @SerializedName("clientId")
-    var clientId: Int=0,
+    var clientId: Int = 0,
 
     @SerializedName("clientName")
-    var clientName: String=" ",
+    var clientName: String = " ",
 
-    @JvmField
     @SerializedName("savingsProductId")
-    var savingsProductId: Int?=null,
+    var savingsProductId: Int? = null,
 
     @SerializedName("savingsProductName")
-    var savingsProductName: String?=null,
+    var savingsProductName: String? = null,
 
     @SerializedName("fieldOfficerId")
-    var fieldOfficerId: Int?=null,
+    var fieldOfficerId: Int? = null,
 
     @SerializedName("status")
-    var status: Status?=null,
+    var status: Status? = null,
 
     @SerializedName("timeline")
-    var timeline: TimeLine?=null,
+    var timeline: TimeLine? = null,
 
     @SerializedName("currency")
-    var currency: Currency?=null,
+    var currency: Currency? = null,
 
     @SerializedName("nominalAnnualInterestRate")
-    var nominalAnnualInterestRate: Double?=null,
+    var nominalAnnualInterestRate: Double? = null,
 
     @SerializedName("minRequiredOpeningBalance")
-    var minRequiredOpeningBalance: Double?=null,
+    var minRequiredOpeningBalance: Double? = null,
 
     @SerializedName("lockinPeriodFrequency")
-    var lockinPeriodFrequency: Double?=null,
+    var lockinPeriodFrequency: Double? = null,
 
     @SerializedName("withdrawalFeeForTransfers")
-    var withdrawalFeeForTransfers: Boolean?=null,
+    var withdrawalFeeForTransfers: Boolean? = null,
 
     @SerializedName("allowOverdraft")
-    var allowOverdraft: Boolean?=null,
+    var allowOverdraft: Boolean? = null,
 
     @SerializedName("enforceMinRequiredBalance")
-    var enforceMinRequiredBalance: Boolean?=null,
+    var enforceMinRequiredBalance: Boolean? = null,
 
     @SerializedName("withHoldTax")
-    var withHoldTax: Boolean?=null,
+    var withHoldTax: Boolean? = null,
 
     @SerializedName("lastActiveTransactionDate")
-    var lastActiveTransactionDate: List<Int?>?=null,
+    var lastActiveTransactionDate: List<Int?>? = null,
 
     @SerializedName("isDormancyTrackingActive")
-    var dormancyTrackingActive: Boolean?=null,
+    var dormancyTrackingActive: Boolean? = null,
 
     @SerializedName("summary")
-    var summary: Summary?=null,
+    var summary: Summary? = null,
 
-    @JvmField
     @SerializedName("transactions")
-    var transactions: List<Transactions> = java.util.ArrayList()
-): Parcelable {
-    constructor() : this(0L, null, null, " ", 0, " ",
-        null, null, 0, null, null, null, null, null, 0.0, false, false, false, null, listOf(), null, null)
+    var transactions: List<Transactions> = ArrayList()
+
+) : Parcelable {
+    constructor() : this(
+        0L,
+        null,
+        null,
+        " ",
+        0,
+        " ",
+        null,
+        null,
+        0,
+        null,
+        null,
+        null,
+        null,
+        null,
+        0.0,
+        false,
+        false,
+        false,
+        null,
+        listOf(),
+        null,
+        null
+    )
 }

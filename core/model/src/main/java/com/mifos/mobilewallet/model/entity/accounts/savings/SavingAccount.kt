@@ -7,19 +7,16 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class SavingAccount( 
-    @JvmField
+
     @SerializedName("id")
     var id: Long = 0L,
 
-    @JvmField
     @SerializedName("accountNo")
     var accountNo: String=" ",
 
-    @JvmField
     @SerializedName("productName")
     var productName: String= " ",
-
-    @JvmField
+    
     @SerializedName("productId")
     var productId: Int=0 ,
 
@@ -29,7 +26,6 @@ data class SavingAccount(
     @SerializedName("minRequiredBalance")
     var minRequiredBalance: Long = 0L,
 
-    @JvmField
     @SerializedName("accountBalance")
     var accountBalance: Double = 0.0,
 
@@ -51,7 +47,6 @@ data class SavingAccount(
     @SerializedName("status")
     var status: Status?=null,
 
-    @JvmField
     @SerializedName("currency")
     var currency: Currency= Currency(),
 

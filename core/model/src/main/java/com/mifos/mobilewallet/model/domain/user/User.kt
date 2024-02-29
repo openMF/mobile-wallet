@@ -1,6 +1,5 @@
 package com.mifos.mobilewallet.model.domain.user
 
-import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 

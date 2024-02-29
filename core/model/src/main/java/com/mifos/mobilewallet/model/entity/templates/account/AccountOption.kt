@@ -4,33 +4,27 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
-/**
- * Created by Rajan Maurya on 10/03/17.
- */
 @Parcelize
 data class AccountOption(
 
     @SerializedName("accountId")
-    var accountId: Int?  =null,
+    var accountId: Int? = null,
 
     @SerializedName("accountNo")
-    var accountNo: String?  =null,
+    var accountNo: String? = null,
 
     @SerializedName("accountType")
-    var accountType: AccountType?  =null,
+    var accountType: AccountType? = null,
 
     @SerializedName("clientId")
-    var clientId: Long?  =null,
+    var clientId: Long? = null,
 
     @SerializedName("clientName")
-    var clientName: String?  =null,
+    var clientName: String? = null,
 
     @SerializedName("officeId")
-    var officeId: Int?  =null,
+    var officeId: Int? = null,
 
     @SerializedName("officeName")
-    var officeName: String?  =null,
-    ) : Parcelable
-    {
-    constructor() : this(null, null, null, null, null, null, null)
-    }
+    var officeName: String? = null,
+) : Parcelable

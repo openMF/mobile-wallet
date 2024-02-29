@@ -1,7 +1,6 @@
 package com.mifos.mobilewallet.model.domain
 
 import java.util.Date
-
 data class NewAccount(
     var clientId: Int,
     var productId: String? = null,

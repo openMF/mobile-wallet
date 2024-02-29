@@ -1,20 +1,10 @@
 package com.mifos.mobilewallet.model.entity
 
-import android.os.Parcel
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
-/**
- * Created by ishankhanna for mifos android-client on 09/02/14.
- * Created by michaelsosnick on 1/20/17.
- */
-/*
- * This project is licensed under the open source MPL V2.
- * See https://github.com/openMF/android-client/blob/master/LICENSE.md
- */
-
 @Parcelize
-data class Timeline (
+data class Timeline(
     var submittedOnDate: List<Int?> = ArrayList(),
     var submittedByUsername: String? = null,
     var submittedByFirstname: String? = null,
@@ -26,7 +16,7 @@ data class Timeline (
     var closedOnDate: List<Int?> = ArrayList(),
     var closedByUsername: String? = null,
     var closedByFirstname: String? = null,
-    var closedByLastname: String? = null,
-): Parcelable{
-    constructor():this(ArrayList(),"","","",ArrayList(),"","","",ArrayList(),"","","")
+    var closedByLastname: String? = null
+) : Parcelable {
+    constructor() : this(ArrayList(), "", "", "", ArrayList(), "", "", "", ArrayList(), "", "", "")
 }
