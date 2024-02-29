@@ -1,9 +1,6 @@
 package com.mifos.mobilewallet.model.domain
 
-import android.os.Parcel
 import android.os.Parcelable
-import com.mifos.mobilewallet.model.domain.Currency
-import com.mifos.mobilewallet.model.domain.TransactionType
 import com.mifos.mobilewallet.model.entity.accounts.savings.TransferDetail
 import kotlinx.parcelize.Parcelize
 
@@ -19,5 +16,17 @@ data class Transaction(
     var transferId: Long = 0,
     var transferDetail: TransferDetail = TransferDetail(),
     var receiptId: String? = null
-) : Parcelable  {
-    constructor() : this("", 0, 0, 0.0, "", Currency(), TransactionType.OTHER, 0, TransferDetail(), "")}
+) : Parcelable {
+    constructor() : this(
+        "",
+        0,
+        0,
+        0.0,
+        "",
+        Currency(),
+        TransactionType.OTHER,
+        0,
+        TransferDetail(),
+        ""
+    )
+}

@@ -2,7 +2,7 @@ package com.mifos.mobilewallet.model.entity.register
 
 import com.google.gson.annotations.SerializedName
 
-data class RegisterPayload (
+data class RegisterPayload(
     @SerializedName("username")
     var username: String? = null,
 
@@ -25,5 +25,5 @@ data class RegisterPayload (
     var password: String? = null,
 
     @SerializedName("authenticationMode")
-    var authenticationMode: String? = null,
+    var authenticationMode: String? = null
 )

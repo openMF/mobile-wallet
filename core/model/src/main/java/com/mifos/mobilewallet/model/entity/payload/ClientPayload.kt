@@ -1,53 +1,52 @@
 package com.mifos.mobilewallet.model.entity.payload
 
-import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class ClientPayload (
+data class ClientPayload(
     @SerializedName("firstname")
-    var firstname: String? =null,
+    var firstname: String? = null,
 
     @SerializedName("lastname")
-    var lastname: String? =null,
+    var lastname: String? = null,
 
     @SerializedName("middlename")
-    var middlename: String? =null,
+    var middlename: String? = null,
 
     @SerializedName("officeId")
-    var officeId: Int? =null,
+    var officeId: Int? = null,
 
     @SerializedName("staffId")
-    var staffId: Int? =null,
+    var staffId: Int? = null,
 
     @SerializedName("genderId")
-    var genderId: Int? =null,
+    var genderId: Int? = null,
 
     @SerializedName("active")
-    var active: Boolean? =null,
+    var active: Boolean? = null,
 
     @SerializedName("activationDate")
-    var activationDate: String? =null,
+    var activationDate: String? = null,
 
     @SerializedName("submittedOnDate")
-    var submittedOnDate: String? =null,
+    var submittedOnDate: String? = null,
 
     @SerializedName("dateOfBirth")
-    var dateOfBirth: String? =null,
+    var dateOfBirth: String? = null,
 
     @SerializedName("mobileNo")
-    var mobileNo: String? =null,
+    var mobileNo: String? = null,
 
     @SerializedName("externalId")
-    var externalId: String? =null,
+    var externalId: String? = null,
 
     @SerializedName("clientTypeId")
-    var clientTypeId: Int? =null,
+    var clientTypeId: Int? = null,
 
     @SerializedName("clientClassificationId")
-    var clientClassificationId: Int? =null,
+    var clientClassificationId: Int? = null,
 
     @SerializedName("dateFormat")
     var dateFormat: String? = "DD_MMMM_YYYY",
@@ -56,8 +55,5 @@ data class ClientPayload (
     var locale: String? = "en",
 
     @SerializedName("datatables")
-    var datatables: List<DataTablePayload> = ArrayList(),) : Parcelable {
-
-    constructor() : this(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, ArrayList())
- 
-}
+    var datatables: List<DataTablePayload> = ArrayList()
+) : Parcelable

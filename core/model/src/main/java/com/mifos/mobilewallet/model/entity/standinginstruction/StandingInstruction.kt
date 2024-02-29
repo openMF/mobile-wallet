@@ -7,32 +7,41 @@ import com.mifos.mobilewallet.model.entity.accounts.savings.SavingAccount
 import com.mifos.mobilewallet.model.entity.client.Client
 import com.mifos.mobilewallet.model.entity.client.Status
 
-/**
- * Created by Devansh 08/06/2020
- */
-
 @Parcelize
 data class StandingInstruction(
+
     val id: Long,
+
     @SerializedName("name")
-        val name: String,
+    val name: String,
+
     @SerializedName("fromClient")
-        val fromClient: Client,
+    val fromClient: Client,
+
     @SerializedName("fromAccount")
-        val fromAccount: SavingAccount,
+    val fromAccount: SavingAccount,
+
     @SerializedName("toClient")
-        val toClient: Client,
+    val toClient: Client,
+
     @SerializedName("toAccount")
-        val toAccount: SavingAccount,
+    val toAccount: SavingAccount,
+
     @SerializedName("status")
-        val status: Status,
+    val status: Status,
+
     @SerializedName("amount")
-        var amount: Double,
+    var amount: Double,
+
     @SerializedName("validFrom")
-        val validFrom: List<Int>,
+    val validFrom: List<Int>,
+
     @SerializedName("validTill")
-        var validTill: List<Int>?,
+    var validTill: List<Int>?,
+
     @SerializedName("recurrenceInterval")
-        var recurrenceInterval: Int,
+    var recurrenceInterval: Int,
+
     @SerializedName("recurrenceOnMonthDay")
-        val recurrenceOnMonthDay: List<Int>) : Parcelable
+    val recurrenceOnMonthDay: List<Int>
+) : Parcelable
