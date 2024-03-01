@@ -11,8 +11,10 @@ apply(from = "${project.rootDir}/config/quality/quality.gradle")
 
 dependencies {
     implementation(projects.core.data)
+    implementation(libs.compose.country.code.picker)
 
     implementation("com.mifos.mobile:mifos-passcode:0.3.0")
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

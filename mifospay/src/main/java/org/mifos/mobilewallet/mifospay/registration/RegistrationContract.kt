@@ -7,19 +7,6 @@ import org.mifos.mobilewallet.mifospay.base.BaseView
  * Created by ankur on 21/June/2018
  */
 interface RegistrationContract {
-    interface MobileVerificationView : BaseView<MobileVerificationPresenter?> {
-        fun onRequestOtpSuccess()
-        fun onOtpVerificationSuccess()
-        fun showToast(s: String?)
-        fun hideProgressDialog()
-        fun onRequestOtpFailed(s: String?)
-        fun onOtpVerificationFailed(s: String?)
-    }
-
-    interface MobileVerificationPresenter : BasePresenter {
-        fun requestOTPfromServer(fullNumber: String?, s: String?)
-        fun verifyOTP(otp: String?)
-    }
 
     interface SignupView : BaseView<SignupPresenter?> {
         fun showToast(s: String?)

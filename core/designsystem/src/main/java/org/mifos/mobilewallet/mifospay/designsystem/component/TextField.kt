@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.designsystem.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -30,6 +31,7 @@ fun MifosOutlinedTextField(
     label: Int,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     trailingIcon: @Composable (() -> Unit)? = null,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
     error: Boolean = false,
 ) {
 
@@ -62,6 +64,7 @@ fun MifosOutlinedTextField(
             TextStyle(fontSize = 18.sp, color = Color.Black)
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         isError = error
     )

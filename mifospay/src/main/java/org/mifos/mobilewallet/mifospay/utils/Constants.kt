@@ -132,6 +132,7 @@ object Constants {
     val BANK_ACCOUNT_DETAILS = "Bank Account Details"
     val NEW_BANK_ACCOUNT = "newBankAccount"
     val VERIFYING_MOBILE_NUMBER = "Verifying mobile number.."
+    val VERIFYING_OTP = "Verifying Otp.."
     val MIFOS_SAVINGS_PRODUCT_ID = "Mifos Savings Product Id"
     val MERCHANTS = "Merchants"
     val UPI_PIN = "UPI PIN"
