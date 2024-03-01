@@ -341,5 +341,8 @@
 
     <string name="level">Level</string>
     <string name="logging_in">Logging In…</string>
+    <string name="all">All</string>
+    <string name="credits">Credits</string>
+    <string name="debits">Debits</string>
 
 </resources>
