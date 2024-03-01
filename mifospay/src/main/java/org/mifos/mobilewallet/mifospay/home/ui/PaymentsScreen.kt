@@ -18,8 +18,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import org.mifos.mobilewallet.mifospay.history.ui.HistoryScreen
+import org.mifos.mobilewallet.mifospay.invoice.ui.InvoiceScreen
 import org.mifos.mobilewallet.mifospay.payments.ui.RequestScreen
 import org.mifos.mobilewallet.mifospay.payments.ui.SendScreen
+import org.mifos.mobilewallet.mifospay.standinginstruction.ui.SIScreen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -61,9 +64,9 @@ fun PaymentsScreen(showQr:()->Unit) {
             when (page) {
                 0 -> SendScreen({},{},{})
                 1 -> RequestScreen(showQr = { showQr.invoke() })
-                2 -> HistoryComposable()
-                3 -> StandingInstructionComposable()
-                4 -> InvoicesComposable()
+                2 -> HistoryScreen()
+                3 -> SIScreen()
+                4 -> InvoiceScreen()
                 else -> Text("Page $page")
             }
         }
@@ -76,24 +79,6 @@ enum class PaymentsScreenContents {
     HISTORY,
     SI,
     INVOICES
-}
-
-@Composable
-fun HistoryComposable() {
-    // Implement your History screen content here
-    Text("History")
-}
-
-@Composable
-fun StandingInstructionComposable() {
-    // Implement your Standing Instruction screen content here
-    Text("Standing Instruction")
-}
-
-@Composable
-fun InvoicesComposable() {
-    // Implement your Invoices screen content here
-    Text("Invoices")
 }
 
 @Preview(showBackground = true)
