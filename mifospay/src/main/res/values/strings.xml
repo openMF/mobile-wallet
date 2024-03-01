@@ -72,6 +72,7 @@
     <string name="enter_mobile_number_description">It should be currently activated on your device
         and linked with your bank account as well.
     </string>
+    <string name="enter_otp_received_on_your_registered_device">Enter otp received on your registered device</string>
     <string name="complete_your_registration">Complete your registration</string>
     <string name="virtual_payment_address">Virtual Payment Address</string>
     <string name="send_via">Send via</string>
@@ -314,5 +315,8 @@
     <string name="welcome_back">Welcome back!</string>
     <string name="sign_up">Sign up.</string>
     <string name="empty"/>
+    <string name="verify_phone">Verify Phone</string>
+    <string name="verify_otp">Verify Otp</string>
+    <string name="phone_number">Phone Number</string>
 
 </resources>

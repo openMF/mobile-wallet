@@ -19,6 +19,8 @@ import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.FileUtils
 import java.io.File
 import javax.inject.Inject
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.asRequestBody
 
 /**
  * Created by ankur on 17/May/2018
@@ -101,10 +103,7 @@ class KYCLevel2Presenter @Inject constructor(
 
     private fun getRequestFileBody(file: File): MultipartBody.Part {
         // create RequestBody instance from file
-        val requestFile = RequestBody.create(
-            MediaType.parse(Constants.MULTIPART_FORM_DATA),
-            file
-        )
+        val requestFile = file.asRequestBody(Constants.MULTIPART_FORM_DATA.toMediaTypeOrNull())
 
         // MultipartBody.Part is used to send also the actual file name
         return MultipartBody.Part.createFormData(Constants.FILE, file.name, requestFile)
