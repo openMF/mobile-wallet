@@ -89,20 +89,6 @@ class MainActivity : BaseActivity(), BaseHomeView {
     override fun onBackPressed() {
         val fragment = supportFragmentManager
             .findFragmentById(R.id.bottom_navigation_fragment_container)
-        if (fragment is FinanceFragment && fragment.isVisible()) {
-            if (fragment.vpTabLayout?.currentItem?.let {
-                    (fragment.vpTabLayout?.adapter as TabLayoutAdapter?)
-                        ?.getItem(it)
-                } is MerchantsFragment
-            ) {
-                val merchantsFragment = (fragment.vpTabLayout?.adapter as TabLayoutAdapter?)
-                    ?.getItem(fragment.vpTabLayout?.currentItem ?: 0) as MerchantsFragment
-                if (merchantsFragment.etMerchantSearch?.text.toString().isNotEmpty()) {
-                    merchantsFragment.etMerchantSearch?.setText("")
-                    return
-                }
-            }
-        }
         if (fragment != null && fragment !is HomeFragment && fragment.isVisible) {
             if (fragment is ProfileFragment &&
                 ProfileFragment.mBottomSheetBehavior?.state
