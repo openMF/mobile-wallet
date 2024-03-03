@@ -26,13 +26,13 @@ import org.mifos.mobilewallet.mifospay.standinginstruction.ui.SIScreen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PaymentsScreen(showQr:()->Unit) {
+fun PaymentsScreen(showQr: () -> Unit) {
 
     val pagerState = rememberPagerState(
         pageCount = { PaymentsScreenContents.entries.size }
     )
     val scope = rememberCoroutineScope()
-    val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage }}
+    val selectedTabIndex by remember { derivedStateOf { pagerState.currentPage } }
 
     Column(modifier = Modifier.fillMaxSize()) {
         ScrollableTabRow(
@@ -62,7 +62,7 @@ fun PaymentsScreen(showQr:()->Unit) {
             modifier = Modifier.weight(1f)
         ) { page ->
             when (page) {
-                0 -> SendScreen({},{},{})
+                0 -> SendScreen({}, {}, {})
                 1 -> RequestScreen(showQr = { showQr.invoke() })
                 2 -> HistoryScreen()
                 3 -> SIScreen()

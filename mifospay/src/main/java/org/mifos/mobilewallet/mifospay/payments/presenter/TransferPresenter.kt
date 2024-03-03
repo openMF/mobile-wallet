@@ -51,7 +51,7 @@ class TransferPresenter @Inject constructor(
 
     override fun fetchVpa() {
         viewModelScope.launch {
-            _vpa.value = localRepository.clientDetails.externalId
+            _vpa.value = localRepository.clientDetails.externalId.toString()
         }
     }
 
