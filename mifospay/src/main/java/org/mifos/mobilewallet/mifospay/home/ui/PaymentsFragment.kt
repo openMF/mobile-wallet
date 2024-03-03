@@ -1,23 +1,17 @@
 package org.mifos.mobilewallet.mifospay.home.ui
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter
-import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.utils.Constants
