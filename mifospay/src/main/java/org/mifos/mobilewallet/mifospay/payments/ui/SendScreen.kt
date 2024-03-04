@@ -1,13 +1,5 @@
 package org.mifos.mobilewallet.mifospay.payments.ui
 
-import android.annotation.SuppressLint
-import android.content.ContentResolver
-import android.database.Cursor
-import android.provider.ContactsContract
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.launch
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -37,7 +29,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
@@ -118,7 +109,7 @@ fun SendScreen(openScanner: () -> Unit, openContacts: () -> Unit, onSubmit: () -
                     label = R.string.mobile_number,
                     modifier = Modifier.fillMaxWidth(),
                     trailingIcon = {
-                        IconButton(onClick = {  }) {
+                        IconButton(onClick = { openContacts.invoke() }) {
                             Icon(
                                 Icons.Filled.ContactPage,
                                 contentDescription = "Open Contacts",
@@ -135,7 +126,7 @@ fun SendScreen(openScanner: () -> Unit, openContacts: () -> Unit, onSubmit: () -
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally),
                 colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
-                onClick = {},
+                onClick = { onSubmit.invoke() },
                 contentPadding = PaddingValues(12.dp)
             ) {
                 Text(
@@ -161,54 +152,6 @@ fun Chip(selected: Boolean, onClick: () -> Unit, label: String) {
             modifier = Modifier.padding(top = 12.dp, bottom = 12.dp, start = 32.dp, end = 32.dp),
             color = Color.White
         )
-    }
-}
-
-@SuppressLint("Range", "Recycle")
-@Composable
-fun ContactPickerTwinTurbo(
-    done: (String, String) -> Unit
-) {
-    val context = LocalContext.current
-    var name by remember{ mutableStateOf("") }
-    var number by remember{ mutableStateOf("") }
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickContact(),
-        onResult = {
-            val contentResolver: ContentResolver = context.contentResolver
-
-            val cursor: Cursor? = contentResolver.query(it!!, null, null, null, null)
-            if (cursor != null) {
-                if (cursor.moveToFirst()) {
-                    name =
-                        cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                    Log.d("Name", name)
-                    val id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID))
-                    val phones: Cursor? = contentResolver.query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null
-                    )
-                    if (phones != null) {
-                        while (phones.moveToNext()) {
-                            number = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                            Log.d("Number", number)
-                        }
-                        phones.close()
-                    }
-                }
-            }
-            done(name, number)
-        }
-    )
-    Button(
-        onClick = {
-            launcher.launch()
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(10.dp)
-    ) {
-        Text(text = "Pick Contact")
     }
 }
 

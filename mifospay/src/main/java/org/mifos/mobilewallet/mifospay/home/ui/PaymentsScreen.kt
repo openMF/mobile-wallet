@@ -26,7 +26,7 @@ import org.mifos.mobilewallet.mifospay.standinginstruction.ui.SIScreen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PaymentsScreen(showQr: () -> Unit) {
+fun PaymentsScreen(showQr: () -> Unit, searchContact: () -> Unit, scanQr: () -> Unit) {
 
     val pagerState = rememberPagerState(
         pageCount = { PaymentsScreenContents.entries.size }
@@ -62,7 +62,7 @@ fun PaymentsScreen(showQr: () -> Unit) {
             modifier = Modifier.weight(1f)
         ) { page ->
             when (page) {
-                0 -> SendScreen({}, {}, {})
+                0 -> SendScreen({ scanQr.invoke() }, { searchContact.invoke() }, {})
                 1 -> RequestScreen(showQr = { showQr.invoke() })
                 2 -> HistoryScreen()
                 3 -> SIScreen()
@@ -84,5 +84,5 @@ enum class PaymentsScreenContents {
 @Preview(showBackground = true)
 @Composable
 fun PaymentsScreenPreview() {
-    PaymentsScreen({})
+    PaymentsScreen({}, {},{})
 }
