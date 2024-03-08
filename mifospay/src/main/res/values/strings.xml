@@ -167,6 +167,7 @@
     <string name="one_time_password">One Time Password</string>
     <string name="upi_pin_setup">UPI PIN Setup</string>
     <string name="all_fields_are_mandatory">All fields are mandatory.</string>
+    <string name="mandatory">Mandatory field</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="username">Username</string>
@@ -300,6 +301,11 @@
     <string name="amount_header">Amount:</string>
     <string name="deleted_successfully">Deleted Successfully</string>
     <string name="error_kyc_details">Couldn\'t fetch KYC details. Please try again.</string>
+    <string name="loading">Loading</string>
+    <string name="add_cards">Please Add Cards</string>
+    <string name="close">Close</string>
+    <string name="edit_clicked">Edit Clicked</string>
+    <string name="card_number">Card Number: </string>
 
     <!-- dynamically formatted strings-->
     <string name="name_client_name">Name: %1$s</string>
@@ -320,5 +326,12 @@
     <string name="verify_phone">Verify Phone</string>
     <string name="verify_otp">Verify Otp</string>
     <string name="phone_number">Phone Number</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="complete">Complete</string>
+    <string name="password_cannot_be_empty">Password cannot be empty</string>
+    <string name="password_must_be_least_6_characters">Password must be at least 6 characters</string>
+    <string name="confirm_password_cannot_empty">Confirm password cannot be empty</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="password_strength">Password Strength:</string>
 
 </resources>

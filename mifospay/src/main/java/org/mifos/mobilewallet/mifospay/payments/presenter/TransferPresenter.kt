@@ -5,7 +5,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
-import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
@@ -18,12 +17,9 @@ import javax.inject.Inject
 @HiltViewModel
 class TransferPresenter @Inject constructor(
     val mUsecaseHandler: UseCaseHandler,
-    val localRepository: LocalRepository
+    val localRepository: LocalRepository,
+    val mFetchAccount: FetchAccount
 ) : ViewModel(), BaseHomeContract.TransferPresenter {
-
-    @JvmField
-    @Inject
-    var mFetchAccount: FetchAccount? = null
 
     var mTransferView: BaseHomeContract.TransferView? = null
     override fun attachView(baseView: BaseView<*>?) {

@@ -16,4 +16,5 @@ dependencies {
 
     // For Serialized name
     implementation(libs.squareup.retrofit.converter.gson)
+    implementation(libs.kotlinx.serialization.json)
 }

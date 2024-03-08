@@ -9,9 +9,9 @@ import kotlinx.coroutines.flow.update
 import org.mifos.mobilewallet.core.base.TaskLooper
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseFactory
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.domain.Account
 import com.mifos.mobilewallet.model.domain.Transaction
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions
 import org.mifos.mobilewallet.mifospay.base.BaseView
@@ -31,12 +31,9 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val mUsecaseHandler: UseCaseHandler,
     private val localRepository: LocalRepository,
-    private val preferencesHelper: PreferencesHelper
+    private val preferencesHelper: PreferencesHelper,
+    private val mFetchAccountUseCase: FetchAccount
 ) : ViewModel(), BaseHomeContract.HomePresenter, TransactionsHistoryAsync {
-
-    @JvmField
-    @Inject
-    var mFetchAccountUseCase: FetchAccount? = null
 
     @JvmField
     @Inject
@@ -69,8 +66,8 @@ class HomeViewModel @Inject constructor(
     override fun fetchAccountDetails() {
         mUsecaseHandler.execute(mFetchAccountUseCase,
             FetchAccount.RequestValues(localRepository.clientDetails.clientId),
-            object : UseCaseCallback<FetchAccount.ResponseValue?> {
-                override fun onSuccess(response: FetchAccount.ResponseValue?) {
+            object : UseCaseCallback<FetchAccount.ResponseValue> {
+                override fun onSuccess(response: FetchAccount.ResponseValue) {
                     preferencesHelper.accountId = response?.account?.id!!
 
                     _homeUIState.update { currentState ->

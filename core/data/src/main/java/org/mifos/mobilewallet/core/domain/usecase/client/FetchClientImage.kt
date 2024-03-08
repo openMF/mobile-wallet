@@ -25,7 +25,7 @@ class FetchClientImage @Inject constructor(private val mFineractRepository: Fine
             .subscribe(object : Subscriber<ResponseBody>() {
                 override fun onCompleted() {}
                 override fun onError(e: Throwable) {
-                    useCaseCallback.onError(getUserMessage(e))
+                    getUserMessage(e)?.let { useCaseCallback.onError(it) }
                 }
 
                 override fun onNext(responseBody: ResponseBody) {

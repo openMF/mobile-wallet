@@ -1,11 +1,11 @@
 package org.mifos.mobilewallet.mifospay.registration.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.entity.UserWithRole
 import com.mifos.mobilewallet.model.domain.user.NewUser
 import com.mifos.mobilewallet.model.domain.user.UpdateUserEntityClients
 import com.mifos.mobilewallet.model.domain.user.User
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData
 import org.mifos.mobilewallet.core.domain.usecase.client.SearchClient
@@ -28,41 +28,18 @@ import javax.inject.Inject
  */
 class SignupPresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mPreferencesHelper: PreferencesHelper
+    private val mPreferencesHelper: PreferencesHelper,
+    private val searchClientUseCase: SearchClient,
+    private val createClientUseCase: CreateClient,
+    private val createUserUseCase: CreateUser,
+    private val updateUserUseCase: UpdateUser,
+    private val authenticateUserUseCase: AuthenticateUser,
+    private val fetchClientDataUseCase: FetchClientData,
+    private val deleteUserUseCase: DeleteUser,
+    private val fetchUserDetailsUseCase: FetchUserDetails
 ) : RegistrationContract.SignupPresenter {
     var mSignupView: SignupView? = null
 
-    @JvmField
-    @Inject
-    var searchClientUseCase: SearchClient? = null
-
-    @JvmField
-    @Inject
-    var createClientUseCase: CreateClient? = null
-
-    @JvmField
-    @Inject
-    var createUserUseCase: CreateUser? = null
-
-    @JvmField
-    @Inject
-    var updateUserUseCase: UpdateUser? = null
-
-    @JvmField
-    @Inject
-    var authenticateUserUseCase: AuthenticateUser? = null
-
-    @JvmField
-    @Inject
-    var fetchClientDataUseCase: FetchClientData? = null
-
-    @JvmField
-    @Inject
-    var deleteUserUseCase: DeleteUser? = null
-
-    @JvmField
-    @Inject
-    var fetchUserDetailsUseCase: FetchUserDetails? = null
     private var firstName: String? = null
     private var lastName: String? = null
     private var mobileNumber: String? = null
@@ -123,8 +100,8 @@ class SignupPresenter @Inject constructor(
         mifosSavingsProductId = mifosSavingProductId
         mUseCaseHandler.execute(searchClientUseCase,
             SearchClient.RequestValues("$username@mifos"),
-            object : UseCaseCallback<SearchClient.ResponseValue?> {
-                override fun onSuccess(response: SearchClient.ResponseValue?) {
+            object : UseCaseCallback<SearchClient.ResponseValue> {
+                override fun onSuccess(response: SearchClient.ResponseValue) {
                     mSignupView!!.onRegisterFailed("Username already exists.")
                 }
 
@@ -143,8 +120,8 @@ class SignupPresenter @Inject constructor(
             password
         )
         mUseCaseHandler.execute(createUserUseCase, CreateUser.RequestValues(newUser),
-            object : UseCaseCallback<CreateUser.ResponseValue?> {
-                override fun onSuccess(response: CreateUser.ResponseValue?) {
+            object : UseCaseCallback<CreateUser.ResponseValue> {
+                override fun onSuccess(response: CreateUser.ResponseValue) {
                     response?.userId?.let { createClient(it) }
                 }
 
@@ -163,8 +140,8 @@ class SignupPresenter @Inject constructor(
         )
         mUseCaseHandler.execute(createClientUseCase,
             CreateClient.RequestValues(newClient),
-            object : UseCaseCallback<CreateClient.ResponseValue?> {
-                override fun onSuccess(response: CreateClient.ResponseValue?) {
+            object : UseCaseCallback<CreateClient.ResponseValue> {
+                override fun onSuccess(response: CreateClient.ResponseValue) {
                     response?.clientId?.let { DebugUtil.log(it) }
                     val clients = ArrayList<Int>()
                     response?.clientId?.let { clients.add(it) }
@@ -200,11 +177,11 @@ class SignupPresenter @Inject constructor(
     }
 
     private fun loginUser(username: String?, password: String?) {
-        authenticateUserUseCase!!.requestValues = AuthenticateUser.RequestValues(username, password)
-        val requestValue = authenticateUserUseCase!!.requestValues
+        authenticateUserUseCase!!.walletRequestValues = AuthenticateUser.RequestValues(username, password)
+        val requestValue = authenticateUserUseCase!!.walletRequestValues
         mUseCaseHandler.execute(authenticateUserUseCase, requestValue,
-            object : UseCaseCallback<AuthenticateUser.ResponseValue?> {
-                override fun onSuccess(response: AuthenticateUser.ResponseValue?) {
+            object : UseCaseCallback<AuthenticateUser.ResponseValue> {
+                override fun onSuccess(response: AuthenticateUser.ResponseValue) {
                     response?.user?.let { createAuthenticatedService(it) }
                     fetchClientData()
                     response?.user?.let { fetchUserDetails(it) }
@@ -219,8 +196,8 @@ class SignupPresenter @Inject constructor(
     private fun fetchUserDetails(user: User) {
         mUseCaseHandler.execute(fetchUserDetailsUseCase,
             FetchUserDetails.RequestValues(user.userId),
-            object : UseCaseCallback<FetchUserDetails.ResponseValue?> {
-                override fun onSuccess(response: FetchUserDetails.ResponseValue?) {
+            object : UseCaseCallback<FetchUserDetails.ResponseValue> {
+                override fun onSuccess(response: FetchUserDetails.ResponseValue) {
                     response?.userWithRole?.let { saveUserDetails(user, it) }
                 }
 
@@ -232,8 +209,8 @@ class SignupPresenter @Inject constructor(
 
     private fun fetchClientData() {
         mUseCaseHandler.execute(fetchClientDataUseCase, null,
-            object : UseCaseCallback<FetchClientData.ResponseValue?> {
-                override fun onSuccess(response: FetchClientData.ResponseValue?) {
+            object : UseCaseCallback<FetchClientData.ResponseValue> {
+                override fun onSuccess(response: FetchClientData.ResponseValue) {
                     response?.userDetails?.let { saveClientDetails(it) }
                     if (response?.userDetails?.name != "") {
                         mSignupView!!.loginSuccess()
@@ -270,8 +247,8 @@ class SignupPresenter @Inject constructor(
 
     private fun deleteUser(userId: Int) {
         mUseCaseHandler.execute(deleteUserUseCase, DeleteUser.RequestValues(userId),
-            object : UseCaseCallback<DeleteUser.ResponseValue?> {
-                override fun onSuccess(response: DeleteUser.ResponseValue?) {}
+            object : UseCaseCallback<DeleteUser.ResponseValue> {
+                override fun onSuccess(response: DeleteUser.ResponseValue) {}
                 override fun onError(message: String) {}
             })
     }

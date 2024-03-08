@@ -27,8 +27,8 @@ class ValidateOTP @Inject constructor(private val mFineractRepository: FineractR
                     useCaseCallback.onError(e.toString())
                 }
 
-                override fun onNext(accessToken: AccessToken?) {
-                    useCaseCallback.onSuccess(accessToken?.let { ResponseValue(it) })
+                override fun onNext(accessToken: AccessToken) {
+                    useCaseCallback.onSuccess(ResponseValue(accessToken))
                 }
             })
 

@@ -28,10 +28,10 @@ class MakeTransferPresenter @Inject constructor(private val mUsecaseHandler: Use
 
     override fun fetchClient(externalId: String) {
         mUsecaseHandler.execute(searchClient, SearchClient.RequestValues(externalId),
-            object : UseCaseCallback<SearchClient.ResponseValue?> {
-                override fun onSuccess(response: SearchClient.ResponseValue?) {
-                    val searchResult = response?.results?.get(0)
-                    searchResult?.resultId?.let {
+            object : UseCaseCallback<SearchClient.ResponseValue> {
+                override fun onSuccess(response: SearchClient.ResponseValue) {
+                    val searchResult = response.results[0]
+                    searchResult.resultId.let {
                         mTransferView?.showToClientDetails(
                             it.toLong(),
                             searchResult.resultName, externalId
@@ -49,8 +49,8 @@ class MakeTransferPresenter @Inject constructor(private val mUsecaseHandler: Use
         mTransferView?.enableDragging(false)
         mUsecaseHandler.execute(transferFunds,
             TransferFunds.RequestValues(fromClientId, toClientId, amount),
-            object : UseCaseCallback<TransferFunds.ResponseValue?> {
-                override fun onSuccess(response: TransferFunds.ResponseValue?) {
+            object : UseCaseCallback<TransferFunds.ResponseValue> {
+                override fun onSuccess(response: TransferFunds.ResponseValue) {
                     mTransferView?.enableDragging(true)
                     mTransferView?.transferSuccess()
                 }

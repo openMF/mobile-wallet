@@ -1,9 +1,9 @@
 package org.mifos.mobilewallet.mifospay.auth.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.entity.UserWithRole
 import com.mifos.mobilewallet.model.domain.user.User
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails
@@ -34,9 +34,9 @@ class LoginPresenter @Inject constructor(
     private lateinit var mLoginView: LoginView
 
     override fun loginUser(username: String?, password: String?) {
-        authenticateUserUseCase.requestValues = AuthenticateUser.RequestValues(username, password)
+        authenticateUserUseCase.walletRequestValues = AuthenticateUser.RequestValues(username, password)
 
-        val requestValue = authenticateUserUseCase.requestValues
+        val requestValue = authenticateUserUseCase.walletRequestValues
         mUsecaseHandler.execute(authenticateUserUseCase, requestValue,
             object : UseCaseCallback<AuthenticateUser.ResponseValue> {
                 override fun onSuccess(response: AuthenticateUser.ResponseValue) {
@@ -71,7 +71,7 @@ class LoginPresenter @Inject constructor(
     }
 
     private fun fetchClientData() {
-        mUsecaseHandler.execute(fetchClientDataUseCase, null,
+        mUsecaseHandler.execute(fetchClientDataUseCase, FetchClientData.RequestValues(0),
             object : UseCaseCallback<FetchClientData.ResponseValue> {
                 override fun onSuccess(response: FetchClientData.ResponseValue) {
                     saveClientDetails(response.userDetails)
@@ -100,9 +100,9 @@ class LoginPresenter @Inject constructor(
         preferencesHelper.saveEmail(userWithRole.email)
     }
 
-    private fun saveClientDetails(client: com.mifos.mobilewallet.model.domain.client.Client) {
-        preferencesHelper.saveFullName(client.name)
-        preferencesHelper.clientId = client.clientId
+    private fun saveClientDetails(client: com.mifos.mobilewallet.model.domain.client.Client?) {
+        preferencesHelper.saveFullName(client?.name)
+        preferencesHelper.clientId = client?.clientId!!
         preferencesHelper.saveMobile(client.mobileNo)
     }
 }

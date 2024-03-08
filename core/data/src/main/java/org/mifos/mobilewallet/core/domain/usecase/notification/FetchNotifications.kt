@@ -25,14 +25,14 @@ class FetchNotifications @Inject constructor(private val mFineractRepository: Fi
         mFineractRepository.fetchNotifications(requestValues.clientId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : Subscriber<List<NotificationPayload?>?>() {
+            .subscribe(object : Subscriber<List<NotificationPayload>>() {
                 override fun onCompleted() {}
                 override fun onError(e: Throwable) {
                     useCaseCallback.onError(Constants.ERROR_FETCHING_NOTIFICATIONS)
                 }
 
-                override fun onNext(notificationPayloads: List<NotificationPayload?>?) {
-                    useCaseCallback.onSuccess(notificationPayloads?.let { ResponseValue(it) })
+                override fun onNext(notificationPayloads: List<NotificationPayload>) {
+                    useCaseCallback.onSuccess(ResponseValue(notificationPayloads))
                 }
             })
 

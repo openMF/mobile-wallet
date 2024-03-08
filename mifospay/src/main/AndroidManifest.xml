@@ -170,6 +170,10 @@
         <activity
             android:name=".password.ui.EditPasswordActivity"
             android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".savedcards.ui.AddCardDialog"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
