@@ -22,6 +22,6 @@ class ApiInterceptor(private val preferencesHelper: PreferencesHelper) : Interce
     companion object {
         const val HEADER_TENANT = "Fineract-Platform-TenantId"
         const val HEADER_AUTH = "Authorization"
-        const val DEFAULT = "default"
+        const val DEFAULT = "venus"
     }
 }
