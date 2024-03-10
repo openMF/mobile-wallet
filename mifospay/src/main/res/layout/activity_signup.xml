@@ -10,7 +10,7 @@
                 android:layout_height="match_parent">
 
         <LinearLayout android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
+                      android:layout_height="match_parent"
                       android:orientation="vertical">
 
             <com.google.android.material.appbar.AppBarLayout
@@ -31,6 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/value_30dp"
                     android:layout_marginRight="@dimen/value_20dp"
+                    android:visibility="gone"
                     android:orientation="vertical">
 
                     <TextView
@@ -57,6 +58,17 @@
 
             </com.google.android.material.appbar.AppBarLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="2000dp"
+                android:background="@color/white">
+
+                <androidx.compose.ui.platform.ComposeView
+                    android:id="@+id/signUpCompose"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -65,6 +77,7 @@
                 android:layout_marginLeft="@dimen/value_20dp"
                 android:layout_marginRight="@dimen/value_20dp"
                 android:layout_marginTop="@dimen/value_20dp"
+                android:visibility="gone"
                 android:orientation="vertical">
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/et_first_name_layout"
@@ -136,7 +149,7 @@
                 <ProgressBar
                     android:layout_width="match_parent"
                     android:id="@+id/pb_password_strength"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:padding="@dimen/value_8dp"
                     android:layout_height="match_parent" />
@@ -144,7 +157,7 @@
                     android:layout_width="match_parent"
                     android:id="@+id/tv_password_strength"
                     android:gravity="center"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     android:layout_marginBottom="@dimen/value_8dp"
                     android:layout_height="wrap_content" />
                 <com.google.android.material.textfield.TextInputLayout
@@ -188,7 +201,7 @@
                     android:layout_height="wrap_content"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_marginBottom="@dimen/value_10dp"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/et_business_shop_name"

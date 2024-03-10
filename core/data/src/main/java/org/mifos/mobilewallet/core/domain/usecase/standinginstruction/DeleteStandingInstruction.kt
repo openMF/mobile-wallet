@@ -26,8 +26,9 @@ class DeleteStandingInstruction @Inject constructor(
 
                     }
 
-                    override fun onError(e: Throwable)
-                            = useCaseCallback.onError(e.message)
+                    override fun onError(e: Throwable) {
+                        e.message?.let { useCaseCallback.onError(it) }
+                    }
 
                     override fun onNext(genericResponse: GenericResponse)
                             = useCaseCallback.onSuccess(ResponseValue())

@@ -14,13 +14,11 @@ import javax.inject.Inject
  */
 class NotificationPresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mLocalRepository: LocalRepository
+    private val mLocalRepository: LocalRepository,
+    private val fetchNotificationsUseCase: FetchNotifications
 ) : NotificationContract.NotificationPresenter {
     var mNotificationView: NotificationView? = null
 
-    @JvmField
-    @Inject
-    var fetchNotificationsUseCase: FetchNotifications? = null
     override fun attachView(baseView: BaseView<*>?) {
         mNotificationView = baseView as NotificationView?
         mNotificationView?.setPresenter(this)
@@ -31,10 +29,10 @@ class NotificationPresenter @Inject constructor(
             FetchNotifications.RequestValues(
                 mLocalRepository.clientDetails.clientId
             ),
-            object : UseCaseCallback<FetchNotifications.ResponseValue?> {
-                override fun onSuccess(response: FetchNotifications.ResponseValue?) {
+            object : UseCaseCallback<FetchNotifications.ResponseValue> {
+                override fun onSuccess(response: FetchNotifications.ResponseValue) {
                     mNotificationView?.fetchNotificationsSuccess(
-                        response?.notificationPayloadList
+                        response.notificationPayloadList
                     )
                 }
 

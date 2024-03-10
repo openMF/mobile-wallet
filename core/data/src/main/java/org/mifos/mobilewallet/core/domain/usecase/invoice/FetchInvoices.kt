@@ -23,14 +23,14 @@ class FetchInvoices @Inject constructor(private val mFineractRepository: Finerac
         mFineractRepository.fetchInvoices(requestValues.clientId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : Subscriber<List<Invoice?>?>() {
+            .subscribe(object : Subscriber<List<Invoice>>() {
                 override fun onCompleted() {}
                 override fun onError(e: Throwable) {
                     useCaseCallback.onError(e.toString())
                 }
 
-                override fun onNext(invoices: List<Invoice?>?) {
-                    useCaseCallback.onSuccess(invoices?.let { ResponseValue(it) })
+                override fun onNext(invoices: List<Invoice>) {
+                    useCaseCallback.onSuccess(ResponseValue(invoices))
                 }
             })
 

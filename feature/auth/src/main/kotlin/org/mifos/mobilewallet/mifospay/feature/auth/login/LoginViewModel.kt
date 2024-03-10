@@ -6,7 +6,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifos.mobilewallet.core.base.UseCase
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.entity.UserWithRole
 import org.mifos.mobilewallet.datastore.PreferencesHelper
 import com.mifos.mobilewallet.model.domain.user.User
@@ -30,8 +29,8 @@ class LoginViewModel @Inject constructor(
     val uiState: StateFlow<LoginUiState> = _uiState
 
     fun loginUser(username: String?, password: String?) {
-        authenticateUserUseCase.requestValues = AuthenticateUser.RequestValues(username, password)
-        val requestValue = authenticateUserUseCase.requestValues
+        authenticateUserUseCase.walletRequestValues = AuthenticateUser.RequestValues(username, password)
+        val requestValue = authenticateUserUseCase.walletRequestValues
         mUsecaseHandler.execute(authenticateUserUseCase, requestValue,
             object : UseCase.UseCaseCallback<AuthenticateUser.ResponseValue> {
                 override fun onSuccess(response: AuthenticateUser.ResponseValue) {

@@ -38,8 +38,8 @@ class MobileVerificationViewModel @Inject constructor(
         showProgress = true
         mUseCaseHandler.execute(searchClientUseCase,
             fullNumber.let { SearchClient.RequestValues(it) },
-            object : UseCase.UseCaseCallback<SearchClient.ResponseValue?> {
-                override fun onSuccess(response: SearchClient.ResponseValue?) {
+            object : UseCase.UseCaseCallback<SearchClient.ResponseValue> {
+                override fun onSuccess(response: SearchClient.ResponseValue) {
                     onError("Mobile number already exists.")
                     showProgress = false
                 }

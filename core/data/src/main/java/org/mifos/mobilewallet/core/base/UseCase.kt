@@ -1,54 +1,35 @@
-package org.mifos.mobilewallet.core.base;
+package org.mifos.mobilewallet.core.base
 
 /**
  * Use cases are the entry points to the domain layer.
  *
  * @param <Q> the request type
  * @param <P> the response type
- */
-public abstract class UseCase<Q extends UseCase.RequestValues, P extends UseCase.ResponseValue> {
-
-    private Q mRequestValues;
-
-    private UseCaseCallback<P> mUseCaseCallback;
-
-    public Q getRequestValues() {
-        return mRequestValues;
+</P></Q> */
+abstract class UseCase<Q : UseCase.RequestValues, P : UseCase.ResponseValue?> {
+    lateinit var walletRequestValues: Q
+    lateinit var useCaseCallback: UseCaseCallback<P>
+    fun setRequestValues(requestValues: Q) {
+        this.walletRequestValues = requestValues
     }
 
-    public void setRequestValues(Q requestValues) {
-        mRequestValues = requestValues;
+    fun run() {
+        executeUseCase(walletRequestValues)
     }
 
-    public UseCaseCallback<P> getUseCaseCallback() {
-        return mUseCaseCallback;
-    }
-
-    public void setUseCaseCallback(UseCaseCallback<P> useCaseCallback) {
-        mUseCaseCallback = useCaseCallback;
-    }
-
-    void run() {
-        executeUseCase(mRequestValues);
-    }
-
-    protected abstract void executeUseCase(Q requestValues);
+    protected abstract fun executeUseCase(requestValues: Q)
 
     /**
      * Data passed to a request.
      */
-    public interface RequestValues {
-    }
+    interface RequestValues
 
     /**
      * Data received from a request.
      */
-    public interface ResponseValue {
-    }
-
-    public interface UseCaseCallback<R> {
-        void onSuccess(R response);
-
-        void onError(String message);
+    interface ResponseValue
+    interface UseCaseCallback<R> {
+        fun onSuccess(response: R)
+        fun onError(message: String)
     }
 }

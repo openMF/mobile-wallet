@@ -5,8 +5,8 @@ import org.mifos.mobilewallet.core.base.TaskLooper.TaskData
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseFactory
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.domain.Transaction
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
 import org.mifos.mobilewallet.mifospay.R
@@ -26,24 +26,15 @@ import javax.inject.Inject
 class MerchantTransferPresenter @Inject constructor(
     private val mUsecaseHandler: UseCaseHandler,
     private val localRepository: LocalRepository,
-    private val preferencesHelper: PreferencesHelper
-) : BaseHomeContract.MerchantTransferPresenter,
-    TransactionsHistoryAsync {
-    @JvmField
-    @Inject
-    var transactionsHistory: TransactionsHistory? = null
+    private val preferencesHelper: PreferencesHelper,
+    private val transactionsHistory: TransactionsHistory,
+    private val mUseCaseFactory: UseCaseFactory,
+    private val mFetchAccount: FetchAccount
+) : BaseHomeContract.MerchantTransferPresenter, TransactionsHistoryAsync {
 
-    @JvmField
     @Inject
-    var mTaskLooper: TaskLooper? = null
+    lateinit var mTaskLooper: TaskLooper
 
-    @JvmField
-    @Inject
-    var mUseCaseFactory: UseCaseFactory? = null
-
-    @JvmField
-    @Inject
-    var mFetchAccount: FetchAccount? = null
     private var mMerchantTransferView: MerchantTransferView? = null
     private var merchantAccountNumber: String? = null
     override fun attachView(baseView: BaseView<*>?) {
@@ -101,14 +92,15 @@ class MerchantTransferPresenter @Inject constructor(
                     && transaction.transferId != 0L
                 ) {
                     val transferId = transaction.transferId
-                    mTaskLooper!!.addTask(
-                        mUseCaseFactory!!.getUseCase(org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER_USECASE),
-                        transferId.let { FetchAccountTransfer.RequestValues(it) },
-                        TaskData(Constants.TRANSFER_DETAILS, i)
+                    mTaskLooper.addTask(
+                        useCase = mUseCaseFactory.getUseCase(org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER_USECASE)
+                                as UseCase<FetchAccountTransfer.RequestValues, FetchAccountTransfer.ResponseValue>,
+                        values = transferId.let { FetchAccountTransfer.RequestValues(it) },
+                        taskData = TaskData(Constants.TRANSFER_DETAILS, i)
                     )
                 }
             }
-            mTaskLooper!!.listen(object : TaskLooper.Listener {
+            mTaskLooper.listen(object : TaskLooper.Listener {
                 override fun <R : UseCase.ResponseValue?> onTaskSuccess(
                     taskData: TaskData, response: R
                 ) {
@@ -137,7 +129,7 @@ class MerchantTransferPresenter @Inject constructor(
                     }
                 }
 
-                override fun onFailure(message: String) {
+                override fun onFailure(message: String?) {
                     showErrorStateView()
                 }
             })

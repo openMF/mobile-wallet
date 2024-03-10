@@ -4,11 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import okhttp3.MediaType
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.kyc.UploadKYCDocs
 import org.mifos.mobilewallet.mifospay.MifosPayApp
 import org.mifos.mobilewallet.mifospay.base.BaseView
@@ -21,6 +18,7 @@ import java.io.File
 import javax.inject.Inject
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.asRequestBody
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 
 /**
  * Created by ankur on 17/May/2018
@@ -28,13 +26,11 @@ import okhttp3.RequestBody.Companion.asRequestBody
 class KYCLevel2Presenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val preferencesHelper: PreferencesHelper,
+    private val uploadKYCDocsUseCase: UploadKYCDocs
 ) : KYCContract.KYCLevel2Presenter {
 
     override val context: Context = MifosPayApp.context!!
 
-    @JvmField
-    @Inject
-    var uploadKYCDocsUseCase: UploadKYCDocs? = null
     private var file: File? = null
     private var mKYCLevel2View: KYCLevel2View? = null
     override fun attachView(baseView: BaseView<*>?) {
@@ -71,17 +67,17 @@ class KYCLevel2Presenter @Inject constructor(
 
     override fun uploadKYCDocs(identityType: String?) {
         if (file != null) {
-            uploadKYCDocsUseCase!!.requestValues = identityType?.let {
+            uploadKYCDocsUseCase.walletRequestValues = identityType?.let {
                 UploadKYCDocs.RequestValues(
                     org.mifos.mobilewallet.core.utils.Constants.ENTITY_TYPE_CLIENTS,
                     preferencesHelper.clientId, file!!.name, it,
                     getRequestFileBody(file!!)
                 )
-            }
-            val requestValues = uploadKYCDocsUseCase!!.requestValues
+            }!!
+            val requestValues = uploadKYCDocsUseCase!!.walletRequestValues
             mUseCaseHandler.execute(uploadKYCDocsUseCase, requestValues,
-                object : UseCaseCallback<UploadKYCDocs.ResponseValue?> {
-                    override fun onSuccess(response: UploadKYCDocs.ResponseValue?) {
+                object : UseCaseCallback<UploadKYCDocs.ResponseValue> {
+                    override fun onSuccess(response: UploadKYCDocs.ResponseValue) {
                         mKYCLevel2View?.hideProgressDialog()
                         mKYCLevel2View?.showToast(
                             Constants.KYC_LEVEL_2_DOCUMENTS_ADDED_SUCCESSFULLY

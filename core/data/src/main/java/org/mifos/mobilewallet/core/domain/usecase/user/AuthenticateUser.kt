@@ -1,83 +1,53 @@
-package org.mifos.mobilewallet.core.domain.usecase.user;
+package org.mifos.mobilewallet.core.domain.usecase.user
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import com.mifos.mobilewallet.model.entity.UserEntity;
-import com.mifos.mobilewallet.model.entity.authentication.AuthenticationPayload;
-
-import org.mifos.mobilewallet.core.data.fineract.entity.mapper.UserEntityMapper;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
-import com.mifos.mobilewallet.model.domain.user.User;
-import org.mifos.mobilewallet.core.utils.Constants;
-
-import javax.inject.Inject;
-
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import com.mifos.mobilewallet.model.domain.user.User
+import com.mifos.mobilewallet.model.entity.UserEntity
+import com.mifos.mobilewallet.model.entity.authentication.AuthenticationPayload
+import org.mifos.mobilewallet.core.base.UseCase
+import org.mifos.mobilewallet.core.data.fineract.entity.mapper.UserEntityMapper
+import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
+import org.mifos.mobilewallet.core.utils.Constants
+import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by naman on 16/6/17.
  */
+class AuthenticateUser @Inject constructor(
+    private val apiRepository: FineractRepository,
+    private var userEntityMapper: UserEntityMapper
+) : UseCase<AuthenticateUser.RequestValues, AuthenticateUser.ResponseValue>() {
 
-public class AuthenticateUser extends UseCase<AuthenticateUser.RequestValues,
-        AuthenticateUser.ResponseValue> {
-
-    private final FineractRepository apiRepository;
-
-    @Inject
-    UserEntityMapper userEntityMapper;
-
-    @Inject
-    public AuthenticateUser(FineractRepository apiRepository) {
-        this.apiRepository = apiRepository;
-    }
-
-    @Override
-    protected void executeUseCase(RequestValues requestValues) {
-
+    override fun executeUseCase(requestValues: RequestValues) {
         apiRepository
-                .loginSelf(requestValues.authPayload)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<UserEntity>() {
-                    @Override
-                    public void onCompleted() {
+            .loginSelf(requestValues.authPayload)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(object : Subscriber<UserEntity>() {
+                override fun onCompleted() {}
+                override fun onError(e: Throwable) {
+                    useCaseCallback.onError(Constants.ERROR_LOGGING_IN)
+                }
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getUseCaseCallback().onError(Constants.ERROR_LOGGING_IN);
-                    }
-
-                    @Override
-                    public void onNext(final UserEntity user) {
-                        getUseCaseCallback().onSuccess(new
-                                ResponseValue(userEntityMapper.transform(user)));
-                    }
-                });
-
+                override fun onNext(user: UserEntity) {
+                    useCaseCallback.onSuccess(
+                        ResponseValue(
+                            userEntityMapper!!.transform(user)
+                        )
+                    )
+                }
+            })
     }
 
-    public static final class RequestValues implements UseCase.RequestValues {
+    class RequestValues(username: String?, password: String?) : UseCase.RequestValues {
+        val authPayload: AuthenticationPayload
 
-        private AuthenticationPayload authPayload;
-
-        public RequestValues(String username, String password) {
-            authPayload = new AuthenticationPayload(username, password);
+        init {
+            authPayload = AuthenticationPayload(username!!, password!!)
         }
     }
 
-    public static final class ResponseValue implements UseCase.ResponseValue {
-
-        private final User user;
-
-        public ResponseValue(User user) {
-            this.user = user;
-        }
-
-        public User getUser() {
-            return user;
-        }
-    }
+    class ResponseValue(val user: User) : UseCase.ResponseValue
 }

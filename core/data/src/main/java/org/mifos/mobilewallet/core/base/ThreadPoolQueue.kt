@@ -1,25 +1,18 @@
-package org.mifos.mobilewallet.core.base;
+package org.mifos.mobilewallet.core.base
 
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ArrayBlockingQueue
 
 /**
  * Created by shivansh on 14/July/2019
  */
+class ThreadPoolQueue(capacity: Int) : ArrayBlockingQueue<Runnable?>(capacity) {
 
-public final class ThreadPoolQueue extends ArrayBlockingQueue<Runnable> {
-
-    public ThreadPoolQueue(int capacity) {
-        super(capacity);
-    }
-
-    @Override
-    public boolean offer(Runnable e) {
+    override fun offer(e: Runnable?): Boolean {
         try {
-            put(e);
-        } catch (InterruptedException e1) {
-            return false;
+            put(e)
+        } catch (e1: InterruptedException) {
+            return false
         }
-        return true;
+        return true
     }
-
 }
