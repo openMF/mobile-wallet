@@ -4,7 +4,6 @@ package org.mifos.mobilewallet.mifospay.passcode.presenter
 
 
 import org.mifos.mobilewallet.core.base.UseCaseHandler
-
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData
 
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser

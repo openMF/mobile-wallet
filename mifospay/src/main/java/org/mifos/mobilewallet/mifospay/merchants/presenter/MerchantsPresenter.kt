@@ -5,8 +5,8 @@ import org.mifos.mobilewallet.core.base.TaskLooper.TaskData
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseFactory
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.entity.accounts.savings.SavingsWithAssociations
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchMerchants
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientDetails
 import org.mifos.mobilewallet.core.utils.Constants
@@ -16,13 +16,13 @@ import org.mifos.mobilewallet.mifospay.merchants.MerchantsContract
 import org.mifos.mobilewallet.mifospay.merchants.MerchantsContract.MerchantsView
 import javax.inject.Inject
 
-class MerchantsPresenter @Inject constructor(private val mUseCaseHandler: UseCaseHandler) :
+class MerchantsPresenter @Inject constructor(
+    private val mUseCaseHandler: UseCaseHandler,
+    private val mFetchMerchantsUseCase: FetchMerchants
+) :
     MerchantsContract.MerchantsPresenter {
     var mMerchantsView: MerchantsView? = null
 
-    @JvmField
-    @Inject
-    var mFetchMerchantsUseCase: FetchMerchants? = null
 
     @JvmField
     @Inject
@@ -60,14 +60,13 @@ class MerchantsPresenter @Inject constructor(private val mUseCaseHandler: UseCas
         savingsWithAssociationsList: List<SavingsWithAssociations>
     ) {
         for (i in savingsWithAssociationsList.indices) {
-            mTaskLooper!!.addTask(
-                mUseCaseFactory!!.getUseCase(
-                    Constants.FETCH_CLIENT_DETAILS_USE_CASE
-                ),
-                FetchClientDetails.RequestValues(
+            mTaskLooper?.addTask(
+                useCase = mUseCaseFactory?.getUseCase(Constants.FETCH_CLIENT_DETAILS_USE_CASE)
+                        as UseCase<FetchClientDetails.RequestValues, FetchClientDetails.ResponseValue>,
+                values = FetchClientDetails.RequestValues(
                     savingsWithAssociationsList[i].clientId.toLong()
                 ),
-                TaskData("Client data", i)
+                taskData = TaskData("Client data", i)
             )
         }
         mTaskLooper!!.listen(object : TaskLooper.Listener {
@@ -89,7 +88,7 @@ class MerchantsPresenter @Inject constructor(private val mUseCaseHandler: UseCas
                 }
             }
 
-            override fun onFailure(message: String) {
+            override fun onFailure(message: String?) {
                 mMerchantsView!!.showErrorStateView(
                     R.drawable.ic_error_state,
                     R.string.error_oops,

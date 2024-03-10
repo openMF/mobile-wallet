@@ -1,65 +1,36 @@
-package org.mifos.mobilewallet.core.domain.usecase.account;
+package org.mifos.mobilewallet.core.domain.usecase.account
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
-import org.mifos.mobilewallet.mifospay.network.GenericResponse;
-
-import javax.inject.Inject;
-
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import org.mifos.mobilewallet.core.base.UseCase
+import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
+import org.mifos.mobilewallet.mifospay.network.GenericResponse
+import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by ankur on 29/June/2018
  */
-
-public class BlockUnblockCommand extends
-        UseCase<BlockUnblockCommand.RequestValues, BlockUnblockCommand.ResponseValue> {
-
-    private final FineractRepository mFineractRepository;
-
-    @Inject
-    public BlockUnblockCommand(FineractRepository fineractRepository) {
-        mFineractRepository = fineractRepository;
-    }
-
-    @Override
-    protected void executeUseCase(final RequestValues requestValues) {
+class BlockUnblockCommand @Inject constructor(private val mFineractRepository: FineractRepository) :
+    UseCase<BlockUnblockCommand.RequestValues, BlockUnblockCommand.ResponseValue>() {
+    protected override fun executeUseCase(requestValues: RequestValues) {
         mFineractRepository.blockUnblockAccount(requestValues.accountId, requestValues.command)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<GenericResponse>() {
-                    @Override
-                    public void onCompleted() {
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(object : Subscriber<GenericResponse>() {
+                override fun onCompleted() {}
+                override fun onError(e: Throwable) {
+                    useCaseCallback.onError(
+                        "Error " + requestValues.command + "ing account"
+                    )
+                }
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getUseCaseCallback().onError(
-                                "Error " + requestValues.command + "ing account");
-                    }
-
-                    @Override
-                    public void onNext(GenericResponse genericResponse) {
-                        getUseCaseCallback().onSuccess(new ResponseValue());
-                    }
-                });
+                override fun onNext(genericResponse: GenericResponse) {
+                    useCaseCallback.onSuccess(ResponseValue)
+                }
+            })
     }
 
-    public static final class RequestValues implements UseCase.RequestValues {
-
-        private final long accountId;
-        private final String command;
-
-        public RequestValues(long accountId, String command) {
-            this.accountId = accountId;
-            this.command = command;
-        }
-    }
-
-    public static final class ResponseValue implements UseCase.ResponseValue {
-
-    }
+    data class RequestValues(val accountId: Long, val command: String) : UseCase.RequestValues
+    data object ResponseValue : UseCase.ResponseValue
 }

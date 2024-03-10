@@ -15,13 +15,11 @@ import javax.inject.Inject
  */
 class InvoicePresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mPreferencesHelper: PreferencesHelper
+    private val mPreferencesHelper: PreferencesHelper,
+    private val fetchInvoiceUseCase: FetchInvoice
 ) : InvoiceContract.InvoicePresenter {
     var mInvoiceView: InvoiceView? = null
 
-    @JvmField
-    @Inject
-    var fetchInvoiceUseCase: FetchInvoice? = null
     override fun attachView(baseView: BaseView<*>?) {
         mInvoiceView = baseView as InvoiceView?
         mInvoiceView!!.setPresenter(this)

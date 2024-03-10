@@ -1,10 +1,10 @@
 package org.mifos.mobilewallet.mifospay.settings.ui
 
-import MifosDialogBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.designsystem.component.MifosDialogBox
 import org.mifos.mobilewallet.mifospay.ui.utility.DialogState
 import org.mifos.mobilewallet.mifospay.ui.utility.DialogType
 

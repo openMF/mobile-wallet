@@ -3,23 +3,19 @@ package org.mifos.mobilewallet.mifospay.history
 import org.mifos.mobilewallet.core.base.TaskLooper
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseFactory
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.domain.Transaction
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions
 import org.mifos.mobilewallet.mifospay.history.HistoryContract.TransactionsHistoryAsync
 import javax.inject.Inject
 
-class TransactionsHistory @Inject constructor(private val mUsecaseHandler: UseCaseHandler) {
+class TransactionsHistory @Inject constructor(
+    private val mUsecaseHandler: UseCaseHandler,
+    private val fetchAccountTransactionsUseCase: FetchAccountTransactions,
+    private val mFetchAccountUseCase: FetchAccount
+) {
     var delegate: TransactionsHistoryAsync? = null
-
-    @JvmField
-    @Inject
-    var mFetchAccountUseCase: FetchAccount? = null
-
-    @JvmField
-    @Inject
-    var fetchAccountTransactionsUseCase: FetchAccountTransactions? = null
 
     @JvmField
     @Inject

@@ -1,101 +1,54 @@
-package org.mifos.mobilewallet.core.base;
+package org.mifos.mobilewallet.core.base
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
+import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
+import javax.inject.Inject
 
 /**
  * Created by ankur on 17/June/2018
  */
+class TaskLooper @Inject constructor(private val mUsecaseHandler: UseCaseHandler) {
+    var isFailed = false
+    var tasks: List<UseCase<*, *>>
+    private var tasksPending: Long = 0
+    private var listener: Listener? = null
 
-public class TaskLooper {
-
-    private final UseCaseHandler mUsecaseHandler;
-    boolean isFailed;
-    List<UseCase> tasks;
-    private long tasksPending;
-    private Listener listener;
-
-    @Inject
-    public TaskLooper(UseCaseHandler useCaseHandler) {
-        isFailed = false;
-        tasksPending = 0;
-        mUsecaseHandler = useCaseHandler;
-        tasks = new ArrayList<>();
+    init {
+        tasks = ArrayList()
     }
 
-    public <T extends UseCase.RequestValues, R extends UseCase.ResponseValue> void addTask(
-            final UseCase<T, R> useCase, T values, final TaskData taskData) {
-
-        tasksPending++;
-
-        mUsecaseHandler.execute(useCase, values, new UseCase.UseCaseCallback<R>() {
-            @Override
-            public void onSuccess(R response) {
-                if (isFailed) return;
-
-                listener.onTaskSuccess(taskData, response);
-
-                tasksPending--;
-
-                if (isCompleted()) {
-                    listener.onComplete();
+    fun <T : UseCase.RequestValues, R : UseCase.ResponseValue?> addTask(
+        useCase: UseCase<T, R>, values: T, taskData: TaskData
+    ) {
+        tasksPending++
+        mUsecaseHandler.execute(useCase, values, object : UseCaseCallback<R> {
+            override fun onSuccess(response: R) {
+                if (isFailed) return
+                listener!!.onTaskSuccess(taskData, response)
+                tasksPending--
+                if (isCompleted) {
+                    listener!!.onComplete()
                 }
             }
 
-            @Override
-            public void onError(String message) {
-                isFailed = true;
-                listener.onFailure(message);
+            override fun onError(message: String) {
+                isFailed = true
+                listener!!.onFailure(message)
             }
-        });
-
+        })
     }
 
-    private boolean isCompleted() {
-        return tasksPending == 0;
+    private val isCompleted: Boolean
+        private get() = tasksPending == 0L
+
+    fun listen(listener: Listener?) {
+        this.listener = listener
     }
 
-    public void listen(Listener listener) {
-        this.listener = listener;
+    interface Listener {
+        fun <R : UseCase.ResponseValue?> onTaskSuccess(taskData: TaskData, response: R)
+        fun onComplete()
+        fun onFailure(message: String?)
     }
 
-    public interface Listener {
-
-        <R extends UseCase.ResponseValue> void onTaskSuccess(TaskData taskData, R response);
-
-        void onComplete();
-
-        void onFailure(String message);
-    }
-
-    public static class TaskData {
-
-        private String taskName;
-        private int taskId;
-
-        public TaskData(String taskName, int taskId) {
-            this.taskName = taskName;
-            this.taskId = taskId;
-        }
-
-        public String getTaskName() {
-            return taskName;
-        }
-
-        public void setTaskName(String taskName) {
-            this.taskName = taskName;
-        }
-
-        public int getTaskId() {
-            return taskId;
-        }
-
-        public void setTaskId(int taskId) {
-            this.taskId = taskId;
-        }
-    }
+    class TaskData(var taskName: String, var taskId: Int)
 }
-
-

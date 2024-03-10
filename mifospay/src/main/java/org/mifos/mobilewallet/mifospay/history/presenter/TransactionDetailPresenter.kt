@@ -12,12 +12,13 @@ import javax.inject.Inject
 /**
  * Created by ankur on 06/June/2018
  */
-class TransactionDetailPresenter @Inject constructor(private val mUseCaseHandler: UseCaseHandler) :
-    HistoryContract.TransactionDetailPresenter {
-    @JvmField
-    @Inject
-    var mFetchAccountTransferUseCase: FetchAccountTransfer? = null
+class TransactionDetailPresenter @Inject constructor(
+    private val mUseCaseHandler: UseCaseHandler,
+    private val mFetchAccountTransferUseCase: FetchAccountTransfer
+) : HistoryContract.TransactionDetailPresenter {
+
     private var mTransactionDetailView: TransactionDetailView? = null
+
     override fun attachView(baseView: BaseView<*>?) {
         mTransactionDetailView = baseView as TransactionDetailView?
         mTransactionDetailView!!.setPresenter(this)

@@ -12,6 +12,8 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.activity.viewModels
+import androidx.compose.ui.platform.ComposeView
 import androidx.transition.TransitionManager
 import butterknife.BindView
 import butterknife.ButterKnife
@@ -22,7 +24,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mifos.mobile.passcode.utils.PassCodeConstants
 import dagger.hilt.android.AndroidEntryPoint
-import `in`.galaxyofandroid.spinerdialog.OnSpinerItemClick
 import `in`.galaxyofandroid.spinerdialog.SpinnerDialog
 import org.json.JSONObject
 import org.mifos.mobilewallet.mifospay.R
@@ -31,9 +32,11 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract.SignupView
+import org.mifos.mobilewallet.mifospay.registration.SignupScreen
+import org.mifos.mobilewallet.mifospay.registration.SignupViewModel
 import org.mifos.mobilewallet.mifospay.registration.presenter.SignupPresenter
+import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.utils.Constants
-import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import org.mifos.mobilewallet.mifospay.utils.FileUtils
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.ValidateUtil.isValidEmail
@@ -45,6 +48,8 @@ class SignupActivity : BaseActivity(), SignupView {
     @Inject
     var mPresenter: SignupPresenter? = null
     var mSignupPresenter: RegistrationContract.SignupPresenter? = null
+
+    val viewModel: SignupViewModel by viewModels()
 
     @JvmField
     @BindView(R.id.et_first_name)
@@ -122,6 +127,25 @@ class SignupActivity : BaseActivity(), SignupView {
         mPresenter!!.attachView(this)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         setToolbarTitle("Registration")
+
+        viewModel.initSignupData(
+            savingProductId = intent.getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0),
+            mobileNumber = intent.getStringExtra(Constants.MOBILE_NUMBER) ?: "",
+            countryName = intent.getStringExtra(Constants.COUNTRY) ?: "",
+            email = intent.getStringExtra(Constants.GOOGLE_EMAIL) ?: "",
+            firstName = intent.getStringExtra(Constants.GOOGLE_GIVEN_NAME) ?: "",
+            lastName = intent.getStringExtra(Constants.GOOGLE_FAMILY_NAME) ?: "",
+            businessName = intent.getStringExtra(Constants.GOOGLE_DISPLAY_NAME) ?: ""
+        )
+
+        findViewById<ComposeView>(R.id.signUpCompose)?.setContent {
+            MifosTheme {
+                SignupScreen {
+                    loginSuccess()
+                }
+            }
+        }
+
         mifosSavingProductId = intent.getIntExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, 0)
         if (mifosSavingProductId
             == org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
@@ -130,8 +154,7 @@ class SignupActivity : BaseActivity(), SignupView {
         } else {
             mEtBusinessShopLayout!!.visibility = View.GONE
         }
-        mobileNumber = intent.getStringExtra(Constants.MOBILE_NUMBER)
-        countryName = intent.getStringExtra(Constants.COUNTRY)
+
         val email = intent.getStringExtra(Constants.GOOGLE_EMAIL)
         val displayName = intent.getStringExtra(Constants.GOOGLE_DISPLAY_NAME)
         val firstName = intent.getStringExtra(Constants.GOOGLE_GIVEN_NAME)
@@ -158,8 +181,8 @@ class SignupActivity : BaseActivity(), SignupView {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun afterTextChanged(s: Editable) {}
         })
-        showProgressDialog(Constants.PLEASE_WAIT)
-        initSearchableStateSpinner()
+        // showProgressDialog(Constants.PLEASE_WAIT)
+        //initSearchableStateSpinner()
     }
 
     private fun initSearchableStateSpinner() {
@@ -280,10 +303,10 @@ class SignupActivity : BaseActivity(), SignupView {
     }
 
     override fun loginSuccess() {
-        hideProgressDialog()
         showToast("Registered successfully")
-        val intent = Intent(this@SignupActivity, PassCodeActivity::class.java)
-        intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
+        val intent = Intent(this@SignupActivity, PassCodeActivity::class.java).apply {
+            putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
+        }
         startActivity(intent)
         finish()
     }

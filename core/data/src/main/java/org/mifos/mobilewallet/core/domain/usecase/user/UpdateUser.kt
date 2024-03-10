@@ -1,73 +1,45 @@
-package org.mifos.mobilewallet.core.domain.usecase.user;
+package org.mifos.mobilewallet.core.domain.usecase.user
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
-import org.mifos.mobilewallet.core.utils.ErrorJsonMessageHelper;
-import org.mifos.mobilewallet.mifospay.network.GenericResponse;
-
-import javax.inject.Inject;
-
-import retrofit2.HttpException;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import org.mifos.mobilewallet.core.base.UseCase
+import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
+import org.mifos.mobilewallet.core.utils.ErrorJsonMessageHelper.getUserMessage
+import org.mifos.mobilewallet.mifospay.network.GenericResponse
+import retrofit2.HttpException
+import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by ankur on 25/June/2018
  */
-
-public class UpdateUser extends UseCase<UpdateUser.RequestValues, UpdateUser.ResponseValue> {
-
-    private final FineractRepository mFineractRepository;
-
-    @Inject
-    public UpdateUser(FineractRepository fineractRepository) {
-        mFineractRepository = fineractRepository;
-    }
-
-    @Override
-    protected void executeUseCase(RequestValues requestValues) {
+class UpdateUser @Inject constructor(
+    private val mFineractRepository: FineractRepository
+) : UseCase<UpdateUser.RequestValues, UpdateUser.ResponseValue?>() {
+    override fun executeUseCase(requestValues: RequestValues) {
         mFineractRepository.updateUser(requestValues.updateUserEntity, requestValues.userId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<GenericResponse>() {
-                    @Override
-                    public void onCompleted() {
-
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(object : Subscriber<GenericResponse>() {
+                override fun onCompleted() {}
+                override fun onError(e: Throwable) {
+                    var message = "Error"
+                    try {
+                        message = (e as HttpException).response()!!.errorBody()!!.string()
+                        message = getUserMessage(message)
+                    } catch (e1: Exception) {
+                        message = "Error"
                     }
+                    useCaseCallback.onError(message)
+                }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        String message = "Error";
-                        try {
-                            message = ((HttpException) e).response().errorBody().string();
-                            message = ErrorJsonMessageHelper.getUserMessage(message);
-                        } catch (Exception e1) {
-                            message = "Error";
-                        }
-                        getUseCaseCallback().onError(message);
-                    }
-
-                    @Override
-                    public void onNext(GenericResponse genericResponse) {
-                        getUseCaseCallback().onSuccess(new ResponseValue());
-                    }
-                });
+                override fun onNext(genericResponse: GenericResponse?) {
+                    useCaseCallback.onSuccess(ResponseValue())
+                }
+            })
     }
 
-    public static final class RequestValues implements UseCase.RequestValues {
+    class RequestValues(val updateUserEntity: Any, val userId: Int) : UseCase.RequestValues
 
-        private final Object updateUserEntity;
-        private final int userId;
-
-        public RequestValues(Object updateUserEntity, int userId) {
-            this.updateUserEntity = updateUserEntity;
-            this.userId = userId;
-        }
-    }
-
-    public static final class ResponseValue implements UseCase.ResponseValue {
-
-    }
-
+    class ResponseValue : UseCase.ResponseValue
 }

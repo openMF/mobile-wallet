@@ -15,11 +15,10 @@ import javax.inject.Inject
  */
 class KYCDescriptionPresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mLocalRepository: LocalRepository
+    private val mLocalRepository: LocalRepository,
+    private val fetchKYCLevel1DetailsUseCase: FetchKYCLevel1Details
 ) : KYCContract.KYCDescriptionPresenter {
-    @JvmField
-    @Inject
-    var fetchKYCLevel1DetailsUseCase: FetchKYCLevel1Details? = null
+
     private var mKYCDescriptionView: KYCDescriptionView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mKYCDescriptionView = baseView as KYCDescriptionView?
@@ -28,12 +27,12 @@ class KYCDescriptionPresenter @Inject constructor(
 
     override fun fetchCurrentLevel() {
         mKYCDescriptionView!!.showFetchingProcess()
-        fetchKYCLevel1DetailsUseCase!!.requestValues =
+        fetchKYCLevel1DetailsUseCase!!.walletRequestValues =
             FetchKYCLevel1Details.RequestValues(mLocalRepository.clientDetails.clientId.toInt())
-        val requestValues = fetchKYCLevel1DetailsUseCase!!.requestValues
+        val requestValues = fetchKYCLevel1DetailsUseCase!!.walletRequestValues
         mUseCaseHandler.execute(fetchKYCLevel1DetailsUseCase, requestValues,
-            object : UseCaseCallback<FetchKYCLevel1Details.ResponseValue?> {
-                override fun onSuccess(response: FetchKYCLevel1Details.ResponseValue?) {
+            object : UseCaseCallback<FetchKYCLevel1Details.ResponseValue> {
+                override fun onSuccess(response: FetchKYCLevel1Details.ResponseValue) {
                     if (response?.kycLevel1DetailsList?.size == 1) {
                         mKYCDescriptionView!!.onFetchLevelSuccess(
                             response.kycLevel1DetailsList[0]

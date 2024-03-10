@@ -1,59 +1,50 @@
-package org.mifos.mobilewallet.core.base;
+package org.mifos.mobilewallet.core.base
 
-import android.os.Handler;
-
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import android.os.Handler
+import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 
 /**
- * Executes asynchronous tasks using a {@link ThreadPoolExecutor}.
- * <p>
- * See also {@link Executors} for a list of factory methods to create common
- * {@link java.util.concurrent.ExecutorService}s for different scenarios.
+ * Executes asynchronous tasks using a [ThreadPoolExecutor].
+ *
+ *
+ * See also [Executors] for a list of factory methods to create common
+ * [java.util.concurrent.ExecutorService]s for different scenarios.
  */
-public class UseCaseThreadPoolScheduler implements UseCaseScheduler {
+class UseCaseThreadPoolScheduler : UseCaseScheduler {
 
-    public static final int POOL_SIZE = 2;
-    public static final int MAX_POOL_SIZE = 40;
-    public static final int TIMEOUT = 60;
-    private final Handler mHandler = new Handler();
-    ThreadPoolExecutor mThreadPoolExecutor;
+    private val mHandler = Handler()
+    var mThreadPoolExecutor: ThreadPoolExecutor
 
-    public UseCaseThreadPoolScheduler() {
-        mThreadPoolExecutor = new ThreadPoolExecutor(POOL_SIZE, MAX_POOL_SIZE, TIMEOUT,
-                TimeUnit.SECONDS, new ThreadPoolQueue(MAX_POOL_SIZE));
+    init {
+        mThreadPoolExecutor = ThreadPoolExecutor(
+            POOL_SIZE, MAX_POOL_SIZE, TIMEOUT.toLong(),
+            TimeUnit.SECONDS, ThreadPoolQueue(MAX_POOL_SIZE)
+        )
     }
 
-    @Override
-    public void execute(Runnable runnable) {
-        mThreadPoolExecutor.execute(runnable);
+    override fun execute(runnable: Runnable?) {
+        mThreadPoolExecutor.execute(runnable)
     }
 
-
-    @Override
-    public <V extends UseCase.ResponseValue> void notifyResponse(final V response,
-            final UseCase.UseCaseCallback<V>
-                    useCaseCallback) {
-
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                useCaseCallback.onSuccess(response);
-            }
-        });
+    override fun <V : UseCase.ResponseValue?> notifyResponse(
+        response: V,
+        useCaseCallback: UseCaseCallback<V>?
+    ) {
+        mHandler.post { useCaseCallback!!.onSuccess(response) }
     }
 
-    @Override
-    public <V extends UseCase.ResponseValue> void onError(final String message,
-            final UseCase.UseCaseCallback<V> useCaseCallback) {
-
-        mHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                useCaseCallback.onError(message);
-            }
-        });
+    override fun <V : UseCase.ResponseValue?> onError(
+        message: String?,
+        useCaseCallback: UseCaseCallback<V>?
+    ) {
+        mHandler.post { useCaseCallback!!.onError(message!!) }
     }
 
+    companion object {
+        const val POOL_SIZE = 2
+        const val MAX_POOL_SIZE = 40
+        const val TIMEOUT = 60
+    }
 }

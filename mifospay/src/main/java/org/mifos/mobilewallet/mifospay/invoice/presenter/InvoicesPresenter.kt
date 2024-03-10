@@ -17,11 +17,10 @@ import javax.inject.Inject
  */
 class InvoicesPresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mPreferencesHelper: PreferencesHelper
+    private val mPreferencesHelper: PreferencesHelper,
+    private val fetchInvoicesUseCase: FetchInvoices
 ) : InvoiceContract.InvoicesPresenter {
-    @JvmField
-    @Inject
-    var fetchInvoicesUseCase: FetchInvoices? = null
+
     private var mInvoicesView: InvoicesView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mInvoicesView = baseView as InvoicesView?
@@ -32,8 +31,8 @@ class InvoicesPresenter @Inject constructor(
         mInvoicesView!!.showFetchingProcess()
         mUseCaseHandler.execute(fetchInvoicesUseCase,
             FetchInvoices.RequestValues(mPreferencesHelper.clientId.toString() + ""),
-            object : UseCaseCallback<FetchInvoices.ResponseValue?> {
-                override fun onSuccess(response: FetchInvoices.ResponseValue?) {
+            object : UseCaseCallback<FetchInvoices.ResponseValue> {
+                override fun onSuccess(response: FetchInvoices.ResponseValue) {
                     mInvoicesView!!.showInvoices(response?.invoiceList)
                 }
 

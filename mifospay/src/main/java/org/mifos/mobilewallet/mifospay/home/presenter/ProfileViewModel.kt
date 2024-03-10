@@ -37,8 +37,8 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             mUsecaseHandler.execute(fetchClientImageUseCase,
                 FetchClientImage.RequestValues(localRepository.clientDetails.clientId),
-                object : UseCase.UseCaseCallback<FetchClientImage.ResponseValue?> {
-                    override fun onSuccess(response: FetchClientImage.ResponseValue?) {
+                object : UseCase.UseCaseCallback<FetchClientImage.ResponseValue> {
+                    override fun onSuccess(response: FetchClientImage.ResponseValue) {
                         val bitmap = convertResponseToBitmap(response?.responseBody)
                         val currentState = _profileState.value as ProfileUiState.Success
                         _profileState.value = currentState.copy(bitmapImage = bitmap)

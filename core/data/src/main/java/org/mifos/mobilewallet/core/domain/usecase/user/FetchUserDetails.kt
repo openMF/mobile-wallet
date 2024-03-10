@@ -1,71 +1,34 @@
-package org.mifos.mobilewallet.core.domain.usecase.user;
+package org.mifos.mobilewallet.core.domain.usecase.user
 
-import org.mifos.mobilewallet.core.base.UseCase;
-import com.mifos.mobilewallet.model.entity.UserWithRole;
-import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
-
-import javax.inject.Inject;
-
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import com.mifos.mobilewallet.model.entity.UserWithRole
+import org.mifos.mobilewallet.core.base.UseCase
+import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
+import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import javax.inject.Inject
 
 /**
  * Created by ankur on 09/July/2018
  */
-
-public class FetchUserDetails extends
-        UseCase<FetchUserDetails.RequestValues, FetchUserDetails.ResponseValue> {
-
-    private final FineractRepository mFineractRepository;
-
-    @Inject
-    public FetchUserDetails(FineractRepository fineractRepository) {
-        mFineractRepository = fineractRepository;
-    }
-
-    @Override
-    protected void executeUseCase(RequestValues requestValues) {
-
+class FetchUserDetails @Inject constructor(private val mFineractRepository: FineractRepository) :
+    UseCase<FetchUserDetails.RequestValues, FetchUserDetails.ResponseValue>() {
+    override fun executeUseCase(requestValues: RequestValues) {
         mFineractRepository.getUser(requestValues.userId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Subscriber<UserWithRole>() {
-                    @Override
-                    public void onCompleted() {
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(object : Subscriber<UserWithRole>() {
+                override fun onCompleted() {}
+                override fun onError(e: Throwable) {
+                    e.message?.let { useCaseCallback.onError(it) }
+                }
 
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        getUseCaseCallback().onError(e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(UserWithRole userWithRole) {
-                        getUseCaseCallback().onSuccess(new ResponseValue(userWithRole));
-                    }
-                });
+                override fun onNext(userWithRole: UserWithRole) {
+                    useCaseCallback.onSuccess(ResponseValue(userWithRole))
+                }
+            })
     }
 
-    public static final class RequestValues implements UseCase.RequestValues {
-        private final long userId;
-
-        public RequestValues(long userId) {
-            this.userId = userId;
-        }
-    }
-
-    public static final class ResponseValue implements UseCase.ResponseValue {
-
-        private final UserWithRole mUserWithRole;
-
-        public ResponseValue(UserWithRole userWithRole) {
-            mUserWithRole = userWithRole;
-        }
-
-        public UserWithRole getUserWithRole() {
-            return mUserWithRole;
-        }
-    }
+    class RequestValues(val userId: Long) : UseCase.RequestValues
+    class ResponseValue(val userWithRole: UserWithRole) : UseCase.ResponseValue
 }

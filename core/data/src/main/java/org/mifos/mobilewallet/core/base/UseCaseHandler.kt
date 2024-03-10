@@ -1,69 +1,54 @@
-package org.mifos.mobilewallet.core.base;
+package org.mifos.mobilewallet.core.base
 
+import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 
 /**
- * Runs {@link UseCase}s using a {@link UseCaseScheduler}.
+ * Runs [UseCase]s using a [UseCaseScheduler].
  */
-public class UseCaseHandler {
-
-    private static UseCaseHandler instance;
-
-    private final UseCaseScheduler mUseCaseScheduler;
-
-    public UseCaseHandler(UseCaseScheduler useCaseScheduler) {
-        mUseCaseScheduler = useCaseScheduler;
+class UseCaseHandler(private val mUseCaseScheduler: UseCaseScheduler) {
+    fun <T : UseCase.RequestValues, R : UseCase.ResponseValue?> execute(
+        useCase: UseCase<T, R>, values: T?, callback: UseCaseCallback<R>
+    ) {
+        values?.let {  useCase.walletRequestValues = values }
+        useCase.useCaseCallback = UiCallbackWrapper(callback, this)
+        mUseCaseScheduler.execute { useCase.run() }
     }
 
-    public static UseCaseHandler getInstance() {
-        if (instance == null) {
-            instance = new UseCaseHandler(new UseCaseThreadPoolScheduler());
+    fun <V : UseCase.ResponseValue?> notifyResponse(
+        response: V,
+        useCaseCallback: UseCaseCallback<V>?
+    ) {
+        mUseCaseScheduler.notifyResponse(response, useCaseCallback)
+    }
+
+    private fun <V : UseCase.ResponseValue?> notifyError(
+        message: String?,
+        useCaseCallback: UseCaseCallback<V>?
+    ) {
+        mUseCaseScheduler.onError(message, useCaseCallback)
+    }
+
+    private class UiCallbackWrapper<V : UseCase.ResponseValue?>(
+        private val mCallback: UseCaseCallback<V>?,
+        private val mUseCaseHandler: UseCaseHandler
+    ) : UseCaseCallback<V> {
+        override fun onSuccess(response: V) {
+            mUseCaseHandler.notifyResponse(response, mCallback)
         }
-        return instance;
+
+        override fun onError(message: String) {
+            mUseCaseHandler.notifyError(message, mCallback)
+        }
     }
 
-    public <T extends UseCase.RequestValues, R extends UseCase.ResponseValue> void execute(
-            final UseCase<T, R> useCase, T values, UseCase.UseCaseCallback<R> callback) {
-        useCase.setRequestValues(values);
-        useCase.setUseCaseCallback(new UiCallbackWrapper(callback, this));
-
-        mUseCaseScheduler.execute(new Runnable() {
-            @Override
-            public void run() {
-
-                useCase.run();
+    companion object {
+        var instance: UseCaseHandler? = null
+            get() {
+                if (field == null) {
+                    field = UseCaseHandler(UseCaseThreadPoolScheduler())
+                }
+                return field
             }
-        });
-    }
-
-    public <V extends UseCase.ResponseValue> void notifyResponse(final V response,
-            final UseCase.UseCaseCallback<V> useCaseCallback) {
-        mUseCaseScheduler.notifyResponse(response, useCaseCallback);
-    }
-
-    private <V extends UseCase.ResponseValue> void notifyError(final String message,
-            final UseCase.UseCaseCallback<V> useCaseCallback) {
-        mUseCaseScheduler.onError(message, useCaseCallback);
-    }
-
-    private static final class UiCallbackWrapper<V extends UseCase.ResponseValue> implements
-            UseCase.UseCaseCallback<V> {
-        private final UseCase.UseCaseCallback<V> mCallback;
-        private final UseCaseHandler mUseCaseHandler;
-
-        public UiCallbackWrapper(UseCase.UseCaseCallback<V> callback,
-                UseCaseHandler useCaseHandler) {
-            mCallback = callback;
-            mUseCaseHandler = useCaseHandler;
-        }
-
-        @Override
-        public void onSuccess(V response) {
-            mUseCaseHandler.notifyResponse(response, mCallback);
-        }
-
-        @Override
-        public void onError(String message) {
-            mUseCaseHandler.notifyError(message, mCallback);
-        }
+            private set
     }
 }
