@@ -301,6 +301,11 @@
     <string name="amount_header">Amount:</string>
     <string name="deleted_successfully">Deleted Successfully</string>
     <string name="error_kyc_details">Couldn\'t fetch KYC details. Please try again.</string>
+    <string name="loading">Loading</string>
+    <string name="add_cards">Please Add Cards</string>
+    <string name="close">Close</string>
+    <string name="edit_clicked">Edit Clicked</string>
+    <string name="card_number">Card Number: </string>
 
     <!-- dynamically formatted strings-->
     <string name="name_client_name">Name: %1$s</string>
