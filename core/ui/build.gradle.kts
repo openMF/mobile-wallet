@@ -36,6 +36,8 @@ android {
 apply(from = "${project.rootDir}/config/quality/quality.gradle")
 
 dependencies {
+    implementation(projects.core.designsystem)
+    implementation(projects.core.model)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

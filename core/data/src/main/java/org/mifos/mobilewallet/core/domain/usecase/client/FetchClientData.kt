@@ -20,7 +20,7 @@ class FetchClientData @Inject constructor(private val fineractRepository: Finera
     @Inject
     lateinit var clientDetailsMapper: ClientDetailsMapper
 
-    override fun executeUseCase(requestValues: RequestValues?) {
+    override fun executeUseCase(requestValues: RequestValues) {
         if (requestValues != null) {
             fineractRepository.getSelfClientDetails(requestValues.clientid)
                 .observeOn(AndroidSchedulers.mainThread())

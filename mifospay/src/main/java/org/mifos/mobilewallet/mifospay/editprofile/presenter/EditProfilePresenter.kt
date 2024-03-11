@@ -1,8 +1,8 @@
 package org.mifos.mobilewallet.mifospay.editprofile.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.domain.user.UpdateUserEntityEmail
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.client.UpdateClient
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
@@ -18,19 +18,12 @@ import javax.inject.Inject
  */
 class EditProfilePresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mPreferencesHelper: PreferencesHelper
+    private val mPreferencesHelper: PreferencesHelper,
+    private val updateUserUseCase: UpdateUser,
+    private val updateClientUseCase: UpdateClient,
+    private val authenticateUserUseCase: AuthenticateUser
 ) : EditProfileContract.EditProfilePresenter {
-    @JvmField
-    @Inject
-    var updateUserUseCase: UpdateUser? = null
 
-    @JvmField
-    @Inject
-    var updateClientUseCase: UpdateClient? = null
-
-    @JvmField
-    @Inject
-    var authenticateUserUseCase: AuthenticateUser? = null
     private var mEditProfileView: EditProfileView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mEditProfileView = baseView as EditProfileView?
@@ -122,8 +115,8 @@ class EditProfilePresenter @Inject constructor(
                 ),
                 mPreferencesHelper.clientId.toInt().toLong()
             ),
-            object : UseCaseCallback<UpdateClient.ResponseValue?> {
-                override fun onSuccess(response: UpdateClient.ResponseValue?) {
+            object : UseCaseCallback<UpdateClient.ResponseValue> {
+                override fun onSuccess(response: UpdateClient.ResponseValue) {
                     mPreferencesHelper.saveMobile(fullNumber)
                     showMobielIfNotEmpty()
                     mEditProfileView!!.stopProgressBar()

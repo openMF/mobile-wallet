@@ -3,10 +3,10 @@ package org.mifos.mobilewallet.mifospay.history.presenter
 import org.mifos.mobilewallet.core.base.TaskLooper
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseFactory
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.domain.Account
 import com.mifos.mobilewallet.model.domain.Transaction
 import com.mifos.mobilewallet.model.domain.TransactionType
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions
 import org.mifos.mobilewallet.mifospay.R
@@ -21,15 +21,10 @@ import javax.inject.Inject
 
 class HistoryPresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mLocalRepository: LocalRepository
+    private val mLocalRepository: LocalRepository,
+    private val mFetchAccountUseCase: FetchAccount,
+    private val fetchAccountTransactionsUseCase: FetchAccountTransactions
 ) : TransactionsHistoryPresenter, TransactionsHistoryAsync {
-    @JvmField
-    @Inject
-    var mFetchAccountUseCase: FetchAccount? = null
-
-    @JvmField
-    @Inject
-    var fetchAccountTransactionsUseCase: FetchAccountTransactions? = null
 
     @JvmField
     @Inject
@@ -55,8 +50,8 @@ class HistoryPresenter @Inject constructor(
         mHistoryView!!.showHistoryFetchingProgress()
         mUseCaseHandler.execute(mFetchAccountUseCase,
             FetchAccount.RequestValues(mLocalRepository.clientDetails.clientId),
-            object : UseCaseCallback<FetchAccount.ResponseValue?> {
-                override fun onSuccess(response: FetchAccount.ResponseValue?) {
+            object : UseCaseCallback<FetchAccount.ResponseValue> {
+                override fun onSuccess(response: FetchAccount.ResponseValue) {
                     mAccount = response?.account
                     response?.account?.id?.let {
                         mTransactionsHistory

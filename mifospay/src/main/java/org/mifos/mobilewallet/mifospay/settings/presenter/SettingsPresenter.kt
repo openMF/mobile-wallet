@@ -14,13 +14,11 @@ import javax.inject.Inject
  */
 class SettingsPresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mLocalRepository: LocalRepository
+    private val mLocalRepository: LocalRepository,
+    private val blockUnblockCommandUseCase: BlockUnblockCommand
 ) : SettingsContract.SettingsPresenter {
     var mSettingsView: SettingsView? = null
 
-    @JvmField
-    @Inject
-    var blockUnblockCommandUseCase: BlockUnblockCommand? = null
     override fun attachView(baseView: BaseView<*>?) {
         mSettingsView = baseView as SettingsView?
         mSettingsView!!.setPresenter(this)
@@ -39,8 +37,8 @@ class SettingsPresenter @Inject constructor(
         mUseCaseHandler.execute(blockUnblockCommandUseCase, BlockUnblockCommand.RequestValues(
             mLocalRepository.clientDetails.clientId, "block"
         ),
-            object : UseCaseCallback<BlockUnblockCommand.ResponseValue?> {
-                override fun onSuccess(response: BlockUnblockCommand.ResponseValue?) {}
+            object : UseCaseCallback<BlockUnblockCommand.ResponseValue> {
+                override fun onSuccess(response: BlockUnblockCommand.ResponseValue) {}
                 override fun onError(message: String) {}
             })
     }
