@@ -1,9 +1,12 @@
 package org.mifos.mobilewallet.mifospay.savedcards.ui
 
 
+import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,137 +43,210 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mifos.mobilewallet.model.entity.savedcards.Card
-import org.mifos.mobilewallet.mifospay.MifosPayApp
+import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosOverlayLoadingWheel
 import org.mifos.mobilewallet.mifospay.designsystem.theme.MifosTheme
+import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsScreenViewModel
 import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsUiState
-import org.mifos.mobilewallet.mifospay.utils.Constants
-import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardsScreen(
+    viewModel: CardsScreenViewModel = hiltViewModel(),
+    onAddBtn: () -> Unit
+) {
+    val context = LocalContext.current
+    val cardState by viewModel.cardState.collectAsState()
+
+    CardsScreenContent(
+        context = context,
+        cardState = cardState,
+        onAddBtn = onAddBtn
+    )
+}
+
+@Composable
+fun CardsScreenContent(
+    context: Context,
     cardState: CardsUiState,
     onAddBtn:() -> Unit,
-    onError:() ->Unit
 ){
-    var query by remember { mutableStateOf("") }
-    var filteredCards by rememberSaveable {
-        mutableStateOf(emptyList<Card>())
-    }
-    var active by remember { mutableStateOf(false) }
-
     Column(
         modifier = Modifier
             .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
     ) {
         when(cardState){
-            CardsUiState.LoadingState->{
-                MifosOverlayLoadingWheel(contentDesc = "LoadingWheel")
+            CardsUiState.Loading->{
+                MifosOverlayLoadingWheel(contentDesc = stringResource(R.string.loading))
             }
-            is CardsUiState.EmptyUiState->{
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(text = Constants.ADD_CARD)
-                        addChip(onAddBtn)
-                    }
-                }
+            is CardsUiState.Empty->{
+                EmptyCardsScreen(onAddBtn)
             }
-            is CardsUiState.ErrorUiState-> {
-                onError.invoke()
+            is CardsUiState.Error -> {
+                PlaceholderScreen()
             }
-            is CardsUiState.WorkingUiState -> {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    SearchBar(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 8.dp, horizontal = 0.dp),
-                        query = query,
-                        onQueryChange = { q ->
-                            val data = filteredCards.filter {
-                                it.cardNumber.lowercase().contains(q.lowercase())
-                                it.firstName.lowercase().contains(q.lowercase())
-                                it.lastName.lowercase().contains(q.lowercase())
-                                it.cvv.lowercase().contains(q.lowercase())
-                                it.expiryDate.lowercase().contains(q.lowercase())
-                            }
-                            filteredCards= data
-                            query = q
-                        },
-                        onSearch = {},
-                        active = false,
-                        onActiveChange = {  },
-                        placeholder = {
-                            Text(text = Constants.SEARCH)
-                        },
-                        leadingIcon = {
-                            Icon(imageVector = Icons.Filled.Search, contentDescription = Constants.SEARCH)
-                        },
-                        trailingIcon = {
-                                    IconButton(
-                                        onClick = { if (query.isNotEmpty()) query = "" else active = false }
-                                    ) {
-                                        Icon(imageVector = Icons.Filled.Close, contentDescription = Constants.CLOSE)
-                                    }
-                        }
-                    ) {}
-                }
-
-                Box(
-                    modifier = Modifier
-                        .width(362.dp)
-                        .height(500.dp)
-                        .padding(0.dp)
-                ) {
-                    LazyColumn(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    ) {
-                        if(filteredCards.isEmpty() || query.isEmpty()){
-                            filteredCards = sampleCardies.toMutableList()
-                        }else{
-                            filteredCards.map { it.cardNumber.lowercase() }.contains(query.lowercase())
-                        }
-                        items(filteredCards) { card ->
-                            CardItem(card = card) { menuItem ->
-                                // Handle menu item click here
-                                when (menuItem) {
-                                    "edit_card" -> {
-                                        editCardAction()
-                                    }
-                                    "delete_card" -> {
-                                        //Todo:Handle delete card action
-                                    }
-                                    "cancel" -> {
-
-                                    }
-                                }
-                            }
-                        }
-
-                    }
-                }
-                Spacer(modifier = Modifier.height(9.dp))
-                addChip(onAddBtn)
+            is CardsUiState.CreditCardForm -> {
+                WorkingCardsScreen(context,cardState,onAddBtn)
             }
             else -> {}
+        }
+    }
+}
+
+
+
+@Composable
+fun EmptyCardsScreen(onAddBtn: () -> Unit){
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(text = stringResource(R.string.add_cards))
+            addChip(onAddBtn)
+        }
+    }
+}
+
+
+
+@Composable
+fun WorkingCardsScreen(
+    context:Context,
+    cardState: CardsUiState.CreditCardForm,
+    onAddBtn: () -> Unit
+) {
+    val context = context
+    val editMessage = stringResource(R.string.add_cards)
+    var query by remember { mutableStateOf("") }
+    var filteredCards by rememberSaveable {
+        mutableStateOf(emptyList<Card>())
+    }
+    var active by remember { mutableStateOf(false) }
+
+    Box(
+        modifier = Modifier
+            .width(362.dp)
+            .height(600.dp)
+            .padding(0.dp)
+    ) {
+        Column {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                SearchScreen(
+                    query = query,
+                    onQueryChange = { q ->
+                        val data = filteredCards.filter {
+                            it.cardNumber.lowercase().contains(q.lowercase())
+                            it.firstName.lowercase().contains(q.lowercase())
+                            it.lastName.lowercase().contains(q.lowercase())
+                            it.cvv.lowercase().contains(q.lowercase())
+                            it.expiryDate.lowercase().contains(q.lowercase())
+                        }
+                        filteredCards = data
+                        query = q
+                    },
+                    onSearch = {},
+                    onActiveChange = {},
+                    onClearQuery = { if (query.isNotEmpty()) query = "" else active = false }
+                )
+            }
+
+            if (filteredCards.isEmpty() || query.isEmpty()) {
+                filteredCards = cardState.cards.filterNotNull()
+            } else {
+                filteredCards.map { it.cardNumber.lowercase() }.contains(query.lowercase())
+            }
+
+            CardsList(
+                cards = filteredCards,
+                onMenuItemClick = { menuItem ->
+                    when (menuItem) {
+                        CardMenuAction.EDIT.toString() -> {
+                            editCardAction(context,editMessage)
+                        }
+                        CardMenuAction.DELETE.toString() -> {
+                            // Todo: Handle delete card action
+                        }
+                        CardMenuAction.CANCEL.toString() -> {
+                            // No action needed
+                        }
+                    }
+                }
+            )
+        }
+    }
+    Spacer(modifier = Modifier.height(9.dp))
+    addChip(onAddBtn)
+}
+
+enum class CardMenuAction {
+    EDIT, DELETE, CANCEL
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun SearchScreen(
+    query: String,
+    onQueryChange: (String) -> Unit,
+    onSearch: (String) -> Unit,
+    onActiveChange: (Boolean) -> Unit,
+    onClearQuery: () -> Unit
+) {
+    SearchBar(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp, horizontal = 0.dp),
+        query = query,
+        onQueryChange = onQueryChange,
+        onSearch = onSearch,
+        active = false,
+        onActiveChange = onActiveChange,
+        placeholder = {
+            Text(text = stringResource(R.string.search))
+        },
+        leadingIcon = {
+            Icon(imageVector = Icons.Filled.Search, contentDescription = stringResource(R.string.search))
+        },
+        trailingIcon = {
+            IconButton(
+                onClick = onClearQuery
+            ) {
+                Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(R.string.close))
+            }
+        }
+    ) {}
+}
+
+@Composable
+fun CardsList(
+    cards: List<Card>,
+    onMenuItemClick: (String) -> Unit
+) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        items(cards) { card ->
+            CardItem(card = card) { menuItem ->
+                onMenuItemClick(menuItem)
+            }
         }
     }
 }
@@ -179,10 +256,9 @@ fun addChip(
     onAddBtn: () -> Unit
 ){
     AssistChip(
-
         onClick = { onAddBtn.invoke() },
         label = { Text(
-            Constants.ADD_CARD,
+            stringResource(R.string.add_cards),
             style = MaterialTheme.typography.bodyLarge.copy(
                 fontWeight = FontWeight.Bold,
                 color = Color.White
@@ -192,7 +268,7 @@ fun addChip(
         leadingIcon = {
             Icon(
                 Icons.Filled.Add,
-                contentDescription = Constants.ADD_CARD,
+                contentDescription = stringResource(R.string.add_cards),
                 modifier = Modifier.size(16.dp),
                 tint = Color.White
             )
@@ -203,9 +279,8 @@ fun addChip(
     )
 }
 
-//Todo: Navigate to AddCardDialog after migration
-fun editCardAction(){
-    Toast.makeText(MifosPayApp.context, Constants.EDIT_CLICK, Toast.LENGTH_SHORT).show()
+fun editCardAction(context: Context, editMessage: String){
+    Toast.makeText(context, editMessage, Toast.LENGTH_SHORT).show()
 }
 
 
@@ -238,7 +313,7 @@ fun CardItem(card: Card?, onMenuItemClick: (String) -> Unit) {
                     }
                     Spacer(modifier = Modifier.height(6.dp))
                     if (card != null) {
-                        Text(text = "${Constants.CARD_NU} ${card.cardNumber}", style = MaterialTheme.typography.bodyMedium)
+                        Text(text = "${stringResource(R.string.card_number)} ${card.cardNumber}", style = MaterialTheme.typography.bodyMedium)
                     }
                     Spacer(modifier = Modifier.height(8.dp))
                     if (card != null) {
@@ -252,22 +327,22 @@ fun CardItem(card: Card?, onMenuItemClick: (String) -> Unit) {
                     modifier = Modifier.background(MaterialTheme.colorScheme.background)
                 ) {
                     DropdownMenuItem(onClick = {
-                        onMenuItemClick("edit_card")
+                        onMenuItemClick(CardMenuAction.EDIT.toString())
                         expanded = false
                     }) {
-                        Text(Constants.EDIT_C)
+                        Text(stringResource(R.string.edit_card))
                     }
                     DropdownMenuItem(onClick = {
-                        onMenuItemClick("delete_card")
+                        onMenuItemClick(CardMenuAction.DELETE.toString())
                         expanded = false
                     }) {
-                        Text(Constants.DELETE_C)
+                        Text(stringResource(R.string.delete_card))
                     }
                     DropdownMenuItem(onClick = {
-                        onMenuItemClick("cancel")
+                        onMenuItemClick(CardMenuAction.CANCEL.toString())
                         expanded = false
                     }) {
-                        Text(Constants.CANCEL_C)
+                        Text(stringResource(R.string.cancel))
                     }
                 }
             }
@@ -275,18 +350,87 @@ fun CardItem(card: Card?, onMenuItemClick: (String) -> Unit) {
     }
 }
 
+@Composable
+fun PlaceholderScreen() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Image(
+                painter = painterResource(id = R.drawable.ic_error_state),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(48.dp)
+                    .scale(1.5f)
+            )
 
-//Todo:Remove SampleCardies after successful retrivation of cards from repo
-val sampleCardies = List(7) { index ->
-    Card(cardNumber = "**** **** **** ${index + 1000}", cvv= "${index + 100}", expiryDate = "$index /0$index/202$index",
-        firstName="ABC ",lastName=" XYZ",id = index)
+            Spacer(modifier = Modifier.height(36.dp))
+
+            Text(
+                text = stringResource(id = R.string.error_oops),
+                style = MaterialTheme.typography.bodyMedium
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = stringResource(id = R.string.unexpected_error_subtitle),
+                style = MaterialTheme.typography.bodyMedium,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+        }
+    }
 }
 
 
 @Preview(showBackground = true)
 @Composable
-fun CardsScreenPreview(){
+private fun CardsScreenPreview() {
     MifosTheme {
-        CardsScreen(hiltViewModel(),{},{})
+        CardsScreen(
+            viewModel = hiltViewModel<CardsScreenViewModel>(),
+            onAddBtn = {}
+        )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CardsScreenPreviewWithSampleData() {
+    val context = LocalContext.current
+    MifosTheme {
+            WorkingCardsScreen(
+                context = context,
+                cardState = CardsUiState.CreditCardForm(sampleCards),
+                onAddBtn = {}
+            )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ErrorScreenPreview() {
+        PlaceholderScreen()
+}
+
+ val sampleCards = List(7) { index ->
+    Card(
+        cardNumber = "**** **** **** ${index + 1000}",
+        cvv = "${index + 100}",
+        expiryDate = "$index /0$index/202$index",
+        firstName = "ABC",
+        lastName = " XYZ",
+        id = index
+    )
 }
