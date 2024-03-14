@@ -59,7 +59,7 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     }
 
     val fullName: String?
-        get() = getString(NAME, "")
+        get() = getString(NAME, " ")
 
     fun saveUsername(name: String?) {
         putString(USERNAME, name)
