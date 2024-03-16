@@ -1,11 +1,16 @@
 package org.mifos.mobilewallet.mifospay.savedcards.presenter
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mifos.mobilewallet.model.entity.savedcards.Card
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.AddCard
@@ -21,17 +26,48 @@ import javax.inject.Inject
 class CardsScreenViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
-    private val addCardUseCase : AddCard,
-    private val fetchSavedCardsUseCase : FetchSavedCards,
+    private val addCardUseCase: AddCard,
+    private val fetchSavedCardsUseCase: FetchSavedCards,
     private val editCardUseCase: EditCard,
     private val deleteCardUseCase: DeleteCard
-): ViewModel() {
+) : ViewModel() {
+
+    private val _searchQuery = MutableStateFlow("")
+    private val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     private val _cardState = MutableStateFlow<CardsUiState>(CardsUiState.Loading)
     val cardState: StateFlow<CardsUiState> = _cardState.asStateFlow()
 
     init {
         fetchSavedCards()
+    }
+
+    val cardListUiState: StateFlow<CardsUiState> = searchQuery
+        .map { q ->
+            when (_cardState.value) {
+                is CardsUiState.CreditCardForm -> {
+                    val cardList = (cardState.value as CardsUiState.CreditCardForm).cards
+                    val filterCards = cardList.filter {
+                        it.cardNumber.lowercase().contains(q.lowercase())
+                        it.firstName.lowercase().contains(q.lowercase())
+                        it.lastName.lowercase().contains(q.lowercase())
+                        it.cvv.lowercase().contains(q.lowercase())
+                        it.expiryDate.lowercase().contains(q.lowercase())
+                    }
+                    CardsUiState.CreditCardForm(filterCards)
+                }
+
+                else -> CardsUiState.CreditCardForm(arrayListOf())
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5_000),
+            initialValue = CardsUiState.CreditCardForm(arrayListOf())
+        )
+
+    fun updateSearchQuery(query: String) {
+        _searchQuery.update { query }
     }
 
     fun fetchSavedCards() {
@@ -42,7 +78,7 @@ class CardsScreenViewModel @Inject constructor(
         mUseCaseHandler.execute(fetchSavedCardsUseCase, requestValues,
             object : UseCase.UseCaseCallback<FetchSavedCards.ResponseValue> {
                 override fun onSuccess(response: FetchSavedCards.ResponseValue) {
-                    response.cardList.let {_cardState.value = CardsUiState.CreditCardForm(it) }
+                    response.cardList.let { _cardState.value = CardsUiState.CreditCardForm(it) }
                 }
 
                 override fun onError(message: String) {
@@ -51,7 +87,11 @@ class CardsScreenViewModel @Inject constructor(
             })
     }
 
-    fun addCard(card: Card?,onValidationSuccess: (String) -> Unit, onValidationFail: (String) -> Unit) {
+    fun addCard(
+        card: Card?,
+        onValidationSuccess: (String) -> Unit,
+        onValidationFail: (String) -> Unit
+    ) {
         if (!validateCreditCardNumber(card!!.cardNumber)) {
             onValidationFail(Constants.ERROR_ADDING_CARD)
             return
@@ -74,7 +114,11 @@ class CardsScreenViewModel @Inject constructor(
             })
     }
 
-    fun editCard(card: Card?,onValidationSuccess: (String) -> Unit, onValidationFail: (String) -> Unit) {
+    fun editCard(
+        card: Card?,
+        onValidationSuccess: (String) -> Unit,
+        onValidationFail: (String) -> Unit
+    ) {
         if (!validateCreditCardNumber(card!!.cardNumber)) {
             onValidationFail(Constants.INVALID_CREDIT_CARD_NUMBER)
             return
@@ -97,7 +141,11 @@ class CardsScreenViewModel @Inject constructor(
             })
     }
 
-    fun deleteCard(cardId: Int, onValidationSuccess: (String) -> Unit, onValidationFail: (String) -> Unit) {
+    fun deleteCard(
+        cardId: Int,
+        onValidationSuccess: (String) -> Unit,
+        onValidationFail: (String) -> Unit
+    ) {
         deleteCardUseCase.walletRequestValues = DeleteCard.RequestValues(
             mLocalRepository.clientDetails.clientId.toInt(),
             cardId
@@ -120,8 +168,9 @@ class CardsScreenViewModel @Inject constructor(
 
 sealed interface CardsUiState {
     data class CreditCardForm(
-        val cards: List<Card?>
+        val cards: List<Card>
     ) : CardsUiState
+
     data object Empty : CardsUiState
     data object Error : CardsUiState
     data object Loading : CardsUiState
