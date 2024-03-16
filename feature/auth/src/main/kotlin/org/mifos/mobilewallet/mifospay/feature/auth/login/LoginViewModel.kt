@@ -9,6 +9,7 @@ import org.mifos.mobilewallet.core.base.UseCase
 import com.mifos.mobilewallet.model.entity.UserWithRole
 import org.mifos.mobilewallet.datastore.PreferencesHelper
 import com.mifos.mobilewallet.model.domain.user.User
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails

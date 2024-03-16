@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.home.ui
+package org.mifos.mobilewallet.mifospay.ui
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.border
@@ -14,7 +14,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import org.mifos.mobilewallet.mifospay.designsystem.component.MifosUserImage
 
 @Composable
 fun ProfileImage(bitmap: Bitmap?) {
