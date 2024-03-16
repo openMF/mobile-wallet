@@ -10,12 +10,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.databinding.FragmentCardsBinding
 import org.mifos.mobilewallet.mifospay.designsystem.theme.MifosTheme
-import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsScreenViewModel
 
 /**
  * This is the UI component of the SavedCards Architecture.
@@ -26,7 +24,6 @@ import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsScreenViewModel
 class CardsFragment : BaseFragment()  {
 
     private lateinit var binding: FragmentCardsBinding
-    private val cviewModel: CardsScreenViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +37,9 @@ class CardsFragment : BaseFragment()  {
                 MifosTheme {
                     Surface(modifier = Modifier.fillMaxWidth()) {
                         CardsScreen(
+                            onEditCard = {
+                                // TODO open Add card flow with edit flag to allow edit the card
+                            },
                             onAddBtn = { onAddBtnClicked() },
                         )
                     }

@@ -1,12 +1,7 @@
 package org.mifos.mobilewallet.mifospay.savedcards.ui
 
-
-import android.content.Context
-import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,18 +11,18 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.DropdownMenuItem
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -35,7 +30,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,193 +37,178 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifos.mobilewallet.model.entity.savedcards.Card
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.designsystem.component.MifosOverlayLoadingWheel
+import org.mifos.mobilewallet.mifospay.designsystem.component.MfLoadingWheel
 import org.mifos.mobilewallet.mifospay.designsystem.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsScreenViewModel
 import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsUiState
-
-@Composable
-fun CardsScreen(
-    viewModel: CardsScreenViewModel = hiltViewModel(),
-    onAddBtn: () -> Unit
-) {
-    val context = LocalContext.current
-    val cardState by viewModel.cardState.collectAsState()
-
-    CardsScreenContent(
-        context = context,
-        cardState = cardState,
-        onAddBtn = onAddBtn
-    )
-}
-
-@Composable
-fun CardsScreenContent(
-    context: Context,
-    cardState: CardsUiState,
-    onAddBtn:() -> Unit,
-){
-    Column(
-        modifier = Modifier
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        when(cardState){
-            CardsUiState.Loading->{
-                MifosOverlayLoadingWheel(contentDesc = stringResource(R.string.loading))
-            }
-            is CardsUiState.Empty->{
-                EmptyCardsScreen(onAddBtn)
-            }
-            is CardsUiState.Error -> {
-                PlaceholderScreen()
-            }
-            is CardsUiState.CreditCardForm -> {
-                WorkingCardsScreen(context,cardState,onAddBtn)
-            }
-            else -> {}
-        }
-    }
-}
-
-
-
-@Composable
-fun EmptyCardsScreen(onAddBtn: () -> Unit){
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(text = stringResource(R.string.add_cards))
-            addChip(onAddBtn)
-        }
-    }
-}
-
-
-
-@Composable
-fun WorkingCardsScreen(
-    context:Context,
-    cardState: CardsUiState.CreditCardForm,
-    onAddBtn: () -> Unit
-) {
-    val context = context
-    val editMessage = stringResource(R.string.add_cards)
-    var query by remember { mutableStateOf("") }
-    var filteredCards by rememberSaveable {
-        mutableStateOf(emptyList<Card>())
-    }
-    var active by remember { mutableStateOf(false) }
-
-    Box(
-        modifier = Modifier
-            .width(362.dp)
-            .height(500.dp)
-            .padding(0.dp)
-    ) {
-        Column {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(15.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                SearchScreen(
-                    query = query,
-                    onQueryChange = { q ->
-                        val data = filteredCards.filter {
-                            it.cardNumber.lowercase().contains(q.lowercase())
-                            it.firstName.lowercase().contains(q.lowercase())
-                            it.lastName.lowercase().contains(q.lowercase())
-                            it.cvv.lowercase().contains(q.lowercase())
-                            it.expiryDate.lowercase().contains(q.lowercase())
-                        }
-                        filteredCards = data
-                        query = q
-                    },
-                    onSearch = {},
-                    onActiveChange = {},
-                    onClearQuery = { if (query.isNotEmpty()) query = "" else active = false }
-                )
-            }
-
-            if (filteredCards.isEmpty() || query.isEmpty()) {
-                filteredCards = cardState.cards.filterNotNull()
-            } else {
-                filteredCards.map { it.cardNumber.lowercase() }.contains(query.lowercase())
-            }
-
-            CardsList(
-                cards = filteredCards,
-                onMenuItemClick = { menuItem ->
-                    when (menuItem) {
-                        CardMenuAction.EDIT.toString() -> {
-                            editCardAction(context,editMessage)
-                        }
-                        CardMenuAction.DELETE.toString() -> {
-                            // Todo: Handle delete card action
-                        }
-                        CardMenuAction.CANCEL.toString() -> {
-                            // No action needed
-                        }
-                    }
-                }
-            )
-        }
-    }
-    Spacer(modifier = Modifier.height(9.dp))
-    addChip(onAddBtn)
-}
+import org.mifos.mobilewallet.mifospay.ui.EmptyContentScreen
 
 enum class CardMenuAction {
     EDIT, DELETE, CANCEL
 }
 
+@Composable
+fun CardsScreen(
+    viewModel: CardsScreenViewModel = hiltViewModel(),
+    onEditCard: (Card) -> Unit,
+    onAddBtn: () -> Unit
+) {
+    val cardState by viewModel.cardState.collectAsStateWithLifecycle()
+    val cardListUiState by viewModel.cardListUiState.collectAsStateWithLifecycle()
+    CardsScreen(
+        cardState = cardState,
+        cardListUiState = cardListUiState,
+        onEditCard = onEditCard,
+        onDeleteCard = {
+           // TODO implement Delete card by implementing a delete confirm dialog and call
+           // TODO viewModel.deleteCard
+        },
+        onAddBtn = onAddBtn,
+        updateQuery = {
+            viewModel.updateSearchQuery(it)
+        }
+    )
+}
+
+@Composable
+fun CardsScreen(
+    cardState: CardsUiState,
+    cardListUiState: CardsUiState,
+    onEditCard: (Card) -> Unit,
+    onDeleteCard: (Card) -> Unit,
+    onAddBtn: () -> Unit,
+    updateQuery: (String) -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        when (cardState) {
+            CardsUiState.Loading -> {
+                MfLoadingWheel(
+                    contentDesc = stringResource(R.string.loading), 
+                    backgroundColor = Color.White
+                )
+            }
+
+            is CardsUiState.Empty -> {
+                NoCardAddCardsScreen(onAddBtn)
+            }
+
+            is CardsUiState.Error -> {
+                EmptyContentScreen(
+                    modifier = Modifier,
+                    title = stringResource(id = R.string.error_oops),
+                    subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                    iconTint = Color.Black,
+                    iconImageVector = Icons.Rounded.Info
+                )
+            }
+
+            is CardsUiState.CreditCardForm -> {
+                CardsScreenContent(
+                    cardList = (cardListUiState as CardsUiState.CreditCardForm).cards,
+                    onAddBtn = onAddBtn,
+                    onDeleteCard = onDeleteCard,
+                    onEditCard = onEditCard,
+                    updateQuery = updateQuery
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun CardsScreenContent(
+    cardList: List<Card>,
+    onEditCard: (Card) -> Unit,
+    onDeleteCard: (Card) -> Unit,
+    onAddBtn: () -> Unit,
+    updateQuery: (String) -> Unit
+) {
+    val query by rememberSaveable { mutableStateOf("") }
+    Box(
+        modifier = Modifier
+    ) {
+        Column {
+            SearchBarScreen(
+                query = query,
+                onQueryChange = { q ->
+                    updateQuery(q)
+                },
+                onSearch = {},
+                onClearQuery = { updateQuery("") }
+            )
+            CardsList(
+                cards = cardList,
+                onMenuItemClick = { card, menuItem ->
+                    when (menuItem) {
+                        CardMenuAction.EDIT -> onEditCard(card)
+                        CardMenuAction.DELETE -> onDeleteCard(card)
+                        CardMenuAction.CANCEL -> Unit
+                    }
+                }
+            )
+        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(56.dp)
+                .align(Alignment.BottomCenter)
+                .background(color = Color.White)
+        ) {
+            AddCardChip(
+                modifier = Modifier.align(Alignment.Center),
+                onAddBtn = onAddBtn
+            )
+        }
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen(
+fun SearchBarScreen(
     query: String,
     onQueryChange: (String) -> Unit,
     onSearch: (String) -> Unit,
-    onActiveChange: (Boolean) -> Unit,
     onClearQuery: () -> Unit
 ) {
     SearchBar(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 0.dp),
+            .padding(vertical = 16.dp, horizontal = 16.dp),
         query = query,
         onQueryChange = onQueryChange,
         onSearch = onSearch,
         active = false,
-        onActiveChange = onActiveChange,
+        onActiveChange = { },
         placeholder = {
             Text(text = stringResource(R.string.search))
         },
         leadingIcon = {
-            Icon(imageVector = Icons.Filled.Search, contentDescription = stringResource(R.string.search))
+            Icon(
+                imageVector = Icons.Filled.Search,
+                contentDescription = stringResource(R.string.search)
+            )
         },
         trailingIcon = {
             IconButton(
                 onClick = onClearQuery
             ) {
-                Icon(imageVector = Icons.Filled.Close, contentDescription = stringResource(R.string.close))
+                Icon(
+                    imageVector = Icons.Filled.Close,
+                    contentDescription = stringResource(R.string.close)
+                )
             }
         }
     ) {}
@@ -238,33 +217,37 @@ fun SearchScreen(
 @Composable
 fun CardsList(
     cards: List<Card>,
-    onMenuItemClick: (String) -> Unit
+    onMenuItemClick: (Card, CardMenuAction) -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     ) {
         items(cards) { card ->
-            CardItem(card = card) { menuItem ->
-                onMenuItemClick(menuItem)
+            CardItem(card = card) { clickedCard, menuItem ->
+                onMenuItemClick(clickedCard, menuItem)
             }
         }
     }
 }
 
 @Composable
-fun addChip(
+fun AddCardChip(
+    modifier: Modifier,
     onAddBtn: () -> Unit
-){
+) {
     AssistChip(
+        modifier = modifier,
         onClick = { onAddBtn.invoke() },
-        label = { Text(
-            stringResource(R.string.add_cards),
-            style = MaterialTheme.typography.bodyLarge.copy(
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            ),
-            modifier = Modifier.padding(horizontal = 8.dp)
-        ) },
+        label = {
+            Text(
+                stringResource(R.string.add_cards),
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                ),
+                modifier = Modifier.padding(horizontal = 8.dp)
+            )
+        },
         leadingIcon = {
             Icon(
                 Icons.Filled.Add,
@@ -279,15 +262,9 @@ fun addChip(
     )
 }
 
-fun editCardAction(context: Context, editMessage: String){
-    Toast.makeText(context, editMessage, Toast.LENGTH_SHORT).show()
-}
-
-
 @Composable
-fun CardItem(card: Card?, onMenuItemClick: (String) -> Unit) {
+fun CardItem(card: Card, onMenuItemClick: (Card, CardMenuAction) -> Unit) {
     var expanded by remember { mutableStateOf(false) }
-
     Card(
         modifier = Modifier
             .clickable { expanded = true }
@@ -303,22 +280,17 @@ fun CardItem(card: Card?, onMenuItemClick: (String) -> Unit) {
             Row {
                 Column {
                     Row {
-                        if (card != null) {
-                            Text(text = card.firstName, style = MaterialTheme.typography.bodyMedium)
-                        }
+                        Text(text = card.firstName, style = MaterialTheme.typography.bodyMedium)
                         Spacer(modifier = Modifier.height(6.dp))
-                        if (card != null) {
-                            Text(text = card.lastName, style = MaterialTheme.typography.bodyMedium)
-                        }
+                        Text(text = card.lastName, style = MaterialTheme.typography.bodyMedium)
                     }
                     Spacer(modifier = Modifier.height(6.dp))
-                    if (card != null) {
-                        Text(text = "${stringResource(R.string.card_number)} ${card.cardNumber}", style = MaterialTheme.typography.bodyMedium)
-                    }
+                    Text(
+                        text = "${stringResource(R.string.card_number)} ${card.cardNumber}",
+                        style = MaterialTheme.typography.bodyMedium
+                    )
                     Spacer(modifier = Modifier.height(8.dp))
-                    if (card != null) {
-                        Text(text = card.expiryDate, style = MaterialTheme.typography.bodyMedium)
-                    }
+                    Text(text = card.expiryDate, style = MaterialTheme.typography.bodyMedium)
                 }
                 Spacer(modifier = Modifier.height(38.dp))
                 DropdownMenu(
@@ -326,24 +298,27 @@ fun CardItem(card: Card?, onMenuItemClick: (String) -> Unit) {
                     onDismissRequest = { expanded = false },
                     modifier = Modifier.background(MaterialTheme.colorScheme.background)
                 ) {
-                    DropdownMenuItem(onClick = {
-                        onMenuItemClick(CardMenuAction.EDIT.toString())
-                        expanded = false
-                    }) {
-                        Text(stringResource(R.string.edit_card))
-                    }
-                    DropdownMenuItem(onClick = {
-                        onMenuItemClick(CardMenuAction.DELETE.toString())
-                        expanded = false
-                    }) {
-                        Text(stringResource(R.string.delete_card))
-                    }
-                    DropdownMenuItem(onClick = {
-                        onMenuItemClick(CardMenuAction.CANCEL.toString())
-                        expanded = false
-                    }) {
-                        Text(stringResource(R.string.cancel))
-                    }
+                    DropdownMenuItem(
+                        text = { Text(text = stringResource(R.string.edit_card)) },
+                        onClick = {
+                            onMenuItemClick(card, CardMenuAction.EDIT)
+                            expanded = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.delete_card)) },
+                        onClick = {
+                            onMenuItemClick(card, CardMenuAction.DELETE)
+                            expanded = false
+                        }
+                    )
+                    DropdownMenuItem(
+                        text = { Text(stringResource(R.string.cancel)) },
+                        onClick = {
+                            onMenuItemClick(card, CardMenuAction.CANCEL)
+                            expanded = false
+                        }
+                    )
                 }
             }
         }
@@ -351,68 +326,33 @@ fun CardItem(card: Card?, onMenuItemClick: (String) -> Unit) {
 }
 
 @Composable
-fun PlaceholderScreen() {
+fun NoCardAddCardsScreen(onAddBtn: () -> Unit) {
     Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .padding(16.dp),
+        modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize()
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_error_state),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(48.dp)
-                    .scale(1.5f)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = stringResource(id = R.string.error_oops),
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = stringResource(id = R.string.unexpected_error_subtitle),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
+            Text(text = stringResource(R.string.add_cards))
+            AddCardChip(
+                modifier = Modifier,
+                onAddBtn = onAddBtn
             )
         }
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
-private fun CardsScreenPreview() {
+private fun CardsScreenWithSampleDataPreview() {
     MifosTheme {
         CardsScreen(
-            viewModel = hiltViewModel<CardsScreenViewModel>(),
-            onAddBtn = {}
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun CardsScreenPreviewWithSampleData() {
-    val context = LocalContext.current
-    MifosTheme {
-        WorkingCardsScreen(
-            context = context,
             cardState = CardsUiState.CreditCardForm(sampleCards),
+            cardListUiState = CardsUiState.CreditCardForm(sampleCards),
+            onEditCard = {},
+            onDeleteCard = {},
+            updateQuery = {},
             onAddBtn = {}
         )
     }
@@ -420,8 +360,47 @@ private fun CardsScreenPreviewWithSampleData() {
 
 @Preview(showBackground = true)
 @Composable
-fun ErrorScreenPreview() {
-    PlaceholderScreen()
+private fun CardsScreenEmptyPreview() {
+    MifosTheme {
+        CardsScreen(
+            cardState = CardsUiState.Empty,
+            cardListUiState = CardsUiState.CreditCardForm(sampleCards),
+            onEditCard = {},
+            onDeleteCard = {},
+            updateQuery = {},
+            onAddBtn = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CardsScreenErrorPreview() {
+    MifosTheme {
+        CardsScreen(
+            cardState = CardsUiState.Error,
+            cardListUiState = CardsUiState.CreditCardForm(sampleCards),
+            onEditCard = {},
+            onDeleteCard = {},
+            updateQuery = {},
+            onAddBtn = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun CardsScreenLoadingPreview() {
+    MifosTheme {
+        CardsScreen(
+            cardState = CardsUiState.Loading,
+            cardListUiState = CardsUiState.CreditCardForm(sampleCards),
+            onEditCard = {},
+            onDeleteCard = {},
+            updateQuery = {},
+            onAddBtn = {}
+        )
+    }
 }
 
 val sampleCards = List(7) { index ->

@@ -16,20 +16,20 @@ class FetchSavedCards @Inject constructor(private val mFineractRepository: Finer
     UseCase<FetchSavedCards.RequestValues, FetchSavedCards.ResponseValue>() {
 
     class RequestValues(val clientId: Long) : UseCase.RequestValues
-    class ResponseValue(val cardList: List<Card?>) : UseCase.ResponseValue
+    class ResponseValue(val cardList: List<Card>) : UseCase.ResponseValue
 
     override fun executeUseCase(requestValues: RequestValues) {
         mFineractRepository.fetchSavedCards(requestValues.clientId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : Subscriber<List<Card?>?>() {
+            .subscribe(object : Subscriber<List<Card>>() {
                 override fun onCompleted() {}
                 override fun onError(e: Throwable) {
                     useCaseCallback.onError(e.toString())
                 }
 
-                override fun onNext(cards: List<Card?>?) {
-                    if (cards != null) {
+                override fun onNext(cards: List<Card>) {
+                    if (cards.isNotEmpty()) {
                         useCaseCallback.onSuccess(ResponseValue(cards))
                     } else {
                         useCaseCallback.onError(Constants.NO_SAVED_CARDS)

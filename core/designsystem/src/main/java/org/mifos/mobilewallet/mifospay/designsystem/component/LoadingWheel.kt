@@ -35,13 +35,11 @@ import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import org.mifos.mobilewallet.mifospay.designsystem.R
 import org.mifos.mobilewallet.mifospay.designsystem.theme.MifosTheme
 
 @Composable
@@ -160,11 +158,14 @@ fun MfOverlayLoadingWheel(contentDesc: String = "Loading") {
 }
 
 @Composable
-fun MfLoadingWheel(contentDesc: String = "Loading") {
+fun MfLoadingWheel(
+    contentDesc: String = "Loading",
+    backgroundColor: Color = Color.Black.copy(alpha = 0.6f)
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Black.copy(alpha = 0.6f))
+            .background(color = backgroundColor)
             .focusable(),
         contentAlignment = Alignment.Center
     ) {
@@ -177,7 +178,7 @@ fun MfLoadingWheel(contentDesc: String = "Loading") {
 
 @Preview
 @Composable
-fun NiaLoadingWheelPreview() {
+fun MifosLoadingWheelPreview() {
     MifosTheme {
         Surface {
             MifosLoadingWheel(contentDesc = "LoadingWheel")
