@@ -21,10 +21,6 @@ class LoginActivity : ComponentActivity() {
 
     private val viewModel by viewModels<LoginViewModel>()
 
-   // private var googleSignInClient: GoogleSignInClient? = null
-   // private var account: GoogleSignInAccount? = null
-    private var mMifosSavingProductId = 0
-
     private var usernameContent: String = ""
     private var passwordContent: String = ""
 

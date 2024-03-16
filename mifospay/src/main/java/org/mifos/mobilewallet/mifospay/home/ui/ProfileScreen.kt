@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfileUiState
+import org.mifos.mobilewallet.mifospay.ui.ProfileImage
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
