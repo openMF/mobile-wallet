@@ -338,6 +338,7 @@
     <string name="confirm_password_cannot_empty">Confirm password cannot be empty</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
     <string name="password_strength">Password Strength:</string>
+    <string name="loading">Loading</string>
 
     <string name="level">Level</string>
     <string name="logging_in">Logging In…</string>
