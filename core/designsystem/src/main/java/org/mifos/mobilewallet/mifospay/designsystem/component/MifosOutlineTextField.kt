@@ -1,9 +1,8 @@
-package org.mifos.mobilewallet.mifospay.auth.ui
+package org.mifos.mobilewallet.mifospay.designsystem.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -20,12 +19,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
 
-/**
- * @author Pratyush Singh
- * @since 21/11/2023
- */
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MifosOutlinedTextField(
     value: TextFieldValue,

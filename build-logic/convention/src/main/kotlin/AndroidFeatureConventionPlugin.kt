@@ -17,6 +17,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                     // set custom test runner
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                 }
+                testOptions.animationsDisabled = true
             }
 
             dependencies {

@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.datastore
+package org.mifos.mobilewallet.mifospay.core.datastore
 
 import android.content.Context
 import android.content.SharedPreferences

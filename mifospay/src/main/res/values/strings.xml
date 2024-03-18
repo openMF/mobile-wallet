@@ -340,5 +340,6 @@
     <string name="password_strength">Password Strength:</string>
 
     <string name="level">Level</string>
+    <string name="logging_in">Logging In…</string>
 
 </resources>

@@ -15,7 +15,7 @@ import org.mifos.mobilewallet.core.domain.usecase.user.DeleteUser
 import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract.SignupView
 import org.mifos.mobilewallet.mifospay.utils.Constants

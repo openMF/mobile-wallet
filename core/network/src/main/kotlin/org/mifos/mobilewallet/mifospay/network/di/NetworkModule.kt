@@ -7,7 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.network.BaseURL
 import org.mifos.mobilewallet.mifospay.network.MifosWalletOkHttpClient
 import org.mifos.mobilewallet.mifospay.network.local_assets.LocalAssetManager

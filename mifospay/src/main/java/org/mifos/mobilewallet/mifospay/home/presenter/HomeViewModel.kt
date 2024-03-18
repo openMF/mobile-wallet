@@ -16,7 +16,7 @@ import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransactions
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.history.HistoryContract.TransactionsHistoryAsync
 import org.mifos.mobilewallet.mifospay.history.TransactionsHistory
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
