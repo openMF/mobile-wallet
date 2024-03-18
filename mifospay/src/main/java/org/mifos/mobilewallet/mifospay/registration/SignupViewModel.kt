@@ -28,7 +28,7 @@ import org.mifos.mobilewallet.core.domain.usecase.user.DeleteUser
 import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
 import org.mifos.mobilewallet.core.repository.local.LocalAssetRepository
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import javax.inject.Inject

@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".auth.ui.LoginActivity"
+            android:name=".auth.LoginActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateVisible" />
         <activity

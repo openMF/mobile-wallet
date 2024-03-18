@@ -1,22 +1,22 @@
 [versions]
 appcompatVersion = "1.6.1"
+androidGradlePlugin = "8.3.0"
 compileSdk = "34"
 constraintlayoutVersion = "2.1.4"
 coreKtxVersion = "1.12.0"
 minSdk = "24"
 targetSdk = "34"
-androidGradlePlugin = "8.2.2"
 androidTools = "31.3.0"
 androidxActivity = "1.8.2"
-androidxComposeBom = "2024.02.01"
+androidxComposeBom = "2024.02.02"
 androidxComposeCompiler = "1.5.10"
 androidxCore = "1.10.1"
 androidxHilt = "1.2.0"
 androidxLifecycle = "2.7.0"
-hilt = "2.50"
+hilt = "2.51"
 junit = "4.13.2"
 kotlin = "1.9.22"
-ksp = "1.9.21-1.0.16"
+ksp = "1.9.22-1.0.18"
 firebaseCrashlyticsPlugin = "2.9.9"
 gmsPlugin = "4.4.1"
 butterknifePlugin = "10.2.3"
@@ -32,22 +32,25 @@ rxandroidVersion = "1.1.0"
 rxjavaVersion = "1.3.8"
 junitVersion = "4.13.2"
 firebasePerfPlugin = "1.4.2"
-truth = "1.1.5"
+truth = "1.4.2"
 dependencyGuard = "0.4.3"
 room = "2.6.1"
-roborazzi = "1.6.0"
+roborazzi = "1.7.0"
 googleOss = "17.0.1"
 googleOssPlugin = "0.10.6"
-firebaseBom = "32.7.3"
+firebaseBom = "32.7.4"
 androidDesugarJdkLibs = "2.0.4"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 material = "1.11.0"
 kotlinxDatetime = "0.5.0"
-kotlinxSerializationJson = "1.6.1"
+kotlinxSerializationJson = "1.6.3"
 retrofitKotlinxSerializationJson = "1.0.0"
-kotlinxCoroutines = "1.7.3"
+kotlinxCoroutines = "1.8.0"
 compose_country_code_picker = "2.2.8"
+protobuf = "3.25.2"
+protobufPlugin = "0.9.4"
+androidxDataStore = "1.0.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityVersion" }
@@ -106,6 +109,9 @@ androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 compose-country-code-picker = { group = "com.github.jump-sdk", name = "jetpack_compose_country_code_picker_emoji", version.ref = "compose_country_code_picker" }
+protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
+protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -134,9 +140,11 @@ kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref =
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
 room = { id = "androidx.room", version.ref = "room" }
+protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 
 # Plugins defined by this project
 mifospay-android-application = { id = "mifospay.android.application", version = "unspecified" }
+mifospay-android-application-flavors = { id = "mifospay.android.application.flavors", version = "unspecified" }
 mifospay-android-application-compose = { id = "mifospay.android.application.compose", version = "unspecified" }
 mifospay-android-application-firebase = { id = "mifospay.android.application.firebase", version = "unspecified" }
 mifospay-android-feature = { id = "mifospay.android.feature", version = "unspecified" }

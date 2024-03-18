@@ -6,7 +6,7 @@ plugins {
 apply(from = "${project.rootDir}/config/quality/quality.gradle")
 
 android {
-    namespace = "org.mifos.mobilewallet.datastore"
+    namespace = "org.mifos.mobilewallet.mifospay.core.datastore"
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
     }
@@ -19,6 +19,8 @@ android {
 
 dependencies {
     api(libs.kotlinx.datetime)
+    api(libs.androidx.dataStore.core)
+    api(projects.core.datastoreProto)
     api(projects.core.common)
     api(projects.core.model)
 }

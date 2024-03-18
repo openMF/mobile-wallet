@@ -1,9 +1,5 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
     dependencies {
         classpath(libs.google.oss.licenses.plugin) {
             exclude(group = "com.google.protobuf")
@@ -29,3 +25,14 @@ plugins {
     alias(libs.plugins.room) apply false
     alias(libs.plugins.kotlin.android) apply false
 }
+
+/*
+// Task to print all the module paths in the project e.g. :core:data
+// Used by module graph generator script
+tasks.register("printModulePaths") {
+    subprojects {
+        if (subprojects.size == 0) {
+            println(this.path)
+        }
+    }
+}*/

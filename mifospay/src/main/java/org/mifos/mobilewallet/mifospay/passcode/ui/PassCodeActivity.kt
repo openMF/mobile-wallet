@@ -13,7 +13,7 @@ import com.mifos.mobile.passcode.utils.PassCodeConstants
 import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity
+import org.mifos.mobilewallet.mifospay.auth.LoginActivity
 import org.mifos.mobilewallet.mifospay.home.ui.MainActivity
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract.PassCodeView

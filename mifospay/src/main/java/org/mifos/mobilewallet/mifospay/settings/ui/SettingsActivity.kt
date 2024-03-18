@@ -4,7 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity
+import org.mifos.mobilewallet.mifospay.auth.LoginActivity
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.settings.SettingsContract
 import org.mifos.mobilewallet.mifospay.settings.SettingsContract.SettingsView

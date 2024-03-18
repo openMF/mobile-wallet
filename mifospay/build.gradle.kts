@@ -1,6 +1,9 @@
+import org.mifos.mobilewallet.mifospay.MifosBuildType
+
 plugins {
     alias(libs.plugins.mifospay.android.application)
     alias(libs.plugins.mifospay.android.application.compose)
+   // alias(libs.plugins.mifospay.android.application.flavors)
     alias(libs.plugins.mifospay.android.hilt)
     alias(libs.plugins.mifospay.android.application.firebase)
     id("com.google.android.gms.oss-licenses-plugin")
@@ -19,10 +22,18 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-            isDebuggable = false
+        debug {
+           // applicationIdSuffix = MifosBuildType.DEBUG.applicationIdSuffix
+        }
+        release {
+            isMinifyEnabled = true
+           // applicationIdSuffix = MifosBuildType.RELEASE.applicationIdSuffix
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+
+            // To publish on the Play store a private signing key is required, but to allow anyone
+            // who clones the code to sign and run the release variant, use the debug signing key.
+            // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 

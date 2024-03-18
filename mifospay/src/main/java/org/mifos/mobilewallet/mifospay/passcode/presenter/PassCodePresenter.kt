@@ -10,7 +10,7 @@ import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 
 import org.mifos.mobilewallet.mifospay.base.BaseView
 
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 
 import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract
 

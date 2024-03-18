@@ -12,7 +12,7 @@ import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientImage
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.common.DebugUtil
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
 import javax.inject.Inject

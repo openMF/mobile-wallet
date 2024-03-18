@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifos.mobilewallet.core.base.UseCase
 import com.mifos.mobilewallet.model.entity.UserWithRole
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import com.mifos.mobilewallet.model.domain.user.User
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData

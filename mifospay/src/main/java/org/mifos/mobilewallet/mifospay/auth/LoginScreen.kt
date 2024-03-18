@@ -1,8 +1,12 @@
-package org.mifos.mobilewallet.mifospay.auth.ui
+package org.mifos.mobilewallet.mifospay.auth
 
+import android.content.Context
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -28,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
@@ -35,7 +40,13 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mifos.mobile.passcode.utils.PassCodeConstants
 import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.designsystem.component.MfOverlayLoadingWheel
+import org.mifos.mobilewallet.mifospay.designsystem.component.MifosOutlinedTextField
+import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.registration.SignupMethodContentScreen
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.theme.grey
@@ -45,10 +56,39 @@ import org.mifos.mobilewallet.mifospay.theme.styleNormal18sp
 
 @Composable
 fun LoginScreen(
-    login: (username: String, password: String) -> Unit,
-    signUp: () -> Unit
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+    val showProgress by viewModel.showProgress.collectAsStateWithLifecycle()
+    val isLoginSuccess by viewModel.isLoginSuccess.collectAsStateWithLifecycle()
 
+    if (viewModel.isPassCodeExist) {
+        startPassCodeActivity(context)
+    }
+
+    LoginScreenContent(
+        showProgress = showProgress,
+        login = { username, password ->
+            viewModel.loginUser(
+                username = username,
+                password = password,
+                onLoginFailed = { message ->
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+    )
+
+    if (isLoginSuccess) {
+        startPassCodeActivity(context)
+    }
+}
+
+@Composable
+fun LoginScreenContent(
+    showProgress: Boolean,
+    login: (username: String, password: String) -> Unit,
+) {
     var showSignUpScreen by rememberSaveable { mutableStateOf(false) }
 
     var userName by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -69,7 +109,7 @@ fun LoginScreen(
         }
     }
 
-    MifosTheme {
+    Box {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -163,7 +203,6 @@ fun LoginScreen(
                 Text(
                     modifier = Modifier.clickable {
                         showSignUpScreen = true
-                        //signUp.invoke()
                     },
                     text = stringResource(id = R.string.sign_up),
                     style = styleMedium16sp.copy(
@@ -172,11 +211,32 @@ fun LoginScreen(
                 )
             }
         }
+
+        if (showProgress) {
+            MfOverlayLoadingWheel(
+                contentDesc = stringResource(id = R.string.logging_in)
+            )
+        }
     }
+
+}
+
+/**
+ * Starts [PassCodeActivity] with `Constans.INTIAL_LOGIN` as true
+ */
+private fun startPassCodeActivity(context: Context) {
+    val intent = Intent(context, PassCodeActivity::class.java)
+    intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
+    context.startActivity(intent)
 }
 
 @Preview(showSystemUi = true, device = "id:pixel_5")
 @Composable
 fun LoanScreenPreview() {
-    LoginScreen({ _, _ -> }, {})
+    MifosTheme {
+        LoginScreenContent(
+            showProgress = false,
+            login = { _, _ -> }
+        )
+    }
 }

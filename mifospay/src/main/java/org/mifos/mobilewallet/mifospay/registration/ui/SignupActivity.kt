@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import `in`.galaxyofandroid.spinerdialog.SpinnerDialog
 import org.json.JSONObject
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.auth.ui.LoginActivity
+import org.mifos.mobilewallet.mifospay.auth.LoginActivity
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract

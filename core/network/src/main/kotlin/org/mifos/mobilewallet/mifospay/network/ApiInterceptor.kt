@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.mifospay.network
 
 import okhttp3.Interceptor
 import okhttp3.Response
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import java.io.IOException
 
 class ApiInterceptor(private val preferencesHelper: PreferencesHelper) : Interceptor {

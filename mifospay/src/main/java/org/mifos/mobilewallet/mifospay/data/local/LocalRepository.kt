@@ -1,6 +1,6 @@
 package org.mifos.mobilewallet.mifospay.data.local
 
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import com.mifos.mobilewallet.model.domain.client.Client
 import javax.inject.Inject
 import javax.inject.Singleton
