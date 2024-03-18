@@ -18,9 +18,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter
-import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity
+import org.mifos.mobilewallet.mifospay.standinginstruction.ui.NewSIActivity
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
@@ -29,6 +29,7 @@ import org.mifos.mobilewallet.mifospay.utils.Toaster
 class PaymentsFragment : BaseFragment() {
 
     private val transferPresenter: TransferPresenter by viewModels()
+    private val newSIActivityRequestCode = 100
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,7 +43,8 @@ class PaymentsFragment : BaseFragment() {
                     PaymentsScreen(
                         showQr = { showQrClicked() },
                         searchContact = { searchContactClicked() },
-                        scanQr = { scanQrClicked() }
+                        scanQr = { scanQrClicked() },
+                        onNewSI = { onNewSI() }
                     )
                 }
             }
@@ -161,6 +163,7 @@ class PaymentsFragment : BaseFragment() {
                 }
                 return
             }
+
             REQUEST_READ_CONTACTS -> {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     val intent = Intent(
@@ -174,6 +177,11 @@ class PaymentsFragment : BaseFragment() {
                 return
             }
         }
+    }
+
+    private fun onNewSI() {
+        val i = Intent(activity, NewSIActivity::class.java)
+        startActivityForResult(i, newSIActivityRequestCode)
     }
 
     companion object {

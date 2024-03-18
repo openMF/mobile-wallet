@@ -17,16 +17,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.mifos.mobilewallet.mifospay.history.ui.HistoryScreen
+import org.mifos.mobilewallet.mifospay.invoice.presenter.InvoicesViewModel
 import org.mifos.mobilewallet.mifospay.invoice.ui.InvoiceScreen
 import org.mifos.mobilewallet.mifospay.payments.ui.RequestScreen
 import org.mifos.mobilewallet.mifospay.payments.ui.SendScreen
+import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.StandingInstructionViewModel
 import org.mifos.mobilewallet.mifospay.standinginstruction.ui.SIScreen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PaymentsScreen(showQr: () -> Unit, searchContact: () -> Unit, scanQr: () -> Unit) {
+fun PaymentsScreen(
+    standingInstructionViewModel: StandingInstructionViewModel = hiltViewModel(),
+    invoicesViewModel: InvoicesViewModel = hiltViewModel(),
+    showQr: () -> Unit, searchContact: () -> Unit, scanQr: () -> Unit,
+    onNewSI: () -> Unit
+) {
 
     val pagerState = rememberPagerState(
         pageCount = { PaymentsScreenContents.entries.size }
@@ -65,8 +74,12 @@ fun PaymentsScreen(showQr: () -> Unit, searchContact: () -> Unit, scanQr: () -> 
                 0 -> SendScreen({ scanQr.invoke() }, { searchContact.invoke() }, {})
                 1 -> RequestScreen(showQr = { showQr.invoke() })
                 2 -> HistoryScreen()
-                3 -> SIScreen()
-                4 -> InvoiceScreen()
+                3 -> SIScreen(
+                    standingInstructionViewModel.standingInstructionsUiState.collectAsStateWithLifecycle().value,
+                    onNewSI = { onNewSI.invoke() }
+                )
+
+                4 -> InvoiceScreen(invoicesViewModel.invoiceUiState.collectAsStateWithLifecycle().value)
                 else -> Text("Page $page")
             }
         }
@@ -84,5 +97,5 @@ enum class PaymentsScreenContents {
 @Preview(showBackground = true)
 @Composable
 fun PaymentsScreenPreview() {
-    PaymentsScreen({}, {},{})
+//    PaymentsScreen(hiltViewModel(), hiltViewModel(), {}, {}, {}, {})
 }
