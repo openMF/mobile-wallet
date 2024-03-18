@@ -240,6 +240,7 @@
     <string name="error_no_invoices_found">Couldn\'t fetch invoice list. Please, try again.</string>
     <string name="error_no_cards_found">Couldn\'t fetch cards list. Please, try again.</string>
     <string name="error_no_merchants_found">Couldn\'t fetch merchant list. Please, try again.</string>
+    <string name="error_no_si_found">Couldn\'t fetch standing instructions list. Please, try again.</string>
     <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
     <string name="account_details">Account Details</string>
     <string name="mobile">Mobile number</string>
@@ -295,6 +296,7 @@
     <string name="interval_cannot_smaller_than_1_month">Interval cannot be smaller than 1 Month</string>
     <string name="delete_standing_instruction">Delete Standing Instruction</string>
     <string name="delete_standing_instruction_confirm">This will delete the Standing Instruction</string>
+    <string name="add_si">Please Add StandingInstructions</string>
     <string name="pick_the_date"><u>pick the date</u></string>
     <string name="empty_standing_instructions">No standing instructions to show</string>
     <string name="select_till_date">Kindly select Till Date</string>
@@ -338,6 +340,7 @@
     <string name="confirm_password_cannot_empty">Confirm password cannot be empty</string>
     <string name="passwords_do_not_match">Passwords do not match</string>
     <string name="password_strength">Password Strength:</string>
+    <string name="rupee_symbol">₹</string>
 
     <string name="level">Level</string>
     <string name="logging_in">Logging In…</string>
