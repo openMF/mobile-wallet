@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import org.mifos.mobilewallet.mifospay.history.presenter.HistoryViewModel
 import org.mifos.mobilewallet.mifospay.history.ui.HistoryScreen
 import org.mifos.mobilewallet.mifospay.invoice.presenter.InvoicesViewModel
 import org.mifos.mobilewallet.mifospay.invoice.ui.InvoiceScreen
@@ -33,6 +34,7 @@ import org.mifos.mobilewallet.mifospay.standinginstruction.ui.SIScreen
 fun PaymentsScreen(
     standingInstructionViewModel: StandingInstructionViewModel = hiltViewModel(),
     invoicesViewModel: InvoicesViewModel = hiltViewModel(),
+    historyViewModel: HistoryViewModel = hiltViewModel(),
     showQr: () -> Unit, searchContact: () -> Unit, scanQr: () -> Unit,
     onNewSI: () -> Unit
 ) {
@@ -73,7 +75,7 @@ fun PaymentsScreen(
             when (page) {
                 0 -> SendScreen({ scanQr.invoke() }, { searchContact.invoke() }, {})
                 1 -> RequestScreen(showQr = { showQr.invoke() })
-                2 -> HistoryScreen()
+                2 -> HistoryScreen(historyViewModel.historyUiState.collectAsStateWithLifecycle().value)
                 3 -> SIScreen(
                     standingInstructionViewModel.standingInstructionsUiState.collectAsStateWithLifecycle().value,
                     onNewSI = { onNewSI.invoke() }
@@ -97,5 +99,5 @@ enum class PaymentsScreenContents {
 @Preview(showBackground = true)
 @Composable
 fun PaymentsScreenPreview() {
-//    PaymentsScreen(hiltViewModel(), hiltViewModel(), {}, {}, {}, {})
+    PaymentsScreen(hiltViewModel(), hiltViewModel(), hiltViewModel(), {}, {}, {}, {})
 }

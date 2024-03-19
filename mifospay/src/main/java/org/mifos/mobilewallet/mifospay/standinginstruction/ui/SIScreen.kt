@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.standinginstruction.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,6 +11,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,6 +45,7 @@ fun SIScreen(
 
     StandingInstructionsUiState.Loading -> {
         MifosLoadingWheel(
+            modifier = Modifier.fillMaxWidth(),
             contentDesc = stringResource(R.string.loading)
         )
     }
@@ -56,7 +59,8 @@ fun SIScreen(
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_add_white),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = Color.Black
                     )
                 }
             }
