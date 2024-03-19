@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.mifospay.invoice.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -33,7 +34,8 @@ fun InvoiceScreen(invoiceUiState: InvoiceUiState) {
                             invoiceAmount = it?.amount.toString(),
                             invoiceStatus = it?.status.toString(),
                             invoiceDate = it?.date.toString(),
-                            invoiceId = it?.id.toString()
+                            invoiceId = it?.id.toString(),
+                            invoiceStatusIcon = it?.status!!
                         )
                     }
                 }
@@ -42,6 +44,7 @@ fun InvoiceScreen(invoiceUiState: InvoiceUiState) {
 
         InvoiceUiState.Loading -> {
             MifosLoadingWheel(
+                modifier = Modifier.fillMaxWidth(),
                 contentDesc = stringResource(R.string.loading)
             )
         }

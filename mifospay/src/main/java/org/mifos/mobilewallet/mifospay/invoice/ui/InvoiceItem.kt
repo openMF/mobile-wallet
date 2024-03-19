@@ -21,7 +21,8 @@ fun InvoiceItem(
     invoiceAmount: String,
     invoiceStatus: String,
     invoiceDate: String,
-    invoiceId: String
+    invoiceId: String,
+    invoiceStatusIcon: Long
 ) {
     Column {
         Row(
@@ -31,11 +32,12 @@ fun InvoiceItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_remove_circle_outline_black_24dp),
+                painter = painterResource(id = if (invoiceStatusIcon == 0L) R.drawable.ic_remove_circle_outline_black_24dp else R.drawable.ic_check_round_black_24dp),
                 contentDescription = "Invoice Status",
                 modifier = Modifier
                     .size(64.dp)
-                    .padding(5.dp)
+                    .padding(5.dp),
+                tint = if(invoiceStatusIcon ==0L) Color.Yellow else Color.Blue
             )
             Column(
                 modifier = Modifier
@@ -93,5 +95,5 @@ fun InvoiceItem(
 @Preview(showBackground = true)
 @Composable
 fun PreviewInvoiceItem() {
-    InvoiceItem("Logo for Richard", "$3000", "Pending", "12/3/4", "Invoice id:12345")
+    InvoiceItem("Logo for Richard", "$3000", "Pending", "12/3/4", "Invoice id:12345",0L)
 }

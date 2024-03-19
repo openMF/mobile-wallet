@@ -99,23 +99,6 @@ class PaymentsFragment : BaseFragment() {
             val qrData = data!!.getStringExtra(Constants.QR_DATA)
             val qrDataArray =
                 qrData!!.split(", ".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
-            if (qrDataArray.size == 1) {
-//                etVpa!!.setText(qrDataArray[0])
-            } else {
-//                etVpa!!.setText(qrDataArray[0])
-//                etAmount!!.setText(qrDataArray[1])
-            }
-//            val externalId = etVpa!!.text.toString().trim { it <= ' ' }
-//            if (etAmount!!.text.toString().isEmpty()) {
-//                showSnackbar(Constants.PLEASE_ENTER_AMOUNT)
-//                return
-//            }
-//            val amount = etAmount!!.text.toString().toDouble()
-//            if (!mTransferPresenter!!.checkSelfTransfer(externalId)) {
-//                mTransferPresenter!!.checkBalanceAvailability(externalId, amount)
-//            } else {
-//                showSnackbar(Constants.SELF_ACCOUNT_ERROR)
-//            }
         } else if (requestCode == PICK_CONTACT && resultCode == Activity.RESULT_OK) {
             var cursor: Cursor? = null
             try {
@@ -136,16 +119,11 @@ class PaymentsFragment : BaseFragment() {
                 )
                 phoneNo = cursor.getString(phoneIndex)
                 name = cursor.getString(nameIndex)
-//                mEtMobileNumber!!.setText(phoneNo)
             } catch (e: Exception) {
-//                showToast(Constants.ERROR_CHOOSING_CONTACT)
+                Toaster.show(view, Constants.ERROR_CHOOSING_CONTACT)
             }
         } else if (requestCode == REQUEST_SHOW_DETAILS && resultCode == Activity.RESULT_CANCELED) {
-//            if (mBtnMobile!!.isSelected) {
-//                showSnackbar(Constants.ERROR_FINDING_MOBILE_NUMBER)
-//            } else {
-//                showSnackbar(Constants.ERROR_FINDING_VPA)
-//            }
+            Toaster.show(view, Constants.ERROR_FINDING_VPA)
         }
     }
 
