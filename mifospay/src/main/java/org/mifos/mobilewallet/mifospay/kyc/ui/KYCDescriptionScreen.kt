@@ -47,25 +47,27 @@ import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCDescriptionViewModel
 
 @Composable
 fun KYCDescriptionScreen(
-    viewModel:KYCDescriptionViewModel = hiltViewModel(),
+    viewModel: KYCDescriptionViewModel = hiltViewModel(),
     onLevel1Clicked: () -> Unit,
     onLevel2Clicked: () -> Unit,
     onLevel3Clicked: () -> Unit
 ) {
     val kUiState by viewModel.kycdescriptionState.collectAsState()
 
-    when(val state = kUiState){
+    when (val state = kUiState) {
         KYCDescriptionUiState.Loading -> {
             MifosOverlayLoadingWheel(contentDesc = stringResource(R.string.loading))
         }
+
         is KYCDescriptionUiState.Error -> {
             PlaceholderScreen()
         }
+
         is KYCDescriptionUiState.KYCDescription -> {
             val kyc = state.kycLevel1Details
             if (kyc != null) {
                 KYCDescriptionScreen(
-                    kUiState=state,
+                    kUiState = state,
                     kyc,
                     onLevel1Clicked,
                     onLevel2Clicked,
@@ -73,19 +75,20 @@ fun KYCDescriptionScreen(
                 )
             }
         }
+
         else -> {}
     }
 }
 
 @Composable
 fun KYCDescriptionScreen(
-    kUiState:KYCDescriptionUiState,
+    kUiState: KYCDescriptionUiState,
     kyc: KYCLevel1Details,
-    onLevel1Clicked:() -> Unit,
-    onLevel2Clicked:() -> Unit,
-    onLevel3Clicked:() -> Unit
-){
-   val currentLevel = kyc.currentLevel
+    onLevel1Clicked: () -> Unit,
+    onLevel2Clicked: () -> Unit,
+    onLevel3Clicked: () -> Unit
+) {
+    val currentLevel = kyc.currentLevel
 
     Column(
         modifier = Modifier
@@ -150,7 +153,8 @@ fun KYCLevelButton(
         Spacer(modifier = Modifier.weight(0.1f))
         IconComponent(
             completed,
-            modifier = Modifier.weight(0.9f))
+            modifier = Modifier.weight(0.9f)
+        )
     }
 }
 
@@ -158,7 +162,7 @@ fun KYCLevelButton(
 fun ButtonComponent(
     value: String,
     enabled: Boolean,
-    completed:Boolean,
+    completed: Boolean,
     onButtonClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -197,7 +201,7 @@ fun ButtonComponent(
 }
 
 @Composable
-fun IconComponent(completed: Boolean, modifier: Modifier = Modifier){
+fun IconComponent(completed: Boolean, modifier: Modifier = Modifier) {
     if (completed) {
         Row(
             modifier = modifier
@@ -262,9 +266,15 @@ fun PlaceholderScreen() {
 
 @Preview(showBackground = true)
 @Composable
-fun KYCDescriptionPreview(){
+fun KYCDescriptionPreview() {
     val onLevel1Clicked: () -> Unit = { }
     val onLevel2Clicked: () -> Unit = { }
     val onLevel3Clicked: () -> Unit = { }
-    KYCDescriptionScreen(kUiState = KYCDescriptionUiState.KYCDescription(kycLevel1Details=KYCLevel1Details()),kyc = KYCLevel1Details(),onLevel1Clicked,onLevel2Clicked,onLevel3Clicked)
+    KYCDescriptionScreen(
+        kUiState = KYCDescriptionUiState.KYCDescription(kycLevel1Details = KYCLevel1Details()),
+        kyc = KYCLevel1Details(),
+        onLevel1Clicked,
+        onLevel2Clicked,
+        onLevel3Clicked
+    )
 }

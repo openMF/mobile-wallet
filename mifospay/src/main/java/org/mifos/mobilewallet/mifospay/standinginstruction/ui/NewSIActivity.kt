@@ -21,6 +21,8 @@ import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.NewSIPresenter
 import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.utils.Constants.REQUEST_CAMERA
+import org.mifos.mobilewallet.mifospay.utils.Constants.SCAN_QR_REQUEST_CODE
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils
 import java.util.*
@@ -30,10 +32,6 @@ import kotlin.properties.Delegates
 
 @AndroidEntryPoint
 class NewSIActivity : BaseActivity(), StandingInstructionContract.NewSIView {
-
-
-    private val REQUEST_CAMERA = 0
-    private val SCAN_QR_REQUEST_CODE = 666
 
     @Inject
     lateinit var mPresenter: NewSIPresenter

@@ -151,7 +151,7 @@ class TextDrawable private constructor(builder: Builder) : ShapeDrawable(builder
         fun buildRound(text: String, color: Int): TextDrawable
     }
 
-    class Builder() : IConfigBuilder, IShapeBuilder, IBuilder {
+    class Builder : IConfigBuilder, IShapeBuilder, IBuilder {
         var mTextColor: Int
         var radius = 0f
         var text = ""

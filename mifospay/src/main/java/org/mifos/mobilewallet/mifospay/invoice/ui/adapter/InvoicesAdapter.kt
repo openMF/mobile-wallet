@@ -37,7 +37,8 @@ class InvoicesAdapter @Inject constructor() : RecyclerView.Adapter<InvoicesAdapt
         holder.mTvInvoiceStatus!!.text =
             if (invoice.status == 0L) Constants.PENDING else Constants.DONE
         holder.mInvoiceImage!!.setImageResource(
-            if (invoice.status == 0L) R.drawable.ic_remove_circle_outline_black_24dp else R.drawable.ic_check_round_black_24dp
+            if (invoice.status == 0L) R.drawable.ic_remove_circle_outline_black_24dp
+            else R.drawable.ic_check_round_black_24dp
         )
         holder.mTvInvoiceDate!!.text = DateHelper.getDateAsString(invoice.date)
         holder.mTvInvoiceAmount!!.text = Constants.INR + invoice.amount

@@ -97,7 +97,9 @@ fun LoginScreen(
                     password = it
                 },
                 label = R.string.feature_auth_password,
-                visualTransformation = if (passwordVisibility) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if (passwordVisibility) {
+                    VisualTransformation.None
+                } else PasswordVisualTransformation(),
                 trailingIcon = {
                     val image = if (passwordVisibility)
                         Icons.Filled.Visibility
