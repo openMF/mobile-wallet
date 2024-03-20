@@ -44,7 +44,11 @@ fun ProfileItemCard(
             tint = Color.Black
         )
         Text(
-            modifier = if (text == R.string.edit_profile || text == R.string.settings) Modifier.padding(start = 18.dp).align(Alignment.CenterVertically) else Modifier,
+            modifier = if (text == R.string.edit_profile || text == R.string.settings) Modifier
+                .padding(
+                    start = 18.dp
+                )
+                .align(Alignment.CenterVertically) else Modifier,
             text = stringResource(id = text),
             style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium)
         )

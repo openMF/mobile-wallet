@@ -9,7 +9,12 @@ import com.google.android.material.textfield.TextInputEditText
 import androidx.core.content.FileProvider
 import androidx.appcompat.app.AlertDialog
 import android.text.InputType
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+//import android.view.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView

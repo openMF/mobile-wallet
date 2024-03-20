@@ -22,8 +22,8 @@ jobs:
           java-version: 17
 
         # Install NDK
-      #- name: Install NDK
-      # run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
+        #- name: Install NDK
+        # run: echo "y" | sudo ${ANDROID_HOME}/tools/bin/sdkmanager --install "ndk;20.0.5594570" --sdk_root=${ANDROID_SDK_ROOT}
 
         # Update Gradle Permission
       - name: Change gradlew Permission
@@ -41,7 +41,7 @@ jobs:
           path: mifospay/build/outputs/apk/debug/
 
   lintCheck:
-    name: StaticAnalysis
+    name: Static Analysis
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -52,31 +52,8 @@ jobs:
         with:
           java-version: 17
 
-      - uses: actions/checkout@v2
-      - name: Static Analysis[Mifospay]
-        run: ./gradlew mifospay:lint
-
-      - name: Upload Static Analysis Report For MifosPay Module
-        uses: actions/upload-artifact@v2.2.0
-        if: failure()
-        with:
-          name: Static Analysis Report[Mifospay]
-          path: mifospay/build/reports/
-
-      - name: Static Analysis[Core:Datastore]
-        run: ./gradlew core:datastore:lint
-
-      - name: Static Analysis[Core:Data]
-        run: ./gradlew core:data:lint
-
-      - name: Static Analysis[Core:DesignSystem]
-        run: ./gradlew core:designsystem:lint
-
-      - name: Static Analysis[Core:Common]
-        run: ./gradlew core:common:lint
-
-      - name: Static Analysis[Feature:Auth]
-        run: ./gradlew feature:auth:lint
+      - name: Detekt For All Modules
+        run: ./gradlew detekt
 
   pmd:
     name: PMD
@@ -101,25 +78,25 @@ jobs:
           name: PMD Report[MifosPay]
           path: mifospay/build/reports/
 
-      - name: Static Analysis[Core:Datastore]
+      - name: PMD Check[Core:Datastore]
         run: ./gradlew core:datastore:pmd
 
-      - name: Static Analysis[Core:Data]
+      - name: PMD Check[Core:Data]
         run: ./gradlew core:data:pmd
 
-      - name: Static Analysis[Core:DesignSystem]
+      - name: PMD Check[Core:DesignSystem]
         run: ./gradlew core:designsystem:pmd
 
-      - name: Static Analysis[Core:Common]
+      - name: PMD Check[Core:Common]
         run: ./gradlew core:common:pmd
 
-      - name: Static Analysis[Core:Network]
+      - name: PMD Check[Core:Network]
         run: ./gradlew core:network:pmd
 
-      - name: Static Analysis[Core:Model]
+      - name: PMD Check[Core:Model]
         run: ./gradlew core:model:pmd
 
-      - name: Static Analysis[Feature:Auth]
+      - name: PMD Check[Feature:Auth]
         run: ./gradlew feature:auth:pmd
 
   checkstyle:

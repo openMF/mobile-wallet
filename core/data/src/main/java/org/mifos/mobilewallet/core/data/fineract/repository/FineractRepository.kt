@@ -2,6 +2,7 @@ package org.mifos.mobilewallet.core.data.fineract.repository
 
 import com.mifos.mobilewallet.model.domain.NewAccount
 import com.mifos.mobilewallet.model.domain.NotificationPayload
+import com.mifos.mobilewallet.model.domain.client.NewClient
 import com.mifos.mobilewallet.model.domain.twofactor.AccessToken
 import com.mifos.mobilewallet.model.domain.twofactor.DeliveryMethod
 import com.mifos.mobilewallet.model.domain.user.NewUser
@@ -48,7 +49,7 @@ class FineractRepository @Inject constructor(
     private val fineractApiManager: FineractApiManager,
     private val selfApiManager: SelfServiceApiManager
 ) {
-    fun createClient(newClient: com.mifos.mobilewallet.model.domain.client.NewClient): Observable<CreateClient.ResponseValue> {
+    fun createClient(newClient: NewClient): Observable<CreateClient.ResponseValue> {
         return fineractApiManager.clientsApi.createClient(newClient)
     }
 

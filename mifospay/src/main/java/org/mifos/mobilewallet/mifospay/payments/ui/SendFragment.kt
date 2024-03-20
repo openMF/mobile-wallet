@@ -144,7 +144,9 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
         val eamount = etAmount!!.text.toString().trim { it <= ' ' }
         val mobileNumber = mEtMobileNumber!!.text
             .toString().trim { it <= ' ' }.replace("\\s+".toRegex(), "")
-        if (eamount == "" || mBtnVpa!!.isSelected && externalId == "" || mBtnMobile!!.isSelected && mobileNumber == "") {
+        if (eamount == "" || mBtnVpa!!.isSelected && externalId == "" ||
+            mBtnMobile!!.isSelected && mobileNumber == ""
+        ) {
             Toast.makeText(
                 activity,
                 Constants.PLEASE_ENTER_ALL_THE_FIELDS, Toast.LENGTH_SHORT

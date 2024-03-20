@@ -9,6 +9,7 @@ import com.mifos.mobilewallet.model.domain.Transaction
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
+import org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER_USECASE
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
@@ -93,7 +94,7 @@ class MerchantTransferPresenter @Inject constructor(
                 ) {
                     val transferId = transaction.transferId
                     mTaskLooper.addTask(
-                        useCase = mUseCaseFactory.getUseCase(org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER_USECASE)
+                        useCase = mUseCaseFactory.getUseCase(FETCH_ACCOUNT_TRANSFER_USECASE)
                                 as UseCase<FetchAccountTransfer.RequestValues, FetchAccountTransfer.ResponseValue>,
                         values = transferId.let { FetchAccountTransfer.RequestValues(it) },
                         taskData = TaskData(Constants.TRANSFER_DETAILS, i)
