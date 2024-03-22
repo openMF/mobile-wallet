@@ -182,7 +182,7 @@ class SignupViewModel @Inject constructor(
         password: String?,
         showToastMessage: (String) -> Unit
     ) {
-        authenticateUserUseCase.walletRequestValues = AuthenticateUser.RequestValues(username, password)
+        authenticateUserUseCase.walletRequestValues = AuthenticateUser.RequestValues(username!!, password!!)
         val requestValue = authenticateUserUseCase.walletRequestValues
         useCaseHandler.execute(authenticateUserUseCase, requestValue,
             object : UseCase.UseCaseCallback<AuthenticateUser.ResponseValue> {
@@ -216,8 +216,8 @@ class SignupViewModel @Inject constructor(
         useCaseHandler.execute(fetchClientDataUseCase, null,
             object : UseCase.UseCaseCallback<FetchClientData.ResponseValue> {
                 override fun onSuccess(response: FetchClientData.ResponseValue) {
-                    saveClientDetails(response.userDetails)
-                    if (response.userDetails.name != "") {
+                    saveClientDetails(response.clientDetails)
+                    if (response.clientDetails.name != "") {
                         isLoginSuccess = true
                     }
                 }
@@ -229,7 +229,7 @@ class SignupViewModel @Inject constructor(
     }
 
     private fun createAuthenticatedService(user: User) {
-        val authToken = Constants.BASIC + user.authenticationKey
+        val authToken = Constants.BASIC + user.base64EncodedAuthenticationKey
         preferencesHelper.saveToken(authToken)
     }
 
@@ -237,7 +237,7 @@ class SignupViewModel @Inject constructor(
         user: User,
         userWithRole: UserWithRole
     ) {
-        val userName = user.userName
+        val userName = user.username
         val userID = user.userId
         preferencesHelper.saveUsername(userName)
         preferencesHelper.userId = userID

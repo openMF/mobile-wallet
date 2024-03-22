@@ -33,8 +33,6 @@ interface UserService {
         @Path("userId") userId: Int
     ): Observable<GenericResponse>
 
-    @GET(ApiEndPoints.USER + "/{userId}")
-    fun getUser(
-        @Path("userId") userId: Long
-    ): Observable<UserWithRole>
+    @GET("self/userdetails")
+    fun getUser(): Observable<UserWithRole>
 }

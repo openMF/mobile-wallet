@@ -6,6 +6,7 @@ import com.mifos.mobilewallet.model.domain.client.NewClient
 import com.mifos.mobilewallet.model.domain.twofactor.AccessToken
 import com.mifos.mobilewallet.model.domain.twofactor.DeliveryMethod
 import com.mifos.mobilewallet.model.domain.user.NewUser
+import com.mifos.mobilewallet.model.domain.user.User
 import com.mifos.mobilewallet.model.entity.Invoice
 import com.mifos.mobilewallet.model.entity.Page
 import com.mifos.mobilewallet.model.entity.SearchedEntity
@@ -216,8 +217,8 @@ class FineractRepository @Inject constructor(
     val users: Observable<List<UserWithRole>>
         get() = fineractApiManager.userApi.users
 
-    fun getUser(userId: Long): Observable<UserWithRole> {
-        return fineractApiManager.userApi.getUser(userId)
+    fun getUser(): Observable<UserWithRole> {
+        return fineractApiManager.userApi.getUser()
     }
 
     fun makeThirdPartyTransfer(transferPayload: TransferPayload): Observable<TPTResponse> {
@@ -256,7 +257,7 @@ class FineractRepository @Inject constructor(
     }
 
     //self user apis
-    fun loginSelf(payload: AuthenticationPayload): Observable<UserEntity> {
+    fun loginSelf(payload: AuthenticationPayload): Observable<User> {
         return selfApiManager.authenticationApi.authenticate(payload)
     }
 

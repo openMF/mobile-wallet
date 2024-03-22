@@ -3,6 +3,9 @@ package org.mifos.mobilewallet.mifospay.core.datastore
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import com.google.gson.Gson
+import com.mifos.mobilewallet.model.domain.client.Client
+import com.mifos.mobilewallet.model.domain.user.User
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -65,8 +68,8 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
         putString(USERNAME, name)
     }
 
-    val username: String?
-        get() = getString(USERNAME, "")
+    val username: String
+        get() = getString(USERNAME, "") ?: ""
 
     fun saveEmail(email: String?) {
         putString(EMAIL, email)
@@ -107,7 +110,27 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
             putString(FIREBASE_REG_ID, firebaseRegId)
         }
 
+    var user: User
+        get() = Gson().fromJson(
+            getString(PREF_USER, Gson().toJson(User::class.java)),
+            User::class.java
+        )
+        set(user) {
+            putString(PREF_USER, Gson().toJson(user))
+        }
+
+    var client: Client
+        get() = Gson().fromJson(
+            getString(PREF_CLIENT, Gson().toJson(Client::class.java)),
+            Client::class.java
+        )
+        set(client) {
+            putString(PREF_USER, Gson().toJson(client))
+        }
+
     companion object {
+        private const val PREF_USER = "pref_user"
+        private const val PREF_CLIENT = "pref_client"
         private const val TOKEN = "preferences_token"
         private const val NAME = "preferences_name"
         private const val USERNAME = "preferences_user_name"

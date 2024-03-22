@@ -64,8 +64,8 @@ class LoginViewModel @Inject constructor(
         mUsecaseHandler.execute(fetchClientDataUseCase, null,
             object : UseCase.UseCaseCallback<FetchClientData.ResponseValue> {
                 override fun onSuccess(response: FetchClientData.ResponseValue) {
-                    saveClientDetails(response.userDetails)
-                    if (response.userDetails.name != "") {
+                    saveClientDetails(response.clientDetails)
+                    if (response.clientDetails.name != "") {
                         _uiState.value = LoginUiState.Success
                     }
                 }

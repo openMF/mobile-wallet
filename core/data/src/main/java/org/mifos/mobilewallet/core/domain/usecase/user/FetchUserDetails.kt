@@ -14,7 +14,7 @@ import javax.inject.Inject
 class FetchUserDetails @Inject constructor(private val mFineractRepository: FineractRepository) :
     UseCase<FetchUserDetails.RequestValues, FetchUserDetails.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {
-        mFineractRepository.getUser(requestValues.userId)
+        mFineractRepository.getUser()
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(object : Subscriber<UserWithRole>() {

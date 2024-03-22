@@ -11,9 +11,6 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import javax.inject.Inject
 
-/**
- * Created by naman on 17/6/17.
- */
 class FetchClientData @Inject constructor(private val fineractRepository: FineractRepository) :
     UseCase<FetchClientData.RequestValues, FetchClientData.ResponseValue>() {
 
@@ -21,8 +18,8 @@ class FetchClientData @Inject constructor(private val fineractRepository: Finera
     lateinit var clientDetailsMapper: ClientDetailsMapper
 
     override fun executeUseCase(requestValues: RequestValues) {
-        if (requestValues != null) {
-            fineractRepository.getSelfClientDetails(requestValues.clientid)
+        requestValues.clientId?.let { clientId ->
+            fineractRepository.getSelfClientDetails(clientId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(object : Subscriber<Client>() {
@@ -33,13 +30,11 @@ class FetchClientData @Inject constructor(private val fineractRepository: Finera
 
                     override fun onNext(client: Client) {
                         useCaseCallback.onSuccess(
-                            ResponseValue(
-                                clientDetailsMapper.transform(client)
-                            )
+                            ResponseValue(clientDetailsMapper.transform(client))
                         )
                     }
                 })
-        } else {
+        } ?: run {
             fineractRepository.selfClientDetails
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -50,12 +45,9 @@ class FetchClientData @Inject constructor(private val fineractRepository: Finera
                     }
 
                     override fun onNext(client: Page<Client>) {
-                        if (client.pageItems != null && client.pageItems.size != 0) {
+                        if (client.pageItems.size != 0) {
                             useCaseCallback.onSuccess(
-                                ResponseValue(
-                                    clientDetailsMapper
-                                        .transform(client.pageItems[0])
-                                )
+                                ResponseValue(clientDetailsMapper.transform(client.pageItems[0]))
                             )
                         } else {
                             useCaseCallback.onError(Constants.NO_CLIENT_FOUND)
@@ -65,7 +57,8 @@ class FetchClientData @Inject constructor(private val fineractRepository: Finera
         }
     }
 
-    data class RequestValues(val clientid: Long) : UseCase.RequestValues
-    data class ResponseValue(val userDetails: com.mifos.mobilewallet.model.domain.client.Client) :
-        UseCase.ResponseValue
+    data class RequestValues(val clientId: Long?) : UseCase.RequestValues
+    data class ResponseValue(
+        val clientDetails: com.mifos.mobilewallet.model.domain.client.Client
+    ) : UseCase.ResponseValue
 }
