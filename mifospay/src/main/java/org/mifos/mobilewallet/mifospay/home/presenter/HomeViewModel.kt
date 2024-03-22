@@ -21,7 +21,7 @@ import org.mifos.mobilewallet.mifospay.history.HistoryContract.TransactionsHisto
 import org.mifos.mobilewallet.mifospay.history.TransactionsHistory
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.HomeView
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**

@@ -18,7 +18,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract.KYCLevel1View
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCLevel1Presenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils.hideSoftKeyboard
 import java.text.SimpleDateFormat

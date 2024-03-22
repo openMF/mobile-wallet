@@ -8,11 +8,9 @@ import android.os.Build
 import android.os.Bundle
 import androidx.core.content.ContextCompat
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import butterknife.ButterKnife
-import com.google.android.gms.common.util.DataUtils
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
@@ -20,9 +18,9 @@ import org.mifos.mobilewallet.mifospay.databinding.ActivityNewSiBinding
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.NewSIPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
-import org.mifos.mobilewallet.mifospay.utils.Constants.REQUEST_CAMERA
-import org.mifos.mobilewallet.mifospay.utils.Constants.SCAN_QR_REQUEST_CODE
+import org.mifos.mobilewallet.mifospay.common.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants.REQUEST_CAMERA
+import org.mifos.mobilewallet.mifospay.common.Constants.SCAN_QR_REQUEST_CODE
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils
 import java.util.*

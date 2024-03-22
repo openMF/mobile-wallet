@@ -33,9 +33,9 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract.EditProfileView
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter
-import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
+import org.mifos.mobilewallet.mifospay.passcode.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.DialogBox
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable
 import org.mifos.mobilewallet.mifospay.utils.Toaster

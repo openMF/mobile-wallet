@@ -27,7 +27,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.qr.QrContract
 import org.mifos.mobilewallet.mifospay.qr.QrContract.ShowQrView
 import org.mifos.mobilewallet.mifospay.qr.presenter.ShowQrPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException

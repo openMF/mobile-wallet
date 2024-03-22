@@ -6,7 +6,7 @@ import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import org.mifos.mobilewallet.core.base.UseCase
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**

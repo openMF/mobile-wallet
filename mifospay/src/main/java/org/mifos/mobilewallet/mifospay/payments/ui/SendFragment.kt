@@ -32,7 +32,7 @@ import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment.Companion.
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
 import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils.hideSoftKeyboard
 

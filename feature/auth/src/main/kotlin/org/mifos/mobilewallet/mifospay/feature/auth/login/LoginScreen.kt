@@ -1,8 +1,12 @@
 package org.mifos.mobilewallet.mifospay.feature.auth.login
 
+import android.content.Context
+import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -28,27 +32,64 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.mifos.mobilewallet.mifospay.feature.auth.R
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mifos.mobile.passcode.utils.PassCodeConstants
+import org.mifos.mobilewallet.mifospay.designsystem.component.MfOverlayLoadingWheel
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosOutlinedTextField
 import org.mifos.mobilewallet.mifospay.designsystem.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.designsystem.theme.grey
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleMedium16sp
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleMedium30sp
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleNormal18sp
+import org.mifos.mobilewallet.mifospay.feature.auth.R
+import org.mifos.mobilewallet.mifospay.feature.auth.social_signup.SocialSignupMethodContentScreen
 
 @Composable
 fun LoginScreen(
-    login: (username: String, password: String) -> Unit,
-    signUp: () -> Unit
+    viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+    val showProgress by viewModel.showProgress.collectAsStateWithLifecycle()
+    val isLoginSuccess by viewModel.isLoginSuccess.collectAsStateWithLifecycle()
+
+    if (viewModel.isPassCodeExist) {
+        startPassCodeActivity(context)
+    }
+
+    LoginScreenContent(
+        showProgress = showProgress,
+        login = { username, password ->
+            viewModel.loginUser(
+                username = username,
+                password = password,
+                onLoginFailed = { message ->
+                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                }
+            )
+        }
+    )
+
+    if (isLoginSuccess) {
+        startPassCodeActivity(context)
+    }
+}
+
+@Composable
+fun LoginScreenContent(
+    showProgress: Boolean,
+    login: (username: String, password: String) -> Unit,
+) {
+    var showSignUpScreen by rememberSaveable { mutableStateOf(false) }
+
     var userName by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(
             TextFieldValue("")
@@ -61,7 +102,13 @@ fun LoginScreen(
     }
     var passwordVisibility: Boolean by remember { mutableStateOf(false) }
 
-    MifosTheme {
+    if (showSignUpScreen) {
+        SocialSignupMethodContentScreen {
+            showSignUpScreen = false
+        }
+    }
+
+    Box {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -126,7 +173,7 @@ fun LoginScreen(
                 )
             }
             // Hide reset password for now
-            Text(
+            /*Text(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 32.dp),
@@ -143,7 +190,7 @@ fun LoginScreen(
                 text = "OR",
                 textAlign = TextAlign.Center,
                 style = styleMedium16sp.copy(color = grey)
-            )
+            )*/
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -156,7 +203,7 @@ fun LoginScreen(
                 )
                 Text(
                     modifier = Modifier.clickable {
-                        signUp.invoke()
+                        showSignUpScreen = true
                     },
                     text = stringResource(id = R.string.feature_auth_sign_up),
                     style = styleMedium16sp.copy(
@@ -165,11 +212,32 @@ fun LoginScreen(
                 )
             }
         }
+
+        if (showProgress) {
+            MfOverlayLoadingWheel(
+                contentDesc = stringResource(id = R.string.feature_auth_logging_in)
+            )
+        }
     }
+
+}
+
+/**
+ * Starts [PassCodeActivity] with `Constans.INTIAL_LOGIN` as true
+ */
+private fun startPassCodeActivity(context: Context) {
+   /* val intent = Intent(context, PassCodeActivity::class.java)
+    intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
+    context.startActivity(intent)*/
 }
 
 @Preview(showSystemUi = true, device = "id:pixel_5")
 @Composable
 fun LoanScreenPreview() {
-    LoginScreen({ _, _ -> }, {})
+    MifosTheme {
+        LoginScreenContent(
+            showProgress = false,
+            login = { _, _ -> }
+        )
+    }
 }

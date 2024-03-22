@@ -79,7 +79,7 @@
             android:name=".qr.ui.ReadQrActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".passcode.ui.PassCodeActivity"
+            android:name=".passcode.PassCodeActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".receipt.ui.ReceiptActivity"

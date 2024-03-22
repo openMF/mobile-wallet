@@ -25,7 +25,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.qr.QrContract
 import org.mifos.mobilewallet.mifospay.qr.QrContract.ReadQrView
 import org.mifos.mobilewallet.mifospay.qr.presenter.ReadQrPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import java.io.FileNotFoundException
 import javax.inject.Inject
 

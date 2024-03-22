@@ -28,11 +28,11 @@ import com.mifos.mobilewallet.model.domain.Transaction
 import com.mifos.mobilewallet.model.domain.TransactionType
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
-import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
+import org.mifos.mobilewallet.mifospay.passcode.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract.ReceiptView
 import org.mifos.mobilewallet.mifospay.receipt.presenter.ReceiptPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.FileUtils
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance

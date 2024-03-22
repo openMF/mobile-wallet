@@ -8,7 +8,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract.KYCLevel1View
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**

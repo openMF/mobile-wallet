@@ -21,7 +21,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.mifos.mobilewallet.model.entity.savedcards.Card
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import java.util.Calendar
 

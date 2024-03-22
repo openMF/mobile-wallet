@@ -29,17 +29,16 @@ import org.json.JSONObject
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.auth.LoginActivity
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
-import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
+import org.mifos.mobilewallet.mifospay.passcode.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract.SignupView
 import org.mifos.mobilewallet.mifospay.registration.SignupScreen
 import org.mifos.mobilewallet.mifospay.registration.SignupViewModel
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.FileUtils
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.ValidateUtil.isValidEmail
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignupActivity : BaseActivity(), SignupView {
@@ -121,7 +120,7 @@ class SignupActivity : BaseActivity(), SignupView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
         ButterKnife.bind(this)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         setToolbarTitle("Registration")
 
         viewModel.initSignupData(

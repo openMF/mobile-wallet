@@ -6,7 +6,7 @@ import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 
 @AndroidEntryPoint
 class SendActivity : BaseActivity() {

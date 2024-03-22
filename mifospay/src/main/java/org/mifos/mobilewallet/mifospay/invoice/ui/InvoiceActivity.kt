@@ -19,7 +19,7 @@ import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract.InvoiceView
 import org.mifos.mobilewallet.mifospay.invoice.presenter.InvoicePresenter
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
 

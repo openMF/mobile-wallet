@@ -21,7 +21,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract.KYCLevel2View
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCLevel2Presenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
 

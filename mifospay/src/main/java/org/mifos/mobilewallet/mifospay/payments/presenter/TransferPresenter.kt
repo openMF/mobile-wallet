@@ -8,7 +8,7 @@ import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**

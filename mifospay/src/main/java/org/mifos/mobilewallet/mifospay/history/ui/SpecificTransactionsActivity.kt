@@ -21,7 +21,7 @@ import org.mifos.mobilewallet.mifospay.history.HistoryContract.SpecificTransacti
 import org.mifos.mobilewallet.mifospay.history.presenter.SpecificTransactionsPresenter
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.SpecificTransactionsAdapter
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import javax.inject.Inject
 

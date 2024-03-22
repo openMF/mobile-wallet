@@ -12,7 +12,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract.KYCLevel2View
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.FileUtils
 import java.io.File
 import javax.inject.Inject

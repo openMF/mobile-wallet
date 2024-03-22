@@ -24,7 +24,7 @@ import org.mifos.mobilewallet.mifospay.history.HistoryContract.HistoryView
 import org.mifos.mobilewallet.mifospay.history.HistoryContract.TransactionsHistoryPresenter
 import org.mifos.mobilewallet.mifospay.history.presenter.HistoryPresenter
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.HistoryAdapter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import javax.inject.Inject
 

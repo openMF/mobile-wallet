@@ -11,7 +11,7 @@ import org.mifos.mobilewallet.mifospay.databinding.ActivityEditPasswordBinding
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract.EditPasswordView
 import org.mifos.mobilewallet.mifospay.password.presenter.EditPasswordPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
 

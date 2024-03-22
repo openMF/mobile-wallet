@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.mifos.mobilewallet.model.entity.standinginstruction.StandingInstruction
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 
 /**
  * Created by Devansh on 08/06/2020

@@ -9,7 +9,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract.InvoicesView
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**

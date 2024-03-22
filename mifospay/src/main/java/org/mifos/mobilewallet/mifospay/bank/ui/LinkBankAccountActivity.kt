@@ -25,7 +25,7 @@ import org.mifos.mobilewallet.mifospay.bank.adapters.PopularBankAdapter
 import org.mifos.mobilewallet.mifospay.bank.presenter.LinkBankAccountPresenter
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.domain.model.Bank
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import org.mifos.mobilewallet.mifospay.utils.FileUtils
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener

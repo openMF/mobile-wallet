@@ -19,7 +19,7 @@ import org.mifos.mobilewallet.core.domain.usecase.savedcards.EditCard
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.FetchSavedCards
 import org.mifos.mobilewallet.mifospay.common.CreditCardUtils.validateCreditCardNumber
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 @HiltViewModel

@@ -22,7 +22,7 @@ import org.mifos.mobilewallet.mifospay.bank.BankContract.BankAccountsView
 import org.mifos.mobilewallet.mifospay.bank.adapters.BankAccountsAdapter
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountsPresenter
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import javax.inject.Inject
