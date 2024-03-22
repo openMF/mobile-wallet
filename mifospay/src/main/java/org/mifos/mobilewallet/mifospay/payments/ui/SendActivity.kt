@@ -15,7 +15,7 @@ class SendActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
         setToolbarTitle(getString(R.string.pay))
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)

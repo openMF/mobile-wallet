@@ -69,7 +69,7 @@ class SetupUpiPinActivity : BaseActivity(), SetupUpiPinView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_upi_pin)
         ButterKnife.bind(this)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         setToolbarTitle(Constants.SETUP_UPI_PIN)
         mPresenter!!.attachView(this)
         val b = intent.extras

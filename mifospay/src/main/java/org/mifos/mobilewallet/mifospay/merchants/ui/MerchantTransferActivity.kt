@@ -93,7 +93,7 @@ class MerchantTransferActivity : BaseActivity(), MerchantTransferView {
         setContentView(R.layout.activity_merchant_transaction)
         ButterKnife.bind(this)
         setToolbarTitle("Merchant Transaction")
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         setupUI()
         mPresenter?.attachView(this)
         mPresenter?.fetchMerchantTransfers(merchantAccountNumber)

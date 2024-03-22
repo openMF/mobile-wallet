@@ -78,7 +78,7 @@ class InvoiceActivity : BaseActivity(), InvoiceView {
         setContentView(R.layout.activity_invoice)
         ButterKnife.bind(this)
         setToolbarTitle(Constants.INVOICE)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         mPresenter!!.attachView(this)
         val data = intent.data
         if (data != null) {

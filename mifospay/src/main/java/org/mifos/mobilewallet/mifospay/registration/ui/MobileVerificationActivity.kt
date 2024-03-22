@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.databinding.ActivityMobileVerificationBinding
 import org.mifos.mobilewallet.mifospay.registration.MobileVerificationScreen
@@ -33,7 +34,7 @@ class MobileVerificationActivity : BaseActivity() {
         }
 
         setToolbarTitle("")
-        showColoredBackButton(Constants.WHITE_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_white_24dp)
     }
 
     private fun onOtpVerificationSuccess(fullNumber: String) {
