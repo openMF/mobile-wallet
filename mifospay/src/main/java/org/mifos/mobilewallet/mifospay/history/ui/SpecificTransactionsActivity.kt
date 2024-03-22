@@ -66,7 +66,7 @@ class SpecificTransactionsActivity : BaseActivity(), SpecificTransactionsView {
         setContentView(R.layout.activity_specific_transactions)
         ButterKnife.bind(this)
         mPresenter!!.attachView(this)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         setToolbarTitle(Constants.SPECIFIC_TRANSACTIONS)
         transactions = intent.getParcelableArrayListExtra(Constants.TRANSACTIONS)
         secondAccountNumber = intent.getStringExtra(Constants.ACCOUNT_NUMBER)

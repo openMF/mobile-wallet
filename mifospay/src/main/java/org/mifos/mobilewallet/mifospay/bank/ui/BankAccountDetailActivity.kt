@@ -74,7 +74,7 @@ class BankAccountDetailActivity : BaseActivity(), BankAccountDetailView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank_account_detail)
         ButterKnife.bind(this)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         setToolbarTitle(Constants.BANK_ACCOUNT_DETAILS)
         mPresenter!!.attachView(this)
         bankAccountDetails = intent.extras!!.getParcelable(Constants.BANK_ACCOUNT_DETAILS)

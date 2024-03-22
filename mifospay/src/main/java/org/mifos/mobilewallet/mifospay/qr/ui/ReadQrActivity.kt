@@ -59,7 +59,7 @@ class ReadQrActivity : BaseActivity(), ReadQrView, ResultHandler {
         setContentView(R.layout.activity_read_qr)
         ButterKnife.bind(this@ReadQrActivity)
         setToolbarTitle(Constants.SCAN_CODE)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         mPresenter!!.attachView(this)
         mScannerView!!.setAutoFocus(true)
     }

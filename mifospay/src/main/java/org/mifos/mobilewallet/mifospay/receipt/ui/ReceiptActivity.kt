@@ -94,7 +94,7 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
         setContentView(R.layout.activity_receipt)
         ButterKnife.bind(this)
         setToolbarTitle(Constants.RECEIPT)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         mPresenter!!.attachView(this)
         val data = intent.data
         deepLinkURI = data

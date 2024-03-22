@@ -48,7 +48,7 @@ class NotificationActivity : BaseActivity(), NotificationView {
         setContentView(R.layout.activity_notification)
         ButterKnife.bind(this)
         setToolbarTitle("Notifications")
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         setupRecyclerView()
         setupSwipeRefreshLayout()
         mPresenter?.attachView(this)

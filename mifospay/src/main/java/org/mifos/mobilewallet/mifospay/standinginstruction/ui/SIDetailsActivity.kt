@@ -53,7 +53,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         setContentView(binding.root)
         ButterKnife.bind(this)
         setToolbarTitle(getString(R.string.details))
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         mPresenter.attachView(this)
         res = resources
 
