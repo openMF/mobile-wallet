@@ -7,7 +7,6 @@ import org.mifos.mobilewallet.core.base.UseCaseFactory
 import com.mifos.mobilewallet.model.domain.Transaction
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
-import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientDetails
 import org.mifos.mobilewallet.core.utils.Constants
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseView
@@ -48,7 +47,7 @@ class SpecificTransactionsPresenter @Inject constructor(
                                 as UseCase<FetchAccountTransfer.RequestValues, FetchAccountTransfer.ResponseValue>,
                         values = FetchAccountTransfer.RequestValues(transferId!!),
                         taskData = TaskData(
-                            org.mifos.mobilewallet.mifospay.utils.Constants.TRANSFER_DETAILS, i
+                            org.mifos.mobilewallet.mifospay.common.Constants.TRANSFER_DETAILS, i
                         )
                     )
                 }
@@ -58,7 +57,7 @@ class SpecificTransactionsPresenter @Inject constructor(
                     taskData: TaskData, response: R
                 ) {
                     when (taskData.taskName) {
-                        org.mifos.mobilewallet.mifospay.utils.Constants.TRANSFER_DETAILS -> {
+                        org.mifos.mobilewallet.mifospay.common.Constants.TRANSFER_DETAILS -> {
                             val responseValue = response as FetchAccountTransfer.ResponseValue
                             val index = taskData.taskId
                             transactions[index]?.transferDetail = responseValue.transferDetail

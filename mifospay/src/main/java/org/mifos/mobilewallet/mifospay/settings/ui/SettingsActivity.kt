@@ -10,7 +10,7 @@ import org.mifos.mobilewallet.mifospay.settings.SettingsContract
 import org.mifos.mobilewallet.mifospay.settings.SettingsContract.SettingsView
 import org.mifos.mobilewallet.mifospay.settings.presenter.SettingsPresenter
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 @AndroidEntryPoint

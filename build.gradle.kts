@@ -29,7 +29,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt").version("1.18.1")
 }
 
-val detektProjectBaseline by tasks.registering(io.gitlab.arturbosch.detekt.DetektCreateBaselineTask::class) {
+val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) {
     description = "Overrides current baseline."
     ignoreFailures.set(true)
     parallel.set(true)

@@ -46,7 +46,7 @@ import com.mifos.mobile.passcode.utils.PassCodeConstants
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.designsystem.component.MfOverlayLoadingWheel
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosOutlinedTextField
-import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
+import org.mifos.mobilewallet.mifospay.passcode.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.registration.SignupMethodContentScreen
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.theme.grey

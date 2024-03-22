@@ -18,10 +18,9 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
 import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import java.util.Locale
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class RequestFragment : BaseFragment(), BaseHomeContract.TransferView {

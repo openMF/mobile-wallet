@@ -2,7 +2,6 @@ package org.mifos.mobilewallet.mifospay.registration.ui
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
@@ -10,7 +9,7 @@ import org.mifos.mobilewallet.mifospay.databinding.ActivityMobileVerificationBin
 import org.mifos.mobilewallet.mifospay.registration.MobileVerificationScreen
 import org.mifos.mobilewallet.mifospay.registration.MobileVerificationViewModel
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 
 @AndroidEntryPoint
 class MobileVerificationActivity : BaseActivity() {

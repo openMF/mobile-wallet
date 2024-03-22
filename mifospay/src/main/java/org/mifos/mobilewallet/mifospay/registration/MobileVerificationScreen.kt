@@ -40,7 +40,7 @@ import org.mifos.mobilewallet.mifospay.designsystem.component.MifosLoadingWheel
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosOutlinedTextField
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.theme.styleMedium16sp
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 
 
 @Composable

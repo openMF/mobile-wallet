@@ -6,7 +6,7 @@ import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.history.HistoryContract
 import org.mifos.mobilewallet.mifospay.history.HistoryContract.TransactionDetailView
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**

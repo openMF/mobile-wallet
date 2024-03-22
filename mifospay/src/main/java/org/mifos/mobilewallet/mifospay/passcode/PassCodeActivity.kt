@@ -1,11 +1,12 @@
-package org.mifos.mobilewallet.mifospay.passcode.ui
+package org.mifos.mobilewallet.mifospay.passcode
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import android.view.View
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import butterknife.ButterKnife
 import com.mifos.mobile.passcode.MifosPassCodeActivity
 import com.mifos.mobile.passcode.utils.EncryptionUtil
@@ -15,27 +16,19 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.auth.LoginActivity
 import org.mifos.mobilewallet.mifospay.home.ui.MainActivity
-import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract
-import org.mifos.mobilewallet.mifospay.passcode.PassCodeContract.PassCodeView
-import org.mifos.mobilewallet.mifospay.passcode.presenter.PassCodePresenter
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
-import javax.inject.Inject
-
-/**
- * Created by ankur on 15/May/2018
- */
+import org.mifos.mobilewallet.mifospay.common.Constants
 
 @AndroidEntryPoint
-class PassCodeActivity : MifosPassCodeActivity(), PassCodeView {
-    @JvmField
-    @Inject
-    var mPresenter: PassCodePresenter? = null
-    private var mPassCodePresenter: PassCodeContract.PassCodePresenter? = null
+class PassCodeActivity : MifosPassCodeActivity() {
+
     private var deepLinkURI: String? = null
     private var currPass: String? = ""
     private var updatePassword = false
     private var isInitialScreen = false
+
+    val viewModel: PassCodeViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -93,10 +86,6 @@ class PassCodeActivity : MifosPassCodeActivity(), PassCodeView {
 
     override fun getEncryptionType(): Int {
         return EncryptionUtil.DEFAULT
-    }
-
-    override fun setPresenter(presenter: PassCodeContract.PassCodePresenter?) {
-        mPassCodePresenter = mPresenter
     }
 
     private fun saveCurrentPasscode() {

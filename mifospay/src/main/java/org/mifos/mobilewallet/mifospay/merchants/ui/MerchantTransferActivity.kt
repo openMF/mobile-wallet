@@ -23,7 +23,7 @@ import org.mifos.mobilewallet.mifospay.history.ui.adapter.SpecificTransactionsAd
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.MerchantTransferView
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantTransferPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject

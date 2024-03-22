@@ -20,7 +20,7 @@ import org.mifos.mobilewallet.mifospay.bank.fragment.UpiPinFragment
 import org.mifos.mobilewallet.mifospay.bank.presenter.SetupUpiPinPresenter
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.utils.AnimationUtil
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
 

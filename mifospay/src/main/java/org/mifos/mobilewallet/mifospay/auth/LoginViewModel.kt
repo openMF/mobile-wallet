@@ -14,7 +14,7 @@ import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientData
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 import org.mifos.mobilewallet.core.domain.usecase.user.FetchUserDetails
 import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import javax.inject.Inject
 

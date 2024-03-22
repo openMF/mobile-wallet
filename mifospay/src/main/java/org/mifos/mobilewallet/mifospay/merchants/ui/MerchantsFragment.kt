@@ -27,7 +27,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.merchants.MerchantsContract
 import org.mifos.mobilewallet.mifospay.merchants.adapter.MerchantsAdapter
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantsPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import java.util.*
 import javax.inject.Inject

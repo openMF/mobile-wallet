@@ -1,6 +1,4 @@
-package org.mifos.mobilewallet.mifospay.utils
-
-import org.mifos.mobilewallet.mifospay.R
+package org.mifos.mobilewallet.mifospay.common
 
 /**
  * Created by naman on 17/6/17.
@@ -169,8 +167,8 @@ object Constants {
     const val TAP_TO_REVEAL = "Tap to Reveal"
     const val NAME = "Name : "
     const val ERROR_FETCHING_TRANSACTION_DETAILS = "Error fetching details"
-    const val WHITE_BACK_BUTTON = R.drawable.ic_arrow_back_white_24dp
-    const val BLACK_BACK_BUTTON = R.drawable.ic_arrow_back_black_24dp
+   // const val WHITE_BACK_BUTTON = R.drawable.ic_arrow_back_white_24dp
+  //  const val BLACK_BACK_BUTTON = R.drawable.ic_arrow_back_black_24dp
     const val VIEW = "View"
     const val CURRENT_PASSCODE = "current passcode"
     const val UPDATE_PASSCODE = "update passcode"

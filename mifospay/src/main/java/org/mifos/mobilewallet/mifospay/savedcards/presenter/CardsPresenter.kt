@@ -12,7 +12,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract.CardsView
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**

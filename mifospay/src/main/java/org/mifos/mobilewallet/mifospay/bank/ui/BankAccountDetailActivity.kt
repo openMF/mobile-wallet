@@ -17,7 +17,7 @@ import org.mifos.mobilewallet.mifospay.bank.BankContract
 import org.mifos.mobilewallet.mifospay.bank.BankContract.BankAccountDetailView
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountDetailPresenter
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject

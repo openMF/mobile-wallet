@@ -46,10 +46,10 @@ import org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUC
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosBottomSheet
 import org.mifos.mobilewallet.mifospay.registration.ui.MobileVerificationActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import org.mifos.mobilewallet.mifospay.utils.Toaster
-import org.mifos.mobilewallet.mifospay.utils.Constants as MifosConstant
+import org.mifos.mobilewallet.mifospay.common.Constants as MifosConstant
 
 const val REQUEST_CODE_SIGN_IN = 1
 

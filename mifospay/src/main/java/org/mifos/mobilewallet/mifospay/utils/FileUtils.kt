@@ -11,6 +11,7 @@ import android.provider.MediaStore
 import android.util.Base64
 import android.util.Log
 import org.json.JSONObject
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil.log
 import java.io.BufferedOutputStream
 import java.io.File
