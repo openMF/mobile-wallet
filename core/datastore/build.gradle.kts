@@ -23,4 +23,5 @@ dependencies {
     api(projects.core.datastoreProto)
     api(projects.core.common)
     api(projects.core.model)
+    implementation(libs.squareup.retrofit.converter.gson)
 }

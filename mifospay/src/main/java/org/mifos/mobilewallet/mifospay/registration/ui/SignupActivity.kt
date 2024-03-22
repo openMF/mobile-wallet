@@ -34,7 +34,6 @@ import org.mifos.mobilewallet.mifospay.registration.RegistrationContract
 import org.mifos.mobilewallet.mifospay.registration.RegistrationContract.SignupView
 import org.mifos.mobilewallet.mifospay.registration.SignupScreen
 import org.mifos.mobilewallet.mifospay.registration.SignupViewModel
-import org.mifos.mobilewallet.mifospay.registration.presenter.SignupPresenter
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.FileUtils
@@ -44,9 +43,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class SignupActivity : BaseActivity(), SignupView {
-    @JvmField
-    @Inject
-    var mPresenter: SignupPresenter? = null
+
     var mSignupPresenter: RegistrationContract.SignupPresenter? = null
 
     val viewModel: SignupViewModel by viewModels()
@@ -124,7 +121,6 @@ class SignupActivity : BaseActivity(), SignupView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
         ButterKnife.bind(this)
-        mPresenter!!.attachView(this)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         setToolbarTitle("Registration")
 
@@ -175,7 +171,7 @@ class SignupActivity : BaseActivity(), SignupView {
         }
         mEtPassword!!.addTextChangedListener(object : TextWatcher {
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-                mPresenter!!.checkPasswordStrength(s.toString())
+                //mPresenter!!.checkPasswordStrength(s.toString())
             }
 
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}

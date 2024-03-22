@@ -48,9 +48,15 @@ class LoginViewModel @Inject constructor(
     }
 
 
+    /**
+     * Authenticate User with username and password
+     * @param username
+     * @param password
+     * Note: username and password can't be empty or null when we pass to API
+     */
     fun loginUser(
-        username: String?,
-        password: String?,
+        username: String,
+        password: String,
         onLoginFailed: (String) -> Unit
     ) {
         updateProgressState(true)
@@ -61,8 +67,8 @@ class LoginViewModel @Inject constructor(
         mUsecaseHandler.execute(authenticateUserUseCase, requestValue,
             object : UseCaseCallback<AuthenticateUser.ResponseValue> {
                 override fun onSuccess(response: AuthenticateUser.ResponseValue) {
-                    createAuthenticatedService(response.user)
-                    fetchClientData()
+                    saveAuthTokenInPref(response.user)
+                    fetchClientData(response.user)
                     fetchUserDetails(response.user)
                 }
 
@@ -73,6 +79,11 @@ class LoginViewModel @Inject constructor(
             })
     }
 
+
+    /**
+     * Fetch user details return by authenticated user
+     * @param user
+     */
     private fun fetchUserDetails(user: User) {
         mUsecaseHandler.execute(fetchUserDetailsUseCase,
             FetchUserDetails.RequestValues(user.userId),
@@ -88,14 +99,21 @@ class LoginViewModel @Inject constructor(
             })
     }
 
-    private fun fetchClientData() {
-        mUsecaseHandler.execute(fetchClientDataUseCase, FetchClientData.RequestValues(0),
+    /**
+     * Fetch client details return by authenticated user
+     * Client Id: user.clients.firstOrNull() ?: 0
+     * @param user
+     */
+    private fun fetchClientData(user: User) {
+        mUsecaseHandler.execute(
+            fetchClientDataUseCase,
+            FetchClientData.RequestValues(user.clients.firstOrNull()),
             object : UseCaseCallback<FetchClientData.ResponseValue> {
                 override fun onSuccess(response: FetchClientData.ResponseValue) {
-                    saveClientDetails(response.userDetails)
+                    saveClientDetails(response.clientDetails)
                     updateProgressState(false)
-                    if (response.userDetails.name != "") {
-                       updateIsLoginSuccess(true)
+                    if (response.clientDetails.name != "") {
+                        updateIsLoginSuccess(true)
                     }
                 }
 
@@ -105,25 +123,32 @@ class LoginViewModel @Inject constructor(
             })
     }
 
-    private fun createAuthenticatedService(user: User) {
-        val authToken = Constants.BASIC + user.authenticationKey
-        preferencesHelper.saveToken(authToken)
+    private fun saveAuthTokenInPref(user: User) {
+        preferencesHelper.saveToken(Constants.BASIC + user.base64EncodedAuthenticationKey)
     }
 
+    /**
+     * TODO remove userName, userId and Email from pref and use from saved User
+     */
     private fun saveUserDetails(
         user: User,
         userWithRole: UserWithRole
     ) {
-        val userName = user.userName
+        val userName = user.username
         val userID = user.userId
         preferencesHelper.saveUsername(userName)
         preferencesHelper.userId = userID
         preferencesHelper.saveEmail(userWithRole.email)
+        preferencesHelper.user = user
     }
 
+    /**
+     * TODO remove name, clientId and mobileNo from pref and use from saved Client
+     */
     private fun saveClientDetails(client: com.mifos.mobilewallet.model.domain.client.Client?) {
         preferencesHelper.saveFullName(client?.name)
         preferencesHelper.clientId = client?.clientId!!
         preferencesHelper.saveMobile(client.mobileNo)
+        preferencesHelper.client = client
     }
 }

@@ -29,8 +29,8 @@ class MainPresenter @Inject constructor(
             FetchClientData.RequestValues(localRepository.clientDetails.clientId),
             object : UseCaseCallback<FetchClientData.ResponseValue> {
                 override fun onSuccess(response: FetchClientData.ResponseValue) {
-                    response?.userDetails?.let { localRepository.saveClientData(it) }
-                    if (response?.userDetails?.name != "") {
+                    response?.clientDetails?.let { localRepository.saveClientData(it) }
+                    if (response?.clientDetails?.name != "") {
                         // mHomeView?.showClientDetails(response?.userDetails) // TODO: Figure out the purpose of this
                     }
                 }
