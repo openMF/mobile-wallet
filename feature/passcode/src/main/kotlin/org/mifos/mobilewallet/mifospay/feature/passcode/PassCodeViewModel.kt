@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.passcode
+package org.mifos.mobilewallet.mifospay.feature.passcode
 
 import androidx.lifecycle.ViewModel
 import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper

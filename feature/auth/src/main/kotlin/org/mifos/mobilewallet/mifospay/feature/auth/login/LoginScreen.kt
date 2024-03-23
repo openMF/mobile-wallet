@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifos.mobile.passcode.utils.PassCodeConstants
@@ -52,6 +53,7 @@ import org.mifos.mobilewallet.mifospay.designsystem.theme.styleMedium30sp
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleNormal18sp
 import org.mifos.mobilewallet.mifospay.feature.auth.R
 import org.mifos.mobilewallet.mifospay.feature.auth.social_signup.SocialSignupMethodContentScreen
+import org.mifos.mobilewallet.mifospay.feature.passcode.PassCodeActivity
 
 @Composable
 fun LoginScreen(
@@ -226,9 +228,10 @@ fun LoginScreenContent(
  * Starts [PassCodeActivity] with `Constans.INTIAL_LOGIN` as true
  */
 private fun startPassCodeActivity(context: Context) {
-   /* val intent = Intent(context, PassCodeActivity::class.java)
-    intent.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
-    context.startActivity(intent)*/
+    PassCodeActivity.startPassCodeActivity(
+        context = context,
+        bundle = bundleOf(Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)),
+    )
 }
 
 @Preview(showSystemUi = true, device = "id:pixel_5")

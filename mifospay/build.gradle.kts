@@ -70,6 +70,9 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     api("com.google.android.material:material:1.0.0") // update require alot of UI changes
 
+    implementation(projects.feature.auth)
+    implementation(projects.feature.passcode)
+
     // Compose
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling.preview)

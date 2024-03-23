@@ -11,6 +11,7 @@ apply(from = "${project.rootDir}/config/quality/quality.gradle")
 
 dependencies {
     implementation(projects.core.data)
+    implementation(projects.feature.passcode)
 
     implementation(libs.compose.country.code.picker)
 
