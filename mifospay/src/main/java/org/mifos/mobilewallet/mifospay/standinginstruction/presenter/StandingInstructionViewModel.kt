@@ -19,7 +19,7 @@ class StandingInstructionViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _standingInstructionsUiState =
-        MutableStateFlow<StandingInstructionsUiState>(StandingInstructionsUiState.Initial)
+        MutableStateFlow<StandingInstructionsUiState>(StandingInstructionsUiState.Loading)
     val standingInstructionsUiState: StateFlow<StandingInstructionsUiState> =
         _standingInstructionsUiState
 
@@ -32,7 +32,7 @@ class StandingInstructionViewModel @Inject constructor(
 
                 override fun onSuccess(response: GetAllStandingInstructions.ResponseValue) {
                     if (response.standingInstructionsList.isEmpty()) {
-                        _standingInstructionsUiState.value = StandingInstructionsUiState.EmptyState
+                        _standingInstructionsUiState.value = StandingInstructionsUiState.Empty
                     } else {
                         _standingInstructionsUiState.value =
                             StandingInstructionsUiState.StandingInstructionList(response.standingInstructionsList)
@@ -48,14 +48,11 @@ class StandingInstructionViewModel @Inject constructor(
     init {
         getAllSI()
     }
-
-
 }
 
 sealed class StandingInstructionsUiState {
-    data object Initial : StandingInstructionsUiState()
     data object Loading : StandingInstructionsUiState()
-    data object EmptyState : StandingInstructionsUiState()
+    data object Empty : StandingInstructionsUiState()
     data class Error(val message: String) : StandingInstructionsUiState()
     data class StandingInstructionList(val standingInstructionList: List<StandingInstruction>) :
         StandingInstructionsUiState()

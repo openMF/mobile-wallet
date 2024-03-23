@@ -15,6 +15,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mifos.mobilewallet.model.entity.Invoice
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosLoadingWheel
 import org.mifos.mobilewallet.mifospay.invoice.presenter.InvoiceUiState
@@ -80,8 +81,40 @@ fun InvoiceScreen(invoiceUiState: InvoiceUiState) {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun InvoiceScreenPreview() {
+fun InvoiceScreenLoadingPreview() {
     InvoiceScreen(invoiceUiState = InvoiceUiState.Loading)
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun InvoiceScreenEmptyListPreview() {
+    InvoiceScreen(invoiceUiState = InvoiceUiState.Empty)
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun InvoiceScreenListPreview() {
+    InvoiceScreen(invoiceUiState = InvoiceUiState.InvoiceList(sampleInvoiceList))
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun InvoiceScreenErrorPreview() {
+    InvoiceScreen(invoiceUiState = InvoiceUiState.Error("Error Screen"))
+}
+
+val sampleInvoiceList = List(10) { index ->
+    Invoice(
+        consumerId = "123456",
+        consumerName = "John Doe",
+        amount = 250.75,
+        itemsBought = "2x Notebook, 1x Pen",
+        status = 1L,
+        transactionId = "txn_78910",
+        id = index.toLong(),
+        title = "Stationery Purchase",
+        date = mutableListOf(2024, 3, 23)
+    )
 }

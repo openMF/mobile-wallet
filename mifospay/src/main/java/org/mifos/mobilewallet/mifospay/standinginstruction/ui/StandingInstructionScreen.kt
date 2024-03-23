@@ -43,7 +43,7 @@ fun StandingInstructionScreen(
     standingInstructionsUiState: StandingInstructionsUiState,
     onNewSI: () -> Unit
 ) = when (standingInstructionsUiState) {
-    StandingInstructionsUiState.EmptyState -> {
+    StandingInstructionsUiState.Empty -> {
         EmptyContentScreen(
             modifier = Modifier,
             title = stringResource(id = R.string.error_oops),
@@ -62,8 +62,6 @@ fun StandingInstructionScreen(
             iconImageVector = Icons.Rounded.Info
         )
     }
-
-    StandingInstructionsUiState.Initial -> {}
 
     StandingInstructionsUiState.Loading -> {
         MifosLoadingWheel(
@@ -108,10 +106,29 @@ fun StandingInstructionScreen(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun SIScreenPreview() {
+fun StandingInstructionsScreenLoadingPreview() {
     StandingInstructionScreen(
-        standingInstructionsUiState = StandingInstructionsUiState.EmptyState,
-        {})
+        standingInstructionsUiState = StandingInstructionsUiState.Loading,
+        onNewSI = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun StandingInstructionsEmptyPreview() {
+    StandingInstructionScreen(
+        standingInstructionsUiState = StandingInstructionsUiState.Empty,
+        onNewSI = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun StandingInstructionsErrorPreview() {
+    StandingInstructionScreen(
+        standingInstructionsUiState = StandingInstructionsUiState.Error("Error Screen"),
+        onNewSI = {}
+    )
 }
