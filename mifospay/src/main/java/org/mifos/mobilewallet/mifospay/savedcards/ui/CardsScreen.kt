@@ -51,6 +51,7 @@ import org.mifos.mobilewallet.mifospay.designsystem.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsScreenViewModel
 import org.mifos.mobilewallet.mifospay.savedcards.presenter.CardsUiState
 import org.mifos.mobilewallet.mifospay.ui.EmptyContentScreen
+import org.mifos.mobilewallet.mifospay.ui.utility.AddCardChip
 
 enum class CardMenuAction {
     EDIT, DELETE, CANCEL
@@ -169,7 +170,9 @@ fun CardsScreenContent(
         ) {
             AddCardChip(
                 modifier = Modifier.align(Alignment.Center),
-                onAddBtn = onAddBtn
+                onAddBtn = onAddBtn,
+                text = R.string.add_cards,
+                btnText = R.string.add_cards
             )
         }
     }
@@ -228,38 +231,6 @@ fun CardsList(
             }
         }
     }
-}
-
-@Composable
-fun AddCardChip(
-    modifier: Modifier,
-    onAddBtn: () -> Unit
-) {
-    AssistChip(
-        modifier = modifier,
-        onClick = { onAddBtn.invoke() },
-        label = {
-            Text(
-                stringResource(R.string.add_cards),
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White
-                ),
-                modifier = Modifier.padding(horizontal = 8.dp)
-            )
-        },
-        leadingIcon = {
-            Icon(
-                Icons.Filled.Add,
-                contentDescription = stringResource(R.string.add_cards),
-                modifier = Modifier.size(16.dp),
-                tint = Color.White
-            )
-        },
-        colors = AssistChipDefaults.assistChipColors(
-            containerColor = MaterialTheme.colorScheme.onSecondaryContainer
-        ),
-    )
 }
 
 @Composable
@@ -337,7 +308,9 @@ fun NoCardAddCardsScreen(onAddBtn: () -> Unit) {
             Text(text = stringResource(R.string.add_cards))
             AddCardChip(
                 modifier = Modifier,
-                onAddBtn = onAddBtn
+                onAddBtn = onAddBtn,
+                text = R.string.add_cards,
+                btnText = R.string.add_cards
             )
         }
     }
