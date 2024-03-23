@@ -9,8 +9,8 @@ import kotlinx.coroutines.flow.StateFlow
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.invoice.FetchInvoices
-import org.mifos.mobilewallet.datastore.PreferencesHelper
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants.INVOICE_DOMAIN
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +30,9 @@ class InvoicesViewModel @Inject constructor(
             FetchInvoices.RequestValues(mPreferencesHelper.clientId.toString() + ""),
             object : UseCase.UseCaseCallback<FetchInvoices.ResponseValue> {
                 override fun onSuccess(response: FetchInvoices.ResponseValue) {
-                    _invoiceUiState.value = InvoiceUiState.InvoiceList(response.invoiceList)
+                    if (response.invoiceList.isNotEmpty())
+                        _invoiceUiState.value = InvoiceUiState.InvoiceList(response.invoiceList)
+                    else _invoiceUiState.value = InvoiceUiState.Empty
                 }
 
                 override fun onError(message: String) {
@@ -41,7 +43,7 @@ class InvoicesViewModel @Inject constructor(
 
     fun getUniqueInvoiceLink(id: Long): Uri? {
         return Uri.parse(
-            Constants.INVOICE_DOMAIN + mPreferencesHelper.clientId + "/" + id
+            INVOICE_DOMAIN + mPreferencesHelper.clientId + "/" + id
         )
     }
 
@@ -52,6 +54,7 @@ class InvoicesViewModel @Inject constructor(
 
 sealed class InvoiceUiState {
     data object Loading : InvoiceUiState()
+    data object Empty : InvoiceUiState()
     data class Error(val message: String) : InvoiceUiState()
     data class InvoiceList(val list: List<Invoice?>) : InvoiceUiState()
 }

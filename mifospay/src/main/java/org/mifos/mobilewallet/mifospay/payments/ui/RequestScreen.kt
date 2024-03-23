@@ -23,11 +23,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleMedium16sp
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleNormal18sp
-import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter
+import org.mifos.mobilewallet.mifospay.payments.presenter.TransferViewModel
 
 @Composable
 fun RequestScreen(
-    viewModel: TransferPresenter = hiltViewModel(),
+    viewModel: TransferViewModel = hiltViewModel(),
     showQr: () -> Unit
 ) {
     val vpa by viewModel.vpa.collectAsState()

@@ -17,18 +17,18 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
-import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter
+import org.mifos.mobilewallet.mifospay.common.Constants
+import org.mifos.mobilewallet.mifospay.payments.presenter.TransferViewModel
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity
 import org.mifos.mobilewallet.mifospay.standinginstruction.ui.NewSIActivity
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
-import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 
 @AndroidEntryPoint
 class PaymentsFragment : BaseFragment() {
 
-    private val transferPresenter: TransferPresenter by viewModels()
+    private val transferPresenter: TransferViewModel by viewModels()
     private val newSIActivityRequestCode = 100
 
     override fun onCreateView(

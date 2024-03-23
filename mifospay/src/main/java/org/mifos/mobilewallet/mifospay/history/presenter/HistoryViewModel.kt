@@ -20,7 +20,7 @@ class HistoryViewModel @Inject constructor(
     private val fetchAccountTransactionsUseCase: FetchAccountTransactions
 ) : ViewModel() {
 
-    private val _historyUiState = MutableStateFlow<HistoryUiState>(HistoryUiState.Initial)
+    private val _historyUiState = MutableStateFlow<HistoryUiState>(HistoryUiState.Loading)
     val historyUiState: StateFlow<HistoryUiState> = _historyUiState
 
     fun fetchTransactions() {
@@ -47,7 +47,7 @@ class HistoryViewModel @Inject constructor(
                 override fun onSuccess(response: FetchAccountTransactions.ResponseValue?) {
                     if (response?.transactions?.isNotEmpty() == true)
                         _historyUiState.value = HistoryUiState.HistoryList(response.transactions)
-                    else _historyUiState.value = HistoryUiState.EmptyList
+                    else _historyUiState.value = HistoryUiState.Empty
                 }
 
                 override fun onError(message: String) {
@@ -62,9 +62,8 @@ class HistoryViewModel @Inject constructor(
 }
 
 sealed class HistoryUiState {
-    data object Initial : HistoryUiState()
     data object Loading : HistoryUiState()
-    data object EmptyList : HistoryUiState()
+    data object Empty : HistoryUiState()
     data class Error(val message: String) : HistoryUiState()
     data class HistoryList(val list: List<Transaction>?) : HistoryUiState()
 }
