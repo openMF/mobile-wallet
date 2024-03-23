@@ -35,3 +35,4 @@ val styleMifosTopBar = TextStyle(
 )
 
 val styleSettingsButton = TextStyle(color = Color.White, textAlign = TextAlign.Center)
+val historyItemTextStyle = TextStyle(color = Color.Black, fontSize = 16.sp)

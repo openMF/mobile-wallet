@@ -20,6 +20,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mifos.mobilewallet.model.domain.TransactionType
 import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.designsystem.theme.creditTextColor
+import org.mifos.mobilewallet.mifospay.designsystem.theme.debitTextColor
+import org.mifos.mobilewallet.mifospay.designsystem.theme.historyItemTextStyle
 
 @Composable
 fun HistoryItem(date: String, amount: String, transactionType: TransactionType) {
@@ -35,8 +38,7 @@ fun HistoryItem(date: String, amount: String, transactionType: TransactionType) 
         Column(modifier = Modifier.padding(10.dp)) {
             Text(
                 text = date,
-                color = Color.Black,
-                fontSize = 16.sp,
+                style = historyItemTextStyle
             )
             Row(
                 modifier = Modifier
@@ -46,14 +48,13 @@ fun HistoryItem(date: String, amount: String, transactionType: TransactionType) 
             ) {
                 Text(
                     text = transactionType.name,
-                    color = if (transactionType == TransactionType.CREDIT) Color(0xFF009688) else Color(0xFFF10606),
+                    color = if (transactionType == TransactionType.CREDIT) creditTextColor else debitTextColor,
                     fontSize = 16.sp,
                 )
             }
             Text(
                 text = amount,
-                color = Color.Black,
-                fontSize = 16.sp,
+                style = historyItemTextStyle
             )
             HorizontalDivider(
                 color = Color.LightGray,

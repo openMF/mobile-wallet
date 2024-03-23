@@ -65,5 +65,5 @@ sealed class HistoryUiState {
     data object Loading : HistoryUiState()
     data object Empty : HistoryUiState()
     data class Error(val message: String) : HistoryUiState()
-    data class HistoryList(val list: List<Transaction>?) : HistoryUiState()
+    data class HistoryList(val list: List<Transaction>) : HistoryUiState()
 }

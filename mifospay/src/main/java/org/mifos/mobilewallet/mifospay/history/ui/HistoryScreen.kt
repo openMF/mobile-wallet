@@ -28,8 +28,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mifos.mobilewallet.model.domain.Currency
 import com.mifos.mobilewallet.model.domain.Transaction
 import com.mifos.mobilewallet.model.domain.TransactionType
+import com.mifos.mobilewallet.model.entity.accounts.savings.TransferDetail
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosLoadingWheel
 import org.mifos.mobilewallet.mifospay.designsystem.theme.chipSelectedColor
@@ -147,8 +149,41 @@ fun Chip(selected: Boolean, onClick: () -> Unit, label: String) {
     }
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showBackground = true)
 @Composable
-fun HistoryScreenPreview() {
+fun HistoryScreenLoadingPreview() {
     HistoryScreen(historyUiState = HistoryUiState.Loading)
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HistoryScreenEmptyPreview() {
+    HistoryScreen(historyUiState = HistoryUiState.Empty)
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HistoryScreenErrorPreview() {
+    HistoryScreen(historyUiState = HistoryUiState.Error("Error Screen"))
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun HistoryScreenListPreview() {
+    HistoryScreen(historyUiState = HistoryUiState.HistoryList(sampleHistoryList))
+}
+
+val sampleHistoryList = List(10) {index ->
+    Transaction(
+        transactionId = "txn_123456789",
+        clientId = 1001L,
+        accountId = index.toLong(),
+        amount = 1500.0,
+        date = "2024-03-23",
+        currency = Currency(),
+        transactionType = TransactionType.CREDIT,
+        transferId = 3003L,
+        transferDetail = TransferDetail(),
+        receiptId = "receipt_123456789"
+    )
 }
