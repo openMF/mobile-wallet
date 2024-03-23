@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun MifosOutlinedTextField(
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
+    value: String,
+    onValueChange: (String) -> Unit,
     maxLines: Int = 1,
     modifier: Modifier,
     singleLine: Boolean = true,

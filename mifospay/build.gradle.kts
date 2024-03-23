@@ -118,6 +118,7 @@ dependencies {
     implementation("io.michaelrocks:libphonenumber-android:8.11.0")
 
     implementation("me.dm7.barcodescanner:zxing:1.9.13")
+    implementation("com.journeyapps:zxing-android-embedded:4.2.0")
 
     implementation("com.mifos.mobile:mifos-passcode:0.3.0")
 
