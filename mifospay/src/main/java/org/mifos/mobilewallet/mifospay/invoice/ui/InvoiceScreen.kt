@@ -1,5 +1,7 @@
 package org.mifos.mobilewallet.mifospay.invoice.ui
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -28,12 +31,17 @@ fun InvoiceScreen(
 ) {
     val invoiceUiState by viewModel.invoiceUiState.collectAsStateWithLifecycle()
     InvoiceScreen(
-        invoiceUiState = invoiceUiState
+        invoiceUiState = invoiceUiState,
+        getUniqueInvoiceLink = { viewModel.getUniqueInvoiceLink(it) }
     )
 }
 
 @Composable
-fun InvoiceScreen(invoiceUiState: InvoiceUiState) {
+fun InvoiceScreen(
+    invoiceUiState: InvoiceUiState,
+    getUniqueInvoiceLink: (Long) -> Uri?
+) {
+    val context = LocalContext.current
     when (invoiceUiState) {
         is InvoiceUiState.Error -> {
             EmptyContentScreen(
@@ -55,7 +63,12 @@ fun InvoiceScreen(invoiceUiState: InvoiceUiState) {
                             invoiceStatus = it?.status.toString(),
                             invoiceDate = it?.date.toString(),
                             invoiceId = it?.id.toString(),
-                            invoiceStatusIcon = it?.status!!
+                            invoiceStatusIcon = it?.status!!,
+                            onClick = { invoiceId ->
+                                val uniqueLink = getUniqueInvoiceLink(invoiceId.toLong())
+                                val intent = Intent(Intent.ACTION_VIEW, uniqueLink)
+                                context.startActivity(intent)
+                            }
                         )
                     }
                 }
@@ -84,25 +97,30 @@ fun InvoiceScreen(invoiceUiState: InvoiceUiState) {
 @Preview(showBackground = true)
 @Composable
 fun InvoiceScreenLoadingPreview() {
-    InvoiceScreen(invoiceUiState = InvoiceUiState.Loading)
+    InvoiceScreen(
+        invoiceUiState = InvoiceUiState.Loading, getUniqueInvoiceLink = { null })
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun InvoiceScreenEmptyListPreview() {
-    InvoiceScreen(invoiceUiState = InvoiceUiState.Empty)
+    InvoiceScreen(invoiceUiState = InvoiceUiState.Empty, getUniqueInvoiceLink = { null })
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun InvoiceScreenListPreview() {
-    InvoiceScreen(invoiceUiState = InvoiceUiState.InvoiceList(sampleInvoiceList))
+    InvoiceScreen(
+        invoiceUiState = InvoiceUiState.InvoiceList(sampleInvoiceList),
+        getUniqueInvoiceLink = { null })
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun InvoiceScreenErrorPreview() {
-    InvoiceScreen(invoiceUiState = InvoiceUiState.Error("Error Screen"))
+    InvoiceScreen(
+        invoiceUiState = InvoiceUiState.Error("Error Screen"),
+        getUniqueInvoiceLink = { null })
 }
 
 val sampleInvoiceList = List(10) { index ->
