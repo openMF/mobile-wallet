@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import android.view.View
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
@@ -28,11 +29,11 @@ import com.mifos.mobilewallet.model.domain.Transaction
 import com.mifos.mobilewallet.model.domain.TransactionType
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
-import org.mifos.mobilewallet.mifospay.passcode.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract.ReceiptView
 import org.mifos.mobilewallet.mifospay.receipt.presenter.ReceiptPresenter
 import org.mifos.mobilewallet.mifospay.common.Constants
+import org.mifos.mobilewallet.mifospay.feature.passcode.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.utils.FileUtils
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance
@@ -121,14 +122,13 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
     }
 
     override fun openPassCodeActivity() {
-        val i = Intent(this, PassCodeActivity::class.java)
-        i.putExtra("uri", deepLinkURI.toString())
-        /**
-         * this is actually not true but has to be set true so as to make the passcode
-         * open a new receipt activity
-         */
-        i.putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
-        startActivity(i)
+        PassCodeActivity.startPassCodeActivity(
+            context = this,
+            bundle = bundleOf(
+                Pair("uri", deepLinkURI.toString()),
+                Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
+            ),
+        )
         finish()
     }
 
@@ -145,11 +145,13 @@ class ReceiptActivity : BaseActivity(), ReceiptView {
                 tvOperation!!.setText(R.string.paid_to)
                 tvOperation!!.setTextColor(resources.getColor(R.color.colorDebit))
             }
+
             TransactionType.CREDIT -> {
                 isDebit = false
                 tvOperation!!.setText(R.string.credited_by)
                 tvOperation!!.setTextColor(resources.getColor(R.color.colorCredit))
             }
+
             TransactionType.OTHER -> {
                 isDebit = false
                 tvOperation!!.text = Constants.OTHER

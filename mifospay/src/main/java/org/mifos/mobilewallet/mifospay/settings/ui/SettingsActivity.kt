@@ -4,13 +4,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifos.mobilewallet.mifospay.auth.LoginActivity
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.settings.SettingsContract
 import org.mifos.mobilewallet.mifospay.settings.SettingsContract.SettingsView
 import org.mifos.mobilewallet.mifospay.settings.presenter.SettingsPresenter
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.common.Constants
+import org.mifos.mobilewallet.mifospay.feature.auth.login.LoginActivity
 import javax.inject.Inject
 
 @AndroidEntryPoint

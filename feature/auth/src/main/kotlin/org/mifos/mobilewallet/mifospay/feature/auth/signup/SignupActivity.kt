@@ -6,12 +6,13 @@ import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import com.mifos.mobile.passcode.utils.PassCodeConstants
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.designsystem.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.feature.auth.login.LoginActivity
-//import org.mifos.mobilewallet.mifospay.passcode.PassCodeActivity
+import org.mifos.mobilewallet.mifospay.feature.passcode.PassCodeActivity
 
 @AndroidEntryPoint
 class SignupActivity : AppCompatActivity() {
@@ -53,10 +54,10 @@ class SignupActivity : AppCompatActivity() {
 
     private fun loginSuccess() {
         Toast.makeText(this, "Registered successfully.", Toast.LENGTH_SHORT).show()
-        /*val intent = Intent(this@SignupActivity, PassCodeActivity::class.java).apply {
-            putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
-        }
-        startActivity(intent)*/
+        PassCodeActivity.startPassCodeActivity(
+            context = this,
+            bundle = bundleOf(Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)),
+        )
         finish()
     }
 }

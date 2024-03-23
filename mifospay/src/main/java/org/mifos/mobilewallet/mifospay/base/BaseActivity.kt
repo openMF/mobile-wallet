@@ -9,7 +9,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.mifos.mobile.passcode.BasePassCodeActivity
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.passcode.PassCodeActivity
+import org.mifos.mobilewallet.mifospay.feature.passcode.PassCodeActivity
 
 /**
  * Created by naman on 16/6/17.
