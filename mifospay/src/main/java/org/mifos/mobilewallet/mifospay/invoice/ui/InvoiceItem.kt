@@ -1,7 +1,13 @@
 package org.mifos.mobilewallet.mifospay.invoice.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,12 +38,15 @@ fun InvoiceItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = if (invoiceStatusIcon == 0L) R.drawable.ic_remove_circle_outline_black_24dp else R.drawable.ic_check_round_black_24dp),
+                painter = painterResource(
+                    id = if (invoiceStatusIcon == 0L) R.drawable.ic_remove_circle_outline_black_24dp
+                    else R.drawable.ic_check_round_black_24dp
+                ),
                 contentDescription = "Invoice Status",
                 modifier = Modifier
                     .size(64.dp)
                     .padding(5.dp),
-                tint = if(invoiceStatusIcon ==0L) Color.Yellow else Color.Blue
+                tint = if (invoiceStatusIcon == 0L) Color.Yellow else Color.Blue
             )
             Column(
                 modifier = Modifier
@@ -95,5 +104,5 @@ fun InvoiceItem(
 @Preview(showBackground = true)
 @Composable
 fun PreviewInvoiceItem() {
-    InvoiceItem("Logo for Richard", "$3000", "Pending", "12/3/4", "Invoice id:12345",0L)
+    InvoiceItem("Logo for Richard", "$3000", "Pending", "12/3/4", "Invoice id:12345", 0L)
 }

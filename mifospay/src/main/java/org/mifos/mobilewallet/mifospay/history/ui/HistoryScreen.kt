@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -24,14 +26,27 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifos.mobilewallet.model.domain.Transaction
 import com.mifos.mobilewallet.model.domain.TransactionType
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.designsystem.component.MifosErrorLayout
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosLoadingWheel
 import org.mifos.mobilewallet.mifospay.designsystem.theme.chipSelectedColor
 import org.mifos.mobilewallet.mifospay.designsystem.theme.lightGrey
 import org.mifos.mobilewallet.mifospay.history.presenter.HistoryUiState
+import org.mifos.mobilewallet.mifospay.history.presenter.HistoryViewModel
+import org.mifos.mobilewallet.mifospay.ui.EmptyContentScreen
+
+@Composable
+fun HistoryScreen(
+    viewModel: HistoryViewModel = hiltViewModel()
+) {
+    val historyUiState by viewModel.historyUiState.collectAsStateWithLifecycle()
+    HistoryScreen(
+        historyUiState = historyUiState
+    )
+}
 
 @Composable
 fun HistoryScreen(
@@ -41,19 +56,23 @@ fun HistoryScreen(
     var filteredTransactions by remember { mutableStateOf(emptyList<Transaction>()) }
 
     when (historyUiState) {
-        HistoryUiState.EmptyList -> {
-            MifosErrorLayout(
-                modifier = Modifier.fillMaxSize(),
-                icon = R.drawable.ic_empty_state,
-                error = R.string.empty_no_transaction_history_title
+        HistoryUiState.Empty -> {
+            EmptyContentScreen(
+                modifier = Modifier,
+                title = stringResource(id = R.string.error_oops),
+                subTitle = stringResource(id = R.string.empty_no_transaction_history_title),
+                iconTint = Color.Black,
+                iconImageVector = Icons.Rounded.Info
             )
         }
 
         is HistoryUiState.Error -> {
-            MifosErrorLayout(
-                modifier = Modifier.fillMaxSize(),
-                icon = R.drawable.ic_empty_state,
-                error = R.string.error_no_transaction_history_subtitle
+            EmptyContentScreen(
+                modifier = Modifier,
+                title = stringResource(id = R.string.error_oops),
+                subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                iconTint = Color.Black,
+                iconImageVector = Icons.Rounded.Info
             )
         }
 
@@ -100,7 +119,6 @@ fun HistoryScreen(
 
         }
 
-        HistoryUiState.Initial -> {}
         HistoryUiState.Loading -> {
             MifosLoadingWheel(
                 modifier = Modifier.fillMaxWidth(),

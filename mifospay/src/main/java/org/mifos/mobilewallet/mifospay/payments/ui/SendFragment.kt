@@ -30,9 +30,9 @@ import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.common.ui.MakeTransferFragment.Companion.newInstance
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
-import org.mifos.mobilewallet.mifospay.payments.presenter.TransferPresenter
 import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.common.Constants
+import org.mifos.mobilewallet.mifospay.payments.presenter.TransferViewModel
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils.hideSoftKeyboard
 
@@ -42,7 +42,7 @@ import org.mifos.mobilewallet.mifospay.utils.Utils.hideSoftKeyboard
 @AndroidEntryPoint
 class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
 
-    private val mPresenter: TransferPresenter by viewModels()
+    private val mPresenter: TransferViewModel by viewModels()
 
     var mTransferPresenter: BaseHomeContract.TransferPresenter? = null
 

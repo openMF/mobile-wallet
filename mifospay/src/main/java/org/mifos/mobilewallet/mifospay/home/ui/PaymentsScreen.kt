@@ -17,24 +17,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import org.mifos.mobilewallet.mifospay.history.presenter.HistoryViewModel
 import org.mifos.mobilewallet.mifospay.history.ui.HistoryScreen
-import org.mifos.mobilewallet.mifospay.invoice.presenter.InvoicesViewModel
 import org.mifos.mobilewallet.mifospay.invoice.ui.InvoiceScreen
 import org.mifos.mobilewallet.mifospay.payments.ui.RequestScreen
 import org.mifos.mobilewallet.mifospay.payments.ui.SendScreen
-import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.StandingInstructionViewModel
-import org.mifos.mobilewallet.mifospay.standinginstruction.ui.SIScreen
+import org.mifos.mobilewallet.mifospay.standinginstruction.ui.StandingInstructionsScreen
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PaymentsScreen(
-    standingInstructionViewModel: StandingInstructionViewModel = hiltViewModel(),
-    invoicesViewModel: InvoicesViewModel = hiltViewModel(),
-    historyViewModel: HistoryViewModel = hiltViewModel(),
     showQr: () -> Unit, searchContact: () -> Unit, scanQr: () -> Unit,
     onNewSI: () -> Unit
 ) {
@@ -75,13 +67,10 @@ fun PaymentsScreen(
             when (page) {
                 0 -> SendScreen({ scanQr.invoke() }, { searchContact.invoke() }, {})
                 1 -> RequestScreen(showQr = { showQr.invoke() })
-                2 -> HistoryScreen(historyViewModel.historyUiState.collectAsStateWithLifecycle().value)
-                3 -> SIScreen(
-                    standingInstructionViewModel.standingInstructionsUiState.collectAsStateWithLifecycle().value,
-                    onNewSI = { onNewSI.invoke() }
-                )
+                2 -> HistoryScreen()
+                3 -> StandingInstructionsScreen(onNewSI = { onNewSI.invoke() })
 
-                4 -> InvoiceScreen(invoicesViewModel.invoiceUiState.collectAsStateWithLifecycle().value)
+                4 -> InvoiceScreen()
                 else -> Text("Page $page")
             }
         }
@@ -99,5 +88,5 @@ enum class PaymentsScreenContents {
 @Preview(showBackground = true)
 @Composable
 fun PaymentsScreenPreview() {
-    PaymentsScreen(hiltViewModel(), hiltViewModel(), hiltViewModel(), {}, {}, {}, {})
+    PaymentsScreen({}, {}, {}, {})
 }

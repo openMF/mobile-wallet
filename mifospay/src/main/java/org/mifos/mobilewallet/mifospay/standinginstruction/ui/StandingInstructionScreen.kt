@@ -6,38 +6,60 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.designsystem.component.MifosErrorLayout
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosLoadingWheel
+import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.StandingInstructionViewModel
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.StandingInstructionsUiState
+import org.mifos.mobilewallet.mifospay.ui.EmptyContentScreen
 
 @Composable
-fun SIScreen(
+fun StandingInstructionsScreen(
+    viewModel: StandingInstructionViewModel = hiltViewModel(),
+    onNewSI: () -> Unit
+) {
+    val standingInstructionsUiState by viewModel.standingInstructionsUiState.collectAsStateWithLifecycle()
+    StandingInstructionScreen(
+        standingInstructionsUiState = standingInstructionsUiState,
+        onNewSI = onNewSI
+    )
+}
+
+@Composable
+fun StandingInstructionScreen(
     standingInstructionsUiState: StandingInstructionsUiState,
     onNewSI: () -> Unit
 ) = when (standingInstructionsUiState) {
     StandingInstructionsUiState.EmptyState -> {
-        MifosErrorLayout(
-            modifier = Modifier.fillMaxSize(),
-            icon = R.drawable.ic_empty_state,
-            error = R.string.empty_standing_instructions
+        EmptyContentScreen(
+            modifier = Modifier,
+            title = stringResource(id = R.string.error_oops),
+            subTitle = stringResource(id = R.string.empty_standing_instructions),
+            iconTint = Color.Black,
+            iconImageVector = Icons.Rounded.Info
         )
     }
 
     is StandingInstructionsUiState.Error -> {
-        MifosErrorLayout(
-            modifier = Modifier.fillMaxSize(),
-            icon = R.drawable.ic_empty_state,
-            error = R.string.error_fetching_si_list
+        EmptyContentScreen(
+            modifier = Modifier,
+            title = stringResource(id = R.string.error_oops),
+            subTitle = stringResource(id = R.string.error_fetching_si_list),
+            iconTint = Color.Black,
+            iconImageVector = Icons.Rounded.Info
         )
     }
 
@@ -89,5 +111,7 @@ fun SIScreen(
 @Preview
 @Composable
 fun SIScreenPreview() {
-    SIScreen(standingInstructionsUiState = StandingInstructionsUiState.EmptyState, {})
+    StandingInstructionScreen(
+        standingInstructionsUiState = StandingInstructionsUiState.EmptyState,
+        {})
 }
