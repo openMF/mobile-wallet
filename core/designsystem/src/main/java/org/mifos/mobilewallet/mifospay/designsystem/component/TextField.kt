@@ -66,6 +66,13 @@ fun MfOutlinedTextField(
         },
         keyboardActions = KeyboardActions {
             onKeyboardActions?.invoke()
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color.Black,
+            focusedLabelColor = Color.Black
+        ),
+        textStyle = LocalDensity.current.run {
+            TextStyle(fontSize = 18.sp, color = Color.Black)
         }
     )
 }

@@ -18,7 +18,7 @@ import org.mifos.mobilewallet.mifospay.ui.utility.TabContent
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PaymentsScreen(
-    showQr: () -> Unit, searchContact: () -> Unit, scanQr: () -> Unit,
+    showQr: () -> Unit,
     onNewSI: () -> Unit
 ) {
 
@@ -28,11 +28,7 @@ fun PaymentsScreen(
 
     val tabContents = listOf(
         TabContent(PaymentsScreenContents.SEND.name) {
-            SendScreen(
-                openScanner = { scanQr.invoke() },
-                openContacts = { searchContact.invoke() },
-                onSubmit = {}
-            )
+            SendScreen(onSubmit = {})
         },
         TabContent(PaymentsScreenContents.REQUEST.name) {
             RequestScreen(showQr = { showQr.invoke() })
@@ -64,5 +60,5 @@ enum class PaymentsScreenContents {
 @Preview(showBackground = true)
 @Composable
 fun PaymentsScreenPreview() {
-    PaymentsScreen({}, {}, {}, {})
+    PaymentsScreen({}, {})
 }
