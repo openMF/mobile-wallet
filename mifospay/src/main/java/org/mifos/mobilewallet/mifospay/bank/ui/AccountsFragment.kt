@@ -8,127 +8,49 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
 import butterknife.ButterKnife
-import butterknife.OnClick
 import dagger.hilt.android.AndroidEntryPoint
 import com.mifos.mobilewallet.model.domain.BankAccountDetails
 import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.bank.composeScreen.AccountScreen
 import org.mifos.mobilewallet.mifospay.bank.BankContract
-import org.mifos.mobilewallet.mifospay.bank.BankContract.BankAccountsView
 import org.mifos.mobilewallet.mifospay.bank.adapters.BankAccountsAdapter
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountsPresenter
+import org.mifos.mobilewallet.mifospay.bank.viewmodel.BankAccountsViewModel
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
+import org.mifos.mobilewallet.mifospay.databinding.FragmentAccountsBinding
 import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
-import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AccountsFragment : BaseFragment(), BankAccountsView {
-    @JvmField
-    @BindView(R.id.inc_state_view)
-    var vStateView: View? = null
+class AccountsFragment : BaseFragment() {
 
-    @JvmField
-    @Inject
-    var mPresenter: BankAccountsPresenter? = null
-    var mBankAccountsPresenter: BankContract.BankAccountsPresenter? = null
-
-    @JvmField
-    @BindView(R.id.rv_accounts)
-    var mRvLinkedBankAccounts: RecyclerView? = null
-
-    @JvmField
-    @BindView(R.id.iv_empty_no_transaction_history)
-    var ivTransactionsStateIcon: ImageView? = null
-
-    @JvmField
-    @BindView(R.id.tv_empty_no_transaction_history_title)
-    var tvTransactionsStateTitle: TextView? = null
-
-    @JvmField
-    @Inject
-    var mBankAccountsAdapter: BankAccountsAdapter? = null
-
-    @JvmField
-    @BindView(R.id.linked_bank_account_text)
-    var linkedAccountsText: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_empty_no_transaction_history_subtitle)
-    var tvTransactionsStateSubtitle: TextView? = null
+    lateinit var binding: FragmentAccountsBinding
+    //hilt viewmodel
+    private val viewModel: BankAccountsViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_accounts, container, false)
-        ButterKnife.bind(this, rootView)
-        setupRecycletView()
-        setUpSwipeRefresh()
-        mPresenter!!.attachView(this)
-        showSwipeProgress()
-        mBankAccountsPresenter!!.fetchLinkedBankAccounts()
-        return rootView
-    }
-
-    private fun setUpSwipeRefresh() {
-        swipeRefreshLayout?.setOnRefreshListener { mBankAccountsPresenter!!.fetchLinkedBankAccounts() }
-    }
-
-    private fun setupRecycletView() {
-        val layoutManager = LinearLayoutManager(context)
-        layoutManager.orientation = LinearLayoutManager.VERTICAL
-        mRvLinkedBankAccounts!!.layoutManager = layoutManager
-        mRvLinkedBankAccounts!!.setHasFixedSize(true)
-        mRvLinkedBankAccounts!!.adapter = mBankAccountsAdapter
-        mRvLinkedBankAccounts!!.addItemDecoration(
-            DividerItemDecoration(
-                context,
-                DividerItemDecoration.VERTICAL
-            )
-        )
-        mRvLinkedBankAccounts!!.addOnItemTouchListener(
-            RecyclerItemClickListener(
-                activity,
-                object : RecyclerItemClickListener.OnItemClickListener {
-                    override fun onItemClick(childView: View?, position: Int) {
-                        val intent = Intent(
-                            activity,
-                            BankAccountDetailActivity::class.java
-                        )
-                        intent.putExtra(
-                            Constants.BANK_ACCOUNT_DETAILS,
-                            mBankAccountsAdapter!!.getBankDetails(position)
-                        )
-                        intent.putExtra(Constants.INDEX, position)
-                        startActivityForResult(intent, BANK_ACCOUNT_DETAILS_REQUEST_CODE)
-                    }
-
-                    override fun onItemLongPress(childView: View?, position: Int) {}
-                })
-        )
-    }
-
-    override fun showLinkedBankAccounts(bankAccountList: List<BankAccountDetails?>?) {
-        if (bankAccountList == null || bankAccountList.size == 0) {
-            mRvLinkedBankAccounts!!.visibility = View.GONE
-            linkedAccountsText!!.visibility = View.GONE
-            setupUi()
-        } else {
-            hideEmptyStateView()
-            mRvLinkedBankAccounts!!.visibility = View.VISIBLE
-            linkedAccountsText!!.visibility = View.VISIBLE
-            mBankAccountsAdapter!!.setData(bankAccountList)
+        binding= FragmentAccountsBinding.inflate(inflater, container, false)
+        ButterKnife.bind(this,binding.root)
+        binding.accountScreen.setContent {
+            AccountScreen( onAddAccountClicked = ::addAccountClicked ,
+                onAccountClicked = ::onAccountClicked)
         }
-        hideSwipeProgress()
+        return binding.root
     }
 
-    override fun setPresenter(presenter: BankContract.BankAccountsPresenter?) {
-        mBankAccountsPresenter = presenter
+    private fun onAccountClicked(bankAccountDetails: BankAccountDetails) {
+        val intent = Intent(activity, BankAccountDetailActivity::class.java)
+        intent.putExtra(Constants.BANK_ACCOUNT_DETAILS, bankAccountDetails)
+        intent.putExtra(Constants.INDEX, viewModel.bankAccountDetailsList.indexOf(bankAccountDetails))
+        startActivityForResult(intent, BANK_ACCOUNT_DETAILS_REQUEST_CODE)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -147,10 +69,8 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
                     DebugUtil.log("details", bankAccountDetails)
                 }
                 if (bankAccountDetails != null) {
-                    mBankAccountsAdapter!!.addBank(bankAccountDetails)
+                    viewModel.bankAccountDetailsList.add(bankAccountDetails)
                 }
-                mRvLinkedBankAccounts!!.visibility = View.VISIBLE
-                linkedAccountsText!!.visibility = View.GONE
             }
         } else if (requestCode == BANK_ACCOUNT_DETAILS_REQUEST_CODE && resultCode
             == Activity.RESULT_OK
@@ -165,32 +85,13 @@ class AccountsFragment : BaseFragment(), BankAccountsView {
                 )
                 val index = bundle.getInt(Constants.INDEX)
                 if (bankAccountDetails != null) {
-                    mBankAccountsAdapter!!.setBankDetails(index, bankAccountDetails)
-                }
+                    DebugUtil.log("details", bankAccountDetails)
+                    viewModel.bankAccountDetailsList[index] = bankAccountDetails
+                 }
             }
         }
     }
 
-    private fun setupUi() {
-        showEmptyStateView()
-    }
-
-    private fun showEmptyStateView() {
-        if (activity != null) {
-            vStateView!!.visibility = View.VISIBLE
-            val res = resources
-            ivTransactionsStateIcon
-                ?.setImageDrawable(res.getDrawable(R.drawable.ic_accounts))
-            tvTransactionsStateTitle?.text = res.getString(R.string.empty_no_accounts_title)
-            tvTransactionsStateSubtitle?.text = res.getString(R.string.empty_no_accounts_subtitle)
-        }
-    }
-
-    private fun hideEmptyStateView() {
-        vStateView!!.visibility = View.GONE
-    }
-
-    @OnClick(R.id.addaccountbutton)
     fun addAccountClicked() {
         val intent = Intent(activity, LinkBankAccountActivity::class.java)
         startActivityForResult(intent, LINK_BANK_ACCOUNT_REQUEST_CODE)
