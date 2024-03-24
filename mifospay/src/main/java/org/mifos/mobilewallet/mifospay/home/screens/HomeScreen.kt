@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.home.ui
+package org.mifos.mobilewallet.mifospay.home.screens
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -42,7 +42,7 @@ import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.common.compose.ChildLayout
 import org.mifos.mobilewallet.mifospay.common.compose.LoadItemAfterSafeCast
 import org.mifos.mobilewallet.mifospay.common.compose.VerticalScrollLayout
-import org.mifos.mobilewallet.mifospay.home.presenter.HomeViewModel
+import org.mifos.mobilewallet.mifospay.home.HomeViewModel
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 import org.mifos.mobilewallet.mifospay.theme.border
 import org.mifos.mobilewallet.mifospay.theme.green

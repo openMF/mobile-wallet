@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import org.mifos.mobilewallet.mifospay.home.ui.PaymentsRoute
+import org.mifos.mobilewallet.mifospay.home.screens.PaymentsRoute
 
 const val PAYMENTS_ROUTE = "payments_route"
 

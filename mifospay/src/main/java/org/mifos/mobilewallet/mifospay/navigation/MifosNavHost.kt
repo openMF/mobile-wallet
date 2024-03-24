@@ -9,11 +9,13 @@ import androidx.navigation.compose.NavHost
 import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity
 import org.mifos.mobilewallet.mifospay.home.navigation.HOME_ROUTE
+import org.mifos.mobilewallet.mifospay.home.navigation.financeScreen
 import org.mifos.mobilewallet.mifospay.home.navigation.homeScreen
 import org.mifos.mobilewallet.mifospay.home.navigation.paymentsScreen
 import org.mifos.mobilewallet.mifospay.home.navigation.profileScreen
 import org.mifos.mobilewallet.mifospay.payments.ui.SendActivity
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity
+import org.mifos.mobilewallet.mifospay.savedcards.ui.AddCardDialog
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity
 import org.mifos.mobilewallet.mifospay.standinginstruction.ui.NewSIActivity
 import org.mifos.mobilewallet.mifospay.ui.MifosAppState
@@ -47,10 +49,8 @@ fun MifosNavHost(
             showQr = { vpa -> context.startActivityShowQr(vpa) },
             onNewSI = { context.startActivityStandingInstruction() }
         )
-        // TODO Update with finance
-        paymentsScreen(
-            showQr = { vpa -> context.startActivityShowQr(vpa) },
-            onNewSI = { context.startActivityStandingInstruction() }
+        financeScreen(
+            onAddBtn = { context.startActivityAddCard() }
         )
         profileScreen(
             onEditProfile = { context.startActivityEditProfile() },
@@ -75,6 +75,10 @@ fun Context.startActivityShowQr(vpa: String) {
     startActivity(Intent(this, ShowQrActivity::class.java).apply {
         putExtra(Constants.QR_DATA, vpa)
     })
+}
+
+fun Context.startActivityAddCard() {
+    startActivity(Intent(this, AddCardDialog::class.java))
 }
 
 fun Context.startActivitySend() {

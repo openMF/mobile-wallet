@@ -21,9 +21,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.TimeZone
 import org.mifos.mobilewallet.core.util.NetworkMonitor
 import org.mifos.mobilewallet.core.util.TimeZoneMonitor
+import org.mifos.mobilewallet.mifospay.home.navigation.FINANCE_ROUTE
 import org.mifos.mobilewallet.mifospay.home.navigation.HOME_ROUTE
 import org.mifos.mobilewallet.mifospay.home.navigation.PAYMENTS_ROUTE
 import org.mifos.mobilewallet.mifospay.home.navigation.PROFILE_ROUTE
+import org.mifos.mobilewallet.mifospay.home.navigation.navigateToFinance
 import org.mifos.mobilewallet.mifospay.home.navigation.navigateToHome
 import org.mifos.mobilewallet.mifospay.home.navigation.navigateToPayments
 import org.mifos.mobilewallet.mifospay.home.navigation.navigateToProfile
@@ -71,7 +73,7 @@ class MifosAppState(
         @Composable get() = when (currentDestination?.route) {
             HOME_ROUTE -> TopLevelDestination.HOME
             PAYMENTS_ROUTE -> TopLevelDestination.PAYMENTS
-            PAYMENTS_ROUTE -> TopLevelDestination.FINANCE
+            FINANCE_ROUTE -> TopLevelDestination.FINANCE
             PROFILE_ROUTE -> TopLevelDestination.PROFILE
             else -> null
         }
@@ -129,7 +131,7 @@ class MifosAppState(
             when (topLevelDestination) {
                 TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions)
                 TopLevelDestination.PAYMENTS -> navController.navigateToPayments(topLevelNavOptions)
-                TopLevelDestination.FINANCE -> navController.navigateToPayments(topLevelNavOptions)
+                TopLevelDestination.FINANCE -> navController.navigateToFinance(topLevelNavOptions)
                 TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelNavOptions)
             }
         }

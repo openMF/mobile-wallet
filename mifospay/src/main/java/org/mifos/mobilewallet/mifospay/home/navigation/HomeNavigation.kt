@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import org.mifos.mobilewallet.mifospay.home.ui.HomeRoute
+import org.mifos.mobilewallet.mifospay.home.screens.HomeRoute
 
 const val HOME_ROUTE = "home_route"
 

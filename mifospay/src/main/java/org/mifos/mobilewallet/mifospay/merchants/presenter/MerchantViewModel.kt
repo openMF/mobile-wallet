@@ -17,7 +17,7 @@ import org.mifos.mobilewallet.core.base.UseCaseFactory
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchMerchants
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientDetails
-import org.mifos.mobilewallet.core.utils.Constants
+import org.mifos.mobilewallet.core.util.Constants
 import javax.inject.Inject
 
 @HiltViewModel

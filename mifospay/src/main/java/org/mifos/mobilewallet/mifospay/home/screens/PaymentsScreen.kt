@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.home.ui
+package org.mifos.mobilewallet.mifospay.home.screens
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
