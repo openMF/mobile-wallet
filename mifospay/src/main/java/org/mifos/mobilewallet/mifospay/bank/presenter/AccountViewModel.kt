@@ -28,7 +28,6 @@ class AccountViewModel @Inject constructor() : ViewModel() {
     /**
      * Mocks network delay
      */
-
     fun fetchLinkedAccount() {
        viewModelScope.launch {
            _accountUiState.value = AccountsUiState.Loading
