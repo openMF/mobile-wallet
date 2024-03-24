@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -45,7 +45,7 @@ fun AccountsScreen(
     AccountScreen(
         accountsUiState = accountsUiState,
         onAddAccount = onAddAccount,
-        sampleList = sampleList
+        sampleList = sampleList,
     )
 }
 
@@ -76,7 +76,6 @@ fun AccountScreen(
                 LazyColumn(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(top = 24.dp)
                         .fillMaxSize()
                 ) {
                     item {
@@ -91,10 +90,8 @@ fun AccountScreen(
                         AccountsItem(
                             bankAccountDetails = sampleList[index],
                             onAccountClicked = {
-                                val intent = Intent(
-                                    context,
-                                    BankAccountDetailActivity::class.java
-                                )
+                                val intent =
+                                    Intent(context, BankAccountDetailActivity::class.java)
                                 intent.putExtra(
                                     Constants.BANK_ACCOUNT_DETAILS,
                                     sampleList[index]
@@ -102,6 +99,9 @@ fun AccountScreen(
                                 intent.putExtra(Constants.INDEX, index)
                                 context.startActivity(intent)
                             }
+                        )
+                        HorizontalDivider(
+                            modifier = Modifier.padding(8.dp)
                         )
                     }
                 }
@@ -177,7 +177,7 @@ private fun AccountErrorScreenPreview() {
     AccountScreen(accountsUiState = AccountsUiState.Error, {}, emptyList())
 }
 
-val sampleLinkedAccount = List(10) { index ->
+val sampleLinkedAccount = List(10) {
     BankAccountDetails(
         "SBI", "Ankur Sharma", "New Delhi",
         "XXXXXXXX9990XXX " + " ", "Savings"
