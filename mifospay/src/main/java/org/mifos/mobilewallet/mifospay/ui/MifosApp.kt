@@ -2,17 +2,21 @@ package org.mifos.mobilewallet.mifospay.ui
 
 import android.content.Context
 import android.content.Intent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +37,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
@@ -70,6 +75,7 @@ import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity
 )
 @Composable
 fun MifosApp(appState: MifosAppState) {
+    val context = LocalContext.current
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.HOME
     var showHomeMenuOption by rememberSaveable { mutableStateOf(false) }
@@ -98,12 +104,34 @@ fun MifosApp(appState: MifosAppState) {
             }
 
             if (showHomeMenuOption) {
-                ShowHomeMenuOptions(
-                    showHomeMenuOption = true,
-                    onDismiss = {
-                        showHomeMenuOption = false
+                AnimatedVisibility(true) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize(Alignment.TopEnd)
+                            .padding(end = 24.dp)
+                    ) {
+                        DropdownMenu(
+                            expanded = showHomeMenuOption,
+                            onDismissRequest = { showHomeMenuOption = false }
+                        ) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.faq)) },
+                                onClick = {
+                                    showHomeMenuOption = false
+                                    context.startActivity(Intent(context, FAQActivity::class.java))
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = { Text(stringResource(id = R.string.settings)) },
+                                onClick = {
+                                    showHomeMenuOption = false
+                                    context.startActivity(Intent(context, SettingsActivity::class.java))
+                                }
+                            )
+                        }
                     }
-                )
+                }
             }
 
             // TODO unread destinations to show dot indicator
@@ -121,7 +149,7 @@ fun MifosApp(appState: MifosAppState) {
                     if (appState.shouldShowBottomBar) {
                         MifosBottomBar(
                             destinations = appState.topLevelDestinations,
-                            destinationsWithUnreadResources = emptySet() ,
+                            destinationsWithUnreadResources = emptySet(),
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
                             modifier = Modifier.testTag("NiaBottomBar"),
@@ -186,24 +214,6 @@ fun MifosApp(appState: MifosAppState) {
                 }
             }
         }
-    }
-}
-
-@Composable
-fun ShowHomeMenuOptions(showHomeMenuOption: Boolean, onDismiss: () -> Unit) {
-    val context = LocalContext.current
-    DropdownMenu(
-        expanded = showHomeMenuOption,
-        onDismissRequest = { onDismiss() }
-    ) {
-        DropdownMenuItem(
-            text = { Text(stringResource(id = R.string.faq)) },
-            onClick = { context.startActivity(Intent(context, FAQActivity::class.java)) }
-        )
-        DropdownMenuItem(
-            text = { Text(stringResource(id = R.string.settings)) },
-            onClick = { context.startActivity(Intent(context, SettingsActivity::class.java)) }
-        )
     }
 }
 
