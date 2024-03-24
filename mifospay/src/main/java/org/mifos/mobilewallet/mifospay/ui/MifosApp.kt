@@ -3,6 +3,7 @@ package org.mifos.mobilewallet.mifospay.ui
 import android.content.Context
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -110,8 +111,10 @@ fun MifosApp(appState: MifosAppState) {
                             .fillMaxWidth()
                             .wrapContentSize(Alignment.TopEnd)
                             .padding(end = 24.dp)
+                            .background(color = Color.White)
                     ) {
                         DropdownMenu(
+                            modifier = Modifier.background(color = Color.White),
                             expanded = showHomeMenuOption,
                             onDismissRequest = { showHomeMenuOption = false }
                         ) {
