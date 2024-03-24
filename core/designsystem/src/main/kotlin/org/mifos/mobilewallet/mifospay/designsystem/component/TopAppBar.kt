@@ -1,3 +1,6 @@
+
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package org.mifos.mobilewallet.mifospay.designsystem.component
 
 import androidx.annotation.StringRes
@@ -54,14 +57,14 @@ fun MifosTopAppBar(
             }
         },
         colors = colors,
-        modifier = modifier.testTag("niaTopAppBar"),
+        modifier = modifier.testTag("mifosTopAppBar"),
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview("Top App Bar")
 @Composable
-private fun NiaTopAppBarPreview() {
+private fun MifosTopAppBarPreview() {
     MifosTheme {
         MifosTopAppBar(
             titleRes = android.R.string.untitled,
