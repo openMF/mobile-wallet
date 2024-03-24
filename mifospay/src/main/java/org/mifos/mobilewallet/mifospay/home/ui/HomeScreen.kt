@@ -60,9 +60,9 @@ enum class HomeScreenContents {
 }
 
 @Composable
-fun HomeScreenDashboard(
+fun HomeRoute(
     homeViewModel: HomeViewModel = hiltViewModel(),
-    onRequest: () -> Unit,
+    onRequest: (String) -> Unit,
     onPay: () -> Unit
 ) {
     val homeUIState by homeViewModel
@@ -72,7 +72,9 @@ fun HomeScreenDashboard(
     HomeScreen(
         homeUIState.account,
         homeUIState.transactions,
-        onRequest = onRequest,
+        onRequest = {
+            onRequest.invoke(homeUIState.vpa ?: "")
+        },
         onPay = onPay
     )
 }

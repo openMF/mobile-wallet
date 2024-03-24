@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.core.utils
+package org.mifos.mobilewallet.core.util
 
 import org.json.JSONException
 import org.json.JSONObject

@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.core.utils
+package org.mifos.mobilewallet.core.util
 
 import java.util.Arrays
 import java.util.Collections

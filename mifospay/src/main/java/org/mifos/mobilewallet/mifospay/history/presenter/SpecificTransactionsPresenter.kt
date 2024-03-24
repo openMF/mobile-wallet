@@ -7,7 +7,7 @@ import org.mifos.mobilewallet.core.base.UseCaseFactory
 import com.mifos.mobilewallet.model.domain.Transaction
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
-import org.mifos.mobilewallet.core.utils.Constants
+import org.mifos.mobilewallet.core.util.Constants
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.history.HistoryContract

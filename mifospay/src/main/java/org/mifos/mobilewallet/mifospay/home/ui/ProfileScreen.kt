@@ -28,13 +28,29 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfileUiState
+import org.mifos.mobilewallet.mifospay.home.presenter.ProfileViewModel
 import org.mifos.mobilewallet.mifospay.ui.ProfileImage
+
+@Composable
+fun ProfileRoute(
+    viewModel: ProfileViewModel = hiltViewModel(),
+    onEditProfile: () -> Unit,
+    onSettings: () -> Unit,
+) {
+    val profileState by viewModel.profileState.collectAsStateWithLifecycle()
+    ProfileScreenContent(
+        profileState = profileState,
+        onEditProfile = onEditProfile,
+        onSettings = onSettings
+    )
+}
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ProfileScreen(
+fun ProfileScreenContent(
     profileState: ProfileUiState,
     onEditProfile: () -> Unit,
     onSettings: () -> Unit,
@@ -140,5 +156,5 @@ fun ProfileScreen(
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen(hiltViewModel(), {}, {})
+    ProfileRoute(hiltViewModel(), {}, {})
 }

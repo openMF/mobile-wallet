@@ -114,7 +114,7 @@ class HomeFragment : BaseFragment(), HomeView {
         binding.homeCompose.apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnLifecycleDestroyed(viewLifecycleOwner))
             setContent {
-                HomeScreenDashboard(
+                HomeRoute(
                     homeViewModel,
                     onRequest = {
                         startActivity(Intent(this@HomeFragment.requireContext(), ShowQrActivity::class.java).apply {
