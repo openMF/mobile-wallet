@@ -12,7 +12,7 @@ import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientImage
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.common.DebugUtil
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
 import javax.inject.Inject
@@ -37,8 +37,8 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch {
             mUsecaseHandler.execute(fetchClientImageUseCase,
                 FetchClientImage.RequestValues(localRepository.clientDetails.clientId),
-                object : UseCase.UseCaseCallback<FetchClientImage.ResponseValue?> {
-                    override fun onSuccess(response: FetchClientImage.ResponseValue?) {
+                object : UseCase.UseCaseCallback<FetchClientImage.ResponseValue> {
+                    override fun onSuccess(response: FetchClientImage.ResponseValue) {
                         val bitmap = convertResponseToBitmap(response?.responseBody)
                         val currentState = _profileState.value as ProfileUiState.Success
                         _profileState.value = currentState.copy(bitmapImage = bitmap)

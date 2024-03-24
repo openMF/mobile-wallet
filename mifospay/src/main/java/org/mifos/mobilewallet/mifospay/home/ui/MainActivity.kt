@@ -21,7 +21,7 @@ import org.mifos.mobilewallet.mifospay.home.ui.HomeFragment.Companion.newInstanc
 import org.mifos.mobilewallet.mifospay.home.ui.PaymentsFragment.Companion.newInstance
 import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantsFragment
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**

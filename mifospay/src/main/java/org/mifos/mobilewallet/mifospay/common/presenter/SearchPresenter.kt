@@ -23,8 +23,8 @@ class SearchPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHa
 
     override fun performSearch(query: String) {
         mUsecaseHandler.execute(searchClient, SearchClient.RequestValues(query),
-            object : UseCaseCallback<SearchClient.ResponseValue?> {
-                override fun onSuccess(response: SearchClient.ResponseValue?) {
+            object : UseCaseCallback<SearchClient.ResponseValue> {
+                override fun onSuccess(response: SearchClient.ResponseValue) {
                     mSearchView.showSearchResult(response?.results?.toMutableList())
                 }
 

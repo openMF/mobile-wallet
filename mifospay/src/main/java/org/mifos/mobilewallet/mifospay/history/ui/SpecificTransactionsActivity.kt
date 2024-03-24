@@ -21,7 +21,7 @@ import org.mifos.mobilewallet.mifospay.history.HistoryContract.SpecificTransacti
 import org.mifos.mobilewallet.mifospay.history.presenter.SpecificTransactionsPresenter
 import org.mifos.mobilewallet.mifospay.history.ui.adapter.SpecificTransactionsAdapter
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import javax.inject.Inject
 
@@ -66,7 +66,7 @@ class SpecificTransactionsActivity : BaseActivity(), SpecificTransactionsView {
         setContentView(R.layout.activity_specific_transactions)
         ButterKnife.bind(this)
         mPresenter!!.attachView(this)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         setToolbarTitle(Constants.SPECIFIC_TRANSACTIONS)
         transactions = intent.getParcelableArrayListExtra(Constants.TRANSACTIONS)
         secondAccountNumber = intent.getStringExtra(Constants.ACCOUNT_NUMBER)

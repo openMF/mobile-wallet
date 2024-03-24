@@ -17,7 +17,7 @@ import org.mifos.mobilewallet.mifospay.bank.BankContract.UpiPinView
 import org.mifos.mobilewallet.mifospay.bank.presenter.UpiPinPresenter
 import org.mifos.mobilewallet.mifospay.bank.ui.SetupUpiPinActivity
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
 

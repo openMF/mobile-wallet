@@ -12,7 +12,7 @@ import butterknife.ButterKnife
 import com.mifos.mobilewallet.model.entity.Invoice
 import com.mifos.mobilewallet.model.utils.DateHelper
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**
@@ -37,7 +37,8 @@ class InvoicesAdapter @Inject constructor() : RecyclerView.Adapter<InvoicesAdapt
         holder.mTvInvoiceStatus!!.text =
             if (invoice.status == 0L) Constants.PENDING else Constants.DONE
         holder.mInvoiceImage!!.setImageResource(
-            if (invoice.status == 0L) R.drawable.ic_remove_circle_outline_black_24dp else R.drawable.ic_check_round_black_24dp
+            if (invoice.status == 0L) R.drawable.ic_remove_circle_outline_black_24dp
+            else R.drawable.ic_check_round_black_24dp
         )
         holder.mTvInvoiceDate!!.text = DateHelper.getDateAsString(invoice.date)
         holder.mTvInvoiceAmount!!.text = Constants.INR + invoice.amount

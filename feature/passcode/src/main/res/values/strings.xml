@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_passcode_passcode_title">Passcode will be reset, are you sure?</string>
+    <string name="feature_passcode_cancel">Cancel</string>
+    <string name="feature_passcode_yes">Yes</string>
+</resources>

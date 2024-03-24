@@ -5,7 +5,7 @@ import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.invoice.FetchInvoice
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract
 import org.mifos.mobilewallet.mifospay.invoice.InvoiceContract.InvoiceView
 import javax.inject.Inject
@@ -15,13 +15,11 @@ import javax.inject.Inject
  */
 class InvoicePresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mPreferencesHelper: PreferencesHelper
+    private val mPreferencesHelper: PreferencesHelper,
+    private val fetchInvoiceUseCase: FetchInvoice
 ) : InvoiceContract.InvoicePresenter {
     var mInvoiceView: InvoiceView? = null
 
-    @JvmField
-    @Inject
-    var fetchInvoiceUseCase: FetchInvoice? = null
     override fun attachView(baseView: BaseView<*>?) {
         mInvoiceView = baseView as InvoiceView?
         mInvoiceView!!.setPresenter(this)

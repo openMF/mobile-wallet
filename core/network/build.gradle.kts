@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.mifospay.android.library)
     alias(libs.plugins.mifospay.android.hilt)
+    id("kotlinx-serialization")
 }
 
 apply(from = "${project.rootDir}/config/quality/quality.gradle")

@@ -16,7 +16,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.common.SearchContract
 import org.mifos.mobilewallet.mifospay.common.presenter.SearchPresenter
 import org.mifos.mobilewallet.mifospay.common.ui.adapter.SearchAdapter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
 
@@ -46,7 +46,7 @@ class SearchActivity : BaseActivity(), SearchContract.SearchView {
         setContentView(R.layout.activity_search)
         ButterKnife.bind(this)
         setToolbarTitle("")
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         mPresenter?.attachView(this)
         rvSearchResults?.layoutManager =
             LinearLayoutManager(this)

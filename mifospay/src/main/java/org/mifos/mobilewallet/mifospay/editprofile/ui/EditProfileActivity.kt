@@ -15,6 +15,7 @@ import android.widget.EditText
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.os.bundleOf
 import butterknife.BindView
 import butterknife.BindViews
 import butterknife.ButterKnife
@@ -33,9 +34,9 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract
 import org.mifos.mobilewallet.mifospay.editprofile.EditProfileContract.EditProfileView
 import org.mifos.mobilewallet.mifospay.editprofile.presenter.EditProfilePresenter
-import org.mifos.mobilewallet.mifospay.passcode.ui.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.password.ui.EditPasswordActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
+import org.mifos.mobilewallet.mifospay.feature.passcode.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.utils.DialogBox
 import org.mifos.mobilewallet.mifospay.utils.TextDrawable
 import org.mifos.mobilewallet.mifospay.utils.Toaster
@@ -166,10 +167,13 @@ class EditProfileActivity : BaseActivity(), EditProfileView {
         val currentPasscode = passcodePreferencesHelper!!.passCode
         // for re-initiating passcode generation process
         passcodePreferencesHelper!!.savePassCode("")
-        val intent = Intent(this, PassCodeActivity::class.java)
-        intent.putExtra(Constants.CURRENT_PASSCODE, currentPasscode)
-        intent.putExtra(Constants.UPDATE_PASSCODE, true)
-        startActivity(intent)
+        PassCodeActivity.startPassCodeActivity(
+            context = this,
+            bundle = bundleOf(
+                Pair(Constants.CURRENT_PASSCODE, currentPasscode),
+                Pair(Constants.UPDATE_PASSCODE, true)
+            )
+        )
     }
 
     @OnTextChanged(

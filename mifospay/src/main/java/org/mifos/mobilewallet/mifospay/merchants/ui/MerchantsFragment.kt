@@ -11,7 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnTextChanged
@@ -22,7 +27,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.merchants.MerchantsContract
 import org.mifos.mobilewallet.mifospay.merchants.adapter.MerchantsAdapter
 import org.mifos.mobilewallet.mifospay.merchants.presenter.MerchantsPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import java.util.*
 import javax.inject.Inject

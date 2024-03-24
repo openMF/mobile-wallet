@@ -6,18 +6,19 @@ import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.history.HistoryContract
 import org.mifos.mobilewallet.mifospay.history.HistoryContract.TransactionDetailView
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**
  * Created by ankur on 06/June/2018
  */
-class TransactionDetailPresenter @Inject constructor(private val mUseCaseHandler: UseCaseHandler) :
-    HistoryContract.TransactionDetailPresenter {
-    @JvmField
-    @Inject
-    var mFetchAccountTransferUseCase: FetchAccountTransfer? = null
+class TransactionDetailPresenter @Inject constructor(
+    private val mUseCaseHandler: UseCaseHandler,
+    private val mFetchAccountTransferUseCase: FetchAccountTransfer
+) : HistoryContract.TransactionDetailPresenter {
+
     private var mTransactionDetailView: TransactionDetailView? = null
+
     override fun attachView(baseView: BaseView<*>?) {
         mTransactionDetailView = baseView as TransactionDetailView?
         mTransactionDetailView!!.setPresenter(this)

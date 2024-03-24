@@ -9,7 +9,12 @@ import com.google.android.material.textfield.TextInputEditText
 import androidx.core.content.FileProvider
 import androidx.appcompat.app.AlertDialog
 import android.text.InputType
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+//import android.view.*
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
@@ -22,7 +27,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.qr.QrContract
 import org.mifos.mobilewallet.mifospay.qr.QrContract.ShowQrView
 import org.mifos.mobilewallet.mifospay.qr.presenter.ShowQrPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -56,7 +61,7 @@ class ShowQrActivity : BaseActivity(), ShowQrView {
         setContentView(R.layout.activity_show_qr)
         ButterKnife.bind(this@ShowQrActivity)
         setToolbarTitle(getString(R.string.request))
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         mPresenter!!.attachView(this)
         val qrData = intent.getStringExtra(Constants.QR_DATA)
         mShowQrPresenter!!.generateQr(qrData)

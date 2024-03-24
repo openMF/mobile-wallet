@@ -10,8 +10,14 @@ import android.widget.Toast
 import butterknife.BindView
 import butterknife.ButterKnife
 import butterknife.OnClick
-import com.google.zxing.*
+import com.google.zxing.BinaryBitmap
+import com.google.zxing.LuminanceSource
+import com.google.zxing.MultiFormatReader
+import com.google.zxing.RGBLuminanceSource
+import com.google.zxing.Reader
+import com.google.zxing.Result
 import com.google.zxing.common.HybridBinarizer
+import com.journeyapps.barcodescanner.CaptureActivity
 import dagger.hilt.android.AndroidEntryPoint
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import me.dm7.barcodescanner.zxing.ZXingScannerView.ResultHandler
@@ -20,18 +26,16 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.qr.QrContract
 import org.mifos.mobilewallet.mifospay.qr.QrContract.ReadQrView
 import org.mifos.mobilewallet.mifospay.qr.presenter.ReadQrPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import java.io.FileNotFoundException
 import javax.inject.Inject
 
 /**
  * Created by naman on 7/9/17.
  */
-@AndroidEntryPoint
-class ReadQrActivity : BaseActivity(), ReadQrView, ResultHandler {
-    @JvmField
-    @Inject
-    var mPresenter: ReadQrPresenter? = null
+
+class ReadQrActivity : CaptureActivity(), ReadQrView, ResultHandler {
+
     var mReadQrPresenter: QrContract.ReadQrPresenter? = null
 
     @JvmField
@@ -53,9 +57,6 @@ class ReadQrActivity : BaseActivity(), ReadQrView, ResultHandler {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_read_qr)
         ButterKnife.bind(this@ReadQrActivity)
-        setToolbarTitle(Constants.SCAN_CODE)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
-        mPresenter!!.attachView(this)
         mScannerView!!.setAutoFocus(true)
     }
 

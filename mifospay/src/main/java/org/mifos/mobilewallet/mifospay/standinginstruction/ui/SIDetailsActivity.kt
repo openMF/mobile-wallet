@@ -18,7 +18,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.databinding.ActivitySiDetailsBinding
 import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionContract
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.StandingInstructionDetailsPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.DialogBox
 import org.mifos.mobilewallet.mifospay.utils.Utils
 import java.util.*
@@ -49,11 +49,11 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_si_details);
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_si_details);
         setContentView(binding.root)
         ButterKnife.bind(this)
         setToolbarTitle(getString(R.string.details))
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         mPresenter.attachView(this)
         res = resources
 
@@ -190,8 +190,8 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         binding.tvSiStatus.text = standingInstruction.status.value
         if (standingInstruction.status.value == "Deleted") {
             if (this::mOptionsMenu.isInitialized) {
-                val nav_dashboard = mOptionsMenu.findItem(R.id.item_delete)
-                nav_dashboard.setVisible(false)
+                val navDashboard = mOptionsMenu.findItem(R.id.item_delete)
+                navDashboard.setVisible(false)
             }
         }
         binding.tvRecurrenceInterval.text = standingInstruction.recurrenceInterval.toString()
@@ -236,7 +236,13 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
         binding.layoutSiDetails.visibility = View.GONE
         binding.incStateView.root.visibility = View.VISIBLE
 
-        binding.incStateView.ivEmptyNoTransactionHistory.setImageDrawable(ResourcesCompat.getDrawable(res, drawable, null))
+        binding.incStateView.ivEmptyNoTransactionHistory.setImageDrawable(
+            ResourcesCompat.getDrawable(
+                res,
+                drawable,
+                null
+            )
+        )
         binding.incStateView.tvEmptyNoTransactionHistoryTitle.text = res.getString(errorTitle)
         binding.incStateView.tvEmptyNoTransactionHistorySubtitle.text = res.getString(errorMessage)
     }
@@ -272,6 +278,7 @@ class SIDetailsActivity : BaseActivity(), StandingInstructionContract.SIDetailsV
                  * perform delete action only when details have been successfully fetched
                  */
                 showConfirmDeleteDialog()
+
             else -> return super.onOptionsItemSelected(item)
         }
         return true

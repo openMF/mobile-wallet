@@ -26,8 +26,9 @@ class FetchStandingInstruction @Inject constructor(private val apiRepository: Fi
 
                     }
 
-                    override fun onError(e: Throwable)
-                            = useCaseCallback.onError(e.message)
+                    override fun onError(e: Throwable) {
+                        e.message?.let { useCaseCallback.onError(it) }
+                    }
 
 
                     override fun onNext(standingInstruction: StandingInstruction)

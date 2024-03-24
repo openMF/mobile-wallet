@@ -1,28 +1,24 @@
 package org.mifos.mobilewallet.mifospay.password.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.domain.user.UpdateUserEntityPassword
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.user.AuthenticateUser
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract
 import org.mifos.mobilewallet.mifospay.password.EditPasswordContract.EditPasswordView
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 class EditPasswordPresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mPreferencesHelper: PreferencesHelper
+    private val mPreferencesHelper: PreferencesHelper,
+    private val authenticateUserUseCase: AuthenticateUser,
+    private val updateUserUseCase: UpdateUser
 ) : EditPasswordContract.EditPasswordPresenter {
-    @JvmField
-    @Inject
-    var updateUserUseCase: UpdateUser? = null
 
-    @JvmField
-    @Inject
-    var authenticateUserUseCase: AuthenticateUser? = null
     private var mEditPasswordView: EditPasswordView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mEditPasswordView = baseView as EditPasswordView?
@@ -97,8 +93,8 @@ class EditPasswordPresenter @Inject constructor(
                 mPreferencesHelper.username,
                 currentPassword
             ),
-            object : UseCaseCallback<AuthenticateUser.ResponseValue?> {
-                override fun onSuccess(response: AuthenticateUser.ResponseValue?) {
+            object : UseCaseCallback<AuthenticateUser.ResponseValue> {
+                override fun onSuccess(response: AuthenticateUser.ResponseValue) {
                     mUseCaseHandler.execute(updateUserUseCase,
                         UpdateUser.RequestValues(
                             UpdateUserEntityPassword(

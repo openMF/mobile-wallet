@@ -1,12 +1,16 @@
 package org.mifos.mobilewallet.mifospay.network.di
 
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import kotlinx.serialization.json.Json
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.network.BaseURL
 import org.mifos.mobilewallet.mifospay.network.MifosWalletOkHttpClient
+import org.mifos.mobilewallet.mifospay.network.local_assets.LocalAssetManager
 import org.mifos.mobilewallet.mifospay.network.services.AccountTransfersService
 import org.mifos.mobilewallet.mifospay.network.services.AuthenticationService
 import org.mifos.mobilewallet.mifospay.network.services.BeneficiaryService
@@ -33,6 +37,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class NetworkModule {
+
+    @Provides
+    @Singleton
+    fun providesNetworkJson(): Json = Json {
+        ignoreUnknownKeys = true
+    }
+
+    @Provides
+    @Singleton
+    fun providesFakeAssetManager(
+        @ApplicationContext context: Context,
+    ): LocalAssetManager = LocalAssetManager(context.assets::open)
 
     @Provides
     @Singleton

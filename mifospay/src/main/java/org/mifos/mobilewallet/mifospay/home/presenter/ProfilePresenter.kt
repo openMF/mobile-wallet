@@ -5,7 +5,7 @@ import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientImage
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract
 import org.mifos.mobilewallet.mifospay.home.BaseHomeContract.ProfileView
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
@@ -15,12 +15,12 @@ import javax.inject.Inject
  * Created by naman on 7/9/17.
  */
 class ProfilePresenter @Inject constructor(
-    private val mUsecaseHandler: UseCaseHandler, private val localRepository: LocalRepository,
-    private val mPreferencesHelper: PreferencesHelper
+    private val mUsecaseHandler: UseCaseHandler,
+    private val localRepository: LocalRepository,
+    private val mPreferencesHelper: PreferencesHelper,
+    private val fetchClientImageUseCase: FetchClientImage
 ) : BaseHomeContract.ProfilePresenter {
-    @JvmField
-    @Inject
-    var fetchClientImageUseCase: FetchClientImage? = null
+
     private var mProfileView: ProfileView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mProfileView = baseView as ProfileView?
@@ -44,8 +44,8 @@ class ProfilePresenter @Inject constructor(
         mUsecaseHandler.execute(fetchClientImageUseCase,
             FetchClientImage.RequestValues(
                 localRepository.clientDetails.clientId
-            ), object : UseCaseCallback<FetchClientImage.ResponseValue?> {
-                override fun onSuccess(response: FetchClientImage.ResponseValue?) {
+            ), object : UseCaseCallback<FetchClientImage.ResponseValue> {
+                override fun onSuccess(response: FetchClientImage.ResponseValue) {
                     mProfileView?.fetchImageSuccess(response?.responseBody)
                 }
 

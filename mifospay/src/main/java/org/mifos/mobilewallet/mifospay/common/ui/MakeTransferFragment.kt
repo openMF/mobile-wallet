@@ -18,12 +18,11 @@ import butterknife.BindView
 import butterknife.ButterKnife
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.common.TransferContract
 import org.mifos.mobilewallet.mifospay.common.presenter.MakeTransferPresenter
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
 import org.mifos.mobilewallet.mifospay.payments.ui.SendFragment
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
 

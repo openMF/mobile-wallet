@@ -17,7 +17,7 @@ import org.mifos.mobilewallet.mifospay.bank.BankContract
 import org.mifos.mobilewallet.mifospay.bank.BankContract.BankAccountDetailView
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountDetailPresenter
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
@@ -74,7 +74,7 @@ class BankAccountDetailActivity : BaseActivity(), BankAccountDetailView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_bank_account_detail)
         ButterKnife.bind(this)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         setToolbarTitle(Constants.BANK_ACCOUNT_DETAILS)
         mPresenter!!.attachView(this)
         bankAccountDetails = intent.extras!!.getParcelable(Constants.BANK_ACCOUNT_DETAILS)

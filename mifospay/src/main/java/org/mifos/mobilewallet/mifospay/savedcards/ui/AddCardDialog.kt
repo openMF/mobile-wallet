@@ -21,7 +21,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.mifos.mobilewallet.model.entity.savedcards.Card
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import java.util.Calendar
 
@@ -76,7 +76,7 @@ class AddCardDialog : BottomSheetDialogFragment() {
 
     private var mBottomSheetBehavior: BottomSheetBehavior<*>? = null
     private var fieldsValid = false
-    private val CHECK_ERROR: Action<TextInputLayout> = Action { view, index ->
+    private val checkError: Action<TextInputLayout> = Action { view, index ->
         val editText = view.editText
         if (editText == null || editText.editableText == null || editText.editableText.toString()
                 .trim { it <= ' ' }.isEmpty()
@@ -181,7 +181,7 @@ class AddCardDialog : BottomSheetDialogFragment() {
      */
     private fun areFieldsValid(): Boolean {
         fieldsValid = true
-        ViewCollections.run(mTextInputLayouts, CHECK_ERROR)
+        ViewCollections.run(mTextInputLayouts, checkError)
         val expiryMonth = spnMM!!.selectedItem.toString().toInt()
         val expiryYear = spnYY!!.selectedItem.toString().toInt()
         val calendar = Calendar.getInstance()

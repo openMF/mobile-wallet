@@ -28,3 +28,15 @@
 -dontwarn com.yalantis.ucrop**
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
+
+-dontwarn com.sun.tools.javac.code.Symbol$ClassSymbol
+-dontwarn com.sun.tools.javac.code.Symbol$PackageSymbol
+-dontwarn com.sun.tools.javac.code.Symbol
+-dontwarn com.sun.tools.javac.tree.TreeScanner
+-dontwarn com.sun.tools.javac.util.Name
+-dontwarn javax.lang.model.SourceVersion
+-dontwarn javax.lang.model.element.Element
+-dontwarn javax.lang.model.element.Modifier
+-dontwarn javax.lang.model.type.TypeMirror
+-dontwarn javax.lang.model.type.TypeVisitor
+-dontwarn javax.lang.model.util.SimpleTypeVisitor7

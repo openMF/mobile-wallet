@@ -15,7 +15,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.notification.NotificationContract
 import org.mifos.mobilewallet.mifospay.notification.NotificationContract.NotificationView
 import org.mifos.mobilewallet.mifospay.notification.presenter.NotificationPresenter
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
@@ -48,7 +48,7 @@ class NotificationActivity : BaseActivity(), NotificationView {
         setContentView(R.layout.activity_notification)
         ButterKnife.bind(this)
         setToolbarTitle("Notifications")
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         setupRecyclerView()
         setupSwipeRefreshLayout()
         mPresenter?.attachView(this)

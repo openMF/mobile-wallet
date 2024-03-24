@@ -45,7 +45,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".auth.ui.LoginActivity"
+            android:name=".feature.auth.login.LoginActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateVisible" />
         <activity
@@ -79,7 +79,7 @@
             android:name=".qr.ui.ReadQrActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".passcode.ui.PassCodeActivity"
+            android:name=".feature.passcode.PassCodeActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".receipt.ui.ReceiptActivity"
@@ -136,11 +136,12 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name=".registration.ui.SignupActivity"
+            android:name=".feature.auth.signup.SignupActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".registration.ui.MobileVerificationActivity"
+            android:name=".feature.auth.mobile_verify.MobileVerificationActivity"
             android:theme="@style/AppTheme" />
+
         <activity
             android:name=".editprofile.ui.EditProfileActivity"
             android:theme="@style/AppTheme"

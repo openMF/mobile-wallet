@@ -1,14 +1,14 @@
 package org.mifos.mobilewallet.mifospay.kyc.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.entity.kyc.KYCLevel1Details
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.kyc.UploadKYCLevel1Details
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract
 import org.mifos.mobilewallet.mifospay.kyc.KYCContract.KYCLevel1View
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**
@@ -16,11 +16,10 @@ import javax.inject.Inject
  */
 class KYCLevel1Presenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mLocalRepository: LocalRepository
+    private val mLocalRepository: LocalRepository,
+    private val uploadKYCLevel1DetailsUseCase: UploadKYCLevel1Details
 ) : KYCContract.KYCLevel1Presenter {
-    @JvmField
-    @Inject
-    var uploadKYCLevel1DetailsUseCase: UploadKYCLevel1Details? = null
+
     private var mKYCLevel1View: KYCLevel1View? = null
     override fun attachView(baseView: BaseView<*>?) {
         mKYCLevel1View = baseView as KYCLevel1View?
@@ -36,14 +35,14 @@ class KYCLevel1Presenter @Inject constructor(
                 fname, lname, address1,
                 address2, phoneno, dob, "1"
             )
-        uploadKYCLevel1DetailsUseCase!!.requestValues = UploadKYCLevel1Details.RequestValues(
+        uploadKYCLevel1DetailsUseCase!!.walletRequestValues = UploadKYCLevel1Details.RequestValues(
             mLocalRepository.clientDetails.clientId.toInt(),
             kycLevel1Details
         )
-        val requestValues = uploadKYCLevel1DetailsUseCase!!.requestValues
+        val requestValues = uploadKYCLevel1DetailsUseCase!!.walletRequestValues
         mUseCaseHandler.execute(uploadKYCLevel1DetailsUseCase, requestValues,
-            object : UseCaseCallback<UploadKYCLevel1Details.ResponseValue?> {
-                override fun onSuccess(response: UploadKYCLevel1Details.ResponseValue?) {
+            object : UseCaseCallback<UploadKYCLevel1Details.ResponseValue> {
+                override fun onSuccess(response: UploadKYCLevel1Details.ResponseValue) {
                     mKYCLevel1View!!.hideProgressDialog()
                     mKYCLevel1View!!.showToast(
                         Constants.KYC_LEVEL_1_DETAILS_ADDED_SUCCESSFULLY

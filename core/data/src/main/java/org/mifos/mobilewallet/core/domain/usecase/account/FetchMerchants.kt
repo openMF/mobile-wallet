@@ -20,7 +20,7 @@ class FetchMerchants @Inject constructor(
             .subscribe(object : Subscriber<Page<SavingsWithAssociations>>() {
                 override fun onCompleted() {}
                 override fun onError(e: Throwable) {
-                    useCaseCallback.onError(e.message)
+                    e.message?.let { useCaseCallback.onError(it) }
                 }
 
                 override fun onNext(savingsWithAssociationsPage: Page<SavingsWithAssociations>) {

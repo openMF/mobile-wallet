@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class AuthenticationPayload(
     @SerializedName("username")
-    val userName: String = "",
+    val userName: String,
     @SerializedName("password")
-    val password: String = ""
+    val password: String
 ) : Parcelable

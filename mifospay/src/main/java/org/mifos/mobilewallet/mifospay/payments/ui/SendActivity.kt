@@ -6,7 +6,7 @@ import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 
 @AndroidEntryPoint
 class SendActivity : BaseActivity() {
@@ -15,7 +15,7 @@ class SendActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_send)
         setToolbarTitle(getString(R.string.pay))
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         if (savedInstanceState == null) {
             supportFragmentManager.commit {
                 setReorderingAllowed(true)

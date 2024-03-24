@@ -22,7 +22,8 @@ object AnimationUtil {
         val a: Animation = object : Animation() {
             override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
                 v.layoutParams.height =
-                    if (interpolatedTime == 1f) LinearLayout.LayoutParams.WRAP_CONTENT else (targetHeight * interpolatedTime).toInt()
+                    if (interpolatedTime == 1f) LinearLayout.LayoutParams.WRAP_CONTENT
+                    else (targetHeight * interpolatedTime).toInt()
                 v.requestLayout()
             }
 

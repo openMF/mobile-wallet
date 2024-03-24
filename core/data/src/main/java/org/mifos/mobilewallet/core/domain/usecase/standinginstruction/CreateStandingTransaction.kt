@@ -44,7 +44,7 @@ class CreateStandingTransaction @Inject constructor(private val apiRepository: F
     }
 
     private fun fetchToClientData() {
-        apiRepository.getClientDetails(requestValues.toClientId)
+        apiRepository.getClientDetails(walletRequestValues.toClientId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(object : Subscriber<Client>() {
@@ -65,7 +65,7 @@ class CreateStandingTransaction @Inject constructor(private val apiRepository: F
     }
 
     private fun fetchFromAccountDetails() {
-        apiRepository.getSelfAccounts(requestValues.fromClientId)
+        apiRepository.getSelfAccounts(walletRequestValues.fromClientId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(object : Subscriber<ClientAccounts>() {
@@ -101,7 +101,7 @@ class CreateStandingTransaction @Inject constructor(private val apiRepository: F
     }
 
     private fun fetchToAccountDetails() {
-        apiRepository.getAccounts(requestValues.toClientId)
+        apiRepository.getAccounts(walletRequestValues.toClientId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(object : Subscriber<ClientAccounts>() {
@@ -149,15 +149,15 @@ class CreateStandingTransaction @Inject constructor(private val apiRepository: F
                 2,
                 toAccount.id,
                 1,
-                requestValues.amount,
-                requestValues.validFrom,
+                walletRequestValues.amount,
+                walletRequestValues.validFrom,
                 1,
-                requestValues.recurrenceInterval,
+                walletRequestValues.recurrenceInterval,
                 2,
                 "en",
                 "dd MM yyyy",
-                requestValues.validTill,
-                requestValues.recurrenceOnDayMonth,
+                walletRequestValues.validTill,
+                walletRequestValues.recurrenceOnDayMonth,
                 "dd MM")
         apiRepository.createStandingInstruction(standingInstructionPayload)
                 .observeOn(AndroidSchedulers.mainThread())

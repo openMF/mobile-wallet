@@ -15,7 +15,7 @@ import org.mifos.mobilewallet.mifospay.editprofile.ui.EditProfileActivity
 import org.mifos.mobilewallet.mifospay.home.presenter.ProfileViewModel
 import org.mifos.mobilewallet.mifospay.settings.ui.SettingsActivity
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 
 /**
  * Created by naman on 7/9/17.

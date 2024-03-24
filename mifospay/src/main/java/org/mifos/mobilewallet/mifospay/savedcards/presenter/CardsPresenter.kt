@@ -1,8 +1,8 @@
 package org.mifos.mobilewallet.mifospay.savedcards.presenter
 
 import org.mifos.mobilewallet.core.base.UseCase.UseCaseCallback
-import org.mifos.mobilewallet.core.base.UseCaseHandler
 import com.mifos.mobilewallet.model.entity.savedcards.Card
+import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.AddCard
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.DeleteCard
 import org.mifos.mobilewallet.core.domain.usecase.savedcards.EditCard
@@ -12,7 +12,7 @@ import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract
 import org.mifos.mobilewallet.mifospay.savedcards.CardsContract.CardsView
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**
@@ -23,23 +23,13 @@ import javax.inject.Inject
  */
 class CardsPresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val mLocalRepository: LocalRepository
+    private val mLocalRepository: LocalRepository,
+    private val fetchSavedCardsUseCase: FetchSavedCards,
+    private val addCardUseCase: AddCard,
+    private val editCardUseCase: EditCard,
+    private val deleteCardUseCase: DeleteCard
 ) : CardsContract.CardsPresenter {
-    @JvmField
-    @Inject
-    var addCardUseCase: AddCard? = null
 
-    @JvmField
-    @Inject
-    var fetchSavedCardsUseCase: FetchSavedCards? = null
-
-    @JvmField
-    @Inject
-    var editCardUseCase: EditCard? = null
-
-    @JvmField
-    @Inject
-    var deleteCardUseCase: DeleteCard? = null
     private var mCardsView: CardsView? = null
     override fun attachView(baseView: BaseView<*>?) {
         mCardsView = baseView as CardsView?
@@ -51,13 +41,13 @@ class CardsPresenter @Inject constructor(
      */
     override fun fetchSavedCards() {
         mCardsView!!.showFetchingProcess()
-        fetchSavedCardsUseCase!!.requestValues = FetchSavedCards.RequestValues(
+        fetchSavedCardsUseCase!!.walletRequestValues = FetchSavedCards.RequestValues(
             mLocalRepository.clientDetails.clientId
         )
-        val requestValues = fetchSavedCardsUseCase!!.requestValues
+        val requestValues = fetchSavedCardsUseCase!!.walletRequestValues
         mUseCaseHandler.execute(fetchSavedCardsUseCase, requestValues,
-            object : UseCaseCallback<FetchSavedCards.ResponseValue?> {
-                override fun onSuccess(response: FetchSavedCards.ResponseValue?) {
+            object : UseCaseCallback<FetchSavedCards.ResponseValue> {
+                override fun onSuccess(response: FetchSavedCards.ResponseValue) {
                     response?.cardList?.let { mCardsView!!.showSavedCards(it as List<Card>) }
                 }
 
@@ -84,14 +74,14 @@ class CardsPresenter @Inject constructor(
             mCardsView!!.hideProgressDialog()
             return
         }
-        addCardUseCase!!.requestValues = AddCard.RequestValues(
+        addCardUseCase!!.walletRequestValues = AddCard.RequestValues(
             mLocalRepository.clientDetails.clientId,
             card
         )
-        val requestValues = addCardUseCase!!.requestValues
+        val requestValues = addCardUseCase!!.walletRequestValues
         mUseCaseHandler.execute(addCardUseCase, requestValues,
-            object : UseCaseCallback<AddCard.ResponseValue?> {
-                override fun onSuccess(response: AddCard.ResponseValue?) {
+            object : UseCaseCallback<AddCard.ResponseValue> {
+                override fun onSuccess(response: AddCard.ResponseValue) {
                     mCardsView!!.hideProgressDialog()
                     mCardsView!!.showToast(Constants.CARD_ADDED_SUCCESSFULLY)
                     fetchSavedCards()
@@ -116,14 +106,14 @@ class CardsPresenter @Inject constructor(
             mCardsView!!.hideProgressDialog()
             return
         }
-        editCardUseCase!!.requestValues = EditCard.RequestValues(
+        editCardUseCase!!.walletRequestValues = EditCard.RequestValues(
             mLocalRepository.clientDetails.clientId.toInt(),
             card
         )
-        val requestValues = editCardUseCase!!.requestValues
+        val requestValues = editCardUseCase!!.walletRequestValues
         mUseCaseHandler.execute(editCardUseCase, requestValues,
-            object : UseCaseCallback<EditCard.ResponseValue?> {
-                override fun onSuccess(response: EditCard.ResponseValue?) {
+            object : UseCaseCallback<EditCard.ResponseValue> {
+                override fun onSuccess(response: EditCard.ResponseValue) {
                     mCardsView!!.hideProgressDialog()
                     mCardsView!!.showToast(Constants.CARD_UPDATED_SUCCESSFULLY)
                     fetchSavedCards()
@@ -143,14 +133,14 @@ class CardsPresenter @Inject constructor(
      */
     override fun deleteCard(cardId: Int) {
         mCardsView!!.showProgressDialog(Constants.DELETING_CARD)
-        deleteCardUseCase!!.requestValues = DeleteCard.RequestValues(
+        deleteCardUseCase!!.walletRequestValues = DeleteCard.RequestValues(
             mLocalRepository.clientDetails.clientId.toInt(),
             cardId
         )
-        val requestValues = deleteCardUseCase!!.requestValues
+        val requestValues = deleteCardUseCase!!.walletRequestValues
         mUseCaseHandler.execute(deleteCardUseCase, requestValues,
-            object : UseCaseCallback<DeleteCard.ResponseValue?> {
-                override fun onSuccess(response: DeleteCard.ResponseValue?) {
+            object : UseCaseCallback<DeleteCard.ResponseValue> {
+                override fun onSuccess(response: DeleteCard.ResponseValue) {
                     mCardsView!!.hideProgressDialog()
                     mCardsView!!.showToast(Constants.CARD_DELETED_SUCCESSFULLY)
                     fetchSavedCards()

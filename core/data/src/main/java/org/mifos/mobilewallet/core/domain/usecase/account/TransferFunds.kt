@@ -21,14 +21,14 @@ import javax.inject.Inject
 class TransferFunds @Inject constructor( private val apiRepository: FineractRepository) :
     UseCase<TransferFunds.RequestValues, TransferFunds.ResponseValue>() {
 
-    private lateinit var requestValues: RequestValues
+   // override var requestValues: RequestValues
     private lateinit var fromClient: Client
     private lateinit var toClient: Client
     private lateinit var fromAccount: SavingAccount
     private lateinit var toAccount: SavingAccount
 
     override fun executeUseCase(requestValues: RequestValues) {
-        this.requestValues = requestValues
+        this.walletRequestValues = requestValues
         apiRepository.getSelfClientDetails(requestValues.fromClientId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
@@ -47,7 +47,7 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
     }
 
     private fun fetchToClientDetails() {
-        apiRepository.getClientDetails(requestValues.toClientId)
+        apiRepository.getClientDetails(walletRequestValues.toClientId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(object : Subscriber<Client>() {
@@ -65,7 +65,7 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
     }
 
     private fun fetchFromAccountDetails() {
-        apiRepository.getSelfAccounts(requestValues.fromClientId)
+        apiRepository.getSelfAccounts(walletRequestValues.fromClientId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(object : Subscriber<ClientAccounts>() {
@@ -99,7 +99,7 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
     }
 
     private fun fetchToAccountDetails() {
-        apiRepository.getAccounts(requestValues.toClientId)
+        apiRepository.getAccounts(walletRequestValues.toClientId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(object : Subscriber<ClientAccounts>() {
@@ -148,7 +148,7 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
                     beneficiaries.forEach { beneficiary ->
                         if (beneficiary.accountNumber == toAccount.accountNo) {
                             exists = true
-                            if (beneficiary.transferLimit >= requestValues.amount) {
+                            if (beneficiary.transferLimit >= walletRequestValues.amount) {
                                 makeTransfer()
                             } else {
                                 updateTransferLimit(beneficiary.id?.toLong()!!)
@@ -168,7 +168,7 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
             accountNumber = toAccount.accountNo
             name = toClient.displayName
             officeName = toClient.officeName
-            transferLimit = requestValues.amount.toInt()
+            transferLimit = walletRequestValues.amount.toInt()
             accountType = 2
         }
 
@@ -190,7 +190,7 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
 
     private fun updateTransferLimit(beneficiaryId: Long) {
         val updatePayload = BeneficiaryUpdatePayload().apply {
-            transferLimit = requestValues.amount.toInt()
+            transferLimit = walletRequestValues.amount.toInt()
         }
         apiRepository.updateBeneficiary(beneficiaryId, updatePayload)
             .observeOn(AndroidSchedulers.mainThread())
@@ -219,7 +219,7 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
             toClientId = toClient.id.toLong()
             toAccountType = 2
             transferDate = DateHelper.getDateAsStringFromLong(System.currentTimeMillis())
-            transferAmount = requestValues.amount
+            transferAmount = walletRequestValues.amount
             transferDescription = Constants.WALLET_TRANSFER
         }
 

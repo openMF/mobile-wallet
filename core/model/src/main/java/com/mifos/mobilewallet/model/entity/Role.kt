@@ -8,4 +8,5 @@ data class Role(
     var id: String? = null,
     var name: String? = null,
     var description: String? = null,
+    val disabled: Boolean
 ) : Parcelable

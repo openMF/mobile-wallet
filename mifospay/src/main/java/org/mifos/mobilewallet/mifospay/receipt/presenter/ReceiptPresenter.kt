@@ -6,10 +6,10 @@ import org.mifos.mobilewallet.core.domain.usecase.account.DownloadTransactionRec
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransaction
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
 import org.mifos.mobilewallet.mifospay.base.BaseView
-import org.mifos.mobilewallet.datastore.PreferencesHelper
+import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract
 import org.mifos.mobilewallet.mifospay.receipt.ReceiptContract.ReceiptView
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import javax.inject.Inject
 
 /**
@@ -17,10 +17,10 @@ import javax.inject.Inject
  */
 class ReceiptPresenter @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val preferencesHelper: PreferencesHelper
+    private val preferencesHelper: PreferencesHelper,
+    private val mFetchAccountTransfer: FetchAccountTransfer
 ) : ReceiptContract.ReceiptPresenter {
     private lateinit var mDownloadTransactionReceiptUseCase: DownloadTransactionReceipt
-    private lateinit var  mFetchAccountTransfer: FetchAccountTransfer
     private lateinit var  mFetchAccountTransaction: FetchAccountTransaction
     private lateinit var mReceiptView: ReceiptView
     override fun attachView(baseView: BaseView<*>?) {
@@ -70,9 +70,9 @@ class ReceiptPresenter @Inject constructor(
     fun fetchTransfer(transferId: Long) {
         mUseCaseHandler.execute(mFetchAccountTransfer,
             FetchAccountTransfer.RequestValues(transferId),
-            object : UseCaseCallback<FetchAccountTransfer.ResponseValue> {
-                override fun onSuccess(response: FetchAccountTransfer.ResponseValue) {
-                    mReceiptView.showTransferDetail(response.transferDetail)
+            object : UseCaseCallback<FetchAccountTransfer.ResponseValue?> {
+                override fun onSuccess(response: FetchAccountTransfer.ResponseValue?) {
+                    mReceiptView.showTransferDetail(response?.transferDetail)
                 }
 
                 override fun onError(message: String) {

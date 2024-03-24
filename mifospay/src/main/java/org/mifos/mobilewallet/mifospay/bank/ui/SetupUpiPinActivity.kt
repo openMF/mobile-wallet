@@ -20,7 +20,7 @@ import org.mifos.mobilewallet.mifospay.bank.fragment.UpiPinFragment
 import org.mifos.mobilewallet.mifospay.bank.presenter.SetupUpiPinPresenter
 import org.mifos.mobilewallet.mifospay.base.BaseActivity
 import org.mifos.mobilewallet.mifospay.utils.AnimationUtil
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
 
@@ -69,7 +69,7 @@ class SetupUpiPinActivity : BaseActivity(), SetupUpiPinView {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setup_upi_pin)
         ButterKnife.bind(this)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
+        showColoredBackButton(R.drawable.ic_arrow_back_black_24dp)
         setToolbarTitle(Constants.SETUP_UPI_PIN)
         mPresenter!!.attachView(this)
         val b = intent.extras

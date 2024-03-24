@@ -12,8 +12,13 @@ import androidx.compose.animation.core.keyframes
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
+import androidx.compose.foundation.focusable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -21,8 +26,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.rotate
 import androidx.compose.ui.graphics.graphicsLayer
@@ -134,9 +141,44 @@ fun MifosOverlayLoadingWheel(
     }
 }
 
+@Composable
+fun MfOverlayLoadingWheel(contentDesc: String = "Loading") {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = Color.Black.copy(alpha = 0.6f))
+            .focusable(),
+        contentAlignment = Alignment.Center
+    ) {
+        MifosOverlayLoadingWheel(
+            modifier = Modifier.wrapContentSize(),
+            contentDesc = contentDesc
+        )
+    }
+}
+
+@Composable
+fun MfLoadingWheel(
+    contentDesc: String = "Loading",
+    backgroundColor: Color = Color.Black.copy(alpha = 0.6f)
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(color = backgroundColor)
+            .focusable(),
+        contentAlignment = Alignment.Center
+    ) {
+        MifosLoadingWheel(
+            modifier = Modifier.wrapContentSize(),
+            contentDesc = contentDesc
+        )
+    }
+}
+
 @Preview
 @Composable
-fun NiaLoadingWheelPreview() {
+fun MifosLoadingWheelPreview() {
     MifosTheme {
         Surface {
             MifosLoadingWheel(contentDesc = "LoadingWheel")

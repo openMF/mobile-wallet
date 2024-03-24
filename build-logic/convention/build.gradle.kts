@@ -82,5 +82,9 @@ gradlePlugin {
             id = "mifospay.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
         }
+        register("androidFlavors") {
+            id = "mifospay.android.application.flavors"
+            implementationClass = "AndroidApplicationFlavorsConventionPlugin"
+        }
     }
 }

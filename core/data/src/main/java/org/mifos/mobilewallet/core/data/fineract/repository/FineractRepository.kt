@@ -2,9 +2,11 @@ package org.mifos.mobilewallet.core.data.fineract.repository
 
 import com.mifos.mobilewallet.model.domain.NewAccount
 import com.mifos.mobilewallet.model.domain.NotificationPayload
+import com.mifos.mobilewallet.model.domain.client.NewClient
 import com.mifos.mobilewallet.model.domain.twofactor.AccessToken
 import com.mifos.mobilewallet.model.domain.twofactor.DeliveryMethod
 import com.mifos.mobilewallet.model.domain.user.NewUser
+import com.mifos.mobilewallet.model.domain.user.User
 import com.mifos.mobilewallet.model.entity.Invoice
 import com.mifos.mobilewallet.model.entity.Page
 import com.mifos.mobilewallet.model.entity.SearchedEntity
@@ -48,7 +50,7 @@ class FineractRepository @Inject constructor(
     private val fineractApiManager: FineractApiManager,
     private val selfApiManager: SelfServiceApiManager
 ) {
-    fun createClient(newClient: com.mifos.mobilewallet.model.domain.client.NewClient): Observable<CreateClient.ResponseValue> {
+    fun createClient(newClient: NewClient): Observable<CreateClient.ResponseValue> {
         return fineractApiManager.clientsApi.createClient(newClient)
     }
 
@@ -215,8 +217,8 @@ class FineractRepository @Inject constructor(
     val users: Observable<List<UserWithRole>>
         get() = fineractApiManager.userApi.users
 
-    fun getUser(userId: Long): Observable<UserWithRole> {
-        return fineractApiManager.userApi.getUser(userId)
+    fun getUser(): Observable<UserWithRole> {
+        return fineractApiManager.userApi.getUser()
     }
 
     fun makeThirdPartyTransfer(transferPayload: TransferPayload): Observable<TPTResponse> {
@@ -255,7 +257,7 @@ class FineractRepository @Inject constructor(
     }
 
     //self user apis
-    fun loginSelf(payload: AuthenticationPayload): Observable<UserEntity> {
+    fun loginSelf(payload: AuthenticationPayload): Observable<User> {
         return selfApiManager.authenticationApi.authenticate(payload)
     }
 

@@ -27,7 +27,7 @@ import org.mifos.mobilewallet.mifospay.history.HistoryContract
 import org.mifos.mobilewallet.mifospay.history.HistoryContract.TransactionDetailView
 import org.mifos.mobilewallet.mifospay.history.presenter.TransactionDetailPresenter
 import org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity
-import org.mifos.mobilewallet.mifospay.utils.Constants
+import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance
 import javax.inject.Inject
