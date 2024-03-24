@@ -8,6 +8,7 @@ import org.gradle.kotlin.dsl.kotlin
 import org.mifos.mobilewallet.mifospay.configureKotlinAndroid
 import org.mifos.mobilewallet.mifospay.configurePrintApksTask
 import org.mifos.mobilewallet.mifospay.disableUnnecessaryAndroidTests
+import org.mifos.mobilewallet.mifospay.libs
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -32,6 +33,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             }
             dependencies {
                 add("testImplementation", kotlin("test"))
+                add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
             }
         }
     }

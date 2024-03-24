@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.core.domain.usecase.account
 import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
-import org.mifos.mobilewallet.core.utils.Constants
+import org.mifos.mobilewallet.core.util.Constants
 import com.mifos.mobilewallet.model.entity.beneficary.Beneficiary
 import com.mifos.mobilewallet.model.entity.beneficary.BeneficiaryPayload
 import com.mifos.mobilewallet.model.entity.beneficary.BeneficiaryUpdatePayload

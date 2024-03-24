@@ -34,8 +34,7 @@ class ProfileFragment : BaseFragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MifosTheme {
-                    ProfileScreen(
-                        profileState = viewModel.profileState.value,
+                    ProfileRoute(
                         onEditProfile = { onEditProfileClicked() },
                         onSettings = { onSettingsClicked() }
                     )

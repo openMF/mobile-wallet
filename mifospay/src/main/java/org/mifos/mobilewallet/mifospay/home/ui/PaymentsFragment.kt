@@ -32,7 +32,7 @@ class PaymentsFragment : BaseFragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MifosTheme {
-                    PaymentsScreen(
+                    PaymentsRoute(
                         showQr = { showQrClicked() },
                         onNewSI = { onNewSI() }
                     )

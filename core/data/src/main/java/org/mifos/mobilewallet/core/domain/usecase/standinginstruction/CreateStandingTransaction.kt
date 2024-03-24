@@ -7,7 +7,7 @@ import com.mifos.mobilewallet.model.entity.client.ClientAccounts
 import com.mifos.mobilewallet.model.entity.standinginstruction.SDIResponse
 import com.mifos.mobilewallet.model.entity.payload.StandingInstructionPayload
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
-import org.mifos.mobilewallet.core.utils.Constants
+import org.mifos.mobilewallet.core.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
