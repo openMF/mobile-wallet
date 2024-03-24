@@ -28,7 +28,7 @@ class PassCodeActivity : MifosPassCodeActivity() {
 
     companion object {
         // We gonna remove it after implementing the Compose Passcode screen and compose navigation
-        const val MAIN_ACTIVITY = "org.mifos.mobilewallet.mifospay.home.ui.MainActivity"
+        const val MAIN_ACTIVITY = "org.mifos.mobilewallet.mifospay.MainActivity"
         const val LOGIN_ACTIVITY = "org.mifos.mobilewallet.mifospay.feature.auth.login.LoginActivity"
         const val RECEIPT_ACTIVITY = "org.mifos.mobilewallet.mifospay.receipt.ui.ReceiptActivity"
 

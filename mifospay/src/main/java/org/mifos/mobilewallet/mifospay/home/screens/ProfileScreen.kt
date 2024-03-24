@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.home.ui
+package org.mifos.mobilewallet.mifospay.home.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,8 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.home.presenter.ProfileUiState
-import org.mifos.mobilewallet.mifospay.home.presenter.ProfileViewModel
+import org.mifos.mobilewallet.mifospay.home.ProfileUiState
+import org.mifos.mobilewallet.mifospay.home.ProfileViewModel
 import org.mifos.mobilewallet.mifospay.ui.ProfileImage
 
 @Composable

@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.home.presenter
+package org.mifos.mobilewallet.mifospay.home
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory

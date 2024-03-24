@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.home.ui
+package org.mifos.mobilewallet.mifospay.home.screens
 
 import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -17,14 +17,9 @@ import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsScreen
 import org.mifos.mobilewallet.mifospay.ui.MifosScrollableTabRow
 import org.mifos.mobilewallet.mifospay.ui.utility.TabContent
 
-/**
- * @author pratyush
- * @since 23/3/24
- */
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun FinanceScreen(
+fun FinanceRoute(
     onAddBtn: () -> Unit
 ) {
     val context = LocalContext.current
@@ -69,5 +64,5 @@ enum class FinanceScreenContents {
 @Preview(showBackground = true)
 @Composable
 private fun FinanceScreenPreview() {
-    FinanceScreen({})
+    FinanceRoute({})
 }

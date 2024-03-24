@@ -1,7 +1,10 @@
 package com.mifos.mobilewallet.model.domain.user
 
+import android.os.Parcelable
 import com.mifos.mobilewallet.model.entity.Role
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class User(
     val username: String,
     val userId: Long = 0,
@@ -14,4 +17,4 @@ data class User(
     val clients: List<Long>,
     val shouldRenewPassword: Boolean,
     val isTwoFactorAuthenticationRequired: Boolean
-)
+) : Parcelable

@@ -160,7 +160,7 @@ fun MifosApp(appState: MifosAppState) {
                                 titleRes = destination.titleTextId,
                                 actionIcon = MifosIcons.MoreVert,
                                 actionIconContentDescription = stringResource(
-                                    id = 0,
+                                    id = R.string.settings,
                                 ),
                                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                                     containerColor = Color.Transparent,
