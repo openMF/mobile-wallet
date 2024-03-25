@@ -40,7 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifos.mobilewallet.model.State
 import com.mifos.mobilewallet.model.signup.PasswordStrength
 import com.mifos.mobilewallet.model.signup.SignupData
-import org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
+import org.mifos.mobilewallet.core.util.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
 import org.mifos.mobilewallet.mifospay.designsystem.component.MfOutlinedTextField
 import org.mifos.mobilewallet.mifospay.designsystem.component.MfOverlayLoadingWheel
 import org.mifos.mobilewallet.mifospay.designsystem.component.MfPasswordTextField

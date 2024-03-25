@@ -159,7 +159,7 @@ class CardsPresenter @Inject constructor(
      * @param str : String to be validated
      * Luhn Algorithm for validating Credit Card Number
      * src: https://www.journaldev
-     * .com/1443/java-credit-card-validation-luhn-algorithm-java
+     * .com/1443/kotlin-credit-card-validation-luhn-algorithm-kotlin
      */
     private fun validateCreditCardNumber(str: String): Boolean {
         val u = 2

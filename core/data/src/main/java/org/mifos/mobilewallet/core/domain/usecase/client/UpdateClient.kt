@@ -3,7 +3,7 @@ package org.mifos.mobilewallet.core.domain.usecase.client
 import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
-import org.mifos.mobilewallet.core.utils.ErrorJsonMessageHelper.getUserMessage
+import org.mifos.mobilewallet.core.util.ErrorJsonMessageHelper.getUserMessage
 import retrofit2.HttpException
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
