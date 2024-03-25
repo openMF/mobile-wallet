@@ -303,6 +303,10 @@
     <string name="deleted_successfully">Deleted Successfully</string>
     <string name="error_kyc_details">Couldn\'t fetch KYC details. Please try again.</string>
     <string name="loading">Loading</string>
+    <string name="date_format">dd-MM-yyyy</string>
+    <string name="select_dob">Select Date of Birth</string>
+    <string name="error_adding_KYC_Level_1_details.">Error adding KYC Level 1 details.</string>
+    <string name="kyc_Level_1_details_added_successfully.">KYC Level 1 details added successfully.</string>
 
     
 
