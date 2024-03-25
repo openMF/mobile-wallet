@@ -9,7 +9,7 @@ import com.mifos.mobilewallet.model.entity.accounts.savings.SavingsWithAssociati
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchMerchants
 import org.mifos.mobilewallet.core.domain.usecase.client.FetchClientDetails
-import org.mifos.mobilewallet.core.utils.Constants
+import org.mifos.mobilewallet.core.util.Constants
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.merchants.MerchantsContract

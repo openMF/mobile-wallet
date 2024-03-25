@@ -5,7 +5,7 @@ import com.mifos.mobilewallet.model.entity.accounts.savings.Transactions;
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.TransactionMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import com.mifos.mobilewallet.model.domain.Transaction;
-import org.mifos.mobilewallet.core.utils.Constants;
+import org.mifos.mobilewallet.core.util.Constants;
 
 import javax.inject.Inject;
 

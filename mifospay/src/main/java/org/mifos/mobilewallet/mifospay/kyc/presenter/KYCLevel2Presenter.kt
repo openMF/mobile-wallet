@@ -69,7 +69,7 @@ class KYCLevel2Presenter @Inject constructor(
         if (file != null) {
             uploadKYCDocsUseCase.walletRequestValues = identityType?.let {
                 UploadKYCDocs.RequestValues(
-                    org.mifos.mobilewallet.core.utils.Constants.ENTITY_TYPE_CLIENTS,
+                    org.mifos.mobilewallet.core.util.Constants.ENTITY_TYPE_CLIENTS,
                     preferencesHelper.clientId, file!!.name, it,
                     getRequestFileBody(file!!)
                 )

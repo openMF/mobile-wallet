@@ -2,7 +2,7 @@ package org.mifos.mobilewallet.core.domain.usecase.user
 
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
-import org.mifos.mobilewallet.core.utils.ErrorJsonMessageHelper.getUserMessage
+import org.mifos.mobilewallet.core.util.ErrorJsonMessageHelper.getUserMessage
 import org.mifos.mobilewallet.mifospay.network.GenericResponse
 import retrofit2.HttpException
 import rx.Subscriber
