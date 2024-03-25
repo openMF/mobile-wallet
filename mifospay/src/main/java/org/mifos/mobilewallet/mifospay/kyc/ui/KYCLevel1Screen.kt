@@ -6,7 +6,9 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -14,7 +16,6 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,6 +40,7 @@ import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import com.togitech.ccp.component.TogiCountryCodePicker
 import org.mifos.mobilewallet.mifospay.R
+import org.mifos.mobilewallet.mifospay.designsystem.component.MifosOutlinedTextField
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCLevel1UiState
 import org.mifos.mobilewallet.mifospay.kyc.presenter.KYCLevel1ViewModel
 import org.mifos.mobilewallet.mifospay.theme.MifosTheme
@@ -81,19 +83,20 @@ fun KYCLevel1Screen(
 ) {
 
     when(uiState){
-        KYCLevel1UiState.EmptyForm -> {
+        KYCLevel1UiState.Empty -> {
             Kyc1Form(
+                modifier = Modifier,
                 submitData = submitData
             )
         }
 
         KYCLevel1UiState.Error -> {
-            Toast.makeText(context, stringResource(R.string.error_adding_KYC_Level_1_details_),Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, stringResource(R.string.error_adding_KYC_Level_1_details),Toast.LENGTH_SHORT).show()
             navigateBack.invoke()
         }
 
         KYCLevel1UiState.Success -> {
-            Toast.makeText(context, stringResource(R.string.kyc_Level_1_details_added_successfully_),Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, stringResource(R.string.successkyc1),Toast.LENGTH_SHORT).show()
             navigateBack.invoke()
         }
     }
@@ -102,6 +105,7 @@ fun KYCLevel1Screen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Kyc1Form(
+    modifier:Modifier,
     submitData: (String, String,String,String,String,String) -> Unit
 ){
 
@@ -116,48 +120,49 @@ fun Kyc1Form(
 
     Column(
         modifier = Modifier
-            .padding(16.dp)
             .fillMaxWidth()
+            .padding(16.dp)
     ) {
-        OutlinedTextField(
+        Spacer(modifier = Modifier.height(20.dp))
+        MifosOutlinedTextField(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
             value = firstName,
             onValueChange = {
-                firstName = it },
-            label = {
-                Text(stringResource(R.string.first_name)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 7.dp)
+                firstName = it
+            },
+            label = R.string.first_name,
         )
-        OutlinedTextField(
+        MifosOutlinedTextField(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
             value = lastName,
             onValueChange = {
-                lastName = it },
-            label = {
-                Text(stringResource(R.string.last_name)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 7.dp)
+                lastName = it
+            },
+            label = R.string.last_name,
         )
-        OutlinedTextField(
+        MifosOutlinedTextField(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
             value = address1,
             onValueChange = {
-                address1 = it },
-            label = {
-                Text(stringResource(R.string.address_line_1)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 7.dp)
+                address1 = it
+            },
+            label = R.string.address_line_1,
         )
-        OutlinedTextField(
+        MifosOutlinedTextField(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
             value = address2,
             onValueChange = {
-                address2 = it },
-            label = {
-                Text(stringResource(R.string.address_line_2)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 7.dp)
+                address2 = it
+            },
+            label = R.string.address_line_2,
         )
 
         Box (
@@ -197,13 +202,14 @@ fun Kyc1Form(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
+                .height(70.dp)
                 .padding(vertical = 9.dp)
                 .clickable { dateState.show() }
                 .border(
                     width = 1.dp,
                     color = Color.Black
                 )
-                .padding(16.dp)
+                .padding(12.dp)
                 .clip(shape = RoundedCornerShape(8.dp))
         ) {
             Text(
@@ -234,6 +240,25 @@ fun Kyc1Form(
 @Composable
 fun Kyc1FormPreview(){
     MifosTheme {
-        Kyc1Form(submitData = { _, _, _, _, _, _ ->}  )
+        val context = LocalContext.current
+        KYCLevel1Screen(context,uiState=KYCLevel1UiState.Empty,submitData = { _, _, _, _, _, _ ->},navigateBack = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun Kyc1PreviewWithError(){
+    MifosTheme {
+        val context = LocalContext.current
+        KYCLevel1Screen(context,uiState=KYCLevel1UiState.Error,submitData = { _, _, _, _, _, _ ->},navigateBack = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun Kyc1FormPreviewWithSuccess(){
+    MifosTheme {
+        val context = LocalContext.current
+        KYCLevel1Screen(context,uiState=KYCLevel1UiState.Success,submitData = { _, _, _, _, _, _ ->},navigateBack = {})
     }
 }
