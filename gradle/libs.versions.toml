@@ -61,6 +61,7 @@ androidxTracing = "1.3.0-alpha02"
 coil = "2.6.0"
 androidxMetrics = "1.0.0-beta01"
 androidxBrowser = "1.8.0"
+sheets_compose_dialogs_core = "1.3.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityVersion" }
@@ -139,7 +140,8 @@ coil-kt-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "
 coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
 androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
-
+sheets-compose-dialogs-core = { group = "com.maxkeppeler.sheets-compose-dialogs",name = "core",version.ref = "sheets_compose_dialogs_core"}
+sheets-compose-dialogs-calender = { group = "com.maxkeppeler.sheets-compose-dialogs",name = "calendar",version.ref = "sheets_compose_dialogs_core"}
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }

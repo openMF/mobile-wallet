@@ -65,7 +65,8 @@ internal class TimeZoneBroadcastMonitor @Inject constructor(
                         }
                     }
 
-                    // If there isn't a zoneId in the intent, fallback to the systemDefault, which should also reflect the change
+                    /* If there isn't a zoneId in the intent, fallback to the systemDefault,
+                       which should also reflect the change */
                     trySend(zoneIdFromIntent ?: TimeZone.currentSystemDefault())
                 }
             }
