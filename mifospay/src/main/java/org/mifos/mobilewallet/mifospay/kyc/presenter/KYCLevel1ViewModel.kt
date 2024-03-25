@@ -19,7 +19,7 @@ class KYCLevel1ViewModel @Inject constructor(
 ) : ViewModel()  {
 
     private val _kyc1uiState =
-        MutableStateFlow<KYCLevel1UiState>(KYCLevel1UiState.EmptyForm)
+        MutableStateFlow<KYCLevel1UiState>(KYCLevel1UiState.Empty)
     val kyc1uiState: StateFlow<KYCLevel1UiState> = _kyc1uiState
 
     fun submitData(
@@ -52,7 +52,7 @@ class KYCLevel1ViewModel @Inject constructor(
 }
 
 sealed interface KYCLevel1UiState {
-    data object EmptyForm : KYCLevel1UiState
+    data object Empty : KYCLevel1UiState
     data object Success : KYCLevel1UiState
     data object Error : KYCLevel1UiState
 }
