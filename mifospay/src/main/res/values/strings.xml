@@ -171,10 +171,6 @@
     <string name="mandatory">Mandatory field</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="date_format">dd-MM-yyyy</string>
-    <string name="select_dob">Select Date of Birth</string>
-    <string name="error_adding_KYC_Level_1_details.">Error adding KYC Level 1 details.</string>
-    <string name="kyc_Level_1_details_added_successfully.">KYC Level 1 details added successfully.</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
