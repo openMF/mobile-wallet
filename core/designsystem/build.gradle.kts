@@ -21,12 +21,8 @@ dependencies {
     api(libs.androidx.compose.material3)
     api(libs.androidx.compose.runtime)
     api(libs.androidx.compose.ui.util)
+    api(libs.androidx.activity.compose)
 
-    debugApi(libs.androidx.compose.ui.tooling)
-    api(libs.androidx.compose.ui.tooling.preview)
-    api(libs.androidx.hilt.navigation.compose)
-
-//    testImplementation(libs.androidx.compose.ui.test)
-
-//    androidTestImplementation(libs.androidx.compose.ui.test)
+    //testImplementation(libs.androidx.compose.ui.test)
+    //androidTestImplementation(libs.androidx.compose.ui.test)
 }

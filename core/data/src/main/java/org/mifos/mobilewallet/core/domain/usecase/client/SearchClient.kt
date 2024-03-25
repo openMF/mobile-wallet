@@ -5,7 +5,7 @@ import com.mifos.mobilewallet.model.entity.SearchedEntity
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.SearchedEntitiesMapper
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
 import com.mifos.mobilewallet.model.domain.SearchResult
-import org.mifos.mobilewallet.core.utils.Constants
+import org.mifos.mobilewallet.core.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers

@@ -9,7 +9,7 @@ import com.mifos.mobilewallet.model.domain.Transaction
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccountTransfer
-import org.mifos.mobilewallet.core.utils.Constants.FETCH_ACCOUNT_TRANSFER_USECASE
+import org.mifos.mobilewallet.core.util.Constants.FETCH_ACCOUNT_TRANSFER_USECASE
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.base.BaseView
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository

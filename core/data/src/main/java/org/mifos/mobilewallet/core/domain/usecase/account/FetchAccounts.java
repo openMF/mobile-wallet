@@ -6,7 +6,7 @@ import com.mifos.mobilewallet.model.entity.client.ClientAccounts;
 import org.mifos.mobilewallet.core.data.fineract.entity.mapper.AccountMapper;
 import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository;
 import com.mifos.mobilewallet.model.domain.Account;
-import org.mifos.mobilewallet.core.utils.Constants;
+import org.mifos.mobilewallet.core.util.Constants;
 
 import java.util.List;
 

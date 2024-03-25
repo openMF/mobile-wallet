@@ -158,7 +158,6 @@ object Constants {
     // id to handle the notification in the notification tray
     const val NOTIFICATION_ID = 100
     const val NOTIFICATION_ID_BIG_IMAGE = 101
-    const val HOME_HISTORY_TRANSACTIONS_LIMIT = 5
     const val ERROR_FIELDS_CANNOT_BE_EMPTY = "Fields cannot be empty"
     const val ERROR_VALIDATING_PASSWORD = "Passwords are not the same"
     const val ERROR_PASSWORDS_CANT_BE_SAME = "New password can't be the same as old password."

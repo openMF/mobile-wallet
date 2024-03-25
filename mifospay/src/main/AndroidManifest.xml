@@ -49,7 +49,7 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateVisible" />
         <activity
-            android:name=".home.ui.MainActivity"
+            android:name=".MainActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustPan" />
         <activity

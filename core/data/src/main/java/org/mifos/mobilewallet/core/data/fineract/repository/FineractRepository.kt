@@ -11,7 +11,6 @@ import com.mifos.mobilewallet.model.entity.Invoice
 import com.mifos.mobilewallet.model.entity.Page
 import com.mifos.mobilewallet.model.entity.SearchedEntity
 import com.mifos.mobilewallet.model.entity.TPTResponse
-import com.mifos.mobilewallet.model.entity.UserEntity
 import com.mifos.mobilewallet.model.entity.UserWithRole
 import com.mifos.mobilewallet.model.entity.accounts.savings.SavingsWithAssociations
 import com.mifos.mobilewallet.model.entity.accounts.savings.Transactions
@@ -34,7 +33,7 @@ import okhttp3.MultipartBody
 import okhttp3.ResponseBody
 import org.mifos.mobilewallet.core.domain.usecase.client.CreateClient
 import org.mifos.mobilewallet.core.domain.usecase.user.CreateUser
-import org.mifos.mobilewallet.core.utils.Constants
+import org.mifos.mobilewallet.core.util.Constants
 import org.mifos.mobilewallet.mifospay.network.FineractApiManager
 import org.mifos.mobilewallet.mifospay.network.GenericResponse
 import org.mifos.mobilewallet.mifospay.network.SelfServiceApiManager

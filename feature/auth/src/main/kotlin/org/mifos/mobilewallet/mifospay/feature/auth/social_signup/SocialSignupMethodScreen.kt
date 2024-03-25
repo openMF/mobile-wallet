@@ -42,8 +42,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import org.mifos.mobilewallet.core.utils.Constants.MIFOS_CONSUMER_SAVINGS_PRODUCT_ID
-import org.mifos.mobilewallet.core.utils.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
+import org.mifos.mobilewallet.core.util.Constants.MIFOS_CONSUMER_SAVINGS_PRODUCT_ID
+import org.mifos.mobilewallet.core.util.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
 import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.common.DebugUtil
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosBottomSheet
