@@ -143,6 +143,8 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.github.yalantis:ucrop:2.2.2")
 
+    implementation("com.google.accompanist:accompanist-swiperefresh:0.27.0")
+
     kspTest(libs.hilt.compiler)
 
     testImplementation(libs.junit)

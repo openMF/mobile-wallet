@@ -10,16 +10,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -39,11 +37,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mifos.mobilewallet.model.entity.savedcards.Card
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.designsystem.component.MfLoadingWheel
@@ -65,19 +64,33 @@ fun CardsScreen(
 ) {
     val cardState by viewModel.cardState.collectAsStateWithLifecycle()
     val cardListUiState by viewModel.cardListUiState.collectAsStateWithLifecycle()
-    CardsScreen(
-        cardState = cardState,
-        cardListUiState = cardListUiState,
-        onEditCard = onEditCard,
-        onDeleteCard = {
-           // TODO implement Delete card by implementing a delete confirm dialog and call
-           // TODO viewModel.deleteCard
-        },
-        onAddBtn = onAddBtn,
-        updateQuery = {
-            viewModel.updateSearchQuery(it)
+    var isRefreshing by rememberSaveable {
+        mutableStateOf(false)
+    }
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
+
+    SwipeRefresh(
+        state = swipeRefreshState,
+        onRefresh = {
+            isRefreshing = true
+            viewModel.fetchSavedCards()
+            isRefreshing = false
         }
-    )
+    ){
+        CardsScreen(
+            cardState = cardState,
+            cardListUiState = cardListUiState,
+            onEditCard = onEditCard,
+            onDeleteCard = {
+                // TODO implement Delete card by implementing a delete confirm dialog and call
+                // TODO viewModel.deleteCard
+            },
+            onAddBtn = onAddBtn,
+            updateQuery = {
+                viewModel.updateSearchQuery(it)
+            }
+        )
+    }
 }
 
 @Composable
@@ -87,11 +100,12 @@ fun CardsScreen(
     onEditCard: (Card) -> Unit,
     onDeleteCard: (Card) -> Unit,
     onAddBtn: () -> Unit,
-    updateQuery: (String) -> Unit
+    updateQuery: (String) -> Unit,
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center,
     ) {
         when (cardState) {
@@ -223,7 +237,9 @@ fun CardsList(
     onMenuItemClick: (Card, CardMenuAction) -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
     ) {
         items(cards) { card ->
             CardItem(card = card) { clickedCard, menuItem ->

@@ -1,7 +1,6 @@
 package org.mifos.mobilewallet.mifospay.kyc.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,9 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
@@ -26,6 +27,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -39,6 +43,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mifos.mobilewallet.model.entity.kyc.KYCLevel1Details
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosOverlayLoadingWheel
@@ -54,30 +60,54 @@ fun KYCDescriptionScreen(
 ) {
     val kUiState by viewModel.kycdescriptionState.collectAsState()
 
-    when (val state = kUiState) {
-        KYCDescriptionUiState.Loading -> {
-            MifosOverlayLoadingWheel(contentDesc = stringResource(R.string.loading))
-        }
+    var isRefreshing by rememberSaveable {
+        mutableStateOf(false)
+    }
+    val swipeRefreshState =
+        rememberSwipeRefreshState(
+            isRefreshing = isRefreshing
+        )
 
-        is KYCDescriptionUiState.Error -> {
-            PlaceholderScreen()
-        }
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = {
+                isRefreshing = true
+                viewModel.fetchCurrentLevel()
+                isRefreshing = false
+            }
+        ){
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState()),
+                contentAlignment = Alignment.Center
+            ) {
+                when (val state = kUiState) {
+                    KYCDescriptionUiState.Loading -> {
+                        MifosOverlayLoadingWheel(contentDesc = stringResource(R.string.loading))
+                    }
 
-        is KYCDescriptionUiState.KYCDescription -> {
-            val kyc = state.kycLevel1Details
-            if (kyc != null) {
-                KYCDescriptionScreen(
-                    kUiState = state,
-                    kyc,
-                    onLevel1Clicked,
-                    onLevel2Clicked,
-                    onLevel3Clicked
-                )
+                    is KYCDescriptionUiState.Error -> {
+                        PlaceholderScreen()
+                    }
+
+                    is KYCDescriptionUiState.KYCDescription -> {
+                        val kyc = state.kycLevel1Details
+                        if (kyc != null) {
+                            KYCDescriptionScreen(
+                                kUiState = state,
+                                kyc,
+                                onLevel1Clicked,
+                                onLevel2Clicked,
+                                onLevel3Clicked
+                            )
+                        }
+                    }
+
+                    else -> {}
+                }
             }
         }
-
-        else -> {}
-    }
 }
 
 @Composable
