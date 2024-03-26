@@ -349,6 +349,7 @@
     <string name="all">All</string>
     <string name="credits">Credits</string>
     <string name="debits">Debits</string>
+    <string name="bank_account_details">Bank Account Details</string>
     <string name="not_connected">⚠️ You aren’t connected to the internet</string>
 
 </resources>
