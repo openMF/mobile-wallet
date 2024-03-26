@@ -15,6 +15,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,6 +29,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mifos.mobilewallet.model.domain.BankAccountDetails
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.bank.presenter.AccountViewModel
@@ -42,11 +47,18 @@ fun AccountsScreen(
 ) {
     val accountsUiState by viewModel.accountsUiState.collectAsStateWithLifecycle()
     val sampleList = viewModel.bankAccountDetailsList
-    AccountScreen(
-        accountsUiState = accountsUiState,
-        onAddAccount = onAddAccount,
-        sampleList = sampleList,
-    )
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = viewModel::refreshAccountList
+        ){
+            AccountScreen(
+                accountsUiState = accountsUiState,
+                onAddAccount = onAddAccount,
+                sampleList = sampleList,
+            )
+        }
 }
 
 @Composable

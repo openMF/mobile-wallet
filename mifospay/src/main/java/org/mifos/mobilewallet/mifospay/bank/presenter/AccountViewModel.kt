@@ -20,6 +20,7 @@ class AccountViewModel @Inject constructor() : ViewModel() {
     val accountsUiState: StateFlow<AccountsUiState> = _accountUiState
 
     private val mRandom = Random()
+    val isRefreshing = MutableStateFlow(false)
 
     init {
         fetchLinkedAccount()
@@ -81,6 +82,11 @@ class AccountViewModel @Inject constructor() : ViewModel() {
             )
         )
         return bankAccountDetailsList
+    }
+    fun refreshAccountList(){
+        isRefreshing.value = true
+        fetchLinkedAccount()
+        isRefreshing.value = false
     }
 
 }

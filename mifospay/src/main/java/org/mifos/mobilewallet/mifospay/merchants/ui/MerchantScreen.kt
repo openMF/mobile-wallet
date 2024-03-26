@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
@@ -17,9 +19,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +33,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mifos.mobilewallet.model.entity.accounts.savings.SavingsWithAssociations
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.common.Constants
@@ -44,11 +50,19 @@ fun MerchantScreen(
 ) {
     val merchantUiState by viewModel.merchantUiState.collectAsStateWithLifecycle()
     val merchantsListUiState by viewModel.merchantsListUiState.collectAsStateWithLifecycle()
-    MerchantScreen(
-        merchantUiState = merchantUiState,
-        merchantListUiState = merchantsListUiState,
-        updateQuery = { viewModel.updateSearchQuery(it) }
-    )
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
+
+        SwipeRefresh(
+            state = swipeRefreshState,
+            onRefresh = viewModel::refreshMerchantsList
+        ){
+            MerchantScreen(
+                merchantUiState = merchantUiState,
+                merchantListUiState = merchantsListUiState,
+                updateQuery = { viewModel.updateSearchQuery(it) }
+            )
+        }
 }
 
 @Composable
@@ -59,7 +73,8 @@ fun MerchantScreen(
 ) {
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         contentAlignment = Alignment.Center,
     ) {
         when (merchantUiState) {

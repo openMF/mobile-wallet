@@ -36,6 +36,8 @@ class MerchantViewModel @Inject constructor(
     private val _merchantUiState = MutableStateFlow<MerchantUiState>(MerchantUiState.Loading)
     val merchantUiState: StateFlow<MerchantUiState> = _merchantUiState
 
+    val isRefreshing = MutableStateFlow(false)
+
     init {
         fetchMerchants()
     }
@@ -119,6 +121,12 @@ class MerchantViewModel @Inject constructor(
                 _merchantUiState.value = MerchantUiState.Error(message.toString())
             }
         })
+    }
+
+    fun refreshMerchantsList(){
+        isRefreshing.value = true
+        fetchMerchants()
+        isRefreshing.value = false
     }
 }
 

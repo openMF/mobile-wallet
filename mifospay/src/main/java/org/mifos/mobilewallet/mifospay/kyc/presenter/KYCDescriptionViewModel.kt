@@ -8,9 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.kyc.FetchKYCLevel1Details
-import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
-import org.mifos.mobilewallet.mifospay.kyc.KYCContract
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,12 +21,13 @@ class KYCDescriptionViewModel @Inject constructor(
         MutableStateFlow<KYCDescriptionUiState>(KYCDescriptionUiState.Loading)
 
     val kycdescriptionState: StateFlow<KYCDescriptionUiState> = _kycdescriptionState
+    val isRefreshing = MutableStateFlow(false)
 
     init {
         fetchCurrentLevel()
     }
 
-    private fun fetchCurrentLevel() {
+    fun fetchCurrentLevel() {
         fetchKYCLevel1DetailsUseCase.walletRequestValues =
             FetchKYCLevel1Details.RequestValues(mLocalRepository.clientDetails.clientId.toInt())
         val requestValues = fetchKYCLevel1DetailsUseCase.walletRequestValues
@@ -48,6 +47,11 @@ class KYCDescriptionViewModel @Inject constructor(
                     _kycdescriptionState.value = KYCDescriptionUiState.Error
                 }
             })
+    }
+    fun refreshKYCLevel(){
+        isRefreshing.value = true
+        fetchCurrentLevel()
+        isRefreshing.value = false
     }
 
 }

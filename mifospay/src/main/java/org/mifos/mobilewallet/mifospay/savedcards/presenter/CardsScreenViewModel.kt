@@ -38,6 +38,8 @@ class CardsScreenViewModel @Inject constructor(
     private val _cardState = MutableStateFlow<CardsUiState>(CardsUiState.Loading)
     val cardState: StateFlow<CardsUiState> = _cardState.asStateFlow()
 
+    val isRefreshing = MutableStateFlow(false)
+
     init {
         fetchSavedCards()
     }
@@ -162,6 +164,11 @@ class CardsScreenViewModel @Inject constructor(
                     onValidationFail(Constants.ERROR_DELETING_CARD)
                 }
             })
+    }
+    fun refreshSavedCards(){
+        isRefreshing.value = true
+        fetchSavedCards()
+        isRefreshing.value = false
     }
 }
 
