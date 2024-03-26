@@ -43,6 +43,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mifos.mobilewallet.model.entity.kyc.KYCLevel1Details
@@ -59,22 +60,12 @@ fun KYCDescriptionScreen(
     onLevel3Clicked: () -> Unit
 ) {
     val kUiState by viewModel.kycdescriptionState.collectAsState()
-
-    var isRefreshing by rememberSaveable {
-        mutableStateOf(false)
-    }
-    val swipeRefreshState =
-        rememberSwipeRefreshState(
-            isRefreshing = isRefreshing
-        )
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
         SwipeRefresh(
             state = swipeRefreshState,
-            onRefresh = {
-                isRefreshing = true
-                viewModel.fetchCurrentLevel()
-                isRefreshing = false
-            }
+            onRefresh = viewModel::refreshKYCLevel
         ){
             Box(
                 modifier = Modifier

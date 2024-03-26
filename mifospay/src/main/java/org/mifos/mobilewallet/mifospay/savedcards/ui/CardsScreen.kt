@@ -64,18 +64,12 @@ fun CardsScreen(
 ) {
     val cardState by viewModel.cardState.collectAsStateWithLifecycle()
     val cardListUiState by viewModel.cardListUiState.collectAsStateWithLifecycle()
-    var isRefreshing by rememberSaveable {
-        mutableStateOf(false)
-    }
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
     SwipeRefresh(
         state = swipeRefreshState,
-        onRefresh = {
-            isRefreshing = true
-            viewModel.fetchSavedCards()
-            isRefreshing = false
-        }
+        onRefresh = viewModel::refreshSavedCards
     ){
         CardsScreen(
             cardState = cardState,

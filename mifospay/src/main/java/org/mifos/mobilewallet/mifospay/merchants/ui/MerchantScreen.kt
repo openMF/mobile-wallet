@@ -19,6 +19,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -49,21 +50,12 @@ fun MerchantScreen(
 ) {
     val merchantUiState by viewModel.merchantUiState.collectAsStateWithLifecycle()
     val merchantsListUiState by viewModel.merchantsListUiState.collectAsStateWithLifecycle()
-     var isRefreshing by rememberSaveable {
-         mutableStateOf(false)
-     }
-      val swipeRefreshState =
-        rememberSwipeRefreshState(
-            isRefreshing = isRefreshing
-        )
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
 
         SwipeRefresh(
             state = swipeRefreshState,
-            onRefresh = {
-                isRefreshing = true
-                viewModel.fetchMerchants()
-                isRefreshing = false
-            }
+            onRefresh = viewModel::refreshMerchantsList
         ){
             MerchantScreen(
                 merchantUiState = merchantUiState,
@@ -77,7 +69,7 @@ fun MerchantScreen(
 fun MerchantScreen(
     merchantUiState: MerchantUiState,
     merchantListUiState: MerchantUiState,
-    updateQuery: (String) -> Unit,
+    updateQuery: (String) -> Unit
 ) {
     Box(
         modifier = Modifier

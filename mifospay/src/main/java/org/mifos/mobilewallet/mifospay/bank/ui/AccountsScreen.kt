@@ -47,19 +47,11 @@ fun AccountsScreen(
 ) {
     val accountsUiState by viewModel.accountsUiState.collectAsStateWithLifecycle()
     val sampleList = viewModel.bankAccountDetailsList
-    var isRefreshing by rememberSaveable {
-        mutableStateOf(false)
-    }
-    val swipeRefreshState = rememberSwipeRefreshState(
-            isRefreshing = isRefreshing
-        )
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
         SwipeRefresh(
             state = swipeRefreshState,
-            onRefresh = {
-                isRefreshing = true
-                viewModel.fetchLinkedAccount()
-                isRefreshing = false
-            }
+            onRefresh = viewModel::refreshAccountList
         ){
             AccountScreen(
                 accountsUiState = accountsUiState,

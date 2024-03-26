@@ -21,6 +21,7 @@ class KYCDescriptionViewModel @Inject constructor(
         MutableStateFlow<KYCDescriptionUiState>(KYCDescriptionUiState.Loading)
 
     val kycdescriptionState: StateFlow<KYCDescriptionUiState> = _kycdescriptionState
+    val isRefreshing = MutableStateFlow(false)
 
     init {
         fetchCurrentLevel()
@@ -46,6 +47,11 @@ class KYCDescriptionViewModel @Inject constructor(
                     _kycdescriptionState.value = KYCDescriptionUiState.Error
                 }
             })
+    }
+    fun refreshKYCLevel(){
+        isRefreshing.value = true
+        fetchCurrentLevel()
+        isRefreshing.value = false
     }
 
 }
