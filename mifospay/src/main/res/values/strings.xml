@@ -351,5 +351,8 @@
     <string name="debits">Debits</string>
     <string name="bank_account_details">Bank Account Details</string>
     <string name="not_connected">⚠️ You aren’t connected to the internet</string>
+    <string name="permission_granted">Permission Granted</string>
+    <string name="permission_denied">Permission Denied</string>
+    <string name="storage_permission_is_required_to_access_gallery">Storage permission is required to access gallery.</string>
 
 </resources>
