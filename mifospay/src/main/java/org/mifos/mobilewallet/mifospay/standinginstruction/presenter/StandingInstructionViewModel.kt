@@ -23,6 +23,8 @@ class StandingInstructionViewModel @Inject constructor(
     val standingInstructionsUiState: StateFlow<StandingInstructionsUiState> =
         _standingInstructionsUiState
 
+    val isRefreshing = MutableStateFlow(false)
+
     fun getAllSI() {
         val client = localRepository.clientDetails
         _standingInstructionsUiState.value = StandingInstructionsUiState.Loading
@@ -47,6 +49,11 @@ class StandingInstructionViewModel @Inject constructor(
 
     init {
         getAllSI()
+    }
+    fun refreshSI(){
+        isRefreshing.value = true
+        getAllSI()
+        isRefreshing.value = false
     }
 }
 

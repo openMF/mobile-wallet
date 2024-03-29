@@ -2,15 +2,22 @@ package org.mifos.mobilewallet.mifospay.invoice.ui
 
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -18,6 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mifos.mobilewallet.model.entity.Invoice
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosLoadingWheel
@@ -30,10 +39,17 @@ fun InvoiceScreen(
     viewModel: InvoicesViewModel = hiltViewModel()
 ) {
     val invoiceUiState by viewModel.invoiceUiState.collectAsStateWithLifecycle()
-    InvoiceScreen(
-        invoiceUiState = invoiceUiState,
-        getUniqueInvoiceLink = { viewModel.getUniqueInvoiceLink(it) }
-    )
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
+    SwipeRefresh(
+        state = swipeRefreshState,
+        onRefresh = viewModel::refreshInvoices
+    ){
+        InvoiceScreen(
+            invoiceUiState = invoiceUiState,
+            getUniqueInvoiceLink = { viewModel.getUniqueInvoiceLink(it) }
+        )
+    }
 }
 
 @Composable
@@ -42,54 +58,60 @@ fun InvoiceScreen(
     getUniqueInvoiceLink: (Long) -> Uri?
 ) {
     val context = LocalContext.current
-    when (invoiceUiState) {
-        is InvoiceUiState.Error -> {
-            EmptyContentScreen(
-                modifier = Modifier,
-                title = stringResource(id = R.string.error_oops),
-                subTitle = stringResource(id = R.string.unexpected_error_subtitle),
-                iconTint = Color.Black,
-                iconImageVector = Icons.Rounded.Info
-            )
-        }
+    Box(modifier = Modifier
+        .fillMaxSize()
+        .verticalScroll(rememberScrollState()),
+        contentAlignment = Alignment.Center
+    ){
+        when (invoiceUiState) {
+            is InvoiceUiState.Error -> {
+                EmptyContentScreen(
+                    modifier = Modifier,
+                    title = stringResource(id = R.string.error_oops),
+                    subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                    iconTint = Color.Black,
+                    iconImageVector = Icons.Rounded.Info
+                )
+            }
 
-        is InvoiceUiState.InvoiceList -> {
-            Column(modifier = Modifier.fillMaxSize()) {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(invoiceUiState.list) {
-                        InvoiceItem(
-                            invoiceTitle = it?.title.toString(),
-                            invoiceAmount = it?.amount.toString(),
-                            invoiceStatus = it?.status.toString(),
-                            invoiceDate = it?.date.toString(),
-                            invoiceId = it?.id.toString(),
-                            invoiceStatusIcon = it?.status!!,
-                            onClick = { invoiceId ->
-                                val uniqueLink = getUniqueInvoiceLink(invoiceId.toLong())
-                                val intent = Intent(Intent.ACTION_VIEW, uniqueLink)
-                                context.startActivity(intent)
-                            }
-                        )
+            is InvoiceUiState.InvoiceList -> {
+                Column(modifier = Modifier.fillMaxSize()) {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(invoiceUiState.list) {
+                            InvoiceItem(
+                                invoiceTitle = it?.title.toString(),
+                                invoiceAmount = it?.amount.toString(),
+                                invoiceStatus = it?.status.toString(),
+                                invoiceDate = it?.date.toString(),
+                                invoiceId = it?.id.toString(),
+                                invoiceStatusIcon = it?.status!!,
+                                onClick = { invoiceId ->
+                                    val uniqueLink = getUniqueInvoiceLink(invoiceId.toLong())
+                                    val intent = Intent(Intent.ACTION_VIEW, uniqueLink)
+                                    context.startActivity(intent)
+                                }
+                            )
+                        }
                     }
                 }
             }
-        }
 
-        InvoiceUiState.Empty -> {
-            EmptyContentScreen(
-                modifier = Modifier,
-                title = stringResource(id = R.string.error_oops),
-                subTitle = stringResource(id = R.string.error_no_invoices_found),
-                iconTint = Color.Black,
-                iconImageVector = Icons.Rounded.Info
-            )
-        }
+            InvoiceUiState.Empty -> {
+                EmptyContentScreen(
+                    modifier = Modifier,
+                    title = stringResource(id = R.string.error_oops),
+                    subTitle = stringResource(id = R.string.error_no_invoices_found),
+                    iconTint = Color.Black,
+                    iconImageVector = Icons.Rounded.Info
+                )
+            }
 
-        InvoiceUiState.Loading -> {
-            MifosLoadingWheel(
-                modifier = Modifier.fillMaxWidth(),
-                contentDesc = stringResource(R.string.loading)
-            )
+            InvoiceUiState.Loading -> {
+                MifosLoadingWheel(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentDesc = stringResource(R.string.loading)
+                )
+            }
         }
     }
 }

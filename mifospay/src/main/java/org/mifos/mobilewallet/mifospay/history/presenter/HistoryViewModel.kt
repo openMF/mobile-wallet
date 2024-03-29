@@ -23,6 +23,8 @@ class HistoryViewModel @Inject constructor(
     private val _historyUiState = MutableStateFlow<HistoryUiState>(HistoryUiState.Loading)
     val historyUiState: StateFlow<HistoryUiState> = _historyUiState
 
+    val isRefreshing = MutableStateFlow(false)
+
     fun fetchTransactions() {
         _historyUiState.value = HistoryUiState.Loading
         mUseCaseHandler.execute(mFetchAccountUseCase,
@@ -58,6 +60,11 @@ class HistoryViewModel @Inject constructor(
 
     init {
         fetchTransactions()
+    }
+    fun refreshTransactionHistory(){
+        isRefreshing.value = true
+        fetchTransactions()
+        isRefreshing.value = false
     }
 }
 

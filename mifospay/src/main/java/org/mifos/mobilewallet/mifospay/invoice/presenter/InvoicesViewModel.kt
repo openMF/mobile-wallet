@@ -24,6 +24,8 @@ class InvoicesViewModel @Inject constructor(
     private val _invoiceUiState = MutableStateFlow<InvoiceUiState>(InvoiceUiState.Loading)
     val invoiceUiState: StateFlow<InvoiceUiState> = _invoiceUiState
 
+    val isRefreshing = MutableStateFlow(false)
+
     fun fetchInvoices() {
         _invoiceUiState.value = InvoiceUiState.Loading
         mUseCaseHandler.execute(fetchInvoicesUseCase,
@@ -49,6 +51,11 @@ class InvoicesViewModel @Inject constructor(
 
     init {
         fetchInvoices()
+    }
+    fun refreshInvoices(){
+        isRefreshing.value = true
+        fetchInvoices()
+        isRefreshing.value = false
     }
 }
 
