@@ -137,6 +137,9 @@ dependencies {
 
     implementation("com.mifos.mobile:mifos-passcode:0.3.0")
 
+    // Coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
     implementation("com.google.android.gms:play-services-auth:20.7.0")
     implementation("com.google.guava:guava:27.0.1-android")
 
