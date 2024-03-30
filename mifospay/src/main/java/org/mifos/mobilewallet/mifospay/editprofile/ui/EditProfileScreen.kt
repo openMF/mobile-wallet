@@ -27,17 +27,16 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.PhotoLibrary
-import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -78,16 +77,16 @@ import java.util.Objects
 @Composable
 fun EditProfileScreen(
     viewModel: EditProfileViewModel = hiltViewModel(),
-    onChangePassword: () -> Unit,
-    onChangePasscode: () -> Unit,
     onSaveChanges: () -> Unit
 ) {
     val editProfileUiState by viewModel.editProfileUiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(key1 = true) {
+        viewModel.fetchProfileDetails()
+    }
+
     EditProfileScreen(
         editProfileUiState = editProfileUiState,
-        onChangePassword = onChangePassword,
-        onChangePasscode = onChangePasscode,
         onSaveChanges = onSaveChanges
     )
 }
@@ -95,8 +94,6 @@ fun EditProfileScreen(
 @Composable
 fun EditProfileScreen(
     editProfileUiState: EditProfileUiState,
-    onChangePassword: () -> Unit,
-    onChangePasscode: () -> Unit,
     onSaveChanges: () -> Unit
 ) {
     val context = LocalContext.current
@@ -154,18 +151,6 @@ fun EditProfileScreen(
     Scaffold(
         topBar = { MifosTopBar(topBarTitle = R.string.edit_profile) {} },
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = { onSaveChanges.invoke() },
-                containerColor = Color.Black
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Save,
-                    contentDescription = null,
-                    tint = Color.White
-                )
-            }
-        }
     ) { contentPadding ->
         Column(
             modifier = Modifier
@@ -198,7 +183,9 @@ fun EditProfileScreen(
                     var mobile by rememberSaveable { mutableStateOf(editProfileUiState.mobile) }
                     var vpa by rememberSaveable { mutableStateOf(editProfileUiState.vpa) }
                     var email by rememberSaveable { mutableStateOf(editProfileUiState.email) }
-                    EditProfileScreenImage(imageUri = imageUri, onCameraIconClick = { showBottomSheet = true })
+                    EditProfileScreenImage(
+                        imageUri = imageUri,
+                        onCameraIconClick = { showBottomSheet = true })
                     MfOutlinedTextField(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -246,15 +233,10 @@ fun EditProfileScreen(
                             keyboardActions = KeyboardActions { keyboardController?.hide() }
                         )
                     }
-                    EditProfileButton(
-                        onClick = { onChangePassword.invoke() },
-                        buttonText = R.string.change_password
+                    EditProfileSaveButton(
+                        onClick = { onSaveChanges.invoke() },
+                        buttonText = R.string.save
                     )
-                    EditProfileButton(
-                        onClick = { onChangePasscode.invoke() },
-                        buttonText = R.string.change_passcode
-                    )
-
                     if (showBottomSheet) {
                         MifosBottomSheet(
                             content = {
@@ -356,7 +338,7 @@ fun EditProfileBottomSheetContent(
 }
 
 @Composable
-fun EditProfileButton(onClick: () -> Unit, buttonText: Int) {
+fun EditProfileSaveButton(onClick: () -> Unit, buttonText: Int) {
     Button(
         onClick = { onClick.invoke() },
         colors = ButtonDefaults.buttonColors(Color.Black),
@@ -383,17 +365,29 @@ fun createImageFile(context: Context): File {
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileLoadingScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Loading, {}, {}, {})
+    EditProfileScreen(editProfileUiState = EditProfileUiState.Loading, {})
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileSuccessScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Success(), {}, {}, {})
+    EditProfileScreen(editProfileUiState = EditProfileUiState.Success(), {})
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun EditProfileSuccessDataScreenPreview() {
+    EditProfileScreen(editProfileUiState = EditProfileUiState.Success(
+        name = "John Doe",
+        username = "John",
+        email = "john@mifos.org",
+        vpa = "vpa",
+        mobile = "+1 55557772901"
+    ), {})
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileErrorScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Error("Error Screen"), {}, {}, {})
+    EditProfileScreen(editProfileUiState = EditProfileUiState.Error("Error Screen"), {})
 }

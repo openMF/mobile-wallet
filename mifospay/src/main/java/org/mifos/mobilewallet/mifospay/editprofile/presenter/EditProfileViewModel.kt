@@ -10,9 +10,7 @@ import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.client.UpdateClient
 import org.mifos.mobilewallet.core.domain.usecase.user.UpdateUser
-import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.core.datastore.PreferencesHelper
-import org.mifos.mobilewallet.mifospay.home.ProfileUiState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,11 +25,7 @@ class EditProfileViewModel @Inject constructor(
         MutableStateFlow<EditProfileUiState>(EditProfileUiState.Loading)
     val editProfileUiState: StateFlow<EditProfileUiState> = _editProfileUiState
 
-    init {
-        fetchProfileDetails()
-    }
-
-    private fun fetchProfileDetails() {
+    fun fetchProfileDetails() {
         val name = mPreferencesHelper.fullName ?: "-"
         val username = mPreferencesHelper.username
         val email = mPreferencesHelper.email ?: "-"
