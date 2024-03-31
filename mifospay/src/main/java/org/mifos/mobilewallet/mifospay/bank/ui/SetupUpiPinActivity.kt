@@ -24,50 +24,16 @@ import org.mifos.mobilewallet.mifospay.utils.Constants
 import org.mifos.mobilewallet.mifospay.utils.Toaster
 import javax.inject.Inject
 
-@AndroidEntryPoint
-class SetupUpiPinActivity : BaseActivity(), SetupUpiPinView {
-    @JvmField
-    @Inject
-    var mPresenter: SetupUpiPinPresenter? = null
-    var mSetupUpiPinPresenter: BankContract.SetupUpiPinPresenter? = null
-
-    @JvmField
-    @BindView(R.id.fl_debit_card)
-    var mFlDebitCard: FrameLayout? = null
-
-    @JvmField
-    @BindView(R.id.toolbar)
-    var mToolbar: Toolbar? = null
-
-    @JvmField
-    @BindView(R.id.fl_otp)
-    var mFlOtp: FrameLayout? = null
-
-    @JvmField
-    @BindView(R.id.fl_upi_pin)
-    var mFlUpiPin: FrameLayout? = null
-
-    @JvmField
-    @BindView(R.id.cv_debit_card)
-    var mCvDebitCard: CardView? = null
-
-    @JvmField
-    @BindView(R.id.tv_debit_card)
-    var mTvDebitCard: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_otp)
-    var mTvOtp: TextView? = null
-
-    @JvmField
-    @BindView(R.id.tv_upi)
-    var mTvUpi: TextView? = null
+class SetupUpiPinActivity : ComponentActivity(), BankContract.SetupUpiPinView {
+    private val setupUpiPinPresenter: SetupUpiPinPresenter by lazy { SetupUpiPinPresenter() }
     private var bankAccountDetails: BankAccountDetails? = null
     private var index = 0
     private var type: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setup_upi_pin)
+        setContent {
+            SetupUpiPinScreen()
+        }
         ButterKnife.bind(this)
         showColoredBackButton(Constants.BLACK_BACK_BUTTON)
         setToolbarTitle(Constants.SETUP_UPI_PIN)
