@@ -34,10 +34,7 @@ class SetupUpiPinActivity : ComponentActivity(), BankContract.SetupUpiPinView {
         setContent {
             SetupUpiPinScreen()
         }
-        ButterKnife.bind(this)
-        showColoredBackButton(Constants.BLACK_BACK_BUTTON)
-        setToolbarTitle(Constants.SETUP_UPI_PIN)
-        mPresenter!!.attachView(this)
+
         val b = intent.extras
         bankAccountDetails = b!!.getParcelable(Constants.BANK_ACCOUNT_DETAILS)
         index = b.getInt(Constants.INDEX)
