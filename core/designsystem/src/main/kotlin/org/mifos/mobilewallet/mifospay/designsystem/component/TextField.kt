@@ -109,7 +109,11 @@ fun MfPasswordTextField(
                     contentDescription = "Show password"
                 )
             }
-        }
+        },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color.Black,
+            focusedLabelColor = Color.Black
+        )
     )
 }
 
