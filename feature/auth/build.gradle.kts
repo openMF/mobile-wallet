@@ -15,6 +15,13 @@ dependencies {
 
     implementation(libs.compose.country.code.picker)
 
+    // Credentials Manager
+    implementation("androidx.credentials:credentials:1.2.1")
+    // optional - needed for credentials support from play services, for devices running
+    // Android 13 and below.
+    implementation("androidx.credentials:credentials-play-services-auth:1.2.1")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+
     implementation("com.mifos.mobile:mifos-passcode:0.3.0")
 
     implementation("com.google.android.gms:play-services-auth:20.7.0")
