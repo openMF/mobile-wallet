@@ -49,8 +49,9 @@ import org.mifos.mobilewallet.mifospay.theme.green
 import org.mifos.mobilewallet.mifospay.theme.lightGrey
 import org.mifos.mobilewallet.mifospay.theme.red
 import org.mifos.mobilewallet.mifospay.theme.styleMedium16sp
-import org.mifos.mobilewallet.mifospay.utils.Utils
-import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance
+import org.mifos.mobilewallet.mifospay.common.Utils
+import org.mifos.mobilewallet.mifospay.common.Utils.getFormattedAccountBalance
+import org.mifos.mobilewallet.mifospay.ui.TransactionItemScreen
 
 enum class HomeScreenContents {
     HOME_CARD,
@@ -190,7 +191,7 @@ fun HomeScreen(
                     items = transactions,
                     content = { item ->
                         LoadItemAfterSafeCast<Transaction>(item) { safeTransaction ->
-                            ItemTransaction(transaction = safeTransaction)
+                            TransactionItemScreen(transaction = safeTransaction)
                         }
                     }
                 )
@@ -230,80 +231,6 @@ fun PayCard(modifier: Modifier, title: String, icon: Int, onClickCard: () -> Uni
             Text(text = title)
         }
     }
-}
-
-@Composable
-fun ItemTransaction(transaction: Transaction) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        horizontalArrangement = Arrangement.Absolute.SpaceBetween
-    ) {
-        Image(
-            modifier = Modifier
-                .size(20.dp)
-                .padding(top = 2.dp),
-            painter = painterResource(
-                id = when (transaction.transactionType) {
-                    TransactionType.DEBIT -> R.drawable.money_out
-                    TransactionType.CREDIT -> R.drawable.money_in
-                    else -> R.drawable.money_in
-                }
-            ),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(Color.Black)
-        )
-        Column(
-            modifier = Modifier
-                .padding(start = 32.dp)
-                .weight(.3f)
-        ) {
-            Text(
-                text = transaction.transactionType.toString(),
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight(400),
-                    color = Color(0xFF000000),
-
-                    )
-            )
-            Text(
-                text = transaction.date.toString(),
-                style = TextStyle(
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight(400),
-                    color = Color(0x66000000)
-                )
-            )
-        }
-        val formattedAmount = getFormattedAccountBalance(transaction.amount, transaction.currency.code, 2)
-        val amount = when (transaction.transactionType) {
-            TransactionType.DEBIT -> "- $formattedAmount"
-            TransactionType.CREDIT -> "+ $formattedAmount"
-            else ->  formattedAmount
-        }
-        Text(
-            modifier = Modifier.weight(.3f),
-            text = amount,
-            style = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
-                color = when (transaction.transactionType) {
-                    TransactionType.DEBIT -> red
-                    TransactionType.CREDIT -> green
-                    else -> Color.Black
-                },
-                textAlign = TextAlign.End,
-            )
-        )
-    }
-}
-
-@Preview
-@Composable
-fun ItemTransactionPreview() {
-    ItemTransaction(Transaction())
 }
 
 @Preview(showSystemUi = true, device = "id:pixel_5")

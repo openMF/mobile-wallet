@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.utils
+package org.mifos.mobilewallet.mifospay.common
 
 import android.app.Activity
 import android.content.Context

@@ -34,7 +34,7 @@ import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.payments.presenter.TransferViewModel
 import org.mifos.mobilewallet.mifospay.utils.Toaster
-import org.mifos.mobilewallet.mifospay.utils.Utils.hideSoftKeyboard
+import org.mifos.mobilewallet.mifospay.common.Utils.hideSoftKeyboard
 
 /**
  * Created by naman on 30/8/17.

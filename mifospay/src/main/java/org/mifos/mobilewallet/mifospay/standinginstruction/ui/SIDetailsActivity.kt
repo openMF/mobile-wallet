@@ -20,7 +20,7 @@ import org.mifos.mobilewallet.mifospay.standinginstruction.StandingInstructionCo
 import org.mifos.mobilewallet.mifospay.standinginstruction.presenter.StandingInstructionDetailsPresenter
 import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.utils.DialogBox
-import org.mifos.mobilewallet.mifospay.utils.Utils
+import org.mifos.mobilewallet.mifospay.common.Utils
 import java.util.*
 import javax.inject.Inject
 

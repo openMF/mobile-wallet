@@ -30,7 +30,7 @@ import org.mifos.mobilewallet.mifospay.utils.DebugUtil
 import org.mifos.mobilewallet.mifospay.utils.FileUtils
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener
 import org.mifos.mobilewallet.mifospay.utils.RecyclerItemClickListener.SimpleOnItemClickListener
-import org.mifos.mobilewallet.mifospay.utils.Utils.isBlank
+import org.mifos.mobilewallet.mifospay.common.Utils.isBlank
 import java.util.Locale
 import javax.inject.Inject
 
