@@ -22,7 +22,7 @@ import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.common.Constants.REQUEST_CAMERA
 import org.mifos.mobilewallet.mifospay.common.Constants.SCAN_QR_REQUEST_CODE
 import org.mifos.mobilewallet.mifospay.utils.Toaster
-import org.mifos.mobilewallet.mifospay.utils.Utils
+import org.mifos.mobilewallet.mifospay.common.Utils
 import java.util.*
 import javax.inject.Inject
 import kotlin.properties.Delegates

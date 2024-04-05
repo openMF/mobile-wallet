@@ -4,8 +4,10 @@ import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -39,6 +41,7 @@ import org.mifos.mobilewallet.mifospay.designsystem.theme.lightGrey
 import org.mifos.mobilewallet.mifospay.history.presenter.HistoryUiState
 import org.mifos.mobilewallet.mifospay.history.presenter.HistoryViewModel
 import org.mifos.mobilewallet.mifospay.ui.EmptyContentScreen
+import org.mifos.mobilewallet.mifospay.ui.TransactionItemScreen
 
 @Composable
 fun HistoryScreen(
@@ -108,13 +111,16 @@ fun HistoryScreen(
                         label = stringResource(R.string.debits)
                     )
                 }
+                Spacer(modifier = Modifier.height(24.dp))
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(filteredTransactions) {
-                        HistoryItem(
-                            date = it.date.toString(),
-                            amount = it.amount.toString(),
-                            transactionType = it.transactionType
-                        )
+                        Column {
+                            TransactionItemScreen(
+                                modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                                transaction = it
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                        }
                     }
                 }
             }
@@ -173,7 +179,7 @@ private fun HistoryScreenListPreview() {
     HistoryScreen(historyUiState = HistoryUiState.HistoryList(sampleHistoryList))
 }
 
-val sampleHistoryList = List(10) {index ->
+val sampleHistoryList = List(10) { index ->
     Transaction(
         transactionId = "txn_123456789",
         clientId = 1001L,
