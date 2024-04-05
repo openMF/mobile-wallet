@@ -34,6 +34,7 @@ class HomeViewModel @Inject constructor(
     val homeUIState: StateFlow<HomeUiState> = _homeUIState.asStateFlow()
 
     init {
+        transactionsHistory.delegate = this
         fetchAccountDetails()
         fetchVpa()
     }
@@ -47,7 +48,9 @@ class HomeViewModel @Inject constructor(
                     _homeUIState.update { currentState ->
                         currentState.copy(account = response.account)
                     }
-                    response.account.id.let { transactionsHistory.fetchTransactionsHistory(it) }
+                    response.account.id.let {
+                        transactionsHistory.fetchTransactionsHistory(it)
+                    }
                 }
 
                 override fun onError(message: String) {
