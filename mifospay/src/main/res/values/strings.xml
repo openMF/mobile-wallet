@@ -311,6 +311,8 @@
     <string name="successkyc2">KYC Level 2 details added.</string>
     <string name="submitting">Submitting</string>
     <string name="file_name">File Name: </string>
+    <string name="approve_permission">Please approve storage permissions</string>
+    <string name="approve">Approve</string>
 
     <string name="add_cards">Please Add Cards</string>
     <string name="close">Close</string>

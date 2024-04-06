@@ -1,10 +1,12 @@
 package org.mifos.mobilewallet.mifospay.kyc.ui
 
 import android.Manifest
+import android.app.Activity
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.os.Build.VERSION.SDK_INT
+import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,9 +21,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,11 +39,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.mifos.mobilewallet.mifospay.R
@@ -115,89 +127,210 @@ fun Kyc2Form(
     var idType by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
     var result by rememberSaveable { mutableStateOf<Uri?>(null) }
-
-    val launcher =
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val scope = rememberCoroutineScope()
+    val snackBarHostState = remember { SnackbarHostState() }
+    val docLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) {
             result = it
         }
 
-    val scope = rememberCoroutineScope()
-    val snackBarHostState = remember { SnackbarHostState() }
+    var storagePermissionGranted by remember {
+        mutableStateOf(
+            if (SDK_INT >= 33) {
+                ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) ==
+                        PackageManager.PERMISSION_GRANTED
+            } else {
+                ContextCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) ==
+                        PackageManager.PERMISSION_GRANTED
+            }
+        )
+    }
 
-    val hasPermissions =
-        ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED
+    var shouldShowPermissionRationale =
+        if (SDK_INT >= 33) {
+            shouldShowRequestPermissionRationale(
+                context as Activity,
+                Manifest.permission.READ_MEDIA_IMAGES
+            )
+        } else {
+            shouldShowRequestPermissionRationale(
+                context as Activity,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
+        }
+
+    var shouldDirectUserToApplicationSettings by remember {
+        mutableStateOf(false)
+    }
+
+    val decideCurrentPermissionStatus: (Boolean, Boolean) -> String =
+        { storagePermissionGranted, shouldShowPermissionRationale ->
+            if (storagePermissionGranted) "Granted"
+            else if (shouldShowPermissionRationale) "Rejected"
+            else "Denied"
+        }
+
+    var currentPermissionStatus by remember {
+        mutableStateOf(
+            decideCurrentPermissionStatus(
+                storagePermissionGranted,
+                shouldShowPermissionRationale
+            )
+        )
+    }
+
+    val permission = if (SDK_INT >= 33) {
+        Manifest.permission.READ_MEDIA_IMAGES
+    } else {
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    }
 
     val storagePermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted: Boolean ->
-            if (isGranted) {
-                launcher.launch(arrayOf("application/pdf", "image/*"))
-            } else {
-                scope.launch {
-                    snackBarHostState.showSnackbar(context.getString(R.string.storage_permission_is_required_to_access_documents))
-                }
+        onResult = { isGranted ->
+            storagePermissionGranted = isGranted
+
+            if (!isGranted) {
+                shouldShowPermissionRationale =
+                    if (SDK_INT >= 33) {
+                        shouldShowRequestPermissionRationale(
+                            context,
+                            Manifest.permission.READ_MEDIA_IMAGES
+                        )
+                    } else {
+                        shouldShowRequestPermissionRationale(
+                            context,
+                            Manifest.permission.READ_EXTERNAL_STORAGE
+                        )
+                    }
+            }
+            shouldDirectUserToApplicationSettings =
+                !shouldShowPermissionRationale && !storagePermissionGranted
+            currentPermissionStatus = decideCurrentPermissionStatus(
+                storagePermissionGranted,
+                shouldShowPermissionRationale
+            )
+        })
+
+
+    DisposableEffect(key1 = lifecycleOwner, effect = {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START &&
+                !storagePermissionGranted &&
+                !shouldShowPermissionRationale
+            ) {
+                storagePermissionLauncher.launch(permission)
             }
         }
-    )
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    })
 
-    Box(
-        modifier = Modifier
-            .padding(20.dp)
-            .fillMaxSize(),
-        contentAlignment = Alignment.TopCenter
-    ) {
-        Column(
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState)
+        }
+    ) { contentPadding ->
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
+                .padding(contentPadding)
+                .fillMaxSize(),
+            contentAlignment = Alignment.TopCenter
         ) {
-            MifosOutlinedTextField(
-                modifier = modifier
+            Column(
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(vertical = 8.dp),
-                value = idType,
-                onValueChange = {
-                    idType = it
-                },
-                label = R.string.id_type
-            )
+                    .padding(horizontal = 20.dp)
+            ) {
+                MifosOutlinedTextField(
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
+                    value = idType,
+                    onValueChange = {
+                        idType = it
+                    },
+                    label = R.string.id_type
+                )
 
-            Spacer(modifier = Modifier.width(20.dp))
+                Spacer(modifier = Modifier.width(20.dp))
 
-            Row {
+                Row {
+                    Button(
+                        onClick = {
+                            if (storagePermissionGranted) {
+                                docLauncher.launch(arrayOf("application/pdf", "image/*"))
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    R.string.approve_permission,
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    ) {
+                        Text(text = stringResource(id = R.string.browse))
+                    }
+                    result?.let { doc ->
+                        val fileName = doc.path?.substringAfterLast("/").toString()
+                        Text(
+                            text = stringResource(id = R.string.file_name) + fileName,
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(horizontal = 2.dp)
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(20.dp))
+
                 Button(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     onClick = {
-                        if (hasPermissions || SDK_INT >= Build.VERSION_CODES.Q) {
-                            launcher.launch(arrayOf("application/pdf", "image/*"))
-                        } else {
-                            storagePermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        result?.let { uri ->
+                            uploadData(idType, uri)
                         }
                     }
                 ) {
-                    Text(text = stringResource(id = R.string.browse))
-                }
-                result?.let { doc ->
-                    val fileName = doc.path?.substringAfterLast("/").toString()
-                    Text(
-                        text = stringResource(id = R.string.file_name) + fileName,
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier.padding(horizontal = 2.dp)
-                    )
+                    Text(text = stringResource(id = R.string.submit))
                 }
             }
+        }
 
-            Spacer(modifier = Modifier.height(20.dp))
+        if (shouldShowPermissionRationale) {
+            LaunchedEffect(Unit) {
+                scope.launch {
+                    val userAction = snackBarHostState.showSnackbar(
+                        message = R.string.approve_permission.toString(),
+                        actionLabel = R.string.approve.toString(),
+                        duration = SnackbarDuration.Indefinite,
+                        withDismissAction = true
+                    )
+                    when (userAction) {
+                        SnackbarResult.ActionPerformed -> {
+                            shouldShowPermissionRationale = false
+                            storagePermissionLauncher.launch(permission)
+                        }
 
-            Button(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                onClick = {
-                    result?.let { uri ->
-                        uploadData(idType, uri)
+                        SnackbarResult.Dismissed -> {
+                            shouldShowPermissionRationale = false
+                        }
                     }
                 }
-            ) {
-                Text(text = stringResource(id = R.string.submit))
+            }
+        }
+
+        if (shouldDirectUserToApplicationSettings) {
+            Intent(
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.fromParts("package", context.packageName, null)
+            ).also {
+                context.startActivity(it)
             }
         }
     }
