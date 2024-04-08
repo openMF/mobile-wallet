@@ -61,6 +61,7 @@ import org.mifos.mobilewallet.mifospay.theme.MifosTheme
 @Composable
 fun KYCLevel2Screen(
     viewModel: KYCLevel2ViewModel = hiltViewModel(),
+    onSuccessKyc2: () -> Unit
 ) {
     val kyc2uiState by viewModel.kyc2uiState.collectAsStateWithLifecycle()
 
@@ -72,7 +73,8 @@ fun KYCLevel2Screen(
                 idType,
                 uri
             )
-        }
+        },
+        onSuccessKyc2 = onSuccessKyc2
     )
 }
 
@@ -82,7 +84,8 @@ fun KYCLevel2Screen(
     uploadData: (
         String,
         Uri,
-    ) -> Unit
+    ) -> Unit,
+    onSuccessKyc2: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -110,7 +113,7 @@ fun KYCLevel2Screen(
                 stringResource(R.string.successkyc2),
                 Toast.LENGTH_SHORT
             ).show()
-            //Todo: Navigate To KycLevel3
+            onSuccessKyc2.invoke()
         }
     }
 
@@ -353,7 +356,8 @@ fun Kyc2FormPreviewWithLoading() {
     MifosTheme {
         KYCLevel2Screen(
             uiState = KYCLevel2UiState.Loading,
-            uploadData = { _, _ -> }
+            uploadData = { _, _ -> },
+            onSuccessKyc2 = {}
         )
     }
 }
@@ -364,7 +368,8 @@ fun Kyc2FormPreviewWithError() {
     MifosTheme {
         KYCLevel2Screen(
             uiState = KYCLevel2UiState.Error,
-            uploadData = { _, _ -> }
+            uploadData = { _, _ -> },
+            onSuccessKyc2 = {}
         )
     }
 }
@@ -375,7 +380,8 @@ fun Kyc2FormPreviewWithSuccess() {
     MifosTheme {
         KYCLevel2Screen(
             uiState = KYCLevel2UiState.Success,
-            uploadData = { _, _ -> }
+            uploadData = { _, _ -> },
+            onSuccessKyc2 = {}
         )
     }
 }

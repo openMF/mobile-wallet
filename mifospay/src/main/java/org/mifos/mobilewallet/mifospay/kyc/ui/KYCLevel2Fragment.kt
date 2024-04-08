@@ -24,10 +24,18 @@ class KYCLevel2Fragment : BaseFragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MifosTheme {
-                    KYCLevel2Screen()
+                    KYCLevel2Screen(
+                        onSuccessKyc2 = { goBack() }
+                    )
                 }
             }
         }
+    }
+
+    private fun goBack() {
+        val intent = requireActivity().intent
+        requireActivity().finish()
+        startActivity(intent)
     }
 
     companion object {
