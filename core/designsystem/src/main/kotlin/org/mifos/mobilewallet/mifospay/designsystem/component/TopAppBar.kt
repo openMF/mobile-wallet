@@ -14,10 +14,12 @@ import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import org.mifos.mobilewallet.mifospay.designsystem.R
 import org.mifos.mobilewallet.mifospay.designsystem.icon.MifosIcons
 import org.mifos.mobilewallet.mifospay.designsystem.theme.MifosTheme
 
@@ -28,11 +30,11 @@ fun MifosTopAppBar(
     @StringRes titleRes: Int,
     navigationIcon: ImageVector? = null,
     navigationIconContentDescription: String? = null,
-    actionIcon: ImageVector,
-    actionIconContentDescription: String,
+    actionIcon: ImageVector? = null,
+    actionIconContentDescription: String? = null,
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     onNavigationClick: (() -> Unit)? = null,
-    onActionClick: () -> Unit = {},
+    onActionClick: (() -> Unit)? = null,
 ) {
     CenterAlignedTopAppBar(
         title = { Text(text = stringResource(id = titleRes)) },
@@ -48,16 +50,36 @@ fun MifosTopAppBar(
             }
         },
         actions = {
-            IconButton(onClick = onActionClick) {
-                Icon(
-                    imageVector = actionIcon,
-                    contentDescription = actionIconContentDescription,
-                    tint = MaterialTheme.colorScheme.onSurface,
-                )
+            actionIcon?.let {
+                IconButton(onClick = onActionClick!!) {
+                    Icon(
+                        imageVector = actionIcon,
+                        contentDescription = actionIconContentDescription,
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
             }
         },
         colors = colors,
         modifier = modifier.testTag("mifosTopAppBar"),
+    )
+}
+
+@Composable
+fun MifosNavigationTopAppBar(
+    @StringRes titleRes: Int,
+    onNavigationClick: (() -> Unit)?
+) {
+    MifosTopAppBar(
+        titleRes = titleRes,
+        navigationIcon = MifosIcons.Back,
+        navigationIconContentDescription = stringResource(
+            id = titleRes,
+        ),
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Transparent,
+        ),
+        onNavigationClick = onNavigationClick
     )
 }
 

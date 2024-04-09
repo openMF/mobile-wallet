@@ -12,9 +12,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.mifos.mobilewallet.mifospay.history.ui.HistoryScreen
 import org.mifos.mobilewallet.mifospay.invoice.ui.InvoiceScreen
-import org.mifos.mobilewallet.mifospay.payments.presenter.TransferViewModel
+import org.mifos.mobilewallet.mifospay.payments.TransferViewModel
 import org.mifos.mobilewallet.mifospay.payments.ui.RequestScreen
-import org.mifos.mobilewallet.mifospay.payments.ui.SendScreen
+import org.mifos.mobilewallet.mifospay.payments.send.SendMoneyScreen
+import org.mifos.mobilewallet.mifospay.payments.send.SendScreenRoute
 import org.mifos.mobilewallet.mifospay.standinginstruction.ui.StandingInstructionsScreen
 import org.mifos.mobilewallet.mifospay.ui.MifosScrollableTabRow
 import org.mifos.mobilewallet.mifospay.ui.utility.TabContent
@@ -43,7 +44,7 @@ fun PaymentScreenContent(
 
     val tabContents = listOf(
         TabContent(PaymentsScreenContents.SEND.name) {
-            SendScreen(onSubmit = {})
+            SendScreenRoute(onBackClick = {}, showToolBar = false)
         },
         TabContent(PaymentsScreenContents.REQUEST.name) {
             RequestScreen(showQr = { showQr.invoke(vpa) })

@@ -1,10 +1,12 @@
 package org.mifos.mobilewallet.mifospay.designsystem.icon
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Wallet
 import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Search
@@ -26,4 +28,6 @@ object MifosIcons {
     val ProfileBoarder = Icons.Rounded.AccountCircle
     val MoreVert = Icons.Rounded.MoreVert
     val Search = Icons.Rounded.Search
+    val Add = Icons.Rounded.Add
+    val Back = Icons.AutoMirrored.Outlined.ArrowBack
 }
