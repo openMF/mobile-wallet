@@ -13,6 +13,8 @@ import org.mifos.mobilewallet.mifospay.home.navigation.financeScreen
 import org.mifos.mobilewallet.mifospay.home.navigation.homeScreen
 import org.mifos.mobilewallet.mifospay.home.navigation.paymentsScreen
 import org.mifos.mobilewallet.mifospay.home.navigation.profileScreen
+import org.mifos.mobilewallet.mifospay.payments.send.navigation.navigateToSendMoneyScreen
+import org.mifos.mobilewallet.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifos.mobilewallet.mifospay.payments.ui.SendActivity
 import org.mifos.mobilewallet.mifospay.qr.ui.ShowQrActivity
 import org.mifos.mobilewallet.mifospay.savedcards.ui.AddCardDialog
@@ -43,7 +45,7 @@ fun MifosNavHost(
     ) {
         homeScreen(
             onRequest = { vpa -> context.startActivityShowQr(vpa) },
-            onPay = { context.startActivitySend() }
+            onPay = navController::navigateToSendMoneyScreen
         )
         paymentsScreen(
             showQr = { vpa -> context.startActivityShowQr(vpa) },
@@ -55,6 +57,9 @@ fun MifosNavHost(
         profileScreen(
             onEditProfile = { context.startActivityEditProfile() },
             onSettings = { context.startActivitySettings() }
+        )
+        sendMoneyScreen(
+            onBackClick = navController::popBackStack
         )
     }
 }
