@@ -5,11 +5,12 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifos.mobilewallet.core.base.UseCase
 import org.mifos.mobilewallet.core.base.UseCaseHandler
 import org.mifos.mobilewallet.core.domain.usecase.account.FetchAccount
-import org.mifos.mobilewallet.mifospay.common.Constants
+import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.data.local.LocalRepository
 import javax.inject.Inject
 
@@ -20,6 +21,9 @@ class SendPaymentViewModel @Inject constructor(
     private val fetchAccount: FetchAccount
 ) : ViewModel() {
 
+    private val _showProgress = MutableStateFlow(false)
+    val showProgress: StateFlow<Boolean> = _showProgress
+
     private val _vpa = MutableStateFlow("")
     val vpa: StateFlow<String> = _vpa
 
@@ -29,6 +33,10 @@ class SendPaymentViewModel @Inject constructor(
     init {
         fetchVpa()
         fetchMobile()
+    }
+
+    fun updateProgressState(isVisible: Boolean) {
+        _showProgress.update { isVisible }
     }
 
     private fun fetchVpa() {
@@ -43,26 +51,45 @@ class SendPaymentViewModel @Inject constructor(
         }
     }
 
-    fun checkSelfTransfer(externalId: String?): Boolean {
-        return externalId == localRepository.clientDetails.externalId
+    fun checkSelfTransfer(
+        selfVpa: String?,
+        selfMobile: String?,
+        externalIdOrMobile: String?,
+        sendMethodType: SendMethodType,
+    ): Boolean {
+        return when (sendMethodType) {
+            SendMethodType.VPA -> {
+                selfVpa.takeIf { !it.isNullOrEmpty() }?.let { it == externalIdOrMobile } ?: false
+            }
+
+            SendMethodType.MOBILE -> {
+                selfMobile.takeIf { !it.isNullOrEmpty() }?.let { it == externalIdOrMobile } ?: false
+            }
+        }
     }
 
-    fun checkBalanceAvailability(externalId: String?, transferAmount: Double) {
+    fun checkBalanceAvailabilityAndTransfer(
+        externalId: String?,
+        transferAmount: Double,
+        onAnyError: (Int) -> Unit,
+        proceedWithTransferFlow: () -> Unit
+    ) {
+        updateProgressState(true)
         useCaseHandler.execute(fetchAccount,
             FetchAccount.RequestValues(localRepository.clientDetails.clientId),
             object : UseCase.UseCaseCallback<FetchAccount.ResponseValue> {
                 override fun onSuccess(response: FetchAccount.ResponseValue) {
-                   /* mTransferView?.hideSwipeProgress()
+                    updateProgressState(false)
                     if (transferAmount > response.account.balance) {
-                        mTransferView?.showSnackbar(Constants.INSUFFICIENT_BALANCE)
+                        onAnyError(R.string.insufficient_balance)
                     } else {
-                        mTransferView?.showClientDetails(externalId, transferAmount)
-                    }*/
+                        proceedWithTransferFlow.invoke()
+                    }
                 }
 
                 override fun onError(message: String) {
-                 /*   mTransferView?.hideSwipeProgress()
-                    mTransferView?.showToast(Constants.ERROR_FETCHING_BALANCE)*/
+                    updateProgressState(false)
+                    onAnyError.invoke(R.string.error_fetching_balance)
                 }
             })
     }
