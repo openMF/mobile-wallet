@@ -354,5 +354,8 @@
     <string name="permission_granted">Permission Granted</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="storage_permission_is_required_to_access_gallery">Storage permission is required to access gallery.</string>
+    <string name="self_amount_transfer_is_not_allowed">Self Account transfer is not allowed</string>
+    <string name="insufficient_balance">Insufficient balance</string>
+    <string name="error_fetching_balance">Error fetching balance</string>
 
 </resources>

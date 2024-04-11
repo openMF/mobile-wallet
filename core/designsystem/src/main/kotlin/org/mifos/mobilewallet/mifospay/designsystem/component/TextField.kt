@@ -51,8 +51,11 @@ fun MfOutlinedTextField(
     label: String,
     isError: Boolean = false,
     errorMessage: String = "",
+    singleLine: Boolean = false,
     onValueChange: (String) -> Unit,
-    onKeyboardActions: (() -> Unit)? = null
+    onKeyboardActions: (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
 ) {
     OutlinedTextField(
         modifier = modifier,
@@ -64,9 +67,12 @@ fun MfOutlinedTextField(
                 Text(text = errorMessage)
             }
         },
+        singleLine = singleLine,
+        trailingIcon = trailingIcon,
         keyboardActions = KeyboardActions {
             onKeyboardActions?.invoke()
         },
+        keyboardOptions = keyboardOptions,
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = Color.Black,
             focusedLabelColor = Color.Black
