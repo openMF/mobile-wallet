@@ -1,12 +1,13 @@
 package org.mifos.mobilewallet.mifospay.payments.send
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.provider.ContactsContract
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -17,11 +18,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ContactPage
 import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,21 +38,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.zxing.integration.android.IntentIntegrator
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.google.mlkit.vision.barcode.common.Barcode
+import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
+import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import com.togitech.ccp.component.TogiCountryCodePicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.designsystem.component.MfOutlinedTextField
+import org.mifos.mobilewallet.mifospay.designsystem.component.MfOverlayLoadingWheel
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosButton
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosNavigationTopAppBar
-import org.mifos.mobilewallet.mifospay.designsystem.component.MifosOutlinedTextField
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleMedium16sp
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleNormal18sp
-import org.mifos.mobilewallet.mifospay.qr.ui.ReadQrActivity
 
 
 enum class SendMethodType {
@@ -60,12 +70,41 @@ fun SendScreenRoute(
     showToolBar: Boolean,
     onBackClick: () -> Unit
 ) {
+    val context = LocalContext.current
+    val selfVpa by viewModel.vpa.collectAsStateWithLifecycle()
+    val selfMobile by viewModel.mobile.collectAsStateWithLifecycle()
+    val showProgress by viewModel.showProgress.collectAsStateWithLifecycle()
+
+    fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
 
     SendMoneyScreen(
         showToolBar = showToolBar,
         onBackClick = onBackClick,
-        onSubmit = { amount, transaferMethod ->
-
+        showProgress = showProgress,
+        onSubmit = { amount, externalIdOrMobile, sendMethodType ->
+            if (!viewModel.checkSelfTransfer(
+                    selfVpa = selfVpa,
+                    selfMobile = selfMobile,
+                    sendMethodType = sendMethodType,
+                    externalIdOrMobile = externalIdOrMobile
+                )
+            ) {
+                viewModel.checkBalanceAvailabilityAndTransfer(
+                    externalId = selfVpa,
+                    transferAmount = amount.toDouble(),
+                    onAnyError = {
+                        showToast(context.getString(it))
+                    },
+                    proceedWithTransferFlow = {
+                        // show transfer flow bottom sheet MakeTransferFragment
+                        // mTransferView?.showClientDetails(externalId, transferAmount)
+                    }
+                )
+            } else {
+                showToast(context.getString(R.string.self_amount_transfer_is_not_allowed))
+            }
         }
     )
 }
@@ -73,7 +112,8 @@ fun SendScreenRoute(
 @Composable
 fun SendMoneyScreen(
     showToolBar: Boolean,
-    onSubmit: (String, String) -> Unit,
+    showProgress: Boolean,
+    onSubmit: (String, String, SendMethodType) -> Unit,
     onBackClick: () -> Unit,
 ) {
 
@@ -82,9 +122,20 @@ fun SendMoneyScreen(
     var amount by rememberSaveable { mutableStateOf("") }
     var vpa by rememberSaveable { mutableStateOf("") }
     var mobileNumber by rememberSaveable { mutableStateOf("") }
+    var isValidMobileNumber by rememberSaveable { mutableStateOf(false) }
     var sendMethodType by rememberSaveable { mutableStateOf(SendMethodType.VPA) }
-    var isVpaSelected by rememberSaveable { mutableStateOf(true) }
+    var isValidInfo by rememberSaveable { mutableStateOf(false) }
+
     var contactUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+
+    fun validateInfo() {
+        isValidInfo = when (sendMethodType) {
+            SendMethodType.VPA -> amount.isNotEmpty() && vpa.isNotEmpty()
+            SendMethodType.MOBILE -> {
+                isValidMobileNumber && mobileNumber.isNotEmpty() && amount.isNotEmpty()
+            }
+        }
+    }
 
     val contactLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickContact()
@@ -92,18 +143,6 @@ fun SendMoneyScreen(
         uri?.let { contactUri = uri }
     }
 
-    val scannerLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val scanResult =
-                    IntentIntegrator.parseActivityResult(result.resultCode, result.data)
-                if (scanResult.contents != null) {
-                    vpa = scanResult.contents
-                }
-            }
-        }
-    )
     LaunchedEffect(key1 = contactUri) {
         contactUri?.let {
             mobileNumber = getContactPhoneNumber(it, context)
@@ -121,110 +160,170 @@ fun SendMoneyScreen(
         }
     )
 
-    Column(Modifier.fillMaxSize()) {
-        if (showToolBar) {
-            MifosNavigationTopAppBar(
-                titleRes = R.string.send,
-                onNavigationClick = onBackClick
-            )
-        }
-        Text(
-            modifier = Modifier.padding(start = 20.dp, top = 20.dp),
-            text = stringResource(id = R.string.select_transfer_method),
-            style = styleNormal18sp
+    val options = GmsBarcodeScannerOptions.Builder()
+        .setBarcodeFormats(
+            Barcode.FORMAT_QR_CODE,
+            Barcode.FORMAT_AZTEC
         )
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp, bottom = 20.dp)
-            ) {
-                VpaMobileChip(
-                    selected = sendMethodType == SendMethodType.VPA,
-                    onClick = { sendMethodType = SendMethodType.VPA },
-                    label = stringResource(id = R.string.vpa)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-                VpaMobileChip(
-                    selected = sendMethodType == SendMethodType.MOBILE,
-                    onClick = { sendMethodType = SendMethodType.MOBILE },
-                    label = stringResource(id = R.string.mobile)
-                )
-            }
-            MfOutlinedTextField(
-                value = amount,
-                onValueChange = { amount = it },
-                label = stringResource(id = R.string.amount),
-                modifier = Modifier.fillMaxWidth()
-            )
-            when (sendMethodType) {
-                SendMethodType.VPA -> {
-                    MifosOutlinedTextField(
-                        value = vpa,
-                        onValueChange = { vpa = it },
-                        label = R.string.virtual_payment_address,
-                        modifier = Modifier.fillMaxWidth(),
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                val intent = Intent(context, ReadQrActivity::class.java)
-                                scannerLauncher.launch(intent)
-                            }) {
-                                Icon(
-                                    imageVector = Icons.Filled.QrCode2,
-                                    contentDescription = "Scan QR",
-                                    tint = Color.Blue
-                                )
-                            }
-                        }
-                    )
-                }
+        .build()
 
-                SendMethodType.MOBILE -> {
-                    MifosOutlinedTextField(
-                        value = mobileNumber,
-                        onValueChange = { mobileNumber = it },
-                        label = R.string.mobile_number,
-                        modifier = Modifier.fillMaxWidth(),
-                        trailingIcon = {
-                            IconButton(onClick = {
-                                permissionLauncher.launch(android.Manifest.permission.READ_CONTACTS)
-                            }) {
-                                Icon(
-                                    Icons.Filled.ContactPage,
-                                    contentDescription = "Open Contacts",
-                                    tint = Color.Blue
-                                )
+    val scanner = GmsBarcodeScanning.getClient(context, options)
+
+    fun startScan() {
+        scanner.startScan()
+            .addOnSuccessListener { barcode ->
+                barcode.rawValue?.let {
+                    vpa = it
+                }
+            }
+            .addOnCanceledListener {
+                // Task canceled
+            }
+            .addOnFailureListener { e ->
+                // Task failed with an exception
+                e.localizedMessage?.let { Log.d("SendMoney: Barcode scan failed", it) }
+            }
+    }
+
+    Box {
+        Column(Modifier.fillMaxSize()) {
+            if (showToolBar) {
+                MifosNavigationTopAppBar(
+                    titleRes = R.string.send,
+                    onNavigationClick = onBackClick
+                )
+            }
+            Text(
+                modifier = Modifier.padding(start = 20.dp, top = 20.dp),
+                text = stringResource(id = R.string.select_transfer_method),
+                style = styleNormal18sp
+            )
+            Column(modifier = Modifier.padding(16.dp)) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp, bottom = 20.dp)
+                ) {
+                    VpaMobileChip(
+                        selected = sendMethodType == SendMethodType.VPA,
+                        onClick = { sendMethodType = SendMethodType.VPA },
+                        label = stringResource(id = R.string.vpa)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    VpaMobileChip(
+                        selected = sendMethodType == SendMethodType.MOBILE,
+                        onClick = { sendMethodType = SendMethodType.MOBILE },
+                        label = stringResource(id = R.string.mobile)
+                    )
+                }
+                MfOutlinedTextField(
+                    value = amount,
+                    onValueChange = {
+                        amount = it
+                        validateInfo()
+                    },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                    label = stringResource(id = R.string.amount),
+                    modifier = Modifier.fillMaxWidth()
+                )
+                when (sendMethodType) {
+                    SendMethodType.VPA -> {
+                        MfOutlinedTextField(
+                            value = vpa,
+                            onValueChange = {
+                                vpa = it
+                                validateInfo()
+                            },
+                            label = stringResource(id = R.string.virtual_payment_address),
+                            modifier = Modifier.fillMaxWidth(),
+                            trailingIcon = {
+                                IconButton(onClick = {
+                                    startScan()
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Filled.QrCode2,
+                                        contentDescription = "Scan QR",
+                                        tint = Color.Blue
+                                    )
+                                }
                             }
-                        }
+                        )
+                    }
+
+                    SendMethodType.MOBILE -> {
+                        EnterPhoneScreen(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp),
+                            initialPhoneNumber = mobileNumber,
+                            onNumberUpdated = { _, fullPhone, valid ->
+                                if (valid) {
+                                    mobileNumber = fullPhone
+                                }
+                                isValidMobileNumber = valid
+                                validateInfo()
+                            }
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(16.dp))
+                MifosButton(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                        .align(Alignment.CenterHorizontally),
+                    color = Color.Black,
+                    enabled = isValidInfo,
+                    onClick = {
+                        if (!isValidInfo) return@MifosButton
+                        onSubmit(
+                            amount,
+                            when (sendMethodType) {
+                                SendMethodType.VPA -> vpa
+                                SendMethodType.MOBILE -> mobileNumber
+                            },
+                            sendMethodType
+                        )
+                    },
+                    contentPadding = PaddingValues(12.dp)
+                ) {
+                    Text(
+                        stringResource(id = R.string.submit),
+                        style = styleMedium16sp.copy(color = Color.White)
                     )
                 }
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            MifosButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp)
-                    .align(Alignment.CenterHorizontally),
-                color = Color.Black,
-                onClick = {
-                    onSubmit(
-                        amount,
-                        when (sendMethodType) {
-                            SendMethodType.VPA -> vpa
-                            SendMethodType.MOBILE -> mobileNumber
-                        }
-                    )
-                },
-                contentPadding = PaddingValues(12.dp)
-            ) {
-                Text(
-                    stringResource(id = R.string.submit),
-                    style = styleMedium16sp.copy(color = Color.White)
-                )
-            }
+        }
+        if (showProgress) {
+            MfOverlayLoadingWheel(
+                contentDesc = stringResource(id = R.string.please_wait)
+            )
         }
     }
+}
+
+@Composable
+fun EnterPhoneScreen(
+    modifier: Modifier,
+    initialPhoneNumber: String? = null,
+    onNumberUpdated: (String, String, Boolean) -> Unit
+) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+    TogiCountryCodePicker(
+        modifier = modifier,
+        shape = RoundedCornerShape(8.dp),
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary
+        ),
+        initialPhoneNumber = initialPhoneNumber,
+        onValueChange = { (code, phone), isValid ->
+            onNumberUpdated(phone, code + phone, isValid)
+        },
+        label = { Text(stringResource(id = org.mifos.mobilewallet.mifospay.feature.auth.R.string.feature_auth_phone_number)) },
+        keyboardActions = KeyboardActions { keyboardController?.hide() }
+    )
 }
 
 @Composable
@@ -270,8 +369,9 @@ suspend fun getContactPhoneNumber(uri: Uri, context: Context): String {
 @Composable
 fun SendMoneyScreenWithToolBarPreview() {
     SendMoneyScreen(
-        onSubmit = { _, _ -> },
+        onSubmit = { _, _, _ -> },
         onBackClick = {},
+        showProgress = false,
         showToolBar = true
     )
 }
@@ -280,8 +380,9 @@ fun SendMoneyScreenWithToolBarPreview() {
 @Composable
 fun SendMoneyScreenWithoutToolBarPreview() {
     SendMoneyScreen(
-        onSubmit = { _, _ -> },
+        onSubmit = { _, _, _ -> },
         onBackClick = {},
+        showProgress = false,
         showToolBar = false
     )
 }
