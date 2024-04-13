@@ -1,7 +1,5 @@
 package org.mifos.mobilewallet.mifospay.bank.ui
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mifos.mobilewallet.model.domain.BankAccountDetails
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.designsystem.component.MifosItemCard
+import org.mifos.mobilewallet.mifospay.designsystem.component.MifosCard
 import org.mifos.mobilewallet.mifospay.designsystem.theme.mifosText
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleMedium16sp
 
@@ -29,7 +27,7 @@ fun AccountsItem(
     bankAccountDetails: BankAccountDetails,
     onAccountClicked: () -> Unit
 ) {
-    MifosItemCard(
+    MifosCard(
         onClick = { onAccountClicked.invoke() },
         colors = CardDefaults.cardColors(Color.White)
     ) {

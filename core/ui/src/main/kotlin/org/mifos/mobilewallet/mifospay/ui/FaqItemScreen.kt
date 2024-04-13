@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.designsystem.component
+package org.mifos.mobilewallet.mifospay.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.Spring
