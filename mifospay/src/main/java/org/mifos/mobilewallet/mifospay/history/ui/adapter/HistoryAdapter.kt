@@ -13,7 +13,7 @@ import com.mifos.mobilewallet.model.domain.Transaction
 import com.mifos.mobilewallet.model.domain.TransactionType
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.common.Constants
-import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance
+import org.mifos.mobilewallet.mifospay.common.Utils.getFormattedAccountBalance
 import javax.inject.Inject
 
 /**

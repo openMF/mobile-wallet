@@ -3,8 +3,8 @@ package org.mifos.mobilewallet.mifospay.feature.auth.social_signup
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,7 +21,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -30,6 +30,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,20 +40,30 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.credentials.ClearCredentialStateRequest
+import androidx.credentials.CredentialManager
+import androidx.credentials.CustomCredential
+import androidx.credentials.GetCredentialRequest
+import androidx.credentials.GetCredentialResponse
+import androidx.credentials.exceptions.GetCredentialException
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
+import com.google.android.libraries.identity.googleid.GetGoogleIdOption
+import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
+import kotlinx.coroutines.launch
 import org.mifos.mobilewallet.core.util.Constants.MIFOS_CONSUMER_SAVINGS_PRODUCT_ID
 import org.mifos.mobilewallet.core.util.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
 import org.mifos.mobilewallet.mifospay.common.Constants
-import org.mifos.mobilewallet.mifospay.common.DebugUtil
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosBottomSheet
 import org.mifos.mobilewallet.mifospay.feature.auth.R
 import org.mifos.mobilewallet.mifospay.feature.auth.mobile_verify.MobileVerificationActivity
 
-const val REQUEST_CODE_SIGN_IN = 1
+const val TAG = "Social Login"
 
+// Followed this https://medium.com/@nirmale.ashwin9696/a-comprehensive-guide-to-google-sign-in-integration-with-credential-manager-in-android-apps-05286f8f5848
+// Keeping until we fix sign up
 @Composable
 fun SocialSignupMethodContentScreen(
     onDismissSignUp: () -> Unit
@@ -68,46 +80,79 @@ fun SocialSignupMethodScreen(
     var mifosSavingProductId by remember { mutableIntStateOf(0) }
     var showProgress by remember { mutableStateOf(false) }
 
-    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-        .requestIdToken(context.getString(R.string.feature_auth_default_web_client_id))
-        .requestEmail()
+    val credentialManager = CredentialManager.create(context)
+    val coroutineScope = rememberCoroutineScope()
+    var showFilterByAuthorizedAccounts by rememberSaveable { mutableStateOf(false) }
+    var googleIdTokenCredential by remember { mutableStateOf<GoogleIdTokenCredential?>(null) }
+
+    val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
+        .setFilterByAuthorizedAccounts(false)
+        .setServerClientId("728434912738-ea88f1thgvhi9058o23dbtp3p0555m32.apps.googleusercontent.com")
         .build()
 
-    val googleSignInClient by remember { mutableStateOf(GoogleSignIn.getClient(context, gso)) }
-    var googleSignInAccount by remember { mutableStateOf<GoogleSignInAccount?>(null) }
+    val request: GetCredentialRequest = GetCredentialRequest.Builder()
+        .addCredentialOption(googleIdOption)
+        .build()
+
 
     fun signUpWithMifos() {
-        googleSignInAccount.signUpWithMifos(context, mifosSavingProductId) {
-            googleSignInClient.signOut().addOnCompleteListener(context as Activity) {
-                googleSignInAccount = null
+        googleIdTokenCredential.signUpWithMifos(context, mifosSavingProductId) {
+            coroutineScope.launch {
+                credentialManager.clearCredentialState(ClearCredentialStateRequest())
             }
             onDismissSignUp.invoke()
         }
     }
 
-    val launchGoogleSignup = rememberLauncherForActivityResult(
-        contract = GoogleApiContract(googleSignInClient)
-    ) { task ->
-        try {
-            // Google Sign In was successful, authenticate with Firebase
-            googleSignInAccount = task?.getResult(ApiException::class.java)
-            if (googleSignInAccount != null) {
-                signUpWithMifos()
-            } else {
-                Toast.makeText(context, Constants.GOOGLE_SIGN_IN_FAILED, Toast.LENGTH_SHORT).show()
+    fun handleSignIn(result: GetCredentialResponse) {
+        // Handle the successfully returned credential.
+        when (val credential = result.credential) {
+            is CustomCredential -> {
+                if (credential.type == GoogleIdTokenCredential.TYPE_GOOGLE_ID_TOKEN_CREDENTIAL) {
+                    try {
+                        googleIdTokenCredential =
+                            GoogleIdTokenCredential.createFrom(credential.data)
+                        googleIdTokenCredential?.let {
+                            signUpWithMifos()
+                        } ?: {
+                            Toast.makeText(context, Constants.GOOGLE_SIGN_IN_FAILED, Toast.LENGTH_SHORT).show()
+                        }
+                    } catch (e: GoogleIdTokenParsingException) {
+                        Log.e(TAG, "Received an invalid google id token response", e)
+                    }
+                } else {
+                    // Catch any unrecognized custom credential type here.
+                    Log.e(TAG, "Unexpected type of credential")
+                }
             }
 
-        } catch (e: Exception) {
-            // Google Sign In failed, update UI appropriately
-            e.message?.let { DebugUtil.log(Constants.GOOGLE_SIGN_IN_FAILED, it) }
-            Toast.makeText(context, Constants.GOOGLE_SIGN_IN_FAILED, Toast.LENGTH_SHORT).show()
+            else -> {
+                // Catch any unrecognized credential type here.
+                Log.e(TAG, "Unexpected type of credential")
+            }
         }
-        onDismissSignUp.invoke()
+    }
+
+
+    fun signUpCredentialManager() {
+        coroutineScope.launch {
+            try {
+                val result = credentialManager.getCredential(
+                    request = request,
+                    context = context,
+                )
+                handleSignIn(result)
+            } catch (e: GetCredentialException) {
+                showFilterByAuthorizedAccounts = false
+                Log.e(TAG, e.message.toString())
+                // handleFailure(e)
+            }
+        }
     }
 
     fun signUp(checkedGoogleAccount: Boolean) {
         if (checkedGoogleAccount) {
-            launchGoogleSignup.launch(REQUEST_CODE_SIGN_IN)
+            signUpCredentialManager()
         } else {
             signUpWithMifos()
         }
@@ -176,7 +221,7 @@ fun SignupMethodContentScreen(
                     .padding(top = 24.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(start = 24.dp, end = 8.dp)
                         .weight(.4f),
@@ -188,7 +233,7 @@ fun SignupMethodContentScreen(
                         .weight(.1f),
                     text = stringResource(id = R.string.feature_auth_or)
                 )
-                Divider(
+                HorizontalDivider(
                     modifier = Modifier
                         .padding(start = 8.dp, end = 24.dp)
                         .weight(.4f),
@@ -229,7 +274,7 @@ fun SignupMethodContentScreen(
                     style = MaterialTheme.typography.labelSmall
                 )
             }
-            Divider(thickness = 48.dp, color = Color.Transparent)
+            HorizontalDivider(thickness = 48.dp, color = Color.Transparent)
         }
         if (showProgress) {
             Box(
@@ -248,20 +293,20 @@ fun SignupMethodContentScreen(
     }
 }
 
-fun GoogleSignInAccount?.signUpWithMifos(
+fun GoogleIdTokenCredential?.signUpWithMifos(
     context: Context,
     mifosSavingsProductId: Int,
     signOutGoogleClient: () -> Unit
 ) {
-    val googleSignInAccount = this
+    val googleIdTokenCredential = this
     val intent = Intent(context, MobileVerificationActivity::class.java)
     intent.putExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, mifosSavingsProductId)
-    if (googleSignInAccount != null) {
-        intent.putExtra(Constants.GOOGLE_PHOTO_URI, googleSignInAccount.photoUrl)
-        intent.putExtra(Constants.GOOGLE_DISPLAY_NAME, googleSignInAccount.displayName)
-        intent.putExtra(Constants.GOOGLE_EMAIL, googleSignInAccount.email)
-        intent.putExtra(Constants.GOOGLE_FAMILY_NAME, googleSignInAccount.familyName)
-        intent.putExtra(Constants.GOOGLE_GIVEN_NAME, googleSignInAccount.givenName)
+    if (googleIdTokenCredential != null) {
+        intent.putExtra(Constants.GOOGLE_PHOTO_URI, googleIdTokenCredential.profilePictureUri)
+        intent.putExtra(Constants.GOOGLE_DISPLAY_NAME, googleIdTokenCredential.displayName)
+        intent.putExtra(Constants.GOOGLE_EMAIL, googleIdTokenCredential.data.getString("com.google.android.libraries.identity.googleid.BUNDLE_KEY_ID"))
+        intent.putExtra(Constants.GOOGLE_FAMILY_NAME, googleIdTokenCredential.familyName)
+        intent.putExtra(Constants.GOOGLE_GIVEN_NAME, googleIdTokenCredential.givenName)
     }
     context.startActivity(intent)
     signOutGoogleClient.invoke()

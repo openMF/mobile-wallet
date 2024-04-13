@@ -36,7 +36,7 @@ import org.mifos.mobilewallet.mifospay.common.Constants
 import org.mifos.mobilewallet.mifospay.feature.passcode.PassCodeActivity
 import org.mifos.mobilewallet.mifospay.utils.FileUtils
 import org.mifos.mobilewallet.mifospay.utils.Toaster
-import org.mifos.mobilewallet.mifospay.utils.Utils.getFormattedAccountBalance
+import org.mifos.mobilewallet.mifospay.common.Utils.getFormattedAccountBalance
 import java.io.File
 import javax.inject.Inject
 

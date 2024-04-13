@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.payments.presenter
+package org.mifos.mobilewallet.mifospay.payments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

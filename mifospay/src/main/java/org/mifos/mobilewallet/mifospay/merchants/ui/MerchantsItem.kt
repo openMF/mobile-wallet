@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mifos.mobilewallet.model.entity.accounts.savings.SavingsWithAssociations
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.designsystem.component.MifosItemCard
+import org.mifos.mobilewallet.mifospay.designsystem.component.MifosCard
 import org.mifos.mobilewallet.mifospay.designsystem.theme.mifosText
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleMedium16sp
 
@@ -27,7 +27,7 @@ fun MerchantsItem(
     savingsWithAssociations: SavingsWithAssociations,
     onMerchantClicked: () -> Unit
 ) {
-    MifosItemCard(
+    MifosCard(
         onClick = { onMerchantClicked.invoke() },
         colors = CardDefaults.cardColors(Color.White)
     ) {

@@ -15,6 +15,7 @@ apply(from = "${project.rootDir}/config/quality/quality.gradle")
 dependencies {
     api(projects.core.designsystem)
     api(projects.core.model)
+    api(projects.core.common)
 
     api(libs.androidx.metrics)
     api(projects.core.analytics)

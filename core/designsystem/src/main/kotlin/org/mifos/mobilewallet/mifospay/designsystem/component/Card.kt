@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MifosItemCard(
+fun MifosCard(
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(8.dp),
     elevation: Dp = 1.dp,

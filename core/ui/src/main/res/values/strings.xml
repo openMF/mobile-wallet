@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_ui_retry">Retry</string>
+    <string name="core_ui_error_occurred">Error Occurred!</string>
+    <string name="core_ui_please_check_your_connection_or_try_again">Please check your connection or try again</string>
+</resources>

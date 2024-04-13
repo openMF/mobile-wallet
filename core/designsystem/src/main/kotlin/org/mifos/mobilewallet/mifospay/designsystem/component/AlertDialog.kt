@@ -7,11 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.stringResource
 
-/**
- * @author pratyush
- * @since 12/02/2024
- */
-
 @Composable
 fun MifosDialogBox(
     showDialogState: MutableState<Boolean>,

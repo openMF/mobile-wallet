@@ -1,0 +1,38 @@
+package org.mifos.mobilewallet.core.domain.usecase.account
+
+import okhttp3.ResponseBody
+import org.mifos.mobilewallet.core.base.UseCase
+import org.mifos.mobilewallet.core.data.fineract.repository.FineractRepository
+import org.mifos.mobilewallet.core.util.Constants
+import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import javax.inject.Inject
+
+/**
+ * Created by ankur on 06/June/2018
+ */
+class DownloadTransactionReceipt @Inject constructor(private val mFineractRepository: FineractRepository) :
+    UseCase<DownloadTransactionReceipt.RequestValues, DownloadTransactionReceipt.ResponseValue>() {
+     override fun executeUseCase(requestValues: RequestValues) {
+         requestValues.transactionId?.let {
+             mFineractRepository.getTransactionReceipt(Constants.PDF, it)
+                 .observeOn(AndroidSchedulers.mainThread())
+                 .subscribeOn(Schedulers.io())
+                 .subscribe(object : Subscriber<ResponseBody>() {
+                     override fun onCompleted() {}
+                     override fun onError(e: Throwable) {
+                         useCaseCallback.onError(e.toString())
+                     }
+
+                     override fun onNext(t: ResponseBody) {
+                         val responseBody = t
+                         useCaseCallback.onSuccess(ResponseValue(responseBody))
+                     }
+                 })
+         }
+    }
+
+    data class RequestValues( val transactionId: String?) : UseCase.RequestValues
+    data class ResponseValue(val responseBody: ResponseBody) : UseCase.ResponseValue
+}

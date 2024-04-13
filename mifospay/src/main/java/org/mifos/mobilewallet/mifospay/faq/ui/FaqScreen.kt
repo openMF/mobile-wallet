@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.designsystem.component.FaqItemScreen
+import org.mifos.mobilewallet.mifospay.ui.FaqItemScreen
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosTopBar
 import org.mifos.mobilewallet.mifospay.faq.presenter.FAQViewModel
 
