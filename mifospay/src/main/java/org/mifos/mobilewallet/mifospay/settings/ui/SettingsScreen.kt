@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import org.mifos.mobilewallet.mifospay.R
-import org.mifos.mobilewallet.mifospay.designsystem.component.MifosItemCard
+import org.mifos.mobilewallet.mifospay.designsystem.component.MifosCard
 import org.mifos.mobilewallet.mifospay.designsystem.component.MifosTopBar
 import org.mifos.mobilewallet.mifospay.designsystem.theme.mifosText
 import org.mifos.mobilewallet.mifospay.designsystem.theme.styleSettingsButton
@@ -73,7 +73,7 @@ fun SettingsScreen(
                     bottom = 4.dp
                 )
             ) {
-                MifosItemCard(
+                MifosCard(
                     colors = CardDefaults.cardColors(Color.White)
                 ) {
                     Text(
@@ -94,7 +94,7 @@ fun SettingsScreen(
                         bottom = 4.dp
                     )
             ) {
-                MifosItemCard(
+                MifosCard(
                     onClick = { onChangePassword.invoke() },
                     colors = CardDefaults.cardColors(Color.White)
                 ) {
@@ -116,7 +116,7 @@ fun SettingsScreen(
                         bottom = 4.dp
                     )
             ) {
-                MifosItemCard(
+                MifosCard(
                     onClick = { onChangePasscode.invoke() },
                     colors = CardDefaults.cardColors(Color.White)
                 ) {
@@ -137,7 +137,7 @@ fun SettingsScreen(
             ) {}
 
             Row(modifier = Modifier.padding(8.dp)) {
-                MifosItemCard(
+                MifosCard(
                     onClick = {
                         dialogState = DialogState(
                             type = DialogType.DISABLE_ACCOUNT,
@@ -157,7 +157,7 @@ fun SettingsScreen(
             }
 
             Row(modifier = Modifier.padding(8.dp)) {
-                MifosItemCard(
+                MifosCard(
                     onClick = {
                         dialogState = DialogState(
                             type = DialogType.LOGOUT,

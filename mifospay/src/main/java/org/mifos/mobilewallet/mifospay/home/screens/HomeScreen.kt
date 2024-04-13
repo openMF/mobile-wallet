@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,10 +42,13 @@ import com.mifos.mobilewallet.model.domain.Transaction
 import com.mifos.mobilewallet.model.domain.TransactionType
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.common.Utils
+import org.mifos.mobilewallet.mifospay.designsystem.component.MfLoadingWheel
+import org.mifos.mobilewallet.mifospay.home.HomeUiState
 import org.mifos.mobilewallet.mifospay.home.HomeViewModel
 import org.mifos.mobilewallet.mifospay.theme.border
 import org.mifos.mobilewallet.mifospay.theme.lightGrey
 import org.mifos.mobilewallet.mifospay.theme.styleMedium16sp
+import org.mifos.mobilewallet.mifospay.ui.ErrorScreenContent
 import org.mifos.mobilewallet.mifospay.ui.TransactionItemScreen
 
 @Composable
@@ -57,14 +61,34 @@ fun HomeRoute(
         .homeUIState
         .collectAsStateWithLifecycle()
 
-    HomeScreen(
-        homeUIState.account,
-        homeUIState.transactions,
-        onRequest = {
-            onRequest.invoke(homeUIState.vpa ?: "")
-        },
-        onPay = onPay
-    )
+    when (homeUIState) {
+        is HomeUiState.Loading -> {
+            MfLoadingWheel(
+                contentDesc = stringResource(R.string.loading),
+                backgroundColor = Color.White
+            )
+        }
+
+        is HomeUiState.Success -> {
+            val successState = homeUIState as HomeUiState.Success
+            HomeScreen(
+                successState.account,
+                successState.transactions,
+                onRequest = {
+                    onRequest.invoke(successState.vpa ?: "")
+                },
+                onPay = onPay
+            )
+        }
+
+        is HomeUiState.Error -> {
+            ErrorScreenContent(
+                onClickRetry = {
+                    homeViewModel.fetchAccountDetails()
+                }
+            )
+        }
+    }
 }
 
 @Composable
