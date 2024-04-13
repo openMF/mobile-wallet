@@ -306,10 +306,13 @@
     <string name="date_format">dd-MM-yyyy</string>
     <string name="select_dob">Select Date of Birth</string>
     <string name="error_adding_KYC_Level_1_details">Error adding KYC Level 1 details.</string>
+    <string name="error_adding_KYC_Level_2_details">Error adding KYC Level 2 details.</string>
     <string name="successkyc1">KYC Level 1 details added.</string>
+    <string name="successkyc2">KYC Level 2 details added.</string>
     <string name="submitting">Submitting</string>
-
-    
+    <string name="file_name">File Name: </string>
+    <string name="approve_permission">Please approve storage permissions</string>
+    <string name="approve">Approve</string>
 
     <string name="add_cards">Please Add Cards</string>
     <string name="close">Close</string>
@@ -354,6 +357,7 @@
     <string name="permission_granted">Permission Granted</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="storage_permission_is_required_to_access_gallery">Storage permission is required to access gallery.</string>
+    <string name="storage_permission_is_required_to_access_documents">Storage permission is required to access documents.</string>
     <string name="self_amount_transfer_is_not_allowed">Self Account transfer is not allowed</string>
     <string name="insufficient_balance">Insufficient balance</string>
     <string name="error_fetching_balance">Error fetching balance</string>
