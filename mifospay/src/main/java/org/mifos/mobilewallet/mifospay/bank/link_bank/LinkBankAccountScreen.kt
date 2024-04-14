@@ -89,7 +89,7 @@ fun LinkBankAccountRoute(
             viewModel.updateSearchQuery(query)
         },
         onBankSelected = {
-            viewModel.setSelectedBank(it)
+            viewModel.updateSelectedBank(it)
             showSimBottomSheet = true
         },
         onBackClick = onBackClick
