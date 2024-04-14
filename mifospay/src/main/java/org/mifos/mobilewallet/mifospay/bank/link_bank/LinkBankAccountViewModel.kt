@@ -1,7 +1,6 @@
 package org.mifos.mobilewallet.mifospay.bank.link_bank
 
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
@@ -20,7 +19,6 @@ import org.mifos.mobilewallet.core.repository.local.MifosLocalAssetRepository
 import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.domain.model.Bank
 import org.mifos.mobilewallet.mifospay.domain.model.BankType
-import org.mifos.mobilewallet.mifospay.home.HomeUiState
 import java.util.Random
 import javax.inject.Inject
 
@@ -39,7 +37,7 @@ class LinkBankAccountViewModel @Inject constructor(
         _searchQuery.update { query }
     }
 
-    fun setSelectedBank(bank: Bank) {
+    fun updateSelectedBank(bank: Bank) {
         selectedBank = bank
     }
 
