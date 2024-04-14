@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import org.mifos.mobilewallet.mifospay.bank.ui.AccountsScreen
-import org.mifos.mobilewallet.mifospay.bank.ui.LinkBankAccountActivity
+import org.mifos.mobilewallet.mifospay.bank.link_bank.LinkBankAccountActivity
 import org.mifos.mobilewallet.mifospay.kyc.ui.KYCDescriptionScreen
 import org.mifos.mobilewallet.mifospay.merchants.ui.MerchantScreen
 import org.mifos.mobilewallet.mifospay.savedcards.ui.CardsScreen
@@ -30,7 +30,7 @@ fun FinanceRoute(
     val tabContents = listOf(
         TabContent(FinanceScreenContents.ACCOUNTS.name) {
             AccountsScreen(onAddAccount = {
-                val intent = Intent(context,LinkBankAccountActivity::class.java)
+                val intent = Intent(context, LinkBankAccountActivity::class.java)
                 context.startActivity(intent)
             })
         },

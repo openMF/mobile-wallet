@@ -13,32 +13,3 @@ val styleMedium16sp = TextStyle(
     fontWeight = FontWeight.Medium,
     color = black,
 )
-
-val styleNormal18sp = TextStyle(
-    fontSize = 18.sp,
-    fontFamily = FontFamily.SansSerif,
-    fontWeight = FontWeight.Normal,
-    color = black,
-)
-
-val styleMedium30sp = TextStyle(
-    fontSize = 30.sp,
-    fontFamily = FontFamily.SansSerif,
-    fontWeight = FontWeight.Medium,
-    color = black,
-)
-
-val stylePrimaryBlueMedium24sp = TextStyle(
-    fontSize = 24.sp,
-    fontFamily = FontFamily.SansSerif,
-    fontWeight = FontWeight.Medium,
-    color = primaryDarkBlue,
-)
-
-val stylePrimaryBlueSmall14sp = TextStyle(
-    fontSize = 14.sp,
-    fontWeight = FontWeight.Normal,
-    textAlign = TextAlign.Center,
-    color = primaryDarkBlue,
-)
-

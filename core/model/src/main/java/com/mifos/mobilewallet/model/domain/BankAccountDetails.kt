@@ -5,13 +5,13 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class BankAccountDetails(
-    var bankName: String?=null,
-    var accountholderName: String?=null,
-    var branch: String?=null,
-    var ifsc: String?=null,
-    var type: String?=null,
-    var isUpiEnabled: Boolean=false,
-    var upiPin: String?=null
-) : Parcelable  {
+    var bankName: String? = null,
+    var accountholderName: String? = null,
+    var branch: String? = null,
+    var ifsc: String? = null,
+    var type: String? = null,
+    var isUpiEnabled: Boolean = false,
+    var upiPin: String? = null
+) : Parcelable {
     constructor() : this("", "", "", "", "", false, "")
 }

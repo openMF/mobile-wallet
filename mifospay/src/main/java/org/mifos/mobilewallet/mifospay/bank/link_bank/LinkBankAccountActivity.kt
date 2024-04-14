@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.bank.ui
+package org.mifos.mobilewallet.mifospay.bank.link_bank
 
 import android.content.Intent
 import android.os.Bundle
@@ -17,19 +17,11 @@ class LinkBankAccountActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MifosTheme {
-                LinkBankAccountScreen(activity = this, onBackPress = {onBackPressed()})
+                LinkBankAccountRoute(
+                    onBackClick = { finish() }
+                )
             }
         }
-    }
-
-    fun addBankAccount(bankAccountDetails: BankAccountDetails?) {
-        val handler = Handler()
-        handler.postDelayed({
-            val intent = Intent()
-            intent.putExtra(Constants.NEW_BANK_ACCOUNT, bankAccountDetails)
-            setResult(RESULT_OK, intent)
-            finish()
-        }, 1500)
     }
 }
 

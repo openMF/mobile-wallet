@@ -20,6 +20,7 @@ import org.mifos.mobilewallet.mifospay.R
 import org.mifos.mobilewallet.mifospay.bank.BankContract
 import org.mifos.mobilewallet.mifospay.bank.BankContract.BankAccountsView
 import org.mifos.mobilewallet.mifospay.bank.adapters.BankAccountsAdapter
+import org.mifos.mobilewallet.mifospay.bank.link_bank.LinkBankAccountActivity
 import org.mifos.mobilewallet.mifospay.bank.presenter.BankAccountsPresenter
 import org.mifos.mobilewallet.mifospay.base.BaseFragment
 import org.mifos.mobilewallet.mifospay.common.Constants
