@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.mobilewallet.mifospay.core.analytics"
+    namespace = "org.mifospay.core.analytics"
 }
 
 dependencies {

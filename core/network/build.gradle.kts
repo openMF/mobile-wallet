@@ -7,7 +7,7 @@ plugins {
 apply(from = "${project.rootDir}/config/quality/quality.gradle")
 
 android {
-    namespace = "org.mifos.mobilewallet.mifospay.network"
+    namespace = "org.mifospay.core.network"
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
     }

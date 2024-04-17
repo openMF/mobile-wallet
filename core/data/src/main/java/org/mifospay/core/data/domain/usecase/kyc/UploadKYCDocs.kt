@@ -1,0 +1,44 @@
+package org.mifospay.core.data.domain.usecase.kyc
+
+import okhttp3.MultipartBody
+import org.mifospay.core.data.base.UseCase
+import org.mifospay.core.data.fineract.repository.FineractRepository
+import org.mifospay.core.network.GenericResponse
+import rx.Subscriber
+import rx.android.schedulers.AndroidSchedulers
+import rx.schedulers.Schedulers
+import javax.inject.Inject
+
+/**
+ * Created by ankur on 16/May/2018
+ */
+class UploadKYCDocs @Inject constructor(private val apiRepository: FineractRepository) :
+    UseCase<UploadKYCDocs.RequestValues, UploadKYCDocs.ResponseValue>() {
+
+    class RequestValues(
+        val entitytype: String, val clientId: Long, val docname: String,
+        val identityType: String, val file: MultipartBody.Part
+    ) : UseCase.RequestValues
+
+    class ResponseValue : UseCase.ResponseValue
+
+    override fun executeUseCase(requestValues: RequestValues) {
+        apiRepository.uploadKYCDocs(
+            requestValues.entitytype, requestValues.clientId,
+            requestValues.docname, requestValues.identityType, requestValues.file
+        )
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(object : Subscriber<GenericResponse>() {
+                override fun onCompleted() {}
+                override fun onError(e: Throwable) {
+                    useCaseCallback.onError(e.toString())
+                }
+
+                override fun onNext(t: GenericResponse) {
+                    useCaseCallback.onSuccess(ResponseValue())
+                }
+            })
+
+    }
+}

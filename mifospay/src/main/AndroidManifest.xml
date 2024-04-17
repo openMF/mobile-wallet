@@ -71,7 +71,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="org.mifos.mobilewallet.mifospay.provider"
+            android:authorities="org.mifospay.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

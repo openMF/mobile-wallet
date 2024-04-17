@@ -1,9 +1,9 @@
-import org.mifos.mobilewallet.mifospay.MifosBuildType
+import org.mifospay.MifosBuildType
 
 plugins {
     alias(libs.plugins.mifospay.android.application)
     alias(libs.plugins.mifospay.android.application.compose)
-   // alias(libs.plugins.mifospay.android.application.flavors)
+    alias(libs.plugins.mifospay.android.application.flavors)
     alias(libs.plugins.mifospay.android.hilt)
     alias(libs.plugins.mifospay.android.application.firebase)
     id("com.google.android.gms.oss-licenses-plugin")
@@ -13,9 +13,9 @@ plugins {
 apply(from = "../config/quality/quality.gradle")
 
 android {
-    namespace = "org.mifos.mobilewallet.mifospay"
+    namespace = "org.mifospay"
     defaultConfig {
-        applicationId = "org.mifos.mobilewallet.mifospay"
+        applicationId = "org.mifospay"
         versionCode = 1
         versionName = "1.0"
         vectorDrawables.useSupportLibrary = true
@@ -23,7 +23,7 @@ android {
     }
     buildTypes {
         debug {
-           // applicationIdSuffix = MifosBuildType.DEBUG.applicationIdSuffix
+          // applicationIdSuffix = MifosBuildType.DEBUG.applicationIdSuffix
         }
         release {
             isMinifyEnabled = true

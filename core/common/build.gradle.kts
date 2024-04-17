@@ -6,7 +6,7 @@ plugins {
 apply(from = "${project.rootDir}/config/quality/quality.gradle")
 
 android {
-    namespace = "org.mifos.mobilewallet.mifospay.common"
+    namespace = "org.mifospay.common"
 }
 
 dependencies {

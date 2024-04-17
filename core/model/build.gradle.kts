@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.mobilewallet.core.model"
+    namespace = "org.mifospay.core.model"
 }
 
 apply(from = "${project.rootDir}/config/quality/quality.gradle")

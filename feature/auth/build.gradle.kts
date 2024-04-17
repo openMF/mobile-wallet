@@ -4,7 +4,10 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.mobilewallet.mifospay.feature.auth"
+    namespace = "org.mifospay.feature.auth"
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 apply(from = "${project.rootDir}/config/quality/quality.gradle")
