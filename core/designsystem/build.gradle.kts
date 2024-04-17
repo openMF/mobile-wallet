@@ -9,7 +9,7 @@ android {
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
-    namespace = "org.mifos.mobilewallet.mifospay.designsystem"
+    namespace = "org.mifospay.core.designsystem"
 }
 
 dependencies {

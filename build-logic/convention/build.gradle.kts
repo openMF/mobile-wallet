@@ -4,7 +4,7 @@ plugins {
     `kotlin-dsl`
 }
 
-group = "org.mifos.mobilewallet.mifospay.buildlogic"
+group = "org.mifospay.buildlogic"
 
 // Configure the build-logic plugins to target JDK 17
 // This matches the JDK used to build the project, and is not related to what is running on device.

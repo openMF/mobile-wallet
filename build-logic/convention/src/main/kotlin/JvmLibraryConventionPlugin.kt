@@ -1,6 +1,6 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.mifos.mobilewallet.mifospay.configureKotlinJvm
+import org.mifospay.configureKotlinJvm
 
 class JvmLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {

@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifos.mobilewallet.mifospay.ui"
+    namespace = "org.mifospay.core.ui"
     defaultConfig {
         consumerProguardFiles("consumer-rules.pro")
     }

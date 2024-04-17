@@ -5,10 +5,11 @@ import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.kotlin
-import org.mifos.mobilewallet.mifospay.configureKotlinAndroid
-import org.mifos.mobilewallet.mifospay.configurePrintApksTask
-import org.mifos.mobilewallet.mifospay.disableUnnecessaryAndroidTests
-import org.mifos.mobilewallet.mifospay.libs
+import org.mifospay.configureFlavors
+import org.mifospay.configureKotlinAndroid
+import org.mifospay.configurePrintApksTask
+import org.mifospay.disableUnnecessaryAndroidTests
+import org.mifospay.libs
 
 class AndroidLibraryConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
@@ -23,6 +24,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 configureKotlinAndroid(this)
                 defaultConfig.targetSdk = 34
                 testOptions.animationsDisabled = true
+                configureFlavors(this)
                 // The resource prefix is derived from the module name,
                 // so resources inside ":core:module1" must be prefixed with "core_module1_"
                 resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"

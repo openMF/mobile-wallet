@@ -5,9 +5,9 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.getByType
-import org.mifos.mobilewallet.mifospay.configureBadgingTasks
-import org.mifos.mobilewallet.mifospay.configureKotlinAndroid
-import org.mifos.mobilewallet.mifospay.configurePrintApksTask
+import org.mifospay.configureBadgingTasks
+import org.mifospay.configureKotlinAndroid
+import org.mifospay.configurePrintApksTask
 
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
