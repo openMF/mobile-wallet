@@ -63,7 +63,7 @@
     <string name="receive">Receive</string>
     <string name="virtual_payment_address_vpa">Virtual Payment Address (VPA)</string>
     <string name="show_code">Show code</string>
-    <string name="unique_receipt_link">Unique Receipt Link</string>
+    <string name="unique_receipt_link">Unique Receipt Link : </string>
     <string name="invoice_details">Invoice details</string>
     <string name="payment_options_will_be_fetched_from_upi">Payment Options (will be fetched from
         UPI)
@@ -149,8 +149,8 @@
     <string name="change_mobile_number">Change Mobile Number</string>
     <string name="items_bought">items bought</string>
     <string name="status">status</string>
-    <string name="transaction_id">Transaction ID</string>
-    <string name="transaction_date">Transaction Date</string>
+    <string name="transaction_id">Transaction ID : </string>
+    <string name="transaction_date">Transaction Date : </string>
     <string name="to">To:</string>
     <string name="from">From:</string>
     <string name="date">date</string>
@@ -223,12 +223,23 @@
     <string name="invalid_link">Invalid link used to open the App.</string>
     <string name="paid_to">Paid to</string>
     <string name="credited_by">Credited by</string>
+    <string name="other">Other</string>
     <string name="downloading_receipt">Downloading Receipt</string>
     <string name="enter_amount">Please enter the Amount</string>
     <string name="reset">Reset</string>
     <string name="vpa_null_no_transactions">VPA is Null. Can\'t make any transactions.</string>
     <string name="vpa_null_cant_copy">VPA is Null. Can\'t copy.</string>
     <string name="vpa_copy_success">VPA copied to Clipboard Successfully</string>
+    <string name="receipt">Receipt</string>
+    <string name="view_Receipt">View Receipt</string>
+    <string name="navigateBack">Go back to previous screen</string>
+    <string name="error_downloading_receipt">Error downloading receipt</string>
+    <string name="unique_receipt_link_copied_to_clipboard">Unique Receipt Link copied to clipboard</string>
+    <string name="sharing_link_failed">Sharing link failed</string>
+    <string name="opening_pdf_failed">Opening pdf failed</string>
+    <string name="name">Name : </string>
+    <string name="account_no">Account Number : </string>
+    <string name="copy_link">Copy Unique Receipt Link</string>
 
     <string name="fetching">Fetching…</string>
     <string name="empty_no_transaction_history_title">Your history is empty</string>
