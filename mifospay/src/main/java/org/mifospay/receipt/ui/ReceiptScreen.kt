@@ -27,21 +27,15 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -77,6 +71,7 @@ import kotlinx.coroutines.launch
 import org.mifospay.R
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
+import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.feature.passcode.PassCodeActivity
 import org.mifospay.receipt.presenter.PassFileState
 import org.mifospay.receipt.presenter.ReceiptUiState
@@ -93,7 +88,7 @@ fun ReceiptScreen(
     val receiptUiState by viewModel.receiptUiState.collectAsState()
     val fileState by viewModel.fileState.collectAsState()
 
-    var receiptLink = " "
+    var receiptLink = ""
     val context = LocalContext.current
     val activity = context as? Activity
     val intent = activity?.intent
@@ -171,14 +166,10 @@ fun ReceiptScreen(
                     file
                 )
             }
-
-            else -> {}
         }
     }
-
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Receipt(
     transaction: Transaction,
@@ -299,64 +290,49 @@ fun Receipt(
         }
     })
 
-    Scaffold(
+    MifosScaffold(
+        topBarTitle = R.string.receipt,
+        backPress = {},
+        onFloatingActionButtonClick = {
+            if (file.exists()) {
+                openFile(context, file)
+            } else {
+                if (storagePermissionGranted) {
+                    scope.launch {
+                        snackBarHostState.showSnackbar(
+                            message = R.string.downloading_receipt.toString(),
+                            actionLabel = null
+                        )
+                    }
+                    downloadData(transaction.transactionId.toString())
+                        if (!writeReceiptToPDFisSuccess) {
+                                scope.launch {
+                                    snackBarHostState.showSnackbar(
+                                        message = R.string.error_downloading_receipt.toString(),
+                                        actionLabel = null
+                                    )
+                              }
+                        }
+                } else {
+                    Toast.makeText(
+                        context,
+                        R.string.approve_permission,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        },
+        floatingActionButtonContentColor = Color.Black,
+        floatingActionButtonContent = {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_download),
+                contentDescription = stringResource(R.string.downloading_receipt)
+            )
+        },
         snackbarHost = {
             SnackbarHost(hostState = snackBarHostState)
         },
-
-        topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.receipt)) },
-                navigationIcon = {
-                    IconButton(onClick = {}) {
-                        Icon(
-                            Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = stringResource(R.string.navigateBack)
-                        )
-                    }
-                }
-            )
-        },
-
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    if (file.exists()) {
-                        openFile(context, file)
-                    } else {
-                        if (storagePermissionGranted) {
-                            Toast.makeText(
-                                context,
-                                R.string.downloading_receipt,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            downloadData(transaction.transactionId.toString())
-                            if (!writeReceiptToPDFisSuccess) {
-                                Toast.makeText(
-                                    context,
-                                    R.string.error_downloading_receipt,
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        } else {
-                            Toast.makeText(
-                                context,
-                                R.string.approve_permission,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
-                },
-                contentColor = Color.Black,
-                content = {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_download),
-                        contentDescription = stringResource(R.string.downloading_receipt)
-                    )
-                }
-            )
-        }
-    ) { contentPadding ->
+        scaffoldContent = { contentPadding ->
         Box(
             modifier = Modifier
                 .padding(contentPadding)
@@ -375,13 +351,14 @@ fun Receipt(
                 ShowInfoTexts(transaction, receiptLink)
             }
         }
-    }
+        }
+    )
 
     if (writeReceiptToPDFisSuccess) {
         LaunchedEffect(Unit) {
             scope.launch {
                 val userAction = snackBarHostState.showSnackbar(
-                    message = R.string.approve_permission.toString(),
+                    message = R.string.download_complete.toString(),
                     actionLabel = R.string.view_Receipt.toString(),
                     duration = SnackbarDuration.Indefinite,
                     withDismissAction = true

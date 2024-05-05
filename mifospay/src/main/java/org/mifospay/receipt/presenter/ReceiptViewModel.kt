@@ -96,7 +96,9 @@ class ReceiptViewModel @Inject constructor(
         mUseCaseHandler.execute(fetchAccountTransferUseCase,
             FetchAccountTransfer.RequestValues(transferId),
             object : UseCase.UseCaseCallback<FetchAccountTransfer.ResponseValue?> {
-                override fun onSuccess(response: FetchAccountTransfer.ResponseValue?) {}
+                override fun onSuccess(response: FetchAccountTransfer.ResponseValue?) {
+                    //TODO: Transfer detail can be fetched already by transaction in UI
+                }
 
                 override fun onError(message: String) {
                     _receiptState.value = ReceiptUiState.Error(message)
@@ -106,7 +108,7 @@ class ReceiptViewModel @Inject constructor(
 }
 
 data class PassFileState(
-    val file: File = File(" "),
+    val file: File = File(""),
     val writeReceiptToPDFisSuccess: Boolean = false
 )
 

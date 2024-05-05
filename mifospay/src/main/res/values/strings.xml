@@ -324,6 +324,7 @@
     <string name="file_name">File Name: </string>
     <string name="approve_permission">Please approve storage permissions</string>
     <string name="approve">Approve</string>
+    <string name="download_complete">Download completed</string>
 
     <string name="add_cards">Please Add Cards</string>
     <string name="close">Close</string>
