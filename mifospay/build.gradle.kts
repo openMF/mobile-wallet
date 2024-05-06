@@ -152,6 +152,9 @@ dependencies {
     implementation("de.hdodenhof:circleimageview:3.1.0")
     implementation("com.github.yalantis:ucrop:2.2.2")
 
+    // Swipe Refresh
+    implementation (libs.accompanist.swiperefresh)
+
     kspTest(libs.hilt.compiler)
 
     testImplementation(libs.junit)

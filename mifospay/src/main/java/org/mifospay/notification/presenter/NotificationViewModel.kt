@@ -1,10 +1,14 @@
 package org.mifospay.notification.presenter
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mifospay.core.model.domain.NotificationPayload
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.notification.FetchNotifications
@@ -21,6 +25,21 @@ class NotificationViewModel @Inject constructor(
     private val _notificationUiState: MutableStateFlow<NotificationUiState> =
         MutableStateFlow(NotificationUiState.Loading)
     val notificationUiState: StateFlow<NotificationUiState> = _notificationUiState
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> get() = _isRefreshing.asStateFlow()
+
+    fun refresh() {
+        viewModelScope.launch {
+            _isRefreshing.emit(true)
+            delay(1000)
+            _isRefreshing.emit(false)
+        }
+    }
+
+    init {
+        fetchNotifications()
+    }
 
     fun fetchNotifications() {
         mUseCaseHandler.execute(fetchNotificationsUseCase,
