@@ -44,7 +44,6 @@ fun NotificationScreen(viewmodel: NotificationViewModel = hiltViewModel()) {
         isRefreshing = isRefreshing,
         onRefresh = {
             viewmodel.refresh()
-            viewmodel.fetchNotifications()
         }
     )
 }
@@ -107,19 +106,6 @@ fun NotificationScreen(
                         }
                     }
                 }
-
-                NotificationUiState.Empty -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.no_notification_found),
-                            style = styleMedium16sp
-                        )
-                    }
-                }
             }
         }
     }
@@ -159,12 +145,6 @@ fun NotificationList(title: String, body: String, timestamp: String) {
             )
         }
     }
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-private fun NotificationEmptyScreenPreview() {
-    NotificationScreen(uiState = NotificationUiState.Empty, isRefreshing = true, onRefresh = {})
 }
 
 @Preview(showSystemUi = true, showBackground = true)

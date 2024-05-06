@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mifospay.core.model.domain.NotificationPayload
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,13 +31,9 @@ class NotificationViewModel @Inject constructor(
     fun refresh() {
         viewModelScope.launch {
             _isRefreshing.emit(true)
-            delay(1000)
+            fetchNotifications()
             _isRefreshing.emit(false)
         }
-    }
-
-    init {
-        fetchNotifications()
     }
 
     fun fetchNotifications() {
@@ -61,7 +56,6 @@ class NotificationViewModel @Inject constructor(
 
 sealed interface NotificationUiState {
     data object Loading : NotificationUiState
-    data object Empty : NotificationUiState
     data class Success(val notificationList: List<NotificationPayload>) : NotificationUiState
     data class Error(val message: String) : NotificationUiState
 }
