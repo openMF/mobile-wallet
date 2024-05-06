@@ -17,7 +17,7 @@ class FetchNotifications @Inject constructor(private val mFineractRepository: Fi
 
     class RequestValues(val clientId: Long) : UseCase.RequestValues
     class ResponseValue(
-        val notificationPayloadList: List<NotificationPayload?>
+        val notificationPayloadList: List<NotificationPayload>?
     ) : UseCase.ResponseValue
 
     override fun executeUseCase(requestValues: RequestValues) {
