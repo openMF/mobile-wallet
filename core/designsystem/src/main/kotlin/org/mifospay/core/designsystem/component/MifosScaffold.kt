@@ -1,38 +1,39 @@
 package org.mifospay.core.designsystem.component
 
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
-@OptIn(ExperimentalMaterial3Api::class)
+data class FloatingActionButtonContent(
+    val onClick: (() -> Unit)? = null,
+    val contentColor: Color? = null,
+    val content: (@Composable () -> Unit)? = null
+)
+
 @Composable
 fun MifosScaffold(
     topBarTitle: Int,
     backPress: () -> Unit,
-    onFloatingActionButtonClick: () -> Unit,
-    floatingActionButtonContentColor: Color,
-    floatingActionButtonContent:@Composable () -> Unit,
+    floatingActionButtonContent: FloatingActionButtonContent? = null,
     snackbarHost: @Composable () -> Unit = {},
     scaffoldContent: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
         topBar = {
-            TopAppBar(
-                { MifosTopBar(
-                    topBarTitle,backPress
-                ) }
+            MifosTopBar(
+                topBarTitle, backPress
             )
-                 },
+        },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onFloatingActionButtonClick,
-                contentColor = floatingActionButtonContentColor ,
-                content = floatingActionButtonContent
-            )
+            floatingActionButtonContent?.let { content ->
+                FloatingActionButton(
+                    onClick = content.onClick ?: {},
+                    contentColor = content.contentColor ?: Color.Cyan,
+                    content = content.content ?: {}
+                )
+            }
         },
         snackbarHost = snackbarHost,
         content = scaffoldContent

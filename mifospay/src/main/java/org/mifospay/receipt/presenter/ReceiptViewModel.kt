@@ -4,11 +4,11 @@ package org.mifospay.receipt.presenter
 import android.os.Environment
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.Transaction
+import com.mifospay.core.model.entity.accounts.savings.TransferDetail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import okhttp3.ResponseBody
 import org.mifospay.common.Constants
 import org.mifospay.core.data.base.UseCase
@@ -60,11 +60,7 @@ class ReceiptViewModel @Inject constructor(
         }
         val documentFile = File(mifosDirectory.path, filename)
         if (FileUtils.writeInputStreamDataToFile(responseBody!!.byteStream(), documentFile)) {
-            _fileState.value = PassFileState(documentFile, true)
-        } else {
-            _fileState.update { currentState ->
-                currentState.copy(writeReceiptToPDFisSuccess = false)
-            }
+            _fileState.value = PassFileState(documentFile)
         }
     }
 
@@ -76,8 +72,7 @@ class ReceiptViewModel @Inject constructor(
                 FetchAccountTransaction.RequestValues(accountId, transactionId.toLong()),
                 object : UseCase.UseCaseCallback<FetchAccountTransaction.ResponseValue> {
                     override fun onSuccess(response: FetchAccountTransaction.ResponseValue) {
-                        _receiptState.value = ReceiptUiState.Success(response.transaction)
-                        fetchTransfer(response.transaction.transferId)
+                        fetchTransfer(response.transaction, response.transaction.transferId)
                     }
 
                     override fun onError(message: String) {
@@ -92,12 +87,15 @@ class ReceiptViewModel @Inject constructor(
         }
     }
 
-    fun fetchTransfer(transferId: Long) {
+    fun fetchTransfer(transaction: Transaction, transferId: Long) {
         mUseCaseHandler.execute(fetchAccountTransferUseCase,
             FetchAccountTransfer.RequestValues(transferId),
             object : UseCase.UseCaseCallback<FetchAccountTransfer.ResponseValue?> {
                 override fun onSuccess(response: FetchAccountTransfer.ResponseValue?) {
-                    //TODO: Transfer detail can be fetched already by transaction in UI
+                    if (response != null) {
+                        _receiptState.value =
+                            ReceiptUiState.Success(transaction, response.transferDetail)
+                    }
                 }
 
                 override fun onError(message: String) {
@@ -108,13 +106,13 @@ class ReceiptViewModel @Inject constructor(
 }
 
 data class PassFileState(
-    val file: File = File(""),
-    val writeReceiptToPDFisSuccess: Boolean = false
+    val file: File = File("")
 )
 
 sealed interface ReceiptUiState {
     data class Success(
-        val transaction: Transaction
+        val transaction: Transaction,
+        val transferDetail: TransferDetail
     ) : ReceiptUiState
 
     data object OpenPassCodeActivity : ReceiptUiState
