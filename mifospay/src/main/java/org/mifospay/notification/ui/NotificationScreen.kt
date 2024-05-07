@@ -1,6 +1,7 @@
 package org.mifospay.notification.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,8 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
@@ -23,8 +28,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.mifospay.core.model.domain.NotificationPayload
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
@@ -48,18 +51,15 @@ fun NotificationScreen(viewmodel: NotificationViewModel = hiltViewModel()) {
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
 fun NotificationScreen(
     uiState: NotificationUiState,
     isRefreshing: Boolean,
     onRefresh: () -> Unit
 ) {
-    val swipeRefreshState = rememberSwipeRefreshState(isRefreshing = isRefreshing)
-    SwipeRefresh(
-        state = swipeRefreshState,
-        onRefresh = onRefresh
-    ) {
+    val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
+    Box(Modifier.pullRefresh(pullRefreshState)) {
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
@@ -108,6 +108,11 @@ fun NotificationScreen(
                 }
             }
         }
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }
 
@@ -150,7 +155,10 @@ fun NotificationList(title: String, body: String, timestamp: String) {
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun NotificationLoadingPreview() {
-    NotificationScreen(uiState = NotificationUiState.Loading, isRefreshing = true, onRefresh = {})
+    NotificationScreen(
+        uiState = NotificationUiState.Loading,
+        isRefreshing = true,
+        onRefresh = {})
 }
 
 @Preview(showSystemUi = true, showBackground = true)
