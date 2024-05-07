@@ -323,6 +323,8 @@
     <string name="submitting">Submitting</string>
     <string name="file_name">File Name: </string>
     <string name="approve_permission">Please approve storage permissions</string>
+    <string name="approve_permission_storage">Please approve storage permissions</string>
+    <string name="approve_permission_storage_receiptDescription">You need to approve this permission in order to download and view your Receipt.</string>
     <string name="approve">Approve</string>
     <string name="download_complete">Download completed</string>
 
