@@ -2,6 +2,8 @@ package org.mifospay.core.designsystem.icon
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Wallet
@@ -30,4 +32,6 @@ object MifosIcons {
     val Search = Icons.Rounded.Search
     val Add = Icons.Rounded.Add
     val Back = Icons.AutoMirrored.Outlined.ArrowBack
+    val Copy = Icons.Filled.ContentCopy
+    val Share = Icons.Filled.Share
 }

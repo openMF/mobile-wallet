@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 data class FloatingActionButtonContent(
-    val onClick: (() -> Unit)? = null,
-    val contentColor: Color? = null,
-    val content: (@Composable () -> Unit)? = null
+    val onClick: (() -> Unit),
+    val contentColor: Color,
+    val content: (@Composable () -> Unit)
 )
 
 @Composable
@@ -29,9 +29,9 @@ fun MifosScaffold(
         floatingActionButton = {
             floatingActionButtonContent?.let { content ->
                 FloatingActionButton(
-                    onClick = content.onClick ?: {},
-                    contentColor = content.contentColor ?: Color.Cyan,
-                    content = content.content ?: {}
+                    onClick = content.onClick,
+                    contentColor = content.contentColor,
+                    content = content.content
                 )
             }
         },

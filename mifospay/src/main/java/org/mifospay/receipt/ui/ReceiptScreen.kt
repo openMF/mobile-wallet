@@ -1,13 +1,11 @@
 package org.mifospay.receipt.ui
 
 import android.Manifest
-import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -22,9 +20,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ContentCopy
-import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
@@ -38,13 +33,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,12 +55,13 @@ import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.FloatingActionButtonContent
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.designsystem.component.PermissionBox
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.DevicePreviews
 import org.mifospay.receipt.presenter.PassFileState
 import org.mifospay.receipt.presenter.ReceiptUiState
 import org.mifospay.receipt.presenter.ReceiptViewModel
 import org.mifospay.theme.MifosTheme
-import org.mifospay.utils.PermissionBox
 import java.io.File
 
 /**
@@ -72,56 +69,46 @@ import java.io.File
  *  PR link : https://github.com/openMF/mobile-wallet/pull/1618
  */
 @Composable
-fun DownloadReceipt(
+fun ReceiptScreenRoute(
     viewModel: ReceiptViewModel = hiltViewModel(),
     onShowSnackbar: suspend (String, String?) -> Boolean,
-    openPassCodeActivity: (Uri?) -> Unit
+    openPassCodeActivity: () -> Unit,
+    onBackClick: () -> Unit
 ) {
-
+    /**
+     * This function serves as the main entry point for the Receipt screen UI.
+     * It collects the receiptUiState and fileState from the ViewModel and
+     * calls the ReceiptScreen function, passing the collected states and
+     * other necessary parameters.
+     */
     val receiptUiState by viewModel.receiptUiState.collectAsState()
     val fileState by viewModel.fileState.collectAsState()
 
-    var receiptLink = ""
-    val context = LocalContext.current
-    val activity = context as? Activity
-    val intent = activity?.intent
-    val data = intent?.data
-
-    data?.let {
-        val scheme = it.scheme // "https"
-        val host = it.host // "receipt.mifospay.com"
-        val params = it.pathSegments
-        val transactionId = params.getOrNull(0)
-        try {
-            receiptLink = data.toString()
-        } catch (e: IndexOutOfBoundsException) {
-            Toast.makeText(context, stringResource(R.string.invalid_link), Toast.LENGTH_SHORT)
-                .show()
-        }
-        viewModel.fetchTransaction(transactionId)
-    }
-
-    DownloadReceipt(
+    ReceiptScreen(
         uiState = receiptUiState,
         viewFileState = fileState,
-        downloadData = {
+        downloadReceipt = {
             viewModel.downloadReceipt(
                 it
             )
         },
-        receiptLink,
-        openPassCodeActivity = openPassCodeActivity
+        openPassCodeActivity = openPassCodeActivity,
+        onBackClick = onBackClick
     )
 }
 
 @Composable
-fun DownloadReceipt(
+fun ReceiptScreen(
     uiState: ReceiptUiState,
     viewFileState: PassFileState,
-    downloadData: (String) -> Unit,
-    receiptLink: String,
-    openPassCodeActivity: (Uri?) -> Unit
+    downloadReceipt: (String) -> Unit,
+    openPassCodeActivity: () -> Unit,
+    onBackClick: () -> Unit
 ) {
+    /**
+     * This function renders the UI based on the ReceiptUiState and PassFileState.
+     * The UI is rendered based on the ReceiptUiState using a when expression.
+     */
     val context = LocalContext.current
 
     Box(
@@ -135,7 +122,7 @@ fun DownloadReceipt(
             }
 
             ReceiptUiState.OpenPassCodeActivity -> {
-                openPassCodeActivity(Uri.parse(receiptLink))
+                openPassCodeActivity.invoke()
             }
 
             is ReceiptUiState.Error -> {
@@ -146,36 +133,44 @@ fun DownloadReceipt(
             is ReceiptUiState.Success -> {
                 val transaction = uiState.transaction
                 val transferDetail = uiState.transferDetail
+                val receiptLink = uiState.receiptLink
                 val file = viewFileState.file
-                Receipt(
+                ReceiptScreenContent(
                     transaction = transaction,
                     transferDetail = transferDetail,
                     receiptLink,
-                    downloadData = downloadData,
-                    file
+                    downloadData = downloadReceipt,
+                    file,
+                    onBackClick = onBackClick
                 )
             }
         }
     }
 }
 
+/**
+ * The following function renders the actual content of the Receipt screen.
+ * It includes components like MifosScaffold, SnackbarHost, PermissionBox,
+ * and various UI elements like Text, Image, and Icon.
+ */
 @Composable
-fun Receipt(
+fun ReceiptScreenContent(
     transaction: Transaction,
     transferDetail: TransferDetail,
     receiptLink: String,
     downloadData: (String) -> Unit,
-    file: File
+    file: File,
+    onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val snackBarHostState = remember { SnackbarHostState() }
-    var needToHandlePermissions = false
+    var needToHandlePermissions = rememberSaveable { false }
 
     val floatingActionButtonContent = FloatingActionButtonContent(
         onClick = {
             if (file.exists()) {
-                openFile(context, file)
+                openReceiptFile(context, file)
             } else {
                 needToHandlePermissions = true
             }
@@ -213,7 +208,7 @@ fun Receipt(
                         )
                         when (userAction) {
                             SnackbarResult.ActionPerformed -> {
-                                openFile(context, file)
+                                openReceiptFile(context, file)
                             }
 
                             SnackbarResult.Dismissed -> {}
@@ -226,7 +221,7 @@ fun Receipt(
 
     MifosScaffold(
         topBarTitle = R.string.receipt,
-        backPress = {/* back press handler */ },
+        backPress = { onBackClick.invoke() },
         floatingActionButtonContent = floatingActionButtonContent,
         snackbarHost = {
             SnackbarHost(hostState = snackBarHostState)
@@ -237,7 +232,10 @@ fun Receipt(
                     .padding(contentPadding)
                     .fillMaxSize()
             ) {
-                Column(modifier = Modifier) {
+                Column(
+                    modifier = Modifier
+                        .verticalScroll(rememberScrollState())
+                ) {
                     Image(
                         painter = painterResource(id = R.drawable.mifospay_round_logo),
                         contentDescription = stringResource(R.string.pan_id),
@@ -245,15 +243,20 @@ fun Receipt(
                             .size(120.dp)
                             .align(Alignment.CenterHorizontally)
                     )
-                    ShowHeadtexts(transaction, transferDetail)
+                    ReceiptHeaderBody(transaction, transferDetail)
                     Spacer(modifier = Modifier.size(height = 15.dp, width = 14.dp))
-                    ShowInfoTexts(transaction, transferDetail, receiptLink)
+                    ReceiptDetailsBody(transaction, transferDetail, receiptLink)
                 }
             }
         }
     )
 }
 
+/**
+ * This function copies the given receiptLink to the system clipboard
+ * and displays a snackbar message to indicate successful copying.
+ * Used in ReceiptLinkActions.
+ */
 fun copyToClipboard(
     context: Context,
     receiptLink: String
@@ -264,14 +267,27 @@ fun copyToClipboard(
         Constants.UNIQUE_RECEIPT_LINK, receiptLink.trim { it <= ' ' }
     )
     clipboardManager.setPrimaryClip(clip)
+    onShowSnackbar(R.string.unique_receipt_link_copied_to_clipboard, context)
+}
+
+/**
+ * This function displays a toast message with the provided string resource.
+ * We will use onShowSnackbar(global Snackbar) when its added in navigation graph
+ */
+fun onShowSnackbar(string: Int, context: Context) {
+    //onShowSnackbar(string,string)
     Toast.makeText(
         context,
-        R.string.unique_receipt_link_copied_to_clipboard,
+        string,
         Toast.LENGTH_SHORT
     ).show()
 }
 
-fun shareReceiptLink(
+/**
+ * This function shares the given shareMessage using an Intent and is called in ReceiptLinkActions.
+ * It displays a chooser to select the app for sharing.
+ */
+fun shareReceiptMessage(
     shareMessage: String,
     context: Context
 ) {
@@ -285,15 +301,15 @@ fun shareReceiptLink(
     try {
         context.startActivity(chooserIntent)
     } catch (e: ActivityNotFoundException) {
-        Toast.makeText(
-            context,
-            R.string.sharing_link_failed,
-            Toast.LENGTH_SHORT
-        ).show()
+        onShowSnackbar(R.string.sharing_link_failed, context)
     }
 }
 
-fun openFile(context: Context, file: File) {
+/**
+ * This function opens the given receipt file pdf using an Intent and is called in ReceiptScreen.
+ * It displays a chooser to select the app for opening the file.
+ */
+fun openReceiptFile(context: Context, file: File) {
     val data = FileProvider.getUriForFile(
         context, "org.mifospay.provider", file
     )
@@ -304,20 +320,21 @@ fun openFile(context: Context, file: File) {
     try {
         context.startActivity(intent)
     } catch (e: ActivityNotFoundException) {
-        Toast.makeText(
-            context,
-            R.string.opening_pdf_failed,
-            Toast.LENGTH_SHORT
-        ).show()
+        onShowSnackbar(R.string.opening_pdf_failed, context)
     }
 }
 
 @Composable
-fun ShowHeadtexts(
+fun ReceiptHeaderBody(
     transaction: Transaction,
     transferDetail: TransferDetail
 ) {
 
+    /**
+     * This function renders the header section of the Receipt screen,
+     * displaying the transaction amount, type, and the client names involved
+     * in the transaction.
+     */
     Column(Modifier.fillMaxWidth()) {
         val centerWithPaddingModifier = Modifier
             .padding(horizontal = 8.dp)
@@ -325,7 +342,10 @@ fun ShowHeadtexts(
 
         Text(
             text = transaction.amount.toString(),
-            fontSize = 34.sp,
+            style = TextStyle(
+                Color.Black,
+                MaterialTheme.typography.headlineLarge.fontSize
+            ),
             modifier = centerWithPaddingModifier.padding(top = 10.dp)
         )
 
@@ -358,87 +378,124 @@ fun ShowHeadtexts(
 }
 
 @Composable
-fun ShowInfoTexts(
+fun ReceiptDetailsBody(
     transaction: Transaction,
     transferDetail: TransferDetail,
     receiptLink: String,
 ) {
+
+    /**
+     * This function renders the transaction details and receipt link section,
+     * displaying information such as transaction ID, date, account details, and the
+     * receipt link.
+     */
     Column(
         modifier = Modifier
             .padding(horizontal = 30.dp)
             .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
     ) {
         Text(
             text = stringResource(R.string.transaction_id),
-            color = colorResource(R.color.gray_5),
-            fontSize = 16.sp
+            style = TextStyle(
+                Color.Gray,
+                MaterialTheme.typography.bodyLarge.fontSize
+            )
         )
         Text(
             text = transaction.transactionId.toString(),
-            fontSize = 16.sp
+            style = TextStyle(
+                Color.Black,
+                MaterialTheme.typography.bodyLarge.fontSize
+            )
         )
 
         Spacer(modifier = Modifier.size(height = 30.dp, width = 14.dp))
 
         Text(
             text = stringResource(R.string.transaction_date),
-            color = colorResource(R.color.gray_5),
-            fontSize = 16.sp
+            style = TextStyle(
+                Color.Gray,
+                MaterialTheme.typography.bodyLarge.fontSize
+            )
         )
         Text(
             text = transaction.date.toString(),
-            fontSize = 16.sp
+            style = TextStyle(
+                Color.Black,
+                MaterialTheme.typography.bodyLarge.fontSize
+            )
         )
 
         Spacer(modifier = Modifier.size(height = 30.dp, width = 14.dp))
 
         Text(
             text = stringResource(R.string.to),
-            color = colorResource(R.color.gray_5),
-            fontSize = 16.sp
+            style = TextStyle(
+                Color.Gray,
+                MaterialTheme.typography.bodyLarge.fontSize
+            )
         )
         Text(
             text = stringResource(R.string.name) + transferDetail.toClient.displayName,
-            fontSize = 16.sp
+            style = TextStyle(
+                Color.Black,
+                MaterialTheme.typography.bodyLarge.fontSize
+            )
         )
         Text(
             text = stringResource(R.string.account_no) + transferDetail.toAccount.accountNo,
-            fontSize = 16.sp
+            style = TextStyle(
+                Color.Black,
+                MaterialTheme.typography.bodyLarge.fontSize
+            )
         )
 
-        Spacer(modifier = Modifier.size(height = 50.dp, width = 14.dp))
+        Spacer(modifier = Modifier.size(height = 30.dp, width = 14.dp))
 
         Text(
             text = stringResource(R.string.from),
-            color = colorResource(R.color.gray_5),
-            fontSize = 16.sp
+            style = TextStyle(
+                Color.Gray,
+                MaterialTheme.typography.bodyLarge.fontSize
+            )
         )
         Text(
             text = stringResource(R.string.name) + transferDetail.fromClient.displayName,
-            fontSize = 16.sp
+            style = TextStyle(
+                Color.Black,
+                MaterialTheme.typography.bodyLarge.fontSize
+            )
         )
         Text(
             text = stringResource(R.string.account_no) + transferDetail.fromAccount.accountNo,
-            fontSize = 16.sp
+            style = TextStyle(
+                Color.Black,
+                MaterialTheme.typography.bodyLarge.fontSize
+            )
         )
 
-        Spacer(modifier = Modifier.size(height = 50.dp, width = 14.dp))
+        Spacer(modifier = Modifier.size(height = 30.dp, width = 14.dp))
 
         Text(
             text = stringResource(R.string.unique_receipt_link),
-            color = colorResource(R.color.gray_5),
-            fontSize = 16.sp
+            style = TextStyle(
+                Color.Gray,
+                MaterialTheme.typography.bodyLarge.fontSize
+            )
         )
     }
-    BottomIcons(transferDetail, receiptLink)
+    ReceiptLinkActions(transferDetail, receiptLink)
 }
 
 @Composable
-fun BottomIcons(
+fun ReceiptLinkActions(
     transferDetail: TransferDetail,
     receiptLink: String,
 ) {
+    /**
+     * This function renders the copy and share icons at the bottom of the screen,
+     * allowing users to copy the receipt link or share the receipt message.
+     */
     val context = LocalContext.current
     val prepareShareMessage =
         Constants.RECEIPT_SHARING_MESSAGE + transferDetail.fromClient.displayName +
@@ -454,14 +511,16 @@ fun BottomIcons(
     ) {
         Text(
             text = receiptLink,
-            color = Color.Blue,
-            style = MaterialTheme.typography.bodyMedium
+            style = TextStyle(
+                Color.Blue,
+                MaterialTheme.typography.bodyMedium.fontSize
+            )
         )
 
         Spacer(modifier = Modifier.size(height = 0.dp, width = 5.dp))
 
         Icon(
-            Icons.Filled.ContentCopy,
+            MifosIcons.Copy,
             contentDescription = stringResource(R.string.copy_link),
             modifier = Modifier
                 .size(25.dp)
@@ -472,46 +531,47 @@ fun BottomIcons(
         )
 
         Icon(
-            Icons.Filled.Share,
+            MifosIcons.Share,
             contentDescription = stringResource(R.string.share_receipt),
             modifier = Modifier
                 .padding(horizontal = 10.dp)
                 .size(25.dp)
                 .clickable {
-                    shareReceiptLink(prepareShareMessage, context)
+                    shareReceiptMessage(prepareShareMessage, context)
                 },
             tint = Color.Black
         )
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ReceiptPreviewWithDummyData() {
-    Receipt(
-        transaction = Transaction(
-            "12345",
-            12345,
-            12345,
-            312.0,
-            "01/04/2024",
-            com.mifospay.core.model.domain.Currency(),
-            TransactionType.DEBIT,
-            12345,
-            TransferDetail(),
-            "12345"
-        ),
-        transferDetail = TransferDetail(),
-        receiptLink = "https://receipt.mifospay.com/12345",
-        downloadData = {},
-        file = File("/path/to/receipt.pdf")
-    )
-}
+//@Preview(showBackground = true)
+//@Composable
+//fun ReceiptPreviewWithDummyData() {
+//    ReceiptScreenContent(
+//        transaction = Transaction(
+//            "12345",
+//            12345,
+//            12345,
+//            312.0,
+//            "01/04/2024",
+//            com.mifospay.core.model.domain.Currency(),
+//            TransactionType.DEBIT,
+//            12345,
+//            TransferDetail(),
+//            "12345"
+//        ),
+//        transferDetail = TransferDetail(),
+//        receiptLink = "https://receipt.mifospay.com/12345",
+//        downloadData = {},
+//        file = File("/path/to/receipt.pdf"),
+//        onBackClick = {}
+//    )
+//}
 
 @DevicePreviews
 @Composable
 fun MultiScreenReceiptPreviewWithDummyData() {
-    Receipt(
+    ReceiptScreenContent(
         transaction = Transaction(
             "12345",
             12345,
@@ -527,7 +587,8 @@ fun MultiScreenReceiptPreviewWithDummyData() {
         transferDetail = TransferDetail(),
         receiptLink = "https://receipt.mifospay.com/12345",
         downloadData = {},
-        file = File("/path/to/receipt.pdf")
+        file = File("/path/to/receipt.pdf"),
+        onBackClick = {}
     )
 }
 
@@ -535,12 +596,12 @@ fun MultiScreenReceiptPreviewWithDummyData() {
 @Composable
 fun ReceiptPreviewWithLoading() {
     MifosTheme {
-        DownloadReceipt(
+        ReceiptScreen(
             uiState = ReceiptUiState.Loading,
             viewFileState = PassFileState(file = File(" ")),
-            downloadData = {},
-            receiptLink = "https://receipt.mifospay.com/12345",
-            openPassCodeActivity = {}
+            downloadReceipt = {},
+            openPassCodeActivity = {},
+            onBackClick = {}
         )
     }
 }
@@ -549,12 +610,12 @@ fun ReceiptPreviewWithLoading() {
 @Composable
 fun ReceiptPreviewWithErrorMessage() {
     MifosTheme {
-        DownloadReceipt(
+        ReceiptScreen(
             uiState = ReceiptUiState.Error(stringResource(R.string.error_specific_transactions)),
             viewFileState = PassFileState(file = File(" ")),
-            downloadData = {},
-            receiptLink = "https://receipt.mifospay.com/12345",
-            openPassCodeActivity = {}
+            downloadReceipt = {},
+            openPassCodeActivity = {},
+            onBackClick = {}
         )
     }
 }
@@ -563,12 +624,16 @@ fun ReceiptPreviewWithErrorMessage() {
 @Composable
 fun ReceiptPreviewWithSuccess() {
     MifosTheme {
-        DownloadReceipt(
-            uiState = ReceiptUiState.Success(Transaction(), TransferDetail()),
+        ReceiptScreen(
+            uiState = ReceiptUiState.Success(
+                Transaction(),
+                TransferDetail(),
+                receiptLink = "https://receipt.mifospay.com/12345"
+            ),
             viewFileState = PassFileState(file = File(" ")),
-            downloadData = {},
-            receiptLink = "https://receipt.mifospay.com/12345",
-            openPassCodeActivity = {}
+            downloadReceipt = {},
+            openPassCodeActivity = {},
+            onBackClick = {}
         )
     }
 }

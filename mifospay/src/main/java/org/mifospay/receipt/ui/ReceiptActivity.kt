@@ -3,33 +3,39 @@ package org.mifospay.receipt.ui
 import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.core.os.bundleOf
 import com.mifos.mobile.passcode.utils.PassCodeConstants
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifospay.base.BaseActivity
 import org.mifospay.feature.passcode.PassCodeActivity
+import org.mifospay.receipt.presenter.ReceiptViewModel
 import org.mifospay.theme.MifosTheme
 
 @AndroidEntryPoint
 class ReceiptActivity : BaseActivity() {
 
+    private val receiptViewModel: ReceiptViewModel by viewModels()
+    private var deepLinkURI: Uri? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val data = intent.data
+        deepLinkURI = data
+        receiptViewModel.getTransactionData(data)
+
         setContent {
             MifosTheme {
-                DownloadReceipt(
+                ReceiptScreenRoute(
                     onShowSnackbar = { _, _ -> false },
-                    openPassCodeActivity = { deepLinkURI ->
-                        if (deepLinkURI != null) {
-                            openPassCodeActivity(deepLinkURI)
-                        }
-                    }
+                    openPassCodeActivity = { openPassCodeActivity() },
+                    onBackClick = { finish() }
                 )
             }
         }
     }
 
-    private fun openPassCodeActivity(deepLinkURI: Uri) {
+    private fun openPassCodeActivity() {
         PassCodeActivity.startPassCodeActivity(
             context = this,
             bundle = bundleOf(
