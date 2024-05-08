@@ -1,4 +1,4 @@
-package org.mifospay.utils
+package org.mifospay.core.designsystem.component
 
 import android.app.Activity
 import android.content.Intent
@@ -20,8 +20,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import org.mifospay.R
-import org.mifospay.core.designsystem.component.MifosDialogBox
 
 @Composable
 fun PermissionBox(
@@ -115,12 +113,12 @@ fun PermissionBox(
             onDismiss = { shouldShowPermissionRationale = false },
             title = title,
             message = description,
-            confirmButtonText = R.string.approve,
+            confirmButtonText = 2,
             onConfirm = {
                 shouldShowPermissionRationale = false
                 multiplePermissionLauncher.launch(requiredPermissions.toTypedArray())
             },
-            dismissButtonText = R.string.cancel
+            dismissButtonText = 3
         )
     }
 

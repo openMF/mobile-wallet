@@ -1,6 +1,7 @@
 package org.mifospay.receipt.presenter
 
 
+import android.net.Uri
 import android.os.Environment
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.Transaction
@@ -64,7 +65,18 @@ class ReceiptViewModel @Inject constructor(
         }
     }
 
-    fun fetchTransaction(transactionId: String?) {
+    fun getTransactionData(data: Uri?) {
+        if (data != null) {
+            val scheme = data.scheme // "https"
+            val host = data.host // "receipt.mifospay.com"
+            val params = data.pathSegments
+            val transactionId = params.getOrNull(0)
+            val receiptLink = data.toString()
+            fetchTransaction(transactionId, receiptLink)
+        }
+    }
+
+    fun fetchTransaction(transactionId: String?, receiptLink: String?) {
         val accountId = preferencesHelper.accountId
 
         if (transactionId != null) {
@@ -72,7 +84,13 @@ class ReceiptViewModel @Inject constructor(
                 FetchAccountTransaction.RequestValues(accountId, transactionId.toLong()),
                 object : UseCase.UseCaseCallback<FetchAccountTransaction.ResponseValue> {
                     override fun onSuccess(response: FetchAccountTransaction.ResponseValue) {
-                        fetchTransfer(response.transaction, response.transaction.transferId)
+                        if (receiptLink != null) {
+                            fetchTransfer(
+                                response.transaction,
+                                response.transaction.transferId,
+                                receiptLink
+                            )
+                        }
                     }
 
                     override fun onError(message: String) {
@@ -87,14 +105,22 @@ class ReceiptViewModel @Inject constructor(
         }
     }
 
-    fun fetchTransfer(transaction: Transaction, transferId: Long) {
+    fun fetchTransfer(
+        transaction: Transaction,
+        transferId: Long,
+        receiptLink: String
+    ) {
         mUseCaseHandler.execute(fetchAccountTransferUseCase,
             FetchAccountTransfer.RequestValues(transferId),
             object : UseCase.UseCaseCallback<FetchAccountTransfer.ResponseValue?> {
                 override fun onSuccess(response: FetchAccountTransfer.ResponseValue?) {
                     if (response != null) {
                         _receiptState.value =
-                            ReceiptUiState.Success(transaction, response.transferDetail)
+                            ReceiptUiState.Success(
+                                transaction,
+                                response.transferDetail,
+                                receiptLink
+                            )
                     }
                 }
 
@@ -103,6 +129,7 @@ class ReceiptViewModel @Inject constructor(
                 }
             })
     }
+
 }
 
 data class PassFileState(
@@ -112,7 +139,8 @@ data class PassFileState(
 sealed interface ReceiptUiState {
     data class Success(
         val transaction: Transaction,
-        val transferDetail: TransferDetail
+        val transferDetail: TransferDetail,
+        val receiptLink: String
     ) : ReceiptUiState
 
     data object OpenPassCodeActivity : ReceiptUiState
