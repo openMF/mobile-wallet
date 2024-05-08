@@ -544,30 +544,6 @@ fun ReceiptLinkActions(
     }
 }
 
-//@Preview(showBackground = true)
-//@Composable
-//fun ReceiptPreviewWithDummyData() {
-//    ReceiptScreenContent(
-//        transaction = Transaction(
-//            "12345",
-//            12345,
-//            12345,
-//            312.0,
-//            "01/04/2024",
-//            com.mifospay.core.model.domain.Currency(),
-//            TransactionType.DEBIT,
-//            12345,
-//            TransferDetail(),
-//            "12345"
-//        ),
-//        transferDetail = TransferDetail(),
-//        receiptLink = "https://receipt.mifospay.com/12345",
-//        downloadData = {},
-//        file = File("/path/to/receipt.pdf"),
-//        onBackClick = {}
-//    )
-//}
-
 @DevicePreviews
 @Composable
 fun MultiScreenReceiptPreviewWithDummyData() {
