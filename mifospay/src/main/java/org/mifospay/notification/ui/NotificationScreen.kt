@@ -17,6 +17,7 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,6 +26,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -32,6 +35,7 @@ import com.mifospay.core.model.domain.NotificationPayload
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosTopAppBar
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.historyItemTextStyle
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.ui.EmptyContentScreen
@@ -84,16 +88,13 @@ fun NotificationScreen(
 
                 is NotificationUiState.Success -> {
                     if (uiState.notificationList.isEmpty()) {
-                        Column(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = stringResource(id = R.string.no_notification_found),
-                                style = styleMedium16sp
-                            )
-                        }
+                        EmptyContentScreen(
+                            modifier = Modifier,
+                            title = stringResource(id = R.string.error_oops),
+                            subTitle = stringResource(id = R.string.no_notification_found),
+                            iconTint = Color.Black,
+                            iconImageVector = Icons.Rounded.Info
+                        )
                     } else {
                         LazyColumn {
                             items(uiState.notificationList) { notification ->
@@ -131,19 +132,19 @@ fun NotificationList(title: String, body: String, timestamp: String) {
         ) {
             Text(
                 text = title,
-                style = styleMedium16sp,
+                style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
             )
             Text(
-                text = body, style = styleMedium16sp,
+                text = body, style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
             )
             Text(
-                text = timestamp, style = historyItemTextStyle,
+                text = timestamp, style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
@@ -152,32 +153,28 @@ fun NotificationList(title: String, body: String, timestamp: String) {
     }
 }
 
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-private fun NotificationLoadingPreview() {
-    NotificationScreen(
-        uiState = NotificationUiState.Loading,
-        isRefreshing = true,
-        onRefresh = {})
+class NotificationUiStateProvider :
+    PreviewParameterProvider<NotificationUiState> {
+    override val values: Sequence<NotificationUiState>
+        get() = sequenceOf(
+            NotificationUiState.Success(sampleNotificationList),
+            NotificationUiState.Error("Error Occurred"),
+            NotificationUiState.Loading,
+        )
 }
 
-@Preview(showSystemUi = true, showBackground = true)
+@Preview(showBackground = true)
 @Composable
-private fun NotificationSuccessPreview() {
-    NotificationScreen(
-        uiState = NotificationUiState.Success(sampleNotificationList),
-        isRefreshing = true,
-        onRefresh = {})
-}
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-private fun NotificationErrorScreenPreview() {
-    NotificationScreen(
-        uiState = NotificationUiState.Error("Error Occurred"),
-        isRefreshing = true,
-        onRefresh = {}
-    )
+fun NotificationScreenPreview(
+    @PreviewParameter(NotificationUiStateProvider::class) notificationUiState: NotificationUiState
+) {
+    MifosTheme {
+        NotificationScreen(
+            uiState = notificationUiState,
+            isRefreshing = false,
+            onRefresh = {}
+        )
+    }
 }
 
 val sampleNotificationList = List(10) {
