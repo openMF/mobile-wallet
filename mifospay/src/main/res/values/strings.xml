@@ -375,5 +375,7 @@
     <string name="self_amount_transfer_is_not_allowed">Self Account transfer is not allowed</string>
     <string name="insufficient_balance">Insufficient balance</string>
     <string name="error_fetching_balance">Error fetching balance</string>
+    <string name="nothing_to_notify">Nothing To Notify</string>
+    <string name="there_is_nothing_to_show">There is nothing to show</string>
 
 </resources>

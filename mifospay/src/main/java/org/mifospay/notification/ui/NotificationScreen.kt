@@ -90,15 +90,15 @@ fun NotificationScreen(
                     if (uiState.notificationList.isEmpty()) {
                         EmptyContentScreen(
                             modifier = Modifier,
-                            title = stringResource(id = R.string.error_oops),
-                            subTitle = stringResource(id = R.string.no_notification_found),
+                            title = stringResource(R.string.nothing_to_notify),
+                            subTitle = stringResource(R.string.there_is_nothing_to_show),
                             iconTint = Color.Black,
                             iconImageVector = Icons.Rounded.Info
                         )
                     } else {
                         LazyColumn {
                             items(uiState.notificationList) { notification ->
-                                NotificationList(
+                                NotificationListItem(
                                     title = notification.title.toString(),
                                     body = notification.body.toString(),
                                     timestamp = notification.timestamp.toString()
@@ -118,7 +118,7 @@ fun NotificationScreen(
 }
 
 @Composable
-fun NotificationList(title: String, body: String, timestamp: String) {
+fun NotificationListItem(title: String, body: String, timestamp: String) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
