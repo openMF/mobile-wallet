@@ -87,7 +87,17 @@ fun EditProfileScreenRoute(
     EditProfileScreen(
         editProfileUiState = editProfileUiState,
         onSaveChanges = onSaveChanges,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        updateEmail = {
+            viewModel.updateEmail(
+                it
+            )
+        },
+        updateMobile = {
+            viewModel.updateMobile(
+                it
+            )
+        }
     )
 }
 
@@ -95,7 +105,9 @@ fun EditProfileScreenRoute(
 fun EditProfileScreen(
     editProfileUiState: EditProfileUiState,
     onSaveChanges: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    updateEmail: (String) -> Unit,
+    updateMobile: (String) -> Unit
 ) {
     val context = LocalContext.current
     val file = createImageFile(context)
@@ -139,7 +151,9 @@ fun EditProfileScreen(
                     initialEmail,
                     uri,
                     onBackClick = onBackClick,
-                    onSaveChanges = onSaveChanges
+                    onSaveChanges = onSaveChanges,
+                    updateEmail = updateEmail,
+                    updateMobile = updateMobile
                 )
             }
 
@@ -156,7 +170,9 @@ fun EditProfileScreenContent(
     initialEmail: String,
     uri: Uri?,
     onBackClick: () -> Unit,
-    onSaveChanges: () -> Unit
+    onSaveChanges: () -> Unit,
+    updateEmail: (String) -> Unit,
+    updateMobile: (String) -> Unit
 ) {
     var username by rememberSaveable { mutableStateOf(initialUsername) }
     var mobile by rememberSaveable { mutableStateOf(initialMobile) }
@@ -291,13 +307,24 @@ fun EditProfileScreenContent(
                         }
                     }
                     EditProfileSaveButton(
-                        onClick = { onSaveChanges.invoke() },
+                        onClick = {
+                            if (isDataSaveNecessary(email, initialEmail)) {
+                                updateEmail(email)
+                            }
+                            if (isDataSaveNecessary(mobile, initialMobile)) {
+                                updateMobile(mobile)
+                            }
+                        },
                         buttonText = R.string.save
                     )
                 }
             }
         }
     )
+}
+
+private fun isDataSaveNecessary(input: String, initialInput: String): Boolean {
+    return input == initialInput
 }
 
 @Composable
@@ -391,20 +418,22 @@ private fun EditProfileScreenContentPreview() {
         initialMobile = "+1 55557772901",
         uri = null,
         onBackClick = {},
-        onSaveChanges = {}
+        onSaveChanges = {},
+        updateEmail = {},
+        updateMobile = {}
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileLoadingScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Loading, {}, {})
+    EditProfileScreen(editProfileUiState = EditProfileUiState.Loading, {}, {}, {}, {})
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileSuccessScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Success(), {}, {})
+    EditProfileScreen(editProfileUiState = EditProfileUiState.Success(), {}, {}, {}, {})
 }
 
 @Preview(showBackground = true)
@@ -416,11 +445,11 @@ private fun EditProfileSuccessDataScreenPreview() {
         email = "john@mifos.org",
         vpa = "vpa",
         mobile = "+1 55557772901"
-    ), {}, {})
+    ), {}, {}, {}, {})
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileErrorScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Error("Error Screen"), {}, {})
+    EditProfileScreen(editProfileUiState = EditProfileUiState.Error("Error Screen"), {}, {}, {}, {})
 }
