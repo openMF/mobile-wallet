@@ -2,7 +2,6 @@ package org.mifospay.editprofile.ui
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
@@ -31,7 +30,6 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -40,31 +38,31 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.togitech.ccp.component.TogiCountryCodePicker
-import kotlinx.coroutines.launch
 import org.mifospay.BuildConfig
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
-import org.mifospay.core.designsystem.component.MifosTopBar
+import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.designsystem.component.PermissionBox
 import org.mifospay.core.designsystem.theme.historyItemTextStyle
 import org.mifospay.core.designsystem.theme.styleMedium16sp
+import org.mifospay.core.ui.DevicePreviews
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.editprofile.presenter.EditProfileUiState
 import org.mifospay.editprofile.presenter.EditProfileViewModel
@@ -75,9 +73,10 @@ import java.util.Locale
 import java.util.Objects
 
 @Composable
-fun EditProfileScreen(
+fun EditProfileScreenRoute(
     viewModel: EditProfileViewModel = hiltViewModel(),
-    onSaveChanges: () -> Unit
+    onSaveChanges: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     val editProfileUiState by viewModel.editProfileUiState.collectAsStateWithLifecycle()
 
@@ -87,102 +86,156 @@ fun EditProfileScreen(
 
     EditProfileScreen(
         editProfileUiState = editProfileUiState,
-        onSaveChanges = onSaveChanges
+        onSaveChanges = onSaveChanges,
+        onBackClick = onBackClick
     )
 }
 
 @Composable
 fun EditProfileScreen(
     editProfileUiState: EditProfileUiState,
-    onSaveChanges: () -> Unit
+    onSaveChanges: () -> Unit,
+    onBackClick: () -> Unit
 ) {
     val context = LocalContext.current
-    var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
-    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val scope = rememberCoroutineScope()
-    val snackbarHostState = remember { SnackbarHostState() }
-
     val file = createImageFile(context)
     val uri = FileProvider.getUriForFile(
         Objects.requireNonNull(context),
         BuildConfig.APPLICATION_ID + ".provider", file
     )
 
-    val cameraLauncher = rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
-        imageUri = uri
-    }
-
-    val cameraPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) {
-            scope.launch {
-                snackbarHostState.showSnackbar(context.getString(R.string.permission_granted))
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        when (editProfileUiState) {
+            is EditProfileUiState.Error -> {
+                EmptyContentScreen(
+                    modifier = Modifier,
+                    title = stringResource(id = R.string.error_oops),
+                    subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                    iconTint = Color.Black,
+                    iconImageVector = Icons.Rounded.Info
+                )
             }
-            cameraLauncher.launch(uri)
+
+            EditProfileUiState.Loading -> {
+                MfLoadingWheel(
+                    contentDesc = stringResource(R.string.loading),
+                    backgroundColor = Color.White
+                )
+            }
+
+            is EditProfileUiState.Success -> {
+                val initialUsername = editProfileUiState.username
+                val initialMobile = editProfileUiState.mobile
+                val initialVpa = editProfileUiState.vpa
+                val initialEmail = editProfileUiState.email
+
+                EditProfileScreenContent(
+                    initialUsername,
+                    initialMobile,
+                    initialVpa,
+                    initialEmail,
+                    uri,
+                    onBackClick = onBackClick,
+                    onSaveChanges = onSaveChanges
+                )
+            }
+
+            else -> {}
+        }
+    }
+}
+
+@Composable
+fun EditProfileScreenContent(
+    initialUsername: String,
+    initialMobile: String,
+    initialVpa: String,
+    initialEmail: String,
+    uri: Uri?,
+    onBackClick: () -> Unit,
+    onSaveChanges: () -> Unit
+) {
+    var username by rememberSaveable { mutableStateOf(initialUsername) }
+    var mobile by rememberSaveable { mutableStateOf(initialMobile) }
+    var vpa by rememberSaveable { mutableStateOf(initialVpa) }
+    var email by rememberSaveable { mutableStateOf(initialEmail) }
+    val snackBarHostState = remember { SnackbarHostState() }
+    var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+    var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+
+    PermissionBox(
+        requiredPermissions = if (Build.VERSION.SDK_INT >= 33) {
+            listOf(
+                Manifest.permission.CAMERA
+            )
         } else {
-            scope.launch {
-                snackbarHostState.showSnackbar(context.getString(R.string.permission_denied))
-            }
-        }
-    }
-
-    val galleryLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.GetContent()
-    ) { uri: Uri? ->
-        uri?.let {
-            imageUri = uri
-        }
-    }
-
-    val storagePermissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted: Boolean ->
-            if (isGranted) {
-                galleryLauncher.launch("image/*")
-            } else {
-                scope.launch {
-                    snackbarHostState.showSnackbar(context.getString(R.string.storage_permission_is_required_to_access_gallery))
+            listOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        },
+        title = R.string.permission_required,
+        description = R.string.approve_permission_description_camera,
+        confirmButtonText = R.string.proceed,
+        dismissButtonText = R.string.dismiss,
+        onGranted = {
+            val cameraLauncher =
+                rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
+                    imageUri = uri
                 }
+
+            val galleryLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.GetContent()
+            ) { uri: Uri? ->
+                uri?.let {
+                    imageUri = uri
+                }
+            }
+
+            if (showBottomSheet) {
+                MifosBottomSheet(
+                    content = {
+                        EditProfileBottomSheetContent(
+                            {
+                                cameraLauncher.launch(uri)
+                                showBottomSheet = false
+                            },
+                            {
+                                galleryLauncher.launch("image/*")
+                                showBottomSheet = false
+                            },
+                            {
+                                imageUri = null
+                                showBottomSheet = false
+                            })
+                    },
+                    onDismiss = { showBottomSheet = false }
+                )
             }
         }
     )
 
-    Scaffold(
-        topBar = { MifosTopBar(topBarTitle = R.string.edit_profile) {} },
-        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
-    ) { contentPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.White)
-                .padding(contentPadding)
-                .verticalScroll(rememberScrollState())
-        ) {
-
-            when (editProfileUiState) {
-                is EditProfileUiState.Error -> {
-                    EmptyContentScreen(
-                        modifier = Modifier,
-                        title = stringResource(id = R.string.error_oops),
-                        subTitle = stringResource(id = R.string.unexpected_error_subtitle),
-                        iconTint = Color.Black,
-                        iconImageVector = Icons.Rounded.Info
-                    )
-                }
-
-                EditProfileUiState.Loading -> {
-                    MfLoadingWheel(
-                        contentDesc = stringResource(R.string.loading),
-                        backgroundColor = Color.White
-                    )
-                }
-
-                is EditProfileUiState.Success -> {
-                    var username by rememberSaveable { mutableStateOf(editProfileUiState.username) }
-                    var mobile by rememberSaveable { mutableStateOf(editProfileUiState.mobile) }
-                    var vpa by rememberSaveable { mutableStateOf(editProfileUiState.vpa) }
-                    var email by rememberSaveable { mutableStateOf(editProfileUiState.email) }
+    MifosScaffold(
+        topBarTitle = R.string.edit_profile,
+        backPress = { onBackClick.invoke() },
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState)
+        },
+        scaffoldContent = { contentPadding ->
+            Box(
+                modifier = Modifier
+                    .padding(contentPadding)
+                    .fillMaxSize()
+            ) {
+                Column(
+                    modifier = Modifier
+                        .background(Color.White)
+                        .verticalScroll(rememberScrollState())
+                ) {
                     EditProfileScreenImage(
                         imageUri = imageUri,
                         onCameraIconClick = { showBottomSheet = true })
@@ -216,69 +269,35 @@ fun EditProfileScreen(
                             .padding(start = 16.dp, end = 16.dp)
                     ) {
                         val keyboardController = LocalSoftwareKeyboardController.current
-                        TogiCountryCodePicker(
-                            modifier = Modifier,
-                            initialPhoneNumber = editProfileUiState.mobile,
-                            autoDetectCode = true,
-                            shape = RoundedCornerShape(3.dp),
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                focusedBorderColor = Color.Black
-                            ),
-                            onValueChange = { (code, phone), isValid ->
-                                if (isValid) {
-                                    mobile = code + phone
-                                }
-                            },
-                            label = { Text(stringResource(id = R.string.phone_number)) },
-                            keyboardActions = KeyboardActions { keyboardController?.hide() }
-                        )
+                        if (LocalInspectionMode.current) {
+                            Text("Placeholder for TogiCountryCodePicker")
+                        } else {
+                            TogiCountryCodePicker(
+                                modifier = Modifier,
+                                initialPhoneNumber = mobile,
+                                autoDetectCode = true,
+                                shape = RoundedCornerShape(3.dp),
+                                colors = TextFieldDefaults.outlinedTextFieldColors(
+                                    focusedBorderColor = Color.Black
+                                ),
+                                onValueChange = { (code, phone), isValid ->
+                                    if (isValid) {
+                                        mobile = code + phone
+                                    }
+                                },
+                                label = { Text(stringResource(id = R.string.phone_number)) },
+                                keyboardActions = KeyboardActions { keyboardController?.hide() }
+                            )
+                        }
                     }
                     EditProfileSaveButton(
                         onClick = { onSaveChanges.invoke() },
                         buttonText = R.string.save
                     )
-                    if (showBottomSheet) {
-                        MifosBottomSheet(
-                            content = {
-                                EditProfileBottomSheetContent(
-                                    {
-                                        val permissionCheckResult =
-                                            ContextCompat.checkSelfPermission(
-                                                context,
-                                                Manifest.permission.CAMERA
-                                            )
-                                        if (permissionCheckResult == PackageManager.PERMISSION_GRANTED) {
-                                            cameraLauncher.launch(uri)
-                                        } else {
-                                            cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
-                                        }
-                                        showBottomSheet = false
-                                    },
-                                    {
-                                        val permissionCheckResult =
-                                            ContextCompat.checkSelfPermission(
-                                                context,
-                                                Manifest.permission.READ_EXTERNAL_STORAGE
-                                            )
-                                        if (permissionCheckResult == PackageManager.PERMISSION_GRANTED || Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                                            galleryLauncher.launch("image/*")
-                                        } else {
-                                            storagePermissionLauncher.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
-                                        }
-                                        showBottomSheet = false
-                                    },
-                                    {
-                                        imageUri = null
-                                        showBottomSheet = false
-                                    })
-                            },
-                            onDismiss = { showBottomSheet = false }
-                        )
-                    }
                 }
             }
         }
-    }
+    )
 }
 
 @Composable
@@ -362,16 +381,30 @@ fun createImageFile(context: Context): File {
     )
 }
 
+@DevicePreviews
+@Composable
+private fun EditProfileScreenContentPreview() {
+    EditProfileScreenContent(
+        initialUsername = "John",
+        initialEmail = "john@mifos.org",
+        initialVpa = "vpa",
+        initialMobile = "+1 55557772901",
+        uri = null,
+        onBackClick = {},
+        onSaveChanges = {}
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileLoadingScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Loading, {})
+    EditProfileScreen(editProfileUiState = EditProfileUiState.Loading, {}, {})
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileSuccessScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Success(), {})
+    EditProfileScreen(editProfileUiState = EditProfileUiState.Success(), {}, {})
 }
 
 @Preview(showBackground = true)
@@ -383,11 +416,11 @@ private fun EditProfileSuccessDataScreenPreview() {
         email = "john@mifos.org",
         vpa = "vpa",
         mobile = "+1 55557772901"
-    ), {})
+    ), {}, {})
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun EditProfileErrorScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Error("Error Screen"), {})
+    EditProfileScreen(editProfileUiState = EditProfileUiState.Error("Error Screen"), {}, {})
 }

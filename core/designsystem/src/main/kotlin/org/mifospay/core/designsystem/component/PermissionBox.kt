@@ -26,7 +26,9 @@ fun PermissionBox(
     requiredPermissions: List<String>,
     title: Int,
     description: Int? = null,
-    onGranted: (@Composable () -> Unit)? = null,
+    confirmButtonText: Int,
+    dismissButtonText: Int,
+    onGranted: @Composable (() -> Unit)? = null,
 ) {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -44,7 +46,11 @@ fun PermissionBox(
 
     var shouldShowPermissionRationale =
         requiredPermissions.all {
-            ActivityCompat.shouldShowRequestPermissionRationale(context as Activity, it)
+            (context as? Activity)?.let { it1 ->
+                ActivityCompat.shouldShowRequestPermissionRationale(
+                    it1, it
+                )
+            } == true
         }
 
     var shouldDirectUserToApplicationSettings by remember {
@@ -113,12 +119,12 @@ fun PermissionBox(
             onDismiss = { shouldShowPermissionRationale = false },
             title = title,
             message = description,
-            confirmButtonText = 2,
+            confirmButtonText = confirmButtonText,
             onConfirm = {
                 shouldShowPermissionRationale = false
                 multiplePermissionLauncher.launch(requiredPermissions.toTypedArray())
             },
-            dismissButtonText = 3
+            dismissButtonText = dismissButtonText
         )
     }
 

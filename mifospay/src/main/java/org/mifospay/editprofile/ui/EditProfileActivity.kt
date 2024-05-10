@@ -13,10 +13,11 @@ class EditProfileActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MifosTheme {
-                EditProfileScreen(
+                EditProfileScreenRoute(
                     onSaveChanges = {
                         // TODO : save locally or send it to backend
-                    }
+                    },
+                    onBackClick = { finish() }
                 )
             }
         }

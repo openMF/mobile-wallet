@@ -196,6 +196,8 @@ fun ReceiptScreenContent(
             },
             title = R.string.approve_permission_storage,
             description = R.string.approve_permission_storage_receiptDescription,
+            confirmButtonText = R.string.proceed,
+            dismissButtonText = R.string.dismiss,
             onGranted = {
                 downloadData(transaction.transactionId.toString())
                 LaunchedEffect(Unit) {
