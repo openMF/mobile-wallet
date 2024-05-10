@@ -328,7 +328,10 @@
     <string name="approve_permission">Please approve storage permissions</string>
     <string name="approve_permission_storage">Please approve storage permissions</string>
     <string name="approve_permission_storage_receiptDescription">You need to approve this permission in order to download and view your Receipt.</string>
+    <string name="permission_required">Permissions Required</string>
+    <string name="approve_permission_description_camera">You need to approve these permissions in order to access the camera.</string>
     <string name="approve">Approve</string>
+    <string name="dismiss">Dismiss</string>
     <string name="download_complete">Download completed</string>
 
     <string name="add_cards">Please Add Cards</string>
