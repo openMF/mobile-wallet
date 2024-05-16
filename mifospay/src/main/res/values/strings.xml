@@ -151,6 +151,8 @@
     <string name="status">status</string>
     <string name="transaction_id">Transaction ID : </string>
     <string name="transaction_date">Transaction Date : </string>
+    <string name="transaction_success">Transaction successful</string>
+    <string name="transaction_unable_to_process">Unable to process transfer</string>
     <string name="to">To:</string>
     <string name="from">From:</string>
     <string name="date">date</string>
