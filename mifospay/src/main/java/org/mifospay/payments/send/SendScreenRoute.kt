@@ -52,6 +52,7 @@ import com.togitech.ccp.component.TogiCountryCodePicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.mifospay.R
+import org.mifospay.common.presenter.MakeTransferViewModel
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton
@@ -67,6 +68,7 @@ enum class SendMethodType {
 @Composable
 fun SendScreenRoute(
     viewModel: SendPaymentViewModel = hiltViewModel(),
+    makeTransferViewModel: MakeTransferViewModel = hiltViewModel(),
     showToolBar: Boolean,
     onBackClick: () -> Unit
 ) {
@@ -97,9 +99,8 @@ fun SendScreenRoute(
                     onAnyError = {
                         showToast(context.getString(it))
                     },
-                    proceedWithTransferFlow = {
-                        // show transfer flow bottom sheet MakeTransferFragment
-                        // mTransferView?.showClientDetails(externalId, transferAmount)
+                    proceedWithTransferFlow = { externalId, transferAmount ->
+                        makeTransferViewModel.fetchClient(externalId, transferAmount)
                     }
                 )
             } else {
@@ -286,6 +287,7 @@ fun SendMoneyScreen(
                             },
                             sendMethodType
                         )
+                        //TODO: Navigate to MakeTransferScreenRoute
                     },
                     contentPadding = PaddingValues(12.dp)
                 ) {
