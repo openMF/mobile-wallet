@@ -72,7 +72,7 @@ class SendPaymentViewModel @Inject constructor(
         externalId: String?,
         transferAmount: Double,
         onAnyError: (Int) -> Unit,
-        proceedWithTransferFlow: () -> Unit
+        proceedWithTransferFlow: (String, Double) -> Unit
     ) {
         updateProgressState(true)
         useCaseHandler.execute(fetchAccount,
@@ -83,7 +83,12 @@ class SendPaymentViewModel @Inject constructor(
                     if (transferAmount > response.account.balance) {
                         onAnyError(R.string.insufficient_balance)
                     } else {
-                        proceedWithTransferFlow.invoke()
+                        if (externalId != null) {
+                            proceedWithTransferFlow(
+                                externalId,
+                                transferAmount
+                            )
+                        }
                     }
                 }
 
