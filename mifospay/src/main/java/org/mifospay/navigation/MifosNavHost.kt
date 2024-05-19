@@ -16,7 +16,7 @@ import org.mifospay.home.navigation.profileScreen
 import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.payments.ui.SendActivity
-import org.mifospay.qr.ui.ShowQrActivity
+import org.mifospay.qr.showQr.ui.ShowQrActivity
 import org.mifospay.savedcards.ui.AddCardDialog
 import org.mifospay.settings.ui.SettingsActivity
 import org.mifospay.standinginstruction.ui.NewSIActivity

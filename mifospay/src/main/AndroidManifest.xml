@@ -60,7 +60,7 @@
             android:name=".common.ui.SearchActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".qr.ui.ShowQrActivity"
+            android:name=".qr.showQr.ui.ShowQrActivity"
             android:exported="true"
             android:theme="@style/AppTheme" />
 

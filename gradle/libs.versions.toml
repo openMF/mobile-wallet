@@ -1,6 +1,6 @@
 [versions]
 appcompatVersion = "1.6.1"
-androidGradlePlugin = "8.3.0"
+androidGradlePlugin = "8.4.0"
 compileSdk = "34"
 constraintlayoutVersion = "2.1.4"
 coreKtxVersion = "1.12.0"
