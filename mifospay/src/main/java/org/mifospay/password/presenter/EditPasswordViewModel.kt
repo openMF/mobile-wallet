@@ -19,10 +19,15 @@ class EditPasswordViewModel @Inject constructor(
     private val mPreferencesHelper: PreferencesHelper,
     private val authenticateUserUseCase: AuthenticateUser,
     private val updateUserUseCase: UpdateUser
-): ViewModel() {
+) : ViewModel() {
 
     private val _editPasswordUiState = MutableStateFlow<EditPasswordUiState>(EditPasswordUiState.Loading)
     val editPasswordUiState: StateFlow<EditPasswordUiState> = _editPasswordUiState
+
+    // Function to manually set the UiState for testing purposes
+    fun setUiState(state: EditPasswordUiState) {
+        _editPasswordUiState.value = state
+    }
 
 //    fun handleSavePasswordButtonStatus(
 //        currentPassword: String?,

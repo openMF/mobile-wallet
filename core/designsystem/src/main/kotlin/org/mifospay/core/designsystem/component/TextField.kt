@@ -103,8 +103,7 @@ fun MfPasswordTextField(
                     contentDescription = "Show password"
                 )
             }
-        },
-
+        }
     )
 }
 

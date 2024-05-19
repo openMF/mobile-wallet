@@ -1,22 +1,38 @@
 package org.mifospay.password.ui
 
-import android.widget.Toast
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.launch
 import org.mifos.mobilewallet.mifospay.password.presenter.EditPasswordUiState
 import org.mifos.mobilewallet.mifospay.password.presenter.EditPasswordViewModel
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfPasswordTextField
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosTopBar
 
 @Composable
@@ -33,93 +49,146 @@ fun EditPasswordScreen(
     var isConfirmNewPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
     val editPasswordUiState by viewModel.editPasswordUiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val coroutineScope = rememberCoroutineScope()
 
-    Column(modifier = Modifier.fillMaxSize()) {
-        MifosTopBar(topBarTitle = R.string.change_password, backPress = {})
-        MfPasswordTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp),
-            password = currentPassword,
-            label = stringResource(R.string.current_password),
-            isError = false,
-            isPasswordVisible = isConfirmPasswordVisible,
-            onTogglePasswordVisibility = { isConfirmPasswordVisible = !isConfirmPasswordVisible },
-            onPasswordChange = { currentPassword = it }
-        )
-        MfPasswordTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp),
-            password = newPassword,
-            label = stringResource(id = R.string.new_password),
-            isError = if(newPassword.isNotEmpty() && newPassword.length < 6) true else false,
-            errorMessage = (if(newPassword.isNotEmpty() && newPassword.length < 6) stringResource(id = R.string.password_length_error) else null),
-            isPasswordVisible = isNewPasswordVisible,
-            onTogglePasswordVisibility = { isNewPasswordVisible = !isNewPasswordVisible },
-            onPasswordChange = { newPassword = it }
-        )
-        MfPasswordTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 16.dp, end = 16.dp),
-            password = confirmNewPassword,
-            label = stringResource(id = R.string.confirm_new_password),
-            isError = if(newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty()) true else false,
-            errorMessage = (if(newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty()) stringResource(id = R.string.password_mismatch_error) else null),
-            isPasswordVisible = isConfirmNewPasswordVisible,
-            onTogglePasswordVisibility = {
-                isConfirmNewPasswordVisible = !isConfirmNewPasswordVisible
-            },
-            onPasswordChange = { confirmNewPassword = it }
-        )
+    val currentSnackbarHostState by rememberUpdatedState(snackbarHostState)
 
-        Row(
+    // Handle side effects based on the editPasswordUiState
+    LaunchedEffect(editPasswordUiState) {
+        when (editPasswordUiState) {
+            is EditPasswordUiState.Error -> {
+                val errorMessage = (editPasswordUiState as EditPasswordUiState.Error).message
+                coroutineScope.launch {
+                    currentSnackbarHostState.showSnackbar(errorMessage)
+                }
+            }
+            EditPasswordUiState.Loading -> {
+                // Handle loading state if needed
+            }
+            EditPasswordUiState.Success -> {
+                coroutineScope.launch {
+                    currentSnackbarHostState.showSnackbar(context.getString(R.string.password_changed_successfully))
+                }
+            }
+            else -> {}
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            MifosTopBar(
+                topBarTitle = R.string.change_password,
+                backPress = { onCancelChanges.invoke() }
+            )
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
+        }
+    ) { paddingValues ->
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 20.dp, start = 16.dp, end = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
-            Button(
+            MfPasswordTextField(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(all = 8.dp),
-                onClick = { onCancelChanges.invoke() },
-                colors = ButtonDefaults.buttonColors(Color.Black),
-                contentPadding = PaddingValues(16.dp)
-            ) {
-                Text(text = stringResource(id = R.string.cancel), color = Color.White)
-            }
-            Button(
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                password = currentPassword,
+                label = stringResource(R.string.current_password),
+                isError = false,
+                isPasswordVisible = isConfirmPasswordVisible,
+                onTogglePasswordVisibility = { isConfirmPasswordVisible = !isConfirmPasswordVisible },
+                onPasswordChange = { currentPassword = it },
+            )
+            MfPasswordTextField(
                 modifier = Modifier
-                    .weight(1f)
-                    .padding(all = 8.dp),
-                onClick = {
-                    viewModel.updatePassword(
-                        currentPassword,
-                        newPassword,
-                        confirmNewPassword
-                    )
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                password = newPassword,
+                label = stringResource(id = R.string.new_password),
+                isError = newPassword.isNotEmpty() && newPassword.length < 6,
+                errorMessage = if (newPassword.isNotEmpty() && newPassword.length < 6) stringResource(id = R.string.password_length_error) else null,
+                isPasswordVisible = isNewPasswordVisible,
+                onTogglePasswordVisibility = { isNewPasswordVisible = !isNewPasswordVisible },
+                onPasswordChange = { newPassword = it }
+            )
+            MfPasswordTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                password = confirmNewPassword,
+                label = stringResource(id = R.string.confirm_new_password),
+                isError = newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty(),
+                errorMessage = if (newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty()) stringResource(id = R.string.password_mismatch_error) else null,
+                isPasswordVisible = isConfirmNewPasswordVisible,
+                onTogglePasswordVisibility = {
+                    isConfirmNewPasswordVisible = !isConfirmNewPasswordVisible
                 },
-                colors = ButtonDefaults.buttonColors(Color.Black),
-                contentPadding = PaddingValues(16.dp)
+                onPasswordChange = { confirmNewPassword = it }
+            )
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp, start = 16.dp, end = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = stringResource(id = R.string.save), color = Color.White)
+                MifosButton(
+                    onClick = { onCancelChanges.invoke() },
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    contentPadding = PaddingValues(16.dp),
+                    content = { Text(text = stringResource(id = R.string.cancel)) }
+                )
+                MifosButton(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    onClick = {
+                        viewModel.updatePassword(
+                            currentPassword,
+                            newPassword,
+                            confirmNewPassword
+                        )
+                    },
+                    contentPadding = PaddingValues(16.dp),
+                    content = { Text(text = stringResource(id = R.string.save)) }
+                )
             }
         }
     }
+}
 
-    when (editPasswordUiState) {
-        is EditPasswordUiState.Error -> {
-            Toast.makeText(context, (editPasswordUiState as EditPasswordUiState.Error).message, Toast.LENGTH_SHORT).show()
-        }
-        EditPasswordUiState.Loading -> {
-
-        }
-        EditPasswordUiState.Success -> {
-
-        }
-
-        else -> {}
+// Wrapper composable for previewing EditPasswordScreen with different UiState
+@Composable
+fun EditPasswordScreenPreviewWrapper(uiState: EditPasswordUiState) {
+    val viewModel: EditPasswordViewModel = hiltViewModel()
+    LaunchedEffect(uiState) {
+        viewModel.setUiState(uiState)
     }
+    EditPasswordScreen(
+        viewModel = viewModel,
+        onCancelChanges = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewEditPasswordScreenLoading() {
+    EditPasswordScreenPreviewWrapper(EditPasswordUiState.Loading)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewEditPasswordScreenSuccess() {
+    EditPasswordScreenPreviewWrapper(EditPasswordUiState.Success)
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewEditPasswordScreenError() {
+    EditPasswordScreenPreviewWrapper(EditPasswordUiState.Error("An error occurred"))
 }
