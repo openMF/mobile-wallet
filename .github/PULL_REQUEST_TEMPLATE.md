@@ -1,5 +1,6 @@
 ## Issue Fix
 Fixes #{Issue Number}
+Jira Task: [Task_Number](Task_Link)
 
 ## Screenshots
 <!--Please Add Screenshots or Screen Recordings which show the changes you made.-->
