@@ -1,12 +1,13 @@
 [versions]
 appcompatVersion = "1.6.1"
 androidGradlePlugin = "8.4.0"
+checkstyleVersion = "10.16.0"
 compileSdk = "34"
 constraintlayoutVersion = "2.1.4"
 coreKtxVersion = "1.12.0"
 minSdk = "24"
 targetSdk = "34"
-androidTools = "31.3.1"
+androidTools = "31.4.0"
 androidxActivity = "1.8.2"
 androidxComposeBom = "2024.02.02"
 androidxComposeCompiler = "1.5.10"
@@ -63,6 +64,7 @@ coil = "2.6.0"
 androidxMetrics = "1.0.0-beta01"
 androidxBrowser = "1.8.0"
 playServicesCodeScanner = "16.1.0"
+moduleGraph = "2.5.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityVersion" }
@@ -87,6 +89,7 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest"}
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling"}
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
+checkstyle = { module = "com.puppycrawl.tools:checkstyle", version.ref = "checkstyleVersion" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
@@ -175,6 +178,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp"}
 room = { id = "androidx.room", version.ref = "room" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt"}
+module-graph = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraph" }
 
 # Plugins defined by this project
 mifospay-android-application = { id = "mifospay.android.application", version = "unspecified" }
