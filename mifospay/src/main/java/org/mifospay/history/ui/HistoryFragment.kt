@@ -25,6 +25,7 @@ import org.mifospay.history.HistoryContract.TransactionsHistoryPresenter
 import org.mifospay.history.presenter.HistoryPresenter
 import org.mifospay.history.ui.adapter.HistoryAdapter
 import org.mifospay.common.Constants
+import org.mifospay.history.transaction_detail.ui.TransactionDetailDialog
 import org.mifospay.utils.RecyclerItemClickListener
 import javax.inject.Inject
 

@@ -2,6 +2,7 @@ package org.mifospay.core.designsystem.icon
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.filled.ArrowOutward
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.AccountCircle
@@ -34,4 +35,6 @@ object MifosIcons {
     val Back = Icons.AutoMirrored.Outlined.ArrowBack
     val Copy = Icons.Filled.ContentCopy
     val Share = Icons.Filled.Share
+    val AccountCircle = Icons.Outlined.AccountCircle
+    val SendRightTilted = Icons.Default.ArrowOutward
 }
