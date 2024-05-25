@@ -35,6 +35,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.qr.showQr.presenter.RequestQrData
 import org.mifospay.qr.showQr.presenter.ShowQrUiState
@@ -45,29 +46,29 @@ import org.mifospay.utils.ImageUtils
 @Composable
 fun ShowQrScreen(
     viewModel: ShowQrViewModel = hiltViewModel(),
-    qrDataString: String,
     backPress: () -> Unit
 ) {
     val uiState = viewModel.showQrUiState.collectAsStateWithLifecycle()
+    val vpaId = viewModel.vpaId.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.generateQr(RequestQrData(vpaId = qrDataString))
+        viewModel.generateQr()
     }
 
     UpdateBrightness()
 
     ShowQrScreen(
         uiState = uiState.value,
-        qrDataString = qrDataString,
+        vpaId = vpaId.value,
         backPress = backPress,
-        generateQR = { viewModel.generateQr(it) }
+        generateQR = { viewModel.generateQr(requestQrData = it) }
     )
 }
 
 @Composable
 fun ShowQrScreen(
     uiState: ShowQrUiState,
-    qrDataString: String,
+    vpaId: String,
     backPress: () -> Unit,
     generateQR: (RequestQrData) -> Unit,
 ) {
@@ -75,7 +76,7 @@ fun ShowQrScreen(
     var amountDialogState by rememberSaveable { mutableStateOf(false) }
     var qrBitmap by rememberSaveable { mutableStateOf<Bitmap?>(null) }
     var amount by rememberSaveable { mutableStateOf<String?>(null) }
-    var currency by rememberSaveable { mutableStateOf<String?>("TZA") }
+    var currency by rememberSaveable { mutableStateOf(context.getString(R.string.usd)) }
 
     MifosScaffold(
         topBarTitle = R.string.request,
@@ -97,12 +98,12 @@ fun ShowQrScreen(
                                 title = stringResource(R.string.nothing_to_notify),
                                 subTitle = stringResource(R.string.there_is_nothing_to_show),
                                 iconTint = Color.Black,
-                                iconImageVector = Icons.Rounded.Info
+                                iconImageVector = MifosIcons.Info
                             )
                         } else {
                             qrBitmap = uiState.qrDataBitmap
                             ShowQrContent(
-                                qrDataString = qrDataString,
+                                qrDataString = vpaId,
                                 amount = amount,
                                 qrDataBitmap = uiState.qrDataBitmap,
                                 showAmountDialog = { amountDialogState = true }
@@ -116,7 +117,7 @@ fun ShowQrScreen(
                             title = stringResource(id = R.string.error_oops),
                             subTitle = stringResource(id = R.string.unexpected_error_subtitle),
                             iconTint = Color.Black,
-                            iconImageVector = Icons.Rounded.Info
+                            iconImageVector = MifosIcons.Info
                         )
                     }
                 }
@@ -130,7 +131,7 @@ fun ShowQrScreen(
                         shareQr(context, uri = uri)
                     }
                 }
-            ) { Icon(Icons.Default.Share, null) }
+            ) { Icon(MifosIcons.Share, null) }
         }
     )
 
@@ -141,16 +142,16 @@ fun ShowQrScreen(
             resetAmount = {
                 amountDialogState = false
                 amount = null
-                currency = "TZA"
-                generateQR(RequestQrData(vpaId = qrDataString))
+                currency = context.getString(R.string.usd)
+                generateQR(RequestQrData())
                 Toast.makeText(context, R.string.reset_amount_successfully, Toast.LENGTH_SHORT)
                     .show()
             },
-            prefilledCurrency = currency ?: "",
+            prefilledCurrency = currency,
             confirmAmount = { confirmedAmount, confirmedCurrency ->
                 amount = confirmedAmount
                 currency = confirmedCurrency
-                generateQR(RequestQrData(vpaId = qrDataString, amount = amount ?: "", currency = currency ?: "TZA"))
+                generateQR(RequestQrData(amount = amount ?: "", currency = currency))
                 amountDialogState = false
             }
         )
@@ -209,7 +210,7 @@ fun ShowQrScreenPreview(@PreviewParameter(ShowQrUiStateProvider::class) uiState:
     MifosTheme {
         ShowQrScreen(
             uiState = uiState,
-            qrDataString = "",
+            vpaId = "",
             backPress = {},
             generateQR = {}
         )

@@ -380,5 +380,7 @@
     <string name="reset_amount_successfully">Reset Amount Successful</string>
     <string name="please_enter_valid_amount">Please enter valid amount</string>
     <string name="currency">Set Currency</string>
+    <string name="usd">USD</string>
+    <string name="enter_currency">Enter Currency</string>
 
 </resources>

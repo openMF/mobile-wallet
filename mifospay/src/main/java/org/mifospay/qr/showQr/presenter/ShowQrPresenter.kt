@@ -24,16 +24,5 @@ class ShowQrPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHa
     }
 
     override fun generateQr(data: String?) {
-//        mUsecaseHandler.execute(
-//            generateQrUseCase, GenerateQr.RequestValues(data!!),
-//            object : UseCaseCallback<GenerateQr.ResponseValue?> {
-//                override fun onSuccess(response: GenerateQr.ResponseValue?) {
-//                    if (response != null) {
-//                        mShowQrView.showGeneratedQr(response.bitmap)
-//                    }
-//                }
-//
-//                override fun onError(message: String) {}
-//            })
     }
 }

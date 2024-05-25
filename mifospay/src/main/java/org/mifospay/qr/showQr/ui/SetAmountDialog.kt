@@ -1,5 +1,6 @@
 package org.mifospay.qr.showQr.ui
 
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,8 +16,11 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -28,10 +32,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import org.mifospay.R
+import org.mifospay.core.data.util.Constants
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosButton
+import org.mifospay.core.designsystem.component.MifosCustomDialog
+import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
+import org.mifospay.feature.auth.utils.ValidateUtil.isValidEmail
 import org.mifospay.theme.MifosTheme
+import java.time.temporal.TemporalAmount
 
 @Composable
 fun SetAmountDialog(
@@ -44,103 +53,108 @@ fun SetAmountDialog(
     val context = LocalContext.current
     var amount by rememberSaveable { mutableStateOf(prefilledAmount) }
     var currency by rememberSaveable { mutableStateOf(prefilledCurrency) }
+    var amountValidator by rememberSaveable { mutableStateOf<String?>(null) }
+    var currencyValidator by rememberSaveable { mutableStateOf<String?>(null) }
 
+    LaunchedEffect(key1 = amount) {
+        amountValidator = when {
+            amount.trim().isEmpty() -> context.getString(R.string.enter_amount)
+            amount.trim().toDoubleOrNull() == null -> context.getString(R.string.enter_valid_amount)
+            amount.trim().toDouble().compareTo(0.0) <= 0 -> context.getString(R.string.enter_valid_amount)
+            else -> null
+        }
+    }
 
-    Dialog(
-        onDismissRequest = { dismissDialog() },
-    ) {
-        Surface(
-            shape = RoundedCornerShape(16.dp),
-            color = Color.White
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
+    LaunchedEffect(key1 = currency) {
+        currencyValidator = when {
+            currency.trim().isEmpty() -> context.getString(R.string.enter_currency)
+            else -> null
+        }
+    }
 
-                Text(
-                    text = stringResource(id = R.string.set_amount),
-                    style = MaterialTheme.typography.titleMedium
-                )
+    fun validateAllFields(): Boolean {
+        if (amountValidator != null) {
+            Toast.makeText(context, amountValidator, Toast.LENGTH_SHORT).show()
+            return false
+        }
 
-                Spacer(modifier = Modifier.height(10.dp))
+        if (currencyValidator != null) {
+            Toast.makeText(context, currencyValidator, Toast.LENGTH_SHORT).show()
+            return false
+        }
 
-                MfOutlinedTextField(
-                    value = amount,
-                    onValueChange = { amount = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(id = R.string.set_amount),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Number
+        return true
+    }
+
+    MifosCustomDialog(
+        onDismiss = { dismissDialog() },
+        content = {
+            Surface(
+                shape = RoundedCornerShape(16.dp),
+                color = Color.White
+            ) {
+                Column(modifier = Modifier.padding(16.dp)) {
+
+                    Text(
+                        text = stringResource(id = R.string.set_amount),
+                        style = MaterialTheme.typography.titleMedium
                     )
-                )
 
-                MfOutlinedTextField(
-                    value = currency,
-                    onValueChange = { currency = it },
-                    modifier = Modifier.fillMaxWidth(),
-                    label = stringResource(id = R.string.currency),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    MfOutlinedTextField(
+                        value = amount,
+                        onValueChange = { amount = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        label = stringResource(id = R.string.set_amount),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        )
                     )
-                )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                    MfOutlinedTextField(
+                        value = currency,
+                        onValueChange = { currency = it },
+                        modifier = Modifier.fillMaxWidth(),
+                        label = stringResource(id = R.string.currency),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text
+                        )
+                    )
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    MifosOutlinedButton(onClick = { resetAmount() }) {
-                        Text(text = stringResource(id = R.string.reset))
-                    }
+                    Spacer(modifier = Modifier.height(8.dp))
 
-                    Spacer(modifier = Modifier.width(5.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+                        MifosOutlinedButton(onClick = { resetAmount() }) {
+                            Text(text = stringResource(id = R.string.reset))
+                        }
 
-                    MifosOutlinedButton(onClick = { dismissDialog() }) {
-                        Text(text = stringResource(id = R.string.cancel))
-                    }
+                        Spacer(modifier = Modifier.width(4.dp))
 
-                    Spacer(modifier = Modifier.width(5.dp))
+                        MifosOutlinedButton(onClick = { dismissDialog() }) {
+                            Text(text = stringResource(id = R.string.cancel))
+                        }
 
-                    MifosButton(
-                        onClick = {
-                            when {
-                                amount.trim().isNullOrEmpty() -> {
-                                    Toast.makeText(
-                                        context,
-                                        R.string.enter_amount,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                        Spacer(modifier = Modifier.width(4.dp))
 
-                                amount.trim().toDoubleOrNull() == null -> {
-                                    Toast.makeText(
-                                        context,
-                                        R.string.enter_amount,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-
-                                amount.trim().toDouble().compareTo(0.0) <= 0 -> {
-                                    Toast.makeText(
-                                        context,
-                                        R.string.please_enter_valid_amount,
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-
-                                else -> {
+                        MifosButton(
+                            onClick = {
+                                if (validateAllFields()) {
                                     confirmAmount(amount, currency)
                                 }
                             }
+                        ) {
+                            Text(text = stringResource(id = R.string.confirm))
                         }
-                    ) {
-                        Text(text = stringResource(id = R.string.confirm))
                     }
                 }
             }
         }
-    }
+    )
 }
-
 
 @Preview
 @Composable

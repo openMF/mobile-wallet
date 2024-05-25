@@ -4,6 +4,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cancel
@@ -38,4 +39,5 @@ object MifosIcons {
     val Share = Icons.Filled.Share
     val ArrowBack = Icons.AutoMirrored.Filled.ArrowBack
     val Cancel = Icons.Outlined.Cancel
+    val Info = Icons.Default.Info
 }

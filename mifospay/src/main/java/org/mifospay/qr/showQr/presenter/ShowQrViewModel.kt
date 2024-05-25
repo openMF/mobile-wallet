@@ -20,9 +20,13 @@ class ShowQrViewModel @Inject constructor(
     private val _showQrUiState: MutableStateFlow<ShowQrUiState> = MutableStateFlow(ShowQrUiState.Loading)
     val showQrUiState get() = _showQrUiState
 
-    fun generateQr(requestQrData: RequestQrData) {
-        val requestQr = requestQrData.copy(
+    private val _vpaId: MutableStateFlow<String> = MutableStateFlow("")
+    val vpaId get() = _vpaId
+
+    fun generateQr(requestQrData: RequestQrData? = null) {
+        val requestQr = (requestQrData ?: RequestQrData()).copy(
             name = mPreferencesHelper.fullName ?: "",
+            vpaId = vpaId.value
         )
         mUseCaseHandler.execute(
             generateQrUseCase, GenerateQr.RequestValues(requestQr),
@@ -36,12 +40,19 @@ class ShowQrViewModel @Inject constructor(
                 }
             })
     }
+
+
+    fun setQrData(qrData: String?) {
+        if (qrData != null) {
+            _vpaId.value = qrData
+        }
+    }
 }
 
 data class RequestQrData(
     val amount: String = "",
     val vpaId: String = "",
-    val currency: String = "TZA",
+    val currency: String = "USD",
     val name: String = "",
 )
 
