@@ -20,6 +20,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -48,8 +49,9 @@ import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 
 @Composable
 fun MakeTransferScreenRoute(
-    viewModel: MakeTransferViewModel = hiltViewModel(),
+    viewModel: MakeTransferViewModel = hiltViewModel()
 ) {
+    val fetchPayeeClient by viewModel.fetchPayeeClient.collectAsStateWithLifecycle()
     val makeTransferState by viewModel.makeTransferState.collectAsStateWithLifecycle()
     val showTransactionStatus by viewModel.showTransactionStatus.collectAsStateWithLifecycle()
 

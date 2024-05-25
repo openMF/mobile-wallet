@@ -43,7 +43,13 @@ fun PaymentScreenContent(
 
     val tabContents = listOf(
         TabContent(PaymentsScreenContents.SEND.name) {
-            SendScreenRoute(onBackClick = {}, showToolBar = false)
+            SendScreenRoute(
+                onBackClick = {},
+                showToolBar = false,
+                proceedWithMakeTransferFlow = { externalId, transferAmount ->
+
+                }
+            )
         },
         TabContent(PaymentsScreenContents.REQUEST.name) {
             RequestScreen(showQr = { showQr.invoke(vpa) })
