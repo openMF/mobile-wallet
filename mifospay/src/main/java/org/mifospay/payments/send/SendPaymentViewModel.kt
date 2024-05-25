@@ -84,10 +84,7 @@ class SendPaymentViewModel @Inject constructor(
                         onAnyError(R.string.insufficient_balance)
                     } else {
                         if (externalId != null) {
-                            proceedWithTransferFlow(
-                                externalId,
-                                transferAmount
-                            )
+                            proceedWithTransferFlow(externalId, transferAmount)
                         }
                     }
                 }

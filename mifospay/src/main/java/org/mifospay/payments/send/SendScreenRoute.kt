@@ -68,9 +68,9 @@ enum class SendMethodType {
 @Composable
 fun SendScreenRoute(
     viewModel: SendPaymentViewModel = hiltViewModel(),
-    makeTransferViewModel: MakeTransferViewModel = hiltViewModel(),
     showToolBar: Boolean,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    proceedWithMakeTransferFlow: (String, String) -> Unit
 ) {
     val context = LocalContext.current
     val selfVpa by viewModel.vpa.collectAsStateWithLifecycle()
@@ -100,7 +100,7 @@ fun SendScreenRoute(
                         showToast(context.getString(it))
                     },
                     proceedWithTransferFlow = { externalId, transferAmount ->
-                        makeTransferViewModel.fetchClient(externalId, transferAmount)
+                        proceedWithMakeTransferFlow.invoke(externalIdOrMobile, transferAmount.toString())
                     }
                 )
             } else {
