@@ -1,19 +1,16 @@
 package org.mifospay.home.screens
 
-import android.content.Intent
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import org.mifospay.bank.ui.AccountsScreen
-import org.mifospay.bank.link_bank.LinkBankAccountActivity
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
-import org.mifospay.kyc.ui.KYCDescriptionScreen
+import org.mifospay.kyc.ui.KYCScreen
 import org.mifospay.merchants.ui.MerchantScreen
 import org.mifospay.savedcards.ui.CardsScreen
 
@@ -22,7 +19,6 @@ import org.mifospay.savedcards.ui.CardsScreen
 fun FinanceRoute(
     onAddBtn: () -> Unit
 ) {
-    val context = LocalContext.current
     val pagerState = rememberPagerState(
         pageCount = { FinanceScreenContents.entries.size }
     )
@@ -38,11 +34,7 @@ fun FinanceRoute(
             MerchantScreen()
         },
         TabContent(FinanceScreenContents.KYC.name) {
-            KYCDescriptionScreen(
-                onLevel1Clicked = {},
-                onLevel2Clicked = {},
-                onLevel3Clicked = {}
-            )
+            KYCScreen()
         }
     )
 
