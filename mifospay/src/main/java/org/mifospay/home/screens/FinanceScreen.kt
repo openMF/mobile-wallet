@@ -29,10 +29,7 @@ fun FinanceRoute(
 
     val tabContents = listOf(
         TabContent(FinanceScreenContents.ACCOUNTS.name) {
-            AccountsScreen(onAddAccount = {
-                val intent = Intent(context, LinkBankAccountActivity::class.java)
-                context.startActivity(intent)
-            })
+            AccountsScreen()
         },
         TabContent(FinanceScreenContents.CARDS.name) {
             CardsScreen(onEditCard = {}, onAddBtn = { onAddBtn.invoke() })
