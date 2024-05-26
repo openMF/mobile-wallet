@@ -1,6 +1,7 @@
 package org.mifospay.core.designsystem.component
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -18,12 +19,15 @@ fun MifosScaffold(
     backPress: () -> Unit,
     floatingActionButtonContent: FloatingActionButtonContent? = null,
     snackbarHost: @Composable () -> Unit = {},
-    scaffoldContent: @Composable (PaddingValues) -> Unit
+    scaffoldContent: @Composable (PaddingValues) -> Unit,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     Scaffold(
         topBar = {
             MifosTopBar(
-                topBarTitle, backPress
+                topBarTitle = topBarTitle,
+                backPress = backPress,
+                actions = actions
             )
         },
         floatingActionButton = {
@@ -36,6 +40,6 @@ fun MifosScaffold(
             }
         },
         snackbarHost = snackbarHost,
-        content = scaffoldContent
+        content = scaffoldContent,
     )
 }

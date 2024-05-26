@@ -6,6 +6,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.window.Dialog
 
 @Composable
 fun MifosDialogBox(
@@ -43,3 +44,15 @@ fun MifosDialogBox(
         )
     }
 }
+
+@Composable
+fun MifosCustomDialog(
+    onDismiss: () -> Unit,
+    content: @Composable () -> Unit,
+) {
+    Dialog(
+        onDismissRequest = onDismiss,
+        content = content
+    )
+}
+

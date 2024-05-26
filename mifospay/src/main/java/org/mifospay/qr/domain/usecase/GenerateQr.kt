@@ -1,12 +1,17 @@
 package org.mifospay.qr.domain.usecase
 
 import android.graphics.Bitmap
+import android.net.Uri
+import androidx.core.net.toUri
+import com.google.android.gms.common.util.Base64Utils
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.common.Constants
+import org.mifospay.qr.showQr.presenter.RequestQrData
+import java.util.Base64
 import javax.inject.Inject
 
 /**
@@ -16,7 +21,7 @@ class GenerateQr @Inject constructor() :
     UseCase<GenerateQr.RequestValues, GenerateQr.ResponseValue?>() {
     override fun executeUseCase(requestValues: RequestValues) {
         try {
-            val bitmap = encodeAsBitmap(requestValues.data)
+            val bitmap = encodeAsBitmap(makeUpiString(requestValues.data))
             if (bitmap != null) {
                 useCaseCallback.onSuccess(ResponseValue(bitmap))
             } else {
@@ -25,6 +30,27 @@ class GenerateQr @Inject constructor() :
         } catch (e: WriterException) {
             useCaseCallback.onError(Constants.FAILED_TO_WRITE_DATA_TO_QR)
         }
+    }
+
+    private fun makeUpiString(requestQrData: RequestQrData): String {
+        // Initial payment string
+        val requestPaymentString = "upi://pay" +
+                "?pa=${requestQrData.vpaId}" +
+                "&am=${requestQrData.amount}" +       // This param is for fixed amount (non-editable).
+                "&pn=${requestQrData.name}" +         // To show your name in app.
+                "&cu=${requestQrData.currency}" +     // Currency code.
+                "&mode=02" +                          // Mode 02 for Secure QR Code.
+                "&s=000000"                           // If the transaction is initiated by any PSP app then the respective orgID needs to be passed.
+
+        // Convert the payment string to bytes and encode to Base64
+        val sign = Base64.getEncoder().encodeToString(requestPaymentString.toByteArray(Charsets.UTF_8))
+
+
+       val signedRequestPayment = requestPaymentString +
+        "&sign=${sign}"
+
+        // Convert the final URI to string
+        return signedRequestPayment
     }
 
     @Throws(WriterException::class)
@@ -52,7 +78,7 @@ class GenerateQr @Inject constructor() :
         return bitmap
     }
 
-    class RequestValues(val data: String) : UseCase.RequestValues
+    class RequestValues(val data: RequestQrData) : UseCase.RequestValues
     class ResponseValue(val bitmap: Bitmap) : UseCase.ResponseValue
     companion object {
         private const val WHITE = -0x1

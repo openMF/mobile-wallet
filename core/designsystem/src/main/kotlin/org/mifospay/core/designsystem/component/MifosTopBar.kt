@@ -1,5 +1,6 @@
 package org.mifospay.core.designsystem.component
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -18,7 +19,8 @@ import org.mifospay.core.designsystem.theme.styleMifosTopBar
 @Composable
 fun MifosTopBar(
     topBarTitle: Int,
-    backPress: () -> Unit
+    actions: @Composable RowScope.() -> Unit = {},
+    backPress: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -36,6 +38,7 @@ fun MifosTopBar(
                 )
             }
         },
-        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.White)
+        colors = TopAppBarDefaults.mediumTopAppBarColors(containerColor = Color.White),
+        actions = actions
     )
 }
