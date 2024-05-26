@@ -1,4 +1,4 @@
-package org.mifospay.history.presenter
+package org.mifospay.history.transaction_detail.presenter
 
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
 import org.mifospay.core.data.base.UseCaseHandler

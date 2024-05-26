@@ -28,13 +28,13 @@ import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifospay.R
 import org.mifospay.base.BaseFragment
-import org.mifospay.common.ui.MakeTransferFragment.Companion.newInstance
 import org.mifospay.home.BaseHomeContract
 import org.mifospay.qr.ui.ReadQrActivity
 import org.mifospay.common.Constants
 import org.mifospay.payments.TransferViewModel
 import org.mifospay.utils.Toaster
 import org.mifospay.common.Utils.hideSoftKeyboard
+import org.mifospay.common.ui.MakeTransferFragment
 
 /**
  * Created by naman on 30/8/17.
@@ -330,7 +330,7 @@ class SendFragment : BaseFragment(), BaseHomeContract.TransferView {
 
     override fun showMobile(mobileNo: String?) {}
     override fun showClientDetails(externalId: String?, amount: Double) {
-        val fragment = newInstance(externalId, amount)
+        val fragment = MakeTransferFragment.newInstance(externalId, amount)
         fragment.setTargetFragment(this, REQUEST_SHOW_DETAILS)
         if (parentFragment != null) {
             fragment.show(childFragmentManager, Constants.MAKE_TRANSFER_FRAGMENT)

@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Random
 import javax.inject.Inject
@@ -14,80 +15,100 @@ import javax.inject.Inject
 @HiltViewModel
 class AccountViewModel @Inject constructor() : ViewModel() {
 
-    val bankAccountDetailsList: MutableList<BankAccountDetails> = mutableListOf()
+    private val _bankAccountDetailsList = MutableStateFlow<List<BankAccountDetails>>(emptyList())
+    val bankAccountDetailsList: StateFlow<List<BankAccountDetails>> = _bankAccountDetailsList
 
-    private val _accountUiState = MutableStateFlow<AccountsUiState>(AccountsUiState.Loading)
-    val accountsUiState: StateFlow<AccountsUiState> = _accountUiState
-
-    private val mRandom = Random()
+    private val _accountsUiState = MutableStateFlow<AccountsUiState>(AccountsUiState.Loading)
+    val accountsUiState: StateFlow<AccountsUiState> = _accountsUiState
 
     init {
         fetchLinkedAccount()
     }
 
-    /**
-     * Mocks network delay
-     */
-    fun fetchLinkedAccount() {
-       viewModelScope.launch {
-           _accountUiState.value = AccountsUiState.Loading
-           delay(2000)
-           val linkedAccount = fetchSampleLinkedAccounts()
-           _accountUiState.value = AccountsUiState.LinkedAccounts(linkedAccount)
-       }
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> get() = _isRefreshing.asStateFlow()
+
+    fun refresh() {
+        viewModelScope.launch {
+            _isRefreshing.emit(true)
+            fetchLinkedAccount()
+            _isRefreshing.emit(false)
+        }
     }
 
-    fun fetchSampleLinkedAccounts(): MutableList<BankAccountDetails> {
-        bankAccountDetailsList.add(
+    private val mRandom = Random()
+
+    fun fetchLinkedAccount() {
+        viewModelScope.launch {
+            _accountsUiState.value = AccountsUiState.Loading
+            delay(2000)
+            val linkedAccounts = fetchSampleLinkedAccounts()
+            _bankAccountDetailsList.value = linkedAccounts
+            _accountsUiState.value = if (linkedAccounts.isEmpty()) {
+                AccountsUiState.Empty
+            } else {
+                AccountsUiState.LinkedAccounts(linkedAccounts)
+            }
+        }
+    }
+
+    fun fetchSampleLinkedAccounts(): List<BankAccountDetails> {
+        return listOf(
             BankAccountDetails(
                 "SBI", "Ankur Sharma", "New Delhi",
                 mRandom.nextInt().toString() + " ", "Savings"
-            )
-        )
-        bankAccountDetailsList.add(
+            ),
             BankAccountDetails(
-                "HDFC", "Mandeep Singh ", "Uttar Pradesh",
+                "HDFC", "Mandeep Singh", "Uttar Pradesh",
+                mRandom.nextInt().toString() + " ", "Savings"
+            ),
+            BankAccountDetails(
+                "ANDHRA", "Rakesh anna", "Telegana",
+                mRandom.nextInt().toString() + " ", "Savings"
+            ),
+            BankAccountDetails(
+                "PNB", "luv Pro", "Gujrat",
+                mRandom.nextInt().toString() + " ", "Savings"
+            ),
+            BankAccountDetails(
+                "HDF", "Harry potter", "Hogwarts",
+                mRandom.nextInt().toString() + " ", "Savings"
+            ),
+            BankAccountDetails(
+                "GCI", "JIGME", "JAMMU",
+                mRandom.nextInt().toString() + " ", "Savings"
+            ),
+            BankAccountDetails(
+                "FCI", "NISHU BOII", "ASSAM",
                 mRandom.nextInt().toString() + " ", "Savings"
             )
         )
-        bankAccountDetailsList.add(
-            BankAccountDetails(
-                "ANDHRA", "Rakesh anna ", "Telegana",
-                mRandom.nextInt().toString() + " ", "Savings"
-            )
-        )
-        bankAccountDetailsList.add(
-            BankAccountDetails(
-                "PNB", "luv Pro ", "Gujrat",
-                mRandom.nextInt().toString() + " ", "Savings"
-            )
-        )
-        bankAccountDetailsList.add(
-            BankAccountDetails(
-                "HDF", "Harry potter ", "Hogwarts",
-                mRandom.nextInt().toString() + " ", "Savings"
-            )
-        )
-        bankAccountDetailsList.add(
-            BankAccountDetails(
-                "GCI", "JIGME ", "JAMMU",
-                mRandom.nextInt().toString() + " ", "Savings"
-            )
-        )
-        bankAccountDetailsList.add(
-            BankAccountDetails(
-                "FCI", "NISHU BOII ", "ASSAM",
-                mRandom.nextInt().toString() + " ", "Savings"
-            )
-        )
-        return bankAccountDetailsList
     }
 
+    fun addBankAccount(bankAccountDetails: BankAccountDetails) {
+        viewModelScope.launch {
+            val updatedList = _bankAccountDetailsList.value.toMutableList().apply {
+                add(bankAccountDetails)
+            }
+            _bankAccountDetailsList.value = updatedList
+            _accountsUiState.value = AccountsUiState.LinkedAccounts(updatedList)
+        }
+    }
+
+    fun updateBankAccount(index: Int, bankAccountDetails: BankAccountDetails) {
+        viewModelScope.launch {
+            val updatedList = _bankAccountDetailsList.value.toMutableList().apply {
+                this[index] = bankAccountDetails
+            }
+            _bankAccountDetailsList.value = updatedList
+            _accountsUiState.value = AccountsUiState.LinkedAccounts(updatedList)
+        }
+    }
 }
 
 sealed class AccountsUiState {
-    data object Loading : AccountsUiState()
-    data object Empty : AccountsUiState()
-    data object Error : AccountsUiState()
+    object Loading : AccountsUiState()
+    object Empty : AccountsUiState()
+    object Error : AccountsUiState()
     data class LinkedAccounts(val linkedAccounts: List<BankAccountDetails>) : AccountsUiState()
 }

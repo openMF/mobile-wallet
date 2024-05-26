@@ -151,6 +151,8 @@
     <string name="status">status</string>
     <string name="transaction_id">Transaction ID : </string>
     <string name="transaction_date">Transaction Date : </string>
+    <string name="transaction_success">Transaction successful</string>
+    <string name="transaction_unable_to_process">Unable to process transfer</string>
     <string name="to">To:</string>
     <string name="from">From:</string>
     <string name="date">date</string>
@@ -377,6 +379,11 @@
     <string name="error_fetching_balance">Error fetching balance</string>
     <string name="nothing_to_notify">Nothing To Notify</string>
     <string name="there_is_nothing_to_show">There is nothing to show</string>
+    <string name="specific_transactions_history">Specific Transactions History</string>
+    <string name="transaction_detail">Transaction Detail</string>
+    <string name="receipt_id">Receipt ID : </string>
+    <string name="debit">Debit</string>
+    <string name="Credit">Credit</string>
     <string name="reset_amount_successfully">Reset Amount Successful</string>
     <string name="please_enter_valid_amount">Please enter valid amount</string>
     <string name="currency">Set Currency</string>

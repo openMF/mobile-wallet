@@ -1,6 +1,7 @@
 package org.mifospay.history.ui
 
 import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,6 +36,7 @@ import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
 import org.mifospay.R
+import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.theme.chipSelectedColor
 import org.mifospay.core.designsystem.theme.lightGrey
@@ -42,23 +44,34 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.TransactionItemScreen
 import org.mifospay.history.presenter.HistoryUiState
 import org.mifospay.history.presenter.HistoryViewModel
+import org.mifospay.history.transaction_detail.ui.TransactionDetailDialog
+import org.mifospay.history.transaction_detail.ui.TransactionDetailScreen
 
 @Composable
 fun HistoryScreen(
-    viewModel: HistoryViewModel = hiltViewModel()
+    viewModel: HistoryViewModel = hiltViewModel(),
+    viewReceipt: (String) -> Unit,
+    accountClicked: (String, ArrayList<Transaction>) -> Unit,
 ) {
     val historyUiState by viewModel.historyUiState.collectAsStateWithLifecycle()
+
     HistoryScreen(
-        historyUiState = historyUiState
+        historyUiState = historyUiState,
+        viewReceipt = viewReceipt,
+        accountClicked = accountClicked,
     )
 }
 
 @Composable
 fun HistoryScreen(
-    historyUiState: HistoryUiState
+    historyUiState: HistoryUiState,
+    viewReceipt: (String) -> Unit,
+    accountClicked: (String, ArrayList<Transaction>) -> Unit,
 ) {
     var selectedChip by remember { mutableStateOf(TransactionType.OTHER) }
     var filteredTransactions by remember { mutableStateOf(emptyList<Transaction>()) }
+    var transactionsList by remember { mutableStateOf(emptyList<Transaction>()) }
+    var transactionDetailState by remember { mutableStateOf<Transaction?>(null) }
 
     when (historyUiState) {
         HistoryUiState.Empty -> {
@@ -83,6 +96,7 @@ fun HistoryScreen(
 
         is HistoryUiState.HistoryList -> {
             LaunchedEffect(selectedChip) {
+                transactionsList = historyUiState.list
                 filteredTransactions = when (selectedChip) {
                     TransactionType.OTHER -> historyUiState.list!!
                     else -> historyUiState.list!!.filter { it.transactionType == selectedChip }
@@ -116,7 +130,9 @@ fun HistoryScreen(
                     items(filteredTransactions) {
                         Column {
                             TransactionItemScreen(
-                                modifier = Modifier.padding(start = 24.dp, end = 24.dp),
+                                modifier = Modifier
+                                    .padding(start = 24.dp, end = 24.dp)
+                                    .clickable { transactionDetailState = it },
                                 transaction = it
                             )
                             Spacer(modifier = Modifier.height(16.dp))
@@ -133,6 +149,19 @@ fun HistoryScreen(
                 contentDesc = stringResource(R.string.loading)
             )
         }
+    }
+
+    if (transactionDetailState != null) {
+        MifosBottomSheet(
+            content = {
+                TransactionDetailScreen(
+                    transaction = transactionDetailState!!,
+                    viewReceipt = { transactionDetailState?.transactionId?.let { viewReceipt(it) } },
+                    accountClicked = { accountClicked(it, ArrayList(transactionsList)) }
+                )
+            },
+            onDismiss = { transactionDetailState = null }
+        )
     }
 }
 
@@ -158,25 +187,25 @@ fun Chip(selected: Boolean, onClick: () -> Unit, label: String) {
 @Preview(showBackground = true)
 @Composable
 fun HistoryScreenLoadingPreview() {
-    HistoryScreen(historyUiState = HistoryUiState.Loading)
+    HistoryScreen(historyUiState = HistoryUiState.Loading, {}, { _, _ -> })
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun HistoryScreenEmptyPreview() {
-    HistoryScreen(historyUiState = HistoryUiState.Empty)
+    HistoryScreen(historyUiState = HistoryUiState.Empty, {}, { _, _ -> })
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun HistoryScreenErrorPreview() {
-    HistoryScreen(historyUiState = HistoryUiState.Error("Error Screen"))
+    HistoryScreen(historyUiState = HistoryUiState.Error("Error Screen"), {}, { _, _ -> })
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun HistoryScreenListPreview() {
-    HistoryScreen(historyUiState = HistoryUiState.HistoryList(sampleHistoryList))
+    HistoryScreen(historyUiState = HistoryUiState.HistoryList(sampleHistoryList), {}, { _, _ -> })
 }
 
 val sampleHistoryList = List(10) { index ->
