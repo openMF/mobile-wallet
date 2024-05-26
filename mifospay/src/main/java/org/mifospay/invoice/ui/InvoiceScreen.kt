@@ -23,6 +23,7 @@ import org.mifospay.R
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.invoice.presenter.InvoiceUiState
+import org.mifospay.invoice.presenter.InvoicesUiState
 import org.mifospay.invoice.presenter.InvoicesViewModel
 
 @Composable
@@ -38,12 +39,12 @@ fun InvoiceScreen(
 
 @Composable
 fun InvoiceScreen(
-    invoiceUiState: InvoiceUiState,
+    invoiceUiState: InvoicesUiState,
     getUniqueInvoiceLink: (Long) -> Uri?
 ) {
     val context = LocalContext.current
     when (invoiceUiState) {
-        is InvoiceUiState.Error -> {
+        is InvoicesUiState.Error -> {
             EmptyContentScreen(
                 modifier = Modifier,
                 title = stringResource(id = R.string.error_oops),
@@ -53,7 +54,7 @@ fun InvoiceScreen(
             )
         }
 
-        is InvoiceUiState.InvoiceList -> {
+        is InvoicesUiState.InvoiceList -> {
             Column(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(invoiceUiState.list) {
@@ -75,7 +76,7 @@ fun InvoiceScreen(
             }
         }
 
-        InvoiceUiState.Empty -> {
+        InvoicesUiState.Empty -> {
             EmptyContentScreen(
                 modifier = Modifier,
                 title = stringResource(id = R.string.error_oops),
@@ -85,7 +86,7 @@ fun InvoiceScreen(
             )
         }
 
-        InvoiceUiState.Loading -> {
+        InvoicesUiState.Loading -> {
             MifosLoadingWheel(
                 modifier = Modifier.fillMaxWidth(),
                 contentDesc = stringResource(R.string.loading)
@@ -98,20 +99,20 @@ fun InvoiceScreen(
 @Composable
 fun InvoiceScreenLoadingPreview() {
     InvoiceScreen(
-        invoiceUiState = InvoiceUiState.Loading, getUniqueInvoiceLink = { null })
+        invoiceUiState = InvoicesUiState.Loading, getUniqueInvoiceLink = { null })
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun InvoiceScreenEmptyListPreview() {
-    InvoiceScreen(invoiceUiState = InvoiceUiState.Empty, getUniqueInvoiceLink = { null })
+    InvoiceScreen(invoiceUiState = InvoicesUiState.Empty, getUniqueInvoiceLink = { null })
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun InvoiceScreenListPreview() {
     InvoiceScreen(
-        invoiceUiState = InvoiceUiState.InvoiceList(sampleInvoiceList),
+        invoiceUiState = InvoicesUiState.InvoiceList(sampleInvoiceList),
         getUniqueInvoiceLink = { null })
 }
 
@@ -119,7 +120,7 @@ private fun InvoiceScreenListPreview() {
 @Composable
 private fun InvoiceScreenErrorPreview() {
     InvoiceScreen(
-        invoiceUiState = InvoiceUiState.Error("Error Screen"),
+        invoiceUiState = InvoicesUiState.Error("Error Screen"),
         getUniqueInvoiceLink = { null })
 }
 
