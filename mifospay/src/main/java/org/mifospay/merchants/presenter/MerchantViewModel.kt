@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.mifospay.core.data.base.TaskLooper
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseFactory
@@ -40,11 +41,24 @@ class MerchantViewModel @Inject constructor(
         fetchMerchants()
     }
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> get() = _isRefreshing.asStateFlow()
+
+    fun refresh() {
+        viewModelScope.launch {
+            _isRefreshing.emit(true)
+            fetchMerchants()
+            _isRefreshing.emit(false)
+        }
+    }
+
+
     val merchantsListUiState: StateFlow<MerchantUiState> = searchQuery
         .map { q ->
             when (_merchantUiState.value) {
                 is MerchantUiState.ShowMerchants -> {
-                    val merchantList = (merchantUiState.value as MerchantUiState.ShowMerchants).merchants
+                    val merchantList =
+                        (merchantUiState.value as MerchantUiState.ShowMerchants).merchants
                     val filterCards = merchantList.filter {
                         it.externalId.lowercase().contains(q.lowercase())
                         it.savingsProductName?.lowercase()?.contains(q.lowercase())
