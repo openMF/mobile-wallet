@@ -1,10 +1,14 @@
 package org.mifospay.kyc.presenter
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mifospay.core.model.entity.kyc.KYCLevel1Details
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.kyc.FetchKYCLevel1Details
@@ -24,6 +28,18 @@ class KYCDescriptionViewModel @Inject constructor(
 
     init {
         fetchCurrentLevel()
+    }
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> get() = _isRefreshing.asStateFlow()
+
+    fun refresh() {
+        viewModelScope.launch {
+            _isRefreshing.emit(true)
+            delay(2000)
+            fetchCurrentLevel()
+            _isRefreshing.emit(false)
+        }
     }
 
     private fun fetchCurrentLevel() {
