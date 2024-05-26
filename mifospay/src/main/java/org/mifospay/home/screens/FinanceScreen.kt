@@ -35,7 +35,7 @@ fun FinanceRoute(
             })
         },
         TabContent(FinanceScreenContents.CARDS.name) {
-            CardsScreen(onEditCard = {}, onAddBtn = { onAddBtn.invoke() })
+            CardsScreen(onEditCard = {})
         },
         TabContent(FinanceScreenContents.MERCHANTS.name) {
             MerchantScreen()

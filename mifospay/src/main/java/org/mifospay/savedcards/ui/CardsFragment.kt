@@ -39,8 +39,7 @@ class CardsFragment : BaseFragment()  {
                         CardsScreen(
                             onEditCard = {
                                 // TODO open Add card flow with edit flag to allow edit the card
-                            },
-                            onAddBtn = { onAddBtnClicked() },
+                            }
                         )
                     }
                 }

@@ -11,15 +11,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import org.mifospay.common.Constants
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.savedcards.AddCard
 import org.mifospay.core.data.domain.usecase.savedcards.DeleteCard
 import org.mifospay.core.data.domain.usecase.savedcards.EditCard
 import org.mifospay.core.data.domain.usecase.savedcards.FetchSavedCards
-import org.mifospay.common.CreditCardUtils.validateCreditCardNumber
 import org.mifospay.data.local.LocalRepository
-import org.mifospay.common.Constants
 import javax.inject.Inject
 
 @HiltViewModel
@@ -87,15 +86,7 @@ class CardsScreenViewModel @Inject constructor(
             })
     }
 
-    fun addCard(
-        card: Card?,
-        onValidationSuccess: (String) -> Unit,
-        onValidationFail: (String) -> Unit
-    ) {
-        if (!validateCreditCardNumber(card!!.cardNumber)) {
-            onValidationFail(Constants.ERROR_ADDING_CARD)
-            return
-        }
+    fun addCard(card: Card) {
         addCardUseCase.walletRequestValues = AddCard.RequestValues(
             mLocalRepository.clientDetails.clientId,
             card
@@ -104,25 +95,17 @@ class CardsScreenViewModel @Inject constructor(
         mUseCaseHandler.execute(addCardUseCase, requestValues,
             object : UseCase.UseCaseCallback<AddCard.ResponseValue> {
                 override fun onSuccess(response: AddCard.ResponseValue) {
-                    onValidationSuccess(Constants.CARD_ADDED_SUCCESSFULLY)
+                    _cardState.value = CardsUiState.Success(Constants.CARD_ADDED_SUCCESSFULLY)
                     fetchSavedCards()
                 }
 
                 override fun onError(message: String) {
-                    onValidationFail(Constants.ERROR_ADDING_CARD)
+                    _cardState.value = CardsUiState.Error
                 }
             })
     }
 
-    fun editCard(
-        card: Card?,
-        onValidationSuccess: (String) -> Unit,
-        onValidationFail: (String) -> Unit
-    ) {
-        if (!validateCreditCardNumber(card!!.cardNumber)) {
-            onValidationFail(Constants.INVALID_CREDIT_CARD_NUMBER)
-            return
-        }
+    fun editCard(card: Card) {
         editCardUseCase.walletRequestValues = EditCard.RequestValues(
             mLocalRepository.clientDetails.clientId.toInt(),
             card
@@ -131,21 +114,17 @@ class CardsScreenViewModel @Inject constructor(
         mUseCaseHandler.execute(editCardUseCase, requestValues,
             object : UseCase.UseCaseCallback<EditCard.ResponseValue> {
                 override fun onSuccess(response: EditCard.ResponseValue) {
-                    onValidationSuccess(Constants.CARD_UPDATED_SUCCESSFULLY)
+                    _cardState.value = CardsUiState.Success(Constants.CARD_UPDATED_SUCCESSFULLY)
                     fetchSavedCards()
                 }
 
                 override fun onError(message: String) {
-                    onValidationFail(Constants.ERROR_UPDATING_CARD)
+                    _cardState.value = CardsUiState.Error
                 }
             })
     }
 
-    fun deleteCard(
-        cardId: Int,
-        onValidationSuccess: (String) -> Unit,
-        onValidationFail: (String) -> Unit
-    ) {
+    fun deleteCard(cardId: Int) {
         deleteCardUseCase.walletRequestValues = DeleteCard.RequestValues(
             mLocalRepository.clientDetails.clientId.toInt(),
             cardId
@@ -154,12 +133,12 @@ class CardsScreenViewModel @Inject constructor(
         mUseCaseHandler.execute(deleteCardUseCase, requestValues,
             object : UseCase.UseCaseCallback<DeleteCard.ResponseValue> {
                 override fun onSuccess(response: DeleteCard.ResponseValue) {
-                    onValidationSuccess(Constants.CARD_DELETED_SUCCESSFULLY)
+                    _cardState.value = CardsUiState.Success(Constants.CARD_DELETED_SUCCESSFULLY)
                     fetchSavedCards()
                 }
 
                 override fun onError(message: String) {
-                    onValidationFail(Constants.ERROR_DELETING_CARD)
+                    _cardState.value = CardsUiState.Error
                 }
             })
     }
@@ -174,4 +153,5 @@ sealed interface CardsUiState {
     data object Empty : CardsUiState
     data object Error : CardsUiState
     data object Loading : CardsUiState
+    data class Success(val message: String) : CardsUiState
 }
