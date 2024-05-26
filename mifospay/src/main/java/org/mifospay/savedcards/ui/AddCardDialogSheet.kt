@@ -133,28 +133,36 @@ fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> U
 
 fun validateCard(card: Card, onError: (Int) -> Unit, onSuccess: (Card) -> Unit) {
 
-    if (card.cardNumber.isEmpty() || card.cvv.isEmpty() || card.expiryDate.isEmpty() || card.firstName.isEmpty() || card.lastName.isEmpty()) {
-        onError(R.string.all_fields_required)
-        return
-    } else if (card.cardNumber.length < 16 || !CreditCardUtils.validateCreditCardNumber(card.cardNumber)) {
-        onError(R.string.invalid_credit_card)
-        return
-    } else if (card.expiryDate.length < 4) {
-        onError(R.string.expiry_date_length_error)
-        return
-    } else if ((card.expiryDate.substring(2, 4) == Calendar.getInstance()[Calendar.YEAR].toString()
+    when {
+        card.cardNumber.isEmpty() || card.cvv.isEmpty() || card.expiryDate.isEmpty() || card.firstName.isEmpty() || card.lastName.isEmpty() -> {
+            onError(R.string.all_fields_required)
+        }
+
+        card.cardNumber.length < 16 || !CreditCardUtils.validateCreditCardNumber(card.cardNumber) -> {
+            onError(R.string.invalid_credit_card)
+        }
+
+        card.expiryDate.length < 4 -> {
+            onError(R.string.expiry_date_length_error)
+        }
+
+        (card.expiryDate.substring(2, 4) == Calendar.getInstance()[Calendar.YEAR].toString()
             .substring(2, 4) && card.expiryDate.substring(0, 2)
             .toInt() < Calendar.getInstance()[Calendar.MONTH] + 1) || card.expiryDate.substring(
-            0, 2
-        ).toInt() > 12
-    ) {
-        onError(R.string.invalid_expiry_date)
-        return
-    } else if (card.cvv.length < 3) {
-        onError(R.string.cvv_length_error)
-        return
+            0,
+            2
+        ).toInt() > 12 -> {
+            onError(R.string.invalid_expiry_date)
+        }
+
+        card.cvv.length < 3 -> {
+            onError(R.string.cvv_length_error)
+        }
+
+        else -> {
+            onSuccess(card)
+        }
     }
-    onSuccess(card)
 }
 
 @Preview(showBackground = true)
