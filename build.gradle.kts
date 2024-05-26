@@ -27,6 +27,7 @@ plugins {
     alias(libs.plugins.room) apply false
     alias(libs.plugins.kotlin.android) apply false
     id("io.gitlab.arturbosch.detekt").version("1.18.1")
+    alias(libs.plugins.module.graph) apply true // Plugin applied to allow module graph generation
 }
 
 val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) {
@@ -55,7 +56,6 @@ allprojects {
     }
 }
 
-/*
 // Task to print all the module paths in the project e.g. :core:data
 // Used by module graph generator script
 tasks.register("printModulePaths") {
@@ -64,4 +64,4 @@ tasks.register("printModulePaths") {
             println(this.path)
         }
     }
-}*/
+}
