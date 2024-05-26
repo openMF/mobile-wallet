@@ -197,6 +197,7 @@
     <string name="no_saved_cards_found">No saved cards found</string>
     <string name="debit_card_number">Debit Card Number</string>
     <string name="mm">MM</string>
+    <string name="mm_yy">MM/YY</string>
     <string name="slash">/</string>
     <string name="search">Search</string>
     <string name="enter_otp">Enter OTP</string>
@@ -335,6 +336,12 @@
     <string name="edit_clicked">Edit Clicked</string>
     <string name="card_number">Card Number: </string>
 
+    <string name="invalid_credit_card">Invalid Credit Card Number</string>
+    <string name="all_fields_required">All Fields Required</string>
+    <string name="expiry_date_length_error">Expiry date should be 4 digits</string>
+    <string name="cvv_length_error">CVV length should be 3 digits</string>
+    <string name="invalid_expiry_date">Invalid Expiry Date</string>
+    <string name="confirm_delete_card">Are you sure you want to delete this card?</string>
 
     <!-- dynamically formatted strings-->
     <string name="name_client_name">Name: %1$s</string>

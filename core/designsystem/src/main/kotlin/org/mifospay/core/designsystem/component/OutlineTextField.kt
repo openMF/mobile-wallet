@@ -30,6 +30,7 @@ fun MifosOutlinedTextField(
     visualTransformation: VisualTransformation = VisualTransformation.None,
     trailingIcon: @Composable (() -> Unit)? = null,
     error: Boolean = false,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
 ) {
 
     OutlinedTextField(
@@ -58,7 +59,7 @@ fun MifosOutlinedTextField(
         textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = Color.Black)
         },
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation,
         isError = error
     )
