@@ -94,7 +94,7 @@
             android:layout_marginLeft="@dimen/value_10dp"
             android:layout_marginRight="@dimen/value_10dp"
             android:layout_marginTop="@dimen/value_10dp"
-            android:visibility="gone">
+            >
 
             <LinearLayout
                 android:id="@+id/ll_from"
@@ -176,7 +176,7 @@
             android:layout_height="1dp"
             android:layout_margin="@dimen/value_10dp"
             android:background="#44000000"
-            android:visibility="gone"/>
+            />
 
         <TextView
             android:id="@+id/tv_viewReceipt"

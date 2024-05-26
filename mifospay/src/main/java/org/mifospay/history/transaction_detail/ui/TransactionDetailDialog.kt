@@ -1,4 +1,4 @@
-package org.mifospay.history.ui
+package org.mifospay.history.transaction_detail.ui
 
 import android.app.Dialog
 import android.content.Intent
@@ -25,11 +25,12 @@ import com.mifospay.core.model.domain.TransactionType
 import org.mifospay.R
 import org.mifospay.history.HistoryContract
 import org.mifospay.history.HistoryContract.TransactionDetailView
-import org.mifospay.history.presenter.TransactionDetailPresenter
+import org.mifospay.history.transaction_detail.presenter.TransactionDetailPresenter
 import org.mifospay.receipt.ui.ReceiptActivity
 import org.mifospay.common.Constants
 import org.mifospay.utils.Toaster
 import org.mifospay.common.Utils.getFormattedAccountBalance
+import org.mifospay.history.specific_transactions.ui.SpecificTransactionsActivity
 import javax.inject.Inject
 
 /**

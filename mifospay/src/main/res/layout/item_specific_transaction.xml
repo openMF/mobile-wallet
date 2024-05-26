@@ -38,6 +38,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:text="fromClientName"
                     android:textColor="@color/grey_900"/>
 
                 <TextView
@@ -45,6 +46,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:text="fromAccountNumber"
                     android:textColor="@color/grey_900"/>
 
             </LinearLayout>
@@ -76,6 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:text="tvToClientName"
                     android:textColor="@color/grey_900"/>
 
                 <TextView
@@ -83,6 +86,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:text="tvToClientNo"
                     android:textColor="@color/grey_900"/>
 
             </LinearLayout>
@@ -113,6 +117,7 @@
                 <TextView
                     android:id="@+id/tv_transaction_id"
                     android:layout_width="match_parent"
+                    android:text="tvtransactionId"
                     android:layout_height="wrap_content"
                     android:textColor="@color/primaryDarkBlue"/>
 
@@ -120,6 +125,7 @@
                     android:id="@+id/tv_transaction_date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:text="tvtransactiondate"
                     android:textColor="@color/gray_5"/>
 
                 <TextView
@@ -127,6 +133,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
+                    android:text="tvtransactionstatus"
                     android:textColor="@color/gray_5"/>
 
             </LinearLayout>
@@ -136,6 +143,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="40dp"
                 android:layout_alignParentRight="true"
+                android:text="3234"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/value_10dp"
                 android:textColor="@android:color/black"
