@@ -139,17 +139,10 @@ fun ShowQrScreen(
         SetAmountDialog(
             dismissDialog = { amountDialogState = false },
             prefilledAmount = amount ?: "",
-            resetAmount = {
-                amountDialogState = false
-                amount = null
-                currency = context.getString(R.string.usd)
-                generateQR(RequestQrData())
-                Toast.makeText(context, R.string.reset_amount_successfully, Toast.LENGTH_SHORT)
-                    .show()
-            },
             prefilledCurrency = currency,
             confirmAmount = { confirmedAmount, confirmedCurrency ->
-                amount = confirmedAmount
+                amount = if(confirmedAmount == "") null
+                else confirmedAmount
                 currency = confirmedCurrency
                 generateQR(RequestQrData(amount = amount ?: "", currency = currency))
                 amountDialogState = false
