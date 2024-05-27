@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -38,6 +40,7 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosCustomDialog
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.feature.auth.utils.ValidateUtil.isValidEmail
 import org.mifospay.theme.MifosTheme
 import java.time.temporal.TemporalAmount
@@ -45,7 +48,6 @@ import java.time.temporal.TemporalAmount
 @Composable
 fun SetAmountDialog(
     dismissDialog: () -> Unit,
-    resetAmount: () -> Unit,
     prefilledCurrency: String,
     prefilledAmount: String,
     confirmAmount: (String, String) -> Unit,
@@ -58,8 +60,9 @@ fun SetAmountDialog(
 
     LaunchedEffect(key1 = amount) {
         amountValidator = when {
-            amount.trim().isEmpty() -> context.getString(R.string.enter_amount)
-            amount.trim().toDoubleOrNull() == null -> context.getString(R.string.enter_valid_amount)
+            amount.trim() == "" -> null
+            amount.trim().any { it.isLetter() }
+                    || amount.trim().toDoubleOrNull() == null -> context.getString(R.string.enter_valid_amount)
             amount.trim().toDouble().compareTo(0.0) <= 0 -> context.getString(R.string.enter_valid_amount)
             else -> null
         }
@@ -109,7 +112,17 @@ fun SetAmountDialog(
                         label = stringResource(id = R.string.set_amount),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number
-                        )
+                        ),
+                        trailingIcon = {
+                            IconButton(onClick = {
+                                amount = ""
+                            }) {
+                                Icon(
+                                    imageVector = MifosIcons.Cancel,
+                                    contentDescription = null,
+                                )
+                            }
+                        }
                     )
 
                     MfOutlinedTextField(
@@ -128,11 +141,6 @@ fun SetAmountDialog(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
                     ) {
-                        MifosOutlinedButton(onClick = { resetAmount() }) {
-                            Text(text = stringResource(id = R.string.reset))
-                        }
-
-                        Spacer(modifier = Modifier.width(4.dp))
 
                         MifosOutlinedButton(onClick = { dismissDialog() }) {
                             Text(text = stringResource(id = R.string.cancel))
@@ -162,7 +170,6 @@ fun SetAmountDialogPreview() {
     MifosTheme {
         SetAmountDialog(
             dismissDialog = {},
-            resetAmount = {},
             prefilledAmount = "",
             confirmAmount = { _, _ -> },
             prefilledCurrency = ""
