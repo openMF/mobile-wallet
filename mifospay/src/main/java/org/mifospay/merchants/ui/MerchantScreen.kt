@@ -1,16 +1,21 @@
 package org.mifospay.merchants.ui
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -23,8 +28,10 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,8 +39,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.accounts.savings.SavingsWithAssociations
 import org.mifospay.R
 import org.mifospay.common.Constants
-import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.designsystem.component.MfLoadingWheel
+import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.merchants.presenter.MerchantUiState
 import org.mifospay.merchants.presenter.MerchantViewModel
 import org.mifospay.theme.MifosTheme
@@ -44,59 +51,70 @@ fun MerchantScreen(
 ) {
     val merchantUiState by viewModel.merchantUiState.collectAsStateWithLifecycle()
     val merchantsListUiState by viewModel.merchantsListUiState.collectAsStateWithLifecycle()
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+
     MerchantScreen(
         merchantUiState = merchantUiState,
         merchantListUiState = merchantsListUiState,
-        updateQuery = { viewModel.updateSearchQuery(it) }
+        updateQuery = { viewModel.updateSearchQuery(it) },
+        isRefreshing = isRefreshing,
+        onRefresh = { viewModel.refresh() },
     )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MerchantScreen(
     merchantUiState: MerchantUiState,
     merchantListUiState: MerchantUiState,
-    updateQuery: (String) -> Unit
+    updateQuery: (String) -> Unit,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.Center,
-    ) {
-        when (merchantUiState) {
-            MerchantUiState.Empty -> {
-                EmptyContentScreen(
-                    modifier = Modifier,
-                    title = stringResource(id = R.string.empty_no_merchants_title),
-                    subTitle = stringResource(id = R.string.empty_no_merchants_subtitle),
-                    iconTint = Color.Black,
-                    iconImageVector = Icons.Rounded.Info
-                )
-            }
+    val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
+    Box(Modifier.pullRefresh(pullRefreshState)) {
+        Column(modifier = Modifier.fillMaxSize()) {
+            when (merchantUiState) {
+                MerchantUiState.Empty -> {
+                    EmptyContentScreen(
+                        modifier = Modifier,
+                        title = stringResource(id = R.string.empty_no_merchants_title),
+                        subTitle = stringResource(id = R.string.empty_no_merchants_subtitle),
+                        iconTint = Color.Black,
+                        iconImageVector = Icons.Rounded.Info
+                    )
+                }
 
-            is MerchantUiState.Error -> {
-                EmptyContentScreen(
-                    modifier = Modifier,
-                    title = stringResource(id = R.string.error_oops),
-                    subTitle = stringResource(id = R.string.unexpected_error_subtitle),
-                    iconTint = Color.Black,
-                    iconImageVector = Icons.Rounded.Info
-                )
-            }
+                is MerchantUiState.Error -> {
+                    EmptyContentScreen(
+                        modifier = Modifier,
+                        title = stringResource(id = R.string.error_oops),
+                        subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                        iconTint = Color.Black,
+                        iconImageVector = Icons.Rounded.Info
+                    )
+                }
 
-            MerchantUiState.Loading -> {
-                MfLoadingWheel(
-                    contentDesc = stringResource(R.string.loading),
-                    backgroundColor = Color.White
-                )
-            }
+                MerchantUiState.Loading -> {
+                    MfLoadingWheel(
+                        contentDesc = stringResource(R.string.loading),
+                        backgroundColor = Color.White
+                    )
+                }
 
-            is MerchantUiState.ShowMerchants -> {
-                MerchantScreenContent(
-                    merchantList = (merchantListUiState as MerchantUiState.ShowMerchants).merchants,
-                    updateQuery = updateQuery
-                )
+                is MerchantUiState.ShowMerchants -> {
+                    MerchantScreenContent(
+                        merchantList = (merchantListUiState as MerchantUiState.ShowMerchants).merchants,
+                        updateQuery = updateQuery
+                    )
+                }
             }
         }
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }
 
@@ -126,6 +144,7 @@ fun MerchantList(
     merchantList: List<SavingsWithAssociations>
 ) {
     val context = LocalContext.current
+    val clipboardManager = LocalClipboardManager.current
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -139,6 +158,10 @@ fun MerchantList(
                     intent.putExtra(Constants.MERCHANT_VPA, merchantList[index].externalId)
                     intent.putExtra(Constants.MERCHANT_ACCOUNT_NO, merchantList[index].accountNo)
                     context.startActivity(intent)
+                },
+                onMerchantLongPressed = {
+                    clipboardManager.setText(AnnotatedString(it ?: ""))
+                    Toast.makeText(context, R.string.vpa_copy_success, Toast.LENGTH_LONG).show()
                 }
             )
         }
@@ -191,7 +214,8 @@ private fun MerchantLoadingPreview() {
     MifosTheme {
         MerchantScreen(merchantUiState = MerchantUiState.Loading,
             merchantListUiState = MerchantUiState.ShowMerchants(sampleMerchantList),
-            updateQuery = {}
+            updateQuery = {},
+            false, {}
         )
     }
 }
@@ -203,7 +227,7 @@ private fun MerchantListPreview() {
         MerchantScreen(
             merchantUiState = MerchantUiState.ShowMerchants(sampleMerchantList),
             merchantListUiState = MerchantUiState.ShowMerchants(sampleMerchantList),
-            updateQuery = {}
+            updateQuery = {}, false, {}
         )
     }
 }
@@ -215,7 +239,7 @@ private fun MerchantErrorPreview() {
         MerchantScreen(
             merchantUiState = MerchantUiState.Error("Error Screen"),
             merchantListUiState = MerchantUiState.ShowMerchants(sampleMerchantList),
-            updateQuery = {}
+            updateQuery = {}, true, {}
         )
     }
 }
@@ -227,7 +251,7 @@ private fun MerchantEmptyPreview() {
         MerchantScreen(
             merchantUiState = MerchantUiState.Empty,
             merchantListUiState = MerchantUiState.ShowMerchants(sampleMerchantList),
-            updateQuery = {}
+            updateQuery = {}, false, {}
         )
     }
 }
