@@ -72,6 +72,7 @@ dependencies {
 
     implementation(projects.feature.auth)
     implementation(projects.feature.passcode)
+    implementation(projects.feature.makeTransfer)
 
     // Compose
     implementation(libs.androidx.activity.compose)

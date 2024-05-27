@@ -9,9 +9,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.NavHost
 import com.mifospay.core.model.domain.Transaction
 import org.mifospay.common.Constants
-import org.mifospay.common.navigation.makeTransferScreen
-import org.mifospay.common.navigation.navigateToMakeTransferScreen
 import org.mifospay.editprofile.ui.EditProfileActivity
+import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
+import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
 import org.mifospay.history.specific_transactions.ui.SpecificTransactionsActivity
 import org.mifospay.home.navigation.HOME_ROUTE
 import org.mifospay.home.navigation.financeScreen

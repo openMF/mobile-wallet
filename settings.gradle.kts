@@ -21,7 +21,7 @@ rootProject.name = "mobile-wallet"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":mifospay")
-include(":feature:auth")
+
 include(":core:data")
 include(":core:datastore")
 include(":core:designsystem")
@@ -31,5 +31,8 @@ include(":core:network")
 include(":core:network")
 include(":core:model")
 include(":core:datastore-proto")
-include(":feature:passcode")
 include(":core:analytics")
+
+include(":feature:passcode")
+include(":feature:auth")
+include(":feature:make-transfer")
