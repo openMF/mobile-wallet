@@ -44,7 +44,8 @@ import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 
 @Composable
 fun MakeTransferScreenRoute(
-    viewModel: MakeTransferViewModel = hiltViewModel()
+    viewModel: MakeTransferViewModel = hiltViewModel(), 
+    onDismiss: () -> Unit
 ) {
     val fetchPayeeClient by viewModel.fetchPayeeClient.collectAsStateWithLifecycle()
     val makeTransferState by viewModel.makeTransferState.collectAsStateWithLifecycle()
@@ -58,7 +59,8 @@ fun MakeTransferScreenRoute(
                 toClientId,
                 transferAmount
             )
-        }
+        },
+        onDismiss = onDismiss
     )
 }
 
@@ -67,6 +69,7 @@ fun MakeTransferScreen(
     uiState: MakeTransferState,
     showTransactionStatus: ShowTransactionStatus,
     makeTransfer: (Long, Double) -> Unit,
+    onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
     when (uiState) {
@@ -97,7 +100,8 @@ fun MakeTransferScreen(
                 externalId,
                 transferAmount,
                 showTransactionStatus,
-                makeTransfer = makeTransfer
+                makeTransfer = makeTransfer,
+                onDismiss = onDismiss
             )
         }
     }
@@ -113,6 +117,7 @@ fun MakeTransferBottomSheetContent(
     transferAmount: Double,
     showTransactionStatus: ShowTransactionStatus,
     makeTransfer: (Long, Double) -> Unit,
+    onDismiss: () -> Unit
 ) {
     val sheetState = rememberModalBottomSheetState()
 
@@ -125,6 +130,7 @@ fun MakeTransferBottomSheetContent(
             sheetState = sheetState,
             onDismissRequest = {
                 showBottomSheet = false
+                onDismiss.invoke()
             },
             dragHandle = { BottomSheetDefaults.DragHandle() },
         ) {
@@ -340,7 +346,8 @@ fun PreviewWithMakeTransferContentLoading() {
             showSuccessStatus = false,
             showErrorStatus = false
         ),
-        makeTransfer = { _, _ -> }
+        makeTransfer = { _, _ -> },
+        onDismiss = { }
     )
 }
 
@@ -359,7 +366,8 @@ fun PreviewWithMakeTransferContentSuccess() {
             showSuccessStatus = false,
             showErrorStatus = false
         ),
-        makeTransfer = { _, _ -> }
+        makeTransfer = { _, _ -> },
+        onDismiss = { }
     )
 }
 
@@ -391,7 +399,8 @@ fun PreviewMakeTransferBottomSheetContent() {
             showSuccessStatus = false,
             showErrorStatus = false
         ),
-        makeTransfer = { _, _ -> }
+        makeTransfer = { _, _ -> },
+        onDismiss = { }
     )
 }
 
@@ -404,7 +413,8 @@ fun PreviewWithMakeTransferContentError() {
             showSuccessStatus = false,
             showErrorStatus = false
         ),
-        makeTransfer = { _, _ -> }
+        makeTransfer = { _, _ -> },
+        onDismiss = { }
     )
 }
 

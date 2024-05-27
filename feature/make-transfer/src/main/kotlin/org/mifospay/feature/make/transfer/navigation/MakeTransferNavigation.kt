@@ -30,7 +30,9 @@ fun NavController.navigateToMakeTransferScreen(
     navigate(route, navOptions)
 }
 
-fun NavGraphBuilder.makeTransferScreen() {
+fun NavGraphBuilder.makeTransferScreen(
+    onDismiss: () -> Unit
+) {
     composable(
         route = MAKE_TRANSFER_ROUTE,
         arguments = listOf(
@@ -46,6 +48,8 @@ fun NavGraphBuilder.makeTransferScreen() {
             }
         )
     ) {
-        MakeTransferScreenRoute()
+        MakeTransferScreenRoute(
+            onDismiss = onDismiss
+        )
     }
 }

@@ -28,6 +28,7 @@ import javax.inject.Inject
 
 /**
  * Created by naman on 30/8/17.
+ * Moved to the feature/make-transfer
  */
 @AndroidEntryPoint
 class MakeTransferFragment : BottomSheetDialogFragment(), TransferContract.TransferView {
