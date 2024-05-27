@@ -74,7 +74,9 @@ fun MifosNavHost(
                 navController.navigateToMakeTransferScreen(externalId, transferAmount)
             }
         )
-        makeTransferScreen()
+        makeTransferScreen(
+            onDismiss = navController::popBackStack
+        )
     }
 }
 
