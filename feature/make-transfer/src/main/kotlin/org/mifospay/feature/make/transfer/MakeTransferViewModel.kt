@@ -1,4 +1,4 @@
-package org.mifospay.common.presenter
+package org.mifospay.feature.make.transfer
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -11,13 +11,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import org.mifospay.common.PAYEE_EXTERNAL_ID_ARG
+import org.mifospay.common.TRANSFER_AMOUNT_ARG
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.TransferFunds
 import org.mifospay.core.data.domain.usecase.client.SearchClient
-import org.mifospay.data.local.LocalRepository
-import org.mifospay.payments.send.navigation.PAYEE_EXTERNAL_ID_ARG
-import org.mifospay.payments.send.navigation.TRANSFER_AMOUNT_ARG
+import org.mifospay.core.data.repository.local.LocalRepository
 import javax.inject.Inject
 
 @HiltViewModel

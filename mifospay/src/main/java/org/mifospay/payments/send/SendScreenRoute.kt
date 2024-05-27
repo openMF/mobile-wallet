@@ -52,7 +52,6 @@ import com.togitech.ccp.component.TogiCountryCodePicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.mifospay.R
-import org.mifospay.common.presenter.MakeTransferViewModel
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton

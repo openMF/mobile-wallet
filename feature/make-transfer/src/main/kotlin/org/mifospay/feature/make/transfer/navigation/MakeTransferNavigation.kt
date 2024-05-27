@@ -1,4 +1,4 @@
-package org.mifospay.common.navigation
+package org.mifospay.feature.make.transfer.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -6,9 +6,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import org.mifospay.common.ui.MakeTransferScreenRoute
-import org.mifospay.payments.send.navigation.PAYEE_EXTERNAL_ID_ARG
-import org.mifospay.payments.send.navigation.TRANSFER_AMOUNT_ARG
+import org.mifospay.common.PAYEE_EXTERNAL_ID_ARG
+import org.mifospay.common.TRANSFER_AMOUNT_ARG
+import org.mifospay.feature.make.transfer.MakeTransferScreenRoute
 
 const val MAKE_TRANSFER_ROUTE_BASE = "make_transfer_route"
 const val MAKE_TRANSFER_ROUTE = MAKE_TRANSFER_ROUTE_BASE +

@@ -1,4 +1,4 @@
-package org.mifospay.common.ui
+package org.mifospay.feature.make.transfer
 
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +20,6 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
@@ -40,11 +39,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import org.mifospay.R
 import org.mifospay.common.Constants
-import org.mifospay.common.presenter.MakeTransferState
-import org.mifospay.common.presenter.MakeTransferViewModel
-import org.mifospay.common.presenter.ShowTransactionStatus
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 
 @Composable
@@ -76,7 +71,9 @@ fun MakeTransferScreen(
     val context = LocalContext.current
     when (uiState) {
         MakeTransferState.Loading -> {
-            MifosOverlayLoadingWheel(contentDesc = stringResource(R.string.loading))
+            MifosOverlayLoadingWheel(
+                contentDesc = stringResource(R.string.feature_make_transfer_loading)
+            )
         }
 
         is MakeTransferState.Error -> {
@@ -170,7 +167,7 @@ fun MakeTransferContent(
             .fillMaxWidth()
     ) {
         Text(
-            text = stringResource(id = R.string.send_money),
+            text = stringResource(id = R.string.feature_make_transfer_send_money),
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
@@ -192,7 +189,7 @@ fun MakeTransferContent(
                     .padding(20.dp)
             ) {
                 Text(
-                    text = stringResource(id = R.string.sending_to) + Constants.COLON,
+                    text = stringResource(id = R.string.feature_make_transfer_sending_to) + Constants.COLON,
                     style = TextStyle(
                         Color.Black,
                         MaterialTheme.typography.bodyMedium.fontSize
@@ -222,7 +219,7 @@ fun MakeTransferContent(
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Text(
-                    text = stringResource(id = R.string.amount) + Constants.COLON,
+                    text = stringResource(id = R.string.feature_make_transfer_amount) + Constants.COLON,
                     style = TextStyle(
                         Color.Black,
                         MaterialTheme.typography.bodyMedium.fontSize
@@ -295,9 +292,9 @@ fun TransactionStatusContent(showTransactionStatus: ShowTransactionStatus) {
     ) {
         Text(
             text = if (showTransactionStatus.showSuccessStatus) {
-                stringResource(id = R.string.transaction_success)
+                stringResource(id = R.string.feature_make_transfer_transaction_success)
             } else {
-                stringResource(id = R.string.transaction_unable_to_process)
+                stringResource(id = R.string.feature_make_transfer_transaction_unable_to_process)
             },
             style = TextStyle(
                 fontSize = 24.sp,
@@ -322,9 +319,9 @@ fun TransactionStatusContent(showTransactionStatus: ShowTransactionStatus) {
                     painterResource(R.drawable.transfer_failure)
                 },
                 contentDescription = if (showTransactionStatus.showSuccessStatus) {
-                    stringResource(id = R.string.transaction_success)
+                    stringResource(id = R.string.feature_make_transfer_transaction_success)
                 } else {
-                    stringResource(id = R.string.transaction_unable_to_process)
+                    stringResource(id = R.string.feature_make_transfer_transaction_unable_to_process)
                 },
                 modifier = Modifier
                     .align(Alignment.Center)
