@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -58,6 +59,89 @@ fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> U
     var creditCardNumber by rememberSaveable { mutableStateOf("") }
     var expiration by rememberSaveable { mutableStateOf("") }
     var cvv by rememberSaveable { mutableStateOf("") }
+    var firstNameValidator by rememberSaveable { mutableStateOf<String?>(null) }
+    var lastNameValidator by rememberSaveable { mutableStateOf<String?>(null) }
+    var creditCardNumberValidator by rememberSaveable { mutableStateOf<String?>(null) }
+    var expirationValidator by rememberSaveable { mutableStateOf<String?>(null) }
+    var cvvValidator by rememberSaveable { mutableStateOf<String?>(null) }
+
+
+    LaunchedEffect(key1 = firstName) {
+        firstNameValidator = when {
+            firstName.trim().isEmpty() -> context.getString(R.string.all_fields_required)
+            else -> null
+        }
+    }
+
+    LaunchedEffect(key1 = lastName) {
+        lastNameValidator = when {
+            lastName.trim().isEmpty() -> context.getString(R.string.all_fields_required)
+            else -> null
+        }
+    }
+
+    LaunchedEffect(key1 = creditCardNumber) {
+        creditCardNumberValidator = when {
+            creditCardNumber.trim().isEmpty() -> context.getString(R.string.all_fields_required)
+            creditCardNumber.length < 16 -> context.getString(R.string.invalid_credit_card)
+            !CreditCardUtils.validateCreditCardNumber(creditCardNumber) -> context.getString(R.string.invalid_credit_card)
+            else -> null
+        }
+    }
+
+    LaunchedEffect(key1 = expiration) {
+        expirationValidator = when {
+            expiration.trim().isEmpty() -> context.getString(R.string.all_fields_required)
+            expiration.length < 4 -> context.getString(R.string.expiry_date_length_error)
+            (expiration.substring(2, 4) == Calendar.getInstance()[Calendar.YEAR].toString()
+                .substring(2, 4) && expiration.substring(0, 2)
+                .toInt() < Calendar.getInstance()[Calendar.MONTH] + 1) || expiration.substring(0, 2)
+                .toInt() > 12 -> context.getString(R.string.invalid_expiry_date)
+
+            else -> null
+        }
+    }
+
+    LaunchedEffect(key1 = cvv) {
+        cvvValidator = when {
+            cvv.trim().isEmpty() -> context.getString(R.string.all_fields_required)
+            cvv.length < 3 -> context.getString(R.string.cvv_length_error)
+            else -> null
+        }
+    }
+
+    fun validateAllFields(): Boolean {
+        when {
+            firstNameValidator != null -> {
+                Toast.makeText(context, firstNameValidator, Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            lastNameValidator != null -> {
+                Toast.makeText(context, lastNameValidator, Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            creditCardNumberValidator != null -> {
+                Toast.makeText(context, creditCardNumberValidator, Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            expirationValidator != null -> {
+                Toast.makeText(context, expirationValidator, Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            cvvValidator != null -> {
+                Toast.makeText(context, cvvValidator, Toast.LENGTH_SHORT).show()
+                return false
+            }
+
+            else -> {
+                return true
+            }
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -120,47 +204,12 @@ fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> U
                     firstName = firstName,
                     lastName = lastName
                 )
-
-                validateCard(card, onError = {
-                    Toast.makeText(context, context.getString(it), Toast.LENGTH_SHORT).show()
-                }, onSuccess = { addClicked(it) })
+                if (validateAllFields()) {
+                    addClicked(card)
+                }
             }) {
                 Text(text = stringResource(id = R.string.add))
             }
-        }
-    }
-}
-
-fun validateCard(card: Card, onError: (Int) -> Unit, onSuccess: (Card) -> Unit) {
-
-    when {
-        card.cardNumber.isEmpty() || card.cvv.isEmpty() || card.expiryDate.isEmpty() || card.firstName.isEmpty() || card.lastName.isEmpty() -> {
-            onError(R.string.all_fields_required)
-        }
-
-        card.cardNumber.length < 16 || !CreditCardUtils.validateCreditCardNumber(card.cardNumber) -> {
-            onError(R.string.invalid_credit_card)
-        }
-
-        card.expiryDate.length < 4 -> {
-            onError(R.string.expiry_date_length_error)
-        }
-
-        (card.expiryDate.substring(2, 4) == Calendar.getInstance()[Calendar.YEAR].toString()
-            .substring(2, 4) && card.expiryDate.substring(0, 2)
-            .toInt() < Calendar.getInstance()[Calendar.MONTH] + 1) || card.expiryDate.substring(
-            0,
-            2
-        ).toInt() > 12 -> {
-            onError(R.string.invalid_expiry_date)
-        }
-
-        card.cvv.length < 3 -> {
-            onError(R.string.cvv_length_error)
-        }
-
-        else -> {
-            onSuccess(card)
         }
     }
 }

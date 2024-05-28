@@ -49,6 +49,7 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utility.AddCardChip
 import org.mifospay.savedcards.presenter.CardsScreenViewModel
+import org.mifospay.savedcards.presenter.CardsUiEvent
 import org.mifospay.savedcards.presenter.CardsUiState
 
 enum class CardMenuAction {
@@ -159,7 +160,31 @@ fun CardsScreen(
             }
 
             is CardsUiState.Success -> {
-                Toast.makeText(LocalContext.current, cardState.message, Toast.LENGTH_SHORT).show()
+                when (cardState.cardsUiEvent) {
+                    CardsUiEvent.CARD_ADDED_SUCCESSFULLY -> {
+                        Toast.makeText(
+                            LocalContext.current,
+                            stringResource(id = R.string.card_added_successfully),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    CardsUiEvent.CARD_UPDATED_SUCCESSFULLY -> {
+                        Toast.makeText(
+                            LocalContext.current,
+                            stringResource(id = R.string.card_updated_successfully),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    CardsUiEvent.CARD_DELETED_SUCCESSFULLY -> {
+                        Toast.makeText(
+                            LocalContext.current,
+                            stringResource(id = R.string.card_deleted_successfully),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
         }
     }
