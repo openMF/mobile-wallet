@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import org.mifospay.common.Constants
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.savedcards.AddCard
@@ -95,7 +94,7 @@ class CardsScreenViewModel @Inject constructor(
         mUseCaseHandler.execute(addCardUseCase, requestValues,
             object : UseCase.UseCaseCallback<AddCard.ResponseValue> {
                 override fun onSuccess(response: AddCard.ResponseValue) {
-                    _cardState.value = CardsUiState.Success(Constants.CARD_ADDED_SUCCESSFULLY)
+                    _cardState.value = CardsUiState.Success(CardsUiEvent.CARD_ADDED_SUCCESSFULLY)
                     fetchSavedCards()
                 }
 
@@ -114,7 +113,7 @@ class CardsScreenViewModel @Inject constructor(
         mUseCaseHandler.execute(editCardUseCase, requestValues,
             object : UseCase.UseCaseCallback<EditCard.ResponseValue> {
                 override fun onSuccess(response: EditCard.ResponseValue) {
-                    _cardState.value = CardsUiState.Success(Constants.CARD_UPDATED_SUCCESSFULLY)
+                    _cardState.value = CardsUiState.Success(CardsUiEvent.CARD_UPDATED_SUCCESSFULLY)
                     fetchSavedCards()
                 }
 
@@ -133,7 +132,7 @@ class CardsScreenViewModel @Inject constructor(
         mUseCaseHandler.execute(deleteCardUseCase, requestValues,
             object : UseCase.UseCaseCallback<DeleteCard.ResponseValue> {
                 override fun onSuccess(response: DeleteCard.ResponseValue) {
-                    _cardState.value = CardsUiState.Success(Constants.CARD_DELETED_SUCCESSFULLY)
+                    _cardState.value = CardsUiState.Success(CardsUiEvent.CARD_DELETED_SUCCESSFULLY)
                     fetchSavedCards()
                 }
 
@@ -153,5 +152,11 @@ sealed interface CardsUiState {
     data object Empty : CardsUiState
     data object Error : CardsUiState
     data object Loading : CardsUiState
-    data class Success(val message: String) : CardsUiState
+    data class Success(val cardsUiEvent: CardsUiEvent) : CardsUiState
+}
+
+enum class CardsUiEvent {
+    CARD_ADDED_SUCCESSFULLY,
+    CARD_UPDATED_SUCCESSFULLY,
+    CARD_DELETED_SUCCESSFULLY
 }
