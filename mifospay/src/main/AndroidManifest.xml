@@ -60,7 +60,7 @@
             android:name=".common.ui.SearchActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".qr.ui.ShowQrActivity"
+            android:name=".qr.showQr.ui.ShowQrActivity"
             android:exported="true"
             android:theme="@style/AppTheme" />
 
@@ -71,7 +71,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="org.mifospay.provider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -118,7 +118,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".history.ui.SpecificTransactionsActivity"
+            android:name=".history.specific_transactions.ui.SpecificTransactionsActivity"
             android:theme="@style/AppTheme" />
 
         <service android:name=".data.firebase.api.services.MifosPayMessagingService"

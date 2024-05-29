@@ -1,5 +1,6 @@
 package org.mifospay.merchants.ui
 
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,9 +27,17 @@ import org.mifospay.core.designsystem.theme.styleMedium16sp
 @Composable
 fun MerchantsItem(
     savingsWithAssociations: SavingsWithAssociations,
-    onMerchantClicked: () -> Unit
+    onMerchantClicked: () -> Unit,
+    onMerchantLongPressed: (String?) -> Unit
 ) {
     MifosCard(
+        modifier = Modifier.pointerInput(Unit) {
+            detectTapGestures(
+                onLongPress = {
+                    onMerchantLongPressed(savingsWithAssociations.externalId)
+                }
+            )
+        },
         onClick = { onMerchantClicked.invoke() },
         colors = CardDefaults.cardColors(Color.White)
     ) {
@@ -71,6 +81,7 @@ fun MerchantsItem(
 private fun AccountsItemPreview() {
     MerchantsItem(
         savingsWithAssociations = SavingsWithAssociations(),
-        onMerchantClicked = {}
+        onMerchantClicked = {},
+        onMerchantLongPressed = {}
     )
 }

@@ -68,7 +68,8 @@ enum class SendMethodType {
 fun SendScreenRoute(
     viewModel: SendPaymentViewModel = hiltViewModel(),
     showToolBar: Boolean,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    proceedWithMakeTransferFlow: (String, String) -> Unit
 ) {
     val context = LocalContext.current
     val selfVpa by viewModel.vpa.collectAsStateWithLifecycle()
@@ -97,9 +98,8 @@ fun SendScreenRoute(
                     onAnyError = {
                         showToast(context.getString(it))
                     },
-                    proceedWithTransferFlow = {
-                        // show transfer flow bottom sheet MakeTransferFragment
-                        // mTransferView?.showClientDetails(externalId, transferAmount)
+                    proceedWithTransferFlow = { externalId, transferAmount ->
+                        proceedWithMakeTransferFlow.invoke(externalIdOrMobile, transferAmount.toString())
                     }
                 )
             } else {
@@ -286,6 +286,7 @@ fun SendMoneyScreen(
                             },
                             sendMethodType
                         )
+                        //TODO: Navigate to MakeTransferScreenRoute
                     },
                     contentPadding = PaddingValues(12.dp)
                 ) {

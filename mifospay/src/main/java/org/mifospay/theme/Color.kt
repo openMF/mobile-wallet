@@ -17,3 +17,7 @@ val lightGrey = Color(0xFFD9D9D9)
 val border = Color(0x66000000)
 val green = Color(0xFF008135)
 val red = Color(0xFFCD0000)
+
+val debitColor = Color.Red
+val creditColor = Color(0xFF009688)
+val otherColor = Color.Yellow

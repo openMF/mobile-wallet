@@ -1,7 +1,6 @@
 package org.mifospay.kyc.ui
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,8 +15,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -39,6 +42,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.kyc.KYCLevel1Details
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
@@ -46,43 +50,69 @@ import org.mifospay.kyc.presenter.KYCDescriptionUiState
 import org.mifospay.kyc.presenter.KYCDescriptionViewModel
 
 @Composable
+fun KYCScreen(viewModel: KYCDescriptionViewModel = hiltViewModel()) {
+    val kUiState by viewModel.kycdescriptionState.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+
+    KYCDescriptionScreen(
+        kUiState = kUiState,
+        onLevel1Clicked = {
+            // Todo
+        },
+        onLevel2Clicked = {
+            // Todo
+        },
+        onLevel3Clicked = {
+            // Todo
+        },
+        isRefreshing = isRefreshing,
+        onRefresh = { viewModel.refresh() }
+    )
+}
+
+@OptIn(ExperimentalMaterialApi::class)
+@Composable
 fun KYCDescriptionScreen(
-    viewModel: KYCDescriptionViewModel = hiltViewModel(),
+    kUiState: KYCDescriptionUiState,
     onLevel1Clicked: () -> Unit,
     onLevel2Clicked: () -> Unit,
-    onLevel3Clicked: () -> Unit
+    onLevel3Clicked: () -> Unit,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
 ) {
-    val kUiState by viewModel.kycdescriptionState.collectAsState()
+    val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
+    Box(Modifier.pullRefresh(pullRefreshState)) {
+        when (kUiState) {
+            KYCDescriptionUiState.Loading -> {
+                MifosOverlayLoadingWheel(contentDesc = stringResource(R.string.loading))
+            }
 
-    when (val state = kUiState) {
-        KYCDescriptionUiState.Loading -> {
-            MifosOverlayLoadingWheel(contentDesc = stringResource(R.string.loading))
-        }
+            is KYCDescriptionUiState.Error -> {
+                PlaceholderScreen()
+            }
 
-        is KYCDescriptionUiState.Error -> {
-            PlaceholderScreen()
-        }
-
-        is KYCDescriptionUiState.KYCDescription -> {
-            val kyc = state.kycLevel1Details
-            if (kyc != null) {
-                KYCDescriptionScreen(
-                    kUiState = state,
-                    kyc,
-                    onLevel1Clicked,
-                    onLevel2Clicked,
-                    onLevel3Clicked
-                )
+            is KYCDescriptionUiState.KYCDescription -> {
+                val kyc = kUiState.kycLevel1Details
+                if (kyc != null) {
+                    KYCDescriptionScreen(
+                        kyc,
+                        onLevel1Clicked,
+                        onLevel2Clicked,
+                        onLevel3Clicked
+                    )
+                }
             }
         }
-
-        else -> {}
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter)
+        )
     }
 }
 
 @Composable
 fun KYCDescriptionScreen(
-    kUiState: KYCDescriptionUiState,
     kyc: KYCLevel1Details,
     onLevel1Clicked: () -> Unit,
     onLevel2Clicked: () -> Unit,
@@ -270,7 +300,6 @@ fun KYCDescriptionPreview() {
     val onLevel2Clicked: () -> Unit = { }
     val onLevel3Clicked: () -> Unit = { }
     KYCDescriptionScreen(
-        kUiState = KYCDescriptionUiState.KYCDescription(kycLevel1Details = KYCLevel1Details()),
         kyc = KYCLevel1Details(),
         onLevel1Clicked,
         onLevel2Clicked,
