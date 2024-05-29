@@ -71,7 +71,7 @@
                 android:layout_marginTop="@dimen/value_10dp"
                 android:text="@string/transaction_id"
                 android:textColor="@color/primaryDarkBlue"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
 
             <TextView
                 android:id="@+id/tv_date"
@@ -138,7 +138,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#44000000"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <LinearLayout
             android:id="@+id/ll_url"
@@ -150,7 +150,7 @@
             android:layout_marginTop="@dimen/value_10dp"
             android:gravity="center_vertical"
             android:orientation="vertical"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:layout_width="wrap_content"

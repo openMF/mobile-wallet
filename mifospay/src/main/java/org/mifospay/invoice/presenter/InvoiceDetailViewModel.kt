@@ -13,20 +13,21 @@ import org.mifospay.core.datastore.PreferencesHelper
 import javax.inject.Inject
 
 @HiltViewModel
-class InvoiceViewModel @Inject constructor(
+class InvoiceDetailViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper,
     private val fetchInvoiceUseCase: FetchInvoice
 ) : ViewModel() {
 
-    private val _invoiceUiState = MutableStateFlow<InvoiceUiState>(InvoiceUiState.Loading)
-    val invoiceUiState: StateFlow<InvoiceUiState> = _invoiceUiState
+    private val _invoiceDetailUiState =
+        MutableStateFlow<InvoiceDetailUiState>(InvoiceDetailUiState.Loading)
+    val invoiceDetailUiState: StateFlow<InvoiceDetailUiState> = _invoiceDetailUiState
 
     fun getInvoiceDetails(data: Uri?) {
         mUseCaseHandler.execute(fetchInvoiceUseCase, FetchInvoice.RequestValues(data),
             object : UseCase.UseCaseCallback<FetchInvoice.ResponseValue> {
                 override fun onSuccess(response: FetchInvoice.ResponseValue) {
-                    _invoiceUiState.value = InvoiceUiState.Success(
+                    _invoiceDetailUiState.value = InvoiceDetailUiState.Success(
                         response.invoices[0],
                         mPreferencesHelper.fullName + " "
                                 + mPreferencesHelper.clientId, data.toString()
@@ -34,19 +35,19 @@ class InvoiceViewModel @Inject constructor(
                 }
 
                 override fun onError(message: String) {
-                    _invoiceUiState.value = InvoiceUiState.Error(message)
+                    _invoiceDetailUiState.value = InvoiceDetailUiState.Error(message)
                 }
             })
     }
 }
 
-sealed interface InvoiceUiState {
-    data object Loading : InvoiceUiState
+sealed interface InvoiceDetailUiState {
+    data object Loading : InvoiceDetailUiState
     data class Success(
         val invoice: Invoice?,
         val merchantId: String?,
         val paymentLink: String?
-    ) : InvoiceUiState
+    ) : InvoiceDetailUiState
 
-    data class Error(val message: String) : InvoiceUiState
+    data class Error(val message: String) : InvoiceDetailUiState
 }

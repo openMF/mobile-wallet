@@ -399,5 +399,8 @@
     <string name="currency">Set Currency</string>
     <string name="usd">USD</string>
     <string name="enter_currency">Enter Currency</string>
+    <string name="merchant_id">Merchant ID</string>
+    <string name="consumer_id">Consumer ID</string>
+    <string name="invoice">Invoice</string>
 
 </resources>
