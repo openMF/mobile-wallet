@@ -83,7 +83,6 @@ fun InvoiceScreen(
                 title = stringResource(id = R.string.error_oops),
                 subTitle = stringResource(id = R.string.error_no_invoices_found),
                 iconTint = Color.Black,
-                iconImageVector = Info
             )
         }
 

@@ -168,27 +168,65 @@ fun InvoiceDetailsContent(invoice: Invoice?, merchantId: String?, paymentLink: S
             )
         }
 
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+        if (invoice?.status == 1L) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.status),
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+
+                Text(
+                    text = Constants.DONE,
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.transaction_id),
+                    color = primaryDarkBlue,
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                )
+                Text(
+                    text = invoice.transactionId ?: "",
+                    color = primaryDarkBlue,
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .then(Modifier.height(0.dp))
+                )
+            }
+            Divider()
             Text(
-                text = stringResource(id = R.string.status),
-                modifier = Modifier.padding(top = 8.dp)
+                text = stringResource(id = R.string.unique_receipt_link),
+                fontWeight = FontWeight.Normal,
+                modifier = Modifier.padding(bottom = 10.dp)
             )
-        }
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
             Text(
-                text = stringResource(id = R.string.transaction_id),
+                text = invoice.transactionId ?: "",
                 color = primaryDarkBlue,
                 modifier = Modifier
                     .padding(top = 10.dp)
-                    .then(Modifier.height(0.dp))
+                    .pointerInput(Unit) {
+                        detectTapGestures(
+                            onPress = {
+                                val intent = Intent(context, ReceiptActivity::class.java)
+                                intent.data = Uri.parse(
+                                    Constants.RECEIPT_DOMAIN + invoice.transactionId
+                                )
+                                context.startActivity(intent)
+                            },
+                            onLongPress = {
+                                clipboardManager.setText(AnnotatedString(Constants.RECEIPT_DOMAIN + invoice.transactionId))
+                            })
+                    }
             )
         }
 
@@ -237,31 +275,7 @@ fun InvoiceDetailsContent(invoice: Invoice?, merchantId: String?, paymentLink: S
                     }
             )
         }
-        Divider()
-        Text(
-            text = stringResource(id = R.string.unique_receipt_link),
-            fontWeight = FontWeight.Normal,
-            modifier = Modifier.padding(bottom = 10.dp)
-        )
-        Text(
-            text = Constants.RECEIPT_DOMAIN + invoice?.transactionId,
-            color = primaryDarkBlue,
-            modifier = Modifier
-                .padding(top = 10.dp)
-                .pointerInput(Unit) {
-                    detectTapGestures(
-                        onPress = {
-                            val intent = Intent(context, ReceiptActivity::class.java)
-                            intent.data = Uri.parse(
-                                Constants.RECEIPT_DOMAIN + invoice?.transactionId
-                            )
-                            context.startActivity(intent)
-                        },
-                        onLongPress = {
-                            clipboardManager.setText(AnnotatedString(Constants.RECEIPT_DOMAIN + invoice?.transactionId))
-                        })
-                }
-        )
+
     }
 }
 
@@ -279,7 +293,7 @@ class InvoiceDetailScreenProvider : PreviewParameterProvider<InvoiceDetailUiStat
     override val values: Sequence<InvoiceDetailUiState>
         get() = sequenceOf(
             InvoiceDetailUiState.Loading,
-            InvoiceDetailUiState.Error("Some Error Occured"),
+            InvoiceDetailUiState.Error("Some Error Occurred"),
             InvoiceDetailUiState.Success(Invoice(), "", "")
         )
 
