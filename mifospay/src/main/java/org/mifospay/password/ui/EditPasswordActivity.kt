@@ -13,6 +13,7 @@ class EditPasswordActivity : ComponentActivity() {
         setContent {
             MifosTheme {
                 EditPasswordScreen(
+                    onBackPress = { finish() },
                     onCancelChanges = { finish() }
                 )
             }

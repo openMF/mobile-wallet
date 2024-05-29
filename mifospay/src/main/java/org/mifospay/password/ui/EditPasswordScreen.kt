@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -24,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -33,12 +34,36 @@ import org.mifos.mobilewallet.mifospay.password.presenter.EditPasswordViewModel
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfPasswordTextField
 import org.mifospay.core.designsystem.component.MifosButton
-import org.mifospay.core.designsystem.component.MifosTopBar
+import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.theme.MifosTheme
 
 @Composable
 fun EditPasswordScreen(
     viewModel: EditPasswordViewModel = hiltViewModel(),
+    onBackPress: () -> Unit,
     onCancelChanges: () -> Unit
+) {
+    val editPasswordUiState by viewModel.editPasswordUiState.collectAsStateWithLifecycle()
+    EditPasswordScreen(
+        editPasswordUiState = editPasswordUiState,
+        onCancelChanges = onCancelChanges,
+        onBackPress = onBackPress,
+        onSave = { currentPass, newPass, confirmPass ->
+            viewModel.updatePassword(
+                currentPassword = currentPass,
+                newPassword = newPass,
+                newPasswordRepeat = confirmPass
+            )
+        }
+    )
+}
+
+@Composable
+fun EditPasswordScreen(
+    editPasswordUiState: EditPasswordUiState,
+    onCancelChanges: () -> Unit,
+    onBackPress: () -> Unit,
+    onSave: (currentPass: String, newPass: String, confirmPass: String) -> Unit
 ) {
     val context = LocalContext.current
     var currentPassword by rememberSaveable { mutableStateOf("") }
@@ -48,43 +73,37 @@ fun EditPasswordScreen(
     var isNewPasswordVisible by rememberSaveable { mutableStateOf(false) }
     var isConfirmNewPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
-    val editPasswordUiState by viewModel.editPasswordUiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val coroutineScope = rememberCoroutineScope()
 
     val currentSnackbarHostState by rememberUpdatedState(snackbarHostState)
 
-    // Handle side effects based on the editPasswordUiState
     LaunchedEffect(editPasswordUiState) {
         when (editPasswordUiState) {
             is EditPasswordUiState.Error -> {
-                val errorMessage = (editPasswordUiState as EditPasswordUiState.Error).message
+                val errorMessage = editPasswordUiState.message
                 coroutineScope.launch {
                     currentSnackbarHostState.showSnackbar(errorMessage)
                 }
             }
-            EditPasswordUiState.Loading -> {
-                // Handle loading state if needed
-            }
+
+            EditPasswordUiState.Loading -> {}
             EditPasswordUiState.Success -> {
                 coroutineScope.launch {
                     currentSnackbarHostState.showSnackbar(context.getString(R.string.password_changed_successfully))
                 }
             }
+
             else -> {}
         }
     }
 
-    Scaffold(
-        topBar = {
-            MifosTopBar(
-                topBarTitle = R.string.change_password,
-                backPress = { onCancelChanges.invoke() }
-            )
-        },
+    MifosScaffold(
+        topBarTitle = R.string.change_password,
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
-        }
+        },
+        backPress = onBackPress
     ) { paddingValues ->
         Column(
             modifier = Modifier
@@ -99,7 +118,9 @@ fun EditPasswordScreen(
                 label = stringResource(R.string.current_password),
                 isError = false,
                 isPasswordVisible = isConfirmPasswordVisible,
-                onTogglePasswordVisibility = { isConfirmPasswordVisible = !isConfirmPasswordVisible },
+                onTogglePasswordVisibility = {
+                    isConfirmPasswordVisible = !isConfirmPasswordVisible
+                },
                 onPasswordChange = { currentPassword = it },
             )
             MfPasswordTextField(
@@ -109,7 +130,9 @@ fun EditPasswordScreen(
                 password = newPassword,
                 label = stringResource(id = R.string.new_password),
                 isError = newPassword.isNotEmpty() && newPassword.length < 6,
-                errorMessage = if (newPassword.isNotEmpty() && newPassword.length < 6) stringResource(id = R.string.password_length_error) else null,
+                errorMessage = if (newPassword.isNotEmpty() && newPassword.length < 6) stringResource(
+                    id = R.string.password_length_error
+                ) else null,
                 isPasswordVisible = isNewPasswordVisible,
                 onTogglePasswordVisibility = { isNewPasswordVisible = !isNewPasswordVisible },
                 onPasswordChange = { newPassword = it }
@@ -121,7 +144,9 @@ fun EditPasswordScreen(
                 password = confirmNewPassword,
                 label = stringResource(id = R.string.confirm_new_password),
                 isError = newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty(),
-                errorMessage = if (newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty()) stringResource(id = R.string.password_mismatch_error) else null,
+                errorMessage = if (newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty()) stringResource(
+                    id = R.string.password_mismatch_error
+                ) else null,
                 isPasswordVisible = isConfirmNewPasswordVisible,
                 onTogglePasswordVisibility = {
                     isConfirmNewPasswordVisible = !isConfirmNewPasswordVisible
@@ -148,11 +173,7 @@ fun EditPasswordScreen(
                         .weight(1f)
                         .padding(8.dp),
                     onClick = {
-                        viewModel.updatePassword(
-                            currentPassword,
-                            newPassword,
-                            confirmNewPassword
-                        )
+                        onSave.invoke(currentPassword, newPassword, confirmNewPassword)
                     },
                     contentPadding = PaddingValues(16.dp),
                     content = { Text(text = stringResource(id = R.string.save)) }
@@ -162,33 +183,21 @@ fun EditPasswordScreen(
     }
 }
 
-// Wrapper composable for previewing EditPasswordScreen with different UiState
+class EditPasswordUiStateProvider : PreviewParameterProvider<EditPasswordUiState> {
+    override val values: Sequence<EditPasswordUiState>
+        get() = sequenceOf(
+            EditPasswordUiState.Loading,
+            EditPasswordUiState.Success,
+            EditPasswordUiState.Error("Some Error Occurred")
+        )
+}
+
+@Preview
 @Composable
-fun EditPasswordScreenPreviewWrapper(uiState: EditPasswordUiState) {
-    val viewModel: EditPasswordViewModel = hiltViewModel()
-    LaunchedEffect(uiState) {
-        viewModel.setUiState(uiState)
+private fun EditPasswordScreenPreview(
+    @PreviewParameter(EditPasswordUiStateProvider::class) editPasswordUiState: EditPasswordUiState
+) {
+    MifosTheme {
+        EditPasswordScreen(editPasswordUiState = editPasswordUiState, {}, {}, { a, b, c -> })
     }
-    EditPasswordScreen(
-        viewModel = viewModel,
-        onCancelChanges = {}
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewEditPasswordScreenLoading() {
-    EditPasswordScreenPreviewWrapper(EditPasswordUiState.Loading)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewEditPasswordScreenSuccess() {
-    EditPasswordScreenPreviewWrapper(EditPasswordUiState.Success)
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewEditPasswordScreenError() {
-    EditPasswordScreenPreviewWrapper(EditPasswordUiState.Error("An error occurred"))
 }

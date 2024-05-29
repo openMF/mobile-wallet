@@ -21,29 +21,9 @@ class EditPasswordViewModel @Inject constructor(
     private val updateUserUseCase: UpdateUser
 ) : ViewModel() {
 
-    private val _editPasswordUiState = MutableStateFlow<EditPasswordUiState>(EditPasswordUiState.Loading)
+    private val _editPasswordUiState =
+        MutableStateFlow<EditPasswordUiState>(EditPasswordUiState.Loading)
     val editPasswordUiState: StateFlow<EditPasswordUiState> = _editPasswordUiState
-
-    // Function to manually set the UiState for testing purposes
-    fun setUiState(state: EditPasswordUiState) {
-        _editPasswordUiState.value = state
-    }
-
-//    fun handleSavePasswordButtonStatus(
-//        currentPassword: String?,
-//        newPassword: String?,
-//        newPasswordRepeat: String?
-//    ) {
-//        if (currentPassword == "" || newPassword == "" || newPasswordRepeat == "") {
-//            mEditPasswordView?.disableSavePasswordButton()
-//        } else {
-//            if (newPassword == newPasswordRepeat) {
-//                mEditPasswordView?.enableSavePasswordButton()
-//            } else {
-//                mEditPasswordView?.disableSavePasswordButton()
-//            }
-//        }
-//    }
 
     fun updatePassword(
         currentPassword: String?,
@@ -56,8 +36,10 @@ class EditPasswordViewModel @Inject constructor(
         ) {
             when {
                 currentPassword == newPassword -> {
-                    _editPasswordUiState.value = EditPasswordUiState.Error(Constants.ERROR_PASSWORDS_CANT_BE_SAME)
+                    _editPasswordUiState.value =
+                        EditPasswordUiState.Error(Constants.ERROR_PASSWORDS_CANT_BE_SAME)
                 }
+
                 newPassword?.let {
                     newPasswordRepeat?.let { it1 ->
                         isNewPasswordValid(
@@ -70,12 +52,15 @@ class EditPasswordViewModel @Inject constructor(
                         updatePassword(currentPassword, newPassword)
                     }
                 }
+
                 else -> {
-                    _editPasswordUiState.value = EditPasswordUiState.Error(Constants.ERROR_VALIDATING_PASSWORD)
+                    _editPasswordUiState.value =
+                        EditPasswordUiState.Error(Constants.ERROR_VALIDATING_PASSWORD)
                 }
             }
         } else {
-            _editPasswordUiState.value = EditPasswordUiState.Error(Constants.ERROR_FIELDS_CANNOT_BE_EMPTY)
+            _editPasswordUiState.value =
+                EditPasswordUiState.Error(Constants.ERROR_FIELDS_CANNOT_BE_EMPTY)
         }
     }
 
@@ -122,7 +107,7 @@ class EditPasswordViewModel @Inject constructor(
 }
 
 sealed interface EditPasswordUiState {
-    data object Loading: EditPasswordUiState
-    data object Success: EditPasswordUiState
-    data class Error(val message: String): EditPasswordUiState
+    data object Loading : EditPasswordUiState
+    data object Success : EditPasswordUiState
+    data class Error(val message: String) : EditPasswordUiState
 }
