@@ -4,8 +4,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.ArrowOutward
+import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cancel
@@ -43,4 +46,7 @@ object MifosIcons {
     val AccountCircle = Icons.Outlined.AccountCircle
     val SendRightTilted = Icons.Default.ArrowOutward
     val Info = Icons.Default.Info
+    val Camera = Icons.Filled.Camera
+    val PhotoLibrary = Icons.Filled.PhotoLibrary
+    val Delete = Icons.Filled.Delete
 }

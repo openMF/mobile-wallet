@@ -14,9 +14,6 @@ class EditProfileActivity : BaseActivity() {
         setContent {
             MifosTheme {
                 EditProfileScreenRoute(
-                    onSaveChanges = {
-                        // TODO : save locally or send it to backend
-                    },
                     onBackClick = { finish() }
                 )
             }

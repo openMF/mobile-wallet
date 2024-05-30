@@ -22,11 +22,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Camera
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.PhotoLibrary
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -48,6 +43,8 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -60,6 +57,11 @@ import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.PermissionBox
+import org.mifospay.core.designsystem.icon.MifosIcons.Camera
+import org.mifospay.core.designsystem.icon.MifosIcons.Delete
+import org.mifospay.core.designsystem.icon.MifosIcons.Info
+import org.mifospay.core.designsystem.icon.MifosIcons.PhotoLibrary
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.historyItemTextStyle
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.ui.DevicePreviews
@@ -75,7 +77,6 @@ import java.util.Objects
 @Composable
 fun EditProfileScreenRoute(
     viewModel: EditProfileViewModel = hiltViewModel(),
-    onSaveChanges: () -> Unit,
     onBackClick: () -> Unit
 ) {
     val editProfileUiState by viewModel.editProfileUiState.collectAsStateWithLifecycle()
@@ -86,7 +87,6 @@ fun EditProfileScreenRoute(
 
     EditProfileScreen(
         editProfileUiState = editProfileUiState,
-        onSaveChanges = onSaveChanges,
         onBackClick = onBackClick,
         updateEmail = {
             viewModel.updateEmail(
@@ -104,7 +104,6 @@ fun EditProfileScreenRoute(
 @Composable
 fun EditProfileScreen(
     editProfileUiState: EditProfileUiState,
-    onSaveChanges: () -> Unit,
     onBackClick: () -> Unit,
     updateEmail: (String) -> Unit,
     updateMobile: (String) -> Unit
@@ -127,7 +126,7 @@ fun EditProfileScreen(
                     title = stringResource(id = R.string.error_oops),
                     subTitle = stringResource(id = R.string.unexpected_error_subtitle),
                     iconTint = Color.Black,
-                    iconImageVector = Icons.Rounded.Info
+                    iconImageVector = Info
                 )
             }
 
@@ -151,7 +150,6 @@ fun EditProfileScreen(
                     initialEmail,
                     uri,
                     onBackClick = onBackClick,
-                    onSaveChanges = onSaveChanges,
                     updateEmail = updateEmail,
                     updateMobile = updateMobile
                 )
@@ -170,7 +168,6 @@ fun EditProfileScreenContent(
     initialEmail: String,
     uri: Uri?,
     onBackClick: () -> Unit,
-    onSaveChanges: () -> Unit,
     updateEmail: (String) -> Unit,
     updateMobile: (String) -> Unit
 ) {
@@ -249,6 +246,7 @@ fun EditProfileScreenContent(
             ) {
                 Column(
                     modifier = Modifier
+                        .fillMaxSize()
                         .background(Color.White)
                         .verticalScroll(rememberScrollState())
                 ) {
@@ -346,7 +344,7 @@ fun EditProfileBottomSheetContent(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = Icons.Filled.Camera, contentDescription = null)
+            Icon(imageVector = Camera, contentDescription = null)
             Text(
                 text = stringResource(id = R.string.click_profile_picture),
                 style = historyItemTextStyle
@@ -360,7 +358,7 @@ fun EditProfileBottomSheetContent(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = Icons.Filled.PhotoLibrary, contentDescription = null)
+            Icon(imageVector = PhotoLibrary, contentDescription = null)
             Text(
                 text = stringResource(id = R.string.change_profile_picture),
                 style = historyItemTextStyle
@@ -374,7 +372,7 @@ fun EditProfileBottomSheetContent(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = Icons.Filled.Delete, contentDescription = null)
+            Icon(imageVector = Delete, contentDescription = null)
             Text(
                 text = stringResource(id = R.string.remove_profile_picture),
                 style = historyItemTextStyle
@@ -408,48 +406,33 @@ fun createImageFile(context: Context): File {
     )
 }
 
-@DevicePreviews
-@Composable
-private fun EditProfileScreenContentPreview() {
-    EditProfileScreenContent(
-        initialUsername = "John",
-        initialEmail = "john@mifos.org",
-        initialVpa = "vpa",
-        initialMobile = "+1 55557772901",
-        uri = null,
-        onBackClick = {},
-        onSaveChanges = {},
-        updateEmail = {},
-        updateMobile = {}
-    )
+class EditProfilePreviewProvider : PreviewParameterProvider<EditProfileUiState> {
+    override val values: Sequence<EditProfileUiState>
+        get() = sequenceOf(
+            EditProfileUiState.Loading,
+            EditProfileUiState.Success(),
+            EditProfileUiState.Success(
+                name = "John Doe",
+                username = "John",
+                email = "john@mifos.org",
+                vpa = "vpa",
+                mobile = "+1 55557772901"
+            ),
+            EditProfileUiState.Error("Error Screen")
+        )
+
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun EditProfileLoadingScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Loading, {}, {}, {}, {})
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun EditProfileSuccessScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Success(), {}, {}, {}, {})
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun EditProfileSuccessDataScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Success(
-        name = "John Doe",
-        username = "John",
-        email = "john@mifos.org",
-        vpa = "vpa",
-        mobile = "+1 55557772901"
-    ), {}, {}, {}, {})
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun EditProfileErrorScreenPreview() {
-    EditProfileScreen(editProfileUiState = EditProfileUiState.Error("Error Screen"), {}, {}, {}, {})
+private fun EditProfileScreenPreview(
+    @PreviewParameter(EditProfilePreviewProvider::class) editProfileUiState: EditProfileUiState
+) {
+    MifosTheme {
+        EditProfileScreen(
+            editProfileUiState = editProfileUiState,
+            onBackClick = {},
+            updateEmail = {}
+        ) {}
+    }
 }
