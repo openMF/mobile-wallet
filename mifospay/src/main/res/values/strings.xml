@@ -389,6 +389,10 @@
     <string name="error_fetching_balance">Error fetching balance</string>
     <string name="nothing_to_notify">Nothing To Notify</string>
     <string name="there_is_nothing_to_show">There is nothing to show</string>
+    <string name="old_password">Old Password</string>
+    <string name="password_length_error">Password too short</string>
+    <string name="password_mismatch_error">Password mismatch</string>
+    <string name="password_changed_successfully">Password changed successfull</string>
     <string name="specific_transactions_history">Specific Transactions History</string>
     <string name="transaction_detail">Transaction Detail</string>
     <string name="receipt_id">Receipt ID : </string>
