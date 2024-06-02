@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -25,14 +26,11 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -64,7 +62,6 @@ import org.mifospay.core.designsystem.icon.MifosIcons.PhotoLibrary
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.historyItemTextStyle
 import org.mifospay.core.designsystem.theme.styleMedium16sp
-import org.mifospay.core.ui.DevicePreviews
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.editprofile.presenter.EditProfileUiState
 import org.mifospay.editprofile.presenter.EditProfileViewModel
@@ -77,9 +74,10 @@ import java.util.Objects
 @Composable
 fun EditProfileScreenRoute(
     viewModel: EditProfileViewModel = hiltViewModel(),
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     val editProfileUiState by viewModel.editProfileUiState.collectAsStateWithLifecycle()
+    val updateSuccess by viewModel.updateSuccess.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = true) {
         viewModel.fetchProfileDetails()
@@ -88,16 +86,13 @@ fun EditProfileScreenRoute(
     EditProfileScreen(
         editProfileUiState = editProfileUiState,
         onBackClick = onBackClick,
-        updateEmail = {
-            viewModel.updateEmail(
-                it
-            )
+        updateEmail = { email ->
+            viewModel.updateEmail(email)
         },
-        updateMobile = {
-            viewModel.updateMobile(
-                it
-            )
-        }
+        updateMobile = { mobile ->
+            viewModel.updateMobile(mobile)
+        },
+        updateSuccess = updateSuccess
     )
 }
 
@@ -106,7 +101,8 @@ fun EditProfileScreen(
     editProfileUiState: EditProfileUiState,
     onBackClick: () -> Unit,
     updateEmail: (String) -> Unit,
-    updateMobile: (String) -> Unit
+    updateMobile: (String) -> Unit,
+    updateSuccess: Boolean
 ) {
     val context = LocalContext.current
     val file = createImageFile(context)
@@ -119,44 +115,49 @@ fun EditProfileScreen(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        when (editProfileUiState) {
-            is EditProfileUiState.Error -> {
-                EmptyContentScreen(
-                    modifier = Modifier,
-                    title = stringResource(id = R.string.error_oops),
-                    subTitle = stringResource(id = R.string.unexpected_error_subtitle),
-                    iconTint = Color.Black,
-                    iconImageVector = Info
-                )
-            }
+        MifosScaffold(
+            topBarTitle = R.string.edit_profile,
+            backPress = { onBackClick.invoke() },
+            scaffoldContent = {
+                when (editProfileUiState) {
+                    is EditProfileUiState.Error -> {
+                        EmptyContentScreen(
+                            modifier = Modifier.padding(it),
+                            title = stringResource(id = R.string.error_oops),
+                            subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                            iconTint = Color.Black,
+                            iconImageVector = Info
+                        )
+                    }
 
-            EditProfileUiState.Loading -> {
-                MfLoadingWheel(
-                    contentDesc = stringResource(R.string.loading),
-                    backgroundColor = Color.White
-                )
-            }
+                    EditProfileUiState.Loading -> {
+                        MfLoadingWheel(
+                            contentDesc = stringResource(R.string.loading),
+                            backgroundColor = Color.White
+                        )
+                    }
 
-            is EditProfileUiState.Success -> {
-                val initialUsername = editProfileUiState.username
-                val initialMobile = editProfileUiState.mobile
-                val initialVpa = editProfileUiState.vpa
-                val initialEmail = editProfileUiState.email
+                    is EditProfileUiState.Success -> {
+                        val initialUsername = editProfileUiState.username
+                        val initialMobile = editProfileUiState.mobile
+                        val initialVpa = editProfileUiState.vpa
+                        val initialEmail = editProfileUiState.email
 
-                EditProfileScreenContent(
-                    initialUsername,
-                    initialMobile,
-                    initialVpa,
-                    initialEmail,
-                    uri,
-                    onBackClick = onBackClick,
-                    updateEmail = updateEmail,
-                    updateMobile = updateMobile
-                )
-            }
-
-            else -> {}
-        }
+                        EditProfileScreenContent(
+                            initialUsername,
+                            initialMobile,
+                            initialVpa,
+                            initialEmail,
+                            uri,
+                            updateEmail = updateEmail,
+                            updateMobile = updateMobile,
+                            contentPadding = it,
+                            onBackClick = onBackClick,
+                            updateSuccess = updateSuccess
+                        )
+                    }
+                }
+            })
     }
 }
 
@@ -167,17 +168,19 @@ fun EditProfileScreenContent(
     initialVpa: String,
     initialEmail: String,
     uri: Uri?,
-    onBackClick: () -> Unit,
+    contentPadding: PaddingValues,
     updateEmail: (String) -> Unit,
-    updateMobile: (String) -> Unit
+    updateMobile: (String) -> Unit,
+    updateSuccess: Boolean,
+    onBackClick: () -> Unit
 ) {
     var username by rememberSaveable { mutableStateOf(initialUsername) }
     var mobile by rememberSaveable { mutableStateOf(initialMobile) }
     var vpa by rememberSaveable { mutableStateOf(initialVpa) }
     var email by rememberSaveable { mutableStateOf(initialEmail) }
-    val snackBarHostState = remember { SnackbarHostState() }
     var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
+    val context = LocalContext.current
 
     PermissionBox(
         requiredPermissions = if (Build.VERSION.SDK_INT >= 33) {
@@ -231,94 +234,91 @@ fun EditProfileScreenContent(
             }
         }
     )
-
-    MifosScaffold(
-        topBarTitle = R.string.edit_profile,
-        backPress = { onBackClick.invoke() },
-        snackbarHost = {
-            SnackbarHost(hostState = snackBarHostState)
-        },
-        scaffoldContent = { contentPadding ->
+    Box(
+        modifier = Modifier
+            .padding(contentPadding)
+            .fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White)
+                .verticalScroll(rememberScrollState())
+        ) {
+            EditProfileScreenImage(
+                imageUri = imageUri,
+                onCameraIconClick = { showBottomSheet = true })
+            MfOutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
+                value = username,
+                label = stringResource(id = R.string.username),
+                onValueChange = { username = it }
+            )
+            MfOutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
+                value = email,
+                label = stringResource(id = R.string.email),
+                onValueChange = { email = it }
+            )
+            MfOutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
+                value = vpa,
+                label = stringResource(id = R.string.vpa),
+                onValueChange = { vpa = it }
+            )
             Box(
                 modifier = Modifier
-                    .padding(contentPadding)
-                    .fillMaxSize()
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color.White)
-                        .verticalScroll(rememberScrollState())
-                ) {
-                    EditProfileScreenImage(
-                        imageUri = imageUri,
-                        onCameraIconClick = { showBottomSheet = true })
-                    MfOutlinedTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        value = username,
-                        label = stringResource(id = R.string.username),
-                        onValueChange = { username = it }
-                    )
-                    MfOutlinedTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        value = email,
-                        label = stringResource(id = R.string.email),
-                        onValueChange = { email = it }
-                    )
-                    MfOutlinedTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp),
-                        value = vpa,
-                        label = stringResource(id = R.string.vpa),
-                        onValueChange = { vpa = it }
-                    )
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp)
-                    ) {
-                        val keyboardController = LocalSoftwareKeyboardController.current
-                        if (LocalInspectionMode.current) {
-                            Text("Placeholder for TogiCountryCodePicker")
-                        } else {
-                            TogiCountryCodePicker(
-                                modifier = Modifier,
-                                initialPhoneNumber = mobile,
-                                autoDetectCode = true,
-                                shape = RoundedCornerShape(3.dp),
-                                colors = TextFieldDefaults.outlinedTextFieldColors(
-                                    focusedBorderColor = Color.Black
-                                ),
-                                onValueChange = { (code, phone), isValid ->
-                                    if (isValid) {
-                                        mobile = code + phone
-                                    }
-                                },
-                                label = { Text(stringResource(id = R.string.phone_number)) },
-                                keyboardActions = KeyboardActions { keyboardController?.hide() }
-                            )
-                        }
-                    }
-                    EditProfileSaveButton(
-                        onClick = {
-                            if (isDataSaveNecessary(email, initialEmail)) {
-                                updateEmail(email)
-                            }
-                            if (isDataSaveNecessary(mobile, initialMobile)) {
-                                updateMobile(mobile)
+                val keyboardController = LocalSoftwareKeyboardController.current
+                if (LocalInspectionMode.current) {
+                    Text("Placeholder for TogiCountryCodePicker")
+                } else {
+                    TogiCountryCodePicker(
+                        modifier = Modifier,
+                        initialPhoneNumber = mobile,
+                        autoDetectCode = true,
+                        shape = RoundedCornerShape(3.dp),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Black
+                        ),
+                        onValueChange = { (code, phone), isValid ->
+                            if (isValid) {
+                                mobile = code + phone
                             }
                         },
-                        buttonText = R.string.save
+                        label = { Text(stringResource(id = R.string.phone_number)) },
+                        keyboardActions = KeyboardActions { keyboardController?.hide() }
                     )
                 }
             }
+            EditProfileSaveButton(
+                onClick = {
+                    if (isDataSaveNecessary(email, initialEmail)) {
+                        updateEmail(email)
+                    }
+                    if (isDataSaveNecessary(mobile, initialMobile)) {
+                        updateMobile(mobile)
+                    }
+                    if (updateSuccess) {
+                        // if user details is successfully saved then go back to Profile Activity
+                        // same behaviour as onBackPress, hence reused the callback
+                        onBackClick.invoke()
+                    } else {
+                        Toast.makeText(context, "Failed To Save Changes", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                buttonText = R.string.save
+            )
         }
-    )
+    }
 }
 
 private fun isDataSaveNecessary(input: String, initialInput: String): Boolean {
@@ -432,7 +432,9 @@ private fun EditProfileScreenPreview(
         EditProfileScreen(
             editProfileUiState = editProfileUiState,
             onBackClick = {},
-            updateEmail = {}
-        ) {}
+            updateEmail = {},
+            updateMobile = {},
+            updateSuccess = false,
+        )
     }
 }
