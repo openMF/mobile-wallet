@@ -6,6 +6,7 @@ import com.mifospay.core.model.domain.user.UpdateUserEntityEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.client.UpdateClient
@@ -24,6 +25,9 @@ class EditProfileViewModel @Inject constructor(
     private val _editProfileUiState =
         MutableStateFlow<EditProfileUiState>(EditProfileUiState.Loading)
     val editProfileUiState: StateFlow<EditProfileUiState> = _editProfileUiState
+
+    private val _updateSuccess = MutableStateFlow(false)
+    val updateSuccess: StateFlow<Boolean> = _updateSuccess
 
     fun fetchProfileDetails() {
         val name = mPreferencesHelper.fullName ?: "-"
@@ -54,10 +58,12 @@ class EditProfileViewModel @Inject constructor(
                 override fun onSuccess(response: UpdateUser.ResponseValue?) {
                     mPreferencesHelper.saveEmail(email)
                     _editProfileUiState.value = EditProfileUiState.Success(email = email!!)
+                    _updateSuccess.value = true
                 }
 
                 override fun onError(message: String) {
                     _editProfileUiState.value = EditProfileUiState.Error(message)
+                    _updateSuccess.value = false
                 }
             })
     }
@@ -75,10 +81,12 @@ class EditProfileViewModel @Inject constructor(
                 override fun onSuccess(response: UpdateClient.ResponseValue) {
                     mPreferencesHelper.saveMobile(fullNumber)
                     _editProfileUiState.value = EditProfileUiState.Success(mobile = fullNumber)
+                    _updateSuccess.value = true
                 }
 
                 override fun onError(message: String) {
                     _editProfileUiState.value = EditProfileUiState.Error(message)
+                    _updateSuccess.value = false
                 }
             })
     }

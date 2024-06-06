@@ -1,5 +1,6 @@
 package org.mifospay.savedcards.ui
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -34,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,10 +44,12 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.savedcards.Card
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
+import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utility.AddCardChip
 import org.mifospay.savedcards.presenter.CardsScreenViewModel
+import org.mifospay.savedcards.presenter.CardsUiEvent
 import org.mifospay.savedcards.presenter.CardsUiState
 
 enum class CardMenuAction {
@@ -55,20 +59,54 @@ enum class CardMenuAction {
 @Composable
 fun CardsScreen(
     viewModel: CardsScreenViewModel = hiltViewModel(),
-    onEditCard: (Card) -> Unit,
-    onAddBtn: () -> Unit
+    onEditCard: (Card) -> Unit
 ) {
     val cardState by viewModel.cardState.collectAsStateWithLifecycle()
     val cardListUiState by viewModel.cardListUiState.collectAsStateWithLifecycle()
+
+    var showCardBottomSheet by rememberSaveable { mutableStateOf(false) }
+    val showConfirmDeleteDialog = rememberSaveable { mutableStateOf(false) }
+
+    var deleteCardID by rememberSaveable { mutableStateOf<Int?>(null) }
+
+
+    if (showCardBottomSheet) {
+        AddCardDialogSheet(
+            cancelClicked = {
+                showCardBottomSheet = false
+            },
+            addClicked = {
+                showCardBottomSheet = false
+                viewModel.addCard(it)
+            },
+            onDismiss = {
+                showCardBottomSheet = false
+            }
+        )
+    }
+
+    MifosDialogBox(
+        showDialogState = showConfirmDeleteDialog,
+        onDismiss = { showConfirmDeleteDialog.value = false },
+        title = R.string.delete_card,
+        confirmButtonText = R.string.yes,
+        onConfirm = {
+            deleteCardID?.let { viewModel.deleteCard(it) }
+            showConfirmDeleteDialog.value = false
+        },
+        dismissButtonText = R.string.no,
+        message = R.string.confirm_delete_card
+    )
+
     CardsScreen(
         cardState = cardState,
         cardListUiState = cardListUiState,
         onEditCard = onEditCard,
         onDeleteCard = {
-           // TODO implement Delete card by implementing a delete confirm dialog and call
-           // TODO viewModel.deleteCard
+            showConfirmDeleteDialog.value = true
+            deleteCardID = it.id
         },
-        onAddBtn = onAddBtn,
+        onAddBtn = { showCardBottomSheet = true },
         updateQuery = {
             viewModel.updateSearchQuery(it)
         }
@@ -92,7 +130,7 @@ fun CardsScreen(
         when (cardState) {
             CardsUiState.Loading -> {
                 MfLoadingWheel(
-                    contentDesc = stringResource(R.string.loading), 
+                    contentDesc = stringResource(R.string.loading),
                     backgroundColor = Color.White
                 )
             }
@@ -119,6 +157,34 @@ fun CardsScreen(
                     onEditCard = onEditCard,
                     updateQuery = updateQuery
                 )
+            }
+
+            is CardsUiState.Success -> {
+                when (cardState.cardsUiEvent) {
+                    CardsUiEvent.CARD_ADDED_SUCCESSFULLY -> {
+                        Toast.makeText(
+                            LocalContext.current,
+                            stringResource(id = R.string.card_added_successfully),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    CardsUiEvent.CARD_UPDATED_SUCCESSFULLY -> {
+                        Toast.makeText(
+                            LocalContext.current,
+                            stringResource(id = R.string.card_updated_successfully),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
+                    CardsUiEvent.CARD_DELETED_SUCCESSFULLY -> {
+                        Toast.makeText(
+                            LocalContext.current,
+                            stringResource(id = R.string.card_deleted_successfully),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
         }
     }
@@ -218,7 +284,9 @@ fun CardsList(
     onMenuItemClick: (Card, CardMenuAction) -> Unit
 ) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
     ) {
         items(cards) { card ->
             CardItem(card = card) { clickedCard, menuItem ->

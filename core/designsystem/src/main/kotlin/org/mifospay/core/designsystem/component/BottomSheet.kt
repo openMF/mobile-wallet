@@ -26,7 +26,7 @@ fun MifosBottomSheet(
     onDismiss: () -> Unit
 ) {
     val coroutineScope = rememberCoroutineScope()
-    val modalSheetState = rememberModalBottomSheetState()
+    val modalSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var showBottomSheet by remember { mutableStateOf(true) }
 
 

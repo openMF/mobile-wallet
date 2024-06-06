@@ -1,0 +1,14 @@
+<resources>
+    <string name="insufficient_balance">Insufficient balance</string>
+    <string name="error_fetching_balance">Error fetching balance</string>
+    <string name="self_amount_transfer_is_not_allowed">Self Account transfer is not allowed</string>
+    <string name="send">Send</string>
+    <string name="select_transfer_method">Select transfer method</string>
+    <string name="vpa">VPA</string>
+    <string name="mobile">Mobile number</string>
+    <string name="amount">Amount</string>
+    <string name="virtual_payment_address">Virtual Payment Address</string>
+    <string name="submit">Submit</string>
+    <string name="please_wait">Please wait…</string>
+    <string name="phone_number">Phone Number</string>
+</resources>

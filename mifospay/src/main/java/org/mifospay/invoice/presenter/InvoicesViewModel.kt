@@ -21,22 +21,22 @@ class InvoicesViewModel @Inject constructor(
 ) : ViewModel() {
 
 
-    private val _invoiceUiState = MutableStateFlow<InvoiceUiState>(InvoiceUiState.Loading)
-    val invoiceUiState: StateFlow<InvoiceUiState> = _invoiceUiState
+    private val _invoiceUiState = MutableStateFlow<InvoicesUiState>(InvoicesUiState.Loading)
+    val invoiceUiState: StateFlow<InvoicesUiState> = _invoiceUiState
 
     fun fetchInvoices() {
-        _invoiceUiState.value = InvoiceUiState.Loading
+        _invoiceUiState.value = InvoicesUiState.Loading
         mUseCaseHandler.execute(fetchInvoicesUseCase,
             FetchInvoices.RequestValues(mPreferencesHelper.clientId.toString() + ""),
             object : UseCase.UseCaseCallback<FetchInvoices.ResponseValue> {
                 override fun onSuccess(response: FetchInvoices.ResponseValue) {
                     if (response.invoiceList.isNotEmpty())
-                        _invoiceUiState.value = InvoiceUiState.InvoiceList(response.invoiceList)
-                    else _invoiceUiState.value = InvoiceUiState.Empty
+                        _invoiceUiState.value = InvoicesUiState.InvoiceList(response.invoiceList)
+                    else _invoiceUiState.value = InvoicesUiState.Empty
                 }
 
                 override fun onError(message: String) {
-                    _invoiceUiState.value = InvoiceUiState.Error(message)
+                    _invoiceUiState.value = InvoicesUiState.Error(message)
                 }
             })
     }
@@ -52,9 +52,9 @@ class InvoicesViewModel @Inject constructor(
     }
 }
 
-sealed class InvoiceUiState {
-    data object Loading : InvoiceUiState()
-    data object Empty : InvoiceUiState()
-    data class Error(val message: String) : InvoiceUiState()
-    data class InvoiceList(val list: List<Invoice?>) : InvoiceUiState()
+sealed class InvoicesUiState {
+    data object Loading : InvoicesUiState()
+    data object Empty : InvoicesUiState()
+    data class Error(val message: String) : InvoicesUiState()
+    data class InvoiceList(val list: List<Invoice?>) : InvoicesUiState()
 }

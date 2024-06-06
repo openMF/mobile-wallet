@@ -1,0 +1,8 @@
+<resources>
+    <string name="feature_make_transfer_loading">Loading</string>
+    <string name="feature_make_transfer_send_money">Send money</string>
+    <string name="feature_make_transfer_sending_to">Sending to</string>
+    <string name="feature_make_transfer_amount">Amount</string>
+    <string name="feature_make_transfer_transaction_success">Transaction successful</string>
+    <string name="feature_make_transfer_transaction_unable_to_process">Unable to process transfer</string>
+</resources>

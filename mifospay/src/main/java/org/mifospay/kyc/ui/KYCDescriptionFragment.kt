@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifospay.R
 import org.mifospay.base.BaseFragment
-import org.mifospay.kyc.presenter.KYCDescriptionViewModel
 import org.mifospay.theme.MifosTheme
 
 /**
@@ -20,7 +18,6 @@ import org.mifospay.theme.MifosTheme
 @AndroidEntryPoint
 class KYCDescriptionFragment : BaseFragment() {
 
-    private val kviewModel: KYCDescriptionViewModel by viewModels()
     private var frameLayout: FrameLayout? = null
 
     override fun onCreateView(
@@ -31,12 +28,7 @@ class KYCDescriptionFragment : BaseFragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MifosTheme {
-                    KYCDescriptionScreen(
-                        kviewModel,
-                        onLevel1Clicked = { onLevel1Clicked() },
-                        onLevel2Clicked = { onLevel2Clicked() },
-                        onLevel3Clicked = { onLevel3Clicked() }
-                    )
+                    KYCScreen()
                 }
             }
         }

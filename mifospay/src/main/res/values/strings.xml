@@ -151,6 +151,8 @@
     <string name="status">status</string>
     <string name="transaction_id">Transaction ID : </string>
     <string name="transaction_date">Transaction Date : </string>
+    <string name="transaction_success">Transaction successful</string>
+    <string name="transaction_unable_to_process">Unable to process transfer</string>
     <string name="to">To:</string>
     <string name="from">From:</string>
     <string name="date">date</string>
@@ -195,6 +197,7 @@
     <string name="no_saved_cards_found">No saved cards found</string>
     <string name="debit_card_number">Debit Card Number</string>
     <string name="mm">MM</string>
+    <string name="mm_yy">MM/YY</string>
     <string name="slash">/</string>
     <string name="search">Search</string>
     <string name="enter_otp">Enter OTP</string>
@@ -336,6 +339,15 @@
     <string name="edit_clicked">Edit Clicked</string>
     <string name="card_number">Card Number: </string>
 
+    <string name="invalid_credit_card">Invalid Credit Card Number</string>
+    <string name="all_fields_required">All Fields Required</string>
+    <string name="expiry_date_length_error">Expiry date should be 4 digits</string>
+    <string name="cvv_length_error">CVV length should be 3 digits</string>
+    <string name="invalid_expiry_date">Invalid Expiry Date</string>
+    <string name="confirm_delete_card">Are you sure you want to delete this card?</string>
+    <string name="card_added_successfully">Card Added Successfully</string>
+    <string name="card_updated_successfully">Card Updated Successfully</string>
+    <string name="card_deleted_successfully">Card Deleted Successfully</string>
 
     <!-- dynamically formatted strings-->
     <string name="name_client_name">Name: %1$s</string>
@@ -380,5 +392,22 @@
     <string name="error_fetching_balance">Error fetching balance</string>
     <string name="nothing_to_notify">Nothing To Notify</string>
     <string name="there_is_nothing_to_show">There is nothing to show</string>
+    <string name="old_password">Old Password</string>
+    <string name="password_length_error">Password too short</string>
+    <string name="password_mismatch_error">Password mismatch</string>
+    <string name="password_changed_successfully">Password changed successfull</string>
+    <string name="specific_transactions_history">Specific Transactions History</string>
+    <string name="transaction_detail">Transaction Detail</string>
+    <string name="receipt_id">Receipt ID : </string>
+    <string name="debit">Debit</string>
+    <string name="Credit">Credit</string>
+    <string name="reset_amount_successfully">Reset Amount Successful</string>
+    <string name="please_enter_valid_amount">Please enter valid amount</string>
+    <string name="currency">Set Currency</string>
+    <string name="usd">USD</string>
+    <string name="enter_currency">Enter Currency</string>
+    <string name="merchant_id">Merchant ID</string>
+    <string name="consumer_id">Consumer ID</string>
+    <string name="invoice">Invoice</string>
 
 </resources>
