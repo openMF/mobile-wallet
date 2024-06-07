@@ -6,7 +6,6 @@ import com.mifospay.core.model.domain.user.UpdateUserEntityEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import okhttp3.ResponseBody.Companion.toResponseBody
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.client.UpdateClient
@@ -46,7 +45,6 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun updateEmail(email: String?) {
-        _editProfileUiState.value = EditProfileUiState.Loading
         mUseCaseHandler.execute(updateUserUseCase,
             UpdateUser.RequestValues(
                 UpdateUserEntityEmail(
@@ -62,14 +60,12 @@ class EditProfileViewModel @Inject constructor(
                 }
 
                 override fun onError(message: String) {
-                    _editProfileUiState.value = EditProfileUiState.Error(message)
                     _updateSuccess.value = false
                 }
             })
     }
 
     fun updateMobile(fullNumber: String?) {
-        _editProfileUiState.value = EditProfileUiState.Loading
         mUseCaseHandler.execute(updateClientUseCase,
             UpdateClient.RequestValues(
                 com.mifospay.core.model.domain.client.UpdateClientEntityMobile(
@@ -85,7 +81,6 @@ class EditProfileViewModel @Inject constructor(
                 }
 
                 override fun onError(message: String) {
-                    _editProfileUiState.value = EditProfileUiState.Error(message)
                     _updateSuccess.value = false
                 }
             })
@@ -95,7 +90,6 @@ class EditProfileViewModel @Inject constructor(
 
 sealed interface EditProfileUiState {
     data object Loading : EditProfileUiState
-    data class Error(val message: String) : EditProfileUiState
     data class Success(
         val bitmapImage: Bitmap? = null,
         val name: String = "",

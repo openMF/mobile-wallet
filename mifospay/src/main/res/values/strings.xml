@@ -409,5 +409,6 @@
     <string name="merchant_id">Merchant ID</string>
     <string name="consumer_id">Consumer ID</string>
     <string name="invoice">Invoice</string>
+    <string name="failed_to_save_changes">Failed To Save Changes</string>
 
 </resources>

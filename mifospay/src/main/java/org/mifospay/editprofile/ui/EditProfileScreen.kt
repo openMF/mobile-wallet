@@ -57,12 +57,10 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.PermissionBox
 import org.mifospay.core.designsystem.icon.MifosIcons.Camera
 import org.mifospay.core.designsystem.icon.MifosIcons.Delete
-import org.mifospay.core.designsystem.icon.MifosIcons.Info
 import org.mifospay.core.designsystem.icon.MifosIcons.PhotoLibrary
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.historyItemTextStyle
 import org.mifospay.core.designsystem.theme.styleMedium16sp
-import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.editprofile.presenter.EditProfileUiState
 import org.mifospay.editprofile.presenter.EditProfileViewModel
 import java.io.File
@@ -79,6 +77,13 @@ fun EditProfileScreenRoute(
     val editProfileUiState by viewModel.editProfileUiState.collectAsStateWithLifecycle()
     val updateSuccess by viewModel.updateSuccess.collectAsStateWithLifecycle()
 
+    val context = LocalContext.current
+    val file = createImageFile(context)
+    val uri = FileProvider.getUriForFile(
+        Objects.requireNonNull(context),
+        BuildConfig.APPLICATION_ID + ".provider", file
+    )
+
     LaunchedEffect(key1 = true) {
         viewModel.fetchProfileDetails()
     }
@@ -92,7 +97,8 @@ fun EditProfileScreenRoute(
         updateMobile = { mobile ->
             viewModel.updateMobile(mobile)
         },
-        updateSuccess = updateSuccess
+        updateSuccess = updateSuccess,
+        uri
     )
 }
 
@@ -102,15 +108,9 @@ fun EditProfileScreen(
     onBackClick: () -> Unit,
     updateEmail: (String) -> Unit,
     updateMobile: (String) -> Unit,
-    updateSuccess: Boolean
+    updateSuccess: Boolean,
+    uri: Uri?
 ) {
-    val context = LocalContext.current
-    val file = createImageFile(context)
-    val uri = FileProvider.getUriForFile(
-        Objects.requireNonNull(context),
-        BuildConfig.APPLICATION_ID + ".provider", file
-    )
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -120,16 +120,6 @@ fun EditProfileScreen(
             backPress = { onBackClick.invoke() },
             scaffoldContent = {
                 when (editProfileUiState) {
-                    is EditProfileUiState.Error -> {
-                        EmptyContentScreen(
-                            modifier = Modifier.padding(it),
-                            title = stringResource(id = R.string.error_oops),
-                            subTitle = stringResource(id = R.string.unexpected_error_subtitle),
-                            iconTint = Color.Black,
-                            iconImageVector = Info
-                        )
-                    }
-
                     EditProfileUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(R.string.loading),
@@ -312,7 +302,8 @@ fun EditProfileScreenContent(
                         // same behaviour as onBackPress, hence reused the callback
                         onBackClick.invoke()
                     } else {
-                        Toast.makeText(context, "Failed To Save Changes", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, R.string.failed_to_save_changes, Toast.LENGTH_SHORT)
+                            .show()
                     }
                 },
                 buttonText = R.string.save
@@ -417,8 +408,7 @@ class EditProfilePreviewProvider : PreviewParameterProvider<EditProfileUiState> 
                 email = "john@mifos.org",
                 vpa = "vpa",
                 mobile = "+1 55557772901"
-            ),
-            EditProfileUiState.Error("Error Screen")
+            )
         )
 
 }
@@ -435,6 +425,7 @@ private fun EditProfileScreenPreview(
             updateEmail = {},
             updateMobile = {},
             updateSuccess = false,
+            uri = null
         )
     }
 }
