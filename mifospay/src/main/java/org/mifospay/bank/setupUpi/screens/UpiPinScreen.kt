@@ -1,6 +1,5 @@
 package org.mifos.mobilewallet.mifospay.seup_upi.fragment
 
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,8 +14,10 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,16 +32,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import org.mifos.mobilewallet.mifospay.ui.VerifyStepHeader
 import org.mifospay.R
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.utils.Toaster
 
 @Composable
 fun UpiPinScreen(
     verificationStatus: Boolean = false,
     contentVisibility: Boolean = false,
-    correctlySetingUpi: (String) -> Unit
+    correctlySettingUpi: (String) -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -58,26 +61,30 @@ fun UpiPinScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             VerifyStepHeader(stringResource(id = R.string.upi_pin_setup), verificationStatus)
-            if (contentVisibility) UpiPinScreenContent(correctlySetingUpi)
+            if (contentVisibility) UpiPinScreenContent(correctlySettingUpi)
         }
     }
 }
 
 @Composable
 fun UpiPinScreenContent(
-    correctlySetingUpi: (String) -> Unit
+    correctlySettingUpi: (String) -> Unit
 ) {
     var steps1 = rememberSaveable { mutableStateOf(0) }
     var upiPin1 = rememberSaveable { mutableStateOf("") }
     var upiPin2 = rememberSaveable { mutableStateOf("") }
     var upiPinTobeMatched1 = rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
     Text(
         text = if (steps1.value == 0) stringResource(id = R.string.enter_upi_pin)
         else stringResource(id = R.string.reenter_upi),
         color = colorResource(id = R.color.colorUpiPinScreenTitle),
         fontSize = 18.sp,
-        style = MaterialTheme.typography.headlineMedium)
+        style = MaterialTheme.typography.headlineMedium
+    )
+
     if (steps1.value == 0) {
         BasicTextField(value = upiPin1.value, onValueChange = {
             upiPin1.value = it
@@ -96,7 +103,7 @@ fun UpiPinScreenContent(
         ), decorationBox = {
             Row(horizontalArrangement = Arrangement.Center) {
                 repeat(4) { index ->
-                    CharView2(
+                    UpiPinCharView(
                         index = index, text = upiPin1.value
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -111,23 +118,23 @@ fun UpiPinScreenContent(
             upiPin2.value = it
             if (upiPin2.value.length == 4) {
                 if (upiPin1.value == upiPin2.value) {
-                    correctlySetingUpi(upiPin2.value)
+                    correctlySettingUpi(upiPin2.value)
                 }
             }
         }, keyboardActions = KeyboardActions(onDone = {
             if (upiPin2.value.length == 4) {
                 if (upiPin1.value == upiPin2.value) {
-                    correctlySetingUpi(upiPin2.value)
+                    correctlySettingUpi(upiPin2.value)
                 }
             } else {
-                showToast(context, "Invalid UPI PIN")
+                showSnackbar(snackbarHostState, R.string.Invalid_UPI_PIN.toString())
             }
         }), keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
         ), decorationBox = {
             Row(horizontalArrangement = Arrangement.Center) {
                 repeat(4) { index ->
-                    CharView2(
+                    UpiPinCharView(
                         index = index, text = upiPin2.value
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -140,8 +147,14 @@ fun UpiPinScreenContent(
     }
 }
 
+fun showSnackbar(snackbarHostState: SnackbarHostState, message: String) {
+    CoroutineScope(Dispatchers.Main).launch {
+        snackbarHostState.showSnackbar(message)
+    }
+}
+
 @Composable
-fun CharView2(
+fun UpiPinCharView(
     index: Int, text: String
 ) {
     val isFocused = text.length == index
@@ -164,10 +177,6 @@ fun CharView2(
         },
         textAlign = TextAlign.Center
     )
-}
-
-fun showToast(context: Context, message: String?) {
-    Toaster.showToast(context, message)
 }
 
 @Preview

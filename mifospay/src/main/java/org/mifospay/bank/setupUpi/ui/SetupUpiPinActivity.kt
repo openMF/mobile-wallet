@@ -20,7 +20,7 @@ class SetupUpiPinActivity : ComponentActivity() {
     private var index = 0
     private var type: String? = null
 
-    private val setUpViewModel : SetUpUpiViewModal by viewModels()
+    private val setUpViewModel: SetUpUpiViewModal by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val b = intent.extras
@@ -41,7 +41,7 @@ class SetupUpiPinActivity : ComponentActivity() {
         }
     }
 
-    fun setupUpiPinSuccess(mSetupUpiPin: String?) {
+    private fun setupUpiPinSuccess(mSetupUpiPin: String?) {
         setUpViewModel.setupUpiPin(bankAccountDetails, mSetupUpiPin)
         bankAccountDetails!!.isUpiEnabled = true
         bankAccountDetails!!.upiPin = mSetupUpiPin

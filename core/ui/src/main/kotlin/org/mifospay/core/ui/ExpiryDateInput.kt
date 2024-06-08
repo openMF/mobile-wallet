@@ -108,7 +108,7 @@ fun FormattedDateView(
     )
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun ExpiryDateInputPreview() {
     ExpiryDateInput(date = "", onDateChange = {}, onDone = {})

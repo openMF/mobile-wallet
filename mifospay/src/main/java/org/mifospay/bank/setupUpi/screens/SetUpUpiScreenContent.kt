@@ -62,7 +62,7 @@ fun SettingAndForgotUpi(
             debitCardScreenVisible = false
         },
         onDebitCardVerificationFailed = {
-            showToast(context,it)
+            showToast(context, it)
         })
     OtpScreen(verificationStatus = otpVerified,
         contentVisibility = otpScreenVisible,
@@ -72,7 +72,7 @@ fun SettingAndForgotUpi(
             otpVerified = true
             upiPinScreenVisible = true
         })
-    UpiPinScreen(contentVisibility = upiPinScreenVisible, correctlySetingUpi = {
+    UpiPinScreen(contentVisibility = upiPinScreenVisible, correctlySettingUpi = {
         upiPinScreenVerified = true
         correctlySetingUpi(it)
     })
@@ -98,7 +98,7 @@ fun ChangeUpi(
             upiPinScreenVisible = true
             otpScreenVisible = false
         })
-    UpiPinScreen(contentVisibility = upiPinScreenVisible, correctlySetingUpi = {
+    UpiPinScreen(contentVisibility = upiPinScreenVisible, correctlySettingUpi = {
         upiPinScreenVerified = true
         correctlySetingUpi(it)
     })
