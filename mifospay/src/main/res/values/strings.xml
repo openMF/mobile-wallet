@@ -220,6 +220,7 @@
     <string name="wrong_otp">Wrong OTP</string>
     <string name="reenter_upi">Re-enter UPI PIN</string>
     <string name="upi_pin_mismatch">UPI PIN mismatch</string>
+    <string name="Invalid_UPI_PIN">Invalid UPI PIN</string>
     <string name="enter_upi_length_4">Enter UPI PIN of length 4</string>
     <string name="no">No</string>
     <string name="enter_valid_mob_num">Enter a valid mobile number</string>
@@ -410,5 +411,6 @@
     <string name="consumer_id">Consumer ID</string>
     <string name="invoice">Invoice</string>
     <string name="failed_to_save_changes">Failed To Save Changes</string>
+    <string name="back">Back</string>
 
 </resources>
