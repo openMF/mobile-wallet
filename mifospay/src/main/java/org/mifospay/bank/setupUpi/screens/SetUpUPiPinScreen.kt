@@ -6,8 +6,6 @@ import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,9 +20,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mifospay.core.model.domain.BankAccountDetails
-import org.mifospay.common.Constants
 import org.mifospay.R
 import org.mifospay.bank.setupUpi.viewmodel.SetUpUpiViewModal
+import org.mifospay.common.Constants
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.utils.Toaster
 
 @Composable
@@ -72,7 +71,7 @@ fun SetupUpiPinScreen(
                     })
                     {
                         Icon(
-                            Icons.Filled.ArrowBack,
+                            MifosIcons.ArrowBack,
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }

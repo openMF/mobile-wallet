@@ -32,16 +32,4 @@ class SetupUpiPinActivity : ComponentActivity() {
             }
         }
     }
-
-//    private fun setupUpiPinSuccess(mSetupUpiPin: String?) {
-//        setUpViewModel.setupUpiPin(bankAccountDetails, mSetupUpiPin)
-//        bankAccountDetails!!.isUpiEnabled = true
-//        bankAccountDetails!!.upiPin = mSetupUpiPin
-//        Toaster.showToast(this, Constants.UPI_PIN_SETUP_COMPLETED_SUCCESSFULLY)
-//        val intent = Intent()
-//        intent.putExtra(Constants.UPDATED_BANK_ACCOUNT, bankAccountDetails)
-//        intent.putExtra(Constants.INDEX, index)
-//        setResult(RESULT_OK, intent)
-//        finish()
-//    }
 }

@@ -39,7 +39,7 @@ fun SetUpUpiScreenContent(
 
 @Composable
 fun SettingAndForgotUpi(
-    correctlySetingUpi: (String) -> Unit
+    correctlySettingUpi: (String) -> Unit
 ) {
     var debitCardVerified by rememberSaveable { mutableStateOf(false) }
     var otpVerified by rememberSaveable { mutableStateOf(false) }
@@ -72,7 +72,7 @@ fun SettingAndForgotUpi(
         })
     UpiPinScreen(contentVisibility = upiPinScreenVisible, correctlySettingUpi = {
         upiPinScreenVerified = true
-        correctlySetingUpi(it)
+        correctlySettingUpi(it)
     })
 }
 
