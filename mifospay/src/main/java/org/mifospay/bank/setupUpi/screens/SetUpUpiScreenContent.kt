@@ -22,18 +22,16 @@ fun SetUpUpiScreenContent(
     viewModal: SetUpUpiViewModal = hiltViewModel(),
     bankAccountDetails: BankAccountDetails,
     type: String,
-    index: Int,
-    correctlySetingUpi: (String) -> Unit
+    correctlySettingUpi: (String) -> Unit
 ) {
-
     Column {
         if (type == Constants.CHANGE) {
             ChangeUpi(
-                viewModal.requestOtp(bankAccountDetails), correctlySetingUpi
+                viewModal.requestOtp(bankAccountDetails), correctlySettingUpi
             )
         } else {
             SettingAndForgotUpi(
-                correctlySetingUpi
+                correctlySettingUpi
             )
         }
     }
@@ -80,7 +78,7 @@ fun SettingAndForgotUpi(
 
 @Composable
 fun ChangeUpi(
-    otpText: String, correctlySetingUpi: (String) -> Unit
+    otpText: String, correctlySettingUpi: (String) -> Unit
 ) {
     var otpVerified by rememberSaveable { mutableStateOf(false) }
     var otpScreenVisible by rememberSaveable { mutableStateOf(true) }
@@ -100,7 +98,7 @@ fun ChangeUpi(
         })
     UpiPinScreen(contentVisibility = upiPinScreenVisible, correctlySettingUpi = {
         upiPinScreenVerified = true
-        correctlySetingUpi(it)
+        correctlySettingUpi(it)
     })
 }
 
@@ -111,8 +109,7 @@ fun PreviewSetUpUpiPin() {
     MaterialTheme {
         SetUpUpiScreenContent(bankAccountDetails = BankAccountDetails(),
             type = Constants.SETUP,
-            index = 0,
-            correctlySetingUpi = {})
+            correctlySettingUpi = {})
     }
 }
 
@@ -122,8 +119,7 @@ fun PreviewForgetUpiPin() {
     MaterialTheme {
         SetUpUpiScreenContent(bankAccountDetails = BankAccountDetails(),
             type = Constants.FORGOT,
-            index = 0,
-            correctlySetingUpi = {})
+            correctlySettingUpi = {})
     }
 }
 
@@ -133,7 +129,6 @@ fun PreviewChangeUpiPin() {
     MaterialTheme {
         SetUpUpiScreenContent(bankAccountDetails = BankAccountDetails(),
             type = Constants.CHANGE,
-            index = 0,
-            correctlySetingUpi = {})
+            correctlySettingUpi = {})
     }
 }
