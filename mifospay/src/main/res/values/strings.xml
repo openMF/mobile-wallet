@@ -197,6 +197,7 @@
     <string name="no_saved_cards_found">No saved cards found</string>
     <string name="debit_card_number">Debit Card Number</string>
     <string name="mm">MM</string>
+    <string name="mm_yy">MM/YY</string>
     <string name="slash">/</string>
     <string name="search">Search</string>
     <string name="enter_otp">Enter OTP</string>
@@ -219,6 +220,7 @@
     <string name="wrong_otp">Wrong OTP</string>
     <string name="reenter_upi">Re-enter UPI PIN</string>
     <string name="upi_pin_mismatch">UPI PIN mismatch</string>
+    <string name="Invalid_UPI_PIN">Invalid UPI PIN</string>
     <string name="enter_upi_length_4">Enter UPI PIN of length 4</string>
     <string name="no">No</string>
     <string name="enter_valid_mob_num">Enter a valid mobile number</string>
@@ -327,7 +329,10 @@
     <string name="approve_permission">Please approve storage permissions</string>
     <string name="approve_permission_storage">Please approve storage permissions</string>
     <string name="approve_permission_storage_receiptDescription">You need to approve this permission in order to download and view your Receipt.</string>
+    <string name="permission_required">Permissions Required</string>
+    <string name="approve_permission_description_camera">You need to approve these permissions in order to access the camera.</string>
     <string name="approve">Approve</string>
+    <string name="dismiss">Dismiss</string>
     <string name="download_complete">Download completed</string>
 
     <string name="add_cards">Please Add Cards</string>
@@ -335,6 +340,15 @@
     <string name="edit_clicked">Edit Clicked</string>
     <string name="card_number">Card Number: </string>
 
+    <string name="invalid_credit_card">Invalid Credit Card Number</string>
+    <string name="all_fields_required">All Fields Required</string>
+    <string name="expiry_date_length_error">Expiry date should be 4 digits</string>
+    <string name="cvv_length_error">CVV length should be 3 digits</string>
+    <string name="invalid_expiry_date">Invalid Expiry Date</string>
+    <string name="confirm_delete_card">Are you sure you want to delete this card?</string>
+    <string name="card_added_successfully">Card Added Successfully</string>
+    <string name="card_updated_successfully">Card Updated Successfully</string>
+    <string name="card_deleted_successfully">Card Deleted Successfully</string>
 
     <!-- dynamically formatted strings-->
     <string name="name_client_name">Name: %1$s</string>
@@ -379,6 +393,10 @@
     <string name="error_fetching_balance">Error fetching balance</string>
     <string name="nothing_to_notify">Nothing To Notify</string>
     <string name="there_is_nothing_to_show">There is nothing to show</string>
+    <string name="old_password">Old Password</string>
+    <string name="password_length_error">Password too short</string>
+    <string name="password_mismatch_error">Password mismatch</string>
+    <string name="password_changed_successfully">Password changed successfull</string>
     <string name="specific_transactions_history">Specific Transactions History</string>
     <string name="transaction_detail">Transaction Detail</string>
     <string name="receipt_id">Receipt ID : </string>
@@ -389,5 +407,10 @@
     <string name="currency">Set Currency</string>
     <string name="usd">USD</string>
     <string name="enter_currency">Enter Currency</string>
+    <string name="merchant_id">Merchant ID</string>
+    <string name="consumer_id">Consumer ID</string>
+    <string name="invoice">Invoice</string>
+    <string name="failed_to_save_changes">Failed To Save Changes</string>
+    <string name="back">Back</string>
 
 </resources>

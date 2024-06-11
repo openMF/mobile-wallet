@@ -7,8 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -16,14 +14,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.Invoice
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
+import org.mifospay.core.designsystem.icon.MifosIcons.Info
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.invoice.presenter.InvoiceUiState
+import org.mifospay.invoice.presenter.InvoicesUiState
 import org.mifospay.invoice.presenter.InvoicesViewModel
+import org.mifospay.theme.MifosTheme
 
 @Composable
 fun InvoiceScreen(
@@ -38,22 +40,22 @@ fun InvoiceScreen(
 
 @Composable
 fun InvoiceScreen(
-    invoiceUiState: InvoiceUiState,
+    invoiceUiState: InvoicesUiState,
     getUniqueInvoiceLink: (Long) -> Uri?
 ) {
     val context = LocalContext.current
     when (invoiceUiState) {
-        is InvoiceUiState.Error -> {
+        is InvoicesUiState.Error -> {
             EmptyContentScreen(
                 modifier = Modifier,
                 title = stringResource(id = R.string.error_oops),
                 subTitle = stringResource(id = R.string.unexpected_error_subtitle),
                 iconTint = Color.Black,
-                iconImageVector = Icons.Rounded.Info
+                iconImageVector = Info
             )
         }
 
-        is InvoiceUiState.InvoiceList -> {
+        is InvoicesUiState.InvoiceList -> {
             Column(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(invoiceUiState.list) {
@@ -65,8 +67,8 @@ fun InvoiceScreen(
                             invoiceId = it?.id.toString(),
                             invoiceStatusIcon = it?.status!!,
                             onClick = { invoiceId ->
-                                val uniqueLink = getUniqueInvoiceLink(invoiceId.toLong())
-                                val intent = Intent(Intent.ACTION_VIEW, uniqueLink)
+                                val intent = Intent(context, InvoiceActivity::class.java)
+                                intent.data = getUniqueInvoiceLink(invoiceId.toLong())
                                 context.startActivity(intent)
                             }
                         )
@@ -75,17 +77,16 @@ fun InvoiceScreen(
             }
         }
 
-        InvoiceUiState.Empty -> {
+        InvoicesUiState.Empty -> {
             EmptyContentScreen(
                 modifier = Modifier,
                 title = stringResource(id = R.string.error_oops),
                 subTitle = stringResource(id = R.string.error_no_invoices_found),
                 iconTint = Color.Black,
-                iconImageVector = Icons.Rounded.Info
             )
         }
 
-        InvoiceUiState.Loading -> {
+        InvoicesUiState.Loading -> {
             MifosLoadingWheel(
                 modifier = Modifier.fillMaxWidth(),
                 contentDesc = stringResource(R.string.loading)
@@ -94,33 +95,24 @@ fun InvoiceScreen(
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun InvoiceScreenLoadingPreview() {
-    InvoiceScreen(
-        invoiceUiState = InvoiceUiState.Loading, getUniqueInvoiceLink = { null })
+class InvoicesUiStateProvider : PreviewParameterProvider<InvoicesUiState> {
+    override val values: Sequence<InvoicesUiState>
+        get() = sequenceOf(
+            InvoicesUiState.Loading,
+            InvoicesUiState.Empty,
+            InvoicesUiState.InvoiceList(sampleInvoiceList),
+            InvoicesUiState.Error("Some Error Occurred")
+        )
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun InvoiceScreenEmptyListPreview() {
-    InvoiceScreen(invoiceUiState = InvoiceUiState.Empty, getUniqueInvoiceLink = { null })
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun InvoiceScreenListPreview() {
-    InvoiceScreen(
-        invoiceUiState = InvoiceUiState.InvoiceList(sampleInvoiceList),
-        getUniqueInvoiceLink = { null })
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun InvoiceScreenErrorPreview() {
-    InvoiceScreen(
-        invoiceUiState = InvoiceUiState.Error("Error Screen"),
-        getUniqueInvoiceLink = { null })
+private fun InvoiceScreenPreview(
+    @PreviewParameter(InvoicesUiStateProvider::class) invoiceUiState: InvoicesUiState
+) {
+    MifosTheme {
+        InvoiceScreen(invoiceUiState = invoiceUiState, getUniqueInvoiceLink = { Uri.EMPTY })
+    }
 }
 
 val sampleInvoiceList = List(10) { index ->
