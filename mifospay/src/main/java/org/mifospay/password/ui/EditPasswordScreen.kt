@@ -1,4 +1,4 @@
-git sttpackage org.mifospay.password.ui
+package org.mifospay.password.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -104,13 +104,9 @@ fun EditPasswordScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
         backPress = onBackPress,
-        scaffoldContent = { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            MfPasswordTextField(
+
+        scaffoldContent = {
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(it)
@@ -132,6 +128,21 @@ fun EditPasswordScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
+                    password = newPassword,
+                    label = stringResource(id = R.string.new_password),
+                    isError = newPassword.isNotEmpty() && newPassword.length < 6,
+                    errorMessage = if (newPassword.isNotEmpty() && newPassword.length < 6) stringResource(
+                        id = R.string.password_length_error
+                    ) else null,
+                    isPasswordVisible = isNewPasswordVisible,
+                    onTogglePasswordVisibility = { isNewPasswordVisible = !isNewPasswordVisible },
+                    onPasswordChange = { newPassword = it }
+                )
+                MfPasswordTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+
                     password = newPassword,
                     label = stringResource(id = R.string.new_password),
                     isError = newPassword.isNotEmpty() && newPassword.length < 6,
@@ -186,7 +197,6 @@ fun EditPasswordScreen(
                 }
             }
         }
-    }
     )
 }
 
