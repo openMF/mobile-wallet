@@ -163,7 +163,7 @@
             android:name=".bank.ui.BankAccountDetailActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".bank.ui.SetupUpiPinActivity"
+            android:name=".bank.setupUpi.ui.SetupUpiPinActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".notification.ui.NotificationActivity"
