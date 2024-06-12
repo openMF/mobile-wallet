@@ -53,6 +53,7 @@ import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
+import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.PermissionBox
 import org.mifospay.core.designsystem.icon.MifosIcons.Camera
@@ -111,13 +112,14 @@ fun EditProfileScreen(
     updateSuccess: Boolean,
     uri: Uri?
 ) {
+    val showDialog = rememberSaveable { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
         MifosScaffold(
             topBarTitle = R.string.edit_profile,
-            backPress = { onBackClick.invoke() },
+            backPress = { showDialog.value = true },
             scaffoldContent = {
                 when (editProfileUiState) {
                     EditProfileUiState.Loading -> {
@@ -148,6 +150,18 @@ fun EditProfileScreen(
                     }
                 }
             })
+
+        MifosDialogBox(
+            showDialogState = showDialog,
+            onDismiss = { showDialog.value = false },
+            title = R.string.discard_changes,
+            confirmButtonText = R.string.confirm_text,
+            onConfirm = {
+                showDialog.value = false
+                onBackClick.invoke()
+            },
+            dismissButtonText = R.string.dismiss_text
+        )
     }
 }
 

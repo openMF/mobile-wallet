@@ -412,5 +412,7 @@
     <string name="invoice">Invoice</string>
     <string name="failed_to_save_changes">Failed To Save Changes</string>
     <string name="back">Back</string>
-
+    <string name="discard_changes">Do you want to discard changes?</string>
+    <string name="dismiss_text">Cancel</string>
+    <string name="confirm_text">Discard</string>
 </resources>
