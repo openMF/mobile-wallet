@@ -64,7 +64,7 @@ import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.GradientColors
 import org.mifospay.core.designsystem.theme.LocalGradientColors
-import org.mifospay.faq.ui.FAQActivity
+import org.mifospay.feature.faq.FAQActivity
 import org.mifospay.navigation.MifosNavHost
 import org.mifospay.navigation.TopLevelDestination
 import org.mifospay.settings.ui.SettingsActivity

@@ -1,27 +1,19 @@
-package org.mifospay.faq.ui
+package org.mifospay.feature.faq
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifospay.base.BaseActivity
-import org.mifospay.theme.MifosTheme
-
-/**
- * This class is the UI component of the Architecture.
- *
- * @author ankur
- * @since 11/July/2018
- */
-
+import org.mifospay.core.designsystem.theme.MifosTheme
 
 @AndroidEntryPoint
-class FAQActivity : BaseActivity() {
+class FAQActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MifosTheme {
-                FaqScreen(
+                FaqScreenRoute(
                     navigateBack = { onBackPressedDispatcher.onBackPressed() }
                 )
             }
