@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import com.mifospay.core.model.domain.BankAccountDetails
 import dagger.hilt.android.AndroidEntryPoint
+import org.mifospay.bank.setupUpi.ui.SetupUpiPinActivity
 import org.mifospay.base.BaseActivity
 import org.mifospay.common.Constants
 import org.mifospay.theme.MifosTheme

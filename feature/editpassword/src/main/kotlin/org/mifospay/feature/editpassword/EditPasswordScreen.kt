@@ -101,6 +101,7 @@ fun EditPasswordScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
         backPress = onBackPress,
+
         scaffoldContent = {
             Column(
                 modifier = Modifier
@@ -129,6 +130,21 @@ fun EditPasswordScreen(
                     isError = newPassword.isNotEmpty() && newPassword.length < 6,
                     errorMessage = if (newPassword.isNotEmpty() && newPassword.length < 6) stringResource(
                         id = R.string.feature_editpassword_password_length_error
+                    ) else null,
+                    isPasswordVisible = isNewPasswordVisible,
+                    onTogglePasswordVisibility = { isNewPasswordVisible = !isNewPasswordVisible },
+                    onPasswordChange = { newPassword = it }
+                )
+                MfPasswordTextField(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
+
+                    password = newPassword,
+                    label = stringResource(id = R.string.new_password),
+                    isError = newPassword.isNotEmpty() && newPassword.length < 6,
+                    errorMessage = if (newPassword.isNotEmpty() && newPassword.length < 6) stringResource(
+                        id = R.string.password_length_error
                     ) else null,
                     isPasswordVisible = isNewPasswordVisible,
                     onTogglePasswordVisibility = { isNewPasswordVisible = !isNewPasswordVisible },
