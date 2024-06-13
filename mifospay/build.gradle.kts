@@ -76,6 +76,7 @@ dependencies {
     implementation(projects.feature.auth)
     implementation(projects.feature.passcode)
     implementation(projects.feature.makeTransfer)
+    implementation(projects.feature.faq)
 
     implementation(projects.feature.editpassword)
 

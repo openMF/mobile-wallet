@@ -1,4 +1,4 @@
-package org.mifospay.faq.ui
+package org.mifospay.feature.faq
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,13 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import org.mifospay.R
+import com.example.faq.R
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.ui.FaqItemScreen
-import org.mifospay.faq.presenter.FAQViewModel
 
 @Composable
-fun FaqScreen(
+fun FaqScreenRoute(
     navigateBack: () -> Unit,
     faqViewModel: FAQViewModel = hiltViewModel()
 ) {
@@ -30,7 +29,7 @@ fun FaqScreen(
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
         MifosTopBar(
-            topBarTitle = R.string.frequently_asked_questions,
+            topBarTitle = R.string.feature_faq_frequently_asked_questions,
             backPress = { navigateBack.invoke() })
         LazyColumn(
             modifier = Modifier
@@ -52,10 +51,10 @@ fun FaqScreen(
 fun FaqScreenPreview() {
     FaqScreen(
         {}, listOf(
-            FAQ(R.string.question1, R.string.answer1),
-            FAQ(R.string.question2, R.string.answer2),
-            FAQ(R.string.question3, R.string.answer3),
-            FAQ(R.string.question4, R.string.answer4)
+            FAQ(R.string.feature_faq_question1, R.string.feature_faq_answer1),
+            FAQ(R.string.feature_faq_question2, R.string.feature_faq_answer2),
+            FAQ(R.string.feature_faq_question3, R.string.feature_faq_answer3),
+            FAQ(R.string.feature_faq_question4, R.string.feature_faq_answer4)
         )
     )
 }

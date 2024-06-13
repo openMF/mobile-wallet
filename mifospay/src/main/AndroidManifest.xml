@@ -159,7 +159,7 @@
             android:name=".settings.ui.SettingsActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".faq.ui.FAQActivity"
+            android:name=".feature.faq.FAQActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".bank.link_bank.LinkBankAccountActivity"

@@ -1,4 +1,4 @@
-package org.mifospay.faq.ui
+package org.mifospay.feature.faq
 
 data class FAQ(
     var question: Int,
