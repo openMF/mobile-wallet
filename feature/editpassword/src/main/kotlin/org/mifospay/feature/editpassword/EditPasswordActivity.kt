@@ -1,4 +1,4 @@
-package org.mifospay.password.ui
+package org.mifospay.feature.editpassword
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

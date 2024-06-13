@@ -17,7 +17,9 @@
     permission you must declare how you're using it to Google Play, otherwise the app will be
     rejected when publishing it. To avoid this we remove the permission entirely.
     -->
-    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="remove"/>
+    <uses-permission
+        android:name="com.google.android.gms.permission.AD_ID"
+        tools:node="remove" />
 
     <application
         android:name=".MifosPayApp"
@@ -30,7 +32,7 @@
 
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
-            android:value="barcode_ui"/>
+            android:value="barcode_ui" />
 
         <activity android:name=".standinginstruction.ui.SIDetailsActivity" />
         <activity
@@ -40,8 +42,8 @@
         <activity android:name=".merchants.ui.MerchantTransferActivity" />
         <activity
             android:name=".SplashScreenActivity"
-            android:theme="@style/SplashScreenTheme"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/SplashScreenTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -87,9 +89,9 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".receipt.ui.ReceiptActivity"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme"
-            android:exported="true">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -103,9 +105,9 @@
         </activity>
         <activity
             android:name=".invoice.ui.InvoiceActivity"
+            android:exported="true"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme"
-            android:exported="true">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -121,7 +123,8 @@
             android:name=".history.specific_transactions.ui.SpecificTransactionsActivity"
             android:theme="@style/AppTheme" />
 
-        <service android:name=".data.firebase.api.services.MifosPayMessagingService"
+        <service
+            android:name=".data.firebase.api.services.MifosPayMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -133,7 +136,9 @@
             android:resource="@drawable/ic_bank" />
 
         <!-- Disable collection of AD_ID for all build variants -->
-        <meta-data android:name="google_analytics_adid_collection_enabled" android:value="false" />
+        <meta-data
+            android:name="google_analytics_adid_collection_enabled"
+            android:value="false" />
 
         <meta-data
             android:name="preloaded_fonts"
@@ -173,7 +178,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".password.ui.EditPasswordActivity"
+            android:name=".feature.editpassword.EditPasswordActivity"
             android:theme="@style/AppTheme" />
     </application>
 

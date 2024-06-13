@@ -1,4 +1,4 @@
-package org.mifospay.password.ui
+package org.mifospay.feature.editpassword
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,13 +29,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import org.mifos.mobilewallet.mifospay.password.presenter.EditPasswordUiState
-import org.mifos.mobilewallet.mifospay.password.presenter.EditPasswordViewModel
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfPasswordTextField
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.MifosTheme
 
 @Composable
 fun EditPasswordScreen(
@@ -90,22 +87,21 @@ fun EditPasswordScreen(
             EditPasswordUiState.Loading -> {}
             EditPasswordUiState.Success -> {
                 coroutineScope.launch {
-                    currentSnackbarHostState.showSnackbar(context.getString(R.string.password_changed_successfully))
+                    currentSnackbarHostState.showSnackbar(context.getString(R.string.feature_editpassword_password_changed_successfully))
                 }
             }
 
-            else -> {}
         }
     }
 
     MifosScaffold(
-        topBarTitle = R.string.change_password,
+        topBarTitle = R.string.feature_editpassword_change_password,
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
         },
         backPress = onBackPress,
 
-        scaffoldContent = {
+        scaffoldContent = { it ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -116,11 +112,12 @@ fun EditPasswordScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     password = currentPassword,
-                    label = stringResource(R.string.current_password),
+                    label = stringResource(R.string.feature_editpassword_current_password),
                     isError = false,
                     isPasswordVisible = isConfirmPasswordVisible,
                     onTogglePasswordVisibility = {
                         isConfirmPasswordVisible = !isConfirmPasswordVisible
+
                     },
                     onPasswordChange = { currentPassword = it },
                 )
@@ -128,26 +125,12 @@ fun EditPasswordScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    password = newPassword,
-                    label = stringResource(id = R.string.new_password),
-                    isError = newPassword.isNotEmpty() && newPassword.length < 6,
-                    errorMessage = if (newPassword.isNotEmpty() && newPassword.length < 6) stringResource(
-                        id = R.string.password_length_error
-                    ) else null,
-                    isPasswordVisible = isNewPasswordVisible,
-                    onTogglePasswordVisibility = { isNewPasswordVisible = !isNewPasswordVisible },
-                    onPasswordChange = { newPassword = it }
-                )
-                MfPasswordTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
 
                     password = newPassword,
-                    label = stringResource(id = R.string.new_password),
+                    label = stringResource(id = R.string.feature_editpassword_new_password),
                     isError = newPassword.isNotEmpty() && newPassword.length < 6,
                     errorMessage = if (newPassword.isNotEmpty() && newPassword.length < 6) stringResource(
-                        id = R.string.password_length_error
+                        id = R.string.feature_editpassword_password_length_error
                     ) else null,
                     isPasswordVisible = isNewPasswordVisible,
                     onTogglePasswordVisibility = { isNewPasswordVisible = !isNewPasswordVisible },
@@ -158,10 +141,10 @@ fun EditPasswordScreen(
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                     password = confirmNewPassword,
-                    label = stringResource(id = R.string.confirm_new_password),
+                    label = stringResource(id = R.string.feature_editpassword_confirm_new_password),
                     isError = newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty(),
                     errorMessage = if (newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty()) stringResource(
-                        id = R.string.password_mismatch_error
+                        id = R.string.feature_editpassword_password_mismatch_error
                     ) else null,
                     isPasswordVisible = isConfirmNewPasswordVisible,
                     onTogglePasswordVisibility = {
@@ -182,7 +165,7 @@ fun EditPasswordScreen(
                             .weight(1f)
                             .padding(8.dp),
                         contentPadding = PaddingValues(16.dp),
-                        content = { Text(text = stringResource(id = R.string.cancel)) }
+                        content = { Text(text = stringResource(id = R.string.feature_editpassword_cancel)) }
                     )
                     MifosButton(
                         modifier = Modifier
@@ -192,7 +175,7 @@ fun EditPasswordScreen(
                             onSave.invoke(currentPassword, newPassword, confirmNewPassword)
                         },
                         contentPadding = PaddingValues(16.dp),
-                        content = { Text(text = stringResource(id = R.string.save)) }
+                        content = { Text(text = stringResource(id = R.string.feature_editpassword_save)) }
                     )
                 }
             }
@@ -215,6 +198,6 @@ private fun EditPasswordScreenPreview(
     @PreviewParameter(EditPasswordUiStateProvider::class) editPasswordUiState: EditPasswordUiState
 ) {
     MifosTheme {
-        EditPasswordScreen(editPasswordUiState = editPasswordUiState, {}, {}, { a, b, c -> })
+        EditPasswordScreen(editPasswordUiState = editPasswordUiState, {}, {}, { _, _, _ -> })
     }
 }

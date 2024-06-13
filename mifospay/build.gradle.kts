@@ -23,12 +23,15 @@ android {
     }
     buildTypes {
         debug {
-          // applicationIdSuffix = MifosBuildType.DEBUG.applicationIdSuffix
+            // applicationIdSuffix = MifosBuildType.DEBUG.applicationIdSuffix
         }
         release {
             isMinifyEnabled = true
-           // applicationIdSuffix = MifosBuildType.RELEASE.applicationIdSuffix
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            // applicationIdSuffix = MifosBuildType.RELEASE.applicationIdSuffix
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
 
             // To publish on the Play store a private signing key is required, but to allow anyone
             // who clones the code to sign and run the release variant, use the debug signing key.
@@ -73,6 +76,8 @@ dependencies {
     implementation(projects.feature.auth)
     implementation(projects.feature.passcode)
     implementation(projects.feature.makeTransfer)
+
+    implementation(projects.feature.editpassword)
 
     // Compose
     implementation(libs.androidx.activity.compose)

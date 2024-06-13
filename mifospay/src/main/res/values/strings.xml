@@ -138,9 +138,6 @@
     <string name="no_linked_bank_accounts">No Linked Bank Accounts</string>
     <string name="editable_image_hint">Editable image hint</string>
     <string name="change_password">Change Password</string>
-    <string name="current_password">Current Password</string>
-    <string name="new_password">New Password</string>
-    <string name="confirm_new_password">Confirm New Password</string>
     <string name="change_passcode">Change Passcode</string>
     <string name="current_passcode">Current Passcode</string>
     <string name="new_passcode">New Passcode</string>
@@ -394,9 +391,6 @@
     <string name="nothing_to_notify">Nothing To Notify</string>
     <string name="there_is_nothing_to_show">There is nothing to show</string>
     <string name="old_password">Old Password</string>
-    <string name="password_length_error">Password too short</string>
-    <string name="password_mismatch_error">Password mismatch</string>
-    <string name="password_changed_successfully">Password changed successfull</string>
     <string name="specific_transactions_history">Specific Transactions History</string>
     <string name="transaction_detail">Transaction Detail</string>
     <string name="receipt_id">Receipt ID : </string>

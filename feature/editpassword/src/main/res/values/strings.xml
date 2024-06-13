@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_editpassword_password_changed_successfully">Password changed successfull</string>
+    <string name="feature_editpassword_change_password">Change Password</string>
+    <string name="feature_editpassword_current_password">Current Password</string>
+    <string name="feature_editpassword_new_password">New Password</string>
+    <string name="feature_editpassword_confirm_new_password">Confirm New Password</string>
+    <string name="feature_editpassword_old_password">Old Password</string>
+    <string name="feature_editpassword_password_length_error">Password too short</string>
+    <string name="feature_editpassword_password_mismatch_error">Password mismatch</string>
+    <string name="feature_editpassword_cancel">Cancel</string>
+    <string name="feature_editpassword_save">Save</string>
+</resources>
