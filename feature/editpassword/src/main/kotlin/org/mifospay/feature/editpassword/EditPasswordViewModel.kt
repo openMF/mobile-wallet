@@ -1,60 +1,45 @@
-package org.mifospay.password.presenter
+package org.mifospay.feature.editpassword
 
-import org.mifospay.core.data.base.UseCase.UseCaseCallback
+import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.user.UpdateUserEntityPassword
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import org.mifospay.common.Constants
+import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.user.AuthenticateUser
 import org.mifospay.core.data.domain.usecase.user.UpdateUser
-import org.mifospay.base.BaseView
 import org.mifospay.core.datastore.PreferencesHelper
-import org.mifospay.password.EditPasswordContract
-import org.mifospay.password.EditPasswordContract.EditPasswordView
-import org.mifospay.common.Constants
 import javax.inject.Inject
 
-class EditPasswordPresenter @Inject constructor(
+@HiltViewModel
+class EditPasswordViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper,
     private val authenticateUserUseCase: AuthenticateUser,
     private val updateUserUseCase: UpdateUser
-) : EditPasswordContract.EditPasswordPresenter {
+) : ViewModel() {
 
-    private var mEditPasswordView: EditPasswordView? = null
-    override fun attachView(baseView: BaseView<*>?) {
-        mEditPasswordView = baseView as EditPasswordView?
-        mEditPasswordView?.setPresenter(this)
-    }
+    private val _editPasswordUiState =
+        MutableStateFlow<EditPasswordUiState>(EditPasswordUiState.Loading)
+    val editPasswordUiState: StateFlow<EditPasswordUiState> = _editPasswordUiState
 
-    override fun handleSavePasswordButtonStatus(
+    fun updatePassword(
         currentPassword: String?,
         newPassword: String?,
         newPasswordRepeat: String?
     ) {
-        if (currentPassword == "" || newPassword == "" || newPasswordRepeat == "") {
-            mEditPasswordView?.disableSavePasswordButton()
-        } else {
-            if (newPassword == newPasswordRepeat) {
-                mEditPasswordView?.enableSavePasswordButton()
-            } else {
-                mEditPasswordView?.disableSavePasswordButton()
-            }
-        }
-    }
-
-    override fun updatePassword(
-        currentPassword: String?,
-        newPassword: String?,
-        newPasswordRepeat: String?
-    ) {
-        mEditPasswordView?.startProgressBar()
+        _editPasswordUiState.value = EditPasswordUiState.Loading
         if (isNotEmpty(currentPassword) && isNotEmpty(newPassword)
             && isNotEmpty(newPasswordRepeat)
         ) {
             when {
                 currentPassword == newPassword -> {
-                    mEditPasswordView?.stopProgressBar()
-                    mEditPasswordView?.showError(Constants.ERROR_PASSWORDS_CANT_BE_SAME)
+                    _editPasswordUiState.value =
+                        EditPasswordUiState.Error(Constants.ERROR_PASSWORDS_CANT_BE_SAME)
                 }
+
                 newPassword?.let {
                     newPasswordRepeat?.let { it1 ->
                         isNewPasswordValid(
@@ -67,19 +52,20 @@ class EditPasswordPresenter @Inject constructor(
                         updatePassword(currentPassword, newPassword)
                     }
                 }
+
                 else -> {
-                    mEditPasswordView?.stopProgressBar()
-                    mEditPasswordView?.showError(Constants.ERROR_VALIDATING_PASSWORD)
+                    _editPasswordUiState.value =
+                        EditPasswordUiState.Error(Constants.ERROR_VALIDATING_PASSWORD)
                 }
             }
         } else {
-            mEditPasswordView?.stopProgressBar()
-            mEditPasswordView?.showError(Constants.ERROR_FIELDS_CANNOT_BE_EMPTY)
+            _editPasswordUiState.value =
+                EditPasswordUiState.Error(Constants.ERROR_FIELDS_CANNOT_BE_EMPTY)
         }
     }
 
     private fun isNotEmpty(str: String?): Boolean {
-        return !(str == null || str.isEmpty())
+        return !str.isNullOrEmpty()
     }
 
     private fun isNewPasswordValid(newPassword: String, newPasswordRepeat: String): Boolean {
@@ -93,7 +79,7 @@ class EditPasswordPresenter @Inject constructor(
                 mPreferencesHelper.username,
                 currentPassword
             ),
-            object : UseCaseCallback<AuthenticateUser.ResponseValue> {
+            object : UseCase.UseCaseCallback<AuthenticateUser.ResponseValue> {
                 override fun onSuccess(response: AuthenticateUser.ResponseValue) {
                     mUseCaseHandler.execute(updateUserUseCase,
                         UpdateUser.RequestValues(
@@ -102,23 +88,26 @@ class EditPasswordPresenter @Inject constructor(
                             ),
                             mPreferencesHelper.userId.toInt()
                         ),
-                        object : UseCaseCallback<UpdateUser.ResponseValue?> {
+                        object : UseCase.UseCaseCallback<UpdateUser.ResponseValue?> {
                             override fun onSuccess(response: UpdateUser.ResponseValue?) {
-                                mEditPasswordView?.stopProgressBar()
-                                mEditPasswordView?.closeActivity()
+                                _editPasswordUiState.value = EditPasswordUiState.Success
                             }
 
                             override fun onError(message: String) {
-                                mEditPasswordView?.stopProgressBar()
-                                mEditPasswordView?.showError(message)
+                                _editPasswordUiState.value = EditPasswordUiState.Error(message)
                             }
                         })
                 }
 
                 override fun onError(message: String) {
-                    mEditPasswordView?.stopProgressBar()
-                    mEditPasswordView?.showError("Wrong password")
+                    _editPasswordUiState.value = EditPasswordUiState.Error("Wrong Password")
                 }
             })
     }
+}
+
+sealed interface EditPasswordUiState {
+    data object Loading : EditPasswordUiState
+    data object Success : EditPasswordUiState
+    data class Error(val message: String) : EditPasswordUiState
 }

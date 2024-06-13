@@ -8,8 +8,8 @@ import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifospay.base.BaseActivity
 import org.mifospay.common.Constants
+import org.mifospay.feature.editpassword.EditPasswordActivity
 import org.mifospay.feature.passcode.PassCodeActivity
-import org.mifospay.password.ui.EditPasswordActivity
 import org.mifospay.theme.MifosTheme
 import javax.inject.Inject
 
