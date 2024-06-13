@@ -25,6 +25,9 @@ class EditProfileViewModel @Inject constructor(
         MutableStateFlow<EditProfileUiState>(EditProfileUiState.Loading)
     val editProfileUiState: StateFlow<EditProfileUiState> = _editProfileUiState
 
+    private val _updateSuccess = MutableStateFlow(false)
+    val updateSuccess: StateFlow<Boolean> = _updateSuccess
+
     fun fetchProfileDetails() {
         val name = mPreferencesHelper.fullName ?: "-"
         val username = mPreferencesHelper.username
@@ -42,7 +45,6 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun updateEmail(email: String?) {
-        _editProfileUiState.value = EditProfileUiState.Loading
         mUseCaseHandler.execute(updateUserUseCase,
             UpdateUser.RequestValues(
                 UpdateUserEntityEmail(
@@ -54,16 +56,16 @@ class EditProfileViewModel @Inject constructor(
                 override fun onSuccess(response: UpdateUser.ResponseValue?) {
                     mPreferencesHelper.saveEmail(email)
                     _editProfileUiState.value = EditProfileUiState.Success(email = email!!)
+                    _updateSuccess.value = true
                 }
 
                 override fun onError(message: String) {
-                    _editProfileUiState.value = EditProfileUiState.Error(message)
+                    _updateSuccess.value = false
                 }
             })
     }
 
     fun updateMobile(fullNumber: String?) {
-        _editProfileUiState.value = EditProfileUiState.Loading
         mUseCaseHandler.execute(updateClientUseCase,
             UpdateClient.RequestValues(
                 com.mifospay.core.model.domain.client.UpdateClientEntityMobile(
@@ -75,10 +77,11 @@ class EditProfileViewModel @Inject constructor(
                 override fun onSuccess(response: UpdateClient.ResponseValue) {
                     mPreferencesHelper.saveMobile(fullNumber)
                     _editProfileUiState.value = EditProfileUiState.Success(mobile = fullNumber)
+                    _updateSuccess.value = true
                 }
 
                 override fun onError(message: String) {
-                    _editProfileUiState.value = EditProfileUiState.Error(message)
+                    _updateSuccess.value = false
                 }
             })
     }
@@ -87,7 +90,6 @@ class EditProfileViewModel @Inject constructor(
 
 sealed interface EditProfileUiState {
     data object Loading : EditProfileUiState
-    data class Error(val message: String) : EditProfileUiState
     data class Success(
         val bitmapImage: Bitmap? = null,
         val name: String = "",

@@ -33,8 +33,10 @@ include(":core:model")
 include(":core:datastore-proto")
 include(":core:analytics")
 
+
+include(":feature:faq")
 include(":feature:passcode")
 include(":feature:auth")
 include(":feature:make-transfer")
 include(":feature:send-money")
-include(":feature:faq")
+include(":feature:editpassword")
