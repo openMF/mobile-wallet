@@ -115,7 +115,7 @@ fun PermissionBox(
 
     if (shouldShowPermissionRationale) {
         MifosDialogBox(
-            showDialogState = rememberSaveable { mutableStateOf(shouldShowPermissionRationale) },
+            showDialogState =  shouldShowPermissionRationale,
             onDismiss = { shouldShowPermissionRationale = false },
             title = title,
             message = description,

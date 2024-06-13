@@ -112,14 +112,14 @@ fun EditProfileScreen(
     updateSuccess: Boolean,
     uri: Uri?
 ) {
-    val showDiscardChangesDialog = rememberSaveable { mutableStateOf(false) }
+    var showDiscardChangesDialog by rememberSaveable { mutableStateOf(false) }
     Box(
         modifier = Modifier
             .fillMaxSize()
     ) {
         MifosScaffold(
             topBarTitle = R.string.edit_profile,
-            backPress = { showDiscardChangesDialog.value = true },
+            backPress = { showDiscardChangesDialog = true },
             scaffoldContent = {
                 when (editProfileUiState) {
                     EditProfileUiState.Loading -> {
@@ -153,11 +153,11 @@ fun EditProfileScreen(
 
         MifosDialogBox(
             showDialogState = showDiscardChangesDialog,
-            onDismiss = { showDiscardChangesDialog.value = false },
+            onDismiss = { showDiscardChangesDialog = false },
             title = R.string.discard_changes,
             confirmButtonText = R.string.confirm_text,
             onConfirm = {
-                showDiscardChangesDialog.value = false
+                showDiscardChangesDialog = false
                 onBackClick.invoke()
             },
             dismissButtonText = R.string.dismiss_text

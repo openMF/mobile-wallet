@@ -12,7 +12,7 @@ import org.mifospay.core.ui.utility.DialogType
 fun DialogManager(dialogState: DialogState, onDismiss: () -> Unit) {
     when (dialogState.type) {
         DialogType.DISABLE_ACCOUNT -> MifosDialogBox(
-            showDialogState = remember { mutableStateOf(true) },
+            showDialogState = true,
             title = R.string.alert_disable_account,
             message = R.string.alert_disable_account_desc,
             confirmButtonText = R.string.ok,
@@ -22,7 +22,7 @@ fun DialogManager(dialogState: DialogState, onDismiss: () -> Unit) {
         )
 
         DialogType.LOGOUT -> MifosDialogBox(
-            showDialogState = remember { mutableStateOf(true) },
+            showDialogState =true,
             title = R.string.log_out_title,
             message = R.string.empty,
             confirmButtonText = R.string.yes,
