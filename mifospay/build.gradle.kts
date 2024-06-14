@@ -77,8 +77,8 @@ dependencies {
     implementation(projects.feature.passcode)
     implementation(projects.feature.makeTransfer)
     implementation(projects.feature.faq)
-
     implementation(projects.feature.editpassword)
+    implementation(projects.feature.notification)
 
     // Compose
     implementation(libs.androidx.activity.compose)
