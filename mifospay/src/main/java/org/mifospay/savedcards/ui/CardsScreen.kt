@@ -65,7 +65,7 @@ fun CardsScreen(
     val cardListUiState by viewModel.cardListUiState.collectAsStateWithLifecycle()
 
     var showCardBottomSheet by rememberSaveable { mutableStateOf(false) }
-    val showConfirmDeleteDialog = rememberSaveable { mutableStateOf(false) }
+    var showConfirmDeleteDialog by rememberSaveable { mutableStateOf(false) }
 
     var deleteCardID by rememberSaveable { mutableStateOf<Int?>(null) }
 
@@ -87,12 +87,12 @@ fun CardsScreen(
 
     MifosDialogBox(
         showDialogState = showConfirmDeleteDialog,
-        onDismiss = { showConfirmDeleteDialog.value = false },
+        onDismiss = { showConfirmDeleteDialog = false },
         title = R.string.delete_card,
         confirmButtonText = R.string.yes,
         onConfirm = {
             deleteCardID?.let { viewModel.deleteCard(it) }
-            showConfirmDeleteDialog.value = false
+            showConfirmDeleteDialog = false
         },
         dismissButtonText = R.string.no,
         message = R.string.confirm_delete_card
@@ -103,7 +103,7 @@ fun CardsScreen(
         cardListUiState = cardListUiState,
         onEditCard = onEditCard,
         onDeleteCard = {
-            showConfirmDeleteDialog.value = true
+            showConfirmDeleteDialog = true
             deleteCardID = it.id
         },
         onAddBtn = { showCardBottomSheet = true },

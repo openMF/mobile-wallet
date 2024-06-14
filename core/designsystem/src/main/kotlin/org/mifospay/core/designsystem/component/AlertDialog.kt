@@ -10,7 +10,7 @@ import androidx.compose.ui.window.Dialog
 
 @Composable
 fun MifosDialogBox(
-    showDialogState: MutableState<Boolean>,
+    showDialogState: Boolean,
     onDismiss: () -> Unit,
     title: Int,
     message: Int? = null,
@@ -18,7 +18,7 @@ fun MifosDialogBox(
     onConfirm: () -> Unit,
     dismissButtonText: Int
 ) {
-    if (showDialogState.value) {
+    if (showDialogState) {
         AlertDialog(
             onDismissRequest = onDismiss,
             title = { Text(text = stringResource(id = title)) },
