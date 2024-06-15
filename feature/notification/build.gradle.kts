@@ -12,5 +12,5 @@ dependencies {
     implementation(libs.androidx.appcompat)
 
     //we need this for pull to refresh implementation
-    implementation("androidx.compose.material:material:1.6.0")
+    implementation(libs.compose.material)
 }
