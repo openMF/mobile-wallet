@@ -1,6 +1,5 @@
-package org.mifospay.notification.ui
+package org.mifospay.feature.notification
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,8 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -32,15 +29,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.domain.NotificationPayload
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosTopAppBar
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.historyItemTextStyle
-import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.notification.presenter.NotificationUiState
-import org.mifospay.notification.presenter.NotificationViewModel
+import org.mifospay.notification.R
 
 @Composable
 fun NotificationScreen(viewmodel: NotificationViewModel = hiltViewModel()) {
@@ -67,21 +61,21 @@ fun NotificationScreen(
         Column(
             modifier = Modifier.fillMaxSize()
         ) {
-            MifosTopAppBar(titleRes = R.string.notifications)
+            MifosTopAppBar(titleRes = R.string.feature_notification_notifications)
             when (uiState) {
                 is NotificationUiState.Error -> {
                     EmptyContentScreen(
                         modifier = Modifier,
-                        title = stringResource(id = R.string.error_oops),
-                        subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                        title = stringResource(id = R.string.feature_notification_error_oops),
+                        subTitle = stringResource(id = R.string.feature_notification_unexpected_error_subtitle),
                         iconTint = Color.Black,
-                        iconImageVector = Icons.Rounded.Info
+                        iconImageVector = MifosIcons.RoundedInfo
                     )
                 }
 
                 NotificationUiState.Loading -> {
                     MfLoadingWheel(
-                        contentDesc = stringResource(R.string.loading),
+                        contentDesc = stringResource(R.string.feature_notification_loading),
                         backgroundColor = Color.White
                     )
                 }
@@ -90,10 +84,10 @@ fun NotificationScreen(
                     if (uiState.notificationList.isEmpty()) {
                         EmptyContentScreen(
                             modifier = Modifier,
-                            title = stringResource(R.string.nothing_to_notify),
-                            subTitle = stringResource(R.string.there_is_nothing_to_show),
+                            title = stringResource(R.string.feature_notification_nothing_to_notify),
+                            subTitle = stringResource(R.string.feature_notification_there_is_nothing_to_show),
                             iconTint = Color.Black,
-                            iconImageVector = Icons.Rounded.Info
+                            iconImageVector = MifosIcons.RoundedInfo
                         )
                     } else {
                         LazyColumn {

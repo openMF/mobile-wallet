@@ -1,10 +1,10 @@
-package org.mifospay.notification.ui
+package org.mifospay.feature.notification
 
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifospay.base.BaseActivity
-import org.mifospay.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.MifosTheme
 
 /**
  * This activity is to view notifications record.
@@ -12,7 +12,7 @@ import org.mifospay.theme.MifosTheme
  * This feature is yet to be implemented on the server side.
  */
 @AndroidEntryPoint
-class NotificationActivity : BaseActivity() {
+class NotificationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
