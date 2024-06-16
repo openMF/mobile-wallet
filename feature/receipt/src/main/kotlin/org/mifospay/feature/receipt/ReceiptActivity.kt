@@ -6,8 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
+import com.mifos.mobile.passcode.utils.PassCodeConstants
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.feature.passcode.PassCodeActivity
 
 @AndroidEntryPoint
 class ReceiptActivity : AppCompatActivity() {
@@ -41,15 +43,5 @@ class ReceiptActivity : AppCompatActivity() {
             ),
         )
         finish()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        dismissProgressDialog()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        dismissProgressDialog()
     }
 }

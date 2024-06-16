@@ -8,12 +8,10 @@ android {
 }
 
 dependencies {
-
+    implementation(libs.squareup.okhttp)
     implementation(projects.core.data)
-    implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
+    implementation(projects.feature.passcode)
+    implementation(projects.mifospay)
+    implementation(libs.mifosPasscode)
 }
