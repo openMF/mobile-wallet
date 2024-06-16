@@ -1,10 +1,12 @@
 [versions]
+accompanistPagerVersion = "0.34.0"
 appcompatVersion = "1.6.1"
 androidGradlePlugin = "8.4.0"
 checkstyleVersion = "10.16.0"
 compileSdk = "34"
 constraintlayoutVersion = "2.1.4"
 coreKtxVersion = "1.12.0"
+materialNavigationVersion = "1.7.0-alpha04"
 minSdk = "24"
 targetSdk = "34"
 androidTools = "31.4.0"
@@ -67,6 +69,7 @@ playServicesCodeScanner = "16.1.0"
 moduleGraph = "2.5.0"
 
 [libraries]
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPagerVersion" }
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityVersion" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompatVersion" }
 androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayoutVersion" }
@@ -89,6 +92,7 @@ androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-te
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest"}
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling"}
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime" }
+androidx-material-navigation = { module = "androidx.compose.material:material-navigation", version.ref = "materialNavigationVersion" }
 checkstyle = { module = "com.puppycrawl.tools:checkstyle", version.ref = "checkstyleVersion" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }

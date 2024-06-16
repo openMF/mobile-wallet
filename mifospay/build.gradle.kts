@@ -90,6 +90,8 @@ dependencies {
     implementation(libs.androidx.tracing.ktx)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
+    implementation(libs.androidx.material.navigation)
+    implementation(libs.accompanist.pager)
 
     ksp(libs.hilt.compiler)
 

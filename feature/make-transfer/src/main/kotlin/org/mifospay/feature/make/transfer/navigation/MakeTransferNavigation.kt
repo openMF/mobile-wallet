@@ -1,10 +1,10 @@
 package org.mifospay.feature.make.transfer.navigation
 
+import androidx.compose.material.navigation.bottomSheet
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import org.mifospay.common.PAYEE_EXTERNAL_ID_ARG
 import org.mifospay.common.TRANSFER_AMOUNT_ARG
@@ -33,7 +33,7 @@ fun NavController.navigateToMakeTransferScreen(
 fun NavGraphBuilder.makeTransferScreen(
     onDismiss: () -> Unit
 ) {
-    composable(
+    bottomSheet(
         route = MAKE_TRANSFER_ROUTE,
         arguments = listOf(
             navArgument(PAYEE_EXTERNAL_ID_ARG) {
