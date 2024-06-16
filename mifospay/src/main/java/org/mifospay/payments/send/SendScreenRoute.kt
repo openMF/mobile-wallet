@@ -175,6 +175,10 @@ fun SendMoneyScreen(
             .addOnSuccessListener { barcode ->
                 barcode.rawValue?.let {
                     vpa = it
+                    validateInfo()
+                    if (isValidInfo) {
+                        onSubmit(amount, vpa, sendMethodType)
+                    }
                 }
             }
             .addOnCanceledListener {
@@ -287,7 +291,6 @@ fun SendMoneyScreen(
                             },
                             sendMethodType
                         )
-                        //TODO: Navigate to MakeTransferScreenRoute
                     },
                     contentPadding = PaddingValues(12.dp)
                 ) {
