@@ -65,6 +65,7 @@ androidxMetrics = "1.0.0-beta01"
 androidxBrowser = "1.8.0"
 playServicesCodeScanner = "16.1.0"
 moduleGraph = "2.5.0"
+composeMaterial = "1.6.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityVersion" }
@@ -82,6 +83,7 @@ androidx-compose-material3-adaptive-navigation = { group = "androidx.compose.mat
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation" }
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3"}
+compose-material = { group = "androidx.compose.material", name = "material", version.ref = "composeMaterial" }
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui"}

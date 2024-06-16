@@ -29,7 +29,7 @@ import com.google.firebase.messaging.RemoteMessage
 import org.json.JSONException
 import org.json.JSONObject
 import org.mifospay.R
-import org.mifospay.notification.ui.NotificationActivity
+import org.mifospay.feature.notification.NotificationActivity
 import org.mifospay.utils.NotificationUtils
 
 /**

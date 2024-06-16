@@ -17,6 +17,7 @@ import androidx.compose.material.icons.outlined.Wallet
 import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SwapHoriz
@@ -49,4 +50,5 @@ object MifosIcons {
     val Camera = Icons.Filled.Camera
     val PhotoLibrary = Icons.Filled.PhotoLibrary
     val Delete = Icons.Filled.Delete
+    val RoundedInfo = Icons.Rounded.Info
 }

@@ -171,7 +171,7 @@
             android:name=".bank.setupUpi.ui.SetupUpiPinActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".notification.ui.NotificationActivity"
+            android:name=".feature.notification.NotificationActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
