@@ -40,6 +40,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.mifospay.common.Constants
+import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 
 @Composable
@@ -74,7 +75,8 @@ fun MakeTransferScreen(
     val context = LocalContext.current
     when (uiState) {
         MakeTransferState.Loading -> {
-            MifosOverlayLoadingWheel(
+            MifosLoadingWheel(
+                modifier = Modifier.fillMaxWidth(),
                 contentDesc = stringResource(R.string.feature_make_transfer_loading)
             )
         }
