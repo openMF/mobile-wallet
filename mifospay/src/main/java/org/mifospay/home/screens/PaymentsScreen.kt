@@ -1,6 +1,5 @@
 package org.mifospay.home.screens
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -40,7 +39,6 @@ fun PaymentsRoute(
     )
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PaymentScreenContent(
     vpa: String,
