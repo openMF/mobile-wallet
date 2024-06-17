@@ -66,6 +66,7 @@ androidxBrowser = "1.8.0"
 playServicesCodeScanner = "16.1.0"
 moduleGraph = "2.5.0"
 composeMaterial = "1.6.0"
+mifosPasscode = "0.3.0"
 
 [libraries]
 androidx-activity-ktx = { module = "androidx.activity:activity-ktx", version.ref = "activityVersion" }
@@ -149,7 +150,7 @@ coil-kt-svg = { group = "io.coil-kt", name = "coil-svg", version.ref = "coil" }
 androidx-metrics = { group = "androidx.metrics", name = "metrics-performance", version.ref = "androidxMetrics" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
 google-play-services-code-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "playServicesCodeScanner" }
-
+mifosPasscode = { group = "com.mifos.mobile", name = "mifos-passcode", version.ref = "mifosPasscode" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_receipt_loading">Loading</string>
+    <string name="feature_receipt_downloading_receipt">Downloading Receipt</string>
+    <string name="feature_receipt_approve_permission_storage">Please approve storage permissions</string>
+    <string name="feature_receipt_approve_permission_storage_receiptDescription">You need to approve this permission in order to download and view your Receipt.</string>
+    <string name="feature_receipt_dismiss">Dismiss</string>
+    <string name="feature_receipt_download_complete">Download completed</string>
+    <string name="feature_receipt_proceed">Proceed</string>
+    <string name="feature_receipt_receipt">Receipt</string>
+    <string name="feature_receipt_view_Receipt">View Receipt</string>
+    <string name="feature_receipt_pan_id">PAN ID</string>
+    <string name="feature_receipt_unique_receipt_link_copied_to_clipboard">Unique Receipt Link copied to clipboard</string>
+    <string name="feature_receipt_sharing_link_failed">Sharing link failed</string>
+    <string name="feature_receipt_view_receipt">View Receipt</string>
+    <string name="feature_receipt_opening_pdf_failed">Opening pdf failed</string>
+    <string name="feature_receipt_paid_to">Paid to</string>
+    <string name="feature_receipt_credited_by">Credited by</string>
+    <string name="feature_receipt_other">Other</string>
+    <string name="feature_receipt_transaction_id">Transaction ID : </string>
+    <string name="feature_receipt_transaction_date">Transaction Date : </string>
+    <string name="feature_receipt_name">Name : </string>
+    <string name="feature_receipt_to">To:</string>
+    <string name="feature_receipt_from">From:</string>
+    <string name="feature_receipt_unique_receipt_link">Unique Receipt Link : </string>
+    <string name="feature_receipt_account_no">Account Number : </string>
+    <string name="feature_receipt_copy_link">Copy Unique Receipt Link</string>
+    <string name="feature_receipt_share_receipt">Share Receipt Link</string>
+    <string name="feature_receipt_error_specific_transactions">Couldn\'t fetch Specific transactions. Please, try again.</string>
+</resources>
