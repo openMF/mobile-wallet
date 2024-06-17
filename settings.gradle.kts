@@ -41,6 +41,5 @@ include(":feature:make-transfer")
 include(":feature:send-money")
 include(":feature:notification")
 include(":feature:editpassword")
-
-
+include(":feature:kyc")
 include(":feature:savedcards")

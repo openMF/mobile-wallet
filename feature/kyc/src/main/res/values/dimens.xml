@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="feature_kyc_value_40dp">40dp</dimen>
+    <dimen name="feature_kyc_value_15sp">15sp</dimen>
+    <dimen name="feature_kyc_value_70dp">70dp</dimen>
+    <dimen name="feature_kyc_value_100dp">100dp</dimen>
+    <dimen name="feature_kyc_value_50dp">50dp</dimen>
+    <dimen name="feature_kyc_value_20dp">20dp</dimen>
+    <dimen name="feature_kyc_value_13sp">13sp</dimen>
+    <dimen name="feature_kyc_emptyStateImageSize">64dp</dimen>
+    <dimen name="feature_kyc_value_20sp">20sp</dimen>
+    <dimen name="feature_kyc_marginItemsInSectionLarge">24dp</dimen>
+    <dimen name="emptyStateImageSize">64dp</dimen>
+    <dimen name="textBody1">16sp</dimen>
+    <dimen name="textBody2">14sp</dimen>
+
+
+
+</resources>
