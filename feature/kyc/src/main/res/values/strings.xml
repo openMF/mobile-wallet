@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="complete_kyc">Complete the KYC process</string>
+    <string name="level_1">Level 1</string>
+    <string name="level_2">Level 2</string>
+    <string name="feature_kyc_level_3">Level 3</string>
+    <string name="content_description_placeholder">Placeholder</string>
+    <string name="error_oops">Oops!</string>
+    <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+
+
+
+
+
+
+</resources>

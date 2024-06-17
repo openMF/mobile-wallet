@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="feature_kyc_colorAccent">#000000</color>
+    <color name="feature_kyc_colorBlack54">#8A000000</color>
+    <color name="feature_kyc_colorBlack87">#DE000000</color>
+    <color name="feature_kyc_colorAccentYellow">#FFF700</color>
+    <color name="feature_kyc_colorTextPrimary">@color/feature_kyc_colorBlack87</color>
+    <color name="feature_kyc_colorTextSecondary">@color/feature_kyc_colorBlack54</color>
+</resources>
