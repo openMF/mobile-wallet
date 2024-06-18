@@ -16,19 +16,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.mifospay.profile.R
+import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.MifosTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProfileItemCard(
     modifier: Modifier = Modifier,
-    icon: Int,
+    icon: ImageVector,
     text: Int,
     onClick: () -> Unit,
 ) {
@@ -38,8 +41,8 @@ fun ProfileItemCard(
         .clickable { onClick.invoke() }
     FlowRow(modifier = combinedModifier) {
         Icon(
+            painter = rememberVectorPainter(icon),
             modifier = Modifier.size(32.dp),
-            painter = painterResource(id = icon),
             contentDescription = null,
             tint = Color.Black
         )
@@ -65,4 +68,24 @@ fun DetailItem(label: String, value: String) {
         style = MaterialTheme.typography.bodyLarge,
         modifier = Modifier.padding(bottom = 12.dp)
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewProfileItemCard() {
+    MifosTheme {
+        ProfileItemCard(
+            icon = MifosIcons.Profile,
+            text = R.string.edit_profile,
+            onClick = {}
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewDetailItem() {
+    MifosTheme {
+        DetailItem(label = "Email", value = "john.doe@example.com")
+    }
 }

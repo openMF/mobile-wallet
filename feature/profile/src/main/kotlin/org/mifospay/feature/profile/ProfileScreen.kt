@@ -27,12 +27,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.ProfileImage
-import org.mifospay.profile.R
 
 
 @Composable
@@ -122,7 +124,7 @@ fun ProfileScreenContent(
                             modifier = Modifier
                                 .padding(end = 8.dp, bottom = 8.dp)
                                 .weight(1f),
-                            icon = R.drawable.qrcode_black,
+                            icon = MifosIcons.QR,
                             text = R.string.personal_qr_code,
                             onClick = {}
                         )
@@ -131,7 +133,7 @@ fun ProfileScreenContent(
                             modifier = Modifier
                                 .padding(start = 8.dp, bottom = 8.dp)
                                 .weight(1f),
-                            icon = R.drawable.ic_bank,
+                            icon = MifosIcons.Bank,
                             text = R.string.link_bank_account,
                             onClick = {}
                         )
@@ -139,7 +141,7 @@ fun ProfileScreenContent(
                         ProfileItemCard(
                             modifier = Modifier
                                 .padding(top = 8.dp, bottom = 8.dp),
-                            icon = R.drawable.ic_contact,
+                            icon = MifosIcons.Contact,
                             text = R.string.edit_profile,
                             onClick = { onEditProfile.invoke() }
                         )
@@ -147,7 +149,7 @@ fun ProfileScreenContent(
                         ProfileItemCard(
                             modifier = Modifier
                                 .padding(top = 8.dp),
-                            icon = R.drawable.ic_setting,
+                            icon = MifosIcons.Settings,
                             text = R.string.settings,
                             onClick = { onSettings.invoke() }
                         )
@@ -160,8 +162,28 @@ fun ProfileScreenContent(
     }
 }
 
+class ProfilePreviewProvider : PreviewParameterProvider<ProfileUiState> {
+    override val values: Sequence<ProfileUiState>
+        get() = sequenceOf(
+            ProfileUiState.Loading,
+            ProfileUiState.Success(
+                name = "John Doe",
+                email = "john.doe@example.com",
+                vpa = "john@vpa",
+                mobile = "+1234567890",
+                bitmapImage = null
+            )
+        )
+}
+
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun ProfileScreenPreview() {
-    ProfileRoute(hiltViewModel(), {}, {})
+fun ProfileScreenPreview(
+    @PreviewParameter(ProfilePreviewProvider::class) profileState: ProfileUiState
+) {
+    ProfileScreenContent(
+        profileState = profileState,
+        onEditProfile = {},
+        onSettings = {}
+    )
 }

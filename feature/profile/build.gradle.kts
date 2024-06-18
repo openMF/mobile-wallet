@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace = "org.mifospay.profile"
+    namespace = "org.mifospay.feature.profile"
 }
 
 dependencies {
@@ -13,6 +13,5 @@ dependencies {
     implementation(libs.compose.country.code.picker)
     implementation(libs.compose.material)
     implementation(libs.coil.kt.compose)
-    implementation(libs.androidx.appcompat)
     implementation(projects.mifospay)
 }

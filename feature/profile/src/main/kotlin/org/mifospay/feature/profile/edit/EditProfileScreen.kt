@@ -61,7 +61,7 @@ import org.mifospay.core.designsystem.icon.MifosIcons.PhotoLibrary
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.historyItemTextStyle
 import org.mifospay.core.designsystem.theme.styleMedium16sp
-import org.mifospay.profile.R
+import org.mifospay.feature.profile.R
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
