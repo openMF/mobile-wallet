@@ -4,14 +4,15 @@ plugins {
 }
 
 android {
-    namespace = "org.mifospay.settings"
+    namespace = "org.mifospay.feature.settings"
 }
 
 dependencies {
     implementation(projects.core.data)
     implementation(projects.feature.passcode)
     implementation(projects.feature.auth)
-    implementation(projects.feature.editpassword)
-    implementation(libs.mifosPasscode)
-    implementation(libs.androidx.appcompat)
+//    implementation(projects.feature.editpassword)
+//    implementation(libs.mifosPasscode)
+//    implementation(libs.androidx.appcompat)
+    implementation(projects.mifospay)
 }
