@@ -33,6 +33,7 @@ include(":core:model")
 include(":core:datastore-proto")
 include(":core:analytics")
 
+include(":feature:history")
 include(":feature:receipt")
 include(":feature:faq")
 include(":feature:passcode")
@@ -44,4 +45,9 @@ include(":feature:editpassword")
 include(":feature:kyc")
 include(":feature:savedcards")
 
-include(":feature:history")
+
+
+
+
+include(":feature:invoices")
+
