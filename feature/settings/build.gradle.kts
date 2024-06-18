@@ -12,7 +12,6 @@ dependencies {
     implementation(projects.feature.passcode)
     implementation(projects.feature.auth)
     implementation(projects.feature.editpassword)
-    //implementation(libs.mifosPasscode)
-    implementation("com.mifos.mobile:mifos-passcode:0.3.0@aar")
+    implementation(libs.mifosPasscode)
     implementation(libs.androidx.appcompat)
 }
