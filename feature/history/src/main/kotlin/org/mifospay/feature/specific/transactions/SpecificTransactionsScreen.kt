@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -41,9 +40,10 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.primaryDarkBlue
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.ErrorScreenContent
-import themes.creditColor
-import themes.debitColor
-import themes.otherColor
+import org.mifospay.invoice.ui.Divider
+import org.mifospay.theme.creditColor
+import org.mifospay.theme.debitColor
+import org.mifospay.theme.otherColor
 
 
 @Composable

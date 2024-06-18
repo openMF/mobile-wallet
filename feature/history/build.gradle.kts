@@ -4,12 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "org.mifospay.history"
+    namespace = "org.mifospay.feature.history"
 }
 
 dependencies {
     implementation(projects.feature.receipt)
-    implementation(libs.compose.material)
     implementation(projects.core.data)
-    implementation(libs.androidx.appcompat)
+    implementation(projects.mifospay)
 }

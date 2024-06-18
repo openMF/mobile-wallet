@@ -28,6 +28,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,7 +45,6 @@ import org.mifospay.core.designsystem.theme.lightGrey
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.TransactionItemScreen
 import org.mifospay.feature.transaction.detail.TransactionDetailScreen
-import org.mifospay.history.R
 
 @Composable
 fun HistoryScreen(
@@ -182,28 +183,14 @@ fun Chip(selected: Boolean, onClick: () -> Unit, label: String) {
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun HistoryScreenLoadingPreview() {
-    HistoryScreen(historyUiState = HistoryUiState.Loading, {}, { _, _ -> })
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun HistoryScreenEmptyPreview() {
-    HistoryScreen(historyUiState = HistoryUiState.Empty, {}, { _, _ -> })
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun HistoryScreenErrorPreview() {
-    HistoryScreen(historyUiState = HistoryUiState.Error("Error Screen"), {}, { _, _ -> })
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun HistoryScreenListPreview() {
-    HistoryScreen(historyUiState = HistoryUiState.HistoryList(sampleHistoryList), {}, { _, _ -> })
+class HistoryPreviewProvider : PreviewParameterProvider<HistoryUiState> {
+    override val values: Sequence<HistoryUiState>
+        get() = sequenceOf(
+            HistoryUiState.Empty,
+            HistoryUiState.Loading,
+            HistoryUiState.Error("Error Screen"),
+            HistoryUiState.HistoryList(sampleHistoryList)
+        )
 }
 
 val sampleHistoryList = List(10) { index ->
@@ -219,4 +206,12 @@ val sampleHistoryList = List(10) { index ->
         transferDetail = TransferDetail(),
         receiptId = "receipt_123456789"
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun HistoryScreenPreview(
+    @PreviewParameter(HistoryPreviewProvider::class) historyUiState: HistoryUiState
+) {
+    HistoryScreen(historyUiState = historyUiState, viewReceipt = {}, accountClicked = { _, _ -> })
 }
