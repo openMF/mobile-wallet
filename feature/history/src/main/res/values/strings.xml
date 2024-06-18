@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_history_error_oops">Oops!</string>
+    <string name="feature_history_empty_no_transaction_history_title">Your history is empty</string>
+    <string name="feature_history_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+    <string name="feature_history_all">All</string>
+    <string name="feature_history_credits">Credits</string>
+    <string name="feature_history_debits">Debits</string>
+    <string name="feature_history_loading">Loading</string>
+</resources>
