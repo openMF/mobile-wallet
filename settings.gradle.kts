@@ -45,4 +45,11 @@ include(":feature:kyc")
 include(":feature:savedcards")
 
 
+
+
+
+
+
 include(":feature:invoices")
+include(":feature:profile")
+
