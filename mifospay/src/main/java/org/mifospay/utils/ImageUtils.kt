@@ -2,9 +2,9 @@ package org.mifospay.utils
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.core.content.FileProvider
-import dagger.hilt.android.qualifiers.ApplicationContext
 import org.mifospay.BuildConfig
 import java.io.File
 import java.io.FileOutputStream
@@ -29,5 +29,15 @@ object ImageUtils {
             e.printStackTrace()
         }
         return uri
+    }
+
+    fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+        return try {
+            val stream = context.contentResolver.openInputStream(uri)
+            BitmapFactory.decodeStream(stream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }
