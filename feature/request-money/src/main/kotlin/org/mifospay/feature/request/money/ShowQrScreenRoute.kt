@@ -1,4 +1,4 @@
-package org.mifospay.qr.showQr.ui
+package org.mifospay.feature.request.money
 
 import android.app.Activity
 import android.content.Context
@@ -7,13 +7,9 @@ import android.content.Intent.createChooser
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -32,34 +28,31 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.content.ContextCompat.startActivity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.qr.showQr.presenter.RequestQrData
-import org.mifospay.qr.showQr.presenter.ShowQrUiState
-import org.mifospay.qr.showQr.presenter.ShowQrViewModel
-import org.mifospay.theme.MifosTheme
-import org.mifospay.utils.ImageUtils
+import org.mifospay.feature.request.money.util.ImageUtils
 
 @Composable
-fun ShowQrScreen(
+fun ShowQrScreenRoute(
     viewModel: ShowQrViewModel = hiltViewModel(),
-    backPress: () -> Unit
+    backPress: () -> Unit,
+    vpa: String
 ) {
-    val uiState = viewModel.showQrUiState.collectAsStateWithLifecycle()
-    val vpaId = viewModel.vpaId.collectAsStateWithLifecycle()
+    val uiState by viewModel.showQrUiState.collectAsStateWithLifecycle()
+//    val vpaId by viewModel.vpaId.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.generateQr()
+        viewModel.setQrData(vpa)
     }
 
     UpdateBrightness()
 
     ShowQrScreen(
-        uiState = uiState.value,
-        vpaId = vpaId.value,
+        uiState = uiState,
+        vpaId = vpa,
         backPress = backPress,
         generateQR = { viewModel.generateQr(requestQrData = it) }
     )
@@ -76,17 +69,17 @@ fun ShowQrScreen(
     var amountDialogState by rememberSaveable { mutableStateOf(false) }
     var qrBitmap by rememberSaveable { mutableStateOf<Bitmap?>(null) }
     var amount by rememberSaveable { mutableStateOf<String?>(null) }
-    var currency by rememberSaveable { mutableStateOf(context.getString(R.string.usd)) }
+    var currency by rememberSaveable { mutableStateOf(context.getString(R.string.feature_request_money_usd)) }
 
     MifosScaffold(
-        topBarTitle = R.string.request,
+        topBarTitle = R.string.feature_request_money_request,
         backPress = { backPress.invoke() },
         scaffoldContent = { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
                 when (uiState) {
                     is ShowQrUiState.Loading -> {
                         MfLoadingWheel(
-                            contentDesc = stringResource(R.string.loading),
+                            contentDesc = stringResource(R.string.feature_request_money_loading),
                             backgroundColor = Color.White
                         )
                     }
@@ -95,8 +88,8 @@ fun ShowQrScreen(
                         if (uiState.qrDataBitmap == null) {
                             EmptyContentScreen(
                                 modifier = Modifier,
-                                title = stringResource(R.string.nothing_to_notify),
-                                subTitle = stringResource(R.string.there_is_nothing_to_show),
+                                title = stringResource(R.string.feature_request_money_nothing_to_notify),
+                                subTitle = stringResource(R.string.feature_request_money_there_is_nothing_to_show),
                                 iconTint = Color.Black,
                                 iconImageVector = MifosIcons.Info
                             )
@@ -114,8 +107,8 @@ fun ShowQrScreen(
                     is ShowQrUiState.Error -> {
                         EmptyContentScreen(
                             modifier = Modifier,
-                            title = stringResource(id = R.string.error_oops),
-                            subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                            title = stringResource(id = R.string.feature_request_money_error_oops),
+                            subTitle = stringResource(id = R.string.feature_request_money_unexpected_error_subtitle),
                             iconTint = Color.Black,
                             iconImageVector = MifosIcons.Info
                         )
@@ -141,7 +134,7 @@ fun ShowQrScreen(
             prefilledAmount = amount ?: "",
             prefilledCurrency = currency,
             confirmAmount = { confirmedAmount, confirmedCurrency ->
-                amount = if(confirmedAmount == "") null
+                amount = if (confirmedAmount == "") null
                 else confirmedAmount
                 currency = confirmedCurrency
                 generateQR(RequestQrData(amount = amount ?: "", currency = currency))
@@ -200,12 +193,10 @@ class ShowQrUiStateProvider :
 @Preview(showSystemUi = true)
 @Composable
 fun ShowQrScreenPreview(@PreviewParameter(ShowQrUiStateProvider::class) uiState: ShowQrUiState) {
-    MifosTheme {
-        ShowQrScreen(
-            uiState = uiState,
-            vpaId = "",
-            backPress = {},
-            generateQR = {}
-        )
-    }
+    ShowQrScreen(
+        uiState = uiState,
+        vpaId = "",
+        backPress = {},
+        generateQR = {}
+    )
 }

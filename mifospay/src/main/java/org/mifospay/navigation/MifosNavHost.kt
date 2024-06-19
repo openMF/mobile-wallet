@@ -13,6 +13,8 @@ import org.mifospay.common.Constants
 import org.mifospay.editprofile.ui.EditProfileActivity
 import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
+import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
+import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.history.specific_transactions.ui.SpecificTransactionsActivity
 import org.mifospay.home.navigation.HOME_ROUTE
 import org.mifospay.home.navigation.financeScreen
@@ -22,7 +24,6 @@ import org.mifospay.home.navigation.profileScreen
 import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.payments.ui.SendActivity
-import org.mifospay.qr.showQr.ui.ShowQrActivity
 import org.mifospay.receipt.ui.ReceiptActivity
 import org.mifospay.savedcards.ui.AddCardDialog
 import org.mifospay.settings.ui.SettingsActivity
@@ -50,11 +51,11 @@ fun MifosNavHost(
         modifier = modifier,
     ) {
         homeScreen(
-            onRequest = { vpa -> context.startActivityShowQr(vpa) },
+            onRequest = { vpa -> navController.navigateToShowQrScreen(vpa) },
             onPay = navController::navigateToSendMoneyScreen
         )
         paymentsScreen(
-            showQr = { vpa -> context.startActivityShowQr(vpa) },
+            showQr = { vpa -> navController.navigateToShowQrScreen(vpa) },
             onNewSI = { context.startActivityStandingInstruction() },
             onAccountClicked = { accountNo, transactionsList ->
                 context.startActivitySpecificTransaction(accountNo = accountNo, transactionsList = transactionsList)
@@ -80,6 +81,9 @@ fun MifosNavHost(
         makeTransferScreen(
             onDismiss = navController::popBackStack
         )
+        showQrScreen(
+            onBackClick = navController::popBackStack
+        )
     }
 }
 
@@ -93,12 +97,6 @@ fun Context.startActivityEditProfile() {
 
 fun Context.startActivitySettings() {
     startActivity(Intent(this, SettingsActivity::class.java))
-}
-
-fun Context.startActivityShowQr(vpa: String) {
-    startActivity(Intent(this, ShowQrActivity::class.java).apply {
-        putExtra(Constants.QR_DATA, vpa)
-    })
 }
 
 fun Context.startActivityAddCard() {

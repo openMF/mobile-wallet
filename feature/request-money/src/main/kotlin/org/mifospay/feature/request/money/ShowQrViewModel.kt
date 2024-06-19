@@ -1,4 +1,4 @@
-package org.mifospay.qr.showQr.presenter
+package org.mifospay.feature.request.money
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.datastore.PreferencesHelper
-import org.mifospay.qr.domain.usecase.GenerateQr
 import javax.inject.Inject
 
 @HiltViewModel

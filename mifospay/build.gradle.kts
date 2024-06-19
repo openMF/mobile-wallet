@@ -79,6 +79,7 @@ dependencies {
     implementation(projects.feature.faq)
     implementation(projects.feature.editpassword)
     implementation(projects.feature.notification)
+    implementation(projects.feature.requestMoney)
 
     // Compose
     implementation(libs.androidx.activity.compose)

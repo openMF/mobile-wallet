@@ -1,16 +1,12 @@
-package org.mifospay.qr.domain.usecase
+package org.mifospay.feature.request.money
 
 import android.graphics.Bitmap
-import android.net.Uri
-import androidx.core.net.toUri
-import com.google.android.gms.common.util.Base64Utils
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.common.Constants
-import org.mifospay.qr.showQr.presenter.RequestQrData
 import java.util.Base64
 import javax.inject.Inject
 

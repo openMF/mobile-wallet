@@ -1,6 +1,5 @@
-package org.mifospay.qr.showQr.ui
+package org.mifospay.feature.request.money
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,10 +18,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -32,18 +29,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import org.mifospay.R
-import org.mifospay.core.data.util.Constants
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosCustomDialog
-import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.feature.auth.utils.ValidateUtil.isValidEmail
-import org.mifospay.theme.MifosTheme
-import java.time.temporal.TemporalAmount
 
 @Composable
 fun SetAmountDialog(
@@ -62,15 +52,15 @@ fun SetAmountDialog(
         amountValidator = when {
             amount.trim() == "" -> null
             amount.trim().any { it.isLetter() }
-                    || amount.trim().toDoubleOrNull() == null -> context.getString(R.string.enter_valid_amount)
-            amount.trim().toDouble().compareTo(0.0) <= 0 -> context.getString(R.string.enter_valid_amount)
+                    || amount.trim().toDoubleOrNull() == null -> context.getString(R.string.feature_request_money_enter_valid_amount)
+            amount.trim().toDouble().compareTo(0.0) <= 0 -> context.getString(R.string.feature_request_money_enter_valid_amount)
             else -> null
         }
     }
 
     LaunchedEffect(key1 = currency) {
         currencyValidator = when {
-            currency.trim().isEmpty() -> context.getString(R.string.enter_currency)
+            currency.trim().isEmpty() -> context.getString(R.string.feature_request_money_enter_currency)
             else -> null
         }
     }
@@ -99,7 +89,7 @@ fun SetAmountDialog(
                 Column(modifier = Modifier.padding(16.dp)) {
 
                     Text(
-                        text = stringResource(id = R.string.set_amount),
+                        text = stringResource(id = R.string.feature_request_money_set_amount),
                         style = MaterialTheme.typography.titleMedium
                     )
 
@@ -109,7 +99,7 @@ fun SetAmountDialog(
                         value = amount,
                         onValueChange = { amount = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = stringResource(id = R.string.set_amount),
+                        label = stringResource(id = R.string.feature_request_money_set_amount),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number
                         ),
@@ -129,7 +119,7 @@ fun SetAmountDialog(
                         value = currency,
                         onValueChange = { currency = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = stringResource(id = R.string.currency),
+                        label = stringResource(id = R.string.feature_request_money_currency),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Text
                         )
@@ -143,7 +133,7 @@ fun SetAmountDialog(
                     ) {
 
                         MifosOutlinedButton(onClick = { dismissDialog() }) {
-                            Text(text = stringResource(id = R.string.cancel))
+                            Text(text = stringResource(id = R.string.feature_request_money_cancel))
                         }
 
                         Spacer(modifier = Modifier.width(4.dp))
@@ -155,7 +145,7 @@ fun SetAmountDialog(
                                 }
                             }
                         ) {
-                            Text(text = stringResource(id = R.string.confirm))
+                            Text(text = stringResource(id = R.string.feature_request_money_confirm))
                         }
                     }
                 }
@@ -167,12 +157,10 @@ fun SetAmountDialog(
 @Preview
 @Composable
 fun SetAmountDialogPreview() {
-    MifosTheme {
-        SetAmountDialog(
-            dismissDialog = {},
-            prefilledAmount = "",
-            confirmAmount = { _, _ -> },
-            prefilledCurrency = ""
-        )
-    }
+    SetAmountDialog(
+        dismissDialog = {},
+        prefilledAmount = "",
+        confirmAmount = { _, _ -> },
+        prefilledCurrency = ""
+    )
 }
