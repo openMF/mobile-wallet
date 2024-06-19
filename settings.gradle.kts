@@ -43,7 +43,6 @@ include(":feature:notification")
 include(":feature:editpassword")
 include(":feature:kyc")
 include(":feature:savedcards")
-
-
 include(":feature:invoices")
 include(":feature:settings")
+include(":feature:profile")
