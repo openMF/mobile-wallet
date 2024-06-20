@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.mifospay.core.model.domain.Transaction
 import org.mifospay.common.Constants
@@ -21,12 +22,11 @@ import org.mifospay.home.navigation.profileScreen
 import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.payments.ui.SendActivity
-import org.mifospay.receipt.ui.ReceiptActivity
 import org.mifospay.qr.showQr.ui.ShowQrActivity
+import org.mifospay.receipt.ui.ReceiptActivity
 import org.mifospay.savedcards.ui.AddCardDialog
 import org.mifospay.settings.ui.SettingsActivity
 import org.mifospay.standinginstruction.ui.NewSIActivity
-import org.mifospay.ui.MifosAppState
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -37,12 +37,12 @@ import org.mifospay.ui.MifosAppState
  */
 @Composable
 fun MifosNavHost(
-    appState: MifosAppState,
+    navController: NavHostController,
     onShowSnackbar: suspend (String, String?) -> Boolean,
     modifier: Modifier = Modifier,
     startDestination: String = HOME_ROUTE,
 ) {
-    val navController = appState.navController
+
     val context = LocalContext.current
     NavHost(
         navController = navController,
@@ -59,7 +59,10 @@ fun MifosNavHost(
             onAccountClicked = { accountNo, transactionsList ->
                 context.startActivitySpecificTransaction(accountNo = accountNo, transactionsList = transactionsList)
             },
-            viewReceipt = { context.startActivityViewReceipt(it) }
+            viewReceipt = { context.startActivityViewReceipt(it) },
+            proceedWithMakeTransferFlow = { externalId, transferAmount ->
+                navController.navigateToMakeTransferScreen(externalId, transferAmount)
+            }
         )
         financeScreen(
             onAddBtn = { context.startActivityAddCard() }
