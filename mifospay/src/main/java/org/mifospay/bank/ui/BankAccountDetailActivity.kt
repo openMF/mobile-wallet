@@ -5,9 +5,9 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import com.mifospay.core.model.domain.BankAccountDetails
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifospay.bank.setupUpi.ui.SetupUpiPinActivity
 import org.mifospay.base.BaseActivity
 import org.mifospay.common.Constants
+import org.mifospay.feature.upi_setup.ui.SetupUpiPinActivity
 import org.mifospay.theme.MifosTheme
 import org.mifospay.utils.Toaster
 
