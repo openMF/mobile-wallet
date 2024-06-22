@@ -19,8 +19,6 @@ import org.mifospay.MifosPayApp
 import org.mifospay.R
 import org.mifospay.base.BaseActivity
 import org.mifospay.common.ui.MakeTransferFragment
-import org.mifospay.history.ui.adapter.SpecificTransactionsAdapter
-import org.mifospay.merchants.presenter.MerchantTransferPresenter
 import org.mifospay.common.Constants
 import org.mifospay.home.BaseHomeContract
 import org.mifospay.utils.TextDrawable
