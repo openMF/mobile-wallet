@@ -1,11 +1,10 @@
-package org.mifospay.utils
+package org.mifospay.feature.request.money.util
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.content.FileProvider
-import dagger.hilt.android.qualifiers.ApplicationContext
-import org.mifospay.BuildConfig
+import org.mifospay.feature.request.money.BuildConfig
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -23,7 +22,7 @@ object ImageUtils {
             stream.close()
             uri = FileProvider.getUriForFile(
                 context,
-                BuildConfig.APPLICATION_ID + ".provider", file
+                BuildConfig.LIBRARY_PACKAGE_NAME+ ".provider", file
             )
         } catch (e: IOException) {
             e.printStackTrace()

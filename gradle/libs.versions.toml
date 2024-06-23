@@ -69,6 +69,8 @@ playServicesCodeScanner = "16.1.0"
 moduleGraph = "2.5.0"
 composeMaterial = "1.6.0"
 mifosPasscode = "0.3.0"
+zxingAndroidEmbeddedVersion = "4.2.0"
+zxingVersion = "1.9.13"
 
 [libraries]
 accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPagerVersion" }
@@ -164,6 +166,8 @@ firebase-performance-gradlePlugin = { group = "com.google.firebase", name = "per
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 room-gradlePlugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "room" }
+zxing = { module = "me.dm7.barcodescanner:zxing", version.ref = "zxingVersion" }
+zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxingAndroidEmbeddedVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }

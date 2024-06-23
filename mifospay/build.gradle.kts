@@ -79,6 +79,7 @@ dependencies {
     implementation(projects.feature.faq)
     implementation(projects.feature.editpassword)
     implementation(projects.feature.notification)
+    implementation(projects.feature.requestMoney)
     implementation(projects.feature.upiSetup)
 
     // Compose
