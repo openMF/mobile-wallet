@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_upi_setup_upi_pin_setup">UPI PIN Setup</string>
+    <string name="feature_upi_setup_enter_upi_pin">Enter UPI PIN</string>
+    <string name="feature_upi_setup_reenter_upi">Re-enter UPI PIN</string>
+    <string name="feature_upi_setup_invalid_upi_pin">Invalid UPI PIN</string>
+    <string name="feature_upi_setup_back">Back</string>
+    <string name="feature_upi_setup_enter_otp">Enter OTP</string>
+
+</resources>
