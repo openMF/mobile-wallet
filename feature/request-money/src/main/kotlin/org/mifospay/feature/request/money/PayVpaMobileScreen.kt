@@ -1,5 +1,3 @@
-package org.mifospay.payments.ui
-
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
