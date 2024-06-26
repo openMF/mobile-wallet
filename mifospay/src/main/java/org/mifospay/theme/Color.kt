@@ -21,3 +21,7 @@ val red = Color(0xFFCD0000)
 val debitColor = Color.Red
 val creditColor = Color(0xFF009688)
 val otherColor = Color.Yellow
+
+val InitialAvatarBgColor = Color(0xFF9999CC)
+val submitButtonColor =  Color(0xFF0000FF)
+val ElectricViolet = Color(0xFF6200EE)

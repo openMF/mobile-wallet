@@ -37,7 +37,8 @@ class SpecificTransactionsActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.setArguments(
-            transactions = intent.getParcelableArrayListExtra(Constants.TRANSACTIONS) ?: arrayListOf(),
+            transactions = intent.getParcelableArrayListExtra(Constants.TRANSACTIONS)
+                ?: arrayListOf(),
             accountNumber = intent.getStringExtra(Constants.ACCOUNT_NUMBER) ?: ""
         )
         setContent {
