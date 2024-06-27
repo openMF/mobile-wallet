@@ -1,7 +1,9 @@
 package org.mifospay.qr.ui
 
 import android.Manifest
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.util.Size
@@ -53,7 +55,6 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.qr.presenter.ReadQrUiState
 import org.mifospay.qr.presenter.ReadQrViewModel
 import org.mifospay.theme.MifosTheme
-import org.mifospay.utils.ImageUtils.loadBitmapFromUri
 import org.mifospay.utils.QrCodeAnalyzer
 
 @Composable
@@ -196,6 +197,16 @@ fun ReadQrScreen(
                 Icon(imageVector = Icons.Default.Photo, contentDescription = null)
             }
         }
+    }
+}
+
+fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+    return try {
+        val stream = context.contentResolver.openInputStream(uri)
+        BitmapFactory.decodeStream(stream)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
     }
 }
 
