@@ -123,7 +123,7 @@
                     android:text="SELECT DATE"
                     android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/value_20dp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black" />
 
                 <Button
                     android:id="@+id/btn_create_si"
@@ -131,7 +131,7 @@
                     android:layout_height="@dimen/value_50dp"
                     android:text="@string/submit"
                     android:layout_gravity="center"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 
