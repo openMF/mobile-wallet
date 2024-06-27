@@ -1,8 +1,11 @@
 package org.mifospay.standinginstruction.ui
 
+import android.app.DatePickerDialog
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +21,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -35,6 +40,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import kotlinx.coroutines.launch
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton
@@ -44,6 +50,7 @@ import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.standinginstruction.presenter.NewSIUiState
 import org.mifospay.standinginstruction.presenter.NewSIViewModel
 import org.mifospay.theme.MifosTheme
+import java.util.Calendar
 
 @Composable
 fun NewSIScreen(viewModel: NewSIViewModel = hiltViewModel(), onBackPress: () -> Unit) {
@@ -66,8 +73,8 @@ fun NewSIScreen(uiState: NewSIUiState, onBackPress: () -> Unit) {
         scaffoldContent = {
             when (uiState) {
                 is NewSIUiState.Error -> ErrorScreenContent()
-                NewSIUiState.Loading -> MfLoadingWheel()
-                is NewSIUiState.ShowClientDetails -> NewSIContent()
+                NewSIUiState.Loading ->NewSIContent(it)
+                is NewSIUiState.ShowClientDetails -> NewSIContent(it)
                 NewSIUiState.Success -> {}
             }
 
@@ -75,13 +82,13 @@ fun NewSIScreen(uiState: NewSIUiState, onBackPress: () -> Unit) {
 }
 
 @Composable
-fun NewSIContent() {
+fun NewSIContent(paddingValues: PaddingValues) {
     var amount by rememberSaveable { mutableStateOf("") }
     var vpa by rememberSaveable { mutableStateOf("") }
     var siInterval by rememberSaveable { mutableStateOf("") }
+    var selectedDate by rememberSaveable { mutableStateOf("") }
 
     val context = LocalContext.current
-
 
     val options = GmsBarcodeScannerOptions.Builder()
         .setBarcodeFormats(
@@ -106,9 +113,25 @@ fun NewSIContent() {
                 e.localizedMessage?.let { Log.d("SendMoney: Barcode scan failed", it) }
             }
     }
+
+    fun showDatePickerDialog() {
+        val calendar = Calendar.getInstance()
+        val datePickerDialog = DatePickerDialog(
+            context,
+            { _, year, month, dayOfMonth ->
+                selectedDate = "$dayOfMonth/${month + 1}/$year"
+            },
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        )
+        datePickerDialog.show()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .padding(paddingValues)
     ) {
         MifosOutlinedTextField(
             modifier = Modifier
@@ -156,19 +179,28 @@ fun NewSIContent() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp), horizontalArrangement = Arrangement.Center
+                .padding(top = 10.dp), horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(text = stringResource(id = R.string.valid_till))
+            if (selectedDate.isNotEmpty()) {
+                Text(
+                    text = selectedDate,
+                    modifier = Modifier.padding(start = 8.dp),
+                    color = Color.Black
+                )
+            }
         }
         MifosButton(
             modifier = Modifier
                 .width(150.dp)
                 .padding(top = 16.dp)
                 .align(Alignment.CenterHorizontally),
-            onClick = {}
+            onClick = { showDatePickerDialog() }
         ) {
             Text(text = stringResource(R.string.select_date), color = Color.White)
         }
+
         MifosButton(
             modifier = Modifier
                 .width(150.dp)
