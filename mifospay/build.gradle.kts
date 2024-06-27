@@ -79,6 +79,8 @@ dependencies {
     implementation(projects.feature.faq)
     implementation(projects.feature.editpassword)
     implementation(projects.feature.notification)
+    implementation(projects.feature.requestMoney)
+    implementation(projects.feature.upiSetup)
 
     // Compose
     implementation(libs.androidx.activity.compose)
@@ -96,8 +98,8 @@ dependencies {
     implementation(libs.androidx.tracing.ktx)
     implementation(libs.kotlinx.coroutines.guava)
     implementation(libs.coil.kt)
-    implementation(libs.androidx.camera.view)
-    implementation(libs.androidx.camera.lifecycle)
+    implementation(libs.androidx.material.navigation)
+    implementation(libs.accompanist.pager)
 
     ksp(libs.hilt.compiler)
 

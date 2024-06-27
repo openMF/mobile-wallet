@@ -33,6 +33,7 @@ include(":core:model")
 include(":core:datastore-proto")
 include(":core:analytics")
 
+include(":feature:history")
 include(":feature:receipt")
 include(":feature:faq")
 include(":feature:passcode")
@@ -43,13 +44,16 @@ include(":feature:notification")
 include(":feature:editpassword")
 include(":feature:kyc")
 include(":feature:savedcards")
-
-
-
-
-
-
-
 include(":feature:invoices")
+include(":feature:invoices")
+include(":feature:settings")
 include(":feature:profile")
-
+include(":feature:finance")
+include(":feature:merchants")
+include(":feature:accounts")
+include(":feature:standing-instruction")
+include(":feature:payments")
+include(":feature:request-money")
+include(":feature:upi-setup")
+include(":feature:qr")
+include(":feature:home")

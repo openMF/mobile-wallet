@@ -15,14 +15,16 @@ fun NavGraphBuilder.paymentsScreen(
     showQr: (String) -> Unit,
     onNewSI: () -> Unit,
     viewReceipt: (String) -> Unit,
-    onAccountClicked: (String, ArrayList<Transaction>) -> Unit
+    onAccountClicked: (String, ArrayList<Transaction>) -> Unit,
+    proceedWithMakeTransferFlow: (String, String) -> Unit
 ) {
     composable(route = PAYMENTS_ROUTE) {
         PaymentsRoute(
             showQr = showQr,
             onNewSI = onNewSI,
             onAccountClicked = onAccountClicked,
-            viewReceipt = viewReceipt
+            viewReceipt = viewReceipt,
+            proceedWithMakeTransferFlow = proceedWithMakeTransferFlow
         )
     }
 }

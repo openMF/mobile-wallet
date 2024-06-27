@@ -1,8 +1,6 @@
 package org.mifospay.core.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -12,6 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.launch
 import org.mifospay.core.ui.utility.TabContent
 
@@ -56,6 +56,7 @@ fun MifosScrollableTabRow(
     }
 
     HorizontalPager(
+        count = tabContents.size,
         state = pagerState,
         modifier = modifier
     ) { page ->

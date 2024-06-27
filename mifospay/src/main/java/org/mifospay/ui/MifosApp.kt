@@ -17,6 +17,9 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material.navigation.BottomSheetNavigator
+import androidx.compose.material.navigation.ModalBottomSheetLayout
+import androidx.compose.material.navigation.rememberBottomSheetNavigator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -52,8 +55,9 @@ import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
-import org.mifospay.R
 import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.compose.rememberNavController
+import org.mifospay.R
 import org.mifospay.core.designsystem.component.MifosBackground
 import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosNavigationBar
@@ -74,8 +78,9 @@ import org.mifospay.settings.ui.SettingsActivity
     ExperimentalComposeUiApi::class,
 )
 @Composable
-fun MifosApp(appState: MifosAppState) {
+fun MifosApp(appState: MifosAppState, bottomSheetNavigator: BottomSheetNavigator) {
     val context = LocalContext.current
+
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.HOME
     var showHomeMenuOption by rememberSaveable { mutableStateOf(false) }
@@ -199,16 +204,18 @@ fun MifosApp(appState: MifosAppState) {
                             )
                         }
 
-                        MifosNavHost(
-                            appState = appState,
-                            onShowSnackbar = { message, action ->
-                                snackbarHostState.showSnackbar(
-                                    message = message,
-                                    actionLabel = action,
-                                    duration = Short,
-                                ) == ActionPerformed
-                            },
-                        )
+                       ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
+                           MifosNavHost(
+                               navController = appState.navController,
+                               onShowSnackbar = { message, action ->
+                                   snackbarHostState.showSnackbar(
+                                       message = message,
+                                       actionLabel = action,
+                                       duration = Short,
+                                   ) == ActionPerformed
+                               },
+                           )
+                       }
                     }
 
                     // TODO: We may want to add padding or spacer when the snackbar is shown so that
