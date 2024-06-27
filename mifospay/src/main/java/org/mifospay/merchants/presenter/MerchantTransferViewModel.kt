@@ -22,7 +22,6 @@ import org.mifospay.history.HistoryContract
 import org.mifospay.history.TransactionsHistory
 import javax.inject.Inject
 
-
 @HiltViewModel
 class MerchantTransferViewModel @Inject constructor(
     private val mUsecaseHandler: UseCaseHandler,
@@ -42,6 +41,7 @@ class MerchantTransferViewModel @Inject constructor(
     private var merchantAccountNumber = _merchantAccountNumber.asStateFlow()
 
     fun checkBalanceAvailability(
+        proceedWithMakeTransferFlow: (String, Double) -> Unit,
         externalId: String,
         transferAmount: Double,
     ) {
@@ -52,7 +52,7 @@ class MerchantTransferViewModel @Inject constructor(
                     if (transferAmount > response.account.balance) {
                         _uiState.value = MerchantTransferUiState.InsufficientBalance
                     } else {
-                        //Todo: Navigate to MakeTransferScreen passing externalId and transferAmount
+                        proceedWithMakeTransferFlow(externalId, transferAmount)
                     }
                 }
 

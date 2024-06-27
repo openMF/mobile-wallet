@@ -59,6 +59,7 @@ import org.mifospay.theme.submitButtonColor
 
 @Composable
 fun MerchantTransferScreenRoute(
+    proceedWithMakeTransferFlow: (String, String) -> Unit,
     viewModel: MerchantTransferViewModel = hiltViewModel(),
     onBackPressed: () -> Unit,
     merchantName: String,
@@ -76,10 +77,13 @@ fun MerchantTransferScreenRoute(
         onBackPressed = onBackPressed,
         merchantName = merchantName,
         merchantVPA = merchantVPA,
-        checkBalanceAvailability = { merchantVPA, amount ->
+        checkBalanceAvailability = { merchantVPA, transferAmount ->
             viewModel.checkBalanceAvailability(
+                proceedWithMakeTransferFlow = { externalId, transferAmount ->
+                    proceedWithMakeTransferFlow.invoke(externalId, transferAmount.toString())
+                },
                 merchantVPA,
-                amount.toDoubleOrNull() ?: 0.0
+                transferAmount.toDoubleOrNull() ?: 0.0
             )
         }
     )
@@ -93,7 +97,7 @@ fun MerchantTransferScreen(
     merchantVPA: String,
     checkBalanceAvailability: (String, String) -> Unit
 ) {
-    var showBottomSheet by remember { mutableStateOf(false) }
+    var showBottomSheet by remember { mutableStateOf(true) }
     var amount by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
 
@@ -274,6 +278,8 @@ class MerchantTransferUiStateProvider :
             MerchantTransferUiState.Success(arrayListOf(Transaction())),
             MerchantTransferUiState.Error,
             MerchantTransferUiState.Loading,
+            MerchantTransferUiState.Empty,
+            MerchantTransferUiState.InsufficientBalance,
         )
 }
 
@@ -284,7 +290,7 @@ fun Preview(@PreviewParameter(MerchantTransferUiStateProvider::class) uiState: M
         MerchantTransferScreen(
             uiState = uiState,
             onBackPressed = {},
-            merchantName = "Naman Dwivedi 2",
+            merchantName = "Naman Dwivedi",
             merchantVPA = "naman.dwivedi2@mifos",
             checkBalanceAvailability = { _, _ -> }
         )
@@ -316,7 +322,7 @@ fun MerchantBottomSheetPreview() {
 
 @Preview
 @Composable
-fun temPreview() {
+fun MerchantInitialAvatarPreview() {
     MifosTheme {
         MerchantInitialAvatar("Naman")
     }

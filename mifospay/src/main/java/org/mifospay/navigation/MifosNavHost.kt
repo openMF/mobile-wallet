@@ -89,6 +89,9 @@ fun MifosNavHost(
             onBackClick = navController::popBackStack
         )
         merchantTransferScreen(
+            proceedWithMakeTransferFlow = { externalId, transferAmount ->
+                navController.navigateToMakeTransferScreen(externalId, transferAmount)
+            },
             onBackPressed = navController::popBackStack
         )
     }

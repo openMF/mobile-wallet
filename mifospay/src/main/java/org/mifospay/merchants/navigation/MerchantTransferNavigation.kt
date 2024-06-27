@@ -10,6 +10,7 @@ import org.mifospay.merchants.ui.MerchantTransferScreenRoute
 const val MERCHANT_TRANSFER_ROUTE = "merchant_transfer_route"
 
 fun NavGraphBuilder.merchantTransferScreen(
+    proceedWithMakeTransferFlow: (String, String?) -> Unit,
     onBackPressed: () -> Unit
 ) {
     composable(
@@ -28,7 +29,8 @@ fun NavGraphBuilder.merchantTransferScreen(
             onBackPressed = onBackPressed,
             merchantName = merchantName,
             merchantVPA = merchantVPA,
-            merchantAccountNumber = merchantAccountNumber
+            merchantAccountNumber = merchantAccountNumber,
+            proceedWithMakeTransferFlow = proceedWithMakeTransferFlow
         )
     }
 }
