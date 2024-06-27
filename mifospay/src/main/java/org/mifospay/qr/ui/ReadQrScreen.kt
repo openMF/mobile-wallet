@@ -29,6 +29,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -73,12 +74,12 @@ fun ReadQrScreen(
     backPress: () -> Unit,
     scanQR: (Bitmap) -> Unit,
 ) {
-    var isFlashOn by remember { mutableStateOf(false) }
+    var isFlashOn by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
-    var scannedQrcode by remember {
+    var scannedQrcode by rememberSaveable {
         mutableStateOf("")
     }
-    val cameraProviderFuture = remember {
+    val cameraProviderFuture = rememberSaveable {
         ProcessCameraProvider.getInstance(context)
     }
     val galleryLauncher =
