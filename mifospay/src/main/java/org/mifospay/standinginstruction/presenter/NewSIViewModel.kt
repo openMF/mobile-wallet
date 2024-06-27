@@ -23,7 +23,7 @@ class NewSIViewModel @Inject constructor(
     private var createStandingTransaction: CreateStandingTransaction
 ) : ViewModel() {
 
-    private val _newSIUiState = MutableStateFlow<NewSIUiState>(NewSIUiState.Initial)
+    private val _newSIUiState = MutableStateFlow<NewSIUiState>(NewSIUiState.Loading)
     val newSIUiState: StateFlow<NewSIUiState> = _newSIUiState
 
     fun fetchClient(externalId: String) {
@@ -84,7 +84,6 @@ class NewSIViewModel @Inject constructor(
 }
 
 sealed interface NewSIUiState {
-    data object Initial : NewSIUiState
     data object Loading : NewSIUiState
     data object Success : NewSIUiState
     data class Error(val message: String) : NewSIUiState
