@@ -24,10 +24,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FlashOff
-import androidx.compose.material.icons.filled.FlashOn
-import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -188,13 +184,13 @@ fun ReadQrScreen(
         ) {
             IconButton(onClick = { isFlashOn = !isFlashOn }) {
                 Icon(
-                    imageVector = if (isFlashOn) Icons.Default.FlashOff else Icons.Default.FlashOn,
+                    imageVector = if (isFlashOn) MifosIcons.FlashOff else MifosIcons.FlashOn,
                     contentDescription = null
                 )
             }
 
             IconButton(onClick = { galleryLauncher.launch("image/*") }) {
-                Icon(imageVector = Icons.Default.Photo, contentDescription = null)
+                Icon(imageVector = MifosIcons.Photo, contentDescription = null)
             }
         }
     }
