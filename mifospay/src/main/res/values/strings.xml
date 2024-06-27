@@ -401,4 +401,5 @@
     <string name="discard_changes">Do you want to discard changes?</string>
     <string name="dismiss_text">Cancel</string>
     <string name="confirm_text">Discard</string>
+    <string name="merchant_transaction">Merchant Transaction</string>
 </resources>
