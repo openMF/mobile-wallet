@@ -42,15 +42,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.savedcards.Card
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utility.AddCardChip
-import org.mifospay.savedcards.presenter.CardsScreenViewModel
-import org.mifospay.savedcards.presenter.CardsUiEvent
-import org.mifospay.savedcards.presenter.CardsUiState
+import org.mifospay.savedcards.R
 
 enum class CardMenuAction {
     EDIT, DELETE, CANCEL
@@ -88,14 +85,14 @@ fun CardsScreen(
     MifosDialogBox(
         showDialogState = showConfirmDeleteDialog,
         onDismiss = { showConfirmDeleteDialog = false },
-        title = R.string.delete_card,
-        confirmButtonText = R.string.yes,
+        title = R.string.feature_savedcards_delete_card,
+        confirmButtonText = R.string.feature_savedcards_yes,
         onConfirm = {
             deleteCardID?.let { viewModel.deleteCard(it) }
             showConfirmDeleteDialog = false
         },
-        dismissButtonText = R.string.no,
-        message = R.string.confirm_delete_card
+        dismissButtonText = R.string.feature_savedcards_no,
+        message = R.string.feature_savedcards_confirm_delete_card
     )
 
     CardsScreen(
@@ -130,7 +127,7 @@ fun CardsScreen(
         when (cardState) {
             CardsUiState.Loading -> {
                 MfLoadingWheel(
-                    contentDesc = stringResource(R.string.loading),
+                    contentDesc = stringResource(R.string.feature_savedcards_loading),
                     backgroundColor = Color.White
                 )
             }
@@ -142,8 +139,8 @@ fun CardsScreen(
             is CardsUiState.Error -> {
                 EmptyContentScreen(
                     modifier = Modifier,
-                    title = stringResource(id = R.string.error_oops),
-                    subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                    title = stringResource(id = R.string.feature_savedcards_error_oops),
+                    subTitle = stringResource(id = R.string.feature_savedcards_unexpected_error_subtitle),
                     iconTint = Color.Black,
                     iconImageVector = Icons.Rounded.Info
                 )
@@ -164,7 +161,7 @@ fun CardsScreen(
                     CardsUiEvent.CARD_ADDED_SUCCESSFULLY -> {
                         Toast.makeText(
                             LocalContext.current,
-                            stringResource(id = R.string.card_added_successfully),
+                            stringResource(id = R.string.feature_savedcards_card_added_successfully),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -172,7 +169,7 @@ fun CardsScreen(
                     CardsUiEvent.CARD_UPDATED_SUCCESSFULLY -> {
                         Toast.makeText(
                             LocalContext.current,
-                            stringResource(id = R.string.card_updated_successfully),
+                            stringResource(id = R.string.feature_savedcards_card_updated_successfully),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -180,7 +177,7 @@ fun CardsScreen(
                     CardsUiEvent.CARD_DELETED_SUCCESSFULLY -> {
                         Toast.makeText(
                             LocalContext.current,
-                            stringResource(id = R.string.card_deleted_successfully),
+                            stringResource(id = R.string.feature_savedcards_card_deleted_successfully),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -232,8 +229,8 @@ fun CardsScreenContent(
             AddCardChip(
                 modifier = Modifier.align(Alignment.Center),
                 onAddBtn = onAddBtn,
-                text = R.string.add_cards,
-                btnText = R.string.add_cards
+                text = R.string.feature_savedcards_add_cards,
+                btnText = R.string.feature_savedcards_add_cards
             )
         }
     }
@@ -257,12 +254,12 @@ fun SearchBarScreen(
         active = false,
         onActiveChange = { },
         placeholder = {
-            Text(text = stringResource(R.string.search))
+            Text(text = stringResource(R.string.feature_savedcards_search))
         },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Search,
-                contentDescription = stringResource(R.string.search)
+                contentDescription = stringResource(R.string.feature_savedcards_search)
             )
         },
         trailingIcon = {
@@ -271,7 +268,7 @@ fun SearchBarScreen(
             ) {
                 Icon(
                     imageVector = Icons.Filled.Close,
-                    contentDescription = stringResource(R.string.close)
+                    contentDescription = stringResource(R.string.feature_savedcards_close)
                 )
             }
         }
@@ -320,7 +317,7 @@ fun CardItem(card: Card, onMenuItemClick: (Card, CardMenuAction) -> Unit) {
                     }
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
-                        text = "${stringResource(R.string.card_number)} ${card.cardNumber}",
+                        text = "${stringResource(R.string.feature_savedcards_card_number)} ${card.cardNumber}",
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Spacer(modifier = Modifier.height(8.dp))
@@ -333,21 +330,21 @@ fun CardItem(card: Card, onMenuItemClick: (Card, CardMenuAction) -> Unit) {
                     modifier = Modifier.background(MaterialTheme.colorScheme.background)
                 ) {
                     DropdownMenuItem(
-                        text = { Text(text = stringResource(R.string.edit_card)) },
+                        text = { Text(text = stringResource(R.string.feature_savedcards_edit_card)) },
                         onClick = {
                             onMenuItemClick(card, CardMenuAction.EDIT)
                             expanded = false
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text(stringResource(R.string.delete_card)) },
+                        text = { Text(stringResource(R.string.feature_savedcards_delete_card)) },
                         onClick = {
                             onMenuItemClick(card, CardMenuAction.DELETE)
                             expanded = false
                         }
                     )
                     DropdownMenuItem(
-                        text = { Text(stringResource(R.string.cancel)) },
+                        text = { Text(stringResource(R.string.feature_savedcards_cancel)) },
                         onClick = {
                             onMenuItemClick(card, CardMenuAction.CANCEL)
                             expanded = false
@@ -368,12 +365,12 @@ fun NoCardAddCardsScreen(onAddBtn: () -> Unit) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.add_cards))
+            Text(text = stringResource(R.string.feature_savedcards_add_cards))
             AddCardChip(
                 modifier = Modifier,
                 onAddBtn = onAddBtn,
-                text = R.string.add_cards,
-                btnText = R.string.add_cards
+                text = R.string.feature_savedcards_add_cards,
+                btnText = R.string.feature_savedcards_add_cards
             )
         }
     }
