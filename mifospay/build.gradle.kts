@@ -100,6 +100,8 @@ dependencies {
     implementation(libs.coil.kt)
     implementation(libs.androidx.material.navigation)
     implementation(libs.accompanist.pager)
+    implementation(libs.androidx.camera.view)
+    implementation(libs.androidx.camera.lifecycle)
 
     ksp(libs.hilt.compiler)
 

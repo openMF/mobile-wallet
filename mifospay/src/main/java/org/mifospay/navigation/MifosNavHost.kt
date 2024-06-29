@@ -21,6 +21,7 @@ import org.mifospay.home.navigation.financeScreen
 import org.mifospay.home.navigation.homeScreen
 import org.mifospay.home.navigation.paymentsScreen
 import org.mifospay.home.navigation.profileScreen
+import org.mifospay.merchants.navigation.merchantTransferScreen
 import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.payments.ui.SendActivity
@@ -58,7 +59,10 @@ fun MifosNavHost(
             showQr = { vpa -> navController.navigateToShowQrScreen(vpa) },
             onNewSI = { context.startActivityStandingInstruction() },
             onAccountClicked = { accountNo, transactionsList ->
-                context.startActivitySpecificTransaction(accountNo = accountNo, transactionsList = transactionsList)
+                context.startActivitySpecificTransaction(
+                    accountNo = accountNo,
+                    transactionsList = transactionsList
+                )
             },
             viewReceipt = { context.startActivityViewReceipt(it) },
             proceedWithMakeTransferFlow = { externalId, transferAmount ->
@@ -83,6 +87,12 @@ fun MifosNavHost(
         )
         showQrScreen(
             onBackClick = navController::popBackStack
+        )
+        merchantTransferScreen(
+            proceedWithMakeTransferFlow = { externalId, transferAmount ->
+                navController.navigateToMakeTransferScreen(externalId, transferAmount)
+            },
+            onBackPressed = navController::popBackStack
         )
     }
 }

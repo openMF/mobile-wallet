@@ -405,4 +405,5 @@
     <string name="select_date">Select Date</string>
     <string name="standing_instruction_created_successfully">Standing Instruction Created Successfully</string>
     <string name="unable_to_create_standing_instructions">Unable to Create Standing Instructions</string>
+    <string name="merchant_transaction">Merchant Transaction</string>
 </resources>
