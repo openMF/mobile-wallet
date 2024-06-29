@@ -73,6 +73,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     api("com.google.android.material:material:1.0.0") // update require alot of UI changes
 
+    implementation(projects.feature.receipt)
     implementation(projects.feature.auth)
     implementation(projects.feature.passcode)
     implementation(projects.feature.makeTransfer)
@@ -81,7 +82,7 @@ dependencies {
     implementation(projects.feature.notification)
     implementation(projects.feature.requestMoney)
     implementation(projects.feature.upiSetup)
-    implementation(projects.feature.receipt)
+    implementation(projects.feature.settings)
 
     // Compose
     implementation(libs.androidx.activity.compose)
