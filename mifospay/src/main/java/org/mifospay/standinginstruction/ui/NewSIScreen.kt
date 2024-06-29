@@ -2,7 +2,8 @@ package org.mifospay.standinginstruction.ui
 
 import android.app.DatePickerDialog
 import android.util.Log
-import androidx.compose.foundation.background
+import android.widget.Toast
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -12,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCode2
@@ -21,8 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -30,23 +31,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-import kotlinx.coroutines.launch
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.standinginstruction.presenter.NewSIUiState
 import org.mifospay.standinginstruction.presenter.NewSIViewModel
 import org.mifospay.theme.MifosTheme
@@ -56,33 +57,85 @@ import java.util.Calendar
 fun NewSIScreen(viewModel: NewSIViewModel = hiltViewModel(), onBackPress: () -> Unit) {
 
     val uiState by viewModel.newSIUiState.collectAsStateWithLifecycle()
+    var cancelClicked by rememberSaveable { mutableStateOf(false) }
 
     NewSIScreen(
         uiState = uiState,
-        onBackPress = onBackPress
+        onBackPress = onBackPress,
+        fetchClient = { viewModel.fetchClient(it) },
+        cancelClicked = cancelClicked,
+        setCancelClicked = { cancelClicked = it },
+        confirm = { clientId, amount, recurrenceInterval, validTill ->
+            viewModel.createNewSI(clientId, amount, recurrenceInterval, validTill)
+        }
     )
 
 }
 
 @Composable
-fun NewSIScreen(uiState: NewSIUiState, onBackPress: () -> Unit) {
+fun NewSIScreen(
+    uiState: NewSIUiState,
+    onBackPress: () -> Unit,
+    fetchClient: (String) -> Unit,
+    cancelClicked: Boolean,
+    setCancelClicked: (Boolean) -> Unit,
+    confirm: (Long, Double, Int, String) -> Unit
+) {
+    val context = LocalContext.current
 
     MifosScaffold(
         topBarTitle = R.string.tile_si_activity,
         backPress = { onBackPress.invoke() },
         scaffoldContent = {
             when (uiState) {
-                is NewSIUiState.Error -> ErrorScreenContent()
-                NewSIUiState.Loading ->NewSIContent(it)
-                is NewSIUiState.ShowClientDetails -> NewSIContent(it)
-                NewSIUiState.Success -> {}
-            }
+                is NewSIUiState.Error -> {
+                    Toast.makeText(
+                        context,
+                        stringResource(R.string.unable_to_create_standing_instructions),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
 
+                NewSIUiState.Loading -> NewSIContent(
+                    it,
+                    fetchClient,
+                    cancelClicked,
+                    setCancelClicked,
+                    confirm,
+                    clientId = 0
+                )
+
+                is NewSIUiState.ShowClientDetails -> {
+                    NewSIContent(
+                        it,
+                        fetchClient,
+                        cancelClicked,
+                        setCancelClicked,
+                        confirm,
+                        clientId = uiState.clientId
+                    )
+                }
+
+                NewSIUiState.Success -> {
+                    Toast.makeText(
+                        context,
+                        stringResource(R.string.standing_instruction_created_successfully),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
         })
 }
 
 @Composable
-fun NewSIContent(paddingValues: PaddingValues) {
+fun NewSIContent(
+    paddingValues: PaddingValues,
+    fetchClient: (String) -> Unit,
+    cancelClicked: Boolean,
+    setCancelClicked: (Boolean) -> Unit,
+    confirm: (Long, Double, Int, String) -> Unit,
+    clientId: Long
+) {
     var amount by rememberSaveable { mutableStateOf("") }
     var vpa by rememberSaveable { mutableStateOf("") }
     var siInterval by rememberSaveable { mutableStateOf("") }
@@ -90,127 +143,136 @@ fun NewSIContent(paddingValues: PaddingValues) {
 
     val context = LocalContext.current
 
-    val options = GmsBarcodeScannerOptions.Builder()
-        .setBarcodeFormats(
-            Barcode.FORMAT_QR_CODE,
-            Barcode.FORMAT_AZTEC
+    if (!cancelClicked) {
+        ConfirmTransfer(
+            paddingValues = paddingValues,
+            clientName = "",
+            clientVpa = vpa,
+            amount = amount,
+            cancel = { setCancelClicked(true) },
+            confirm = confirm,
+            clientId = clientId,
+            recurrenceInterval = siInterval,
+            validTill = selectedDate
         )
-        .build()
-    val scanner = GmsBarcodeScanning.getClient(context, options)
+    } else {
+        val options = GmsBarcodeScannerOptions.Builder()
+            .setBarcodeFormats(
+                Barcode.FORMAT_QR_CODE,
+                Barcode.FORMAT_AZTEC
+            )
+            .build()
+        val scanner = GmsBarcodeScanning.getClient(context, options)
 
-    fun startScan() {
-        scanner.startScan()
-            .addOnSuccessListener { barcode ->
-                barcode.rawValue?.let {
+        fun startScan() {
+            scanner.startScan()
+                .addOnSuccessListener { barcode ->
+                    barcode.rawValue?.let {
+                        vpa = it
+                    }
+                }
+                .addOnCanceledListener {
+                    // Task canceled
+                }
+                .addOnFailureListener { e ->
+                    // Task failed with an exception
+                    e.localizedMessage?.let { Log.d("SendMoney: Barcode scan failed", it) }
+                }
+        }
+
+        fun showDatePickerDialog() {
+            val calendar = Calendar.getInstance()
+            val datePickerDialog = DatePickerDialog(
+                context,
+                { _, year, month, dayOfMonth ->
+                    selectedDate = "$dayOfMonth/${month + 1}/$year"
+                },
+                calendar.get(Calendar.YEAR),
+                calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)
+            )
+            datePickerDialog.show()
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+        ) {
+            MifosOutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                value = amount,
+                onValueChange = {
+                    amount = it
+                },
+                label = R.string.amount,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            )
+            Spacer(modifier = Modifier.padding(top = 16.dp))
+            MifosOutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                value = vpa,
+                onValueChange = {
                     vpa = it
+                },
+                label = R.string.vpa,
+                trailingIcon = {
+                    IconButton(onClick = { startScan() }) {
+                        Icon(
+                            imageVector = Icons.Filled.QrCode2,
+                            contentDescription = "Scan QR",
+                            tint = Color.Blue
+                        )
+                    }
                 }
+            )
+            Spacer(modifier = Modifier.padding(top = 16.dp))
+            MifosOutlinedTextField(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                value = siInterval,
+                onValueChange = {
+                    siInterval = it
+                },
+                label = R.string.recurrence_interval_in_months
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp), horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = stringResource(id = R.string.valid_till))
             }
-            .addOnCanceledListener {
-                // Task canceled
+            MifosButton(
+                modifier = Modifier
+                    .width(150.dp)
+                    .padding(top = 16.dp)
+                    .align(Alignment.CenterHorizontally),
+                onClick = { showDatePickerDialog() }
+            ) {
+                val text = selectedDate.ifEmpty { stringResource(R.string.select_date) }
+                Text(text = text, color = Color.White)
             }
-            .addOnFailureListener { e ->
-                // Task failed with an exception
-                e.localizedMessage?.let { Log.d("SendMoney: Barcode scan failed", it) }
-            }
-    }
 
-    fun showDatePickerDialog() {
-        val calendar = Calendar.getInstance()
-        val datePickerDialog = DatePickerDialog(
-            context,
-            { _, year, month, dayOfMonth ->
-                selectedDate = "$dayOfMonth/${month + 1}/$year"
-            },
-            calendar.get(Calendar.YEAR),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.DAY_OF_MONTH)
-        )
-        datePickerDialog.show()
-    }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(paddingValues)
-    ) {
-        MifosOutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            value = amount,
-            onValueChange = {
-                amount = it
-            },
-            label = R.string.amount,
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-        )
-        Spacer(modifier = Modifier.padding(top = 16.dp))
-        MifosOutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            value = vpa,
-            onValueChange = {
-                vpa = it
-            },
-            label = R.string.vpa,
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            trailingIcon = {
-                IconButton(onClick = { startScan() }) {
-                    Icon(
-                        imageVector = Icons.Filled.QrCode2,
-                        contentDescription = "Scan QR",
-                        tint = Color.Blue
-                    )
-                }
-            }
-        )
-        Spacer(modifier = Modifier.padding(top = 16.dp))
-        MifosOutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-            value = siInterval,
-            onValueChange = {
-                siInterval = it
-            },
-            label = R.string.recurrence_interval_in_months
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 10.dp), horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(text = stringResource(id = R.string.valid_till))
-            if (selectedDate.isNotEmpty()) {
-                Text(
-                    text = selectedDate,
-                    modifier = Modifier.padding(start = 8.dp),
-                    color = Color.Black
-                )
+            MifosButton(
+                modifier = Modifier
+                    .width(150.dp)
+                    .padding(top = 16.dp)
+                    .align(Alignment.CenterHorizontally),
+                onClick = { fetchClient(vpa) },
+                enabled = selectedDate.isNotEmpty() && vpa.isNotEmpty() && amount.isNotEmpty() && siInterval.isNotEmpty()
+            ) {
+                Text(text = stringResource(id = R.string.submit), color = Color.White)
             }
         }
-        MifosButton(
-            modifier = Modifier
-                .width(150.dp)
-                .padding(top = 16.dp)
-                .align(Alignment.CenterHorizontally),
-            onClick = { showDatePickerDialog() }
-        ) {
-            Text(text = stringResource(R.string.select_date), color = Color.White)
-        }
-
-        MifosButton(
-            modifier = Modifier
-                .width(150.dp)
-                .padding(top = 16.dp)
-                .align(Alignment.CenterHorizontally),
-            onClick = {}
-        ) {
-            Text(text = stringResource(id = R.string.submit), color = Color.White)
-        }
     }
+
 }
 
 class NewSiUiStateProvider : PreviewParameterProvider<NewSIUiState> {
@@ -224,12 +286,125 @@ class NewSiUiStateProvider : PreviewParameterProvider<NewSIUiState> {
 
 }
 
+@Composable
+fun ConfirmTransfer(
+    paddingValues: PaddingValues,
+    clientName: String,
+    clientVpa: String,
+    amount: String,
+    cancel: () -> Unit,
+    confirm: (Long, Double, Int, String) -> Unit,
+    clientId: Long,
+    recurrenceInterval: String,
+    validTill: String
+) {
+    val context = LocalContext.current
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(paddingValues)
+    ) {
+        Column(
+            modifier = Modifier
+                .wrapContentSize()
+                .padding(12.dp)
+                .border(2.dp, Color.Black, RoundedCornerShape(12.dp))
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.sending_to),
+                    style = TextStyle(color = Color.Blue, fontSize = 15.sp)
+                )
+                Text(text = clientName, style = TextStyle(color = Color.Black, fontSize = 20.sp))
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.vpa),
+                    style = TextStyle(color = Color.Black, fontSize = 15.sp)
+                )
+                Text(text = clientVpa, style = TextStyle(color = Color.Black, fontSize = 20.sp))
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = stringResource(id = R.string.amount),
+                    style = TextStyle(color = Color.Blue, fontSize = 15.sp)
+                )
+                Text(
+                    text = context.getString(
+                        R.string.currency_amount
+                    ) + " " + amount, style = TextStyle(color = Color.Black, fontSize = 20.sp)
+                )
+            }
+
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            MifosButton(
+                modifier = Modifier
+                    .width(150.dp)
+                    .padding(top = 16.dp),
+                onClick = { cancel.invoke() }
+            ) {
+                Text(text = stringResource(id = R.string.cancel), color = Color.White)
+            }
+
+            MifosButton(
+                modifier = Modifier
+                    .width(150.dp)
+                    .padding(top = 16.dp),
+                onClick = {
+                    confirm.invoke(
+                        clientId,
+                        amount.toDouble(),
+                        recurrenceInterval.toInt(),
+                        validTill
+                    )
+                }
+
+            ) {
+                Text(text = stringResource(id = R.string.confirm), color = Color.White)
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun ConfirmTransferPreview() {
+    ConfirmTransfer(
+        PaddingValues(12.dp),
+        "Pratyush",
+        "999999999@axl",
+        "100",
+        {}, { _, _, _, _ -> },
+        0L, "", ""
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 private fun NewSIScreenPreview(
     @PreviewParameter(NewSiUiStateProvider::class) newSIUiState: NewSIUiState
 ) {
     MifosTheme {
-        NewSIScreen(newSIUiState, {})
+        NewSIScreen(newSIUiState, {}, {}, false, {}, { _, _, _, _ -> })
     }
 }
