@@ -15,6 +15,8 @@ import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
 import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
+import org.mifospay.feature.savedcards.navigation.addCardScreen
+import org.mifospay.feature.savedcards.navigation.navigateToAddCard
 import org.mifospay.history.specific_transactions.ui.SpecificTransactionsActivity
 import org.mifospay.home.navigation.HOME_ROUTE
 import org.mifospay.home.navigation.financeScreen
@@ -26,7 +28,6 @@ import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.payments.ui.SendActivity
 import org.mifospay.receipt.ui.ReceiptActivity
-import org.mifospay.savedcards.ui.AddCardDialog
 import org.mifospay.settings.ui.SettingsActivity
 import org.mifospay.standinginstruction.ui.NewSIActivity
 
@@ -70,7 +71,14 @@ fun MifosNavHost(
             }
         )
         financeScreen(
-            onAddBtn = { context.startActivityAddCard() }
+            onAddBtn = {  navController.navigateToAddCard() }
+        )
+        addCardScreen(
+            onDismiss = navController::popBackStack,
+            onAddCard = {
+                // Handle adding the card
+                navController.popBackStack()
+            }
         )
         profileScreen(
             onEditProfile = { context.startActivityEditProfile() },
@@ -107,10 +115,6 @@ fun Context.startActivityEditProfile() {
 
 fun Context.startActivitySettings() {
     startActivity(Intent(this, SettingsActivity::class.java))
-}
-
-fun Context.startActivityAddCard() {
-    startActivity(Intent(this, AddCardDialog::class.java))
 }
 
 fun Context.startActivitySend() {
