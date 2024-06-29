@@ -155,7 +155,7 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".settings.ui.SettingsActivity"
+            android:name=".feature.settings.SettingsActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".feature.faq.FAQActivity"
