@@ -1,5 +1,7 @@
 package org.mifospay.navigation
 
+import org.mifospay.feature.savedcards.navigation.addCardScreen
+import org.mifospay.feature.savedcards.navigation.navigateToAddCard
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -27,8 +29,9 @@ import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.payments.ui.SendActivity
 import org.mifospay.receipt.ui.ReceiptActivity
-import org.mifospay.savedcards.ui.AddCardDialog
+import org.mifospay.settings.ui.SettingsActivity
 import org.mifospay.standinginstruction.ui.NewSIActivity
+import org.mifospay.savedcards.ui.AddCardDialog
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -70,7 +73,14 @@ fun MifosNavHost(
             }
         )
         financeScreen(
-            onAddBtn = { context.startActivityAddCard() }
+            onAddBtn = {  navController.navigateToAddCard() }
+        )
+        addCardScreen(
+            onDismiss = navController::popBackStack,
+            onAddCard = {
+                // Handle adding the card
+                navController.popBackStack()
+            }
         )
         profileScreen(
             onEditProfile = { context.startActivityEditProfile() },
@@ -107,10 +117,6 @@ fun Context.startActivityEditProfile() {
 
 fun Context.startActivitySettings() {
     startActivity(Intent(this, SettingsActivity::class.java))
-}
-
-fun Context.startActivityAddCard() {
-    startActivity(Intent(this, AddCardDialog::class.java))
 }
 
 fun Context.startActivitySend() {
