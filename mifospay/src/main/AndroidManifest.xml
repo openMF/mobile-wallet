@@ -88,7 +88,7 @@
             android:name=".feature.passcode.PassCodeActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".receipt.ui.ReceiptActivity"
+            android:name=".feature.receipt.ReceiptActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme">

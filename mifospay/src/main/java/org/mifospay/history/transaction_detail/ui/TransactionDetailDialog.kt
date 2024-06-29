@@ -26,10 +26,10 @@ import org.mifospay.R
 import org.mifospay.history.HistoryContract
 import org.mifospay.history.HistoryContract.TransactionDetailView
 import org.mifospay.history.transaction_detail.presenter.TransactionDetailPresenter
-import org.mifospay.receipt.ui.ReceiptActivity
 import org.mifospay.common.Constants
 import org.mifospay.utils.Toaster
 import org.mifospay.common.Utils.getFormattedAccountBalance
+import org.mifospay.feature.receipt.ReceiptActivity
 import org.mifospay.history.specific_transactions.ui.SpecificTransactionsActivity
 import javax.inject.Inject
 

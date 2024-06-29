@@ -81,6 +81,7 @@ dependencies {
     implementation(projects.feature.notification)
     implementation(projects.feature.requestMoney)
     implementation(projects.feature.upiSetup)
+    implementation(projects.feature.receipt)
 
     // Compose
     implementation(libs.androidx.activity.compose)

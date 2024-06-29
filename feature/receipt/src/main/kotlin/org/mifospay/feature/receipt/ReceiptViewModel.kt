@@ -3,7 +3,6 @@ package org.mifospay.feature.receipt
 
 import android.net.Uri
 import android.os.Environment
-import org.mifospay.utils.FileUtils
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
@@ -12,7 +11,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import okhttp3.ResponseBody
-
 import org.mifospay.common.Constants
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
@@ -20,7 +18,7 @@ import org.mifospay.core.data.domain.usecase.account.DownloadTransactionReceipt
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransaction
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransfer
 import org.mifospay.core.datastore.PreferencesHelper
-
+import org.mifospay.feature.receipt.utils.FileUtils
 import java.io.File
 import javax.inject.Inject
 
