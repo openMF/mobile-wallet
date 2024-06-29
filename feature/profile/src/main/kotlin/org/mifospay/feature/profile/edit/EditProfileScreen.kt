@@ -78,10 +78,6 @@ fun EditProfileScreenRoute(
 
     val context = LocalContext.current
     val file = createImageFile(context)
-//    val uri = FileProvider.getUriForFile(
-//        Objects.requireNonNull(context),
-//        BuildConfig.APPLICATION_ID + ".provider", file
-//    )
     val uri = FileProvider.getUriForFile(
         Objects.requireNonNull(context),
         BuildConfig.LIBRARY_PACKAGE_NAME + ".provider", file
