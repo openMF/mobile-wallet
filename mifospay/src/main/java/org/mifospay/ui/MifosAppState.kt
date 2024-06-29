@@ -22,14 +22,14 @@ import kotlinx.datetime.TimeZone
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.ui.TrackDisposableJank
+import org.mifospay.feature.profile.navigation.PROFILE_ROUTE
+import org.mifospay.feature.profile.navigation.navigateToProfile
 import org.mifospay.home.navigation.FINANCE_ROUTE
 import org.mifospay.home.navigation.HOME_ROUTE
 import org.mifospay.home.navigation.PAYMENTS_ROUTE
-import org.mifospay.home.navigation.PROFILE_ROUTE
 import org.mifospay.home.navigation.navigateToFinance
 import org.mifospay.home.navigation.navigateToHome
 import org.mifospay.home.navigation.navigateToPayments
-import org.mifospay.home.navigation.navigateToProfile
 import org.mifospay.navigation.TopLevelDestination
 
 @Composable
