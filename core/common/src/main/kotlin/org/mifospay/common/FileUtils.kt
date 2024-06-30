@@ -1,4 +1,4 @@
-package org.mifospay.feature.receipt.utils
+package org.mifospay.common
 
 import java.io.File
 import java.io.FileOutputStream

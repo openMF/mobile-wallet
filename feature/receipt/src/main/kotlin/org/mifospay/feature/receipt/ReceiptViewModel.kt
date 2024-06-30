@@ -12,13 +12,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import okhttp3.ResponseBody
 import org.mifospay.common.Constants
+import org.mifospay.common.FileUtils
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.DownloadTransactionReceipt
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransaction
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransfer
 import org.mifospay.core.datastore.PreferencesHelper
-import org.mifospay.feature.receipt.utils.FileUtils
 import java.io.File
 import javax.inject.Inject
 
