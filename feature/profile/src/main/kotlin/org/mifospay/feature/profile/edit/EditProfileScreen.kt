@@ -48,7 +48,6 @@ import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.togitech.ccp.component.TogiCountryCodePicker
-import org.mifospay.BuildConfig
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
@@ -61,6 +60,7 @@ import org.mifospay.core.designsystem.icon.MifosIcons.PhotoLibrary
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.historyItemTextStyle
 import org.mifospay.core.designsystem.theme.styleMedium16sp
+import org.mifospay.feature.profile.BuildConfig
 import org.mifospay.feature.profile.R
 import java.io.File
 import java.text.SimpleDateFormat
@@ -80,7 +80,7 @@ fun EditProfileScreenRoute(
     val file = createImageFile(context)
     val uri = FileProvider.getUriForFile(
         Objects.requireNonNull(context),
-        BuildConfig.APPLICATION_ID + ".provider", file
+        BuildConfig.LIBRARY_PACKAGE_NAME + ".provider", file
     )
 
     LaunchedEffect(key1 = true) {

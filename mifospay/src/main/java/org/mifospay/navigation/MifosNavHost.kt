@@ -1,5 +1,7 @@
 package org.mifospay.navigation
 
+import org.mifospay.feature.savedcards.navigation.addCardScreen
+import org.mifospay.feature.savedcards.navigation.navigateToAddCard
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -10,10 +12,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.mifospay.core.model.domain.Transaction
 import org.mifospay.common.Constants
-import org.mifospay.editprofile.ui.EditProfileActivity
 import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
-import org.mifospay.feature.receipt.ReceiptActivity
+import org.mifospay.feature.profile.edit.EditProfileActivity
+import org.mifospay.feature.profile.navigation.profileScreen
 import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.settings.SettingsActivity
@@ -22,13 +24,16 @@ import org.mifospay.home.navigation.HOME_ROUTE
 import org.mifospay.home.navigation.financeScreen
 import org.mifospay.home.navigation.homeScreen
 import org.mifospay.home.navigation.paymentsScreen
-import org.mifospay.home.navigation.profileScreen
 import org.mifospay.merchants.navigation.merchantTransferScreen
 import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.payments.ui.SendActivity
-import org.mifospay.savedcards.ui.AddCardDialog
+import org.mifospay.receipt.ui.ReceiptActivity
+import org.mifospay.settings.ui.SettingsActivity
 import org.mifospay.standinginstruction.ui.NewSIActivity
+import org.mifospay.savedcards.ui.AddCardDialog
+import org.mifospay.feature.receipt.ReceiptActivity
+import org.mifospay.savedcards.ui.AddCardDialog
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -70,7 +75,14 @@ fun MifosNavHost(
             }
         )
         financeScreen(
-            onAddBtn = { context.startActivityAddCard() }
+            onAddBtn = {  navController.navigateToAddCard() }
+        )
+        addCardScreen(
+            onDismiss = navController::popBackStack,
+            onAddCard = {
+                // Handle adding the card
+                navController.popBackStack()
+            }
         )
         profileScreen(
             onEditProfile = { context.startActivityEditProfile() },
@@ -107,10 +119,6 @@ fun Context.startActivityEditProfile() {
 
 fun Context.startActivitySettings() {
     startActivity(Intent(this, SettingsActivity::class.java))
-}
-
-fun Context.startActivityAddCard() {
-    startActivity(Intent(this, AddCardDialog::class.java))
 }
 
 fun Context.startActivitySend() {
