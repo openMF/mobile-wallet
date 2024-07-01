@@ -15,15 +15,7 @@
         UPI)
     </string>
     <string name="feature_invoices_unique_payment_link">Unique Payment Link</string>
-
-
-
-
-
-
-
-
-
-
-
+    <string name="feature_invoices_error_oops">Oops!</string>
+    <string name="feature_invoices_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+    <string name="feature_invoices_error_no_invoices_found">Couldn\'t fetch invoice list. Please, try again.</string>
 </resources>
