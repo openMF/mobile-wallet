@@ -29,12 +29,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.mifospay.R
 import org.mifospay.base.BaseFragment
 import org.mifospay.home.BaseHomeContract
-import org.mifospay.qr.ui.ReadQrActivity
 import org.mifospay.common.Constants
 import org.mifospay.payments.TransferViewModel
 import org.mifospay.utils.Toaster
 import org.mifospay.common.Utils.hideSoftKeyboard
 import org.mifospay.common.ui.MakeTransferFragment
+import org.mifospay.feature.read.qr.ReadQrActivity
 
 /**
  * Created by naman on 30/8/17.
