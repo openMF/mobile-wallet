@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_qr_approve_permission_description_camera">You need to approve these permissions in order to access the camera.</string>
+    <string name="feature_qr_permission_required">Permission Required</string>
+    <string name="feature_qr_dismiss">Dismiss</string>
+    <string name="feature_qr_proceed">Proceed</string>
+    <string name="feature_qr_scan_code">Scan Code</string>
+    <string name="feature_qr_loading">Loading</string>
+    <string name="feature_qr_oops">Oops</string>
+    <string name="feature_qr_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+
+</resources>

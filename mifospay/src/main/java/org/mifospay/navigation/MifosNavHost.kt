@@ -29,9 +29,7 @@ import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.payments.ui.SendActivity
 import org.mifospay.receipt.ui.ReceiptActivity
-import org.mifospay.settings.ui.SettingsActivity
 import org.mifospay.standinginstruction.ui.NewSIActivity
-import org.mifospay.savedcards.ui.AddCardDialog
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
