@@ -19,7 +19,6 @@ import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.navigation.addCardScreen
 import org.mifospay.feature.savedcards.navigation.navigateToAddCard
-import org.mifospay.feature.settings.SettingsActivity
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.history.specific_transactions.ui.SpecificTransactionsActivity
@@ -30,8 +29,6 @@ import org.mifospay.home.navigation.paymentsScreen
 import org.mifospay.merchants.navigation.merchantTransferScreen
 import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
-import org.mifospay.payments.ui.SendActivity
-import org.mifospay.receipt.ui.ReceiptActivity
 import org.mifospay.standinginstruction.ui.NewSIActivity
 
 /**
