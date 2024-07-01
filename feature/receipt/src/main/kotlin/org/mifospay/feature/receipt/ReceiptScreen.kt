@@ -315,7 +315,7 @@ fun openReceiptFile(context: Context, file: File) {
     )
     var intent: Intent? = Intent(Intent.ACTION_VIEW)
         .setDataAndType(data, "application/pdf")
-    intent = Intent.createChooser(intent, context.getString(R.string.feature_receipt_view_receipt))
+    intent = Intent.createChooser(intent, context.getString(R.string.feature_receipt_view_Receipt))
 
     try {
         context.startActivity(intent)

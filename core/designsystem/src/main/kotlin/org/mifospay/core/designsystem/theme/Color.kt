@@ -75,5 +75,6 @@ val mifosText = Color(0xFF212121)
 val chipSelectedColor = Color(0xFF00BFFF)
 val creditTextColor = Color(0xFF009688)
 val debitTextColor = Color(0xFFF10606)
+val otherTextColor = Color.Yellow
 val greyBackgroundColor = Color(0xFFF7F7F7)
 val primaryDarkBlue = Color(0xFF303F9F)

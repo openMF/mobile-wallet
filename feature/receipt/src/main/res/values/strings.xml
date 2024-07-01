@@ -12,7 +12,6 @@
     <string name="feature_receipt_pan_id">PAN ID</string>
     <string name="feature_receipt_unique_receipt_link_copied_to_clipboard">Unique Receipt Link copied to clipboard</string>
     <string name="feature_receipt_sharing_link_failed">Sharing link failed</string>
-    <string name="feature_receipt_view_receipt">View Receipt</string>
     <string name="feature_receipt_opening_pdf_failed">Opening pdf failed</string>
     <string name="feature_receipt_paid_to">Paid to</string>
     <string name="feature_receipt_credited_by">Credited by</string>

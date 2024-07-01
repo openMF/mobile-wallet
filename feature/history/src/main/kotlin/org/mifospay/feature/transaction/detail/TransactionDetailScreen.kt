@@ -17,7 +17,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -29,12 +28,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
-import org.mifospay.R
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MfLoadingWheel
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.primaryDarkBlue
 import org.mifospay.core.ui.ErrorScreenContent
+import org.mifospay.feature.history.R
 import org.mifospay.feature.specific.transactions.SpecificTransactionAccountInfo
 
 
@@ -114,17 +114,17 @@ fun TransactionsDetailContent(
         ) {
             Column {
                 Text(
-                    text = stringResource(id = R.string.transaction_id) + transaction.transactionId,
+                    text = stringResource(id = R.string.feature_receipt_transaction_id) + transaction.transactionId,
                     style = MaterialTheme.typography.bodyLarge,
                     color = primaryDarkBlue
                 )
                 Text(
-                    text = stringResource(id = R.string.date) + transaction.date,
+                    text = stringResource(id = R.string.feature_receipt_transaction_date) + transaction.date,
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 if (transaction.receiptId != null) {
                     Text(
-                        text = stringResource(id = R.string.receipt_id) + transaction.receiptId,
+                        text = stringResource(id = R.string.feature_receipt_transaction_id) + transaction.receiptId,
                         style = MaterialTheme.typography.bodyLarge,
                     )
                 }
@@ -148,7 +148,7 @@ fun TransactionsDetailContent(
                 client = transaction.transferDetail.fromClient,
                 accountClicked = accountClicked
             )
-            Image(painter = painterResource(id = R.drawable.ic_send), contentDescription = null)
+            Image(imageVector = MifosIcons.SendRightTilted, contentDescription = null)
             SpecificTransactionAccountInfo(
                 modifier = Modifier.weight(1f),
                 account = transaction.transferDetail.toAccount,
@@ -160,7 +160,7 @@ fun TransactionsDetailContent(
         HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
 
         Text(
-            text = stringResource(id = R.string.view_receipt),
+            text = stringResource(id = R.string.feature_receipt_view_Receipt),
             style = MaterialTheme.typography.bodyLarge,
             color = primaryDarkBlue,
             textAlign = TextAlign.Center,

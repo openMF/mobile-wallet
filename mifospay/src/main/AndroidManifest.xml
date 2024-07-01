@@ -120,7 +120,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".history.specific_transactions.ui.SpecificTransactionsActivity"
+            android:name=".feature.specific.transactions.SpecificTransactionsActivity"
             android:theme="@style/AppTheme" />
 
         <service
