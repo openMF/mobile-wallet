@@ -67,7 +67,7 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.GradientColors
 import org.mifospay.core.designsystem.theme.LocalGradientColors
 import org.mifospay.feature.faq.FAQActivity
-import org.mifospay.feature.settings.SettingsActivity
+import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.navigation.MifosNavHost
 import org.mifospay.navigation.TopLevelDestination
 
@@ -131,7 +131,7 @@ fun MifosApp(appState: MifosAppState, bottomSheetNavigator: BottomSheetNavigator
                                 text = { Text(stringResource(id = R.string.settings)) },
                                 onClick = {
                                     showHomeMenuOption = false
-                                    context.startActivity(Intent(context, SettingsActivity::class.java))
+                                    appState.navController.navigateToSettings()
                                 }
                             )
                         }
