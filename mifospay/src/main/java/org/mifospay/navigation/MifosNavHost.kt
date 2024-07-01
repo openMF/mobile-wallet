@@ -1,7 +1,5 @@
 package org.mifospay.navigation
 
-import org.mifospay.feature.savedcards.navigation.addCardScreen
-import org.mifospay.feature.savedcards.navigation.navigateToAddCard
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -18,7 +16,10 @@ import org.mifospay.feature.profile.edit.EditProfileActivity
 import org.mifospay.feature.profile.navigation.profileScreen
 import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
-import org.mifospay.feature.settings.SettingsActivity
+import org.mifospay.feature.savedcards.navigation.addCardScreen
+import org.mifospay.feature.savedcards.navigation.navigateToAddCard
+import org.mifospay.feature.settings.navigation.navigateToSettings
+import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.history.specific_transactions.ui.SpecificTransactionsActivity
 import org.mifospay.home.navigation.HOME_ROUTE
 import org.mifospay.home.navigation.financeScreen
@@ -27,11 +28,8 @@ import org.mifospay.home.navigation.paymentsScreen
 import org.mifospay.merchants.navigation.merchantTransferScreen
 import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
-import org.mifospay.payments.ui.SendActivity
 import org.mifospay.receipt.ui.ReceiptActivity
-import org.mifospay.settings.ui.SettingsActivity
 import org.mifospay.standinginstruction.ui.NewSIActivity
-import org.mifospay.savedcards.ui.AddCardDialog
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -73,7 +71,7 @@ fun MifosNavHost(
             }
         )
         financeScreen(
-            onAddBtn = {  navController.navigateToAddCard() }
+            onAddBtn = { navController.navigateToAddCard() }
         )
         addCardScreen(
             onDismiss = navController::popBackStack,
@@ -84,7 +82,7 @@ fun MifosNavHost(
         )
         profileScreen(
             onEditProfile = { context.startActivityEditProfile() },
-            onSettings = { context.startActivitySettings() }
+            onSettings = { navController.navigateToSettings() }
         )
         sendMoneyScreen(
             onBackClick = navController::popBackStack,
@@ -104,6 +102,7 @@ fun MifosNavHost(
             },
             onBackPressed = navController::popBackStack
         )
+        settingsScreen(onBackPress = navController::popBackStack)
     }
 }
 
@@ -113,14 +112,6 @@ fun Context.startActivityStandingInstruction() {
 
 fun Context.startActivityEditProfile() {
     startActivity(Intent(this, EditProfileActivity::class.java))
-}
-
-fun Context.startActivitySettings() {
-    startActivity(Intent(this, SettingsActivity::class.java))
-}
-
-fun Context.startActivitySend() {
-    startActivity(Intent(this, SendActivity::class.java))
 }
 
 fun Context.startActivityViewReceipt(transactionId: String) {

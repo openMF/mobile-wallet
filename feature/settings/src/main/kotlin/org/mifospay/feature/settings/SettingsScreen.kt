@@ -1,5 +1,6 @@
 package org.mifospay.feature.settings
 
+import android.content.Context
 import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -23,7 +24,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
+import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.theme.mifosText
@@ -31,6 +35,8 @@ import org.mifospay.core.designsystem.theme.styleSettingsButton
 import org.mifospay.core.ui.utility.DialogState
 import org.mifospay.core.ui.utility.DialogType
 import org.mifospay.feature.auth.login.LoginActivity
+import org.mifospay.feature.editpassword.EditPasswordActivity
+import org.mifospay.feature.passcode.PassCodeActivity
 
 /**
  * @author pratyush
@@ -38,14 +44,13 @@ import org.mifospay.feature.auth.login.LoginActivity
  */
 
 @Composable
-fun SettingsScreen(
+fun SettingsScreenRoute(
     viewmodel: SettingsViewModel = hiltViewModel(),
     backPress: () -> Unit,
-    onChangePassword: () -> Unit,
-    onChangePasscode: () -> Unit
 ) {
     val context = LocalContext.current
     var dialogState by remember { mutableStateOf(DialogState()) }
+    val passcodePreferencesHelper = viewmodel.passcodePreferencesHelper
 
     DialogManager(
         dialogState = dialogState,
@@ -95,7 +100,7 @@ fun SettingsScreen(
                     )
             ) {
                 MifosCard(
-                    onClick = { onChangePassword.invoke() },
+                    onClick = { onChangePasswordClicked(context) },
                     colors = CardDefaults.cardColors(Color.White)
                 ) {
                     Text(
@@ -117,7 +122,7 @@ fun SettingsScreen(
                     )
             ) {
                 MifosCard(
-                    onClick = { onChangePasscode.invoke() },
+                    onClick = { onChangePasscodeClicked(context, passcodePreferencesHelper) },
                     colors = CardDefaults.cardColors(Color.White)
                 ) {
                     Text(
@@ -187,8 +192,27 @@ fun SettingsScreen(
     }
 }
 
+fun onChangePasswordClicked(context: Context) {
+    context.startActivity(Intent(context, EditPasswordActivity::class.java))
+}
+
+fun onChangePasscodeClicked(
+    context: Context,
+    passcodePreferencesHelper: PasscodePreferencesHelper
+) {
+    val currentPasscode = passcodePreferencesHelper.passCode
+    passcodePreferencesHelper.savePassCode("")
+    PassCodeActivity.startPassCodeActivity(
+        context = context,
+        bundle = bundleOf(
+            Pair(Constants.CURRENT_PASSCODE, currentPasscode),
+            Pair(Constants.UPDATE_PASSCODE, true)
+        )
+    )
+}
+
 @Preview(showSystemUi = true)
 @Composable
 fun SettingsScreenPreview() {
-    SettingsScreen(hiltViewModel(), {}, {}, {})
+    SettingsScreenRoute(hiltViewModel(), {})
 }

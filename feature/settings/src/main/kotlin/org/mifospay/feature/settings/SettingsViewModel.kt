@@ -1,6 +1,7 @@
 package org.mifospay.feature.settings
 
 import androidx.lifecycle.ViewModel
+import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
@@ -12,7 +13,8 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
-    private val blockUnblockCommandUseCase: BlockUnblockCommand
+    private val blockUnblockCommandUseCase: BlockUnblockCommand,
+    val passcodePreferencesHelper: PasscodePreferencesHelper
 ) : ViewModel() {
 
     fun logout() {
