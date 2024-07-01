@@ -1,4 +1,4 @@
-package org.mifospay.qr.presenter
+package org.mifospay.feature.read.qr
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
-import org.mifospay.qr.usecase.ScanQr
+import org.mifospay.feature.read.qr.utils.ScanQr
 import javax.inject.Inject
 
 @HiltViewModel

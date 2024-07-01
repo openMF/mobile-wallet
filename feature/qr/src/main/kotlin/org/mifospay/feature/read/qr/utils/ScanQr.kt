@@ -1,4 +1,4 @@
-package org.mifospay.qr.usecase
+package org.mifospay.feature.read.qr.utils
 
 import android.graphics.Bitmap
 import com.google.zxing.BinaryBitmap
