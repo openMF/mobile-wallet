@@ -1,4 +1,4 @@
-package org.mifospay.utils
+package org.mifospay.feature.read.qr.utils
 
 import android.graphics.ImageFormat
 import androidx.camera.core.ImageAnalysis

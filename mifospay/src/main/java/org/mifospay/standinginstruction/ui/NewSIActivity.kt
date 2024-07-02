@@ -15,7 +15,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import org.mifospay.R
 import org.mifospay.base.BaseActivity
 import org.mifospay.databinding.ActivityNewSiBinding
-import org.mifospay.qr.ui.ReadQrActivity
 import org.mifospay.standinginstruction.StandingInstructionContract
 import org.mifospay.standinginstruction.presenter.NewSIPresenter
 import org.mifospay.common.Constants
@@ -23,6 +22,7 @@ import org.mifospay.common.Constants.REQUEST_CAMERA
 import org.mifospay.common.Constants.SCAN_QR_REQUEST_CODE
 import org.mifospay.utils.Toaster
 import org.mifospay.common.Utils
+import org.mifospay.feature.read.qr.ReadQrActivity
 import java.util.*
 import javax.inject.Inject
 import kotlin.properties.Delegates

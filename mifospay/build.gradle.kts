@@ -73,6 +73,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     api("com.google.android.material:material:1.0.0") // update require alot of UI changes
 
+    implementation(projects.feature.receipt)
     implementation(projects.feature.profile)
     implementation(projects.feature.auth)
     implementation(projects.feature.passcode)
@@ -84,6 +85,7 @@ dependencies {
     implementation(projects.feature.upiSetup)
     implementation(projects.feature.settings)
     implementation(projects.feature.savedcards)
+    implementation(projects.feature.qr)
 
     // Compose
     implementation(libs.androidx.activity.compose)
@@ -103,8 +105,6 @@ dependencies {
     implementation(libs.coil.kt)
     implementation(libs.androidx.material.navigation)
     implementation(libs.accompanist.pager)
-    implementation(libs.androidx.camera.view)
-    implementation(libs.androidx.camera.lifecycle)
 
     ksp(libs.hilt.compiler)
 
@@ -160,7 +160,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.6.0")
 
     implementation("com.google.android.gms:play-services-auth:20.7.0")
-    implementation("com.google.guava:guava:27.0.1-android")
 
     implementation("com.hbb20:ccp:2.2.0")
     implementation("com.github.MdFarhanRaja:SearchableSpinner:1.9")

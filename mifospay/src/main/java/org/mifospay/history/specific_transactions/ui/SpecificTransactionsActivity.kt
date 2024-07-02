@@ -8,8 +8,8 @@ import androidx.activity.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifospay.base.BaseActivity
 import org.mifospay.common.Constants
+import org.mifospay.feature.receipt.ReceiptActivity
 import org.mifospay.history.specific_transactions.presenter.SpecificTransactionsViewModel
-import org.mifospay.receipt.ui.ReceiptActivity
 import org.mifospay.theme.MifosTheme
 
 @AndroidEntryPoint

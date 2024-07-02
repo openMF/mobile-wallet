@@ -1,4 +1,4 @@
-package org.mifospay.qr.ui
+package org.mifospay.feature.read.qr
 
 import android.Manifest
 import android.content.Context
@@ -22,13 +22,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -43,16 +42,15 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.PermissionBox
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.qr.presenter.ReadQrUiState
-import org.mifospay.qr.presenter.ReadQrViewModel
-import org.mifospay.theme.MifosTheme
-import org.mifospay.utils.QrCodeAnalyzer
+import org.mifospay.feature.qr.R
+import org.mifospay.feature.read.qr.utils.QrCodeAnalyzer
+
 
 @Composable
 fun ShowQrScreenRoute(
@@ -102,21 +100,21 @@ fun ReadQrScreen(
                 Manifest.permission.READ_EXTERNAL_STORAGE
             )
         },
-        title = R.string.permission_required,
-        description = R.string.approve_permission_description_camera,
-        confirmButtonText = R.string.proceed,
-        dismissButtonText = R.string.dismiss,
+        title = R.string.feature_qr_permission_required,
+        description = R.string.feature_qr_approve_permission_description_camera,
+        confirmButtonText =  R.string.feature_qr_proceed,
+        dismissButtonText = R.string.feature_qr_dismiss,
     )
 
     MifosScaffold(
-        topBarTitle = R.string.scan_code,
+        topBarTitle = R.string.feature_qr_scan_code,
         backPress = { backPress.invoke() },
         scaffoldContent = { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
                 when (uiState) {
                     is ReadQrUiState.Loading -> {
                         MfLoadingWheel(
-                            contentDesc = stringResource(R.string.loading),
+                            contentDesc = stringResource(R.string.feature_qr_loading),
                             backgroundColor = Color.White
                         )
                     }
@@ -128,8 +126,8 @@ fun ReadQrScreen(
                     is ReadQrUiState.Error -> {
                         EmptyContentScreen(
                             modifier = Modifier,
-                            title = stringResource(id = R.string.error_oops),
-                            subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                            title = stringResource(R.string.feature_qr_oops),
+                            subTitle = stringResource(id = R.string.feature_qr_unexpected_error_subtitle),
                             iconTint = Color.Black,
                             iconImageVector = MifosIcons.Info
                         )

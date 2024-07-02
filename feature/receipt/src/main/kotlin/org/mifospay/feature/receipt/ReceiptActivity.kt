@@ -4,16 +4,15 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import com.mifos.mobile.passcode.utils.PassCodeConstants
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifospay.base.BaseActivity
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.feature.passcode.PassCodeActivity
-import org.mifospay.receipt.presenter.ReceiptViewModel
 
 @AndroidEntryPoint
-class ReceiptActivity : BaseActivity() {
+class ReceiptActivity : AppCompatActivity() {
 
     private val receiptViewModel: ReceiptViewModel by viewModels()
     private var deepLinkURI: Uri? = null
@@ -46,13 +45,4 @@ class ReceiptActivity : BaseActivity() {
         finish()
     }
 
-    override fun onPause() {
-        super.onPause()
-        dismissProgressDialog()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        dismissProgressDialog()
-    }
 }
