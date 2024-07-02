@@ -87,6 +87,8 @@ dependencies {
     implementation(projects.feature.savedcards)
     implementation(projects.feature.qr)
 
+    implementation(projects.feature.kyc)
+
     // Compose
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3.adaptive)

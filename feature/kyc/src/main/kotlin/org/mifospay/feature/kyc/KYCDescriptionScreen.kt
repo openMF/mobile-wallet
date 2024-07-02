@@ -48,20 +48,28 @@ import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 import org.mifospay.kyc.R
 
 @Composable
-fun KYCScreen(viewModel: KYCDescriptionViewModel = hiltViewModel()) {
+fun KYCScreen(
+    viewModel: KYCDescriptionViewModel = hiltViewModel(),
+    onLevel1Clicked: () -> Unit,
+    onLevel2Clicked: () -> Unit,
+    onLevel3Clicked: () -> Unit
+    ) {
     val kUiState by viewModel.kycdescriptionState.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
 
     KYCDescriptionScreen(
         kUiState = kUiState,
         onLevel1Clicked = {
-            // Todo
+            // Todo : Implement onLevel1Clicked flow
+            onLevel1Clicked.invoke()
         },
         onLevel2Clicked = {
-            // Todo
+            // Todo : Implement onLevel2Clicked flow
+            onLevel2Clicked.invoke()
         },
         onLevel3Clicked = {
-            // Todo
+            // Todo : Implement onLevel3Clicked flow
+            onLevel3Clicked.invoke()
         },
         isRefreshing = isRefreshing,
         onRefresh = { viewModel.refresh() }
