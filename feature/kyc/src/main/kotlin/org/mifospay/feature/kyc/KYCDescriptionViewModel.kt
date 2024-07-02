@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.kyc.FetchKYCLevel1Details
-import org.mifospay.data.local.LocalRepository
+import org.mifospay.core.data.repository.local.LocalRepository
 import javax.inject.Inject
 
 @HiltViewModel
