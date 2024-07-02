@@ -38,14 +38,11 @@ import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import com.togitech.ccp.component.TogiCountryCodePicker
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
-import org.mifospay.kyc.presenter.KYCLevel1UiState
-import org.mifospay.kyc.presenter.KYCLevel1ViewModel
-import org.mifospay.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.kyc.R
 import java.time.format.DateTimeFormatter
-
 
 @Composable
 fun KYCLevel1Screen(
@@ -97,13 +94,13 @@ fun KYCLevel1Screen(
 
     when (uiState) {
         KYCLevel1UiState.Loading -> {
-            MfOverlayLoadingWheel(stringResource(id = R.string.submitting))
+            MfOverlayLoadingWheel(stringResource(id = R.string.feature_kyc_submitting))
         }
 
         KYCLevel1UiState.Error -> {
             Toast.makeText(
                 context,
-                stringResource(R.string.error_adding_KYC_Level_1_details),
+                stringResource(R.string.feature_kyc_error_adding_KYC_Level_1_details),
                 Toast.LENGTH_SHORT
             ).show()
             navigateToKycLevel2.invoke()
@@ -112,7 +109,7 @@ fun KYCLevel1Screen(
         KYCLevel1UiState.Success -> {
             Toast.makeText(
                 context,
-                stringResource(R.string.successkyc1),
+                stringResource(R.string.feature_kyc_successkyc1),
                 Toast.LENGTH_SHORT
             ).show()
             navigateToKycLevel2.invoke()
@@ -141,7 +138,7 @@ fun Kyc1Form(
     var mobileNumber by rememberSaveable { mutableStateOf("") }
     var dateOfBirth by rememberSaveable { mutableStateOf("") }
     val dateState = rememberUseCaseState()
-    val dateFormatter = DateTimeFormatter.ofPattern(stringResource(R.string.date_format))
+    val dateFormatter = DateTimeFormatter.ofPattern(stringResource(R.string.feature_kyc_date_format))
 
     Column(
         modifier = Modifier
@@ -157,7 +154,7 @@ fun Kyc1Form(
             onValueChange = {
                 firstName = it
             },
-            label = R.string.first_name,
+            label = R.string.feature_kyc_first_name,
         )
         MifosOutlinedTextField(
             modifier = modifier
@@ -167,7 +164,7 @@ fun Kyc1Form(
             onValueChange = {
                 lastName = it
             },
-            label = R.string.last_name,
+            label = R.string.feature_kyc_last_name,
         )
         MifosOutlinedTextField(
             modifier = modifier
@@ -177,7 +174,7 @@ fun Kyc1Form(
             onValueChange = {
                 address1 = it
             },
-            label = R.string.address_line_1,
+            label = R.string.feature_kyc_address_line_1,
         )
         MifosOutlinedTextField(
             modifier = modifier
@@ -187,7 +184,7 @@ fun Kyc1Form(
             onValueChange = {
                 address2 = it
             },
-            label = R.string.address_line_2,
+            label = R.string.feature_kyc_address_line_2,
         )
 
         Box(
@@ -207,7 +204,7 @@ fun Kyc1Form(
                     }
                 },
                 label = {
-                    Text(stringResource(id = R.string.phone_number))
+                    Text(stringResource(id = R.string.feature_kyc_phone_number))
                 },
                 keyboardActions = KeyboardActions { keyboardController?.hide() }
             )
@@ -239,7 +236,7 @@ fun Kyc1Form(
                 .clip(shape = RoundedCornerShape(8.dp))
         ) {
             Text(
-                text = dateOfBirth.ifEmpty { stringResource(R.string.select_dob) },
+                text = dateOfBirth.ifEmpty { stringResource(R.string.feature_kyc_select_dob) },
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -258,7 +255,7 @@ fun Kyc1Form(
                 .align(Alignment.CenterHorizontally)
                 .padding(vertical = 7.dp),
         ) {
-            Text(text = stringResource(R.string.submit))
+            Text(text = stringResource(R.string.feature_kyc_submit))
         }
     }
 }

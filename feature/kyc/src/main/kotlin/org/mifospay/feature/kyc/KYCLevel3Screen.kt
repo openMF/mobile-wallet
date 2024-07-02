@@ -19,12 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
-import org.mifospay.kyc.presenter.KYCLevel3UiState
-import org.mifospay.kyc.presenter.KYCLevel3ViewModel
-import org.mifospay.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.kyc.R
 
 @Composable
 fun KYCLevel3Screen(
@@ -48,7 +46,7 @@ fun KYCLevel3Screen(
 
     when (uiState) {
         KYCLevel3UiState.Loading -> {
-            MfOverlayLoadingWheel(stringResource(id = R.string.submitting))
+            MfOverlayLoadingWheel(stringResource(id = R.string.feature_kyc_submitting))
         }
 
         KYCLevel3UiState.Error -> {
@@ -82,7 +80,7 @@ fun Kyc3Form(
             onValueChange = {
                 panIdValue = it
             },
-            label = R.string.pan_id,
+            label = R.string.feature_kyc_pan_id,
         )
 
         Button(
@@ -91,7 +89,7 @@ fun Kyc3Form(
                 .align(Alignment.CenterHorizontally)
                 .padding(16.dp)
         ) {
-            Text(stringResource(R.string.submit))
+            Text(stringResource(R.string.feature_kyc_submit))
         }
     }
 }
