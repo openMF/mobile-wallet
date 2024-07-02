@@ -10,24 +10,25 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.mifospay.core.model.domain.Transaction
 import org.mifospay.common.Constants
-import org.mifospay.editprofile.ui.EditProfileActivity
 import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
+import org.mifospay.feature.profile.edit.EditProfileActivity
+import org.mifospay.feature.profile.navigation.profileScreen
+import org.mifospay.feature.receipt.ReceiptActivity
 import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
+import org.mifospay.feature.savedcards.navigation.addCardScreen
+import org.mifospay.feature.savedcards.navigation.navigateToAddCard
+import org.mifospay.feature.settings.navigation.navigateToSettings
+import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.history.specific_transactions.ui.SpecificTransactionsActivity
 import org.mifospay.home.navigation.HOME_ROUTE
 import org.mifospay.home.navigation.financeScreen
 import org.mifospay.home.navigation.homeScreen
 import org.mifospay.home.navigation.paymentsScreen
-import org.mifospay.home.navigation.profileScreen
 import org.mifospay.merchants.navigation.merchantTransferScreen
 import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
-import org.mifospay.payments.ui.SendActivity
-import org.mifospay.receipt.ui.ReceiptActivity
-import org.mifospay.savedcards.ui.AddCardDialog
-import org.mifospay.settings.ui.SettingsActivity
 import org.mifospay.standinginstruction.ui.NewSIActivity
 
 /**
@@ -70,11 +71,18 @@ fun MifosNavHost(
             }
         )
         financeScreen(
-            onAddBtn = { context.startActivityAddCard() }
+            onAddBtn = { navController.navigateToAddCard() }
+        )
+        addCardScreen(
+            onDismiss = navController::popBackStack,
+            onAddCard = {
+                // Handle adding the card
+                navController.popBackStack()
+            }
         )
         profileScreen(
             onEditProfile = { context.startActivityEditProfile() },
-            onSettings = { context.startActivitySettings() }
+            onSettings = { navController.navigateToSettings() }
         )
         sendMoneyScreen(
             onBackClick = navController::popBackStack,
@@ -94,6 +102,7 @@ fun MifosNavHost(
             },
             onBackPressed = navController::popBackStack
         )
+        settingsScreen(onBackPress = navController::popBackStack)
     }
 }
 
@@ -103,18 +112,6 @@ fun Context.startActivityStandingInstruction() {
 
 fun Context.startActivityEditProfile() {
     startActivity(Intent(this, EditProfileActivity::class.java))
-}
-
-fun Context.startActivitySettings() {
-    startActivity(Intent(this, SettingsActivity::class.java))
-}
-
-fun Context.startActivityAddCard() {
-    startActivity(Intent(this, AddCardDialog::class.java))
-}
-
-fun Context.startActivitySend() {
-    startActivity(Intent(this, SendActivity::class.java))
 }
 
 fun Context.startActivityViewReceipt(transactionId: String) {

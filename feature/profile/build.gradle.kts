@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.tasks.ApplicationIdWriterTask
+
 plugins {
     alias(libs.plugins.mifospay.android.feature)
     alias(libs.plugins.mifospay.android.library.compose)
@@ -5,6 +7,9 @@ plugins {
 
 android {
     namespace = "org.mifospay.feature.profile"
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -13,5 +18,5 @@ dependencies {
     implementation(libs.compose.country.code.picker)
     implementation(libs.compose.material)
     implementation(libs.coil.kt.compose)
-    implementation(projects.mifospay)
+    implementation(libs.androidx.appcompat)
 }

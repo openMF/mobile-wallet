@@ -39,9 +39,9 @@ import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.theme.primaryDarkBlue
 import org.mifospay.core.ui.ErrorScreenContent
+import org.mifospay.feature.receipt.ReceiptActivity
 import org.mifospay.invoice.presenter.InvoiceDetailUiState
 import org.mifospay.invoice.presenter.InvoiceDetailViewModel
-import org.mifospay.receipt.ui.ReceiptActivity
 import org.mifospay.theme.MifosTheme
 
 @Composable

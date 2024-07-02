@@ -24,12 +24,12 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mifospay.core.model.entity.savedcards.Card
-import org.mifospay.R
 import org.mifospay.common.CreditCardUtils
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.utils.ExpirationDateMask
+import org.mifospay.savedcards.R
 import java.util.Calendar
 
 @Composable
@@ -68,35 +68,35 @@ fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> U
 
     LaunchedEffect(key1 = firstName) {
         firstNameValidator = when {
-            firstName.trim().isEmpty() -> context.getString(R.string.all_fields_required)
+            firstName.trim().isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
             else -> null
         }
     }
 
     LaunchedEffect(key1 = lastName) {
         lastNameValidator = when {
-            lastName.trim().isEmpty() -> context.getString(R.string.all_fields_required)
+            lastName.trim().isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
             else -> null
         }
     }
 
     LaunchedEffect(key1 = creditCardNumber) {
         creditCardNumberValidator = when {
-            creditCardNumber.trim().isEmpty() -> context.getString(R.string.all_fields_required)
-            creditCardNumber.length < 16 -> context.getString(R.string.invalid_credit_card)
-            !CreditCardUtils.validateCreditCardNumber(creditCardNumber) -> context.getString(R.string.invalid_credit_card)
+            creditCardNumber.trim().isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+            creditCardNumber.length < 16 -> context.getString(R.string.feature_savedcards_invalid_credit_card)
+            !CreditCardUtils.validateCreditCardNumber(creditCardNumber) -> context.getString(R.string.feature_savedcards_invalid_credit_card)
             else -> null
         }
     }
 
     LaunchedEffect(key1 = expiration) {
         expirationValidator = when {
-            expiration.trim().isEmpty() -> context.getString(R.string.all_fields_required)
-            expiration.length < 4 -> context.getString(R.string.expiry_date_length_error)
+            expiration.trim().isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+            expiration.length < 4 -> context.getString(R.string.feature_savedcards_expiry_date_length_error)
             (expiration.substring(2, 4) == Calendar.getInstance()[Calendar.YEAR].toString()
                 .substring(2, 4) && expiration.substring(0, 2)
                 .toInt() < Calendar.getInstance()[Calendar.MONTH] + 1) || expiration.substring(0, 2)
-                .toInt() > 12 -> context.getString(R.string.invalid_expiry_date)
+                .toInt() > 12 -> context.getString(R.string.feature_savedcards_invalid_expiry_date)
 
             else -> null
         }
@@ -104,8 +104,8 @@ fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> U
 
     LaunchedEffect(key1 = cvv) {
         cvvValidator = when {
-            cvv.trim().isEmpty() -> context.getString(R.string.all_fields_required)
-            cvv.length < 3 -> context.getString(R.string.cvv_length_error)
+            cvv.trim().isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+            cvv.length < 3 -> context.getString(R.string.feature_savedcards_cvv_length_error)
             else -> null
         }
     }
@@ -152,32 +152,32 @@ fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> U
             value = firstName,
             onValueChange = { firstName = it },
             modifier = Modifier.fillMaxWidth(),
-            label = R.string.first_name
+            label = R.string.feature_savedcards_first_name
         )
         Spacer(modifier = Modifier.height(8.dp))
         MifosOutlinedTextField(
             value = lastName,
             onValueChange = { lastName = it },
             modifier = Modifier.fillMaxWidth(),
-            label = R.string.last_name
+            label = R.string.feature_savedcards_last_name
         )
         Spacer(modifier = Modifier.height(8.dp))
         MifosOutlinedTextField(
             value = creditCardNumber,
             onValueChange = { if (it.length <= 16) creditCardNumber = it },
             modifier = Modifier.fillMaxWidth(),
-            label = R.string.credit_card_number,
+            label = R.string.feature_savedcards_credit_card_number,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword)
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Text(text = stringResource(id = R.string.expiry_date))
+        Text(text = stringResource(id = R.string.feature_savedcards_expiry_date))
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth()) {
             MifosOutlinedTextField(
                 value = expiration,
                 onValueChange = { if (it.length <= 4) expiration = it },
                 modifier = Modifier.weight(1f),
-                label = R.string.mm_yy,
+                label = R.string.feature_savedcards_mm_yy,
                 visualTransformation = ExpirationDateMask(),
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword)
             )
@@ -186,14 +186,14 @@ fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> U
                 value = cvv,
                 onValueChange = { if (it.length <= 3) cvv = it },
                 modifier = Modifier.weight(1f),
-                label = R.string.cvv,
+                label = R.string.feature_savedcards_cvv,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword)
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
             MifosButton(onClick = { cancelClicked() }) {
-                Text(text = stringResource(id = R.string.cancel))
+                Text(text = stringResource(id = R.string.feature_savedcards_cancel))
             }
             Spacer(modifier = Modifier.width(16.dp))
             MifosButton(onClick = {
@@ -208,7 +208,7 @@ fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> U
                     addClicked(card)
                 }
             }) {
-                Text(text = stringResource(id = R.string.add))
+                Text(text = stringResource(id = R.string.feature_savedcards_add))
             }
         }
     }
