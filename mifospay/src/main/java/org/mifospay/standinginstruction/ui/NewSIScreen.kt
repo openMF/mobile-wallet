@@ -16,8 +16,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -44,10 +42,10 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import org.mifospay.R
-import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.standinginstruction.presenter.NewSIUiState
 import org.mifospay.standinginstruction.presenter.NewSIViewModel
 import org.mifospay.theme.MifosTheme
@@ -223,7 +221,7 @@ fun NewSIContent(
                 trailingIcon = {
                     IconButton(onClick = { startScan() }) {
                         Icon(
-                            imageVector = Icons.Filled.QrCode2,
+                            imageVector = MifosIcons.QrCode2,
                             contentDescription = "Scan QR",
                             tint = Color.Blue
                         )

@@ -3,19 +3,15 @@ package org.mifospay.standinginstruction.ui
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -25,10 +21,9 @@ import org.mifospay.core.designsystem.component.FloatingActionButtonContent
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.standinginstruction.presenter.StandingInstructionViewModel
 import org.mifospay.standinginstruction.presenter.StandingInstructionsUiState
-import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.receipt.ui.openReceiptFile
 
 @Composable
 fun StandingInstructionsScreen(
@@ -82,7 +77,7 @@ fun StandingInstructionScreen(
                     title = stringResource(id = R.string.error_oops),
                     subTitle = stringResource(id = R.string.error_fetching_si_list),
                     iconTint = Color.Black,
-                    iconImageVector = Icons.Rounded.Info
+                    iconImageVector = MifosIcons.RoundedInfo
                 )
             }
 
