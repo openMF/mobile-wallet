@@ -10,8 +10,16 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.mifospay.core.model.domain.Transaction
 import org.mifospay.common.Constants
+import org.mifospay.feature.kyc.navigation.kycLevel1Screen
+import org.mifospay.feature.kyc.navigation.kycLevel2Screen
+import org.mifospay.feature.kyc.navigation.kycLevel3Screen
+import org.mifospay.feature.kyc.navigation.kycScreen
+import org.mifospay.feature.kyc.navigation.navigateToKYCLevel1
+import org.mifospay.feature.kyc.navigation.navigateToKYCLevel2
+import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
 import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
+import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.profile.edit.EditProfileActivity
 import org.mifospay.feature.profile.navigation.profileScreen
 import org.mifospay.feature.receipt.ReceiptActivity
@@ -21,12 +29,11 @@ import org.mifospay.feature.savedcards.navigation.addCardScreen
 import org.mifospay.feature.savedcards.navigation.navigateToAddCard
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.feature.settings.navigation.settingsScreen
-import org.mifospay.history.specific_transactions.ui.SpecificTransactionsActivity
+import org.mifospay.feature.specific.transactions.SpecificTransactionsActivity
 import org.mifospay.home.navigation.HOME_ROUTE
 import org.mifospay.home.navigation.financeScreen
 import org.mifospay.home.navigation.homeScreen
 import org.mifospay.home.navigation.paymentsScreen
-import org.mifospay.merchants.navigation.merchantTransferScreen
 import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.standinginstruction.ui.NewSIActivity
@@ -71,7 +78,10 @@ fun MifosNavHost(
             }
         )
         financeScreen(
-            onAddBtn = { navController.navigateToAddCard() }
+            onAddBtn = { navController.navigateToAddCard() },
+            onLevel1Clicked = { navController.navigateToKYCLevel1() },
+            onLevel2Clicked = { navController.navigateToKYCLevel2() },
+            onLevel3Clicked = { navController.navigateToKYCLevel3() }
         )
         addCardScreen(
             onDismiss = navController::popBackStack,
@@ -103,6 +113,34 @@ fun MifosNavHost(
             onBackPressed = navController::popBackStack
         )
         settingsScreen(onBackPress = navController::popBackStack)
+
+        kycScreen(
+            onLevel1Clicked = {
+                // Navigate to Level 1 screen
+                navController.navigate("kyc_level_1")
+            },
+            onLevel2Clicked = {
+                // Navigate to Level 2 screen
+                navController.navigate("kyc_level_2")
+            },
+            onLevel3Clicked = {
+                // Navigate to Level 3 screen
+                navController.navigate("kyc_level_3")
+            }
+        )
+        kycLevel1Screen(
+            navigateToKycLevel2 = {
+                // Navigate to KYC Level 2 screen
+                // For now, we'll just pop back to the previous screen
+                navController.popBackStack()
+            }
+        )
+        kycLevel2Screen(
+            onSuccessKyc2 = {
+                navController.popBackStack()
+            }
+        )
+        kycLevel3Screen()
     }
 }
 

@@ -86,6 +86,10 @@ dependencies {
     implementation(projects.feature.settings)
     implementation(projects.feature.savedcards)
     implementation(projects.feature.qr)
+    implementation(projects.feature.merchants)
+    implementation(projects.feature.history)
+
+    implementation(projects.feature.kyc)
 
     // Compose
     implementation(libs.androidx.activity.compose)

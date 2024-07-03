@@ -9,13 +9,16 @@ import com.google.accompanist.pager.rememberPagerState
 import org.mifospay.bank.ui.AccountsScreen
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
+import org.mifospay.feature.kyc.KYCScreen
 import org.mifospay.feature.savedcards.CardsScreen
-import org.mifospay.kyc.ui.KYCScreen
-import org.mifospay.merchants.ui.MerchantScreen
+import org.mifospay.feature.merchants.ui.MerchantScreen
 
 @Composable
 fun FinanceRoute(
-    onAddBtn: () -> Unit
+    onAddBtn: () -> Unit,
+    onLevel1Clicked: () -> Unit,
+    onLevel2Clicked: () -> Unit,
+    onLevel3Clicked: () -> Unit
 ) {
     val pagerState = rememberPagerState(initialPage = 0)
 
@@ -30,7 +33,11 @@ fun FinanceRoute(
             MerchantScreen()
         },
         TabContent(FinanceScreenContents.KYC.name) {
-            KYCScreen()
+            KYCScreen(
+                onLevel1Clicked = onLevel1Clicked,
+                onLevel2Clicked = onLevel2Clicked,
+                onLevel3Clicked = onLevel3Clicked
+            )
         }
     )
 
@@ -49,5 +56,10 @@ enum class FinanceScreenContents {
 @Preview(showBackground = true)
 @Composable
 private fun FinanceScreenPreview() {
-    FinanceRoute({})
+    FinanceRoute(
+        onAddBtn = {},
+        onLevel1Clicked = {},
+        onLevel2Clicked = {},
+        onLevel3Clicked = {}
+    )
 }
