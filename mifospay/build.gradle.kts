@@ -89,7 +89,7 @@ dependencies {
     implementation(projects.feature.invoices)
     implementation(projects.feature.merchants)
     implementation(projects.feature.history)
-
+    implementation(projects.feature.kyc)
 
     // Compose
     implementation(libs.androidx.activity.compose)

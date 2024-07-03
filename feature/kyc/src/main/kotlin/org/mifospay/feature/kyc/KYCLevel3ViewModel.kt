@@ -5,7 +5,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCaseHandler
-import org.mifospay.data.local.LocalRepository
+import org.mifospay.core.data.repository.local.LocalRepository
 import javax.inject.Inject
 
 @HiltViewModel

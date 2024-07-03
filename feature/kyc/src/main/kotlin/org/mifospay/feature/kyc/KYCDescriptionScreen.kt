@@ -44,26 +44,32 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.kyc.KYCLevel1Details
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
-import org.mifospay.kyc.presenter.KYCDescriptionUiState
-import org.mifospay.kyc.presenter.KYCDescriptionViewModel
+import org.mifospay.kyc.R
 
 @Composable
-fun KYCScreen(viewModel: KYCDescriptionViewModel = hiltViewModel()) {
+fun KYCScreen(
+    viewModel: KYCDescriptionViewModel = hiltViewModel(),
+    onLevel1Clicked: () -> Unit,
+    onLevel2Clicked: () -> Unit,
+    onLevel3Clicked: () -> Unit
+    ) {
     val kUiState by viewModel.kycdescriptionState.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
 
     KYCDescriptionScreen(
         kUiState = kUiState,
         onLevel1Clicked = {
-            // Todo
+            // Todo : Implement onLevel1Clicked flow
+            onLevel1Clicked.invoke()
         },
         onLevel2Clicked = {
-            // Todo
+            // Todo : Implement onLevel2Clicked flow
+            onLevel2Clicked.invoke()
         },
         onLevel3Clicked = {
-            // Todo
+            // Todo : Implement onLevel3Clicked flow
+            onLevel3Clicked.invoke()
         },
         isRefreshing = isRefreshing,
         onRefresh = { viewModel.refresh() }
@@ -84,7 +90,7 @@ fun KYCDescriptionScreen(
     Box(Modifier.pullRefresh(pullRefreshState)) {
         when (kUiState) {
             KYCDescriptionUiState.Loading -> {
-                MifosOverlayLoadingWheel(contentDesc = stringResource(R.string.loading))
+                MifosOverlayLoadingWheel(contentDesc = stringResource(R.string.feature_kyc_loading))
             }
 
             is KYCDescriptionUiState.Error -> {
@@ -128,7 +134,7 @@ fun KYCDescriptionScreen(
         verticalArrangement = Arrangement.Top
     ) {
         Text(
-            text = stringResource(R.string.complete_kyc),
+            text = stringResource(R.string.feature_kyc_complete_kyc),
             modifier = Modifier.padding(top = 40.dp),
             fontSize = 19.sp,
             textAlign = TextAlign.Center
@@ -174,7 +180,7 @@ fun KYCLevelButton(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         ButtonComponent(
-            stringResource(R.string.level) + "$level",
+            stringResource(R.string.feature_kyc_level) + "$level",
             enabled,
             completed,
             onClick
@@ -237,13 +243,13 @@ fun IconComponent(completed: Boolean, modifier: Modifier = Modifier) {
         ) {
             Icon(
                 Icons.Filled.Check,
-                contentDescription = stringResource(R.string.check),
+                contentDescription = stringResource(R.string.feature_kyc_check),
                 modifier = Modifier
                     .size(20.dp)
             )
             Spacer(modifier = Modifier.width(26.dp))
             Text(
-                text = stringResource(R.string.completion)
+                text = stringResource(R.string.feature_kyc_completion)
             )
         }
     }
@@ -273,14 +279,14 @@ fun PlaceholderScreen() {
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = stringResource(id = R.string.error_oops),
+                text = stringResource(id = R.string.feature_kyc_error_oops),
                 style = MaterialTheme.typography.bodyMedium
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = stringResource(id = R.string.error_kyc_details),
+                text = stringResource(id = R.string.feature_kyc_error_kyc_details),
                 style = MaterialTheme.typography.bodyMedium,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
