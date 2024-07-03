@@ -17,7 +17,7 @@ import org.mifospay.invoice.ui.InvoiceScreen
 import org.mifospay.payments.TransferViewModel
 import org.mifospay.payments.send.SendScreenRoute
 import org.mifospay.payments.ui.RequestScreen
-import org.mifospay.standinginstruction.ui.StandingInstructionsScreen
+import org.mifospay.standinginstruction.ui.StandingInstructionsScreenRoute
 
 @Composable
 fun PaymentsRoute(
@@ -69,7 +69,7 @@ fun PaymentScreenContent(
             )
         },
         TabContent(PaymentsScreenContents.SI.name) {
-            StandingInstructionsScreen(onNewSI = { onNewSI.invoke() })
+            StandingInstructionsScreenRoute(onNewSI = { onNewSI.invoke() })
         },
         TabContent(PaymentsScreenContents.INVOICES.name) {
             InvoiceScreen()

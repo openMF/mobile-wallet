@@ -52,7 +52,10 @@ import org.mifospay.theme.MifosTheme
 import java.util.Calendar
 
 @Composable
-fun NewSIScreen(viewModel: NewSIViewModel = hiltViewModel(), onBackPress: () -> Unit) {
+fun NewSIScreenRoute(
+    viewModel: NewSIViewModel = hiltViewModel(),
+    onBackPress: () -> Unit
+) {
 
     val uiState by viewModel.newSIUiState.collectAsStateWithLifecycle()
     var cancelClicked by rememberSaveable { mutableStateOf(false) }
@@ -94,7 +97,7 @@ fun NewSIScreen(
                     ).show()
                 }
 
-                NewSIUiState.Loading -> NewSIContent(
+                NewSIUiState.Loading -> NewSIBody(
                     it,
                     fetchClient,
                     cancelClicked,
@@ -104,7 +107,7 @@ fun NewSIScreen(
                 )
 
                 is NewSIUiState.ShowClientDetails -> {
-                    NewSIContent(
+                    NewSIBody(
                         it,
                         fetchClient,
                         cancelClicked,
@@ -126,7 +129,7 @@ fun NewSIScreen(
 }
 
 @Composable
-fun NewSIContent(
+fun NewSIBody(
     paddingValues: PaddingValues,
     fetchClient: (String) -> Unit,
     cancelClicked: Boolean,

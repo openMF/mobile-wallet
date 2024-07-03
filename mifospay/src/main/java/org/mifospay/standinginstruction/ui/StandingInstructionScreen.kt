@@ -26,7 +26,7 @@ import org.mifospay.standinginstruction.presenter.StandingInstructionViewModel
 import org.mifospay.standinginstruction.presenter.StandingInstructionsUiState
 
 @Composable
-fun StandingInstructionsScreen(
+fun StandingInstructionsScreenRoute(
     viewModel: StandingInstructionViewModel = hiltViewModel(),
     onNewSI: () -> Unit
 ) {

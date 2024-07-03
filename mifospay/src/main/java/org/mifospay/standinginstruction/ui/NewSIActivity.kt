@@ -12,7 +12,7 @@ class NewSIActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MifosTheme {
-                NewSIScreen(onBackPress = { finish() })
+                NewSIScreenRoute(onBackPress = { finish() })
             }
         }
     }
