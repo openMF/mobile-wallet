@@ -89,6 +89,8 @@ dependencies {
     implementation(projects.feature.merchants)
     implementation(projects.feature.history)
 
+    implementation(projects.feature.kyc)
+
     // Compose
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.compose.material3.adaptive)

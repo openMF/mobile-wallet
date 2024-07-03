@@ -50,12 +50,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
-import org.mifospay.kyc.presenter.KYCLevel2UiState
-import org.mifospay.kyc.presenter.KYCLevel2ViewModel
-import org.mifospay.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.kyc.R
 
 
 @Composable
@@ -96,13 +94,13 @@ fun KYCLevel2Screen(
 
     when (uiState) {
         KYCLevel2UiState.Loading -> {
-            MfOverlayLoadingWheel(stringResource(id = R.string.submitting))
+            MfOverlayLoadingWheel(stringResource(id = R.string.feature_kyc_submitting))
         }
 
         KYCLevel2UiState.Error -> {
             Toast.makeText(
                 context,
-                stringResource(R.string.error_adding_KYC_Level_2_details),
+                stringResource(R.string.feature_kyc_error_adding_KYC_Level_2_details),
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -110,7 +108,7 @@ fun KYCLevel2Screen(
         KYCLevel2UiState.Success -> {
             Toast.makeText(
                 context,
-                stringResource(R.string.successkyc2),
+                stringResource(R.string.feature_kyc_successkyc2),
                 Toast.LENGTH_SHORT
             ).show()
             onSuccessKyc2.invoke()
@@ -259,7 +257,7 @@ fun Kyc2Form(
                     onValueChange = {
                         idType = it
                     },
-                    label = R.string.id_type
+                    label = R.string.feature_kyc_id_type
                 )
 
                 Spacer(modifier = Modifier.width(20.dp))
@@ -272,18 +270,18 @@ fun Kyc2Form(
                             } else {
                                 Toast.makeText(
                                     context,
-                                    R.string.approve_permission,
+                                    R.string.feature_kyc_approve_permission,
                                     Toast.LENGTH_SHORT
                                 ).show()
                             }
                         }
                     ) {
-                        Text(text = stringResource(id = R.string.browse))
+                        Text(text = stringResource(id = R.string.feature_kyc_browse))
                     }
                     result?.let { doc ->
                         val fileName = doc.path?.substringAfterLast("/").toString()
                         Text(
-                            text = stringResource(id = R.string.file_name) + fileName,
+                            text = stringResource(id = R.string.feature_kyc_file_name) + fileName,
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier.padding(horizontal = 2.dp)
                         )
@@ -300,7 +298,7 @@ fun Kyc2Form(
                         }
                     }
                 ) {
-                    Text(text = stringResource(id = R.string.submit))
+                    Text(text = stringResource(id = R.string.feature_kyc_submit))
                 }
             }
         }
@@ -309,8 +307,8 @@ fun Kyc2Form(
             LaunchedEffect(Unit) {
                 scope.launch {
                     val userAction = snackBarHostState.showSnackbar(
-                        message = R.string.approve_permission.toString(),
-                        actionLabel = R.string.approve.toString(),
+                        message = R.string.feature_kyc_approve_permission.toString(),
+                        actionLabel = R.string.feature_kyc_approve.toString(),
                         duration = SnackbarDuration.Indefinite,
                         withDismissAction = true
                     )
