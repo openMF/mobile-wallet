@@ -19,11 +19,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.Invoice
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons.Info
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.invoices.R
 
 @Composable
 fun InvoiceScreen(
@@ -46,8 +46,8 @@ fun InvoiceScreen(
         is InvoicesUiState.Error -> {
             EmptyContentScreen(
                 modifier = Modifier,
-                title = stringResource(id = R.string.error_oops),
-                subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                title = stringResource(id = R.string.feature_invoices_error_oops),
+                subTitle = stringResource(id = R.string.feature_invoices_unexpected_error_subtitle),
                 iconTint = Color.Black,
                 iconImageVector = Info
             )
@@ -78,8 +78,8 @@ fun InvoiceScreen(
         InvoicesUiState.Empty -> {
             EmptyContentScreen(
                 modifier = Modifier,
-                title = stringResource(id = R.string.error_oops),
-                subTitle = stringResource(id = R.string.error_no_invoices_found),
+                title = stringResource(id = R.string.feature_invoices_error_oops),
+                subTitle = stringResource(id = R.string.feature_invoices_error_no_invoices_found),
                 iconTint = Color.Black,
             )
         }
@@ -87,7 +87,7 @@ fun InvoiceScreen(
         InvoicesUiState.Loading -> {
             MifosLoadingWheel(
                 modifier = Modifier.fillMaxWidth(),
-                contentDesc = stringResource(R.string.loading)
+                contentDesc = stringResource(R.string.feature_invoices_loading)
             )
         }
     }
