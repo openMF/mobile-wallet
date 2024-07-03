@@ -1,4 +1,4 @@
-package org.mifospay.merchants.ui
+package org.mifospay.feature.merchants.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -41,21 +41,21 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.domain.Transaction
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.ElectricViolet
+import org.mifospay.core.designsystem.theme.InitialAvatarBgColor
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.submitButtonColor
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.ErrorScreenContent
-import org.mifospay.history.specific_transactions.ui.SpecificTransactionItem
-import org.mifospay.merchants.presenter.MerchantTransferUiState
-import org.mifospay.merchants.presenter.MerchantTransferViewModel
-import org.mifospay.theme.ElectricViolet
-import org.mifospay.theme.InitialAvatarBgColor
-import org.mifospay.theme.submitButtonColor
+import org.mifospay.feature.merchants.MerchantTransferUiState
+import org.mifospay.feature.merchants.MerchantTransferViewModel
+import org.mifospay.feature.merchants.R
+import org.mifospay.feature.specific.transactions.SpecificTransactionItem
 
 @Composable
 fun MerchantTransferScreenRoute(
@@ -102,7 +102,7 @@ fun MerchantTransferScreen(
     val context = LocalContext.current
 
     MifosScaffold(
-        topBarTitle = R.string.merchant_transaction,
+        topBarTitle = R.string.feature_merchants_merchant_transaction,
         backPress = { onBackPressed.invoke() },
         scaffoldContent = { paddingValues ->
             Box(
@@ -111,7 +111,7 @@ fun MerchantTransferScreen(
                 when (uiState) {
                     is MerchantTransferUiState.Loading -> {
                         MfLoadingWheel(
-                            contentDesc = stringResource(R.string.loading),
+                            contentDesc = stringResource(R.string.feature_merchants_loading),
                             backgroundColor = Color.White
                         )
                     }
@@ -119,16 +119,16 @@ fun MerchantTransferScreen(
                     is MerchantTransferUiState.Error -> {
                         ErrorScreenContent(
                             modifier = Modifier,
-                            title = stringResource(id = R.string.error_oops),
-                            subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                            title = stringResource(id = R.string.feature_merchants_error_oops),
+                            subTitle = stringResource(id = R.string.feature_merchants_unexpected_error_subtitle),
                         )
                     }
 
                     is MerchantTransferUiState.Empty -> {
                         EmptyContentScreen(
                             modifier = Modifier,
-                            title = stringResource(id = R.string.error_oops),
-                            subTitle = stringResource(id = R.string.no_transactions_found),
+                            title = stringResource(id = R.string.feature_merchants_error_oops),
+                            subTitle = stringResource(id = R.string.feature_merchants_no_transactions_found),
                             iconTint = Color.Black,
                             iconImageVector = MifosIcons.Info
                         )
@@ -141,7 +141,7 @@ fun MerchantTransferScreen(
                     is MerchantTransferUiState.InsufficientBalance -> {
                         Toast.makeText(
                             context,
-                            stringResource(id = R.string.insufficient_balance),
+                            stringResource(id = R.string.feature_merchants_insufficient_balance),
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -190,7 +190,7 @@ fun MerchantBottomSheet(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = stringResource(R.string.transfer_money_to_this_merchant),
+                    text = stringResource(R.string.feature_merchants_transfer_money_to_this_merchant),
                     color = ElectricViolet,
                     style = MaterialTheme.typography.subtitle1
                 )
@@ -205,7 +205,7 @@ fun MerchantBottomSheet(
                 MfOutlinedTextField(
                     value = amount,
                     onValueChange = onAmountChange,
-                    label = stringResource(id = R.string.amount),
+                    label = stringResource(id = R.string.feature_merchants_amount),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -220,7 +220,7 @@ fun MerchantBottomSheet(
                     colors = ButtonDefaults.buttonColors(backgroundColor = submitButtonColor),
                     modifier = Modifier.width(155.dp)
                 ) {
-                    Text(stringResource(id = R.string.submit), color = Color.White)
+                    Text(stringResource(id = R.string.feature_merchants_submit), color = Color.White)
                 }
             }
         },

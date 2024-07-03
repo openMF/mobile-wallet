@@ -1,6 +1,5 @@
-package org.mifospay.feature.merchants
+package org.mifospay.feature.merchants.ui
 
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -36,12 +35,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.compose.rememberNavController
 import com.mifospay.core.model.entity.accounts.savings.SavingsWithAssociations
-import org.mifospay.R
-import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MfLoadingWheel
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.theme.MifosTheme
+import org.mifospay.feature.merchants.MerchantUiState
+import org.mifospay.feature.merchants.MerchantViewModel
+import org.mifospay.feature.merchants.R
+import org.mifospay.feature.merchants.navigation.navigateToMerchantTransferScreen
 
 @Composable
 fun MerchantScreen(
@@ -76,8 +78,8 @@ fun MerchantScreen(
                 MerchantUiState.Empty -> {
                     EmptyContentScreen(
                         modifier = Modifier,
-                        title = stringResource(id = R.string.empty_no_merchants_title),
-                        subTitle = stringResource(id = R.string.empty_no_merchants_subtitle),
+                        title = stringResource(id = R.string.feature_merchants_empty_no_merchants_title),
+                        subTitle = stringResource(id = R.string.feature_merchants_empty_no_merchants_subtitle),
                         iconTint = Color.Black,
                         iconImageVector = Icons.Rounded.Info
                     )
@@ -86,8 +88,8 @@ fun MerchantScreen(
                 is MerchantUiState.Error -> {
                     EmptyContentScreen(
                         modifier = Modifier,
-                        title = stringResource(id = R.string.error_oops),
-                        subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                        title = stringResource(id = R.string.feature_merchants_error_oops),
+                        subTitle = stringResource(id = R.string.feature_merchants_unexpected_error_subtitle),
                         iconTint = Color.Black,
                         iconImageVector = Icons.Rounded.Info
                     )
@@ -95,7 +97,7 @@ fun MerchantScreen(
 
                 MerchantUiState.Loading -> {
                     MfLoadingWheel(
-                        contentDesc = stringResource(R.string.loading),
+                        contentDesc = stringResource(R.string.feature_merchants_loading),
                         backgroundColor = Color.White
                     )
                 }
@@ -143,6 +145,8 @@ fun MerchantList(
 ) {
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
+    val navController = rememberNavController()
+
     LazyColumn(
         modifier = Modifier
             .fillMaxWidth()
@@ -151,15 +155,24 @@ fun MerchantList(
         items(merchantList.size) { index ->
             MerchantsItem(savingsWithAssociations = merchantList[index],
                 onMerchantClicked = {
-                    val intent = Intent(context, MerchantTransferActivity::class.java)
-                    intent.putExtra(Constants.MERCHANT_NAME, merchantList[index].clientName)
-                    intent.putExtra(Constants.MERCHANT_VPA, merchantList[index].externalId)
-                    intent.putExtra(Constants.MERCHANT_ACCOUNT_NO, merchantList[index].accountNo)
-                    context.startActivity(intent)
+                    navController.navigateToMerchantTransferScreen(
+                        merchantVPA = merchantList[index].externalId,
+                        merchantName = merchantList[index].clientName,
+                        merchantAccountNumber = merchantList[index].accountNo.toString()
+                    )
+//                    val intent = Intent(context, MerchantTransferActivity::class.java)
+//                    intent.putExtra(Constants.MERCHANT_NAME, merchantList[index].clientName)
+//                    intent.putExtra(Constants.MERCHANT_VPA, merchantList[index].externalId)
+//                    intent.putExtra(Constants.MERCHANT_ACCOUNT_NO, merchantList[index].accountNo)
+//                    context.startActivity(intent)
                 },
                 onMerchantLongPressed = {
                     clipboardManager.setText(AnnotatedString(it ?: ""))
-                    Toast.makeText(context, R.string.vpa_copy_success, Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        context,
+                        R.string.feature_merchants_vpa_copy_success,
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             )
         }
@@ -185,12 +198,12 @@ fun SearchBarScreen(
         active = false,
         onActiveChange = { },
         placeholder = {
-            Text(text = stringResource(R.string.search))
+            Text(text = stringResource(R.string.feature_merchants_search))
         },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Search,
-                contentDescription = stringResource(R.string.search)
+                contentDescription = stringResource(R.string.feature_merchants_search)
             )
         },
         trailingIcon = {
@@ -199,7 +212,7 @@ fun SearchBarScreen(
             ) {
                 Icon(
                     imageVector = Icons.Filled.Close,
-                    contentDescription = stringResource(R.string.close)
+                    contentDescription = stringResource(R.string.feature_merchants_close)
                 )
             }
         }
