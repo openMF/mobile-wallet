@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="feature_merchants_empty_no_merchants_title">You haven\'t added any merchant yet</string>
+    <string name="feature_merchants_empty_no_merchants_subtitle">Every added merchant will be visible here</string>
+    <string name="feature_merchants_error_oops">Oops!</string>
+    <string name="feature_merchants_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+    <string name="feature_merchants_loading">Loading</string>
+    <string name="feature_merchants_vpa_copy_success">VPA copied to Clipboard Successfully</string>
+    <string name="feature_merchants_search">Search</string>
+    <string name="feature_merchants_close">Close</string>
+    <string name="feature_merchants_merchant_transaction">Merchant Transaction</string>
+    <string name="feature_merchants_no_transactions_found">No transactions found</string>
+    <string name="feature_merchants_insufficient_balance">Insufficient balance</string>
+    <string name="feature_merchants_transfer_money_to_this_merchant">Transfer money to this merchant</string>
+    <string name="feature_merchants_amount">Amount</string>
+    <string name="feature_merchants_submit">Submit</string>
+]
+</resources>

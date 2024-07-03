@@ -3,16 +3,16 @@ package org.mifospay.feature.specific.transactions
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.feature.receipt.ReceiptActivity
 
 @AndroidEntryPoint
-class SpecificTransactionsActivity : AppCompatActivity() {
+class SpecificTransactionsActivity : ComponentActivity() {
 
     private val viewModel: SpecificTransactionsViewModel by viewModels()
 

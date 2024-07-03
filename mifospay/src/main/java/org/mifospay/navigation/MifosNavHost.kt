@@ -12,6 +12,7 @@ import com.mifospay.core.model.domain.Transaction
 import org.mifospay.common.Constants
 import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
+import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.profile.edit.EditProfileActivity
 import org.mifospay.feature.profile.navigation.profileScreen
 import org.mifospay.feature.receipt.ReceiptActivity
@@ -21,12 +22,11 @@ import org.mifospay.feature.savedcards.navigation.addCardScreen
 import org.mifospay.feature.savedcards.navigation.navigateToAddCard
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.feature.settings.navigation.settingsScreen
-import org.mifospay.history.specific_transactions.ui.SpecificTransactionsActivity
+import org.mifospay.feature.specific.transactions.SpecificTransactionsActivity
 import org.mifospay.home.navigation.HOME_ROUTE
 import org.mifospay.home.navigation.financeScreen
 import org.mifospay.home.navigation.homeScreen
 import org.mifospay.home.navigation.paymentsScreen
-import org.mifospay.merchants.navigation.merchantTransferScreen
 import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
 import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.standinginstruction.ui.NewSIActivity

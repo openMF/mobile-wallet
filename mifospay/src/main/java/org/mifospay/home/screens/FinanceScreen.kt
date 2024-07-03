@@ -9,9 +9,9 @@ import com.google.accompanist.pager.rememberPagerState
 import org.mifospay.bank.ui.AccountsScreen
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
+import org.mifospay.feature.merchants.ui.MerchantScreen
 import org.mifospay.feature.savedcards.CardsScreen
 import org.mifospay.kyc.ui.KYCScreen
-import org.mifospay.merchants.ui.MerchantScreen
 
 @Composable
 fun FinanceRoute(

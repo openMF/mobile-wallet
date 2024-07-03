@@ -7,4 +7,7 @@
     <string name="feature_history_credits">Credits</string>
     <string name="feature_history_debits">Debits</string>
     <string name="feature_history_loading">Loading</string>
+    <string name="feature_history_no_transactions_found">No transactions found</string>
+    <string name="feature_history_specific_transactions_history">Specific Transactions History</string>
+
 </resources>

@@ -12,7 +12,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.mifospay.core.model.domain.Transaction
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
-import org.mifospay.history.ui.HistoryScreen
+import org.mifospay.feature.history.HistoryScreen
 import org.mifospay.invoice.ui.InvoiceScreen
 import org.mifospay.payments.TransferViewModel
 import org.mifospay.payments.send.SendScreenRoute
