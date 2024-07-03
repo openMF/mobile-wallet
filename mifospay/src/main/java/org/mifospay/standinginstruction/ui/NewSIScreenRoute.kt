@@ -58,6 +58,8 @@ fun NewSIScreenRoute(
 ) {
 
     val uiState by viewModel.newSIUiState.collectAsStateWithLifecycle()
+    val updateSuccess by viewModel.updateSuccess.collectAsStateWithLifecycle()
+
     var cancelClicked by rememberSaveable { mutableStateOf(false) }
 
     NewSIScreen(
@@ -68,7 +70,8 @@ fun NewSIScreenRoute(
         setCancelClicked = { cancelClicked = it },
         confirm = { clientId, amount, recurrenceInterval, validTill ->
             viewModel.createNewSI(clientId, amount, recurrenceInterval, validTill)
-        }
+        },
+        updateSuccess = updateSuccess
     )
 
 }
@@ -80,22 +83,15 @@ fun NewSIScreen(
     fetchClient: (String) -> Unit,
     cancelClicked: Boolean,
     setCancelClicked: (Boolean) -> Unit,
-    confirm: (Long, Double, Int, String) -> Unit
+    confirm: (Long, Double, Int, String) -> Unit,
+    updateSuccess: Boolean
 ) {
-    val context = LocalContext.current
 
     MifosScaffold(
         topBarTitle = R.string.tile_si_activity,
         backPress = { onBackPress.invoke() },
         scaffoldContent = {
             when (uiState) {
-                is NewSIUiState.Error -> {
-                    Toast.makeText(
-                        context,
-                        stringResource(R.string.unable_to_create_standing_instructions),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
 
                 NewSIUiState.Loading -> NewSIBody(
                     it,
@@ -103,7 +99,8 @@ fun NewSIScreen(
                     cancelClicked,
                     setCancelClicked,
                     confirm,
-                    clientId = 0
+                    clientId = 0,
+                    updateSuccess = updateSuccess
                 )
 
                 is NewSIUiState.ShowClientDetails -> {
@@ -113,16 +110,9 @@ fun NewSIScreen(
                         cancelClicked,
                         setCancelClicked,
                         confirm,
-                        clientId = uiState.clientId
+                        clientId = uiState.clientId,
+                        updateSuccess = updateSuccess
                     )
-                }
-
-                NewSIUiState.Success -> {
-                    Toast.makeText(
-                        context,
-                        stringResource(R.string.standing_instruction_created_successfully),
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
             }
         })
@@ -135,7 +125,9 @@ fun NewSIBody(
     cancelClicked: Boolean,
     setCancelClicked: (Boolean) -> Unit,
     confirm: (Long, Double, Int, String) -> Unit,
-    clientId: Long
+    clientId: Long,
+    updateSuccess: Boolean
+
 ) {
     var amount by rememberSaveable { mutableStateOf("") }
     var vpa by rememberSaveable { mutableStateOf("") }
@@ -154,7 +146,8 @@ fun NewSIBody(
             confirm = confirm,
             clientId = clientId,
             recurrenceInterval = siInterval,
-            validTill = selectedDate
+            validTill = selectedDate,
+            updateSuccess = updateSuccess
         )
     } else {
         val options = GmsBarcodeScannerOptions.Builder()
@@ -266,7 +259,24 @@ fun NewSIBody(
                     .width(150.dp)
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally),
-                onClick = { fetchClient(vpa) },
+                onClick = {
+                    fetchClient(vpa)
+                    if (updateSuccess) {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.successfully_creates_new_standing_instruction),
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            org.mifospay.feature.profile.R.string.failed_to_save_changes,
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
+                },
                 enabled = selectedDate.isNotEmpty() && vpa.isNotEmpty() && amount.isNotEmpty() && siInterval.isNotEmpty()
             ) {
                 Text(text = stringResource(id = R.string.submit), color = Color.White)
@@ -280,8 +290,6 @@ class NewSiUiStateProvider : PreviewParameterProvider<NewSIUiState> {
     override val values: Sequence<NewSIUiState>
         get() = sequenceOf(
             NewSIUiState.Loading,
-            NewSIUiState.Error("Error"),
-            NewSIUiState.Success,
             NewSIUiState.ShowClientDetails(0L, "Pratyush", "External Id")
         )
 
@@ -297,7 +305,8 @@ fun ConfirmTransfer(
     confirm: (Long, Double, Int, String) -> Unit,
     clientId: Long,
     recurrenceInterval: String,
-    validTill: String
+    validTill: String,
+    updateSuccess: Boolean
 ) {
     val context = LocalContext.current
     Column(
@@ -345,9 +354,7 @@ fun ConfirmTransfer(
                     style = TextStyle(color = Color.Blue, fontSize = 15.sp)
                 )
                 Text(
-                    text = context.getString(
-                        R.string.currency_amount
-                    ) + " " + amount, style = TextStyle(color = Color.Black, fontSize = 20.sp)
+                    text = amount, style = TextStyle(color = Color.Black, fontSize = 20.sp)
                 )
             }
 
@@ -378,6 +385,21 @@ fun ConfirmTransfer(
                         recurrenceInterval.toInt(),
                         validTill
                     )
+                    if (updateSuccess) {
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.successfully_creates_new_standing_instruction),
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    } else {
+                        Toast.makeText(
+                            context,
+                            org.mifospay.feature.profile.R.string.failed_to_save_changes,
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
                 }
 
             ) {
@@ -396,7 +418,7 @@ private fun ConfirmTransferPreview() {
         "999999999@axl",
         "100",
         {}, { _, _, _, _ -> },
-        0L, "", ""
+        0L, "", "", true
     )
 }
 
@@ -406,6 +428,6 @@ private fun NewSIScreenPreview(
     @PreviewParameter(NewSiUiStateProvider::class) newSIUiState: NewSIUiState
 ) {
     MifosTheme {
-        NewSIScreen(newSIUiState, {}, {}, false, {}, { _, _, _, _ -> })
+        NewSIScreen(newSIUiState, {}, {}, false, {}, { _, _, _, _ -> }, true)
     }
 }

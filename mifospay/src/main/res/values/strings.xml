@@ -406,4 +406,5 @@
     <string name="standing_instruction_created_successfully">Standing Instruction Created Successfully</string>
     <string name="unable_to_create_standing_instructions">Unable to Create Standing Instructions</string>
     <string name="merchant_transaction">Merchant Transaction</string>
+    <string name="successfully_creates_new_standing_instruction">Successfully Creates New Standing Instruction</string>
 </resources>

@@ -26,6 +26,9 @@ class NewSIViewModel @Inject constructor(
     private val _newSIUiState = MutableStateFlow<NewSIUiState>(NewSIUiState.Loading)
     val newSIUiState: StateFlow<NewSIUiState> = _newSIUiState
 
+    private val _updateSuccess = MutableStateFlow(false)
+    val updateSuccess: StateFlow<Boolean> = _updateSuccess
+
     fun fetchClient(externalId: String) {
         _newSIUiState.value = NewSIUiState.Loading
         mUseCaseHandler.execute(searchClient, SearchClient.RequestValues(externalId),
@@ -41,7 +44,7 @@ class NewSIViewModel @Inject constructor(
                 }
 
                 override fun onError(message: String) {
-                    _newSIUiState.value = NewSIUiState.Error(message)
+                    _updateSuccess.value = false
                 }
 
             })
@@ -71,11 +74,11 @@ class NewSIViewModel @Inject constructor(
                 UseCase.UseCaseCallback<CreateStandingTransaction.ResponseValue> {
 
                 override fun onSuccess(response: CreateStandingTransaction.ResponseValue) {
-                    _newSIUiState.value = NewSIUiState.Success
+                    _updateSuccess.value = true
                 }
 
                 override fun onError(message: String) {
-                    _newSIUiState.value = NewSIUiState.Error(message)
+                    _updateSuccess.value = false
                 }
 
             })
@@ -85,8 +88,6 @@ class NewSIViewModel @Inject constructor(
 
 sealed interface NewSIUiState {
     data object Loading : NewSIUiState
-    data object Success : NewSIUiState
-    data class Error(val message: String) : NewSIUiState
     data class ShowClientDetails(val clientId: Long, val name: String, val externalId: String) :
         NewSIUiState
 }
