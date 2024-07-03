@@ -22,7 +22,7 @@ import org.mifospay.feature.savedcards.navigation.addCardScreen
 import org.mifospay.feature.savedcards.navigation.navigateToAddCard
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.feature.settings.navigation.settingsScreen
-import org.mifospay.history.specific_transactions.ui.SpecificTransactionsActivity
+import org.mifospay.feature.specific.transactions.SpecificTransactionsActivity
 import org.mifospay.home.navigation.HOME_ROUTE
 import org.mifospay.home.navigation.financeScreen
 import org.mifospay.home.navigation.homeScreen
