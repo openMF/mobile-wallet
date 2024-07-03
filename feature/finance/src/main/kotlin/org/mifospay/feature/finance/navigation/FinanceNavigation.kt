@@ -15,7 +15,10 @@ fun NavGraphBuilder.financeScreen(
 ) {
     composable(route = FINANCE_ROUTE) {
         FinanceRoute(
-            onAddBtn = onAddBtn
+            onAddBtn = onAddBtn,
+            onLevel1Clicked = {},
+            onLevel2Clicked = {},
+            onLevel3Clicked = {}
         )
     }
 }

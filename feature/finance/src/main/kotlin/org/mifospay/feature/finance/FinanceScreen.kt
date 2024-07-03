@@ -1,6 +1,5 @@
 package org.mifospay.feature.finance
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.rememberPagerState
@@ -14,10 +13,12 @@ import org.mifospay.feature.kyc.KYCScreen
 import org.mifospay.feature.savedcards.CardsScreen
 import org.mifospay.merchants.ui.MerchantScreen
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FinanceRoute(
-    onAddBtn: () -> Unit
+    onAddBtn: () -> Unit,
+    onLevel1Clicked: () -> Unit,
+    onLevel2Clicked: () -> Unit,
+    onLevel3Clicked: () -> Unit
 ) {
     val pagerState = rememberPagerState(
         pageCount = { FinanceScreenContents.entries.size }
@@ -34,7 +35,11 @@ fun FinanceRoute(
             MerchantScreen()
         },
         TabContent(FinanceScreenContents.KYC.name) {
-            KYCScreen()
+            KYCScreen(
+                onLevel1Clicked = onLevel1Clicked,
+                onLevel2Clicked = onLevel2Clicked,
+                onLevel3Clicked = onLevel3Clicked
+            )
         }
     )
 
@@ -53,5 +58,10 @@ enum class FinanceScreenContents {
 @Preview(showBackground = true)
 @Composable
 private fun FinanceScreenPreview() {
-    FinanceRoute {}
+    FinanceRoute(
+        onAddBtn = {},
+        onLevel1Clicked = {},
+        onLevel2Clicked = {},
+        onLevel3Clicked = {}
+    )
 }
