@@ -11,7 +11,7 @@ import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.kyc.KYCScreen
 import org.mifospay.feature.savedcards.CardsScreen
-import org.mifospay.merchants.ui.MerchantScreen
+import org.mifospay.feature.merchants.ui.MerchantScreen
 
 @Composable
 fun FinanceRoute(

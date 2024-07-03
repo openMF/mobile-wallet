@@ -10,5 +10,4 @@ android {
 dependencies {
     implementation(projects.feature.receipt)
     implementation(projects.core.data)
-    implementation(projects.mifospay)
 }

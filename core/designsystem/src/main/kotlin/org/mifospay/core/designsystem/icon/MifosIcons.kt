@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
+import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cancel
@@ -65,4 +66,5 @@ object MifosIcons {
     val Photo = Icons.Default.Photo
     val FlashOn = Icons.Default.FlashOn
     val FlashOff = Icons.Default.FlashOff
+    val QrCode2 = Icons.Filled.QrCode2
 }

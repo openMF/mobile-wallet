@@ -1,11 +1,11 @@
-package org.mifospay.merchants.navigation
+package org.mifospay.feature.merchants.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import org.mifospay.merchants.ui.MerchantTransferScreenRoute
+import org.mifospay.feature.merchants.ui.MerchantTransferScreenRoute
 
 const val MERCHANT_TRANSFER_ROUTE = "merchant_transfer_route"
 
