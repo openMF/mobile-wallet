@@ -15,7 +15,7 @@ data class FloatingActionButtonContent(
 
 @Composable
 fun MifosScaffold(
-    topBarTitle: Int,
+    topBarTitle: Int? = null,
     backPress: () -> Unit,
     floatingActionButtonContent: FloatingActionButtonContent? = null,
     snackbarHost: @Composable () -> Unit = {},
@@ -24,11 +24,13 @@ fun MifosScaffold(
 ) {
     Scaffold(
         topBar = {
-            MifosTopBar(
-                topBarTitle = topBarTitle,
-                backPress = backPress,
-                actions = actions
-            )
+            if (topBarTitle != null) {
+                MifosTopBar(
+                    topBarTitle = topBarTitle,
+                    backPress = backPress,
+                    actions = actions
+                )
+            }
         },
         floatingActionButton = {
             floatingActionButtonContent?.let { content ->

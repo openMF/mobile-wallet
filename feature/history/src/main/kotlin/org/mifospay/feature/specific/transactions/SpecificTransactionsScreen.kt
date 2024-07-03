@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -32,18 +33,17 @@ import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.domain.client.Client
 import com.mifospay.core.model.entity.accounts.savings.SavingAccount
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.creditTextColor
+import org.mifospay.core.designsystem.theme.debitTextColor
+import org.mifospay.core.designsystem.theme.otherTextColor
 import org.mifospay.core.designsystem.theme.primaryDarkBlue
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.ErrorScreenContent
-import org.mifospay.invoice.ui.Divider
-import org.mifospay.theme.creditColor
-import org.mifospay.theme.debitColor
-import org.mifospay.theme.otherColor
+import org.mifospay.feature.history.R
 
 
 @Composable
@@ -72,7 +72,7 @@ fun SpecificTransactionsScreen(
     transactionItemClicked: (String) -> Unit,
 ) {
     MifosScaffold(
-        topBarTitle = R.string.specific_transactions_history,
+        topBarTitle = R.string.feature_history_specific_transactions_history,
         backPress = backPress,
         scaffoldContent = { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
@@ -80,14 +80,14 @@ fun SpecificTransactionsScreen(
                     SpecificTransactionsUiState.Error -> {
                         ErrorScreenContent(
                             modifier = Modifier,
-                            title = stringResource(id = R.string.error_oops),
-                            subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                            title = stringResource(id = R.string.feature_history_error_oops),
+                            subTitle = stringResource(id = R.string.feature_history_unexpected_error_subtitle),
                         )
                     }
 
                     SpecificTransactionsUiState.Loading -> {
                         MfLoadingWheel(
-                            contentDesc = stringResource(R.string.loading),
+                            contentDesc = stringResource(R.string.feature_history_loading),
                             backgroundColor = Color.White
                         )
                     }
@@ -96,8 +96,8 @@ fun SpecificTransactionsScreen(
                         if (uiState.transactionsList.isEmpty()) {
                             EmptyContentScreen(
                                 modifier = Modifier,
-                                title = stringResource(id = R.string.error_oops),
-                                subTitle = stringResource(id = R.string.no_transactions_found),
+                                title = stringResource(id = R.string.feature_history_error_oops),
+                                subTitle = stringResource(id = R.string.feature_history_no_transactions_found),
                                 iconTint = Color.Black,
                                 iconImageVector = Icons.Rounded.Info
                             )
@@ -165,19 +165,19 @@ fun SpecificTransactionItem(
         ) {
             Column {
                 Text(
-                    text = stringResource(id = R.string.transaction_id) + transaction.transactionId,
+                    text = stringResource(id = R.string.feature_receipt_transaction_id) + transaction.transactionId,
                     style = MaterialTheme.typography.bodyLarge,
                     color = primaryDarkBlue
                 )
                 Text(
-                    text = stringResource(id = R.string.date) + transaction.date,
+                    text = stringResource(id = R.string.feature_receipt_transaction_date) + transaction.date,
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
                     text = when (transaction.transactionType) {
-                        TransactionType.DEBIT -> stringResource(id = R.string.debit)
-                        TransactionType.CREDIT -> stringResource(id = R.string.Credit)
-                        TransactionType.OTHER -> stringResource(id = R.string.other)
+                        TransactionType.DEBIT -> stringResource(id = R.string.feature_history_debits)
+                        TransactionType.CREDIT -> stringResource(id = R.string.feature_history_credits)
+                        TransactionType.OTHER -> stringResource(id = R.string.feature_receipt_other)
                     },
                     style = MaterialTheme.typography.bodyLarge,
                 )
@@ -187,9 +187,9 @@ fun SpecificTransactionItem(
                 text = "${transaction.currency.code}${transaction.amount}",
                 style = MaterialTheme.typography.displaySmall,
                 color = when (transaction.transactionType) {
-                    TransactionType.DEBIT -> debitColor
-                    TransactionType.CREDIT -> creditColor
-                    TransactionType.OTHER -> otherColor
+                    TransactionType.DEBIT -> debitTextColor
+                    TransactionType.CREDIT -> creditTextColor
+                    TransactionType.OTHER -> otherTextColor
                 },
             )
         }

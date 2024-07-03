@@ -1,20 +1,20 @@
 package org.mifospay.home
 
 import androidx.lifecycle.ViewModel
+import com.mifospay.core.model.domain.Account
+import com.mifospay.core.model.domain.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
-import com.mifospay.core.model.domain.Account
-import com.mifospay.core.model.domain.Transaction
-import kotlinx.coroutines.flow.asStateFlow
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.FetchAccount
-import org.mifospay.data.local.LocalRepository
 import org.mifospay.core.datastore.PreferencesHelper
-import org.mifospay.history.HistoryContract.TransactionsHistoryAsync
-import org.mifospay.history.TransactionsHistory
+import org.mifospay.data.local.LocalRepository
+import org.mifospay.feature.HistoryContract
+import org.mifospay.feature.TransactionsHistory
 import javax.inject.Inject
 
 @HiltViewModel
@@ -24,7 +24,7 @@ class HomeViewModel @Inject constructor(
     private val preferencesHelper: PreferencesHelper,
     private val fetchAccountUseCase: FetchAccount,
     private val transactionsHistory: TransactionsHistory
-) : ViewModel(), TransactionsHistoryAsync {
+) : ViewModel(), HistoryContract.TransactionsHistoryAsync {
 
     // Expose screen UI state
     private val _homeUIState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Loading)
