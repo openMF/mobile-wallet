@@ -82,13 +82,13 @@
         </provider>
 
         <activity
-            android:name=".qr.ui.ReadQrActivity"
+            android:name=".feature.read.qr.ReadQrActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".feature.passcode.PassCodeActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".receipt.ui.ReceiptActivity"
+            android:name=".feature.receipt.ReceiptActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme">
@@ -150,13 +150,12 @@
         <activity
             android:name=".feature.auth.mobile_verify.MobileVerificationActivity"
             android:theme="@style/AppTheme" />
-
         <activity
-            android:name=".editprofile.ui.EditProfileActivity"
+            android:name=".feature.profile.edit.EditProfileActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".settings.ui.SettingsActivity"
+            android:name=".feature.settings.SettingsActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".feature.faq.FAQActivity"
@@ -176,9 +175,6 @@
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".feature.editpassword.EditPasswordActivity"
             android:theme="@style/AppTheme" />
     </application>
 

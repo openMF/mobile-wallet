@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.navigation.BottomSheetNavigator
 import androidx.compose.material.navigation.ModalBottomSheetLayout
-import androidx.compose.material.navigation.rememberBottomSheetNavigator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -56,7 +55,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.rememberNavController
 import org.mifospay.R
 import org.mifospay.core.designsystem.component.MifosBackground
 import org.mifospay.core.designsystem.component.MifosGradientBackground
@@ -69,9 +67,9 @@ import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.GradientColors
 import org.mifospay.core.designsystem.theme.LocalGradientColors
 import org.mifospay.feature.faq.FAQActivity
+import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.navigation.MifosNavHost
 import org.mifospay.navigation.TopLevelDestination
-import org.mifospay.settings.ui.SettingsActivity
 
 @OptIn(
     ExperimentalMaterial3Api::class,
@@ -133,7 +131,7 @@ fun MifosApp(appState: MifosAppState, bottomSheetNavigator: BottomSheetNavigator
                                 text = { Text(stringResource(id = R.string.settings)) },
                                 onClick = {
                                     showHomeMenuOption = false
-                                    context.startActivity(Intent(context, SettingsActivity::class.java))
+                                    appState.navController.navigateToSettings()
                                 }
                             )
                         }

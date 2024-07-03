@@ -12,6 +12,5 @@ dependencies {
     implementation(projects.core.data)
     implementation(libs.androidx.appcompat)
     implementation(projects.feature.passcode)
-    implementation(projects.mifospay)
     implementation(libs.mifosPasscode)
 }

@@ -17,7 +17,7 @@ import org.mifospay.core.data.domain.usecase.savedcards.AddCard
 import org.mifospay.core.data.domain.usecase.savedcards.DeleteCard
 import org.mifospay.core.data.domain.usecase.savedcards.EditCard
 import org.mifospay.core.data.domain.usecase.savedcards.FetchSavedCards
-import org.mifospay.data.local.LocalRepository
+import org.mifospay.core.data.repository.local.LocalRepository
 import javax.inject.Inject
 
 @HiltViewModel
