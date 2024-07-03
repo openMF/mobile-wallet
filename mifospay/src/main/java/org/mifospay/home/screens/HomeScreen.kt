@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -65,7 +66,7 @@ fun HomeRoute(
         is HomeUiState.Loading -> {
             MfLoadingWheel(
                 contentDesc = stringResource(R.string.loading),
-                backgroundColor = Color.White
+                backgroundColor = MaterialTheme.colorScheme.surface
             )
         }
 
@@ -102,7 +103,7 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxWidth()
 
-            .background(color = Color.White)
+            .background(color = MaterialTheme.colorScheme.surface)
             .padding(start = 32.dp, end = 32.dp),
     ) {
         item {
@@ -119,7 +120,8 @@ fun HomeScreen(
                 Text(
                     modifier = Modifier.padding(top = 32.dp),
                     text = "Recent Transactions",
-                    style = styleMedium16sp
+                    style = MaterialTheme.typography.titleMedium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -140,7 +142,7 @@ fun MifosWalletCardScreen(account: Account?) {
             .fillMaxWidth()
             .height(225.dp)
             .padding(top = 20.dp, bottom = 32.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.Black)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primary)
     ) {
         Column(
             modifier = Modifier
@@ -155,7 +157,7 @@ fun MifosWalletCardScreen(account: Account?) {
                 style = TextStyle(
                     fontSize = 12.sp,
                     fontWeight = FontWeight.W400,
-                    color = lightGrey
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -168,7 +170,7 @@ fun MifosWalletCardScreen(account: Account?) {
                 style = TextStyle(
                     fontSize = 42.sp,
                     fontWeight = FontWeight(600),
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             )
             Spacer(modifier = Modifier.height(10.dp))
@@ -180,7 +182,7 @@ fun MifosWalletCardScreen(account: Account?) {
                 style = TextStyle(
                     fontSize = 12.sp,
                     fontWeight = FontWeight(500),
-                    color = lightGrey
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             )
         }
@@ -226,7 +228,7 @@ fun PayCard(
             .height(144.dp)
             .clickable { onClickCard.invoke() },
         border = BorderStroke(1.dp, border),
-        colors = CardDefaults.cardColors(containerColor = Color.White)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier
@@ -237,17 +239,18 @@ fun PayCard(
             Box(
                 modifier = Modifier
                     .size(40.dp)
-                    .background(Color.Black, shape = RoundedCornerShape(4.dp)),
+                    .background(MaterialTheme.colorScheme.secondary, shape = RoundedCornerShape(4.dp)),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
                     modifier = Modifier.size(20.dp),
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(Color.White)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSecondary)
                 )
             }
-            Text(text = title)
+            Text(text = title,
+                color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }

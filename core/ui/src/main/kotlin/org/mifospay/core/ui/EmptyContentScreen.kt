@@ -72,6 +72,7 @@ fun EmptyContentScreen(
                     .padding(start = 24.dp, end = 24.dp),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
@@ -82,7 +83,7 @@ fun EmptyContentScreen(
     modifier: Modifier = Modifier,
     title: String,
     subTitle: String,
-    iconTint: Color = LocalTintTheme.current.iconTint,
+    iconTint: Color = MaterialTheme.colorScheme.surfaceTint,
     iconDrawable: Int
 ) {
     EmptyContentScreen(
@@ -105,7 +106,7 @@ fun EmptyContentScreen(
     modifier: Modifier = Modifier,
     title: String,
     subTitle: String,
-    iconTint: Color = LocalTintTheme.current.iconTint,
+    iconTint: Color = MaterialTheme.colorScheme.surfaceTint,
     iconImageVector: ImageVector = Icons.Rounded.Search
 ) {
     EmptyContentScreen(

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -39,7 +40,7 @@ fun MerchantsItem(
             )
         },
         onClick = { onMerchantClicked.invoke() },
-        colors = CardDefaults.cardColors(Color.White)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Column {
             Row(
@@ -59,12 +60,14 @@ fun MerchantsItem(
                 Column {
                     Text(
                         text = savingsWithAssociations.clientName,
-                        color = mifosText,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        style = MaterialTheme.typography.bodyMedium
                     )
                     Text(
                         text = savingsWithAssociations.externalId,
                         modifier = Modifier.padding(top = 4.dp),
-                        style = styleMedium16sp.copy(mifosText)
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        style = MaterialTheme.typography.bodyMedium
                     )
                 }
             }

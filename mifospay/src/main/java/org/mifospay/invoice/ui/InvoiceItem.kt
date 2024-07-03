@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -40,7 +41,7 @@ fun InvoiceItem(
             .padding(4.dp)
             .clickable { onClick(invoiceId) },
         elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(Color.White)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
     ) {
         Column {
             Row(
@@ -71,12 +72,12 @@ fun InvoiceItem(
                     ) {
                         Text(
                             text = invoiceTitle,
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.weight(1f)
                         )
                         Text(
                             text = invoiceAmount,
-                            color = Color.Black,
+                            color = MaterialTheme.colorScheme.onSurface,
                             textAlign = TextAlign.End,
                             modifier = Modifier.weight(1f)
                         )

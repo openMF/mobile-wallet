@@ -113,22 +113,24 @@ fun MifosApp(appState: MifosAppState, bottomSheetNavigator: BottomSheetNavigator
                             .fillMaxWidth()
                             .wrapContentSize(Alignment.TopEnd)
                             .padding(end = 24.dp)
-                            .background(color = Color.White)
+                            .background(color = MaterialTheme.colorScheme.surface)
                     ) {
                         DropdownMenu(
-                            modifier = Modifier.background(color = Color.White),
+                            modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
                             expanded = showHomeMenuOption,
                             onDismissRequest = { showHomeMenuOption = false }
                         ) {
                             DropdownMenuItem(
-                                text = { Text(stringResource(id = R.string.faq)) },
+                                text = { Text(stringResource(id = R.string.faq),
+                                    color = MaterialTheme.colorScheme.onSurface) },
                                 onClick = {
                                     showHomeMenuOption = false
                                     context.startActivity(Intent(context, FAQActivity::class.java))
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text(stringResource(id = R.string.settings)) },
+                                text = { Text(stringResource(id = R.string.settings),
+                                    color = MaterialTheme.colorScheme.onSurface) },
                                 onClick = {
                                     showHomeMenuOption = false
                                     appState.navController.navigateToSettings()

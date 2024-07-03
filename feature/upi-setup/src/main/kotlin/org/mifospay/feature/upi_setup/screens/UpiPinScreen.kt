@@ -79,7 +79,7 @@ fun UpiPinScreenContent(
     Text(
         text = if (steps1.value == 0) stringResource(id = R.string.feature_upi_setup_enter_upi_pin)
         else stringResource(id = R.string.feature_upi_setup_reenter_upi),
-        color = Color(0xFF1E90FF),
+        color = MaterialTheme.colorScheme.onSurface,
         fontSize = 18.sp,
         style = MaterialTheme.typography.headlineMedium
     )

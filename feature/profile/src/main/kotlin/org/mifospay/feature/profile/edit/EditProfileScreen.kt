@@ -26,6 +26,7 @@ import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -123,7 +124,7 @@ fun EditProfileScreen(
                     EditProfileUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(R.string.loading),
-                            backgroundColor = Color.White
+                            backgroundColor = MaterialTheme.colorScheme.surface
                         )
                     }
 
@@ -244,7 +245,7 @@ fun EditProfileScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(color = MaterialTheme.colorScheme.surface,)
                 .verticalScroll(rememberScrollState())
         ) {
             EditProfileScreenImage(
@@ -289,7 +290,7 @@ fun EditProfileScreenContent(
                         autoDetectCode = true,
                         shape = RoundedCornerShape(3.dp),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = Color.Black
+                            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
                         ),
                         onValueChange = { (code, phone), isValid ->
                             if (isValid) {
@@ -336,7 +337,7 @@ fun EditProfileBottomSheetContent(
 ) {
     Column(
         modifier = Modifier
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(top = 8.dp, bottom = 12.dp)
     ) {
         Row(
@@ -388,14 +389,14 @@ fun EditProfileBottomSheetContent(
 fun EditProfileSaveButton(onClick: () -> Unit, buttonText: Int) {
     Button(
         onClick = { onClick.invoke() },
-        colors = ButtonDefaults.buttonColors(Color.Black),
+        colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp),
         shape = RoundedCornerShape(10.dp),
         contentPadding = PaddingValues(12.dp)
     ) {
-        Text(text = stringResource(id = buttonText), style = styleMedium16sp.copy(Color.White))
+        Text(text = stringResource(id = buttonText), style = styleMedium16sp.copy(MaterialTheme.colorScheme.onPrimary))
     }
 }
 

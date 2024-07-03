@@ -190,7 +190,7 @@ fun SignupMethodContentScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.White),
+                .background(color = MaterialTheme.colorScheme.surface),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
@@ -204,7 +204,7 @@ fun SignupMethodContentScreen(
                 },
                 border = BorderStroke(1.dp, Color.LightGray),
                 shape = RoundedCornerShape(4.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Black)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_auth_sign_up_as_merchant).uppercase(),
@@ -243,7 +243,7 @@ fun SignupMethodContentScreen(
                 },
                 border = BorderStroke(1.dp, Color.LightGray),
                 shape = RoundedCornerShape(4.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Black)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_auth_sign_up_as_customer).uppercase(),
@@ -263,7 +263,7 @@ fun SignupMethodContentScreen(
                     onCheckedChange = {
                         checkedGoogleAccountState = !checkedGoogleAccountState
                     },
-                    colors = CheckboxDefaults.colors(Color.Black)
+                    colors = CheckboxDefaults.colors(MaterialTheme.colorScheme.primary)
                 )
                 Text(
                     text = stringResource(id = R.string.feature_auth_ease_my_sign_up_using_google_account),

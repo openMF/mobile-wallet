@@ -152,20 +152,20 @@ fun SignupScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color.White)
+                .background(color = MaterialTheme.colorScheme.surface)
                 .verticalScroll(rememberScrollState())
                 .focusable(!showProgressState),
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.onBackground),
+                    .background(color = MaterialTheme.colorScheme.primary),
                 verticalArrangement = Arrangement.Top
             ) {
                 Text(
                     modifier = Modifier.padding(top = 48.dp, start = 24.dp, end = 24.dp),
                     text = stringResource(id = R.string.feature_auth_complete_your_registration),
-                    style = MaterialTheme.typography.titleLarge.copy(color = Color.White)
+                    style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary)
                 )
                 Text(
                     modifier = Modifier.padding(
@@ -278,7 +278,7 @@ fun SignupScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     enabled = true,
                     onClick = {
                         validateAllFields()
@@ -288,7 +288,7 @@ fun SignupScreen(
                 ) {
                     Text(
                         text = stringResource(id = R.string.feature_auth_complete),
-                        style = styleMedium16sp.copy(color = Color.White)
+                        style = styleMedium16sp.copy(color = MaterialTheme.colorScheme.onPrimary)
                     )
                 }
             }

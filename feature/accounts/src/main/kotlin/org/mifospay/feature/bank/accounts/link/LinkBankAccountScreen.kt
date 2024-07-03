@@ -107,7 +107,7 @@ fun LinkBankAccountScreen(
 ) {
 
     Scaffold(
-        modifier = Modifier.background(color = Color.White),
+        modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
         topBar = {
             MifosTopAppBar(
                 titleRes = R.string.link_bank_account,
@@ -115,7 +115,7 @@ fun LinkBankAccountScreen(
                 navigationIconContentDescription = "Back icon",
                 onNavigationClick = onBackClick,
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.White,
+                    containerColor = MaterialTheme.colorScheme.surface,
                 ),
             )
         }) { paddingValues ->
@@ -126,7 +126,7 @@ fun LinkBankAccountScreen(
                 is BankUiState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(R.string.loading),
-                        backgroundColor = Color.White
+                        backgroundColor = MaterialTheme.colorScheme.surface
                     )
                 }
 
@@ -156,7 +156,7 @@ fun BankListScreenContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.White)
+            .background(color = MaterialTheme.colorScheme.surface)
             .verticalScroll(rememberScrollState())
     ) {
         MifosOutlinedTextField(modifier = Modifier
@@ -176,7 +176,7 @@ fun BankListScreenContent(
             Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = stringResource(id = R.string.popular_banks),
-                style = TextStyle(Color.Black, fontWeight = FontWeight.Medium),
+                style = TextStyle(MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Medium),
                 modifier = Modifier.padding(start = 16.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
@@ -187,7 +187,7 @@ fun BankListScreenContent(
             Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = stringResource(id = R.string.other_banks),
-                style = TextStyle(Color.Black, fontWeight = FontWeight.Medium),
+                style = TextStyle(MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Medium),
                 modifier = Modifier.padding(start = 16.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
@@ -212,7 +212,7 @@ fun PopularBankGridBody(
         modifier = Modifier,
         shape = RoundedCornerShape(0.dp),
         elevation = 2.dp,
-        colors = CardDefaults.cardColors(Color.White)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
     ) {
         FlowRow(
             modifier = Modifier,

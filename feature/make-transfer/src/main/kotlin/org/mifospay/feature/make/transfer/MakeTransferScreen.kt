@@ -179,7 +179,7 @@ fun MakeTransferContent(
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             ),
             modifier = Modifier
                 .padding(vertical = 10.dp)
@@ -199,7 +199,7 @@ fun MakeTransferContent(
                 Text(
                     text = stringResource(id = R.string.feature_make_transfer_sending_to) + Constants.COLON,
                     style = TextStyle(
-                        Color.Black,
+                        MaterialTheme.colorScheme.onSurface,
                         MaterialTheme.typography.bodyMedium.fontSize
                     )
                 )
@@ -209,7 +209,7 @@ fun MakeTransferContent(
                 Text(
                     text = resultName,
                     style = TextStyle(
-                        Color.Black,
+                        MaterialTheme.colorScheme.onSurface,
                         MaterialTheme.typography.bodyLarge.fontSize
                     )
                 )
@@ -219,7 +219,7 @@ fun MakeTransferContent(
                 Text(
                     text = externalId,
                     style = TextStyle(
-                        Color.Black,
+                        MaterialTheme.colorScheme.onSurface,
                         MaterialTheme.typography.bodyLarge.fontSize
                     )
                 )
@@ -229,7 +229,7 @@ fun MakeTransferContent(
                 Text(
                     text = stringResource(id = R.string.feature_make_transfer_amount) + Constants.COLON,
                     style = TextStyle(
-                        Color.Black,
+                        MaterialTheme.colorScheme.onSurface,
                         MaterialTheme.typography.bodyMedium.fontSize
                     )
                 )
@@ -239,7 +239,7 @@ fun MakeTransferContent(
                 Text(
                     text = transferAmount.toString(),
                     style = TextStyle(
-                        Color.Black,
+                        MaterialTheme.colorScheme.onSurface,
                         MaterialTheme.typography.bodyLarge.fontSize
                     )
                 )
@@ -307,7 +307,7 @@ fun TransactionStatusContent(showTransactionStatus: ShowTransactionStatus) {
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black
+                color = MaterialTheme.colorScheme.onSurface
             ),
             modifier = Modifier
                 .padding(vertical = 10.dp)

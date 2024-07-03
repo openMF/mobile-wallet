@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -115,7 +116,7 @@ fun ReadQrScreen(
                     is ReadQrUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(R.string.feature_qr_loading),
-                            backgroundColor = Color.White
+                            backgroundColor = MaterialTheme.colorScheme.surface
                         )
                     }
 
@@ -128,7 +129,7 @@ fun ReadQrScreen(
                             modifier = Modifier,
                             title = stringResource(R.string.feature_qr_oops),
                             subTitle = stringResource(id = R.string.feature_qr_unexpected_error_subtitle),
-                            iconTint = Color.Black,
+                            iconTint = MaterialTheme.colorScheme.onSurface,
                             iconImageVector = MifosIcons.Info
                         )
                     }

@@ -96,7 +96,7 @@ fun SpecificTransactionsScreen(
                     SpecificTransactionsUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(R.string.loading),
-                            backgroundColor = Color.White
+                            backgroundColor = MaterialTheme.colorScheme.surface
                         )
                     }
 
@@ -106,7 +106,7 @@ fun SpecificTransactionsScreen(
                                 modifier = Modifier,
                                 title = stringResource(id = R.string.error_oops),
                                 subTitle = stringResource(id = R.string.no_transactions_found),
-                                iconTint = Color.Black,
+                                iconTint = MaterialTheme.colorScheme.primary,
                                 iconImageVector = Icons.Rounded.Info
                             )
                         } else {
@@ -175,7 +175,7 @@ fun SpecificTransactionItem(
                 Text(
                     text = stringResource(id = R.string.transaction_id) + transaction.transactionId,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = primaryDarkBlue
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Text(
                     text = stringResource(id = R.string.date) + transaction.date,

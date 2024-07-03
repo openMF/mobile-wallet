@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -47,10 +49,12 @@ fun PayVpsMobileScreen() {
                 .fillMaxWidth()
                 .padding(top = 32.dp),
             value = amount,
+            colors = TextFieldDefaults.colors(MaterialTheme.colorScheme.surface),
             onValueChange = {
                 amount = it
             },
-            label = { Text("Amount") }
+            label = { Text(text = "Amount",
+                color = MaterialTheme.colorScheme.onSurface) }
         )
         TextField(
             modifier = Modifier
@@ -60,19 +64,20 @@ fun PayVpsMobileScreen() {
             onValueChange = {
                 description = it
             },
-            label = { Text("Description") }
+            label = { Text(text = "Description",
+                color = MaterialTheme.colorScheme.onSurface) }
         )
         Button(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             enabled = amount.isNotEmpty() && description.isNotEmpty(),
             onClick = {
 
             }
         ) {
-            Text(text = "Create Payment Request", style = styleMedium16sp.copy(color = Color.White))
+            Text(text = "Create Payment Request", style = styleMedium16sp.copy(color = MaterialTheme.colorScheme.onPrimary))
         }
     }
 }

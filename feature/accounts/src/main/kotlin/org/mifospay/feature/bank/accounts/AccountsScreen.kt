@@ -19,6 +19,7 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -110,7 +111,7 @@ fun AccountScreen(
                         modifier = Modifier,
                         title = stringResource(id = R.string.error_oops),
                         subTitle = stringResource(id = R.string.unexpected_error_subtitle),
-                        iconTint = Color.Black,
+                        iconTint = MaterialTheme.colorScheme.onSurface,
                         iconImageVector = Icons.Rounded.Info
                     )
                 }
@@ -125,7 +126,7 @@ fun AccountScreen(
                             Text(
                                 text = stringResource(id = R.string.linked_bank_account),
                                 fontSize = 16.sp,
-                                color = colorResource(id = R.color.colorTextPrimary),
+                                color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(top = 48.dp, start = 24.dp)
                             )
                         }
@@ -146,7 +147,7 @@ fun AccountScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(16.dp)
-                                    .background(color = Color.White)
+                                    .background(MaterialTheme.colorScheme.surface)
                             ) {
                                 AddCardChip(
                                     modifier = Modifier.align(Alignment.Center),
@@ -162,7 +163,7 @@ fun AccountScreen(
                 AccountsUiState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(R.string.loading),
-                        backgroundColor = Color.White
+                        backgroundColor = MaterialTheme.colorScheme.surface
                     )
                 }
 

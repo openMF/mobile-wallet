@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -62,11 +63,11 @@ fun MfOutlinedTextField(
         },
         keyboardOptions = keyboardOptions,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color.Black,
-            focusedLabelColor = Color.Black
+            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+            focusedLabelColor = MaterialTheme.colorScheme.onSurface
         ),
         textStyle = LocalDensity.current.run {
-            TextStyle(fontSize = 18.sp, color = Color.Black)
+            TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         }
     )
 }
@@ -133,10 +134,8 @@ fun MifosOutlinedTextField(
                 Image(
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    colorFilter = if (isSystemInDarkTheme()) {
-                        ColorFilter.tint(Color.White)
-                    } else ColorFilter.tint(
-                        Color.Black
+                    colorFilter = ColorFilter.tint(
+                        MaterialTheme.colorScheme.onSurface
                     )
                 )
             }
@@ -145,11 +144,11 @@ fun MifosOutlinedTextField(
         maxLines = maxLines,
         singleLine = singleLine,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color.Black,
-            focusedLabelColor = Color.Black
+            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+            focusedLabelColor = MaterialTheme.colorScheme.onSurface
         ),
         textStyle = LocalDensity.current.run {
-            TextStyle(fontSize = 18.sp, color = Color.Black)
+            TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = keyboardActions,
@@ -163,7 +162,7 @@ fun MifosOutlinedTextField(
 fun MfOutlinedTextFieldPreview() {
     MifosTheme {
         Box(
-            modifier = Modifier.background(color = Color.White)
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.surface)
         ) {
             MfOutlinedTextField(
                 modifier = Modifier,

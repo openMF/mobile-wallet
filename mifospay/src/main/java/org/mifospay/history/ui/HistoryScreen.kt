@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -79,7 +80,7 @@ fun HistoryScreen(
                 modifier = Modifier,
                 title = stringResource(id = R.string.error_oops),
                 subTitle = stringResource(id = R.string.empty_no_transaction_history_title),
-                iconTint = Color.Black,
+                iconTint = MaterialTheme.colorScheme.surfaceTint,
                 iconImageVector = Icons.Rounded.Info
             )
         }
@@ -89,7 +90,7 @@ fun HistoryScreen(
                 modifier = Modifier,
                 title = stringResource(id = R.string.error_oops),
                 subTitle = stringResource(id = R.string.unexpected_error_subtitle),
-                iconTint = Color.Black,
+                iconTint = MaterialTheme.colorScheme.surfaceTint,
                 iconImageVector = Icons.Rounded.Info
             )
         }
@@ -168,7 +169,7 @@ fun HistoryScreen(
 @Composable
 fun Chip(selected: Boolean, onClick: () -> Unit, label: String) {
     val context = LocalContext.current
-    val backgroundColor = if (selected) chipSelectedColor else lightGrey
+    val backgroundColor = if (selected) MaterialTheme.colorScheme.primary else lightGrey
     Button(
         onClick = {
             onClick()
@@ -179,7 +180,7 @@ fun Chip(selected: Boolean, onClick: () -> Unit, label: String) {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp),
             text = label,
-            color = Color.Black
+            color = if (selected) MaterialTheme.colorScheme.onPrimary else Color.Black
         )
     }
 }

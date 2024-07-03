@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -52,7 +53,7 @@ fun StandingInstructionScreen(
             modifier = Modifier,
             title = stringResource(id = R.string.feature_standing_instruction_error_oops),
             subTitle = stringResource(id = R.string.feature_standing_instruction_empty_standing_instructions),
-            iconTint = Color.Black,
+            iconTint = MaterialTheme.colorScheme.primary,
             iconImageVector = Icons.Rounded.Info
         )
     }
@@ -62,7 +63,7 @@ fun StandingInstructionScreen(
             modifier = Modifier,
             title = stringResource(id = R.string.feature_standing_instruction_error_oops),
             subTitle = stringResource(id = R.string.feature_standing_instruction_error_fetching_si_list),
-            iconTint = Color.Black,
+            iconTint = MaterialTheme.colorScheme.primary,
             iconImageVector = Icons.Rounded.Info
         )
     }
@@ -80,11 +81,13 @@ fun StandingInstructionScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = { onNewSI.invoke() },
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 ) {
                     Icon(
                         painter = rememberVectorPainter(MifosIcons.Add),
                         contentDescription = null,
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }

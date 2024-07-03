@@ -84,13 +84,14 @@ fun SetAmountDialog(
         content = {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = Color.White
+                color = MaterialTheme.colorScheme.surface
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
 
                     Text(
                         text = stringResource(id = R.string.feature_request_money_set_amount),
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))

@@ -19,6 +19,7 @@ import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -78,7 +79,7 @@ fun MerchantScreen(
                         modifier = Modifier,
                         title = stringResource(id = R.string.empty_no_merchants_title),
                         subTitle = stringResource(id = R.string.empty_no_merchants_subtitle),
-                        iconTint = Color.Black,
+                        iconTint = MaterialTheme.colorScheme.onSurface,
                         iconImageVector = Icons.Rounded.Info
                     )
                 }
@@ -88,7 +89,7 @@ fun MerchantScreen(
                         modifier = Modifier,
                         title = stringResource(id = R.string.error_oops),
                         subTitle = stringResource(id = R.string.unexpected_error_subtitle),
-                        iconTint = Color.Black,
+                        iconTint = MaterialTheme.colorScheme.onSurface,
                         iconImageVector = Icons.Rounded.Info
                     )
                 }
@@ -96,7 +97,7 @@ fun MerchantScreen(
                 MerchantUiState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(R.string.loading),
-                        backgroundColor = Color.White
+                        backgroundColor = MaterialTheme.colorScheme.surface
                     )
                 }
 

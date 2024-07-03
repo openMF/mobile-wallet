@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -87,11 +89,13 @@ fun Kyc3Form(
 
         Button(
             onClick = {},
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(16.dp)
         ) {
-            Text(stringResource(R.string.submit))
+            Text(stringResource(R.string.submit),
+                color = MaterialTheme.colorScheme.onPrimary)
         }
     }
 }

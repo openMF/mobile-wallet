@@ -65,20 +65,23 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
     ) {
         Text(
             text = stringResource(id = R.string.verify_mobile_number),
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
+            color = MaterialTheme.colorScheme.onSurface
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(id = R.string.confirm_mobile_number_message),
             style = MaterialTheme.typography.bodySmall.copy(
                 textAlign = TextAlign.Center
-            )
+            ),
+            color = MaterialTheme.colorScheme.onSurface
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             modifier = Modifier.padding(horizontal = 24.dp),
             text = stringResource(id = R.string.bank_account_mobile_verification_conditions),
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
         )
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -93,7 +96,8 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
             )
 
             Spacer(modifier = Modifier.width(24.dp))
-            Text(text = stringResource(id = R.string.or))
+            Text(text = stringResource(id = R.string.or),
+                color = MaterialTheme.colorScheme.onSurface)
             Spacer(modifier = Modifier.width(24.dp))
             SimCard(
                 simNumber = 2,
@@ -104,7 +108,7 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(id = R.string.regular_charges_will_apply),
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodySmall
         )
         MifosButton(

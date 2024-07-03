@@ -31,7 +31,7 @@ fun AddCardChip(
                 stringResource(text),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Bold,
-                    color = Color.White
+                    color = MaterialTheme.colorScheme.onPrimary
                 ),
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
@@ -41,11 +41,11 @@ fun AddCardChip(
                 Icons.Filled.Add,
                 contentDescription = stringResource(btnText),
                 modifier = Modifier.size(16.dp),
-                tint = Color.White
+                tint = MaterialTheme.colorScheme.onPrimary
             )
         },
         colors = AssistChipDefaults.assistChipColors(
-            containerColor = Color.Black
+            containerColor = MaterialTheme.colorScheme.primary
         ),
     )
 }

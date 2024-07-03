@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -37,7 +38,8 @@ fun RequestScreen(
         Text(
             modifier = Modifier.padding(start = 20.dp, top = 30.dp),
             text = stringResource(id = R.string.receive),
-            style = styleNormal18sp.copy(Color.Blue)
+            style = MaterialTheme.typography.titleMedium,
+            color = MaterialTheme.colorScheme.primary
         )
         Row(modifier = Modifier.fillMaxWidth().padding(start = 20.dp), verticalAlignment = Alignment.CenterVertically) {
             Column(
@@ -48,12 +50,16 @@ fun RequestScreen(
             ) {
                 Column {
                     Text(text = stringResource(id = R.string.virtual_payment_address_vpa))
-                    Text(text = vpa, style = styleMedium16sp)
+                    Text(text = vpa,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface)
                 }
 
                 Column(modifier = Modifier.padding(top = 10.dp)) {
                     Text(text = stringResource(id = R.string.mobile_number))
-                    Text(text = mobile, style = styleMedium16sp)
+                    Text(text = mobile,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface)
                 }
             }
             Column(
@@ -65,7 +71,7 @@ fun RequestScreen(
                 IconButton(onClick = { showQr.invoke() }) {
                     Icon(
                         imageVector = Icons.Default.QrCode,
-                        tint = Color.Blue,
+                        tint = MaterialTheme.colorScheme.primary,
                         contentDescription = stringResource(id = R.string.show_code),
                     )
                 }

@@ -37,7 +37,8 @@ fun OtpScreen(
                 bottom = dimensionResource(id = R.dimen.value_15dp),
                 start = dimensionResource(id = R.dimen.value_10dp),
                 end = dimensionResource(id = R.dimen.value_10dp)
-            ), elevation = 1.dp
+            ), elevation = 1.dp,
+        contentColor = MaterialTheme.colorScheme.surface
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -56,7 +57,7 @@ fun OtpScreen(
 private fun OtpScreenContent(realOtp: String, onOtpTextCorrectlyEntered: () -> Unit) {
     Text(
         text = stringResource(id = R.string.enter_otp),
-        color = Color(0xFF1E90FF),
+        color = MaterialTheme.colorScheme.primary,
         fontSize = 18.sp,
         style = MaterialTheme.typography.headlineMedium
     )

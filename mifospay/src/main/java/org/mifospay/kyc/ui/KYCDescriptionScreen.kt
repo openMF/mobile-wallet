@@ -209,13 +209,13 @@ fun ButtonComponent(
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(
             containerColor = when {
-                completed -> Color.White
-                enabled -> Color.Blue
+                completed -> MaterialTheme.colorScheme.surface
+                enabled -> MaterialTheme.colorScheme.primary
                 else -> Color.Gray
             },
             contentColor = when {
-                completed -> Color.Blue
-                enabled -> Color.White
+                completed -> MaterialTheme.colorScheme.onSurface
+                enabled -> MaterialTheme.colorScheme.onPrimary
                 else -> Color.Gray
             }
         ),
