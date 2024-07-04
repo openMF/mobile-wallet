@@ -1,10 +1,10 @@
-package org.mifospay.home.navigation
+package org.mifospay.feature.home.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import org.mifospay.home.screens.HomeRoute
+import org.mifospay.feature.home.HomeRoute
 
 const val HOME_ROUTE = "home_route"
 

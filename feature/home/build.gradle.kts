@@ -10,7 +10,4 @@ android {
 dependencies {
     implementation(projects.feature.history)
     implementation(projects.core.data)
-
-    //remove this after optimizing HistoryContract
-    implementation(projects.mifospay)
 }
