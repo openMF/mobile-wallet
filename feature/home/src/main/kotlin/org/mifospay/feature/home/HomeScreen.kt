@@ -40,7 +40,6 @@ import com.mifospay.core.model.domain.Account
 import com.mifospay.core.model.domain.Currency
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
-import org.mifospay.R
 import org.mifospay.common.Utils
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.theme.border
@@ -62,7 +61,7 @@ fun HomeRoute(
     when (homeUIState) {
         is HomeUiState.Loading -> {
             MfLoadingWheel(
-                contentDesc = stringResource(R.string.loading),
+                contentDesc = stringResource(R.string.feature_home_loading),
                 backgroundColor = Color.White
             )
         }
@@ -293,5 +292,5 @@ fun PayRequestScreenPreview() {
 @Preview
 @Composable
 fun PayCardPreview() {
-    PayCard(Modifier.width(150.dp), "Request", R.drawable.ic_arrow_back_black_24dp) { }
+    PayCard(Modifier.width(150.dp), "Request", R.drawable.feature_home_ic_arrow_back_black_24dp) { }
 }
