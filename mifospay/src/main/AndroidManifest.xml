@@ -104,7 +104,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".invoice.ui.InvoiceActivity"
+            android:name=".feature.invoices.InvoiceActivity"
             android:exported="true"
             android:launchMode="singleTask"
             android:theme="@style/AppTheme">
