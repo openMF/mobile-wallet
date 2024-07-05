@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.domain.BankAccountDetails
-import org.mifospay.R
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.ui.EmptyContentScreen

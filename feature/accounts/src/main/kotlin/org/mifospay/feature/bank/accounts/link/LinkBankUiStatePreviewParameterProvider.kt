@@ -1,9 +1,9 @@
 package org.mifospay.feature.bank.accounts.link
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import org.mifospay.R
-import org.mifospay.domain.model.Bank
-import org.mifospay.domain.model.BankType
+import com.mifospay.core.model.domain.Bank
+import com.mifospay.core.model.domain.BankType
+import org.mifospay.feature.bank.accounts.R
 
 class LinkBankUiStatePreviewParameterProvider : PreviewParameterProvider<BankUiState> {
 

@@ -6,9 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.rememberPagerState
-import org.mifospay.bank.ui.AccountsScreen
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
+import org.mifospay.feature.bank.accounts.AccountsScreen
 import org.mifospay.feature.kyc.KYCScreen
 import org.mifospay.feature.savedcards.CardsScreen
 import org.mifospay.feature.merchants.ui.MerchantScreen

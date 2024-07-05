@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.mifospay.core.model.domain.BankAccountDetails
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.theme.mifosText
 import org.mifospay.core.designsystem.theme.styleMedium16sp
