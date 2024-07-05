@@ -46,18 +46,18 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.mifospay.R
-import org.mifospay.bank.choose_sim.ChooseSimDialogSheet
+import com.mifospay.core.model.domain.Bank
+import com.mifospay.core.model.domain.BankType
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.domain.model.Bank
-import org.mifospay.domain.model.BankType
-import org.mifospay.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.DevicePreviews
+import org.mifospay.feature.bank.accounts.R
+import org.mifospay.feature.bank.accounts.choose.sim.ChooseSimDialogSheet
 
 
 @Composable

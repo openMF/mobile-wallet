@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bank_account_details">Bank Account Details</string>
+    <string name="bank_name">Bank Name</string>
+    <string name="ac_holder_name">A/C Holder Name</string>
+    <string name="branch_name">Branch Name</string>
+    <string name="ifsc">IFSC</string>
+    <string name="type">Type</string>
+    <string name="setup_upi">Setup UPI</string>
+    <string name="delete_bank">Delete Bank</string>
+    <string name="change_upi_pin">Change UPI PIN</string>
+    <string name="forgot_upi_pin">Forgot UPI PIN</string>
+    <string name="link_bank_account">Link Bank Account</string>
+    <string name="loading">Loading</string>
+    <string name="search">Search</string>
+    <string name="popular_banks">Popular Banks</string>
+    <string name="other_banks">Other Banks</string>
+    <string name="error_oops">Oops!</string>
+    <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+    <string name="linked_bank_account">Linked bank accounts</string>
+    <string name="add_account">ADD ACCOUNT</string>
+    <string name="add_cards">Please Add Cards</string>
+    <string name="no_linked_bank_accounts">No Linked Bank Accounts</string>
+    <string name="verify_mobile_number">Verify Mobile Number</string>
+    <string name="confirm_mobile_number_message">To confirm your mobile number \n we need to send an
+        SMS from \n your phone*
+    </string>
+    <string name="or">or</string>
+    <string name="regular_charges_will_apply">*Regular charges will apply</string>
+    <string name="choose_a_sim">Please choose a SIM</string>
+    <string name="confirm">Confirm</string>
+    <string name="bank_account_mobile_verification_conditions">Make sure that the following
+        conditions are met: \n1. Mobile Number is linked with your Bank Account. \n2. Mobile Number
+        is
+        registered on MifosPay. \n3. It\'s sim is on this device.
+    </string>
+</resources>

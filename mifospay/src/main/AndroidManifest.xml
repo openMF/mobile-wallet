@@ -161,10 +161,10 @@
             android:name=".feature.faq.FAQActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".bank.link_bank.LinkBankAccountActivity"
+            android:name=".feature.bank.accounts.link.LinkBankAccountActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".bank.ui.BankAccountDetailActivity"
+            android:name=".feature.bank.accounts.details.BankAccountDetailActivity"
             android:theme="@style/AppTheme" />
         <activity
             android:name=".feature.upi_setup.ui.SetupUpiPinActivity"

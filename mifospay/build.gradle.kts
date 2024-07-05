@@ -90,6 +90,8 @@ dependencies {
     implementation(projects.feature.merchants)
     implementation(projects.feature.history)
     implementation(projects.feature.kyc)
+    implementation(projects.feature.home)
+    implementation(projects.feature.accounts)
 
     // Compose
     implementation(libs.androidx.activity.compose)

@@ -24,8 +24,7 @@ class HomeViewModel @Inject constructor(
     private val preferencesHelper: PreferencesHelper,
     private val fetchAccountUseCase: FetchAccount,
     private val transactionsHistory: TransactionsHistory
-) : ViewModel(), HistoryContract.TransactionsHistoryAsync,
-    org.mifospay.history.HistoryContract.TransactionsHistoryAsync {
+) : ViewModel(), HistoryContract.TransactionsHistoryAsync{
 
     // Expose screen UI state
     private val _homeUIState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Loading)
