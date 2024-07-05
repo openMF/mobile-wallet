@@ -5,7 +5,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mifospay.core.model.domain.Bank
 import com.mifospay.core.model.domain.BankAccountDetails
+import com.mifospay.core.model.domain.BankType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -15,10 +17,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import org.mifospay.R
 import org.mifospay.core.data.repository.local.MifosLocalAssetRepository
-import org.mifospay.domain.model.Bank
-import org.mifospay.domain.model.BankType
+import org.mifospay.feature.bank.accounts.R
 import java.util.Random
 import javax.inject.Inject
 

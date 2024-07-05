@@ -1,4 +1,4 @@
-package org.mifospay.bank.choose_sim
+package org.mifospay.feature.bank.accounts.choose.sim
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -31,10 +31,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton
-import org.mifospay.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.feature.bank.accounts.R
 
 @Composable
 fun ChooseSimDialogSheet(

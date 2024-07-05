@@ -3,16 +3,15 @@ package org.mifospay.feature.bank.accounts.details
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatActivity
 import com.mifospay.core.model.domain.BankAccountDetails
 import dagger.hilt.android.AndroidEntryPoint
-import org.mifospay.bank.setupUpi.ui.SetupUpiPinActivity
-import org.mifospay.base.BaseActivity
 import org.mifospay.common.Constants
-import org.mifospay.theme.MifosTheme
-import org.mifospay.utils.Toaster
+import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.feature.upi_setup.ui.SetupUpiPinActivity
 
 @AndroidEntryPoint
-class BankAccountDetailActivity : BaseActivity() {
+class BankAccountDetailActivity : AppCompatActivity() {
 
     private lateinit var bankAccountDetails: BankAccountDetails
     private var index = 0
@@ -64,7 +63,8 @@ class BankAccountDetailActivity : BaseActivity() {
     }
 
     private fun showToast(message: String?) {
-        Toaster.showToast(this, message)
+        //Todo: Implement toast in compose after complete migration
+        //Toaster.showToast(this, message)
     }
 
     override fun onBackPressed() {
