@@ -18,6 +18,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -128,7 +130,7 @@ fun CardsScreen(
             CardsUiState.Loading -> {
                 MfLoadingWheel(
                     contentDesc = stringResource(R.string.feature_savedcards_loading),
-                    backgroundColor = Color.White
+                    backgroundColor = MaterialTheme.colorScheme.surface
                 )
             }
 
@@ -141,7 +143,7 @@ fun CardsScreen(
                     modifier = Modifier,
                     title = stringResource(id = R.string.feature_savedcards_error_oops),
                     subTitle = stringResource(id = R.string.feature_savedcards_unexpected_error_subtitle),
-                    iconTint = Color.Black,
+                    iconTint = MaterialTheme.colorScheme.primary,
                     iconImageVector = Icons.Rounded.Info
                 )
             }
@@ -224,7 +226,7 @@ fun CardsScreenContent(
                 .fillMaxWidth()
                 .height(56.dp)
                 .align(Alignment.BottomCenter)
-                .background(color = Color.White)
+                .background(color = MaterialTheme.colorScheme.surface)
         ) {
             AddCardChip(
                 modifier = Modifier.align(Alignment.Center),
@@ -249,12 +251,14 @@ fun SearchBarScreen(
             .fillMaxWidth()
             .padding(vertical = 16.dp, horizontal = 16.dp),
         query = query,
+        colors = SearchBarDefaults.colors(MaterialTheme.colorScheme.primaryContainer),
         onQueryChange = onQueryChange,
         onSearch = onSearch,
         active = false,
         onActiveChange = { },
         placeholder = {
-            Text(text = stringResource(R.string.feature_savedcards_search))
+            Text(text = stringResource(R.string.feature_savedcards_search),
+                color = MaterialTheme.colorScheme.onPrimaryContainer)
         },
         leadingIcon = {
             Icon(
@@ -299,9 +303,10 @@ fun CardItem(card: Card, onMenuItemClick: (Card, CardMenuAction) -> Unit) {
     Card(
         modifier = Modifier
             .clickable { expanded = true }
-            .background(color = Color.White)
+            .background(color = MaterialTheme.colorScheme.surface)
             .fillMaxWidth()
-            .padding(10.dp)
+            .padding(10.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Column(
             modifier = Modifier
@@ -311,17 +316,18 @@ fun CardItem(card: Card, onMenuItemClick: (Card, CardMenuAction) -> Unit) {
             Row {
                 Column {
                     Row {
-                        Text(text = card.firstName, style = MaterialTheme.typography.bodyMedium)
+                        Text(text = card.firstName, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
                         Spacer(modifier = Modifier.height(6.dp))
-                        Text(text = card.lastName, style = MaterialTheme.typography.bodyMedium)
+                        Text(text = card.lastName, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                     }
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = "${stringResource(R.string.feature_savedcards_card_number)} ${card.cardNumber}",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = card.expiryDate, style = MaterialTheme.typography.bodyMedium)
+                    Text(text = card.expiryDate, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
                 Spacer(modifier = Modifier.height(38.dp))
                 DropdownMenu(
@@ -365,7 +371,8 @@ fun NoCardAddCardsScreen(onAddBtn: () -> Unit) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.feature_savedcards_add_cards))
+            Text(text = stringResource(R.string.feature_savedcards_add_cards),
+                color = MaterialTheme.colorScheme.onSurface)
             AddCardChip(
                 modifier = Modifier,
                 onAddBtn = onAddBtn,

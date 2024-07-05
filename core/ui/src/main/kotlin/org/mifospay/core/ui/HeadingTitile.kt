@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,7 +30,7 @@ fun VerifyStepHeader(text: String, isVerified: Boolean) {
     ) {
         Text(
             text = text,
-            color = Color(0xFF212121),
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = 17.sp,
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
@@ -45,7 +46,7 @@ fun VerifyStepHeader(text: String, isVerified: Boolean) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = null,
-                    tint = if (isVerified) Color.Black else Color.Gray,
+                    tint = if (isVerified) MaterialTheme.colorScheme.onSurface else Color.Gray,
                     modifier = Modifier.size(24.dp)
                 )
         }

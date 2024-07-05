@@ -146,7 +146,7 @@ fun MfOverlayLoadingWheel(contentDesc: String = "Loading") {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Black.copy(alpha = 0.6f))
+            .background(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
             .focusable(),
         contentAlignment = Alignment.Center
     ) {
@@ -160,7 +160,7 @@ fun MfOverlayLoadingWheel(contentDesc: String = "Loading") {
 @Composable
 fun MfLoadingWheel(
     contentDesc: String = "Loading",
-    backgroundColor: Color = Color.Black.copy(alpha = 0.6f)
+    backgroundColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
 ) {
     Box(
         modifier = Modifier

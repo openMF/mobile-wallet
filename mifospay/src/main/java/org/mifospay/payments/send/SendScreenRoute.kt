@@ -200,7 +200,8 @@ fun SendMoneyScreen(
             Text(
                 modifier = Modifier.padding(start = 20.dp, top = 20.dp),
                 text = stringResource(id = R.string.select_transfer_method),
-                style = styleNormal18sp
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.onSurface
             )
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(
@@ -249,7 +250,7 @@ fun SendMoneyScreen(
                                     Icon(
                                         imageVector = Icons.Filled.QrCode2,
                                         contentDescription = "Scan QR",
-                                        tint = Color.Blue
+                                        tint = MaterialTheme.colorScheme.primary
                                     )
                                 }
                             }
@@ -278,7 +279,7 @@ fun SendMoneyScreen(
                         .fillMaxWidth()
                         .padding(top = 16.dp)
                         .align(Alignment.CenterHorizontally),
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.primary,
                     enabled = isValidInfo,
                     onClick = {
                         if (!isValidInfo) return@MifosButton
@@ -295,7 +296,8 @@ fun SendMoneyScreen(
                 ) {
                     Text(
                         stringResource(id = R.string.submit),
-                        style = styleMedium16sp.copy(color = Color.White)
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }
@@ -334,7 +336,7 @@ fun EnterPhoneScreen(
 fun VpaMobileChip(selected: Boolean, onClick: () -> Unit, label: String) {
     MifosButton(
         onClick = onClick,
-        color = if (selected) Color.Black else Color.LightGray,
+        color = if (selected) MaterialTheme.colorScheme.primary else Color.LightGray,
         modifier = Modifier
             .padding(4.dp)
             .wrapContentSize()
@@ -342,6 +344,7 @@ fun VpaMobileChip(selected: Boolean, onClick: () -> Unit, label: String) {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
             text = label,
+            color = MaterialTheme.colorScheme.onPrimary
         )
     }
 }

@@ -13,6 +13,7 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -68,7 +69,7 @@ fun NotificationScreen(
                         modifier = Modifier,
                         title = stringResource(id = R.string.feature_notification_error_oops),
                         subTitle = stringResource(id = R.string.feature_notification_unexpected_error_subtitle),
-                        iconTint = Color.Black,
+                        iconTint = MaterialTheme.colorScheme.primary,
                         iconImageVector = MifosIcons.RoundedInfo
                     )
                 }
@@ -76,7 +77,7 @@ fun NotificationScreen(
                 NotificationUiState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(R.string.feature_notification_loading),
-                        backgroundColor = Color.White
+                        backgroundColor = MaterialTheme.colorScheme.surface
                     )
                 }
 
@@ -86,7 +87,7 @@ fun NotificationScreen(
                             modifier = Modifier,
                             title = stringResource(R.string.feature_notification_nothing_to_notify),
                             subTitle = stringResource(R.string.feature_notification_there_is_nothing_to_show),
-                            iconTint = Color.Black,
+                            iconTint = MaterialTheme.colorScheme.onSurface,
                             iconImageVector = MifosIcons.RoundedInfo
                         )
                     } else {
@@ -117,7 +118,8 @@ fun NotificationListItem(title: String, body: String, timestamp: String) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        shape = RoundedCornerShape(12.dp)
+        shape = RoundedCornerShape(12.dp),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer)
     ) {
         Column(
             modifier = Modifier
@@ -127,18 +129,21 @@ fun NotificationListItem(title: String, body: String, timestamp: String) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
             )
             Text(
                 text = body, style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)
             )
             Text(
                 text = timestamp, style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)

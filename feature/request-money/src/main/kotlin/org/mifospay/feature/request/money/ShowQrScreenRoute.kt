@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -80,7 +81,7 @@ fun ShowQrScreen(
                     is ShowQrUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(R.string.feature_request_money_loading),
-                            backgroundColor = Color.White
+                            backgroundColor = MaterialTheme.colorScheme.surface
                         )
                     }
 
@@ -90,7 +91,7 @@ fun ShowQrScreen(
                                 modifier = Modifier,
                                 title = stringResource(R.string.feature_request_money_nothing_to_notify),
                                 subTitle = stringResource(R.string.feature_request_money_there_is_nothing_to_show),
-                                iconTint = Color.Black,
+                                iconTint = MaterialTheme.colorScheme.onSurface,
                                 iconImageVector = MifosIcons.Info
                             )
                         } else {
@@ -109,7 +110,7 @@ fun ShowQrScreen(
                             modifier = Modifier,
                             title = stringResource(id = R.string.feature_request_money_error_oops),
                             subTitle = stringResource(id = R.string.feature_request_money_unexpected_error_subtitle),
-                            iconTint = Color.Black,
+                            iconTint = MaterialTheme.colorScheme.onSurface,
                             iconImageVector = MifosIcons.Info
                         )
                     }

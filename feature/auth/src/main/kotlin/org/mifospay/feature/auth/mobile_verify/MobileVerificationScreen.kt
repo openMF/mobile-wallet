@@ -102,7 +102,7 @@ fun MobileVerificationScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.onBackground),
+                    .background(color = MaterialTheme.colorScheme.primary),
                 verticalArrangement = Arrangement.Top
             ) {
                 Text(
@@ -112,7 +112,7 @@ fun MobileVerificationScreen(
                     } else {
                         stringResource(id = R.string.feature_auth_enter_otp)
                     },
-                    style = MaterialTheme.typography.titleLarge.copy(color = Color.White)
+                    style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary)
                 )
                 Text(
                     modifier = Modifier.padding(
@@ -123,7 +123,8 @@ fun MobileVerificationScreen(
                     } else {
                         stringResource(id = R.string.feature_auth_enter_otp_received_on_your_registered_device)
                     },
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.White)
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
 
@@ -157,7 +158,7 @@ fun MobileVerificationScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp, vertical = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 enabled = if (uiState == MobileVerificationUiState.VerifyPhone) {
                     isNumberValid
                 } else {
@@ -171,7 +172,8 @@ fun MobileVerificationScreen(
                         stringResource(id = R.string.feature_auth_verify_phone).uppercase()
                     } else {
                         stringResource(id = R.string.feature_auth_verify_otp).uppercase()
-                    }, style = styleMedium16sp.copy(color = Color.White)
+                    }, style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
@@ -231,7 +233,7 @@ fun ShowProgressScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.Black.copy(alpha = 0.6f))
+            .background(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
             .focusable(),
         contentAlignment = Alignment.Center
     ) {

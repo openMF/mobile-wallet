@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -48,7 +49,7 @@ fun TransactionItemScreen(
                 }
             ),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(Color.Black)
+            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
         )
         Column(
             modifier = Modifier
@@ -60,7 +61,7 @@ fun TransactionItemScreen(
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontWeight = FontWeight(400),
-                    color = Color(0xFF000000),
+                    color = MaterialTheme.colorScheme.onSurface,
 
                     )
             )

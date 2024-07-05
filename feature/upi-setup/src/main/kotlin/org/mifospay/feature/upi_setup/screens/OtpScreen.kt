@@ -55,7 +55,7 @@ fun OtpScreen(
 private fun OtpScreenContent(realOtp: String, onOtpTextCorrectlyEntered: () -> Unit) {
     Text(
         text = stringResource(id = R.string.feature_upi_setup_enter_otp),
-        color = Color(0xFF1E90FF),
+        color = MaterialTheme.colorScheme.onSurface,
         fontSize = 18.sp,
         style = MaterialTheme.typography.headlineMedium
     )

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,7 +29,7 @@ fun AccountsItem(
 ) {
     MifosCard(
         onClick = { onAccountClicked.invoke() },
-        colors = CardDefaults.cardColors(Color.White)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
     ) {
         Column {
             Row(
@@ -48,12 +49,13 @@ fun AccountsItem(
                 Column {
                     Text(
                         text = bankAccountDetails.accountholderName.toString(),
-                        color = mifosText,
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = bankAccountDetails.bankName.toString(),
                         modifier = Modifier.padding(top = 4.dp),
-                        style = styleMedium16sp.copy(mifosText)
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
                 Column(
@@ -64,7 +66,7 @@ fun AccountsItem(
                         text = bankAccountDetails.branch.toString(),
                         modifier = Modifier.padding(16.dp),
                         fontSize = 12.sp,
-                        color = mifosText
+                        color = MaterialTheme.colorScheme.onSurface
                     )
                 }
             }

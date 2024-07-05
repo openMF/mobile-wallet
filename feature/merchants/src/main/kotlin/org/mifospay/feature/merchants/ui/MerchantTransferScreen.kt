@@ -14,11 +14,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+//noinspection UsingMaterialAndMaterial3Libraries
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -112,7 +113,7 @@ fun MerchantTransferScreen(
                     is MerchantTransferUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(R.string.feature_merchants_loading),
-                            backgroundColor = Color.White
+                            backgroundColor = MaterialTheme.colorScheme.surface
                         )
                     }
 
@@ -129,7 +130,7 @@ fun MerchantTransferScreen(
                             modifier = Modifier,
                             title = stringResource(id = R.string.feature_merchants_error_oops),
                             subTitle = stringResource(id = R.string.feature_merchants_no_transactions_found),
-                            iconTint = Color.Black,
+                            iconTint = MaterialTheme.colorScheme.onSurface,
                             iconImageVector = MifosIcons.Info
                         )
                     }
@@ -192,7 +193,7 @@ fun MerchantBottomSheet(
                 Text(
                     text = stringResource(R.string.feature_merchants_transfer_money_to_this_merchant),
                     color = ElectricViolet,
-                    style = MaterialTheme.typography.subtitle1
+                    style = MaterialTheme.typography.bodyMedium
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 
@@ -217,7 +218,7 @@ fun MerchantBottomSheet(
                             merchantVPA
                         )
                     },
-                    colors = ButtonDefaults.buttonColors(backgroundColor = submitButtonColor),
+                    colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
                     modifier = Modifier.width(155.dp)
                 ) {
                     Text(stringResource(id = R.string.feature_merchants_submit), color = Color.White)
@@ -238,12 +239,12 @@ fun MerchantInfo(
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = merchantName,
-            style = MaterialTheme.typography.h5
+            style = MaterialTheme.typography.labelMedium
         )
         Spacer(modifier = Modifier.height(9.dp))
         Text(
             text = merchantVPA,
-            style = MaterialTheme.typography.h6,
+            style = MaterialTheme.typography.labelMedium,
             color = Color.Gray
         )
     }
@@ -257,14 +258,14 @@ fun MerchantInitialAvatar(merchantName: String) {
         modifier = Modifier
             .size(86.dp)
             .background(
-                color = InitialAvatarBgColor,
+                color = MaterialTheme.colorScheme.primary,
                 shape = CircleShape
             ),
         contentAlignment = Alignment.Center
     ) {
         Text(
             text = initial,
-            color = Color.White,
+            color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 44.sp,
             fontWeight = FontWeight.Medium
         )

@@ -3,6 +3,7 @@ package org.mifospay.core.designsystem.component
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -43,8 +44,8 @@ fun MifosOutlinedTextField(
                 Image(
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    colorFilter = if (isSystemInDarkTheme()) ColorFilter.tint(Color.White) else ColorFilter.tint(
-                        Color.Black
+                    colorFilter = ColorFilter.tint(
+                        MaterialTheme.colorScheme.onSurface
                     )
                 )
             }
@@ -53,11 +54,11 @@ fun MifosOutlinedTextField(
         maxLines = maxLines,
         singleLine = singleLine,
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color.Black,
-            focusedLabelColor = Color.Black
+            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+            focusedLabelColor = MaterialTheme.colorScheme.onSurface
         ),
         textStyle = LocalDensity.current.run {
-            TextStyle(fontSize = 18.sp, color = Color.Black)
+            TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
         keyboardOptions = keyboardOptions,
         visualTransformation = visualTransformation,

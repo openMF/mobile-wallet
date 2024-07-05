@@ -14,6 +14,7 @@ import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -70,7 +71,7 @@ fun BankAccountDetailScreen(
         Column(
             modifier = Modifier
                 .padding(20.dp)
-                .border(2.dp, Color.Black)
+                .border(2.dp, MaterialTheme.colorScheme.onSurface)
                 .padding(20.dp)
         ) {
             BankAccountDetailRows(
@@ -148,9 +149,14 @@ fun BankAccountDetailRows(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(id = detail), modifier = Modifier.padding(end = 10.dp)
+            text = stringResource(id = detail),
+            modifier = Modifier.padding(end = 10.dp),
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface
         )
-        Text(text = detailValue, style = styleMedium16sp)
+        Text(text = detailValue,
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
@@ -165,11 +171,10 @@ fun BankAccountDetailButton(
     if (isUpiEnabled) {
         Button(
             onClick = { onClick.invoke() },
-            colors = ButtonDefaults.buttonColors(Color.White),
+            colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
             modifier = modifier
                 .padding(start = 20.dp, end = 20.dp),
-            contentPadding = PaddingValues(20.dp),
-            border = BorderStroke(2.dp, Color.Black)
+            contentPadding = PaddingValues(20.dp)
         ) {
             Row(
                 modifier = modifier,
@@ -178,13 +183,14 @@ fun BankAccountDetailButton(
             ) {
                 Text(
                     text = stringResource(id = btnText),
-                    style = TextStyle(color = mifosText, fontSize = 18.sp)
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
                 if (hasTrailingIcon) {
                     Icon(
                         imageVector = Icons.Filled.ChevronRight,
                         contentDescription = null,
-                        tint = Color.Black
+                        tint = MaterialTheme.colorScheme.onPrimary
                     )
                 }
             }

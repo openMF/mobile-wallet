@@ -172,7 +172,7 @@ fun ReceiptScreenContent(
                 needToHandlePermissions = true
             }
         },
-        contentColor = Color.Black,
+        contentColor = MaterialTheme.colorScheme.onSurface,
         content = {
             Icon(
                 painter = painterResource(id = R.drawable.feature_receipt_ic_download),
@@ -343,7 +343,7 @@ fun ReceiptHeaderBody(
         Text(
             text = transaction.amount.toString(),
             style = TextStyle(
-                Color.Black,
+                MaterialTheme.colorScheme.onSurface,
                 MaterialTheme.typography.headlineLarge.fontSize
             ),
             modifier = centerWithPaddingModifier.padding(top = 10.dp)
@@ -404,7 +404,7 @@ fun ReceiptDetailsBody(
         Text(
             text = transaction.transactionId.toString(),
             style = TextStyle(
-                Color.Black,
+                MaterialTheme.colorScheme.onSurface,
                 MaterialTheme.typography.bodyLarge.fontSize
             )
         )
@@ -421,7 +421,7 @@ fun ReceiptDetailsBody(
         Text(
             text = transaction.date.toString(),
             style = TextStyle(
-                Color.Black,
+                MaterialTheme.colorScheme.onSurface,
                 MaterialTheme.typography.bodyLarge.fontSize
             )
         )
@@ -438,14 +438,14 @@ fun ReceiptDetailsBody(
         Text(
             text = stringResource(R.string.feature_receipt_name) + transferDetail.toClient.displayName,
             style = TextStyle(
-                Color.Black,
+                MaterialTheme.colorScheme.onSurface,
                 MaterialTheme.typography.bodyLarge.fontSize
             )
         )
         Text(
             text = stringResource(R.string.feature_receipt_account_no) + transferDetail.toAccount.accountNo,
             style = TextStyle(
-                Color.Black,
+                MaterialTheme.colorScheme.onSurface,
                 MaterialTheme.typography.bodyLarge.fontSize
             )
         )
@@ -462,14 +462,14 @@ fun ReceiptDetailsBody(
         Text(
             text = stringResource(R.string.feature_receipt_name) + transferDetail.fromClient.displayName,
             style = TextStyle(
-                Color.Black,
+                MaterialTheme.colorScheme.onSurface,
                 MaterialTheme.typography.bodyLarge.fontSize
             )
         )
         Text(
             text = stringResource(R.string.feature_receipt_account_no) + transferDetail.fromAccount.accountNo,
             style = TextStyle(
-                Color.Black,
+                MaterialTheme.colorScheme.onSurface,
                 MaterialTheme.typography.bodyLarge.fontSize
             )
         )
@@ -512,7 +512,7 @@ fun ReceiptLinkActions(
         Text(
             text = receiptLink,
             style = TextStyle(
-                Color.Blue,
+                MaterialTheme.colorScheme.primary,
                 MaterialTheme.typography.bodyMedium.fontSize
             )
         )
@@ -527,7 +527,7 @@ fun ReceiptLinkActions(
                 .clickable {
                     copyToClipboard(context, receiptLink)
                 },
-            tint = Color.Black
+            tint = MaterialTheme.colorScheme.onSurface
         )
 
         Icon(
@@ -539,7 +539,7 @@ fun ReceiptLinkActions(
                 .clickable {
                     shareReceiptMessage(prepareShareMessage, context)
                 },
-            tint = Color.Black
+            tint = MaterialTheme.colorScheme.onSurface
         )
     }
 }

@@ -79,7 +79,7 @@ fun SearchScreen(
             SearchResultState.Loading -> {
                 MfLoadingWheel(
                     contentDesc = stringResource(R.string.loading),
-                    backgroundColor = Color.White
+                    backgroundColor = MaterialTheme.colorScheme.surface
                 )
             }
 
@@ -90,7 +90,8 @@ fun SearchScreen(
             }
 
             is SearchResultState.Error -> {
-                Text(text = searchResultState.message)
+                Text(text = searchResultState.message,
+                    color = MaterialTheme.colorScheme.onSurface)
             }
         }
     }
@@ -209,7 +210,8 @@ fun SearchResultItem(
         text = searchResult.resultName,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
+        color = MaterialTheme.colorScheme.onSurface
     )
 }
 

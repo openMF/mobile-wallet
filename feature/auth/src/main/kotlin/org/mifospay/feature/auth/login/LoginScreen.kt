@@ -21,6 +21,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -113,14 +114,15 @@ fun LoginScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surface)
                 .verticalScroll(rememberScrollState())
                 .padding(top = 100.dp, start = 48.dp, end = 48.dp),
             horizontalAlignment = Alignment.Start
         ) {
             Text(
                 text = stringResource(id = R.string.feature_auth_login),
-                style = styleMedium30sp
+                style = MaterialTheme.typography.titleLarge,
+                color = MaterialTheme.colorScheme.primary
             )
             Text(
                 modifier = Modifier
@@ -161,7 +163,7 @@ fun LoginScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Black),
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 enabled = userName.text.isNotEmpty() && password.text.isNotEmpty(),
                 onClick = {
                     login.invoke(userName.text, password.text)
@@ -170,7 +172,8 @@ fun LoginScreenContent(
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_auth_login).uppercase(),
-                    style = styleMedium16sp.copy(color = Color.White)
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary
                 )
             }
             // Hide reset password for now
@@ -200,14 +203,15 @@ fun LoginScreenContent(
             ) {
                 Text(
                     text = "Don’t have an account yet? ",
-                    style = styleMedium16sp
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
                 Text(
                     modifier = Modifier.clickable {
                         showSignUpScreen = true
                     },
                     text = stringResource(id = R.string.feature_auth_sign_up),
-                    style = styleMedium16sp.copy(
+                    style = MaterialTheme.typography.titleMedium.copy(
                         textDecoration = TextDecoration.Underline,
                     ),
                 )

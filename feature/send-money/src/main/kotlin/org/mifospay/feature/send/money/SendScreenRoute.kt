@@ -244,7 +244,7 @@ fun SendMoneyScreen(
                                     Icon(
                                         imageVector = Icons.Filled.QrCode2,
                                         contentDescription = "Scan QR",
-                                        tint = Color.Blue
+                                        tint = MaterialTheme.colorScheme.primary
                                     )
                                 }
                             }
@@ -273,7 +273,7 @@ fun SendMoneyScreen(
                         .fillMaxWidth()
                         .padding(top = 16.dp)
                         .align(Alignment.CenterHorizontally),
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onSurface,
                     enabled = isValidInfo,
                     onClick = {
                         if (!isValidInfo) return@MifosButton
@@ -291,7 +291,7 @@ fun SendMoneyScreen(
                 ) {
                     Text(
                         stringResource(id = R.string.submit),
-                        style = styleMedium16sp.copy(color = Color.White)
+                        style = styleMedium16sp.copy(color = MaterialTheme.colorScheme.surface)
                     )
                 }
             }
@@ -330,7 +330,7 @@ fun EnterPhoneScreen(
 fun VpaMobileChip(selected: Boolean, onClick: () -> Unit, label: String) {
     MifosButton(
         onClick = onClick,
-        color = if (selected) Color.Black else Color.LightGray,
+        color = if (selected) MaterialTheme.colorScheme.primary else Color.LightGray,
         modifier = Modifier
             .padding(4.dp)
             .wrapContentSize()

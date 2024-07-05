@@ -1,6 +1,7 @@
 package org.mifospay.core.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
@@ -26,8 +27,8 @@ fun MifosScrollableTabRow(
     tabContents: List<TabContent>,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    containerColor: Color = Color.White,
-    selectedContentColor: Color = Color.Black,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
+    selectedContentColor: Color = MaterialTheme.colorScheme.onSurface,
     unselectedContentColor: Color = Color.LightGray,
     edgePadding: Dp = 8.dp
 ) {
@@ -42,7 +43,8 @@ fun MifosScrollableTabRow(
     ) {
         tabContents.forEachIndexed { index, currentTab ->
             Tab(
-                text = { Text(text = currentTab.tabName) },
+                text = { Text(text = currentTab.tabName,
+                    color = MaterialTheme.colorScheme.onSurface) },
                 selected = pagerState.currentPage == index,
                 selectedContentColor = selectedContentColor,
                 unselectedContentColor = unselectedContentColor,

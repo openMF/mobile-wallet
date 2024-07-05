@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -24,7 +26,7 @@ fun SIContent(
     Column(modifier = Modifier.padding(10.dp)) {
         Text(
             text = fromClientName,
-            color = Color.Black,
+            color = MaterialTheme.colorScheme.onSurface,
             fontSize = 16.sp,
             modifier = Modifier.padding(bottom = 20.dp)
         )
@@ -32,13 +34,13 @@ fun SIContent(
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
             Text(
                 text = toClientName,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             Text(
                 text = amount,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSurface,
                 fontSize = 16.sp,
                 modifier = Modifier.padding(end = 8.dp, bottom = 8.dp)
             )
@@ -50,10 +52,10 @@ fun SIContent(
             modifier = Modifier.padding(bottom = 4.dp)
         )
 
-        Divider(
-            color = Color.Black,
+        HorizontalDivider(
+            modifier = Modifier.padding(vertical = 8.dp),
             thickness = 1.dp,
-            modifier = Modifier.padding(vertical = 8.dp)
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }

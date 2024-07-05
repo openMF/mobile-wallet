@@ -51,7 +51,7 @@ fun FaqItemScreen(
             Text(
                 text = question.orEmpty(),
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f),
@@ -60,7 +60,7 @@ fun FaqItemScreen(
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
                 contentDescription = "drop down",
-                tint = Color.Black,
+                tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .scale(1f, if (isSelected) -1f else 1f)
             )
@@ -77,7 +77,7 @@ fun FaqItemScreen(
             Text(
                 text = answer.orEmpty(),
                 style = MaterialTheme.typography.bodyMedium,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 8.dp)

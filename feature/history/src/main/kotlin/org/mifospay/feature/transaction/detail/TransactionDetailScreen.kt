@@ -116,7 +116,7 @@ fun TransactionsDetailContent(
                 Text(
                     text = stringResource(id = R.string.feature_receipt_transaction_id) + transaction.transactionId,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = primaryDarkBlue
+                    color = MaterialTheme.colorScheme.primary
                 )
                 Text(
                     text = stringResource(id = R.string.feature_receipt_transaction_date) + transaction.date,
@@ -162,7 +162,7 @@ fun TransactionsDetailContent(
         Text(
             text = stringResource(id = R.string.feature_receipt_view_Receipt),
             style = MaterialTheme.typography.bodyLarge,
-            color = primaryDarkBlue,
+            color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
             modifier = Modifier.clickable { viewReceipt() }
         )

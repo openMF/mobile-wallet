@@ -38,7 +38,7 @@ fun MifosButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    color: Color = MaterialTheme.colorScheme.onBackground,
+    color: Color = MaterialTheme.colorScheme.primary,
     content: @Composable RowScope.() -> Unit,
 ) {
     Button(

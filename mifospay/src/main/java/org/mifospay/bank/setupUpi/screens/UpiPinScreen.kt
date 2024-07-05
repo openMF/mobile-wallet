@@ -53,7 +53,8 @@ fun UpiPinScreen(
                 bottom = dimensionResource(id = R.dimen.value_15dp),
                 start = dimensionResource(id = R.dimen.value_10dp),
                 end = dimensionResource(id = R.dimen.value_10dp)
-            ), elevation = 1.dp
+            ), elevation = 1.dp,
+        contentColor = MaterialTheme.colorScheme.surface
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
@@ -80,7 +81,7 @@ fun UpiPinScreenContent(
     Text(
         text = if (steps1.value == 0) stringResource(id = R.string.enter_upi_pin)
         else stringResource(id = R.string.reenter_upi),
-        color = colorResource(id = R.color.colorUpiPinScreenTitle),
+        color = MaterialTheme.colorScheme.primary,
         fontSize = 18.sp,
         style = MaterialTheme.typography.headlineMedium
     )

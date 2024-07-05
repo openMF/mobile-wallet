@@ -44,7 +44,7 @@ fun ProfileItemCard(
             painter = rememberVectorPainter(icon),
             modifier = Modifier.size(32.dp),
             contentDescription = null,
-            tint = Color.Black
+            tint = MaterialTheme.colorScheme.onSurface
         )
         Text(
             modifier = if (text == R.string.edit_profile || text == R.string.settings) Modifier
@@ -53,7 +53,8 @@ fun ProfileItemCard(
                 )
                 .align(Alignment.CenterVertically) else Modifier,
             text = stringResource(id = text),
-            style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium)
+            style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium),
+            color = MaterialTheme.colorScheme.onSurface
         )
         if (text == R.string.edit_profile || text == R.string.settings) {
             Spacer(modifier = Modifier.fillMaxWidth())

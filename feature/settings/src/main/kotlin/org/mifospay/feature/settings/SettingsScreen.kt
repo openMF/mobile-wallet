@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -67,7 +68,7 @@ fun SettingsScreenRoute(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.White)
+                .background(MaterialTheme.colorScheme.surface)
                 .padding(contentPadding)
         ) {
             Row(
@@ -79,14 +80,14 @@ fun SettingsScreenRoute(
                 )
             ) {
                 MifosCard(
-                    colors = CardDefaults.cardColors(Color.White)
+                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
                 ) {
                     Text(
                         text = stringResource(id = R.string.feature_settings_notification_settings),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(20.dp),
-                        style = TextStyle(fontSize = 18.sp, color = mifosText)
+                        style = TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
                     )
                 }
             }
@@ -101,14 +102,14 @@ fun SettingsScreenRoute(
             ) {
                 MifosCard(
                     onClick = { onChangePasswordClicked(context) },
-                    colors = CardDefaults.cardColors(Color.White)
+                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
                 ) {
                     Text(
                         text = stringResource(id = R.string.feature_settings_change_password),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(20.dp),
-                        style = TextStyle(fontSize = 18.sp, color = mifosText)
+                        style = TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
                     )
                 }
             }
@@ -123,14 +124,14 @@ fun SettingsScreenRoute(
             ) {
                 MifosCard(
                     onClick = { onChangePasscodeClicked(context, passcodePreferencesHelper) },
-                    colors = CardDefaults.cardColors(Color.White)
+                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
                 ) {
                     Text(
                         text = stringResource(id = R.string.feature_settings_change_passcode),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(20.dp),
-                        style = TextStyle(fontSize = 18.sp, color = mifosText)
+                        style = TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
                     )
                 }
             }
@@ -149,14 +150,15 @@ fun SettingsScreenRoute(
                             onConfirm = { viewmodel.disableAccount() }
                         )
                     },
-                    colors = CardDefaults.cardColors(Color.Black)
+                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.error)
                 ) {
                     Text(
                         text = stringResource(id = R.string.feature_settings_disable_account).uppercase(),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(20.dp),
-                        style = styleSettingsButton
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onError
                     )
                 }
             }
@@ -177,14 +179,15 @@ fun SettingsScreenRoute(
                             }
                         )
                     },
-                    colors = CardDefaults.cardColors(Color.Black)
+                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary)
                 ) {
                     Text(
                         text = stringResource(id = R.string.feature_settings_log_out).uppercase(),
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(20.dp),
-                        style = styleSettingsButton
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSecondary
                     )
                 }
             }
