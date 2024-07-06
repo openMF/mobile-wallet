@@ -92,6 +92,7 @@ dependencies {
     implementation(projects.feature.kyc)
     implementation(projects.feature.home)
     implementation(projects.feature.accounts)
+    implementation(projects.feature.finance)
 
     // Compose
     implementation(libs.androidx.activity.compose)
