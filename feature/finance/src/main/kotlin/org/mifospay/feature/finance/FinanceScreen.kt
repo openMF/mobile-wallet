@@ -2,16 +2,16 @@ package org.mifospay.feature.finance
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.pager.rememberPagerState
+import com.google.accompanist.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import org.mifospay.bank.ui.AccountsScreen
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
+import org.mifospay.feature.bank.accounts.AccountsScreen
 import org.mifospay.feature.kyc.KYCScreen
+import org.mifospay.feature.merchants.ui.MerchantScreen
 import org.mifospay.feature.savedcards.CardsScreen
-import org.mifospay.merchants.ui.MerchantScreen
 
 @Composable
 fun FinanceRoute(
@@ -20,9 +20,7 @@ fun FinanceRoute(
     onLevel2Clicked: () -> Unit,
     onLevel3Clicked: () -> Unit
 ) {
-    val pagerState = rememberPagerState(
-        pageCount = { FinanceScreenContents.entries.size }
-    )
+    val pagerState = rememberPagerState(initialPage = 0)
 
     val tabContents = listOf(
         TabContent(FinanceScreenContents.ACCOUNTS.name) {

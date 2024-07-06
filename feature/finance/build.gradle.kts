@@ -11,7 +11,7 @@ dependencies {
     implementation(projects.core.data)
     implementation(projects.feature.kyc)
     implementation(projects.feature.savedcards)
-
-    //Todo:Remove this after moving account and merchant screen
-    implementation(project(":mifospay"))
+    implementation(projects.feature.accounts)
+    implementation(projects.feature.merchants)
+    implementation(libs.accompanist.pager)
 }
