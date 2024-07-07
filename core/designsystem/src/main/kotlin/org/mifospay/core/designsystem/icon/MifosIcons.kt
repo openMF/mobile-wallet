@@ -1,5 +1,6 @@
 package org.mifospay.core.designsystem.icon
 
+import android.content.SharedPreferences.Editor
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
@@ -7,6 +8,7 @@ import androidx.compose.material.icons.filled.ArrowOutward
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Info
@@ -67,4 +69,5 @@ object MifosIcons {
     val FlashOn = Icons.Default.FlashOn
     val FlashOff = Icons.Default.FlashOff
     val QrCode2 = Icons.Filled.QrCode2
+    val Edit = Icons.Filled.Edit
 }
