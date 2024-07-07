@@ -34,7 +34,7 @@
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="barcode_ui" />
 
-        <activity android:name=".standinginstruction.ui.SIDetailsActivity" />
+        <activity android:name=".feature.standing.instruction.SIDetailsActivity" />
         <activity
             android:name=".standinginstruction.ui.NewSIActivity"
             android:label="@string/title_activity_new_si"

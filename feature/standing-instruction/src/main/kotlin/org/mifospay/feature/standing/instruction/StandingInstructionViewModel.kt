@@ -13,8 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class StandingInstructionViewModel @Inject constructor(
-    private val mUseCaseHandler: UseCaseHandler,
-    private val localRepository: LocalRepository,
+    val mUseCaseHandler: UseCaseHandler,
+    val localRepository: LocalRepository,
     private val getAllStandingInstructions: GetAllStandingInstructions
 ) : ViewModel() {
 
@@ -23,7 +23,7 @@ class StandingInstructionViewModel @Inject constructor(
     val standingInstructionsUiState: StateFlow<StandingInstructionsUiState> =
         _standingInstructionsUiState
 
-    private fun getAllSI() {
+    fun getAllSI() {
         val client = localRepository.clientDetails
         _standingInstructionsUiState.value = StandingInstructionsUiState.Loading
         mUseCaseHandler.execute(getAllStandingInstructions,

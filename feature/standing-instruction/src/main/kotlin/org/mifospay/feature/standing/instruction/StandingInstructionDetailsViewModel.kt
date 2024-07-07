@@ -1,22 +1,21 @@
-package org.mifospay.standinginstruction.presenter
+package org.mifospay.feature.standing.instruction
 
-import org.mifospay.core.data.base.UseCase
+import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.entity.standinginstruction.StandingInstruction
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
-import org.mifospay.core.data.domain.usecase.standinginstruction.FetchStandingInstruction
 import org.mifospay.core.data.domain.usecase.standinginstruction.DeleteStandingInstruction
+import org.mifospay.core.data.domain.usecase.standinginstruction.FetchStandingInstruction
 import org.mifospay.core.data.domain.usecase.standinginstruction.UpdateStandingInstruction
-import org.mifospay.R
-import org.mifospay.base.BaseView
-import org.mifospay.standinginstruction.StandingInstructionContract
 import javax.inject.Inject
 
-/**
- * Created by Devansh on 09/06/2020
- */
-class StandingInstructionDetailsPresenter @Inject constructor(
+@HiltViewModel
+class StandingInstructionDetailsViewModel @Inject constructor(
     val mUseCaseHandler: UseCaseHandler
-) : StandingInstructionContract.StandingInstructorDetailsPresenter {
+): ViewModel() {
 
     @Inject
     lateinit var fetchStandingInstruction: FetchStandingInstruction
@@ -27,63 +26,67 @@ class StandingInstructionDetailsPresenter @Inject constructor(
     @Inject
     lateinit var deleteStandingInstruction: DeleteStandingInstruction
 
-    lateinit var mSIDetailsView: StandingInstructionContract.SIDetailsView
+    private var _siDetailsUiState = MutableStateFlow<SiDetailsUiState>(SiDetailsUiState.Loading)
+    var siDetailsUiState: StateFlow<SiDetailsUiState> = _siDetailsUiState
 
-    override fun attachView(baseView: BaseView<*>?) {
-        mSIDetailsView = baseView as StandingInstructionContract.SIDetailsView
-        mSIDetailsView.setPresenter(this)
-    }
+    private val _updateSuccess = MutableStateFlow(false)
+    val updateSuccess: StateFlow<Boolean> = _updateSuccess
 
-    override fun fetchStandingInstructionDetails(standingInstructionId: Long) {
-        mSIDetailsView.showLoadingView()
+    private val _deleteSuccess = MutableStateFlow(false)
+    val deleteSuccess: StateFlow<Boolean> = _deleteSuccess
+
+    fun fetchStandingInstructionDetails(standingInstructionId: Long) {
+        _siDetailsUiState.value = SiDetailsUiState.Loading
         mUseCaseHandler.execute(fetchStandingInstruction,
             FetchStandingInstruction.RequestValues(standingInstructionId), object :
                 UseCase.UseCaseCallback<FetchStandingInstruction.ResponseValue> {
 
                 override fun onSuccess(response: FetchStandingInstruction.ResponseValue) {
-                    mSIDetailsView.showSIDetails(response.standingInstruction)
+                    _siDetailsUiState.value =
+                        SiDetailsUiState.ShowSiDetails(response.standingInstruction)
                 }
 
                 override fun onError(message: String) {
-                    mSIDetailsView.showStateView(
-                        R.drawable.ic_error_state, R.string.error_oops,
-                        R.string.error_fetching_si_details
-                    )
+                    _updateSuccess.value = false
                 }
             })
     }
 
-    override fun deleteStandingInstruction(standingInstructionId: Long) {
-        mSIDetailsView.showLoadingView()
+     fun deleteStandingInstruction(standingInstructionId: Long) {
+         _siDetailsUiState.value = SiDetailsUiState.Loading
         mUseCaseHandler.execute(deleteStandingInstruction,
             DeleteStandingInstruction.RequestValues(standingInstructionId), object :
                 UseCase.UseCaseCallback<DeleteStandingInstruction.ResponseValue> {
 
                 override fun onSuccess(response: DeleteStandingInstruction.ResponseValue) {
-                    mSIDetailsView.siDeletedSuccessfully()
+                   _deleteSuccess.value = true
                 }
 
                 override fun onError(message: String) {
-                    mSIDetailsView.updateDeleteFailure()
-                    mSIDetailsView.showToast("Error occurred, cannot delete")
+                    _updateSuccess.value = false
                 }
             })
     }
 
-    override fun updateStandingInstruction(standingInstruction: StandingInstruction) {
-        mSIDetailsView.showLoadingView()
+     fun updateStandingInstruction(standingInstruction: StandingInstruction) {
+         _siDetailsUiState.value = SiDetailsUiState.Loading
         mUseCaseHandler.execute(updateStandingInstruction,
             UpdateStandingInstruction.RequestValues(standingInstruction.id, standingInstruction),
             object : UseCase.UseCaseCallback<UpdateStandingInstruction.ResponseValue> {
 
                 override fun onSuccess(response: UpdateStandingInstruction.ResponseValue) {
-                    mSIDetailsView.showSIDetails(standingInstruction)
+                    _siDetailsUiState.value = SiDetailsUiState.ShowSiDetails(standingInstruction)
                 }
 
                 override fun onError(message: String) {
-                    mSIDetailsView.updateDeleteFailure()
-                    mSIDetailsView.showToast("Error occurred, cannot update")
+                    _updateSuccess.value = false
                 }
             })
     }
+}
+
+sealed interface SiDetailsUiState {
+    data object Loading: SiDetailsUiState
+    data class ShowSiDetails(val standingInstruction: StandingInstruction): SiDetailsUiState
+
 }
