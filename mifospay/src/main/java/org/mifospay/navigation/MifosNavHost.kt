@@ -23,6 +23,7 @@ import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
 import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
+import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.profile.edit.EditProfileActivity
 import org.mifospay.feature.profile.navigation.profileScreen
 import org.mifospay.feature.receipt.ReceiptActivity
@@ -30,12 +31,11 @@ import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.navigation.addCardScreen
 import org.mifospay.feature.savedcards.navigation.navigateToAddCard
+import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
+import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.specific.transactions.SpecificTransactionsActivity
-import org.mifospay.home.navigation.paymentsScreen
-import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
-import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.standinginstruction.ui.NewSIActivity
 
 /**

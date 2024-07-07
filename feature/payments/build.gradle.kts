@@ -12,7 +12,7 @@ dependencies {
     implementation(projects.feature.history)
     implementation(projects.feature.invoices)
     implementation(projects.feature.sendMoney)
+    implementation(projects.feature.standingInstruction)
 
-    //Todo:Remove after moving required packages to feature module
-    implementation(project(":mifospay"))
+    implementation(libs.accompanist.pager)
 }

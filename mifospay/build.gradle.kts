@@ -93,6 +93,8 @@ dependencies {
     implementation(projects.feature.home)
     implementation(projects.feature.accounts)
     implementation(projects.feature.finance)
+    implementation(projects.feature.payments)
+    implementation(projects.feature.sendMoney)
 
     // Compose
     implementation(libs.androidx.activity.compose)
