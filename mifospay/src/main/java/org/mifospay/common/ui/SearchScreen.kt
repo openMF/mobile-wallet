@@ -37,7 +37,7 @@ import org.mifospay.common.presenter.SearchResultState
 import org.mifospay.common.presenter.SearchViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.MifosTheme
 
 @Composable
 fun SearchScreenRoute(

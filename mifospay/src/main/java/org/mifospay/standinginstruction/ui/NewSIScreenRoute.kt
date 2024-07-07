@@ -46,9 +46,9 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.standinginstruction.presenter.NewSIUiState
 import org.mifospay.standinginstruction.presenter.NewSIViewModel
-import org.mifospay.theme.MifosTheme
 import java.util.Calendar
 
 @Composable

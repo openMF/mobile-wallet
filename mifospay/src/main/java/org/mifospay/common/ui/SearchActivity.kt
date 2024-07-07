@@ -5,7 +5,7 @@ import androidx.activity.compose.setContent
 import dagger.hilt.android.AndroidEntryPoint
 import org.mifospay.R
 import org.mifospay.base.BaseActivity
-import org.mifospay.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.MifosTheme
 
 /**
  * Created by naman on 21/8/17.

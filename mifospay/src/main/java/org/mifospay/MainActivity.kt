@@ -29,8 +29,8 @@ import org.mifospay.MainActivityUiState.Loading
 import org.mifospay.MainActivityUiState.Success
 import org.mifospay.core.analytics.AnalyticsHelper
 import org.mifospay.core.analytics.LocalAnalyticsHelper
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.LocalTimeZone
-import org.mifospay.theme.MifosTheme
 import org.mifospay.ui.MifosApp
 import org.mifospay.ui.rememberMifosAppState
 import javax.inject.Inject
