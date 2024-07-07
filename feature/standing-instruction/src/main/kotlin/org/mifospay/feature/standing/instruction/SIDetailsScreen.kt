@@ -39,14 +39,18 @@ fun SIDetailsScreen(
 
     SIDetailsScreen(
         siDetailsUiState = siDetailUiState,
-        onBackPress = onBackPress
+        onBackPress = onBackPress,
+        updateSuccess = updateSuccess,
+        deleteSuccess = deleteSuccess
     )
 }
 
 @Composable
 fun SIDetailsScreen(
     siDetailsUiState: SiDetailsUiState,
-    onBackPress: () -> Unit
+    onBackPress: () -> Unit,
+    updateSuccess: Boolean,
+    deleteSuccess: Boolean
 ) {
     val floatingActionButtonContent = FloatingActionButtonContent(
         onClick = { },
@@ -76,36 +80,34 @@ fun SIDetailsScreen(
                     ) {
                         SIDetailsContent(
                             paddingValues = it,
-                            siName = "Pratyush",
-                            siId = "1234567890",
-                            amount = "1000",
-                            validFrom = "1/1/11",
-                            validTill = "1/2/11",
-                            siToName = "Aditya",
-                            siFromNumber = "9898989898",
-                            siToNumber = "99990088665",
-                            recurrenceInterval = 3,
-                            status = "Active",
-                            siFromName = "Pratyush"
+                            siName = siDetailsUiState.standingInstruction.name,
+                            siId = siDetailsUiState.standingInstruction.id,
+                            amount = siDetailsUiState.standingInstruction.amount,
+                            validFrom = siDetailsUiState.standingInstruction.validFrom,
+                            validTill = siDetailsUiState.standingInstruction.validTill ?: emptyList(),
+                            siToName = siDetailsUiState.standingInstruction.toClient.displayName ?: "",
+                            siFromNumber = siDetailsUiState.standingInstruction.fromClient.mobileNo,
+                            siToNumber = siDetailsUiState.standingInstruction.toClient.mobileNo,
+                            recurrenceInterval = siDetailsUiState.standingInstruction.recurrenceInterval,
+                            status = siDetailsUiState.standingInstruction.status.value ?: "",
+                            siFromName = siDetailsUiState.standingInstruction.fromAccount.clientName ?: ""
                         )
                     }
 
                 }
             }
         }
-    ) {
-
-    }
+    )
 }
 
 @Composable
 fun SIDetailsContent(
     paddingValues: PaddingValues,
     siName: String,
-    siId: String,
-    amount: String,
-    validFrom: String,
-    validTill: String,
+    siId: Long,
+    amount: Double,
+    validFrom: List<Int>,
+    validTill: List<Int>,
     siToName: String,
     siToNumber: String,
     siFromName: String,
@@ -126,72 +128,66 @@ fun SIDetailsContent(
             modifier = Modifier.padding(vertical = 8.dp)
         )
 
-        // Standing Instruction ID
         Text(
-            text = "Standing Instruction ID:",
+            text = stringResource(R.string.feature_standing_instruction_standing_instruction_id),
             fontSize = 16.sp,
             color = Color.DarkGray,
             modifier = Modifier.padding(vertical = 8.dp)
         )
         Text(
-            text = siId, // Replace with actual data
+            text = siId.toString(),
             fontSize = 16.sp,
             color = Color.Blue,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // Amount
         Text(
-            text = "Amount:",
+            text = stringResource(id = R.string.feature_standing_instruction_amount),
             fontSize = 16.sp,
             color = Color.DarkGray,
             modifier = Modifier.padding(vertical = 8.dp)
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = amount, // Replace with actual data
+                text = amount.toString(),
                 fontSize = 16.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(end = 16.dp)
             )
-            // TextInputLayout for editing amount (hidden by default)
         }
 
-        // Valid From
         Text(
-            text = "Valid From:",
+            text = stringResource(R.string.feature_standing_instruction_valid_from),
             fontSize = 16.sp,
             color = Color.DarkGray,
             modifier = Modifier.padding(vertical = 8.dp)
         )
+
         Text(
-            text = validFrom, // Replace with actual data
+            text = validFrom.toString(),
             fontSize = 16.sp,
             color = Color.Black,
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // Valid Till
         Text(
-            text = "Valid Till:",
+            text = stringResource(id = R.string.feature_standing_instruction_valid_till),
             fontSize = 16.sp,
             color = Color.DarkGray,
             modifier = Modifier.padding(vertical = 8.dp)
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = validTill, // Replace with actual data
+                text = validTill.toString(),
                 fontSize = 16.sp,
                 color = Color.Black,
                 modifier = Modifier.padding(end = 16.dp)
             )
-            // Text for "Pick the date" (hidden by default)
         }
 
-        // To Name and Number
         Text(
-            text = "To:",
+            text = stringResource(R.string.feature_standing_instruction_to),
             fontSize = 16.sp,
             color = Color.DarkGray,
             modifier = Modifier.padding(vertical = 8.dp)
@@ -209,9 +205,8 @@ fun SIDetailsContent(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // From Name and Number
         Text(
-            text = "From:",
+            text = stringResource(R.string.feature_standing_instruction_from),
             fontSize = 16.sp,
             color = Color.DarkGray,
             modifier = Modifier.padding(vertical = 8.dp)
@@ -229,26 +224,23 @@ fun SIDetailsContent(
             modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        // Recurrence Interval
         Text(
-            text = "Recurrence Interval in Months:",
+            text = stringResource(id = R.string.feature_standing_instruction_recurrence_interval_in_months),
             fontSize = 16.sp,
             color = Color.DarkGray,
             modifier = Modifier.padding(vertical = 8.dp)
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = recurrenceInterval.toString(), // Replace with actual data
+                text = recurrenceInterval.toString(),
                 fontSize = 16.sp,
                 color = Color.Black,
                 modifier = Modifier.padding(end = 16.dp)
             )
-            // TextInputLayout for editing interval (hidden by default)
         }
 
-        // Status
         Text(
-            text = "Status:",
+            text = stringResource(R.string.feature_standing_instruction_status),
             fontSize = 16.sp,
             color = Color.DarkGray,
             modifier = Modifier.padding(vertical = 8.dp)
@@ -267,18 +259,18 @@ fun SIDetailsContent(
 fun PreviewSIDetailsScreen() {
     SIDetailsScreen(siDetailsUiState = SiDetailsUiState.ShowSiDetails(
         StandingInstruction(
-            id = 1, // Replace with actual ID
+            id = 1,
             name = "Dummy Standing Instruction",
             fromClient = Client(),
             fromAccount = SavingAccount(),
             toClient = Client(),
             toAccount = SavingAccount(),
             status = Status(),
-            amount = 1000.0, // Replace with actual amount
-            validFrom = listOf(2024, 1, 1), // Replace with actual date
-            validTill = listOf(2025, 12, 31), // Replace with actual date
-            recurrenceInterval = 1, // Replace with actual interval
-            recurrenceOnMonthDay = listOf(1) // Replace with actual recurrence day
+            amount = 1000.0,
+            validFrom = listOf(2024, 1, 1),
+            validTill = listOf(2025, 12, 31),
+            recurrenceInterval = 1,
+            recurrenceOnMonthDay = listOf(1)
         )
-    ), onBackPress = {})
+    ), onBackPress = {}, updateSuccess = false, deleteSuccess = false)
 }

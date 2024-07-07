@@ -18,5 +18,10 @@
     <string name="feature_standing_instruction_sending_to">Sending to</string>
     <string name="feature_standing_instruction_cancel">Cancel</string>
     <string name="feature_standing_instruction_confirm">Confirm</string>
+    <string name="feature_standing_instruction_standing_instruction_id">Standing Instruction ID:</string>
+    <string name="feature_standing_instruction_valid_from">Valid From:</string>
+    <string name="feature_standing_instruction_to">To:</string>
+    <string name="feature_standing_instruction_from">From:</string>
+    <string name="feature_standing_instruction_status">Status:</string>
 
 </resources>
