@@ -36,7 +36,8 @@ import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.specific.transactions.SpecificTransactionsActivity
-import org.mifospay.standinginstruction.ui.NewSIActivity
+import org.mifospay.feature.standing.instruction.navigateToNewSiScreen
+import org.mifospay.feature.standing.instruction.newSiScreen
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -65,7 +66,7 @@ fun MifosNavHost(
         )
         paymentsScreen(
             showQr = { vpa -> navController.navigateToShowQrScreen(vpa) },
-            onNewSI = { context.startActivityStandingInstruction() },
+            onNewSI = { navController.navigateToNewSiScreen() },
             onAccountClicked = { accountNo, transactionsList ->
                 context.startActivitySpecificTransaction(
                     accountNo = accountNo,
@@ -141,11 +142,8 @@ fun MifosNavHost(
             }
         )
         kycLevel3Screen()
+        newSiScreen(onBackClick = navController::popBackStack)
     }
-}
-
-fun Context.startActivityStandingInstruction() {
-    startActivity(Intent(this, NewSIActivity::class.java))
 }
 
 fun Context.startActivityEditProfile() {

@@ -1,4 +1,4 @@
-package org.mifospay.standinginstruction.presenter
+package org.mifospay.feature.standing.instruction
 
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.SearchResult

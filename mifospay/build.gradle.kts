@@ -95,6 +95,7 @@ dependencies {
     implementation(projects.feature.finance)
     implementation(projects.feature.payments)
     implementation(projects.feature.sendMoney)
+    implementation(projects.feature.standingInstruction)
 
     // Compose
     implementation(libs.androidx.activity.compose)

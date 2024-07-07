@@ -1,4 +1,4 @@
-package org.mifospay.standinginstruction.ui
+package org.mifospay.feature.standing.instruction
 
 import android.app.DatePickerDialog
 import android.util.Log
@@ -41,14 +41,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.standinginstruction.presenter.NewSIUiState
-import org.mifospay.standinginstruction.presenter.NewSIViewModel
 import java.util.Calendar
 
 @Composable
@@ -88,7 +85,7 @@ fun NewSIScreen(
 ) {
 
     MifosScaffold(
-        topBarTitle = R.string.tile_si_activity,
+        topBarTitle = R.string.feature_standing_instruction_tile_si_activity,
         backPress = { onBackPress.invoke() },
         scaffoldContent = {
             when (uiState) {
@@ -201,7 +198,7 @@ fun NewSIBody(
                 onValueChange = {
                     amount = it
                 },
-                label = R.string.amount,
+                label = R.string.feature_standing_instruction_amount,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             )
             Spacer(modifier = Modifier.padding(top = 16.dp))
@@ -213,7 +210,7 @@ fun NewSIBody(
                 onValueChange = {
                     vpa = it
                 },
-                label = R.string.vpa,
+                label = R.string.feature_standing_instruction_vpa,
                 trailingIcon = {
                     IconButton(onClick = { startScan() }) {
                         Icon(
@@ -233,7 +230,7 @@ fun NewSIBody(
                 onValueChange = {
                     siInterval = it
                 },
-                label = R.string.recurrence_interval_in_months
+                label = R.string.feature_standing_instruction_recurrence_interval_in_months
             )
             Row(
                 modifier = Modifier
@@ -241,7 +238,7 @@ fun NewSIBody(
                     .padding(top = 10.dp), horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = stringResource(id = R.string.valid_till))
+                Text(text = stringResource(id = R.string.feature_standing_instruction_valid_till))
             }
             MifosButton(
                 modifier = Modifier
@@ -250,7 +247,8 @@ fun NewSIBody(
                     .align(Alignment.CenterHorizontally),
                 onClick = { showDatePickerDialog() }
             ) {
-                val text = selectedDate.ifEmpty { stringResource(R.string.select_date) }
+                val text =
+                    selectedDate.ifEmpty { stringResource(R.string.feature_standing_instruction_select_date) }
                 Text(text = text, color = Color.White)
             }
 
@@ -264,14 +262,14 @@ fun NewSIBody(
                     if (updateSuccess) {
                         Toast.makeText(
                             context,
-                            context.getString(R.string.successfully_creates_new_standing_instruction),
+                            context.getString(R.string.feature_standing_instruction_successfully_creates_new_standing_instruction),
                             Toast.LENGTH_SHORT
                         )
                             .show()
                     } else {
                         Toast.makeText(
                             context,
-                            org.mifospay.feature.profile.R.string.failed_to_save_changes,
+                            R.string.feature_standing_instruction_failed_to_save_changes,
                             Toast.LENGTH_SHORT
                         )
                             .show()
@@ -279,7 +277,10 @@ fun NewSIBody(
                 },
                 enabled = selectedDate.isNotEmpty() && vpa.isNotEmpty() && amount.isNotEmpty() && siInterval.isNotEmpty()
             ) {
-                Text(text = stringResource(id = R.string.submit), color = Color.White)
+                Text(
+                    text = stringResource(id = R.string.feature_standing_instruction_submit),
+                    color = Color.White
+                )
             }
         }
     }
@@ -328,7 +329,7 @@ fun ConfirmTransfer(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = R.string.sending_to),
+                    text = stringResource(id = R.string.feature_standing_instruction_sending_to),
                     style = TextStyle(color = Color.Blue, fontSize = 15.sp)
                 )
                 Text(text = clientName, style = TextStyle(color = Color.Black, fontSize = 20.sp))
@@ -339,7 +340,7 @@ fun ConfirmTransfer(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = R.string.vpa),
+                    text = stringResource(id = R.string.feature_standing_instruction_vpa),
                     style = TextStyle(color = Color.Black, fontSize = 15.sp)
                 )
                 Text(text = clientVpa, style = TextStyle(color = Color.Black, fontSize = 20.sp))
@@ -350,7 +351,7 @@ fun ConfirmTransfer(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = stringResource(id = R.string.amount),
+                    text = stringResource(id = R.string.feature_standing_instruction_amount),
                     style = TextStyle(color = Color.Blue, fontSize = 15.sp)
                 )
                 Text(
@@ -371,7 +372,10 @@ fun ConfirmTransfer(
                     .padding(top = 16.dp),
                 onClick = { cancel.invoke() }
             ) {
-                Text(text = stringResource(id = R.string.cancel), color = Color.White)
+                Text(
+                    text = stringResource(id = R.string.feature_standing_instruction_cancel),
+                    color = Color.White
+                )
             }
 
             MifosButton(
@@ -388,14 +392,14 @@ fun ConfirmTransfer(
                     if (updateSuccess) {
                         Toast.makeText(
                             context,
-                            context.getString(R.string.successfully_creates_new_standing_instruction),
+                            context.getString(R.string.feature_standing_instruction_successfully_creates_new_standing_instruction),
                             Toast.LENGTH_SHORT
                         )
                             .show()
                     } else {
                         Toast.makeText(
                             context,
-                            org.mifospay.feature.profile.R.string.failed_to_save_changes,
+                            R.string.feature_standing_instruction_failed_to_save_changes,
                             Toast.LENGTH_SHORT
                         )
                             .show()
@@ -403,7 +407,10 @@ fun ConfirmTransfer(
                 }
 
             ) {
-                Text(text = stringResource(id = R.string.confirm), color = Color.White)
+                Text(
+                    text = stringResource(id = R.string.feature_standing_instruction_confirm),
+                    color = Color.White
+                )
             }
         }
     }

@@ -9,4 +9,7 @@ android {
 
 dependencies {
     implementation(projects.core.data)
+
+    // Google Bar code scanner
+    implementation(libs.google.play.services.code.scanner)
 }

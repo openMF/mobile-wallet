@@ -1,4 +1,4 @@
-package org.mifospay.standinginstruction.ui
+package org.mifospay.feature.standing.instruction
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -23,13 +23,10 @@ import com.mifospay.core.model.entity.accounts.savings.SavingAccount
 import com.mifospay.core.model.entity.client.Client
 import com.mifospay.core.model.entity.client.Status
 import com.mifospay.core.model.entity.standinginstruction.StandingInstruction
-import org.mifospay.R
 import org.mifospay.core.designsystem.component.FloatingActionButtonContent
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.standinginstruction.presenter.SiDetailsUiState
-import org.mifospay.standinginstruction.presenter.StandingInstructionDetailsViewModel
 
 @Composable
 fun SIDetailsScreen(
@@ -57,20 +54,20 @@ fun SIDetailsScreen(
         content = {
             androidx.compose.material3.Icon(
                 imageVector = MifosIcons.Edit,
-                contentDescription = stringResource(R.string.downloading_receipt)
+                contentDescription = stringResource(R.string.feature_standing_instruction_downloading_receipt)
             )
         }
     )
 
     MifosScaffold(
-        topBarTitle = R.string.details,
+        topBarTitle = R.string.feature_standing_instruction_details,
         floatingActionButtonContent = floatingActionButtonContent,
         backPress = {},
         scaffoldContent = {
             when (siDetailsUiState) {
                 SiDetailsUiState.Loading -> MifosLoadingWheel(
                     modifier = Modifier.fillMaxWidth(),
-                    contentDesc = stringResource(R.string.loading)
+                    contentDesc = stringResource(R.string.feature_standing_instruction_loading)
                 )
 
                 is SiDetailsUiState.ShowSiDetails -> {

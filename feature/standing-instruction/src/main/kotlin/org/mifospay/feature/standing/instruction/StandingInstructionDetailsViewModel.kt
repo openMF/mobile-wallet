@@ -1,4 +1,4 @@
-package org.mifospay.standinginstruction.presenter
+package org.mifospay.feature.standing.instruction
 
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.entity.standinginstruction.StandingInstruction
@@ -42,7 +42,8 @@ class StandingInstructionDetailsViewModel @Inject constructor(
                 UseCase.UseCaseCallback<FetchStandingInstruction.ResponseValue> {
 
                 override fun onSuccess(response: FetchStandingInstruction.ResponseValue) {
-                    _siDetailsUiState.value = SiDetailsUiState.ShowSiDetails(response.standingInstruction)
+                    _siDetailsUiState.value =
+                        SiDetailsUiState.ShowSiDetails(response.standingInstruction)
                 }
 
                 override fun onError(message: String) {
