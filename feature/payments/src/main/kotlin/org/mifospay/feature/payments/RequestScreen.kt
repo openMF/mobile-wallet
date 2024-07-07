@@ -1,4 +1,4 @@
-package org.mifospay.payments.ui
+package org.mifospay.feature.payments
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,15 +16,10 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import org.mifospay.R
-import org.mifospay.core.designsystem.theme.styleMedium16sp
-import org.mifospay.core.designsystem.theme.styleNormal18sp
-import org.mifospay.payments.TransferViewModel
 
 @Composable
 fun RequestScreen(
@@ -37,7 +32,7 @@ fun RequestScreen(
     Column(Modifier.fillMaxSize()) {
         Text(
             modifier = Modifier.padding(start = 20.dp, top = 30.dp),
-            text = stringResource(id = R.string.receive),
+            text = stringResource(id = R.string.feature_payments_receive),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.primary
         )
@@ -49,14 +44,14 @@ fun RequestScreen(
                     .weight(1f)
             ) {
                 Column {
-                    Text(text = stringResource(id = R.string.virtual_payment_address_vpa))
+                    Text(text = stringResource(id = R.string.feature_payments_virtual_payment_address_vpa))
                     Text(text = vpa,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface)
                 }
 
                 Column(modifier = Modifier.padding(top = 10.dp)) {
-                    Text(text = stringResource(id = R.string.mobile_number))
+                    Text(text = stringResource(id = R.string.feature_payments_mobile_number))
                     Text(text = mobile,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface)
@@ -72,11 +67,11 @@ fun RequestScreen(
                     Icon(
                         imageVector = Icons.Default.QrCode,
                         tint = MaterialTheme.colorScheme.primary,
-                        contentDescription = stringResource(id = R.string.show_code),
+                        contentDescription = stringResource(id = R.string.feature_payments_show_code),
                     )
                 }
                 Text(
-                    text = stringResource(id = R.string.show_code),
+                    text = stringResource(id = R.string.feature_payments_show_code),
                 )
             }
         }

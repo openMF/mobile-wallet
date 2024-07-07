@@ -26,10 +26,10 @@ import org.mifospay.feature.finance.navigation.FINANCE_ROUTE
 import org.mifospay.feature.finance.navigation.navigateToFinance
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.navigateToHome
+import org.mifospay.feature.payments.PAYMENTS_ROUTE
+import org.mifospay.feature.payments.navigateToPayments
 import org.mifospay.feature.profile.navigation.PROFILE_ROUTE
 import org.mifospay.feature.profile.navigation.navigateToProfile
-import org.mifospay.home.navigation.PAYMENTS_ROUTE
-import org.mifospay.home.navigation.navigateToPayments
 import org.mifospay.navigation.TopLevelDestination
 
 @Composable

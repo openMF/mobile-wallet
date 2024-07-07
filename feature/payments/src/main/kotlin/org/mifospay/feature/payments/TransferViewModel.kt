@@ -1,4 +1,4 @@
-package org.mifospay.payments
+package org.mifospay.feature.payments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,10 +9,7 @@ import kotlinx.coroutines.launch
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.FetchAccount
-import org.mifospay.base.BaseView
-import org.mifospay.common.Constants
-import org.mifospay.data.local.LocalRepository
-import org.mifospay.home.BaseHomeContract
+import org.mifospay.core.data.repository.local.LocalRepository
 import javax.inject.Inject
 
 /**
@@ -23,7 +20,7 @@ class TransferViewModel @Inject constructor(
     val mUsecaseHandler: UseCaseHandler,
     val localRepository: LocalRepository,
     val mFetchAccount: FetchAccount
-) : ViewModel(), BaseHomeContract.TransferPresenter {
+) : ViewModel() {
 
     private val _vpa = MutableStateFlow("")
     val vpa: StateFlow<String> = _vpa
@@ -31,50 +28,55 @@ class TransferViewModel @Inject constructor(
     private val _mobile = MutableStateFlow("")
     val mobile: StateFlow<String> = _mobile
 
-    var mTransferView: BaseHomeContract.TransferView? = null
-    override fun attachView(baseView: BaseView<*>?) {
-        mTransferView = baseView as BaseHomeContract.TransferView?
-        mTransferView?.setPresenter(this)
-    }
+    private var _transferUiState = MutableStateFlow<TransferUiState>(TransferUiState.Loading)
+    var transferUiState: StateFlow<TransferUiState> = _transferUiState
+
+    private var _updateSuccess = MutableStateFlow<Boolean>(false)
+    var updateSuccess: StateFlow<Boolean> = _updateSuccess
 
     init {
         fetchVpa()
         fetchMobile()
     }
 
-    override fun fetchVpa() {
+    fun fetchVpa() {
         viewModelScope.launch {
             _vpa.value = localRepository.clientDetails.externalId.toString()
         }
     }
 
-    override fun fetchMobile() {
+    fun fetchMobile() {
         viewModelScope.launch {
             _mobile.value = localRepository.preferencesHelper.mobile.toString()
         }
     }
 
-    override fun checkSelfTransfer(externalId: String?): Boolean {
+    fun checkSelfTransfer(externalId: String?): Boolean {
         return externalId == localRepository.clientDetails.externalId
     }
 
-    override fun checkBalanceAvailability(externalId: String?, transferAmount: Double) {
+    fun checkBalanceAvailability(externalId: String, transferAmount: Double) {
         mUsecaseHandler.execute(mFetchAccount,
             FetchAccount.RequestValues(localRepository.clientDetails.clientId),
             object : UseCaseCallback<FetchAccount.ResponseValue> {
                 override fun onSuccess(response: FetchAccount.ResponseValue) {
-                    mTransferView?.hideSwipeProgress()
+                    _transferUiState.value = TransferUiState.Loading
                     if (transferAmount > response.account.balance) {
-                        mTransferView?.showSnackbar(Constants.INSUFFICIENT_BALANCE)
+                        _updateSuccess.value = true
                     } else {
-                        mTransferView?.showClientDetails(externalId, transferAmount)
+                       _transferUiState.value = TransferUiState.ShowClientDetails(externalId, transferAmount)
                     }
                 }
 
                 override fun onError(message: String) {
-                    mTransferView?.hideSwipeProgress()
-                    mTransferView?.showToast(Constants.ERROR_FETCHING_BALANCE)
+                    _updateSuccess.value = false
                 }
             })
     }
+}
+
+
+sealed interface TransferUiState {
+    data object Loading: TransferUiState
+    data class ShowClientDetails(val externalId: String, val transferAmount: Double): TransferUiState
 }
