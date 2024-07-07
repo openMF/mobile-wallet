@@ -24,7 +24,8 @@ import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.payments.paymentsScreen
-import org.mifospay.feature.profile.edit.EditProfileActivity
+import org.mifospay.feature.profile.navigation.editProfileScreen
+import org.mifospay.feature.profile.navigation.navigateToEditProfile
 import org.mifospay.feature.profile.navigation.profileScreen
 import org.mifospay.feature.receipt.ReceiptActivity
 import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
@@ -92,7 +93,7 @@ fun MifosNavHost(
             }
         )
         profileScreen(
-            onEditProfile = { context.startActivityEditProfile() },
+            onEditProfile = { navController.navigateToEditProfile() },
             onSettings = { navController.navigateToSettings() }
         )
         sendMoneyScreen(
@@ -143,11 +144,8 @@ fun MifosNavHost(
         )
         kycLevel3Screen()
         newSiScreen(onBackClick = navController::popBackStack)
+        editProfileScreen(onBackPress = navController::popBackStack)
     }
-}
-
-fun Context.startActivityEditProfile() {
-    startActivity(Intent(this, EditProfileActivity::class.java))
 }
 
 fun Context.startActivityViewReceipt(transactionId: String) {

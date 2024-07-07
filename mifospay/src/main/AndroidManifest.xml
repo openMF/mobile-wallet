@@ -34,12 +34,6 @@
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="barcode_ui" />
 
-        <activity android:name=".feature.standing.instruction.SIDetailsActivity" />
-        <activity
-            android:name=".standinginstruction.ui.NewSIActivity"
-            android:label="@string/title_activity_new_si"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".merchants.ui.MerchantTransferActivity" />
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true"
@@ -60,15 +54,6 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".common.ui.SearchActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".qr.showQr.ui.ShowQrActivity"
-            android:exported="true"
-            android:theme="@style/AppTheme" />
-
-        <activity
-            android:name=".payments.ui.SendActivity"
-            android:exported="true"
             android:theme="@style/AppTheme" />
 
         <provider
@@ -119,9 +104,6 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".history.specific_transactions.ui.SpecificTransactionsActivity"
-            android:theme="@style/AppTheme" />
 
         <service
             android:name=".data.firebase.api.services.MifosPayMessagingService"
@@ -150,13 +132,7 @@
         <activity
             android:name=".feature.auth.mobile_verify.MobileVerificationActivity"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".feature.profile.edit.EditProfileActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".feature.settings.SettingsActivity"
-            android:theme="@style/AppTheme" />
+
         <activity
             android:name=".feature.faq.FAQActivity"
             android:theme="@style/AppTheme" />
