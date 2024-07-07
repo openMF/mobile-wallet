@@ -31,11 +31,11 @@ import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.navigation.addCardScreen
 import org.mifospay.feature.savedcards.navigation.navigateToAddCard
+import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
+import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.specific.transactions.SpecificTransactionsActivity
-import org.mifospay.payments.send.navigation.navigateToSendMoneyScreen
-import org.mifospay.payments.send.navigation.sendMoneyScreen
 import org.mifospay.standinginstruction.ui.NewSIActivity
 
 /**
