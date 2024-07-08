@@ -1,5 +1,6 @@
 package org.mifospay.feature.payments
 
+import android.net.Uri
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
@@ -15,7 +16,8 @@ fun NavGraphBuilder.paymentsScreen(
     onNewSI: () -> Unit,
     viewReceipt: (String) -> Unit,
     onAccountClicked: (String, ArrayList<Transaction>) -> Unit,
-    proceedWithMakeTransferFlow: (String, String) -> Unit
+    proceedWithMakeTransferFlow: (String, String) -> Unit,
+    navigateToInvoiceDetailScreen:(Uri) -> Unit
 ) {
     composable(route = PAYMENTS_ROUTE) {
         PaymentsRoute(
@@ -23,7 +25,8 @@ fun NavGraphBuilder.paymentsScreen(
             onNewSI = onNewSI,
             onAccountClicked = onAccountClicked,
             viewReceipt = viewReceipt,
-            proceedWithMakeTransferFlow = proceedWithMakeTransferFlow
+            proceedWithMakeTransferFlow = proceedWithMakeTransferFlow,
+            navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen
         )
     }
 }
