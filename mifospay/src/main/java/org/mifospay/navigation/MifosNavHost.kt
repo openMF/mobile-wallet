@@ -26,6 +26,7 @@ import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.profile.edit.EditProfileActivity
 import org.mifospay.feature.profile.navigation.profileScreen
+import org.mifospay.feature.read.qr.navigation.readQrScreen
 import org.mifospay.feature.receipt.ReceiptActivity
 import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
@@ -143,6 +144,9 @@ fun MifosNavHost(
         )
         kycLevel3Screen()
         newSiScreen(onBackClick = navController::popBackStack)
+        readQrScreen(
+            onBackClick = navController::popBackStack
+        )
     }
 }
 
