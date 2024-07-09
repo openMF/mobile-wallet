@@ -119,9 +119,6 @@
                     android:scheme="https" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".history.specific_transactions.ui.SpecificTransactionsActivity"
-            android:theme="@style/AppTheme" />
 
         <service
             android:name=".data.firebase.api.services.MifosPayMessagingService"
