@@ -13,6 +13,8 @@ import org.mifospay.common.Constants
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.homeScreen
+import org.mifospay.feature.invoices.navigation.invoiceDetailScreen
+import org.mifospay.feature.invoices.navigation.navigateToInvoiceDetail
 import org.mifospay.feature.kyc.navigation.kycLevel1Screen
 import org.mifospay.feature.kyc.navigation.kycLevel2Screen
 import org.mifospay.feature.kyc.navigation.kycLevel3Screen
@@ -76,6 +78,9 @@ fun MifosNavHost(
             viewReceipt = { context.startActivityViewReceipt(it) },
             proceedWithMakeTransferFlow = { externalId, transferAmount ->
                 navController.navigateToMakeTransferScreen(externalId, transferAmount)
+            },
+            navigateToInvoiceDetailScreen = { uri ->
+                navController.navigateToInvoiceDetail(uri.toString())
             }
         )
         financeScreen(
@@ -143,6 +148,10 @@ fun MifosNavHost(
         )
         kycLevel3Screen()
         newSiScreen(onBackClick = navController::popBackStack)
+
+        invoiceDetailScreen(
+            onBackPress = { navController.popBackStack() }
+        )
     }
 }
 
