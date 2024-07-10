@@ -8,7 +8,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.mifospay.core.model.domain.Transaction
 import org.mifospay.common.Constants
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.home.navigation.HOME_ROUTE
@@ -37,7 +36,8 @@ import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.feature.settings.navigation.settingsScreen
-import org.mifospay.feature.specific.transactions.SpecificTransactionsActivity
+import org.mifospay.feature.specific.transactions.navigation.navigateToSpecificTransactions
+import org.mifospay.feature.specific.transactions.navigation.specificTransactionsScreen
 import org.mifospay.feature.standing.instruction.navigateToNewSiScreen
 import org.mifospay.feature.standing.instruction.newSiScreen
 
@@ -70,10 +70,7 @@ fun MifosNavHost(
             showQr = { vpa -> navController.navigateToShowQrScreen(vpa) },
             onNewSI = { navController.navigateToNewSiScreen() },
             onAccountClicked = { accountNo, transactionsList ->
-                context.startActivitySpecificTransaction(
-                    accountNo = accountNo,
-                    transactionsList = transactionsList
-                )
+                navController.navigateToSpecificTransactions(accountNo, transactionsList)
             },
             viewReceipt = { context.startActivityViewReceipt(it) },
             proceedWithMakeTransferFlow = { externalId, transferAmount ->
@@ -149,6 +146,12 @@ fun MifosNavHost(
         kycLevel3Screen()
         newSiScreen(onBackClick = navController::popBackStack)
 
+        specificTransactionsScreen(
+            onBackClick = navController::popBackStack,
+            onTransactionItemClicked = { transactionId ->
+                context.startActivityViewReceipt(transactionId)
+            }
+
         invoiceDetailScreen(
             onBackPress = { navController.popBackStack() }
         )
@@ -162,15 +165,5 @@ fun Context.startActivityEditProfile() {
 fun Context.startActivityViewReceipt(transactionId: String) {
     startActivity(Intent(this, ReceiptActivity::class.java).apply {
         data = Uri.parse(Constants.RECEIPT_DOMAIN + transactionId)
-    })
-}
-
-fun Context.startActivitySpecificTransaction(
-    accountNo: String,
-    transactionsList: ArrayList<Transaction>
-) {
-    startActivity(Intent(this, SpecificTransactionsActivity::class.java).apply {
-        putParcelableArrayListExtra(Constants.TRANSACTIONS, transactionsList)
-        putExtra(Constants.ACCOUNT_NUMBER, accountNo)
     })
 }
