@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -40,7 +39,6 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.creditTextColor
 import org.mifospay.core.designsystem.theme.debitTextColor
 import org.mifospay.core.designsystem.theme.otherTextColor
-import org.mifospay.core.designsystem.theme.primaryDarkBlue
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.feature.history.R
@@ -48,6 +46,8 @@ import org.mifospay.feature.history.R
 
 @Composable
 fun SpecificTransactionsScreen(
+    accountNumber: String,
+    transactions: ArrayList<Transaction>,
     viewModel: SpecificTransactionsViewModel = hiltViewModel(),
     backPress: () -> Unit,
     transactionItemClicked: (String) -> Unit
@@ -55,6 +55,7 @@ fun SpecificTransactionsScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
+        viewModel.setArguments(transactions, accountNumber)
         viewModel.getSpecificTransactions()
     }
 
