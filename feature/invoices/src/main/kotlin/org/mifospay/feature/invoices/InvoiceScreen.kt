@@ -1,6 +1,5 @@
 package org.mifospay.feature.invoices
 
-import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -26,22 +24,25 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.invoices.R
 
 @Composable
-fun InvoiceScreen(
-    viewModel: InvoicesViewModel = hiltViewModel()
+fun InvoiceScreenRoute(
+    viewModel: InvoicesViewModel = hiltViewModel(),
+    navigateToInvoiceDetailScreen: (Uri) -> Unit
 ) {
     val invoiceUiState by viewModel.invoiceUiState.collectAsStateWithLifecycle()
     InvoiceScreen(
         invoiceUiState = invoiceUiState,
-        getUniqueInvoiceLink = { viewModel.getUniqueInvoiceLink(it) }
+        getUniqueInvoiceLink = { viewModel.getUniqueInvoiceLink(it) },
+        navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen
     )
 }
 
 @Composable
 fun InvoiceScreen(
     invoiceUiState: InvoicesUiState,
-    getUniqueInvoiceLink: (Long) -> Uri?
+    getUniqueInvoiceLink: (Long) -> Uri?,
+    navigateToInvoiceDetailScreen: (Uri) -> Unit
 ) {
-    val context = LocalContext.current
+
     when (invoiceUiState) {
         is InvoicesUiState.Error -> {
             EmptyContentScreen(
@@ -65,9 +66,10 @@ fun InvoiceScreen(
                             invoiceId = it?.id.toString(),
                             invoiceStatusIcon = it?.status!!,
                             onClick = { invoiceId ->
-                                val intent = Intent(context, InvoiceActivity::class.java)
-                                intent.data = getUniqueInvoiceLink(invoiceId.toLong())
-                                context.startActivity(intent)
+                                val invoiceUri = getUniqueInvoiceLink(invoiceId.toLong())
+                                invoiceUri?.let { uri ->
+                                    navigateToInvoiceDetailScreen.invoke(uri)
+                                }
                             }
                         )
                     }
@@ -109,7 +111,7 @@ private fun InvoiceScreenPreview(
     @PreviewParameter(InvoicesUiStateProvider::class) invoiceUiState: InvoicesUiState
 ) {
     MifosTheme {
-        InvoiceScreen(invoiceUiState = invoiceUiState, getUniqueInvoiceLink = { Uri.EMPTY })
+        InvoiceScreen(invoiceUiState = invoiceUiState, getUniqueInvoiceLink = { Uri.EMPTY }, {})
     }
 }
 
