@@ -1,5 +1,6 @@
 package org.mifospay.feature.payments
 
+import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -13,7 +14,7 @@ import com.mifospay.core.model.domain.Transaction
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.history.HistoryScreen
-import org.mifospay.feature.invoices.InvoiceScreen
+import org.mifospay.feature.invoices.InvoiceScreenRoute
 import org.mifospay.feature.send.money.SendScreenRoute
 import org.mifospay.feature.standing.instruction.StandingInstructionsScreenRoute
 
@@ -24,7 +25,8 @@ fun PaymentsRoute(
     onNewSI: () -> Unit,
     viewReceipt: (String) -> Unit,
     onAccountClicked: (String, ArrayList<Transaction>) -> Unit,
-    proceedWithMakeTransferFlow: (String, String) -> Unit
+    proceedWithMakeTransferFlow: (String, String) -> Unit,
+    navigateToInvoiceDetailScreen:(Uri) -> Unit
 ) {
     val vpa by viewModel.vpa.collectAsStateWithLifecycle()
     PaymentScreenContent(
@@ -33,7 +35,8 @@ fun PaymentsRoute(
         onNewSI = onNewSI,
         onAccountClicked = onAccountClicked,
         viewReceipt = viewReceipt,
-        proceedWithMakeTransferFlow = proceedWithMakeTransferFlow
+        proceedWithMakeTransferFlow = proceedWithMakeTransferFlow,
+        navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen
     )
 }
 
@@ -44,7 +47,8 @@ fun PaymentScreenContent(
     onNewSI: () -> Unit,
     viewReceipt: (String) -> Unit,
     onAccountClicked: (String, ArrayList<Transaction>) -> Unit,
-    proceedWithMakeTransferFlow: (String, String) -> Unit
+    proceedWithMakeTransferFlow: (String, String) -> Unit,
+    navigateToInvoiceDetailScreen:(Uri) -> Unit
 ) {
 
     val pagerState = rememberPagerState(initialPage = 0)
@@ -70,7 +74,9 @@ fun PaymentScreenContent(
             StandingInstructionsScreenRoute(onNewSI = { onNewSI.invoke() })
         },
         TabContent(PaymentsScreenContents.INVOICES.name) {
-            InvoiceScreen()
+            InvoiceScreenRoute(
+                navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen
+            )
         }
     )
 
@@ -90,5 +96,5 @@ enum class PaymentsScreenContents {
 @Preview(showBackground = true)
 @Composable
 fun PaymentsScreenPreview() {
-    PaymentScreenContent(vpa = "", { _ -> }, {}, {}, { _, _ -> }, { _, _ -> })
+    PaymentScreenContent(vpa = "", { _ -> }, {}, {}, { _, _ -> }, { _, _ -> }, {})
 }
