@@ -6,13 +6,17 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.os.bundleOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.mifospay.core.model.domain.Transaction
+import com.mifos.mobile.passcode.utils.PassCodeConstants
 import org.mifospay.common.Constants
+import org.mifospay.feature.faq.navigation.faqScreen
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.homeScreen
+import org.mifospay.feature.invoices.navigation.invoiceDetailScreen
+import org.mifospay.feature.invoices.navigation.navigateToInvoiceDetail
 import org.mifospay.feature.kyc.navigation.kycLevel1Screen
 import org.mifospay.feature.kyc.navigation.kycLevel2Screen
 import org.mifospay.feature.kyc.navigation.kycLevel3Screen
@@ -23,11 +27,14 @@ import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
 import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
+import org.mifospay.feature.passcode.PassCodeActivity
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.profile.navigation.editProfileScreen
 import org.mifospay.feature.profile.navigation.navigateToEditProfile
 import org.mifospay.feature.profile.navigation.profileScreen
-import org.mifospay.feature.receipt.ReceiptActivity
+import org.mifospay.feature.read.qr.navigation.readQrScreen
+import org.mifospay.feature.receipt.navigation.navigateToReceipt
+import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.navigation.addCardScreen
@@ -36,7 +43,8 @@ import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.feature.settings.navigation.settingsScreen
-import org.mifospay.feature.specific.transactions.SpecificTransactionsActivity
+import org.mifospay.feature.specific.transactions.navigation.navigateToSpecificTransactions
+import org.mifospay.feature.specific.transactions.navigation.specificTransactionsScreen
 import org.mifospay.feature.standing.instruction.navigateToNewSiScreen
 import org.mifospay.feature.standing.instruction.newSiScreen
 
@@ -69,14 +77,14 @@ fun MifosNavHost(
             showQr = { vpa -> navController.navigateToShowQrScreen(vpa) },
             onNewSI = { navController.navigateToNewSiScreen() },
             onAccountClicked = { accountNo, transactionsList ->
-                context.startActivitySpecificTransaction(
-                    accountNo = accountNo,
-                    transactionsList = transactionsList
-                )
+                navController.navigateToSpecificTransactions(accountNo, transactionsList)
             },
-            viewReceipt = { context.startActivityViewReceipt(it) },
+            viewReceipt = { navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + it)) },
             proceedWithMakeTransferFlow = { externalId, transferAmount ->
                 navController.navigateToMakeTransferScreen(externalId, transferAmount)
+            },
+            navigateToInvoiceDetailScreen = { uri ->
+                navController.navigateToInvoiceDetail(uri.toString())
             }
         )
         financeScreen(
@@ -144,22 +152,52 @@ fun MifosNavHost(
         )
         kycLevel3Screen()
         newSiScreen(onBackClick = navController::popBackStack)
+
         editProfileScreen(onBackPress = navController::popBackStack)
+
+        faqScreen(
+            navigateBack = { navController.popBackStack() }
+        )
+        readQrScreen(
+            onBackClick = navController::popBackStack
+        )
+
+        specificTransactionsScreen(
+            onBackClick = navController::popBackStack,
+            onTransactionItemClicked = { transactionId ->
+                navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + transactionId))
+            }
+        )
+        invoiceDetailScreen(
+            onBackPress = { navController.popBackStack() },
+            navigateToReceiptScreen = { uri ->
+                navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + uri))
+            }
+        )
+        receiptScreen(
+            onShowSnackbar = { message, action ->
+                //Todo: Use onShowSnackbar
+                true
+            },
+            openPassCodeActivity = { uri ->
+                context.openPassCodeActivity(uri)
+            },
+            onBackClick = navController::popBackStack
+        )
     }
 }
 
-fun Context.startActivityViewReceipt(transactionId: String) {
-    startActivity(Intent(this, ReceiptActivity::class.java).apply {
-        data = Uri.parse(Constants.RECEIPT_DOMAIN + transactionId)
-    })
+fun Context.startActivityEditProfile() {
+    startActivity(Intent(this, EditProfileActivity::class.java))
 }
 
-fun Context.startActivitySpecificTransaction(
-    accountNo: String,
-    transactionsList: ArrayList<Transaction>
-) {
-    startActivity(Intent(this, SpecificTransactionsActivity::class.java).apply {
-        putParcelableArrayListExtra(Constants.TRANSACTIONS, transactionsList)
-        putExtra(Constants.ACCOUNT_NUMBER, accountNo)
-    })
+fun Context.openPassCodeActivity(deepLinkURI: Uri) {
+    PassCodeActivity.startPassCodeActivity(
+        context = this,
+        bundle = bundleOf(
+            Pair("uri", deepLinkURI.toString()),
+            Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
+        ),
+    )
+
 }

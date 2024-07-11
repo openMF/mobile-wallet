@@ -1,6 +1,5 @@
 package org.mifospay.feature.invoices
 
-import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -34,24 +33,26 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.Invoice
 import com.mifospay.core.model.utils.DateHelper
-
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.primaryDarkBlue
 import org.mifospay.core.ui.ErrorScreenContent
-import org.mifospay.feature.receipt.ReceiptActivity
 import org.mifospay.invoices.R
 
 @Composable
 fun InvoiceDetailScreen(
     viewModel: InvoiceDetailViewModel = hiltViewModel(),
     data: Uri?,
-    onBackPress: () -> Unit
+    onBackPress: () -> Unit,
+    navigateToReceiptScreen: (String) -> Unit
 ) {
     val invoiceDetailUiState by viewModel.invoiceDetailUiState.collectAsStateWithLifecycle()
-    InvoiceDetailScreen(invoiceDetailUiState = invoiceDetailUiState, onBackPress = onBackPress)
+    InvoiceDetailScreen(
+        invoiceDetailUiState = invoiceDetailUiState,
+        onBackPress = onBackPress,
+        navigateToReceiptScreen = navigateToReceiptScreen
+    )
     LaunchedEffect(key1 = true) {
         viewModel.getInvoiceDetails(data)
     }
@@ -59,7 +60,9 @@ fun InvoiceDetailScreen(
 
 @Composable
 fun InvoiceDetailScreen(
-    invoiceDetailUiState: InvoiceDetailUiState, onBackPress: () -> Unit
+    invoiceDetailUiState: InvoiceDetailUiState,
+    onBackPress: () -> Unit,
+    navigateToReceiptScreen: (String) -> Unit
 ) {
     MifosScaffold(
         topBarTitle = R.string.feature_invoices_invoice,
@@ -86,7 +89,8 @@ fun InvoiceDetailScreen(
                         InvoiceDetailsContent(
                             invoiceDetailUiState.invoice,
                             invoiceDetailUiState.merchantId,
-                            invoiceDetailUiState.paymentLink
+                            invoiceDetailUiState.paymentLink,
+                            navigateToReceiptScreen = navigateToReceiptScreen
                         )
                     }
                 }
@@ -95,7 +99,12 @@ fun InvoiceDetailScreen(
 }
 
 @Composable
-fun InvoiceDetailsContent(invoice: Invoice?, merchantId: String?, paymentLink: String?) {
+fun InvoiceDetailsContent(
+    invoice: Invoice?,
+    merchantId: String?,
+    paymentLink: String?,
+    navigateToReceiptScreen: (String) -> Unit
+) {
     val clipboardManager = LocalClipboardManager.current
 
     Column(
@@ -217,11 +226,11 @@ fun InvoiceDetailsContent(invoice: Invoice?, merchantId: String?, paymentLink: S
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onPress = {
-                                val intent = Intent(context, ReceiptActivity::class.java)
-                                intent.data = Uri.parse(
-                                    Constants.RECEIPT_DOMAIN + invoice.transactionId
-                                )
-                                context.startActivity(intent)
+                                invoice.transactionId?.let { it1 ->
+                                    navigateToReceiptScreen.invoke(
+                                        it1
+                                    )
+                                }
                             },
                             onLongPress = {
                                 clipboardManager.setText(AnnotatedString(Constants.RECEIPT_DOMAIN + invoice.transactionId))
@@ -305,6 +314,10 @@ fun InvoiceDetailScreenPreview(
     @PreviewParameter(InvoiceDetailScreenProvider::class) invoiceDetailUiState: InvoiceDetailUiState
 ) {
     MifosTheme {
-        InvoiceDetailScreen(invoiceDetailUiState = invoiceDetailUiState) {}
+        InvoiceDetailScreen(
+            invoiceDetailUiState = invoiceDetailUiState,
+            onBackPress = {},
+            navigateToReceiptScreen = {}
+        )
     }
 }
