@@ -155,7 +155,7 @@ fun MifosNavHost(
 
         faqScreen(
             navigateBack = { navController.popBackStack() }
-
+        )
         readQrScreen(
             onBackClick = navController::popBackStack
         )
