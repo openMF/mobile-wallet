@@ -6,6 +6,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.foundation.Image
@@ -67,6 +68,7 @@ import java.io.File
  */
 @Composable
 fun ReceiptScreenRoute(
+    uri: Uri?,
     viewModel: ReceiptViewModel = hiltViewModel(),
     onShowSnackbar: suspend (String, String?) -> Boolean,
     openPassCodeActivity: () -> Unit,
@@ -80,6 +82,10 @@ fun ReceiptScreenRoute(
      */
     val receiptUiState by viewModel.receiptUiState.collectAsState()
     val fileState by viewModel.fileState.collectAsState()
+
+    LaunchedEffect(uri) {
+        uri?.let { viewModel.getTransactionData(it) }
+    }
 
     ReceiptScreen(
         uiState = receiptUiState,

@@ -75,23 +75,6 @@
         <activity
             android:name=".feature.passcode.PassCodeActivity"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".feature.receipt.ReceiptActivity"
-            android:exported="true"
-            android:launchMode="singleTask"
-            android:theme="@style/AppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data
-                    android:host="receipt.mifospay.com"
-                    android:scheme="https" />
-            </intent-filter>
-        </activity>
-        <activity
 
         <service
             android:name=".data.firebase.api.services.MifosPayMessagingService"

@@ -6,8 +6,10 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.os.bundleOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import com.mifos.mobile.passcode.utils.PassCodeConstants
 import org.mifospay.common.Constants
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.home.navigation.HOME_ROUTE
@@ -24,11 +26,13 @@ import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
 import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
+import org.mifospay.feature.passcode.PassCodeActivity
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.profile.edit.EditProfileActivity
 import org.mifospay.feature.profile.navigation.profileScreen
 import org.mifospay.feature.read.qr.navigation.readQrScreen
-import org.mifospay.feature.receipt.ReceiptActivity
+import org.mifospay.feature.receipt.navigation.navigateToReceipt
+import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.navigation.addCardScreen
@@ -73,7 +77,7 @@ fun MifosNavHost(
             onAccountClicked = { accountNo, transactionsList ->
                 navController.navigateToSpecificTransactions(accountNo, transactionsList)
             },
-            viewReceipt = { context.startActivityViewReceipt(it) },
+            viewReceipt = { navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + it)) },
             proceedWithMakeTransferFlow = { externalId, transferAmount ->
                 navController.navigateToMakeTransferScreen(externalId, transferAmount)
             },
@@ -149,16 +153,28 @@ fun MifosNavHost(
 
         readQrScreen(
             onBackClick = navController::popBackStack
-
-
+        )
         specificTransactionsScreen(
             onBackClick = navController::popBackStack,
             onTransactionItemClicked = { transactionId ->
-                context.startActivityViewReceipt(transactionId)
+                navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + transactionId))
             }
-
+        )
         invoiceDetailScreen(
-            onBackPress = { navController.popBackStack() }
+            onBackPress = { navController.popBackStack() },
+            navigateToReceiptScreen = { uri ->
+                navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + uri))
+            }
+        )
+        receiptScreen(
+            onShowSnackbar = { message, action ->
+                //Todo: Use onShowSnackbar
+                true
+            },
+            openPassCodeActivity = { uri ->
+                context.openPassCodeActivity(uri)
+            },
+            onBackClick = navController::popBackStack
         )
     }
 }
@@ -167,8 +183,12 @@ fun Context.startActivityEditProfile() {
     startActivity(Intent(this, EditProfileActivity::class.java))
 }
 
-fun Context.startActivityViewReceipt(transactionId: String) {
-    startActivity(Intent(this, ReceiptActivity::class.java).apply {
-        data = Uri.parse(Constants.RECEIPT_DOMAIN + transactionId)
-    })
+fun Context.openPassCodeActivity(deepLinkURI: Uri) {
+    PassCodeActivity.startPassCodeActivity(
+        context = this,
+        bundle = bundleOf(
+            Pair("uri", deepLinkURI.toString()),
+            Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
+        ),
+    )
 }
