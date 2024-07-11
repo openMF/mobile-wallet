@@ -16,6 +16,7 @@ fun NavController.navigateToInvoiceDetail(invoiceData: String) {
 }
 
 fun NavGraphBuilder.invoiceDetailScreen(
+    navigateToReceiptScreen: (String) -> Unit,
     onBackPress: () -> Unit
 ) {
     composable(
@@ -27,7 +28,8 @@ fun NavGraphBuilder.invoiceDetailScreen(
         val invoiceData = Uri.decode(backStackEntry.arguments?.getString(INVOICE_DATA_ARG))
         InvoiceDetailScreen(
             data = Uri.parse(invoiceData),
-            onBackPress = onBackPress
+            onBackPress = onBackPress,
+            navigateToReceiptScreen = navigateToReceiptScreen
         )
     }
 }
