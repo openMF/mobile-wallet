@@ -1,6 +1,5 @@
 package org.mifospay.ui
 
-import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -66,7 +65,7 @@ import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.GradientColors
 import org.mifospay.core.designsystem.theme.LocalGradientColors
-import org.mifospay.feature.faq.FAQActivity
+import org.mifospay.feature.faq.navigation.navigateToFAQ
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.navigation.MifosNavHost
 import org.mifospay.navigation.TopLevelDestination
@@ -125,7 +124,7 @@ fun MifosApp(appState: MifosAppState, bottomSheetNavigator: BottomSheetNavigator
                                     color = MaterialTheme.colorScheme.onSurface) },
                                 onClick = {
                                     showHomeMenuOption = false
-                                    context.startActivity(Intent(context, FAQActivity::class.java))
+                                    appState.navController.navigateToFAQ()
                                 }
                             )
                             DropdownMenuItem(

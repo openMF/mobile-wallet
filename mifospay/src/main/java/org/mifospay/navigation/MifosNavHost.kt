@@ -11,6 +11,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.mifos.mobile.passcode.utils.PassCodeConstants
 import org.mifospay.common.Constants
+import org.mifospay.feature.faq.navigation.faqScreen
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.homeScreen
@@ -151,9 +152,14 @@ fun MifosNavHost(
         kycLevel3Screen()
         newSiScreen(onBackClick = navController::popBackStack)
 
+
+        faqScreen(
+            navigateBack = { navController.popBackStack() }
+        )
         readQrScreen(
             onBackClick = navController::popBackStack
         )
+
         specificTransactionsScreen(
             onBackClick = navController::popBackStack,
             onTransactionItemClicked = { transactionId ->

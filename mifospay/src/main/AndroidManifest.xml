@@ -111,9 +111,6 @@
             android:name=".feature.settings.SettingsActivity"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".feature.faq.FAQActivity"
-            android:theme="@style/AppTheme" />
-        <activity
             android:name=".feature.bank.accounts.link.LinkBankAccountActivity"
             android:theme="@style/AppTheme" />
         <activity
