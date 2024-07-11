@@ -245,7 +245,7 @@ fun EditProfileScreenContent(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surface,)
+                .background(color = MaterialTheme.colorScheme.surface)
                 .verticalScroll(rememberScrollState())
         ) {
             EditProfileScreenImage(
@@ -396,7 +396,10 @@ fun EditProfileSaveButton(onClick: () -> Unit, buttonText: Int) {
         shape = RoundedCornerShape(10.dp),
         contentPadding = PaddingValues(12.dp)
     ) {
-        Text(text = stringResource(id = buttonText), style = styleMedium16sp.copy(MaterialTheme.colorScheme.onPrimary))
+        Text(
+            text = stringResource(id = buttonText),
+            style = styleMedium16sp.copy(MaterialTheme.colorScheme.onPrimary)
+        )
     }
 }
 

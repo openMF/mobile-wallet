@@ -29,7 +29,8 @@ import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScree
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.passcode.PassCodeActivity
 import org.mifospay.feature.payments.paymentsScreen
-import org.mifospay.feature.profile.edit.EditProfileActivity
+import org.mifospay.feature.profile.navigation.editProfileScreen
+import org.mifospay.feature.profile.navigation.navigateToEditProfile
 import org.mifospay.feature.profile.navigation.profileScreen
 import org.mifospay.feature.read.qr.navigation.readQrScreen
 import org.mifospay.feature.receipt.navigation.navigateToReceipt
@@ -100,7 +101,7 @@ fun MifosNavHost(
             }
         )
         profileScreen(
-            onEditProfile = { context.startActivityEditProfile() },
+            onEditProfile = { navController.navigateToEditProfile() },
             onSettings = { navController.navigateToSettings() }
         )
         sendMoneyScreen(
@@ -152,6 +153,7 @@ fun MifosNavHost(
         kycLevel3Screen()
         newSiScreen(onBackClick = navController::popBackStack)
 
+        editProfileScreen(onBackPress = navController::popBackStack)
 
         faqScreen(
             navigateBack = { navController.popBackStack() }
@@ -197,4 +199,5 @@ fun Context.openPassCodeActivity(deepLinkURI: Uri) {
             Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
         ),
     )
+
 }

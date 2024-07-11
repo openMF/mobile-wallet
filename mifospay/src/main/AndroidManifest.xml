@@ -34,12 +34,6 @@
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="barcode_ui" />
 
-        <activity android:name=".feature.standing.instruction.SIDetailsActivity" />
-        <activity
-            android:name=".standinginstruction.ui.NewSIActivity"
-            android:label="@string/title_activity_new_si"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".merchants.ui.MerchantTransferActivity" />
         <activity
             android:name=".SplashScreenActivity"
             android:exported="true"
@@ -103,13 +97,7 @@
         <activity
             android:name=".feature.auth.mobile_verify.MobileVerificationActivity"
             android:theme="@style/AppTheme" />
-        <activity
-            android:name=".feature.profile.edit.EditProfileActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".feature.settings.SettingsActivity"
-            android:theme="@style/AppTheme" />
+
         <activity
             android:name=".feature.bank.accounts.link.LinkBankAccountActivity"
             android:theme="@style/AppTheme" />
