@@ -1,6 +1,5 @@
 package org.mifospay.feature.bank.accounts.details
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,16 +18,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.mifospay.core.model.domain.BankAccountDetails
 import org.mifospay.core.designsystem.component.MifosTopBar
-import org.mifospay.core.designsystem.theme.mifosText
-import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.feature.bank.accounts.R
 
 @Composable
