@@ -6,6 +6,7 @@ import com.google.accompanist.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.mifospay.core.model.domain.BankAccountDetails
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.bank.accounts.AccountsScreen
@@ -18,13 +19,18 @@ fun FinanceRoute(
     onAddBtn: () -> Unit,
     onLevel1Clicked: () -> Unit,
     onLevel2Clicked: () -> Unit,
-    onLevel3Clicked: () -> Unit
+    onLevel3Clicked: () -> Unit,
+    navigateToBankAccountDetailScreen: (BankAccountDetails, Int) -> Unit,
+    navigateToLinkBankAccountScreen: () -> Unit
 ) {
     val pagerState = rememberPagerState(initialPage = 0)
 
     val tabContents = listOf(
         TabContent(FinanceScreenContents.ACCOUNTS.name) {
-            AccountsScreen()
+            AccountsScreen(
+                navigateToBankAccountDetailScreen = navigateToBankAccountDetailScreen,
+                navigateToLinkBankAccountScreen = navigateToLinkBankAccountScreen
+            )
         },
         TabContent(FinanceScreenContents.CARDS.name) {
             CardsScreen(onEditCard = {})
@@ -60,6 +66,8 @@ private fun FinanceScreenPreview() {
         onAddBtn = {},
         onLevel1Clicked = {},
         onLevel2Clicked = {},
-        onLevel3Clicked = {}
+        onLevel3Clicked = {},
+        navigateToBankAccountDetailScreen = { _, _ -> },
+        navigateToLinkBankAccountScreen = {}
     )
 }

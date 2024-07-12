@@ -1,9 +1,5 @@
 package org.mifospay.feature.bank.accounts
 
-import android.app.Activity
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,9 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -35,42 +28,24 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.domain.BankAccountDetails
-import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utility.AddCardChip
-import org.mifospay.feature.bank.accounts.details.BankAccountDetailActivity
-import org.mifospay.feature.bank.accounts.link.LinkBankAccountActivity
 
 @Composable
 fun AccountsScreen(
-    viewModel: AccountViewModel = hiltViewModel()
+    viewModel: AccountViewModel = hiltViewModel(),
+    navigateToBankAccountDetailScreen: (BankAccountDetails,Int) -> Unit,
+    navigateToLinkBankAccountScreen: () -> Unit
 ) {
     val accountsUiState by viewModel.accountsUiState.collectAsStateWithLifecycle()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val bankAccountDetailsList by viewModel.bankAccountDetailsList.collectAsStateWithLifecycle()
 
-    val context = LocalContext.current
-    val updateBankAccountLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val bundle = result.data?.extras
-            if (bundle != null) {
-                val bankAccountDetails = bundle.getParcelable<BankAccountDetails>(Constants.UPDATED_BANK_ACCOUNT)
-                val index = bundle.getInt(Constants.INDEX)
-                if (bankAccountDetails != null) {
-                    viewModel.updateBankAccount(index, bankAccountDetails)
-                }
-            }
-        }
-    }
-
     AccountScreen(
         accountsUiState = accountsUiState,
         onAddAccount = {
-            val intent = Intent(context, LinkBankAccountActivity::class.java)
-            context.startActivity(intent)
+            navigateToLinkBankAccountScreen.invoke()
         },
         bankAccountDetailsList = bankAccountDetailsList,
         isRefreshing = isRefreshing,
@@ -78,11 +53,8 @@ fun AccountsScreen(
             viewModel.refresh()
         },
         onUpdateAccount = { bankAccountDetails, index ->
-            val intent = Intent(context, BankAccountDetailActivity::class.java).apply {
-                putExtra(Constants.BANK_ACCOUNT_DETAILS, bankAccountDetails)
-                putExtra(Constants.INDEX, index)
-            }
-            updateBankAccountLauncher.launch(intent)
+            viewModel.updateBankAccount(index, bankAccountDetails)
+            navigateToBankAccountDetailScreen.invoke(bankAccountDetails,index)
         }
     )
 }

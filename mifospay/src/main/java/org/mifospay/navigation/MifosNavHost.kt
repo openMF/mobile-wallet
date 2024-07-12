@@ -1,7 +1,6 @@
 package org.mifospay.navigation
 
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -11,6 +10,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.mifos.mobile.passcode.utils.PassCodeConstants
 import org.mifospay.common.Constants
+import org.mifospay.feature.bank.accounts.navigation.bankAccountDetailScreen
+import org.mifospay.feature.bank.accounts.navigation.linkBankAccountScreen
+import org.mifospay.feature.bank.accounts.navigation.navigateToBankAccountDetail
+import org.mifospay.feature.bank.accounts.navigation.navigateToLinkBankAccount
 import org.mifospay.feature.faq.navigation.faqScreen
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.home.navigation.HOME_ROUTE
@@ -47,6 +50,8 @@ import org.mifospay.feature.specific.transactions.navigation.navigateToSpecificT
 import org.mifospay.feature.specific.transactions.navigation.specificTransactionsScreen
 import org.mifospay.feature.standing.instruction.navigateToNewSiScreen
 import org.mifospay.feature.standing.instruction.newSiScreen
+import org.mifospay.feature.upi_setup.navigation.navigateToSetupUpiPin
+import org.mifospay.feature.upi_setup.navigation.setupUpiPinScreen
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -91,7 +96,13 @@ fun MifosNavHost(
             onAddBtn = { navController.navigateToAddCard() },
             onLevel1Clicked = { navController.navigateToKYCLevel1() },
             onLevel2Clicked = { navController.navigateToKYCLevel2() },
-            onLevel3Clicked = { navController.navigateToKYCLevel3() }
+            onLevel3Clicked = { navController.navigateToKYCLevel3() },
+            navigateToBankAccountDetailScreen = { bankAccountDetails, index ->
+                navController.navigateToBankAccountDetail(bankAccountDetails, index)
+            },
+                    navigateToLinkBankAccountScreen = {
+                navController.navigateToLinkBankAccount()
+            }
         )
         addCardScreen(
             onDismiss = navController::popBackStack,
@@ -184,11 +195,27 @@ fun MifosNavHost(
             },
             onBackClick = navController::popBackStack
         )
+        setupUpiPinScreen()
+        bankAccountDetailScreen(
+            onSetupUpiPin = { bankAccountDetails, index ->
+                navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.SETUP)
+            },
+            onChangeUpiPin = { bankAccountDetails, index ->
+                navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.CHANGE)
+            },
+            onForgotUpiPin = { bankAccountDetails, index ->
+                navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.FORGOT)
+            },
+            onBackClick = { bankAccountDetails, index ->
+                navController.previousBackStackEntry?.savedStateHandle?.set(Constants.UPDATED_BANK_ACCOUNT, bankAccountDetails)
+                navController.previousBackStackEntry?.savedStateHandle?.set(Constants.INDEX, index)
+                navController.popBackStack()
+            }
+        )
+        linkBankAccountScreen(
+            onBackClick = { navController.popBackStack() }
+        )
     }
-}
-
-fun Context.startActivityEditProfile() {
-    startActivity(Intent(this, EditProfileActivity::class.java))
 }
 
 fun Context.openPassCodeActivity(deepLinkURI: Uri) {
@@ -199,5 +226,4 @@ fun Context.openPassCodeActivity(deepLinkURI: Uri) {
             Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
         ),
     )
-
 }
