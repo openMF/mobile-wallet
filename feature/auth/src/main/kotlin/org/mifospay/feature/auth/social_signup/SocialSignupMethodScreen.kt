@@ -1,7 +1,6 @@
 package org.mifospay.feature.auth.social_signup
 
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -54,7 +53,6 @@ import org.mifospay.core.data.util.Constants.MIFOS_CONSUMER_SAVINGS_PRODUCT_ID
 import org.mifospay.core.data.util.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.feature.auth.R
-import org.mifospay.feature.auth.mobile_verify.MobileVerificationActivity
 
 const val TAG = "Social Login"
 
@@ -111,7 +109,11 @@ fun SocialSignupMethodScreen(
                         googleIdTokenCredential?.let {
                             signUpWithMifos()
                         } ?: {
-                            Toast.makeText(context, Constants.GOOGLE_SIGN_IN_FAILED, Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                Constants.GOOGLE_SIGN_IN_FAILED,
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     } catch (e: GoogleIdTokenParsingException) {
                         Log.e(TAG, "Received an invalid google id token response", e)
@@ -295,16 +297,8 @@ fun GoogleIdTokenCredential?.signUpWithMifos(
     signOutGoogleClient: () -> Unit
 ) {
     val googleIdTokenCredential = this
-    val intent = Intent(context, MobileVerificationActivity::class.java)
-    intent.putExtra(Constants.MIFOS_SAVINGS_PRODUCT_ID, mifosSavingsProductId)
-    if (googleIdTokenCredential != null) {
-        intent.putExtra(Constants.GOOGLE_PHOTO_URI, googleIdTokenCredential.profilePictureUri)
-        intent.putExtra(Constants.GOOGLE_DISPLAY_NAME, googleIdTokenCredential.displayName)
-        intent.putExtra(Constants.GOOGLE_EMAIL, googleIdTokenCredential.data.getString("com.google.android.libraries.identity.googleid.BUNDLE_KEY_ID"))
-        intent.putExtra(Constants.GOOGLE_FAMILY_NAME, googleIdTokenCredential.familyName)
-        intent.putExtra(Constants.GOOGLE_GIVEN_NAME, googleIdTokenCredential.givenName)
-    }
-    context.startActivity(intent)
+    //Todo:navigate to MobileVerificationScreen with googleIdTokenCredential.givenName,profilePictureUri,
+    // familyName,mifosSavingsProductId,displayName,data.getString("com.google.android.libraries.identity.googleid.BUNDLE_KEY_ID")
     signOutGoogleClient.invoke()
 }
 

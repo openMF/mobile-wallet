@@ -18,7 +18,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -31,12 +30,9 @@ import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.component.MifosTopBar
-import org.mifospay.core.designsystem.theme.mifosText
-import org.mifospay.core.designsystem.theme.styleSettingsButton
 import org.mifospay.core.ui.utility.DialogState
 import org.mifospay.core.ui.utility.DialogType
 import org.mifospay.feature.auth.login.LoginActivity
-import org.mifospay.feature.editpassword.EditPasswordActivity
 import org.mifospay.feature.passcode.PassCodeActivity
 
 /**
@@ -48,6 +44,7 @@ import org.mifospay.feature.passcode.PassCodeActivity
 fun SettingsScreenRoute(
     viewmodel: SettingsViewModel = hiltViewModel(),
     backPress: () -> Unit,
+    navigateToEditPasswordScreen:() -> Unit
 ) {
     val context = LocalContext.current
     var dialogState by remember { mutableStateOf(DialogState()) }
@@ -101,7 +98,7 @@ fun SettingsScreenRoute(
                     )
             ) {
                 MifosCard(
-                    onClick = { onChangePasswordClicked(context) },
+                    onClick = { onChangePasswordClicked(navigateToEditPasswordScreen) },
                     colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
                 ) {
                     Text(
@@ -195,8 +192,8 @@ fun SettingsScreenRoute(
     }
 }
 
-fun onChangePasswordClicked(context: Context) {
-    context.startActivity(Intent(context, EditPasswordActivity::class.java))
+fun onChangePasswordClicked(navigateToEditPasswordScreen:()->Unit) {
+    navigateToEditPasswordScreen.invoke()
 }
 
 fun onChangePasscodeClicked(
@@ -217,5 +214,5 @@ fun onChangePasscodeClicked(
 @Preview(showSystemUi = true)
 @Composable
 fun SettingsScreenPreview() {
-    SettingsScreenRoute(hiltViewModel(), {})
+    SettingsScreenRoute(hiltViewModel(), {},{})
 }
