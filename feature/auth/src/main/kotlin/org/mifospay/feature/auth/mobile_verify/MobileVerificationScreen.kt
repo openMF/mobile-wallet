@@ -39,7 +39,6 @@ import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.feature.auth.R
 
 

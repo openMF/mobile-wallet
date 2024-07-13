@@ -1,6 +1,7 @@
 package org.mifospay.navigation
 
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -10,10 +11,17 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.mifos.mobile.passcode.utils.PassCodeConstants
 import org.mifospay.common.Constants
+import org.mifospay.feature.auth.navigation.loginScreen
+import org.mifospay.feature.auth.navigation.mobileVerificationScreen
+import org.mifospay.feature.auth.navigation.navigateToMobileVerification
+import org.mifospay.feature.auth.navigation.navigateToSignup
+import org.mifospay.feature.auth.navigation.signupScreen
 import org.mifospay.feature.bank.accounts.navigation.bankAccountDetailScreen
 import org.mifospay.feature.bank.accounts.navigation.linkBankAccountScreen
 import org.mifospay.feature.bank.accounts.navigation.navigateToBankAccountDetail
 import org.mifospay.feature.bank.accounts.navigation.navigateToLinkBankAccount
+import org.mifospay.feature.editpassword.navigation.editPasswordScreen
+import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.home.navigation.HOME_ROUTE
@@ -100,7 +108,7 @@ fun MifosNavHost(
             navigateToBankAccountDetailScreen = { bankAccountDetails, index ->
                 navController.navigateToBankAccountDetail(bankAccountDetails, index)
             },
-                    navigateToLinkBankAccountScreen = {
+            navigateToLinkBankAccountScreen = {
                 navController.navigateToLinkBankAccount()
             }
         )
@@ -133,7 +141,12 @@ fun MifosNavHost(
             },
             onBackPressed = navController::popBackStack
         )
-        settingsScreen(onBackPress = navController::popBackStack)
+        settingsScreen(
+            onBackPress = navController::popBackStack,
+            navigateToEditPasswordScreen = {
+                navController.navigateToEditPassword()
+            }
+        )
 
         kycScreen(
             onLevel1Clicked = {
@@ -207,13 +220,63 @@ fun MifosNavHost(
                 navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.FORGOT)
             },
             onBackClick = { bankAccountDetails, index ->
-                navController.previousBackStackEntry?.savedStateHandle?.set(Constants.UPDATED_BANK_ACCOUNT, bankAccountDetails)
+                navController.previousBackStackEntry?.savedStateHandle?.set(
+                    Constants.UPDATED_BANK_ACCOUNT,
+                    bankAccountDetails
+                )
                 navController.previousBackStackEntry?.savedStateHandle?.set(Constants.INDEX, index)
                 navController.popBackStack()
             }
         )
         linkBankAccountScreen(
             onBackClick = { navController.popBackStack() }
+        )
+        editPasswordScreen(
+            onBackPress = {
+                navController.popBackStack()
+            },
+            onCancelChanges = {
+                navController.popBackStack()
+            }
+        )
+        signupScreen(
+            onLoginSuccess = {
+                val intent = Intent(context, PassCodeActivity::class.java).apply {
+                    putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
+                }
+                context.startActivity(intent)
+            },
+            onRegisterSuccess = {
+                //Todo: Implement onRegisterSuccess
+            },
+        )
+        mobileVerificationScreen(
+            onOtpVerificationSuccess = { fullNumber, extraData ->
+                navController.navigateToSignup(
+                    savingProductId = extraData[Constants.MIFOS_SAVINGS_PRODUCT_ID] as Int,
+                    mobileNumber = fullNumber,
+                    country = "Canada",
+                    email = extraData[Constants.GOOGLE_EMAIL] as? String ?: "",
+                    firstName = extraData[Constants.GOOGLE_GIVEN_NAME] as? String ?: "",
+                    lastName = extraData[Constants.GOOGLE_FAMILY_NAME] as? String ?: "",
+                    businessName = extraData[Constants.GOOGLE_DISPLAY_NAME] as? String ?: ""
+                )
+            }
+        )
+
+        loginScreen(
+            onDismissSignUp = {
+                //Todo: Navigate to the main screen after successful login
+            },
+            onNavigateToMobileVerificationScreen = { mifosSignedUp, googleDisplayName, googleEmail, googleFamilyName, googleGivenName ->
+                navController.navigateToMobileVerification(
+                    mifosSignedUp = mifosSignedUp,
+                    googleDisplayName = googleDisplayName,
+                    googleEmail = googleEmail,
+                    googleFamilyName = googleFamilyName,
+                    googleGivenName = googleGivenName
+                )
+            }
         )
     }
 }

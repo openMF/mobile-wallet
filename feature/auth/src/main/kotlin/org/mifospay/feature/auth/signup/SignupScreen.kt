@@ -53,12 +53,30 @@ import java.util.Locale
 @Composable
 fun SignupScreen(
     viewModel: SignupViewModel = hiltViewModel(),
-    onLoginSuccess: () -> Unit
+    onLoginSuccess: () -> Unit,
+    savingProductId:Int,
+    mobileNumber:String,
+    country:String,
+    email:String,
+    firstName:String,
+    lastName:String,
+    businessName:String
 ) {
     val context = LocalContext.current
 
     val stateList by viewModel.states.collectAsStateWithLifecycle()
 
+    LaunchedEffect(key1 = true) {
+        viewModel.initSignupData(
+            savingProductId = savingProductId,
+            mobileNumber = mobileNumber,
+            countryName = country,
+            email = email,
+                    firstName = firstName,
+                    lastName = lastName,
+                    businessName = businessName
+        )
+    }
     LaunchedEffect(viewModel.isLoginSuccess) {
         if (viewModel.isLoginSuccess) {
             onLoginSuccess.invoke()

@@ -12,10 +12,12 @@ fun NavController.navigateToSettings(navOptions: NavOptions? = null) = navigate(
 
 fun NavGraphBuilder.settingsScreen(
     onBackPress: () -> Unit,
+    navigateToEditPasswordScreen:() -> Unit
 ) {
     composable(route = SETTINGS_ROUTE) {
         SettingsScreenRoute(
-            backPress = onBackPress
+            backPress = onBackPress,
+            navigateToEditPasswordScreen = navigateToEditPasswordScreen
         )
     }
 }
