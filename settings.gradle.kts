@@ -9,7 +9,6 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
@@ -57,3 +56,4 @@ include(":feature:request-money")
 include(":feature:upi-setup")
 include(":feature:qr")
 include(":feature:home")
+include(":shared")
