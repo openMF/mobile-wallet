@@ -9,6 +9,12 @@ pluginManagement {
     }
 }
 dependencyResolutionManagement {
+
+    // repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS) was removed as it centralized repository configuration in this
+    // file to ensure that all subprojects use the same repositories. As a result Gradle has deprecated the use of project-level repositories in favor of settings-level repositories,
+    // leading to warnings or errors if project repositories are still used when RepositoriesMode.FAIL_ON_PROJECT_REPOS is enabled.
+    // Find the discussion at https://stackoverflow.com/questions/69163511/build-was-configured-to-prefer-settings-repositories-over-project-repositories-b
+
     repositories {
         google()
         mavenCentral()
