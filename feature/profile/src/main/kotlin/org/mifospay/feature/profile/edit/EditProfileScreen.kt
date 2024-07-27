@@ -36,7 +36,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
@@ -45,7 +44,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.togitech.ccp.component.TogiCountryCodePicker
@@ -61,28 +59,24 @@ import org.mifospay.core.designsystem.icon.MifosIcons.PhotoLibrary
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.historyItemTextStyle
 import org.mifospay.core.designsystem.theme.styleMedium16sp
-import org.mifospay.feature.profile.BuildConfig
 import org.mifospay.feature.profile.R
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.Objects
 
 @Composable
 fun EditProfileScreenRoute(
     viewModel: EditProfileViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
+    getUri:(context: Context, file: File) -> Uri
 ) {
     val editProfileUiState by viewModel.editProfileUiState.collectAsStateWithLifecycle()
     val updateSuccess by viewModel.updateSuccess.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val file = createImageFile(context)
-    val uri = FileProvider.getUriForFile(
-        Objects.requireNonNull(context),
-        BuildConfig.LIBRARY_PACKAGE_NAME + ".provider", file
-    )
+    val uri = getUri(context,file)
 
     LaunchedEffect(key1 = true) {
         viewModel.fetchProfileDetails()
@@ -286,7 +280,7 @@ fun EditProfileScreenContent(
                 } else {
                     TogiCountryCodePicker(
                         modifier = Modifier,
-                        initialPhoneNumber = mobile,
+                        initialPhoneNumber = " ",
                         autoDetectCode = true,
                         shape = RoundedCornerShape(3.dp),
                         colors = TextFieldDefaults.outlinedTextFieldColors(

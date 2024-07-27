@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
 import androidx.core.os.bundleOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -60,6 +61,8 @@ import org.mifospay.feature.standing.instruction.navigateToNewSiScreen
 import org.mifospay.feature.standing.instruction.newSiScreen
 import org.mifospay.feature.upi_setup.navigation.navigateToSetupUpiPin
 import org.mifospay.feature.upi_setup.navigation.setupUpiPinScreen
+import java.io.File
+import java.util.Objects
 
 /**
  * Top-level navigation graph. Navigation is organized as explained at
@@ -177,7 +180,12 @@ fun MifosNavHost(
         kycLevel3Screen()
         newSiScreen(onBackClick = navController::popBackStack)
 
-        editProfileScreen(onBackPress = navController::popBackStack)
+        editProfileScreen(
+            onBackPress = navController::popBackStack,
+            getUri = { context, file ->
+                getUri(context, file)
+            },
+        )
 
         faqScreen(
             navigateBack = { navController.popBackStack() }
@@ -289,4 +297,12 @@ fun Context.openPassCodeActivity(deepLinkURI: Uri) {
             Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
         ),
     )
+}
+
+fun getUri(context: Context, file: File): Uri {
+    val uri = FileProvider.getUriForFile(
+        Objects.requireNonNull(context),
+        org.mifospay.BuildConfig.APPLICATION_ID + ".provider", file
+    )
+    return uri
 }
