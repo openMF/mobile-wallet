@@ -25,28 +25,30 @@ fun NavGraphBuilder.bankAccountDetailScreen(
             navArgument(Constants.INDEX) { type = NavType.IntType }
         )
     ) { backStackEntry ->
-        val bankAccountDetails = backStackEntry.arguments?.getParcelable<BankAccountDetails>(Constants.BANK_ACCOUNT_DETAILS)
+        val bankAccountDetails =
+            backStackEntry.arguments?.getParcelable(Constants.BANK_ACCOUNT_DETAILS)
+                ?: BankAccountDetails("", "", "", "", "")
         val index = backStackEntry.arguments?.getInt(Constants.INDEX) ?: 0
 
-            BankAccountDetailScreen(
-                bankAccountDetails = bankAccountDetails!!,
-                onSetupUpiPin = { onSetupUpiPin(bankAccountDetails, index) },
-                onChangeUpiPin = {
-                    if (bankAccountDetails.isUpiEnabled) {
-                        onChangeUpiPin(bankAccountDetails, index)
-                    } else {
-                        // TODO: Use global snackbar
-                    }
-                },
-                onForgotUpiPin = {
-                    if (bankAccountDetails.isUpiEnabled) {
-                        onForgotUpiPin(bankAccountDetails, index)
-                    } else {
-                        // TODO: Use global snackbar
-                    }
-                },
-                navigateBack = { onBackClick(bankAccountDetails, index) }
-            )
+        BankAccountDetailScreen(
+            bankAccountDetails = bankAccountDetails,
+            onSetupUpiPin = { onSetupUpiPin(bankAccountDetails, index) },
+            onChangeUpiPin = {
+                if (bankAccountDetails.isUpiEnabled) {
+                    onChangeUpiPin(bankAccountDetails, index)
+                } else {
+                    // TODO: Use global snackbar
+                }
+            },
+            onForgotUpiPin = {
+                if (bankAccountDetails.isUpiEnabled) {
+                    onForgotUpiPin(bankAccountDetails, index)
+                } else {
+                    // TODO: Use global snackbar
+                }
+            },
+            navigateBack = { onBackClick(bankAccountDetails, index) }
+        )
     }
 }
 

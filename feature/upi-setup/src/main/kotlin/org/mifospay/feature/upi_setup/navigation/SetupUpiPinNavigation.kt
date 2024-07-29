@@ -20,19 +20,25 @@ fun NavGraphBuilder.setupUpiPinScreen() {
             navArgument(Constants.TYPE) { type = NavType.StringType }
         )
     ) { backStackEntry ->
-        val bankAccountDetails = backStackEntry.arguments?.getParcelable<BankAccountDetails>(Constants.BANK_ACCOUNT_DETAILS)
+        val bankAccountDetails =
+            backStackEntry.arguments?.getParcelable(Constants.BANK_ACCOUNT_DETAILS)
+                ?: BankAccountDetails("", "", "", "", "")
         val index = backStackEntry.arguments?.getInt(Constants.INDEX) ?: 0
         val type = backStackEntry.arguments?.getString(Constants.TYPE) ?: ""
 
         SetupUpiPinScreenRoute(
-            bankAccountDetails = bankAccountDetails!!,
+            bankAccountDetails = bankAccountDetails,
             type = type,
             index = index
         )
     }
 }
 
-fun NavController.navigateToSetupUpiPin(bankAccountDetails: BankAccountDetails, index: Int, type: String) {
+fun NavController.navigateToSetupUpiPin(
+    bankAccountDetails: BankAccountDetails,
+    index: Int,
+    type: String
+) {
     val bundle = Bundle().apply {
         putParcelable(Constants.BANK_ACCOUNT_DETAILS, bankAccountDetails)
     }
