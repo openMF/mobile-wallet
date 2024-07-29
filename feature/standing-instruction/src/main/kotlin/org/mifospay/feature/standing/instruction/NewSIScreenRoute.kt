@@ -383,12 +383,22 @@ fun ConfirmTransfer(
                     .width(150.dp)
                     .padding(top = 16.dp),
                 onClick = {
-                    confirm.invoke(
-                        clientId,
-                        amount.toDouble(),
-                        recurrenceInterval.toInt(),
-                        validTill
-                    )
+                    if (amount.isNotEmpty()) {
+                        confirm.invoke(
+                            clientId,
+                            amount.toDouble(),
+                            recurrenceInterval.toInt(),
+                            validTill
+                        )
+                    } else {
+                        // Handle the case when the amount is empty
+                        Toast.makeText(
+                            context,
+                            R.string.feature_standing_instruction_failed_to_save_changes,
+                            Toast.LENGTH_SHORT
+                        )
+                            .show()
+                    }
                     if (updateSuccess) {
                         Toast.makeText(
                             context,
