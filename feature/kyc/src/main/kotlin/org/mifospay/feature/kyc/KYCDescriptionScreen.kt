@@ -1,6 +1,5 @@
 package org.mifospay.feature.kyc
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -18,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
@@ -31,20 +30,21 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.kyc.KYCLevel1Details
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
+import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.kyc.R
 
 @Composable
@@ -53,7 +53,7 @@ fun KYCScreen(
     onLevel1Clicked: () -> Unit,
     onLevel2Clicked: () -> Unit,
     onLevel3Clicked: () -> Unit
-    ) {
+) {
     val kUiState by viewModel.kycdescriptionState.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
 
@@ -94,7 +94,13 @@ fun KYCDescriptionScreen(
             }
 
             is KYCDescriptionUiState.Error -> {
-                PlaceholderScreen()
+                EmptyContentScreen(
+                    modifier = Modifier,
+                    title = stringResource(id = R.string.feature_kyc_error_oops),
+                    subTitle = stringResource(id = R.string.feature_kyc_unexpected_error_subtitle),
+                    iconTint = MaterialTheme.colorScheme.primary,
+                    iconImageVector = Icons.Rounded.Info
+                )
             }
 
             is KYCDescriptionUiState.KYCDescription -> {
@@ -255,48 +261,6 @@ fun IconComponent(completed: Boolean, modifier: Modifier = Modifier) {
     }
 }
 
-@Composable
-fun PlaceholderScreen() {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize()
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.ic_error_state),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(48.dp)
-                    .scale(1.5f)
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = stringResource(id = R.string.feature_kyc_error_oops),
-                style = MaterialTheme.typography.bodyMedium
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = stringResource(id = R.string.feature_kyc_error_kyc_details),
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp)
-            )
-        }
-    }
-}
-
 @Preview(showBackground = true)
 @Composable
 fun KYCDescriptionPreview() {
@@ -309,4 +273,65 @@ fun KYCDescriptionPreview() {
         onLevel2Clicked,
         onLevel3Clicked
     )
+}
+
+class KYCDescriptionUiStatePreviewProvider : PreviewParameterProvider<KYCDescriptionUiState> {
+    override val values = sequenceOf(
+        KYCDescriptionUiState.Loading,
+        KYCDescriptionUiState.Error,
+        KYCDescriptionUiState.KYCDescription(
+            KYCLevel1Details().apply {
+                currentLevel = "0"
+            }
+        ),
+        KYCDescriptionUiState.KYCDescription(
+            KYCLevel1Details().apply {
+                currentLevel = "1"
+            }
+        ),
+        KYCDescriptionUiState.KYCDescription(
+            KYCLevel1Details().apply {
+                currentLevel = "2"
+            }
+        ),
+        KYCDescriptionUiState.KYCDescription(
+            KYCLevel1Details().apply {
+                currentLevel = "3"
+            }
+        )
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun KYCDescriptionScreenPreview(
+    @PreviewParameter(KYCDescriptionUiStatePreviewProvider::class) uiState: KYCDescriptionUiState
+) {
+    KYCDescriptionScreen(
+        kUiState = uiState,
+        onLevel1Clicked = {},
+        onLevel2Clicked = {},
+        onLevel3Clicked = {},
+        isRefreshing = false,
+        onRefresh = {}
+    )
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ButtonComponentPreview() {
+    Column {
+        ButtonComponent(value = "Level 1", enabled = true, completed = false) {}
+        ButtonComponent(value = "Level 2", enabled = true, completed = true) {}
+        ButtonComponent(value = "Level 3", enabled = false, completed = false) {}
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun IconComponentPreview() {
+    Column {
+        IconComponent(completed = true)
+        IconComponent(completed = false)
+    }
 }
