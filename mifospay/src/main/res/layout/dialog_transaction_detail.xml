@@ -43,7 +43,7 @@
                     android:id="@+id/tv_transaction_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/primaryDarkBlue"/>
+                    android:textColor="@color/feature_make_transfer_primaryDarkBlue"/>
 
                 <TextView
                     android:id="@+id/tv_transaction_date"
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center"
-                android:background="@drawable/ic_send"
+                android:background="@drawable/feature_history_ic_send"
                 android:foregroundGravity="center"/>
 
             <LinearLayout
@@ -188,7 +188,7 @@
             android:foregroundGravity="center"
             android:gravity="center"
             android:text="@string/view_receipt"
-            android:textColor="@color/primaryDarkBlue"
+            android:textColor="@color/feature_make_transfer_primaryDarkBlue"
             android:textStyle="bold"/>
 
     </LinearLayout>

@@ -230,7 +230,7 @@ fun NewSIBody(
                 onValueChange = {
                     siInterval = it
                 },
-                label = R.string.feature_standing_instruction_recurrence_interval_in_months
+                label = R.string.feature_standing_instruction_interval
             )
             Row(
                 modifier = Modifier
@@ -262,7 +262,7 @@ fun NewSIBody(
                     if (updateSuccess) {
                         Toast.makeText(
                             context,
-                            context.getString(R.string.feature_standing_instruction_successfully_creates_new_standing_instruction),
+                            context.getString(R.string.feature_standing_instruction_creates),
                             Toast.LENGTH_SHORT
                         )
                             .show()
@@ -275,7 +275,9 @@ fun NewSIBody(
                             .show()
                     }
                 },
-                enabled = selectedDate.isNotEmpty() && vpa.isNotEmpty() && amount.isNotEmpty() && siInterval.isNotEmpty()
+                enabled = selectedDate.isNotEmpty()
+                        && vpa.isNotEmpty()
+                        && amount.isNotEmpty() && siInterval.isNotEmpty()
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_submit),
@@ -402,10 +404,9 @@ fun ConfirmTransfer(
                     if (updateSuccess) {
                         Toast.makeText(
                             context,
-                            context.getString(R.string.feature_standing_instruction_successfully_creates_new_standing_instruction),
+                            context.getString(R.string.feature_standing_instruction_creates),
                             Toast.LENGTH_SHORT
-                        )
-                            .show()
+                        ).show()
                     } else {
                         Toast.makeText(
                             context,

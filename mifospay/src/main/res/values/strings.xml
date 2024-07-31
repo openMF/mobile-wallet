@@ -13,7 +13,7 @@
     <string name="level_1">Level 1</string>
     <string name="transaction_history">Transaction History</string>
     <string name="history">History</string>
-    <string name="email">E-mail</string>
+    <string name="feature_profile_email">E-mail</string>
     <string name="level_1_description">Level 1 Description</string>
     <string name="completion">Completed</string>
     <string name="check">Checked</string>
@@ -22,14 +22,14 @@
     <string name="level_3">Level 3</string>
     <string name="level_3_description">Level 3 Description</string>
     <string name="code">Code</string>
-    <string name="linked_bank_account">Linked bank accounts</string>
-    <string name="link_bank_account">Link Bank Account</string>
+    <string name="feature_accounts_linked_bank_account">Linked bank accounts</string>
+    <string name="feature_accounts_link_bank_account">Link Bank Account</string>
     <string name="date_of_birth">Date of Birth</string>
     <string name="add_card">Add Card</string>
     <string name="id_type">ID Type</string>
     <string name="vpaname">VPA</string>
     <string name="browse">Browse</string>
-    <string name="submit">Submit</string>
+    <string name="feature_send_money_submit">Submit</string>
     <string name="credit_card_number">Credit Card Number</string>
     <string name="expiry_date">Expiry Date</string>
     <string name="add">ADD</string>
@@ -46,7 +46,7 @@
     <string name="request">Request</string>
     <string name="bank_account">Bank Account</string>
     <string name="qr_code">QR code</string>
-    <string name="personal_qr_code">Personal QR Code</string>
+    <string name="feature_profile_personal_qr_code">Personal QR Code</string>
     <string name="complete_kyc">Complete the KYC process</string>
     <string name="saved_cards">Saved Cards</string>
     <string name="qr_code_details">QR code details</string>
@@ -54,11 +54,11 @@
     <string name="send_money">Send money</string>
     <string name="sending_to">Sending to</string>
     <string name="cancel">Cancel</string>
-    <string name="confirm">Confirm</string>
-    <string name="send">Send</string>
-    <string name="add_account">ADD ACCOUNT</string>
+    <string name="feature_accounts_confirm">Confirm</string>
+    <string name="feature_send_money_send">Send</string>
+    <string name="feature_accounts_add_account">ADD ACCOUNT</string>
     <string name="vpa_mobile_number">VPA/ Mobile Number</string>
-    <string name="proceed">Proceed</string>
+    <string name="feature_profile_proceed">Proceed</string>
     <string name="scan_code">Scan Code</string>
     <string name="receive">Receive</string>
     <string name="virtual_payment_address_vpa">Virtual Payment Address (VPA)</string>
@@ -77,19 +77,19 @@
     </string>
     <string name="enter_otp_received_on_your_registered_device">Enter otp received on your registered device</string>
     <string name="complete_your_registration">Complete your registration</string>
-    <string name="virtual_payment_address">Virtual Payment Address</string>
+    <string name="feature_send_money_virtual_payment_address">Virtual Payment Address</string>
     <string name="send_via">Send via</string>
 
-    <string name="verify_mobile_number">Verify Mobile Number</string>
-    <string name="confirm_mobile_number_message">To confirm your mobile number \n we need to send an
+    <string name="feature_accounts_verify_mobile_number">Verify Mobile Number</string>
+    <string name="feature_accounts_confirm_mobile_number_message">To confirm your mobile number \n we need to send an
         SMS from \n your phone*
     </string>
     <string name="choose_your_sim">Please choose your SIM</string>
-    <string name="choose_a_sim">Please choose a SIM</string>
-    <string name="regular_charges_will_apply">*Regular charges will apply</string>
+    <string name="feature_accounts_choose_a_sim">Please choose a SIM</string>
+    <string name="feature_accounts_regular_charges_will_apply">*Regular charges will apply</string>
     <string name="send_sms">Send SMS</string>
-    <string name="or">or</string>
-    <string name="bank_account_mobile_verification_conditions">Make sure that the following
+    <string name="feature_accounts_or">or</string>
+    <string name="feature_accounts_bank_account_mobile_verification_conditions">Make sure that the following
         conditions are met: \n1. Mobile Number is linked with your Bank Account. \n2. Mobile Number
         is
         registered on MifosPay. \n3. It\'s sim is on this device.
@@ -122,12 +122,12 @@
     <string name="label_select_picture">Select picture</string>
 
 
-    <string name="setup_upi">Setup UPI</string>
-    <string name="change_upi_pin">Change UPI PIN</string>
-    <string name="forgot_upi_pin">Forgot UPI PIN</string>
-    <string name="delete_bank">Delete Bank</string>
+    <string name="feature_accounts_setup_upi">Setup UPI</string>
+    <string name="feature_accounts_change_upi_pin">Change UPI PIN</string>
+    <string name="feature_accounts_forgot_upi_pin">Forgot UPI PIN</string>
+    <string name="feature_accounts_delete_bank">Delete Bank</string>
     <string name="link_your_bank_account">Link Your Bank Account</string>
-    <string name="no_linked_bank_accounts">No Linked Bank Accounts</string>
+    <string name="feature_accounts_no_linked_bank_accounts">No Linked Bank Accounts</string>
     <string name="editable_image_hint">Editable image hint</string>
     <string name="change_password">Change Password</string>
     <string name="change_passcode">Change Passcode</string>
@@ -147,8 +147,8 @@
     <string name="date">date</string>
     <string name="link">link</string>
     <string name="no_invoices_found">No invoices found</string>
-    <string name="popular_banks">Popular Banks</string>
-    <string name="other_banks">Other Banks</string>
+    <string name="feature_accounts_popular_banks">Popular Banks</string>
+    <string name="feature_accounts_other_banks">Other Banks</string>
     <string name="enter_mobile_number">Enter Mobile Number</string>
     <string name="verifying_otp_please_wait">Verifying OTP. Please wait..</string>
     <string name="notification_setting">Notification Setting</string>
@@ -162,7 +162,7 @@
     <string name="mandatory">Mandatory field</string>
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
-    <string name="username">Username</string>
+    <string name="feature_profile_username">Username</string>
     <string name="password">Password</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="name_of_business">Name of Business</string>
@@ -172,10 +172,10 @@
     <string name="pin_code">Pin Code</string>
     <string name="state">State</string>
     <string name="no_transactions_found">No transactions found</string>
-    <string name="click_profile_picture">Click profile picture</string>
-    <string name="change_profile_picture">Pick profile picture from device</string>
+    <string name="feature_profile_click_profile_picture">Click profile picture</string>
+    <string name="feature_profile_change_profile_picture">Pick profile picture from device</string>
     <string name="need_camera_permission_to_click_profile_picture">Need camera permission to click profile picture</string>
-    <string name="remove_profile_picture">Remove profile picture</string>
+    <string name="feature_profile_remove_profile_picture">Remove profile picture</string>
     <string name="sign_up_as">Sign up as</string>
     <string name="merchant">Merchant</string>
     <string name="customer">Customer</string>
@@ -188,20 +188,20 @@
     <string name="mm">MM</string>
     <string name="mm_yy">MM/YY</string>
     <string name="slash">/</string>
-    <string name="search">Search</string>
+    <string name="feature_accounts_search">Search</string>
     <string name="enter_otp">Enter OTP</string>
-    <string name="vpa">VPA</string>
+    <string name="feature_send_money_vpa">VPA</string>
     <string name="enter_upi_pin">Enter UPI PIN</string>
     <string name="notifications">Notifications</string>
-    <string name="bank_name">Bank Name</string>
-    <string name="ac_holder_name">A/C Holder Name</string>
-    <string name="branch_name">Branch Name</string>
-    <string name="ifsc">IFSC</string>
-    <string name="type">Type</string>
-    <string name="edit_profile">Edit Profile</string>
+    <string name="feature_accounts_bank_name">Bank Name</string>
+    <string name="feature_accounts_ac_holder_name">A/C Holder Name</string>
+    <string name="feature_accounts_branch_name">Branch Name</string>
+    <string name="feature_accounts_ifsc">IFSC</string>
+    <string name="feature_accounts_type">Type</string>
+    <string name="feature_profile_edit_profile">Edit Profile</string>
     <string name="faq">FAQ</string>
     <string name="frequently_asked_questions">Frequently Asked Question</string>
-    <string name="settings">Settings</string>
+    <string name="feature_profile_settings">Settings</string>
     <string name="mobile_number">Mobile Number</string>
     <string name="passcode_title">Passcode will be reset, are you sure?</string>
     <string name="yes">Yes</string>
@@ -237,16 +237,16 @@
     <string name="fetching">Fetching…</string>
     <string name="empty_no_transaction_history_title">Your history is empty</string>
     <string name="nothing_in_invoices">Nothing in Invoices</string>
-    <string name="select_transfer_method">Select transfer method</string>
+    <string name="feature_send_money_select_transfer_method">Select transfer method</string>
     <string name="empty_no_transaction_history_subtitle">Every completed transaction will be displaying here</string>
-    <string name="error_oops">Oops!</string>
+    <string name="feature_accounts_error_oops">Oops!</string>
     <string name="error_no_transaction_history_subtitle">Couldn\'t fetch transactions history. Please, try again.</string>
     <string name="error_no_invoices_found">Couldn\'t fetch invoice list. Please, try again.</string>
     <string name="error_no_cards_found">Couldn\'t fetch cards list. Please, try again.</string>
     <string name="error_no_merchants_found">Couldn\'t fetch merchant list. Please, try again.</string>
-    <string name="unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+    <string name="feature_accounts_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
     <string name="account_details">Account Details</string>
-    <string name="mobile">Mobile number</string>
+    <string name="feature_send_money_mobile">Mobile number</string>
     <string name="discard_changes_and_exit">Discard changes and exit?</string>
     <string name="discard_changes_and_exit_description">This will discard all unsaved changes and return to the Profile section.</string>
     <string name="accept">accept</string>
@@ -270,7 +270,7 @@
     <string name="password_normal">Normal</string>
     <string name="password_strong">Strong</string>
     <string name="password_very_strong">Very Strong</string>
-    <string name="amount">Amount</string>
+    <string name="feature_send_money_amount">Amount</string>
     <string name="merchant_history_message">The transaction history with this merchant will be shown here</string>
     <string name="log_out_title">Do you want to logout?</string>
     <string name="ok">Ok</string>
@@ -306,7 +306,7 @@
     <string name="amount_header">Amount:</string>
     <string name="deleted_successfully">Deleted Successfully</string>
     <string name="error_kyc_details">Couldn\'t fetch KYC details. Please try again.</string>
-    <string name="loading">Loading</string>
+    <string name="feature_accounts_loading">Loading</string>
     <string name="date_format">dd-MM-yyyy</string>
     <string name="select_dob">Select Date of Birth</string>
     <string name="error_adding_KYC_Level_1_details">Error adding KYC Level 1 details.</string>
@@ -318,13 +318,13 @@
     <string name="approve_permission">Please approve storage permissions</string>
     <string name="approve_permission_storage">Please approve storage permissions</string>
     <string name="approve_permission_storage_receiptDescription">You need to approve this permission in order to download and view your Receipt.</string>
-    <string name="permission_required">Permissions Required</string>
-    <string name="approve_permission_description_camera">You need to approve these permissions in order to access the camera.</string>
+    <string name="feature_profile_permission_required">Permissions Required</string>
+    <string name="feature_profile_approve_description">You need to approve these permissions in order to access the camera.</string>
     <string name="approve">Approve</string>
-    <string name="dismiss">Dismiss</string>
+    <string name="feature_profile_dismiss">Dismiss</string>
     <string name="download_complete">Download completed</string>
 
-    <string name="add_cards">Please Add Cards</string>
+    <string name="feature_accounts_add_cards">Please Add Cards</string>
     <string name="close">Close</string>
     <string name="edit_clicked">Edit Clicked</string>
     <string name="card_number">Card Number: </string>
@@ -357,8 +357,8 @@
     <string name="empty"/>
     <string name="verify_phone">Verify Phone</string>
     <string name="verify_otp">Verify Otp</string>
-    <string name="phone_number">Phone Number</string>
-    <string name="please_wait">Please wait…</string>
+    <string name="feature_send_money_phone_number">Phone Number</string>
+    <string name="feature_send_money_please_wait">Please wait…</string>
     <string name="complete">Complete</string>
     <string name="password_cannot_be_empty">Password cannot be empty</string>
     <string name="password_must_be_least_6_characters">Password must be at least 6 characters</string>
@@ -371,15 +371,15 @@
     <string name="all">All</string>
     <string name="credits">Credits</string>
     <string name="debits">Debits</string>
-    <string name="bank_account_details">Bank Account Details</string>
+    <string name="feature_accounts_bank_account_details">Bank Account Details</string>
     <string name="not_connected">⚠️ You aren’t connected to the internet</string>
     <string name="permission_granted">Permission Granted</string>
     <string name="permission_denied">Permission Denied</string>
     <string name="storage_permission_is_required_to_access_gallery">Storage permission is required to access gallery.</string>
     <string name="storage_permission_is_required_to_access_documents">Storage permission is required to access documents.</string>
-    <string name="self_amount_transfer_is_not_allowed">Self Account transfer is not allowed</string>
-    <string name="insufficient_balance">Insufficient balance</string>
-    <string name="error_fetching_balance">Error fetching balance</string>
+    <string name="feature_send_money_not_allowed">Self Account transfer is not allowed</string>
+    <string name="feature_send_money_insufficient_balance">Insufficient balance</string>
+    <string name="feature_send_money_error_fetching_balance">Error fetching balance</string>
     <string name="nothing_to_notify">Nothing To Notify</string>
     <string name="there_is_nothing_to_show">There is nothing to show</string>
     <string name="old_password">Old Password</string>
@@ -396,11 +396,11 @@
     <string name="merchant_id">Merchant ID</string>
     <string name="consumer_id">Consumer ID</string>
     <string name="invoice">Invoice</string>
-    <string name="failed_to_save_changes">Failed To Save Changes</string>
+    <string name="feature_profile_failed_to_save_changes">Failed To Save Changes</string>
     <string name="back">Back</string>
-    <string name="discard_changes">Do you want to discard changes?</string>
-    <string name="dismiss_text">Cancel</string>
-    <string name="confirm_text">Discard</string>
+    <string name="feature_profile_discard_changes">Do you want to discard changes?</string>
+    <string name="feature_profile_dismiss_text">Cancel</string>
+    <string name="feature_profile_confirm_text">Discard</string>
     <string name="recurrence_interval_in_months">Recurrence Interval (in months)</string>
     <string name="select_date">Select Date</string>
     <string name="standing_instruction_created_successfully">Standing Instruction Created Successfully</string>

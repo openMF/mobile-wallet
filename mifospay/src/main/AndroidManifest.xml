@@ -80,7 +80,7 @@
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_bank" />
+            android:resource="@drawable/feature_accounts_ic_bank" />
 
         <!-- Disable collection of AD_ID for all build variants -->
         <meta-data
@@ -90,23 +90,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
-        <activity
-            android:name=".feature.auth.signup.SignupActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".feature.auth.mobile_verify.MobileVerificationActivity"
-            android:theme="@style/AppTheme" />
-
-        <activity
-            android:name=".feature.bank.accounts.link.LinkBankAccountActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".feature.bank.accounts.details.BankAccountDetailActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".feature.upi_setup.ui.SetupUpiPinActivity"
-            android:theme="@style/AppTheme" />
         <activity
             android:name=".feature.notification.NotificationActivity"
             android:theme="@style/AppTheme" />

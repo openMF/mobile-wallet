@@ -233,7 +233,11 @@ fun InvoiceDetailsContent(
                                 }
                             },
                             onLongPress = {
-                                clipboardManager.setText(AnnotatedString(Constants.RECEIPT_DOMAIN + invoice.transactionId))
+                                clipboardManager.setText(
+                                    AnnotatedString(
+                                        Constants.RECEIPT_DOMAIN + invoice.transactionId
+                                    )
+                                )
                             })
                     }
             )

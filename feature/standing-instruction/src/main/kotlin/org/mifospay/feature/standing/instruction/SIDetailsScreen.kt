@@ -225,7 +225,7 @@ fun SIDetailsContent(
         )
 
         Text(
-            text = stringResource(id = R.string.feature_standing_instruction_recurrence_interval_in_months),
+            text = stringResource(id = R.string.feature_standing_instruction_interval),
             fontSize = 16.sp,
             color = Color.DarkGray,
             modifier = Modifier.padding(vertical = 8.dp)

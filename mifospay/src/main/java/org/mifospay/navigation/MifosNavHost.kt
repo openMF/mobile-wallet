@@ -72,6 +72,7 @@ import java.util.Objects
  * within each route is handled using state and Back Handlers.
  */
 @Composable
+@Suppress("MaxLineLength")
 fun MifosNavHost(
     navController: NavHostController,
     onShowSnackbar: suspend (String, String?) -> Boolean,

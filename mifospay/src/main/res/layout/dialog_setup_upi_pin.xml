@@ -97,7 +97,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/enter_otp"
-                android:textColor="@color/primaryDarkBlue"
+                android:textColor="@color/feature_make_transfer_primaryDarkBlue"
                 android:textSize="18sp"/>
 
             <com.alimuzaffar.lib.pin.PinEntryEditText
@@ -140,7 +140,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="@string/enter_upi_pin"
-                android:textColor="@color/primaryDarkBlue"
+                android:textColor="@color/feature_make_transfer_primaryDarkBlue"
                 android:textSize="18sp"/>
 
             <com.alimuzaffar.lib.pin.PinEntryEditText

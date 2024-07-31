@@ -90,7 +90,7 @@ open class BaseActivity : BasePassCodeActivity(), BaseActivityCallback {
 
     override fun showCloseButton() {
         showHomeButton()
-        setToolbarIcon(R.drawable.ic_close)
+        setToolbarIcon(R.drawable.feature_make_transfer_ic_close)
     }
 
     private fun showHomeButton() {

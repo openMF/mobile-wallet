@@ -128,7 +128,7 @@ fun MifosApp(appState: MifosAppState, bottomSheetNavigator: BottomSheetNavigator
                                 }
                             )
                             DropdownMenuItem(
-                                text = { Text(stringResource(id = R.string.settings),
+                                text = { Text(stringResource(id = R.string.feature_profile_settings),
                                     color = MaterialTheme.colorScheme.onSurface) },
                                 onClick = {
                                     showHomeMenuOption = false
@@ -194,7 +194,7 @@ fun MifosApp(appState: MifosAppState, bottomSheetNavigator: BottomSheetNavigator
                                 titleRes = destination.titleTextId,
                                 actionIcon = MifosIcons.MoreVert,
                                 actionIconContentDescription = stringResource(
-                                    id = R.string.settings,
+                                    id = R.string.feature_profile_settings,
                                 ),
                                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                                     containerColor = Color.Transparent,

@@ -1,3 +1,5 @@
+@file:Suppress("MaxLineLength")
+
 package org.mifospay.feature.auth.social_signup
 
 import android.content.Context

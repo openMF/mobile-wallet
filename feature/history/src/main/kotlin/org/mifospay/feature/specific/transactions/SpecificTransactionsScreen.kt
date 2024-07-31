@@ -235,7 +235,10 @@ class SpecificTransactionsUiStateProvider :
 
 @Preview(showSystemUi = true)
 @Composable
-fun ShowQrScreenPreview(@PreviewParameter(SpecificTransactionsUiStateProvider::class) uiState: SpecificTransactionsUiState) {
+fun ShowQrScreenPreview(
+    @PreviewParameter(SpecificTransactionsUiStateProvider::class)
+    uiState: SpecificTransactionsUiState
+) {
     MifosTheme {
         SpecificTransactionsScreen(
             uiState = uiState,

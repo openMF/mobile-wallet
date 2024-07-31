@@ -18,6 +18,7 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        jcenter()
         maven("https://www.jitpack.io")
         maven("https://plugins.gradle.org/m2/")
     }

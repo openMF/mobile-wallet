@@ -5,7 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material.Card
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -14,9 +15,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.mifos.mobilewallet.mifospay.ui.VerifyStepHeader
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.ui.VerifyStepHeader
 import org.mifospay.feature.upi_setup.viewmodel.DebitCardUiState
 import org.mifospay.feature.upi_setup.viewmodel.DebitCardViewModel
 
@@ -51,7 +52,9 @@ fun DebitCardScreenWithHeaderAndContent(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp),
-        elevation = 1.dp
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 1.dp
+        )
     ) {
         Column(
             modifier = Modifier.padding(
@@ -91,7 +94,6 @@ fun DebitCardScreenWithHeaderAndContent(
                             is DebitCardUiState.VerificationFailed -> {
                                 onDebitCardVerificationFailed((debitCardUiState).errorMessage)
                             }
-                            else -> {}
                         }
                     }
                 }

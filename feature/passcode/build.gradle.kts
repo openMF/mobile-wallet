@@ -13,5 +13,5 @@ dependencies {
     implementation(projects.core.data)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation("com.mifos.mobile:mifos-passcode:0.3.0")
+    implementation(libs.mifosPasscode)
 }

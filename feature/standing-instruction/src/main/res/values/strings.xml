@@ -9,10 +9,10 @@
     <string name="feature_standing_instruction_tile_si_activity">Create Standing Instruction</string>
     <string name="feature_standing_instruction_amount">Amount</string>
     <string name="feature_standing_instruction_vpa">VPA</string>
-    <string name="feature_standing_instruction_recurrence_interval_in_months">Recurrence Interval (in months)</string>
+    <string name="feature_standing_instruction_interval">Recurrence Interval (in months)</string>
     <string name="feature_standing_instruction_valid_till">Valid till :</string>
     <string name="feature_standing_instruction_select_date">Select Date</string>
-    <string name="feature_standing_instruction_successfully_creates_new_standing_instruction">Successfully Creates New Standing Instruction</string>
+    <string name="feature_standing_instruction_creates">Successfully Creates New Standing Instruction</string>
     <string name="feature_standing_instruction_failed_to_save_changes">Failed To Save Changes</string>
     <string name="feature_standing_instruction_submit">Submit</string>
     <string name="feature_standing_instruction_sending_to">Sending to</string>

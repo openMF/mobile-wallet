@@ -10,13 +10,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.mifos.mobilewallet.mifospay.ui.OtpTextField
-import org.mifos.mobilewallet.mifospay.ui.VerifyStepHeader
+import org.mifospay.core.ui.OtpTextField
+import org.mifospay.core.ui.VerifyStepHeader
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.feature.upi_setup.R
 

@@ -80,8 +80,8 @@ fun AccountScreen(
                 AccountsUiState.Error -> {
                     EmptyContentScreen(
                         modifier = Modifier,
-                        title = stringResource(id = R.string.error_oops),
-                        subTitle = stringResource(id = R.string.unexpected_error_subtitle),
+                        title = stringResource(id = R.string.feature_accounts_error_oops),
+                        subTitle = stringResource(id = R.string.feature_accounts_unexpected_error_subtitle),
                         iconTint = MaterialTheme.colorScheme.onSurface,
                         iconImageVector = Icons.Rounded.Info
                     )
@@ -95,7 +95,7 @@ fun AccountScreen(
                     ) {
                         item {
                             Text(
-                                text = stringResource(id = R.string.linked_bank_account),
+                                text = stringResource(id = R.string.feature_accounts_linked_bank_account),
                                 fontSize = 16.sp,
                                 color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(top = 48.dp, start = 24.dp)
@@ -123,8 +123,8 @@ fun AccountScreen(
                                 AddCardChip(
                                     modifier = Modifier.align(Alignment.Center),
                                     onAddBtn = onAddAccount,
-                                    text = R.string.add_account,
-                                    btnText = R.string.add_cards
+                                    text = R.string.feature_accounts_add_account,
+                                    btnText = R.string.feature_accounts_add_cards
                                 )
                             }
                         }
@@ -133,12 +133,10 @@ fun AccountScreen(
 
                 AccountsUiState.Loading -> {
                     MfLoadingWheel(
-                        contentDesc = stringResource(R.string.loading),
+                        contentDesc = stringResource(R.string.feature_accounts_loading),
                         backgroundColor = MaterialTheme.colorScheme.surface
                     )
                 }
-
-                else -> {}
             }
         }
         PullRefreshIndicator(
@@ -158,12 +156,12 @@ fun NoLinkedAccountsScreen(onAddBtn: () -> Unit) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.no_linked_bank_accounts))
+            Text(text = stringResource(R.string.feature_accounts_no_linked_bank_accounts))
             AddCardChip(
                 modifier = Modifier,
                 onAddBtn = onAddBtn,
-                text = R.string.add_account,
-                btnText = R.string.add_cards
+                text = R.string.feature_accounts_add_account,
+                btnText = R.string.feature_accounts_add_cards
             )
         }
     }

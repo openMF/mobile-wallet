@@ -32,6 +32,7 @@ import org.mifospay.core.designsystem.utils.ExpirationDateMask
 import org.mifospay.savedcards.R
 import java.util.Calendar
 
+@Suppress("MaxLineLength")
 @Composable
 fun AddCardDialogSheet(
     cancelClicked: () -> Unit,
@@ -50,9 +51,12 @@ fun AddCardDialogSheet(
     )
 }
 
+@Suppress("MaxLineLength")
 @Composable
-fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> Unit) {
-
+fun AddCardDialogSheetContent(
+    cancelClicked: () -> Unit,
+    addClicked: (Card) -> Unit
+) {
     val context = LocalContext.current
     var firstName by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
@@ -68,21 +72,27 @@ fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> U
 
     LaunchedEffect(key1 = firstName) {
         firstNameValidator = when {
-            firstName.trim().isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+            firstName.trim()
+                .isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+
             else -> null
         }
     }
 
     LaunchedEffect(key1 = lastName) {
         lastNameValidator = when {
-            lastName.trim().isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+            lastName.trim()
+                .isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+
             else -> null
         }
     }
 
     LaunchedEffect(key1 = creditCardNumber) {
         creditCardNumberValidator = when {
-            creditCardNumber.trim().isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+            creditCardNumber.trim()
+                .isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+
             creditCardNumber.length < 16 -> context.getString(R.string.feature_savedcards_invalid_credit_card)
             !CreditCardUtils.validateCreditCardNumber(creditCardNumber) -> context.getString(R.string.feature_savedcards_invalid_credit_card)
             else -> null
@@ -91,7 +101,9 @@ fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> U
 
     LaunchedEffect(key1 = expiration) {
         expirationValidator = when {
-            expiration.trim().isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+            expiration.trim()
+                .isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+
             expiration.length < 4 -> context.getString(R.string.feature_savedcards_expiry_date_length_error)
             (expiration.substring(2, 4) == Calendar.getInstance()[Calendar.YEAR].toString()
                 .substring(2, 4) && expiration.substring(0, 2)
@@ -104,7 +116,9 @@ fun AddCardDialogSheetContent(cancelClicked: () -> Unit, addClicked: (Card) -> U
 
     LaunchedEffect(key1 = cvv) {
         cvvValidator = when {
-            cvv.trim().isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+            cvv.trim()
+                .isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
+
             cvv.length < 3 -> context.getString(R.string.feature_savedcards_cvv_length_error)
             else -> null
         }

@@ -1,14 +1,12 @@
+@file:Suppress("MaxLineLength")
+
 package org.mifospay.feature.auth.navigation
 
-import android.content.Intent
-import android.widget.Toast
-import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import org.mifospay.feature.auth.login.LoginActivity
 import org.mifospay.feature.auth.signup.SignupScreen
 
 const val SIGNUP_ROUTE = "signup_route"

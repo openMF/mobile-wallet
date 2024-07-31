@@ -80,7 +80,7 @@ class SendPaymentViewModel @Inject constructor(
                 override fun onSuccess(response: FetchAccount.ResponseValue) {
                     updateProgressState(false)
                     if (transferAmount > response.account.balance) {
-                        onAnyError(R.string.insufficient_balance)
+                        onAnyError(R.string.feature_send_money_insufficient_balance)
                     } else {
                         if (externalId != null) {
                             proceedWithTransferFlow(externalId, transferAmount)
@@ -90,7 +90,7 @@ class SendPaymentViewModel @Inject constructor(
 
                 override fun onError(message: String) {
                     updateProgressState(false)
-                    onAnyError.invoke(R.string.error_fetching_balance)
+                    onAnyError.invoke(R.string.feature_send_money_error_fetching_balance)
                 }
             })
     }

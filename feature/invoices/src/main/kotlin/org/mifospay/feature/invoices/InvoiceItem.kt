@@ -51,7 +51,8 @@ fun InvoiceItem(
             ) {
                 Icon(
                     painter = painterResource(
-                        id = if (invoiceStatusIcon == 0L) R.drawable.feature_invoices_ic_remove_circle_outline_black_24dp
+                        id = if (invoiceStatusIcon == 0L)
+                            R.drawable.feature_invoices_ic_remove_circle_outline_black_24dp
                         else R.drawable.feature_invoices_ic_check_round_black_24dp
                     ),
                     contentDescription = "Invoice Status",

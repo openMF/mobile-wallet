@@ -61,7 +61,7 @@ fun BankAccountDetailScreen(
     navigateBack: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxSize()) {
-        MifosTopBar(topBarTitle = R.string.bank_account_details) { navigateBack.invoke() }
+        MifosTopBar(topBarTitle = R.string.feature_accounts_bank_account_details) { navigateBack.invoke() }
         Column(
             modifier = Modifier
                 .padding(20.dp)
@@ -70,27 +70,27 @@ fun BankAccountDetailScreen(
         ) {
             BankAccountDetailRows(
                 modifier = Modifier.fillMaxWidth(),
-                detail = R.string.bank_name,
+                detail = R.string.feature_accounts_bank_name,
                 detailValue = bankName
             )
             BankAccountDetailRows(
                 modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
-                detail = R.string.ac_holder_name,
+                detail = R.string.feature_accounts_ac_holder_name,
                 detailValue = accountHolderName
             )
             BankAccountDetailRows(
                 modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
-                detail = R.string.branch_name,
+                detail = R.string.feature_accounts_branch_name,
                 detailValue = branchName
             )
             BankAccountDetailRows(
                 modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
-                detail = R.string.ifsc,
+                detail = R.string.feature_accounts_ifsc,
                 detailValue = ifsc
             )
             BankAccountDetailRows(
                 modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
-                detail = R.string.type,
+                detail = R.string.feature_accounts_type,
                 detailValue = type
             )
         }
@@ -101,14 +101,14 @@ fun BankAccountDetailScreen(
         ) {
 
             BankAccountDetailButton(
-                btnText = R.string.setup_upi,
+                btnText = R.string.feature_accounts_setup_upi,
                 onClick = { onSetupUpiPin.invoke() },
                 isUpiEnabled = !isUpiEnabled,
                 hasTrailingIcon = false
             )
 
             BankAccountDetailButton(
-                btnText = R.string.delete_bank,
+                btnText = R.string.feature_accounts_delete_bank,
                 onClick = {},
                 isUpiEnabled = !isUpiEnabled
             )
@@ -118,13 +118,13 @@ fun BankAccountDetailScreen(
             modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(20.dp)
         ) {
             BankAccountDetailButton(
-                btnText = R.string.change_upi_pin,
+                btnText = R.string.feature_accounts_change_upi_pin,
                 onClick = { onChangeUpiPin.invoke() },
                 isUpiEnabled = isUpiEnabled,
                 modifier = Modifier.fillMaxWidth()
             )
             BankAccountDetailButton(
-                btnText = R.string.forgot_upi_pin,
+                btnText = R.string.feature_accounts_forgot_upi_pin,
                 onClick = { onForgotUpiPin.invoke() },
                 isUpiEnabled = isUpiEnabled,
                 modifier = Modifier.fillMaxWidth()

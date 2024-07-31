@@ -12,17 +12,17 @@
         <ImageView
             android:id="@+id/iv_empty_no_transaction_history"
             android:layout_width="@dimen/feature_kyc_emptyStateImageSize"
-            android:layout_height="@dimen/emptyStateImageSize"
+            android:layout_height="@dimen/feature_kyc_emptyStateImageSize"
             android:scaleType="fitCenter"
-            app:srcCompat="@drawable/ic_error_state"
-            android:contentDescription="@string/content_description_placeholder" />
+            app:srcCompat="@drawable/feature_kyc_ic_error_state"
+            android:contentDescription="@string/feature_kyc_content_description_placeholder" />
 
         <TextView
             android:id="@+id/tv_empty_no_transaction_history_title"
             android:layout_marginTop="@dimen/feature_kyc_marginItemsInSectionLarge"
-            android:text="@string/error_oops"
+            android:text="@string/feature_kyc_error_oops"
             android:textColor="@color/feature_kyc_colorTextPrimary"
-            android:textSize="@dimen/textBody1"
+            android:textSize="@dimen/feature_kyc_textBody1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -34,9 +34,9 @@
             android:layout_marginTop="8dp"
             android:layout_marginRight="@dimen/feature_kyc_marginItemsInSectionLarge"
             android:layout_marginBottom="@dimen/feature_kyc_marginItemsInSectionLarge"
-            android:text="@string/unexpected_error_subtitle"
+            android:text="@string/feature_kyc_unexpected_error_subtitle"
             android:textAlignment="center"
             android:textColor="@color/feature_kyc_colorTextSecondary"
-            android:textSize="@dimen/textBody2" />
+            android:textSize="@dimen/feature_kyc_textBody2" />
     </LinearLayout>
 </layout>

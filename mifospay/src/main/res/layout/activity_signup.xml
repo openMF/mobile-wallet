@@ -16,13 +16,13 @@
             <com.google.android.material.appbar.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/primaryDarkBlue">
+                android:background="@color/feature_make_transfer_primaryDarkBlue">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/primaryDarkBlue"
+                    android:background="@color/feature_make_transfer_primaryDarkBlue"
                     android:theme="@style/Theme.AppCompat"
                     app:popupTheme="@style/ThemeOverlay.AppCompat.ActionBar"/>
 
@@ -124,7 +124,7 @@
                         android:id="@+id/et_user_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/username"
+                        android:hint="@string/feature_profile_username"
                         android:inputType="text"
                         android:paddingLeft="@dimen/value_15dp"
                         android:paddingRight="@dimen/value_15dp"/>
@@ -189,7 +189,7 @@
                         android:id="@+id/et_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/email"
+                        android:hint="@string/feature_profile_email"
                         android:inputType="textEmailAddress"
                         android:paddingLeft="@dimen/value_15dp"
                         android:paddingRight="@dimen/value_15dp"/>
@@ -301,11 +301,11 @@
         android:layout_gravity="bottom"
         android:layout_marginBottom="@dimen/value_20dp"
         android:layout_marginRight="@dimen/value_20dp"
-        android:backgroundTint="@color/primaryDarkBlue"
-        android:foregroundTint="@color/primaryDarkBlue"
+        android:backgroundTint="@color/feature_make_transfer_primaryDarkBlue"
+        android:foregroundTint="@color/feature_make_transfer_primaryDarkBlue"
         android:scaleType="center"
         android:visibility="visible"
-        app:backgroundTint="@color/primaryDarkBlue"
+        app:backgroundTint="@color/feature_make_transfer_primaryDarkBlue"
         app:srcCompat="@drawable/ic_next"
         android:layout_alignParentEnd="true" />
 

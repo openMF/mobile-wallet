@@ -19,8 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/value_10dp"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="@dimen/textBody1"
+        android:textColor="@color/feature_accounts_colorTextPrimary"
+        android:textSize="@dimen/feature_kyc_textBody1"
         android:text="dadas"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,9 +31,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/value_20dp"
         android:layout_marginStart="@dimen/value_10dp"
-        android:textColor="@color/colorTextPrimary"
+        android:textColor="@color/feature_accounts_colorTextPrimary"
         android:text="dadsdasdasd"
-        android:textSize="@dimen/textBody1"
+        android:textSize="@dimen/feature_kyc_textBody1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/tv_from_client_name" />
 

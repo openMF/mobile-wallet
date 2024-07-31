@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorBlack87">#DE000000</color>
-    <color name="colorTextPrimary">@color/colorBlack87</color>
+    <color name="feature_accounts_colorBlack87">#DE000000</color>
+    <color name="feature_accounts_colorTextPrimary">@color/feature_accounts_colorBlack87</color>
+    <color name="feature_accounts_primaryDarkBlue">#303F9F</color>
 </resources>

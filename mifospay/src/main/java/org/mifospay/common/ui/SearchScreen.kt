@@ -78,7 +78,7 @@ fun SearchScreen(
             SearchResultState.Idle -> {}
             SearchResultState.Loading -> {
                 MfLoadingWheel(
-                    contentDesc = stringResource(R.string.loading),
+                    contentDesc = stringResource(R.string.feature_accounts_loading),
                     backgroundColor = MaterialTheme.colorScheme.surface
                 )
             }

@@ -32,7 +32,7 @@
 
     <style name="AppTheme.Dialog" parent="ThemeOverlay.MaterialComponents.Dialog">
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/colorBlack87</item>
+        <item name="android:textColorPrimary">@color/feature_accounts_colorBlack87</item>
         <item name="android:background">@color/colorPrimary</item>
         <item name="android:buttonBarButtonStyle">@style/transparentBackground</item>
     </style>

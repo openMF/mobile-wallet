@@ -154,7 +154,7 @@ class MifosPayMessagingService : FirebaseMessagingService() {
         val channelId = getString(R.string.app_name)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.drawable.ic_bank)
+            .setSmallIcon(R.drawable.feature_accounts_ic_bank)
             .setContentTitle(title)
             .setContentText(messageBody)
             .setAutoCancel(true)

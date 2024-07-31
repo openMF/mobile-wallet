@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="email">E-mail</string>
-    <string name="vpa">VPA</string>
-    <string name="mobile">Mobile number</string>
-    <string name="personal_qr_code">Personal QR Code</string>
-    <string name="link_bank_account">Link Bank Account</string>
-    <string name="edit_profile">Edit Profile</string>
-    <string name="settings">Settings</string>
-    <string name="loading">Loading</string>
-    <string name="discard_changes">Do you want to discard changes?</string>
-    <string name="confirm_text">Discard</string>
-    <string name="dismiss_text">Cancel</string>
-    <string name="permission_required">Permissions Required</string>
-    <string name="approve_permission_description_camera">You need to approve these permissions in order to access the camera.</string>
-    <string name="proceed">Proceed</string>
-    <string name="dismiss">Dismiss</string>
-    <string name="username">Username</string>
-    <string name="phone_number">Phone Number</string>
-    <string name="failed_to_save_changes">Failed To Save Changes</string>
-    <string name="save">Save</string>
-    <string name="click_profile_picture">Click profile picture</string>
-    <string name="change_profile_picture">Pick profile picture from device</string>
-    <string name="remove_profile_picture">Remove profile picture</string>
+    <string name="feature_profile_email">E-mail</string>
+    <string name="feature_profile_vpa">VPA</string>
+    <string name="feature_profile_mobile">Mobile number</string>
+    <string name="feature_profile_personal_qr_code">Personal QR Code</string>
+    <string name="feature_profile_link_bank_account">Link Bank Account</string>
+    <string name="feature_profile_edit_profile">Edit Profile</string>
+    <string name="feature_profile_settings">Settings</string>
+    <string name="feature_profile_loading">Loading</string>
+    <string name="feature_profile_discard_changes">Do you want to discard changes?</string>
+    <string name="feature_profile_confirm_text">Discard</string>
+    <string name="feature_profile_dismiss_text">Cancel</string>
+    <string name="feature_profile_permission_required">Permissions Required</string>
+    <string name="feature_profile_approve_description">You need to approve these permissions in order to access the camera.</string>
+    <string name="feature_profile_proceed">Proceed</string>
+    <string name="feature_profile_dismiss">Dismiss</string>
+    <string name="feature_profile_username">Username</string>
+    <string name="feature_profile_phone_number">Phone Number</string>
+    <string name="feature_profile_failed_to_save_changes">Failed To Save Changes</string>
+    <string name="feature_profile_save">Save</string>
+    <string name="feature_profile_click_profile_picture">Click profile picture</string>
+    <string name="feature_profile_change_profile_picture">Pick profile picture from device</string>
+    <string name="feature_profile_remove_profile_picture">Remove profile picture</string>
 </resources>

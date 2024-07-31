@@ -36,7 +36,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -110,7 +109,7 @@ fun LinkBankAccountScreen(
         modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
         topBar = {
             MifosTopAppBar(
-                titleRes = R.string.link_bank_account,
+                titleRes = R.string.feature_accounts_link_bank_account,
                 navigationIcon = MifosIcons.Back,
                 navigationIconContentDescription = "Back icon",
                 onNavigationClick = onBackClick,
@@ -125,7 +124,7 @@ fun LinkBankAccountScreen(
             when (bankUiState) {
                 is BankUiState.Loading -> {
                     MfLoadingWheel(
-                        contentDesc = stringResource(R.string.loading),
+                        contentDesc = stringResource(R.string.feature_accounts_loading),
                         backgroundColor = MaterialTheme.colorScheme.surface
                     )
                 }
@@ -167,7 +166,7 @@ fun BankListScreenContent(
                 searchQuery = it
                 onBankSearch(it)
             },
-            label = R.string.search,
+            label = R.string.feature_accounts_search,
             trailingIcon = {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = null)
             })
@@ -175,7 +174,7 @@ fun BankListScreenContent(
         if (searchQuery.isBlank()) {
             Spacer(modifier = Modifier.height(24.dp))
             Text(
-                text = stringResource(id = R.string.popular_banks),
+                text = stringResource(id = R.string.feature_accounts_popular_banks),
                 style = TextStyle(MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Medium),
                 modifier = Modifier.padding(start = 16.dp)
             )
@@ -186,7 +185,7 @@ fun BankListScreenContent(
             )
             Spacer(modifier = Modifier.height(24.dp))
             Text(
-                text = stringResource(id = R.string.other_banks),
+                text = stringResource(id = R.string.feature_accounts_other_banks),
                 style = TextStyle(MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Medium),
                 modifier = Modifier.padding(start = 16.dp)
             )

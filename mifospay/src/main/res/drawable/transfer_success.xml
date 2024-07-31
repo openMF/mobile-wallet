@@ -7,7 +7,7 @@
                android:shape="oval"
                android:useLevel="false">
 
-            <solid android:color="@color/primaryDarkBlue"/>
+            <solid android:color="@color/feature_make_transfer_primaryDarkBlue"/>
 
         </shape>
 
@@ -15,7 +15,7 @@
 
     <item
         android:bottom="10dp"
-        android:drawable="@drawable/ic_done" android:gravity="center"
+        android:drawable="@drawable/feature_make_transfer_ic_done" android:gravity="center"
         android:left="10dp" android:right="10dp"
         android:top="10dp"/>
 
