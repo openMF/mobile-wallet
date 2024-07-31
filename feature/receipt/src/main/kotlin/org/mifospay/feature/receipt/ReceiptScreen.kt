@@ -242,7 +242,7 @@ fun ReceiptScreenContent(
                         .verticalScroll(rememberScrollState())
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.mifospay_round_logo),
+                        painter = painterResource(id = R.drawable.feature_receipt_mifospay_round_logo),
                         contentDescription = stringResource(R.string.feature_receipt_pan_id),
                         modifier = Modifier
                             .size(120.dp)

@@ -1,3 +1,5 @@
+@file:Suppress("MaxLineLength")
+
 package org.mifospay.feature.auth.navigation
 
 import androidx.navigation.NavController

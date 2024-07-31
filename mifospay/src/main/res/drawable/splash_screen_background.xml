@@ -5,7 +5,7 @@
     <item
         android:width="200dp"
         android:height="200dp"
-        android:drawable="@drawable/mifospay_round_logo"
+        android:drawable="@drawable/feature_receipt_mifospay_round_logo"
         android:gravity="center" />
 
 </layer-list>

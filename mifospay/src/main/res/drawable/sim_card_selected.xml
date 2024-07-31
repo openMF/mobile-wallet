@@ -6,7 +6,7 @@
         android:viewportWidth="512">
 
     <path
-        android:fillColor="@color/primaryDarkBlue"
+        android:fillColor="@color/feature_make_transfer_primaryDarkBlue"
         android:pathData="M444.875,109.792 L338.167,3.125 C336.167,1.125,333.459,0,330.625,0 L106.667,0
 C83.135,0,64,19.135,64,42.667 L64,469.334 C64,492.865,83.135,512,106.667,512
 L405.334,512 C428.865,512,448,492.865,448,469.333 L448,117.333

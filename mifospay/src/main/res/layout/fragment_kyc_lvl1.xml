@@ -102,7 +102,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/value_20dp"
             android:background="@drawable/button_round_black"
-            android:text="@string/submit"
+            android:text="@string/feature_send_money_submit"
             android:textColor="@color/white"/>
     </LinearLayout>
 

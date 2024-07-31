@@ -27,7 +27,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,7 +40,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
-import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 
 @Composable
 fun MakeTransferScreenRoute(
@@ -322,9 +320,9 @@ fun TransactionStatusContent(showTransactionStatus: ShowTransactionStatus) {
         ) {
             Icon(
                 if (showTransactionStatus.showSuccessStatus) {
-                    painterResource(R.drawable.transfer_success)
+                    painterResource(R.drawable.feature_make_transfer_transfer_success)
                 } else {
-                    painterResource(R.drawable.transfer_failure)
+                    painterResource(R.drawable.feature_make_transfer_transfer_failure)
                 },
                 contentDescription = if (showTransactionStatus.showSuccessStatus) {
                     stringResource(id = R.string.feature_make_transfer_transaction_success)

@@ -53,8 +53,12 @@ fun PayVpsMobileScreen() {
             onValueChange = {
                 amount = it
             },
-            label = { Text(text = "Amount",
-                color = MaterialTheme.colorScheme.onSurface) }
+            label = {
+                Text(
+                    text = "Amount",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
         )
         TextField(
             modifier = Modifier
@@ -64,8 +68,12 @@ fun PayVpsMobileScreen() {
             onValueChange = {
                 description = it
             },
-            label = { Text(text = "Description",
-                color = MaterialTheme.colorScheme.onSurface) }
+            label = {
+                Text(
+                    text = "Description",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+            }
         )
         Button(
             modifier = Modifier
@@ -77,7 +85,11 @@ fun PayVpsMobileScreen() {
 
             }
         ) {
-            Text(text = "Create Payment Request", style = styleMedium16sp.copy(color = MaterialTheme.colorScheme.onPrimary))
+            Text(
+                text = "Create Payment Request",
+                style = styleMedium16sp
+                    .copy(color = MaterialTheme.colorScheme.onPrimary)
+            )
         }
     }
 }

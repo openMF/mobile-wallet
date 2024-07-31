@@ -18,7 +18,7 @@
 
         <include
             android:id="@+id/inc_empty_transactions_state_view"
-            layout="@layout/placeholder_state"
+            layout="@layout/feature_kyc_placeholder_state"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -61,7 +61,7 @@
                     android:fontFamily="@font/roboto"
                     android:text="@string/transfer_money_to_this_merchant"
                     android:textColor="@color/colorAccentBlue"
-                    android:textSize="@dimen/textBody1" />
+                    android:textSize="@dimen/feature_kyc_textBody1" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_merchant_image"
@@ -69,7 +69,7 @@
                     android:layout_height="@dimen/user_profile_image_size"
                     android:layout_gravity="center_horizontal|top"
                     android:layout_marginTop="@dimen/value_30dp"
-                    android:src="@drawable/logo_pnb" />
+                    android:src="@drawable/feature_accounts_logo_pnb" />
 
                 <TextView
                     android:id="@+id/tv_pay_to_name"
@@ -108,7 +108,7 @@
                         android:id="@+id/et_merchant_amount"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="@string/amount"
+                        android:hint="@string/feature_send_money_amount"
                         android:inputType="number"
                         android:paddingBottom="@dimen/value_20dp"
                         android:textSize="@dimen/value_15sp"
@@ -121,7 +121,7 @@
                     android:layout_height="@dimen/value_50dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="@dimen/value_10dp"
-                    android:text="@string/submit"
+                    android:text="@string/feature_send_money_submit"
                     android:textColor="@color/white" />
 
             </LinearLayout>

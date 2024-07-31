@@ -47,16 +47,16 @@ fun ProfileItemCard(
             tint = MaterialTheme.colorScheme.onSurface
         )
         Text(
-            modifier = if (text == R.string.edit_profile || text == R.string.settings) Modifier
-                .padding(
-                    start = 18.dp
-                )
+            modifier = if (text == R.string.feature_profile_edit_profile
+                || text == R.string.feature_profile_settings
+            ) Modifier
+                .padding(start = 18.dp)
                 .align(Alignment.CenterVertically) else Modifier,
             text = stringResource(id = text),
             style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium),
             color = MaterialTheme.colorScheme.onSurface
         )
-        if (text == R.string.edit_profile || text == R.string.settings) {
+        if (text == R.string.feature_profile_edit_profile || text == R.string.feature_profile_settings) {
             Spacer(modifier = Modifier.fillMaxWidth())
         }
     }
@@ -77,7 +77,7 @@ fun PreviewProfileItemCard() {
     MifosTheme {
         ProfileItemCard(
             icon = MifosIcons.Profile,
-            text = R.string.edit_profile,
+            text = R.string.feature_profile_edit_profile,
             onClick = {}
         )
     }

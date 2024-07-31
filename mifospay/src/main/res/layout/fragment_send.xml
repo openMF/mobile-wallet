@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_20dp"
-            android:text="@string/select_transfer_method"
+            android:text="@string/feature_send_money_select_transfer_method"
             android:textSize="@dimen/value_18sp" />
 
         <RelativeLayout
@@ -50,7 +50,7 @@
                 android:layout_marginBottom="10dp"
                 android:layout_weight="1"
                 android:clickable="true"
-                android:text="@string/vpa"
+                android:text="@string/feature_send_money_vpa"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:typeface="sans"
@@ -98,7 +98,7 @@
                     android:id="@+id/et_amount"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:hint="@string/amount"
+                    android:hint="@string/feature_send_money_amount"
                     android:inputType="number"
                     android:textSize="@dimen/value_15sp" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -121,7 +121,7 @@
                         android:id="@+id/et_vpa"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="@string/virtual_payment_address"
+                        android:hint="@string/feature_send_money_virtual_payment_address"
                         android:paddingBottom="@dimen/value_20dp"
                         android:singleLine="true"
                         android:textSize="@dimen/value_15sp" />
@@ -138,7 +138,7 @@
                     android:layout_weight="0.5"
                     android:drawableTop="@drawable/qrcode_blue_selector"
                     android:gravity="center_horizontal"
-                    android:textColor="@color/primaryDarkBlue" />
+                    android:textColor="@color/feature_make_transfer_primaryDarkBlue" />
 
             </LinearLayout>
 
@@ -195,7 +195,7 @@
                     android:layout_height="@dimen/value_50dp"
                     android:layout_marginTop="@dimen/value_20dp"
                     android:layout_marginBottom="@dimen/value_20dp"
-                    android:text="@string/submit"
+                    android:text="@string/feature_send_money_submit"
                     android:textColor="@color/white" />
             </LinearLayout>
 

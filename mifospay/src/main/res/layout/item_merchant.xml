@@ -27,7 +27,7 @@
             android:id="@+id/tv_merchant_external_id"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/primaryDarkBlue"/>
+            android:textColor="@color/feature_make_transfer_primaryDarkBlue"/>
 
     </LinearLayout>
 

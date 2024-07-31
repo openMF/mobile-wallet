@@ -41,8 +41,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:textColor="@color/colorTextPrimary"
-        android:textSize="@dimen/textBody1"
+        android:textColor="@color/feature_accounts_colorTextPrimary"
+        android:textSize="@dimen/feature_kyc_textBody1"
         app:layout_constraintStart_toStartOf="@+id/tv_item_casual_list_subtitle"
         app:layout_constraintTop_toBottomOf="@+id/tv_item_casual_list_subtitle" />
 

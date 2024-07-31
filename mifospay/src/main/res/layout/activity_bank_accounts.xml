@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/value_10dp"
             android:gravity="center_horizontal"
-            android:text="@string/no_linked_bank_accounts"
+            android:text="@string/feature_accounts_no_linked_bank_accounts"
             android:textColor="@color/grey_900"
             android:textSize="18sp"
             android:visibility="gone" />

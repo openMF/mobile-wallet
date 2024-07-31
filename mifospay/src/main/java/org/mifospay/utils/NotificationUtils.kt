@@ -40,7 +40,7 @@ class NotificationUtils(private val mContext: Context) {
         }
 
         // notification icon
-        val icon = R.drawable.ic_bank
+        val icon = R.drawable.feature_accounts_ic_bank
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         val resultPendingIntent = PendingIntent.getActivity(
             mContext,

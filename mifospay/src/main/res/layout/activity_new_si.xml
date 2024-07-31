@@ -35,7 +35,7 @@
                         android:id="@+id/et_si_amount"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:hint="@string/amount"
+                        android:hint="@string/feature_send_money_amount"
                         android:inputType="number"
                         android:textSize="@dimen/value_15sp" />
 
@@ -65,7 +65,7 @@
                             android:id="@+id/et_si_vpa"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:hint="@string/virtual_payment_address"
+                            android:hint="@string/feature_send_money_virtual_payment_address"
                             android:singleLine="true"
                             android:textSize="@dimen/value_15sp" />
                     </com.google.android.material.textfield.TextInputLayout>
@@ -129,7 +129,7 @@
                     android:id="@+id/btn_create_si"
                     android:layout_width="260dp"
                     android:layout_height="@dimen/value_50dp"
-                    android:text="@string/submit"
+                    android:text="@string/feature_send_money_submit"
                     android:layout_gravity="center"
                     android:textColor="@color/white" />
 
@@ -147,7 +147,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sending_to"
-                    android:textColor="@color/primaryDarkBlue"
+                    android:textColor="@color/feature_make_transfer_primaryDarkBlue"
                     android:textSize="@dimen/value_15sp" />
 
                 <TextView
@@ -169,8 +169,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/value_20dp"
-                    android:text="@string/amount"
-                    android:textColor="@color/primaryDarkBlue"
+                    android:text="@string/feature_send_money_amount"
+                    android:textColor="@color/feature_make_transfer_primaryDarkBlue"
                     android:textSize="@dimen/value_15sp" />
 
                 <TextView
@@ -204,8 +204,8 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="right"
                         android:layout_marginLeft="@dimen/value_30dp"
-                        android:background="@color/primaryDarkBlue"
-                        android:text="@string/confirm"
+                        android:background="@color/feature_make_transfer_primaryDarkBlue"
+                        android:text="@string/feature_accounts_confirm"
                         android:textColor="@android:color/white" />
 
                 </LinearLayout>

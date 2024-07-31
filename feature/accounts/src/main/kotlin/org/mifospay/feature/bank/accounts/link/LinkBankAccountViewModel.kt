@@ -48,7 +48,7 @@ class LinkBankAccountViewModel @Inject constructor(
     ).map { searchQueryAndBanks ->
         val searchQuery = searchQueryAndBanks.first
         val localBanks = searchQueryAndBanks.second.map {
-            Bank(it, R.drawable.ic_bank, BankType.OTHER)
+            Bank(it, R.drawable.feature_accounts_ic_bank, BankType.OTHER)
         }
         val banks = ArrayList<Bank>().apply {
             addAll(popularBankList())
@@ -65,12 +65,12 @@ class LinkBankAccountViewModel @Inject constructor(
 
     private fun popularBankList(): List<Bank> {
         return listOf(
-            Bank("RBL Bank", R.drawable.logo_rbl, BankType.POPULAR),
-            Bank("SBI Bank", R.drawable.logo_sbi, BankType.POPULAR),
-            Bank("PNB Bank", R.drawable.logo_pnb, BankType.POPULAR),
-            Bank("HDFC Bank", R.drawable.logo_hdfc, BankType.POPULAR),
-            Bank("ICICI Bank", R.drawable.logo_icici, BankType.POPULAR),
-            Bank("AXIS Bank", R.drawable.logo_axis, BankType.POPULAR)
+            Bank("RBL Bank", R.drawable.feature_accounts_logo_rbl, BankType.POPULAR),
+            Bank("SBI Bank", R.drawable.feature_accounts_logo_sbi, BankType.POPULAR),
+            Bank("PNB Bank", R.drawable.feature_accounts_logo_pnb, BankType.POPULAR),
+            Bank("HDFC Bank", R.drawable.feature_accounts_logo_hdfc, BankType.POPULAR),
+            Bank("ICICI Bank", R.drawable.feature_accounts_logo_icici, BankType.POPULAR),
+            Bank("AXIS Bank", R.drawable.feature_accounts_logo_axis, BankType.POPULAR)
         )
     }
 

@@ -26,7 +26,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -45,7 +44,6 @@ import org.mifospay.common.Utils
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.theme.border
 import org.mifospay.core.designsystem.theme.lightGrey
-import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.TransactionItemScreen
 
@@ -198,7 +196,7 @@ fun PayRequestScreen(
         PayCard(
             modifier = Modifier.weight(1f),
             title = "Request",
-            icon = R.drawable.money_in
+            icon = R.drawable.core_ui_money_in
         ) {
             onRequest.invoke()
         }
@@ -206,7 +204,7 @@ fun PayRequestScreen(
         PayCard(
             modifier = Modifier.weight(1f),
             title = "Pay",
-            icon = R.drawable.money_out
+            icon = R.drawable.core_ui_money_out
         ) {
             onPay.invoke()
         }

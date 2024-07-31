@@ -5,8 +5,8 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
-import org.mifospay.core.data.base.UseCase
 import org.mifospay.common.Constants
+import org.mifospay.core.data.base.UseCase
 import java.util.Base64
 import javax.inject.Inject
 
@@ -32,11 +32,11 @@ class GenerateQr @Inject constructor() :
         // Initial payment string
         val requestPaymentString = "upi://pay" +
                 "?pa=${requestQrData.vpaId}" +
-                "&am=${requestQrData.amount}" +       // This param is for fixed amount (non-editable).
-                "&pn=${requestQrData.name}" +         // To show your name in app.
-                "&cu=${requestQrData.currency}" +     // Currency code.
-                "&mode=02" +                          // Mode 02 for Secure QR Code.
-                "&s=000000"                           // If the transaction is initiated by any PSP app then the respective orgID needs to be passed.
+                "&am=${requestQrData.amount}" +
+                "&pn=${requestQrData.name}" +
+                "&cu=${requestQrData.currency}" +
+                "&mode=02" +
+                "&s=000000"
 
         // Convert the payment string to bytes and encode to Base64
         val sign = Base64.getEncoder().encodeToString(requestPaymentString.toByteArray(Charsets.UTF_8))

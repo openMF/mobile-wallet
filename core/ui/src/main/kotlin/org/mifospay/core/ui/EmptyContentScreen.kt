@@ -26,7 +26,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.mifospay.core.designsystem.theme.LocalTintTheme
 import org.mifospay.core.designsystem.theme.MifosTheme
 
 @Composable
@@ -133,7 +132,7 @@ fun EmptyContentScreenDrawableImagePreview() {
             title = "No data found",
             subTitle = "Please check you connection or try again",
             iconTint = MaterialTheme.colorScheme.primary,
-            iconDrawable = R.drawable.baseline_info_outline_24
+            iconDrawable = R.drawable.core_ui_baseline_info_outline_24
         )
     }
 }

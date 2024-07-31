@@ -9,7 +9,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:boxStrokeColor="@color/primaryDarkBlue"
+        app:boxStrokeColor="@color/feature_make_transfer_primaryDarkBlue"
         android:hint="@string/enter_amount"
         android:textColorHint="@color/grey_900"
         android:layout_margin="@dimen/value_20dp"
@@ -18,7 +18,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:inputType="number"
-            android:textColor="@color/colorTextPrimary"
+            android:textColor="@color/feature_accounts_colorTextPrimary"
             android:textColorHint="@color/gray_9"
             android:id="@+id/editText_set_amt"
             android:layout_height="wrap_content"/>

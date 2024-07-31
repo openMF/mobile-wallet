@@ -154,7 +154,7 @@ dependencies {
     implementation(libs.squareup.okhttp)
     implementation(libs.squareup.logging.interceptor)
 
-    implementation("com.github.barteksc:android-pdf-viewer:2.8.2")
+    implementation(libs.android.pdf.viewer)
 
     implementation(libs.reactivex.rxjava.android)
     implementation(libs.reactivex.rxjava)
@@ -164,7 +164,7 @@ dependencies {
     implementation("me.dm7.barcodescanner:zxing:1.9.13")
     implementation("com.journeyapps:zxing-android-embedded:4.2.0")
 
-    implementation("com.mifos.mobile:mifos-passcode:0.3.0")
+    implementation(libs.mifosPasscode)
 
     // Coil
     implementation("io.coil-kt:coil-compose:2.6.0")
@@ -185,4 +185,8 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation(libs.hilt.android.testing)
+}
+
+dependencyGuard {
+    configuration("prodReleaseRuntimeClasspath")
 }

@@ -102,7 +102,7 @@ fun SendScreenRoute(
                     }
                 )
             } else {
-                showToast(context.getString(R.string.self_amount_transfer_is_not_allowed))
+                showToast(context.getString(R.string.feature_send_money_not_allowed))
             }
         }
     )
@@ -188,13 +188,13 @@ fun SendMoneyScreen(
         Column(Modifier.fillMaxSize()) {
             if (showToolBar) {
                 MifosNavigationTopAppBar(
-                    titleRes = R.string.send,
+                    titleRes = R.string.feature_send_money_send,
                     onNavigationClick = onBackClick
                 )
             }
             Text(
                 modifier = Modifier.padding(start = 20.dp, top = 20.dp),
-                text = stringResource(id = R.string.select_transfer_method),
+                text = stringResource(id = R.string.feature_send_money_select_transfer_method),
                 style = styleNormal18sp
             )
             Column(modifier = Modifier.padding(16.dp)) {
@@ -207,13 +207,13 @@ fun SendMoneyScreen(
                     VpaMobileChip(
                         selected = sendMethodType == SendMethodType.VPA,
                         onClick = { sendMethodType = SendMethodType.VPA },
-                        label = stringResource(id = R.string.vpa)
+                        label = stringResource(id = R.string.feature_send_money_vpa)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     VpaMobileChip(
                         selected = sendMethodType == SendMethodType.MOBILE,
                         onClick = { sendMethodType = SendMethodType.MOBILE },
-                        label = stringResource(id = R.string.mobile)
+                        label = stringResource(id = R.string.feature_send_money_mobile)
                     )
                 }
                 MfOutlinedTextField(
@@ -224,7 +224,7 @@ fun SendMoneyScreen(
                     },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    label = stringResource(id = R.string.amount),
+                    label = stringResource(id = R.string.feature_send_money_amount),
                     modifier = Modifier.fillMaxWidth()
                 )
                 when (sendMethodType) {
@@ -235,7 +235,7 @@ fun SendMoneyScreen(
                                 vpa = it
                                 validateInfo()
                             },
-                            label = stringResource(id = R.string.virtual_payment_address),
+                            label = stringResource(id = R.string.feature_send_money_virtual_payment_address),
                             modifier = Modifier.fillMaxWidth(),
                             trailingIcon = {
                                 IconButton(onClick = {
@@ -290,7 +290,7 @@ fun SendMoneyScreen(
                     contentPadding = PaddingValues(12.dp)
                 ) {
                     Text(
-                        stringResource(id = R.string.submit),
+                        stringResource(id = R.string.feature_send_money_submit),
                         style = styleMedium16sp.copy(color = MaterialTheme.colorScheme.surface)
                     )
                 }
@@ -298,7 +298,7 @@ fun SendMoneyScreen(
         }
         if (showProgress) {
             MfOverlayLoadingWheel(
-                contentDesc = stringResource(id = R.string.please_wait)
+                contentDesc = stringResource(id = R.string.feature_send_money_please_wait)
             )
         }
     }
@@ -321,7 +321,7 @@ fun EnterPhoneScreen(
         onValueChange = { (code, phone), isValid ->
             onNumberUpdated(phone, code + phone, isValid)
         },
-        label = { Text(stringResource(id = R.string.phone_number)) },
+        label = { Text(stringResource(id = R.string.feature_send_money_phone_number)) },
         keyboardActions = KeyboardActions { keyboardController?.hide() }
     )
 }

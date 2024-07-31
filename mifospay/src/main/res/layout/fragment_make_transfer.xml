@@ -43,7 +43,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/sending_to"
-                    android:textColor="@color/primaryDarkBlue"
+                    android:textColor="@color/feature_make_transfer_primaryDarkBlue"
                     android:textSize="@dimen/value_15sp"/>
 
                 <TextView
@@ -65,8 +65,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/value_20dp"
-                    android:text="@string/amount"
-                    android:textColor="@color/primaryDarkBlue"
+                    android:text="@string/feature_send_money_amount"
+                    android:textColor="@color/feature_make_transfer_primaryDarkBlue"
                     android:textSize="@dimen/value_15sp"/>
 
                 <TextView
@@ -102,8 +102,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginLeft="@dimen/value_30dp"
-                    android:background="@color/primaryDarkBlue"
-                    android:text="@string/confirm"
+                    android:background="@color/feature_make_transfer_primaryDarkBlue"
+                    android:text="@string/feature_accounts_confirm"
                     android:textColor="@android:color/white"/>
 
             </LinearLayout>
@@ -117,7 +117,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_20dp"
-            android:background="@drawable/transfer_success"
+            android:background="@drawable/feature_make_transfer_transfer_success"
             android:visibility="gone"/>
 
         <View
@@ -127,7 +127,7 @@
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/value_20dp"
             android:layout_marginTop="@dimen/value_20dp"
-            android:background="@drawable/transfer_failure"
+            android:background="@drawable/feature_make_transfer_transfer_failure"
             android:visibility="gone"/>
 
         <ProgressBar

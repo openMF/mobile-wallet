@@ -43,9 +43,9 @@ fun TransactionItemScreen(
                 .padding(top = 2.dp),
             painter = painterResource(
                 id = when (transaction.transactionType) {
-                    com.mifospay.core.model.domain.TransactionType.DEBIT -> R.drawable.money_out
-                    com.mifospay.core.model.domain.TransactionType.CREDIT -> R.drawable.money_in
-                    else -> R.drawable.money_in
+                    com.mifospay.core.model.domain.TransactionType.DEBIT -> R.drawable.core_ui_money_out
+                    com.mifospay.core.model.domain.TransactionType.CREDIT -> R.drawable.core_ui_money_in
+                    else -> R.drawable.core_ui_money_in
                 }
             ),
             contentDescription = null,

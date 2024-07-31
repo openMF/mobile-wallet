@@ -87,7 +87,9 @@ fun EditPasswordScreen(
             EditPasswordUiState.Loading -> {}
             EditPasswordUiState.Success -> {
                 coroutineScope.launch {
-                    currentSnackbarHostState.showSnackbar(context.getString(R.string.feature_editpassword_password_changed_successfully))
+                    currentSnackbarHostState.showSnackbar(
+                        context.getString(R.string.feature_editpassword_password_changed_successfully)
+                    )
                 }
             }
 
@@ -143,7 +145,9 @@ fun EditPasswordScreen(
                     password = confirmNewPassword,
                     label = stringResource(id = R.string.feature_editpassword_confirm_new_password),
                     isError = newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty(),
-                    errorMessage = if (newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty()) stringResource(
+                    errorMessage = if (newPassword !=
+                        confirmNewPassword && confirmNewPassword.isNotEmpty()
+                    ) stringResource(
                         id = R.string.feature_editpassword_password_mismatch_error
                     ) else null,
                     isPasswordVisible = isConfirmNewPasswordVisible,

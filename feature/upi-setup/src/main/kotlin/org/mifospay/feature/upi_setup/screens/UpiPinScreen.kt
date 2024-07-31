@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.mifos.mobilewallet.mifospay.ui.VerifyStepHeader
+import org.mifospay.core.ui.VerifyStepHeader
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.feature.upi_setup.R
 

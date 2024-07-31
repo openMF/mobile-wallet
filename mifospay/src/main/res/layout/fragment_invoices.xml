@@ -47,7 +47,7 @@
 
     <include
         android:id="@+id/inc_state_view"
-        layout="@layout/placeholder_state"
+        layout="@layout/feature_kyc_placeholder_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"

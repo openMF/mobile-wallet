@@ -49,8 +49,8 @@
                     android:id="@+id/til_edit_profile_username"
                     android:layout_marginTop="@dimen/marginItemsInSectionLarge"
                     android:layout_width="match_parent"
-                    app:helperText="@string/username"
-                    android:hint="@string/username"
+                    app:helperText="@string/feature_profile_username"
+                    android:hint="@string/feature_profile_username"
                     android:layout_height="wrap_content" >
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -67,8 +67,8 @@
                     android:layout_width="match_parent"
                     android:id="@+id/til_edit_profile_email"
                     app:layout_anchor="@id/til_edit_profile_username"
-                    app:helperText="@string/email"
-                    android:hint="@string/email"
+                    app:helperText="@string/feature_profile_email"
+                    android:hint="@string/feature_profile_email"
                     android:layout_height="wrap_content" >
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -84,8 +84,8 @@
                     android:layout_marginTop="@dimen/marginItemsInSectionMedium"
                     android:id="@+id/til_edit_profile_vpa"
                     android:layout_width="match_parent"
-                    app:helperText="@string/vpa"
-                    android:hint="@string/vpa"
+                    app:helperText="@string/feature_send_money_vpa"
+                    android:hint="@string/feature_send_money_vpa"
                     android:layout_height="wrap_content" >
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -116,8 +116,8 @@
                         android:id="@+id/til_edit_profile_mobile"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:helperText="@string/mobile"
-                        android:hint="@string/mobile" >
+                        app:helperText="@string/feature_send_money_mobile"
+                        android:hint="@string/feature_send_money_mobile" >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/et_edit_profile_mobile"

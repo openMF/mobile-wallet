@@ -111,13 +111,13 @@ fun EditProfileScreen(
             .fillMaxSize()
     ) {
         MifosScaffold(
-            topBarTitle = R.string.edit_profile,
+            topBarTitle = R.string.feature_profile_edit_profile,
             backPress = { showDiscardChangesDialog = true },
             scaffoldContent = {
                 when (editProfileUiState) {
                     EditProfileUiState.Loading -> {
                         MfLoadingWheel(
-                            contentDesc = stringResource(R.string.loading),
+                            contentDesc = stringResource(R.string.feature_profile_loading),
                             backgroundColor = MaterialTheme.colorScheme.surface
                         )
                     }
@@ -147,13 +147,13 @@ fun EditProfileScreen(
         MifosDialogBox(
             showDialogState = showDiscardChangesDialog,
             onDismiss = { showDiscardChangesDialog = false },
-            title = R.string.discard_changes,
-            confirmButtonText = R.string.confirm_text,
+            title = R.string.feature_profile_discard_changes,
+            confirmButtonText = R.string.feature_profile_confirm_text,
             onConfirm = {
                 showDiscardChangesDialog = false
                 onBackClick.invoke()
             },
-            dismissButtonText = R.string.dismiss_text
+            dismissButtonText = R.string.feature_profile_dismiss_text
         )
     }
 }
@@ -191,10 +191,10 @@ fun EditProfileScreenContent(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
             )
         },
-        title = R.string.permission_required,
-        description = R.string.approve_permission_description_camera,
-        confirmButtonText = R.string.proceed,
-        dismissButtonText = R.string.dismiss,
+        title = R.string.feature_profile_permission_required,
+        description = R.string.feature_profile_approve_description,
+        confirmButtonText = R.string.feature_profile_proceed,
+        dismissButtonText = R.string.feature_profile_dismiss,
         onGranted = {
             val cameraLauncher =
                 rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
@@ -250,7 +250,7 @@ fun EditProfileScreenContent(
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
                 value = username,
-                label = stringResource(id = R.string.username),
+                label = stringResource(id = R.string.feature_profile_username),
                 onValueChange = { username = it }
             )
             MfOutlinedTextField(
@@ -258,7 +258,7 @@ fun EditProfileScreenContent(
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
                 value = email,
-                label = stringResource(id = R.string.email),
+                label = stringResource(id = R.string.feature_profile_email),
                 onValueChange = { email = it }
             )
             MfOutlinedTextField(
@@ -266,7 +266,7 @@ fun EditProfileScreenContent(
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
                 value = vpa,
-                label = stringResource(id = R.string.vpa),
+                label = stringResource(id = R.string.feature_profile_vpa),
                 onValueChange = { vpa = it }
             )
             Box(
@@ -291,7 +291,7 @@ fun EditProfileScreenContent(
                                 mobile = code + phone
                             }
                         },
-                        label = { Text(stringResource(id = R.string.phone_number)) },
+                        label = { Text(stringResource(id = R.string.feature_profile_phone_number)) },
                         keyboardActions = KeyboardActions { keyboardController?.hide() }
                     )
                 }
@@ -309,11 +309,11 @@ fun EditProfileScreenContent(
                         // same behaviour as onBackPress, hence reused the callback
                         onBackClick.invoke()
                     } else {
-                        Toast.makeText(context, R.string.failed_to_save_changes, Toast.LENGTH_SHORT)
+                        Toast.makeText(context, R.string.feature_profile_failed_to_save_changes, Toast.LENGTH_SHORT)
                             .show()
                     }
                 },
-                buttonText = R.string.save
+                buttonText = R.string.feature_profile_save
             )
         }
     }
@@ -344,7 +344,7 @@ fun EditProfileBottomSheetContent(
         ) {
             Icon(imageVector = Camera, contentDescription = null)
             Text(
-                text = stringResource(id = R.string.click_profile_picture),
+                text = stringResource(id = R.string.feature_profile_click_profile_picture),
                 style = historyItemTextStyle
             )
         }
@@ -358,7 +358,7 @@ fun EditProfileBottomSheetContent(
         ) {
             Icon(imageVector = PhotoLibrary, contentDescription = null)
             Text(
-                text = stringResource(id = R.string.change_profile_picture),
+                text = stringResource(id = R.string.feature_profile_change_profile_picture),
                 style = historyItemTextStyle
             )
         }
@@ -372,7 +372,7 @@ fun EditProfileBottomSheetContent(
         ) {
             Icon(imageVector = Delete, contentDescription = null)
             Text(
-                text = stringResource(id = R.string.remove_profile_picture),
+                text = stringResource(id = R.string.feature_profile_remove_profile_picture),
                 style = historyItemTextStyle
             )
         }

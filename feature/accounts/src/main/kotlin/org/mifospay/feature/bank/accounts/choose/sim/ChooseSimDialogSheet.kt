@@ -22,7 +22,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -64,13 +63,13 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
             .padding(8.dp)
     ) {
         Text(
-            text = stringResource(id = R.string.verify_mobile_number),
+            text = stringResource(id = R.string.feature_accounts_verify_mobile_number),
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.onSurface
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = stringResource(id = R.string.confirm_mobile_number_message),
+            text = stringResource(id = R.string.feature_accounts_confirm_mobile_number_message),
             style = MaterialTheme.typography.bodySmall.copy(
                 textAlign = TextAlign.Center
             ),
@@ -79,7 +78,7 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             modifier = Modifier.padding(horizontal = 24.dp),
-            text = stringResource(id = R.string.bank_account_mobile_verification_conditions),
+            text = stringResource(id = R.string.feature_accounts_bank_account_mobile_verification_conditions),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurface
         )
@@ -96,7 +95,7 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
             )
 
             Spacer(modifier = Modifier.width(24.dp))
-            Text(text = stringResource(id = R.string.or),
+            Text(text = stringResource(id = R.string.feature_accounts_or),
                 color = MaterialTheme.colorScheme.onSurface)
             Spacer(modifier = Modifier.width(24.dp))
             SimCard(
@@ -107,7 +106,7 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
-            text = stringResource(id = R.string.regular_charges_will_apply),
+            text = stringResource(id = R.string.feature_accounts_regular_charges_will_apply),
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodySmall
         )
@@ -119,7 +118,7 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
                 if (selectedSim == -1) {
                     Toast.makeText(
                         context,
-                        context.getString(R.string.choose_a_sim),
+                        context.getString(R.string.feature_accounts_choose_a_sim),
                         Toast.LENGTH_SHORT
                     ).show()
                 } else {
@@ -127,7 +126,7 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
                 }
             }
         ) {
-            Text(text = stringResource(id = R.string.confirm))
+            Text(text = stringResource(id = R.string.feature_accounts_confirm))
         }
         Spacer(modifier = Modifier.height(24.dp))
     }
@@ -139,8 +138,8 @@ fun SimCard(
 ) {
     val drawable: Painter = painterResource(
         id = if (isSelected) {
-            R.drawable.sim_card_selected
-        } else R.drawable.sim_card_unselected
+            R.drawable.feature_accounts_sim_card_selected
+        } else R.drawable.feature_accounts_sim_card_unselected
     )
     Image(painter = drawable,
         contentDescription = "SIM Card $simNumber",

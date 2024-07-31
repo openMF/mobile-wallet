@@ -52,7 +52,7 @@
                             android:drawableLeft="@drawable/et_search"
                             android:drawablePadding="10dp"
                             android:drawableStart="@drawable/et_search"
-                            android:hint="@string/search"
+                            android:hint="@string/feature_accounts_search"
                             android:inputType="text"
                             android:paddingLeft="15dp"/>
 
@@ -66,7 +66,7 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/popular_banks"
                     android:padding="@dimen/value_15dp"
-                    android:text="@string/popular_banks"
+                    android:text="@string/feature_accounts_popular_banks"
                     android:textColor="@android:color/black"/>
 
                 <androidx.cardview.widget.CardView
@@ -100,7 +100,7 @@
                     android:id="@+id/other_banks"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/value_15dp"
-                    android:text="@string/other_banks"
+                    android:text="@string/feature_accounts_other_banks"
                     android:textColor="@android:color/black"/>
 
                 <androidx.cardview.widget.CardView

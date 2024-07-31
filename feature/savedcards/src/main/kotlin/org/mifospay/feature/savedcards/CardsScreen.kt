@@ -36,7 +36,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -257,8 +256,10 @@ fun SearchBarScreen(
         active = false,
         onActiveChange = { },
         placeholder = {
-            Text(text = stringResource(R.string.feature_savedcards_search),
-                color = MaterialTheme.colorScheme.onPrimaryContainer)
+            Text(
+                text = stringResource(R.string.feature_savedcards_search),
+                color = MaterialTheme.colorScheme.onPrimaryContainer
+            )
         },
         leadingIcon = {
             Icon(
@@ -298,7 +299,10 @@ fun CardsList(
 }
 
 @Composable
-fun CardItem(card: Card, onMenuItemClick: (Card, CardMenuAction) -> Unit) {
+fun CardItem(
+    card: Card,
+    onMenuItemClick: (Card, CardMenuAction) -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     Card(
         modifier = Modifier
@@ -316,9 +320,17 @@ fun CardItem(card: Card, onMenuItemClick: (Card, CardMenuAction) -> Unit) {
             Row {
                 Column {
                     Row {
-                        Text(text = card.firstName, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurface)
+                        Text(
+                            text = card.firstName,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
                         Spacer(modifier = Modifier.height(6.dp))
-                        Text(text = card.lastName, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Text(
+                            text = card.lastName,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
                     }
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
@@ -327,7 +339,11 @@ fun CardItem(card: Card, onMenuItemClick: (Card, CardMenuAction) -> Unit) {
                         color = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = card.expiryDate, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    Text(
+                        text = card.expiryDate,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
                 }
                 Spacer(modifier = Modifier.height(38.dp))
                 DropdownMenu(
@@ -371,8 +387,10 @@ fun NoCardAddCardsScreen(onAddBtn: () -> Unit) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = stringResource(R.string.feature_savedcards_add_cards),
-                color = MaterialTheme.colorScheme.onSurface)
+            Text(
+                text = stringResource(R.string.feature_savedcards_add_cards),
+                color = MaterialTheme.colorScheme.onSurface
+            )
             AddCardChip(
                 modifier = Modifier,
                 onAddBtn = onAddBtn,

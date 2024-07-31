@@ -23,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -98,15 +97,15 @@ fun ProfileScreenContent(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         DetailItem(
-                            label = stringResource(id = R.string.email),
+                            label = stringResource(id = R.string.feature_profile_email),
                             value = profileState.email.toString()
                         )
                         DetailItem(
-                            label = stringResource(id = R.string.vpa),
+                            label = stringResource(id = R.string.feature_profile_vpa),
                             value = profileState.vpa.toString()
                         )
                         DetailItem(
-                            label = stringResource(id = R.string.mobile),
+                            label = stringResource(id = R.string.feature_profile_mobile),
                             value = profileState.mobile.toString()
                         )
                     }
@@ -127,7 +126,7 @@ fun ProfileScreenContent(
                                 .padding(end = 8.dp, bottom = 8.dp)
                                 .weight(1f),
                             icon = MifosIcons.QR,
-                            text = R.string.personal_qr_code,
+                            text = R.string.feature_profile_personal_qr_code,
                             onClick = {}
                         )
 
@@ -136,7 +135,7 @@ fun ProfileScreenContent(
                                 .padding(start = 8.dp, bottom = 8.dp)
                                 .weight(1f),
                             icon = MifosIcons.Bank,
-                            text = R.string.link_bank_account,
+                            text = R.string.feature_profile_link_bank_account,
                             onClick = {}
                         )
 
@@ -144,7 +143,7 @@ fun ProfileScreenContent(
                             modifier = Modifier
                                 .padding(top = 8.dp, bottom = 8.dp),
                             icon = MifosIcons.Contact,
-                            text = R.string.edit_profile,
+                            text = R.string.feature_profile_edit_profile,
                             onClick = { onEditProfile.invoke() }
                         )
 
@@ -152,14 +151,12 @@ fun ProfileScreenContent(
                             modifier = Modifier
                                 .padding(top = 8.dp),
                             icon = MifosIcons.Settings,
-                            text = R.string.settings,
+                            text = R.string.feature_profile_settings,
                             onClick = { onSettings.invoke() }
                         )
                     }
                 }
             }
-
-            else -> {}
         }
     }
 }

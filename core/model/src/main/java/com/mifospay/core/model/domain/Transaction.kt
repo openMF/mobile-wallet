@@ -4,6 +4,7 @@ import android.os.Parcelable
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
 import kotlinx.parcelize.Parcelize
 
+@Suppress("MaxLineLength")
 @Parcelize
 data class Transaction(
     var transactionId: String? = null,

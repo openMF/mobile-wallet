@@ -32,7 +32,6 @@ import com.mifospay.core.model.entity.accounts.savings.TransferDetail
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.primaryDarkBlue
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.feature.history.R
 import org.mifospay.feature.specific.transactions.SpecificTransactionAccountInfo
@@ -148,7 +147,7 @@ fun TransactionsDetailContent(
                 client = transaction.transferDetail.fromClient,
                 accountClicked = accountClicked
             )
-            Image(painter = painterResource(id = R.drawable.ic_send), contentDescription = null)
+            Image(painter = painterResource(id = R.drawable.feature_history_ic_send), contentDescription = null)
             SpecificTransactionAccountInfo(
                 modifier = Modifier.weight(1f),
                 account = transaction.transferDetail.toAccount,
