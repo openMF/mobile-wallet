@@ -9,6 +9,7 @@ import org.mifospay.core.data.repository.local.LocalRepository
 import javax.inject.Inject
 
 @HiltViewModel
+@Suppress("UnusedPrivateProperty")
 class KYCLevel3ViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository

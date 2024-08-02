@@ -1,6 +1,6 @@
 package org.mifospay.feature.bank.accounts.choose.sim
 
-import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -14,22 +14,26 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.delay
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.theme.MifosTheme
@@ -37,15 +41,20 @@ import org.mifospay.feature.bank.accounts.R
 
 @Composable
 fun ChooseSimDialogSheet(
-    onSimSelected: (Int) -> Unit
+    onSimSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    MifosBottomSheet(content = {
-        ChooseSimDialogSheetContent { selectedSim ->
-            onSimSelected.invoke(selectedSim)
-        }
-    }, onDismiss = {
-        onSimSelected.invoke(-1)
-    })
+    MifosBottomSheet(
+        content = {
+            ChooseSimDialogSheetContent(
+                onSimSelected = onSimSelected
+            )
+        },
+        onDismiss = {
+            onSimSelected.invoke(-1)
+        },
+        modifier = modifier,
+    )
 }
 
 /**
@@ -53,12 +62,25 @@ fun ChooseSimDialogSheet(
  * show both of them and implement send SMS after select and confirm.
  */
 @Composable
-fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
-    val context = LocalContext.current
+@Suppress("LongMethod")
+fun ChooseSimDialogSheetContent(
+    onSimSelected: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
     var selectedSim by rememberSaveable { mutableIntStateOf(-1) }
+    var showMessage by remember { mutableStateOf(false) }
+    val message = stringResource(id = R.string.feature_accounts_choose_a_sim)
+
+    LaunchedEffect(key1 = showMessage) {
+        if (showMessage) {
+            delay(5000)
+            showMessage = false
+        }
+    }
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(8.dp)
     ) {
@@ -95,8 +117,10 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
             )
 
             Spacer(modifier = Modifier.width(24.dp))
-            Text(text = stringResource(id = R.string.feature_accounts_or),
-                color = MaterialTheme.colorScheme.onSurface)
+            Text(
+                text = stringResource(id = R.string.feature_accounts_or),
+                color = MaterialTheme.colorScheme.onSurface
+            )
             Spacer(modifier = Modifier.width(24.dp))
             SimCard(
                 simNumber = 2,
@@ -110,17 +134,25 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
             color = MaterialTheme.colorScheme.onSurface,
             style = MaterialTheme.typography.bodySmall
         )
+
+        AnimatedVisibility(
+            visible = showMessage
+        ) {
+            Text(
+                text = message,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(vertical = 4.dp)
+            )
+        }
+
         MifosButton(
             modifier = Modifier
                 .width(200.dp)
                 .padding(top = 16.dp),
             onClick = {
                 if (selectedSim == -1) {
-                    Toast.makeText(
-                        context,
-                        context.getString(R.string.feature_accounts_choose_a_sim),
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    showMessage = true
                 } else {
                     onSimSelected(selectedSim)
                 }
@@ -134,17 +166,21 @@ fun ChooseSimDialogSheetContent(onSimSelected: (Int) -> Unit) {
 
 @Composable
 fun SimCard(
-    simNumber: Int, isSelected: Boolean, onSimSelected: () -> Unit
+    simNumber: Int,
+    isSelected: Boolean,
+    onSimSelected: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val drawable: Painter = painterResource(
         id = if (isSelected) {
             R.drawable.feature_accounts_sim_card_selected
         } else R.drawable.feature_accounts_sim_card_unselected
     )
-    Image(painter = drawable,
+    Image(
+        painter = drawable,
         contentDescription = "SIM Card $simNumber",
         contentScale = ContentScale.Fit,
-        modifier = Modifier
+        modifier = modifier
             .size(50.dp)
             .clickable { onSimSelected() }
     )
@@ -154,6 +190,10 @@ fun SimCard(
 @Composable
 fun SimSelectionPreview() {
     MifosTheme {
-        ChooseSimDialogSheetContent(onSimSelected = {})
+        Surface {
+            ChooseSimDialogSheetContent(
+                onSimSelected = {}
+            )
+        }
     }
 }

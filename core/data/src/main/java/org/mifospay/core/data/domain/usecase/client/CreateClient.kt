@@ -30,7 +30,7 @@ class CreateClient @Inject constructor(private val apiRepository: FineractReposi
                         message = (e as HttpException).response()?.errorBody()?.string().toString()
                         message = getUserMessage(message)
                     } catch (e1: Exception) {
-                        message = "Error"
+                        message = e1.message.toString()
                     }
                     useCaseCallback.onError(message)
                 }

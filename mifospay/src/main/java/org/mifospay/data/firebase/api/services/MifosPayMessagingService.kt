@@ -35,6 +35,7 @@ import org.mifospay.utils.NotificationUtils
 /**
  * Created by ankur on 20/June/2018
  */
+@Suppress("UnusedParameter", "UnusedPrivateMember")
 class MifosPayMessagingService : FirebaseMessagingService() {
     /**
      * Called if InstanceID token is updated. This may occur if the security of

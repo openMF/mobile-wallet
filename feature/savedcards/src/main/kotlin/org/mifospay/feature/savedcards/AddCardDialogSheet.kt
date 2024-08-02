@@ -51,7 +51,7 @@ fun AddCardDialogSheet(
     )
 }
 
-@Suppress("MaxLineLength")
+@Suppress("MaxLineLength", "CyclomaticComplexMethod", "ReturnCount")
 @Composable
 fun AddCardDialogSheetContent(
     cancelClicked: () -> Unit,

@@ -6,6 +6,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.util.Size
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -32,7 +33,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -201,7 +201,7 @@ fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
         val stream = context.contentResolver.openInputStream(uri)
         BitmapFactory.decodeStream(stream)
     } catch (e: Exception) {
-        e.printStackTrace()
+        Log.e("Error", e.message.toString())
         null
     }
 }

@@ -7,6 +7,7 @@ import org.mifospay.feature.auth.login.LoginScreen
 
 const val LOGIN_ROUTE = "login_route"
 
+@Suppress("UnusedParameter")
 fun NavGraphBuilder.loginScreen(
     onDismissSignUp: () -> Unit,
     onNavigateToMobileVerificationScreen:(Int,String,String,String,String,) -> Unit

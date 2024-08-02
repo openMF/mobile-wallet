@@ -73,6 +73,7 @@ private val DarkDefaultColorScheme = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
+@Suppress("UnusedParameter")
 @Composable
 fun MifosTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),

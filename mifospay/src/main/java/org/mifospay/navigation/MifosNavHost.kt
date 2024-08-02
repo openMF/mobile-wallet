@@ -59,8 +59,8 @@ import org.mifospay.feature.specific.transactions.navigation.navigateToSpecificT
 import org.mifospay.feature.specific.transactions.navigation.specificTransactionsScreen
 import org.mifospay.feature.standing.instruction.navigateToNewSiScreen
 import org.mifospay.feature.standing.instruction.newSiScreen
-import org.mifospay.feature.upi_setup.navigation.navigateToSetupUpiPin
-import org.mifospay.feature.upi_setup.navigation.setupUpiPinScreen
+import org.mifospay.feature.upiSetup.navigation.navigateToSetupUpiPin
+import org.mifospay.feature.upiSetup.navigation.setupUpiPinScreen
 import java.io.File
 import java.util.Objects
 
@@ -72,7 +72,7 @@ import java.util.Objects
  * within each route is handled using state and Back Handlers.
  */
 @Composable
-@Suppress("MaxLineLength")
+@Suppress("MaxLineLength", "LongMethod", "UnusedParameter")
 fun MifosNavHost(
     navController: NavHostController,
     onShowSnackbar: suspend (String, String?) -> Boolean,

@@ -39,5 +39,5 @@ dependencies {
     implementation(libs.jetbrains.kotlin.jdk7)
 
     testImplementation(libs.junit)
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation(libs.espresso.core)
 }

@@ -23,12 +23,12 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import org.mifospay.core.data.util.NetworkMonitor
-import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.MainActivityUiState.Loading
 import org.mifospay.MainActivityUiState.Success
 import org.mifospay.core.analytics.AnalyticsHelper
 import org.mifospay.core.analytics.LocalAnalyticsHelper
+import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.LocalTimeZone
 import org.mifospay.ui.MifosApp
@@ -37,6 +37,7 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
+@Suppress("UnusedPrivateProperty")
 class MainActivity : ComponentActivity() {
 
     /**

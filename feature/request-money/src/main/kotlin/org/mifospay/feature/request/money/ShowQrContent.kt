@@ -20,6 +20,7 @@ import coil.compose.AsyncImage
 import org.mifospay.core.designsystem.component.MifosButton
 
 @Composable
+@Suppress("ImplicitDefaultLocale")
 fun ShowQrContent(
     qrDataBitmap: Bitmap,
     amount: String?,

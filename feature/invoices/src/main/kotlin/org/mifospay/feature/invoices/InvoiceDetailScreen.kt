@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -99,6 +98,7 @@ fun InvoiceDetailScreen(
 }
 
 @Composable
+@Suppress("LongMethod")
 fun InvoiceDetailsContent(
     invoice: Invoice?,
     merchantId: String?,
@@ -112,7 +112,6 @@ fun InvoiceDetailsContent(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
     ) {
-        val context = LocalContext.current
         Text(
             text = stringResource(R.string.feature_invoices_invoice_details),
             modifier = Modifier.padding(top = 16.dp)

@@ -45,6 +45,7 @@ fun SIDetailsScreen(
     )
 }
 
+@Suppress("UnusedParameter")
 @Composable
 fun SIDetailsScreen(
     siDetailsUiState: SiDetailsUiState,

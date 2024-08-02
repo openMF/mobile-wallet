@@ -14,9 +14,8 @@ android {
 
 dependencies {
     implementation(projects.core.data)
-    implementation(libs.squareup.okhttp)
     implementation(libs.compose.country.code.picker)
+    // TODO:: this should be removed
     implementation(libs.compose.material)
     implementation(libs.coil.kt.compose)
-    implementation(libs.androidx.appcompat)
 }

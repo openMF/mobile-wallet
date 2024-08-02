@@ -50,10 +50,6 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utility.AddCardChip
 import org.mifospay.savedcards.R
 
-enum class CardMenuAction {
-    EDIT, DELETE, CANCEL
-}
-
 @Composable
 fun CardsScreen(
     viewModel: CardsScreenViewModel = hiltViewModel(),
@@ -109,6 +105,10 @@ fun CardsScreen(
             viewModel.updateSearchQuery(it)
         }
     )
+}
+
+enum class CardMenuAction {
+    EDIT, DELETE, CANCEL
 }
 
 @Composable

@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat
 /**
  * Created by ankur on 23/July/2018
  */
+@Suppress("NestedBlockDepth")
 class NotificationUtils(private val mContext: Context) {
     @JvmOverloads
     fun showNotificationMessage(

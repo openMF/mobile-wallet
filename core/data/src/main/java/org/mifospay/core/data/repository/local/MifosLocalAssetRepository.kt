@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.mifospay.core.network.Dispatcher
 import org.mifospay.core.network.MifosDispatchers
-import org.mifospay.core.network.local_assets.MifosLocalAssetDataSource
+import org.mifospay.core.network.localAssets.MifosLocalAssetDataSource
 import javax.inject.Inject
 
 /**

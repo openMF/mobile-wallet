@@ -9,7 +9,7 @@ android {
 
 dependencies {
     implementation(projects.core.data)
+    // TODO:: this should be removed
     implementation(libs.compose.material)
-    implementation(libs.androidx.appcompat)
     implementation(projects.feature.upiSetup)
 }

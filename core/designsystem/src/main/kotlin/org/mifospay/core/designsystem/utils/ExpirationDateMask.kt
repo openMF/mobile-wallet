@@ -5,6 +5,7 @@ import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
 
+@Suppress("ReturnCount")
 class ExpirationDateMask : VisualTransformation {
     override fun filter(text: AnnotatedString): TransformedText {
         return makeExpirationFilter(text)

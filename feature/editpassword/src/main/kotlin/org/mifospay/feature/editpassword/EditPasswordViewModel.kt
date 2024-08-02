@@ -14,6 +14,7 @@ import org.mifospay.core.datastore.PreferencesHelper
 import javax.inject.Inject
 
 @HiltViewModel
+@Suppress("NestedBlockDepth")
 class EditPasswordViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper,

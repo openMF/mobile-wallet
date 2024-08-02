@@ -94,6 +94,7 @@ fun PayVpsMobileScreen() {
     }
 }
 
+@Suppress("CyclomaticComplexMethod")
 @Composable
 fun rememberQrBitmapPainter(
     content: String,

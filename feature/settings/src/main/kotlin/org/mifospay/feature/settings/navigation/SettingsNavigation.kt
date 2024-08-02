@@ -8,11 +8,13 @@ import org.mifospay.feature.settings.SettingsScreenRoute
 
 const val SETTINGS_ROUTE = "settings_route"
 
-fun NavController.navigateToSettings(navOptions: NavOptions? = null) = navigate(SETTINGS_ROUTE)
+fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
+    this.navigate(SETTINGS_ROUTE, navOptions)
+}
 
 fun NavGraphBuilder.settingsScreen(
     onBackPress: () -> Unit,
-    navigateToEditPasswordScreen:() -> Unit
+    navigateToEditPasswordScreen: () -> Unit
 ) {
     composable(route = SETTINGS_ROUTE) {
         SettingsScreenRoute(

@@ -8,9 +8,7 @@ android {
 }
 
 dependencies {
+    // TODO:: this should be removed
     implementation(libs.squareup.okhttp)
     implementation(projects.core.data)
-    implementation(libs.androidx.appcompat)
-    implementation(projects.feature.passcode)
-    implementation(libs.mifosPasscode)
 }

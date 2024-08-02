@@ -7,12 +7,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-data class FloatingActionButtonContent(
-    val onClick: (() -> Unit),
-    val contentColor: Color,
-    val content: (@Composable () -> Unit)
-)
-
 @Composable
 fun MifosScaffold(
     topBarTitle: Int? = null,
@@ -45,3 +39,9 @@ fun MifosScaffold(
         content = scaffoldContent,
     )
 }
+
+data class FloatingActionButtonContent(
+    val onClick: (() -> Unit),
+    val contentColor: Color,
+    val content: (@Composable () -> Unit)
+)
