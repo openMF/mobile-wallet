@@ -20,6 +20,7 @@ androidxLifecycle = "2.7.0"
 hilt = "2.51"
 junit = "4.13.2"
 kotlin = "1.9.22"
+compose-plugin = "1.6.1"
 ksp = "1.9.22-1.0.18"
 firebaseCrashlyticsPlugin = "2.9.9"
 gmsPlugin = "4.4.1"
@@ -176,6 +177,7 @@ androidx-camera-view = { group = "androidx.camera", name = "camera-view", versio
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycleVersion" }
 
 [plugins]
+jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
