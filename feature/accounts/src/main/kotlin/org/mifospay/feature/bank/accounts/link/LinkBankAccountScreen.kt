@@ -69,16 +69,18 @@ fun LinkBankAccountRoute(
     var showOverlyProgressBar by rememberSaveable { mutableStateOf(false) }
 
     if (showSimBottomSheet) {
-        ChooseSimDialogSheet { selectedSim ->
-            showSimBottomSheet = false
-            if (selectedSim != -1) {
-                showOverlyProgressBar = true
-                viewModel.fetchBankAccountDetails {
-                    showOverlyProgressBar = false
-                    onBackClick()
+        ChooseSimDialogSheet(
+            onSimSelected = { selectedSim ->
+                showSimBottomSheet = false
+                if (selectedSim != -1) {
+                    showOverlyProgressBar = true
+                    viewModel.fetchBankAccountDetails {
+                        showOverlyProgressBar = false
+                        onBackClick()
+                    }
                 }
             }
-        }
+        )
     }
 
     LinkBankAccountScreen(
@@ -175,7 +177,10 @@ fun BankListScreenContent(
             Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = stringResource(id = R.string.feature_accounts_popular_banks),
-                style = TextStyle(MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Medium),
+                style = TextStyle(
+                    MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Medium
+                ),
                 modifier = Modifier.padding(start = 16.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))
@@ -186,7 +191,10 @@ fun BankListScreenContent(
             Spacer(modifier = Modifier.height(24.dp))
             Text(
                 text = stringResource(id = R.string.feature_accounts_other_banks),
-                style = TextStyle(MaterialTheme.colorScheme.onSurface, fontWeight = FontWeight.Medium),
+                style = TextStyle(
+                    MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Medium
+                ),
                 modifier = Modifier.padding(start = 16.dp)
             )
             Spacer(modifier = Modifier.height(12.dp))

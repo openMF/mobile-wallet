@@ -9,7 +9,4 @@ android {
 
 dependencies {
     implementation(projects.core.data)
-
-    // need this because of M2 dependency in this module
-    implementation("androidx.compose.material:material:1.6.0")
 }

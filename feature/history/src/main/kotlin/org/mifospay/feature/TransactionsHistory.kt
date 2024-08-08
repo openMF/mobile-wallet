@@ -1,14 +1,15 @@
 package org.mifospay.feature
 
+import com.mifospay.core.model.domain.Transaction
 import org.mifospay.core.data.base.TaskLooper
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
 import org.mifospay.core.data.base.UseCaseFactory
-import com.mifospay.core.model.domain.Transaction
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.FetchAccount
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransactions
 import javax.inject.Inject
 
+@Suppress("UnusedPrivateProperty")
 class TransactionsHistory @Inject constructor(
     private val mUsecaseHandler: UseCaseHandler,
     private val fetchAccountTransactionsUseCase: FetchAccountTransactions,

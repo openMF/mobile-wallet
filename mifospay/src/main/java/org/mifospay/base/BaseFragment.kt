@@ -66,7 +66,7 @@ open class BaseFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        val activity = if (context is Activity) context else null
+        val activity = context as? Activity
         callback = try {
             activity as BaseActivityCallback?
         } catch (e: ClassCastException) {

@@ -5,8 +5,6 @@ import android.net.Uri
 import android.provider.ContactsContract
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -58,11 +56,6 @@ import org.mifospay.core.designsystem.component.MifosNavigationTopAppBar
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 
-
-enum class SendMethodType {
-    VPA, MOBILE
-}
-
 @Composable
 fun SendScreenRoute(
     viewModel: SendPaymentViewModel = hiltViewModel(),
@@ -98,7 +91,10 @@ fun SendScreenRoute(
                         showToast(context.getString(it))
                     },
                     proceedWithTransferFlow = { externalId, transferAmount ->
-                        proceedWithMakeTransferFlow.invoke(externalIdOrMobile, transferAmount.toString())
+                        proceedWithMakeTransferFlow.invoke(
+                            externalIdOrMobile,
+                            transferAmount.toString()
+                        )
                     }
                 )
             } else {
@@ -108,14 +104,18 @@ fun SendScreenRoute(
     )
 }
 
+enum class SendMethodType {
+    VPA, MOBILE
+}
+
 @Composable
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 fun SendMoneyScreen(
     showToolBar: Boolean,
     showProgress: Boolean,
     onSubmit: (String, String, SendMethodType) -> Unit,
     onBackClick: () -> Unit,
 ) {
-
     val context = LocalContext.current
 
     var amount by rememberSaveable { mutableStateOf("") }
@@ -136,28 +136,11 @@ fun SendMoneyScreen(
         }
     }
 
-    val contactLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickContact()
-    ) { uri: Uri? ->
-        uri?.let { contactUri = uri }
-    }
-
     LaunchedEffect(key1 = contactUri) {
         contactUri?.let {
             mobileNumber = getContactPhoneNumber(it, context)
         }
     }
-
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted: Boolean ->
-            if (isGranted) {
-                contactLauncher.launch(null)
-            } else {
-                // Handle permission denial
-            }
-        }
-    )
 
     val options = GmsBarcodeScannerOptions.Builder()
         .setBarcodeFormats(

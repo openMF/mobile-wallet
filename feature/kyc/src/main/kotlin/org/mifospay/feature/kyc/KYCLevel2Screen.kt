@@ -117,6 +117,7 @@ fun KYCLevel2Screen(
 
 }
 
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun Kyc2Form(
     modifier: Modifier,

@@ -2,10 +2,10 @@ package org.mifospay.feature.finance
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import com.google.accompanist.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.accompanist.pager.rememberPagerState
 import com.mifospay.core.model.domain.BankAccountDetails
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
@@ -14,6 +14,7 @@ import org.mifospay.feature.kyc.KYCScreen
 import org.mifospay.feature.merchants.ui.MerchantScreen
 import org.mifospay.feature.savedcards.CardsScreen
 
+@Suppress("UnusedParameter")
 @Composable
 fun FinanceRoute(
     onAddBtn: () -> Unit,

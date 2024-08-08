@@ -1,7 +1,7 @@
 package org.mifospay.core.network
 
 import androidx.annotation.VisibleForTesting
-import org.mifospay.core.network.local_assets.LocalAssetManager
+import org.mifospay.core.network.localAssets.LocalAssetManager
 import java.io.File
 import java.io.InputStream
 import java.util.Properties

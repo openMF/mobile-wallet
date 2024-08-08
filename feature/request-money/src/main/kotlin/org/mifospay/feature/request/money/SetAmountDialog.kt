@@ -34,7 +34,7 @@ import org.mifospay.core.designsystem.component.MifosCustomDialog
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.icon.MifosIcons
 
-@Suppress("MaxLineLength")
+@Suppress("MaxLineLength", "ReturnCount")
 @Composable
 fun SetAmountDialog(
     dismissDialog: () -> Unit,

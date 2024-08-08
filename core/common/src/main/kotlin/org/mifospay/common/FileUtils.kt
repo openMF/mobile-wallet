@@ -1,5 +1,6 @@
 package org.mifospay.common
 
+import android.util.Log
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -7,18 +8,19 @@ import java.io.OutputStream
 
 object FileUtils {
 
-    fun writeInputStreamDataToFile(`in`: InputStream, file: File?): Boolean {
+    fun writeInputStreamDataToFile(inputStream: InputStream, file: File?): Boolean {
         return try {
             val out: OutputStream = FileOutputStream(file)
             val buf = ByteArray(1024)
             var len: Int
-            while (`in`.read(buf).also { len = it } > 0) {
+            while (inputStream.read(buf).also { len = it } > 0) {
                 out.write(buf, 0, len)
             }
             out.close()
-            `in`.close()
+            inputStream.close()
             true
         } catch (e: Exception) {
+            Log.e("Message",e.message.toString())
             false
         }
     }

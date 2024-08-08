@@ -67,6 +67,7 @@ import java.io.File
  *  PR link : https://github.com/openMF/mobile-wallet/pull/1618
  */
 @Composable
+@Suppress("UnusedParameter")
 fun ReceiptScreenRoute(
     uri: Uri?,
     viewModel: ReceiptViewModel = hiltViewModel(),

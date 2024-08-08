@@ -18,12 +18,12 @@ object ErrorJsonMessageHelper {
 
     @JvmStatic
     fun getUserMessage(e: Throwable): String? {
-        var message: String? = "Error"
+        var message: String?
         try {
             message = (e as HttpException).response()?.errorBody()?.string().toString()
             message = getUserMessage(message)
         } catch (e1: Exception) {
-            message = "Error"
+            message = e1.message.toString()
         }
         return message
     }

@@ -4,9 +4,9 @@ plugins {
 }
 
 android {
-    namespace = "com.example.faq"
+    namespace = "org.mifospay.feature.faq"
 }
 
 dependencies {
-    implementation(libs.androidx.appcompat)
+
 }

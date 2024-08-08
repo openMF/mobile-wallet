@@ -43,6 +43,7 @@ import javax.inject.Singleton
 
 
 @Singleton
+@Suppress("TooManyFunctions")
 class FineractRepository @Inject constructor(
     private val fineractApiManager: FineractApiManager,
     private val selfApiManager: SelfServiceApiManager

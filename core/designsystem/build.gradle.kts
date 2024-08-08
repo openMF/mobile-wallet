@@ -23,6 +23,6 @@ dependencies {
     api(libs.androidx.compose.ui.util)
     api(libs.androidx.activity.compose)
 
-    //testImplementation(libs.androidx.compose.ui.test)
-    //androidTestImplementation(libs.androidx.compose.ui.test)
+    testImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.androidx.compose.ui.test)
 }

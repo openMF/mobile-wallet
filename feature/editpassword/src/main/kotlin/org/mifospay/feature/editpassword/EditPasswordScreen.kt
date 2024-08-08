@@ -103,11 +103,11 @@ fun EditPasswordScreen(
         },
         backPress = onBackPress,
 
-        scaffoldContent = { it ->
+        scaffoldContent = { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(it)
+                    .padding(paddingValues)
             ) {
                 MfPasswordTextField(
                     modifier = Modifier

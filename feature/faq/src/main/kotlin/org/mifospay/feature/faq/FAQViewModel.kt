@@ -1,7 +1,6 @@
 package org.mifospay.feature.faq
 
 import androidx.lifecycle.ViewModel
-import com.example.faq.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 

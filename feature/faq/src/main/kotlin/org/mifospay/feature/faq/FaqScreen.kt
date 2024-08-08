@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.faq.R
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.ui.FaqItemScreen
 

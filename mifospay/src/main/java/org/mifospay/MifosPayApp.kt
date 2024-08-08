@@ -3,7 +3,6 @@ package org.mifospay
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import butterknife.ButterKnife
 import com.mifos.mobile.passcode.utils.ForegroundChecker
 import dagger.hilt.android.HiltAndroidApp
 
@@ -17,7 +16,6 @@ class MifosPayApp : Application() {
         if (instance == null) {
             instance = this
         }
-        ButterKnife.setDebug(true)
 
         //Initialize ForegroundChecker
         ForegroundChecker.init(this)

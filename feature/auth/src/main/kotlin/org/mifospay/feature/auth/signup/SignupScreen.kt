@@ -83,7 +83,7 @@ fun SignupScreen(
         }
     }
 
-    SignupScreen(
+    SignupScreenContent(
         showProgressState = viewModel.showProgress,
         data = viewModel.signupData,
         stateList = stateList,
@@ -96,7 +96,8 @@ fun SignupScreen(
 }
 
 @Composable
-fun SignupScreen(
+@Suppress("LongMethod", "CyclomaticComplexMethod")
+fun SignupScreenContent(
     showProgressState: Boolean = false,
     data: SignupData,
     stateList: List<State>,
@@ -469,7 +470,7 @@ private fun getPasswordStrengthColor(password: String): Color {
 @Preview
 @Composable
 fun SignupScreenPreview() {
-    SignupScreen(
+    SignupScreenContent(
         showProgressState = false,
         data = SignupData(),
         stateList = listOf(),

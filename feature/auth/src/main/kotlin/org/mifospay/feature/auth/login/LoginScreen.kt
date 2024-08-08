@@ -31,7 +31,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -48,11 +47,9 @@ import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.grey
-import org.mifospay.core.designsystem.theme.styleMedium16sp
-import org.mifospay.core.designsystem.theme.styleMedium30sp
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 import org.mifospay.feature.auth.R
-import org.mifospay.feature.auth.social_signup.SocialSignupMethodContentScreen
+import org.mifospay.feature.auth.socialSignup.SocialSignupMethodContentScreen
 import org.mifospay.feature.passcode.PassCodeActivity
 
 @Composable
@@ -86,6 +83,7 @@ fun LoginScreen(
 }
 
 @Composable
+@Suppress("LongMethod")
 fun LoginScreenContent(
     showProgress: Boolean,
     login: (username: String, password: String) -> Unit,

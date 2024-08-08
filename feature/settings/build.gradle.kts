@@ -9,9 +9,8 @@ android {
 
 dependencies {
     implementation(projects.core.data)
-    implementation(projects.feature.passcode)
+    // TODO: this should be removed
     implementation(projects.feature.auth)
-    implementation(projects.feature.editpassword)
+    implementation(projects.feature.passcode)
     implementation(libs.mifosPasscode)
-    implementation(libs.androidx.appcompat)
 }

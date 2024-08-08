@@ -10,6 +10,7 @@ package org.mifospay.core.analytics
  *
  * @param extras - list of parameters which supply additional context to the event. See `Param`.
  */
+@Suppress("UtilityClassWithPublicConstructor")
 data class AnalyticsEvent(
     val type: String,
     val extras: List<Param> = emptyList(),

@@ -10,5 +10,4 @@ android {
 dependencies {
     implementation(projects.core.data)
     implementation(projects.feature.receipt)
-    implementation(libs.androidx.appcompat)
 }

@@ -25,7 +25,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,10 +37,8 @@ import com.mifospay.core.model.domain.Currency
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
-
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
-import org.mifospay.core.designsystem.theme.chipSelectedColor
 import org.mifospay.core.designsystem.theme.lightGrey
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.TransactionItemScreen
@@ -166,15 +163,19 @@ fun HistoryScreen(
 }
 
 @Composable
-fun Chip(selected: Boolean, onClick: () -> Unit, label: String) {
+fun Chip(
+    selected: Boolean,
+    onClick: () -> Unit,
+    label: String
+) {
     val context = LocalContext.current
-    val backgroundColor = if (selected) chipSelectedColor else lightGrey
+    val backgroundColor = if (selected) MaterialTheme.colorScheme.primary else lightGrey
     Button(
         onClick = {
             onClick()
             Toast.makeText(context, label, Toast.LENGTH_SHORT).show()
         },
-        colors = ButtonDefaults.buttonColors(if (selected) MaterialTheme.colorScheme.primary else lightGrey)
+        colors = ButtonDefaults.buttonColors(backgroundColor)
     ) {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp),

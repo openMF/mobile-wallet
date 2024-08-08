@@ -11,6 +11,7 @@ import org.mifospay.feature.auth.signup.SignupScreen
 
 const val SIGNUP_ROUTE = "signup_route"
 
+@Suppress("UnusedParameter")
 fun NavGraphBuilder.signupScreen(
     onLoginSuccess: () -> Unit,
     onRegisterSuccess: () -> Unit
@@ -57,9 +58,14 @@ fun NavController.navigateToSignup(
     lastName: String = "",
     businessName: String = ""
 ) {
-    this.navigate("$SIGNUP_ROUTE?savingProductId=$savingProductId&mobileNumber=$mobileNumber&country=$country&email=$email&firstName=$firstName&lastName=$lastName&businessName=$businessName")
+    this.navigate(
+        "$SIGNUP_ROUTE?savingProductId=$savingProductId" +
+                "&mobileNumber=$mobileNumber&country=$country&email=$email" +
+                "&firstName=$firstName&lastName=$lastName&businessName=$businessName"
+    )
 }
 
+@Suppress("UnusedParameter")
 fun onRegisterSuccess(s: String?) {
     // registered but unable to login or user not updated with client
     // TODO :: Consider this case

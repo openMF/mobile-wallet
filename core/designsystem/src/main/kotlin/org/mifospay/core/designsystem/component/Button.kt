@@ -288,6 +288,7 @@ fun MifosButtonLeadingIconPreview() {
 /**
  * Mifos Wallet button default values.
  */
+@Suppress("ForbiddenComment")
 object MifosButtonDefaults {
     // TODO: File bug
     // OutlinedButton border color doesn't respect disabled state by default

@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import org.mifospay.common.Constants
+import org.mifospay.common.DebugUtil
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.client.CreateClient
@@ -28,8 +30,6 @@ import org.mifospay.core.data.domain.usecase.user.DeleteUser
 import org.mifospay.core.data.domain.usecase.user.FetchUserDetails
 import org.mifospay.core.data.domain.usecase.user.UpdateUser
 import org.mifospay.core.data.repository.local.LocalAssetRepository
-import org.mifospay.common.Constants
-import org.mifospay.common.DebugUtil
 import org.mifospay.core.datastore.PreferencesHelper
 import javax.inject.Inject
 
@@ -187,9 +187,9 @@ class SignupViewModel @Inject constructor(
         useCaseHandler.execute(authenticateUserUseCase, requestValue,
             object : UseCase.UseCaseCallback<AuthenticateUser.ResponseValue> {
                 override fun onSuccess(response: AuthenticateUser.ResponseValue) {
-                    response?.user?.let { createAuthenticatedService(it) }
+                    createAuthenticatedService(response.user)
                     fetchClientData(showToastMessage)
-                    response?.user?.let { fetchUserDetails(it) }
+                    fetchUserDetails(response.user)
                 }
 
                 override fun onError(message: String) {

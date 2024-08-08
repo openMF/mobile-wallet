@@ -9,6 +9,7 @@ import rx.Observable
 /**
  * Created by ankur on 06/June/2018
  */
+@Suppress("FunctionParameterNaming")
 interface RunReportService {
     @GET(ApiEndPoints.RUN_REPORT + "/Savings Transaction Receipt")
     fun getTransactionReceipt(

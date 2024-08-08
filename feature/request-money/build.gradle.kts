@@ -14,6 +14,5 @@ dependencies {
     implementation(projects.core.data)
 
     implementation(libs.zxing)
-    implementation(libs.zxing.android.embedded)
     implementation(libs.coil.kt.compose)
 }

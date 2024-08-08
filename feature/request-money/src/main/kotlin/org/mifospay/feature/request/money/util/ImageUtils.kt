@@ -3,6 +3,7 @@ package org.mifospay.feature.request.money.util
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import androidx.core.content.FileProvider
 import org.mifospay.feature.request.money.BuildConfig
 import java.io.File
@@ -25,7 +26,7 @@ object ImageUtils {
                 BuildConfig.LIBRARY_PACKAGE_NAME+ ".provider", file
             )
         } catch (e: IOException) {
-            e.printStackTrace()
+            Log.d("Error", e.message.toString())
         }
         return uri
     }
