@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.make.transfer
 
 import androidx.lifecycle.SavedStateHandle
@@ -26,11 +35,13 @@ class MakeTransferViewModel @Inject constructor(
     private val useCaseHandler: UseCaseHandler,
     private val searchClientUseCase: SearchClient,
     private val transferFundsUseCase: TransferFunds,
-    private val localRepository: LocalRepository
+    private val localRepository: LocalRepository,
 ) : ViewModel() {
 
-    private val payeeExternalId: StateFlow<String> = savedStateHandle.getStateFlow(PAYEE_EXTERNAL_ID_ARG, "")
-    private val transferAmount: StateFlow<String?> = savedStateHandle.getStateFlow(TRANSFER_AMOUNT_ARG, null)
+    private val payeeExternalId: StateFlow<String> =
+        savedStateHandle.getStateFlow(PAYEE_EXTERNAL_ID_ARG, "")
+    private val transferAmount: StateFlow<String?> =
+        savedStateHandle.getStateFlow(TRANSFER_AMOUNT_ARG, null)
 
     private val _makeTransferState = MutableStateFlow<MakeTransferState>(MakeTransferState.Loading)
     val makeTransferState: StateFlow<MakeTransferState> = _makeTransferState.asStateFlow()
@@ -38,24 +49,25 @@ class MakeTransferViewModel @Inject constructor(
     private val _showTransactionStatus = MutableStateFlow(
         ShowTransactionStatus(
             showSuccessStatus = false,
-            showErrorStatus = false
-        )
+            showErrorStatus = false,
+        ),
     )
     val showTransactionStatus: StateFlow<ShowTransactionStatus> =
         _showTransactionStatus.asStateFlow()
 
-
     // Fetch Payee client details
     val fetchPayeeClient = combine(payeeExternalId, transferAmount, ::Pair)
-    .map {
-        it.takeIf { it.first.isNotEmpty() }?.let {
-            fetchClient(it.first, it.second?.toDouble() ?: 0.0)
+        .map { stringPair ->
+            stringPair.takeIf { it.first.isNotEmpty() }?.let {
+                fetchClient(it.first, it.second?.toDouble() ?: 0.0)
+            }
         }
-    }
-    .stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = null)
+        .stateIn(scope = viewModelScope, started = SharingStarted.Eagerly, initialValue = null)
 
     private fun fetchClient(externalId: String, transferAmount: Double) {
-        useCaseHandler.execute(searchClientUseCase, SearchClient.RequestValues(externalId),
+        useCaseHandler.execute(
+            searchClientUseCase,
+            SearchClient.RequestValues(externalId),
             object : UseCase.UseCaseCallback<SearchClient.ResponseValue> {
                 override fun onSuccess(response: SearchClient.ResponseValue) {
                     val searchResult = response.results[0]
@@ -65,7 +77,7 @@ class MakeTransferViewModel @Inject constructor(
                             searchResult.resultName,
                             externalId,
                             transferAmount,
-                            true
+                            true,
                         )
                     }
                 }
@@ -73,35 +85,37 @@ class MakeTransferViewModel @Inject constructor(
                 override fun onError(message: String) {
                     _makeTransferState.value = MakeTransferState.Error(message)
                 }
-            })
+            },
+        )
     }
 
     fun makeTransfer(toClientId: Long, amount: Double) {
         val fromClientId = localRepository.clientDetails.clientId
-        useCaseHandler.execute(transferFundsUseCase,
+        useCaseHandler.execute(
+            transferFundsUseCase,
             TransferFunds.RequestValues(fromClientId, toClientId, amount),
             object : UseCase.UseCaseCallback<TransferFunds.ResponseValue> {
                 override fun onSuccess(response: TransferFunds.ResponseValue) {
-
                     _showTransactionStatus.value = ShowTransactionStatus(
                         showSuccessStatus = true,
-                        showErrorStatus = false
+                        showErrorStatus = false,
                     )
                 }
 
                 override fun onError(message: String) {
                     _showTransactionStatus.value = ShowTransactionStatus(
                         showSuccessStatus = false,
-                        showErrorStatus = true
+                        showErrorStatus = true,
                     )
                 }
-            })
+            },
+        )
     }
 }
 
 data class ShowTransactionStatus(
     val showSuccessStatus: Boolean,
-    val showErrorStatus: Boolean
+    val showErrorStatus: Boolean,
 )
 
 sealed interface MakeTransferState {

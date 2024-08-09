@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.make.transfer
 
 import android.widget.Toast
@@ -16,13 +25,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -37,71 +44,62 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import kotlinx.coroutines.launch
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 
 @Composable
-fun MakeTransferScreenRoute(
-    viewModel: MakeTransferViewModel = hiltViewModel(), 
-    onDismiss: () -> Unit
+internal fun MakeTransferScreenRoute(
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: MakeTransferViewModel = hiltViewModel(),
 ) {
-    val fetchPayeeClient by viewModel.fetchPayeeClient.collectAsStateWithLifecycle()
+    // TODO: commented out because not using it
+    // val fetchPayeeClient by viewModel.fetchPayeeClient.collectAsStateWithLifecycle()
     val makeTransferState by viewModel.makeTransferState.collectAsStateWithLifecycle()
     val showTransactionStatus by viewModel.showTransactionStatus.collectAsStateWithLifecycle()
 
     MakeTransferScreen(
-        uiState = makeTransferState,
+        state = makeTransferState,
         showTransactionStatus = showTransactionStatus,
-        makeTransfer = { toClientId, transferAmount ->
-            viewModel.makeTransfer(
-                toClientId,
-                transferAmount
-            )
-        },
-        onDismiss = onDismiss
+        makeTransfer = viewModel::makeTransfer,
+        onDismiss = onDismiss,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun MakeTransferScreen(
-    uiState: MakeTransferState,
+private fun MakeTransferScreen(
+    state: MakeTransferState,
     showTransactionStatus: ShowTransactionStatus,
     makeTransfer: (Long, Double) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    when (uiState) {
+    when (state) {
         MakeTransferState.Loading -> {
             MifosLoadingWheel(
                 modifier = Modifier.fillMaxWidth(),
-                contentDesc = stringResource(R.string.feature_make_transfer_loading)
+                contentDesc = stringResource(R.string.feature_make_transfer_loading),
             )
         }
 
         is MakeTransferState.Error -> {
-            val message = uiState.message
+            val message = state.message
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
 
         is MakeTransferState.Success -> {
-
-            val showBottomSheet = uiState.showBottomSheet
-            val toClientId = uiState.toClientId
-            val resultName = uiState.resultName
-            val externalId = uiState.externalId
-            val transferAmount = uiState.transferAmount
-            val showTransactionStatus = showTransactionStatus
-
             MakeTransferBottomSheetContent(
-                showBottomSheet,
-                toClientId,
-                resultName,
-                externalId,
-                transferAmount,
-                showTransactionStatus,
+                showBottomSheet = state.showBottomSheet,
+                toClientId = state.toClientId,
+                resultName = state.resultName,
+                externalId = state.externalId,
+                transferAmount = state.transferAmount,
+                showTransactionStatus = showTransactionStatus,
                 makeTransfer = makeTransfer,
-                onDismiss = onDismiss
+                onDismiss = onDismiss,
+                modifier = modifier,
             )
         }
     }
@@ -109,7 +107,7 @@ fun MakeTransferScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MakeTransferBottomSheetContent(
+private fun MakeTransferBottomSheetContent(
     showBottomSheet: Boolean,
     toClientId: Long,
     resultName: String,
@@ -117,89 +115,87 @@ fun MakeTransferBottomSheetContent(
     transferAmount: Double,
     showTransactionStatus: ShowTransactionStatus,
     makeTransfer: (Long, Double) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val sheetState = rememberModalBottomSheetState()
 
-    var showBottomSheet by rememberSaveable {
-        mutableStateOf(showBottomSheet)
-    }
+    var visibleBottomSheet by rememberSaveable { mutableStateOf(showBottomSheet) }
 
-    if (showBottomSheet) {
+    if (visibleBottomSheet) {
         ModalBottomSheet(
+            modifier = modifier,
             sheetState = sheetState,
             onDismissRequest = {
-                showBottomSheet = false
+                visibleBottomSheet = false
                 onDismiss.invoke()
             },
             dragHandle = { BottomSheetDefaults.DragHandle() },
         ) {
-            if (showTransactionStatus.showErrorStatus || showTransactionStatus.showSuccessStatus) {
+            if (showTransactionStatus.showErrorStatus ||
+                showTransactionStatus.showSuccessStatus
+            ) {
                 TransactionStatusContent(showTransactionStatus)
             } else {
                 MakeTransferContent(
-                    toClientId,
-                    resultName,
-                    externalId,
-                    transferAmount,
+                    toClientId = toClientId,
+                    resultName = resultName,
+                    externalId = externalId,
+                    transferAmount = transferAmount,
                     makeTransfer = makeTransfer,
-                    showBottomSheet = showBottomSheet,
-                    sheetState
+                    onCloseBottomSheet = {
+                        visibleBottomSheet = false
+                        onDismiss.invoke()
+                    },
                 )
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MakeTransferContent(
+private fun MakeTransferContent(
     toClientId: Long,
     resultName: String,
     externalId: String,
     transferAmount: Double,
     makeTransfer: (Long, Double) -> Unit,
-    showBottomSheet: Boolean,
-    sheetState: SheetState?
+    onCloseBottomSheet: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val scope = rememberCoroutineScope()
-    var showBottomSheet by rememberSaveable {
-        mutableStateOf(showBottomSheet)
-    }
-
     Column(
-        modifier = Modifier
+        modifier = modifier
             .padding(20.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Text(
             text = stringResource(id = R.string.feature_make_transfer_send_money),
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             ),
             modifier = Modifier
                 .padding(vertical = 10.dp)
-                .align(Alignment.CenterHorizontally)
+                .align(Alignment.CenterHorizontally),
         )
 
         Box(
             modifier = Modifier
                 .padding(vertical = 10.dp)
                 .fillMaxWidth()
-                .height(180.dp)
+                .height(180.dp),
         ) {
             Column(
                 modifier = Modifier
-                    .padding(20.dp)
+                    .padding(20.dp),
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_make_transfer_sending_to) + Constants.COLON,
                     style = TextStyle(
                         MaterialTheme.colorScheme.onSurface,
-                        MaterialTheme.typography.bodyMedium.fontSize
-                    )
+                        MaterialTheme.typography.bodyMedium.fontSize,
+                    ),
                 )
 
                 Spacer(modifier = Modifier.height(5.dp))
@@ -208,8 +204,8 @@ fun MakeTransferContent(
                     text = resultName,
                     style = TextStyle(
                         MaterialTheme.colorScheme.onSurface,
-                        MaterialTheme.typography.bodyLarge.fontSize
-                    )
+                        MaterialTheme.typography.bodyLarge.fontSize,
+                    ),
                 )
 
                 Spacer(modifier = Modifier.height(5.dp))
@@ -218,8 +214,8 @@ fun MakeTransferContent(
                     text = externalId,
                     style = TextStyle(
                         MaterialTheme.colorScheme.onSurface,
-                        MaterialTheme.typography.bodyLarge.fontSize
-                    )
+                        MaterialTheme.typography.bodyLarge.fontSize,
+                    ),
                 )
 
                 Spacer(modifier = Modifier.height(20.dp))
@@ -228,8 +224,8 @@ fun MakeTransferContent(
                     text = stringResource(id = R.string.feature_make_transfer_amount) + Constants.COLON,
                     style = TextStyle(
                         MaterialTheme.colorScheme.onSurface,
-                        MaterialTheme.typography.bodyMedium.fontSize
-                    )
+                        MaterialTheme.typography.bodyMedium.fontSize,
+                    ),
                 )
 
                 Spacer(modifier = Modifier.height(5.dp))
@@ -238,8 +234,8 @@ fun MakeTransferContent(
                     text = transferAmount.toString(),
                     style = TextStyle(
                         MaterialTheme.colorScheme.onSurface,
-                        MaterialTheme.typography.bodyLarge.fontSize
-                    )
+                        MaterialTheme.typography.bodyLarge.fontSize,
+                    ),
                 )
             }
         }
@@ -248,23 +244,13 @@ fun MakeTransferContent(
             modifier = Modifier
                 .padding(top = 20.dp)
                 .fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.End,
         ) {
             Button(
-                onClick = {
-                    scope.launch {
-                        sheetState?.hide()
-                    }.invokeOnCompletion {
-                        if (sheetState != null) {
-                            if (!sheetState.isVisible) {
-                                showBottomSheet = false
-                            }
-                        }
-                    }
-                },
+                onClick = onCloseBottomSheet,
                 modifier = Modifier
                     .width(100.dp)
-                    .height(50.dp)
+                    .height(50.dp),
             ) {
                 Text(text = "Cancel")
             }
@@ -275,12 +261,12 @@ fun MakeTransferContent(
                 onClick = {
                     makeTransfer(
                         toClientId,
-                        transferAmount
+                        transferAmount,
                     )
                 },
                 modifier = Modifier
                     .width(100.dp)
-                    .height(50.dp)
+                    .height(50.dp),
             ) {
                 Text(text = "Confirm")
             }
@@ -288,13 +274,12 @@ fun MakeTransferContent(
     }
 }
 
-
 @Composable
-fun TransactionStatusContent(showTransactionStatus: ShowTransactionStatus) {
+private fun TransactionStatusContent(showTransactionStatus: ShowTransactionStatus) {
     Column(
         modifier = Modifier
             .padding(20.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Text(
             text = if (showTransactionStatus.showSuccessStatus) {
@@ -305,18 +290,18 @@ fun TransactionStatusContent(showTransactionStatus: ShowTransactionStatus) {
             style = TextStyle(
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             ),
             modifier = Modifier
                 .padding(vertical = 10.dp)
-                .align(Alignment.CenterHorizontally)
+                .align(Alignment.CenterHorizontally),
         )
 
         Box(
             modifier = Modifier
                 .padding(vertical = 10.dp)
                 .fillMaxWidth()
-                .height(180.dp)
+                .height(180.dp),
         ) {
             Icon(
                 if (showTransactionStatus.showSuccessStatus) {
@@ -330,32 +315,31 @@ fun TransactionStatusContent(showTransactionStatus: ShowTransactionStatus) {
                     stringResource(id = R.string.feature_make_transfer_transaction_unable_to_process)
                 },
                 modifier = Modifier
-                    .align(Alignment.Center)
+                    .align(Alignment.Center),
             )
         }
-
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewWithMakeTransferContentLoading() {
+private fun PreviewWithMakeTransferContentLoading() {
     MakeTransferScreen(
-        uiState = MakeTransferState.Loading,
+        state = MakeTransferState.Loading,
         showTransactionStatus = ShowTransactionStatus(
             showSuccessStatus = false,
-            showErrorStatus = false
+            showErrorStatus = false,
         ),
         makeTransfer = { _, _ -> },
-        onDismiss = { }
+        onDismiss = { },
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewWithMakeTransferContentSuccess() {
+private fun PreviewWithMakeTransferContentSuccess() {
     MakeTransferScreen(
-        uiState = MakeTransferState.Success(
+        state = MakeTransferState.Success(
             toClientId = 1234,
             resultName = "John Doe",
             externalId = "example@example.com",
@@ -364,31 +348,29 @@ fun PreviewWithMakeTransferContentSuccess() {
         ),
         showTransactionStatus = ShowTransactionStatus(
             showSuccessStatus = false,
-            showErrorStatus = false
+            showErrorStatus = false,
         ),
         makeTransfer = { _, _ -> },
-        onDismiss = { }
+        onDismiss = { },
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
-fun PreviewMakeTransferContent() {
+private fun PreviewMakeTransferContent() {
     MakeTransferContent(
         toClientId = 1234,
         resultName = "John Doe",
         externalId = "example@example.com",
         transferAmount = 100.0,
         makeTransfer = { _, _ -> },
-        sheetState = null,
-        showBottomSheet = true
+        onCloseBottomSheet = {},
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewMakeTransferBottomSheetContent() {
+private fun PreviewMakeTransferBottomSheetContent() {
     MakeTransferBottomSheetContent(
         showBottomSheet = true,
         toClientId = 1234,
@@ -397,24 +379,23 @@ fun PreviewMakeTransferBottomSheetContent() {
         transferAmount = 100.0,
         showTransactionStatus = ShowTransactionStatus(
             showSuccessStatus = false,
-            showErrorStatus = false
+            showErrorStatus = false,
         ),
         makeTransfer = { _, _ -> },
-        onDismiss = { }
+        onDismiss = { },
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewWithMakeTransferContentError() {
+private fun PreviewWithMakeTransferContentError() {
     MakeTransferScreen(
-        uiState = MakeTransferState.Error("An error occurred"),
+        state = MakeTransferState.Error("An error occurred"),
         showTransactionStatus = ShowTransactionStatus(
             showSuccessStatus = false,
-            showErrorStatus = false
+            showErrorStatus = false,
         ),
         makeTransfer = { _, _ -> },
-        onDismiss = { }
+        onDismiss = { },
     )
 }
-
