@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.home
 
 import androidx.compose.foundation.BorderStroke
@@ -48,10 +57,11 @@ import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.TransactionItemScreen
 
 @Composable
-fun HomeRoute(
-    homeViewModel: HomeViewModel = hiltViewModel(),
+internal fun HomeRoute(
     onRequest: (String) -> Unit,
-    onPay: () -> Unit
+    onPay: () -> Unit,
+    modifier: Modifier = Modifier,
+    homeViewModel: HomeViewModel = hiltViewModel(),
 ) {
     val homeUIState by homeViewModel
         .homeUIState
@@ -61,7 +71,7 @@ fun HomeRoute(
         is HomeUiState.Loading -> {
             MfLoadingWheel(
                 contentDesc = stringResource(R.string.feature_home_loading),
-                backgroundColor = MaterialTheme.colorScheme.surface
+                backgroundColor = MaterialTheme.colorScheme.surface,
             )
         }
 
@@ -73,7 +83,8 @@ fun HomeRoute(
                 onRequest = {
                     onRequest.invoke(successState.vpa ?: "")
                 },
-                onPay = onPay
+                onPay = onPay,
+                modifier = modifier,
             )
         }
 
@@ -81,23 +92,23 @@ fun HomeRoute(
             ErrorScreenContent(
                 onClickRetry = {
                     homeViewModel.fetchAccountDetails()
-                }
+                },
             )
         }
     }
 }
 
 @Composable
-fun HomeScreen(
+private fun HomeScreen(
     account: Account?,
     transactions: List<Transaction>,
     onRequest: () -> Unit,
-    onPay: () -> Unit
+    onPay: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-
             .background(color = MaterialTheme.colorScheme.surface)
             .padding(start = 32.dp, end = 32.dp),
     ) {
@@ -107,7 +118,7 @@ fun HomeScreen(
         item {
             PayRequestScreen(
                 onRequest = onRequest,
-                onPay = onPay
+                onPay = onPay,
             )
         }
         if (transactions.isNotEmpty()) {
@@ -116,7 +127,7 @@ fun HomeScreen(
                     modifier = Modifier.padding(top = 32.dp),
                     text = "Recent Transactions",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Spacer(modifier = Modifier.height(16.dp))
             }
@@ -131,19 +142,22 @@ fun HomeScreen(
 }
 
 @Composable
-fun MifosWalletCardScreen(account: Account?) {
+private fun MifosWalletCardScreen(
+    modifier: Modifier = Modifier,
+    account: Account? = null,
+) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(225.dp)
             .padding(top = 20.dp, bottom = 32.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onSurface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onSurface),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(start = 36.dp),
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             val walletBalanceLabel =
                 if (account != null) "(${account.currency.displayLabel})" else ""
@@ -152,96 +166,109 @@ fun MifosWalletCardScreen(account: Account?) {
                 style = TextStyle(
                     fontSize = 12.sp,
                     fontWeight = FontWeight.W400,
-                    color = lightGrey
-                )
+                    color = lightGrey,
+                ),
             )
             Spacer(modifier = Modifier.height(10.dp))
             val accountBalance =
-                if (account != null) Utils.getFormattedAccountBalance(
-                    account.balance, account.currency.code
-                ) else "0"
+                if (account != null) {
+                    Utils.getFormattedAccountBalance(
+                        account.balance,
+                        account.currency.code,
+                    )
+                } else {
+                    "0"
+                }
             Text(
                 text = accountBalance,
                 style = TextStyle(
                     fontSize = 42.sp,
                     fontWeight = FontWeight(600),
-                    color = MaterialTheme.colorScheme.surface
-                )
+                    color = MaterialTheme.colorScheme.surface,
+                ),
             )
             Spacer(modifier = Modifier.height(10.dp))
             val currencyEqual = if (account != null) {
                 "${account.currency.code}1 ${account.currency.displayLabel}"
-            } else ""
+            } else {
+                ""
+            }
             Text(
                 text = currencyEqual,
                 style = TextStyle(
                     fontSize = 12.sp,
                     fontWeight = FontWeight(500),
-                    color = lightGrey
-                )
+                    color = lightGrey,
+                ),
             )
         }
     }
 }
 
 @Composable
-fun PayRequestScreen(
+private fun PayRequestScreen(
     onRequest: () -> Unit,
-    onPay: () -> Unit
+    onPay: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         PayCard(
-            modifier = Modifier.weight(1f),
             title = "Request",
-            icon = R.drawable.core_ui_money_in
-        ) {
-            onRequest.invoke()
-        }
+            icon = R.drawable.core_ui_money_in,
+            {
+                onRequest.invoke()
+            },
+            modifier = Modifier.weight(1f),
+        )
         Spacer(modifier = Modifier.width(16.dp))
         PayCard(
-            modifier = Modifier.weight(1f),
             title = "Pay",
-            icon = R.drawable.core_ui_money_out
-        ) {
-            onPay.invoke()
-        }
+            icon = R.drawable.core_ui_money_out,
+            {
+                onPay.invoke()
+            },
+            modifier = Modifier.weight(1f),
+        )
     }
 }
 
 @Composable
-fun PayCard(
-    modifier: Modifier,
+private fun PayCard(
     title: String,
     icon: Int,
-    onClickCard: () -> Unit
+    onClickCard: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Card(
         modifier = modifier
             .height(144.dp)
             .clickable { onClickCard.invoke() },
         border = BorderStroke(1.dp, border),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxHeight()
                 .padding(top = 20.dp, bottom = 20.dp, start = 20.dp),
-            verticalArrangement = Arrangement.SpaceBetween
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
             Box(
                 modifier = Modifier
                     .size(40.dp)
-                    .background(MaterialTheme.colorScheme.onSurface, shape = RoundedCornerShape(4.dp)),
-                contentAlignment = Alignment.Center
+                    .background(
+                        MaterialTheme.colorScheme.onSurface,
+                        shape = RoundedCornerShape(4.dp),
+                    ),
+                contentAlignment = Alignment.Center,
             ) {
                 Image(
                     modifier = Modifier.size(20.dp),
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surface)
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surface),
                 )
             }
             Text(text = title)
@@ -251,7 +278,7 @@ fun PayCard(
 
 @Preview(showSystemUi = true, device = "id:pixel_5")
 @Composable
-fun HomeScreenPreview() {
+private fun HomeScreenPreview() {
     HomeScreen(
         account = Account(
             image = "",
@@ -262,9 +289,9 @@ fun HomeScreenPreview() {
             currency = Currency(
                 code = "USD",
                 displayLabel = "$",
-                displaySymbol = "$"
+                displaySymbol = "$",
             ),
-            productId = 1223
+            productId = 1223,
         ),
         transactions = List(25) { index ->
             Transaction(
@@ -273,24 +300,29 @@ fun HomeScreenPreview() {
                 currency = Currency(
                     code = "USD",
                     displayLabel = "$",
-                    displaySymbol = "$"
+                    displaySymbol = "$",
                 ),
-                transactionType = TransactionType.CREDIT
+                transactionType = TransactionType.CREDIT,
             )
         },
         onPay = {},
-        onRequest = {}
+        onRequest = {},
     )
 }
 
 @Preview
 @Composable
-fun PayRequestScreenPreview() {
+private fun PayRequestScreenPreview() {
     PayRequestScreen({}, {})
 }
 
 @Preview
 @Composable
-fun PayCardPreview() {
-    PayCard(Modifier.width(150.dp), "Request", R.drawable.feature_home_ic_arrow_back_black_24dp) { }
+private fun PayCardPreview() {
+    PayCard(
+        "Request",
+        R.drawable.feature_home_ic_arrow_back_black_24dp,
+        { },
+        Modifier.width(150.dp),
+    )
 }
