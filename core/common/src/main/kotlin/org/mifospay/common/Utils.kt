@@ -5,7 +5,7 @@ import android.content.Context
 import android.content.res.Resources
 import android.view.inputmethod.InputMethodManager
 import java.text.NumberFormat
-import java.util.*
+import java.util.Currency
 
 object Utils {
 
@@ -29,6 +29,12 @@ object Utils {
         accountBalanceFormatter.maximumFractionDigits = maximumFractionDigits ?: 0
         accountBalanceFormatter.currency = Currency.getInstance(currencyCode)
         return accountBalanceFormatter.format(balance)
+    }
+
+    fun <T> List<T>.toArrayList(): ArrayList<T> {
+        val array: ArrayList<T> = ArrayList()
+        for (index in this) array.add(index)
+        return array
     }
 
 }
