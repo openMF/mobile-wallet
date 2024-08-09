@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.auth.signup
 
 import androidx.compose.runtime.getValue
@@ -33,7 +42,6 @@ import org.mifospay.core.data.repository.local.LocalAssetRepository
 import org.mifospay.core.datastore.PreferencesHelper
 import javax.inject.Inject
 
-
 @HiltViewModel
 class SignupViewModel @Inject constructor(
     localAssetRepository: LocalAssetRepository,
@@ -46,7 +54,7 @@ class SignupViewModel @Inject constructor(
     private val authenticateUserUseCase: AuthenticateUser,
     private val fetchClientDataUseCase: FetchClientData,
     private val deleteUserUseCase: DeleteUser,
-    private val fetchUserDetailsUseCase: FetchUserDetails
+    private val fetchUserDetailsUseCase: FetchUserDetails,
 ) : ViewModel() {
 
     var showProgress by mutableStateOf(false)
@@ -62,7 +70,7 @@ class SignupViewModel @Inject constructor(
         email: String?,
         firstName: String?,
         lastName: String?,
-        businessName: String?
+        businessName: String?,
     ) {
         signupData = signupData.copy(
             mifosSavingsProductId = savingProductId,
@@ -71,19 +79,19 @@ class SignupViewModel @Inject constructor(
             email = email,
             firstName = firstName!!,
             lastName = lastName!!,
-            businessName = businessName
+            businessName = businessName,
         )
     }
 
     val states: StateFlow<List<State>> = combine(
         localAssetRepository.getCountries(),
         localAssetRepository.getStateList(),
-        ::Pair
+        ::Pair,
     )
         .map {
             val countries = it.first
             signupData = signupData.copy(
-                countryId = countries.find { it.name == signupData.countryName }?.id ?: ""
+                countryId = countries.find { it.name == signupData.countryName }?.id ?: "",
             )
             it.second.filter { it.countryId == signupData.countryId }
         }
@@ -101,7 +109,8 @@ class SignupViewModel @Inject constructor(
         // 2. Create user
         // 3. Create Client
         // 4. Update User and connect client with user
-        useCaseHandler.execute(searchClientUseCase,
+        useCaseHandler.execute(
+            searchClientUseCase,
             SearchClient.RequestValues("${signupData.userName}@mifos"),
             object : UseCase.UseCaseCallback<SearchClient.ResponseValue> {
                 override fun onSuccess(response: SearchClient.ResponseValue) {
@@ -111,15 +120,21 @@ class SignupViewModel @Inject constructor(
                 override fun onError(message: String) {
                     createUser(showToastMessage)
                 }
-            })
+            },
+        )
     }
 
     private fun createUser(showToastMessage: (String) -> Unit) {
         val newUser = NewUser(
-            signupData.userName, signupData.firstName, signupData.lastName,
-            signupData.email, signupData.password
+            signupData.userName,
+            signupData.firstName,
+            signupData.lastName,
+            signupData.email,
+            signupData.password,
         )
-        useCaseHandler.execute(createUserUseCase, CreateUser.RequestValues(newUser),
+        useCaseHandler.execute(
+            createUserUseCase,
+            CreateUser.RequestValues(newUser),
             object : UseCase.UseCaseCallback<CreateUser.ResponseValue> {
                 override fun onSuccess(response: CreateUser.ResponseValue) {
                     createClient(response.userId, showToastMessage)
@@ -129,16 +144,18 @@ class SignupViewModel @Inject constructor(
                     DebugUtil.log(message)
                     showToastMessage(message)
                 }
-            })
+            },
+        )
     }
 
     private fun createClient(userId: Int, showToastMessage: (String) -> Unit) {
         val newClient = com.mifospay.core.model.domain.client.NewClient(
             signupData.businessName, signupData.userName, signupData.addressLine1,
             signupData.addressLine2, signupData.city, signupData.pinCode, signupData.stateId,
-            signupData.countryId, signupData.mobileNumber, signupData.mifosSavingsProductId
+            signupData.countryId, signupData.mobileNumber, signupData.mifosSavingsProductId,
         )
-        useCaseHandler.execute(createClientUseCase,
+        useCaseHandler.execute(
+            createClientUseCase,
             CreateClient.RequestValues(newClient),
             object : UseCase.UseCaseCallback<CreateClient.ResponseValue> {
                 override fun onSuccess(response: CreateClient.ResponseValue) {
@@ -154,15 +171,17 @@ class SignupViewModel @Inject constructor(
                     showToastMessage(message)
                     deleteUser(userId)
                 }
-            })
+            },
+        )
     }
 
     private fun updateClient(
         clients: ArrayList<Int>,
         userId: Int,
-        showToastMessage: (String) -> Unit
+        showToastMessage: (String) -> Unit,
     ) {
-        useCaseHandler.execute(updateUserUseCase,
+        useCaseHandler.execute(
+            updateUserUseCase,
             UpdateUser.RequestValues(UpdateUserEntityClients(clients), userId),
             object : UseCase.UseCaseCallback<UpdateUser.ResponseValue?> {
                 override fun onSuccess(response: UpdateUser.ResponseValue?) {
@@ -174,17 +193,20 @@ class SignupViewModel @Inject constructor(
                     DebugUtil.log(message)
                     showToastMessage("update client error")
                 }
-            })
+            },
+        )
     }
 
     private fun loginUser(
         username: String?,
         password: String?,
-        showToastMessage: (String) -> Unit
+        showToastMessage: (String) -> Unit,
     ) {
         authenticateUserUseCase.walletRequestValues = AuthenticateUser.RequestValues(username!!, password!!)
         val requestValue = authenticateUserUseCase.walletRequestValues
-        useCaseHandler.execute(authenticateUserUseCase, requestValue,
+        useCaseHandler.execute(
+            authenticateUserUseCase,
+            requestValue,
             object : UseCase.UseCaseCallback<AuthenticateUser.ResponseValue> {
                 override fun onSuccess(response: AuthenticateUser.ResponseValue) {
                     createAuthenticatedService(response.user)
@@ -195,11 +217,13 @@ class SignupViewModel @Inject constructor(
                 override fun onError(message: String) {
                     showToastMessage("Login Failed")
                 }
-            })
+            },
+        )
     }
 
     private fun fetchUserDetails(user: User) {
-        useCaseHandler.execute(fetchUserDetailsUseCase,
+        useCaseHandler.execute(
+            fetchUserDetailsUseCase,
             FetchUserDetails.RequestValues(user.userId),
             object : UseCase.UseCaseCallback<FetchUserDetails.ResponseValue> {
                 override fun onSuccess(response: FetchUserDetails.ResponseValue) {
@@ -209,11 +233,14 @@ class SignupViewModel @Inject constructor(
                 override fun onError(message: String) {
                     DebugUtil.log(message)
                 }
-            })
+            },
+        )
     }
 
     private fun fetchClientData(showToastMessage: (String) -> Unit) {
-        useCaseHandler.execute(fetchClientDataUseCase, null,
+        useCaseHandler.execute(
+            fetchClientDataUseCase,
+            null,
             object : UseCase.UseCaseCallback<FetchClientData.ResponseValue> {
                 override fun onSuccess(response: FetchClientData.ResponseValue) {
                     saveClientDetails(response.clientDetails)
@@ -225,7 +252,8 @@ class SignupViewModel @Inject constructor(
                 override fun onError(message: String) {
                     showToastMessage("Fetch Client Error")
                 }
-            })
+            },
+        )
     }
 
     private fun createAuthenticatedService(user: User) {
@@ -235,7 +263,7 @@ class SignupViewModel @Inject constructor(
 
     private fun saveUserDetails(
         user: User,
-        userWithRole: UserWithRole
+        userWithRole: UserWithRole,
     ) {
         val userName = user.username
         val userID = user.userId
@@ -251,11 +279,14 @@ class SignupViewModel @Inject constructor(
     }
 
     private fun deleteUser(userId: Int) {
-        useCaseHandler.execute(deleteUserUseCase, DeleteUser.RequestValues(userId),
+        useCaseHandler.execute(
+            deleteUserUseCase,
+            DeleteUser.RequestValues(userId),
             object : UseCase.UseCaseCallback<DeleteUser.ResponseValue> {
                 override fun onSuccess(response: DeleteUser.ResponseValue) {}
                 override fun onError(message: String) {}
-            })
+            },
+        )
     }
 }
 

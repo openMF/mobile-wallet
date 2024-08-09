@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.auth.signup
 
 import android.widget.Toast
@@ -49,18 +58,18 @@ import org.mifospay.feature.auth.R
 import org.mifospay.feature.auth.utils.ValidateUtil.isValidEmail
 import java.util.Locale
 
-
 @Composable
-fun SignupScreen(
-    viewModel: SignupViewModel = hiltViewModel(),
+internal fun SignupScreen(
+    savingProductId: Int,
+    mobileNumber: String,
+    country: String,
+    email: String,
+    firstName: String,
+    lastName: String,
+    businessName: String,
     onLoginSuccess: () -> Unit,
-    savingProductId:Int,
-    mobileNumber:String,
-    country:String,
-    email:String,
-    firstName:String,
-    lastName:String,
-    businessName:String
+    modifier: Modifier = Modifier,
+    viewModel: SignupViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
 
@@ -72,9 +81,9 @@ fun SignupScreen(
             mobileNumber = mobileNumber,
             countryName = country,
             email = email,
-                    firstName = firstName,
-                    lastName = lastName,
-                    businessName = businessName
+            firstName = firstName,
+            lastName = lastName,
+            businessName = businessName,
         )
     }
     LaunchedEffect(viewModel.isLoginSuccess) {
@@ -84,6 +93,7 @@ fun SignupScreen(
     }
 
     SignupScreenContent(
+        modifier = modifier,
         showProgressState = viewModel.showProgress,
         data = viewModel.signupData,
         stateList = stateList,
@@ -91,27 +101,28 @@ fun SignupScreen(
             viewModel.registerUser(it) { message ->
                 Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             }
-        }
+        },
     )
 }
 
 @Composable
 @Suppress("LongMethod", "CyclomaticComplexMethod")
-fun SignupScreenContent(
-    showProgressState: Boolean = false,
+private fun SignupScreenContent(
     data: SignupData,
     stateList: List<State>,
-    onCompleteRegistration: (SignupData) -> Unit
+    onCompleteRegistration: (SignupData) -> Unit,
+    modifier: Modifier = Modifier,
+    showProgressState: Boolean = false,
 ) {
-
     val context = LocalContext.current
 
     var firstName by rememberSaveable { mutableStateOf(data.firstName ?: "") }
     var lastName by rememberSaveable { mutableStateOf(data.lastName ?: "") }
     var email by rememberSaveable { mutableStateOf(data.email ?: "") }
     var userName by rememberSaveable {
-        mutableStateOf(data.email?.ifEmpty { "" }
-            ?: data.email?.let { it.substring(0, it.indexOf('@')) } ?: ""
+        mutableStateOf(
+            data.email?.ifEmpty { "" }
+                ?: data.email?.let { it.substring(0, it.indexOf('@')) } ?: "",
         )
     }
     var addressLine1 by rememberSaveable { mutableStateOf("") }
@@ -127,16 +138,19 @@ fun SignupScreenContent(
     var selectedState by rememberSaveable { mutableStateOf<State?>(null) }
 
     fun validateAllFields() {
-        val isAnyFieldEmpty = firstName.isEmpty() || lastName.isEmpty() || email.isEmpty()
-                || userName.isEmpty() || addressLine1.isEmpty() || addressLine2.isEmpty()
-                || pinCode.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()
-                || selectedState == null
-        val isNameOfBusinessEmpty = data.mifosSavingsProductId == MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
-                && nameOfBusiness.isEmpty()
+        val isAnyFieldEmpty = firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() ||
+            userName.isEmpty() || addressLine1.isEmpty() || addressLine2.isEmpty() ||
+            pinCode.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() ||
+            selectedState == null
+
+        val isNameOfBusinessEmpty = data.mifosSavingsProductId == MIFOS_MERCHANT_SAVINGS_PRODUCT_ID &&
+            nameOfBusiness.isEmpty()
 
         if (!email.isValidEmail()) {
             Toast.makeText(
-                context, context.getString(R.string.feature_auth_validate_email), Toast.LENGTH_SHORT
+                context,
+                context.getString(R.string.feature_auth_validate_email),
+                Toast.LENGTH_SHORT,
             ).show()
             return
         }
@@ -145,7 +159,7 @@ fun SignupScreenContent(
             Toast.makeText(
                 context,
                 context.getString(R.string.feature_auth_all_fields_are_mandatory),
-                Toast.LENGTH_SHORT
+                Toast.LENGTH_SHORT,
             ).show()
             return
         }
@@ -162,12 +176,12 @@ fun SignupScreenContent(
             pinCode = pinCode,
             businessName = nameOfBusiness,
             password = password,
-            stateId = selectedState?.id
+            stateId = selectedState?.id,
         )
         onCompleteRegistration.invoke(signUpData)
     }
 
-    Box {
+    Box(modifier) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -179,33 +193,37 @@ fun SignupScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = MaterialTheme.colorScheme.primary),
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.Top,
             ) {
                 Text(
                     modifier = Modifier.padding(top = 48.dp, start = 24.dp, end = 24.dp),
                     text = stringResource(id = R.string.feature_auth_complete_your_registration),
-                    style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary)
+                    style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
                 )
                 Text(
                     modifier = Modifier.padding(
-                        top = 4.dp, bottom = 32.dp, start = 24.dp, end = 24.dp
+                        top = 4.dp,
+                        bottom = 32.dp,
+                        start = 24.dp,
+                        end = 24.dp,
                     ),
                     text = stringResource(id = R.string.feature_auth_all_fields_are_mandatory),
-                    style = MaterialTheme.typography.bodySmall.copy(color = Color.White)
+                    style = MaterialTheme.typography.bodySmall.copy(color = Color.White),
                 )
             }
+
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
-                    .focusable(!showProgressState)
+                    .focusable(!showProgressState),
             ) {
                 UserInfoTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 16.dp),
                     label = stringResource(id = R.string.feature_auth_first_name),
-                    value = firstName
+                    value = firstName,
                 ) {
                     firstName = it
                 }
@@ -214,7 +232,7 @@ fun SignupScreenContent(
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_last_name),
-                    value = lastName
+                    value = lastName,
                 ) {
                     lastName = it
                 }
@@ -223,7 +241,7 @@ fun SignupScreenContent(
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_username),
-                    value = userName
+                    value = userName,
                 ) {
                     userName = it
                 }
@@ -244,7 +262,7 @@ fun SignupScreenContent(
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_email),
-                    value = email
+                    value = email,
                 ) {
                     email = it
                 }
@@ -254,7 +272,7 @@ fun SignupScreenContent(
                             .fillMaxWidth()
                             .padding(top = 8.dp),
                         label = stringResource(id = R.string.feature_auth_name_of_business),
-                        value = nameOfBusiness
+                        value = nameOfBusiness,
                     ) {
                         nameOfBusiness = it
                     }
@@ -264,7 +282,7 @@ fun SignupScreenContent(
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_address_line_1),
-                    value = addressLine1
+                    value = addressLine1,
                 ) {
                     addressLine1 = it
                 }
@@ -273,14 +291,14 @@ fun SignupScreenContent(
                         .fillMaxWidth()
                         .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_address_line_2),
-                    value = addressLine2
+                    value = addressLine2,
                 ) {
                     addressLine2 = it
                 }
                 UserInfoTextField(
                     modifier = Modifier.padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_pin_code),
-                    value = pinCode
+                    value = pinCode,
                 ) {
                     pinCode = it
                 }
@@ -288,7 +306,7 @@ fun SignupScreenContent(
                 MifosStateDropDownOutlinedTextField(
                     value = selectedState?.name ?: "",
                     label = stringResource(id = R.string.feature_auth_state),
-                    stateList = stateList
+                    stateList = stateList,
                 ) {
                     selectedState = it
                 }
@@ -307,7 +325,7 @@ fun SignupScreenContent(
                 ) {
                     Text(
                         text = stringResource(id = R.string.feature_auth_complete),
-                        style = styleMedium16sp.copy(color = MaterialTheme.colorScheme.onPrimary)
+                        style = styleMedium16sp.copy(color = MaterialTheme.colorScheme.onPrimary),
                     )
                 }
             }
@@ -321,19 +339,19 @@ fun SignupScreenContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MifosStateDropDownOutlinedTextField(
-    modifier: Modifier = Modifier,
+private fun MifosStateDropDownOutlinedTextField(
     value: String,
     label: String,
     stateList: List<State>,
-    onSelectedState: (State) -> Unit
+    modifier: Modifier = Modifier,
+    onSelectedState: (State) -> Unit = {},
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = {
             expanded = !expanded
-        }
+        },
     ) {
         OutlinedTextField(
             modifier = modifier.menuAnchor(),
@@ -343,21 +361,21 @@ fun MifosStateDropDownOutlinedTextField(
             label = { Text(label) },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
-            }
+            },
         )
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = {
                 expanded = false
-            })
-        {
+            },
+        ) {
             stateList.forEach {
                 DropdownMenuItem(
                     text = { Text(text = it.name) },
                     onClick = {
                         expanded = false
                         onSelectedState(it)
-                    }
+                    },
                 )
             }
         }
@@ -365,11 +383,11 @@ fun MifosStateDropDownOutlinedTextField(
 }
 
 @Composable
-fun UserInfoTextField(
-    modifier: Modifier = Modifier,
+private fun UserInfoTextField(
     label: String,
     value: String,
-    onValueChange: (String) -> Unit
+    modifier: Modifier = Modifier,
+    onValueChange: (String) -> Unit = {},
 ) {
     MfOutlinedTextField(
         modifier = modifier,
@@ -377,12 +395,12 @@ fun UserInfoTextField(
         label = label,
         isError = value.isEmpty(),
         errorMessage = stringResource(id = R.string.feature_auth_mandatory),
-        onValueChange = onValueChange
+        onValueChange = onValueChange,
     )
 }
 
 @Composable
-fun PasswordAndConfirmPassword(
+private fun PasswordAndConfirmPassword(
     password: String,
     onPasswordChange: (String) -> Unit,
     confirmPassword: String,
@@ -391,8 +409,9 @@ fun PasswordAndConfirmPassword(
     onTogglePasswordVisibility: () -> Unit,
     isConfirmPasswordVisible: Boolean,
     onConfirmTogglePasswordVisibility: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Column {
+    Column(modifier) {
         MfPasswordTextField(
             modifier = Modifier.fillMaxWidth(),
             password = password,
@@ -402,10 +421,12 @@ fun PasswordAndConfirmPassword(
                 stringResource(id = R.string.feature_auth_password_cannot_be_empty)
             } else if (password.length < 6) {
                 stringResource(id = R.string.feature_auth_password_must_be_least_6_characters)
-            } else null,
+            } else {
+                null
+            },
             onPasswordChange = onPasswordChange,
             isPasswordVisible = isPasswordVisible,
-            onTogglePasswordVisibility = onTogglePasswordVisibility
+            onTogglePasswordVisibility = onTogglePasswordVisibility,
         )
         MfPasswordTextField(
             modifier = Modifier.fillMaxWidth(),
@@ -416,19 +437,25 @@ fun PasswordAndConfirmPassword(
                 stringResource(id = R.string.feature_auth_confirm_password_cannot_empty)
             } else if (password != confirmPassword) {
                 stringResource(id = R.string.feature_auth_passwords_do_not_match)
-            } else null,
+            } else {
+                null
+            },
             onPasswordChange = onConfirmPasswordChange,
             isPasswordVisible = isConfirmPasswordVisible,
-            onTogglePasswordVisibility = onConfirmTogglePasswordVisibility
+            onTogglePasswordVisibility = onConfirmTogglePasswordVisibility,
         )
         if (password.length >= 6) {
             Text(
                 modifier = Modifier.padding(top = 8.dp),
                 text = "${stringResource(id = R.string.feature_auth_password_strength)}${
                     getPasswordStrength(password).replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase(
-                            Locale.ENGLISH
-                        ) else it.toString()
+                        if (it.isLowerCase()) {
+                            it.titlecase(
+                                Locale.ENGLISH,
+                            )
+                        } else {
+                            it.toString()
+                        }
                     }
                 }",
                 color = getPasswordStrengthColor(password),
@@ -436,7 +463,6 @@ fun PasswordAndConfirmPassword(
         }
     }
 }
-
 
 private fun getPasswordStrength(password: String): String {
     val hasUpperCase = password.any { it.isUpperCase() }
@@ -448,12 +474,12 @@ private fun getPasswordStrength(password: String): String {
         hasUpperCase.toInt(),
         hasLowerCase.toInt(),
         hasNumbers.toInt(),
-        hasSymbols.toInt()
+        hasSymbols.toInt(),
     ).sum()
     return PasswordStrength.entries[numTypesPresent].name
 }
 
-fun Boolean.toInt() = if (this) 1 else 0
+private fun Boolean.toInt() = if (this) 1 else 0
 
 private fun getPasswordStrengthColor(password: String): Color {
     val strength = getPasswordStrength(password)
@@ -469,11 +495,11 @@ private fun getPasswordStrengthColor(password: String): Color {
 
 @Preview
 @Composable
-fun SignupScreenPreview() {
+private fun SignupScreenPreview() {
     SignupScreenContent(
         showProgressState = false,
         data = SignupData(),
         stateList = listOf(),
-        onCompleteRegistration = { }
+        onCompleteRegistration = { },
     )
 }

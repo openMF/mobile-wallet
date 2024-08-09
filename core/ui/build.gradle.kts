@@ -16,11 +16,8 @@ dependencies {
     api(projects.core.designsystem)
     api(projects.core.model)
     api(projects.core.common)
-
     api(libs.androidx.metrics)
     api(projects.core.analytics)
-    api(projects.core.designsystem)
-    api(projects.core.model)
 
     implementation(libs.accompanist.pager)
     implementation(libs.androidx.browser)

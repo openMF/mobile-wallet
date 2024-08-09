@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.auth.mobileVerify
 
 import android.widget.Toast
@@ -41,16 +50,17 @@ import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.feature.auth.R
 
-
 @Composable
-fun MobileVerificationScreen(
+internal fun MobileVerificationScreen(
+    onOtpVerificationSuccess: (String) -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: MobileVerificationViewModel = hiltViewModel(),
-    onOtpVerificationSuccess: (String) -> Unit
 ) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    MobileVerificationScreen(uiState = uiState,
+    MobileVerificationScreen(
+        uiState = uiState,
         showProgressState = viewModel.showProgress,
         verifyMobileAndRequestOtp = { phone, fullPhone ->
             viewModel.verifyMobileAndRequestOtp(fullPhone, phone) {
@@ -63,18 +73,19 @@ fun MobileVerificationScreen(
             viewModel.verifyOTP(validatedOtp) {
                 onOtpVerificationSuccess(fullNumber)
             }
-        }
+        },
+        modifier = modifier,
     )
 }
 
 @Composable
-fun MobileVerificationScreen(
+private fun MobileVerificationScreen(
     uiState: MobileVerificationUiState,
-    showProgressState: Boolean = false,
     verifyMobileAndRequestOtp: (String, String) -> Unit,
-    verifyOtp: (String, String) -> Unit
+    verifyOtp: (String, String) -> Unit,
+    modifier: Modifier = Modifier,
+    showProgressState: Boolean = false,
 ) {
-
     var phoneNumber by rememberSaveable { mutableStateOf("") }
     var fullPhoneNumber by rememberSaveable { mutableStateOf("") }
     var isNumberValid: Boolean by rememberSaveable { mutableStateOf(false) }
@@ -90,19 +101,18 @@ fun MobileVerificationScreen(
         }
     }
 
-    Box {
+    Box(modifier) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = Color.White)
                 .focusable(!showProgressState),
         ) {
-
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(color = MaterialTheme.colorScheme.primary),
-                verticalArrangement = Arrangement.Top
+                verticalArrangement = Arrangement.Top,
             ) {
                 Text(
                     modifier = Modifier.padding(top = 48.dp, start = 24.dp, end = 24.dp),
@@ -111,11 +121,14 @@ fun MobileVerificationScreen(
                     } else {
                         stringResource(id = R.string.feature_auth_enter_otp)
                     },
-                    style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary)
+                    style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
                 )
                 Text(
                     modifier = Modifier.padding(
-                        top = 4.dp, bottom = 32.dp, start = 24.dp, end = 24.dp
+                        top = 4.dp,
+                        bottom = 32.dp,
+                        start = 24.dp,
+                        end = 24.dp,
                     ),
                     text = if (uiState == MobileVerificationUiState.VerifyPhone) {
                         stringResource(id = R.string.feature_auth_enter_mobile_number_description)
@@ -123,7 +136,7 @@ fun MobileVerificationScreen(
                         stringResource(id = R.string.feature_auth_enter_otp_received_on_your_registered_device)
                     },
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
 
@@ -137,7 +150,7 @@ fun MobileVerificationScreen(
                             phoneNumber = phone
                             fullPhoneNumber = fullPhone
                             isNumberValid = valid
-                        }
+                        },
                     )
                 }
 
@@ -145,11 +158,12 @@ fun MobileVerificationScreen(
                     EnterOtpScreen(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 48.dp, vertical = 24.dp)
-                    ) { isValidated, otp ->
-                        isOtpValidated = isValidated
-                        validatedOtp = otp
-                    }
+                            .padding(horizontal = 48.dp, vertical = 24.dp),
+                        onOtpValidated = { isValidated, otp ->
+                            isOtpValidated = isValidated
+                            validatedOtp = otp
+                        },
+                    )
                 }
             }
 
@@ -171,8 +185,9 @@ fun MobileVerificationScreen(
                         stringResource(id = R.string.feature_auth_verify_phone).uppercase()
                     } else {
                         stringResource(id = R.string.feature_auth_verify_otp).uppercase()
-                    }, style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    },
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
         }
@@ -184,29 +199,29 @@ fun MobileVerificationScreen(
 }
 
 @Composable
-fun EnterPhoneScreen(
-    modifier: Modifier,
-    onNumberUpdated: (String, String, Boolean) -> Unit
+private fun EnterPhoneScreen(
+    onNumberUpdated: (String, String, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     TogiCountryCodePicker(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
         ),
         onValueChange = { (code, phone), isValid ->
             onNumberUpdated(phone, code + phone, isValid)
         },
         label = { Text(stringResource(id = R.string.feature_auth_phone_number)) },
-        keyboardActions = KeyboardActions { keyboardController?.hide() }
+        keyboardActions = KeyboardActions { keyboardController?.hide() },
     )
 }
 
 @Composable
-fun EnterOtpScreen(
-    modifier: Modifier,
-    onOtpValidated: (Boolean, String) -> Unit
+private fun EnterOtpScreen(
+    onOtpValidated: (Boolean, String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     var otp by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -221,20 +236,21 @@ fun EnterOtpScreen(
             onOtpValidated(otp.text.length == 6, otp.text)
         },
         label = R.string.feature_auth_enter_otp,
-        keyboardActions = KeyboardActions { keyboardController?.hide() }
+        keyboardActions = KeyboardActions { keyboardController?.hide() },
     )
 }
 
 @Composable
-fun ShowProgressScreen(
+private fun ShowProgressScreen(
     uiState: MobileVerificationUiState,
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f))
             .focusable(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         MifosLoadingWheel(
             modifier = Modifier.wrapContentSize(),
@@ -242,31 +258,33 @@ fun ShowProgressScreen(
                 Constants.SENDING_OTP_TO_YOUR_MOBILE_NUMBER
             } else {
                 Constants.VERIFYING_OTP
-            }
+            },
         )
     }
 }
 
 @Preview
 @Composable
-fun MobileVerificationScreenVerifyPhonePreview() {
+private fun MobileVerificationScreenVerifyPhonePreview() {
     MifosTheme {
-        MobileVerificationScreen(uiState = MobileVerificationUiState.VerifyPhone,
+        MobileVerificationScreen(
+            uiState = MobileVerificationUiState.VerifyPhone,
             showProgressState = false,
             verifyMobileAndRequestOtp = { _, _ -> },
-            verifyOtp = { _, _ -> }
+            verifyOtp = { _, _ -> },
         )
     }
 }
 
 @Preview
 @Composable
-fun MobileVerificationScreenVerifyOtpPreview() {
+private fun MobileVerificationScreenVerifyOtpPreview() {
     MifosTheme {
-        MobileVerificationScreen(uiState = MobileVerificationUiState.VerifyOtp,
+        MobileVerificationScreen(
+            uiState = MobileVerificationUiState.VerifyOtp,
             showProgressState = false,
             verifyMobileAndRequestOtp = { _, _ -> },
-            verifyOtp = { _, _ -> }
+            verifyOtp = { _, _ -> },
         )
     }
 }

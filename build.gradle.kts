@@ -1,11 +1,10 @@
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     dependencies {
         classpath(libs.google.oss.licenses.plugin) {
             exclude(group = "com.google.protobuf")
         }
+        classpath(libs.spotless.gradle)
     }
 }
 
@@ -28,11 +27,14 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     alias(libs.plugins.detekt)
     alias(libs.plugins.detekt.compiler)
-    alias(libs.plugins.module.graph) apply true // Plugin applied to allow module graph generation
+    // Plugin applied to allow module graph generation
+    alias(libs.plugins.module.graph) apply true
+    alias(libs.plugins.spotless)
 }
 
 val detektFormatting = libs.detekt.formatting
 val twitterComposeRules = libs.twitter.detekt.compose
+val ktlintVersion = "1.0.1"
 
 val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
     output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.html")) // or "reports/detekt/merge.sarif"
@@ -41,15 +43,38 @@ val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMe
 subprojects {
     apply {
         plugin("io.gitlab.arturbosch.detekt")
-    }
-
-    detekt {
-        config.from(rootProject.files("config/detekt/detekt.yml"))
-        reports.xml.required.set(true)
+        plugin("com.diffplug.spotless")
     }
 
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+        config.from(rootProject.files("config/detekt/detekt.yml"))
+        reports.xml.required.set(true)
         finalizedBy(reportMerge)
+    }
+
+    extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+        kotlin {
+            target("**/*.kt")
+            targetExclude("**/build/**/*.kt")
+            ktlint(ktlintVersion).editorConfigOverride(
+                mapOf(
+                    "android" to "true",
+                ),
+            )
+            licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
+        }
+        format("kts") {
+            target("**/*.kts")
+            targetExclude("**/build/**/*.kts")
+            // Look for the first line that doesn't have a block comment (assumed to be the license)
+            licenseHeaderFile(rootProject.file("spotless/copyright.kts"), "(^(?![\\/ ]\\*).*$)")
+        }
+        format("xml") {
+            target("**/*.xml")
+            targetExclude("**/build/**/*.xml")
+            // Look for the first XML tag that isn't a comment (<!--) or the xml declaration (<?xml)
+            licenseHeaderFile(rootProject.file("spotless/copyright.xml"), "(<[^!?])")
+        }
     }
 
     reportMerge {

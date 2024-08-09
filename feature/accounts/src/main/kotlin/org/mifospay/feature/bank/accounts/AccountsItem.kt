@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.bank.accounts
 
 import androidx.compose.foundation.layout.Column
@@ -20,19 +29,21 @@ import com.mifospay.core.model.domain.BankAccountDetails
 import org.mifospay.core.designsystem.component.MifosCard
 
 @Composable
-fun AccountsItem(
+internal fun AccountsItem(
     bankAccountDetails: BankAccountDetails,
-    onAccountClicked: () -> Unit
+    onAccountClicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     MifosCard(
+        modifier = modifier,
         onClick = { onAccountClicked.invoke() },
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
     ) {
         Column {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 16.dp)
+                    .padding(top = 16.dp),
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.feature_accounts_ic_bank),
@@ -40,7 +51,7 @@ fun AccountsItem(
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(start = 16.dp, end = 16.dp)
-                        .size(39.dp)
+                        .size(39.dp),
                 )
 
                 Column {
@@ -52,18 +63,18 @@ fun AccountsItem(
                         text = bankAccountDetails.bankName.toString(),
                         modifier = Modifier.padding(top = 4.dp),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
                 Column(
                     horizontalAlignment = Alignment.End,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(
                         text = bankAccountDetails.branch.toString(),
                         modifier = Modifier.padding(16.dp),
                         fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -76,6 +87,6 @@ fun AccountsItem(
 private fun AccountsItemPreview() {
     AccountsItem(
         bankAccountDetails = BankAccountDetails("A", "B", "C"),
-        onAccountClicked = {}
+        onAccountClicked = {},
     )
 }

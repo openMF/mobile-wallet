@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.bank.accounts.link
 
 import androidx.compose.runtime.getValue
@@ -24,17 +33,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LinkBankAccountViewModel @Inject constructor(
-    localAssetRepository: MifosLocalAssetRepository
+    localAssetRepository: MifosLocalAssetRepository,
 ) : ViewModel() {
 
-    private val _searchQuery = MutableStateFlow("")
+    private val searchQuery = MutableStateFlow("")
     private var selectedBank by mutableStateOf<Bank?>(null)
 
-    private val _bankAccountDetails: MutableStateFlow<BankAccountDetails?> = MutableStateFlow(null)
-    val bankAccountDetails: StateFlow<BankAccountDetails?> = _bankAccountDetails.asStateFlow()
+    private val accountDetails: MutableStateFlow<BankAccountDetails?> = MutableStateFlow(null)
+    val bankAccountDetails: StateFlow<BankAccountDetails?> = accountDetails.asStateFlow()
 
     fun updateSearchQuery(query: String) {
-        _searchQuery.update { query }
+        searchQuery.update { query }
     }
 
     fun updateSelectedBank(bank: Bank) {
@@ -42,9 +51,9 @@ class LinkBankAccountViewModel @Inject constructor(
     }
 
     val bankListUiState: StateFlow<BankUiState> = combine(
-        _searchQuery,
+        searchQuery,
         localAssetRepository.getBanks(),
-        ::Pair
+        ::Pair,
     ).map { searchQueryAndBanks ->
         val searchQuery = searchQueryAndBanks.first
         val localBanks = searchQueryAndBanks.second.map {
@@ -55,7 +64,7 @@ class LinkBankAccountViewModel @Inject constructor(
             addAll(localBanks)
         }.distinctBy { it.name }
         BankUiState.Success(
-            banks.filter { it.name.contains(searchQuery.lowercase(), ignoreCase = true) }
+            banks.filter { it.name.contains(searchQuery.lowercase(), ignoreCase = true) },
         )
     }.stateIn(
         scope = viewModelScope,
@@ -70,17 +79,20 @@ class LinkBankAccountViewModel @Inject constructor(
             Bank("PNB Bank", R.drawable.feature_accounts_logo_pnb, BankType.POPULAR),
             Bank("HDFC Bank", R.drawable.feature_accounts_logo_hdfc, BankType.POPULAR),
             Bank("ICICI Bank", R.drawable.feature_accounts_logo_icici, BankType.POPULAR),
-            Bank("AXIS Bank", R.drawable.feature_accounts_logo_axis, BankType.POPULAR)
+            Bank("AXIS Bank", R.drawable.feature_accounts_logo_axis, BankType.POPULAR),
         )
     }
 
     fun fetchBankAccountDetails(onBankDetailsSuccess: () -> Unit) {
         // TODO:: UPI API implement, Implement with real API,
         //  It revert back to Account Screen after successful BankAccount Add
-        _bankAccountDetails.update {
+        accountDetails.update {
             BankAccountDetails(
-                selectedBank?.name, "Ankur Sharma", "New Delhi",
-                mRandom.nextInt().toString() + " ", "Savings"
+                selectedBank?.name,
+                "Ankur Sharma",
+                "New Delhi",
+                mRandom.nextInt().toString() + " ",
+                "Savings",
             )
         }
         onBankDetailsSuccess.invoke()

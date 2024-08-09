@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.bank.accounts
 
 import androidx.lifecycle.ViewModel
@@ -55,33 +64,54 @@ class AccountViewModel @Inject constructor() : ViewModel() {
     private fun fetchSampleLinkedAccounts(): List<BankAccountDetails> {
         return listOf(
             BankAccountDetails(
-                "SBI", "Ankur Sharma", "New Delhi",
-                mRandom.nextInt().toString() + " ", "Savings"
+                "SBI",
+                "Ankur Sharma",
+                "New Delhi",
+                mRandom.nextInt().toString() + " ",
+                "Savings",
             ),
             BankAccountDetails(
-                "HDFC", "Mandeep Singh", "Uttar Pradesh",
-                mRandom.nextInt().toString() + " ", "Savings"
+                "HDFC",
+                "Mandeep Singh",
+                "Uttar Pradesh",
+                mRandom.nextInt().toString() + " ",
+                "Savings",
             ),
             BankAccountDetails(
-                "ANDHRA", "Rakesh anna", "Telegana",
-                mRandom.nextInt().toString() + " ", "Savings"
+                "ANDHRA",
+                "Rakesh anna",
+                "Telegana",
+                mRandom.nextInt().toString() + " ",
+                "Savings",
             ),
             BankAccountDetails(
-                "PNB", "luv Pro", "Gujrat",
-                mRandom.nextInt().toString() + " ", "Savings"
+                "PNB",
+                "luv Pro",
+                "Gujrat",
+                mRandom.nextInt().toString() + " ",
+                "Savings",
             ),
             BankAccountDetails(
-                "HDF", "Harry potter", "Hogwarts",
-                mRandom.nextInt().toString() + " ", "Savings"
+                "HDF",
+                "Harry potter",
+                "Hogwarts",
+                mRandom.nextInt().toString() + " ",
+                "Savings",
             ),
             BankAccountDetails(
-                "GCI", "JIGME", "JAMMU",
-                mRandom.nextInt().toString() + " ", "Savings"
+                "GCI",
+                "JIGME",
+                "JAMMU",
+                mRandom.nextInt().toString() + " ",
+                "Savings",
             ),
             BankAccountDetails(
-                "FCI", "NISHU BOII", "ASSAM",
-                mRandom.nextInt().toString() + " ", "Savings"
-            )
+                "FCI",
+                "NISHU BOII",
+                "ASSAM",
+                mRandom.nextInt().toString() + " ",
+                "Savings",
+            ),
         )
     }
 

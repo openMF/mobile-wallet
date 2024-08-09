@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 @file:Suppress("MaxLineLength")
 
 package org.mifospay.feature.auth.navigation
@@ -14,19 +23,40 @@ const val SIGNUP_ROUTE = "signup_route"
 @Suppress("UnusedParameter")
 fun NavGraphBuilder.signupScreen(
     onLoginSuccess: () -> Unit,
-    onRegisterSuccess: () -> Unit
+    onRegisterSuccess: () -> Unit,
 ) {
     composable(
         route = "$SIGNUP_ROUTE?savingProductId={savingProductId}&mobileNumber={mobileNumber}&country={country}&email={email}&firstName={firstName}&lastName={lastName}&businessName={businessName}",
         arguments = listOf(
-            navArgument("savingProductId") { type = NavType.IntType; defaultValue = 0 },
-            navArgument("mobileNumber") { type = NavType.StringType; defaultValue = "" },
-            navArgument("country") { type = NavType.StringType; defaultValue = "" },
-            navArgument("email") { type = NavType.StringType; defaultValue = "" },
-            navArgument("firstName") { type = NavType.StringType; defaultValue = "" },
-            navArgument("lastName") { type = NavType.StringType; defaultValue = "" },
-            navArgument("businessName") { type = NavType.StringType; defaultValue = "" }
-        )
+            navArgument("savingProductId") {
+                type = NavType.IntType
+                defaultValue = 0
+            },
+            navArgument("mobileNumber") {
+                type = NavType.StringType
+                defaultValue = ""
+            },
+            navArgument("country") {
+                type = NavType.StringType
+                defaultValue = ""
+            },
+            navArgument("email") {
+                type = NavType.StringType
+                defaultValue = ""
+            },
+            navArgument("firstName") {
+                type = NavType.StringType
+                defaultValue = ""
+            },
+            navArgument("lastName") {
+                type = NavType.StringType
+                defaultValue = ""
+            },
+            navArgument("businessName") {
+                type = NavType.StringType
+                defaultValue = ""
+            },
+        ),
     ) { backStackEntry ->
         val savingProductId = backStackEntry.arguments?.getInt("savingProductId") ?: 0
         val mobileNumber = backStackEntry.arguments?.getString("mobileNumber") ?: ""
@@ -44,7 +74,7 @@ fun NavGraphBuilder.signupScreen(
             email = email,
             firstName = firstName,
             lastName = lastName,
-            businessName = businessName
+            businessName = businessName,
         )
     }
 }
@@ -56,12 +86,12 @@ fun NavController.navigateToSignup(
     email: String = "",
     firstName: String = "",
     lastName: String = "",
-    businessName: String = ""
+    businessName: String = "",
 ) {
     this.navigate(
         "$SIGNUP_ROUTE?savingProductId=$savingProductId" +
-                "&mobileNumber=$mobileNumber&country=$country&email=$email" +
-                "&firstName=$firstName&lastName=$lastName&businessName=$businessName"
+            "&mobileNumber=$mobileNumber&country=$country&email=$email" +
+            "&firstName=$firstName&lastName=$lastName&businessName=$businessName",
     )
 }
 

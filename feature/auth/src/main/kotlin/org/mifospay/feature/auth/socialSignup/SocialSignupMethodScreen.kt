@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 @file:Suppress("MaxLineLength")
 
 package org.mifospay.feature.auth.socialSignup
@@ -61,18 +70,22 @@ const val TAG = "Social Login"
 // Followed this https://medium.com/@nirmale.ashwin9696/a-comprehensive-guide-to-google-sign-in-integration-with-credential-manager-in-android-apps-05286f8f5848
 // Keeping until we fix sign up
 @Composable
-fun SocialSignupMethodContentScreen(
-    onDismissSignUp: () -> Unit
+internal fun SocialSignupMethodContentScreen(
+    modifier: Modifier = Modifier,
+    onDismissSignUp: () -> Unit = {},
 ) {
-    SocialSignupMethodScreen(onDismissSignUp = onDismissSignUp)
+    SocialSignupMethodScreen(
+        modifier = modifier,
+        onDismissSignUp = onDismissSignUp,
+    )
 }
 
 @Composable
 @Suppress("NestedBlockDepth")
-fun SocialSignupMethodScreen(
-    onDismissSignUp: () -> Unit
+private fun SocialSignupMethodScreen(
+    modifier: Modifier = Modifier,
+    onDismissSignUp: () -> Unit = {},
 ) {
-
     val context = LocalContext.current
     var mifosSavingProductId by remember { mutableIntStateOf(0) }
     var showProgress by remember { mutableStateOf(false) }
@@ -90,7 +103,6 @@ fun SocialSignupMethodScreen(
     val request: GetCredentialRequest = GetCredentialRequest.Builder()
         .addCredentialOption(googleIdOption)
         .build()
-
 
     fun signUpWithMifos() {
         googleIdTokenCredential.signUpWithMifos(context, mifosSavingProductId) {
@@ -115,7 +127,7 @@ fun SocialSignupMethodScreen(
                             Toast.makeText(
                                 context,
                                 Constants.GOOGLE_SIGN_IN_FAILED,
-                                Toast.LENGTH_SHORT
+                                Toast.LENGTH_SHORT,
                             ).show()
                         }
                     } catch (e: GoogleIdTokenParsingException) {
@@ -133,7 +145,6 @@ fun SocialSignupMethodScreen(
             }
         }
     }
-
 
     fun signUpCredentialManager() {
         coroutineScope.launch {
@@ -161,6 +172,7 @@ fun SocialSignupMethodScreen(
     }
 
     MifosBottomSheet(
+        modifier = modifier,
         content = {
             SignupMethodContentScreen(
                 showProgress = showProgress,
@@ -171,37 +183,37 @@ fun SocialSignupMethodScreen(
                 onSignupAsCustomer = { checkedGoogleAccount ->
                     mifosSavingProductId = MIFOS_CONSUMER_SAVINGS_PRODUCT_ID
                     signUp(checkedGoogleAccount)
-                }
+                },
             )
         },
         onDismiss = {
             onDismissSignUp.invoke()
-        }
+        },
     )
 }
 
 @Composable
 @Suppress("LongMethod")
-fun SignupMethodContentScreen(
+private fun SignupMethodContentScreen(
     showProgress: Boolean,
     onSignUpAsMerchant: (Boolean) -> Unit,
     onSignupAsCustomer: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-
     var checkedGoogleAccountState by remember { mutableStateOf(true) }
 
     Box(
-        modifier = Modifier,
+        modifier = modifier,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.surface),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 modifier = Modifier.padding(top = 16.dp),
-                text = stringResource(id = R.string.feature_auth_create_an_account)
+                text = stringResource(id = R.string.feature_auth_create_an_account),
             )
             OutlinedButton(
                 modifier = Modifier.padding(top = 48.dp),
@@ -210,36 +222,36 @@ fun SignupMethodContentScreen(
                 },
                 border = BorderStroke(1.dp, Color.LightGray),
                 shape = RoundedCornerShape(4.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_auth_sign_up_as_merchant).uppercase(),
-                    style = MaterialTheme.typography.labelMedium
+                    style = MaterialTheme.typography.labelMedium,
                 )
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 24.dp),
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 HorizontalDivider(
                     modifier = Modifier
                         .padding(start = 24.dp, end = 8.dp)
                         .weight(.4f),
-                    thickness = 1.dp
+                    thickness = 1.dp,
                 )
                 Text(
                     modifier = Modifier
                         .wrapContentWidth()
                         .weight(.1f),
-                    text = stringResource(id = R.string.feature_auth_or)
+                    text = stringResource(id = R.string.feature_auth_or),
                 )
                 HorizontalDivider(
                     modifier = Modifier
                         .padding(start = 8.dp, end = 24.dp)
                         .weight(.4f),
-                    thickness = 1.dp
+                    thickness = 1.dp,
                 )
             }
             OutlinedButton(
@@ -249,11 +261,11 @@ fun SignupMethodContentScreen(
                 },
                 border = BorderStroke(1.dp, Color.LightGray),
                 shape = RoundedCornerShape(4.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary)
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_auth_sign_up_as_customer).uppercase(),
-                    style = MaterialTheme.typography.labelMedium
+                    style = MaterialTheme.typography.labelMedium,
                 )
             }
             Row(
@@ -262,18 +274,18 @@ fun SignupMethodContentScreen(
                     .clickable {
                         checkedGoogleAccountState = !checkedGoogleAccountState
                     },
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Checkbox(
                     checked = checkedGoogleAccountState,
                     onCheckedChange = {
                         checkedGoogleAccountState = !checkedGoogleAccountState
                     },
-                    colors = CheckboxDefaults.colors(MaterialTheme.colorScheme.primary)
+                    colors = CheckboxDefaults.colors(MaterialTheme.colorScheme.primary),
                 )
                 Text(
                     text = stringResource(id = R.string.feature_auth_ease_my_sign_up_using_google_account),
-                    style = MaterialTheme.typography.labelSmall
+                    style = MaterialTheme.typography.labelSmall,
                 )
             }
             HorizontalDivider(thickness = 48.dp, color = Color.Transparent)
@@ -283,7 +295,7 @@ fun SignupMethodContentScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 140.dp),
-                contentAlignment = Alignment.Center
+                contentAlignment = Alignment.Center,
             ) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(64.dp),
@@ -296,20 +308,20 @@ fun SignupMethodContentScreen(
 }
 
 @Suppress("UnusedParameter")
-fun GoogleIdTokenCredential?.signUpWithMifos(
+private fun GoogleIdTokenCredential?.signUpWithMifos(
     context: Context,
     mifosSavingsProductId: Int,
-    signOutGoogleClient: () -> Unit
+    signOutGoogleClient: () -> Unit,
 ) {
     val googleIdTokenCredential = this
-    //Todo:navigate to MobileVerificationScreen with googleIdTokenCredential.givenName,profilePictureUri,
+    // Todo:navigate to MobileVerificationScreen with googleIdTokenCredential.givenName,profilePictureUri,
     // familyName,mifosSavingsProductId,displayName,data.getString("com.google.android.libraries.identity.googleid.BUNDLE_KEY_ID")
     signOutGoogleClient.invoke()
 }
 
 @Preview
 @Composable
-fun SignupMethodContentScreenPreview() {
+private fun SignupMethodContentScreenPreview() {
     MaterialTheme {
         SignupMethodContentScreen(true, {}, {})
     }
