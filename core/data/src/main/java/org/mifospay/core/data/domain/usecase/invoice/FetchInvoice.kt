@@ -31,7 +31,6 @@ class FetchInvoice @Inject constructor(private val mFineractRepository: Fineract
             val clientId = params?.get(0) // "clientId"
             val invoiceId = params?.get(1) // "invoiceId"
             if (clientId != null && invoiceId != null) {
-
                 mFineractRepository.fetchInvoice(clientId, invoiceId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
