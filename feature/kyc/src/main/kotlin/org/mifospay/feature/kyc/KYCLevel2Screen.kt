@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.kyc
 
 import android.Manifest
@@ -10,15 +19,13 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -55,41 +62,34 @@ import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.kyc.R
 
-
 @Composable
-fun KYCLevel2Screen(
+internal fun KYCLevel2Screen(
+    onSuccessKyc2: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: KYCLevel2ViewModel = hiltViewModel(),
-    onSuccessKyc2: () -> Unit
 ) {
     val kyc2uiState by viewModel.kyc2uiState.collectAsStateWithLifecycle()
 
     KYCLevel2Screen(
         uiState = kyc2uiState,
-        uploadData = { idType,
-                       uri ->
-            viewModel.uploadKYCDocs(
-                idType,
-                uri
-            )
-        },
-        onSuccessKyc2 = onSuccessKyc2
+        uploadData = viewModel::uploadKYCDocs,
+        onSuccessKyc2 = onSuccessKyc2,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun KYCLevel2Screen(
+private fun KYCLevel2Screen(
     uiState: KYCLevel2UiState,
-    uploadData: (
-        String,
-        Uri,
-    ) -> Unit,
-    onSuccessKyc2: () -> Unit
+    uploadData: (String, Uri) -> Unit,
+    onSuccessKyc2: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
 
     Kyc2Form(
-        modifier = Modifier,
-        uploadData = uploadData
+        modifier = modifier,
+        uploadData = uploadData,
     )
 
     when (uiState) {
@@ -101,7 +101,7 @@ fun KYCLevel2Screen(
             Toast.makeText(
                 context,
                 stringResource(R.string.feature_kyc_error_adding_KYC_Level_2_details),
-                Toast.LENGTH_SHORT
+                Toast.LENGTH_SHORT,
             ).show()
         }
 
@@ -109,22 +109,18 @@ fun KYCLevel2Screen(
             Toast.makeText(
                 context,
                 stringResource(R.string.feature_kyc_successkyc2),
-                Toast.LENGTH_SHORT
+                Toast.LENGTH_SHORT,
             ).show()
             onSuccessKyc2.invoke()
         }
     }
-
 }
 
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
-fun Kyc2Form(
-    modifier: Modifier,
-    uploadData: (
-        String,
-        Uri,
-    ) -> Unit
+private fun Kyc2Form(
+    uploadData: (String, Uri) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var idType by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
@@ -141,14 +137,14 @@ fun Kyc2Form(
         mutableStateOf(
             if (SDK_INT >= 33) {
                 ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) ==
-                        PackageManager.PERMISSION_GRANTED
+                    PackageManager.PERMISSION_GRANTED
             } else {
                 ContextCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.READ_EXTERNAL_STORAGE
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
                 ) ==
-                        PackageManager.PERMISSION_GRANTED
-            }
+                    PackageManager.PERMISSION_GRANTED
+            },
         )
     }
 
@@ -156,12 +152,12 @@ fun Kyc2Form(
         if (SDK_INT >= 33) {
             shouldShowRequestPermissionRationale(
                 context as Activity,
-                Manifest.permission.READ_MEDIA_IMAGES
+                Manifest.permission.READ_MEDIA_IMAGES,
             )
         } else {
             shouldShowRequestPermissionRationale(
                 context as Activity,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.READ_EXTERNAL_STORAGE,
             )
         }
 
@@ -170,18 +166,22 @@ fun Kyc2Form(
     }
 
     val decideCurrentPermissionStatus: (Boolean, Boolean) -> String =
-        { storagePermissionGranted, shouldShowPermissionRationale ->
-            if (storagePermissionGranted) "Granted"
-            else if (shouldShowPermissionRationale) "Rejected"
-            else "Denied"
+        { granted, permissionRationale ->
+            if (granted) {
+                "Granted"
+            } else if (permissionRationale) {
+                "Rejected"
+            } else {
+                "Denied"
+            }
         }
 
     var currentPermissionStatus by remember {
         mutableStateOf(
             decideCurrentPermissionStatus(
                 storagePermissionGranted,
-                shouldShowPermissionRationale
-            )
+                shouldShowPermissionRationale,
+            ),
         )
     }
 
@@ -201,12 +201,12 @@ fun Kyc2Form(
                     if (SDK_INT >= 33) {
                         shouldShowRequestPermissionRationale(
                             context,
-                            Manifest.permission.READ_MEDIA_IMAGES
+                            Manifest.permission.READ_MEDIA_IMAGES,
                         )
                     } else {
                         shouldShowRequestPermissionRationale(
                             context,
-                            Manifest.permission.READ_EXTERNAL_STORAGE
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
                         )
                     }
             }
@@ -214,54 +214,57 @@ fun Kyc2Form(
                 !shouldShowPermissionRationale && !storagePermissionGranted
             currentPermissionStatus = decideCurrentPermissionStatus(
                 storagePermissionGranted,
-                shouldShowPermissionRationale
+                shouldShowPermissionRationale,
             )
-        })
+        },
+    )
 
-
-    DisposableEffect(key1 = lifecycleOwner, effect = {
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START &&
-                !storagePermissionGranted &&
-                !shouldShowPermissionRationale
-            ) {
-                storagePermissionLauncher.launch(permission)
+    DisposableEffect(
+        key1 = lifecycleOwner,
+        effect = {
+            val observer = LifecycleEventObserver { _, event ->
+                if (event == Lifecycle.Event.ON_START &&
+                    !storagePermissionGranted &&
+                    !shouldShowPermissionRationale
+                ) {
+                    storagePermissionLauncher.launch(permission)
+                }
             }
-        }
-        lifecycleOwner.lifecycle.addObserver(observer)
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    })
+            lifecycleOwner.lifecycle.addObserver(observer)
+            onDispose {
+                lifecycleOwner.lifecycle.removeObserver(observer)
+            }
+        },
+    )
 
     Scaffold(
+        modifier = modifier,
         snackbarHost = {
             SnackbarHost(hostState = snackBarHostState)
-        }
+        },
     ) { contentPadding ->
         Box(
             modifier = Modifier
                 .padding(contentPadding)
                 .fillMaxSize(),
-            contentAlignment = Alignment.TopCenter
+            contentAlignment = Alignment.TopCenter,
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
+                    .padding(horizontal = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 MifosOutlinedTextField(
-                    modifier = modifier
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp),
                     value = idType,
                     onValueChange = {
                         idType = it
                     },
-                    label = R.string.feature_kyc_id_type
+                    label = R.string.feature_kyc_id_type,
                 )
-
-                Spacer(modifier = Modifier.width(20.dp))
 
                 Row {
                     Button(
@@ -272,10 +275,10 @@ fun Kyc2Form(
                                 Toast.makeText(
                                     context,
                                     R.string.feature_kyc_approve_permission,
-                                    Toast.LENGTH_SHORT
+                                    Toast.LENGTH_SHORT,
                                 ).show()
                             }
-                        }
+                        },
                     ) {
                         Text(text = stringResource(id = R.string.feature_kyc_browse))
                     }
@@ -284,12 +287,10 @@ fun Kyc2Form(
                         Text(
                             text = stringResource(id = R.string.feature_kyc_file_name) + fileName,
                             style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(horizontal = 2.dp)
+                            modifier = Modifier.padding(horizontal = 2.dp),
                         )
                     }
                 }
-
-                Spacer(modifier = Modifier.height(20.dp))
 
                 Button(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
@@ -297,7 +298,7 @@ fun Kyc2Form(
                         result?.let { uri ->
                             uploadData(idType, uri)
                         }
-                    }
+                    },
                 ) {
                     Text(text = stringResource(id = R.string.feature_kyc_submit))
                 }
@@ -311,7 +312,7 @@ fun Kyc2Form(
                         message = R.string.feature_kyc_approve_permission.toString(),
                         actionLabel = R.string.feature_kyc_approve.toString(),
                         duration = SnackbarDuration.Indefinite,
-                        withDismissAction = true
+                        withDismissAction = true,
                     )
                     when (userAction) {
                         SnackbarResult.ActionPerformed -> {
@@ -330,7 +331,7 @@ fun Kyc2Form(
         if (shouldDirectUserToApplicationSettings) {
             Intent(
                 Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                Uri.fromParts("package", context.packageName, null)
+                Uri.fromParts("package", context.packageName, null),
             ).also {
                 context.startActivity(it)
             }
@@ -340,47 +341,47 @@ fun Kyc2Form(
 
 @Preview(showBackground = true)
 @Composable
-fun EmptyKyc2FormPreview() {
+private fun EmptyKyc2FormPreview() {
     MifosTheme {
         Kyc2Form(
             modifier = Modifier,
-            uploadData = { _, _ -> }
+            uploadData = { _, _ -> },
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun Kyc2FormPreviewWithLoading() {
+private fun Kyc2FormPreviewWithLoading() {
     MifosTheme {
         KYCLevel2Screen(
             uiState = KYCLevel2UiState.Loading,
             uploadData = { _, _ -> },
-            onSuccessKyc2 = {}
+            onSuccessKyc2 = {},
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun Kyc2FormPreviewWithError() {
+private fun Kyc2FormPreviewWithError() {
     MifosTheme {
         KYCLevel2Screen(
             uiState = KYCLevel2UiState.Error,
             uploadData = { _, _ -> },
-            onSuccessKyc2 = {}
+            onSuccessKyc2 = {},
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun Kyc2FormPreviewWithSuccess() {
+private fun Kyc2FormPreviewWithSuccess() {
     MifosTheme {
         KYCLevel2Screen(
             uiState = KYCLevel2UiState.Success,
             uploadData = { _, _ -> },
-            onSuccessKyc2 = {}
+            onSuccessKyc2 = {},
         )
     }
 }

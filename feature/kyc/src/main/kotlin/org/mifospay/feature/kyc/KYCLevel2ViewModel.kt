@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.kyc
 
 import android.net.Uri
@@ -8,11 +17,12 @@ import kotlinx.coroutines.flow.StateFlow
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
+import org.mifospay.common.Constants
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.kyc.UploadKYCDocs
-import org.mifospay.common.Constants
 import org.mifospay.core.datastore.PreferencesHelper
+import org.mifospay.feature.kyc.KYCLevel2UiState.Loading
 import java.io.File
 import javax.inject.Inject
 
@@ -20,12 +30,11 @@ import javax.inject.Inject
 class KYCLevel2ViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val preferencesHelper: PreferencesHelper,
-    private val uploadKYCDocsUseCase: UploadKYCDocs
+    private val uploadKYCDocsUseCase: UploadKYCDocs,
 ) : ViewModel() {
 
-    private val _kyc2uiState =
-        MutableStateFlow<KYCLevel2UiState>(KYCLevel2UiState.Loading)
-    val kyc2uiState: StateFlow<KYCLevel2UiState> = _kyc2uiState
+    private val kycUiState = MutableStateFlow<KYCLevel2UiState>(Loading)
+    val kyc2uiState: StateFlow<KYCLevel2UiState> = kycUiState
 
     fun uploadKYCDocs(identityType: String, result: Uri) {
         val file = result.path?.let { File(it) }
@@ -34,21 +43,24 @@ class KYCLevel2ViewModel @Inject constructor(
                 UploadKYCDocs.RequestValues(
                     org.mifospay.core.data.util.Constants.ENTITY_TYPE_CLIENTS,
                     preferencesHelper.clientId, file.name, it,
-                    getRequestFileBody(file)
+                    getRequestFileBody(file),
                 )
             }
         }
         val requestValues = uploadKYCDocsUseCase.walletRequestValues
-        mUseCaseHandler.execute(uploadKYCDocsUseCase, requestValues,
+        mUseCaseHandler.execute(
+            uploadKYCDocsUseCase,
+            requestValues,
             object : UseCase.UseCaseCallback<UploadKYCDocs.ResponseValue> {
                 override fun onSuccess(response: UploadKYCDocs.ResponseValue) {
-                    _kyc2uiState.value = KYCLevel2UiState.Success
+                    kycUiState.value = KYCLevel2UiState.Success
                 }
 
                 override fun onError(message: String) {
-                    _kyc2uiState.value = KYCLevel2UiState.Error
+                    kycUiState.value = KYCLevel2UiState.Error
                 }
-            })
+            },
+        )
     }
 
     private fun getRequestFileBody(file: File): MultipartBody.Part {

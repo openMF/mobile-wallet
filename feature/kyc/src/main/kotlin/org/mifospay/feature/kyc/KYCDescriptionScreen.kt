@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.kyc
 
 import androidx.compose.foundation.layout.Arrangement
@@ -49,15 +58,17 @@ import org.mifospay.kyc.R
 
 @Composable
 fun KYCScreen(
-    viewModel: KYCDescriptionViewModel = hiltViewModel(),
     onLevel1Clicked: () -> Unit,
     onLevel2Clicked: () -> Unit,
-    onLevel3Clicked: () -> Unit
+    onLevel3Clicked: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: KYCDescriptionViewModel = hiltViewModel(),
 ) {
-    val kUiState by viewModel.kycdescriptionState.collectAsState()
+    val kUiState by viewModel.kycDescriptionState.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
 
     KYCDescriptionScreen(
+        modifier = modifier,
         kUiState = kUiState,
         onLevel1Clicked = {
             // Todo : Implement onLevel1Clicked flow
@@ -72,22 +83,26 @@ fun KYCScreen(
             onLevel3Clicked.invoke()
         },
         isRefreshing = isRefreshing,
-        onRefresh = { viewModel.refresh() }
+        onRefresh = viewModel::refresh,
     )
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun KYCDescriptionScreen(
+private fun KYCDescriptionScreen(
     kUiState: KYCDescriptionUiState,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
     onLevel1Clicked: () -> Unit,
     onLevel2Clicked: () -> Unit,
     onLevel3Clicked: () -> Unit,
-    isRefreshing: Boolean,
-    onRefresh: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
-    Box(Modifier.pullRefresh(pullRefreshState)) {
+    Box(
+        modifier = modifier
+            .pullRefresh(pullRefreshState),
+    ) {
         when (kUiState) {
             KYCDescriptionUiState.Loading -> {
                 MifosOverlayLoadingWheel(contentDesc = stringResource(R.string.feature_kyc_loading))
@@ -99,7 +114,7 @@ fun KYCDescriptionScreen(
                     title = stringResource(id = R.string.feature_kyc_error_oops),
                     subTitle = stringResource(id = R.string.feature_kyc_unexpected_error_subtitle),
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = Icons.Rounded.Info
+                    iconImageVector = Icons.Rounded.Info,
                 )
             }
 
@@ -110,40 +125,42 @@ fun KYCDescriptionScreen(
                         kyc,
                         onLevel1Clicked,
                         onLevel2Clicked,
-                        onLevel3Clicked
+                        onLevel3Clicked,
                     )
                 }
             }
         }
+
         PullRefreshIndicator(
             refreshing = isRefreshing,
             state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier.align(Alignment.TopCenter),
         )
     }
 }
 
 @Composable
-fun KYCDescriptionScreen(
+private fun KYCDescriptionScreen(
     kyc: KYCLevel1Details,
     onLevel1Clicked: () -> Unit,
     onLevel2Clicked: () -> Unit,
-    onLevel3Clicked: () -> Unit
+    onLevel3Clicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val currentLevel = kyc.currentLevel
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Top
+        verticalArrangement = Arrangement.Top,
     ) {
         Text(
             text = stringResource(R.string.feature_kyc_complete_kyc),
             modifier = Modifier.padding(top = 40.dp),
             fontSize = 19.sp,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         KYCLevelButton(
@@ -151,7 +168,7 @@ fun KYCDescriptionScreen(
             enabled = currentLevel >= 0.toString(),
             completed = currentLevel >= 1.toString(),
             modifier = Modifier.padding(top = 90.dp),
-            onLevel1Clicked
+            onLevel1Clicked,
         )
 
         KYCLevelButton(
@@ -159,7 +176,7 @@ fun KYCDescriptionScreen(
             enabled = currentLevel >= 1.toString(),
             completed = currentLevel >= 2.toString(),
             modifier = Modifier.padding(top = 80.dp),
-            onLevel2Clicked
+            onLevel2Clicked,
         )
 
         KYCLevelButton(
@@ -167,47 +184,48 @@ fun KYCDescriptionScreen(
             enabled = currentLevel >= 2.toString(),
             completed = currentLevel >= 3.toString(),
             modifier = Modifier.padding(top = 80.dp),
-            onLevel3Clicked
+            onLevel3Clicked,
         )
     }
 }
 
 @Composable
-fun KYCLevelButton(
+private fun KYCLevelButton(
     level: Int,
     enabled: Boolean,
     completed: Boolean,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    onClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         ButtonComponent(
             stringResource(R.string.feature_kyc_level) + "$level",
             enabled,
             completed,
-            onClick
+            onClick,
         )
         Spacer(modifier = Modifier.weight(0.1f))
         IconComponent(
             completed,
-            modifier = Modifier.weight(0.9f)
+            modifier = Modifier.weight(0.9f),
         )
     }
 }
 
 @Composable
-fun ButtonComponent(
+private fun ButtonComponent(
     value: String,
     enabled: Boolean,
     completed: Boolean,
-    onButtonClicked: () -> Unit
+    onButtonClicked: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Button(
-        modifier = Modifier
+        modifier = modifier
             .width(130.dp)
             .heightIn(38.dp)
             .shadow(43.dp),
@@ -227,35 +245,38 @@ fun ButtonComponent(
                 completed -> MaterialTheme.colorScheme.primary
                 enabled -> MaterialTheme.colorScheme.onPrimary
                 else -> Color.Gray
-            }
+            },
         ),
         shape = RoundedCornerShape(10.dp),
-        enabled = enabled
+        enabled = enabled,
     ) {
         Text(
             text = value,
             fontSize = 18.sp,
-            fontWeight = FontWeight.Normal
+            fontWeight = FontWeight.Normal,
         )
     }
 }
 
 @Composable
-fun IconComponent(completed: Boolean, modifier: Modifier = Modifier) {
+private fun IconComponent(
+    completed: Boolean,
+    modifier: Modifier = Modifier,
+) {
     if (completed) {
         Row(
             modifier = modifier
-                .height(23.dp)
+                .height(23.dp),
         ) {
             Icon(
                 Icons.Filled.Check,
                 contentDescription = stringResource(R.string.feature_kyc_check),
                 modifier = Modifier
-                    .size(20.dp)
+                    .size(20.dp),
             )
             Spacer(modifier = Modifier.width(26.dp))
             Text(
-                text = stringResource(R.string.feature_kyc_completion)
+                text = stringResource(R.string.feature_kyc_completion),
             )
         }
     }
@@ -263,7 +284,7 @@ fun IconComponent(completed: Boolean, modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun KYCDescriptionPreview() {
+private fun KYCDescriptionPreview() {
     val onLevel1Clicked: () -> Unit = { }
     val onLevel2Clicked: () -> Unit = { }
     val onLevel3Clicked: () -> Unit = { }
@@ -271,41 +292,42 @@ fun KYCDescriptionPreview() {
         kyc = KYCLevel1Details(),
         onLevel1Clicked,
         onLevel2Clicked,
-        onLevel3Clicked
+        onLevel3Clicked,
     )
 }
 
-class KYCDescriptionUiStatePreviewProvider : PreviewParameterProvider<KYCDescriptionUiState> {
+internal class KYCDescriptionUiStatePreviewProvider :
+    PreviewParameterProvider<KYCDescriptionUiState> {
     override val values = sequenceOf(
         KYCDescriptionUiState.Loading,
         KYCDescriptionUiState.Error,
         KYCDescriptionUiState.KYCDescription(
             KYCLevel1Details().apply {
                 currentLevel = "0"
-            }
+            },
         ),
         KYCDescriptionUiState.KYCDescription(
             KYCLevel1Details().apply {
                 currentLevel = "1"
-            }
+            },
         ),
         KYCDescriptionUiState.KYCDescription(
             KYCLevel1Details().apply {
                 currentLevel = "2"
-            }
+            },
         ),
         KYCDescriptionUiState.KYCDescription(
             KYCLevel1Details().apply {
                 currentLevel = "3"
-            }
-        )
+            },
+        ),
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun KYCDescriptionScreenPreview(
-    @PreviewParameter(KYCDescriptionUiStatePreviewProvider::class) uiState: KYCDescriptionUiState
+private fun KYCDescriptionScreenPreview(
+    @PreviewParameter(KYCDescriptionUiStatePreviewProvider::class) uiState: KYCDescriptionUiState,
 ) {
     KYCDescriptionScreen(
         kUiState = uiState,
@@ -313,23 +335,23 @@ fun KYCDescriptionScreenPreview(
         onLevel2Clicked = {},
         onLevel3Clicked = {},
         isRefreshing = false,
-        onRefresh = {}
+        onRefresh = {},
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun ButtonComponentPreview() {
+private fun ButtonComponentPreview() {
     Column {
-        ButtonComponent(value = "Level 1", enabled = true, completed = false) {}
-        ButtonComponent(value = "Level 2", enabled = true, completed = true) {}
-        ButtonComponent(value = "Level 3", enabled = false, completed = false) {}
+        ButtonComponent(value = "Level 1", enabled = true, completed = false, onButtonClicked = {})
+        ButtonComponent(value = "Level 2", enabled = true, completed = true, {})
+        ButtonComponent(value = "Level 3", enabled = false, completed = false, {})
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun IconComponentPreview() {
+private fun IconComponentPreview() {
     Column {
         IconComponent(completed = true)
         IconComponent(completed = false)
