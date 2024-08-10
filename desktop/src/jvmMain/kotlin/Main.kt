@@ -1,14 +1,17 @@
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import org.mifospay.shared.App
+import androidx.compose.ui.window.rememberWindowState
+import org.mifospay.shared.MainView
 
 fun main() {
     application {
+        val windowState = rememberWindowState()
         Window(
-            title = "Kmp App",
-            onCloseRequest = ::exitApplication
+            onCloseRequest = ::exitApplication,
+            state = windowState,
+            title = "MifosWallet"
         ) {
-           App()
+            MainView()
         }
     }
 }

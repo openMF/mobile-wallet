@@ -38,6 +38,8 @@ kotlin {
         val desktopMain by getting {
             dependencies {
                 // Desktop specific dependencies
+                implementation(compose.desktop.currentOs)
+                implementation(compose.desktop.common)
             }
         }
     }
