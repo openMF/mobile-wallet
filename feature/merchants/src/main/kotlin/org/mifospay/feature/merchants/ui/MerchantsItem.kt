@@ -1,6 +1,16 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.merchants.ui
 
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -24,22 +33,22 @@ import org.mifospay.core.designsystem.theme.mifosText
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.feature.merchants.R
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun MerchantsItem(
+internal fun MerchantsItem(
     savingsWithAssociations: SavingsWithAssociations,
     onMerchantClicked: () -> Unit,
-    onMerchantLongPressed: (String?) -> Unit
+    onMerchantLongPressed: (String?) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     MifosCard(
-        modifier = Modifier.pointerInput(Unit) {
-            detectTapGestures(
-                onLongPress = {
-                    onMerchantLongPressed(savingsWithAssociations.externalId)
-                }
-            )
-        },
-        onClick = { onMerchantClicked.invoke() },
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface)
+        modifier = modifier.combinedClickable(
+            onClick = onMerchantClicked,
+            onLongClick = {
+                onMerchantLongPressed(savingsWithAssociations.externalId)
+            },
+        ),
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
     ) {
         Column {
             Row(
@@ -53,7 +62,7 @@ fun MerchantsItem(
                     modifier = Modifier
                         .align(Alignment.CenterVertically)
                         .padding(start = 16.dp, end = 16.dp)
-                        .size(39.dp)
+                        .size(39.dp),
                 )
 
                 Column {
@@ -64,14 +73,14 @@ fun MerchantsItem(
                     Text(
                         text = savingsWithAssociations.externalId,
                         modifier = Modifier.padding(top = 4.dp),
-                        style = styleMedium16sp.copy(mifosText)
+                        style = styleMedium16sp.copy(mifosText),
                     )
                 }
             }
         }
         HorizontalDivider(
             thickness = 1.dp,
-            modifier = Modifier.padding(8.dp)
+            modifier = Modifier.padding(8.dp),
         )
     }
 }
@@ -82,6 +91,6 @@ private fun AccountsItemPreview() {
     MerchantsItem(
         savingsWithAssociations = SavingsWithAssociations(),
         onMerchantClicked = {},
-        onMerchantLongPressed = {}
+        onMerchantLongPressed = {},
     )
 }
