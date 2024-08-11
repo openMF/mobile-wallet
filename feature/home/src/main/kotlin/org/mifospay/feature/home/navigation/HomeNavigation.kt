@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.home.navigation
 
 import androidx.navigation.NavController
@@ -12,12 +21,12 @@ fun NavController.navigateToHome(navOptions: NavOptions) = navigate(HOME_ROUTE, 
 
 fun NavGraphBuilder.homeScreen(
     onRequest: (String) -> Unit,
-    onPay: () -> Unit
+    onPay: () -> Unit,
 ) {
     composable(route = HOME_ROUTE) {
         HomeRoute(
             onRequest = onRequest,
-            onPay = onPay
+            onPay = onPay,
         )
     }
 }

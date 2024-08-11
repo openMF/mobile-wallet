@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.bank.accounts.choose.sim
 
 import androidx.compose.animation.AnimatedVisibility
@@ -40,14 +49,14 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.feature.bank.accounts.R
 
 @Composable
-fun ChooseSimDialogSheet(
+internal fun ChooseSimDialogSheet(
     onSimSelected: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     MifosBottomSheet(
         content = {
             ChooseSimDialogSheetContent(
-                onSimSelected = onSimSelected
+                onSimSelected = onSimSelected,
             )
         },
         onDismiss = {
@@ -63,7 +72,7 @@ fun ChooseSimDialogSheet(
  */
 @Composable
 @Suppress("LongMethod")
-fun ChooseSimDialogSheetContent(
+private fun ChooseSimDialogSheetContent(
     onSimSelected: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -82,67 +91,67 @@ fun ChooseSimDialogSheetContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .padding(8.dp)
+            .padding(8.dp),
     ) {
         Text(
             text = stringResource(id = R.string.feature_accounts_verify_mobile_number),
             style = MaterialTheme.typography.titleLarge,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(id = R.string.feature_accounts_confirm_mobile_number_message),
             style = MaterialTheme.typography.bodySmall.copy(
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             ),
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             modifier = Modifier.padding(horizontal = 24.dp),
             text = stringResource(id = R.string.feature_accounts_bank_account_mobile_verification_conditions),
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
         Spacer(modifier = Modifier.height(20.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             SimCard(
                 simNumber = 1,
                 isSelected = selectedSim == 1,
-                onSimSelected = { selectedSim = 1 }
+                onSimSelected = { selectedSim = 1 },
             )
 
             Spacer(modifier = Modifier.width(24.dp))
             Text(
                 text = stringResource(id = R.string.feature_accounts_or),
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             Spacer(modifier = Modifier.width(24.dp))
             SimCard(
                 simNumber = 2,
                 isSelected = selectedSim == 2,
-                onSimSelected = { selectedSim = 2 }
+                onSimSelected = { selectedSim = 2 },
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
         Text(
             text = stringResource(id = R.string.feature_accounts_regular_charges_will_apply),
             color = MaterialTheme.colorScheme.onSurface,
-            style = MaterialTheme.typography.bodySmall
+            style = MaterialTheme.typography.bodySmall,
         )
 
         AnimatedVisibility(
-            visible = showMessage
+            visible = showMessage,
         ) {
             Text(
                 text = message,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(vertical = 4.dp)
+                modifier = Modifier.padding(vertical = 4.dp),
             )
         }
 
@@ -156,7 +165,7 @@ fun ChooseSimDialogSheetContent(
                 } else {
                     onSimSelected(selectedSim)
                 }
-            }
+            },
         ) {
             Text(text = stringResource(id = R.string.feature_accounts_confirm))
         }
@@ -165,7 +174,7 @@ fun ChooseSimDialogSheetContent(
 }
 
 @Composable
-fun SimCard(
+private fun SimCard(
     simNumber: Int,
     isSelected: Boolean,
     onSimSelected: () -> Unit,
@@ -174,7 +183,9 @@ fun SimCard(
     val drawable: Painter = painterResource(
         id = if (isSelected) {
             R.drawable.feature_accounts_sim_card_selected
-        } else R.drawable.feature_accounts_sim_card_unselected
+        } else {
+            R.drawable.feature_accounts_sim_card_unselected
+        },
     )
     Image(
         painter = drawable,
@@ -182,17 +193,17 @@ fun SimCard(
         contentScale = ContentScale.Fit,
         modifier = modifier
             .size(50.dp)
-            .clickable { onSimSelected() }
+            .clickable { onSimSelected() },
     )
 }
 
 @Preview
 @Composable
-fun SimSelectionPreview() {
+private fun SimSelectionPreview() {
     MifosTheme {
         Surface {
             ChooseSimDialogSheetContent(
-                onSimSelected = {}
+                onSimSelected = {},
             )
         }
     }

@@ -5,16 +5,18 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 
 @Composable
 fun MifosScaffold(
-    topBarTitle: Int? = null,
     backPress: () -> Unit,
+    modifier: Modifier = Modifier,
+    topBarTitle: Int? = null,
     floatingActionButtonContent: FloatingActionButtonContent? = null,
     snackbarHost: @Composable () -> Unit = {},
     scaffoldContent: @Composable (PaddingValues) -> Unit,
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -22,7 +24,7 @@ fun MifosScaffold(
                 MifosTopBar(
                     topBarTitle = topBarTitle,
                     backPress = backPress,
-                    actions = actions
+                    actions = actions,
                 )
             }
         },
@@ -31,17 +33,18 @@ fun MifosScaffold(
                 FloatingActionButton(
                     onClick = content.onClick,
                     contentColor = content.contentColor,
-                    content = content.content
+                    content = content.content,
                 )
             }
         },
         snackbarHost = snackbarHost,
         content = scaffoldContent,
+        modifier = modifier,
     )
 }
 
 data class FloatingActionButtonContent(
     val onClick: (() -> Unit),
     val contentColor: Color,
-    val content: (@Composable () -> Unit)
+    val content: (@Composable () -> Unit),
 )

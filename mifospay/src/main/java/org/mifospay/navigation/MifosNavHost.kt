@@ -12,11 +12,13 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.mifos.mobile.passcode.utils.PassCodeConstants
 import org.mifospay.common.Constants
+import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.auth.navigation.loginScreen
 import org.mifospay.feature.auth.navigation.mobileVerificationScreen
 import org.mifospay.feature.auth.navigation.navigateToMobileVerification
 import org.mifospay.feature.auth.navigation.navigateToSignup
 import org.mifospay.feature.auth.navigation.signupScreen
+import org.mifospay.feature.bank.accounts.AccountsScreen
 import org.mifospay.feature.bank.accounts.navigation.bankAccountDetailScreen
 import org.mifospay.feature.bank.accounts.navigation.linkBankAccountScreen
 import org.mifospay.feature.bank.accounts.navigation.navigateToBankAccountDetail
@@ -24,11 +26,13 @@ import org.mifospay.feature.bank.accounts.navigation.navigateToLinkBankAccount
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
+import org.mifospay.feature.finance.FinanceScreenContents
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.homeScreen
 import org.mifospay.feature.invoices.navigation.invoiceDetailScreen
 import org.mifospay.feature.invoices.navigation.navigateToInvoiceDetail
+import org.mifospay.feature.kyc.KYCScreen
 import org.mifospay.feature.kyc.navigation.kycLevel1Screen
 import org.mifospay.feature.kyc.navigation.kycLevel2Screen
 import org.mifospay.feature.kyc.navigation.kycLevel3Screen
@@ -39,6 +43,7 @@ import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
 import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
+import org.mifospay.feature.merchants.ui.MerchantScreen
 import org.mifospay.feature.passcode.PassCodeActivity
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.profile.navigation.editProfileScreen
@@ -49,8 +54,8 @@ import org.mifospay.feature.receipt.navigation.navigateToReceipt
 import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
+import org.mifospay.feature.savedcards.CardsScreen
 import org.mifospay.feature.savedcards.navigation.addCardScreen
-import org.mifospay.feature.savedcards.navigation.navigateToAddCard
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.navigateToSettings
@@ -79,8 +84,29 @@ fun MifosNavHost(
     modifier: Modifier = Modifier,
     startDestination: String = HOME_ROUTE,
 ) {
-
     val context = LocalContext.current
+    val tabContents = listOf(
+        TabContent(FinanceScreenContents.ACCOUNTS.name) {
+            AccountsScreen(
+                navigateToBankAccountDetailScreen = navController::navigateToBankAccountDetail,
+                navigateToLinkBankAccountScreen = navController::navigateToLinkBankAccount,
+            )
+        },
+        TabContent(FinanceScreenContents.CARDS.name) {
+            CardsScreen(onEditCard = {})
+        },
+        TabContent(FinanceScreenContents.MERCHANTS.name) {
+            MerchantScreen()
+        },
+        TabContent(FinanceScreenContents.KYC.name) {
+            KYCScreen(
+                onLevel1Clicked = navController::navigateToKYCLevel1,
+                onLevel2Clicked = navController::navigateToKYCLevel2,
+                onLevel3Clicked = navController::navigateToKYCLevel3,
+            )
+        },
+    )
+
     NavHost(
         navController = navController,
         startDestination = startDestination,
@@ -88,7 +114,7 @@ fun MifosNavHost(
     ) {
         homeScreen(
             onRequest = { vpa -> navController.navigateToShowQrScreen(vpa) },
-            onPay = navController::navigateToSendMoneyScreen
+            onPay = navController::navigateToSendMoneyScreen,
         )
         paymentsScreen(
             showQr = { vpa -> navController.navigateToShowQrScreen(vpa) },
@@ -102,54 +128,45 @@ fun MifosNavHost(
             },
             navigateToInvoiceDetailScreen = { uri ->
                 navController.navigateToInvoiceDetail(uri.toString())
-            }
+            },
         )
         financeScreen(
-            onAddBtn = { navController.navigateToAddCard() },
-            onLevel1Clicked = { navController.navigateToKYCLevel1() },
-            onLevel2Clicked = { navController.navigateToKYCLevel2() },
-            onLevel3Clicked = { navController.navigateToKYCLevel3() },
-            navigateToBankAccountDetailScreen = { bankAccountDetails, index ->
-                navController.navigateToBankAccountDetail(bankAccountDetails, index)
-            },
-            navigateToLinkBankAccountScreen = {
-                navController.navigateToLinkBankAccount()
-            }
+            tabContents = tabContents,
         )
         addCardScreen(
             onDismiss = navController::popBackStack,
             onAddCard = {
                 // Handle adding the card
                 navController.popBackStack()
-            }
+            },
         )
         profileScreen(
             onEditProfile = { navController.navigateToEditProfile() },
-            onSettings = { navController.navigateToSettings() }
+            onSettings = { navController.navigateToSettings() },
         )
         sendMoneyScreen(
             onBackClick = navController::popBackStack,
             proceedWithMakeTransferFlow = { externalId, transferAmount ->
                 navController.navigateToMakeTransferScreen(externalId, transferAmount)
-            }
+            },
         )
         makeTransferScreen(
-            onDismiss = navController::popBackStack
+            onDismiss = navController::popBackStack,
         )
         showQrScreen(
-            onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
         )
         merchantTransferScreen(
             proceedWithMakeTransferFlow = { externalId, transferAmount ->
                 navController.navigateToMakeTransferScreen(externalId, transferAmount)
             },
-            onBackPressed = navController::popBackStack
+            onBackPressed = navController::popBackStack,
         )
         settingsScreen(
             onBackPress = navController::popBackStack,
             navigateToEditPasswordScreen = {
                 navController.navigateToEditPassword()
-            }
+            },
         )
 
         kycScreen(
@@ -164,19 +181,19 @@ fun MifosNavHost(
             onLevel3Clicked = {
                 // Navigate to Level 3 screen
                 navController.navigate("kyc_level_3")
-            }
+            },
         )
         kycLevel1Screen(
             navigateToKycLevel2 = {
                 // Navigate to KYC Level 2 screen
                 // For now, we'll just pop back to the previous screen
                 navController.popBackStack()
-            }
+            },
         )
         kycLevel2Screen(
             onSuccessKyc2 = {
                 navController.popBackStack()
-            }
+            },
         )
         kycLevel3Screen()
         newSiScreen(onBackClick = navController::popBackStack)
@@ -189,23 +206,23 @@ fun MifosNavHost(
         )
 
         faqScreen(
-            navigateBack = { navController.popBackStack() }
+            navigateBack = { navController.popBackStack() },
         )
         readQrScreen(
-            onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
         )
 
         specificTransactionsScreen(
             onBackClick = navController::popBackStack,
             onTransactionItemClicked = { transactionId ->
                 navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + transactionId))
-            }
+            },
         )
         invoiceDetailScreen(
             onBackPress = { navController.popBackStack() },
             navigateToReceiptScreen = { uri ->
                 navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + uri))
-            }
+            },
         )
         receiptScreen(
             onShowSnackbar = { message, action ->
@@ -215,7 +232,7 @@ fun MifosNavHost(
             openPassCodeActivity = { uri ->
                 context.openPassCodeActivity(uri)
             },
-            onBackClick = navController::popBackStack
+            onBackClick = navController::popBackStack,
         )
         setupUpiPinScreen()
         bankAccountDetailScreen(
@@ -231,14 +248,14 @@ fun MifosNavHost(
             onBackClick = { bankAccountDetails, index ->
                 navController.previousBackStackEntry?.savedStateHandle?.set(
                     Constants.UPDATED_BANK_ACCOUNT,
-                    bankAccountDetails
+                    bankAccountDetails,
                 )
                 navController.previousBackStackEntry?.savedStateHandle?.set(Constants.INDEX, index)
                 navController.popBackStack()
-            }
+            },
         )
         linkBankAccountScreen(
-            onBackClick = { navController.popBackStack() }
+            onBackClick = { navController.popBackStack() },
         )
         editPasswordScreen(
             onBackPress = {
@@ -246,7 +263,7 @@ fun MifosNavHost(
             },
             onCancelChanges = {
                 navController.popBackStack()
-            }
+            },
         )
         signupScreen(
             onLoginSuccess = {
@@ -268,9 +285,9 @@ fun MifosNavHost(
                     email = extraData[Constants.GOOGLE_EMAIL] as? String ?: "",
                     firstName = extraData[Constants.GOOGLE_GIVEN_NAME] as? String ?: "",
                     lastName = extraData[Constants.GOOGLE_FAMILY_NAME] as? String ?: "",
-                    businessName = extraData[Constants.GOOGLE_DISPLAY_NAME] as? String ?: ""
+                    businessName = extraData[Constants.GOOGLE_DISPLAY_NAME] as? String ?: "",
                 )
-            }
+            },
         )
 
         loginScreen(
@@ -283,19 +300,20 @@ fun MifosNavHost(
                     googleDisplayName = googleDisplayName,
                     googleEmail = googleEmail,
                     googleFamilyName = googleFamilyName,
-                    googleGivenName = googleGivenName
+                    googleGivenName = googleGivenName,
                 )
-            }
+            },
         )
     }
 }
+
 
 fun Context.openPassCodeActivity(deepLinkURI: Uri) {
     PassCodeActivity.startPassCodeActivity(
         context = this,
         bundle = bundleOf(
             Pair("uri", deepLinkURI.toString()),
-            Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
+            Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true),
         ),
     )
 }
@@ -303,7 +321,7 @@ fun Context.openPassCodeActivity(deepLinkURI: Uri) {
 fun getUri(context: Context, file: File): Uri {
     val uri = FileProvider.getUriForFile(
         Objects.requireNonNull(context),
-        org.mifospay.BuildConfig.APPLICATION_ID + ".provider", file
+        org.mifospay.BuildConfig.APPLICATION_ID + ".provider", file,
     )
     return uri
 }

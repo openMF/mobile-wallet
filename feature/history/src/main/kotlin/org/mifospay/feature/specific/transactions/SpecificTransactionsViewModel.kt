@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.specific.transactions
 
 import androidx.lifecycle.ViewModel
@@ -14,7 +23,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SpecificTransactionsViewModel @Inject constructor(
     private val mUseCaseFactory: UseCaseFactory,
-    private var mTaskLooper: TaskLooper? = null
+    private var mTaskLooper: TaskLooper? = null,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<SpecificTransactionsUiState> =
@@ -39,16 +48,18 @@ class SpecificTransactionsViewModel @Inject constructor(
                 val transferId = transaction.transferId
                 mTaskLooper?.addTask(
                     useCase = mUseCaseFactory.getUseCase(Constants.FETCH_ACCOUNT_TRANSFER_USECASE)
-                            as UseCase<FetchAccountTransfer.RequestValues, FetchAccountTransfer.ResponseValue>,
+                        as UseCase<FetchAccountTransfer.RequestValues, FetchAccountTransfer.ResponseValue>,
                     values = FetchAccountTransfer.RequestValues(transferId),
                     taskData = TaskLooper.TaskData(
-                        org.mifospay.common.Constants.TRANSFER_DETAILS, i
-                    )
+                        org.mifospay.common.Constants.TRANSFER_DETAILS,
+                        i,
+                    ),
                 )
             }
             mTaskLooper!!.listen(object : TaskLooper.Listener {
                 override fun <R : UseCase.ResponseValue?> onTaskSuccess(
-                    taskData: TaskLooper.TaskData, response: R
+                    taskData: TaskLooper.TaskData,
+                    response: R,
                 ) {
                     when (taskData.taskName) {
                         org.mifospay.common.Constants.TRANSFER_DETAILS -> {

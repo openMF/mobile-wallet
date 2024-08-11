@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.faq
 
 import androidx.compose.foundation.layout.Column
@@ -14,31 +23,41 @@ import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.ui.FaqItemScreen
 
 @Composable
-fun FaqScreenRoute(
+internal fun FaqScreenRoute(
     navigateBack: () -> Unit,
-    faqViewModel: FAQViewModel = hiltViewModel()
+    modifier: Modifier = Modifier,
+    faqViewModel: FAQViewModel = hiltViewModel(),
 ) {
-    FaqScreen(navigateBack = { navigateBack.invoke() }, faqViewModel.getFAQ())
+    FaqScreen(
+        modifier = modifier,
+        navigateBack = navigateBack,
+        faqList = faqViewModel.getFAQ(),
+    )
 }
 
 @Composable
-fun FaqScreen(
+private fun FaqScreen(
     navigateBack: () -> Unit,
-    faqList: List<FAQ>
+    faqList: List<FAQ>,
+    modifier: Modifier = Modifier,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+    ) {
         MifosTopBar(
             topBarTitle = R.string.feature_faq_frequently_asked_questions,
-            backPress = { navigateBack.invoke() })
+            backPress = { navigateBack.invoke() },
+        )
         LazyColumn(
             modifier = Modifier
                 .weight(1f)
-                .fillMaxWidth()
+                .fillMaxWidth(),
         ) {
             itemsIndexed(items = faqList) { _, faqItem ->
                 FaqItemScreen(
                     question = stringResource(id = faqItem.question),
-                    answer = faqItem.answer?.let { stringResource(id = it) }
+                    answer = faqItem.answer?.let { stringResource(id = it) },
                 )
             }
         }
@@ -47,13 +66,14 @@ fun FaqScreen(
 
 @Preview(showSystemUi = true)
 @Composable
-fun FaqScreenPreview() {
+private fun FaqScreenPreview() {
     FaqScreen(
-        {}, listOf(
+        {},
+        listOf(
             FAQ(R.string.feature_faq_question1, R.string.feature_faq_answer1),
             FAQ(R.string.feature_faq_question2, R.string.feature_faq_answer2),
             FAQ(R.string.feature_faq_question3, R.string.feature_faq_answer3),
-            FAQ(R.string.feature_faq_question4, R.string.feature_faq_answer4)
-        )
+            FAQ(R.string.feature_faq_question4, R.string.feature_faq_answer4),
+        ),
     )
 }

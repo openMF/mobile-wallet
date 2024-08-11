@@ -16,11 +16,6 @@ import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.launch
 import org.mifospay.core.ui.utility.TabContent
 
-/**
- * @author pratyush
- * @since 23/3/24
- */
-
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MifosScrollableTabRow(
@@ -35,11 +30,10 @@ fun MifosScrollableTabRow(
     val scope = rememberCoroutineScope()
 
     ScrollableTabRow(
+        modifier = modifier,
         containerColor = containerColor,
         selectedTabIndex = pagerState.currentPage,
         edgePadding = edgePadding,
-        indicator = {},
-        divider = {},
     ) {
         tabContents.forEachIndexed { index, currentTab ->
             Tab(
@@ -59,9 +53,8 @@ fun MifosScrollableTabRow(
 
     HorizontalPager(
         count = tabContents.size,
-        state = pagerState,
-        modifier = modifier
-    ) { page ->
-        tabContents.getOrNull(page)?.content?.invoke() ?: Text("Page $page")
+        state = pagerState
+    ) {
+        tabContents[it].content.invoke()
     }
 }

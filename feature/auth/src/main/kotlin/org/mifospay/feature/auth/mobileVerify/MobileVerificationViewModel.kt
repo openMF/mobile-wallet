@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.auth.mobileVerify
 
 import androidx.compose.runtime.getValue
@@ -20,7 +29,7 @@ import javax.inject.Inject
 @Suppress("UnusedParameter")
 class MobileVerificationViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
-    private val searchClientUseCase: SearchClient
+    private val searchClientUseCase: SearchClient,
 ) : ViewModel() {
 
     private val _uiState =
@@ -35,10 +44,11 @@ class MobileVerificationViewModel @Inject constructor(
     fun verifyMobileAndRequestOtp(
         fullNumber: String,
         mobileNo: String,
-        onError: (String?) -> Unit
+        onError: (String?) -> Unit,
     ) {
         showProgress = true
-        mUseCaseHandler.execute(searchClientUseCase,
+        mUseCaseHandler.execute(
+            searchClientUseCase,
             fullNumber.let { SearchClient.RequestValues(it) },
             object : UseCase.UseCaseCallback<SearchClient.ResponseValue> {
                 override fun onSuccess(response: SearchClient.ResponseValue) {
@@ -49,7 +59,8 @@ class MobileVerificationViewModel @Inject constructor(
                 override fun onError(message: String) {
                     requestOtp(fullNumber)
                 }
-            })
+            },
+        )
     }
 
     /**

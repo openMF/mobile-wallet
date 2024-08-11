@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.transaction.detail
 
 import androidx.compose.foundation.Image
@@ -36,15 +45,14 @@ import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.feature.history.R
 import org.mifospay.feature.specific.transactions.SpecificTransactionAccountInfo
 
-
 @Composable
-fun TransactionDetailScreen(
-    viewModel: TransactionDetailViewModel = hiltViewModel(),
+internal fun TransactionDetailScreen(
     transaction: Transaction,
     viewReceipt: () -> Unit,
     accountClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: TransactionDetailViewModel = hiltViewModel(),
 ) {
-
     val uiState = viewModel.transactionDetailUiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = transaction) {
@@ -55,21 +63,23 @@ fun TransactionDetailScreen(
         uiState = uiState.value,
         transaction = transaction,
         viewReceipt = viewReceipt,
-        accountClicked = accountClicked
+        accountClicked = accountClicked,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun TransactionDetailScreen(
+private fun TransactionDetailScreen(
     uiState: TransactionDetailUiState,
     transaction: Transaction,
     viewReceipt: () -> Unit,
     accountClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .padding(20.dp)
-            .height(300.dp)
+            .height(300.dp),
     ) {
         when (uiState) {
             is TransactionDetailUiState.Error -> {
@@ -78,7 +88,7 @@ fun TransactionDetailScreen(
 
             is TransactionDetailUiState.Loading -> {
                 MfLoadingWheel(
-                    backgroundColor = Color.Black.copy(alpha = 0.6f)
+                    backgroundColor = Color.Black.copy(alpha = 0.6f),
                 )
             }
 
@@ -86,7 +96,7 @@ fun TransactionDetailScreen(
                 TransactionsDetailContent(
                     transaction = transaction,
                     viewReceipt = viewReceipt,
-                    accountClicked = accountClicked
+                    accountClicked = accountClicked,
                 )
             }
         }
@@ -94,36 +104,36 @@ fun TransactionDetailScreen(
 }
 
 @Composable
-fun TransactionsDetailContent(
-    modifier: Modifier = Modifier,
+private fun TransactionsDetailContent(
     transaction: Transaction,
     viewReceipt: () -> Unit,
     accountClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.padding(12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(
             modifier = Modifier
                 .padding(horizontal = 12.dp)
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column {
                 Text(
-                    text = stringResource(id = R.string.feature_receipt_transaction_id) + transaction.transactionId,
+                    text = stringResource(id = R.string.feature_history_transaction_id) + transaction.transactionId,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
-                    text = stringResource(id = R.string.feature_receipt_transaction_date) + transaction.date,
+                    text = stringResource(id = R.string.feature_history_transaction_date) + transaction.date,
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 if (transaction.receiptId != null) {
                     Text(
-                        text = stringResource(id = R.string.feature_receipt_pan_id) + transaction.receiptId,
+                        text = stringResource(id = R.string.feature_history_pan_id) + transaction.receiptId,
                         style = MaterialTheme.typography.bodyLarge,
                     )
                 }
@@ -145,30 +155,31 @@ fun TransactionsDetailContent(
                 modifier = Modifier.weight(1f),
                 account = transaction.transferDetail.fromAccount,
                 client = transaction.transferDetail.fromClient,
-                accountClicked = accountClicked
+                accountClicked = accountClicked,
             )
-            Image(painter = painterResource(id = R.drawable.feature_history_ic_send), contentDescription = null)
+            Image(
+                painter = painterResource(id = R.drawable.feature_history_ic_send),
+                contentDescription = null,
+            )
             SpecificTransactionAccountInfo(
                 modifier = Modifier.weight(1f),
                 account = transaction.transferDetail.toAccount,
                 client = transaction.transferDetail.toClient,
-                accountClicked = accountClicked
+                accountClicked = accountClicked,
             )
         }
 
         HorizontalDivider(modifier = Modifier.padding(vertical = 12.dp))
 
         Text(
-            text = stringResource(id = R.string.feature_receipt_view_Receipt),
+            text = stringResource(id = R.string.feature_history_view_Receipt),
             style = MaterialTheme.typography.bodyLarge,
             color = MaterialTheme.colorScheme.primary,
             textAlign = TextAlign.Center,
-            modifier = Modifier.clickable { viewReceipt() }
+            modifier = Modifier.clickable { viewReceipt() },
         )
-
     }
 }
-
 
 class TransactionDetailUiStateProvider :
     PreviewParameterProvider<TransactionDetailUiState> {
@@ -182,7 +193,10 @@ class TransactionDetailUiStateProvider :
 
 @Preview(showSystemUi = true)
 @Composable
-fun ShowQrScreenPreview(@PreviewParameter(TransactionDetailUiStateProvider::class) uiState: TransactionDetailUiState) {
+private fun ShowQrScreenPreview(
+    @PreviewParameter(TransactionDetailUiStateProvider::class)
+    uiState: TransactionDetailUiState,
+) {
     MifosTheme {
         TransactionDetailScreen(
             uiState = uiState,

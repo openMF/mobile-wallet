@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.auth.login
 
 import android.util.Log
@@ -43,7 +52,6 @@ class LoginViewModel @Inject constructor(
         _isLoginSuccess.update { isLoginSuccess }
     }
 
-
     /**
      * Authenticate User with username and password
      * @param username
@@ -53,14 +61,16 @@ class LoginViewModel @Inject constructor(
     fun loginUser(
         username: String,
         password: String,
-        onLoginFailed: (String) -> Unit
+        onLoginFailed: (String) -> Unit,
     ) {
         updateProgressState(true)
         authenticateUserUseCase.walletRequestValues =
             AuthenticateUser.RequestValues(username, password)
 
         val requestValue = authenticateUserUseCase.walletRequestValues
-        mUsecaseHandler.execute(authenticateUserUseCase, requestValue,
+        mUsecaseHandler.execute(
+            authenticateUserUseCase,
+            requestValue,
             object : UseCaseCallback<AuthenticateUser.ResponseValue> {
                 override fun onSuccess(response: AuthenticateUser.ResponseValue) {
                     saveAuthTokenInPref(response.user)
@@ -72,16 +82,17 @@ class LoginViewModel @Inject constructor(
                     updateProgressState(false)
                     onLoginFailed(message)
                 }
-            })
+            },
+        )
     }
-
 
     /**
      * Fetch user details return by authenticated user
      * @param user
      */
     private fun fetchUserDetails(user: User) {
-        mUsecaseHandler.execute(fetchUserDetailsUseCase,
+        mUsecaseHandler.execute(
+            fetchUserDetailsUseCase,
             FetchUserDetails.RequestValues(user.userId),
             object : UseCaseCallback<FetchUserDetails.ResponseValue> {
                 override fun onSuccess(response: FetchUserDetails.ResponseValue) {
@@ -92,7 +103,8 @@ class LoginViewModel @Inject constructor(
                     updateProgressState(false)
                     Log.d("Login User Detailed: ", message)
                 }
-            })
+            },
+        )
     }
 
     /**
@@ -116,7 +128,8 @@ class LoginViewModel @Inject constructor(
                 override fun onError(message: String) {
                     updateProgressState(false)
                 }
-            })
+            },
+        )
     }
 
     private fun saveAuthTokenInPref(user: User) {
@@ -128,7 +141,7 @@ class LoginViewModel @Inject constructor(
      */
     private fun saveUserDetails(
         user: User,
-        userWithRole: UserWithRole
+        userWithRole: UserWithRole,
     ) {
         val userName = user.username
         val userID = user.userId

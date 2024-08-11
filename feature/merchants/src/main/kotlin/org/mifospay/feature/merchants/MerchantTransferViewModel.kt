@@ -18,8 +18,8 @@ import org.mifospay.core.data.domain.usecase.account.FetchAccountTransfer
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.core.data.util.Constants.FETCH_ACCOUNT_TRANSFER_USECASE
 import org.mifospay.core.datastore.PreferencesHelper
-import org.mifospay.feature.HistoryContract
-import org.mifospay.feature.TransactionsHistory
+import org.mifospay.core.data.domain.usecase.history.HistoryContract
+import org.mifospay.core.data.domain.usecase.history.TransactionsHistory
 import javax.inject.Inject
 
 @HiltViewModel

@@ -7,15 +7,12 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-plugins {
-    alias(libs.plugins.mifospay.android.feature)
-    alias(libs.plugins.mifospay.android.library.compose)
-}
+package org.mifospay.core.data.domain.usecase.history
 
-android {
-    namespace = "org.mifospay.feature.editpassword"
-}
+import com.mifospay.core.model.domain.Transaction
 
-dependencies {
-    implementation(projects.core.data)
+interface HistoryContract {
+    interface TransactionsHistoryAsync {
+        fun onTransactionsFetchCompleted(transactions: List<Transaction>?)
+    }
 }

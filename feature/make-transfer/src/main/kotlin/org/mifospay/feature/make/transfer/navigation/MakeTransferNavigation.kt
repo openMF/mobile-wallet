@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.make.transfer.navigation
 
 import androidx.compose.material.navigation.bottomSheet
@@ -18,7 +27,7 @@ const val MAKE_TRANSFER_ROUTE = MAKE_TRANSFER_ROUTE_BASE +
 fun NavController.navigateToMakeTransferScreen(
     externalId: String? = null,
     transferAmount: String? = null,
-    navOptions: NavOptions? = null
+    navOptions: NavOptions? = null,
 ) {
     val route = MAKE_TRANSFER_ROUTE_BASE + if (transferAmount != null) {
         "?${PAYEE_EXTERNAL_ID_ARG}=$externalId" +
@@ -31,7 +40,7 @@ fun NavController.navigateToMakeTransferScreen(
 }
 
 fun NavGraphBuilder.makeTransferScreen(
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
 ) {
     bottomSheet(
         route = MAKE_TRANSFER_ROUTE,
@@ -45,11 +54,11 @@ fun NavGraphBuilder.makeTransferScreen(
                 type = NavType.StringType
                 defaultValue = null
                 nullable = true
-            }
-        )
+            },
+        ),
     ) {
         MakeTransferScreenRoute(
-            onDismiss = onDismiss
+            onDismiss = onDismiss,
         )
     }
 }

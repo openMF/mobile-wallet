@@ -1,19 +1,25 @@
-package org.mifospay.feature
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
+package org.mifospay.core.data.domain.usecase.history
 
 import com.mifospay.core.model.domain.Transaction
 import org.mifospay.core.data.base.TaskLooper
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
 import org.mifospay.core.data.base.UseCaseFactory
 import org.mifospay.core.data.base.UseCaseHandler
-import org.mifospay.core.data.domain.usecase.account.FetchAccount
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransactions
 import javax.inject.Inject
 
-@Suppress("UnusedPrivateProperty")
 class TransactionsHistory @Inject constructor(
-    private val mUsecaseHandler: UseCaseHandler,
+    private val mUseCaseHandler: UseCaseHandler,
     private val fetchAccountTransactionsUseCase: FetchAccountTransactions,
-    private val mFetchAccountUseCase: FetchAccount
 ) {
     var delegate: HistoryContract.TransactionsHistoryAsync? = null
 
@@ -31,7 +37,8 @@ class TransactionsHistory @Inject constructor(
     }
 
     fun fetchTransactionsHistory(accountId: Long) {
-        mUsecaseHandler.execute(fetchAccountTransactionsUseCase,
+        mUseCaseHandler.execute(
+            fetchAccountTransactionsUseCase,
             FetchAccountTransactions.RequestValues(accountId),
             object : UseCaseCallback<FetchAccountTransactions.ResponseValue?> {
                 override fun onSuccess(response: FetchAccountTransactions.ResponseValue?) {
@@ -42,6 +49,7 @@ class TransactionsHistory @Inject constructor(
                 override fun onError(message: String) {
                     transactions = null
                 }
-            })
+            },
+        )
     }
 }

@@ -26,7 +26,7 @@ fun PaymentsRoute(
     viewReceipt: (String) -> Unit,
     onAccountClicked: (String, ArrayList<Transaction>) -> Unit,
     proceedWithMakeTransferFlow: (String, String) -> Unit,
-    navigateToInvoiceDetailScreen:(Uri) -> Unit
+    navigateToInvoiceDetailScreen: (Uri) -> Unit,
 ) {
     val vpa by viewModel.vpa.collectAsStateWithLifecycle()
     PaymentScreenContent(
@@ -36,7 +36,7 @@ fun PaymentsRoute(
         onAccountClicked = onAccountClicked,
         viewReceipt = viewReceipt,
         proceedWithMakeTransferFlow = proceedWithMakeTransferFlow,
-        navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen
+        navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen,
     )
 }
 
@@ -48,17 +48,14 @@ fun PaymentScreenContent(
     viewReceipt: (String) -> Unit,
     onAccountClicked: (String, ArrayList<Transaction>) -> Unit,
     proceedWithMakeTransferFlow: (String, String) -> Unit,
-    navigateToInvoiceDetailScreen:(Uri) -> Unit
+    navigateToInvoiceDetailScreen: (Uri) -> Unit,
 ) {
-
-    val pagerState = rememberPagerState(initialPage = 0)
-
     val tabContents = listOf(
         TabContent(PaymentsScreenContents.SEND.name) {
             SendScreenRoute(
                 onBackClick = {},
                 showToolBar = false,
-                proceedWithMakeTransferFlow = proceedWithMakeTransferFlow
+                proceedWithMakeTransferFlow = proceedWithMakeTransferFlow,
             )
         },
         TabContent(PaymentsScreenContents.REQUEST.name) {
@@ -67,7 +64,7 @@ fun PaymentScreenContent(
         TabContent(PaymentsScreenContents.HISTORY.name) {
             HistoryScreen(
                 accountClicked = onAccountClicked,
-                viewReceipt = viewReceipt
+                viewReceipt = viewReceipt,
             )
         },
         TabContent(PaymentsScreenContents.SI.name) {
@@ -75,13 +72,18 @@ fun PaymentScreenContent(
         },
         TabContent(PaymentsScreenContents.INVOICES.name) {
             InvoiceScreenRoute(
-                navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen
+                navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen,
             )
-        }
+        },
     )
 
+    val pagerState = rememberPagerState(initialPage = 0)
+
     Column(modifier = Modifier.fillMaxSize()) {
-        MifosScrollableTabRow(tabContents = tabContents, pagerState = pagerState)
+        MifosScrollableTabRow(
+            tabContents = tabContents,
+            pagerState = pagerState,
+        )
     }
 }
 

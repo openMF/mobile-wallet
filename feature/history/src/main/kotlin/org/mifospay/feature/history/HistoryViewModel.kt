@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.history
 
 import androidx.lifecycle.ViewModel
@@ -17,7 +26,7 @@ class HistoryViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val mFetchAccountUseCase: FetchAccount,
-    private val fetchAccountTransactionsUseCase: FetchAccountTransactions
+    private val fetchAccountTransactionsUseCase: FetchAccountTransactions,
 ) : ViewModel() {
 
     private val _historyUiState = MutableStateFlow<HistoryUiState>(HistoryUiState.Loading)
@@ -25,7 +34,8 @@ class HistoryViewModel @Inject constructor(
 
     private fun fetchTransactions() {
         _historyUiState.value = HistoryUiState.Loading
-        mUseCaseHandler.execute(mFetchAccountUseCase,
+        mUseCaseHandler.execute(
+            mFetchAccountUseCase,
             FetchAccount.RequestValues(mLocalRepository.clientDetails.clientId),
             object : UseCase.UseCaseCallback<FetchAccount.ResponseValue> {
                 override fun onSuccess(response: FetchAccount.ResponseValue) {
@@ -37,23 +47,28 @@ class HistoryViewModel @Inject constructor(
                 override fun onError(message: String) {
                     _historyUiState.value = HistoryUiState.Error(message)
                 }
-            })
+            },
+        )
     }
 
     fun fetchTransactionsHistory(accountId: Long) {
-        mUseCaseHandler.execute(fetchAccountTransactionsUseCase,
+        mUseCaseHandler.execute(
+            fetchAccountTransactionsUseCase,
             FetchAccountTransactions.RequestValues(accountId),
             object : UseCase.UseCaseCallback<FetchAccountTransactions.ResponseValue?> {
                 override fun onSuccess(response: FetchAccountTransactions.ResponseValue?) {
-                    if (response?.transactions?.isNotEmpty() == true)
+                    if (response?.transactions?.isNotEmpty() == true) {
                         _historyUiState.value = HistoryUiState.HistoryList(response.transactions)
-                    else _historyUiState.value = HistoryUiState.Empty
+                    } else {
+                        _historyUiState.value = HistoryUiState.Empty
+                    }
                 }
 
                 override fun onError(message: String) {
                     _historyUiState.value = HistoryUiState.Error(message)
                 }
-            })
+            },
+        )
     }
 
     init {
