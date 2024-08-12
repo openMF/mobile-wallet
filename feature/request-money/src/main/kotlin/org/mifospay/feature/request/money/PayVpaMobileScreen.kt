@@ -1,12 +1,3 @@
-/*
- * Copyright 2024 Mifos Initiative
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
- */
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -45,16 +36,13 @@ import org.mifospay.core.designsystem.theme.grey
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 
 @Composable
-fun PayVpsMobileScreen(
-    modifier: Modifier = Modifier,
-) {
+fun PayVpsMobileScreen() {
     var amount by rememberSaveable { mutableStateOf("") }
     var description by rememberSaveable { mutableStateOf("") }
-
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 32.dp, end = 32.dp),
+            .padding(start = 32.dp, end = 32.dp)
     ) {
         TextField(
             modifier = Modifier
@@ -68,9 +56,9 @@ fun PayVpsMobileScreen(
             label = {
                 Text(
                     text = "Amount",
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
-            },
+            }
         )
         TextField(
             modifier = Modifier
@@ -83,9 +71,9 @@ fun PayVpsMobileScreen(
             label = {
                 Text(
                     text = "Description",
-                    color = MaterialTheme.colorScheme.onSurface,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
-            },
+            }
         )
         Button(
             modifier = Modifier
@@ -94,12 +82,13 @@ fun PayVpsMobileScreen(
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             enabled = amount.isNotEmpty() && description.isNotEmpty(),
             onClick = {
-            },
+
+            }
         ) {
             Text(
                 text = "Create Payment Request",
                 style = styleMedium16sp
-                    .copy(color = MaterialTheme.colorScheme.onPrimary),
+                    .copy(color = MaterialTheme.colorScheme.onPrimary)
             )
         }
     }
@@ -110,18 +99,20 @@ fun PayVpsMobileScreen(
 fun rememberQrBitmapPainter(
     content: String,
     size: Dp = 150.dp,
-    padding: Dp = 0.dp,
+    padding: Dp = 0.dp
 ): BitmapPainter {
+
     val density = LocalDensity.current
     val sizePx = with(density) { size.roundToPx() }
     val paddingPx = with(density) { padding.roundToPx() }
+
 
     var bitmap by remember(content) {
         mutableStateOf<Bitmap?>(null)
     }
 
     LaunchedEffect(bitmap) {
-        if (bitmap == null) return@LaunchedEffect
+        if (bitmap != null) return@LaunchedEffect
 
         launch(Dispatchers.IO) {
             val qrCodeWriter = QRCodeWriter()
@@ -133,11 +124,8 @@ fun rememberQrBitmapPainter(
 
             val bitmapMatrix = try {
                 qrCodeWriter.encode(
-                    content,
-                    BarcodeFormat.QR_CODE,
-                    sizePx,
-                    sizePx,
-                    encodeHints,
+                    content, BarcodeFormat.QR_CODE,
+                    sizePx, sizePx, encodeHints
                 )
             } catch (ex: WriterException) {
                 null
@@ -177,12 +165,12 @@ fun rememberQrBitmapPainter(
 
 @Preview
 @Composable
-private fun RememberQrBitmapPainterPreview() {
+fun RememberQrBitmapPainterPreview() {
     Image(
         painter = rememberQrBitmapPainter(
             "askfgaklhsfasjflasjhfldajhslfhlajslfjlajsflkjals",
             200.dp,
-            8.dp,
+            8.dp
         ),
         contentDescription = "some useful description",
     )
@@ -190,6 +178,6 @@ private fun RememberQrBitmapPainterPreview() {
 
 @Preview
 @Composable
-private fun PayVpsMobileScreenPreview() {
+fun PayVpsMobileScreenPreview() {
     PayVpsMobileScreen()
 }
