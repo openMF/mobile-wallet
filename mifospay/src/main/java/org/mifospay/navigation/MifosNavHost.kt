@@ -72,6 +72,7 @@ import org.mifospay.feature.specific.transactions.navigation.specificTransaction
 import org.mifospay.feature.standing.instruction.StandingInstructionsScreenRoute
 import org.mifospay.feature.standing.instruction.navigateToNewSiScreen
 import org.mifospay.feature.standing.instruction.newSiScreen
+import org.mifospay.feature.standing.instruction.siDetailsScreen
 import org.mifospay.feature.upiSetup.navigation.navigateToSetupUpiPin
 import org.mifospay.feature.upiSetup.navigation.setupUpiPinScreen
 import java.io.File
@@ -85,7 +86,7 @@ import java.util.Objects
  * within each route is handled using state and Back Handlers.
  */
 @Composable
-@Suppress("MaxLineLength", "LongMethod", "UnusedParameter")
+@Suppress("MaxLineLength", "LongMethod")
 fun MifosNavHost(
     navController: NavHostController,
     onShowSnackbar: suspend (String, String?) -> Boolean,
@@ -137,7 +138,10 @@ fun MifosNavHost(
             )
         },
         TabContent(PaymentsScreenContents.SI.name) {
-            StandingInstructionsScreenRoute(onNewSI = navController::navigateToNewSiScreen)
+            StandingInstructionsScreenRoute(
+                onNewSI = navController::navigateToNewSiScreen,
+                onBackPress = navController::popBackStack,
+            )
         },
         TabContent(PaymentsScreenContents.INVOICES.name) {
             InvoiceScreenRoute(
@@ -212,6 +216,11 @@ fun MifosNavHost(
 
         newSiScreen(onBackClick = navController::popBackStack)
 
+        siDetailsScreen(
+            onClickCreateNew = navController::navigateToNewSiScreen,
+            onBackPress = navController::popBackStack,
+        )
+
         editProfileScreen(
             onBackPress = navController::popBackStack,
             getUri = ::getUri,
@@ -240,7 +249,9 @@ fun MifosNavHost(
             openPassCodeActivity = context::openPassCodeActivity,
             onBackClick = navController::popBackStack,
         )
-        setupUpiPinScreen()
+        setupUpiPinScreen(
+            onBackPress = navController::popBackStack,
+        )
         bankAccountDetailScreen(
             onSetupUpiPin = { bankAccountDetails, index ->
                 navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.SETUP)

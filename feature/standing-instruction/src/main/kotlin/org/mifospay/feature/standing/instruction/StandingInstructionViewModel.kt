@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.standing.instruction
 
 import androidx.lifecycle.ViewModel
@@ -9,44 +18,46 @@ import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.standinginstruction.GetAllStandingInstructions
 import org.mifospay.core.data.repository.local.LocalRepository
+import org.mifospay.feature.standing.instruction.StandingInstructionsUiState.Loading
 import javax.inject.Inject
 
 @HiltViewModel
 class StandingInstructionViewModel @Inject constructor(
-    val mUseCaseHandler: UseCaseHandler,
-    val localRepository: LocalRepository,
-    private val getAllStandingInstructions: GetAllStandingInstructions
+    private val mUseCaseHandler: UseCaseHandler,
+    private val localRepository: LocalRepository,
+    private val getAllStandingInstructions: GetAllStandingInstructions,
 ) : ViewModel() {
 
-    private val _standingInstructionsUiState =
-        MutableStateFlow<StandingInstructionsUiState>(StandingInstructionsUiState.Loading)
-    val standingInstructionsUiState: StateFlow<StandingInstructionsUiState> =
-        _standingInstructionsUiState
+    private val mInstructionState = MutableStateFlow<StandingInstructionsUiState>(Loading)
+    val standingInstructionsUiState: StateFlow<StandingInstructionsUiState> = mInstructionState
 
-    fun getAllSI() {
+    init {
+        getAllSI()
+    }
+
+    private fun getAllSI() {
         val client = localRepository.clientDetails
-        _standingInstructionsUiState.value = StandingInstructionsUiState.Loading
-        mUseCaseHandler.execute(getAllStandingInstructions,
-            GetAllStandingInstructions.RequestValues(client.clientId), object :
+        mInstructionState.value = Loading
+        mUseCaseHandler.execute(
+            getAllStandingInstructions,
+            GetAllStandingInstructions.RequestValues(client.clientId),
+            object :
                 UseCase.UseCaseCallback<GetAllStandingInstructions.ResponseValue> {
 
                 override fun onSuccess(response: GetAllStandingInstructions.ResponseValue) {
                     if (response.standingInstructionsList.isEmpty()) {
-                        _standingInstructionsUiState.value = StandingInstructionsUiState.Empty
+                        mInstructionState.value = StandingInstructionsUiState.Empty
                     } else {
-                        _standingInstructionsUiState.value =
+                        mInstructionState.value =
                             StandingInstructionsUiState.StandingInstructionList(response.standingInstructionsList)
                     }
                 }
 
                 override fun onError(message: String) {
-                    _standingInstructionsUiState.value = StandingInstructionsUiState.Error(message)
+                    mInstructionState.value = StandingInstructionsUiState.Error(message)
                 }
-            })
-    }
-
-    init {
-        getAllSI()
+            },
+        )
     }
 }
 
