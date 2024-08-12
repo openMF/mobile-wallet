@@ -233,10 +233,6 @@ fun MifosNavHost(
             },
         )
         receiptScreen(
-            onShowSnackbar = { message, action ->
-                //Todo: Use onShowSnackbar
-                true
-            },
             openPassCodeActivity = context::openPassCodeActivity,
             onBackClick = navController::popBackStack,
         )
