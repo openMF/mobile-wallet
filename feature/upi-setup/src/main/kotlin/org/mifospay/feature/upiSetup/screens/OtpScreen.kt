@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.upiSetup.screens
 
 import androidx.compose.foundation.layout.Arrangement
@@ -20,31 +29,31 @@ import org.mifospay.core.ui.OtpTextField
 import org.mifospay.core.ui.VerifyStepHeader
 import org.mifospay.feature.upi_setup.R
 
-
 @Composable
-fun OtpScreen(
-    verificationStatus: Boolean = false,
-    contentVisibility: Boolean = false,
+internal fun OtpScreen(
     realOtp: String,
-    onOtpTextCorrectlyEntered: () -> Unit
+    onOtpTextCorrectlyEntered: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentVisibility: Boolean = false,
+    verificationStatus: Boolean = false,
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(
                 top = 15.dp,
                 bottom = 15.dp,
                 start = 10.dp,
-                end = 10.dp
+                end = 10.dp,
             ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
+            defaultElevation = 1.dp,
+        ),
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             VerifyStepHeader("OtpSetUp", verificationStatus)
             if (contentVisibility) {
@@ -55,38 +64,50 @@ fun OtpScreen(
 }
 
 @Composable
-private fun OtpScreenContent(realOtp: String, onOtpTextCorrectlyEntered: () -> Unit) {
-    Text(
-        text = stringResource(id = R.string.feature_upi_setup_enter_otp),
-        color = MaterialTheme.colorScheme.onSurface,
-        fontSize = 18.sp,
-        style = MaterialTheme.typography.headlineMedium
-    )
-    OtpTextField(modifier = Modifier.padding(top = 20.dp),
-        realOtp = realOtp,
-        onOtpTextCorrectlyEntered = {
-            onOtpTextCorrectlyEntered()
-        })
-}
-
-@Preview
-@Composable
-fun OtpScreenPreview() {
-    MifosTheme {
-        OtpScreen(realOtp = "1234",
-            contentVisibility = true,
-            verificationStatus = false,
-            onOtpTextCorrectlyEntered = {})
+private fun OtpScreenContent(
+    realOtp: String,
+    onOtpTextCorrectlyEntered: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier) {
+        Text(
+            text = stringResource(id = R.string.feature_upi_setup_enter_otp),
+            color = MaterialTheme.colorScheme.onSurface,
+            fontSize = 18.sp,
+            style = MaterialTheme.typography.headlineMedium,
+        )
+        OtpTextField(
+            modifier = Modifier.padding(top = 20.dp),
+            realOtp = realOtp,
+            onOtpTextCorrectlyEntered = {
+                onOtpTextCorrectlyEntered()
+            },
+        )
     }
 }
 
 @Preview
 @Composable
-fun OtpScreenVerifiedPreview() {
+private fun OtpScreenPreview() {
     MifosTheme {
-        OtpScreen(realOtp = "1234",
+        OtpScreen(
+            realOtp = "1234",
+            contentVisibility = true,
+            verificationStatus = false,
+            onOtpTextCorrectlyEntered = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun OtpScreenVerifiedPreview() {
+    MifosTheme {
+        OtpScreen(
+            realOtp = "1234",
             contentVisibility = false,
             verificationStatus = true,
-            onOtpTextCorrectlyEntered = {})
+            onOtpTextCorrectlyEntered = {},
+        )
     }
 }

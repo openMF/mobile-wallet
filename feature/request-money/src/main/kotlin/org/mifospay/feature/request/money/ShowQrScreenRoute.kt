@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.request.money
 
 import android.app.Activity
@@ -7,6 +16,7 @@ import android.content.Intent.createChooser
 import android.graphics.Bitmap
 import android.net.Uri
 import android.view.WindowManager
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -14,13 +24,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,35 +44,33 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.feature.request.money.util.ImageUtils
 
 @Composable
-fun ShowQrScreenRoute(
-    viewModel: ShowQrViewModel = hiltViewModel(),
+internal fun ShowQrScreenRoute(
     backPress: () -> Unit,
-    vpa: String
+    modifier: Modifier = Modifier,
+    viewModel: ShowQrViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.showQrUiState.collectAsStateWithLifecycle()
-//    val vpaId by viewModel.vpaId.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) {
-        viewModel.generateQr()
-        viewModel.setQrData(vpa)
-    }
+    val vpaId by viewModel.vpaId.collectAsStateWithLifecycle()
 
     UpdateBrightness()
 
     ShowQrScreen(
         uiState = uiState,
-        vpaId = vpa,
+        vpaId = vpaId,
         backPress = backPress,
-        generateQR = { viewModel.generateQr(requestQrData = it) }
+        generateQR = viewModel::generateQr,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun ShowQrScreen(
+@VisibleForTesting
+internal fun ShowQrScreen(
     uiState: ShowQrUiState,
     vpaId: String,
     backPress: () -> Unit,
     generateQR: (RequestQrData) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     var amountDialogState by rememberSaveable { mutableStateOf(false) }
@@ -74,14 +80,14 @@ fun ShowQrScreen(
 
     MifosScaffold(
         topBarTitle = R.string.feature_request_money_request,
-        backPress = { backPress.invoke() },
+        backPress = backPress,
         scaffoldContent = { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
                 when (uiState) {
                     is ShowQrUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(R.string.feature_request_money_loading),
-                            backgroundColor = MaterialTheme.colorScheme.surface
+                            backgroundColor = MaterialTheme.colorScheme.surface,
                         )
                     }
 
@@ -92,7 +98,7 @@ fun ShowQrScreen(
                                 title = stringResource(R.string.feature_request_money_nothing_to_notify),
                                 subTitle = stringResource(R.string.feature_request_money_there_is_nothing_to_show),
                                 iconTint = MaterialTheme.colorScheme.onSurface,
-                                iconImageVector = MifosIcons.Info
+                                iconImageVector = MifosIcons.Info,
                             )
                         } else {
                             qrBitmap = uiState.qrDataBitmap
@@ -100,7 +106,7 @@ fun ShowQrScreen(
                                 qrDataString = vpaId,
                                 amount = amount,
                                 qrDataBitmap = uiState.qrDataBitmap,
-                                showAmountDialog = { amountDialogState = true }
+                                showAmountDialog = { amountDialogState = true },
                             )
                         }
                     }
@@ -111,7 +117,7 @@ fun ShowQrScreen(
                             title = stringResource(id = R.string.feature_request_money_error_oops),
                             subTitle = stringResource(id = R.string.feature_request_money_unexpected_error_subtitle),
                             iconTint = MaterialTheme.colorScheme.onSurface,
-                            iconImageVector = MifosIcons.Info
+                            iconImageVector = MifosIcons.Info,
                         )
                     }
                 }
@@ -124,9 +130,10 @@ fun ShowQrScreen(
                         val uri = ImageUtils.saveImage(context = context, bitmap = it)
                         shareQr(context, uri = uri)
                     }
-                }
+                },
             ) { Icon(MifosIcons.Share, null) }
-        }
+        },
+        modifier = modifier,
     )
 
     if (amountDialogState) {
@@ -135,18 +142,21 @@ fun ShowQrScreen(
             prefilledAmount = amount ?: "",
             prefilledCurrency = currency,
             confirmAmount = { confirmedAmount, confirmedCurrency ->
-                amount = if (confirmedAmount == "") null
-                else confirmedAmount
+                amount = if (confirmedAmount == "") {
+                    null
+                } else {
+                    confirmedAmount
+                }
                 currency = confirmedCurrency
                 generateQR(RequestQrData(amount = amount ?: "", currency = currency))
                 amountDialogState = false
-            }
+            },
         )
     }
 }
 
 @Composable
-fun UpdateBrightness() {
+private fun UpdateBrightness() {
     val context = LocalContext.current
     DisposableEffect(Unit) {
         setBrightness(context, isFull = true)
@@ -156,7 +166,7 @@ fun UpdateBrightness() {
     }
 }
 
-fun setBrightness(context: Context, isFull: Boolean) {
+private fun setBrightness(context: Context, isFull: Boolean) {
     val activity = context as? Activity ?: return
     val layoutParams: WindowManager.LayoutParams = activity.window.attributes
     layoutParams.screenBrightness =
@@ -175,7 +185,7 @@ private fun shareQr(context: Context, uri: Uri?) {
     }
 }
 
-class ShowQrUiStateProvider :
+internal class ShowQrUiStateProvider :
     PreviewParameterProvider<ShowQrUiState> {
     override val values: Sequence<ShowQrUiState>
         get() = sequenceOf(
@@ -183,8 +193,8 @@ class ShowQrUiStateProvider :
                 qrDataBitmap = Bitmap.createBitmap(
                     100,
                     100,
-                    Bitmap.Config.ARGB_8888
-                )
+                    Bitmap.Config.ARGB_8888,
+                ),
             ),
             ShowQrUiState.Error,
             ShowQrUiState.Loading,
@@ -193,11 +203,14 @@ class ShowQrUiStateProvider :
 
 @Preview(showSystemUi = true)
 @Composable
-fun ShowQrScreenPreview(@PreviewParameter(ShowQrUiStateProvider::class) uiState: ShowQrUiState) {
+private fun ShowQrScreenPreview(
+    @PreviewParameter(ShowQrUiStateProvider::class)
+    uiState: ShowQrUiState,
+) {
     ShowQrScreen(
         uiState = uiState,
         vpaId = "",
         backPress = {},
-        generateQR = {}
+        generateQR = {},
     )
 }

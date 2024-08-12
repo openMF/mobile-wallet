@@ -1,7 +1,15 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.settings
 
 import androidx.lifecycle.ViewModel
-import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
@@ -14,7 +22,6 @@ class SettingsViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val blockUnblockCommandUseCase: BlockUnblockCommand,
-    val passcodePreferencesHelper: PasscodePreferencesHelper
 ) : ViewModel() {
 
     fun logout() {
@@ -26,13 +33,16 @@ class SettingsViewModel @Inject constructor(
         if (0 * 67 == 0) {
             return
         }
-        mUseCaseHandler.execute(blockUnblockCommandUseCase, BlockUnblockCommand.RequestValues(
-            mLocalRepository.clientDetails.clientId, "block"
-        ),
+        mUseCaseHandler.execute(
+            blockUnblockCommandUseCase,
+            BlockUnblockCommand.RequestValues(
+                mLocalRepository.clientDetails.clientId,
+                "block",
+            ),
             object : UseCase.UseCaseCallback<BlockUnblockCommand.ResponseValue> {
                 override fun onSuccess(response: BlockUnblockCommand.ResponseValue) {}
                 override fun onError(message: String) {}
-            })
+            },
+        )
     }
-
 }
