@@ -1,50 +1,62 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.request.money
 
 import android.graphics.Bitmap
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.datastore.PreferencesHelper
+import org.mifospay.feature.request.money.ShowQrUiState.Loading
 import javax.inject.Inject
 
 @HiltViewModel
 class ShowQrViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val generateQrUseCase: GenerateQr,
-    private val mPreferencesHelper: PreferencesHelper
-): ViewModel() {
+    private val mPreferencesHelper: PreferencesHelper,
+    savedStateHandle: SavedStateHandle,
+) : ViewModel() {
+    val vpaId = savedStateHandle.getStateFlow("vpa", "")
 
-    private val _showQrUiState: MutableStateFlow<ShowQrUiState> = MutableStateFlow(ShowQrUiState.Loading)
-    val showQrUiState get() = _showQrUiState
+    private val mShowQrUiState: MutableStateFlow<ShowQrUiState> = MutableStateFlow(Loading)
+    val showQrUiState get() = mShowQrUiState
 
-    private val _vpaId: MutableStateFlow<String> = MutableStateFlow("")
-    val vpaId get() = _vpaId
+    init {
+        savedStateHandle.get<String>("vpa")?.let {
+            generateQr()
+        }
+    }
 
     fun generateQr(requestQrData: RequestQrData? = null) {
         val requestQr = (requestQrData ?: RequestQrData()).copy(
             name = mPreferencesHelper.fullName ?: "",
-            vpaId = vpaId.value
+            vpaId = vpaId.value,
         )
+
         mUseCaseHandler.execute(
-            generateQrUseCase, GenerateQr.RequestValues(requestQr),
+            generateQrUseCase,
+            GenerateQr.RequestValues(requestQr),
             object : UseCase.UseCaseCallback<GenerateQr.ResponseValue?> {
                 override fun onSuccess(response: GenerateQr.ResponseValue?) {
-                    _showQrUiState.value = ShowQrUiState.Success(response?.bitmap)
+                    mShowQrUiState.value = ShowQrUiState.Success(response?.bitmap)
                 }
 
                 override fun onError(message: String) {
-                    _showQrUiState.value = ShowQrUiState.Error
+                    mShowQrUiState.value = ShowQrUiState.Error
                 }
-            })
-    }
-
-
-    fun setQrData(qrData: String?) {
-        if (qrData != null) {
-            _vpaId.value = qrData
-        }
+            },
+        )
     }
 }
 
