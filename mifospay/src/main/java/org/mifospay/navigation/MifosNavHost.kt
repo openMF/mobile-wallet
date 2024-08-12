@@ -249,7 +249,9 @@ fun MifosNavHost(
             openPassCodeActivity = context::openPassCodeActivity,
             onBackClick = navController::popBackStack,
         )
-        setupUpiPinScreen()
+        setupUpiPinScreen(
+            onBackPress = navController::popBackStack,
+        )
         bankAccountDetailScreen(
             onSetupUpiPin = { bankAccountDetails, index ->
                 navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.SETUP)
