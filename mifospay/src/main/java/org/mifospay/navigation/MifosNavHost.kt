@@ -117,8 +117,8 @@ fun MifosNavHost(
     val paymentsTabContents = listOf(
         TabContent(PaymentsScreenContents.SEND.name) {
             SendScreenRoute(
-                onBackClick = {},
                 showToolBar = false,
+                onBackClick = {},
                 proceedWithMakeTransferFlow = navController::navigateToMakeTransferScreen,
             )
         },
