@@ -11,8 +11,10 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.mifos.mobile.passcode.utils.PassCodeConstants
+import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
 import org.mifospay.common.Constants
 import org.mifospay.core.ui.utility.TabContent
+import org.mifospay.feature.auth.login.LoginActivity
 import org.mifospay.feature.auth.navigation.loginScreen
 import org.mifospay.feature.auth.navigation.mobileVerificationScreen
 import org.mifospay.feature.auth.navigation.navigateToMobileVerification
@@ -190,6 +192,8 @@ fun MifosNavHost(
         settingsScreen(
             onBackPress = navController::popBackStack,
             navigateToEditPasswordScreen = navController::navigateToEditPassword,
+            onLogout = context::logOut,
+            onChangePasscode = context::onChangePasscodeClicked,
         )
 
         kycScreen(
@@ -305,6 +309,29 @@ fun MifosNavHost(
     }
 }
 
+private fun Context.logOut() {
+    val intent = Intent(this, LoginActivity::class.java)
+    intent.addFlags(
+        Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK,
+    )
+    this.startActivity(intent)
+}
+
+private fun Context.onChangePasscodeClicked() {
+    val passcodePreferencesHelper = PasscodePreferencesHelper(this)
+
+    val currentPasscode = passcodePreferencesHelper.passCode
+    passcodePreferencesHelper.savePassCode("")
+
+    PassCodeActivity.startPassCodeActivity(
+        context = this,
+        bundle = bundleOf(
+            Pair(Constants.CURRENT_PASSCODE, currentPasscode),
+            Pair(Constants.UPDATE_PASSCODE, true),
+        ),
+    )
+}
 
 fun Context.openPassCodeActivity(deepLinkURI: Uri) {
     PassCodeActivity.startPassCodeActivity(
