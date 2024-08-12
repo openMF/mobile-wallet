@@ -11,8 +11,10 @@ import androidx.core.os.bundleOf
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import com.mifos.mobile.passcode.utils.PassCodeConstants
+import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
 import org.mifospay.common.Constants
 import org.mifospay.core.ui.utility.TabContent
+import org.mifospay.feature.auth.login.LoginActivity
 import org.mifospay.feature.auth.navigation.loginScreen
 import org.mifospay.feature.auth.navigation.mobileVerificationScreen
 import org.mifospay.feature.auth.navigation.navigateToMobileVerification
@@ -70,6 +72,7 @@ import org.mifospay.feature.specific.transactions.navigation.specificTransaction
 import org.mifospay.feature.standing.instruction.StandingInstructionsScreenRoute
 import org.mifospay.feature.standing.instruction.navigateToNewSiScreen
 import org.mifospay.feature.standing.instruction.newSiScreen
+import org.mifospay.feature.standing.instruction.siDetailsScreen
 import org.mifospay.feature.upiSetup.navigation.navigateToSetupUpiPin
 import org.mifospay.feature.upiSetup.navigation.setupUpiPinScreen
 import java.io.File
@@ -83,7 +86,7 @@ import java.util.Objects
  * within each route is handled using state and Back Handlers.
  */
 @Composable
-@Suppress("MaxLineLength", "LongMethod", "UnusedParameter")
+@Suppress("MaxLineLength", "LongMethod")
 fun MifosNavHost(
     navController: NavHostController,
     onShowSnackbar: suspend (String, String?) -> Boolean,
@@ -135,7 +138,10 @@ fun MifosNavHost(
             )
         },
         TabContent(PaymentsScreenContents.SI.name) {
-            StandingInstructionsScreenRoute(onNewSI = navController::navigateToNewSiScreen)
+            StandingInstructionsScreenRoute(
+                onNewSI = navController::navigateToNewSiScreen,
+                onBackPress = navController::popBackStack,
+            )
         },
         TabContent(PaymentsScreenContents.INVOICES.name) {
             InvoiceScreenRoute(
@@ -190,6 +196,8 @@ fun MifosNavHost(
         settingsScreen(
             onBackPress = navController::popBackStack,
             navigateToEditPasswordScreen = navController::navigateToEditPassword,
+            onLogout = context::logOut,
+            onChangePasscode = context::onChangePasscodeClicked,
         )
 
         kycScreen(
@@ -207,6 +215,11 @@ fun MifosNavHost(
         kycLevel3Screen()
 
         newSiScreen(onBackClick = navController::popBackStack)
+
+        siDetailsScreen(
+            onClickCreateNew = navController::navigateToNewSiScreen,
+            onBackPress = navController::popBackStack,
+        )
 
         editProfileScreen(
             onBackPress = navController::popBackStack,
@@ -236,7 +249,9 @@ fun MifosNavHost(
             openPassCodeActivity = context::openPassCodeActivity,
             onBackClick = navController::popBackStack,
         )
-        setupUpiPinScreen()
+        setupUpiPinScreen(
+            onBackPress = navController::popBackStack,
+        )
         bankAccountDetailScreen(
             onSetupUpiPin = { bankAccountDetails, index ->
                 navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.SETUP)
@@ -305,6 +320,29 @@ fun MifosNavHost(
     }
 }
 
+private fun Context.logOut() {
+    val intent = Intent(this, LoginActivity::class.java)
+    intent.addFlags(
+        Intent.FLAG_ACTIVITY_CLEAR_TOP or
+                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK,
+    )
+    this.startActivity(intent)
+}
+
+private fun Context.onChangePasscodeClicked() {
+    val passcodePreferencesHelper = PasscodePreferencesHelper(this)
+
+    val currentPasscode = passcodePreferencesHelper.passCode
+    passcodePreferencesHelper.savePassCode("")
+
+    PassCodeActivity.startPassCodeActivity(
+        context = this,
+        bundle = bundleOf(
+            Pair(Constants.CURRENT_PASSCODE, currentPasscode),
+            Pair(Constants.UPDATE_PASSCODE, true),
+        ),
+    )
+}
 
 fun Context.openPassCodeActivity(deepLinkURI: Uri) {
     PassCodeActivity.startPassCodeActivity(
