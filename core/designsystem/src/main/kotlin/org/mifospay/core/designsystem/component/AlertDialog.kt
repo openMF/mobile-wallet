@@ -14,13 +14,15 @@ fun MifosDialogBox(
     showDialogState: Boolean,
     onDismiss: () -> Unit,
     title: Int,
-    message: Int? = null,
     confirmButtonText: Int,
     onConfirm: () -> Unit,
     dismissButtonText: Int,
+    modifier: Modifier = Modifier,
+    message: Int? = null,
 ) {
     if (showDialogState) {
         AlertDialog(
+            modifier = modifier,
             onDismissRequest = onDismiss,
             title = { Text(text = stringResource(id = title)) },
             text = {
