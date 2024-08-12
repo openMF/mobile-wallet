@@ -1,6 +1,16 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.merchants.ui
 
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +37,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -48,7 +57,8 @@ import org.mifospay.feature.merchants.navigation.navigateToMerchantTransferScree
 
 @Composable
 fun MerchantScreen(
-    viewModel: MerchantViewModel = hiltViewModel()
+    modifier: Modifier = Modifier,
+    viewModel: MerchantViewModel = hiltViewModel(),
 ) {
     val merchantUiState by viewModel.merchantUiState.collectAsStateWithLifecycle()
     val merchantsListUiState by viewModel.merchantsListUiState.collectAsStateWithLifecycle()
@@ -57,23 +67,30 @@ fun MerchantScreen(
     MerchantScreen(
         merchantUiState = merchantUiState,
         merchantListUiState = merchantsListUiState,
-        updateQuery = { viewModel.updateSearchQuery(it) },
         isRefreshing = isRefreshing,
-        onRefresh = { viewModel.refresh() },
+        updateQuery = viewModel::updateSearchQuery,
+        onRefresh = viewModel::refresh,
+        modifier = modifier,
     )
 }
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun MerchantScreen(
+@VisibleForTesting
+internal fun MerchantScreen(
     merchantUiState: MerchantUiState,
     merchantListUiState: MerchantUiState,
-    updateQuery: (String) -> Unit,
     isRefreshing: Boolean,
+    updateQuery: (String) -> Unit,
     onRefresh: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
-    Box(Modifier.pullRefresh(pullRefreshState)) {
+
+    Box(
+        modifier = modifier
+            .pullRefresh(pullRefreshState),
+    ) {
         Column(modifier = Modifier.fillMaxSize()) {
             when (merchantUiState) {
                 MerchantUiState.Empty -> {
@@ -82,7 +99,7 @@ fun MerchantScreen(
                         title = stringResource(id = R.string.feature_merchants_empty_no_merchants_title),
                         subTitle = stringResource(id = R.string.feature_merchants_empty_no_merchants_subtitle),
                         iconTint = MaterialTheme.colorScheme.primary,
-                        iconImageVector = Icons.Rounded.Info
+                        iconImageVector = Icons.Rounded.Info,
                     )
                 }
 
@@ -92,21 +109,21 @@ fun MerchantScreen(
                         title = stringResource(id = R.string.feature_merchants_error_oops),
                         subTitle = stringResource(id = R.string.feature_merchants_unexpected_error_subtitle),
                         iconTint = MaterialTheme.colorScheme.primary,
-                        iconImageVector = Icons.Rounded.Info
+                        iconImageVector = Icons.Rounded.Info,
                     )
                 }
 
                 MerchantUiState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(R.string.feature_merchants_loading),
-                        backgroundColor = MaterialTheme.colorScheme.surface
+                        backgroundColor = MaterialTheme.colorScheme.surface,
                     )
                 }
 
                 is MerchantUiState.ShowMerchants -> {
                     MerchantScreenContent(
                         merchantList = (merchantListUiState as MerchantUiState.ShowMerchants).merchants,
-                        updateQuery = updateQuery
+                        updateQuery = updateQuery,
                     )
                 }
             }
@@ -114,18 +131,20 @@ fun MerchantScreen(
         PullRefreshIndicator(
             refreshing = isRefreshing,
             state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier.align(Alignment.TopCenter),
         )
     }
 }
 
 @Composable
-fun MerchantScreenContent(
+private fun MerchantScreenContent(
     merchantList: List<SavingsWithAssociations>,
-    updateQuery: (String) -> Unit
+    updateQuery: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val query by rememberSaveable { mutableStateOf("") }
-    Box(modifier = Modifier.fillMaxSize()) {
+
+    Box(modifier = modifier.fillMaxSize()) {
         Column {
             SearchBarScreen(
                 query = query,
@@ -133,7 +152,7 @@ fun MerchantScreenContent(
                     updateQuery(q)
                 },
                 onSearch = {},
-                onClearQuery = { updateQuery("") }
+                onClearQuery = { updateQuery("") },
             )
             MerchantList(merchantList = merchantList)
         }
@@ -141,25 +160,27 @@ fun MerchantScreenContent(
 }
 
 @Composable
-fun MerchantList(
-    merchantList: List<SavingsWithAssociations>
+private fun MerchantList(
+    merchantList: List<SavingsWithAssociations>,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
     val navController = rememberNavController()
 
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
     ) {
         items(merchantList.size) { index ->
-            MerchantsItem(savingsWithAssociations = merchantList[index],
+            MerchantsItem(
+                savingsWithAssociations = merchantList[index],
                 onMerchantClicked = {
                     navController.navigateToMerchantTransferScreen(
                         merchantVPA = merchantList[index].externalId,
                         merchantName = merchantList[index].clientName,
-                        merchantAccountNumber = merchantList[index].accountNo.toString()
+                        merchantAccountNumber = merchantList[index].accountNo.toString(),
                     )
 //                    val intent = Intent(context, MerchantTransferActivity::class.java)
 //                    intent.putExtra(Constants.MERCHANT_NAME, merchantList[index].clientName)
@@ -172,25 +193,25 @@ fun MerchantList(
                     Toast.makeText(
                         context,
                         R.string.feature_merchants_vpa_copy_success,
-                        Toast.LENGTH_LONG
+                        Toast.LENGTH_LONG,
                     ).show()
-                }
+                },
             )
         }
     }
 }
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBarScreen(
+private fun SearchBarScreen(
     query: String,
     onQueryChange: (String) -> Unit,
     onSearch: (String) -> Unit,
-    onClearQuery: () -> Unit
+    onClearQuery: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     SearchBar(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp, horizontal = 16.dp),
         query = query,
@@ -204,19 +225,19 @@ fun SearchBarScreen(
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Search,
-                contentDescription = stringResource(R.string.feature_merchants_search)
+                contentDescription = stringResource(R.string.feature_merchants_search),
             )
         },
         trailingIcon = {
             IconButton(
-                onClick = onClearQuery
+                onClick = onClearQuery,
             ) {
                 Icon(
                     imageVector = Icons.Filled.Close,
-                    contentDescription = stringResource(R.string.feature_merchants_close)
+                    contentDescription = stringResource(R.string.feature_merchants_close),
                 )
             }
-        }
+        },
     ) {}
 }
 
@@ -224,10 +245,13 @@ fun SearchBarScreen(
 @Composable
 private fun MerchantLoadingPreview() {
     MifosTheme {
-        MerchantScreen(merchantUiState = MerchantUiState.Loading,
+        MerchantScreen(
+            merchantUiState = MerchantUiState.Loading,
             merchantListUiState = MerchantUiState.ShowMerchants(sampleMerchantList),
+            isRefreshing = false,
             updateQuery = {},
-            false, {}
+            onRefresh = {},
+            modifier = Modifier,
         )
     }
 }
@@ -239,7 +263,10 @@ private fun MerchantListPreview() {
         MerchantScreen(
             merchantUiState = MerchantUiState.ShowMerchants(sampleMerchantList),
             merchantListUiState = MerchantUiState.ShowMerchants(sampleMerchantList),
-            updateQuery = {}, false, {}
+            isRefreshing = false,
+            updateQuery = {},
+            onRefresh = {},
+            modifier = Modifier,
         )
     }
 }
@@ -251,7 +278,10 @@ private fun MerchantErrorPreview() {
         MerchantScreen(
             merchantUiState = MerchantUiState.Error("Error Screen"),
             merchantListUiState = MerchantUiState.ShowMerchants(sampleMerchantList),
-            updateQuery = {}, true, {}
+            isRefreshing = true,
+            updateQuery = {},
+            onRefresh = {},
+            modifier = Modifier,
         )
     }
 }
@@ -263,11 +293,13 @@ private fun MerchantEmptyPreview() {
         MerchantScreen(
             merchantUiState = MerchantUiState.Empty,
             merchantListUiState = MerchantUiState.ShowMerchants(sampleMerchantList),
-            updateQuery = {}, false, {}
+            isRefreshing = false,
+            updateQuery = {},
+            onRefresh = {},
+            modifier = Modifier,
         )
     }
 }
-
 
 val sampleMerchantList = List(10) {
     SavingsWithAssociations(
@@ -293,6 +325,6 @@ val sampleMerchantList = List(10) {
         lastActiveTransactionDate = listOf(2024, 3, 24),
         dormancyTrackingActive = true,
         summary = null,
-        transactions = listOf()
+        transactions = listOf(),
     )
 }

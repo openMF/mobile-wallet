@@ -1,85 +1,42 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.payments
 
-import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.accompanist.pager.rememberPagerState
-import com.mifospay.core.model.domain.Transaction
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
-import org.mifospay.feature.history.HistoryScreen
-import org.mifospay.feature.invoices.InvoiceScreenRoute
-import org.mifospay.feature.send.money.SendScreenRoute
-import org.mifospay.feature.standing.instruction.StandingInstructionsScreenRoute
 
 @Composable
 fun PaymentsRoute(
-    viewModel: TransferViewModel = hiltViewModel(),
-    showQr: (String) -> Unit,
-    onNewSI: () -> Unit,
-    viewReceipt: (String) -> Unit,
-    onAccountClicked: (String, ArrayList<Transaction>) -> Unit,
-    proceedWithMakeTransferFlow: (String, String) -> Unit,
-    navigateToInvoiceDetailScreen: (Uri) -> Unit,
+    tabContents: List<TabContent>,
+    modifier: Modifier = Modifier,
 ) {
-    val vpa by viewModel.vpa.collectAsStateWithLifecycle()
     PaymentScreenContent(
-        vpa = vpa,
-        showQr = showQr,
-        onNewSI = onNewSI,
-        onAccountClicked = onAccountClicked,
-        viewReceipt = viewReceipt,
-        proceedWithMakeTransferFlow = proceedWithMakeTransferFlow,
-        navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen,
+        tabContents = tabContents,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun PaymentScreenContent(
-    vpa: String,
-    showQr: (String) -> Unit,
-    onNewSI: () -> Unit,
-    viewReceipt: (String) -> Unit,
-    onAccountClicked: (String, ArrayList<Transaction>) -> Unit,
-    proceedWithMakeTransferFlow: (String, String) -> Unit,
-    navigateToInvoiceDetailScreen: (Uri) -> Unit,
+private fun PaymentScreenContent(
+    tabContents: List<TabContent>,
+    modifier: Modifier = Modifier,
 ) {
-    val tabContents = listOf(
-        TabContent(PaymentsScreenContents.SEND.name) {
-            SendScreenRoute(
-                onBackClick = {},
-                showToolBar = false,
-                proceedWithMakeTransferFlow = proceedWithMakeTransferFlow,
-            )
-        },
-        TabContent(PaymentsScreenContents.REQUEST.name) {
-            RequestScreen(showQr = { showQr.invoke(vpa) })
-        },
-        TabContent(PaymentsScreenContents.HISTORY.name) {
-            HistoryScreen(
-                accountClicked = onAccountClicked,
-                viewReceipt = viewReceipt,
-            )
-        },
-        TabContent(PaymentsScreenContents.SI.name) {
-            StandingInstructionsScreenRoute(onNewSI = { onNewSI.invoke() })
-        },
-        TabContent(PaymentsScreenContents.INVOICES.name) {
-            InvoiceScreenRoute(
-                navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen,
-            )
-        },
-    )
-
     val pagerState = rememberPagerState(initialPage = 0)
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = modifier.fillMaxSize()) {
         MifosScrollableTabRow(
             tabContents = tabContents,
             pagerState = pagerState,
@@ -92,11 +49,13 @@ enum class PaymentsScreenContents {
     REQUEST,
     HISTORY,
     SI,
-    INVOICES
+    INVOICES,
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PaymentsScreenPreview() {
-    PaymentScreenContent(vpa = "", { _ -> }, {}, {}, { _, _ -> }, { _, _ -> }, {})
+private fun PaymentsScreenPreview() {
+    PaymentScreenContent(
+        tabContents = emptyList(),
+    )
 }

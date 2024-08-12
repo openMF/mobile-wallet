@@ -9,6 +9,7 @@
  */
 package org.mifospay.feature.specific.transactions
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -78,7 +79,8 @@ internal fun SpecificTransactionsScreen(
 }
 
 @Composable
-private fun SpecificTransactionsScreen(
+@VisibleForTesting
+internal fun SpecificTransactionsScreen(
     uiState: SpecificTransactionsUiState,
     backPress: () -> Unit,
     transactionItemClicked: (String) -> Unit,
@@ -156,7 +158,7 @@ private fun SpecificTransactionsContent(
 }
 
 @Composable
-fun SpecificTransactionItem(
+private fun SpecificTransactionItem(
     transaction: Transaction,
     modifier: Modifier = Modifier,
 ) {

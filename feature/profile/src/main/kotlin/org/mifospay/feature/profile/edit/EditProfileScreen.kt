@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.profile.edit
 
 import android.Manifest
@@ -29,7 +38,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -67,9 +75,10 @@ import java.util.Locale
 
 @Composable
 fun EditProfileScreenRoute(
-    viewModel: EditProfileViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
     getUri: (context: Context, file: File) -> Uri,
+    modifier: Modifier = Modifier,
+    viewModel: EditProfileViewModel = hiltViewModel(),
 ) {
     val editProfileUiState by viewModel.editProfileUiState.collectAsStateWithLifecycle()
     val updateSuccess by viewModel.updateSuccess.collectAsStateWithLifecycle()
@@ -78,36 +87,31 @@ fun EditProfileScreenRoute(
     val file = createImageFile(context)
     val uri = getUri(context, file)
 
-    LaunchedEffect(key1 = true) {
-        viewModel.fetchProfileDetails()
-    }
-
     EditProfileScreen(
         editProfileUiState = editProfileUiState,
-        onBackClick = onBackClick,
-        updateEmail = { email ->
-            viewModel.updateEmail(email)
-        },
-        updateMobile = { mobile ->
-            viewModel.updateMobile(mobile)
-        },
         updateSuccess = updateSuccess,
-        uri,
+        onBackClick = onBackClick,
+        updateEmail = viewModel::updateEmail,
+        updateMobile = viewModel::updateMobile,
+        modifier = modifier,
+        uri = uri,
     )
 }
 
 @Composable
 fun EditProfileScreen(
     editProfileUiState: EditProfileUiState,
+    updateSuccess: Boolean,
     onBackClick: () -> Unit,
     updateEmail: (String) -> Unit,
     updateMobile: (String) -> Unit,
-    updateSuccess: Boolean,
-    uri: Uri?,
+    modifier: Modifier = Modifier,
+    uri: Uri? = null,
 ) {
     var showDiscardChangesDialog by rememberSaveable { mutableStateOf(false) }
+
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
     ) {
         MifosScaffold(
@@ -133,12 +137,12 @@ fun EditProfileScreen(
                             initialMobile,
                             initialVpa,
                             initialEmail,
-                            uri,
+                            updateSuccess = updateSuccess,
+                            contentPadding = it,
                             updateEmail = updateEmail,
                             updateMobile = updateMobile,
-                            contentPadding = it,
                             onBackClick = onBackClick,
-                            updateSuccess = updateSuccess,
+                            uri = uri,
                         )
                     }
                 }
@@ -160,17 +164,18 @@ fun EditProfileScreen(
 }
 
 @Composable
-fun EditProfileScreenContent(
+private fun EditProfileScreenContent(
     initialUsername: String,
     initialMobile: String,
     initialVpa: String,
     initialEmail: String,
-    uri: Uri?,
+    updateSuccess: Boolean,
     contentPadding: PaddingValues,
     updateEmail: (String) -> Unit,
     updateMobile: (String) -> Unit,
-    updateSuccess: Boolean,
     onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    uri: Uri? = null,
 ) {
     var username by rememberSaveable { mutableStateOf(initialUsername) }
     var mobile by rememberSaveable { mutableStateOf(initialMobile) }
@@ -182,9 +187,7 @@ fun EditProfileScreenContent(
 
     PermissionBox(
         requiredPermissions = if (Build.VERSION.SDK_INT >= 33) {
-            listOf(
-                Manifest.permission.CAMERA,
-            )
+            listOf(Manifest.permission.CAMERA)
         } else {
             listOf(
                 Manifest.permission.CAMERA,
@@ -236,7 +239,7 @@ fun EditProfileScreenContent(
         },
     )
     Box(
-        modifier = Modifier
+        modifier = modifier
             .padding(contentPadding)
             .fillMaxSize(),
     ) {
@@ -337,9 +340,10 @@ fun EditProfileBottomSheetContent(
     onClickProfilePicture: () -> Unit,
     onChangeProfilePicture: () -> Unit,
     onRemoveProfilePicture: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
             .padding(top = 8.dp, bottom = 12.dp),
     ) {
@@ -389,11 +393,15 @@ fun EditProfileBottomSheetContent(
 }
 
 @Composable
-fun EditProfileSaveButton(onClick: () -> Unit, buttonText: Int) {
+private fun EditProfileSaveButton(
+    onClick: () -> Unit,
+    buttonText: Int,
+    modifier: Modifier = Modifier,
+) {
     Button(
-        onClick = { onClick.invoke() },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
         shape = RoundedCornerShape(10.dp),
@@ -406,7 +414,7 @@ fun EditProfileSaveButton(onClick: () -> Unit, buttonText: Int) {
     }
 }
 
-fun createImageFile(context: Context): File {
+private fun createImageFile(context: Context): File {
     val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
     val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
     return File.createTempFile(
@@ -416,7 +424,7 @@ fun createImageFile(context: Context): File {
     )
 }
 
-class EditProfilePreviewProvider : PreviewParameterProvider<EditProfileUiState> {
+internal class EditProfilePreviewProvider : PreviewParameterProvider<EditProfileUiState> {
     override val values: Sequence<EditProfileUiState>
         get() = sequenceOf(
             EditProfileUiState.Loading,
@@ -429,21 +437,21 @@ class EditProfilePreviewProvider : PreviewParameterProvider<EditProfileUiState> 
                 mobile = "+1 55557772901",
             ),
         )
-
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun EditProfileScreenPreview(
-    @PreviewParameter(EditProfilePreviewProvider::class) editProfileUiState: EditProfileUiState,
+    @PreviewParameter(EditProfilePreviewProvider::class)
+    editProfileUiState: EditProfileUiState,
 ) {
     MifosTheme {
         EditProfileScreen(
             editProfileUiState = editProfileUiState,
+            updateSuccess = false,
             onBackClick = {},
             updateEmail = {},
             updateMobile = {},
-            updateSuccess = false,
             uri = null,
         )
     }

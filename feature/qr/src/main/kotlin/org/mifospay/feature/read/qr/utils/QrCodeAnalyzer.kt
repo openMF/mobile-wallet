@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.read.qr.utils
 
 import android.graphics.ImageFormat
@@ -13,7 +22,7 @@ import com.google.zxing.common.HybridBinarizer
 import java.nio.ByteBuffer
 
 class QrCodeAnalyzer(
-    private val onQrCodeScanned: (String) -> Unit
+    private val onQrCodeScanned: (String) -> Unit,
 ) : ImageAnalysis.Analyzer {
 
     private val supportedImageFormats = listOf(
@@ -33,7 +42,7 @@ class QrCodeAnalyzer(
                 0,
                 image.width,
                 image.height,
-                false
+                false,
             )
             val binaryBmp = BinaryBitmap(HybridBinarizer(source))
             try {
@@ -41,9 +50,9 @@ class QrCodeAnalyzer(
                     setHints(
                         mapOf(
                             DecodeHintType.POSSIBLE_FORMATS to arrayListOf(
-                                BarcodeFormat.QR_CODE
-                            )
-                        )
+                                BarcodeFormat.QR_CODE,
+                            ),
+                        ),
                     )
                 }.decode(binaryBmp)
                 onQrCodeScanned(result.text)

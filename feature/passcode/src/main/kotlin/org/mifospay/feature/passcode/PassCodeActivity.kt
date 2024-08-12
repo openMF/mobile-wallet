@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.passcode
 
 import android.content.Context
@@ -7,7 +16,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import com.mifos.mobile.passcode.MifosPassCodeActivity
 import com.mifos.mobile.passcode.utils.EncryptionUtil
@@ -25,8 +33,6 @@ class PassCodeActivity : MifosPassCodeActivity() {
     private var updatePassword = false
     private var isInitialScreen = false
 
-    val viewModel: PassCodeViewModel by viewModels()
-
     companion object {
         // We gonna remove it after implementing the Compose Passcode screen and compose navigation
         const val MAIN_ACTIVITY = "org.mifospay.MainActivity"
@@ -34,9 +40,11 @@ class PassCodeActivity : MifosPassCodeActivity() {
         const val RECEIPT_ACTIVITY = "org.mifospay.receipt.ui.ReceiptActivity"
 
         fun startPassCodeActivity(context: Context, bundle: Bundle) {
-            context.startActivity(Intent(context, PassCodeActivity::class.java).apply {
-                putExtras(bundle)
-            })
+            context.startActivity(
+                Intent(context, PassCodeActivity::class.java).apply {
+                    putExtras(bundle)
+                },
+            )
         }
     }
 
@@ -44,7 +52,7 @@ class PassCodeActivity : MifosPassCodeActivity() {
         super.onCreate(savedInstanceState)
 
         isInitialScreen = intent.getBooleanExtra(
-            PassCodeConstants.PASSCODE_INITIAL_LOGIN, false
+            PassCodeConstants.PASSCODE_INITIAL_LOGIN, false,
         )
         if (intent != null) {
             currPass = intent.getStringExtra(Constants.CURRENT_PASSCODE)
@@ -53,12 +61,15 @@ class PassCodeActivity : MifosPassCodeActivity() {
 
         deepLinkURI = intent.getStringExtra("uri")
 
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                saveCurrentPasscode()
-                finishAffinity()
-            }
-        })
+        onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    saveCurrentPasscode()
+                    finishAffinity()
+                }
+            },
+        )
     }
 
     override fun getLogo(): Int {
@@ -75,7 +86,7 @@ class PassCodeActivity : MifosPassCodeActivity() {
         } else {
             val intent = Intent(this@PassCodeActivity, Class.forName(MAIN_ACTIVITY))
             intent.addFlags(
-                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK,
             )
             startActivity(intent)
         }

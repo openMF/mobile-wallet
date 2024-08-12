@@ -6,7 +6,7 @@ import javax.inject.Inject
 /**
  * Created by ankur on 17/June/2018
  */
-class TaskLooper @Inject constructor(private val mUsecaseHandler: UseCaseHandler) {
+class TaskLooper @Inject constructor(private val mUseCaseHandler: UseCaseHandler) {
     var isFailed = false
     var tasks: List<UseCase<*, *>>
     private var tasksPending: Long = 0
@@ -17,24 +17,27 @@ class TaskLooper @Inject constructor(private val mUsecaseHandler: UseCaseHandler
     }
 
     fun <T : UseCase.RequestValues, R : UseCase.ResponseValue?> addTask(
-        useCase: UseCase<T, R>, values: T, taskData: TaskData
+        useCase: UseCase<T, R>, values: T, taskData: TaskData,
     ) {
         tasksPending++
-        mUsecaseHandler.execute(useCase, values, object : UseCaseCallback<R> {
-            override fun onSuccess(response: R) {
-                if (isFailed) return
-                listener!!.onTaskSuccess(taskData, response)
-                tasksPending--
-                if (isCompleted) {
-                    listener!!.onComplete()
+        mUseCaseHandler.execute(
+            useCase, values,
+            object : UseCaseCallback<R> {
+                override fun onSuccess(response: R) {
+                    if (isFailed) return
+                    listener!!.onTaskSuccess(taskData, response)
+                    tasksPending--
+                    if (isCompleted) {
+                        listener!!.onComplete()
+                    }
                 }
-            }
 
-            override fun onError(message: String) {
-                isFailed = true
-                listener!!.onFailure(message)
-            }
-        })
+                override fun onError(message: String) {
+                    isFailed = true
+                    listener!!.onFailure(message)
+                }
+            },
+        )
     }
 
     private val isCompleted: Boolean

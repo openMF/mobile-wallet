@@ -41,7 +41,7 @@ fun InvoiceScreenRoute(
     val invoiceUiState by viewModel.invoiceUiState.collectAsStateWithLifecycle()
     InvoiceScreen(
         invoiceUiState = invoiceUiState,
-        getUniqueInvoiceLink = { viewModel.getUniqueInvoiceLink(it) },
+        getUniqueInvoiceLink = viewModel::getUniqueInvoiceLink,
         navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen,
         modifier = modifier,
     )
@@ -124,7 +124,11 @@ private fun InvoiceScreenPreview(
     @PreviewParameter(InvoicesUiStateProvider::class) invoiceUiState: InvoicesUiState,
 ) {
     MifosTheme {
-        InvoiceScreen(invoiceUiState = invoiceUiState, getUniqueInvoiceLink = { Uri.EMPTY }, {})
+        InvoiceScreen(
+            invoiceUiState = invoiceUiState,
+            getUniqueInvoiceLink = { Uri.EMPTY },
+            navigateToInvoiceDetailScreen = {},
+        )
     }
 }
 

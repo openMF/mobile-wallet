@@ -1,5 +1,15 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.notification
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,7 +31,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -38,29 +47,33 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.notification.R
 
 @Composable
-fun NotificationScreen(viewmodel: NotificationViewModel = hiltViewModel()) {
+fun NotificationScreen(
+    modifier: Modifier = Modifier,
+    viewmodel: NotificationViewModel = hiltViewModel(),
+) {
     val uiState by viewmodel.notificationUiState.collectAsStateWithLifecycle()
     val isRefreshing by viewmodel.isRefreshing.collectAsStateWithLifecycle()
     NotificationScreen(
         uiState = uiState,
         isRefreshing = isRefreshing,
-        onRefresh = {
-            viewmodel.refresh()
-        }
+        onRefresh = viewmodel::refresh,
+        modifier = modifier,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 @Composable
-fun NotificationScreen(
+@VisibleForTesting
+internal fun NotificationScreen(
     uiState: NotificationUiState,
     isRefreshing: Boolean,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
-    Box(Modifier.pullRefresh(pullRefreshState)) {
+    Box(modifier.pullRefresh(pullRefreshState)) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             MifosTopAppBar(titleRes = R.string.feature_notification_notifications)
             when (uiState) {
@@ -70,14 +83,14 @@ fun NotificationScreen(
                         title = stringResource(id = R.string.feature_notification_error_oops),
                         subTitle = stringResource(id = R.string.feature_notification_unexpected_error_subtitle),
                         iconTint = MaterialTheme.colorScheme.primary,
-                        iconImageVector = MifosIcons.RoundedInfo
+                        iconImageVector = MifosIcons.RoundedInfo,
                     )
                 }
 
                 NotificationUiState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(R.string.feature_notification_loading),
-                        backgroundColor = MaterialTheme.colorScheme.surface
+                        backgroundColor = MaterialTheme.colorScheme.surface,
                     )
                 }
 
@@ -88,7 +101,7 @@ fun NotificationScreen(
                             title = stringResource(R.string.feature_notification_nothing_to_notify),
                             subTitle = stringResource(R.string.feature_notification_there_is_nothing_to_show),
                             iconTint = MaterialTheme.colorScheme.onSurface,
-                            iconImageVector = MifosIcons.RoundedInfo
+                            iconImageVector = MifosIcons.RoundedInfo,
                         )
                     } else {
                         LazyColumn {
@@ -96,7 +109,7 @@ fun NotificationScreen(
                                 NotificationListItem(
                                     title = notification.title.toString(),
                                     body = notification.body.toString(),
-                                    timestamp = notification.timestamp.toString()
+                                    timestamp = notification.timestamp.toString(),
                                 )
                             }
                         }
@@ -107,24 +120,29 @@ fun NotificationScreen(
         PullRefreshIndicator(
             refreshing = isRefreshing,
             state = pullRefreshState,
-            modifier = Modifier.align(Alignment.TopCenter)
+            modifier = Modifier.align(Alignment.TopCenter),
         )
     }
 }
 
 @Composable
-fun NotificationListItem(title: String, body: String, timestamp: String) {
+private fun NotificationListItem(
+    title: String,
+    body: String,
+    timestamp: String,
+    modifier: Modifier = Modifier,
+) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(24.dp)
+                .padding(24.dp),
         ) {
             Text(
                 text = title,
@@ -132,27 +150,29 @@ fun NotificationListItem(title: String, body: String, timestamp: String) {
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = 8.dp),
             )
             Text(
-                text = body, style = MaterialTheme.typography.bodyMedium,
+                text = body,
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = 8.dp),
             )
             Text(
-                text = timestamp, style = MaterialTheme.typography.bodySmall,
+                text = timestamp,
+                style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onPrimaryContainer,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = 8.dp),
             )
         }
     }
 }
 
-class NotificationUiStateProvider :
+internal class NotificationUiStateProvider :
     PreviewParameterProvider<NotificationUiState> {
     override val values: Sequence<NotificationUiState>
         get() = sequenceOf(
@@ -164,18 +184,19 @@ class NotificationUiStateProvider :
 
 @Preview(showBackground = true)
 @Composable
-fun NotificationScreenPreview(
-    @PreviewParameter(NotificationUiStateProvider::class) notificationUiState: NotificationUiState
+private fun NotificationScreenPreview(
+    @PreviewParameter(NotificationUiStateProvider::class)
+    notificationUiState: NotificationUiState,
 ) {
     MifosTheme {
         NotificationScreen(
             uiState = notificationUiState,
             isRefreshing = false,
-            onRefresh = {}
+            onRefresh = {},
         )
     }
 }
 
-val sampleNotificationList = List(10) {
+internal val sampleNotificationList = List(10) {
     NotificationPayload("Title", "Body", "TimeStamp")
 }

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.request.money
 
 import android.graphics.Bitmap
@@ -31,19 +40,19 @@ class GenerateQr @Inject constructor() :
     private fun makeUpiString(requestQrData: RequestQrData): String {
         // Initial payment string
         val requestPaymentString = "upi://pay" +
-                "?pa=${requestQrData.vpaId}" +
-                "&am=${requestQrData.amount}" +
-                "&pn=${requestQrData.name}" +
-                "&cu=${requestQrData.currency}" +
-                "&mode=02" +
-                "&s=000000"
+            "?pa=${requestQrData.vpaId}" +
+            "&am=${requestQrData.amount}" +
+            "&pn=${requestQrData.name}" +
+            "&cu=${requestQrData.currency}" +
+            "&mode=02" +
+            "&s=000000"
 
         // Convert the payment string to bytes and encode to Base64
-        val sign = Base64.getEncoder().encodeToString(requestPaymentString.toByteArray(Charsets.UTF_8))
+        val sign =
+            Base64.getEncoder().encodeToString(requestPaymentString.toByteArray(Charsets.UTF_8))
 
-
-       val signedRequestPayment = requestPaymentString +
-        "&sign=${sign}"
+        val signedRequestPayment = requestPaymentString +
+            "&sign=$sign"
 
         // Convert the final URI to string
         return signedRequestPayment
@@ -51,11 +60,13 @@ class GenerateQr @Inject constructor() :
 
     @Throws(WriterException::class)
     private fun encodeAsBitmap(str: String): Bitmap? {
-        val result: BitMatrix
-        result = try {
+        val result: BitMatrix = try {
             MultiFormatWriter().encode(
                 str,
-                BarcodeFormat.QR_CODE, WIDTH, WIDTH, null
+                BarcodeFormat.QR_CODE,
+                WIDTH,
+                WIDTH,
+                null,
             )
         } catch (iae: IllegalArgumentException) {
             return null
