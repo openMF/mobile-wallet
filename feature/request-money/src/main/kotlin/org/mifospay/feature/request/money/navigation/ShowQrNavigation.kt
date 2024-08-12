@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.request.money.navigation
 
 import androidx.navigation.NavController
@@ -10,14 +19,13 @@ import org.mifospay.feature.request.money.ShowQrScreenRoute
 const val SHOW_QR_ROUTE = "show_qr_route"
 
 fun NavGraphBuilder.showQrScreen(
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     composable(
         route = "$SHOW_QR_ROUTE/{vpa}",
-        arguments = listOf(navArgument("vpa") { type = NavType.StringType })
-    ) { backStackEntry ->
-        val vpa = backStackEntry.arguments?.getString("vpa")
-        ShowQrScreenRoute(backPress = onBackClick, vpa = vpa!!)
+        arguments = listOf(navArgument("vpa") { type = NavType.StringType }),
+    ) {
+        ShowQrScreenRoute(backPress = onBackClick)
     }
 }
 

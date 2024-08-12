@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.request.money
 
 import android.graphics.Bitmap
@@ -18,25 +27,26 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import org.mifospay.core.designsystem.component.MifosButton
+import java.util.Locale
 
 @Composable
-@Suppress("ImplicitDefaultLocale")
-fun ShowQrContent(
+internal fun ShowQrContent(
     qrDataBitmap: Bitmap,
-    amount: String?,
     qrDataString: String,
     showAmountDialog: () -> Unit,
+    modifier: Modifier = Modifier,
+    amount: String? = null,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AsyncImage(
             model = qrDataBitmap,
             contentDescription = null,
             modifier = Modifier
                 .padding(20.dp)
-                .weight(1f)
+                .weight(1f),
         )
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -44,7 +54,7 @@ fun ShowQrContent(
         MifosButton(
             modifier = Modifier
                 .width(150.dp),
-            onClick = { showAmountDialog() }
+            onClick = { showAmountDialog() },
         ) {
             Text(text = stringResource(id = R.string.feature_request_money_set_amount))
         }
@@ -57,11 +67,11 @@ fun ShowQrContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
         ) {
             Text(
                 text = stringResource(id = R.string.feature_request_money_qr_code_details),
-                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold)
+                style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.Bold),
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -69,22 +79,24 @@ fun ShowQrContent(
             Text(
                 text = when (amount) {
                     null -> String.format(
-                        "%s: %s",
+                        Locale.getDefault(),
+                        format = "%s: %s",
                         stringResource(R.string.feature_request_money_vpa),
-                        qrDataString
+                        qrDataString,
                     )
 
                     else -> String.format(
-                        "%s: %s\n%s: %s",
+                        Locale.getDefault(),
+                        format = "%s: %s\n%s: %s",
                         stringResource(R.string.feature_request_money_vpa),
                         qrDataString,
                         stringResource(
-                            R.string.feature_request_money_amount
+                            R.string.feature_request_money_amount,
                         ),
-                        amount
+                        amount,
                     )
                 },
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }
