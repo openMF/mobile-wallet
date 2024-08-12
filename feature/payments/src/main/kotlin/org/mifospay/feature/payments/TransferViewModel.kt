@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.payments
 
 import androidx.lifecycle.ViewModel
@@ -12,42 +21,39 @@ import org.mifospay.core.data.domain.usecase.account.FetchAccount
 import org.mifospay.core.data.repository.local.LocalRepository
 import javax.inject.Inject
 
-/**
- * Created by naman on 30/8/17.
- */
 @HiltViewModel
 class TransferViewModel @Inject constructor(
     val mUsecaseHandler: UseCaseHandler,
     val localRepository: LocalRepository,
-    val mFetchAccount: FetchAccount
+    val mFetchAccount: FetchAccount,
 ) : ViewModel() {
 
-    private val _vpa = MutableStateFlow("")
-    val vpa: StateFlow<String> = _vpa
+    private val mVpa = MutableStateFlow("")
+    val vpa: StateFlow<String> = mVpa
 
-    private val _mobile = MutableStateFlow("")
-    val mobile: StateFlow<String> = _mobile
+    private val mMobile = MutableStateFlow("")
+    val mobile: StateFlow<String> = mMobile
 
-    private var _transferUiState = MutableStateFlow<TransferUiState>(TransferUiState.Loading)
-    var transferUiState: StateFlow<TransferUiState> = _transferUiState
+    private var mTransferUiState = MutableStateFlow<TransferUiState>(TransferUiState.Loading)
+    var transferUiState: StateFlow<TransferUiState> = mTransferUiState
 
-    private var _updateSuccess = MutableStateFlow<Boolean>(false)
-    var updateSuccess: StateFlow<Boolean> = _updateSuccess
+    private var mUpdateSuccess = MutableStateFlow<Boolean>(false)
+    var updateSuccess: StateFlow<Boolean> = mUpdateSuccess
 
     init {
         fetchVpa()
         fetchMobile()
     }
 
-    fun fetchVpa() {
+    private fun fetchVpa() {
         viewModelScope.launch {
-            _vpa.value = localRepository.clientDetails.externalId.toString()
+            mVpa.value = localRepository.clientDetails.externalId.toString()
         }
     }
 
-    fun fetchMobile() {
+    private fun fetchMobile() {
         viewModelScope.launch {
-            _mobile.value = localRepository.preferencesHelper.mobile.toString()
+            mMobile.value = localRepository.preferencesHelper.mobile.toString()
         }
     }
 
@@ -56,27 +62,32 @@ class TransferViewModel @Inject constructor(
     }
 
     fun checkBalanceAvailability(externalId: String, transferAmount: Double) {
-        mUsecaseHandler.execute(mFetchAccount,
+        mUsecaseHandler.execute(
+            mFetchAccount,
             FetchAccount.RequestValues(localRepository.clientDetails.clientId),
             object : UseCaseCallback<FetchAccount.ResponseValue> {
                 override fun onSuccess(response: FetchAccount.ResponseValue) {
-                    _transferUiState.value = TransferUiState.Loading
+                    mTransferUiState.value = TransferUiState.Loading
                     if (transferAmount > response.account.balance) {
-                        _updateSuccess.value = true
+                        mUpdateSuccess.value = true
                     } else {
-                       _transferUiState.value = TransferUiState.ShowClientDetails(externalId, transferAmount)
+                        mTransferUiState.value =
+                            TransferUiState.ShowClientDetails(externalId, transferAmount)
                     }
                 }
 
                 override fun onError(message: String) {
-                    _updateSuccess.value = false
+                    mUpdateSuccess.value = false
                 }
-            })
+            },
+        )
     }
 }
 
-
 sealed interface TransferUiState {
-    data object Loading: TransferUiState
-    data class ShowClientDetails(val externalId: String, val transferAmount: Double): TransferUiState
+    data object Loading : TransferUiState
+    data class ShowClientDetails(
+        val externalId: String,
+        val transferAmount: Double,
+    ) : TransferUiState
 }
