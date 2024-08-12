@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.kyc
 
 import androidx.compose.foundation.layout.Arrangement
@@ -25,24 +34,24 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.kyc.R
 
 @Composable
-fun KYCLevel3Screen(
-    viewModel: KYCLevel3ViewModel = hiltViewModel()
-){
+internal fun KYCLevel3Screen(
+    modifier: Modifier = Modifier,
+    viewModel: KYCLevel3ViewModel = hiltViewModel(),
+) {
     val kyc3uiState by viewModel.kyc3uiState.collectAsStateWithLifecycle()
 
     KYCLevel3Screen(
-        uiState = kyc3uiState
+        uiState = kyc3uiState,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun KYCLevel3Screen(
-    uiState: KYCLevel3UiState
-){
-
-    Kyc3Form(
-        modifier = Modifier
-    )
+private fun KYCLevel3Screen(
+    uiState: KYCLevel3UiState,
+    modifier: Modifier = Modifier,
+) {
+    Kyc3Form(modifier = modifier)
 
     when (uiState) {
         KYCLevel3UiState.Loading -> {
@@ -50,30 +59,29 @@ fun KYCLevel3Screen(
         }
 
         KYCLevel3UiState.Error -> {
-            //Todo : Implement Error state
+            // Todo : Implement Error state
         }
 
         KYCLevel3UiState.Success -> {
-            //Todo : Implement Success state
+            // Todo : Implement Success state
         }
     }
 }
 
 @Composable
-fun Kyc3Form(
-    modifier: Modifier
+private fun Kyc3Form(
+    modifier: Modifier = Modifier,
 ) {
     var panIdValue by rememberSaveable { mutableStateOf("") }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(20.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
-
         MifosOutlinedTextField(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
             value = panIdValue,
@@ -87,7 +95,7 @@ fun Kyc3Form(
             onClick = {},
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             Text(stringResource(R.string.feature_kyc_submit))
         }
@@ -96,7 +104,7 @@ fun Kyc3Form(
 
 @Preview(showBackground = true)
 @Composable
-fun KYCLevel3ScreenPreview() {
+private fun KYCLevel3ScreenPreview() {
     MifosTheme {
         Kyc3Form(modifier = Modifier)
     }

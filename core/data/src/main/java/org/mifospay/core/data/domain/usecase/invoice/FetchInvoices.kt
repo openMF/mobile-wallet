@@ -1,5 +1,6 @@
 package org.mifospay.core.data.domain.usecase.invoice
 
+import android.util.Log
 import org.mifospay.core.data.base.UseCase
 import com.mifospay.core.model.entity.Invoice
 import org.mifospay.core.data.fineract.repository.FineractRepository
@@ -26,6 +27,7 @@ class FetchInvoices @Inject constructor(private val mFineractRepository: Finerac
             .subscribe(object : Subscriber<List<Invoice>>() {
                 override fun onCompleted() {}
                 override fun onError(e: Throwable) {
+                    Log.e("Invoices", e.message.toString())
                     useCaseCallback.onError(e.toString())
                 }
 

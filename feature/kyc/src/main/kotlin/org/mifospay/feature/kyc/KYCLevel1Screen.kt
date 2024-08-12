@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.kyc
 
 import android.widget.Toast
@@ -45,51 +54,33 @@ import org.mifospay.kyc.R
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun KYCLevel1Screen(
+internal fun KYCLevel1Screen(
+    navigateToKycLevel2: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: KYCLevel1ViewModel = hiltViewModel(),
-    navigateToKycLevel2: () -> Unit
 ) {
     val kyc1uiState by viewModel.kyc1uiState.collectAsStateWithLifecycle()
 
     KYCLevel1Screen(
         uiState = kyc1uiState,
-        submitData = { fname,
-                       lname,
-                       address1,
-                       address2,
-                       phoneno,
-                       dob ->
-            viewModel.submitData(
-                fname.trim { it <= ' ' },
-                lname.trim { it <= ' ' },
-                address1.trim { it <= ' ' },
-                address2.trim { it <= ' ' },
-                phoneno.trim { it <= ' ' },
-                dob.trim { it <= ' ' }
-            )
-        },
-        navigateToKycLevel2 = navigateToKycLevel2
+        submitData = viewModel::submitData,
+        navigateToKycLevel2 = navigateToKycLevel2,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun KYCLevel1Screen(
+private fun KYCLevel1Screen(
     uiState: KYCLevel1UiState,
-    submitData: (
-        String,
-        String,
-        String,
-        String,
-        String,
-        String
-    ) -> Unit,
-    navigateToKycLevel2: () -> Unit
+    submitData: (KYCLevel1DetailsState) -> Unit,
+    navigateToKycLevel2: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
 
     Kyc1Form(
-        modifier = Modifier,
-        submitData = submitData
+        submitData = submitData,
+        modifier = modifier,
     )
 
     when (uiState) {
@@ -101,7 +92,7 @@ fun KYCLevel1Screen(
             Toast.makeText(
                 context,
                 stringResource(R.string.feature_kyc_error_adding_KYC_Level_1_details),
-                Toast.LENGTH_SHORT
+                Toast.LENGTH_SHORT,
             ).show()
             navigateToKycLevel2.invoke()
         }
@@ -110,7 +101,7 @@ fun KYCLevel1Screen(
             Toast.makeText(
                 context,
                 stringResource(R.string.feature_kyc_successkyc1),
-                Toast.LENGTH_SHORT
+                Toast.LENGTH_SHORT,
             ).show()
             navigateToKycLevel2.invoke()
         }
@@ -119,18 +110,10 @@ fun KYCLevel1Screen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Kyc1Form(
-    modifier: Modifier,
-    submitData: (
-        String,
-        String,
-        String,
-        String,
-        String,
-        String
-    ) -> Unit
+private fun Kyc1Form(
+    submitData: (KYCLevel1DetailsState) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-
     var firstName by rememberSaveable { mutableStateOf("") }
     var lastName by rememberSaveable { mutableStateOf("") }
     var address1 by rememberSaveable { mutableStateOf("") }
@@ -138,16 +121,26 @@ fun Kyc1Form(
     var mobileNumber by rememberSaveable { mutableStateOf("") }
     var dateOfBirth by rememberSaveable { mutableStateOf("") }
     val dateState = rememberUseCaseState()
-    val dateFormatter = DateTimeFormatter.ofPattern(stringResource(R.string.feature_kyc_date_format))
+    val dateFormatter =
+        DateTimeFormatter.ofPattern(stringResource(R.string.feature_kyc_date_format))
+
+    val kycDetails = KYCLevel1DetailsState(
+        firstName = firstName,
+        lastName = lastName,
+        addressLine1 = address1,
+        addressLine2 = address2,
+        mobileNo = mobileNumber,
+        dob = dateOfBirth,
+    )
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         MifosOutlinedTextField(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
             value = firstName,
@@ -157,7 +150,7 @@ fun Kyc1Form(
             label = R.string.feature_kyc_first_name,
         )
         MifosOutlinedTextField(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
             value = lastName,
@@ -167,7 +160,7 @@ fun Kyc1Form(
             label = R.string.feature_kyc_last_name,
         )
         MifosOutlinedTextField(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
             value = address1,
@@ -177,7 +170,7 @@ fun Kyc1Form(
             label = R.string.feature_kyc_address_line_1,
         )
         MifosOutlinedTextField(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
             value = address2,
@@ -189,14 +182,14 @@ fun Kyc1Form(
 
         Box(
             modifier = Modifier
-                .padding(vertical = 7.dp)
+                .padding(vertical = 7.dp),
         ) {
             val keyboardController = LocalSoftwareKeyboardController.current
             TogiCountryCodePicker(
                 modifier = Modifier,
                 shape = RoundedCornerShape(3.dp),
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = MaterialTheme.colorScheme.primary
+                    focusedBorderColor = MaterialTheme.colorScheme.primary,
                 ),
                 onValueChange = { (code, phone), isValid ->
                     if (isValid) {
@@ -206,7 +199,7 @@ fun Kyc1Form(
                 label = {
                     Text(stringResource(id = R.string.feature_kyc_phone_number))
                 },
-                keyboardActions = KeyboardActions { keyboardController?.hide() }
+                keyboardActions = KeyboardActions { keyboardController?.hide() },
             )
         }
 
@@ -215,11 +208,11 @@ fun Kyc1Form(
             config = CalendarConfig(
                 monthSelection = true,
                 yearSelection = true,
-                style = CalendarStyle.MONTH
+                style = CalendarStyle.MONTH,
             ),
             selection = CalendarSelection.Date { date ->
                 dateOfBirth = dateFormatter.format(date)
-            }
+            },
         )
 
         Box(
@@ -230,26 +223,20 @@ fun Kyc1Form(
                 .clickable { dateState.show() }
                 .border(
                     width = 1.dp,
-                    color = Color.Black
+                    color = Color.Black,
                 )
                 .padding(12.dp)
-                .clip(shape = RoundedCornerShape(8.dp))
+                .clip(shape = RoundedCornerShape(8.dp)),
         ) {
             Text(
                 text = dateOfBirth.ifEmpty { stringResource(R.string.feature_kyc_select_dob) },
-                style = MaterialTheme.typography.bodyLarge
+                style = MaterialTheme.typography.bodyLarge,
             )
         }
+
         Button(
             onClick = {
-                submitData(
-                    firstName,
-                    lastName,
-                    address1,
-                    address2,
-                    mobileNumber,
-                    dateOfBirth
-                )
+                submitData(kycDetails)
             },
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
@@ -262,36 +249,36 @@ fun Kyc1Form(
 
 @Preview(showBackground = true)
 @Composable
-fun Kyc1FormPreview() {
+private fun Kyc1FormPreview() {
     MifosTheme {
         KYCLevel1Screen(
             uiState = KYCLevel1UiState.Loading,
-            submitData = { _, _, _, _, _, _ -> },
-            navigateToKycLevel2 = {}
+            submitData = { _ -> },
+            navigateToKycLevel2 = {},
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun Kyc1PreviewWithError() {
+private fun Kyc1PreviewWithError() {
     MifosTheme {
         KYCLevel1Screen(
             uiState = KYCLevel1UiState.Error,
-            submitData = { _, _, _, _, _, _ -> },
-            navigateToKycLevel2 = {}
+            submitData = { _ -> },
+            navigateToKycLevel2 = {},
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun Kyc1FormPreviewWithSuccess() {
+private fun Kyc1FormPreviewWithSuccess() {
     MifosTheme {
         KYCLevel1Screen(
             uiState = KYCLevel1UiState.Success,
-            submitData = { _, _, _, _, _, _ -> },
-            navigateToKycLevel2 = {}
+            submitData = { _ -> },
+            navigateToKycLevel2 = {},
         )
     }
 }
