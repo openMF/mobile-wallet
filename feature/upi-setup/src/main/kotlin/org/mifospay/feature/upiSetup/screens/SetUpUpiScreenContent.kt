@@ -1,6 +1,14 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.upiSetup.screens
 
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
@@ -8,37 +16,39 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.mifospay.core.model.domain.BankAccountDetails
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.feature.upiSetup.viewmodel.SetUpUpiViewModal
 
 @Composable
-fun SetUpUpiScreenContent(
-    viewModal: SetUpUpiViewModal = hiltViewModel(),
-    bankAccountDetails: BankAccountDetails,
+internal fun SetUpUpiScreenContent(
     type: String,
-    correctlySettingUpi: (String) -> Unit
+    otpText: String,
+    correctlySettingUpi: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column {
         if (type == Constants.CHANGE) {
             ChangeUpi(
-                viewModal.requestOtp(bankAccountDetails), correctlySettingUpi
+                otpText = otpText,
+                correctlySettingUpi = correctlySettingUpi,
+                modifier = modifier,
             )
         } else {
             SettingAndForgotUpi(
-                correctlySettingUpi
+                correctlySettingUpi,
+                modifier = modifier,
             )
         }
     }
 }
 
 @Composable
-fun SettingAndForgotUpi(
-    correctlySettingUpi: (String) -> Unit
+private fun SettingAndForgotUpi(
+    correctlySettingUpi: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var debitCardVerified by rememberSaveable { mutableStateOf(false) }
     var otpVerified by rememberSaveable { mutableStateOf(false) }
@@ -50,84 +60,107 @@ fun SettingAndForgotUpi(
 
     val context = LocalContext.current
 
-    DebitCardScreen(verificationStatus = debitCardVerified,
-        isContentVisible = debitCardScreenVisible,
-        onDebitCardVerified = {
-            debitCardVerified = true
-            otpScreenVisible = true
-            realOtp = it
-            debitCardScreenVisible = false
-        },
-        onDebitCardVerificationFailed = {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-        })
-    OtpScreen(verificationStatus = otpVerified,
-        contentVisibility = otpScreenVisible,
-        realOtp = realOtp,
-        onOtpTextCorrectlyEntered = {
-            otpScreenVisible = false
-            otpVerified = true
-            upiPinScreenVisible = true
-        })
-    UpiPinScreen(contentVisibility = upiPinScreenVisible, correctlySettingUpi = {
-        upiPinScreenVerified = true
-        correctlySettingUpi(it)
-    })
+    Column(modifier) {
+        DebitCardScreen(
+            verificationStatus = debitCardVerified,
+            isContentVisible = debitCardScreenVisible,
+            onDebitCardVerified = {
+                debitCardVerified = true
+                otpScreenVisible = true
+                realOtp = it
+                debitCardScreenVisible = false
+            },
+            onDebitCardVerificationFailed = {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+            },
+        )
+        OtpScreen(
+            verificationStatus = otpVerified,
+            contentVisibility = otpScreenVisible,
+            realOtp = realOtp,
+            onOtpTextCorrectlyEntered = {
+                otpScreenVisible = false
+                otpVerified = true
+                upiPinScreenVisible = true
+            },
+        )
+        UpiPinScreen(
+            correctlySettingUpi = {
+                upiPinScreenVerified = true
+                correctlySettingUpi(it)
+            },
+            contentVisibility = upiPinScreenVisible,
+        )
+    }
 }
 
 @Composable
-fun ChangeUpi(
-    otpText: String, correctlySettingUpi: (String) -> Unit
+private fun ChangeUpi(
+    otpText: String,
+    correctlySettingUpi: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var otpVerified by rememberSaveable { mutableStateOf(false) }
     var otpScreenVisible by rememberSaveable { mutableStateOf(true) }
     var upiPinScreenVisible by rememberSaveable { mutableStateOf(false) }
     var upiPinScreenVerified by rememberSaveable { mutableStateOf(false) }
-    var realOtp by rememberSaveable { mutableStateOf(otpText) }
+    val realOtp by rememberSaveable { mutableStateOf(otpText) }
 
-    OtpScreen(verificationStatus = otpVerified,
-        contentVisibility = otpScreenVisible,
-        realOtp = realOtp,
-        onOtpTextCorrectlyEntered = {
-            otpScreenVisible = false
-            Log.i("OtpScreen", "$otpScreenVisible")
-            otpVerified = true
-            upiPinScreenVisible = true
-            otpScreenVisible = false
-        })
-    UpiPinScreen(contentVisibility = upiPinScreenVisible, correctlySettingUpi = {
-        upiPinScreenVerified = true
-        correctlySettingUpi(it)
-    })
+    Column(modifier) {
+        OtpScreen(
+            verificationStatus = otpVerified,
+            contentVisibility = otpScreenVisible,
+            realOtp = realOtp,
+            onOtpTextCorrectlyEntered = {
+                otpScreenVisible = false
+                otpVerified = true
+                upiPinScreenVisible = true
+                otpScreenVisible = false
+            },
+        )
+
+        UpiPinScreen(
+            correctlySettingUpi = {
+                upiPinScreenVerified = true
+                correctlySettingUpi(it)
+            },
+            contentVisibility = upiPinScreenVisible,
+        )
+    }
 }
-
 
 @Preview
 @Composable
-fun PreviewSetUpUpiPin() {
+private fun PreviewSetUpUpiPin() {
     MifosTheme {
-        SetUpUpiScreenContent(bankAccountDetails = BankAccountDetails(),
+        SetUpUpiScreenContent(
             type = Constants.SETUP,
-            correctlySettingUpi = {})
+            otpText = "907889",
+            correctlySettingUpi = {},
+        )
     }
 }
 
 @Preview
 @Composable
-fun PreviewForgetUpiPin() {
+private fun PreviewForgetUpiPin() {
     MifosTheme {
-        SetUpUpiScreenContent(bankAccountDetails = BankAccountDetails(),
+        SetUpUpiScreenContent(
             type = Constants.FORGOT,
-            correctlySettingUpi = {})
+            otpText = "907889",
+            correctlySettingUpi = {},
+        )
     }
 }
 
 @Preview
 @Composable
-fun PreviewChangeUpiPin() {
+private fun PreviewChangeUpiPin() {
     MifosTheme {
-        SetUpUpiScreenContent(bankAccountDetails = BankAccountDetails(),
+        SetUpUpiScreenContent(
             type = Constants.CHANGE,
-            correctlySettingUpi = {})
+            otpText = "907889",
+            correctlySettingUpi = {},
+        )
     }
 }

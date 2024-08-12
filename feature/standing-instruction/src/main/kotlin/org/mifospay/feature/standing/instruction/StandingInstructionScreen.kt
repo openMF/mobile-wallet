@@ -1,5 +1,15 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.standing.instruction
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,47 +34,55 @@ import org.mifospay.core.ui.EmptyContentScreen
 
 @Composable
 fun StandingInstructionsScreenRoute(
+    onNewSI: () -> Unit,
+    onBackPress: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: StandingInstructionViewModel = hiltViewModel(),
-    onNewSI: () -> Unit
 ) {
     val standingInstructionsUiState by viewModel.standingInstructionsUiState.collectAsStateWithLifecycle()
+
     StandingInstructionScreen(
         standingInstructionsUiState = standingInstructionsUiState,
-        onNewSI = onNewSI
+        onNewSI = onNewSI,
+        onBackPress = onBackPress,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun StandingInstructionScreen(
+@VisibleForTesting
+internal fun StandingInstructionScreen(
     standingInstructionsUiState: StandingInstructionsUiState,
-    onNewSI: () -> Unit
+    onNewSI: () -> Unit,
+    onBackPress: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-
     val floatingActionButtonContent = FloatingActionButtonContent(
-        onClick = { onNewSI.invoke() },
+        onClick = onNewSI,
         contentColor = MaterialTheme.colorScheme.primary,
         content = {
             Icon(
                 imageVector = MifosIcons.Add,
-                contentDescription = stringResource(R.string.feature_standing_instruction_downloading_receipt)
+                contentDescription = stringResource(R.string.feature_standing_instruction_downloading_receipt),
             )
-        }
+        },
     )
 
     MifosScaffold(
-        backPress = { /*TODO*/ },
+        backPress = onBackPress,
         floatingActionButtonContent = floatingActionButtonContent,
+        modifier = modifier,
         scaffoldContent = {
-
-        }) {
+        },
+    ) {
         when (standingInstructionsUiState) {
             StandingInstructionsUiState.Empty -> {
                 EmptyContentScreen(
                     modifier = Modifier,
                     title = stringResource(id = R.string.feature_standing_instruction_error_oops),
-                    subTitle = stringResource(id = R.string.feature_standing_instruction_empty_standing_instructions, ),
+                    subTitle = stringResource(id = R.string.feature_standing_instruction_empty_standing_instructions),
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = Icons.Rounded.Info
+                    iconImageVector = Icons.Rounded.Info,
                 )
             }
 
@@ -74,21 +92,21 @@ fun StandingInstructionScreen(
                     title = stringResource(id = R.string.feature_standing_instruction_error_oops),
                     subTitle = stringResource(id = R.string.feature_standing_instruction_error_fetching_si_list),
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = MifosIcons.RoundedInfo
+                    iconImageVector = MifosIcons.RoundedInfo,
                 )
             }
 
             StandingInstructionsUiState.Loading -> {
                 MifosLoadingWheel(
                     modifier = Modifier.fillMaxWidth(),
-                    contentDesc = stringResource(R.string.feature_standing_instruction_loading)
+                    contentDesc = stringResource(R.string.feature_standing_instruction_loading),
                 )
             }
 
             is StandingInstructionsUiState.StandingInstructionList -> {
                 Column(
                     modifier = Modifier
-                        .fillMaxSize()
+                        .fillMaxSize(),
                 ) {
                     LazyColumn(modifier = Modifier.fillMaxSize()) {
                         items(standingInstructionsUiState.standingInstructionList) { items ->
@@ -102,17 +120,17 @@ fun StandingInstructionScreen(
                     }
                 }
             }
-
         }
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun StandingInstructionsScreenLoadingPreview() {
+private fun StandingInstructionsScreenLoadingPreview() {
     StandingInstructionScreen(
         standingInstructionsUiState = StandingInstructionsUiState.Loading,
-        onNewSI = {}
+        onNewSI = {},
+        onBackPress = {},
     )
 }
 
@@ -121,7 +139,8 @@ fun StandingInstructionsScreenLoadingPreview() {
 private fun StandingInstructionsEmptyPreview() {
     StandingInstructionScreen(
         standingInstructionsUiState = StandingInstructionsUiState.Empty,
-        onNewSI = {}
+        onNewSI = {},
+        onBackPress = {},
     )
 }
 
@@ -130,6 +149,7 @@ private fun StandingInstructionsEmptyPreview() {
 private fun StandingInstructionsErrorPreview() {
     StandingInstructionScreen(
         standingInstructionsUiState = StandingInstructionsUiState.Error("Error Screen"),
-        onNewSI = {}
+        onNewSI = {},
+        onBackPress = {},
     )
 }

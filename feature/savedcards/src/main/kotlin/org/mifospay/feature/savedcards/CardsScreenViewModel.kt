@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.savedcards
 
 import androidx.lifecycle.ViewModel
@@ -27,14 +36,14 @@ class CardsScreenViewModel @Inject constructor(
     private val addCardUseCase: AddCard,
     private val fetchSavedCardsUseCase: FetchSavedCards,
     private val editCardUseCase: EditCard,
-    private val deleteCardUseCase: DeleteCard
+    private val deleteCardUseCase: DeleteCard,
 ) : ViewModel() {
 
-    private val _searchQuery = MutableStateFlow("")
-    private val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
+    private val mSearchQuery = MutableStateFlow("")
+    private val searchQuery: StateFlow<String> = mSearchQuery.asStateFlow()
 
-    private val _cardState = MutableStateFlow<CardsUiState>(CardsUiState.Loading)
-    val cardState: StateFlow<CardsUiState> = _cardState.asStateFlow()
+    private val mCardState = MutableStateFlow<CardsUiState>(CardsUiState.Loading)
+    val cardState: StateFlow<CardsUiState> = mCardState.asStateFlow()
 
     init {
         fetchSavedCards()
@@ -42,7 +51,7 @@ class CardsScreenViewModel @Inject constructor(
 
     val cardListUiState: StateFlow<CardsUiState> = searchQuery
         .map { q ->
-            when (_cardState.value) {
+            when (mCardState.value) {
                 is CardsUiState.CreditCardForm -> {
                     val cardList = (cardState.value as CardsUiState.CreditCardForm).cards
                     val filterCards = cardList.filter {
@@ -61,92 +70,103 @@ class CardsScreenViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = CardsUiState.CreditCardForm(arrayListOf())
+            initialValue = CardsUiState.CreditCardForm(arrayListOf()),
         )
 
     fun updateSearchQuery(query: String) {
-        _searchQuery.update { query }
+        mSearchQuery.update { query }
     }
 
     fun fetchSavedCards() {
         fetchSavedCardsUseCase.walletRequestValues = FetchSavedCards.RequestValues(
-            mLocalRepository.clientDetails.clientId
+            mLocalRepository.clientDetails.clientId,
         )
         val requestValues = fetchSavedCardsUseCase.walletRequestValues
-        mUseCaseHandler.execute(fetchSavedCardsUseCase, requestValues,
+        mUseCaseHandler.execute(
+            fetchSavedCardsUseCase,
+            requestValues,
             object : UseCase.UseCaseCallback<FetchSavedCards.ResponseValue> {
                 override fun onSuccess(response: FetchSavedCards.ResponseValue) {
-                    response.cardList.let { _cardState.value = CardsUiState.CreditCardForm(it) }
+                    response.cardList.let { mCardState.value = CardsUiState.CreditCardForm(it) }
                 }
 
                 override fun onError(message: String) {
-                    _cardState.value = CardsUiState.Error
+                    mCardState.value = CardsUiState.Error
                 }
-            })
+            },
+        )
     }
 
     fun addCard(card: Card) {
         addCardUseCase.walletRequestValues = AddCard.RequestValues(
             mLocalRepository.clientDetails.clientId,
-            card
+            card,
         )
         val requestValues = addCardUseCase.walletRequestValues
-        mUseCaseHandler.execute(addCardUseCase, requestValues,
+        mUseCaseHandler.execute(
+            addCardUseCase,
+            requestValues,
             object : UseCase.UseCaseCallback<AddCard.ResponseValue> {
                 override fun onSuccess(response: AddCard.ResponseValue) {
-                    _cardState.value = CardsUiState.Success(CardsUiEvent.CARD_ADDED_SUCCESSFULLY)
+                    mCardState.value = CardsUiState.Success(CardsUiEvent.CARD_ADDED_SUCCESSFULLY)
                     fetchSavedCards()
                 }
 
                 override fun onError(message: String) {
-                    _cardState.value = CardsUiState.Error
+                    mCardState.value = CardsUiState.Error
                 }
-            })
+            },
+        )
     }
 
     fun editCard(card: Card) {
         editCardUseCase.walletRequestValues = EditCard.RequestValues(
             mLocalRepository.clientDetails.clientId.toInt(),
-            card
+            card,
         )
         val requestValues = editCardUseCase.walletRequestValues
-        mUseCaseHandler.execute(editCardUseCase, requestValues,
+        mUseCaseHandler.execute(
+            editCardUseCase,
+            requestValues,
             object : UseCase.UseCaseCallback<EditCard.ResponseValue> {
                 override fun onSuccess(response: EditCard.ResponseValue) {
-                    _cardState.value = CardsUiState.Success(CardsUiEvent.CARD_UPDATED_SUCCESSFULLY)
+                    mCardState.value = CardsUiState.Success(CardsUiEvent.CARD_UPDATED_SUCCESSFULLY)
                     fetchSavedCards()
                 }
 
                 override fun onError(message: String) {
-                    _cardState.value = CardsUiState.Error
+                    mCardState.value = CardsUiState.Error
                 }
-            })
+            },
+        )
     }
 
     fun deleteCard(cardId: Int) {
         deleteCardUseCase.walletRequestValues = DeleteCard.RequestValues(
             mLocalRepository.clientDetails.clientId.toInt(),
-            cardId
+            cardId,
         )
         val requestValues = deleteCardUseCase.walletRequestValues
-        mUseCaseHandler.execute(deleteCardUseCase, requestValues,
+        mUseCaseHandler.execute(
+            deleteCardUseCase,
+            requestValues,
             object : UseCase.UseCaseCallback<DeleteCard.ResponseValue> {
                 override fun onSuccess(response: DeleteCard.ResponseValue) {
-                    _cardState.value = CardsUiState.Success(CardsUiEvent.CARD_DELETED_SUCCESSFULLY)
+                    mCardState.value = CardsUiState.Success(CardsUiEvent.CARD_DELETED_SUCCESSFULLY)
                     fetchSavedCards()
                 }
 
                 override fun onError(message: String) {
-                    _cardState.value = CardsUiState.Error
+                    mCardState.value = CardsUiState.Error
                 }
-            })
+            },
+        )
     }
 }
 
-
 sealed interface CardsUiState {
     data class CreditCardForm(
-        val cards: List<Card>
+        val cards: List<Card>,
     ) : CardsUiState
 
     data object Empty : CardsUiState
@@ -158,5 +178,5 @@ sealed interface CardsUiState {
 enum class CardsUiEvent {
     CARD_ADDED_SUCCESSFULLY,
     CARD_UPDATED_SUCCESSFULLY,
-    CARD_DELETED_SUCCESSFULLY
+    CARD_DELETED_SUCCESSFULLY,
 }

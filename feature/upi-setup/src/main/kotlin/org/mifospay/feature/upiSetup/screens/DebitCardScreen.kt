@@ -1,5 +1,15 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.upiSetup.screens
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,75 +32,86 @@ import org.mifospay.feature.upiSetup.viewmodel.DebitCardUiState
 import org.mifospay.feature.upiSetup.viewmodel.DebitCardViewModel
 
 @Composable
-fun DebitCardScreen(
-    viewModel: DebitCardViewModel = hiltViewModel(),
+internal fun DebitCardScreen(
+    onDebitCardVerified: (String) -> Unit,
+    onDebitCardVerificationFailed: (String) -> Unit,
+    modifier: Modifier = Modifier,
     verificationStatus: Boolean = false,
     isContentVisible: Boolean = true,
-    onDebitCardVerified: (String) -> Unit,
-    onDebitCardVerificationFailed: (String) -> Unit
+    viewModel: DebitCardViewModel = hiltViewModel(),
 ) {
     val debitCardUiState by viewModel.debitCardUiState.collectAsStateWithLifecycle()
+
     DebitCardScreenWithHeaderAndContent(
         debitCardUiState = debitCardUiState,
+        onDebitCardVerified = onDebitCardVerified,
+        onDebitCardVerificationFailed = onDebitCardVerificationFailed,
+        onDone = viewModel::verifyDebitCard,
         verificationStatus = verificationStatus,
         isContentVisible = isContentVisible,
-        onDebitCardVerified = onDebitCardVerified,
-        onDebitCardVerificationFailed = onDebitCardVerificationFailed
+        modifier = modifier,
     )
 }
 
 @Composable
-fun DebitCardScreenWithHeaderAndContent(
-    debitCardUiState: DebitCardUiState = DebitCardUiState.Initials,
+@VisibleForTesting
+internal fun DebitCardScreenWithHeaderAndContent(
+    debitCardUiState: DebitCardUiState,
+    onDebitCardVerified: (String) -> Unit,
+    onDebitCardVerificationFailed: (String) -> Unit,
+    onDone: (String, String, String) -> Unit,
+    modifier: Modifier = Modifier,
     verificationStatus: Boolean = false,
     isContentVisible: Boolean = true,
-    onDebitCardVerified: (String) -> Unit,
-    onDebitCardVerificationFailed: (String) -> Unit
 ) {
-
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(20.dp),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
+            defaultElevation = 1.dp,
+        ),
     ) {
         Column(
             modifier = Modifier.padding(
                 top = 15.dp,
                 bottom = 15.dp,
                 start = 10.dp,
-                end = 10.dp
-            )
+                end = 10.dp,
+            ),
         ) {
             VerifyStepHeader("Debit Card Details ", verificationStatus)
             if (isContentVisible) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 12.dp)
+                        .padding(start = 12.dp),
                 ) {
-                    //handle debit card ui state
+                    // handle debit card ui state
                     Box(
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
-                        DebitCardScreenContents()
+                        DebitCardScreenContent(
+                            onDone = onDone,
+                        )
+
                         when (debitCardUiState) {
                             is DebitCardUiState.Initials -> {
-
                             }
+
                             is DebitCardUiState.Verifying -> {
                                 MifosLoadingWheel(
                                     modifier = Modifier
                                         .wrapContentSize()
                                         .align(Alignment.Center),
-                                    contentDesc = "Verifying Debit Card"
+                                    contentDesc = "Verifying Debit Card",
                                 )
                             }
+
                             is DebitCardUiState.Verified -> {
                                 onDebitCardVerified((debitCardUiState).otp)
                             }
+
                             is DebitCardUiState.VerificationFailed -> {
                                 onDebitCardVerificationFailed((debitCardUiState).errorMessage)
                             }
@@ -104,30 +125,39 @@ fun DebitCardScreenWithHeaderAndContent(
 
 @Preview
 @Composable
-fun DebitCardScreenInitialsPreview() {
+private fun DebitCardScreenInitialsPreview() {
     MifosTheme {
-        DebitCardScreenWithHeaderAndContent(debitCardUiState = DebitCardUiState.Initials,
+        DebitCardScreenWithHeaderAndContent(
+            debitCardUiState = DebitCardUiState.Initials,
             onDebitCardVerified = {},
-            onDebitCardVerificationFailed = {})
+            onDebitCardVerificationFailed = {},
+            onDone = { _, _, _ -> },
+        )
     }
 }
 
 @Preview
 @Composable
-fun DebitCardScreenLoadingPreview() {
+private fun DebitCardScreenLoadingPreview() {
     MifosTheme {
-        DebitCardScreenWithHeaderAndContent(debitCardUiState = DebitCardUiState.Verifying,
+        DebitCardScreenWithHeaderAndContent(
+            debitCardUiState = DebitCardUiState.Verifying,
             onDebitCardVerified = {},
-            onDebitCardVerificationFailed = {})
+            onDebitCardVerificationFailed = {},
+            onDone = { _, _, _ -> },
+        )
     }
 }
 
 @Preview
 @Composable
-fun DebitCardScreenVerificationFailedPreview() {
+private fun DebitCardScreenVerificationFailedPreview() {
     MifosTheme {
-        DebitCardScreenWithHeaderAndContent(debitCardUiState = DebitCardUiState.VerificationFailed("Error Message"),
+        DebitCardScreenWithHeaderAndContent(
+            debitCardUiState = DebitCardUiState.VerificationFailed("Error Message"),
             onDebitCardVerified = {},
-            onDebitCardVerificationFailed = {})
+            onDebitCardVerificationFailed = {},
+            onDone = { _, _, _ -> },
+        )
     }
 }
