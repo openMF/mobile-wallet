@@ -12,15 +12,16 @@ import javax.inject.Inject
  * Created by Devansh on 09/06/2020
  */
 
-class FetchStandingInstruction @Inject constructor(private val apiRepository: FineractRepository)
-    : UseCase<FetchStandingInstruction.RequestValues, FetchStandingInstruction.ResponseValue>(){
-
+class FetchStandingInstruction @Inject constructor(
+    private val apiRepository: FineractRepository,
+) : UseCase<FetchStandingInstruction.RequestValues, FetchStandingInstruction.ResponseValue>() {
 
     override fun executeUseCase(requestValues: RequestValues) {
         apiRepository.getStandingInstruction(requestValues.standingInstructionId)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(object : Subscriber<StandingInstruction>() {
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(
+                object : Subscriber<StandingInstruction>() {
 
                     override fun onCompleted() {
 
@@ -31,14 +32,14 @@ class FetchStandingInstruction @Inject constructor(private val apiRepository: Fi
                     }
 
 
-                    override fun onNext(standingInstruction: StandingInstruction)
-                            = useCaseCallback.onSuccess(ResponseValue(standingInstruction))
-                })
+                    override fun onNext(standingInstruction: StandingInstruction) =
+                        useCaseCallback.onSuccess(ResponseValue(standingInstruction))
+                },
+            )
     }
 
     class RequestValues(val standingInstructionId: Long) : UseCase.RequestValues
 
-    class ResponseValue(val standingInstruction: StandingInstruction)
-        : UseCase.ResponseValue
+    class ResponseValue(val standingInstruction: StandingInstruction) : UseCase.ResponseValue
 
 }

@@ -1,8 +1,17 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.receipt
-
 
 import android.net.Uri
 import android.os.Environment
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
@@ -29,15 +38,23 @@ class ReceiptViewModel @Inject constructor(
     private val downloadTransactionReceiptUseCase: DownloadTransactionReceipt,
     private val fetchAccountTransactionUseCase: FetchAccountTransaction,
     private val fetchAccountTransferUseCase: FetchAccountTransfer,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val _receiptState = MutableStateFlow<ReceiptUiState>(ReceiptUiState.Loading)
-    val receiptUiState: StateFlow<ReceiptUiState> = _receiptState.asStateFlow()
+    private val mReceiptState = MutableStateFlow<ReceiptUiState>(ReceiptUiState.Loading)
+    val receiptUiState: StateFlow<ReceiptUiState> = mReceiptState.asStateFlow()
 
-    private val _fileState = MutableStateFlow(PassFileState())
-    val fileState: StateFlow<PassFileState> = _fileState.asStateFlow()
+    private val mFileState = MutableStateFlow(PassFileState())
+    val fileState: StateFlow<PassFileState> = mFileState.asStateFlow()
+
+    init {
+        savedStateHandle.get<String>("uri")?.let {
+            getTransactionData(Uri.parse(it))
+        }
+    }
 
     fun downloadReceipt(transactionId: String?) {
-        mUseCaseHandler.execute(downloadTransactionReceiptUseCase,
+        mUseCaseHandler.execute(
+            downloadTransactionReceiptUseCase,
             DownloadTransactionReceipt.RequestValues(transactionId),
             object : UseCase.UseCaseCallback<DownloadTransactionReceipt.ResponseValue> {
                 override fun onSuccess(response: DownloadTransactionReceipt.ResponseValue) {
@@ -46,29 +63,28 @@ class ReceiptViewModel @Inject constructor(
                 }
 
                 override fun onError(message: String) {
-                    _receiptState.value = ReceiptUiState.Error(message)
+                    mReceiptState.value = ReceiptUiState.Error(message)
                 }
-            })
+            },
+        )
     }
 
     fun writeReceiptToPDF(responseBody: ResponseBody?, filename: String) {
         val mifosDirectory = File(
             Environment.getExternalStorageDirectory(),
-            Constants.MIFOSPAY
+            Constants.MIFOSPAY,
         )
         if (!mifosDirectory.exists()) {
             mifosDirectory.mkdirs()
         }
         val documentFile = File(mifosDirectory.path, filename)
         if (FileUtils.writeInputStreamDataToFile(responseBody!!.byteStream(), documentFile)) {
-            _fileState.value = PassFileState(documentFile)
+            mFileState.value = PassFileState(documentFile)
         }
     }
 
-    fun getTransactionData(data: Uri?) {
+    private fun getTransactionData(data: Uri?) {
         if (data != null) {
-            val scheme = data.scheme // "https"
-            val host = data.host // "receipt.mifospay.com"
             val params = data.pathSegments
             val transactionId = params.getOrNull(0)
             val receiptLink = data.toString()
@@ -76,11 +92,12 @@ class ReceiptViewModel @Inject constructor(
         }
     }
 
-    fun fetchTransaction(transactionId: String?, receiptLink: String?) {
+    private fun fetchTransaction(transactionId: String?, receiptLink: String?) {
         val accountId = preferencesHelper.accountId
 
         if (transactionId != null) {
-            mUseCaseHandler.execute(fetchAccountTransactionUseCase,
+            mUseCaseHandler.execute(
+                fetchAccountTransactionUseCase,
                 FetchAccountTransaction.RequestValues(accountId, transactionId.toLong()),
                 object : UseCase.UseCaseCallback<FetchAccountTransaction.ResponseValue> {
                     override fun onSuccess(response: FetchAccountTransaction.ResponseValue) {
@@ -88,19 +105,19 @@ class ReceiptViewModel @Inject constructor(
                             fetchTransfer(
                                 response.transaction,
                                 response.transaction.transferId,
-                                receiptLink
+                                receiptLink,
                             )
                         }
                     }
 
                     override fun onError(message: String) {
                         if (message == Constants.UNAUTHORIZED_ERROR) {
-                            _receiptState.value = ReceiptUiState.OpenPassCodeActivity
+                            mReceiptState.value = ReceiptUiState.OpenPassCodeActivity
                         } else {
-                            _receiptState.value = ReceiptUiState.Error(message)
+                            mReceiptState.value = ReceiptUiState.Error(message)
                         }
                     }
-                }
+                },
             )
         }
     }
@@ -108,44 +125,45 @@ class ReceiptViewModel @Inject constructor(
     fun fetchTransfer(
         transaction: Transaction,
         transferId: Long,
-        receiptLink: String
+        receiptLink: String,
     ) {
-        mUseCaseHandler.execute(fetchAccountTransferUseCase,
+        mUseCaseHandler.execute(
+            fetchAccountTransferUseCase,
             FetchAccountTransfer.RequestValues(transferId),
             object : UseCase.UseCaseCallback<FetchAccountTransfer.ResponseValue?> {
                 override fun onSuccess(response: FetchAccountTransfer.ResponseValue?) {
                     if (response != null) {
-                        _receiptState.value =
+                        mReceiptState.value =
                             ReceiptUiState.Success(
                                 transaction,
                                 response.transferDetail,
-                                receiptLink
+                                receiptLink,
                             )
                     }
                 }
 
                 override fun onError(message: String) {
-                    _receiptState.value = ReceiptUiState.Error(message)
+                    mReceiptState.value = ReceiptUiState.Error(message)
                 }
-            })
+            },
+        )
     }
-
 }
 
 data class PassFileState(
-    val file: File = File("")
+    val file: File = File(""),
 )
 
 sealed interface ReceiptUiState {
     data class Success(
         val transaction: Transaction,
         val transferDetail: TransferDetail,
-        val receiptLink: String
+        val receiptLink: String,
     ) : ReceiptUiState
 
     data object OpenPassCodeActivity : ReceiptUiState
     data class Error(
-        val message: String
+        val message: String,
     ) : ReceiptUiState
 
     data object Loading : ReceiptUiState

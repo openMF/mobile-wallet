@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.upiSetup.screens
 
 import androidx.compose.foundation.layout.Arrangement
@@ -39,32 +48,33 @@ import org.mifospay.core.ui.VerifyStepHeader
 import org.mifospay.feature.upi_setup.R
 
 @Composable
-fun UpiPinScreen(
+internal fun UpiPinScreen(
+    correctlySettingUpi: (String) -> Unit,
+    modifier: Modifier = Modifier,
     verificationStatus: Boolean = false,
     contentVisibility: Boolean = false,
-    correctlySettingUpi: (String) -> Unit
 ) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(
                 top = 15.dp,
                 bottom = 15.dp,
                 start = 10.dp,
-                end = 10.dp
+                end = 10.dp,
             ),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
-        )
+            defaultElevation = 1.dp,
+        ),
     ) {
         Column(
             modifier = Modifier.fillMaxWidth(),
             verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             VerifyStepHeader(
                 stringResource(id = R.string.feature_upi_setup_upi_pin_setup),
-                verificationStatus
+                verificationStatus,
             )
             if (contentVisibility) UpiPinScreenContent(correctlySettingUpi)
         }
@@ -72,8 +82,9 @@ fun UpiPinScreen(
 }
 
 @Composable
-fun UpiPinScreenContent(
-    correctlySettingUpi: (String) -> Unit
+private fun UpiPinScreenContent(
+    correctlySettingUpi: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val steps1 = rememberSaveable { mutableIntStateOf(0) }
     val upiPin1 = rememberSaveable { mutableStateOf("") }
@@ -82,11 +93,15 @@ fun UpiPinScreenContent(
     val snackbarHostState = remember { SnackbarHostState() }
 
     Text(
-        text = if (steps1.intValue == 0) stringResource(id = R.string.feature_upi_setup_enter_upi_pin)
-        else stringResource(id = R.string.feature_upi_setup_reenter_upi),
+        modifier = modifier,
+        text = if (steps1.intValue == 0) {
+            stringResource(id = R.string.feature_upi_setup_enter_upi_pin)
+        } else {
+            stringResource(id = R.string.feature_upi_setup_reenter_upi)
+        },
         color = MaterialTheme.colorScheme.onSurface,
         fontSize = 18.sp,
-        style = MaterialTheme.typography.headlineMedium
+        style = MaterialTheme.typography.headlineMedium,
     )
 
     if (steps1.intValue == 0) {
@@ -106,16 +121,18 @@ fun UpiPinScreenContent(
                         steps1.intValue = 1
                         upiPinTobeMatched1.value = upiPin1.value
                     }
-                }
+                },
             ),
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done,
             ),
             decorationBox = {
                 Row(horizontalArrangement = Arrangement.Center) {
                     repeat(4) { index ->
                         UpiPinCharView(
-                            index = index, text = upiPin1.value
+                            index = index,
+                            text = upiPin1.value,
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                     }
@@ -123,41 +140,51 @@ fun UpiPinScreenContent(
             },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         )
     } else {
-        BasicTextField(value = upiPin2.value, onValueChange = {
-            upiPin2.value = it
-            if (upiPin2.value.length == 4) {
-                if (upiPin1.value == upiPin2.value) {
-                    correctlySettingUpi(upiPin2.value)
+        BasicTextField(
+            value = upiPin2.value,
+            onValueChange = {
+                upiPin2.value = it
+                if (upiPin2.value.length == 4) {
+                    if (upiPin1.value == upiPin2.value) {
+                        correctlySettingUpi(upiPin2.value)
+                    }
                 }
-            }
-        }, keyboardActions = KeyboardActions(onDone = {
-            if (upiPin2.value.length == 4) {
-                if (upiPin1.value == upiPin2.value) {
-                    correctlySettingUpi(upiPin2.value)
+            },
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    if (upiPin2.value.length == 4) {
+                        if (upiPin1.value == upiPin2.value) {
+                            correctlySettingUpi(upiPin2.value)
+                        }
+                    } else {
+                        showSnackbar(
+                            snackbarHostState,
+                            R.string.feature_upi_setup_invalid_upi_pin.toString(),
+                        )
+                    }
+                },
+            ),
+            keyboardOptions = KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done,
+            ),
+            decorationBox = {
+                Row(horizontalArrangement = Arrangement.Center) {
+                    repeat(4) { index ->
+                        UpiPinCharView(
+                            index = index,
+                            text = upiPin2.value,
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                    }
                 }
-            } else {
-                showSnackbar(
-                    snackbarHostState,
-                    R.string.feature_upi_setup_invalid_upi_pin.toString()
-                )
-            }
-        }), keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
-        ), decorationBox = {
-            Row(horizontalArrangement = Arrangement.Center) {
-                repeat(4) { index ->
-                    UpiPinCharView(
-                        index = index, text = upiPin2.value
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-            }
-        }, modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
         )
     }
 }
@@ -169,8 +196,9 @@ fun showSnackbar(snackbarHostState: SnackbarHostState, message: String) {
 }
 
 @Composable
-fun UpiPinCharView(
-    index: Int, text: String
+private fun UpiPinCharView(
+    index: Int,
+    text: String,
 ) {
     val isFocused = text.length == index
 
@@ -190,14 +218,14 @@ fun UpiPinCharView(
         } else {
             Color.LightGray
         },
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
 }
 
 @Preview
 @Composable
-fun UpiScreenPreview() {
+private fun UpiScreenPreview() {
     MifosTheme {
-        UpiPinScreen(verificationStatus = false, contentVisibility = true) {}
+        UpiPinScreen({}, verificationStatus = false, contentVisibility = true)
     }
 }

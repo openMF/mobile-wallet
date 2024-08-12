@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.upiSetup.screens
 
 import androidx.compose.foundation.layout.Column
@@ -25,29 +34,29 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.ExpiryDateInput
-import org.mifospay.feature.upiSetup.viewmodel.DebitCardViewModel
-
 
 @Composable
-fun DebitCardScreenContents(
-    viewModel: DebitCardViewModel = hiltViewModel()
+internal fun DebitCardScreenContent(
+    modifier: Modifier = Modifier,
+    onDone: (String, String, String) -> Unit,
 ) {
+    val focusManager = LocalFocusManager.current
+
     var cardNumber by rememberSaveable { mutableStateOf("") }
     var expiryDate by rememberSaveable { mutableStateOf("") }
-    val focusManager = LocalFocusManager.current
-    Column {
+
+    Column(modifier) {
         OutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth(),
             label = {
                 Text(
                     text = "Debit Card Number",
-                    style = TextStyle(color = MaterialTheme.colorScheme.onSurface)
+                    style = TextStyle(color = MaterialTheme.colorScheme.onSurface),
                 )
             },
             value = cardNumber,
@@ -55,34 +64,36 @@ fun DebitCardScreenContents(
                 cardNumber = it
             },
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done,
             ),
-            keyboardActions = KeyboardActions(onDone = {
-                focusManager.moveFocus(FocusDirection.Down)
-            }),
-            visualTransformation = VisualTransformation {
-                val formattedCardNumber = formatCardNumber(it)
-                formattedCardNumber
-            },
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    focusManager.moveFocus(FocusDirection.Down)
+                },
+            ),
+            visualTransformation = ::formatCardNumber,
             colors = OutlinedTextFieldDefaults.colors(
                 focusedBorderColor = Color.DarkGray,
                 unfocusedBorderColor = Color.LightGray,
-                cursorColor = MaterialTheme.colorScheme.onSurface
-            )
+                cursorColor = MaterialTheme.colorScheme.onSurface,
+            ),
         )
+
         Spacer(modifier = Modifier.height(8.dp))
+
         ExpiryDateInput(
             date = expiryDate,
             onDateChange = { expiryDate = it },
             onDone = {
-                viewModel.verifyDebitCard(cardNumber, "month, year", expiryDate)
-            }
+                onDone(cardNumber, "month, year", expiryDate)
+            },
         )
     }
 }
 
 @Suppress("ReturnCount")
-fun formatCardNumber(text: AnnotatedString): TransformedText {
+private fun formatCardNumber(text: AnnotatedString): TransformedText {
     val trimmed = if (text.text.length >= 16) text.text.substring(0..15) else text.text
     var out = ""
     for (i in trimmed.indices) {
@@ -127,8 +138,12 @@ fun formatCardNumber(text: AnnotatedString): TransformedText {
     return TransformedText(AnnotatedString(out), creditCardOffsetTranslator)
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
-fun DebitCardScreenContentsPreview() {
-    DebitCardScreenContents()
+private fun DebitCardScreenContentsPreview() {
+    MifosTheme {
+        DebitCardScreenContent(
+            onDone = { _, _, _ -> },
+        )
+    }
 }
