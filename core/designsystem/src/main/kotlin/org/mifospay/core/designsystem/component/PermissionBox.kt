@@ -118,13 +118,13 @@ fun PermissionBox(
             showDialogState =  shouldShowPermissionRationale,
             onDismiss = { shouldShowPermissionRationale = false },
             title = title,
-            message = description,
             confirmButtonText = confirmButtonText,
             onConfirm = {
                 shouldShowPermissionRationale = false
                 multiplePermissionLauncher.launch(requiredPermissions.toTypedArray())
             },
-            dismissButtonText = dismissButtonText
+            dismissButtonText = dismissButtonText,
+            message = description
         )
     }
 

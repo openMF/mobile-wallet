@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.request.money.util
 
 import android.content.Context
@@ -23,7 +32,7 @@ object ImageUtils {
             stream.close()
             uri = FileProvider.getUriForFile(
                 context,
-                BuildConfig.LIBRARY_PACKAGE_NAME+ ".provider", file
+                BuildConfig.LIBRARY_PACKAGE_NAME + ".provider", file,
             )
         } catch (e: IOException) {
             Log.d("Error", e.message.toString())

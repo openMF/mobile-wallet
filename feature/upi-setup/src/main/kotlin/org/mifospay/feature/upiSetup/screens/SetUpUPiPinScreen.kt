@@ -1,8 +1,18 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.upiSetup.screens
 
 import android.app.Activity
 import android.content.Intent
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -26,32 +36,42 @@ import org.mifospay.feature.upiSetup.viewmodel.SetUpUpiViewModal
 import org.mifospay.feature.upi_setup.R
 
 @Composable
-fun SetupUpiPinScreenRoute(
-    setUpViewModel: SetUpUpiViewModal = hiltViewModel(),
-    bankAccountDetails: BankAccountDetails,
+internal fun SetupUpiPinScreenRoute(
     type: String,
-    index: Int
+    index: Int,
+    bankAccountDetails: BankAccountDetails,
+    onBackPress: () -> Unit,
+    modifier: Modifier = Modifier,
+    setUpViewModel: SetUpUpiViewModal = hiltViewModel(),
 ) {
     SetupUpiPinScreen(
-        bankAccountDetails = bankAccountDetails,
         type = type,
         index = index,
+        bankAccountDetails = bankAccountDetails,
+        otpText = setUpViewModel.requestOtp(bankAccountDetails),
         setupUpiPin = {
             setUpViewModel.setupUpiPin(bankAccountDetails, it)
-        }
+        },
+        onBackPress = onBackPress,
+        modifier = modifier,
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SetupUpiPinScreen(
-    bankAccountDetails: BankAccountDetails,
+@VisibleForTesting
+internal fun SetupUpiPinScreen(
     type: String,
     index: Int,
-    setupUpiPin: (String) -> Unit
+    bankAccountDetails: BankAccountDetails,
+    otpText: String,
+    setupUpiPin: (String) -> Unit,
+    onBackPress: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     Scaffold(
+        modifier = modifier,
         topBar = {
             TopAppBar(
                 title = {
@@ -61,31 +81,31 @@ fun SetupUpiPinScreen(
                             Constants.CHANGE -> Constants.CHANGE_UPI_PIN
                             Constants.FORGOT -> Constants.FORGOT_UPI_PIN
                             else -> ""
-                        }
+                        },
                     )
                 },
                 navigationIcon = {
-                    IconButton(onClick = {
-                        (context as? Activity)?.onBackPressed()
-                    })
-                    {
+                    IconButton(
+                        onClick = onBackPress,
+                    ) {
                         Icon(
                             MifosIcons.ArrowBack,
-                            contentDescription = stringResource(id = R.string.feature_upi_setup_back)
+                            contentDescription = stringResource(id = R.string.feature_upi_setup_back),
                         )
                     }
-                })
+                },
+            )
         },
         content = { paddingValues ->
             Column(
                 modifier = Modifier
                     .padding(paddingValues),
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 SetUpUpiScreenContent(
-                    bankAccountDetails = bankAccountDetails,
                     type = type,
+                    otpText = otpText,
                     correctlySettingUpi = {
                         setupUpiPin(it)
                         bankAccountDetails.isUpiEnabled = true
@@ -93,7 +113,7 @@ fun SetupUpiPinScreen(
                         Toast.makeText(
                             context,
                             Constants.UPI_PIN_SETUP_COMPLETED_SUCCESSFULLY,
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                         ).show()
                         val intent = Intent().apply {
                             putExtra(Constants.UPDATED_BANK_ACCOUNT, bankAccountDetails)
@@ -101,10 +121,10 @@ fun SetupUpiPinScreen(
                         }
                         (context as? Activity)?.setResult(Activity.RESULT_OK, intent)
                         (context as? Activity)?.finish()
-                    }
+                    },
                 )
             }
-        }
+        },
     )
 }
 
@@ -112,36 +132,47 @@ fun SetupUpiPinScreen(
 @Composable
 fun PreviewSetupUpiPin() {
     SetupUpiPinScreen(
-        getBankAccountDetails(),
-        Constants.SETUP_UPI_PIN,
-        0
-    ) {}
+        type = Constants.SETUP_UPI_PIN,
+        index = 0,
+        otpText = "907889",
+        bankAccountDetails = getBankAccountDetails(),
+        onBackPress = {},
+        setupUpiPin = {},
+    )
 }
 
 @Preview
 @Composable
 fun PreviewChangeUpi() {
     SetupUpiPinScreen(
-        getBankAccountDetails(),
-        Constants.CHANGE,
-        0
-    ) {}
+        type = Constants.CHANGE,
+        index = 0,
+        otpText = "907889",
+        bankAccountDetails = getBankAccountDetails(),
+        onBackPress = {},
+        setupUpiPin = {},
+    )
 }
 
 @Preview
 @Composable
 fun PreviewForgetUpi() {
     SetupUpiPinScreen(
-        getBankAccountDetails(),
-        Constants.FORGOT,
-        0
-    ) {}
+        type = Constants.FORGOT,
+        index = 0,
+        otpText = "907889",
+        bankAccountDetails = getBankAccountDetails(),
+        onBackPress = {},
+        setupUpiPin = {},
+    )
 }
 
 fun getBankAccountDetails(): BankAccountDetails {
     return BankAccountDetails(
-        "SBI", "Ankur Sharma", "New Delhi",
-        "XXXXXXXX9990XXX " + " ", "Savings"
+        "SBI",
+        "Ankur Sharma",
+        "New Delhi",
+        "XXXXXXXX9990XXX " + " ",
+        "Savings",
     )
 }
-

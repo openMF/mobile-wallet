@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.profile
 
 import android.graphics.Bitmap
@@ -9,25 +18,24 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
+import org.mifospay.common.DebugUtil
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.client.FetchClientImage
-import org.mifospay.core.datastore.PreferencesHelper
-import org.mifospay.common.DebugUtil
 import org.mifospay.core.data.repository.local.LocalRepository
-
+import org.mifospay.core.datastore.PreferencesHelper
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val mUsecaseHandler: UseCaseHandler,
+    private val mUseCaseHandler: UseCaseHandler,
     private val fetchClientImageUseCase: FetchClientImage,
     private val localRepository: LocalRepository,
-    private val mPreferencesHelper: PreferencesHelper
+    private val mPreferencesHelper: PreferencesHelper,
 ) : ViewModel() {
 
-    private val _profileState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
-    val profileState: StateFlow<ProfileUiState> get() = _profileState
+    private val mProfileState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
+    val profileState: StateFlow<ProfileUiState> get() = mProfileState
 
     init {
         fetchClientImage()
@@ -36,19 +44,21 @@ class ProfileViewModel @Inject constructor(
 
     private fun fetchClientImage() {
         viewModelScope.launch {
-            mUsecaseHandler.execute(fetchClientImageUseCase,
+            mUseCaseHandler.execute(
+                fetchClientImageUseCase,
                 FetchClientImage.RequestValues(localRepository.clientDetails.clientId),
                 object : UseCase.UseCaseCallback<FetchClientImage.ResponseValue> {
                     override fun onSuccess(response: FetchClientImage.ResponseValue) {
                         val bitmap = convertResponseToBitmap(response.responseBody)
-                        val currentState = _profileState.value as ProfileUiState.Success
-                        _profileState.value = currentState.copy(bitmapImage = bitmap)
+                        val currentState = mProfileState.value as ProfileUiState.Success
+                        mProfileState.value = currentState.copy(bitmapImage = bitmap)
                     }
 
                     override fun onError(message: String) {
                         DebugUtil.log("image", message)
                     }
-                })
+                },
+            )
         }
     }
 
@@ -58,11 +68,11 @@ class ProfileViewModel @Inject constructor(
         val vpa = mPreferencesHelper.clientVpa ?: "-"
         val mobile = mPreferencesHelper.mobile ?: "-"
 
-        _profileState.value = ProfileUiState.Success(
+        mProfileState.value = ProfileUiState.Success(
             name = name,
             email = email,
             vpa = vpa,
-            mobile = mobile
+            mobile = mobile,
         )
     }
 
@@ -84,7 +94,6 @@ sealed class ProfileUiState {
         val name: String?,
         val email: String?,
         val vpa: String?,
-        val mobile: String?
+        val mobile: String?,
     ) : ProfileUiState()
 }
-

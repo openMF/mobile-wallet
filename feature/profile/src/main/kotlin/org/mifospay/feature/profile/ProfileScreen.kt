@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.profile
 
 import androidx.compose.foundation.layout.Arrangement
@@ -33,21 +42,24 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.ProfileImage
 
-
 @Composable
 fun ProfileRoute(
-    viewModel: ProfileViewModel = hiltViewModel(),
     onEditProfile: () -> Unit,
     onSettings: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val profileState by viewModel.profileState.collectAsStateWithLifecycle()
+
     ProfileScreenContent(
         profileState = profileState,
         onEditProfile = onEditProfile,
-        onSettings = onSettings
+        onSettings = onSettings,
+        modifier = modifier,
     )
 }
 
@@ -57,16 +69,18 @@ fun ProfileScreenContent(
     profileState: ProfileUiState,
     onEditProfile: () -> Unit,
     onSettings: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var showDetails by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
     ) {
         when (profileState) {
-            ProfileUiState.Loading -> {}
+            is ProfileUiState.Loading -> MfLoadingWheel()
+
             is ProfileUiState.Success -> {
                 ProfileImage(bitmap = profileState.bitmapImage)
                 Row(
@@ -74,18 +88,18 @@ fun ProfileScreenContent(
                         .fillMaxWidth()
                         .padding(top = 12.dp, bottom = 8.dp),
                     horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Text(
                         text = profileState.name.toString(),
                         style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium),
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     IconButton(onClick = { showDetails = !showDetails }) {
                         Icon(
                             imageVector = Icons.Default.ArrowDropDown,
                             tint = MaterialTheme.colorScheme.onSurface,
-                            contentDescription = null
+                            contentDescription = null,
                         )
                     }
                 }
@@ -94,19 +108,19 @@ fun ProfileScreenContent(
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                        horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         DetailItem(
                             label = stringResource(id = R.string.feature_profile_email),
-                            value = profileState.email.toString()
+                            value = profileState.email.toString(),
                         )
                         DetailItem(
                             label = stringResource(id = R.string.feature_profile_vpa),
-                            value = profileState.vpa.toString()
+                            value = profileState.vpa.toString(),
                         )
                         DetailItem(
                             label = stringResource(id = R.string.feature_profile_mobile),
-                            value = profileState.mobile.toString()
+                            value = profileState.mobile.toString(),
                         )
                     }
                 }
@@ -114,12 +128,12 @@ fun ProfileScreenContent(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(start = 24.dp, end = 24.dp)
+                        .padding(start = 24.dp, end = 24.dp),
                 ) {
                     FlowRow(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        maxItemsInEachRow = 2
+                        maxItemsInEachRow = 2,
                     ) {
                         ProfileItemCard(
                             modifier = Modifier
@@ -127,7 +141,7 @@ fun ProfileScreenContent(
                                 .weight(1f),
                             icon = MifosIcons.QR,
                             text = R.string.feature_profile_personal_qr_code,
-                            onClick = {}
+                            onClick = {},
                         )
 
                         ProfileItemCard(
@@ -136,7 +150,7 @@ fun ProfileScreenContent(
                                 .weight(1f),
                             icon = MifosIcons.Bank,
                             text = R.string.feature_profile_link_bank_account,
-                            onClick = {}
+                            onClick = {},
                         )
 
                         ProfileItemCard(
@@ -144,7 +158,7 @@ fun ProfileScreenContent(
                                 .padding(top = 8.dp, bottom = 8.dp),
                             icon = MifosIcons.Contact,
                             text = R.string.feature_profile_edit_profile,
-                            onClick = { onEditProfile.invoke() }
+                            onClick = { onEditProfile.invoke() },
                         )
 
                         ProfileItemCard(
@@ -152,7 +166,7 @@ fun ProfileScreenContent(
                                 .padding(top = 8.dp),
                             icon = MifosIcons.Settings,
                             text = R.string.feature_profile_settings,
-                            onClick = { onSettings.invoke() }
+                            onClick = { onSettings.invoke() },
                         )
                     }
                 }
@@ -161,7 +175,7 @@ fun ProfileScreenContent(
     }
 }
 
-class ProfilePreviewProvider : PreviewParameterProvider<ProfileUiState> {
+internal class ProfilePreviewProvider : PreviewParameterProvider<ProfileUiState> {
     override val values: Sequence<ProfileUiState>
         get() = sequenceOf(
             ProfileUiState.Loading,
@@ -170,19 +184,20 @@ class ProfilePreviewProvider : PreviewParameterProvider<ProfileUiState> {
                 email = "john.doe@example.com",
                 vpa = "john@vpa",
                 mobile = "+1234567890",
-                bitmapImage = null
-            )
+                bitmapImage = null,
+            ),
         )
 }
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun ProfileScreenPreview(
-    @PreviewParameter(ProfilePreviewProvider::class) profileState: ProfileUiState
+private fun ProfileScreenPreview(
+    @PreviewParameter(ProfilePreviewProvider::class)
+    profileState: ProfileUiState,
 ) {
     ProfileScreenContent(
         profileState = profileState,
         onEditProfile = {},
-        onSettings = {}
+        onSettings = {},
     )
 }

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.settings.navigation
 
 import androidx.navigation.NavController
@@ -14,12 +23,16 @@ fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.settingsScreen(
     onBackPress: () -> Unit,
-    navigateToEditPasswordScreen: () -> Unit
+    navigateToEditPasswordScreen: () -> Unit,
+    onLogout: () -> Unit,
+    onChangePasscode: () -> Unit,
 ) {
     composable(route = SETTINGS_ROUTE) {
         SettingsScreenRoute(
             backPress = onBackPress,
-            navigateToEditPasswordScreen = navigateToEditPasswordScreen
+            navigateToEditPasswordScreen = navigateToEditPasswordScreen,
+            onLogout = onLogout,
+            onChangePasscode = onChangePasscode,
         )
     }
 }
