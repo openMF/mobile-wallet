@@ -1,8 +1,18 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.standing.instruction
 
 import android.app.DatePickerDialog
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,11 +59,11 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import java.util.Calendar
 
 @Composable
-fun NewSIScreenRoute(
+internal fun NewSIScreenRoute(
+    onBackPress: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: NewSIViewModel = hiltViewModel(),
-    onBackPress: () -> Unit
 ) {
-
     val uiState by viewModel.newSIUiState.collectAsStateWithLifecycle()
     val updateSuccess by viewModel.updateSuccess.collectAsStateWithLifecycle()
 
@@ -61,70 +71,70 @@ fun NewSIScreenRoute(
 
     NewSIScreen(
         uiState = uiState,
-        onBackPress = onBackPress,
-        fetchClient = { viewModel.fetchClient(it) },
         cancelClicked = cancelClicked,
+        updateSuccess = updateSuccess,
+        onBackPress = onBackPress,
+        fetchClient = viewModel::fetchClient,
         setCancelClicked = { cancelClicked = it },
-        confirm = { clientId, amount, recurrenceInterval, validTill ->
-            viewModel.createNewSI(clientId, amount, recurrenceInterval, validTill)
-        },
-        updateSuccess = updateSuccess
+        confirm = viewModel::createNewSI,
+        modifier = modifier,
     )
-
 }
 
 @Composable
-fun NewSIScreen(
+@VisibleForTesting
+internal fun NewSIScreen(
     uiState: NewSIUiState,
+    cancelClicked: Boolean,
+    updateSuccess: Boolean,
     onBackPress: () -> Unit,
     fetchClient: (String) -> Unit,
-    cancelClicked: Boolean,
     setCancelClicked: (Boolean) -> Unit,
     confirm: (Long, Double, Int, String) -> Unit,
-    updateSuccess: Boolean
+    modifier: Modifier = Modifier,
 ) {
-
     MifosScaffold(
         topBarTitle = R.string.feature_standing_instruction_tile_si_activity,
-        backPress = { onBackPress.invoke() },
+        backPress = onBackPress,
+        modifier = modifier,
         scaffoldContent = {
             when (uiState) {
-
                 NewSIUiState.Loading -> NewSIBody(
-                    it,
-                    fetchClient,
-                    cancelClicked,
-                    setCancelClicked,
-                    confirm,
+                    paddingValues = it,
+                    fetchClient = fetchClient,
+                    cancelClicked = cancelClicked,
+                    setCancelClicked = setCancelClicked,
+                    confirm = confirm,
                     clientId = 0,
-                    updateSuccess = updateSuccess
+                    updateSuccess = updateSuccess,
                 )
 
                 is NewSIUiState.ShowClientDetails -> {
                     NewSIBody(
-                        it,
-                        fetchClient,
-                        cancelClicked,
-                        setCancelClicked,
-                        confirm,
+                        paddingValues = it,
+                        fetchClient = fetchClient,
+                        cancelClicked = cancelClicked,
+                        setCancelClicked = setCancelClicked,
+                        confirm = confirm,
                         clientId = uiState.clientId,
-                        updateSuccess = updateSuccess
+                        updateSuccess = updateSuccess,
                     )
                 }
             }
-        })
+        },
+    )
 }
 
 @Composable
-fun NewSIBody(
+private fun NewSIBody(
     paddingValues: PaddingValues,
     fetchClient: (String) -> Unit,
     cancelClicked: Boolean,
     setCancelClicked: (Boolean) -> Unit,
     confirm: (Long, Double, Int, String) -> Unit,
     clientId: Long,
-    updateSuccess: Boolean
-
+    updateSuccess: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     var amount by rememberSaveable { mutableStateOf("") }
     var vpa by rememberSaveable { mutableStateOf("") }
@@ -144,13 +154,14 @@ fun NewSIBody(
             clientId = clientId,
             recurrenceInterval = siInterval,
             validTill = selectedDate,
-            updateSuccess = updateSuccess
+            updateSuccess = updateSuccess,
+            modifier = modifier,
         )
     } else {
         val options = GmsBarcodeScannerOptions.Builder()
             .setBarcodeFormats(
                 Barcode.FORMAT_QR_CODE,
-                Barcode.FORMAT_AZTEC
+                Barcode.FORMAT_AZTEC,
             )
             .build()
         val scanner = GmsBarcodeScanning.getClient(context, options)
@@ -180,15 +191,15 @@ fun NewSIBody(
                 },
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
+                calendar.get(Calendar.DAY_OF_MONTH),
             )
             datePickerDialog.show()
         }
 
         Column(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(paddingValues),
         ) {
             MifosOutlinedTextField(
                 modifier = Modifier
@@ -216,10 +227,10 @@ fun NewSIBody(
                         Icon(
                             imageVector = MifosIcons.QrCode2,
                             contentDescription = "Scan QR",
-                            tint = Color.Blue
+                            tint = Color.Blue,
                         )
                     }
-                }
+                },
             )
             Spacer(modifier = Modifier.padding(top = 16.dp))
             MifosOutlinedTextField(
@@ -230,13 +241,14 @@ fun NewSIBody(
                 onValueChange = {
                     siInterval = it
                 },
-                label = R.string.feature_standing_instruction_interval
+                label = R.string.feature_standing_instruction_interval,
             )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 10.dp), horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(top = 10.dp),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(text = stringResource(id = R.string.feature_standing_instruction_valid_till))
             }
@@ -245,7 +257,7 @@ fun NewSIBody(
                     .width(150.dp)
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally),
-                onClick = { showDatePickerDialog() }
+                onClick = { showDatePickerDialog() },
             ) {
                 val text =
                     selectedDate.ifEmpty { stringResource(R.string.feature_standing_instruction_select_date) }
@@ -263,43 +275,45 @@ fun NewSIBody(
                         Toast.makeText(
                             context,
                             context.getString(R.string.feature_standing_instruction_creates),
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                         )
                             .show()
                     } else {
                         Toast.makeText(
                             context,
                             R.string.feature_standing_instruction_failed_to_save_changes,
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                         )
                             .show()
                     }
                 },
-                enabled = selectedDate.isNotEmpty()
-                        && vpa.isNotEmpty()
-                        && amount.isNotEmpty() && siInterval.isNotEmpty()
+                enabled = selectedDate.isNotEmpty() &&
+                    vpa.isNotEmpty() &&
+                    amount.isNotEmpty() && siInterval.isNotEmpty(),
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_submit),
-                    color = Color.White
+                    color = Color.White,
                 )
             }
         }
     }
-
 }
 
-class NewSiUiStateProvider : PreviewParameterProvider<NewSIUiState> {
+internal class NewSiUiStateProvider : PreviewParameterProvider<NewSIUiState> {
     override val values: Sequence<NewSIUiState>
         get() = sequenceOf(
             NewSIUiState.Loading,
-            NewSIUiState.ShowClientDetails(0L, "Pratyush", "External Id")
+            NewSIUiState.ShowClientDetails(
+                0L,
+                name = "Pratyush",
+                externalId = "External Id",
+            ),
         )
-
 }
 
 @Composable
-fun ConfirmTransfer(
+private fun ConfirmTransfer(
     paddingValues: PaddingValues,
     clientName: String,
     clientVpa: String,
@@ -309,13 +323,14 @@ fun ConfirmTransfer(
     clientId: Long,
     recurrenceInterval: String,
     validTill: String,
-    updateSuccess: Boolean
+    updateSuccess: Boolean,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(paddingValues)
+            .padding(paddingValues),
     ) {
         Column(
             modifier = Modifier
@@ -323,60 +338,60 @@ fun ConfirmTransfer(
                 .padding(12.dp)
                 .border(2.dp, Color.Black, RoundedCornerShape(12.dp))
                 .padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_sending_to),
-                    style = TextStyle(color = Color.Blue, fontSize = 15.sp)
+                    style = TextStyle(color = Color.Blue, fontSize = 15.sp),
                 )
                 Text(text = clientName, style = TextStyle(color = Color.Black, fontSize = 20.sp))
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_vpa),
-                    style = TextStyle(color = Color.Black, fontSize = 15.sp)
+                    style = TextStyle(color = Color.Black, fontSize = 15.sp),
                 )
                 Text(text = clientVpa, style = TextStyle(color = Color.Black, fontSize = 20.sp))
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_amount),
-                    style = TextStyle(color = Color.Blue, fontSize = 15.sp)
+                    style = TextStyle(color = Color.Blue, fontSize = 15.sp),
                 )
                 Text(
-                    text = amount, style = TextStyle(color = Color.Black, fontSize = 20.sp)
+                    text = amount,
+                    style = TextStyle(color = Color.Black, fontSize = 20.sp),
                 )
             }
-
         }
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 12.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
             MifosButton(
                 modifier = Modifier
                     .width(150.dp)
                     .padding(top = 16.dp),
-                onClick = { cancel.invoke() }
+                onClick = { cancel.invoke() },
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_cancel),
-                    color = Color.White
+                    color = Color.White,
                 )
             }
 
@@ -390,14 +405,14 @@ fun ConfirmTransfer(
                             clientId,
                             amount.toDouble(),
                             recurrenceInterval.toInt(),
-                            validTill
+                            validTill,
                         )
                     } else {
                         // Handle the case when the amount is empty
                         Toast.makeText(
                             context,
                             R.string.feature_standing_instruction_failed_to_save_changes,
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                         )
                             .show()
                     }
@@ -405,22 +420,22 @@ fun ConfirmTransfer(
                         Toast.makeText(
                             context,
                             context.getString(R.string.feature_standing_instruction_creates),
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                         ).show()
                     } else {
                         Toast.makeText(
                             context,
                             R.string.feature_standing_instruction_failed_to_save_changes,
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                         )
                             .show()
                     }
-                }
+                },
 
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_confirm),
-                    color = Color.White
+                    color = Color.White,
                 )
             }
         }
@@ -436,16 +451,24 @@ private fun ConfirmTransferPreview() {
         "999999999@axl",
         "100",
         {}, { _, _, _, _ -> },
-        0L, "", "", true
+        0L, "", "", true,
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun NewSIScreenPreview(
-    @PreviewParameter(NewSiUiStateProvider::class) newSIUiState: NewSIUiState
+    @PreviewParameter(NewSiUiStateProvider::class) newSIUiState: NewSIUiState,
 ) {
     MifosTheme {
-        NewSIScreen(newSIUiState, {}, {}, false, {}, { _, _, _, _ -> }, true)
+        NewSIScreen(
+            newSIUiState,
+            cancelClicked = false,
+            updateSuccess = true,
+            onBackPress = {},
+            fetchClient = {},
+            setCancelClicked = {},
+            confirm = { _, _, _, _ -> },
+        )
     }
 }

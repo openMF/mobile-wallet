@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.send.money
 
 import androidx.lifecycle.ViewModel
@@ -17,17 +26,17 @@ import javax.inject.Inject
 class SendPaymentViewModel @Inject constructor(
     private val useCaseHandler: UseCaseHandler,
     private val localRepository: LocalRepository,
-    private val fetchAccount: FetchAccount
+    private val fetchAccount: FetchAccount,
 ) : ViewModel() {
 
-    private val _showProgress = MutableStateFlow(false)
-    val showProgress: StateFlow<Boolean> = _showProgress
+    private val mShowProgress = MutableStateFlow(false)
+    val showProgress: StateFlow<Boolean> = mShowProgress
 
-    private val _vpa = MutableStateFlow("")
-    val vpa: StateFlow<String> = _vpa
+    private val mVpa = MutableStateFlow("")
+    val vpa: StateFlow<String> = mVpa
 
-    private val _mobile = MutableStateFlow("")
-    val mobile: StateFlow<String> = _mobile
+    private val mMobile = MutableStateFlow("")
+    val mobile: StateFlow<String> = mMobile
 
     init {
         fetchVpa()
@@ -35,18 +44,18 @@ class SendPaymentViewModel @Inject constructor(
     }
 
     fun updateProgressState(isVisible: Boolean) {
-        _showProgress.update { isVisible }
+        mShowProgress.update { isVisible }
     }
 
     private fun fetchVpa() {
         viewModelScope.launch {
-            _vpa.value = localRepository.clientDetails.externalId.toString()
+            mVpa.value = localRepository.clientDetails.externalId.toString()
         }
     }
 
     private fun fetchMobile() {
         viewModelScope.launch {
-            _mobile.value = localRepository.preferencesHelper.mobile.toString()
+            mMobile.value = localRepository.preferencesHelper.mobile.toString()
         }
     }
 
@@ -71,10 +80,11 @@ class SendPaymentViewModel @Inject constructor(
         externalId: String?,
         transferAmount: Double,
         onAnyError: (Int) -> Unit,
-        proceedWithTransferFlow: (String, Double) -> Unit
+        proceedWithTransferFlow: (String, Double) -> Unit,
     ) {
         updateProgressState(true)
-        useCaseHandler.execute(fetchAccount,
+        useCaseHandler.execute(
+            fetchAccount,
             FetchAccount.RequestValues(localRepository.clientDetails.clientId),
             object : UseCase.UseCaseCallback<FetchAccount.ResponseValue> {
                 override fun onSuccess(response: FetchAccount.ResponseValue) {
@@ -92,6 +102,7 @@ class SendPaymentViewModel @Inject constructor(
                     updateProgressState(false)
                     onAnyError.invoke(R.string.feature_send_money_error_fetching_balance)
                 }
-            })
+            },
+        )
     }
 }
