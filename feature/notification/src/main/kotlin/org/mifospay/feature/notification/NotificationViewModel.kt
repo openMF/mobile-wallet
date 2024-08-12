@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.notification
 
 import androidx.lifecycle.ViewModel
@@ -12,18 +21,19 @@ import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.notification.FetchNotifications
 import org.mifospay.core.data.repository.local.LocalRepository
+import org.mifospay.feature.notification.NotificationUiState.Loading
 import javax.inject.Inject
 
 @HiltViewModel
 class NotificationViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
-    private val fetchNotificationsUseCase: FetchNotifications
+    private val fetchNotificationsUseCase: FetchNotifications,
 ) : ViewModel() {
 
-    private val _notificationUiState: MutableStateFlow<NotificationUiState> =
-        MutableStateFlow(NotificationUiState.Loading)
-    val notificationUiState: StateFlow<NotificationUiState> = _notificationUiState
+    private val mNotificationUiState: MutableStateFlow<NotificationUiState> =
+        MutableStateFlow(Loading)
+    val notificationUiState: StateFlow<NotificationUiState> = mNotificationUiState
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> get() = _isRefreshing.asStateFlow()
@@ -37,20 +47,22 @@ class NotificationViewModel @Inject constructor(
     }
 
     private fun fetchNotifications() {
-        mUseCaseHandler.execute(fetchNotificationsUseCase,
+        mUseCaseHandler.execute(
+            fetchNotificationsUseCase,
             FetchNotifications.RequestValues(
-                mLocalRepository.clientDetails.clientId
+                mLocalRepository.clientDetails.clientId,
             ),
             object : UseCase.UseCaseCallback<FetchNotifications.ResponseValue> {
                 override fun onSuccess(response: FetchNotifications.ResponseValue) {
-                    _notificationUiState.value =
+                    mNotificationUiState.value =
                         NotificationUiState.Success(response.notificationPayloadList.orEmpty())
                 }
 
                 override fun onError(message: String) {
-                    _notificationUiState.value = NotificationUiState.Error(message)
+                    mNotificationUiState.value = NotificationUiState.Error(message)
                 }
-            })
+            },
+        )
     }
 }
 
