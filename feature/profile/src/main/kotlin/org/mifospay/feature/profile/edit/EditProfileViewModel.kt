@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.profile.edit
 
 import android.graphics.Bitmap
@@ -11,6 +20,7 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.client.UpdateClient
 import org.mifospay.core.data.domain.usecase.user.UpdateUser
 import org.mifospay.core.datastore.PreferencesHelper
+import org.mifospay.feature.profile.edit.EditProfileUiState.Loading
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,71 +31,77 @@ class EditProfileViewModel @Inject constructor(
     private val updateClientUseCase: UpdateClient,
 ) : ViewModel() {
 
-    private val _editProfileUiState =
-        MutableStateFlow<EditProfileUiState>(EditProfileUiState.Loading)
-    val editProfileUiState: StateFlow<EditProfileUiState> = _editProfileUiState
+    private val mEditProfileUiState = MutableStateFlow<EditProfileUiState>(Loading)
+    val editProfileUiState: StateFlow<EditProfileUiState> = mEditProfileUiState
 
-    private val _updateSuccess = MutableStateFlow(false)
-    val updateSuccess: StateFlow<Boolean> = _updateSuccess
+    private val mUpdateSuccess = MutableStateFlow(false)
+    val updateSuccess: StateFlow<Boolean> = mUpdateSuccess
 
-    fun fetchProfileDetails() {
+    init {
+        fetchProfileDetails()
+    }
+
+    private fun fetchProfileDetails() {
         val name = mPreferencesHelper.fullName ?: "-"
         val username = mPreferencesHelper.username
         val email = mPreferencesHelper.email ?: "-"
         val vpa = mPreferencesHelper.clientVpa ?: "-"
         val mobile = mPreferencesHelper.mobile ?: "-"
 
-        _editProfileUiState.value = EditProfileUiState.Success(
+        mEditProfileUiState.value = EditProfileUiState.Success(
             name = name,
             username = username,
             email = email,
             vpa = vpa,
-            mobile = mobile
+            mobile = mobile,
         )
     }
 
     fun updateEmail(email: String?) {
-        mUseCaseHandler.execute(updateUserUseCase,
+        mUseCaseHandler.execute(
+            updateUserUseCase,
             UpdateUser.RequestValues(
                 UpdateUserEntityEmail(
-                    email
+                    email,
                 ),
-                mPreferencesHelper.userId.toInt()
+                mPreferencesHelper.userId.toInt(),
             ),
             object : UseCase.UseCaseCallback<UpdateUser.ResponseValue?> {
                 override fun onSuccess(response: UpdateUser.ResponseValue?) {
                     mPreferencesHelper.saveEmail(email)
-                    _editProfileUiState.value = EditProfileUiState.Success(email = email!!)
-                    _updateSuccess.value = true
+                    mEditProfileUiState.value = EditProfileUiState.Success(email = email!!)
+                    mUpdateSuccess.value = true
                 }
 
                 override fun onError(message: String) {
-                    _updateSuccess.value = false
+                    mUpdateSuccess.value = false
                 }
-            })
+            },
+        )
     }
 
     fun updateMobile(fullNumber: String?) {
-        mUseCaseHandler.execute(updateClientUseCase,
+        mUseCaseHandler.execute(
+            updateClientUseCase,
             UpdateClient.RequestValues(
                 com.mifospay.core.model.domain.client.UpdateClientEntityMobile(
-                    fullNumber!!
+                    fullNumber!!,
                 ),
-                mPreferencesHelper.clientId.toInt().toLong()
+                mPreferencesHelper.clientId.toInt().toLong(),
             ),
             object : UseCase.UseCaseCallback<UpdateClient.ResponseValue> {
                 override fun onSuccess(response: UpdateClient.ResponseValue) {
                     mPreferencesHelper.saveMobile(fullNumber)
-                    _editProfileUiState.value = EditProfileUiState.Success(mobile = fullNumber)
-                    _updateSuccess.value = true
+                    mEditProfileUiState.value = EditProfileUiState.Success(mobile = fullNumber)
+                    mUpdateSuccess.value = true
                 }
 
                 override fun onError(message: String) {
-                    _updateSuccess.value = false
+                    mUpdateSuccess.value = false
                 }
-            })
+            },
+        )
     }
-
 }
 
 sealed interface EditProfileUiState {
@@ -96,6 +112,6 @@ sealed interface EditProfileUiState {
         var username: String = "",
         val email: String = "",
         val vpa: String = "",
-        val mobile: String = ""
+        val mobile: String = "",
     ) : EditProfileUiState
 }
