@@ -28,6 +28,7 @@ kotlin {
             //put your multiplatform dependencies here
         }
     }
+    task("testClasses")
 }
 
 android {
