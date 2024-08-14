@@ -1,6 +1,7 @@
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    alias(libs.plugins.jetbrainsCompose)
 }
 
 kotlin {
@@ -11,7 +12,11 @@ kotlin {
             }
         }
     }
-    
+
+    jvm("desktop"){
+        jvmToolchain(17)
+    }
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -26,6 +31,16 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             //put your multiplatform dependencies here
+            implementation(compose.material)
+            implementation(compose.material3)
+        }
+
+        val desktopMain by getting {
+            dependencies {
+                // Desktop specific dependencies
+                implementation(compose.desktop.currentOs)
+                implementation(compose.desktop.common)
+            }
         }
     }
     task("testClasses")
