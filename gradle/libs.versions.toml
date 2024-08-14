@@ -2,7 +2,7 @@
 accompanistPagerVersion = "0.34.0"
 androidPdfViewerVersion = "2.8.2"
 appcompatVersion = "1.7.0"
-androidGradlePlugin = "8.5.1"
+androidGradlePlugin = "8.4.0"
 checkstyleVersion = "10.16.0"
 compileSdk = "34"
 constraintlayoutVersion = "2.1.4"
