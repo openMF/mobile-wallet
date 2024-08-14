@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.merchants.navigation
 
 import androidx.navigation.NavController
@@ -11,26 +20,19 @@ const val MERCHANT_TRANSFER_ROUTE = "merchant_transfer_route"
 
 fun NavGraphBuilder.merchantTransferScreen(
     proceedWithMakeTransferFlow: (String, String?) -> Unit,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
 ) {
     composable(
         route = "$MERCHANT_TRANSFER_ROUTE/{merchantName}/{merchantVPA}/{merchantAccountNumber}",
         arguments = listOf(
             navArgument("merchantName") { type = NavType.StringType },
             navArgument("merchantVPA") { type = NavType.StringType },
-            navArgument("merchantAccountNumber") { type = NavType.StringType }
-        )
-    ) { backStackEntry ->
-        val merchantName = backStackEntry.arguments?.getString("merchantName") ?: ""
-        val merchantVPA = backStackEntry.arguments?.getString("merchantVPA") ?: ""
-        val merchantAccountNumber = backStackEntry.arguments?.getString("merchantAccountNumber") ?: ""
-
+            navArgument("merchantAccountNumber") { type = NavType.StringType },
+        ),
+    ) {
         MerchantTransferScreenRoute(
             onBackPressed = onBackPressed,
-            merchantName = merchantName,
-            merchantVPA = merchantVPA,
-            merchantAccountNumber = merchantAccountNumber,
-            proceedWithMakeTransferFlow = proceedWithMakeTransferFlow
+            proceedWithMakeTransferFlow = proceedWithMakeTransferFlow,
         )
     }
 }
@@ -38,7 +40,7 @@ fun NavGraphBuilder.merchantTransferScreen(
 fun NavController.navigateToMerchantTransferScreen(
     merchantName: String,
     merchantVPA: String,
-    merchantAccountNumber: String
+    merchantAccountNumber: String,
 ) {
     navigate("$MERCHANT_TRANSFER_ROUTE/$merchantName/$merchantVPA/$merchantAccountNumber")
 }

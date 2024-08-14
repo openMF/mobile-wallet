@@ -1,7 +1,7 @@
 package org.mifospay.core.analytics.di
 
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.analytics.logEvent
 import org.mifospay.core.analytics.AnalyticsEvent
 import org.mifospay.core.analytics.AnalyticsHelper
 import javax.inject.Inject

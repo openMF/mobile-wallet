@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 plugins {
     alias(libs.plugins.mifospay.android.feature)
     alias(libs.plugins.mifospay.android.library.compose)
@@ -17,21 +26,19 @@ dependencies {
     implementation(projects.feature.passcode)
 
     implementation(libs.compose.country.code.picker)
+    // TODO:: this should be removed
+    implementation(libs.compose.material)
 
     // Credentials Manager
-    implementation("androidx.credentials:credentials:1.2.1")
+    implementation(libs.androidx.credentials)
     // optional - needed for credentials support from play services, for devices running
     // Android 13 and below.
-    implementation("androidx.credentials:credentials-play-services-auth:1.2.1")
-    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
 
-    implementation("com.mifos.mobile:mifos-passcode:0.3.0")
+    implementation(libs.mifosPasscode)
 
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-
-    // we need it for country picker library
-    implementation("androidx.compose.material:material:1.6.0")
-    implementation(libs.compose.country.code.picker) // remove after moving auth code to module
+    implementation(libs.play.services.auth)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

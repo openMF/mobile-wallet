@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.profile
 
 import androidx.compose.foundation.border
@@ -29,32 +38,37 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun ProfileItemCard(
-    modifier: Modifier = Modifier,
+internal fun ProfileItemCard(
     icon: ImageVector,
     text: Int,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val combinedModifier = modifier
         .border(width = 1.dp, color = Color.Gray, shape = RoundedCornerShape(8.dp))
         .padding(16.dp)
         .clickable { onClick.invoke() }
+
     FlowRow(modifier = combinedModifier) {
         Icon(
             painter = rememberVectorPainter(icon),
             modifier = Modifier.size(32.dp),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface
+            tint = MaterialTheme.colorScheme.onSurface,
         )
         Text(
-            modifier = if (text == R.string.feature_profile_edit_profile
-                || text == R.string.feature_profile_settings
-            ) Modifier
-                .padding(start = 18.dp)
-                .align(Alignment.CenterVertically) else Modifier,
+            modifier = if (text == R.string.feature_profile_edit_profile ||
+                text == R.string.feature_profile_settings
+            ) {
+                Modifier
+                    .padding(start = 18.dp)
+                    .align(Alignment.CenterVertically)
+            } else {
+                Modifier
+            },
             text = stringResource(id = text),
             style = TextStyle(fontSize = 18.sp, fontWeight = FontWeight.Medium),
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
         if (text == R.string.feature_profile_edit_profile || text == R.string.feature_profile_settings) {
             Spacer(modifier = Modifier.fillMaxWidth())
@@ -63,29 +77,33 @@ fun ProfileItemCard(
 }
 
 @Composable
-fun DetailItem(label: String, value: String) {
+internal fun DetailItem(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+) {
     Text(
         text = "$label: $value",
         style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier.padding(bottom = 12.dp)
+        modifier = modifier.padding(bottom = 12.dp),
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewProfileItemCard() {
+private fun PreviewProfileItemCard() {
     MifosTheme {
         ProfileItemCard(
             icon = MifosIcons.Profile,
             text = R.string.feature_profile_edit_profile,
-            onClick = {}
+            onClick = {},
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewDetailItem() {
+private fun PreviewDetailItem() {
     MifosTheme {
         DetailItem(label = "Email", value = "john.doe@example.com")
     }

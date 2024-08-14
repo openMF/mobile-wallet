@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.receipt.navigation
 
 import android.net.Uri
@@ -11,24 +20,21 @@ import org.mifospay.feature.receipt.ReceiptScreenRoute
 const val RECEIPT_ROUTE = "receipt_route"
 
 fun NavGraphBuilder.receiptScreen(
-    onShowSnackbar: (String, String?) -> Boolean,
     openPassCodeActivity: (Uri) -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
 ) {
     composable(
         route = "$RECEIPT_ROUTE?uri={uri}",
         arguments = listOf(
-            navArgument("uri") { type = NavType.StringType }
-        )
+            navArgument("uri") { type = NavType.StringType },
+        ),
     ) { backStackEntry ->
         val uriString = backStackEntry.arguments?.getString("uri")
         val uri = if (uriString != null) Uri.parse(uriString) else null
 
         ReceiptScreenRoute(
-            uri = uri,
-            onShowSnackbar = onShowSnackbar,
             openPassCodeActivity = { uri?.let { openPassCodeActivity(it) } },
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
         )
     }
 }

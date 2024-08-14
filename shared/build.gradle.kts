@@ -43,6 +43,7 @@ kotlin {
             }
         }
     }
+    task("testClasses")
 }
 
 android {

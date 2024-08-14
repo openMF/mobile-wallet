@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.editpassword
 
 import androidx.lifecycle.ViewModel
@@ -14,11 +23,12 @@ import org.mifospay.core.datastore.PreferencesHelper
 import javax.inject.Inject
 
 @HiltViewModel
+@Suppress("NestedBlockDepth")
 class EditPasswordViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper,
     private val authenticateUserUseCase: AuthenticateUser,
-    private val updateUserUseCase: UpdateUser
+    private val updateUserUseCase: UpdateUser,
 ) : ViewModel() {
 
     private val _editPasswordUiState =
@@ -28,11 +38,11 @@ class EditPasswordViewModel @Inject constructor(
     fun updatePassword(
         currentPassword: String?,
         newPassword: String?,
-        newPasswordRepeat: String?
+        newPasswordRepeat: String?,
     ) {
         _editPasswordUiState.value = EditPasswordUiState.Loading
-        if (isNotEmpty(currentPassword) && isNotEmpty(newPassword)
-            && isNotEmpty(newPasswordRepeat)
+        if (isNotEmpty(currentPassword) && isNotEmpty(newPassword) &&
+            isNotEmpty(newPasswordRepeat)
         ) {
             when {
                 currentPassword == newPassword -> {
@@ -44,7 +54,7 @@ class EditPasswordViewModel @Inject constructor(
                     newPasswordRepeat?.let { it1 ->
                         isNewPasswordValid(
                             it,
-                            it1
+                            it1,
                         )
                     }
                 } == true -> {
@@ -74,19 +84,21 @@ class EditPasswordViewModel @Inject constructor(
 
     private fun updatePassword(currentPassword: String, newPassword: String) {
         // authenticate and then update
-        mUseCaseHandler.execute(authenticateUserUseCase,
+        mUseCaseHandler.execute(
+            authenticateUserUseCase,
             AuthenticateUser.RequestValues(
                 mPreferencesHelper.username,
-                currentPassword
+                currentPassword,
             ),
             object : UseCase.UseCaseCallback<AuthenticateUser.ResponseValue> {
                 override fun onSuccess(response: AuthenticateUser.ResponseValue) {
-                    mUseCaseHandler.execute(updateUserUseCase,
+                    mUseCaseHandler.execute(
+                        updateUserUseCase,
                         UpdateUser.RequestValues(
                             UpdateUserEntityPassword(
-                                newPassword
+                                newPassword,
                             ),
-                            mPreferencesHelper.userId.toInt()
+                            mPreferencesHelper.userId.toInt(),
                         ),
                         object : UseCase.UseCaseCallback<UpdateUser.ResponseValue?> {
                             override fun onSuccess(response: UpdateUser.ResponseValue?) {
@@ -96,13 +108,15 @@ class EditPasswordViewModel @Inject constructor(
                             override fun onError(message: String) {
                                 _editPasswordUiState.value = EditPasswordUiState.Error(message)
                             }
-                        })
+                        },
+                    )
                 }
 
                 override fun onError(message: String) {
                     _editPasswordUiState.value = EditPasswordUiState.Error("Wrong Password")
                 }
-            })
+            },
+        )
     }
 }
 

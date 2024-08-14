@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.invoices.navigation
 
 import android.net.Uri
@@ -17,19 +26,17 @@ fun NavController.navigateToInvoiceDetail(invoiceData: String) {
 
 fun NavGraphBuilder.invoiceDetailScreen(
     navigateToReceiptScreen: (String) -> Unit,
-    onBackPress: () -> Unit
+    onBackPress: () -> Unit,
 ) {
     composable(
         route = "$INVOICE_ROUTE/{$INVOICE_DATA_ARG}",
         arguments = listOf(
-            navArgument(INVOICE_DATA_ARG) { type = NavType.StringType }
-        )
-    ) { backStackEntry ->
-        val invoiceData = Uri.decode(backStackEntry.arguments?.getString(INVOICE_DATA_ARG))
+            navArgument(INVOICE_DATA_ARG) { type = NavType.StringType },
+        ),
+    ) {
         InvoiceDetailScreen(
-            data = Uri.parse(invoiceData),
             onBackPress = onBackPress,
-            navigateToReceiptScreen = navigateToReceiptScreen
+            navigateToReceiptScreen = navigateToReceiptScreen,
         )
     }
 }

@@ -45,7 +45,6 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -75,9 +74,10 @@ import org.mifospay.navigation.TopLevelDestination
     ExperimentalComposeUiApi::class,
 )
 @Composable
-fun MifosApp(appState: MifosAppState, bottomSheetNavigator: BottomSheetNavigator) {
-    val context = LocalContext.current
-
+fun MifosApp(
+    appState: MifosAppState,
+    bottomSheetNavigator: BottomSheetNavigator
+) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.HOME
     var showHomeMenuOption by rememberSaveable { mutableStateOf(false) }

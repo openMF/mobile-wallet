@@ -14,9 +14,12 @@ import javax.inject.Inject
  * Created by Devansh on 09/06/2020
  */
 class UpdateStandingInstruction @Inject constructor(
-        private val apiRepository: FineractRepository) :
-        UseCase<UpdateStandingInstruction.RequestValues,
-                UpdateStandingInstruction.ResponseValue>() {
+    private val apiRepository: FineractRepository,
+) :
+    UseCase<
+            UpdateStandingInstruction.RequestValues,
+            UpdateStandingInstruction.ResponseValue,
+            >() {
 
     override fun executeUseCase(requestValues: RequestValues) {
         val validTillString = "${requestValues.standingInstruction.validTill?.get(2)} " +
@@ -29,35 +32,39 @@ class UpdateStandingInstruction @Inject constructor(
                 "${requestValues.standingInstruction.validFrom[1]}"
 
         val standingInstructionPayload = StandingInstructionPayload(
-                requestValues.standingInstruction.fromClient.officeId,
-                requestValues.standingInstruction.fromClient.id,
-                2,
-                "wallet standing transaction",
-                1,
-                2,
-                1,
-                requestValues.standingInstruction.fromAccount.id,
-                requestValues.standingInstruction.toClient.officeId,
-                requestValues.standingInstruction.toClient.id,
-                2,
-                requestValues.standingInstruction.toAccount.id,
-                1,
-                requestValues.standingInstruction.amount,
-                validFromString,
-                1,
-                1,
-                2,
-                "en",
-                "dd MM yyyy",
-                validTillString,
-                recurrenceOnMonthDayString,
-                "dd MM")
+            requestValues.standingInstruction.fromClient.officeId,
+            requestValues.standingInstruction.fromClient.id,
+            2,
+            "wallet standing transaction",
+            1,
+            2,
+            1,
+            requestValues.standingInstruction.fromAccount.id,
+            requestValues.standingInstruction.toClient.officeId,
+            requestValues.standingInstruction.toClient.id,
+            2,
+            requestValues.standingInstruction.toAccount.id,
+            1,
+            requestValues.standingInstruction.amount,
+            validFromString,
+            1,
+            1,
+            2,
+            "en",
+            "dd MM yyyy",
+            validTillString,
+            recurrenceOnMonthDayString,
+            "dd MM",
+        )
 
-        apiRepository.updateStandingInstruction(requestValues.standingInstructionId,
-                standingInstructionPayload)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(object : Subscriber<GenericResponse>() {
+        apiRepository.updateStandingInstruction(
+            requestValues.standingInstructionId,
+            standingInstructionPayload,
+        )
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(Schedulers.io())
+            .subscribe(
+                object : Subscriber<GenericResponse>() {
 
                     override fun onCompleted() {
 
@@ -67,13 +74,15 @@ class UpdateStandingInstruction @Inject constructor(
                         e.message?.let { useCaseCallback.onError(it) }
                     }
 
-                    override fun onNext(genericResponse: GenericResponse)
-                            = useCaseCallback.onSuccess(ResponseValue())
-                })
+                    override fun onNext(genericResponse: GenericResponse) =
+                        useCaseCallback.onSuccess(ResponseValue())
+                },
+            )
     }
 
-    class RequestValues(val standingInstructionId: Long,
-                        val standingInstruction: StandingInstruction
+    class RequestValues(
+        val standingInstructionId: Long,
+        val standingInstruction: StandingInstruction,
     ) : UseCase.RequestValues
 
     class ResponseValue : UseCase.ResponseValue

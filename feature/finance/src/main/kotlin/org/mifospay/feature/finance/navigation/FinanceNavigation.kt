@@ -1,10 +1,19 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.finance.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import com.mifospay.core.model.domain.BankAccountDetails
+import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.finance.FinanceRoute
 
 const val FINANCE_ROUTE = "finance_route"
@@ -12,21 +21,9 @@ const val FINANCE_ROUTE = "finance_route"
 fun NavController.navigateToFinance(navOptions: NavOptions) = navigate(FINANCE_ROUTE, navOptions)
 
 fun NavGraphBuilder.financeScreen(
-    onAddBtn: () -> Unit,
-    onLevel1Clicked: () -> Unit,
-    onLevel2Clicked: () -> Unit,
-    onLevel3Clicked: () -> Unit,
-    navigateToBankAccountDetailScreen: (BankAccountDetails,Int) -> Unit,
-    navigateToLinkBankAccountScreen: () -> Unit
+    tabContents: List<TabContent>,
 ) {
     composable(route = FINANCE_ROUTE) {
-        FinanceRoute(
-            onAddBtn = onAddBtn,
-            onLevel1Clicked = onLevel1Clicked,
-            onLevel2Clicked = onLevel2Clicked,
-            onLevel3Clicked = onLevel3Clicked,
-            navigateToBankAccountDetailScreen = navigateToBankAccountDetailScreen,
-            navigateToLinkBankAccountScreen = navigateToLinkBankAccountScreen
-        )
+        FinanceRoute(tabContents = tabContents)
     }
 }

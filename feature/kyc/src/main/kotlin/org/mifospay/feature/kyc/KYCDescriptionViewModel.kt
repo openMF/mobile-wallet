@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.kyc
 
 import androidx.lifecycle.ViewModel
@@ -13,18 +22,17 @@ import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.kyc.FetchKYCLevel1Details
 import org.mifospay.core.data.repository.local.LocalRepository
+import org.mifospay.feature.kyc.KYCDescriptionUiState.Loading
 import javax.inject.Inject
 
 @HiltViewModel
 class KYCDescriptionViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
-    private val fetchKYCLevel1DetailsUseCase: FetchKYCLevel1Details
-) : ViewModel(){
-    private val _kycdescriptionState =
-        MutableStateFlow<KYCDescriptionUiState>(KYCDescriptionUiState.Loading)
-
-    val kycdescriptionState: StateFlow<KYCDescriptionUiState> = _kycdescriptionState
+    private val fetchKYCLevel1DetailsUseCase: FetchKYCLevel1Details,
+) : ViewModel() {
+    private val descriptionState = MutableStateFlow<KYCDescriptionUiState>(Loading)
+    val kycDescriptionState: StateFlow<KYCDescriptionUiState> = descriptionState
 
     init {
         fetchCurrentLevel()
@@ -46,31 +54,30 @@ class KYCDescriptionViewModel @Inject constructor(
         fetchKYCLevel1DetailsUseCase.walletRequestValues =
             FetchKYCLevel1Details.RequestValues(mLocalRepository.clientDetails.clientId.toInt())
         val requestValues = fetchKYCLevel1DetailsUseCase.walletRequestValues
-        mUseCaseHandler.execute(fetchKYCLevel1DetailsUseCase, requestValues,
+        mUseCaseHandler.execute(
+            fetchKYCLevel1DetailsUseCase,
+            requestValues,
             object : UseCase.UseCaseCallback<FetchKYCLevel1Details.ResponseValue> {
                 override fun onSuccess(response: FetchKYCLevel1Details.ResponseValue) {
                     if (response.kycLevel1DetailsList.size == 1) {
-                            _kycdescriptionState.value = KYCDescriptionUiState.KYCDescription(
-                                response.kycLevel1DetailsList.first()!!
-                            )
+                        descriptionState.value = KYCDescriptionUiState.KYCDescription(
+                            response.kycLevel1DetailsList.first()!!,
+                        )
                     } else {
-                        _kycdescriptionState.value = KYCDescriptionUiState.Error
+                        descriptionState.value = KYCDescriptionUiState.Error
                     }
                 }
 
                 override fun onError(message: String) {
-                    _kycdescriptionState.value = KYCDescriptionUiState.Error
+                    descriptionState.value = KYCDescriptionUiState.Error
                 }
-            })
+            },
+        )
     }
-
 }
 
 sealed interface KYCDescriptionUiState {
-    data class KYCDescription(
-        val kycLevel1Details: KYCLevel1Details?
-    ) : KYCDescriptionUiState
-
+    data class KYCDescription(val kycLevel1Details: KYCLevel1Details?) : KYCDescriptionUiState
     data object Error : KYCDescriptionUiState
     data object Loading : KYCDescriptionUiState
 }

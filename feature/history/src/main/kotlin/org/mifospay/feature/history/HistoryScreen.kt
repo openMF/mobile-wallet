@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.history
 
 import android.widget.Toast
@@ -25,7 +34,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,10 +46,8 @@ import com.mifospay.core.model.domain.Currency
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
-
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
-import org.mifospay.core.designsystem.theme.chipSelectedColor
 import org.mifospay.core.designsystem.theme.lightGrey
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.TransactionItemScreen
@@ -49,9 +55,10 @@ import org.mifospay.feature.transaction.detail.TransactionDetailScreen
 
 @Composable
 fun HistoryScreen(
-    viewModel: HistoryViewModel = hiltViewModel(),
     viewReceipt: (String) -> Unit,
     accountClicked: (String, ArrayList<Transaction>) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: HistoryViewModel = hiltViewModel(),
 ) {
     val historyUiState by viewModel.historyUiState.collectAsStateWithLifecycle()
 
@@ -59,14 +66,16 @@ fun HistoryScreen(
         historyUiState = historyUiState,
         viewReceipt = viewReceipt,
         accountClicked = accountClicked,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun HistoryScreen(
+private fun HistoryScreen(
     historyUiState: HistoryUiState,
     viewReceipt: (String) -> Unit,
     accountClicked: (String, ArrayList<Transaction>) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var selectedChip by remember { mutableStateOf(TransactionType.OTHER) }
     var filteredTransactions by remember { mutableStateOf(emptyList<Transaction>()) }
@@ -80,7 +89,7 @@ fun HistoryScreen(
                 title = stringResource(id = R.string.feature_history_error_oops),
                 subTitle = stringResource(id = R.string.feature_history_empty_no_transaction_history_title),
                 iconTint = MaterialTheme.colorScheme.primary,
-                iconImageVector = Icons.Rounded.Info
+                iconImageVector = Icons.Rounded.Info,
             )
         }
 
@@ -90,7 +99,7 @@ fun HistoryScreen(
                 title = stringResource(id = R.string.feature_history_error_oops),
                 subTitle = stringResource(id = R.string.feature_history_unexpected_error_subtitle),
                 iconTint = MaterialTheme.colorScheme.primary,
-                iconImageVector = Icons.Rounded.Info
+                iconImageVector = Icons.Rounded.Info,
             )
         }
 
@@ -107,22 +116,22 @@ fun HistoryScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     Chip(
                         selected = selectedChip == TransactionType.OTHER,
                         onClick = { selectedChip = TransactionType.OTHER },
-                        label = stringResource(R.string.feature_history_all)
+                        label = stringResource(R.string.feature_history_all),
                     )
                     Chip(
                         selected = selectedChip == TransactionType.CREDIT,
                         onClick = { selectedChip = TransactionType.CREDIT },
-                        label = stringResource(R.string.feature_history_credits)
+                        label = stringResource(R.string.feature_history_credits),
                     )
                     Chip(
                         selected = selectedChip == TransactionType.DEBIT,
                         onClick = { selectedChip = TransactionType.DEBIT },
-                        label = stringResource(R.string.feature_history_debits)
+                        label = stringResource(R.string.feature_history_debits),
                     )
                 }
                 Spacer(modifier = Modifier.height(24.dp))
@@ -133,68 +142,74 @@ fun HistoryScreen(
                                 modifier = Modifier
                                     .padding(start = 24.dp, end = 24.dp)
                                     .clickable { transactionDetailState = it },
-                                transaction = it
+                                transaction = it,
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }
             }
-
         }
 
         HistoryUiState.Loading -> {
             MifosLoadingWheel(
                 modifier = Modifier.fillMaxWidth(),
-                contentDesc = stringResource(R.string.feature_history_loading)
+                contentDesc = stringResource(R.string.feature_history_loading),
             )
         }
     }
 
     if (transactionDetailState != null) {
         MifosBottomSheet(
+            modifier = modifier,
             content = {
                 TransactionDetailScreen(
                     transaction = transactionDetailState!!,
                     viewReceipt = { transactionDetailState?.transactionId?.let { viewReceipt(it) } },
-                    accountClicked = { accountClicked(it, ArrayList(transactionsList)) }
+                    accountClicked = { accountClicked(it, ArrayList(transactionsList)) },
                 )
             },
-            onDismiss = { transactionDetailState = null }
+            onDismiss = { transactionDetailState = null },
         )
     }
 }
 
 @Composable
-fun Chip(selected: Boolean, onClick: () -> Unit, label: String) {
+private fun Chip(
+    selected: Boolean,
+    onClick: () -> Unit,
+    label: String,
+    modifier: Modifier = Modifier,
+) {
     val context = LocalContext.current
-    val backgroundColor = if (selected) chipSelectedColor else lightGrey
+    val backgroundColor = if (selected) MaterialTheme.colorScheme.primary else lightGrey
     Button(
+        modifier = modifier,
         onClick = {
             onClick()
             Toast.makeText(context, label, Toast.LENGTH_SHORT).show()
         },
-        colors = ButtonDefaults.buttonColors(if (selected) MaterialTheme.colorScheme.primary else lightGrey)
+        colors = ButtonDefaults.buttonColors(backgroundColor),
     ) {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp),
             text = label,
-            color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+            color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
         )
     }
 }
 
-class HistoryPreviewProvider : PreviewParameterProvider<HistoryUiState> {
+internal class HistoryPreviewProvider : PreviewParameterProvider<HistoryUiState> {
     override val values: Sequence<HistoryUiState>
         get() = sequenceOf(
             HistoryUiState.Empty,
             HistoryUiState.Loading,
             HistoryUiState.Error("Error Screen"),
-            HistoryUiState.HistoryList(sampleHistoryList)
+            HistoryUiState.HistoryList(sampleHistoryList),
         )
 }
 
-val sampleHistoryList = List(10) { index ->
+internal val sampleHistoryList = List(10) { index ->
     Transaction(
         transactionId = "txn_123456789",
         clientId = 1001L,
@@ -205,14 +220,14 @@ val sampleHistoryList = List(10) { index ->
         transactionType = TransactionType.CREDIT,
         transferId = 3003L,
         transferDetail = TransferDetail(),
-        receiptId = "receipt_123456789"
+        receiptId = "receipt_123456789",
     )
 }
 
 @Preview(showBackground = true)
 @Composable
-fun HistoryScreenPreview(
-    @PreviewParameter(HistoryPreviewProvider::class) historyUiState: HistoryUiState
+private fun HistoryScreenPreview(
+    @PreviewParameter(HistoryPreviewProvider::class) historyUiState: HistoryUiState,
 ) {
     HistoryScreen(historyUiState = historyUiState, viewReceipt = {}, accountClicked = { _, _ -> })
 }

@@ -1,11 +1,20 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.read.qr.utils
 
 import android.graphics.Bitmap
 import com.google.zxing.BinaryBitmap
+import com.google.zxing.RGBLuminanceSource
 import com.google.zxing.Result
 import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
-import com.google.zxing.RGBLuminanceSource
 import org.mifospay.core.data.base.UseCase
 import javax.inject.Inject
 

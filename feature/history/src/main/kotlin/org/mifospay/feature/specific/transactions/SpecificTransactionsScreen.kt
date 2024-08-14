@@ -1,5 +1,15 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.specific.transactions
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -12,7 +22,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -32,6 +42,7 @@ import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.domain.client.Client
 import com.mifospay.core.model.entity.accounts.savings.SavingAccount
+import org.mifospay.common.Utils.toArrayList
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -43,36 +54,40 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.feature.history.R
 
-
 @Composable
-fun SpecificTransactionsScreen(
+internal fun SpecificTransactionsScreen(
     accountNumber: String,
-    transactions: ArrayList<Transaction>,
-    viewModel: SpecificTransactionsViewModel = hiltViewModel(),
+    transactions: List<Transaction>,
     backPress: () -> Unit,
-    transactionItemClicked: (String) -> Unit
+    transactionItemClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: SpecificTransactionsViewModel = hiltViewModel(),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.setArguments(transactions, accountNumber)
+        viewModel.setArguments(transactions.toArrayList(), accountNumber)
         viewModel.getSpecificTransactions()
     }
 
     SpecificTransactionsScreen(
         uiState = uiState.value,
         backPress = backPress,
-        transactionItemClicked = transactionItemClicked
+        transactionItemClicked = transactionItemClicked,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun SpecificTransactionsScreen(
+@VisibleForTesting
+internal fun SpecificTransactionsScreen(
     uiState: SpecificTransactionsUiState,
     backPress: () -> Unit,
     transactionItemClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     MifosScaffold(
+        modifier = modifier,
         topBarTitle = R.string.feature_history_specific_transactions_history,
         backPress = backPress,
         scaffoldContent = { paddingValues ->
@@ -89,7 +104,7 @@ fun SpecificTransactionsScreen(
                     SpecificTransactionsUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(R.string.feature_history_loading),
-                            backgroundColor = MaterialTheme.colorScheme.surface
+                            backgroundColor = MaterialTheme.colorScheme.surface,
                         )
                     }
 
@@ -100,39 +115,42 @@ fun SpecificTransactionsScreen(
                                 title = stringResource(id = R.string.feature_history_error_oops),
                                 subTitle = stringResource(id = R.string.feature_history_no_transactions_found),
                                 iconTint = MaterialTheme.colorScheme.onSurface,
-                                iconImageVector = Icons.Rounded.Info
+                                iconImageVector = Icons.Rounded.Info,
                             )
                         } else {
                             SpecificTransactionsContent(
                                 transactionList = uiState.transactionsList,
-                                transactionItemClicked = transactionItemClicked
+                                transactionItemClicked = transactionItemClicked,
                             )
                         }
                     }
                 }
             }
-        }
+        },
     )
 }
 
 @Composable
-fun SpecificTransactionsContent(
-    transactionList: ArrayList<Transaction>,
-    transactionItemClicked: (String) -> Unit
+private fun SpecificTransactionsContent(
+    transactionList: List<Transaction>,
+    transactionItemClicked: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    LazyColumn {
-        itemsIndexed(items = transactionList) { index, transaction ->
+    LazyColumn(modifier = modifier) {
+        itemsIndexed(
+            items = transactionList,
+        ) { index, transaction ->
             SpecificTransactionItem(
                 transaction = transaction,
                 modifier = Modifier
                     .padding(12.dp)
                     .clickable {
                         transaction.transactionId?.let { transactionItemClicked(it) }
-                    }
+                    },
             )
             Spacer(modifier = Modifier.height(4.dp))
             if (index != transactionList.lastIndex) {
-                Divider()
+                HorizontalDivider()
             }
             Spacer(modifier = Modifier.height(4.dp))
         }
@@ -140,45 +158,45 @@ fun SpecificTransactionsContent(
 }
 
 @Composable
-fun SpecificTransactionItem(
+private fun SpecificTransactionItem(
     transaction: Transaction,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.padding(horizontal = 12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             SpecificTransactionAccountInfo(
-                modifier = Modifier.weight(1f),
                 account = transaction.transferDetail.fromAccount,
-                client = transaction.transferDetail.fromClient
+                client = transaction.transferDetail.fromClient,
+                modifier = Modifier.weight(1f),
             )
             Icon(imageVector = MifosIcons.SendRightTilted, contentDescription = null)
             SpecificTransactionAccountInfo(
-                modifier = Modifier.weight(1f),
                 account = transaction.transferDetail.toAccount,
-                client = transaction.transferDetail.toClient
+                client = transaction.transferDetail.toClient,
+                modifier = Modifier.weight(1f),
             )
         }
         Spacer(modifier = Modifier.height(12.dp))
         Row(
             modifier = Modifier.padding(horizontal = 8.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Column {
                 Text(
-                    text = stringResource(id = R.string.feature_receipt_transaction_id) + transaction.transactionId,
+                    text = stringResource(id = R.string.feature_history_transaction_id) + transaction.transactionId,
                     style = MaterialTheme.typography.bodyLarge,
-                    color = MaterialTheme.colorScheme.primary
+                    color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
-                    text = stringResource(id = R.string.feature_receipt_transaction_date) + transaction.date,
+                    text = stringResource(id = R.string.feature_history_transaction_date) + transaction.date,
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
                     text = when (transaction.transactionType) {
                         TransactionType.DEBIT -> stringResource(id = R.string.feature_history_debits)
                         TransactionType.CREDIT -> stringResource(id = R.string.feature_history_credits)
-                        TransactionType.OTHER -> stringResource(id = R.string.feature_receipt_other)
+                        TransactionType.OTHER -> stringResource(id = R.string.feature_history_other)
                     },
                     style = MaterialTheme.typography.bodyLarge,
                 )
@@ -198,11 +216,11 @@ fun SpecificTransactionItem(
 }
 
 @Composable
-fun SpecificTransactionAccountInfo(
-    modifier: Modifier = Modifier,
+internal fun SpecificTransactionAccountInfo(
     account: SavingAccount,
     client: Client,
-    accountClicked: (String) -> Unit = {}
+    modifier: Modifier = Modifier,
+    accountClicked: (String) -> Unit = {},
 ) {
     Column(
         modifier = modifier.clickable {
@@ -222,7 +240,7 @@ fun SpecificTransactionAccountInfo(
     }
 }
 
-class SpecificTransactionsUiStateProvider :
+internal class SpecificTransactionsUiStateProvider :
     PreviewParameterProvider<SpecificTransactionsUiState> {
     override val values: Sequence<SpecificTransactionsUiState>
         get() = sequenceOf(
@@ -235,9 +253,9 @@ class SpecificTransactionsUiStateProvider :
 
 @Preview(showSystemUi = true)
 @Composable
-fun ShowQrScreenPreview(
+private fun ShowQrScreenPreview(
     @PreviewParameter(SpecificTransactionsUiStateProvider::class)
-    uiState: SpecificTransactionsUiState
+    uiState: SpecificTransactionsUiState,
 ) {
     MifosTheme {
         SpecificTransactionsScreen(
@@ -250,7 +268,7 @@ fun ShowQrScreenPreview(
 
 @Preview
 @Composable
-fun SpecificTransactionItemPreview() {
+private fun SpecificTransactionItemPreview() {
     Surface {
         SpecificTransactionItem(transaction = Transaction())
     }

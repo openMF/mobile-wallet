@@ -1,23 +1,24 @@
 package org.mifospay.core.data.domain.usecase.account
 
-import okhttp3.ResponseBody
-import org.mifospay.core.data.base.UseCase
-import org.mifospay.core.data.fineract.repository.FineractRepository
+import com.mifospay.core.model.entity.TPTResponse
+import com.mifospay.core.model.entity.accounts.savings.SavingAccount
 import com.mifospay.core.model.entity.beneficary.Beneficiary
 import com.mifospay.core.model.entity.beneficary.BeneficiaryPayload
 import com.mifospay.core.model.entity.beneficary.BeneficiaryUpdatePayload
-import com.mifospay.core.model.entity.payload.TransferPayload
-import com.mifospay.core.model.entity.TPTResponse
-import com.mifospay.core.model.entity.accounts.savings.SavingAccount
 import com.mifospay.core.model.entity.client.Client
 import com.mifospay.core.model.entity.client.ClientAccounts
+import com.mifospay.core.model.entity.payload.TransferPayload
 import com.mifospay.core.model.utils.DateHelper
+import okhttp3.ResponseBody
+import org.mifospay.core.data.base.UseCase
+import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import javax.inject.Inject
 
+@Suppress("UnusedPrivateMember")
 class TransferFunds @Inject constructor( private val apiRepository: FineractRepository) :
     UseCase<TransferFunds.RequestValues, TransferFunds.ResponseValue>() {
 

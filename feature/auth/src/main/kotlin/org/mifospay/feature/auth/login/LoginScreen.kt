@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.auth.login
 
 import android.content.Context
@@ -31,7 +40,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -48,16 +56,15 @@ import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.grey
-import org.mifospay.core.designsystem.theme.styleMedium16sp
-import org.mifospay.core.designsystem.theme.styleMedium30sp
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 import org.mifospay.feature.auth.R
-import org.mifospay.feature.auth.social_signup.SocialSignupMethodContentScreen
+import org.mifospay.feature.auth.socialSignup.SocialSignupMethodContentScreen
 import org.mifospay.feature.passcode.PassCodeActivity
 
 @Composable
-fun LoginScreen(
-    viewModel: LoginViewModel = hiltViewModel()
+internal fun LoginScreen(
+    modifier: Modifier = Modifier,
+    viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val showProgress by viewModel.showProgress.collectAsStateWithLifecycle()
@@ -68,6 +75,7 @@ fun LoginScreen(
     }
 
     LoginScreenContent(
+        modifier = modifier,
         showProgress = showProgress,
         login = { username, password ->
             viewModel.loginUser(
@@ -75,9 +83,9 @@ fun LoginScreen(
                 password = password,
                 onLoginFailed = { message ->
                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                }
+                },
             )
-        }
+        },
     )
 
     if (isLoginSuccess) {
@@ -86,20 +94,22 @@ fun LoginScreen(
 }
 
 @Composable
-fun LoginScreenContent(
+@Suppress("LongMethod")
+private fun LoginScreenContent(
     showProgress: Boolean,
     login: (username: String, password: String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var showSignUpScreen by rememberSaveable { mutableStateOf(false) }
 
     var userName by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(
-            TextFieldValue("")
+            TextFieldValue(""),
         )
     }
     var password by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(
-            TextFieldValue("")
+            TextFieldValue(""),
         )
     }
     var passwordVisibility: Boolean by remember { mutableStateOf(false) }
@@ -110,25 +120,25 @@ fun LoginScreenContent(
         }
     }
 
-    Box {
+    Box(modifier) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(MaterialTheme.colorScheme.surface)
                 .verticalScroll(rememberScrollState())
                 .padding(top = 100.dp, start = 48.dp, end = 48.dp),
-            horizontalAlignment = Alignment.Start
+            horizontalAlignment = Alignment.Start,
         ) {
             Text(
                 text = stringResource(id = R.string.feature_auth_login),
                 style = MaterialTheme.typography.titleLarge,
-                color = MaterialTheme.colorScheme.primary
+                color = MaterialTheme.colorScheme.primary,
             )
             Text(
                 modifier = Modifier
                     .padding(top = 32.dp),
                 text = stringResource(id = R.string.feature_auth_welcome_back),
-                style = styleNormal18sp.copy(color = grey)
+                style = styleNormal18sp.copy(color = grey),
             )
             Spacer(modifier = Modifier.padding(top = 32.dp))
             MifosOutlinedTextField(
@@ -137,7 +147,7 @@ fun LoginScreenContent(
                 onValueChange = {
                     userName = it
                 },
-                label = R.string.feature_auth_username
+                label = R.string.feature_auth_username,
             )
             Spacer(modifier = Modifier.padding(top = 16.dp))
             MifosOutlinedTextField(
@@ -149,15 +159,19 @@ fun LoginScreenContent(
                 label = R.string.feature_auth_password,
                 visualTransformation = if (passwordVisibility) {
                     VisualTransformation.None
-                } else PasswordVisualTransformation(),
+                } else {
+                    PasswordVisualTransformation()
+                },
                 trailingIcon = {
-                    val image = if (passwordVisibility)
+                    val image = if (passwordVisibility) {
                         Icons.Filled.Visibility
-                    else Icons.Filled.VisibilityOff
+                    } else {
+                        Icons.Filled.VisibilityOff
+                    }
                     IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                         Icon(imageVector = image, null)
                     }
-                }
+                },
             )
             Button(
                 modifier = Modifier
@@ -168,12 +182,12 @@ fun LoginScreenContent(
                 onClick = {
                     login.invoke(userName.text, password.text)
                 },
-                contentPadding = PaddingValues(12.dp)
+                contentPadding = PaddingValues(12.dp),
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_auth_login).uppercase(),
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
             // Hide reset password for now
@@ -199,12 +213,12 @@ fun LoginScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 24.dp),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
             ) {
                 Text(
                     text = "Don’t have an account yet? ",
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     modifier = Modifier.clickable {
@@ -220,11 +234,10 @@ fun LoginScreenContent(
 
         if (showProgress) {
             MfOverlayLoadingWheel(
-                contentDesc = stringResource(id = R.string.feature_auth_logging_in)
+                contentDesc = stringResource(id = R.string.feature_auth_logging_in),
             )
         }
     }
-
 }
 
 /**
@@ -239,11 +252,11 @@ private fun startPassCodeActivity(context: Context) {
 
 @Preview(showSystemUi = true, device = "id:pixel_5")
 @Composable
-fun LoanScreenPreview() {
+private fun LoanScreenPreview() {
     MifosTheme {
         LoginScreenContent(
             showProgress = false,
-            login = { _, _ -> }
+            login = { _, _ -> },
         )
     }
 }

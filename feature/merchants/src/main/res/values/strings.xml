@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
 <resources>
     <string name="feature_merchants_empty_no_merchants_title">You haven\'t added any merchant yet</string>
     <string name="feature_merchants_empty_no_merchants_subtitle">Every added merchant will be visible here</string>
@@ -14,4 +23,9 @@
     <string name="feature_merchants_transfer_money_to_this_merchant">Transfer money to this merchant</string>
     <string name="feature_merchants_amount">Amount</string>
     <string name="feature_merchants_submit">Submit</string>
+    <string name="feature_merchants_transaction_id">Transaction ID : </string>
+    <string name="feature_merchants_transaction_date">Transaction Date : </string>
+    <string name="feature_merchants_credits">Credits</string>
+    <string name="feature_merchants_debits">Debits</string>
+    <string name="feature_merchants_other">Other</string>
 </resources>

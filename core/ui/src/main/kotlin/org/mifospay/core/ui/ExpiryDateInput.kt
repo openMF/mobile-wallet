@@ -1,4 +1,4 @@
-package org.mifos.mobilewallet.mifospay.ui
+package org.mifospay.core.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row

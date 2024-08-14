@@ -1,6 +1,14 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.invoices
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
@@ -14,14 +22,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -41,30 +47,31 @@ import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.invoices.R
 
 @Composable
-fun InvoiceDetailScreen(
-    viewModel: InvoiceDetailViewModel = hiltViewModel(),
-    data: Uri?,
+internal fun InvoiceDetailScreen(
     onBackPress: () -> Unit,
-    navigateToReceiptScreen: (String) -> Unit
+    navigateToReceiptScreen: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: InvoiceDetailViewModel = hiltViewModel(),
 ) {
     val invoiceDetailUiState by viewModel.invoiceDetailUiState.collectAsStateWithLifecycle()
+
     InvoiceDetailScreen(
         invoiceDetailUiState = invoiceDetailUiState,
         onBackPress = onBackPress,
-        navigateToReceiptScreen = navigateToReceiptScreen
+        navigateToReceiptScreen = navigateToReceiptScreen,
+        modifier = modifier,
     )
-    LaunchedEffect(key1 = true) {
-        viewModel.getInvoiceDetails(data)
-    }
 }
 
 @Composable
-fun InvoiceDetailScreen(
+private fun InvoiceDetailScreen(
     invoiceDetailUiState: InvoiceDetailUiState,
     onBackPress: () -> Unit,
-    navigateToReceiptScreen: (String) -> Unit
+    navigateToReceiptScreen: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     MifosScaffold(
+        modifier = modifier,
         topBarTitle = R.string.feature_invoices_invoice,
         backPress = { onBackPress.invoke() },
         scaffoldContent = {
@@ -72,7 +79,7 @@ fun InvoiceDetailScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(MaterialTheme.colorScheme.surface)
-                    .padding(it)
+                    .padding(it),
             ) {
                 when (invoiceDetailUiState) {
                     is InvoiceDetailUiState.Error -> {
@@ -81,7 +88,7 @@ fun InvoiceDetailScreen(
 
                     InvoiceDetailUiState.Loading -> {
                         MfOverlayLoadingWheel(
-                            contentDesc = stringResource(R.string.feature_invoices_loading)
+                            contentDesc = stringResource(R.string.feature_invoices_loading),
                         )
                     }
 
@@ -90,90 +97,92 @@ fun InvoiceDetailScreen(
                             invoiceDetailUiState.invoice,
                             invoiceDetailUiState.merchantId,
                             invoiceDetailUiState.paymentLink,
-                            navigateToReceiptScreen = navigateToReceiptScreen
+                            navigateToReceiptScreen = navigateToReceiptScreen,
                         )
                     }
                 }
             }
-        })
+        },
+    )
 }
 
 @Composable
-fun InvoiceDetailsContent(
+@Suppress("LongMethod")
+private fun InvoiceDetailsContent(
     invoice: Invoice?,
     merchantId: String?,
     paymentLink: String?,
-    navigateToReceiptScreen: (String) -> Unit
+    navigateToReceiptScreen: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val clipboardManager = LocalClipboardManager.current
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
     ) {
-        val context = LocalContext.current
         Text(
             text = stringResource(R.string.feature_invoices_invoice_details),
-            modifier = Modifier.padding(top = 16.dp)
+            modifier = Modifier.padding(top = 16.dp),
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(R.string.feature_invoices_merchant_id),
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.padding(top = 16.dp),
             )
             Text(
                 text = merchantId.toString(),
-                modifier = Modifier.padding(top = 16.dp)
+                modifier = Modifier.padding(top = 16.dp),
             )
         }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(R.string.feature_invoices_consumer_id),
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp),
             )
             Text(
                 text = (invoice?.consumerName + " " + invoice?.consumerId),
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp),
             )
         }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(id = R.string.feature_invoices_amount),
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp),
             )
             Text(
                 text = Constants.INR + " " + invoice?.amount + "",
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp),
             )
         }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(id = R.string.feature_invoices_items_bought),
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp),
             )
             Text(
                 text = invoice?.itemsBought.toString(),
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp),
             )
         }
 
@@ -181,42 +190,42 @@ fun InvoiceDetailsContent(
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_invoices_status),
-                    modifier = Modifier.padding(top = 8.dp)
+                    modifier = Modifier.padding(top = 8.dp),
                 )
 
                 Text(
                     text = Constants.DONE,
-                    modifier = Modifier.padding(top = 8.dp)
+                    modifier = Modifier.padding(top = 8.dp),
                 )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_invoices_transaction_id),
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
-                        .padding(top = 10.dp)
+                        .padding(top = 10.dp),
                 )
                 Text(
                     text = invoice.transactionId ?: "",
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier
                         .padding(top = 10.dp)
-                        .then(Modifier.height(0.dp))
+                        .then(Modifier.height(0.dp)),
                 )
             }
             Divider()
             Text(
                 text = stringResource(id = R.string.feature_invoices_unique_receipt_link),
                 fontWeight = FontWeight.Normal,
-                modifier = Modifier.padding(bottom = 10.dp)
+                modifier = Modifier.padding(bottom = 10.dp),
             )
             Text(
                 text = invoice.transactionId ?: "",
@@ -228,33 +237,34 @@ fun InvoiceDetailsContent(
                             onPress = {
                                 invoice.transactionId?.let { it1 ->
                                     navigateToReceiptScreen.invoke(
-                                        it1
+                                        it1,
                                     )
                                 }
                             },
                             onLongPress = {
                                 clipboardManager.setText(
                                     AnnotatedString(
-                                        Constants.RECEIPT_DOMAIN + invoice.transactionId
-                                    )
+                                        Constants.RECEIPT_DOMAIN + invoice.transactionId,
+                                    ),
                                 )
-                            })
-                    }
+                            },
+                        )
+                    },
             )
         }
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(id = R.string.feature_invoices_date),
-                modifier = Modifier.padding(top = 10.dp)
+                modifier = Modifier.padding(top = 10.dp),
             )
             Text(
                 text = DateHelper.getDateAsString(invoice!!.date),
-                modifier = Modifier.padding(top = 10.dp)
+                modifier = Modifier.padding(top = 10.dp),
             )
         }
 
@@ -262,18 +272,18 @@ fun InvoiceDetailsContent(
         Text(
             text = stringResource(id = R.string.feature_invoices_payment_options_will_be_fetched_from_upi),
             fontWeight = FontWeight.Normal,
-            modifier = Modifier.padding(vertical = 10.dp)
+            modifier = Modifier.padding(vertical = 10.dp),
         )
         Divider()
         Text(
             text = stringResource(id = R.string.feature_invoices_unique_payment_link),
             fontWeight = FontWeight.Normal,
-            modifier = Modifier.padding(bottom = 10.dp)
+            modifier = Modifier.padding(bottom = 10.dp),
         )
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = paymentLink.toString(),
@@ -284,21 +294,21 @@ fun InvoiceDetailsContent(
                         detectTapGestures(
                             onLongPress = {
                                 clipboardManager.setText(AnnotatedString(paymentLink.toString()))
-                            })
-                    }
+                            },
+                        )
+                    },
             )
         }
-
     }
 }
 
 @Composable
-fun Divider(modifier: Modifier = Modifier) {
+private fun Divider(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(1.dp)
-            .background(Color(0x44000000))
+            .background(Color(0x44000000)),
     )
 }
 
@@ -307,21 +317,21 @@ class InvoiceDetailScreenProvider : PreviewParameterProvider<InvoiceDetailUiStat
         get() = sequenceOf(
             InvoiceDetailUiState.Loading,
             InvoiceDetailUiState.Error("Some Error Occurred"),
-            InvoiceDetailUiState.Success(Invoice(), "", "")
+            InvoiceDetailUiState.Success(Invoice(), "", ""),
         )
-
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun InvoiceDetailScreenPreview(
-    @PreviewParameter(InvoiceDetailScreenProvider::class) invoiceDetailUiState: InvoiceDetailUiState
+private fun InvoiceDetailScreenPreview(
+    @PreviewParameter(InvoiceDetailScreenProvider::class)
+    invoiceDetailUiState: InvoiceDetailUiState,
 ) {
     MifosTheme {
         InvoiceDetailScreen(
             invoiceDetailUiState = invoiceDetailUiState,
             onBackPress = {},
-            navigateToReceiptScreen = {}
+            navigateToReceiptScreen = {},
         )
     }
 }

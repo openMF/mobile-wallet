@@ -1,6 +1,16 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.savedcards
 
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -50,14 +60,11 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utility.AddCardChip
 import org.mifospay.savedcards.R
 
-enum class CardMenuAction {
-    EDIT, DELETE, CANCEL
-}
-
 @Composable
 fun CardsScreen(
+    onEditCard: (Card) -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: CardsScreenViewModel = hiltViewModel(),
-    onEditCard: (Card) -> Unit
 ) {
     val cardState by viewModel.cardState.collectAsStateWithLifecycle()
     val cardListUiState by viewModel.cardListUiState.collectAsStateWithLifecycle()
@@ -66,7 +73,6 @@ fun CardsScreen(
     var showConfirmDeleteDialog by rememberSaveable { mutableStateOf(false) }
 
     var deleteCardID by rememberSaveable { mutableStateOf<Int?>(null) }
-
 
     if (showCardBottomSheet) {
         AddCardDialogSheet(
@@ -79,22 +85,24 @@ fun CardsScreen(
             },
             onDismiss = {
                 showCardBottomSheet = false
-            }
+            },
         )
     }
 
-    MifosDialogBox(
-        showDialogState = showConfirmDeleteDialog,
-        onDismiss = { showConfirmDeleteDialog = false },
-        title = R.string.feature_savedcards_delete_card,
-        confirmButtonText = R.string.feature_savedcards_yes,
-        onConfirm = {
-            deleteCardID?.let { viewModel.deleteCard(it) }
-            showConfirmDeleteDialog = false
-        },
-        dismissButtonText = R.string.feature_savedcards_no,
-        message = R.string.feature_savedcards_confirm_delete_card
-    )
+    if (showConfirmDeleteDialog) {
+        MifosDialogBox(
+            showDialogState = true,
+            onDismiss = { showConfirmDeleteDialog = false },
+            title = R.string.feature_savedcards_delete_card,
+            confirmButtonText = R.string.feature_savedcards_yes,
+            onConfirm = {
+                deleteCardID?.let { viewModel.deleteCard(it) }
+                showConfirmDeleteDialog = false
+            },
+            dismissButtonText = R.string.feature_savedcards_no,
+            message = R.string.feature_savedcards_confirm_delete_card,
+        )
+    }
 
     CardsScreen(
         cardState = cardState,
@@ -105,23 +113,30 @@ fun CardsScreen(
             deleteCardID = it.id
         },
         onAddBtn = { showCardBottomSheet = true },
-        updateQuery = {
-            viewModel.updateSearchQuery(it)
-        }
+        updateQuery = viewModel::updateSearchQuery,
+        modifier = modifier,
     )
 }
 
+enum class CardMenuAction {
+    EDIT,
+    DELETE,
+    CANCEL,
+}
+
 @Composable
-fun CardsScreen(
+@VisibleForTesting
+internal fun CardsScreen(
     cardState: CardsUiState,
     cardListUiState: CardsUiState,
     onEditCard: (Card) -> Unit,
     onDeleteCard: (Card) -> Unit,
     onAddBtn: () -> Unit,
-    updateQuery: (String) -> Unit
+    updateQuery: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
@@ -129,7 +144,7 @@ fun CardsScreen(
             CardsUiState.Loading -> {
                 MfLoadingWheel(
                     contentDesc = stringResource(R.string.feature_savedcards_loading),
-                    backgroundColor = MaterialTheme.colorScheme.surface
+                    backgroundColor = MaterialTheme.colorScheme.surface,
                 )
             }
 
@@ -143,7 +158,7 @@ fun CardsScreen(
                     title = stringResource(id = R.string.feature_savedcards_error_oops),
                     subTitle = stringResource(id = R.string.feature_savedcards_unexpected_error_subtitle),
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = Icons.Rounded.Info
+                    iconImageVector = Icons.Rounded.Info,
                 )
             }
 
@@ -153,7 +168,7 @@ fun CardsScreen(
                     onAddBtn = onAddBtn,
                     onDeleteCard = onDeleteCard,
                     onEditCard = onEditCard,
-                    updateQuery = updateQuery
+                    updateQuery = updateQuery,
                 )
             }
 
@@ -163,7 +178,7 @@ fun CardsScreen(
                         Toast.makeText(
                             LocalContext.current,
                             stringResource(id = R.string.feature_savedcards_card_added_successfully),
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                         ).show()
                     }
 
@@ -171,7 +186,7 @@ fun CardsScreen(
                         Toast.makeText(
                             LocalContext.current,
                             stringResource(id = R.string.feature_savedcards_card_updated_successfully),
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                         ).show()
                     }
 
@@ -179,7 +194,7 @@ fun CardsScreen(
                         Toast.makeText(
                             LocalContext.current,
                             stringResource(id = R.string.feature_savedcards_card_deleted_successfully),
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                         ).show()
                     }
                 }
@@ -189,16 +204,18 @@ fun CardsScreen(
 }
 
 @Composable
-fun CardsScreenContent(
+private fun CardsScreenContent(
     cardList: List<Card>,
     onEditCard: (Card) -> Unit,
     onDeleteCard: (Card) -> Unit,
     onAddBtn: () -> Unit,
-    updateQuery: (String) -> Unit
+    updateQuery: (String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val query by rememberSaveable { mutableStateOf("") }
+
     Box(
-        modifier = Modifier
+        modifier = modifier,
     ) {
         Column {
             SearchBarScreen(
@@ -207,7 +224,7 @@ fun CardsScreenContent(
                     updateQuery(q)
                 },
                 onSearch = {},
-                onClearQuery = { updateQuery("") }
+                onClearQuery = { updateQuery("") },
             )
             CardsList(
                 cards = cardList,
@@ -217,7 +234,7 @@ fun CardsScreenContent(
                         CardMenuAction.DELETE -> onDeleteCard(card)
                         CardMenuAction.CANCEL -> Unit
                     }
-                }
+                },
             )
         }
         Box(
@@ -225,13 +242,13 @@ fun CardsScreenContent(
                 .fillMaxWidth()
                 .height(56.dp)
                 .align(Alignment.BottomCenter)
-                .background(color = MaterialTheme.colorScheme.surface)
+                .background(color = MaterialTheme.colorScheme.surface),
         ) {
             AddCardChip(
                 modifier = Modifier.align(Alignment.Center),
                 onAddBtn = onAddBtn,
                 text = R.string.feature_savedcards_add_cards,
-                btnText = R.string.feature_savedcards_add_cards
+                btnText = R.string.feature_savedcards_add_cards,
             )
         }
     }
@@ -239,14 +256,15 @@ fun CardsScreenContent(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchBarScreen(
+private fun SearchBarScreen(
     query: String,
     onQueryChange: (String) -> Unit,
     onSearch: (String) -> Unit,
-    onClearQuery: () -> Unit
+    onClearQuery: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     SearchBar(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp, horizontal = 16.dp),
         query = query,
@@ -258,64 +276,67 @@ fun SearchBarScreen(
         placeholder = {
             Text(
                 text = stringResource(R.string.feature_savedcards_search),
-                color = MaterialTheme.colorScheme.onPrimaryContainer
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
             )
         },
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Search,
-                contentDescription = stringResource(R.string.feature_savedcards_search)
+                contentDescription = stringResource(R.string.feature_savedcards_search),
             )
         },
         trailingIcon = {
             IconButton(
-                onClick = onClearQuery
+                onClick = onClearQuery,
             ) {
                 Icon(
                     imageVector = Icons.Filled.Close,
-                    contentDescription = stringResource(R.string.feature_savedcards_close)
+                    contentDescription = stringResource(R.string.feature_savedcards_close),
                 )
             }
-        }
+        },
     ) {}
 }
 
 @Composable
-fun CardsList(
+private fun CardsList(
     cards: List<Card>,
-    onMenuItemClick: (Card, CardMenuAction) -> Unit
+    onMenuItemClick: (Card, CardMenuAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
     ) {
         items(cards) { card ->
-            CardItem(card = card) { clickedCard, menuItem ->
-                onMenuItemClick(clickedCard, menuItem)
-            }
+            CardItem(
+                card = card,
+                onMenuItemClick = onMenuItemClick,
+            )
         }
     }
 }
 
 @Composable
-fun CardItem(
+private fun CardItem(
     card: Card,
-    onMenuItemClick: (Card, CardMenuAction) -> Unit
+    onMenuItemClick: (Card, CardMenuAction) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var expanded by remember { mutableStateOf(false) }
     Card(
-        modifier = Modifier
+        modifier = modifier
             .clickable { expanded = true }
             .background(color = MaterialTheme.colorScheme.surface)
             .fillMaxWidth()
             .padding(10.dp),
-        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer)
+        colors = CardDefaults.cardColors(MaterialTheme.colorScheme.primaryContainer),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             Row {
                 Column {
@@ -323,54 +344,54 @@ fun CardItem(
                         Text(
                             text = card.firstName,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
+                            color = MaterialTheme.colorScheme.onSurface,
                         )
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
                             text = card.lastName,
                             style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onPrimaryContainer
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                         )
                     }
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         text = "${stringResource(R.string.feature_savedcards_card_number)} ${card.cardNumber}",
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     Text(
                         text = card.expiryDate,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onPrimaryContainer
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                     )
                 }
                 Spacer(modifier = Modifier.height(38.dp))
                 DropdownMenu(
                     expanded = expanded,
                     onDismissRequest = { expanded = false },
-                    modifier = Modifier.background(MaterialTheme.colorScheme.background)
+                    modifier = Modifier.background(MaterialTheme.colorScheme.background),
                 ) {
                     DropdownMenuItem(
                         text = { Text(text = stringResource(R.string.feature_savedcards_edit_card)) },
                         onClick = {
                             onMenuItemClick(card, CardMenuAction.EDIT)
                             expanded = false
-                        }
+                        },
                     )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.feature_savedcards_delete_card)) },
                         onClick = {
                             onMenuItemClick(card, CardMenuAction.DELETE)
                             expanded = false
-                        }
+                        },
                     )
                     DropdownMenuItem(
                         text = { Text(stringResource(R.string.feature_savedcards_cancel)) },
                         onClick = {
                             onMenuItemClick(card, CardMenuAction.CANCEL)
                             expanded = false
-                        }
+                        },
                     )
                 }
             }
@@ -379,23 +400,26 @@ fun CardItem(
 }
 
 @Composable
-fun NoCardAddCardsScreen(onAddBtn: () -> Unit) {
+private fun NoCardAddCardsScreen(
+    onAddBtn: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
     ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text(
                 text = stringResource(R.string.feature_savedcards_add_cards),
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
             AddCardChip(
                 modifier = Modifier,
                 onAddBtn = onAddBtn,
                 text = R.string.feature_savedcards_add_cards,
-                btnText = R.string.feature_savedcards_add_cards
+                btnText = R.string.feature_savedcards_add_cards,
             )
         }
     }
@@ -411,7 +435,7 @@ private fun CardsScreenWithSampleDataPreview() {
             onEditCard = {},
             onDeleteCard = {},
             updateQuery = {},
-            onAddBtn = {}
+            onAddBtn = {},
         )
     }
 }
@@ -426,7 +450,7 @@ private fun CardsScreenEmptyPreview() {
             onEditCard = {},
             onDeleteCard = {},
             updateQuery = {},
-            onAddBtn = {}
+            onAddBtn = {},
         )
     }
 }
@@ -441,7 +465,7 @@ private fun CardsScreenErrorPreview() {
             onEditCard = {},
             onDeleteCard = {},
             updateQuery = {},
-            onAddBtn = {}
+            onAddBtn = {},
         )
     }
 }
@@ -456,7 +480,7 @@ private fun CardsScreenLoadingPreview() {
             onEditCard = {},
             onDeleteCard = {},
             updateQuery = {},
-            onAddBtn = {}
+            onAddBtn = {},
         )
     }
 }
@@ -468,6 +492,6 @@ val sampleCards = List(7) { index ->
         expiryDate = "$index /0$index/202$index",
         firstName = "ABC",
         lastName = " XYZ",
-        id = index
+        id = index,
     )
 }

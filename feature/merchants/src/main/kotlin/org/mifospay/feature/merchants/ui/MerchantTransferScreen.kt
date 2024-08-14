@@ -1,9 +1,22 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.merchants.ui
 
 import android.widget.Toast
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -14,14 +27,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,78 +54,81 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.domain.Transaction
+import com.mifospay.core.model.domain.TransactionType
+import com.mifospay.core.model.domain.client.Client
+import com.mifospay.core.model.entity.accounts.savings.SavingAccount
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.ElectricViolet
-import org.mifospay.core.designsystem.theme.InitialAvatarBgColor
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.submitButtonColor
+import org.mifospay.core.designsystem.theme.creditTextColor
+import org.mifospay.core.designsystem.theme.debitTextColor
+import org.mifospay.core.designsystem.theme.otherTextColor
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.feature.merchants.MerchantTransferUiState
 import org.mifospay.feature.merchants.MerchantTransferViewModel
 import org.mifospay.feature.merchants.R
-import org.mifospay.feature.specific.transactions.SpecificTransactionItem
 
 @Composable
-fun MerchantTransferScreenRoute(
-    proceedWithMakeTransferFlow: (String, String) -> Unit,
-    viewModel: MerchantTransferViewModel = hiltViewModel(),
+internal fun MerchantTransferScreenRoute(
     onBackPressed: () -> Unit,
-    merchantName: String,
-    merchantVPA: String,
-    merchantAccountNumber: String
+    proceedWithMakeTransferFlow: (String, String) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: MerchantTransferViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(key1 = Unit) {
-        viewModel.fetchMerchantTransfers(merchantAccountNumber)
-    }
+    val merchantName by viewModel.merchantName.collectAsStateWithLifecycle()
+    val merchantVPA by viewModel.merchantVPA.collectAsStateWithLifecycle()
 
     MerchantTransferScreen(
         uiState = uiState,
-        onBackPressed = onBackPressed,
         merchantName = merchantName,
         merchantVPA = merchantVPA,
-        checkBalanceAvailability = { merchantVPA, transferAmount ->
+        onBackPressed = onBackPressed,
+        checkBalanceAvailability = { vpa, transferAmount ->
             viewModel.checkBalanceAvailability(
-                proceedWithMakeTransferFlow = { externalId, transferAmount ->
-                    proceedWithMakeTransferFlow.invoke(externalId, transferAmount.toString())
+                proceedWithMakeTransferFlow = { externalId, amount ->
+                    proceedWithMakeTransferFlow.invoke(externalId, amount.toString())
                 },
-                merchantVPA,
-                transferAmount.toDoubleOrNull() ?: 0.0
+                externalId = vpa,
+                transferAmount = transferAmount.toDoubleOrNull() ?: 0.0,
             )
-        }
+        },
+        modifier = modifier,
     )
 }
 
 @Composable
-fun MerchantTransferScreen(
+@VisibleForTesting
+internal fun MerchantTransferScreen(
     uiState: MerchantTransferUiState,
-    onBackPressed: () -> Unit,
     merchantName: String,
     merchantVPA: String,
-    checkBalanceAvailability: (String, String) -> Unit
+    onBackPressed: () -> Unit,
+    checkBalanceAvailability: (String, String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     var showBottomSheet by remember { mutableStateOf(true) }
     var amount by rememberSaveable { mutableStateOf("") }
     val context = LocalContext.current
 
     MifosScaffold(
+        modifier = modifier,
         topBarTitle = R.string.feature_merchants_merchant_transaction,
-        backPress = { onBackPressed.invoke() },
+        backPress = onBackPressed,
         scaffoldContent = { paddingValues ->
             Box(
-                modifier = Modifier.padding(paddingValues)
+                modifier = Modifier.padding(paddingValues),
             ) {
                 when (uiState) {
                     is MerchantTransferUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(R.string.feature_merchants_loading),
-                            backgroundColor = MaterialTheme.colorScheme.surface
+                            backgroundColor = MaterialTheme.colorScheme.surface,
                         )
                     }
 
@@ -131,7 +146,7 @@ fun MerchantTransferScreen(
                             title = stringResource(id = R.string.feature_merchants_error_oops),
                             subTitle = stringResource(id = R.string.feature_merchants_no_transactions_found),
                             iconTint = MaterialTheme.colorScheme.onSurface,
-                            iconImageVector = MifosIcons.Info
+                            iconImageVector = MifosIcons.Info,
                         )
                     }
 
@@ -143,7 +158,7 @@ fun MerchantTransferScreen(
                         Toast.makeText(
                             context,
                             stringResource(id = R.string.feature_merchants_insufficient_balance),
-                            Toast.LENGTH_SHORT
+                            Toast.LENGTH_SHORT,
                         ).show()
                     }
                 }
@@ -155,32 +170,39 @@ fun MerchantTransferScreen(
                         amount = amount,
                         onAmountChange = { amount = it },
                         checkBalanceAvailability = checkBalanceAvailability,
-                        onDismiss = { showBottomSheet = false }
+                        onDismiss = { showBottomSheet = false },
                     )
                 }
             }
-        }
+        },
     )
 }
 
 @Composable
-fun TransactionList(transactions: List<Transaction>) {
-    LazyColumn {
-        items(transactions) { transaction ->
+private fun TransactionList(
+    transactions: List<Transaction>,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(modifier) {
+        items(
+            items = transactions,
+            key = { it.transactionId ?: it.transferId },
+        ) { transaction ->
             SpecificTransactionItem(transaction)
-            Divider()
+            HorizontalDivider()
         }
     }
 }
 
 @Composable
-fun MerchantBottomSheet(
+private fun MerchantBottomSheet(
     merchantName: String,
     merchantVPA: String,
     amount: String,
     onAmountChange: (String) -> Unit,
     checkBalanceAvailability: (String, String) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     MifosBottomSheet(
         content = {
@@ -188,18 +210,18 @@ fun MerchantBottomSheet(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp, vertical = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
                     text = stringResource(R.string.feature_merchants_transfer_money_to_this_merchant),
                     color = ElectricViolet,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
 
                 MerchantInfo(
                     merchantName,
-                    merchantVPA
+                    merchantVPA,
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -208,71 +230,166 @@ fun MerchantBottomSheet(
                     onValueChange = onAmountChange,
                     label = stringResource(id = R.string.feature_merchants_amount),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Button(
                     onClick = {
                         checkBalanceAvailability(
                             merchantName,
-                            merchantVPA
+                            merchantVPA,
                         )
                     },
                     colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-                    modifier = Modifier.width(155.dp)
+                    modifier = Modifier.width(155.dp),
                 ) {
-                    Text(stringResource(id = R.string.feature_merchants_submit), color = Color.White)
+                    Text(
+                        stringResource(id = R.string.feature_merchants_submit),
+                        color = Color.White,
+                    )
                 }
             }
         },
-        onDismiss = onDismiss
+        onDismiss = onDismiss,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun MerchantInfo(
+private fun MerchantInfo(
     merchantName: String,
-    merchantVPA: String
+    merchantVPA: String,
+    modifier: Modifier = Modifier,
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(10.dp),
+        modifier = modifier,
+    ) {
         MerchantInitialAvatar(merchantName)
-        Spacer(modifier = Modifier.height(10.dp))
+
         Text(
             text = merchantName,
-            style = MaterialTheme.typography.labelMedium
+            style = MaterialTheme.typography.labelMedium,
         )
-        Spacer(modifier = Modifier.height(9.dp))
+
         Text(
             text = merchantVPA,
             style = MaterialTheme.typography.labelMedium,
-            color = Color.Gray
+            color = Color.Gray,
         )
     }
 }
 
 @Composable
-fun MerchantInitialAvatar(merchantName: String) {
+private fun MerchantInitialAvatar(
+    merchantName: String,
+    modifier: Modifier = Modifier,
+) {
     val initial = merchantName.take(1).uppercase()
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(86.dp)
             .background(
                 color = MaterialTheme.colorScheme.primary,
-                shape = CircleShape
+                shape = CircleShape,
             ),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = initial,
             color = MaterialTheme.colorScheme.onPrimary,
             fontSize = 44.sp,
-            fontWeight = FontWeight.Medium
+            fontWeight = FontWeight.Medium,
         )
     }
 }
 
-class MerchantTransferUiStateProvider :
+@Composable
+private fun SpecificTransactionItem(
+    transaction: Transaction,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier.padding(horizontal = 12.dp)) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            SpecificTransactionAccountInfo(
+                account = transaction.transferDetail.fromAccount,
+                client = transaction.transferDetail.fromClient,
+                modifier = Modifier.weight(1f),
+            )
+            Icon(imageVector = MifosIcons.SendRightTilted, contentDescription = null)
+            SpecificTransactionAccountInfo(
+                account = transaction.transferDetail.toAccount,
+                client = transaction.transferDetail.toClient,
+                modifier = Modifier.weight(1f),
+            )
+        }
+        Spacer(modifier = Modifier.height(12.dp))
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column {
+                Text(
+                    text = stringResource(id = R.string.feature_merchants_transaction_id) + transaction.transactionId,
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary,
+                )
+                Text(
+                    text = stringResource(id = R.string.feature_merchants_transaction_date) + transaction.date,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                Text(
+                    text = when (transaction.transactionType) {
+                        TransactionType.DEBIT -> stringResource(id = R.string.feature_merchants_debits)
+                        TransactionType.CREDIT -> stringResource(id = R.string.feature_merchants_credits)
+                        TransactionType.OTHER -> stringResource(id = R.string.feature_merchants_other)
+                    },
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            }
+            Spacer(modifier = Modifier.weight(1f))
+            Text(
+                text = "${transaction.currency.code}${transaction.amount}",
+                style = MaterialTheme.typography.displaySmall,
+                color = when (transaction.transactionType) {
+                    TransactionType.DEBIT -> debitTextColor
+                    TransactionType.CREDIT -> creditTextColor
+                    TransactionType.OTHER -> otherTextColor
+                },
+            )
+        }
+    }
+}
+
+@Composable
+private fun SpecificTransactionAccountInfo(
+    account: SavingAccount,
+    client: Client,
+    modifier: Modifier = Modifier,
+    accountClicked: (String) -> Unit = {},
+) {
+    Column(
+        modifier = modifier.clickable {
+            accountClicked(account.accountNo)
+        },
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Icon(imageVector = MifosIcons.AccountCircle, contentDescription = null)
+        Text(
+            text = client.displayName,
+            style = MaterialTheme.typography.titleSmall,
+        )
+        Text(
+            text = account.accountNo,
+            style = MaterialTheme.typography.bodyMedium,
+        )
+    }
+}
+
+internal class MerchantTransferUiStateProvider :
     PreviewParameterProvider<MerchantTransferUiState> {
     override val values: Sequence<MerchantTransferUiState>
         get() = sequenceOf(
@@ -286,21 +403,24 @@ class MerchantTransferUiStateProvider :
 
 @Preview(showSystemUi = true)
 @Composable
-fun Preview(@PreviewParameter(MerchantTransferUiStateProvider::class) uiState: MerchantTransferUiState) {
+private fun Preview(
+    @PreviewParameter(MerchantTransferUiStateProvider::class)
+    uiState: MerchantTransferUiState,
+) {
     MifosTheme {
         MerchantTransferScreen(
             uiState = uiState,
-            onBackPressed = {},
-            merchantName = "Naman Dwivedi",
+            merchantName = "New User",
             merchantVPA = "naman.dwivedi2@mifos",
-            checkBalanceAvailability = { _, _ -> }
+            onBackPressed = {},
+            checkBalanceAvailability = { _, _ -> },
         )
     }
 }
 
 @Preview
 @Composable
-fun TransactionItemPreview() {
+private fun TransactionItemPreview() {
     MifosTheme {
         SpecificTransactionItem(Transaction())
     }
@@ -308,7 +428,7 @@ fun TransactionItemPreview() {
 
 @Preview
 @Composable
-fun MerchantBottomSheetPreview() {
+private fun MerchantBottomSheetPreview() {
     MifosTheme {
         MerchantBottomSheet(
             merchantName = "Naman Dwivedi 2",
@@ -316,14 +436,14 @@ fun MerchantBottomSheetPreview() {
             amount = "",
             onAmountChange = {},
             checkBalanceAvailability = { _, _ -> },
-            onDismiss = {}
+            onDismiss = {},
         )
     }
 }
 
 @Preview
 @Composable
-fun MerchantInitialAvatarPreview() {
+private fun MerchantInitialAvatarPreview() {
     MifosTheme {
         MerchantInitialAvatar("Naman")
     }

@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.mifospay.core.network.local_assets.LocalAssetDataSource
-import org.mifospay.core.network.local_assets.MifosLocalAssetDataSource
+import org.mifospay.core.network.localAssets.LocalAssetDataSource
+import org.mifospay.core.network.localAssets.MifosLocalAssetDataSource
 
 @Module
 @InstallIn(SingletonComponent::class)

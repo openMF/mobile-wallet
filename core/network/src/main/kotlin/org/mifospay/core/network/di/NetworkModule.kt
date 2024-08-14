@@ -12,7 +12,7 @@ import org.mifospay.core.network.BaseURL
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.MifosWalletOkHttpClient
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.local_assets.LocalAssetManager
+import org.mifospay.core.network.localAssets.LocalAssetManager
 import org.mifospay.core.network.services.AccountTransfersService
 import org.mifospay.core.network.services.AuthenticationService
 import org.mifospay.core.network.services.BeneficiaryService
@@ -38,6 +38,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
+@Suppress("TooManyFunctions")
 class NetworkModule {
 
     @Provides

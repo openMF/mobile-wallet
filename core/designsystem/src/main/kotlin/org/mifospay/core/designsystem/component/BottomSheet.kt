@@ -23,7 +23,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun MifosBottomSheet(
     content: @Composable () -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val modalSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -50,7 +51,8 @@ fun MifosBottomSheet(
                 showBottomSheet = false
                 dismissSheet()
             },
-            sheetState = modalSheetState
+            sheetState = modalSheetState,
+            modifier = modifier,
         ) {
             content()
         }

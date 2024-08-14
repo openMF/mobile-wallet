@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.read.qr
 
 import android.graphics.Bitmap
@@ -14,24 +23,26 @@ import javax.inject.Inject
 @HiltViewModel
 class ReadQrViewModel @Inject constructor(
     private val useCaseHandler: UseCaseHandler,
-    private val scanQrUseCase: ScanQr
+    private val scanQrUseCase: ScanQr,
 ) : ViewModel() {
 
-    private val _readQrUiState = MutableStateFlow<ReadQrUiState>(ReadQrUiState.Loading)
-    val readQrUiState = _readQrUiState.asStateFlow()
+    private val mReadQrUiState = MutableStateFlow<ReadQrUiState>(ReadQrUiState.Loading)
+    val readQrUiState = mReadQrUiState.asStateFlow()
 
     fun scanQr(bitmap: Bitmap) {
         useCaseHandler.execute(
-            scanQrUseCase, ScanQr.RequestValues(bitmap),
+            scanQrUseCase,
+            ScanQr.RequestValues(bitmap),
             object : UseCase.UseCaseCallback<ScanQr.ResponseValue?> {
                 override fun onSuccess(response: ScanQr.ResponseValue?) {
-                    _readQrUiState.update { ReadQrUiState.Success(response?.result) }
+                    mReadQrUiState.update { ReadQrUiState.Success(response?.result) }
                 }
 
                 override fun onError(message: String) {
-                    _readQrUiState.update { ReadQrUiState.Error }
+                    mReadQrUiState.update { ReadQrUiState.Error }
                 }
-            })
+            },
+        )
     }
 }
 

@@ -1,5 +1,15 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.standing.instruction
 
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -29,54 +39,56 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 
 @Composable
-fun SIDetailsScreen(
+internal fun SIDetailsScreen(
+    onClickCreateNew: () -> Unit,
+    onBackPress: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: StandingInstructionDetailsViewModel = hiltViewModel(),
-    onBackPress: () -> Unit
 ) {
     val siDetailUiState by viewModel.siDetailsUiState.collectAsStateWithLifecycle()
-    val updateSuccess by viewModel.updateSuccess.collectAsStateWithLifecycle()
-    val deleteSuccess by viewModel.deleteSuccess.collectAsStateWithLifecycle()
 
     SIDetailsScreen(
         siDetailsUiState = siDetailUiState,
+        onClickCreateNew = onClickCreateNew,
         onBackPress = onBackPress,
-        updateSuccess = updateSuccess,
-        deleteSuccess = deleteSuccess
+        modifier = modifier,
     )
 }
 
 @Composable
-fun SIDetailsScreen(
+@VisibleForTesting
+internal fun SIDetailsScreen(
     siDetailsUiState: SiDetailsUiState,
+    onClickCreateNew: () -> Unit,
     onBackPress: () -> Unit,
-    updateSuccess: Boolean,
-    deleteSuccess: Boolean
+    modifier: Modifier = Modifier,
 ) {
     val floatingActionButtonContent = FloatingActionButtonContent(
-        onClick = { },
+        onClick = onClickCreateNew,
         contentColor = Color.Black,
         content = {
             androidx.compose.material3.Icon(
                 imageVector = MifosIcons.Edit,
-                contentDescription = stringResource(R.string.feature_standing_instruction_downloading_receipt)
+                contentDescription = stringResource(R.string.feature_standing_instruction_downloading_receipt),
             )
-        }
+        },
     )
 
     MifosScaffold(
         topBarTitle = R.string.feature_standing_instruction_details,
         floatingActionButtonContent = floatingActionButtonContent,
-        backPress = {},
+        backPress = onBackPress,
+        modifier = modifier,
         scaffoldContent = {
             when (siDetailsUiState) {
                 SiDetailsUiState.Loading -> MifosLoadingWheel(
                     modifier = Modifier.fillMaxWidth(),
-                    contentDesc = stringResource(R.string.feature_standing_instruction_loading)
+                    contentDesc = stringResource(R.string.feature_standing_instruction_loading),
                 )
 
                 is SiDetailsUiState.ShowSiDetails -> {
                     Column(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     ) {
                         SIDetailsContent(
                             paddingValues = it,
@@ -84,24 +96,26 @@ fun SIDetailsScreen(
                             siId = siDetailsUiState.standingInstruction.id,
                             amount = siDetailsUiState.standingInstruction.amount,
                             validFrom = siDetailsUiState.standingInstruction.validFrom,
-                            validTill = siDetailsUiState.standingInstruction.validTill ?: emptyList(),
-                            siToName = siDetailsUiState.standingInstruction.toClient.displayName ?: "",
+                            validTill = siDetailsUiState.standingInstruction.validTill
+                                ?: emptyList(),
+                            siToName = siDetailsUiState.standingInstruction.toClient.displayName
+                                ?: "",
                             siFromNumber = siDetailsUiState.standingInstruction.fromClient.mobileNo,
                             siToNumber = siDetailsUiState.standingInstruction.toClient.mobileNo,
                             recurrenceInterval = siDetailsUiState.standingInstruction.recurrenceInterval,
                             status = siDetailsUiState.standingInstruction.status.value ?: "",
-                            siFromName = siDetailsUiState.standingInstruction.fromAccount.clientName ?: ""
+                            siFromName = siDetailsUiState.standingInstruction.fromAccount.clientName
+                                ?: "",
                         )
                     }
-
                 }
             }
-        }
+        },
     )
 }
 
 @Composable
-fun SIDetailsContent(
+private fun SIDetailsContent(
     paddingValues: PaddingValues,
     siName: String,
     siId: Long,
@@ -119,33 +133,33 @@ fun SIDetailsContent(
         modifier = Modifier
             .padding(paddingValues)
             .padding(horizontal = 16.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Text(
             text = siName,
             fontSize = 30.sp,
             color = Color.Black,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         )
 
         Text(
             text = stringResource(R.string.feature_standing_instruction_standing_instruction_id),
             fontSize = 16.sp,
             color = Color.DarkGray,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         )
         Text(
             text = siId.toString(),
             fontSize = 16.sp,
             color = Color.Blue,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
         )
 
         Text(
             text = stringResource(id = R.string.feature_standing_instruction_amount),
             fontSize = 16.sp,
             color = Color.DarkGray,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
@@ -153,7 +167,7 @@ fun SIDetailsContent(
                 fontSize = 16.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(end = 16.dp)
+                modifier = Modifier.padding(end = 16.dp),
             )
         }
 
@@ -161,28 +175,28 @@ fun SIDetailsContent(
             text = stringResource(R.string.feature_standing_instruction_valid_from),
             fontSize = 16.sp,
             color = Color.DarkGray,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         )
 
         Text(
             text = validFrom.toString(),
             fontSize = 16.sp,
             color = Color.Black,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
         )
 
         Text(
             text = stringResource(id = R.string.feature_standing_instruction_valid_till),
             fontSize = 16.sp,
             color = Color.DarkGray,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = validTill.toString(),
                 fontSize = 16.sp,
                 color = Color.Black,
-                modifier = Modifier.padding(end = 16.dp)
+                modifier = Modifier.padding(end = 16.dp),
             )
         }
 
@@ -190,52 +204,52 @@ fun SIDetailsContent(
             text = stringResource(R.string.feature_standing_instruction_to),
             fontSize = 16.sp,
             color = Color.DarkGray,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         )
         Text(
             text = siToName,
             fontSize = 16.sp,
             color = Color.Black,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp),
         )
         Text(
-            text = siToNumber, // Replace with actual data
+            text = siToNumber,
             fontSize = 16.sp,
             color = Color.Black,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
         )
 
         Text(
             text = stringResource(R.string.feature_standing_instruction_from),
             fontSize = 16.sp,
             color = Color.DarkGray,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         )
         Text(
             text = siFromName,
             fontSize = 16.sp,
             color = Color.Black,
-            modifier = Modifier.padding(bottom = 8.dp)
+            modifier = Modifier.padding(bottom = 8.dp),
         )
         Text(
-            text = siFromNumber, // Replace with actual data
+            text = siFromNumber,
             fontSize = 16.sp,
             color = Color.Black,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
         )
 
         Text(
             text = stringResource(id = R.string.feature_standing_instruction_interval),
             fontSize = 16.sp,
             color = Color.DarkGray,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         )
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text(
                 text = recurrenceInterval.toString(),
                 fontSize = 16.sp,
                 color = Color.Black,
-                modifier = Modifier.padding(end = 16.dp)
+                modifier = Modifier.padding(end = 16.dp),
             )
         }
 
@@ -243,34 +257,38 @@ fun SIDetailsContent(
             text = stringResource(R.string.feature_standing_instruction_status),
             fontSize = 16.sp,
             color = Color.DarkGray,
-            modifier = Modifier.padding(vertical = 8.dp)
+            modifier = Modifier.padding(vertical = 8.dp),
         )
         Text(
-            text = status, // Replace with actual data
+            text = status,
             fontSize = 16.sp,
             color = Color.Blue,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewSIDetailsScreen() {
-    SIDetailsScreen(siDetailsUiState = SiDetailsUiState.ShowSiDetails(
-        StandingInstruction(
-            id = 1,
-            name = "Dummy Standing Instruction",
-            fromClient = Client(),
-            fromAccount = SavingAccount(),
-            toClient = Client(),
-            toAccount = SavingAccount(),
-            status = Status(),
-            amount = 1000.0,
-            validFrom = listOf(2024, 1, 1),
-            validTill = listOf(2025, 12, 31),
-            recurrenceInterval = 1,
-            recurrenceOnMonthDay = listOf(1)
-        )
-    ), onBackPress = {}, updateSuccess = false, deleteSuccess = false)
+private fun PreviewSIDetailsScreen() {
+    SIDetailsScreen(
+        siDetailsUiState = SiDetailsUiState.ShowSiDetails(
+            StandingInstruction(
+                id = 1,
+                name = "Dummy Standing Instruction",
+                fromClient = Client(),
+                fromAccount = SavingAccount(),
+                toClient = Client(),
+                toAccount = SavingAccount(),
+                status = Status(),
+                amount = 1000.0,
+                validFrom = listOf(2024, 1, 1),
+                validTill = listOf(2025, 12, 31),
+                recurrenceInterval = 1,
+                recurrenceOnMonthDay = listOf(1),
+            ),
+        ),
+        onBackPress = {},
+        onClickCreateNew = {},
+    )
 }

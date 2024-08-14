@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.merchants
 
 import androidx.lifecycle.ViewModel
@@ -25,7 +34,7 @@ import javax.inject.Inject
 class MerchantViewModel @Inject constructor(
     private val mUseCaseHandler: UseCaseHandler,
     private val mFetchMerchantsUseCase: FetchMerchants,
-    private val mUseCaseFactory: UseCaseFactory
+    private val mUseCaseFactory: UseCaseFactory,
 ) : ViewModel() {
 
     @Inject
@@ -35,7 +44,7 @@ class MerchantViewModel @Inject constructor(
     private val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()
 
     private val _merchantUiState = MutableStateFlow<MerchantUiState>(MerchantUiState.Loading)
-     val merchantUiState: StateFlow<MerchantUiState> = _merchantUiState
+    val merchantUiState: StateFlow<MerchantUiState> = _merchantUiState
 
     init {
         fetchMerchants()
@@ -51,7 +60,6 @@ class MerchantViewModel @Inject constructor(
             _isRefreshing.emit(false)
         }
     }
-
 
     val merchantsListUiState: StateFlow<MerchantUiState> = searchQuery
         .map { q ->
@@ -74,17 +82,17 @@ class MerchantViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
-            initialValue = MerchantUiState.ShowMerchants(arrayListOf())
+            initialValue = MerchantUiState.ShowMerchants(arrayListOf()),
         )
 
     fun updateSearchQuery(query: String) {
         _searchQuery.update { query }
     }
 
-
     private fun fetchMerchants() {
         _merchantUiState.value = MerchantUiState.Loading
-        mUseCaseHandler.execute(mFetchMerchantsUseCase,
+        mUseCaseHandler.execute(
+            mFetchMerchantsUseCase,
             FetchMerchants.RequestValues(),
             object : UseCase.UseCaseCallback<FetchMerchants.ResponseValue> {
                 override fun onSuccess(response: FetchMerchants.ResponseValue) {
@@ -94,26 +102,27 @@ class MerchantViewModel @Inject constructor(
                 override fun onError(message: String) {
                     _merchantUiState.value = MerchantUiState.Error(message)
                 }
-            })
+            },
+        )
     }
 
     fun retrieveMerchantsData(
-        savingsWithAssociationsList: List<SavingsWithAssociations>
+        savingsWithAssociationsList: List<SavingsWithAssociations>,
     ) {
         for (i in savingsWithAssociationsList.indices) {
             mTaskLooper.addTask(
                 useCase = mUseCaseFactory.getUseCase(Constants.FETCH_CLIENT_DETAILS_USE_CASE)
-                        as UseCase<FetchClientDetails.RequestValues, FetchClientDetails.ResponseValue>,
+                    as UseCase<FetchClientDetails.RequestValues, FetchClientDetails.ResponseValue>,
                 values = FetchClientDetails.RequestValues(
-                    savingsWithAssociationsList[i].clientId.toLong()
+                    savingsWithAssociationsList[i].clientId.toLong(),
                 ),
-                taskData = TaskLooper.TaskData("Client data", i)
+                taskData = TaskLooper.TaskData("Client data", i),
             )
         }
         mTaskLooper.listen(object : TaskLooper.Listener {
             override fun <R : UseCase.ResponseValue?> onTaskSuccess(
                 taskData: TaskLooper.TaskData,
-                response: R
+                response: R,
             ) {
                 val responseValue = response as FetchClientDetails.ResponseValue
                 savingsWithAssociationsList[taskData.taskId].externalId =

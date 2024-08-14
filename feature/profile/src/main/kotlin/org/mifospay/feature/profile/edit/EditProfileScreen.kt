@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.profile.edit
 
 import android.Manifest
@@ -29,7 +38,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -67,48 +75,44 @@ import java.util.Locale
 
 @Composable
 fun EditProfileScreenRoute(
-    viewModel: EditProfileViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
-    getUri:(context: Context, file: File) -> Uri
+    getUri: (context: Context, file: File) -> Uri,
+    modifier: Modifier = Modifier,
+    viewModel: EditProfileViewModel = hiltViewModel(),
 ) {
     val editProfileUiState by viewModel.editProfileUiState.collectAsStateWithLifecycle()
     val updateSuccess by viewModel.updateSuccess.collectAsStateWithLifecycle()
 
     val context = LocalContext.current
     val file = createImageFile(context)
-    val uri = getUri(context,file)
-
-    LaunchedEffect(key1 = true) {
-        viewModel.fetchProfileDetails()
-    }
+    val uri = getUri(context, file)
 
     EditProfileScreen(
         editProfileUiState = editProfileUiState,
-        onBackClick = onBackClick,
-        updateEmail = { email ->
-            viewModel.updateEmail(email)
-        },
-        updateMobile = { mobile ->
-            viewModel.updateMobile(mobile)
-        },
         updateSuccess = updateSuccess,
-        uri
+        onBackClick = onBackClick,
+        updateEmail = viewModel::updateEmail,
+        updateMobile = viewModel::updateMobile,
+        modifier = modifier,
+        uri = uri,
     )
 }
 
 @Composable
 fun EditProfileScreen(
     editProfileUiState: EditProfileUiState,
+    updateSuccess: Boolean,
     onBackClick: () -> Unit,
     updateEmail: (String) -> Unit,
     updateMobile: (String) -> Unit,
-    updateSuccess: Boolean,
-    uri: Uri?
+    modifier: Modifier = Modifier,
+    uri: Uri? = null,
 ) {
     var showDiscardChangesDialog by rememberSaveable { mutableStateOf(false) }
+
     Box(
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = modifier
+            .fillMaxSize(),
     ) {
         MifosScaffold(
             topBarTitle = R.string.feature_profile_edit_profile,
@@ -118,7 +122,7 @@ fun EditProfileScreen(
                     EditProfileUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(R.string.feature_profile_loading),
-                            backgroundColor = MaterialTheme.colorScheme.surface
+                            backgroundColor = MaterialTheme.colorScheme.surface,
                         )
                     }
 
@@ -133,16 +137,17 @@ fun EditProfileScreen(
                             initialMobile,
                             initialVpa,
                             initialEmail,
-                            uri,
+                            updateSuccess = updateSuccess,
+                            contentPadding = it,
                             updateEmail = updateEmail,
                             updateMobile = updateMobile,
-                            contentPadding = it,
                             onBackClick = onBackClick,
-                            updateSuccess = updateSuccess
+                            uri = uri,
                         )
                     }
                 }
-            })
+            },
+        )
 
         MifosDialogBox(
             showDialogState = showDiscardChangesDialog,
@@ -153,23 +158,24 @@ fun EditProfileScreen(
                 showDiscardChangesDialog = false
                 onBackClick.invoke()
             },
-            dismissButtonText = R.string.feature_profile_dismiss_text
+            dismissButtonText = R.string.feature_profile_dismiss_text,
         )
     }
 }
 
 @Composable
-fun EditProfileScreenContent(
+private fun EditProfileScreenContent(
     initialUsername: String,
     initialMobile: String,
     initialVpa: String,
     initialEmail: String,
-    uri: Uri?,
+    updateSuccess: Boolean,
     contentPadding: PaddingValues,
     updateEmail: (String) -> Unit,
     updateMobile: (String) -> Unit,
-    updateSuccess: Boolean,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    uri: Uri? = null,
 ) {
     var username by rememberSaveable { mutableStateOf(initialUsername) }
     var mobile by rememberSaveable { mutableStateOf(initialMobile) }
@@ -181,14 +187,12 @@ fun EditProfileScreenContent(
 
     PermissionBox(
         requiredPermissions = if (Build.VERSION.SDK_INT >= 33) {
-            listOf(
-                Manifest.permission.CAMERA
-            )
+            listOf(Manifest.permission.CAMERA)
         } else {
             listOf(
                 Manifest.permission.CAMERA,
                 Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
             )
         },
         title = R.string.feature_profile_permission_required,
@@ -202,7 +206,7 @@ fun EditProfileScreenContent(
                 }
 
             val galleryLauncher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.GetContent()
+                contract = ActivityResultContracts.GetContent(),
             ) { uri: Uri? ->
                 uri?.let {
                     imageUri = uri
@@ -213,45 +217,49 @@ fun EditProfileScreenContent(
                 MifosBottomSheet(
                     content = {
                         EditProfileBottomSheetContent(
-                            {
-                                cameraLauncher.launch(uri)
+                            onClickProfilePicture = {
+                                if (uri != null) {
+                                    cameraLauncher.launch(uri)
+                                }
                                 showBottomSheet = false
                             },
-                            {
+                            onChangeProfilePicture = {
                                 galleryLauncher.launch("image/*")
                                 showBottomSheet = false
                             },
-                            {
+                            onRemoveProfilePicture = {
                                 imageUri = null
                                 showBottomSheet = false
-                            })
+                            },
+                        )
                     },
-                    onDismiss = { showBottomSheet = false }
+                    onDismiss = { showBottomSheet = false },
                 )
             }
-        }
+        },
     )
     Box(
-        modifier = Modifier
+        modifier = modifier
             .padding(contentPadding)
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.surface)
-                .verticalScroll(rememberScrollState())
+                .verticalScroll(rememberScrollState()),
         ) {
             EditProfileScreenImage(
                 imageUri = imageUri,
-                onCameraIconClick = { showBottomSheet = true })
+                onCameraIconClick = { showBottomSheet = true },
+            )
             MfOutlinedTextField(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(start = 16.dp, end = 16.dp),
                 value = username,
                 label = stringResource(id = R.string.feature_profile_username),
-                onValueChange = { username = it }
+                onValueChange = { username = it },
             )
             MfOutlinedTextField(
                 modifier = Modifier
@@ -259,7 +267,7 @@ fun EditProfileScreenContent(
                     .padding(start = 16.dp, end = 16.dp),
                 value = email,
                 label = stringResource(id = R.string.feature_profile_email),
-                onValueChange = { email = it }
+                onValueChange = { email = it },
             )
             MfOutlinedTextField(
                 modifier = Modifier
@@ -267,12 +275,12 @@ fun EditProfileScreenContent(
                     .padding(start = 16.dp, end = 16.dp),
                 value = vpa,
                 label = stringResource(id = R.string.feature_profile_vpa),
-                onValueChange = { vpa = it }
+                onValueChange = { vpa = it },
             )
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp)
+                    .padding(start = 16.dp, end = 16.dp),
             ) {
                 val keyboardController = LocalSoftwareKeyboardController.current
                 if (LocalInspectionMode.current) {
@@ -292,7 +300,7 @@ fun EditProfileScreenContent(
                             }
                         },
                         label = { Text(stringResource(id = R.string.feature_profile_phone_number)) },
-                        keyboardActions = KeyboardActions { keyboardController?.hide() }
+                        keyboardActions = KeyboardActions { keyboardController?.hide() },
                     )
                 }
             }
@@ -309,11 +317,15 @@ fun EditProfileScreenContent(
                         // same behaviour as onBackPress, hence reused the callback
                         onBackClick.invoke()
                     } else {
-                        Toast.makeText(context, R.string.feature_profile_failed_to_save_changes, Toast.LENGTH_SHORT)
+                        Toast.makeText(
+                            context,
+                            R.string.feature_profile_failed_to_save_changes,
+                            Toast.LENGTH_SHORT,
+                        )
                             .show()
                     }
                 },
-                buttonText = R.string.feature_profile_save
+                buttonText = R.string.feature_profile_save,
             )
         }
     }
@@ -327,12 +339,13 @@ private fun isDataSaveNecessary(input: String, initialInput: String): Boolean {
 fun EditProfileBottomSheetContent(
     onClickProfilePicture: () -> Unit,
     onChangeProfilePicture: () -> Unit,
-    onRemoveProfilePicture: () -> Unit
+    onRemoveProfilePicture: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
-            .padding(top = 8.dp, bottom = 12.dp)
+            .padding(top = 8.dp, bottom = 12.dp),
     ) {
         Row(
             modifier = Modifier
@@ -340,12 +353,12 @@ fun EditProfileBottomSheetContent(
                 .padding(12.dp)
                 .clickable { onClickProfilePicture.invoke() },
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(imageVector = Camera, contentDescription = null)
             Text(
                 text = stringResource(id = R.string.feature_profile_click_profile_picture),
-                style = historyItemTextStyle
+                style = historyItemTextStyle,
             )
         }
         Row(
@@ -354,12 +367,12 @@ fun EditProfileBottomSheetContent(
                 .padding(12.dp)
                 .clickable { onChangeProfilePicture.invoke() },
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(imageVector = PhotoLibrary, contentDescription = null)
             Text(
                 text = stringResource(id = R.string.feature_profile_change_profile_picture),
-                style = historyItemTextStyle
+                style = historyItemTextStyle,
             )
         }
         Row(
@@ -368,46 +381,50 @@ fun EditProfileBottomSheetContent(
                 .padding(12.dp)
                 .clickable { onRemoveProfilePicture.invoke() },
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(imageVector = Delete, contentDescription = null)
             Text(
                 text = stringResource(id = R.string.feature_profile_remove_profile_picture),
-                style = historyItemTextStyle
+                style = historyItemTextStyle,
             )
         }
     }
 }
 
 @Composable
-fun EditProfileSaveButton(onClick: () -> Unit, buttonText: Int) {
+private fun EditProfileSaveButton(
+    onClick: () -> Unit,
+    buttonText: Int,
+    modifier: Modifier = Modifier,
+) {
     Button(
-        onClick = { onClick.invoke() },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
         shape = RoundedCornerShape(10.dp),
-        contentPadding = PaddingValues(12.dp)
+        contentPadding = PaddingValues(12.dp),
     ) {
         Text(
             text = stringResource(id = buttonText),
-            style = styleMedium16sp.copy(MaterialTheme.colorScheme.onPrimary)
+            style = styleMedium16sp.copy(MaterialTheme.colorScheme.onPrimary),
         )
     }
 }
 
-fun createImageFile(context: Context): File {
+private fun createImageFile(context: Context): File {
     val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
     val storageDir: File? = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
     return File.createTempFile(
         "JPEG_${timeStamp}_",
         ".jpg",
-        storageDir
+        storageDir,
     )
 }
 
-class EditProfilePreviewProvider : PreviewParameterProvider<EditProfileUiState> {
+internal class EditProfilePreviewProvider : PreviewParameterProvider<EditProfileUiState> {
     override val values: Sequence<EditProfileUiState>
         get() = sequenceOf(
             EditProfileUiState.Loading,
@@ -417,25 +434,25 @@ class EditProfilePreviewProvider : PreviewParameterProvider<EditProfileUiState> 
                 username = "John",
                 email = "john@mifos.org",
                 vpa = "vpa",
-                mobile = "+1 55557772901"
-            )
+                mobile = "+1 55557772901",
+            ),
         )
-
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun EditProfileScreenPreview(
-    @PreviewParameter(EditProfilePreviewProvider::class) editProfileUiState: EditProfileUiState
+    @PreviewParameter(EditProfilePreviewProvider::class)
+    editProfileUiState: EditProfileUiState,
 ) {
     MifosTheme {
         EditProfileScreen(
             editProfileUiState = editProfileUiState,
+            updateSuccess = false,
             onBackClick = {},
             updateEmail = {},
             updateMobile = {},
-            updateSuccess = false,
-            uri = null
+            uri = null,
         )
     }
 }

@@ -1,11 +1,10 @@
-import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
-
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     dependencies {
         classpath(libs.google.oss.licenses.plugin) {
             exclude(group = "com.google.protobuf")
         }
+        classpath(libs.spotless.gradle)
     }
 }
 
@@ -26,33 +25,67 @@ plugins {
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.kotlin.android) apply false
-    id("io.gitlab.arturbosch.detekt").version("1.18.1")
-    alias(libs.plugins.module.graph) apply true // Plugin applied to allow module graph generation
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.detekt.compiler)
+    // Plugin applied to allow module graph generation
+    alias(libs.plugins.module.graph) apply true
+    alias(libs.plugins.spotless)
 }
 
-val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) {
-    description = "Overrides current baseline."
-    ignoreFailures.set(true)
-    parallel.set(true)
-    setSource(files(rootDir))
-    config.setFrom(files("$rootDir/detekt.yml"))
-    baseline.set(file("$rootDir/baseline.xml"))
-    include("**/*.kt")
-    include("**/*.kts")
-    exclude("**/resources/**")
-    exclude("**/build/**")
-    exclude("**/buildSrc/**")
-    exclude("**/test/**/*.kt")
+val detektFormatting = libs.detekt.formatting
+val twitterComposeRules = libs.twitter.detekt.compose
+val ktlintVersion = "1.0.1"
+
+val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
+    output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.html")) // or "reports/detekt/merge.sarif"
 }
 
-allprojects {
-    apply(plugin = "io.gitlab.arturbosch.detekt")
+subprojects {
+    apply {
+        plugin("io.gitlab.arturbosch.detekt")
+        plugin("com.diffplug.spotless")
+    }
 
-    detekt {
-        config = files("$rootDir/config/detekt/detekt.yml")
-        buildUponDefaultConfig = true
-        parallel = true
-        ignoreFailures = false
+    tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+        config.from(rootProject.files("config/detekt/detekt.yml"))
+        reports.xml.required.set(true)
+        finalizedBy(reportMerge)
+    }
+
+    extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension> {
+        kotlin {
+            target("**/*.kt")
+            targetExclude("**/build/**/*.kt")
+            ktlint(ktlintVersion).editorConfigOverride(
+                mapOf(
+                    "android" to "true",
+                ),
+            )
+            licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
+        }
+        format("kts") {
+            target("**/*.kts")
+            targetExclude("**/build/**/*.kts")
+            // Look for the first line that doesn't have a block comment (assumed to be the license)
+            licenseHeaderFile(rootProject.file("spotless/copyright.kts"), "(^(?![\\/ ]\\*).*$)")
+        }
+        format("xml") {
+            target("**/*.xml")
+            targetExclude("**/build/**/*.xml")
+            // Look for the first XML tag that isn't a comment (<!--) or the xml declaration (<?xml)
+            licenseHeaderFile(rootProject.file("spotless/copyright.xml"), "(<[^!?])")
+        }
+    }
+
+    reportMerge {
+        input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map {
+            it.htmlReportFile }
+        )
+    }
+
+    dependencies {
+        detektPlugins(detektFormatting)
+        detektPlugins(twitterComposeRules)
     }
 }
 

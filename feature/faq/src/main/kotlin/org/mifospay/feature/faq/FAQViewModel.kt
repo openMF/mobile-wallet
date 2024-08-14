@@ -1,12 +1,20 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.faq
 
 import androidx.lifecycle.ViewModel
-import com.example.faq.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class FAQViewModel @Inject constructor() : ViewModel() {
+internal class FAQViewModel @Inject constructor() : ViewModel() {
 
     /**
      * Retrieves a list of Frequently Asked Questions (FAQs).
@@ -23,7 +31,7 @@ class FAQViewModel @Inject constructor() : ViewModel() {
             FAQ(R.string.feature_faq_question1, R.string.feature_faq_answer1),
             FAQ(R.string.feature_faq_question2, R.string.feature_faq_answer2),
             FAQ(R.string.feature_faq_question3, R.string.feature_faq_answer3),
-            FAQ(R.string.feature_faq_question4, R.string.feature_faq_answer4)
+            FAQ(R.string.feature_faq_question4, R.string.feature_faq_answer4),
         )
     }
 }

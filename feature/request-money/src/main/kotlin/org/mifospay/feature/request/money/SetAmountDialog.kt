@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.request.money
 
 import android.widget.Toast
@@ -34,13 +43,14 @@ import org.mifospay.core.designsystem.component.MifosCustomDialog
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.icon.MifosIcons
 
-@Suppress("MaxLineLength")
+@Suppress("MaxLineLength", "ReturnCount")
 @Composable
-fun SetAmountDialog(
+internal fun SetAmountDialog(
     dismissDialog: () -> Unit,
     prefilledCurrency: String,
     prefilledAmount: String,
     confirmAmount: (String, String) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     var amount by rememberSaveable { mutableStateOf(prefilledAmount) }
@@ -51,16 +61,22 @@ fun SetAmountDialog(
     LaunchedEffect(key1 = amount) {
         amountValidator = when {
             amount.trim() == "" -> null
-            amount.trim().any { it.isLetter() }
-                    || amount.trim().toDoubleOrNull() == null -> context.getString(R.string.feature_request_money_enter_valid_amount)
-            amount.trim().toDouble().compareTo(0.0) <= 0 -> context.getString(R.string.feature_request_money_enter_valid_amount)
+            amount.trim().any { it.isLetter() } ||
+                amount.trim()
+                    .toDoubleOrNull() == null -> context.getString(R.string.feature_request_money_enter_valid_amount)
+
+            amount.trim().toDouble()
+                .compareTo(0.0) <= 0 -> context.getString(R.string.feature_request_money_enter_valid_amount)
+
             else -> null
         }
     }
 
     LaunchedEffect(key1 = currency) {
         currencyValidator = when {
-            currency.trim().isEmpty() -> context.getString(R.string.feature_request_money_enter_currency)
+            currency.trim()
+                .isEmpty() -> context.getString(R.string.feature_request_money_enter_currency)
+
             else -> null
         }
     }
@@ -80,18 +96,17 @@ fun SetAmountDialog(
     }
 
     MifosCustomDialog(
-        onDismiss = { dismissDialog() },
+        onDismiss = dismissDialog,
         content = {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surface
+                color = MaterialTheme.colorScheme.surface,
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-
                     Text(
                         text = stringResource(id = R.string.feature_request_money_set_amount),
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -102,18 +117,20 @@ fun SetAmountDialog(
                         modifier = Modifier.fillMaxWidth(),
                         label = stringResource(id = R.string.feature_request_money_set_amount),
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number
+                            keyboardType = KeyboardType.Number,
                         ),
                         trailingIcon = {
-                            IconButton(onClick = {
-                                amount = ""
-                            }) {
+                            IconButton(
+                                onClick = {
+                                    amount = ""
+                                },
+                            ) {
                                 Icon(
                                     imageVector = MifosIcons.Cancel,
                                     contentDescription = null,
                                 )
                             }
-                        }
+                        },
                     )
 
                     MfOutlinedTextField(
@@ -122,17 +139,16 @@ fun SetAmountDialog(
                         modifier = Modifier.fillMaxWidth(),
                         label = stringResource(id = R.string.feature_request_money_currency),
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text
-                        )
+                            keyboardType = KeyboardType.Text,
+                        ),
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
+                        horizontalArrangement = Arrangement.End,
                     ) {
-
                         MifosOutlinedButton(onClick = { dismissDialog() }) {
                             Text(text = stringResource(id = R.string.feature_request_money_cancel))
                         }
@@ -144,24 +160,25 @@ fun SetAmountDialog(
                                 if (validateAllFields()) {
                                     confirmAmount(amount, currency)
                                 }
-                            }
+                            },
                         ) {
                             Text(text = stringResource(id = R.string.feature_request_money_confirm))
                         }
                     }
                 }
             }
-        }
+        },
+        modifier = modifier,
     )
 }
 
 @Preview
 @Composable
-fun SetAmountDialogPreview() {
+private fun SetAmountDialogPreview() {
     SetAmountDialog(
         dismissDialog = {},
         prefilledAmount = "",
         confirmAmount = { _, _ -> },
-        prefilledCurrency = ""
+        prefilledCurrency = "",
     )
 }

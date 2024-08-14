@@ -2,19 +2,15 @@
 //  ContentView.swift
 //  iosApp
 //
-//  Created by Pratyush Singh on 21/07/24.
+//  Created by Apple on 14/08/24.
 //
 
 import SwiftUI
+import shared
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
+        Text(Greeting().greet())
         .padding()
     }
 }

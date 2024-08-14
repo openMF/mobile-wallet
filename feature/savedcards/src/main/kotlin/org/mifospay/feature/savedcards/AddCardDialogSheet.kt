@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.savedcards
 
 import android.widget.Toast
@@ -32,30 +41,31 @@ import org.mifospay.core.designsystem.utils.ExpirationDateMask
 import org.mifospay.savedcards.R
 import java.util.Calendar
 
-@Suppress("MaxLineLength")
 @Composable
-fun AddCardDialogSheet(
+internal fun AddCardDialogSheet(
     cancelClicked: () -> Unit,
     addClicked: (Card) -> Unit,
-    onDismiss: () -> Unit
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-
     MifosBottomSheet(
         content = {
             AddCardDialogSheetContent(
                 cancelClicked = cancelClicked,
-                addClicked = addClicked
+                addClicked = addClicked,
             )
         },
-        onDismiss = onDismiss
+        onDismiss = onDismiss,
+        modifier = modifier,
     )
 }
 
-@Suppress("MaxLineLength")
+@Suppress("MaxLineLength", "CyclomaticComplexMethod", "ReturnCount")
 @Composable
-fun AddCardDialogSheetContent(
+private fun AddCardDialogSheetContent(
     cancelClicked: () -> Unit,
-    addClicked: (Card) -> Unit
+    addClicked: (Card) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     var firstName by rememberSaveable { mutableStateOf("") }
@@ -68,7 +78,6 @@ fun AddCardDialogSheetContent(
     var creditCardNumberValidator by rememberSaveable { mutableStateOf<String?>(null) }
     var expirationValidator by rememberSaveable { mutableStateOf<String?>(null) }
     var cvvValidator by rememberSaveable { mutableStateOf<String?>(null) }
-
 
     LaunchedEffect(key1 = firstName) {
         firstNameValidator = when {
@@ -105,9 +114,11 @@ fun AddCardDialogSheetContent(
                 .isEmpty() -> context.getString(R.string.feature_savedcards_all_fields_required)
 
             expiration.length < 4 -> context.getString(R.string.feature_savedcards_expiry_date_length_error)
-            (expiration.substring(2, 4) == Calendar.getInstance()[Calendar.YEAR].toString()
-                .substring(2, 4) && expiration.substring(0, 2)
-                .toInt() < Calendar.getInstance()[Calendar.MONTH] + 1) || expiration.substring(0, 2)
+            (
+                expiration.substring(2, 4) == Calendar.getInstance()[Calendar.YEAR].toString()
+                    .substring(2, 4) && expiration.substring(0, 2)
+                    .toInt() < Calendar.getInstance()[Calendar.MONTH] + 1
+                ) || expiration.substring(0, 2)
                 .toInt() > 12 -> context.getString(R.string.feature_savedcards_invalid_expiry_date)
 
             else -> null
@@ -158,22 +169,22 @@ fun AddCardDialogSheetContent(
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         MifosOutlinedTextField(
             value = firstName,
             onValueChange = { firstName = it },
             modifier = Modifier.fillMaxWidth(),
-            label = R.string.feature_savedcards_first_name
+            label = R.string.feature_savedcards_first_name,
         )
         Spacer(modifier = Modifier.height(8.dp))
         MifosOutlinedTextField(
             value = lastName,
             onValueChange = { lastName = it },
             modifier = Modifier.fillMaxWidth(),
-            label = R.string.feature_savedcards_last_name
+            label = R.string.feature_savedcards_last_name,
         )
         Spacer(modifier = Modifier.height(8.dp))
         MifosOutlinedTextField(
@@ -181,7 +192,7 @@ fun AddCardDialogSheetContent(
             onValueChange = { if (it.length <= 16) creditCardNumber = it },
             modifier = Modifier.fillMaxWidth(),
             label = R.string.feature_savedcards_credit_card_number,
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword)
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword),
         )
         Spacer(modifier = Modifier.height(16.dp))
         Text(text = stringResource(id = R.string.feature_savedcards_expiry_date))
@@ -193,7 +204,7 @@ fun AddCardDialogSheetContent(
                 modifier = Modifier.weight(1f),
                 label = R.string.feature_savedcards_mm_yy,
                 visualTransformation = ExpirationDateMask(),
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword)
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword),
             )
             Spacer(modifier = Modifier.width(16.dp))
             MifosOutlinedTextField(
@@ -201,7 +212,7 @@ fun AddCardDialogSheetContent(
                 onValueChange = { if (it.length <= 3) cvv = it },
                 modifier = Modifier.weight(1f),
                 label = R.string.feature_savedcards_cvv,
-                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword)
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword),
             )
         }
         Spacer(modifier = Modifier.height(16.dp))
@@ -210,18 +221,20 @@ fun AddCardDialogSheetContent(
                 Text(text = stringResource(id = R.string.feature_savedcards_cancel))
             }
             Spacer(modifier = Modifier.width(16.dp))
-            MifosButton(onClick = {
-                val card = Card(
-                    cardNumber = creditCardNumber,
-                    cvv = cvv,
-                    expiryDate = expiration,
-                    firstName = firstName,
-                    lastName = lastName
-                )
-                if (validateAllFields()) {
-                    addClicked(card)
-                }
-            }) {
+            MifosButton(
+                onClick = {
+                    val card = Card(
+                        cardNumber = creditCardNumber,
+                        cvv = cvv,
+                        expiryDate = expiration,
+                        firstName = firstName,
+                        lastName = lastName,
+                    )
+                    if (validateAllFields()) {
+                        addClicked(card)
+                    }
+                },
+            ) {
                 Text(text = stringResource(id = R.string.feature_savedcards_add))
             }
         }

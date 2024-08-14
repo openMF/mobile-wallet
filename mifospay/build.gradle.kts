@@ -67,9 +67,11 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.fragment.ktx)
-    implementation("androidx.vectordrawable:vectordrawable-animated:1.1.0")
-    implementation("androidx.media:media:1.6.0")
-    implementation("androidx.cardview:cardview:1.0.0")
+    implementation(libs.androidx.swiperefresh.layout)
+
+//    implementation("androidx.vectordrawable:vectordrawable-animated:1.1.0")
+//    implementation("androidx.media:media:1.6.0")
+//    implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     api("com.google.android.material:material:1.0.0") // update require alot of UI changes
 
@@ -116,11 +118,13 @@ dependencies {
     implementation(libs.androidx.material.navigation)
     implementation(libs.accompanist.pager)
 
+    implementation(libs.mifosPasscode)
+
     ksp(libs.hilt.compiler)
 
     // we need it for country picker library
-    implementation("androidx.compose.material:material:1.6.0")
-    implementation(libs.compose.country.code.picker) // remove after moving auth code to module
+//    implementation("androidx.compose.material:material:1.6.0")
+//    implementation(libs.compose.country.code.picker) // remove after moving auth code to module
 
     // Google Bar code scanner
     implementation(libs.google.play.services.code.scanner)
@@ -133,57 +137,54 @@ dependencies {
     implementation(libs.androidx.lifecycle.ktx)
     implementation(libs.androidx.lifecycle.extensions)
 
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
-
-    implementation(libs.jakewharton.butterknife)
-    implementation(libs.jakewharton.compiler)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
 
     // Splash API
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.androidx.core.splashscreen)
 
     runtimeOnly(libs.androidx.compose.runtime)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    implementation(libs.squareup.retrofit2) {
-        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
-        exclude(module = "okhttp")
-    }
-    implementation(libs.squareup.retrofit.adapter.rxjava)
-    implementation(libs.squareup.retrofit.converter.gson)
-    implementation(libs.squareup.okhttp)
-    implementation(libs.squareup.logging.interceptor)
-
-    implementation(libs.android.pdf.viewer)
-
-    implementation(libs.reactivex.rxjava.android)
-    implementation(libs.reactivex.rxjava)
-
-    implementation("io.michaelrocks:libphonenumber-android:8.11.0")
-
-    implementation("me.dm7.barcodescanner:zxing:1.9.13")
-    implementation("com.journeyapps:zxing-android-embedded:4.2.0")
+//    implementation(libs.squareup.retrofit2) {
+//        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
+//        exclude(module = "okhttp")
+//    }
+//    implementation(libs.squareup.retrofit.adapter.rxjava)
+//    implementation(libs.squareup.retrofit.converter.gson)
+//    implementation(libs.squareup.okhttp)
+//    implementation(libs.squareup.logging.interceptor)
+//
+//    implementation(libs.android.pdf.viewer)
+//
+//    implementation(libs.reactivex.rxjava.android)
+//    implementation(libs.reactivex.rxjava)
+//
+//    implementation("io.michaelrocks:libphonenumber-android:8.11.0")
+//
+//    implementation("me.dm7.barcodescanner:zxing:1.9.13")
+//    implementation("com.journeyapps:zxing-android-embedded:4.2.0")
 
     implementation(libs.mifosPasscode)
 
-    // Coil
-    implementation("io.coil-kt:coil-compose:2.6.0")
-
-    implementation("com.google.android.gms:play-services-auth:20.7.0")
-
-    implementation("com.hbb20:ccp:2.2.0")
-    implementation("com.github.MdFarhanRaja:SearchableSpinner:1.9")
-    implementation("com.alimuzaffar.lib:pinentryedittext:1.3.1")
-    implementation("de.hdodenhof:circleimageview:3.1.0")
-    implementation("com.github.yalantis:ucrop:2.2.2")
+//    // Coil
+//    implementation("io.coil-kt:coil-compose:2.6.0")
+//
+//    implementation("com.google.android.gms:play-services-auth:20.7.0")
+//
+//    implementation("com.hbb20:ccp:2.2.0")
+//    implementation("com.github.MdFarhanRaja:SearchableSpinner:1.9")
+//    implementation("com.alimuzaffar.lib:pinentryedittext:1.3.1")
+//    implementation("de.hdodenhof:circleimageview:3.1.0")
+//    implementation("com.github.yalantis:ucrop:2.2.2")
 
     kspTest(libs.hilt.compiler)
 
     testImplementation(libs.junit)
     testImplementation(libs.hilt.android.testing)
 
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.hilt.android.testing)
 }
 

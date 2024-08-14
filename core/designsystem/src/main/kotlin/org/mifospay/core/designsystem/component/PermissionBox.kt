@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 
+@Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun PermissionBox(
     requiredPermissions: List<String>,
@@ -57,9 +58,9 @@ fun PermissionBox(
     }
 
     val decideCurrentPermissionStatus: (Boolean, Boolean) -> String =
-        { permissionGranted, shouldShowPermissionRationale ->
-            if (permissionGranted) "Granted"
-            else if (shouldShowPermissionRationale) "Rejected"
+        { granted, rationale ->
+            if (granted) "Granted"
+            else if (rationale) "Rejected"
             else "Denied"
         }
 
@@ -117,13 +118,13 @@ fun PermissionBox(
             showDialogState =  shouldShowPermissionRationale,
             onDismiss = { shouldShowPermissionRationale = false },
             title = title,
-            message = description,
             confirmButtonText = confirmButtonText,
             onConfirm = {
                 shouldShowPermissionRationale = false
                 multiplePermissionLauncher.launch(requiredPermissions.toTypedArray())
             },
-            dismissButtonText = dismissButtonText
+            dismissButtonText = dismissButtonText,
+            message = description
         )
     }
 

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.bank.accounts.details
 
 import androidx.compose.foundation.border
@@ -26,12 +35,12 @@ import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.feature.bank.accounts.R
 
 @Composable
-fun BankAccountDetailScreen(
+internal fun BankAccountDetailScreen(
     bankAccountDetails: BankAccountDetails,
     onSetupUpiPin: () -> Unit,
     onChangeUpiPin: () -> Unit,
     onForgotUpiPin: () -> Unit,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
 ) {
     BankAccountDetailScreen(
         bankName = bankAccountDetails.bankName.toString(),
@@ -43,12 +52,12 @@ fun BankAccountDetailScreen(
         onSetupUpiPin = onSetupUpiPin,
         onChangeUpiPin = onChangeUpiPin,
         onForgotUpiPin = onForgotUpiPin,
-        navigateBack = navigateBack
+        navigateBack = navigateBack,
     )
 }
 
 @Composable
-fun BankAccountDetailScreen(
+private fun BankAccountDetailScreen(
     bankName: String,
     accountHolderName: String,
     branchName: String,
@@ -58,109 +67,131 @@ fun BankAccountDetailScreen(
     onSetupUpiPin: () -> Unit,
     onChangeUpiPin: () -> Unit,
     onForgotUpiPin: () -> Unit,
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Column(modifier = Modifier.fillMaxSize()) {
-        MifosTopBar(topBarTitle = R.string.feature_accounts_bank_account_details) { navigateBack.invoke() }
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+    ) {
+        MifosTopBar(
+            topBarTitle = R.string.feature_accounts_bank_account_details,
+            backPress = navigateBack,
+        )
+
         Column(
             modifier = Modifier
                 .padding(20.dp)
                 .border(2.dp, MaterialTheme.colorScheme.onSurface)
-                .padding(20.dp)
+                .padding(20.dp),
         ) {
             BankAccountDetailRows(
                 modifier = Modifier.fillMaxWidth(),
                 detail = R.string.feature_accounts_bank_name,
-                detailValue = bankName
+                detailValue = bankName,
             )
             BankAccountDetailRows(
-                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
                 detail = R.string.feature_accounts_ac_holder_name,
-                detailValue = accountHolderName
+                detailValue = accountHolderName,
             )
             BankAccountDetailRows(
-                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
                 detail = R.string.feature_accounts_branch_name,
-                detailValue = branchName
+                detailValue = branchName,
             )
             BankAccountDetailRows(
-                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
                 detail = R.string.feature_accounts_ifsc,
-                detailValue = ifsc
+                detailValue = ifsc,
             )
             BankAccountDetailRows(
-                modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 10.dp),
                 detail = R.string.feature_accounts_type,
-                detailValue = type
+                detailValue = type,
             )
         }
 
         Row(
-            modifier = Modifier.fillMaxWidth().padding(20.dp),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-
             BankAccountDetailButton(
                 btnText = R.string.feature_accounts_setup_upi,
                 onClick = { onSetupUpiPin.invoke() },
                 isUpiEnabled = !isUpiEnabled,
-                hasTrailingIcon = false
+                hasTrailingIcon = false,
             )
 
             BankAccountDetailButton(
                 btnText = R.string.feature_accounts_delete_bank,
                 onClick = {},
-                isUpiEnabled = !isUpiEnabled
+                isUpiEnabled = !isUpiEnabled,
             )
         }
 
         Column(
-            modifier = Modifier.fillMaxWidth(), verticalArrangement = Arrangement.spacedBy(20.dp)
+            modifier = Modifier.fillMaxWidth(),
+            verticalArrangement = Arrangement.spacedBy(20.dp),
         ) {
             BankAccountDetailButton(
                 btnText = R.string.feature_accounts_change_upi_pin,
                 onClick = { onChangeUpiPin.invoke() },
                 isUpiEnabled = isUpiEnabled,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
             BankAccountDetailButton(
                 btnText = R.string.feature_accounts_forgot_upi_pin,
                 onClick = { onForgotUpiPin.invoke() },
                 isUpiEnabled = isUpiEnabled,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }
 }
 
 @Composable
-fun BankAccountDetailRows(
-    modifier: Modifier, detail: Int, detailValue: String
+private fun BankAccountDetailRows(
+    detail: Int,
+    detailValue: String,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = stringResource(id = detail),
             modifier = Modifier.padding(end = 10.dp),
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface
+            color = MaterialTheme.colorScheme.onSurface,
         )
-        Text(text = detailValue,
+        Text(
+            text = detailValue,
             style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface)
+            color = MaterialTheme.colorScheme.onSurface,
+        )
     }
 }
 
 @Composable
-fun BankAccountDetailButton(
-    modifier: Modifier = Modifier,
+private fun BankAccountDetailButton(
     btnText: Int,
     onClick: () -> Unit,
     isUpiEnabled: Boolean,
-    hasTrailingIcon: Boolean = false
+    modifier: Modifier = Modifier,
+    hasTrailingIcon: Boolean = false,
 ) {
     if (isUpiEnabled) {
         Button(
@@ -168,23 +199,23 @@ fun BankAccountDetailButton(
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
             modifier = modifier
                 .padding(start = 20.dp, end = 20.dp),
-            contentPadding = PaddingValues(20.dp)
+            contentPadding = PaddingValues(20.dp),
         ) {
             Row(
-                modifier = modifier,
+                modifier = Modifier,
                 horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = stringResource(id = btnText),
                     style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.onPrimary
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
                 if (hasTrailingIcon) {
                     Icon(
                         imageVector = Icons.Filled.ChevronRight,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimary
+                        tint = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
             }
@@ -192,29 +223,30 @@ fun BankAccountDetailButton(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 private fun BankAccountDetailUpiDisabledPreview() {
-    BankAccountDetailScreen("Mifos Bank",
+    BankAccountDetailScreen(
+        "Mifos Bank",
         "Mifos Account Holder",
         "Mifos Branch",
         "IFSC",
         "type",
         false,
-        {}, {}, {}, {}
+        {}, {}, {}, {},
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun BankAccountDetailUpiEnabledPreview() {
-    BankAccountDetailScreen("Mifos Bank",
+    BankAccountDetailScreen(
+        "Mifos Bank",
         "Mifos Account Holder",
         "Mifos Branch",
         "IFSC",
         "type",
         true,
-        {}, {}, {}, {}
+        {}, {}, {}, {},
     )
 }

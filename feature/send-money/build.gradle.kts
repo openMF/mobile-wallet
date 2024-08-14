@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 plugins {
     alias(libs.plugins.mifospay.android.feature)
     alias(libs.plugins.mifospay.android.library.compose)
@@ -11,7 +20,7 @@ dependencies {
     implementation(projects.core.data)
 
     // we need it for country picker library
-    implementation("androidx.compose.material:material:1.6.0")
+    implementation(libs.compose.material)
     implementation(libs.compose.country.code.picker) // remove after moving auth code to module
 
     // Google Bar code scanner

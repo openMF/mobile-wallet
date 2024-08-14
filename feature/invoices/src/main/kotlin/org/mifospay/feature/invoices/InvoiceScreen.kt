@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.invoices
 
 import android.net.Uri
@@ -25,24 +34,26 @@ import org.mifospay.invoices.R
 
 @Composable
 fun InvoiceScreenRoute(
+    navigateToInvoiceDetailScreen: (Uri) -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: InvoicesViewModel = hiltViewModel(),
-    navigateToInvoiceDetailScreen: (Uri) -> Unit
 ) {
     val invoiceUiState by viewModel.invoiceUiState.collectAsStateWithLifecycle()
     InvoiceScreen(
         invoiceUiState = invoiceUiState,
-        getUniqueInvoiceLink = { viewModel.getUniqueInvoiceLink(it) },
-        navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen
+        getUniqueInvoiceLink = viewModel::getUniqueInvoiceLink,
+        navigateToInvoiceDetailScreen = navigateToInvoiceDetailScreen,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun InvoiceScreen(
+private fun InvoiceScreen(
     invoiceUiState: InvoicesUiState,
     getUniqueInvoiceLink: (Long) -> Uri?,
-    navigateToInvoiceDetailScreen: (Uri) -> Unit
+    navigateToInvoiceDetailScreen: (Uri) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-
     when (invoiceUiState) {
         is InvoicesUiState.Error -> {
             EmptyContentScreen(
@@ -50,14 +61,16 @@ fun InvoiceScreen(
                 title = stringResource(id = R.string.feature_invoices_error_oops),
                 subTitle = stringResource(id = R.string.feature_invoices_unexpected_error_subtitle),
                 iconTint = Color.Black,
-                iconImageVector = Info
+                iconImageVector = Info,
             )
         }
 
         is InvoicesUiState.InvoiceList -> {
-            Column(modifier = Modifier.fillMaxSize()) {
+            Column(modifier = modifier.fillMaxSize()) {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(invoiceUiState.list) {
+                    items(
+                        items = invoiceUiState.list,
+                    ) {
                         InvoiceItem(
                             invoiceTitle = it?.title.toString(),
                             invoiceAmount = it?.amount.toString(),
@@ -70,7 +83,7 @@ fun InvoiceScreen(
                                 invoiceUri?.let { uri ->
                                     navigateToInvoiceDetailScreen.invoke(uri)
                                 }
-                            }
+                            },
                         )
                     }
                 }
@@ -89,7 +102,7 @@ fun InvoiceScreen(
         InvoicesUiState.Loading -> {
             MifosLoadingWheel(
                 modifier = Modifier.fillMaxWidth(),
-                contentDesc = stringResource(R.string.feature_invoices_loading)
+                contentDesc = stringResource(R.string.feature_invoices_loading),
             )
         }
     }
@@ -101,17 +114,21 @@ class InvoicesUiStateProvider : PreviewParameterProvider<InvoicesUiState> {
             InvoicesUiState.Loading,
             InvoicesUiState.Empty,
             InvoicesUiState.InvoiceList(sampleInvoiceList),
-            InvoicesUiState.Error("Some Error Occurred")
+            InvoicesUiState.Error("Some Error Occurred"),
         )
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun InvoiceScreenPreview(
-    @PreviewParameter(InvoicesUiStateProvider::class) invoiceUiState: InvoicesUiState
+    @PreviewParameter(InvoicesUiStateProvider::class) invoiceUiState: InvoicesUiState,
 ) {
     MifosTheme {
-        InvoiceScreen(invoiceUiState = invoiceUiState, getUniqueInvoiceLink = { Uri.EMPTY }, {})
+        InvoiceScreen(
+            invoiceUiState = invoiceUiState,
+            getUniqueInvoiceLink = { Uri.EMPTY },
+            navigateToInvoiceDetailScreen = {},
+        )
     }
 }
 
@@ -125,6 +142,6 @@ val sampleInvoiceList = List(10) { index ->
         transactionId = "txn_78910",
         id = index.toLong(),
         title = "Stationery Purchase",
-        date = mutableListOf(2024, 3, 23)
+        date = mutableListOf(2024, 3, 23),
     )
 }

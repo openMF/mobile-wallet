@@ -1,8 +1,9 @@
 package org.mifospay.core.data.domain.usecase.invoice
 
 import android.net.Uri
-import org.mifospay.core.data.base.UseCase
+import android.util.Log
 import com.mifospay.core.model.entity.Invoice
+import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
 import rx.Subscriber
@@ -30,7 +31,6 @@ class FetchInvoice @Inject constructor(private val mFineractRepository: Fineract
             val clientId = params?.get(0) // "clientId"
             val invoiceId = params?.get(1) // "invoiceId"
             if (clientId != null && invoiceId != null) {
-
                 mFineractRepository.fetchInvoice(clientId, invoiceId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
@@ -51,6 +51,7 @@ class FetchInvoice @Inject constructor(private val mFineractRepository: Fineract
 
             }
         } catch (e: IndexOutOfBoundsException) {
+            Log.e("Error", e.message.toString())
             useCaseCallback.onError("Invalid link used to open the App")
         }
     }

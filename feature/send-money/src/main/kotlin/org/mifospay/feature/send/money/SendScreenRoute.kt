@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.send.money
 
 import android.content.Context
@@ -5,8 +14,7 @@ import android.net.Uri
 import android.provider.ContactsContract
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -58,17 +66,13 @@ import org.mifospay.core.designsystem.component.MifosNavigationTopAppBar
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 
-
-enum class SendMethodType {
-    VPA, MOBILE
-}
-
 @Composable
 fun SendScreenRoute(
-    viewModel: SendPaymentViewModel = hiltViewModel(),
     showToolBar: Boolean,
     onBackClick: () -> Unit,
-    proceedWithMakeTransferFlow: (String, String) -> Unit
+    proceedWithMakeTransferFlow: (String, String) -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: SendPaymentViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val selfVpa by viewModel.vpa.collectAsStateWithLifecycle()
@@ -88,7 +92,7 @@ fun SendScreenRoute(
                     selfVpa = selfVpa,
                     selfMobile = selfMobile,
                     sendMethodType = sendMethodType,
-                    externalIdOrMobile = externalIdOrMobile
+                    externalIdOrMobile = externalIdOrMobile,
                 )
             ) {
                 viewModel.checkBalanceAvailabilityAndTransfer(
@@ -98,24 +102,35 @@ fun SendScreenRoute(
                         showToast(context.getString(it))
                     },
                     proceedWithTransferFlow = { externalId, transferAmount ->
-                        proceedWithMakeTransferFlow.invoke(externalIdOrMobile, transferAmount.toString())
-                    }
+                        proceedWithMakeTransferFlow.invoke(
+                            externalId,
+                            transferAmount.toString(),
+                        )
+                    },
                 )
             } else {
                 showToast(context.getString(R.string.feature_send_money_not_allowed))
             }
-        }
+        },
+        modifier = modifier,
     )
 }
 
+enum class SendMethodType {
+    VPA,
+    MOBILE,
+}
+
 @Composable
-fun SendMoneyScreen(
+@Suppress("LongMethod", "CyclomaticComplexMethod")
+@VisibleForTesting
+internal fun SendMoneyScreen(
     showToolBar: Boolean,
     showProgress: Boolean,
     onSubmit: (String, String, SendMethodType) -> Unit,
     onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-
     val context = LocalContext.current
 
     var amount by rememberSaveable { mutableStateOf("") }
@@ -125,7 +140,7 @@ fun SendMoneyScreen(
     var sendMethodType by rememberSaveable { mutableStateOf(SendMethodType.VPA) }
     var isValidInfo by rememberSaveable { mutableStateOf(false) }
 
-    var contactUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+    val contactUri by rememberSaveable { mutableStateOf<Uri?>(null) }
 
     fun validateInfo() {
         isValidInfo = when (sendMethodType) {
@@ -136,33 +151,16 @@ fun SendMoneyScreen(
         }
     }
 
-    val contactLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickContact()
-    ) { uri: Uri? ->
-        uri?.let { contactUri = uri }
-    }
-
     LaunchedEffect(key1 = contactUri) {
         contactUri?.let {
             mobileNumber = getContactPhoneNumber(it, context)
         }
     }
 
-    val permissionLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission(),
-        onResult = { isGranted: Boolean ->
-            if (isGranted) {
-                contactLauncher.launch(null)
-            } else {
-                // Handle permission denial
-            }
-        }
-    )
-
     val options = GmsBarcodeScannerOptions.Builder()
         .setBarcodeFormats(
             Barcode.FORMAT_QR_CODE,
-            Barcode.FORMAT_AZTEC
+            Barcode.FORMAT_AZTEC,
         )
         .build()
 
@@ -184,36 +182,36 @@ fun SendMoneyScreen(
             }
     }
 
-    Box {
+    Box(modifier) {
         Column(Modifier.fillMaxSize()) {
             if (showToolBar) {
                 MifosNavigationTopAppBar(
                     titleRes = R.string.feature_send_money_send,
-                    onNavigationClick = onBackClick
+                    onNavigationClick = onBackClick,
                 )
             }
             Text(
                 modifier = Modifier.padding(start = 20.dp, top = 20.dp),
                 text = stringResource(id = R.string.feature_send_money_select_transfer_method),
-                style = styleNormal18sp
+                style = styleNormal18sp,
             )
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 20.dp, bottom = 20.dp)
+                        .padding(top = 20.dp, bottom = 20.dp),
                 ) {
                     VpaMobileChip(
+                        label = stringResource(id = R.string.feature_send_money_vpa),
                         selected = sendMethodType == SendMethodType.VPA,
                         onClick = { sendMethodType = SendMethodType.VPA },
-                        label = stringResource(id = R.string.feature_send_money_vpa)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                     VpaMobileChip(
+                        label = stringResource(id = R.string.feature_send_money_mobile),
                         selected = sendMethodType == SendMethodType.MOBILE,
                         onClick = { sendMethodType = SendMethodType.MOBILE },
-                        label = stringResource(id = R.string.feature_send_money_mobile)
                     )
                 }
                 MfOutlinedTextField(
@@ -225,7 +223,7 @@ fun SendMoneyScreen(
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
                     label = stringResource(id = R.string.feature_send_money_amount),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
                 when (sendMethodType) {
                     SendMethodType.VPA -> {
@@ -238,16 +236,18 @@ fun SendMoneyScreen(
                             label = stringResource(id = R.string.feature_send_money_virtual_payment_address),
                             modifier = Modifier.fillMaxWidth(),
                             trailingIcon = {
-                                IconButton(onClick = {
-                                    startScan()
-                                }) {
+                                IconButton(
+                                    onClick = {
+                                        startScan()
+                                    },
+                                ) {
                                     Icon(
                                         imageVector = Icons.Filled.QrCode2,
                                         contentDescription = "Scan QR",
-                                        tint = MaterialTheme.colorScheme.primary
+                                        tint = MaterialTheme.colorScheme.primary,
                                     )
                                 }
-                            }
+                            },
                         )
                     }
 
@@ -263,7 +263,7 @@ fun SendMoneyScreen(
                                 }
                                 isValidMobileNumber = valid
                                 validateInfo()
-                            }
+                            },
                         )
                     }
                 }
@@ -283,57 +283,63 @@ fun SendMoneyScreen(
                                 SendMethodType.VPA -> vpa
                                 SendMethodType.MOBILE -> mobileNumber
                             },
-                            sendMethodType
+                            sendMethodType,
                         )
-                        //TODO: Navigate to MakeTransferScreenRoute
+                        // TODO: Navigate to MakeTransferScreenRoute
                     },
-                    contentPadding = PaddingValues(12.dp)
+                    contentPadding = PaddingValues(12.dp),
                 ) {
                     Text(
                         stringResource(id = R.string.feature_send_money_submit),
-                        style = styleMedium16sp.copy(color = MaterialTheme.colorScheme.surface)
+                        style = styleMedium16sp.copy(color = MaterialTheme.colorScheme.surface),
                     )
                 }
             }
         }
+
         if (showProgress) {
             MfOverlayLoadingWheel(
-                contentDesc = stringResource(id = R.string.feature_send_money_please_wait)
+                contentDesc = stringResource(id = R.string.feature_send_money_please_wait),
             )
         }
     }
 }
 
 @Composable
-fun EnterPhoneScreen(
-    modifier: Modifier,
+private fun EnterPhoneScreen(
+    onNumberUpdated: (String, String, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
     initialPhoneNumber: String? = null,
-    onNumberUpdated: (String, String, Boolean) -> Unit
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     TogiCountryCodePicker(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
         ),
         initialPhoneNumber = initialPhoneNumber,
         onValueChange = { (code, phone), isValid ->
             onNumberUpdated(phone, code + phone, isValid)
         },
         label = { Text(stringResource(id = R.string.feature_send_money_phone_number)) },
-        keyboardActions = KeyboardActions { keyboardController?.hide() }
+        keyboardActions = KeyboardActions { keyboardController?.hide() },
     )
 }
 
 @Composable
-fun VpaMobileChip(selected: Boolean, onClick: () -> Unit, label: String) {
+private fun VpaMobileChip(
+    label: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     MifosButton(
         onClick = onClick,
         color = if (selected) MaterialTheme.colorScheme.primary else Color.LightGray,
-        modifier = Modifier
+        modifier = modifier
             .padding(4.dp)
-            .wrapContentSize()
+            .wrapContentSize(),
     ) {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
@@ -342,7 +348,7 @@ fun VpaMobileChip(selected: Boolean, onClick: () -> Unit, label: String) {
     }
 }
 
-suspend fun getContactPhoneNumber(uri: Uri, context: Context): String {
+private suspend fun getContactPhoneNumber(uri: Uri, context: Context): String {
     val contactId: String = uri.lastPathSegment ?: return ""
     return withContext(Dispatchers.IO) {
         val phoneCursor = context.contentResolver.query(
@@ -350,7 +356,7 @@ suspend fun getContactPhoneNumber(uri: Uri, context: Context): String {
             arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
             "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
             arrayOf(contactId),
-            null
+            null,
         )
         phoneCursor?.use { cursor ->
             if (cursor.moveToFirst()) {
@@ -364,25 +370,24 @@ suspend fun getContactPhoneNumber(uri: Uri, context: Context): String {
     }
 }
 
-
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun SendMoneyScreenWithToolBarPreview() {
+private fun SendMoneyScreenWithToolBarPreview() {
     SendMoneyScreen(
         onSubmit = { _, _, _ -> },
         onBackClick = {},
         showProgress = false,
-        showToolBar = true
+        showToolBar = true,
     )
 }
 
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
-fun SendMoneyScreenWithoutToolBarPreview() {
+private fun SendMoneyScreenWithoutToolBarPreview() {
     SendMoneyScreen(
         onSubmit = { _, _, _ -> },
         onBackClick = {},
         showProgress = false,
-        showToolBar = false
+        showToolBar = false,
     )
 }

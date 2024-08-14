@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.feature.read.qr
 
 import android.Manifest
@@ -6,9 +15,11 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.util.Size
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.VisibleForTesting
 import androidx.camera.core.CameraSelector
 import androidx.camera.core.ImageAnalysis
 import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
@@ -32,7 +43,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
@@ -52,35 +62,37 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.feature.qr.R
 import org.mifospay.feature.read.qr.utils.QrCodeAnalyzer
 
-
 @Composable
-fun ShowQrScreenRoute(
+internal fun ShowQrScreenRoute(
+    backPress: () -> Unit,
+    modifier: Modifier = Modifier,
     viewModel: ReadQrViewModel = hiltViewModel(),
-    backPress: () -> Unit
 ) {
     val uiState = viewModel.readQrUiState.collectAsStateWithLifecycle()
 
     ReadQrScreen(
         uiState = uiState.value,
         backPress = backPress,
-        scanQR = { viewModel.scanQr(it) }
+        scanQR = viewModel::scanQr,
+        modifier = modifier,
     )
 }
 
 @Composable
-fun ReadQrScreen(
+@VisibleForTesting
+internal fun ReadQrScreen(
     uiState: ReadQrUiState,
     backPress: () -> Unit,
     scanQR: (Bitmap) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    var isFlashOn by rememberSaveable { mutableStateOf(false) }
+    val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-    var scannedQrcode by rememberSaveable {
-        mutableStateOf("")
-    }
-    val cameraProviderFuture = rememberSaveable {
-        ProcessCameraProvider.getInstance(context)
-    }
+
+    var isFlashOn by rememberSaveable { mutableStateOf(false) }
+    var scannedQrcode by rememberSaveable { mutableStateOf("") }
+    val cameraProviderFuture = rememberSaveable { ProcessCameraProvider.getInstance(context) }
+
     val galleryLauncher =
         rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
@@ -88,130 +100,135 @@ fun ReadQrScreen(
                 bitmap?.let { scanQR(it) }
             }
         }
-    val lifecycleOwner = LocalLifecycleOwner.current
 
     PermissionBox(
         requiredPermissions = if (Build.VERSION.SDK_INT >= 33) {
-            listOf(
-                Manifest.permission.CAMERA
-            )
+            listOf(Manifest.permission.CAMERA)
         } else {
             listOf(
                 Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                Manifest.permission.READ_EXTERNAL_STORAGE,
             )
         },
         title = R.string.feature_qr_permission_required,
         description = R.string.feature_qr_approve_permission_description_camera,
-        confirmButtonText =  R.string.feature_qr_proceed,
+        confirmButtonText = R.string.feature_qr_proceed,
         dismissButtonText = R.string.feature_qr_dismiss,
-    )
+        onGranted = {
+            Box {
+                MifosScaffold(
+                    topBarTitle = R.string.feature_qr_scan_code,
+                    backPress = backPress,
+                    scaffoldContent = { paddingValues ->
+                        Box(modifier = Modifier.padding(paddingValues)) {
+                            when (uiState) {
+                                is ReadQrUiState.Loading -> {
+                                    MfLoadingWheel(
+                                        contentDesc = stringResource(R.string.feature_qr_loading),
+                                        backgroundColor = MaterialTheme.colorScheme.surface,
+                                    )
+                                }
 
-    MifosScaffold(
-        topBarTitle = R.string.feature_qr_scan_code,
-        backPress = { backPress.invoke() },
-        scaffoldContent = { paddingValues ->
-            Box(modifier = Modifier.padding(paddingValues)) {
-                when (uiState) {
-                    is ReadQrUiState.Loading -> {
-                        MfLoadingWheel(
-                            contentDesc = stringResource(R.string.feature_qr_loading),
-                            backgroundColor = MaterialTheme.colorScheme.surface
-                        )
-                    }
+                                is ReadQrUiState.Success -> {
+                                    Text("QR Data: ${uiState.qrData}")
+                                }
 
-                    is ReadQrUiState.Success -> {
-                        Text("QR Data: ${uiState.qrData}")
-                    }
+                                is ReadQrUiState.Error -> {
+                                    EmptyContentScreen(
+                                        modifier = Modifier,
+                                        title = stringResource(R.string.feature_qr_oops),
+                                        subTitle = stringResource(id = R.string.feature_qr_unexpected_error_subtitle),
+                                        iconTint = MaterialTheme.colorScheme.onSurface,
+                                        iconImageVector = MifosIcons.Info,
+                                    )
+                                }
+                            }
+                        }
+                    },
+                    modifier = modifier,
+                )
 
-                    is ReadQrUiState.Error -> {
-                        EmptyContentScreen(
-                            modifier = Modifier,
-                            title = stringResource(R.string.feature_qr_oops),
-                            subTitle = stringResource(id = R.string.feature_qr_unexpected_error_subtitle),
-                            iconTint = MaterialTheme.colorScheme.onSurface,
-                            iconImageVector = MifosIcons.Info
-                        )
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                ) {
+                    AndroidView(
+                        factory = { context ->
+                            val previewView = PreviewView(context)
+                            val preview = Preview.Builder().build()
+                            val selector = CameraSelector.Builder()
+                                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+                                .build()
+                            preview.setSurfaceProvider(previewView.surfaceProvider)
+                            val imageAnalysis = ImageAnalysis.Builder()
+                                .setTargetResolution(
+                                    Size(
+                                        previewView.width,
+                                        previewView.height,
+                                    ),
+                                )
+                                .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
+                                .build()
+                            imageAnalysis.setAnalyzer(
+                                ContextCompat.getMainExecutor(context),
+                                QrCodeAnalyzer { result ->
+                                    scannedQrcode = result
+                                },
+                            )
+                            try {
+                                cameraProviderFuture.get().bindToLifecycle(
+                                    lifecycleOwner,
+                                    selector,
+                                    preview,
+                                    imageAnalysis,
+                                )
+                            } catch (e: Exception) {
+                                e.printStackTrace()
+                            }
+                            previewView
+                        },
+                        modifier = Modifier.weight(1f),
+                    )
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.SpaceEvenly,
+                    ) {
+                        IconButton(onClick = { isFlashOn = !isFlashOn }) {
+                            Icon(
+                                imageVector = if (isFlashOn) MifosIcons.FlashOff else MifosIcons.FlashOn,
+                                contentDescription = null,
+                            )
+                        }
+
+                        IconButton(onClick = { galleryLauncher.launch("image/*") }) {
+                            Icon(imageVector = MifosIcons.Photo, contentDescription = null)
+                        }
                     }
                 }
             }
-        }
+        },
     )
-    Column(modifier = Modifier.fillMaxSize()) {
-        AndroidView(
-            factory = { context ->
-                val previewView = PreviewView(context)
-                val preview = Preview.Builder().build()
-                val selector = CameraSelector.Builder()
-                    .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                    .build()
-                preview.setSurfaceProvider(previewView.surfaceProvider)
-                val imageAnalysis = ImageAnalysis.Builder()
-                    .setTargetResolution(
-                        Size(
-                            previewView.width,
-                            previewView.height
-                        )
-                    )
-                    .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
-                    .build()
-                imageAnalysis.setAnalyzer(
-                    ContextCompat.getMainExecutor(context),
-                    QrCodeAnalyzer { result ->
-                        scannedQrcode = result
-                    }
-                )
-                try {
-                    cameraProviderFuture.get().bindToLifecycle(
-                        lifecycleOwner,
-                        selector,
-                        preview,
-                        imageAnalysis
-                    )
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                previewView
-            },
-            modifier = Modifier.weight(1f)
-        )
-
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
-            IconButton(onClick = { isFlashOn = !isFlashOn }) {
-                Icon(
-                    imageVector = if (isFlashOn) MifosIcons.FlashOff else MifosIcons.FlashOn,
-                    contentDescription = null
-                )
-            }
-
-            IconButton(onClick = { galleryLauncher.launch("image/*") }) {
-                Icon(imageVector = MifosIcons.Photo, contentDescription = null)
-            }
-        }
-    }
 }
 
-fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
+private fun loadBitmapFromUri(context: Context, uri: Uri): Bitmap? {
     return try {
         val stream = context.contentResolver.openInputStream(uri)
         BitmapFactory.decodeStream(stream)
     } catch (e: Exception) {
-        e.printStackTrace()
+        Log.e("Error", e.message.toString())
         null
     }
 }
 
-class ReadQrUiStateProvider :
+internal class ReadQrUiStateProvider :
     PreviewParameterProvider<ReadQrUiState> {
     override val values: Sequence<ReadQrUiState>
         get() = sequenceOf(
             ReadQrUiState.Success(
-                qrData = "This is QR data"
+                qrData = "This is QR data",
             ),
             ReadQrUiState.Error,
             ReadQrUiState.Loading,
@@ -220,7 +237,10 @@ class ReadQrUiStateProvider :
 
 @androidx.compose.ui.tooling.preview.Preview(showSystemUi = true)
 @Composable
-fun ShowQrScreenPreview(@PreviewParameter(ReadQrUiStateProvider::class) uiState: ReadQrUiState) {
+private fun ShowQrScreenPreview(
+    @PreviewParameter(ReadQrUiStateProvider::class)
+    uiState: ReadQrUiState,
+) {
     MifosTheme {
         ReadQrScreen(
             uiState = uiState,
@@ -229,9 +249,9 @@ fun ShowQrScreenPreview(@PreviewParameter(ReadQrUiStateProvider::class) uiState:
                 Bitmap.createBitmap(
                     100,
                     100,
-                    Bitmap.Config.ARGB_8888
+                    Bitmap.Config.ARGB_8888,
                 )
-            }
+            },
         )
     }
 }
