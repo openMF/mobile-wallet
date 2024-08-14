@@ -61,7 +61,7 @@ import org.mifospay.core.ui.utility.AddCardChip
 import org.mifospay.savedcards.R
 
 @Composable
-fun CardsScreen(
+internal fun CardsScreen(
     onEditCard: (Card) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CardsScreenViewModel = hiltViewModel(),
