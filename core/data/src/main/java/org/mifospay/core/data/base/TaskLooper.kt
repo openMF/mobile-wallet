@@ -1,27 +1,33 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.data.base
 
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
 import javax.inject.Inject
 
-/**
- * Created by ankur on 17/June/2018
- */
-class TaskLooper @Inject constructor(private val mUseCaseHandler: UseCaseHandler) {
+class TaskLooper @Inject constructor(
+    private val mUseCaseHandler: UseCaseHandler,
+) {
     var isFailed = false
-    var tasks: List<UseCase<*, *>>
     private var tasksPending: Long = 0
     private var listener: Listener? = null
 
-    init {
-        tasks = ArrayList()
-    }
-
     fun <T : UseCase.RequestValues, R : UseCase.ResponseValue?> addTask(
-        useCase: UseCase<T, R>, values: T, taskData: TaskData,
+        useCase: UseCase<T, R>,
+        values: T,
+        taskData: TaskData,
     ) {
         tasksPending++
         mUseCaseHandler.execute(
-            useCase, values,
+            useCase,
+            values,
             object : UseCaseCallback<R> {
                 override fun onSuccess(response: R) {
                     if (isFailed) return
@@ -41,7 +47,7 @@ class TaskLooper @Inject constructor(private val mUseCaseHandler: UseCaseHandler
     }
 
     private val isCompleted: Boolean
-        private get() = tasksPending == 0L
+        get() = tasksPending == 0L
 
     fun listen(listener: Listener?) {
         this.listener = listener

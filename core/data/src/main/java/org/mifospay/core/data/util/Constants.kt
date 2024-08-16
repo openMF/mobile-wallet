@@ -1,11 +1,17 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.data.util
 
 import java.util.Arrays
 import java.util.Collections
 
-/**
- * Created by naman on 17/6/17.
- */
 object Constants {
     const val BASIC = "Basic "
     const val SAVINGS = "savingsAccounts"
@@ -15,9 +21,10 @@ object Constants {
     const val MIFOS_CONSUMER_SAVINGS_PRODUCT_ID = 165 // 373
     private const val MOBILE_WALLET_ROLE_ID = 471
     private const val SUPER_USER_ROLE_ID = 1
+
     @JvmField
     val NEW_USER_ROLE_IDS: Collection<Int> = Collections.unmodifiableList(
-        Arrays.asList(MOBILE_WALLET_ROLE_ID, SUPER_USER_ROLE_ID)
+        Arrays.asList(MOBILE_WALLET_ROLE_ID, SUPER_USER_ROLE_ID),
     )
     const val ENTITY_TYPE_CLIENTS = "clients"
     const val FETCH_ACCOUNT_TRANSFER_USECASE = "FetchAccountTransfer"

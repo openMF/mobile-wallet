@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.data.domain.usecase.invoice
 
 import android.net.Uri
@@ -11,21 +20,17 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import javax.inject.Inject
 
-/**
- * Created by ankur on 07/June/2018
- */
-class FetchInvoice @Inject constructor(private val mFineractRepository: FineractRepository) :
-    UseCase<FetchInvoice.RequestValues, FetchInvoice.ResponseValue>() {
+class FetchInvoice @Inject constructor(
+    private val mFineractRepository: FineractRepository,
+) : UseCase<FetchInvoice.RequestValues, FetchInvoice.ResponseValue>() {
 
     class RequestValues(val uniquePaymentLink: Uri?) : UseCase.RequestValues
     class ResponseValue(
-        val invoices: List<Invoice?>
+        val invoices: List<Invoice?>,
     ) : UseCase.ResponseValue
 
     override fun executeUseCase(requestValues: RequestValues) {
         val paymentLink = requestValues.uniquePaymentLink
-        val scheme = paymentLink?.scheme // "https"
-        val host = paymentLink?.host // "invoice.mifospay.com"
         try {
             val params = paymentLink?.pathSegments
             val clientId = params?.get(0) // "clientId"
@@ -34,21 +39,22 @@ class FetchInvoice @Inject constructor(private val mFineractRepository: Fineract
                 mFineractRepository.fetchInvoice(clientId, invoiceId)
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.io())
-                    .subscribe(object : Subscriber<List<Invoice?>?>() {
-                        override fun onCompleted() {}
-                        override fun onError(e: Throwable) {
-                            useCaseCallback.onError(Constants.INVALID_UPL)
-                        }
-
-                        override fun onNext(invoices: List<Invoice?>?) {
-                            if (invoices?.isNotEmpty() == true) {
-                                useCaseCallback.onSuccess(ResponseValue(invoices))
-                            } else {
-                                useCaseCallback.onError(Constants.INVOICE_DOES_NOT_EXIST)
+                    .subscribe(
+                        object : Subscriber<List<Invoice?>?>() {
+                            override fun onCompleted() {}
+                            override fun onError(e: Throwable) {
+                                useCaseCallback.onError(Constants.INVALID_UPL)
                             }
-                        }
-                    })
 
+                            override fun onNext(invoices: List<Invoice?>?) {
+                                if (invoices?.isNotEmpty() == true) {
+                                    useCaseCallback.onSuccess(ResponseValue(invoices))
+                                } else {
+                                    useCaseCallback.onError(Constants.INVOICE_DOES_NOT_EXIST)
+                                }
+                            }
+                        },
+                    )
             }
         } catch (e: IndexOutOfBoundsException) {
             Log.e("Error", e.message.toString())

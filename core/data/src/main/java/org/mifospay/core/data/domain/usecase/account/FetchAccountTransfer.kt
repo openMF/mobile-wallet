@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.data.domain.usecase.account
 
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
@@ -8,11 +17,8 @@ import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 import javax.inject.Inject
 
-/**
- * Created by ankur on 05/June/2018
- */
 class FetchAccountTransfer @Inject constructor(
-    private val mFineractRepository: FineractRepository
+    private val mFineractRepository: FineractRepository,
 ) : UseCase<FetchAccountTransfer.RequestValues, FetchAccountTransfer.ResponseValue?>() {
     override fun executeUseCase(requestValues: RequestValues) {
         mFineractRepository.getAccountTransfer(requestValues.transferId)
