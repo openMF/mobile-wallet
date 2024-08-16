@@ -1,10 +1,19 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.common.presenter
 
+import org.mifospay.base.BaseView
+import org.mifospay.common.SearchContract
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.client.SearchClient
-import org.mifospay.base.BaseView
-import org.mifospay.common.SearchContract
 import javax.inject.Inject
 
 /**
@@ -22,13 +31,16 @@ class SearchPresenter @Inject constructor(private val mUsecaseHandler: UseCaseHa
     }
 
     override fun performSearch(query: String) {
-        mUsecaseHandler.execute(searchClient, SearchClient.RequestValues(query),
+        mUsecaseHandler.execute(
+            searchClient,
+            SearchClient.RequestValues(query),
             object : UseCaseCallback<SearchClient.ResponseValue> {
                 override fun onSuccess(response: SearchClient.ResponseValue) {
                     mSearchView.showSearchResult(response?.results?.toMutableList())
                 }
 
                 override fun onError(message: String) {}
-            })
+            },
+        )
     }
 }

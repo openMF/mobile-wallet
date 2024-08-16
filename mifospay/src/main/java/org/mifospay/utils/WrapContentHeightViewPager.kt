@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.utils
 
 import android.content.Context
@@ -10,7 +19,8 @@ import androidx.viewpager.widget.ViewPager
 class WrapContentHeightViewPager : ViewPager {
     constructor(context: Context?) : super(context!!)
     constructor(context: Context?, attrs: AttributeSet?) : super(
-        context!!, attrs
+        context!!,
+        attrs,
     )
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -20,7 +30,7 @@ class WrapContentHeightViewPager : ViewPager {
             val child = getChildAt(i)
             child.measure(
                 widthMeasureSpec,
-                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED)
+                MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
             )
             val h = child.measuredHeight
             if (h > height) height = h

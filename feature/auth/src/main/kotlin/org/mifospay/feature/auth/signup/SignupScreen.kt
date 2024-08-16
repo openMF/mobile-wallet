@@ -140,19 +140,19 @@ private fun SignupScreenContent(
     fun validateAllFields() {
         val isAnyFieldEmpty =
             firstName.isEmpty() ||
-                    lastName.isEmpty() ||
-                    email.isEmpty() ||
-                    userName.isEmpty() ||
-                    addressLine1.isEmpty() ||
-                    addressLine2.isEmpty() ||
-                    pinCode.isEmpty() ||
-                    password.isEmpty() ||
-                    confirmPassword.isEmpty() ||
-                    selectedState == null
+                lastName.isEmpty() ||
+                email.isEmpty() ||
+                userName.isEmpty() ||
+                addressLine1.isEmpty() ||
+                addressLine2.isEmpty() ||
+                pinCode.isEmpty() ||
+                password.isEmpty() ||
+                confirmPassword.isEmpty() ||
+                selectedState == null
 
         val isNameOfBusinessEmpty =
             data.mifosSavingsProductId == MIFOS_MERCHANT_SAVINGS_PRODUCT_ID &&
-                    nameOfBusiness.isEmpty()
+                nameOfBusiness.isEmpty()
 
         if (!email.isValidEmail()) {
             Toast
