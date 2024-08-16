@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.ui
 
 import androidx.compose.foundation.Image
@@ -30,18 +39,18 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 
 @Composable
 fun EmptyContentScreen(
-    modifier: Modifier = Modifier,
     title: String,
     subTitle: String,
-    imageContent: @Composable () -> Unit
+    imageContent: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(16.dp)
                 .fillMaxSize()
                 .testTag("mifos:empty"),
@@ -71,7 +80,7 @@ fun EmptyContentScreen(
                     .padding(start = 24.dp, end = 24.dp),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
+                color = MaterialTheme.colorScheme.onSurface,
             )
         }
     }
@@ -79,14 +88,13 @@ fun EmptyContentScreen(
 
 @Composable
 fun EmptyContentScreen(
-    modifier: Modifier = Modifier,
     title: String,
     subTitle: String,
+    iconDrawable: Int,
+    modifier: Modifier = Modifier,
     iconTint: Color = MaterialTheme.colorScheme.surfaceTint,
-    iconDrawable: Int
 ) {
     EmptyContentScreen(
-        modifier = modifier,
         title = title,
         subTitle = subTitle,
         imageContent = {
@@ -96,20 +104,20 @@ fun EmptyContentScreen(
                 colorFilter = if (iconTint != Color.Unspecified) ColorFilter.tint(iconTint) else null,
                 contentDescription = null,
             )
-        }
+        },
+        modifier = modifier,
     )
 }
 
 @Composable
 fun EmptyContentScreen(
-    modifier: Modifier = Modifier,
     title: String,
     subTitle: String,
+    modifier: Modifier = Modifier,
     iconTint: Color = MaterialTheme.colorScheme.surfaceTint,
-    iconImageVector: ImageVector = Icons.Rounded.Search
+    iconImageVector: ImageVector = Icons.Rounded.Search,
 ) {
     EmptyContentScreen(
-        modifier = modifier,
         title = title,
         subTitle = subTitle,
         imageContent = {
@@ -117,9 +125,10 @@ fun EmptyContentScreen(
                 modifier = Modifier.size(64.dp),
                 imageVector = iconImageVector,
                 contentDescription = null,
-                tint = iconTint
+                tint = iconTint,
             )
-        }
+        },
+        modifier = modifier,
     )
 }
 
@@ -128,11 +137,11 @@ fun EmptyContentScreen(
 fun EmptyContentScreenDrawableImagePreview() {
     MifosTheme {
         EmptyContentScreen(
-            modifier = Modifier,
             title = "No data found",
             subTitle = "Please check you connection or try again",
+            iconDrawable = R.drawable.core_ui_baseline_info_outline_24,
+            modifier = Modifier,
             iconTint = MaterialTheme.colorScheme.primary,
-            iconDrawable = R.drawable.core_ui_baseline_info_outline_24
         )
     }
 }
@@ -142,11 +151,11 @@ fun EmptyContentScreenDrawableImagePreview() {
 fun EmptyContentScreenImageVectorPreview() {
     MifosTheme {
         EmptyContentScreen(
-            modifier = Modifier,
             title = "No data found",
             subTitle = "Please check you connection or try again",
+            modifier = Modifier,
             iconTint = MaterialTheme.colorScheme.primary,
-            iconImageVector = Icons.Rounded.Search
+            iconImageVector = Icons.Rounded.Search,
         )
     }
 }

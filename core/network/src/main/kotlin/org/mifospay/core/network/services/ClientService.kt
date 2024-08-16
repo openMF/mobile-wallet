@@ -1,11 +1,20 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.network.services
 
 import com.mifospay.core.model.domain.NewAccount
-import okhttp3.MultipartBody
-import okhttp3.ResponseBody
 import com.mifospay.core.model.entity.Page
 import com.mifospay.core.model.entity.client.Client
 import com.mifospay.core.model.entity.client.ClientAccounts
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.GenericResponse
 import retrofit2.http.Body
@@ -27,7 +36,7 @@ interface ClientService {
     @PUT(ApiEndPoints.CLIENTS + "/{clientId}")
     fun updateClient(
         @Path("clientId") clientId: Long,
-        @Body payload: Any
+        @Body payload: Any,
     ): Observable<ResponseBody>
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/images")
@@ -36,7 +45,7 @@ interface ClientService {
     @PUT(ApiEndPoints.CLIENTS + "/{clientId}/images")
     fun updateClientImage(
         @Path("clientId") clientId: Long,
-        @Part typedFile: MultipartBody.Part?
+        @Part typedFile: MultipartBody.Part?,
     ): Observable<GenericResponse>
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
@@ -45,7 +54,7 @@ interface ClientService {
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
     fun getAccounts(
         @Path("clientId") clientId: Long,
-        @Query("fields") accountType: String
+        @Query("fields") accountType: String,
     ): Observable<ClientAccounts>
 
     @POST(ApiEndPoints.CLIENTS)

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.common.presenter
 
 import androidx.lifecycle.SavedStateHandle
@@ -16,7 +25,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     private val mUsecaseHandler: UseCaseHandler,
     private val searchClient: SearchClient,
-    private val savedStateHandle: SavedStateHandle
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     val searchQuery = savedStateHandle.getStateFlow(SEARCH_QUERY, "")
@@ -34,7 +43,9 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun performSearch(query: String) {
-        mUsecaseHandler.execute(searchClient, SearchClient.RequestValues(query),
+        mUsecaseHandler.execute(
+            searchClient,
+            SearchClient.RequestValues(query),
             object : UseCase.UseCaseCallback<SearchClient.ResponseValue> {
                 override fun onSuccess(response: SearchClient.ResponseValue) {
                     _searchResults.value =
@@ -42,7 +53,8 @@ class SearchViewModel @Inject constructor(
                 }
 
                 override fun onError(message: String) {}
-            })
+            },
+        )
     }
 }
 

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.ui
 
 import androidx.compose.foundation.layout.Arrangement
@@ -31,10 +40,10 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun OtpTextField(
+    onOtpTextCorrectlyEntered: () -> Unit,
     modifier: Modifier = Modifier,
     realOtp: String = "",
     otpCount: Int = 4,
-    onOtpTextCorrectlyEntered: () -> Unit
 ) {
     var otpText by remember { mutableStateOf("") }
     var isError by remember { mutableStateOf(false) }
@@ -42,10 +51,10 @@ fun OtpTextField(
         modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
-        BasicTextField(modifier = modifier,
+        BasicTextField(
+            modifier = Modifier,
             value = TextFieldValue(otpText, selection = TextRange(otpText.length)),
             onValueChange = {
                 otpText = it.text
@@ -58,27 +67,32 @@ fun OtpTextField(
                     }
                 }
             },
-            keyboardActions = KeyboardActions(onDone = {
-                if (otpText != realOtp) {
-                    isError = true
-                } else {
-                    onOtpTextCorrectlyEntered.invoke()
-                }
-                println("OTP: $otpText and $isError")
-            }),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    if (otpText != realOtp) {
+                        isError = true
+                    } else {
+                        onOtpTextCorrectlyEntered.invoke()
+                    }
+                    println("OTP: $otpText and $isError")
+                },
+            ),
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done,
             ),
             decorationBox = {
                 Row(horizontalArrangement = Arrangement.Center) {
                     repeat(otpCount) { index ->
                         CharView(
-                            index = index, text = otpText
+                            index = index,
+                            text = otpText,
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                     }
                 }
-            })
+            },
+        )
         if (isError) {
             // display erro message in text
             Text(
@@ -86,7 +100,7 @@ fun OtpTextField(
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Red,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.padding(top = 8.dp)
+                modifier = Modifier.padding(top = 8.dp),
             )
         }
     }
@@ -94,7 +108,9 @@ fun OtpTextField(
 
 @Composable
 fun CharView(
-    index: Int, text: String
+    index: Int,
+    text: String,
+    modifier: Modifier = Modifier,
 ) {
     val isFocused = text.length == index
     val char = when {
@@ -103,7 +119,7 @@ fun CharView(
         else -> text[index].toString()
     }
     Text(
-        modifier = Modifier
+        modifier = modifier
             .width(40.dp)
             .wrapContentHeight(align = Alignment.CenterVertically),
         text = char,
@@ -113,7 +129,7 @@ fun CharView(
         } else {
             Color.LightGray
         },
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
 }
 
@@ -121,8 +137,8 @@ fun CharView(
 @Composable
 fun PreviewOtpTextField() {
     OtpTextField(
+        onOtpTextCorrectlyEntered = {},
         realOtp = "1234",
         otpCount = 4,
-        onOtpTextCorrectlyEntered = {}
     )
 }

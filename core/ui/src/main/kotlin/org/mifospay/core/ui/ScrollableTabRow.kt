@@ -1,6 +1,14 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -16,7 +24,7 @@ import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.launch
 import org.mifospay.core.ui.utility.TabContent
 
-@OptIn(ExperimentalFoundationApi::class)
+@Suppress("MultipleEmitters")
 @Composable
 fun MifosScrollableTabRow(
     tabContents: List<TabContent>,
@@ -25,7 +33,7 @@ fun MifosScrollableTabRow(
     containerColor: Color = MaterialTheme.colorScheme.surface,
     selectedContentColor: Color = MaterialTheme.colorScheme.onSurface,
     unselectedContentColor: Color = Color.LightGray,
-    edgePadding: Dp = 8.dp
+    edgePadding: Dp = 8.dp,
 ) {
     val scope = rememberCoroutineScope()
 
@@ -37,8 +45,12 @@ fun MifosScrollableTabRow(
     ) {
         tabContents.forEachIndexed { index, currentTab ->
             Tab(
-                text = { Text(text = currentTab.tabName,
-                    color = MaterialTheme.colorScheme.onSurface) },
+                text = {
+                    Text(
+                        text = currentTab.tabName,
+                        color = MaterialTheme.colorScheme.onSurface,
+                    )
+                },
                 selected = pagerState.currentPage == index,
                 selectedContentColor = selectedContentColor,
                 unselectedContentColor = unselectedContentColor,
@@ -46,14 +58,14 @@ fun MifosScrollableTabRow(
                     scope.launch {
                         pagerState.animateScrollToPage(index)
                     }
-                }
+                },
             )
         }
     }
 
     HorizontalPager(
         count = tabContents.size,
-        state = pagerState
+        state = pagerState,
     ) {
         tabContents[it].content.invoke()
     }

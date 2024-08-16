@@ -135,9 +135,9 @@ internal fun ReadQrScreen(
 
                                 is ReadQrUiState.Error -> {
                                     EmptyContentScreen(
-                                        modifier = Modifier,
                                         title = stringResource(R.string.feature_qr_oops),
                                         subTitle = stringResource(id = R.string.feature_qr_unexpected_error_subtitle),
+                                        modifier = Modifier,
                                         iconTint = MaterialTheme.colorScheme.onSurface,
                                         iconImageVector = MifosIcons.Info,
                                     )

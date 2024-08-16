@@ -142,9 +142,9 @@ internal fun MerchantTransferScreen(
 
                     is MerchantTransferUiState.Empty -> {
                         EmptyContentScreen(
-                            modifier = Modifier,
                             title = stringResource(id = R.string.feature_merchants_error_oops),
                             subTitle = stringResource(id = R.string.feature_merchants_no_transactions_found),
+                            modifier = Modifier,
                             iconTint = MaterialTheme.colorScheme.onSurface,
                             iconImageVector = MifosIcons.Info,
                         )

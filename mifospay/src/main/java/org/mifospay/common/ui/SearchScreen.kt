@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.common.ui
 
 import androidx.compose.foundation.layout.Column
@@ -41,33 +50,35 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 
 @Composable
 fun SearchScreenRoute(
-    viewModel: SearchViewModel = hiltViewModel(),
     onBackClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: SearchViewModel = hiltViewModel(),
 ) {
     val searchQuery by viewModel.searchQuery.collectAsState()
     val searchResultState by viewModel.searchResults.collectAsState()
 
     SearchScreen(
         onBackClick = onBackClick,
+        searchResultState,
         searchQueryChanged = viewModel::onSearchQueryChanged,
-        searchQuery,
-        searchResultState
+        searchQuery = searchQuery,
+        modifier = modifier,
     )
 }
 
 @Composable
 fun SearchScreen(
     onBackClick: () -> Unit,
-    searchQueryChanged: (String) -> Unit = {},
+    searchResultState: SearchResultState,
+    modifier: Modifier = Modifier,
     searchQuery: String = "",
-    searchResultState: SearchResultState
+    searchQueryChanged: (String) -> Unit = {},
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
-
         SearchToolbar(
             onBackClick = onBackClick,
             onSearchQueryChanged = searchQueryChanged,
@@ -79,19 +90,21 @@ fun SearchScreen(
             SearchResultState.Loading -> {
                 MfLoadingWheel(
                     contentDesc = stringResource(R.string.feature_accounts_loading),
-                    backgroundColor = MaterialTheme.colorScheme.surface
+                    backgroundColor = MaterialTheme.colorScheme.surface,
                 )
             }
 
             is SearchResultState.Success -> {
                 SearchResultList(
-                    searchResults = searchResultState.results
+                    searchResults = searchResultState.results,
                 )
             }
 
             is SearchResultState.Error -> {
-                Text(text = searchResultState.message,
-                    color = MaterialTheme.colorScheme.onSurface)
+                Text(
+                    text = searchResultState.message,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
             }
         }
     }
@@ -99,9 +112,9 @@ fun SearchScreen(
 
 @Composable
 private fun SearchToolbar(
-    modifier: Modifier = Modifier,
     onBackClick: () -> Unit,
     onSearchQueryChanged: (String) -> Unit,
+    modifier: Modifier = Modifier,
     searchQuery: String = "",
 ) {
     Row(
@@ -116,7 +129,7 @@ private fun SearchToolbar(
         }
         SearchTextField(
             onSearchQueryChanged = onSearchQueryChanged,
-            searchQuery = searchQuery
+            searchQuery = searchQuery,
         )
     }
 }
@@ -124,7 +137,8 @@ private fun SearchToolbar(
 @Composable
 fun SearchTextField(
     onSearchQueryChanged: (String) -> Unit,
-    searchQuery: String
+    searchQuery: String,
+    modifier: Modifier = Modifier,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val onSearchExplicitlyTriggered = {
@@ -162,7 +176,7 @@ fun SearchTextField(
         onValueChange = {
             if ("\n" !in it) onSearchQueryChanged(it)
         },
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp)
             .onKeyEvent {
@@ -191,10 +205,10 @@ fun SearchTextField(
 @Composable
 fun SearchResultList(
     searchResults: List<SearchResult>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier
+        modifier = modifier,
     ) {
         items(searchResults) { searchResult ->
             SearchResultItem(searchResult = searchResult)
@@ -204,14 +218,15 @@ fun SearchResultList(
 
 @Composable
 fun SearchResultItem(
-    searchResult: SearchResult
+    searchResult: SearchResult,
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = searchResult.resultName,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
-        color = MaterialTheme.colorScheme.onSurface
+        color = MaterialTheme.colorScheme.onSurface,
     )
 }
 
@@ -221,7 +236,7 @@ private fun SearchToolbarPreview() {
     MifosTheme {
         SearchToolbar(
             onBackClick = {},
-            onSearchQueryChanged = {}
+            onSearchQueryChanged = {},
         )
     }
 }
@@ -231,15 +246,15 @@ private fun SearchToolbarPreview() {
 fun SearchScreenSuccessPreview() {
     MifosTheme {
         SearchScreen(
+            onBackClick = {},
             searchResultState = SearchResultState.Success(
                 mutableListOf(
                     SearchResult(1, "John Doe", "Client"),
                     SearchResult(2, "Jane Smith", "Client"),
                     SearchResult(3, "example@email.com", "Email"),
-                    SearchResult(4, "555-1234", "Phone Number")
-                )
+                    SearchResult(4, "555-1234", "Phone Number"),
+                ),
             ),
-            onBackClick = {}
         )
     }
 }
@@ -249,8 +264,8 @@ fun SearchScreenSuccessPreview() {
 fun SearchScreenLoadingPreview() {
     MifosTheme {
         SearchScreen(
+            onBackClick = {},
             searchResultState = SearchResultState.Loading,
-            onBackClick = {}
         )
     }
 }
@@ -260,8 +275,8 @@ fun SearchScreenLoadingPreview() {
 fun SearchScreenIdlePreview() {
     MifosTheme {
         SearchScreen(
+            onBackClick = {},
             searchResultState = SearchResultState.Idle,
-            onBackClick = {}
         )
     }
 }
@@ -271,10 +286,8 @@ fun SearchScreenIdlePreview() {
 fun SearchScreenErrorPreview() {
     MifosTheme {
         SearchScreen(
+            onBackClick = {},
             searchResultState = SearchResultState.Error("Error"),
-            onBackClick = {}
         )
     }
 }
-
-

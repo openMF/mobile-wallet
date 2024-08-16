@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.ui
 
 import androidx.compose.animation.AnimatedVisibility
@@ -77,12 +86,13 @@ import org.mifospay.navigation.TopLevelDestination
 fun MifosApp(
     appState: MifosAppState,
     bottomSheetNavigator: BottomSheetNavigator,
+    modifier: Modifier = Modifier,
 ) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.HOME
     var showHomeMenuOption by rememberSaveable { mutableStateOf(false) }
 
-    MifosBackground {
+    MifosBackground(modifier) {
         MifosGradientBackground(
             gradientColors =
                 if (shouldShowGradientBackground) {

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.utils
 
 import android.app.ActivityManager
@@ -32,8 +41,11 @@ import java.text.SimpleDateFormat
 class NotificationUtils(private val mContext: Context) {
     @JvmOverloads
     fun showNotificationMessage(
-        title: String, message: String?,
-        timeStamp: String, intent: Intent, imageUrl: String? = null
+        title: String,
+        message: String?,
+        timeStamp: String,
+        intent: Intent,
+        imageUrl: String? = null,
     ) {
         // Check for empty push message
         if (TextUtils.isEmpty(message)) {
@@ -47,10 +59,10 @@ class NotificationUtils(private val mContext: Context) {
             mContext,
             0,
             intent,
-            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
         val mBuilder = NotificationCompat.Builder(
-            mContext
+            mContext,
         )
 
 //        final Uri alarmSound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE
@@ -58,34 +70,55 @@ class NotificationUtils(private val mContext: Context) {
         val alarmSound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         if (!TextUtils.isEmpty(imageUrl)) {
             if (imageUrl != null && imageUrl.length > 4 && Patterns.WEB_URL.matcher(
-                    imageUrl
+                    imageUrl,
                 ).matches()
             ) {
                 val bitmap = getBitmapFromURL(imageUrl)
                 if (bitmap != null) {
                     showBigNotification(
-                        bitmap, mBuilder, icon, title, message, timeStamp,
-                        resultPendingIntent, alarmSound
+                        bitmap,
+                        mBuilder,
+                        icon,
+                        title,
+                        message,
+                        timeStamp,
+                        resultPendingIntent,
+                        alarmSound,
                     )
                 } else {
                     showSmallNotification(
-                        mBuilder, icon, title, message, timeStamp,
-                        resultPendingIntent, alarmSound
+                        mBuilder,
+                        icon,
+                        title,
+                        message,
+                        timeStamp,
+                        resultPendingIntent,
+                        alarmSound,
                     )
                 }
             }
         } else {
             showSmallNotification(
-                mBuilder, icon, title, message, timeStamp, resultPendingIntent,
-                alarmSound
+                mBuilder,
+                icon,
+                title,
+                message,
+                timeStamp,
+                resultPendingIntent,
+                alarmSound,
             )
             playNotificationSound()
         }
     }
 
     private fun showSmallNotification(
-        mBuilder: NotificationCompat.Builder, icon: Int, title: String,
-        message: String?, timeStamp: String, resultPendingIntent: PendingIntent, alarmSound: Uri
+        mBuilder: NotificationCompat.Builder,
+        icon: Int,
+        title: String,
+        message: String?,
+        timeStamp: String,
+        resultPendingIntent: PendingIntent,
+        alarmSound: Uri,
     ) {
         val inboxStyle = NotificationCompat.InboxStyle()
         inboxStyle.addLine(message)
@@ -102,15 +135,20 @@ class NotificationUtils(private val mContext: Context) {
             .setContentText(message)
             .build()
         val notificationManager = mContext.getSystemService(
-            Context.NOTIFICATION_SERVICE
+            Context.NOTIFICATION_SERVICE,
         ) as NotificationManager
         notificationManager.notify(Constants.NOTIFICATION_ID, notification)
     }
 
     private fun showBigNotification(
-        bitmap: Bitmap, mBuilder: NotificationCompat.Builder, icon: Int,
-        title: String, message: String?, timeStamp: String, resultPendingIntent: PendingIntent,
-        alarmSound: Uri
+        bitmap: Bitmap,
+        mBuilder: NotificationCompat.Builder,
+        icon: Int,
+        title: String,
+        message: String?,
+        timeStamp: String,
+        resultPendingIntent: PendingIntent,
+        alarmSound: Uri,
     ) {
         val bigPictureStyle = NotificationCompat.BigPictureStyle()
         bigPictureStyle.setBigContentTitle(title)
@@ -129,7 +167,7 @@ class NotificationUtils(private val mContext: Context) {
             .setContentText(message)
             .build()
         val notificationManager = mContext.getSystemService(
-            Context.NOTIFICATION_SERVICE
+            Context.NOTIFICATION_SERVICE,
         ) as NotificationManager
         notificationManager.notify(Constants.NOTIFICATION_ID_BIG_IMAGE, notification)
     }
@@ -200,7 +238,7 @@ class NotificationUtils(private val mContext: Context) {
         // Clears notification tray messages
         fun clearNotifications(context: Context) {
             val notificationManager = context.getSystemService(
-                Context.NOTIFICATION_SERVICE
+                Context.NOTIFICATION_SERVICE,
             ) as NotificationManager
             notificationManager.cancelAll()
         }

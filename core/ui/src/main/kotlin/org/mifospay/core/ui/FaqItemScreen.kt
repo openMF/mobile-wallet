@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.ui
 
 import androidx.compose.animation.AnimatedVisibility
@@ -24,21 +33,21 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun FaqItemScreen(
-    question: String?,
-    answer: String?,
+    modifier: Modifier = Modifier,
+    question: String? = null,
+    answer: String? = null,
 ) {
     var isSelected by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp)
+            .padding(horizontal = 16.dp),
     ) {
         Row(
             modifier = Modifier
@@ -46,7 +55,7 @@ fun FaqItemScreen(
                     isSelected = !isSelected
                 }
                 .padding(vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = question.orEmpty(),
@@ -62,7 +71,7 @@ fun FaqItemScreen(
                 contentDescription = "drop down",
                 tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
-                    .scale(1f, if (isSelected) -1f else 1f)
+                    .scale(1f, if (isSelected) -1f else 1f),
             )
         }
 
@@ -70,9 +79,9 @@ fun FaqItemScreen(
             visible = isSelected,
             enter = fadeIn() + expandVertically(
                 animationSpec = spring(
-                    stiffness = Spring.StiffnessMedium
-                )
-            )
+                    stiffness = Spring.StiffnessMedium,
+                ),
+            ),
         ) {
             Text(
                 text = answer.orEmpty(),
@@ -80,7 +89,7 @@ fun FaqItemScreen(
                 color = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = 8.dp),
             )
         }
 
