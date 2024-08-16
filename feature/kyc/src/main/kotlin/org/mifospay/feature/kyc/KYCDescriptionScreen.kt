@@ -110,9 +110,9 @@ private fun KYCDescriptionScreen(
 
             is KYCDescriptionUiState.Error -> {
                 EmptyContentScreen(
-                    modifier = Modifier,
                     title = stringResource(id = R.string.feature_kyc_error_oops),
                     subTitle = stringResource(id = R.string.feature_kyc_unexpected_error_subtitle),
+                    modifier = Modifier,
                     iconTint = MaterialTheme.colorScheme.primary,
                     iconImageVector = Icons.Rounded.Info,
                 )

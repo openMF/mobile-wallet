@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.ui
 
 import android.graphics.Bitmap
@@ -16,12 +25,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ProfileImage(bitmap: Bitmap?) {
+fun ProfileImage(
+    modifier: Modifier = Modifier,
+    bitmap: Bitmap? = null,
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(top = 64.dp, bottom = 12.dp),
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
     ) {
         Box(
             contentAlignment = Alignment.Center,
@@ -30,14 +42,14 @@ fun ProfileImage(bitmap: Bitmap?) {
                 .border(
                     width = 2.dp,
                     color = Color.Gray,
-                    shape = CircleShape
-                )
+                    shape = CircleShape,
+                ),
         ) {
             MifosUserImage(
-                bitmap = bitmap,
                 modifier = Modifier
                     .size(200.dp)
-                    .padding(10.dp)
+                    .padding(10.dp),
+                bitmap = bitmap,
             )
         }
     }

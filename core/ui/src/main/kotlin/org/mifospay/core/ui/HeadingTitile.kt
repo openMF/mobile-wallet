@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.ui
 
 import androidx.compose.foundation.layout.Row
@@ -22,11 +31,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.mifospay.core.designsystem.theme.MifosTheme
 
-
 @Composable
-fun VerifyStepHeader(text: String, isVerified: Boolean) {
+fun VerifyStepHeader(
+    text: String,
+    isVerified: Boolean,
+    modifier: Modifier = Modifier,
+) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth(),
     ) {
         Text(
@@ -38,21 +50,23 @@ fun VerifyStepHeader(text: String, isVerified: Boolean) {
                 .padding(16.dp)
                 .weight(1f),
             textAlign = TextAlign.Start,
-            style = TextStyle(fontWeight = FontWeight.Bold)
+            style = TextStyle(fontWeight = FontWeight.Bold),
         )
         IconButton(
             onClick = { },
         ) {
-            if (isVerified)
+            if (isVerified) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = null,
                     tint = if (isVerified) MaterialTheme.colorScheme.onSurface else Color.Gray,
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(24.dp),
                 )
+            }
         }
     }
 }
+
 @Preview
 @Composable
 fun VerifyStepHeaderVerifiedPreview() {

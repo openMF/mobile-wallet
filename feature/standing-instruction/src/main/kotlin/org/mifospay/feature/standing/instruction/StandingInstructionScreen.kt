@@ -78,9 +78,9 @@ internal fun StandingInstructionScreen(
         when (standingInstructionsUiState) {
             StandingInstructionsUiState.Empty -> {
                 EmptyContentScreen(
-                    modifier = Modifier,
                     title = stringResource(id = R.string.feature_standing_instruction_error_oops),
                     subTitle = stringResource(id = R.string.feature_standing_instruction_empty_standing_instructions),
+                    modifier = Modifier,
                     iconTint = MaterialTheme.colorScheme.primary,
                     iconImageVector = Icons.Rounded.Info,
                 )
@@ -88,9 +88,9 @@ internal fun StandingInstructionScreen(
 
             is StandingInstructionsUiState.Error -> {
                 EmptyContentScreen(
-                    modifier = Modifier,
                     title = stringResource(id = R.string.feature_standing_instruction_error_oops),
                     subTitle = stringResource(id = R.string.feature_standing_instruction_error_fetching_si_list),
+                    modifier = Modifier,
                     iconTint = MaterialTheme.colorScheme.primary,
                     iconImageVector = MifosIcons.RoundedInfo,
                 )

@@ -57,9 +57,9 @@ private fun InvoiceScreen(
     when (invoiceUiState) {
         is InvoicesUiState.Error -> {
             EmptyContentScreen(
-                modifier = Modifier,
                 title = stringResource(id = R.string.feature_invoices_error_oops),
                 subTitle = stringResource(id = R.string.feature_invoices_unexpected_error_subtitle),
+                modifier = Modifier,
                 iconTint = Color.Black,
                 iconImageVector = Info,
             )
@@ -92,9 +92,9 @@ private fun InvoiceScreen(
 
         InvoicesUiState.Empty -> {
             EmptyContentScreen(
-                modifier = Modifier,
                 title = stringResource(id = R.string.feature_invoices_error_oops),
                 subTitle = stringResource(id = R.string.feature_invoices_error_no_invoices_found),
+                modifier = Modifier,
                 iconTint = Color.Black,
             )
         }
