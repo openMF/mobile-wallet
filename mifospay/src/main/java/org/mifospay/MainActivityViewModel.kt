@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay
 
 import androidx.lifecycle.ViewModel
@@ -11,10 +20,9 @@ import kotlinx.coroutines.flow.stateIn
 import org.mifospay.core.data.repository.auth.UserDataRepository
 import javax.inject.Inject
 
-
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    userDataRepository: UserDataRepository
+    userDataRepository: UserDataRepository,
 ) : ViewModel() {
 
     val uiState: StateFlow<MainActivityUiState> = userDataRepository.userData.map {

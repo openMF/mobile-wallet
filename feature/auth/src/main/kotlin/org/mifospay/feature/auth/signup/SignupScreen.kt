@@ -152,7 +152,20 @@ private fun SignupScreenContent(
 
         val isNameOfBusinessEmpty =
             data.mifosSavingsProductId == MIFOS_MERCHANT_SAVINGS_PRODUCT_ID &&
-                    nameOfBusiness.isEmpty()
+                nameOfBusiness.isEmpty()
+                lastName.isEmpty() ||
+                email.isEmpty() ||
+                userName.isEmpty() ||
+                addressLine1.isEmpty() ||
+                addressLine2.isEmpty() ||
+                pinCode.isEmpty() ||
+                password.isEmpty() ||
+                confirmPassword.isEmpty() ||
+                selectedState == null
+
+        val isNameOfBusinessEmpty =
+            data.mifosSavingsProductId == MIFOS_MERCHANT_SAVINGS_PRODUCT_ID &&
+                nameOfBusiness.isEmpty()
 
         if (!email.isValidEmail()) {
             Toast

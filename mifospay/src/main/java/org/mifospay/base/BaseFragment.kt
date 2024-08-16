@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.base
 
 import android.app.Activity
@@ -62,7 +71,9 @@ open class BaseFragment : Fragment() {
     protected val swipeRefreshLayout: SwipeRefreshLayout?
         protected get() = if (callback != null) {
             callback!!.swipeRefreshLayout
-        } else null
+        } else {
+            null
+        }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -71,8 +82,8 @@ open class BaseFragment : Fragment() {
             activity as BaseActivityCallback?
         } catch (e: ClassCastException) {
             throw ClassCastException(
-                activity.toString()
-                        + " must implement BaseActivityCallback methods"
+                activity.toString() +
+                    " must implement BaseActivityCallback methods",
             )
         }
     }
@@ -83,13 +94,14 @@ open class BaseFragment : Fragment() {
     }
 
     fun replaceFragmentUsingFragmentManager(
-        fragment: Fragment, addToBackStack: Boolean,
-        containerId: Int
+        fragment: Fragment,
+        addToBackStack: Boolean,
+        containerId: Int,
     ) {
         val backStateName = fragment.javaClass.name
         val fragmentPopped = requireFragmentManager().popBackStackImmediate(
             backStateName,
-            0
+            0,
         )
         if (!fragmentPopped && requireFragmentManager().findFragmentByTag(backStateName) ==
             null
@@ -107,7 +119,7 @@ open class BaseFragment : Fragment() {
         val backStateName = fragment.javaClass.name
         val fragmentPopped = childFragmentManager.popBackStackImmediate(
             backStateName,
-            0
+            0,
         )
         if (!fragmentPopped && childFragmentManager.findFragmentByTag(backStateName) ==
             null

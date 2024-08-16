@@ -1,11 +1,20 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.common.presenter
 
+import org.mifospay.base.BaseView
+import org.mifospay.common.TransferContract
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.TransferFunds
 import org.mifospay.core.data.domain.usecase.client.SearchClient
-import org.mifospay.base.BaseView
-import org.mifospay.common.TransferContract
 import javax.inject.Inject
 
 /**
@@ -27,14 +36,17 @@ class MakeTransferPresenter @Inject constructor(private val mUsecaseHandler: Use
     }
 
     override fun fetchClient(externalId: String) {
-        mUsecaseHandler.execute(searchClient, SearchClient.RequestValues(externalId),
+        mUsecaseHandler.execute(
+            searchClient,
+            SearchClient.RequestValues(externalId),
             object : UseCaseCallback<SearchClient.ResponseValue> {
                 override fun onSuccess(response: SearchClient.ResponseValue) {
                     val searchResult = response.results[0]
                     searchResult.resultId.let {
                         mTransferView?.showToClientDetails(
                             it.toLong(),
-                            searchResult.resultName, externalId
+                            searchResult.resultName,
+                            externalId,
                         )
                     }
                 }
@@ -42,12 +54,14 @@ class MakeTransferPresenter @Inject constructor(private val mUsecaseHandler: Use
                 override fun onError(message: String) {
                     mTransferView?.showVpaNotFoundSnackbar()
                 }
-            })
+            },
+        )
     }
 
     override fun makeTransfer(fromClientId: Long, toClientId: Long, amount: Double) {
         mTransferView?.enableDragging(false)
-        mUsecaseHandler.execute(transferFunds,
+        mUsecaseHandler.execute(
+            transferFunds,
             TransferFunds.RequestValues(fromClientId, toClientId, amount),
             object : UseCaseCallback<TransferFunds.ResponseValue> {
                 override fun onSuccess(response: TransferFunds.ResponseValue) {
@@ -59,6 +73,7 @@ class MakeTransferPresenter @Inject constructor(private val mUsecaseHandler: Use
                     mTransferView?.enableDragging(true)
                     mTransferView?.transferFailure()
                 }
-            })
+            },
+        )
     }
 }

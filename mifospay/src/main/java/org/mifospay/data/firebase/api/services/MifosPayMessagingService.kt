@@ -1,17 +1,11 @@
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
+/*
+ * Copyright 2016 Mifos Initiative
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 package org.mifospay.data.firebase.api.services
 
@@ -32,10 +26,7 @@ import org.mifospay.R
 import org.mifospay.feature.notification.NotificationActivity
 import org.mifospay.utils.NotificationUtils
 
-/**
- * Created by ankur on 20/June/2018
- */
-@Suppress("UnusedParameter", "UnusedPrivateMember")
+@Suppress("UnusedPrivateMember")
 class MifosPayMessagingService : FirebaseMessagingService() {
     /**
      * Called if InstanceID token is updated. This may occur if the security of
@@ -78,7 +69,7 @@ class MifosPayMessagingService : FirebaseMessagingService() {
 
         // Check if message contains a data payload.
         // We will use data messages and hence our messages will be handled here
-        if (remoteMessage.data.size > 0) {
+        if (remoteMessage.data.isNotEmpty()) {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
             try {
                 val json = JSONObject(remoteMessage.data.toString())
@@ -92,7 +83,7 @@ class MifosPayMessagingService : FirebaseMessagingService() {
 //                scheduleJob();
 //            } else {
 //                // Handle message within 10 seconds
-///                handleNow();
+// /                handleNow();
 //            }
         }
 
@@ -100,7 +91,7 @@ class MifosPayMessagingService : FirebaseMessagingService() {
         // We will not use Firebase Notification Message but keeping the code for that won't harm.
 //        if (remoteMessage.getNotification() != null) {
 //            Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-////            handleNotification(remoteMessage.getNotification().getBody());
+// //            handleNotification(remoteMessage.getNotification().getBody());
 //            sendNotification(remoteMessage.getNotification().getTitle(),
 //                    remoteMessage.getNotification().getBody());
 //        }
@@ -144,13 +135,10 @@ class MifosPayMessagingService : FirebaseMessagingService() {
         val intent = Intent(this, NotificationActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
-            this, 0 /* Request code */,
+            this,
+            0,
             intent,
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT }
-            else {
-                PendingIntent.FLAG_ONE_SHOT
-            }
+            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_ONE_SHOT,
         )
         val channelId = getString(R.string.app_name)
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
@@ -168,11 +156,11 @@ class MifosPayMessagingService : FirebaseMessagingService() {
             val channel = NotificationChannel(
                 channelId,
                 "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT
+                NotificationManager.IMPORTANCE_DEFAULT,
             )
             notificationManager.createNotificationChannel(channel)
         }
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
+        notificationManager.notify(0, notificationBuilder.build())
     }
 
     /**
@@ -198,9 +186,7 @@ class MifosPayMessagingService : FirebaseMessagingService() {
             Log.e(TAG, "type: $type")
             // payload can be used when one needs to show specific notification with some data
             // and process it
-            if (payload != null) {
-                Log.e(TAG, "payload: $payload")
-            }
+            Log.e(TAG, "payload: $payload")
             Log.e(TAG, "imageUrl: $imageUrl")
             Log.e(TAG, "timestamp: $timestamp")
             sendNotification(title, message)
@@ -230,8 +216,11 @@ class MifosPayMessagingService : FirebaseMessagingService() {
      * Showing notification with text only
      */
     private fun showNotificationMessage(
-        context: Context, title: String, message: String,
-        timeStamp: String, intent: Intent
+        context: Context,
+        title: String,
+        message: String,
+        timeStamp: String,
+        intent: Intent,
     ) {
         val notificationUtils = NotificationUtils(context)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -242,8 +231,12 @@ class MifosPayMessagingService : FirebaseMessagingService() {
      * Showing notification with text and image
      */
     private fun showNotificationMessageWithBigImage(
-        context: Context, title: String, message: String,
-        timeStamp: String, intent: Intent, imageUrl: String
+        context: Context,
+        title: String,
+        message: String,
+        timeStamp: String,
+        intent: Intent,
+        imageUrl: String,
     ) {
         val notificationUtils = NotificationUtils(context)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

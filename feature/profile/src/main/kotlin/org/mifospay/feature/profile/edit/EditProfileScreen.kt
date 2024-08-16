@@ -164,6 +164,7 @@ fun EditProfileScreen(
     }
 }
 
+@Suppress("LongMethod")
 @Composable
 private fun EditProfileScreenContent(
     initialUsername: String,
