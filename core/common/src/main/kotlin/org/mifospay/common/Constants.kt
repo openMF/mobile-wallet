@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.common
 
 /**
@@ -166,8 +175,9 @@ object Constants {
     const val TAP_TO_REVEAL = "Tap to Reveal"
     const val NAME = "Name : "
     const val ERROR_FETCHING_TRANSACTION_DETAILS = "Error fetching details"
-   // const val WHITE_BACK_BUTTON = R.drawable.ic_arrow_back_white_24dp
-  //  const val BLACK_BACK_BUTTON = R.drawable.ic_arrow_back_black_24dp
+
+    // const val WHITE_BACK_BUTTON = R.drawable.ic_arrow_back_white_24dp
+    //  const val BLACK_BACK_BUTTON = R.drawable.ic_arrow_back_black_24dp
     const val VIEW = "View"
     const val CURRENT_PASSCODE = "current passcode"
     const val UPDATE_PASSCODE = "update passcode"
