@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.ui
 
 import android.graphics.Bitmap
@@ -12,21 +21,16 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import org.mifospay.core.designsystem.component.MifosTextUserImage
 
-/**
- * @author pratyush
- * @since 20/12/2023
- */
-
 @Composable
 fun MifosUserImage(
-    bitmap: Bitmap?,
     modifier: Modifier = Modifier,
-    username: String? = null
+    bitmap: Bitmap? = null,
+    username: String? = null,
 ) {
     if (bitmap == null) {
         MifosTextUserImage(
+            text = username?.firstOrNull()?.toString() ?: "J",
             modifier = modifier,
-            text = username?.firstOrNull()?.toString() ?: "J"
         )
     } else {
         Image(

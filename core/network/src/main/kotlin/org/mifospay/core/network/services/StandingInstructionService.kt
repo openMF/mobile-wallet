@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.network.services
 
 import com.mifospay.core.model.entity.Page
@@ -17,19 +26,24 @@ import rx.Observable
 interface StandingInstructionService {
 
     @POST(ApiEndPoints.STANDING_INSTRUCTION)
-    fun createStandingInstruction(@Body standingInstructionPayload: StandingInstructionPayload) :
-            Observable<SDIResponse>
+    fun createStandingInstruction(
+        @Body
+        standingInstructionPayload: StandingInstructionPayload,
+    ): Observable<SDIResponse>
 
     /**
      * @param clientId - passed as Query to limit the response to client specific response
      */
     @GET(ApiEndPoints.STANDING_INSTRUCTION)
-    fun getAllStandingInstructions(@Query("clientId") clientId : Long)
-            : Observable<Page<StandingInstruction>>
+    fun getAllStandingInstructions(
+        @Query("clientId") clientId: Long,
+    ): Observable<Page<StandingInstruction>>
 
     @GET("${ApiEndPoints.STANDING_INSTRUCTION}/{standingInstructionId}")
-    fun getStandingInstruction(@Path("standingInstructionId") standingInstructionId: Long)
-            : Observable<StandingInstruction>
+    fun getStandingInstruction(
+        @Path("standingInstructionId")
+        standingInstructionId: Long,
+    ): Observable<StandingInstruction>
 
     /**
      * @param command - if command is passed as "update" then the corresponding standing instruction
@@ -40,13 +54,14 @@ interface StandingInstructionService {
      */
     @PUT("${ApiEndPoints.STANDING_INSTRUCTION}/{standingInstructionId}")
     fun deleteStandingInstruction(
-            @Path("standingInstructionId") standingInstructionId: Long,
-            @Query("command") command: String): Observable<GenericResponse>
+        @Path("standingInstructionId") standingInstructionId: Long,
+        @Query("command") command: String,
+    ): Observable<GenericResponse>
 
     @PUT("${ApiEndPoints.STANDING_INSTRUCTION}/{standingInstructionId}")
     fun updateStandingInstruction(
         @Path("standingInstructionId") standingInstructionId: Long,
         @Body standingInstructionPayload: StandingInstructionPayload,
-        @Query("command") command: String): Observable<GenericResponse>
-
+        @Query("command") command: String,
+    ): Observable<GenericResponse>
 }

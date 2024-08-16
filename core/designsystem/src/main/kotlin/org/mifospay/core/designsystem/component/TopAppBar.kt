@@ -1,4 +1,12 @@
-
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 package org.mifospay.core.designsystem.component
@@ -25,8 +33,8 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MifosTopAppBar(
-    modifier: Modifier = Modifier,
     @StringRes titleRes: Int,
+    modifier: Modifier = Modifier,
     navigationIcon: ImageVector? = null,
     navigationIconContentDescription: String? = null,
     actionIcon: ImageVector? = null,
@@ -67,18 +75,20 @@ fun MifosTopAppBar(
 @Composable
 fun MifosNavigationTopAppBar(
     @StringRes titleRes: Int,
-    onNavigationClick: (() -> Unit)?
+    onNavigationClick: (() -> Unit)?,
 ) {
     MifosTopAppBar(
         titleRes = titleRes,
         navigationIcon = MifosIcons.Back,
-        navigationIconContentDescription = stringResource(
+        navigationIconContentDescription =
+        stringResource(
             id = titleRes,
         ),
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        colors =
+        TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Transparent,
         ),
-        onNavigationClick = onNavigationClick
+        onNavigationClick = onNavigationClick,
     )
 }
 

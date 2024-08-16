@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
@@ -79,5 +88,5 @@ val otherTextColor = Color.Yellow
 val greyBackgroundColor = Color(0xFFF7F7F7)
 val primaryDarkBlue = Color(0xFF303F9F)
 val InitialAvatarBgColor = Color(0xFF9999CC)
-val submitButtonColor =  Color(0xFF0000FF)
+val submitButtonColor = Color(0xFF0000FF)
 val ElectricViolet = Color(0xFF6200EE)

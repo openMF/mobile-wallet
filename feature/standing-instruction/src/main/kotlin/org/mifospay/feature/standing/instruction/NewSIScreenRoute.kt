@@ -202,26 +202,26 @@ private fun NewSIBody(
                 .padding(paddingValues),
         ) {
             MifosOutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
+                label = R.string.feature_standing_instruction_amount,
                 value = amount,
                 onValueChange = {
                     amount = it
                 },
-                label = R.string.feature_standing_instruction_amount,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             )
             Spacer(modifier = Modifier.padding(top = 16.dp))
             MifosOutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
+                label = R.string.feature_standing_instruction_vpa,
                 value = vpa,
                 onValueChange = {
                     vpa = it
                 },
-                label = R.string.feature_standing_instruction_vpa,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
                 trailingIcon = {
                     IconButton(onClick = { startScan() }) {
                         Icon(
@@ -234,14 +234,14 @@ private fun NewSIBody(
             )
             Spacer(modifier = Modifier.padding(top = 16.dp))
             MifosOutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp),
+                label = R.string.feature_standing_instruction_interval,
                 value = siInterval,
                 onValueChange = {
                     siInterval = it
                 },
-                label = R.string.feature_standing_instruction_interval,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
             )
             Row(
                 modifier = Modifier

@@ -111,9 +111,9 @@ internal fun ReadQrScreen(
             )
         },
         title = R.string.feature_qr_permission_required,
-        description = R.string.feature_qr_approve_permission_description_camera,
         confirmButtonText = R.string.feature_qr_proceed,
         dismissButtonText = R.string.feature_qr_dismiss,
+        description = R.string.feature_qr_approve_permission_description_camera,
         onGranted = {
             Box {
                 MifosScaffold(
@@ -135,9 +135,9 @@ internal fun ReadQrScreen(
 
                                 is ReadQrUiState.Error -> {
                                     EmptyContentScreen(
-                                        modifier = Modifier,
                                         title = stringResource(R.string.feature_qr_oops),
                                         subTitle = stringResource(id = R.string.feature_qr_unexpected_error_subtitle),
+                                        modifier = Modifier,
                                         iconTint = MaterialTheme.colorScheme.onSurface,
                                         iconImageVector = MifosIcons.Info,
                                     )

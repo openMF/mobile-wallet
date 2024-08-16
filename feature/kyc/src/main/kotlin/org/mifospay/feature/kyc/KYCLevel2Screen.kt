@@ -94,7 +94,9 @@ private fun KYCLevel2Screen(
 
     when (uiState) {
         KYCLevel2UiState.Loading -> {
-            MfOverlayLoadingWheel(stringResource(id = R.string.feature_kyc_submitting))
+            MfOverlayLoadingWheel(
+                contentDesc = stringResource(id = R.string.feature_kyc_submitting),
+            )
         }
 
         KYCLevel2UiState.Error -> {
@@ -256,14 +258,14 @@ private fun Kyc2Form(
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 MifosOutlinedTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
+                    label = R.string.feature_kyc_id_type,
                     value = idType,
                     onValueChange = {
                         idType = it
                     },
-                    label = R.string.feature_kyc_id_type,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 8.dp),
                 )
 
                 Row {

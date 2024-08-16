@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.datastore
 
 import android.content.Context
@@ -113,7 +122,7 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     var user: User
         get() = Gson().fromJson(
             getString(PREF_USER, Gson().toJson(User::class.java)),
-            User::class.java
+            User::class.java,
         )
         set(user) {
             putString(PREF_USER, Gson().toJson(user))
@@ -122,7 +131,7 @@ class PreferencesHelper @Inject constructor(@ApplicationContext context: Context
     var client: Client
         get() = Gson().fromJson(
             getString(PREF_CLIENT, Gson().toJson(Client::class.java)),
-            Client::class.java
+            Client::class.java,
         )
         set(client) {
             putString(PREF_USER, Gson().toJson(client))

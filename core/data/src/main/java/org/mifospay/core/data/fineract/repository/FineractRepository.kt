@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.data.fineract.repository
 
 import com.mifospay.core.model.domain.NewAccount
@@ -41,12 +50,11 @@ import rx.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
 
-
 @Singleton
 @Suppress("TooManyFunctions")
 class FineractRepository @Inject constructor(
     private val fineractApiManager: FineractApiManager,
-    private val selfApiManager: SelfServiceApiManager
+    private val selfApiManager: SelfServiceApiManager,
 ) {
     fun createClient(newClient: NewClient): Observable<CreateClient.ResponseValue> {
         return fineractApiManager.clientsApi.createClient(newClient)
@@ -73,8 +81,9 @@ class FineractRepository @Inject constructor(
     }
 
     fun searchResources(
-        query: String, resources: String,
-        exactMatch: Boolean
+        query: String,
+        resources: String,
+        exactMatch: Boolean,
     ): Observable<List<SearchedEntity>> {
         return fineractApiManager.searchApi.searchResources(query, resources, exactMatch)
     }
@@ -98,7 +107,7 @@ class FineractRepository @Inject constructor(
     fun blockUnblockAccount(accountId: Long, command: String?): Observable<GenericResponse> {
         return fineractApiManager.savingsAccountsApi.blockUnblockAccount(
             accountId,
-            command
+            command,
         )
     }
 
@@ -112,7 +121,7 @@ class FineractRepository @Inject constructor(
 
     fun addSavedCards(
         clientId: Long,
-        card: Card
+        card: Card,
     ): Observable<GenericResponse> {
         return fineractApiManager.savedCardApi.addSavedCard(clientId.toInt(), card)
     }
@@ -130,12 +139,18 @@ class FineractRepository @Inject constructor(
     }
 
     fun uploadKYCDocs(
-        entityType: String, entityId: Long, name: String,
-        desc: String, file: MultipartBody.Part
+        entityType: String,
+        entityId: Long,
+        name: String,
+        desc: String,
+        file: MultipartBody.Part,
     ): Observable<GenericResponse> {
         return fineractApiManager.documentApi.createDocument(
-            entityType, entityId, name, desc,
-            file
+            entityType,
+            entityId,
+            name,
+            desc,
+            file,
         )
     }
 
@@ -145,11 +160,11 @@ class FineractRepository @Inject constructor(
 
     fun uploadKYCLevel1Details(
         clientId: Int,
-        kycLevel1Details: KYCLevel1Details
+        kycLevel1Details: KYCLevel1Details,
     ): Observable<GenericResponse> {
         return fineractApiManager.kycLevel1Api.addKYCLevel1Details(
             clientId,
-            kycLevel1Details
+            kycLevel1Details,
         )
     }
 
@@ -159,11 +174,11 @@ class FineractRepository @Inject constructor(
 
     fun updateKYCLevel1Details(
         clientId: Int,
-        kycLevel1Details: KYCLevel1Details
+        kycLevel1Details: KYCLevel1Details,
     ): Observable<GenericResponse> {
         return fineractApiManager.kycLevel1Api.updateKYCLevel1Details(
             clientId,
-            kycLevel1Details
+            kycLevel1Details,
         )
     }
 
@@ -184,11 +199,11 @@ class FineractRepository @Inject constructor(
 
     fun getTransactionReceipt(
         outputType: String,
-        transactionId: String
+        transactionId: String,
     ): Observable<ResponseBody> {
         return fineractApiManager.runReportApi.getTransactionReceipt(
             outputType,
-            transactionId
+            transactionId,
         )
     }
 
@@ -224,7 +239,7 @@ class FineractRepository @Inject constructor(
     }
 
     fun createStandingInstruction(
-        standingInstructionPayload: StandingInstructionPayload
+        standingInstructionPayload: StandingInstructionPayload,
     ): Observable<SDIResponse> {
         return fineractApiManager.standingInstructionApi
             .createStandingInstruction(standingInstructionPayload)
@@ -241,20 +256,23 @@ class FineractRepository @Inject constructor(
 
     fun updateStandingInstruction(
         standingInstructionId: Long,
-        data: StandingInstructionPayload
+        data: StandingInstructionPayload,
     ): Observable<GenericResponse> {
         return fineractApiManager.standingInstructionApi.updateStandingInstruction(
-            standingInstructionId, data, "update"
+            standingInstructionId,
+            data,
+            "update",
         )
     }
 
     fun deleteStandingInstruction(standingInstruction: Long): Observable<GenericResponse> {
         return fineractApiManager.standingInstructionApi.deleteStandingInstruction(
-            standingInstruction, "delete"
+            standingInstruction,
+            "delete",
         )
     }
 
-    //self user apis
+    // self user apis
     fun loginSelf(payload: AuthenticationPayload): Observable<User> {
         return selfApiManager.authenticationApi.authenticate(payload)
     }
@@ -269,17 +287,17 @@ class FineractRepository @Inject constructor(
     fun getSelfAccountTransactions(accountId: Long): Observable<SavingsWithAssociations> {
         return selfApiManager.savingAccountsListApi.getSavingsWithAssociations(
             accountId,
-            Constants.TRANSACTIONS
+            Constants.TRANSACTIONS,
         )
     }
 
     fun getSelfAccountTransactionFromId(
         accountId: Long,
-        transactionId: Long
+        transactionId: Long,
     ): Observable<Transactions> {
         return selfApiManager.savingAccountsListApi.getSavingAccountTransaction(
             accountId,
-            transactionId
+            transactionId,
         )
     }
 
@@ -296,7 +314,7 @@ class FineractRepository @Inject constructor(
 
     fun updateBeneficiary(
         beneficiaryId: Long,
-        payload: BeneficiaryUpdatePayload
+        payload: BeneficiaryUpdatePayload,
     ): Observable<ResponseBody> {
         return selfApiManager.beneficiaryApi.updateBeneficiary(beneficiaryId, payload)
     }

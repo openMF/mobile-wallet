@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.utils
 
 import android.view.View
@@ -22,8 +31,11 @@ object AnimationUtil {
         val a: Animation = object : Animation() {
             override fun applyTransformation(interpolatedTime: Float, t: Transformation) {
                 v.layoutParams.height =
-                    if (interpolatedTime == 1f) LinearLayout.LayoutParams.WRAP_CONTENT
-                    else (targetHeight * interpolatedTime).toInt()
+                    if (interpolatedTime == 1f) {
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                    } else {
+                        (targetHeight * interpolatedTime).toInt()
+                    }
                 v.requestLayout()
             }
 
@@ -62,10 +74,14 @@ object AnimationUtil {
 
     fun inFromRightAnimation(view: View) {
         val inFromRight: Animation = TranslateAnimation(
-            Animation.RELATIVE_TO_PARENT, +1.0f,
-            Animation.RELATIVE_TO_PARENT, 0.0f,
-            Animation.RELATIVE_TO_PARENT, 0.0f,
-            Animation.RELATIVE_TO_PARENT, 0.0f
+            Animation.RELATIVE_TO_PARENT,
+            +1.0f,
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
         )
         inFromRight.duration = 500
         inFromRight.interpolator = AccelerateInterpolator()
@@ -82,10 +98,14 @@ object AnimationUtil {
 
     fun outToLeftAnimation(view: View) {
         val outtoLeft: Animation = TranslateAnimation(
-            Animation.RELATIVE_TO_PARENT, 0.0f,
-            Animation.RELATIVE_TO_PARENT, -1.0f,
-            Animation.RELATIVE_TO_PARENT, 0.0f,
-            Animation.RELATIVE_TO_PARENT, 0.0f
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
+            Animation.RELATIVE_TO_PARENT,
+            -1.0f,
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
         )
         outtoLeft.duration = 500
         outtoLeft.interpolator = AccelerateInterpolator()
@@ -102,10 +122,14 @@ object AnimationUtil {
 
     fun inFromLeftAnimation(view: View) {
         val inFromLeft: Animation = TranslateAnimation(
-            Animation.RELATIVE_TO_PARENT, -1.0f,
-            Animation.RELATIVE_TO_PARENT, 0.0f,
-            Animation.RELATIVE_TO_PARENT, 0.0f,
-            Animation.RELATIVE_TO_PARENT, 0.0f
+            Animation.RELATIVE_TO_PARENT,
+            -1.0f,
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
         )
         inFromLeft.duration = 500
         inFromLeft.interpolator = AccelerateInterpolator()
@@ -122,10 +146,14 @@ object AnimationUtil {
 
     fun outToRightAnimation(view: View) {
         val outtoRight: Animation = TranslateAnimation(
-            Animation.RELATIVE_TO_PARENT, 0.0f,
-            Animation.RELATIVE_TO_PARENT, +1.0f,
-            Animation.RELATIVE_TO_PARENT, 0.0f,
-            Animation.RELATIVE_TO_PARENT, 0.0f
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
+            Animation.RELATIVE_TO_PARENT,
+            +1.0f,
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
+            Animation.RELATIVE_TO_PARENT,
+            0.0f,
         )
         outtoRight.duration = 500
         outtoRight.interpolator = AccelerateInterpolator()

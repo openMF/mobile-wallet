@@ -194,9 +194,9 @@ private fun ReceiptScreenContent(
                 )
             },
             title = R.string.feature_receipt_approve_permission_storage,
-            description = R.string.feature_receipt_approve_permission_storage_receiptDescription,
             confirmButtonText = R.string.feature_receipt_proceed,
             dismissButtonText = R.string.feature_receipt_dismiss,
+            description = R.string.feature_receipt_approve_permission_storage_receiptDescription,
             onGranted = {
                 downloadData(transaction.transactionId.toString())
                 LaunchedEffect(Unit) {

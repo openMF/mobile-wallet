@@ -229,13 +229,13 @@ private fun EnterOtpScreen(
     }
 
     MifosOutlinedTextField(
-        modifier = modifier,
+        label = R.string.feature_auth_enter_otp,
         value = otp,
         onValueChange = {
             otp = it
             onOtpValidated(otp.text.length == 6, otp.text)
         },
-        label = R.string.feature_auth_enter_otp,
+        modifier = modifier,
         keyboardActions = KeyboardActions { keyboardController?.hide() },
     )
 }

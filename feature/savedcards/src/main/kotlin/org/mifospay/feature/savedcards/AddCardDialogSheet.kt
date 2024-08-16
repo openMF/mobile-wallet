@@ -174,24 +174,24 @@ private fun AddCardDialogSheetContent(
             .padding(16.dp),
     ) {
         MifosOutlinedTextField(
+            label = R.string.feature_savedcards_first_name,
             value = firstName,
             onValueChange = { firstName = it },
             modifier = Modifier.fillMaxWidth(),
-            label = R.string.feature_savedcards_first_name,
         )
         Spacer(modifier = Modifier.height(8.dp))
         MifosOutlinedTextField(
+            label = R.string.feature_savedcards_last_name,
             value = lastName,
             onValueChange = { lastName = it },
             modifier = Modifier.fillMaxWidth(),
-            label = R.string.feature_savedcards_last_name,
         )
         Spacer(modifier = Modifier.height(8.dp))
         MifosOutlinedTextField(
+            label = R.string.feature_savedcards_credit_card_number,
             value = creditCardNumber,
             onValueChange = { if (it.length <= 16) creditCardNumber = it },
             modifier = Modifier.fillMaxWidth(),
-            label = R.string.feature_savedcards_credit_card_number,
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword),
         )
         Spacer(modifier = Modifier.height(16.dp))
@@ -199,19 +199,19 @@ private fun AddCardDialogSheetContent(
         Spacer(modifier = Modifier.height(8.dp))
         Row(modifier = Modifier.fillMaxWidth()) {
             MifosOutlinedTextField(
+                label = R.string.feature_savedcards_mm_yy,
                 value = expiration,
                 onValueChange = { if (it.length <= 4) expiration = it },
                 modifier = Modifier.weight(1f),
-                label = R.string.feature_savedcards_mm_yy,
                 visualTransformation = ExpirationDateMask(),
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword),
             )
             Spacer(modifier = Modifier.width(16.dp))
             MifosOutlinedTextField(
+                label = R.string.feature_savedcards_cvv,
                 value = cvv,
                 onValueChange = { if (it.length <= 3) cvv = it },
                 modifier = Modifier.weight(1f),
-                label = R.string.feature_savedcards_cvv,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.NumberPassword),
             )
         }

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.designsystem.component
 
 import androidx.compose.foundation.clickable
@@ -20,7 +29,7 @@ fun MifosCard(
     elevation: Dp = 1.dp,
     onClick: (() -> Unit)? = null,
     colors: CardColors = CardDefaults.cardColors(),
-    content: @Composable ColumnScope.() -> Unit
+    content: @Composable ColumnScope.() -> Unit,
 ) {
     Card(
         shape = shape,
@@ -28,9 +37,9 @@ fun MifosCard(
             .fillMaxWidth()
             .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = elevation
+            defaultElevation = elevation,
         ),
         colors = colors,
-        content = content
+        content = content,
     )
 }

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package com.mifospay.core.model.utils
 
 import android.util.Log
@@ -8,10 +17,9 @@ import java.util.Date
 import java.util.Locale
 
 object DateHelper {
-    val LOG_TAG = DateHelper::class.java.simpleName
-    const val FORMAT_dd_MMMM_yyyy = "dd MMMM yyyy"
-    const val DD_MMM_YYYY = "dd MMM yyyy"
-    const val DD_MM_YYYY = "dd-MM-yyyy"
+    private val LOG_TAG = DateHelper::class.java.simpleName
+    private const val DD_MMM_YYYY = "dd MMM yyyy"
+    private const val DD_MM_YYYY = "dd-MM-yyyy"
 
     /**
      * the result string uses the list given in a reverse order ([x, y, z] results in "z y x")
@@ -34,7 +42,8 @@ object DateHelper {
     fun getDateAsString(integersOfDate: List<Int>, pattern: String?): String {
         return getFormatConverter(
             DD_MMM_YYYY,
-            pattern, getDateAsString(integersOfDate)
+            pattern,
+            getDateAsString(integersOfDate),
         )
     }
 
@@ -45,21 +54,22 @@ object DateHelper {
      * @param dateString date string
      * @return dd MMMM yyyy format date string.
      */
-    fun getSpecificFormat(format: String?, dateString: String?): String {
+    fun getSpecificFormat(format: String, dateString: String): String {
         val pickerFormat = SimpleDateFormat(DD_MM_YYYY, Locale.ENGLISH)
         val finalFormat = SimpleDateFormat(format, Locale.ENGLISH)
         var date: Date? = null
         try {
             date = pickerFormat.parse(dateString)
         } catch (e: ParseException) {
-            Log.d(LOG_TAG, e.localizedMessage)
+            Log.d(LOG_TAG, e.message.toString())
         }
         return finalFormat.format(date)
     }
 
     fun getFormatConverter(
-        currentFormat: String?, requiredFormat: String?,
-        dateString: String?
+        currentFormat: String?,
+        requiredFormat: String?,
+        dateString: String?,
     ): String {
         val pickerFormat = SimpleDateFormat(currentFormat, Locale.ENGLISH)
         val finalFormat = SimpleDateFormat(requiredFormat, Locale.ENGLISH)
@@ -76,7 +86,7 @@ object DateHelper {
      * @param month an integer from 1 to 12
      * @return string representation of the month like Jan or Feb..etc
      */
-    fun getMonthName(month: Int): String {
+    private fun getMonthName(month: Int): String {
         var monthName = ""
         when (month) {
             1 -> monthName = "Jan"
@@ -95,8 +105,8 @@ object DateHelper {
         return monthName
     }
 
-    fun getDateAsLongFromString(dateStr: String?, pattern: String?): Long {
-        val sdf = SimpleDateFormat(pattern)
+    private fun getDateAsLongFromString(dateStr: String?, pattern: String?): Long {
+        val sdf = SimpleDateFormat(pattern, Locale.getDefault())
         var date: Date? = null
         try {
             date = sdf.parse(dateStr)
@@ -125,7 +135,7 @@ object DateHelper {
 
     @JvmStatic
     fun getDateAsStringFromLong(timeInMillis: Long): String {
-        val sdf = SimpleDateFormat(DD_MMM_YYYY)
+        val sdf = SimpleDateFormat(DD_MMM_YYYY, Locale.getDefault())
         return sdf.format(Date(timeInMillis))
     }
 }

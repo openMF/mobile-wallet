@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.designsystem.utils
 
 import androidx.compose.ui.text.AnnotatedString
@@ -7,12 +16,9 @@ import androidx.compose.ui.text.input.VisualTransformation
 
 @Suppress("ReturnCount")
 class ExpirationDateMask : VisualTransformation {
-    override fun filter(text: AnnotatedString): TransformedText {
-        return makeExpirationFilter(text)
-    }
+    override fun filter(text: AnnotatedString): TransformedText = makeExpirationFilter(text)
 
     private fun makeExpirationFilter(text: AnnotatedString): TransformedText {
-
         val trimmed = if (text.text.length >= 4) text.text.substring(0..3) else text.text
         var out = ""
         for (i in trimmed.indices) {
@@ -20,19 +26,20 @@ class ExpirationDateMask : VisualTransformation {
             if (i == 1) out += "/"
         }
 
-        val offsetMapping = object : OffsetMapping {
-            override fun originalToTransformed(offset: Int): Int {
-                if (offset <= 1) return offset
-                if (offset <= 4) return offset + 1
-                return 5
-            }
+        val offsetMapping =
+            object : OffsetMapping {
+                override fun originalToTransformed(offset: Int): Int {
+                    if (offset <= 1) return offset
+                    if (offset <= 4) return offset + 1
+                    return 5
+                }
 
-            override fun transformedToOriginal(offset: Int): Int {
-                if (offset <= 2) return offset
-                if (offset <= 5) return offset - 1
-                return 4
+                override fun transformedToOriginal(offset: Int): Int {
+                    if (offset <= 2) return offset
+                    if (offset <= 5) return offset - 1
+                    return 4
+                }
             }
-        }
 
         return TransformedText(AnnotatedString(out), offsetMapping)
     }

@@ -79,9 +79,9 @@ internal fun NotificationScreen(
             when (uiState) {
                 is NotificationUiState.Error -> {
                     EmptyContentScreen(
-                        modifier = Modifier,
                         title = stringResource(id = R.string.feature_notification_error_oops),
                         subTitle = stringResource(id = R.string.feature_notification_unexpected_error_subtitle),
+                        modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.primary,
                         iconImageVector = MifosIcons.RoundedInfo,
                     )
@@ -97,9 +97,9 @@ internal fun NotificationScreen(
                 is NotificationUiState.Success -> {
                     if (uiState.notificationList.isEmpty()) {
                         EmptyContentScreen(
-                            modifier = Modifier,
                             title = stringResource(R.string.feature_notification_nothing_to_notify),
                             subTitle = stringResource(R.string.feature_notification_there_is_nothing_to_show),
+                            modifier = Modifier,
                             iconTint = MaterialTheme.colorScheme.onSurface,
                             iconImageVector = MifosIcons.RoundedInfo,
                         )

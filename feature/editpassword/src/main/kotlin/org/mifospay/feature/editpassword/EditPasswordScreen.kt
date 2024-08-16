@@ -121,9 +121,6 @@ private fun EditPasswordScreen(
                     .padding(paddingValues),
             ) {
                 MfPasswordTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
                     password = currentPassword,
                     label = stringResource(R.string.feature_editpassword_current_password),
                     isError = false,
@@ -132,15 +129,21 @@ private fun EditPasswordScreen(
                         isConfirmPasswordVisible = !isConfirmPasswordVisible
                     },
                     onPasswordChange = { currentPassword = it },
-                )
-                MfPasswordTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-
+                )
+                MfPasswordTextField(
                     password = newPassword,
+
                     label = stringResource(id = R.string.feature_editpassword_new_password),
                     isError = newPassword.isNotEmpty() && newPassword.length < 6,
+                    isPasswordVisible = isNewPasswordVisible,
+                    onTogglePasswordVisibility = { isNewPasswordVisible = !isNewPasswordVisible },
+                    onPasswordChange = { newPassword = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                     errorMessage = if (newPassword.isNotEmpty() && newPassword.length < 6) {
                         stringResource(
                             id = R.string.feature_editpassword_password_length_error,
@@ -148,17 +151,19 @@ private fun EditPasswordScreen(
                     } else {
                         null
                     },
-                    isPasswordVisible = isNewPasswordVisible,
-                    onTogglePasswordVisibility = { isNewPasswordVisible = !isNewPasswordVisible },
-                    onPasswordChange = { newPassword = it },
                 )
                 MfPasswordTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
                     password = confirmNewPassword,
                     label = stringResource(id = R.string.feature_editpassword_confirm_new_password),
                     isError = newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty(),
+                    isPasswordVisible = isConfirmNewPasswordVisible,
+                    onTogglePasswordVisibility = {
+                        isConfirmNewPasswordVisible = !isConfirmNewPasswordVisible
+                    },
+                    onPasswordChange = { confirmNewPassword = it },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                     errorMessage = if (newPassword !=
                         confirmNewPassword && confirmNewPassword.isNotEmpty()
                     ) {
@@ -168,11 +173,6 @@ private fun EditPasswordScreen(
                     } else {
                         null
                     },
-                    isPasswordVisible = isConfirmNewPasswordVisible,
-                    onTogglePasswordVisibility = {
-                        isConfirmNewPasswordVisible = !isConfirmNewPasswordVisible
-                    },
-                    onPasswordChange = { confirmNewPassword = it },
                 )
 
                 Row(

@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.designsystem.component
 
 import androidx.compose.foundation.layout.ColumnScope
@@ -37,10 +46,10 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 fun RowScope.MifosNavigationBarItem(
     selected: Boolean,
     onClick: () -> Unit,
+    icon: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     alwaysShowLabel: Boolean = true,
-    icon: @Composable () -> Unit,
     selectedIcon: @Composable () -> Unit = icon,
     label: @Composable (() -> Unit)? = null,
 ) {
@@ -52,7 +61,8 @@ fun RowScope.MifosNavigationBarItem(
         enabled = enabled,
         label = label,
         alwaysShowLabel = alwaysShowLabel,
-        colors = NavigationBarItemDefaults.colors(
+        colors =
+        NavigationBarItemDefaults.colors(
             selectedIconColor = MifosNavigationDefaults.navigationSelectedItemColor(),
             unselectedIconColor = MifosNavigationDefaults.navigationContentColor(),
             selectedTextColor = MifosNavigationDefaults.navigationSelectedItemColor(),
@@ -101,10 +111,10 @@ fun MifosNavigationBar(
 fun MifosNavigationRailItem(
     selected: Boolean,
     onClick: () -> Unit,
+    icon: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     alwaysShowLabel: Boolean = true,
-    icon: @Composable () -> Unit,
     selectedIcon: @Composable () -> Unit = icon,
     label: @Composable (() -> Unit)? = null,
 ) {
@@ -116,7 +126,8 @@ fun MifosNavigationRailItem(
         enabled = enabled,
         label = label,
         alwaysShowLabel = alwaysShowLabel,
-        colors = NavigationRailItemDefaults.colors(
+        colors =
+        NavigationRailItemDefaults.colors(
             selectedIconColor = MifosNavigationDefaults.navigationSelectedItemColor(),
             unselectedIconColor = MifosNavigationDefaults.navigationContentColor(),
             selectedTextColor = MifosNavigationDefaults.navigationSelectedItemColor(),
@@ -153,23 +164,27 @@ fun MifosNavigationRail(
 @Composable
 fun MifosNavigationBarPreview() {
     val items = listOf("Home", "Payments", "Finance", "Profile")
-    val icons = listOf(
-        MifosIcons.Home,
-        MifosIcons.Payment,
-        MifosIcons.Finance,
-        MifosIcons.Profile,
-    )
-    val selectedIcons = listOf(
-        MifosIcons.HomeBoarder,
-        MifosIcons.Payment,
-        MifosIcons.Finance,
-        MifosIcons.ProfileBoarder,
-    )
+    val icons =
+        listOf(
+            MifosIcons.Home,
+            MifosIcons.Payment,
+            MifosIcons.Finance,
+            MifosIcons.Profile,
+        )
+    val selectedIcons =
+        listOf(
+            MifosIcons.HomeBoarder,
+            MifosIcons.Payment,
+            MifosIcons.Finance,
+            MifosIcons.ProfileBoarder,
+        )
 
     MifosTheme {
         MifosNavigationBar {
             items.forEachIndexed { index, item ->
                 MifosNavigationBarItem(
+                    selected = index == 0,
+                    onClick = { },
                     icon = {
                         Icon(
                             imageVector = icons[index],
@@ -183,8 +198,6 @@ fun MifosNavigationBarPreview() {
                         )
                     },
                     label = { Text(item) },
-                    selected = index == 0,
-                    onClick = { },
                 )
             }
         }
@@ -195,23 +208,27 @@ fun MifosNavigationBarPreview() {
 @Composable
 fun MifosNavigationRailPreview() {
     val items = listOf("Home", "Payments", "Finance", "Profile")
-    val icons = listOf(
-        MifosIcons.Home,
-        MifosIcons.Payment,
-        MifosIcons.Finance,
-        MifosIcons.Profile,
-    )
-    val selectedIcons = listOf(
-        MifosIcons.HomeBoarder,
-        MifosIcons.Payment,
-        MifosIcons.Finance,
-        MifosIcons.ProfileBoarder,
-    )
+    val icons =
+        listOf(
+            MifosIcons.Home,
+            MifosIcons.Payment,
+            MifosIcons.Finance,
+            MifosIcons.Profile,
+        )
+    val selectedIcons =
+        listOf(
+            MifosIcons.HomeBoarder,
+            MifosIcons.Payment,
+            MifosIcons.Finance,
+            MifosIcons.ProfileBoarder,
+        )
 
     MifosTheme {
         MifosNavigationRail {
             items.forEachIndexed { index, item ->
                 MifosNavigationRailItem(
+                    selected = index == 0,
+                    onClick = { },
                     icon = {
                         Icon(
                             imageVector = icons[index],
@@ -225,8 +242,6 @@ fun MifosNavigationRailPreview() {
                         )
                     },
                     label = { Text(item) },
-                    selected = index == 0,
-                    onClick = { },
                 )
             }
         }

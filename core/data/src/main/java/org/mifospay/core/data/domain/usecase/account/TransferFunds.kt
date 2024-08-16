@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.data.domain.usecase.account
 
 import com.mifospay.core.model.entity.TPTResponse
@@ -19,10 +28,11 @@ import rx.schedulers.Schedulers
 import javax.inject.Inject
 
 @Suppress("UnusedPrivateMember")
-class TransferFunds @Inject constructor( private val apiRepository: FineractRepository) :
-    UseCase<TransferFunds.RequestValues, TransferFunds.ResponseValue>() {
+class TransferFunds @Inject constructor(
+    private val apiRepository: FineractRepository,
+) : UseCase<TransferFunds.RequestValues, TransferFunds.ResponseValue>() {
 
-   // override var requestValues: RequestValues
+    // override var requestValues: RequestValues
     private lateinit var fromClient: Client
     private lateinit var toClient: Client
     private lateinit var fromAccount: SavingAccount
@@ -33,135 +43,145 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
         apiRepository.getSelfClientDetails(requestValues.fromClientId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : Subscriber<Client>() {
-                override fun onCompleted() {}
+            .subscribe(
+                object : Subscriber<Client>() {
+                    override fun onCompleted() {}
 
-                override fun onError(e: Throwable) {
-                    useCaseCallback.onError(Constants.ERROR_FETCHING_CLIENT_DATA)
-                }
+                    override fun onError(e: Throwable) {
+                        useCaseCallback.onError(Constants.ERROR_FETCHING_CLIENT_DATA)
+                    }
 
-                override fun onNext(client: Client) {
-                    fromClient = client
-                    fetchToClientDetails()
-                }
-            })
+                    override fun onNext(client: Client) {
+                        fromClient = client
+                        fetchToClientDetails()
+                    }
+                },
+            )
     }
 
     private fun fetchToClientDetails() {
         apiRepository.getClientDetails(walletRequestValues.toClientId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : Subscriber<Client>() {
-                override fun onCompleted() {}
+            .subscribe(
+                object : Subscriber<Client>() {
+                    override fun onCompleted() {}
 
-                override fun onError(e: Throwable) {
-                    useCaseCallback.onError(Constants.ERROR_FETCHING_CLIENT_DATA)
-                }
+                    override fun onError(e: Throwable) {
+                        useCaseCallback.onError(Constants.ERROR_FETCHING_CLIENT_DATA)
+                    }
 
-                override fun onNext(client: Client) {
-                    toClient = client
-                    fetchFromAccountDetails()
-                }
-            })
+                    override fun onNext(client: Client) {
+                        toClient = client
+                        fetchFromAccountDetails()
+                    }
+                },
+            )
     }
 
     private fun fetchFromAccountDetails() {
         apiRepository.getSelfAccounts(walletRequestValues.fromClientId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : Subscriber<ClientAccounts>() {
-                override fun onCompleted() {}
+            .subscribe(
+                object : Subscriber<ClientAccounts>() {
+                    override fun onCompleted() {}
 
-                override fun onError(e: Throwable) {
-                    useCaseCallback.onError(Constants.ERROR_FETCHING_FROM_ACCOUNT)
-                }
-
-                override fun onNext(clientAccounts: ClientAccounts) {
-                    val accounts = clientAccounts.savingsAccounts
-                    if (accounts != null && accounts.isNotEmpty()) {
-                        var walletAccount: SavingAccount? = null
-                        for (account in accounts) {
-                            if (account.productId == Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
-                                walletAccount = account
-                                break
-                            }
-                        }
-                        if (walletAccount != null) {
-                            fromAccount = walletAccount
-                            fetchToAccountDetails()
-                        } else {
-                            useCaseCallback.onError(Constants.NO_WALLET_FOUND)
-                        }
-                    } else {
+                    override fun onError(e: Throwable) {
                         useCaseCallback.onError(Constants.ERROR_FETCHING_FROM_ACCOUNT)
                     }
-                }
-            })
+
+                    override fun onNext(clientAccounts: ClientAccounts) {
+                        val accounts = clientAccounts.savingsAccounts
+                        if (accounts.isNotEmpty()) {
+                            var walletAccount: SavingAccount? = null
+                            for (account in accounts) {
+                                if (account.productId == Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
+                                    walletAccount = account
+                                    break
+                                }
+                            }
+                            if (walletAccount != null) {
+                                fromAccount = walletAccount
+                                fetchToAccountDetails()
+                            } else {
+                                useCaseCallback.onError(Constants.NO_WALLET_FOUND)
+                            }
+                        } else {
+                            useCaseCallback.onError(Constants.ERROR_FETCHING_FROM_ACCOUNT)
+                        }
+                    }
+                },
+            )
     }
 
     private fun fetchToAccountDetails() {
         apiRepository.getAccounts(walletRequestValues.toClientId)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : Subscriber<ClientAccounts>() {
-                override fun onCompleted() {}
+            .subscribe(
+                object : Subscriber<ClientAccounts>() {
+                    override fun onCompleted() {}
 
-                override fun onError(e: Throwable) {
-                    useCaseCallback.onError(Constants.ERROR_FETCHING_TO_ACCOUNT)
-                }
-
-                override fun onNext(clientAccounts: ClientAccounts) {
-                    val accounts = clientAccounts.savingsAccounts
-                    if (!accounts.isNullOrEmpty()) {
-                        var walletAccount: SavingAccount? = null
-                        for (account in accounts) {
-                            if (account.productId == Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
-                                walletAccount = account
-                                break
-                            }
-                        }
-                        if (walletAccount != null) {
-                            toAccount = walletAccount
-                            makeTransfer()
-                        } else {
-                            useCaseCallback.onError(Constants.NO_WALLET_FOUND)
-                        }
-                    } else {
+                    override fun onError(e: Throwable) {
                         useCaseCallback.onError(Constants.ERROR_FETCHING_TO_ACCOUNT)
                     }
-                }
-            })
+
+                    override fun onNext(clientAccounts: ClientAccounts) {
+                        val accounts = clientAccounts.savingsAccounts
+                        if (accounts.isNotEmpty()) {
+                            var walletAccount: SavingAccount? = null
+                            for (account in accounts) {
+                                if (account.productId == Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID) {
+                                    walletAccount = account
+                                    break
+                                }
+                            }
+                            if (walletAccount != null) {
+                                toAccount = walletAccount
+                                makeTransfer()
+                            } else {
+                                useCaseCallback.onError(Constants.NO_WALLET_FOUND)
+                            }
+                        } else {
+                            useCaseCallback.onError(Constants.ERROR_FETCHING_TO_ACCOUNT)
+                        }
+                    }
+                },
+            )
     }
 
     private fun checkBeneficiary() {
         apiRepository.beneficiaryList
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : Subscriber<List<Beneficiary>>() {
-                override fun onCompleted() {}
+            .subscribe(
+                object : Subscriber<List<Beneficiary>>() {
+                    override fun onCompleted() {}
 
-                override fun onError(e: Throwable) {
-                    useCaseCallback.onError(Constants.ERROR_FETCHING_BENEFICIARIES)
-                }
+                    override fun onError(e: Throwable) {
+                        useCaseCallback.onError(Constants.ERROR_FETCHING_BENEFICIARIES)
+                    }
 
-                override fun onNext(beneficiaries: List<Beneficiary>) {
-                    var exists = false
-                    beneficiaries.forEach { beneficiary ->
-                        if (beneficiary.accountNumber == toAccount.accountNo) {
-                            exists = true
-                            if (beneficiary.transferLimit >= walletRequestValues.amount) {
-                                makeTransfer()
-                            } else {
-                                updateTransferLimit(beneficiary.id?.toLong()!!)
+                    override fun onNext(beneficiaries: List<Beneficiary>) {
+                        var exists = false
+                        beneficiaries.forEach { beneficiary ->
+                            if (beneficiary.accountNumber == toAccount.accountNo) {
+                                exists = true
+                                if (beneficiary.transferLimit >= walletRequestValues.amount) {
+                                    makeTransfer()
+                                } else {
+                                    updateTransferLimit(beneficiary.id?.toLong()!!)
+                                }
+                                return@forEach
                             }
-                            return@forEach
+                        }
+                        if (!exists) {
+                            addBeneficiary()
                         }
                     }
-                    if (!exists) {
-                        addBeneficiary()
-                    }
-                }
-            })
+                },
+            )
     }
 
     private fun addBeneficiary() {
@@ -176,17 +196,19 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
         apiRepository.createBeneficiary(payload)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : Subscriber<ResponseBody>() {
-                override fun onCompleted() {}
+            .subscribe(
+                object : Subscriber<ResponseBody>() {
+                    override fun onCompleted() {}
 
-                override fun onError(e: Throwable) {
-                    useCaseCallback.onError(Constants.ERROR_ADDING_BENEFICIARY)
-                }
+                    override fun onError(e: Throwable) {
+                        useCaseCallback.onError(Constants.ERROR_ADDING_BENEFICIARY)
+                    }
 
-                override fun onNext(responseBody: ResponseBody) {
-                    makeTransfer()
-                }
-            })
+                    override fun onNext(responseBody: ResponseBody) {
+                        makeTransfer()
+                    }
+                },
+            )
     }
 
     private fun updateTransferLimit(beneficiaryId: Long) {
@@ -196,17 +218,19 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
         apiRepository.updateBeneficiary(beneficiaryId, updatePayload)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : Subscriber<ResponseBody>() {
-                override fun onCompleted() {}
+            .subscribe(
+                object : Subscriber<ResponseBody>() {
+                    override fun onCompleted() {}
 
-                override fun onError(e: Throwable) {
-                    useCaseCallback.onError(Constants.ERROR_ADDING_BENEFICIARY)
-                }
+                    override fun onError(e: Throwable) {
+                        useCaseCallback.onError(Constants.ERROR_ADDING_BENEFICIARY)
+                    }
 
-                override fun onNext(responseBody: ResponseBody) {
-                    makeTransfer()
-                }
-            })
+                    override fun onNext(responseBody: ResponseBody) {
+                        makeTransfer()
+                    }
+                },
+            )
     }
 
     private fun makeTransfer() {
@@ -227,23 +251,25 @@ class TransferFunds @Inject constructor( private val apiRepository: FineractRepo
         apiRepository.makeThirdPartyTransfer(transferPayload)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
-            .subscribe(object : Subscriber<TPTResponse>() {
-                override fun onCompleted() {}
+            .subscribe(
+                object : Subscriber<TPTResponse>() {
+                    override fun onCompleted() {}
 
-                override fun onError(e: Throwable) {
-                    useCaseCallback.onError(Constants.ERROR_MAKING_TRANSFER)
-                }
+                    override fun onError(e: Throwable) {
+                        useCaseCallback.onError(Constants.ERROR_MAKING_TRANSFER)
+                    }
 
-                override fun onNext(responseBody: TPTResponse) {
-                    useCaseCallback.onSuccess(ResponseValue())
-                }
-            })
+                    override fun onNext(responseBody: TPTResponse) {
+                        useCaseCallback.onSuccess(ResponseValue())
+                    }
+                },
+            )
     }
 
     data class RequestValues(
         val fromClientId: Long,
         val toClientId: Long,
-        val amount: Double
+        val amount: Double,
     ) : UseCase.RequestValues
 
     class ResponseValue : UseCase.ResponseValue

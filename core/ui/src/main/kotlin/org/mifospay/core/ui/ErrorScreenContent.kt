@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.ui
 
 import androidx.compose.foundation.layout.Arrangement
@@ -27,22 +36,21 @@ fun ErrorScreenContent(
     modifier: Modifier = Modifier,
     title: String = stringResource(id = R.string.core_ui_error_occurred),
     subTitle: String = stringResource(id = R.string.core_ui_please_check_your_connection_or_try_again),
-    onClickRetry: () -> Unit = { }
+    onClickRetry: () -> Unit = { },
 ) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(16.dp)
                 .fillMaxSize()
                 .testTag("mifos:empty"),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
             Spacer(modifier = Modifier.height(48.dp))
 
             Text(
@@ -70,7 +78,7 @@ fun ErrorScreenContent(
                 modifier = Modifier
                     .width(150.dp)
                     .padding(top = 16.dp),
-                onClick = onClickRetry
+                onClick = onClickRetry,
             ) {
                 Text(text = stringResource(id = R.string.core_ui_retry))
             }
@@ -86,7 +94,7 @@ fun ErrorContentScreenDrawableImagePreview() {
             modifier = Modifier,
             title = "Error Occurred!",
             subTitle = "Please check your connection or try again",
-            onClickRetry = { }
+            onClickRetry = { },
         )
     }
 }

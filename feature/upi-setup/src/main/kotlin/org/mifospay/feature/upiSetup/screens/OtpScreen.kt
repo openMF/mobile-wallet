@@ -77,11 +77,11 @@ private fun OtpScreenContent(
             style = MaterialTheme.typography.headlineMedium,
         )
         OtpTextField(
-            modifier = Modifier.padding(top = 20.dp),
-            realOtp = realOtp,
             onOtpTextCorrectlyEntered = {
                 onOtpTextCorrectlyEntered()
             },
+            modifier = Modifier.padding(top = 20.dp),
+            realOtp = realOtp,
         )
     }
 }

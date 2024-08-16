@@ -1,8 +1,18 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.designsystem.component
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -39,13 +49,13 @@ fun MifosButton(
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     color: Color = MaterialTheme.colorScheme.primary,
-    content: @Composable RowScope.() -> Unit,
+    content: @Composable RowScope.() -> Unit = {},
 ) {
     Button(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.buttonColors(containerColor = color,),
+        colors = ButtonDefaults.buttonColors(containerColor = color),
         contentPadding = contentPadding,
         content = content,
     )
@@ -63,11 +73,11 @@ fun MifosButton(
  */
 @Composable
 fun MifosButton(
+    text: @Composable () -> Unit,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     color: Color = MaterialTheme.colorScheme.onBackground,
-    text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     MifosButton(
@@ -105,7 +115,7 @@ fun MifosOutlinedButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    content: @Composable RowScope.() -> Unit,
+    content: @Composable RowScope.() -> Unit = {},
 ) {
     OutlinedButton(
         onClick = onClick,
@@ -142,9 +152,9 @@ fun MifosOutlinedButton(
 @Composable
 fun MifosOutlinedButton(
     onClick: () -> Unit,
+    text: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     MifosOutlinedButton(
@@ -178,7 +188,7 @@ fun MifosTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    content: @Composable RowScope.() -> Unit,
+    content: @Composable RowScope.() -> Unit = {},
 ) {
     TextButton(
         onClick = onClick,
@@ -203,10 +213,10 @@ fun MifosTextButton(
  */
 @Composable
 fun MifosTextButton(
+    text: @Composable () -> Unit,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    text: @Composable () -> Unit,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     MifosTextButton(
@@ -230,24 +240,27 @@ fun MifosTextButton(
 @Composable
 private fun MifosButtonContent(
     text: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
-    if (leadingIcon != null) {
-        Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) {
-            leadingIcon()
+    Row(modifier) {
+        if (leadingIcon != null) {
+            Box(Modifier.sizeIn(maxHeight = ButtonDefaults.IconSize)) {
+                leadingIcon()
+            }
         }
-    }
-    Box(
-        Modifier
-            .padding(
-                start = if (leadingIcon != null) {
-                    ButtonDefaults.IconSpacing
-                } else {
-                    0.dp
-                },
-            ),
-    ) {
-        text()
+        Box(
+            Modifier
+                .padding(
+                    start = if (leadingIcon != null) {
+                        ButtonDefaults.IconSpacing
+                    } else {
+                        0.dp
+                    },
+                ),
+        ) {
+            text()
+        }
     }
 }
 
@@ -256,7 +269,7 @@ private fun MifosButtonContent(
 fun MifosButtonPreview() {
     MifosTheme {
         MifosBackground(modifier = Modifier.size(150.dp, 50.dp)) {
-            MifosButton(onClick = {}, text = { Text("Test button") })
+            MifosButton(text = { Text("Test button") }, onClick = {})
         }
     }
 }
@@ -277,8 +290,8 @@ fun MifosButtonLeadingIconPreview() {
     MifosTheme {
         MifosBackground(modifier = Modifier.size(150.dp, 50.dp)) {
             MifosButton(
-                onClick = {},
                 text = { Text("Test button") },
+                onClick = {},
                 leadingIcon = { Icon(imageVector = MifosIcons.Add, contentDescription = null) },
             )
         }
