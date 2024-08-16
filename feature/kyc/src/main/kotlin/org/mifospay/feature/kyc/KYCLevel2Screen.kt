@@ -94,7 +94,9 @@ private fun KYCLevel2Screen(
 
     when (uiState) {
         KYCLevel2UiState.Loading -> {
-            MfOverlayLoadingWheel(stringResource(id = R.string.feature_kyc_submitting))
+            MfOverlayLoadingWheel(
+                contentDesc = stringResource(id = R.string.feature_kyc_submitting),
+            )
         }
 
         KYCLevel2UiState.Error -> {
@@ -137,13 +139,13 @@ private fun Kyc2Form(
         mutableStateOf(
             if (SDK_INT >= 33) {
                 ContextCompat.checkSelfPermission(context, Manifest.permission.READ_MEDIA_IMAGES) ==
-                    PackageManager.PERMISSION_GRANTED
+                        PackageManager.PERMISSION_GRANTED
             } else {
                 ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.READ_EXTERNAL_STORAGE,
                 ) ==
-                    PackageManager.PERMISSION_GRANTED
+                        PackageManager.PERMISSION_GRANTED
             },
         )
     }

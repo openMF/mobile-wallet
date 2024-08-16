@@ -55,7 +55,7 @@ private fun KYCLevel3Screen(
 
     when (uiState) {
         KYCLevel3UiState.Loading -> {
-            MfOverlayLoadingWheel(stringResource(id = R.string.feature_kyc_submitting))
+            MfOverlayLoadingWheel(contentDesc = stringResource(id = R.string.feature_kyc_submitting))
         }
 
         KYCLevel3UiState.Error -> {
