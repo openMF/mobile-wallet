@@ -355,7 +355,9 @@ private fun SignupScreenContent(
         }
 
         if (showProgressState) {
-            MfOverlayLoadingWheel(stringResource(id = R.string.feature_auth_please_wait))
+            MfOverlayLoadingWheel(
+                contentDesc = stringResource(id = R.string.feature_auth_please_wait),
+            )
         }
     }
 }

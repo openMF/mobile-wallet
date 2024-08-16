@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.network.di
 
 import android.content.Context
@@ -113,7 +122,7 @@ class NetworkModule {
             userService,
             thirdPartyTransferService,
             standingInstructionService,
-            notificationService
+            notificationService,
         )
     }
 
@@ -133,11 +142,11 @@ class NetworkModule {
             savingsAccountsService,
             registrationService,
             beneficiaryService,
-            thirdPartyTransferService
+            thirdPartyTransferService,
         )
     }
 
-    //-----Fineract API Service---------//
+    // -----Fineract API Service---------//
 
     @Provides
     @Singleton
@@ -240,13 +249,13 @@ class NetworkModule {
         return retrofit.create(StandingInstructionService::class.java)
     }
 
-    //-------SelfService API Service-------//
+    // -------SelfService API Service-------//
 
     @Provides
     @Singleton
     @Named("SelfServiceAuthenticationService")
     fun providesSelfServiceAuthenticationService(
-        @SelfServiceApi retrofit: Retrofit
+        @SelfServiceApi retrofit: Retrofit,
     ): AuthenticationService {
         return retrofit.create(AuthenticationService::class.java)
     }
@@ -255,7 +264,7 @@ class NetworkModule {
     @Singleton
     @Named("SelfServiceClientService")
     fun providesSelfServiceClientService(
-        @SelfServiceApi retrofit: Retrofit
+        @SelfServiceApi retrofit: Retrofit,
     ): ClientService {
         return retrofit.create(ClientService::class.java)
     }
@@ -264,7 +273,7 @@ class NetworkModule {
     @Singleton
     @Named("SelfServiceSavingsAccountsService")
     fun providesSelfServiceSavingsAccountsService(
-        @SelfServiceApi retrofit: Retrofit
+        @SelfServiceApi retrofit: Retrofit,
     ): SavingsAccountsService {
         return retrofit.create(SavingsAccountsService::class.java)
     }
@@ -273,7 +282,7 @@ class NetworkModule {
     @Singleton
     @Named("SelfServiceRegistrationService")
     fun providesSelfServiceRegistrationService(
-        @SelfServiceApi retrofit: Retrofit
+        @SelfServiceApi retrofit: Retrofit,
     ): RegistrationService {
         return retrofit.create(RegistrationService::class.java)
     }
@@ -281,7 +290,7 @@ class NetworkModule {
     @Provides
     @Singleton
     fun providesSelfServiceBeneficiaryService(
-        @SelfServiceApi retrofit: Retrofit
+        @SelfServiceApi retrofit: Retrofit,
     ): BeneficiaryService {
         return retrofit.create(BeneficiaryService::class.java)
     }
@@ -290,7 +299,7 @@ class NetworkModule {
     @Singleton
     @Named("SelfServiceThirdPartyTransferService")
     fun providesSelfServiceThirdPartyTransferService(
-        @SelfServiceApi retrofit: Retrofit
+        @SelfServiceApi retrofit: Retrofit,
     ): ThirdPartyTransferService {
         return retrofit.create(ThirdPartyTransferService::class.java)
     }

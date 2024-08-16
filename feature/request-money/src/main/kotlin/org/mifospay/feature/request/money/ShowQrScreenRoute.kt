@@ -94,9 +94,9 @@ internal fun ShowQrScreen(
                     is ShowQrUiState.Success -> {
                         if (uiState.qrDataBitmap == null) {
                             EmptyContentScreen(
-                                modifier = Modifier,
                                 title = stringResource(R.string.feature_request_money_nothing_to_notify),
                                 subTitle = stringResource(R.string.feature_request_money_there_is_nothing_to_show),
+                                modifier = Modifier,
                                 iconTint = MaterialTheme.colorScheme.onSurface,
                                 iconImageVector = MifosIcons.Info,
                             )
@@ -113,9 +113,9 @@ internal fun ShowQrScreen(
 
                     is ShowQrUiState.Error -> {
                         EmptyContentScreen(
-                            modifier = Modifier,
                             title = stringResource(id = R.string.feature_request_money_error_oops),
                             subTitle = stringResource(id = R.string.feature_request_money_unexpected_error_subtitle),
+                            modifier = Modifier,
                             iconTint = MaterialTheme.colorScheme.onSurface,
                             iconImageVector = MifosIcons.Info,
                         )

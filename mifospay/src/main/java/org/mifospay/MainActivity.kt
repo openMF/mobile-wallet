@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay
 
 import android.os.Bundle
@@ -94,7 +103,7 @@ class MainActivity : ComponentActivity() {
                 windowSizeClass = calculateWindowSizeClass(this),
                 networkMonitor = networkMonitor,
                 timeZoneMonitor = timeZoneMonitor,
-                navController = navController
+                navController = navController,
             )
 
             val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
@@ -108,7 +117,6 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-
     }
 
     override fun onResume() {
@@ -120,7 +128,6 @@ class MainActivity : ComponentActivity() {
         super.onPause()
         lazyStats.get().isTrackingEnabled = false
     }
-
 
     /**
      * The default light scrim, as defined by androidx and the platform:

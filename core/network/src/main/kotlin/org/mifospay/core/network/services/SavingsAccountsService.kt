@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.network.services
 
 import com.mifospay.core.model.entity.Page
@@ -17,12 +26,12 @@ interface SavingsAccountsService {
     @GET(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}")
     fun getSavingsWithAssociations(
         @Path("accountId") accountId: Long,
-        @Query("associations") associationType: String
+        @Query("associations") associationType: String,
     ): Observable<SavingsWithAssociations>
 
     @GET(ApiEndPoints.SAVINGS_ACCOUNTS)
     fun getSavingsAccounts(
-        @Query("limit") limit: Int
+        @Query("limit") limit: Int,
     ): Observable<Page<SavingsWithAssociations>>
 
     @POST(ApiEndPoints.SAVINGS_ACCOUNTS)
@@ -31,21 +40,21 @@ interface SavingsAccountsService {
     @POST(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}")
     fun blockUnblockAccount(
         @Path("accountId") accountId: Long,
-        @Query("command") command: String?
+        @Query("command") command: String?,
     ): Observable<GenericResponse>
 
     @GET(
-        ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}/" + ApiEndPoints.TRANSACTIONS
-                + "/{transactionId}"
+        ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}/" + ApiEndPoints.TRANSACTIONS +
+            "/{transactionId}",
     )
     fun getSavingAccountTransaction(
         @Path("accountId") accountId: Long,
-        @Path("transactionId") transactionId: Long
+        @Path("transactionId") transactionId: Long,
     ): Observable<Transactions>
 
     @POST(
-        ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}/" + ApiEndPoints.TRANSACTIONS
-                + "?command=deposit"
+        ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}/" + ApiEndPoints.TRANSACTIONS +
+            "?command=deposit",
     )
     fun payViaMobile(@Path("accountId") accountId: Long): Observable<Transactions>
 }

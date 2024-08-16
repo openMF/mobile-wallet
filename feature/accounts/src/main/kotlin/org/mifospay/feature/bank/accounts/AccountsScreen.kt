@@ -93,9 +93,9 @@ private fun AccountScreen(
 
                 AccountsUiState.Error -> {
                     EmptyContentScreen(
-                        modifier = Modifier,
                         title = stringResource(id = R.string.feature_accounts_error_oops),
                         subTitle = stringResource(id = R.string.feature_accounts_unexpected_error_subtitle),
+                        modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.onSurface,
                         iconImageVector = Icons.Rounded.Info,
                     )
@@ -135,10 +135,10 @@ private fun AccountScreen(
                                     .background(MaterialTheme.colorScheme.surface),
                             ) {
                                 AddCardChip(
-                                    modifier = Modifier.align(Alignment.Center),
-                                    onAddBtn = onAddAccount,
                                     text = R.string.feature_accounts_add_account,
                                     btnText = R.string.feature_accounts_add_cards,
+                                    onAddBtn = onAddAccount,
+                                    modifier = Modifier.align(Alignment.Center),
                                 )
                             }
                         }
@@ -175,10 +175,10 @@ private fun NoLinkedAccountsScreen(
         ) {
             Text(text = stringResource(R.string.feature_accounts_no_linked_bank_accounts))
             AddCardChip(
-                modifier = Modifier,
-                onAddBtn = onAddBtn,
                 text = R.string.feature_accounts_add_account,
                 btnText = R.string.feature_accounts_add_cards,
+                onAddBtn = onAddBtn,
+                modifier = Modifier,
             )
         }
     }

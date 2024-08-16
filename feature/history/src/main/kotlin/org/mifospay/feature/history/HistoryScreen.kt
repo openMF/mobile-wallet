@@ -85,9 +85,9 @@ private fun HistoryScreen(
     when (historyUiState) {
         HistoryUiState.Empty -> {
             EmptyContentScreen(
-                modifier = Modifier,
                 title = stringResource(id = R.string.feature_history_error_oops),
                 subTitle = stringResource(id = R.string.feature_history_empty_no_transaction_history_title),
+                modifier = Modifier,
                 iconTint = MaterialTheme.colorScheme.primary,
                 iconImageVector = Icons.Rounded.Info,
             )
@@ -95,9 +95,9 @@ private fun HistoryScreen(
 
         is HistoryUiState.Error -> {
             EmptyContentScreen(
-                modifier = Modifier,
                 title = stringResource(id = R.string.feature_history_error_oops),
                 subTitle = stringResource(id = R.string.feature_history_unexpected_error_subtitle),
+                modifier = Modifier,
                 iconTint = MaterialTheme.colorScheme.primary,
                 iconImageVector = Icons.Rounded.Info,
             )
@@ -139,10 +139,10 @@ private fun HistoryScreen(
                     items(filteredTransactions) {
                         Column {
                             TransactionItemScreen(
+                                transaction = it,
                                 modifier = Modifier
                                     .padding(start = 24.dp, end = 24.dp)
                                     .clickable { transactionDetailState = it },
-                                transaction = it,
                             )
                             Spacer(modifier = Modifier.height(16.dp))
                         }

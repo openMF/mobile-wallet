@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package com.mifospay.core.model.domain
 
 import android.os.Parcelable
@@ -16,7 +25,7 @@ data class Transaction(
     var transactionType: com.mifospay.core.model.domain.TransactionType = com.mifospay.core.model.domain.TransactionType.OTHER,
     var transferId: Long = 0,
     var transferDetail: TransferDetail = TransferDetail(),
-    var receiptId: String? = null
+    var receiptId: String? = null,
 ) : Parcelable {
     constructor() : this(
         "",
@@ -28,6 +37,6 @@ data class Transaction(
         com.mifospay.core.model.domain.TransactionType.OTHER,
         0,
         TransferDetail(),
-        ""
+        "",
     )
 }

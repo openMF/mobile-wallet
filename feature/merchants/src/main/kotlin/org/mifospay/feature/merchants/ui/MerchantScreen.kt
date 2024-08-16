@@ -95,9 +95,9 @@ internal fun MerchantScreen(
             when (merchantUiState) {
                 MerchantUiState.Empty -> {
                     EmptyContentScreen(
-                        modifier = Modifier,
                         title = stringResource(id = R.string.feature_merchants_empty_no_merchants_title),
                         subTitle = stringResource(id = R.string.feature_merchants_empty_no_merchants_subtitle),
+                        modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.primary,
                         iconImageVector = Icons.Rounded.Info,
                     )
@@ -105,9 +105,9 @@ internal fun MerchantScreen(
 
                 is MerchantUiState.Error -> {
                     EmptyContentScreen(
-                        modifier = Modifier,
                         title = stringResource(id = R.string.feature_merchants_error_oops),
                         subTitle = stringResource(id = R.string.feature_merchants_unexpected_error_subtitle),
+                        modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.primary,
                         iconImageVector = Icons.Rounded.Info,
                     )
