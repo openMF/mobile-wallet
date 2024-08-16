@@ -1,8 +1,17 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.network.services
 
+import com.mifospay.core.model.entity.noncore.Document
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
-import com.mifospay.core.model.entity.noncore.Document
 import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.GenericResponse
 import retrofit2.http.DELETE
@@ -21,7 +30,7 @@ interface DocumentService {
     @GET("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS)
     fun getDocuments(
         @Path("entityType") entityType: String?,
-        @Path("entityId") entityId: Int
+        @Path("entityId") entityId: Int,
     ): Observable<List<Document>>
 
     /**
@@ -39,7 +48,7 @@ interface DocumentService {
         @Path("entityId") entityId: Long,
         @Part("name") nameOfDocument: String,
         @Part("description") description: String,
-        @Part typedFile: MultipartBody.Part
+        @Part typedFile: MultipartBody.Part,
     ): Observable<GenericResponse>
 
     /**
@@ -58,7 +67,7 @@ interface DocumentService {
     fun downloadDocument(
         @Path("entityType") entityType: String,
         @Path("entityId") entityId: Int,
-        @Path("documentId") documentId: Int
+        @Path("documentId") documentId: Int,
     ): Observable<ResponseBody>
 
     /**
@@ -76,7 +85,7 @@ interface DocumentService {
     fun removeDocument(
         @Path("entityType") entityType: String,
         @Path("entityId") entityId: Int,
-        @Path("documentId") documentId: Int
+        @Path("documentId") documentId: Int,
     ): Observable<ResponseBody>
 
     /**
@@ -102,6 +111,6 @@ interface DocumentService {
         @Path("documentId") documentId: Int,
         @Part("name") nameOfDocument: String,
         @Part("description") description: String,
-        @Part typedFile: MultipartBody.Part
+        @Part typedFile: MultipartBody.Part,
     ): Observable<ResponseBody>
 }

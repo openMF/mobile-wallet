@@ -1,10 +1,19 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.network.services
 
-import okhttp3.ResponseBody
 import com.mifospay.core.model.entity.beneficary.Beneficiary
 import com.mifospay.core.model.entity.beneficary.BeneficiaryPayload
 import com.mifospay.core.model.entity.beneficary.BeneficiaryUpdatePayload
 import com.mifospay.core.model.entity.templates.beneficiary.BeneficiaryTemplate
+import okhttp3.ResponseBody
 import org.mifospay.core.network.ApiEndPoints
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -30,7 +39,7 @@ interface BeneficiaryService {
     @PUT(ApiEndPoints.BENEFICIARIES + "/tpt/{beneficiaryId}")
     fun updateBeneficiary(
         @Path("beneficiaryId") beneficiaryId: Long,
-        @Body payload: BeneficiaryUpdatePayload
+        @Body payload: BeneficiaryUpdatePayload,
     ): Observable<ResponseBody>
 
     @DELETE(ApiEndPoints.BENEFICIARIES + "/tpt/{beneficiaryId}")
