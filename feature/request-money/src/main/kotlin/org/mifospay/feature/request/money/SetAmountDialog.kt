@@ -59,26 +59,32 @@ internal fun SetAmountDialog(
     var currencyValidator by rememberSaveable { mutableStateOf<String?>(null) }
 
     LaunchedEffect(key1 = amount) {
-        amountValidator = when {
-            amount.trim() == "" -> null
-            amount.trim().any { it.isLetter() } ||
-                amount.trim()
-                    .toDoubleOrNull() == null -> context.getString(R.string.feature_request_money_enter_valid_amount)
+        amountValidator =
+            when {
+                amount.trim() == "" -> null
+                amount.trim().any { it.isLetter() } ||
+                    amount
+                        .trim()
+                        .toDoubleOrNull() == null -> context.getString(R.string.feature_request_money_enter_valid_amount)
 
-            amount.trim().toDouble()
-                .compareTo(0.0) <= 0 -> context.getString(R.string.feature_request_money_enter_valid_amount)
+                amount
+                    .trim()
+                    .toDouble()
+                    .compareTo(0.0) <= 0 -> context.getString(R.string.feature_request_money_enter_valid_amount)
 
-            else -> null
-        }
+                else -> null
+            }
     }
 
     LaunchedEffect(key1 = currency) {
-        currencyValidator = when {
-            currency.trim()
-                .isEmpty() -> context.getString(R.string.feature_request_money_enter_currency)
+        currencyValidator =
+            when {
+                currency
+                    .trim()
+                    .isEmpty() -> context.getString(R.string.feature_request_money_enter_currency)
 
-            else -> null
-        }
+                else -> null
+            }
     }
 
     fun validateAllFields(): Boolean {
@@ -113,12 +119,9 @@ internal fun SetAmountDialog(
 
                     MfOutlinedTextField(
                         value = amount,
+                        label = stringResource(id = R.string.feature_request_money_set_amount),
                         onValueChange = { amount = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = stringResource(id = R.string.feature_request_money_set_amount),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                        ),
                         trailingIcon = {
                             IconButton(
                                 onClick = {
@@ -131,16 +134,21 @@ internal fun SetAmountDialog(
                                 )
                             }
                         },
+                        keyboardOptions =
+                            KeyboardOptions(
+                                keyboardType = KeyboardType.Number,
+                            ),
                     )
 
                     MfOutlinedTextField(
                         value = currency,
+                        label = stringResource(id = R.string.feature_request_money_currency),
                         onValueChange = { currency = it },
                         modifier = Modifier.fillMaxWidth(),
-                        label = stringResource(id = R.string.feature_request_money_currency),
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                        ),
+                        keyboardOptions =
+                            KeyboardOptions(
+                                keyboardType = KeyboardType.Text,
+                            ),
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))

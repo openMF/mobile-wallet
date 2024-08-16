@@ -142,21 +142,21 @@ private fun LoginScreenContent(
             )
             Spacer(modifier = Modifier.padding(top = 32.dp))
             MifosOutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
+                label = R.string.feature_auth_username,
                 value = userName,
                 onValueChange = {
                     userName = it
                 },
-                label = R.string.feature_auth_username,
+                modifier = Modifier.fillMaxWidth(),
             )
             Spacer(modifier = Modifier.padding(top = 16.dp))
             MifosOutlinedTextField(
-                modifier = Modifier.fillMaxWidth(),
+                label = R.string.feature_auth_password,
                 value = password,
                 onValueChange = {
                     password = it
                 },
-                label = R.string.feature_auth_password,
+                modifier = Modifier.fillMaxWidth(),
                 visualTransformation = if (passwordVisibility) {
                     VisualTransformation.None
                 } else {

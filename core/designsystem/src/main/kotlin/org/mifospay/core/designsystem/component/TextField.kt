@@ -1,8 +1,16 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.designsystem.component
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.KeyboardActions
@@ -32,19 +40,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import org.mifospay.core.designsystem.theme.MifosTheme
 
-
 @Composable
 fun MfOutlinedTextField(
-    modifier: Modifier = Modifier,
     value: String,
     label: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
     isError: Boolean = false,
     errorMessage: String = "",
     singleLine: Boolean = false,
-    onValueChange: (String) -> Unit,
     onKeyboardActions: (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    keyboardOptions: KeyboardOptions = KeyboardOptions.Default
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) {
     OutlinedTextField(
         modifier = modifier,
@@ -58,30 +65,33 @@ fun MfOutlinedTextField(
         },
         singleLine = singleLine,
         trailingIcon = trailingIcon,
-        keyboardActions = KeyboardActions {
+        keyboardActions =
+        KeyboardActions {
             onKeyboardActions?.invoke()
         },
         keyboardOptions = keyboardOptions,
-        colors = OutlinedTextFieldDefaults.colors(
+        colors =
+        OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-            focusedLabelColor = MaterialTheme.colorScheme.onSurface
+            focusedLabelColor = MaterialTheme.colorScheme.onSurface,
         ),
-        textStyle = LocalDensity.current.run {
+        textStyle =
+        LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
-        }
+        },
     )
 }
 
 @Composable
 fun MfPasswordTextField(
-    modifier: Modifier = Modifier,
     password: String,
     label: String,
     isError: Boolean,
-    errorMessage: String? = null,
     isPasswordVisible: Boolean,
     onTogglePasswordVisibility: () -> Unit,
     onPasswordChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    errorMessage: String? = null,
 ) {
     OutlinedTextField(
         modifier = modifier,
@@ -89,7 +99,8 @@ fun MfPasswordTextField(
         onValueChange = onPasswordChange,
         label = { Text(label) },
         isError = isError,
-        visualTransformation = if (isPasswordVisible) {
+        visualTransformation =
+        if (isPasswordVisible) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()
@@ -101,59 +112,63 @@ fun MfPasswordTextField(
             IconButton(onClick = onTogglePasswordVisibility) {
                 Icon(
                     if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                    contentDescription = "Show password"
+                    contentDescription = "Show password",
                 )
             }
-        }
+        },
     )
 }
 
-
 @Composable
 fun MifosOutlinedTextField(
+    label: Int,
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
+    modifier: Modifier = Modifier,
     maxLines: Int = 1,
-    modifier: Modifier,
     singleLine: Boolean = true,
     icon: Int? = null,
-    label: Int,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     error: Boolean = false,
 ) {
-
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = { Text(stringResource(id = label)) },
         modifier = modifier,
-        leadingIcon = if (icon != null) {
+        leadingIcon =
+        if (icon != null) {
             {
                 Image(
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    colorFilter = ColorFilter.tint(
-                        MaterialTheme.colorScheme.onSurface
-                    )
+                    colorFilter =
+                    ColorFilter.tint(
+                        MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
-        } else null,
+        } else {
+            null
+        },
         trailingIcon = trailingIcon,
         maxLines = maxLines,
         singleLine = singleLine,
-        colors = OutlinedTextFieldDefaults.colors(
+        colors =
+        OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-            focusedLabelColor = MaterialTheme.colorScheme.onSurface
+            focusedLabelColor = MaterialTheme.colorScheme.onSurface,
         ),
-        textStyle = LocalDensity.current.run {
+        textStyle =
+        LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
-        isError = error
+        isError = error,
     )
 }
 
@@ -162,16 +177,16 @@ fun MifosOutlinedTextField(
 fun MfOutlinedTextFieldPreview() {
     MifosTheme {
         Box(
-            modifier = Modifier.background(color = MaterialTheme.colorScheme.surface)
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
         ) {
             MfOutlinedTextField(
-                modifier = Modifier,
                 value = "Text Field Value",
                 label = "Text Field",
+                onValueChange = { },
+                modifier = Modifier,
                 isError = true,
                 errorMessage = "Error Message",
-                onValueChange = { },
-                onKeyboardActions = { }
+                onKeyboardActions = { },
             )
         }
     }
@@ -183,23 +198,18 @@ fun MfPasswordTextFieldPreview() {
     MifosTheme {
         val password = " "
         Box(
-            modifier = Modifier.background(color = Color.White)
+            modifier = Modifier.background(color = Color.White),
         ) {
             MfPasswordTextField(
-                modifier = Modifier.fillMaxWidth(),
                 password = password,
                 label = "Password",
-                isError = password.isEmpty() || password.length < 6,
-                errorMessage = if (password.isEmpty()) {
-                    "Password cannot be empty"
-                } else if (password.length < 6) {
-                    "Password must be at least 6 characters"
-                } else null,
-                onPasswordChange = { },
+                isError = true,
                 isPasswordVisible = true,
-                onTogglePasswordVisibility = { }
+                onTogglePasswordVisibility = { },
+                onPasswordChange = { },
+                modifier = Modifier.fillMaxWidth(),
+                errorMessage = "Password must be at least 6 characters",
             )
         }
     }
 }
-

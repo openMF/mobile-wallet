@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.designsystem.component
 
 import androidx.compose.animation.animateColor
@@ -142,36 +151,40 @@ fun MifosOverlayLoadingWheel(
 }
 
 @Composable
-fun MfOverlayLoadingWheel(contentDesc: String = "Loading") {
+fun MfOverlayLoadingWheel(
+    modifier: Modifier = Modifier,
+    contentDesc: String = "Loading",
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f))
             .focusable(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         MifosOverlayLoadingWheel(
             modifier = Modifier.wrapContentSize(),
-            contentDesc = contentDesc
+            contentDesc = contentDesc,
         )
     }
 }
 
 @Composable
 fun MfLoadingWheel(
+    modifier: Modifier = Modifier,
     contentDesc: String = "Loading",
-    backgroundColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+    backgroundColor: Color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(color = backgroundColor)
             .focusable(),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         MifosLoadingWheel(
             modifier = Modifier.wrapContentSize(),
-            contentDesc = contentDesc
+            contentDesc = contentDesc,
         )
     }
 }

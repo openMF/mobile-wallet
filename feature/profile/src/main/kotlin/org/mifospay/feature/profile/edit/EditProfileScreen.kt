@@ -111,8 +111,9 @@ fun EditProfileScreen(
     var showDiscardChangesDialog by rememberSaveable { mutableStateOf(false) }
 
     Box(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .fillMaxSize(),
     ) {
         MifosScaffold(
             topBarTitle = R.string.feature_profile_edit_profile,
@@ -186,32 +187,34 @@ private fun EditProfileScreenContent(
     val context = LocalContext.current
 
     PermissionBox(
-        requiredPermissions = if (Build.VERSION.SDK_INT >= 33) {
-            listOf(Manifest.permission.CAMERA)
-        } else {
-            listOf(
-                Manifest.permission.CAMERA,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            )
-        },
+        requiredPermissions =
+            if (Build.VERSION.SDK_INT >= 33) {
+                listOf(Manifest.permission.CAMERA)
+            } else {
+                listOf(
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                )
+            },
         title = R.string.feature_profile_permission_required,
-        description = R.string.feature_profile_approve_description,
         confirmButtonText = R.string.feature_profile_proceed,
         dismissButtonText = R.string.feature_profile_dismiss,
+        description = R.string.feature_profile_approve_description,
         onGranted = {
             val cameraLauncher =
                 rememberLauncherForActivityResult(ActivityResultContracts.TakePicture()) {
                     imageUri = uri
                 }
 
-            val galleryLauncher = rememberLauncherForActivityResult(
-                contract = ActivityResultContracts.GetContent(),
-            ) { uri: Uri? ->
-                uri?.let {
-                    imageUri = uri
+            val galleryLauncher =
+                rememberLauncherForActivityResult(
+                    contract = ActivityResultContracts.GetContent(),
+                ) { uri: Uri? ->
+                    uri?.let {
+                        imageUri = uri
+                    }
                 }
-            }
 
             if (showBottomSheet) {
                 MifosBottomSheet(
@@ -239,48 +242,54 @@ private fun EditProfileScreenContent(
         },
     )
     Box(
-        modifier = modifier
-            .padding(contentPadding)
-            .fillMaxSize(),
+        modifier =
+            modifier
+                .padding(contentPadding)
+                .fillMaxSize(),
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surface)
-                .verticalScroll(rememberScrollState()),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(color = MaterialTheme.colorScheme.surface)
+                    .verticalScroll(rememberScrollState()),
         ) {
             EditProfileScreenImage(
                 imageUri = imageUri,
                 onCameraIconClick = { showBottomSheet = true },
             )
             MfOutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
                 value = username,
                 label = stringResource(id = R.string.feature_profile_username),
                 onValueChange = { username = it },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
             )
             MfOutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
                 value = email,
                 label = stringResource(id = R.string.feature_profile_email),
                 onValueChange = { email = it },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
             )
             MfOutlinedTextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
                 value = vpa,
                 label = stringResource(id = R.string.feature_profile_vpa),
                 onValueChange = { vpa = it },
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
             )
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
             ) {
                 val keyboardController = LocalSoftwareKeyboardController.current
                 if (LocalInspectionMode.current) {
@@ -291,9 +300,10 @@ private fun EditProfileScreenContent(
                         initialPhoneNumber = " ",
                         autoDetectCode = true,
                         shape = RoundedCornerShape(3.dp),
-                        colors = TextFieldDefaults.outlinedTextFieldColors(
-                            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-                        ),
+                        colors =
+                            TextFieldDefaults.outlinedTextFieldColors(
+                                focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                            ),
                         onValueChange = { (code, phone), isValid ->
                             if (isValid) {
                                 mobile = code + phone
@@ -317,12 +327,12 @@ private fun EditProfileScreenContent(
                         // same behaviour as onBackPress, hence reused the callback
                         onBackClick.invoke()
                     } else {
-                        Toast.makeText(
-                            context,
-                            R.string.feature_profile_failed_to_save_changes,
-                            Toast.LENGTH_SHORT,
-                        )
-                            .show()
+                        Toast
+                            .makeText(
+                                context,
+                                R.string.feature_profile_failed_to_save_changes,
+                                Toast.LENGTH_SHORT,
+                            ).show()
                     }
                 },
                 buttonText = R.string.feature_profile_save,
@@ -331,9 +341,10 @@ private fun EditProfileScreenContent(
     }
 }
 
-private fun isDataSaveNecessary(input: String, initialInput: String): Boolean {
-    return input == initialInput
-}
+private fun isDataSaveNecessary(
+    input: String,
+    initialInput: String,
+): Boolean = input == initialInput
 
 @Composable
 fun EditProfileBottomSheetContent(
@@ -343,15 +354,17 @@ fun EditProfileBottomSheetContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(top = 8.dp, bottom = 12.dp),
+        modifier =
+            modifier
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(top = 8.dp, bottom = 12.dp),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-                .clickable { onClickProfilePicture.invoke() },
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+                    .clickable { onClickProfilePicture.invoke() },
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -362,10 +375,11 @@ fun EditProfileBottomSheetContent(
             )
         }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-                .clickable { onChangeProfilePicture.invoke() },
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+                    .clickable { onChangeProfilePicture.invoke() },
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -376,10 +390,11 @@ fun EditProfileBottomSheetContent(
             )
         }
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-                .clickable { onRemoveProfilePicture.invoke() },
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(12.dp)
+                    .clickable { onRemoveProfilePicture.invoke() },
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -401,9 +416,10 @@ private fun EditProfileSaveButton(
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(16.dp),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(16.dp),
         shape = RoundedCornerShape(10.dp),
         contentPadding = PaddingValues(12.dp),
     ) {
@@ -426,17 +442,18 @@ private fun createImageFile(context: Context): File {
 
 internal class EditProfilePreviewProvider : PreviewParameterProvider<EditProfileUiState> {
     override val values: Sequence<EditProfileUiState>
-        get() = sequenceOf(
-            EditProfileUiState.Loading,
-            EditProfileUiState.Success(),
-            EditProfileUiState.Success(
-                name = "John Doe",
-                username = "John",
-                email = "john@mifos.org",
-                vpa = "vpa",
-                mobile = "+1 55557772901",
-            ),
-        )
+        get() =
+            sequenceOf(
+                EditProfileUiState.Loading,
+                EditProfileUiState.Success(),
+                EditProfileUiState.Success(
+                    name = "John Doe",
+                    username = "John",
+                    email = "john@mifos.org",
+                    vpa = "vpa",
+                    mobile = "+1 55557772901",
+                ),
+            )
 }
 
 @Preview(showBackground = true, showSystemUi = true)

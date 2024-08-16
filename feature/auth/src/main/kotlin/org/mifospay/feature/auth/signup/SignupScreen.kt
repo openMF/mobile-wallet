@@ -138,61 +138,74 @@ private fun SignupScreenContent(
     var selectedState by rememberSaveable { mutableStateOf<State?>(null) }
 
     fun validateAllFields() {
-        val isAnyFieldEmpty = firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() ||
-            userName.isEmpty() || addressLine1.isEmpty() || addressLine2.isEmpty() ||
-            pinCode.isEmpty() || password.isEmpty() || confirmPassword.isEmpty() ||
-            selectedState == null
+        val isAnyFieldEmpty =
+            firstName.isEmpty() ||
+                lastName.isEmpty() ||
+                email.isEmpty() ||
+                userName.isEmpty() ||
+                addressLine1.isEmpty() ||
+                addressLine2.isEmpty() ||
+                pinCode.isEmpty() ||
+                password.isEmpty() ||
+                confirmPassword.isEmpty() ||
+                selectedState == null
 
-        val isNameOfBusinessEmpty = data.mifosSavingsProductId == MIFOS_MERCHANT_SAVINGS_PRODUCT_ID &&
-            nameOfBusiness.isEmpty()
+        val isNameOfBusinessEmpty =
+            data.mifosSavingsProductId == MIFOS_MERCHANT_SAVINGS_PRODUCT_ID &&
+                nameOfBusiness.isEmpty()
 
         if (!email.isValidEmail()) {
-            Toast.makeText(
-                context,
-                context.getString(R.string.feature_auth_validate_email),
-                Toast.LENGTH_SHORT,
-            ).show()
+            Toast
+                .makeText(
+                    context,
+                    context.getString(R.string.feature_auth_validate_email),
+                    Toast.LENGTH_SHORT,
+                ).show()
             return
         }
 
         if (isAnyFieldEmpty || isNameOfBusinessEmpty) {
-            Toast.makeText(
-                context,
-                context.getString(R.string.feature_auth_all_fields_are_mandatory),
-                Toast.LENGTH_SHORT,
-            ).show()
+            Toast
+                .makeText(
+                    context,
+                    context.getString(R.string.feature_auth_all_fields_are_mandatory),
+                    Toast.LENGTH_SHORT,
+                ).show()
             return
         }
     }
 
     fun completeRegistration() {
-        val signUpData = data.copy(
-            firstName = firstName,
-            lastName = lastName,
-            email = email,
-            userName = userName,
-            addressLine1 = addressLine1,
-            addressLine2 = addressLine2,
-            pinCode = pinCode,
-            businessName = nameOfBusiness,
-            password = password,
-            stateId = selectedState?.id,
-        )
+        val signUpData =
+            data.copy(
+                firstName = firstName,
+                lastName = lastName,
+                email = email,
+                userName = userName,
+                addressLine1 = addressLine1,
+                addressLine2 = addressLine2,
+                pinCode = pinCode,
+                businessName = nameOfBusiness,
+                password = password,
+                stateId = selectedState?.id,
+            )
         onCompleteRegistration.invoke(signUpData)
     }
 
     Box(modifier) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surface)
-                .verticalScroll(rememberScrollState())
-                .focusable(!showProgressState),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(color = MaterialTheme.colorScheme.surface)
+                    .verticalScroll(rememberScrollState())
+                    .focusable(!showProgressState),
         ) {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.primary),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .background(color = MaterialTheme.colorScheme.primary),
                 verticalArrangement = Arrangement.Top,
             ) {
                 Text(
@@ -201,45 +214,50 @@ private fun SignupScreenContent(
                     style = MaterialTheme.typography.titleLarge.copy(color = MaterialTheme.colorScheme.onPrimary),
                 )
                 Text(
-                    modifier = Modifier.padding(
-                        top = 4.dp,
-                        bottom = 32.dp,
-                        start = 24.dp,
-                        end = 24.dp,
-                    ),
+                    modifier =
+                        Modifier.padding(
+                            top = 4.dp,
+                            bottom = 32.dp,
+                            start = 24.dp,
+                            end = 24.dp,
+                        ),
                     text = stringResource(id = R.string.feature_auth_all_fields_are_mandatory),
                     style = MaterialTheme.typography.bodySmall.copy(color = Color.White),
                 )
             }
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-                    .focusable(!showProgressState),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp)
+                        .focusable(!showProgressState),
             ) {
                 UserInfoTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp),
                     label = stringResource(id = R.string.feature_auth_first_name),
                     value = firstName,
                 ) {
                     firstName = it
                 }
                 UserInfoTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_last_name),
                     value = lastName,
                 ) {
                     lastName = it
                 }
                 UserInfoTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_username),
                     value = userName,
                 ) {
@@ -258,9 +276,10 @@ private fun SignupScreenContent(
                     },
                 )
                 UserInfoTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_email),
                     value = email,
                 ) {
@@ -268,9 +287,10 @@ private fun SignupScreenContent(
                 }
                 if (data.mifosSavingsProductId == MIFOS_MERCHANT_SAVINGS_PRODUCT_ID) {
                     UserInfoTextField(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
                         label = stringResource(id = R.string.feature_auth_name_of_business),
                         value = nameOfBusiness,
                     ) {
@@ -278,18 +298,20 @@ private fun SignupScreenContent(
                     }
                 }
                 UserInfoTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_address_line_1),
                     value = addressLine1,
                 ) {
                     addressLine1 = it
                 }
                 UserInfoTextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_address_line_2),
                     value = addressLine2,
                 ) {
@@ -312,9 +334,10 @@ private fun SignupScreenContent(
                 }
                 HorizontalDivider(thickness = 24.dp, color = Color.White)
                 Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     enabled = true,
                     onClick = {
@@ -390,12 +413,12 @@ private fun UserInfoTextField(
     onValueChange: (String) -> Unit = {},
 ) {
     MfOutlinedTextField(
-        modifier = modifier,
         value = value,
         label = label,
+        onValueChange = onValueChange,
+        modifier = modifier,
         isError = value.isEmpty(),
         errorMessage = stringResource(id = R.string.feature_auth_mandatory),
-        onValueChange = onValueChange,
     )
 }
 
@@ -413,36 +436,38 @@ private fun PasswordAndConfirmPassword(
 ) {
     Column(modifier) {
         MfPasswordTextField(
-            modifier = Modifier.fillMaxWidth(),
             password = password,
             label = stringResource(id = R.string.feature_auth_password),
             isError = password.isEmpty() || password.length < 6,
-            errorMessage = if (password.isEmpty()) {
-                stringResource(id = R.string.feature_auth_password_cannot_be_empty)
-            } else if (password.length < 6) {
-                stringResource(id = R.string.feature_auth_password_must_be_least_6_characters)
-            } else {
-                null
-            },
-            onPasswordChange = onPasswordChange,
             isPasswordVisible = isPasswordVisible,
             onTogglePasswordVisibility = onTogglePasswordVisibility,
+            onPasswordChange = onPasswordChange,
+            modifier = Modifier.fillMaxWidth(),
+            errorMessage =
+                if (password.isEmpty()) {
+                    stringResource(id = R.string.feature_auth_password_cannot_be_empty)
+                } else if (password.length < 6) {
+                    stringResource(id = R.string.feature_auth_password_must_be_least_6_characters)
+                } else {
+                    null
+                },
         )
         MfPasswordTextField(
-            modifier = Modifier.fillMaxWidth(),
             password = confirmPassword,
             label = stringResource(id = R.string.feature_auth_confirm_password),
             isError = confirmPassword.isEmpty() || password != confirmPassword,
-            errorMessage = if (confirmPassword.isEmpty()) {
-                stringResource(id = R.string.feature_auth_confirm_password_cannot_empty)
-            } else if (password != confirmPassword) {
-                stringResource(id = R.string.feature_auth_passwords_do_not_match)
-            } else {
-                null
-            },
-            onPasswordChange = onConfirmPasswordChange,
             isPasswordVisible = isConfirmPasswordVisible,
             onTogglePasswordVisibility = onConfirmTogglePasswordVisibility,
+            onPasswordChange = onConfirmPasswordChange,
+            modifier = Modifier.fillMaxWidth(),
+            errorMessage =
+                if (confirmPassword.isEmpty()) {
+                    stringResource(id = R.string.feature_auth_confirm_password_cannot_empty)
+                } else if (password != confirmPassword) {
+                    stringResource(id = R.string.feature_auth_passwords_do_not_match)
+                } else {
+                    null
+                },
         )
         if (password.length >= 6) {
             Text(
@@ -470,12 +495,13 @@ private fun getPasswordStrength(password: String): String {
     val hasNumbers = password.any { it.isDigit() }
     val hasSymbols = password.any { !it.isLetterOrDigit() }
 
-    val numTypesPresent = intArrayOf(
-        hasUpperCase.toInt(),
-        hasLowerCase.toInt(),
-        hasNumbers.toInt(),
-        hasSymbols.toInt(),
-    ).sum()
+    val numTypesPresent =
+        intArrayOf(
+            hasUpperCase.toInt(),
+            hasLowerCase.toInt(),
+            hasNumbers.toInt(),
+            hasSymbols.toInt(),
+        ).sum()
     return PasswordStrength.entries[numTypesPresent].name
 }
 

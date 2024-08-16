@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.designsystem.component
 
 import androidx.compose.foundation.background
@@ -15,18 +24,23 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun MifosTextUserImage(modifier: Modifier = Modifier, text: String, size: Dp = 100.dp) {
+fun MifosTextUserImage(
+    text: String,
+    modifier: Modifier = Modifier,
+    size: Dp = 100.dp,
+) {
     Box(
-        modifier = modifier
+        modifier =
+        modifier
             .size(size)
             .clip(CircleShape)
             .background(color = MaterialTheme.colorScheme.primary),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = text,
             color = MaterialTheme.colorScheme.onPrimary,
-            fontSize = with(LocalDensity.current) { (size / 2).toSp() }
+            fontSize = with(LocalDensity.current) { (size / 2).toSp() },
         )
     }
 }

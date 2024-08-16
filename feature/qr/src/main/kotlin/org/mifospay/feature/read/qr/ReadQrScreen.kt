@@ -111,9 +111,9 @@ internal fun ReadQrScreen(
             )
         },
         title = R.string.feature_qr_permission_required,
-        description = R.string.feature_qr_approve_permission_description_camera,
         confirmButtonText = R.string.feature_qr_proceed,
         dismissButtonText = R.string.feature_qr_dismiss,
+        description = R.string.feature_qr_approve_permission_description_camera,
         onGranted = {
             Box {
                 MifosScaffold(

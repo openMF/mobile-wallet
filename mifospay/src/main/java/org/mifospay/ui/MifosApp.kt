@@ -76,7 +76,7 @@ import org.mifospay.navigation.TopLevelDestination
 @Composable
 fun MifosApp(
     appState: MifosAppState,
-    bottomSheetNavigator: BottomSheetNavigator
+    bottomSheetNavigator: BottomSheetNavigator,
 ) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.HOME
@@ -84,11 +84,12 @@ fun MifosApp(
 
     MifosBackground {
         MifosGradientBackground(
-            gradientColors = if (shouldShowGradientBackground) {
-                LocalGradientColors.current
-            } else {
-                GradientColors()
-            },
+            gradientColors =
+                if (shouldShowGradientBackground) {
+                    LocalGradientColors.current
+                } else {
+                    GradientColors()
+                },
         ) {
             val snackbarHostState = remember { SnackbarHostState() }
 
@@ -108,32 +109,41 @@ fun MifosApp(
             if (showHomeMenuOption) {
                 AnimatedVisibility(true) {
                     Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .wrapContentSize(Alignment.TopEnd)
-                            .padding(end = 24.dp)
-                            .background(color = MaterialTheme.colorScheme.surface)
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .wrapContentSize(Alignment.TopEnd)
+                                .padding(end = 24.dp)
+                                .background(color = MaterialTheme.colorScheme.surface),
                     ) {
                         DropdownMenu(
                             modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
                             expanded = showHomeMenuOption,
-                            onDismissRequest = { showHomeMenuOption = false }
+                            onDismissRequest = { showHomeMenuOption = false },
                         ) {
                             DropdownMenuItem(
-                                text = { Text(stringResource(id = R.string.faq),
-                                    color = MaterialTheme.colorScheme.onSurface) },
+                                text = {
+                                    Text(
+                                        stringResource(id = R.string.faq),
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                    )
+                                },
                                 onClick = {
                                     showHomeMenuOption = false
                                     appState.navController.navigateToFAQ()
-                                }
+                                },
                             )
                             DropdownMenuItem(
-                                text = { Text(stringResource(id = R.string.feature_profile_settings),
-                                    color = MaterialTheme.colorScheme.onSurface) },
+                                text = {
+                                    Text(
+                                        stringResource(id = R.string.feature_profile_settings),
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                    )
+                                },
                                 onClick = {
                                     showHomeMenuOption = false
                                     appState.navController.navigateToSettings()
-                                }
+                                },
                             )
                         }
                     }
@@ -141,12 +151,13 @@ fun MifosApp(
             }
 
             // TODO unread destinations to show dot indicator
-            //val unreadDestinations by appState.topLevelDestinationsWithUnreadResources.collectAsStateWithLifecycle()
+            // val unreadDestinations by appState.topLevelDestinationsWithUnreadResources.collectAsStateWithLifecycle()
 
             Scaffold(
-                modifier = Modifier.semantics {
-                    testTagsAsResourceId = true
-                },
+                modifier =
+                    Modifier.semantics {
+                        testTagsAsResourceId = true
+                    },
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -180,9 +191,10 @@ fun MifosApp(
                             destinationsWithUnreadResources = emptySet(),
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
-                            modifier = Modifier
-                                .testTag("NiaNavRail")
-                                .safeDrawingPadding(),
+                            modifier =
+                                Modifier
+                                    .testTag("NiaNavRail")
+                                    .safeDrawingPadding(),
                         )
                     }
 
@@ -193,28 +205,30 @@ fun MifosApp(
                             MifosTopAppBar(
                                 titleRes = destination.titleTextId,
                                 actionIcon = MifosIcons.MoreVert,
-                                actionIconContentDescription = stringResource(
-                                    id = R.string.feature_profile_settings,
-                                ),
-                                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                                    containerColor = Color.Transparent,
-                                ),
-                                onActionClick = { showHomeMenuOption = true }
+                                actionIconContentDescription =
+                                    stringResource(
+                                        id = R.string.feature_profile_settings,
+                                    ),
+                                colors =
+                                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                                        containerColor = Color.Transparent,
+                                    ),
+                                onActionClick = { showHomeMenuOption = true },
                             )
                         }
 
-                       ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
-                           MifosNavHost(
-                               navController = appState.navController,
-                               onShowSnackbar = { message, action ->
-                                   snackbarHostState.showSnackbar(
-                                       message = message,
-                                       actionLabel = action,
-                                       duration = Short,
-                                   ) == ActionPerformed
-                               },
-                           )
-                       }
+                        ModalBottomSheetLayout(bottomSheetNavigator = bottomSheetNavigator) {
+                            MifosNavHost(
+                                navController = appState.navController,
+                                onShowSnackbar = { message, action ->
+                                    snackbarHostState.showSnackbar(
+                                        message = message,
+                                        actionLabel = action,
+                                        duration = Short,
+                                    ) == ActionPerformed
+                                },
+                            )
+                        }
                     }
 
                     // TODO: We may want to add padding or spacer when the snackbar is shown so that
@@ -246,6 +260,7 @@ private fun MifosNavRail(
                         contentDescription = null,
                     )
                 },
+                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
                 selectedIcon = {
                     Icon(
                         imageVector = destination.selectedIcon,
@@ -253,7 +268,6 @@ private fun MifosNavRail(
                     )
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
-                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
             )
         }
     }
@@ -282,6 +296,7 @@ private fun MifosBottomBar(
                         contentDescription = null,
                     )
                 },
+                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
                 selectedIcon = {
                     Icon(
                         imageVector = destination.selectedIcon,
@@ -289,7 +304,6 @@ private fun MifosBottomBar(
                     )
                 },
                 label = { Text(stringResource(destination.iconTextId)) },
-                modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
             )
         }
     }
@@ -306,10 +320,12 @@ private fun Modifier.notificationDot(): Modifier =
                 // This is based on the dimensions of the NavigationBar's "indicator pill";
                 // however, its parameters are private, so we must depend on them implicitly
                 // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
-                center = center + Offset(
-                    64.dp.toPx() * .45f,
-                    32.dp.toPx() * -.45f - 6.dp.toPx(),
-                ),
+                center =
+                    center +
+                        Offset(
+                            64.dp.toPx() * .45f,
+                            32.dp.toPx() * -.45f - 6.dp.toPx(),
+                        ),
             )
         }
     }

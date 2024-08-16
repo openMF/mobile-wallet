@@ -140,44 +140,44 @@ private fun Kyc1Form(
     ) {
         Spacer(modifier = Modifier.height(20.dp))
         MifosOutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
+            label = R.string.feature_kyc_first_name,
             value = firstName,
             onValueChange = {
                 firstName = it
             },
-            label = R.string.feature_kyc_first_name,
-        )
-        MifosOutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
+        )
+        MifosOutlinedTextField(
+            label = R.string.feature_kyc_last_name,
             value = lastName,
             onValueChange = {
                 lastName = it
             },
-            label = R.string.feature_kyc_last_name,
-        )
-        MifosOutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
+        )
+        MifosOutlinedTextField(
+            label = R.string.feature_kyc_address_line_1,
             value = address1,
             onValueChange = {
                 address1 = it
             },
-            label = R.string.feature_kyc_address_line_1,
-        )
-        MifosOutlinedTextField(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 8.dp),
+        )
+        MifosOutlinedTextField(
+            label = R.string.feature_kyc_address_line_2,
             value = address2,
             onValueChange = {
                 address2 = it
             },
-            label = R.string.feature_kyc_address_line_2,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
         )
 
         Box(

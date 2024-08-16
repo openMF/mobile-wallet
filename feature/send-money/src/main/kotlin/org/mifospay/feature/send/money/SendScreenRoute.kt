@@ -143,12 +143,13 @@ internal fun SendMoneyScreen(
     val contactUri by rememberSaveable { mutableStateOf<Uri?>(null) }
 
     fun validateInfo() {
-        isValidInfo = when (sendMethodType) {
-            SendMethodType.VPA -> amount.isNotEmpty() && vpa.isNotEmpty()
-            SendMethodType.MOBILE -> {
-                isValidMobileNumber && mobileNumber.isNotEmpty() && amount.isNotEmpty()
+        isValidInfo =
+            when (sendMethodType) {
+                SendMethodType.VPA -> amount.isNotEmpty() && vpa.isNotEmpty()
+                SendMethodType.MOBILE -> {
+                    isValidMobileNumber && mobileNumber.isNotEmpty() && amount.isNotEmpty()
+                }
             }
-        }
     }
 
     LaunchedEffect(key1 = contactUri) {
@@ -157,26 +158,26 @@ internal fun SendMoneyScreen(
         }
     }
 
-    val options = GmsBarcodeScannerOptions.Builder()
-        .setBarcodeFormats(
-            Barcode.FORMAT_QR_CODE,
-            Barcode.FORMAT_AZTEC,
-        )
-        .build()
+    val options =
+        GmsBarcodeScannerOptions
+            .Builder()
+            .setBarcodeFormats(
+                Barcode.FORMAT_QR_CODE,
+                Barcode.FORMAT_AZTEC,
+            ).build()
 
     val scanner = GmsBarcodeScanning.getClient(context, options)
 
     fun startScan() {
-        scanner.startScan()
+        scanner
+            .startScan()
             .addOnSuccessListener { barcode ->
                 barcode.rawValue?.let {
                     vpa = it
                 }
-            }
-            .addOnCanceledListener {
+            }.addOnCanceledListener {
                 // Task canceled
-            }
-            .addOnFailureListener { e ->
+            }.addOnFailureListener { e ->
                 // Task failed with an exception
                 e.localizedMessage?.let { Log.d("SendMoney: Barcode scan failed", it) }
             }
@@ -198,9 +199,10 @@ internal fun SendMoneyScreen(
             Column(modifier = Modifier.padding(16.dp)) {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp, bottom = 20.dp),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 20.dp, bottom = 20.dp),
                 ) {
                     VpaMobileChip(
                         label = stringResource(id = R.string.feature_send_money_vpa),
@@ -216,24 +218,24 @@ internal fun SendMoneyScreen(
                 }
                 MfOutlinedTextField(
                     value = amount,
+                    label = stringResource(id = R.string.feature_send_money_amount),
                     onValueChange = {
                         amount = it
                         validateInfo()
                     },
+                    modifier = Modifier.fillMaxWidth(),
                     singleLine = true,
                     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-                    label = stringResource(id = R.string.feature_send_money_amount),
-                    modifier = Modifier.fillMaxWidth(),
                 )
                 when (sendMethodType) {
                     SendMethodType.VPA -> {
                         MfOutlinedTextField(
                             value = vpa,
+                            label = stringResource(id = R.string.feature_send_money_virtual_payment_address),
                             onValueChange = {
                                 vpa = it
                                 validateInfo()
                             },
-                            label = stringResource(id = R.string.feature_send_money_virtual_payment_address),
                             modifier = Modifier.fillMaxWidth(),
                             trailingIcon = {
                                 IconButton(
@@ -253,9 +255,10 @@ internal fun SendMoneyScreen(
 
                     SendMethodType.MOBILE -> {
                         EnterPhoneScreen(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 8.dp),
+                            modifier =
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(bottom = 8.dp),
                             initialPhoneNumber = mobileNumber,
                             onNumberUpdated = { _, fullPhone, valid ->
                                 if (valid) {
@@ -269,10 +272,11 @@ internal fun SendMoneyScreen(
                 }
                 Spacer(modifier = Modifier.height(16.dp))
                 MifosButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                        .align(Alignment.CenterHorizontally),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp)
+                            .align(Alignment.CenterHorizontally),
                     color = MaterialTheme.colorScheme.onSurface,
                     enabled = isValidInfo,
                     onClick = {
@@ -315,9 +319,10 @@ private fun EnterPhoneScreen(
     TogiCountryCodePicker(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            focusedBorderColor = MaterialTheme.colorScheme.primary,
-        ),
+        colors =
+            TextFieldDefaults.outlinedTextFieldColors(
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+            ),
         initialPhoneNumber = initialPhoneNumber,
         onValueChange = { (code, phone), isValid ->
             onNumberUpdated(phone, code + phone, isValid)
@@ -337,9 +342,10 @@ private fun VpaMobileChip(
     MifosButton(
         onClick = onClick,
         color = if (selected) MaterialTheme.colorScheme.primary else Color.LightGray,
-        modifier = modifier
-            .padding(4.dp)
-            .wrapContentSize(),
+        modifier =
+            modifier
+                .padding(4.dp)
+                .wrapContentSize(),
     ) {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
@@ -348,16 +354,20 @@ private fun VpaMobileChip(
     }
 }
 
-private suspend fun getContactPhoneNumber(uri: Uri, context: Context): String {
+private suspend fun getContactPhoneNumber(
+    uri: Uri,
+    context: Context,
+): String {
     val contactId: String = uri.lastPathSegment ?: return ""
     return withContext(Dispatchers.IO) {
-        val phoneCursor = context.contentResolver.query(
-            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-            arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
-            "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
-            arrayOf(contactId),
-            null,
-        )
+        val phoneCursor =
+            context.contentResolver.query(
+                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
+                "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
+                arrayOf(contactId),
+                null,
+            )
         phoneCursor?.use { cursor ->
             if (cursor.moveToFirst()) {
                 val phoneNumberIndex =

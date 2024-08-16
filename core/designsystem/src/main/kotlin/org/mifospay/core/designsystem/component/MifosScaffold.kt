@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.designsystem.component
 
 import androidx.compose.foundation.layout.PaddingValues
@@ -15,7 +24,7 @@ fun MifosScaffold(
     topBarTitle: Int? = null,
     floatingActionButtonContent: FloatingActionButtonContent? = null,
     snackbarHost: @Composable () -> Unit = {},
-    scaffoldContent: @Composable (PaddingValues) -> Unit,
+    scaffoldContent: @Composable (PaddingValues) -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     Scaffold(

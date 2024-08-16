@@ -123,10 +123,10 @@ private fun LinkBankAccountScreen(
                 titleRes = R.string.feature_accounts_link_bank_account,
                 navigationIcon = MifosIcons.Back,
                 navigationIconContentDescription = "Back icon",
-                onNavigationClick = onBackClick,
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.surface,
                 ),
+                onNavigationClick = onBackClick,
             )
         },
     ) { paddingValues ->
@@ -173,15 +173,15 @@ private fun BankListScreenContent(
             .verticalScroll(rememberScrollState()),
     ) {
         MifosOutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+            label = R.string.feature_accounts_search,
             value = searchQuery,
             onValueChange = {
                 searchQuery = it
                 onBankSearch(it)
             },
-            label = R.string.feature_accounts_search,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             trailingIcon = {
                 Icon(imageVector = Icons.Filled.Search, contentDescription = null)
             },

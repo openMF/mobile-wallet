@@ -25,8 +25,8 @@ fun MifosUserImage(
 ) {
     if (bitmap == null) {
         MifosTextUserImage(
-            modifier = modifier,
-            text = username?.firstOrNull()?.toString() ?: "J"
+            text = username?.firstOrNull()?.toString() ?: "J",
+            modifier = modifier
         )
     } else {
         Image(

@@ -155,11 +155,12 @@ internal fun MerchantTransferScreen(
                     }
 
                     is MerchantTransferUiState.InsufficientBalance -> {
-                        Toast.makeText(
-                            context,
-                            stringResource(id = R.string.feature_merchants_insufficient_balance),
-                            Toast.LENGTH_SHORT,
-                        ).show()
+                        Toast
+                            .makeText(
+                                context,
+                                stringResource(id = R.string.feature_merchants_insufficient_balance),
+                                Toast.LENGTH_SHORT,
+                            ).show()
                     }
                 }
 
@@ -207,9 +208,10 @@ private fun MerchantBottomSheet(
     MifosBottomSheet(
         content = {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 24.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
@@ -227,10 +229,10 @@ private fun MerchantBottomSheet(
                 Spacer(modifier = Modifier.height(24.dp))
                 MfOutlinedTextField(
                     value = amount,
-                    onValueChange = onAmountChange,
                     label = stringResource(id = R.string.feature_merchants_amount),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = onAmountChange,
                     modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 )
                 Spacer(modifier = Modifier.height(24.dp))
                 Button(
@@ -289,12 +291,13 @@ private fun MerchantInitialAvatar(
     val initial = merchantName.take(1).uppercase()
 
     Box(
-        modifier = modifier
-            .size(86.dp)
-            .background(
-                color = MaterialTheme.colorScheme.primary,
-                shape = CircleShape,
-            ),
+        modifier =
+            modifier
+                .size(86.dp)
+                .background(
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = CircleShape,
+                ),
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -342,11 +345,12 @@ private fun SpecificTransactionItem(
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
-                    text = when (transaction.transactionType) {
-                        TransactionType.DEBIT -> stringResource(id = R.string.feature_merchants_debits)
-                        TransactionType.CREDIT -> stringResource(id = R.string.feature_merchants_credits)
-                        TransactionType.OTHER -> stringResource(id = R.string.feature_merchants_other)
-                    },
+                    text =
+                        when (transaction.transactionType) {
+                            TransactionType.DEBIT -> stringResource(id = R.string.feature_merchants_debits)
+                            TransactionType.CREDIT -> stringResource(id = R.string.feature_merchants_credits)
+                            TransactionType.OTHER -> stringResource(id = R.string.feature_merchants_other)
+                        },
                     style = MaterialTheme.typography.bodyLarge,
                 )
             }
@@ -354,11 +358,12 @@ private fun SpecificTransactionItem(
             Text(
                 text = "${transaction.currency.code}${transaction.amount}",
                 style = MaterialTheme.typography.displaySmall,
-                color = when (transaction.transactionType) {
-                    TransactionType.DEBIT -> debitTextColor
-                    TransactionType.CREDIT -> creditTextColor
-                    TransactionType.OTHER -> otherTextColor
-                },
+                color =
+                    when (transaction.transactionType) {
+                        TransactionType.DEBIT -> debitTextColor
+                        TransactionType.CREDIT -> creditTextColor
+                        TransactionType.OTHER -> otherTextColor
+                    },
             )
         }
     }
@@ -372,9 +377,10 @@ private fun SpecificTransactionAccountInfo(
     accountClicked: (String) -> Unit = {},
 ) {
     Column(
-        modifier = modifier.clickable {
-            accountClicked(account.accountNo)
-        },
+        modifier =
+            modifier.clickable {
+                accountClicked(account.accountNo)
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(imageVector = MifosIcons.AccountCircle, contentDescription = null)
@@ -389,16 +395,16 @@ private fun SpecificTransactionAccountInfo(
     }
 }
 
-internal class MerchantTransferUiStateProvider :
-    PreviewParameterProvider<MerchantTransferUiState> {
+internal class MerchantTransferUiStateProvider : PreviewParameterProvider<MerchantTransferUiState> {
     override val values: Sequence<MerchantTransferUiState>
-        get() = sequenceOf(
-            MerchantTransferUiState.Success(arrayListOf(Transaction())),
-            MerchantTransferUiState.Error,
-            MerchantTransferUiState.Loading,
-            MerchantTransferUiState.Empty,
-            MerchantTransferUiState.InsufficientBalance,
-        )
+        get() =
+            sequenceOf(
+                MerchantTransferUiState.Success(arrayListOf(Transaction())),
+                MerchantTransferUiState.Error,
+                MerchantTransferUiState.Loading,
+                MerchantTransferUiState.Empty,
+                MerchantTransferUiState.InsufficientBalance,
+            )
 }
 
 @Preview(showSystemUi = true)

@@ -81,14 +81,14 @@ private fun Kyc3Form(
         verticalArrangement = Arrangement.spacedBy(10.dp),
     ) {
         MifosOutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 8.dp),
+            label = R.string.feature_kyc_pan_id,
             value = panIdValue,
             onValueChange = {
                 panIdValue = it
             },
-            label = R.string.feature_kyc_pan_id,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
         )
 
         Button(
