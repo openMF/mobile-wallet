@@ -17,8 +17,9 @@ targetSdk = "34"
 androidTools = "31.5.1"
 androidxActivity = "1.9.1"
 androidxComposeBom = "2024.06.00"
-androidxComposeCompiler = "1.5.15"
+androidxComposeCompiler = "1.5.10"
 androidxComposeUi = "1.6.8"
+androidxComposeUiTest = "1.7.0-beta01"
 androidxComposeRuntime = "1.6.8"
 androidxCore = "1.10.1"
 androidxHilt = "1.2.0"
@@ -109,7 +110,7 @@ compose-material = { group = "androidx.compose.material", name = "material", ver
 androidx-compose-material-iconsExtended = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-compose-material3-windowSizeClass = { group = "androidx.compose.material3", name = "material3-window-size-class" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref="androidxComposeUi" }
-androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+androidx-compose-ui-test = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "androidxComposeUiTest" }
 androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref="androidxComposeRuntime" }
