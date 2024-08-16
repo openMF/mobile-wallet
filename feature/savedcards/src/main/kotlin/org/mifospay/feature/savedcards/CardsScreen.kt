@@ -154,9 +154,9 @@ internal fun CardsScreen(
 
             is CardsUiState.Error -> {
                 EmptyContentScreen(
-                    modifier = Modifier,
                     title = stringResource(id = R.string.feature_savedcards_error_oops),
                     subTitle = stringResource(id = R.string.feature_savedcards_unexpected_error_subtitle),
+                    modifier = Modifier,
                     iconTint = MaterialTheme.colorScheme.primary,
                     iconImageVector = Icons.Rounded.Info,
                 )
@@ -245,10 +245,10 @@ private fun CardsScreenContent(
                 .background(color = MaterialTheme.colorScheme.surface),
         ) {
             AddCardChip(
-                modifier = Modifier.align(Alignment.Center),
-                onAddBtn = onAddBtn,
                 text = R.string.feature_savedcards_add_cards,
                 btnText = R.string.feature_savedcards_add_cards,
+                onAddBtn = onAddBtn,
+                modifier = Modifier.align(Alignment.Center),
             )
         }
     }
@@ -416,10 +416,10 @@ private fun NoCardAddCardsScreen(
                 color = MaterialTheme.colorScheme.onSurface,
             )
             AddCardChip(
-                modifier = Modifier,
-                onAddBtn = onAddBtn,
                 text = R.string.feature_savedcards_add_cards,
                 btnText = R.string.feature_savedcards_add_cards,
+                onAddBtn = onAddBtn,
+                modifier = Modifier,
             )
         }
     }

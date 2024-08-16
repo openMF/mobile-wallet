@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.core.ui
 
 import androidx.compose.foundation.layout.Arrangement
@@ -11,6 +20,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -33,18 +43,21 @@ fun ExpiryDateInput(
     date: String,
     onDateChange: (String) -> Unit,
     onDone: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val (a, b, c) = FocusRequester.createRefs()
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp), verticalAlignment = Alignment.Bottom
+            .padding(8.dp),
+        verticalAlignment = Alignment.Bottom,
     ) {
-        BasicTextField(modifier = Modifier
-            .focusRequester(b)
-            .focusProperties {
-                next = c
-            },
+        BasicTextField(
+            modifier = Modifier
+                .focusRequester(b)
+                .focusProperties {
+                    next = c
+                },
             value = TextFieldValue(date, selection = TextRange(date.length)),
             onValueChange = {
                 if (it.text.length == 3 && it.text[2] != '/') {
@@ -62,28 +75,35 @@ fun ExpiryDateInput(
                 }
                 onDateChange(it.text)
             },
-            keyboardActions = KeyboardActions(onDone = {
-                onDone()
-            }),
+            keyboardActions = KeyboardActions(
+                onDone = {
+                    onDone()
+                },
+            ),
             keyboardOptions = KeyboardOptions.Default.copy(
-                keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done,
             ),
             decorationBox = {
                 Row(horizontalArrangement = Arrangement.Center) {
                     repeat(7) { index ->
                         FormattedDateView(
-                            index = index, text = date
+                            index = index,
+                            text = date,
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                     }
                 }
-            })
+            },
+        )
     }
 }
 
 @Composable
 fun FormattedDateView(
-    index: Int, text: String
+    index: Int,
+    text: String,
+    modifier: Modifier = Modifier,
 ) {
     val isFocused = text.length == index
 
@@ -93,8 +113,8 @@ fun FormattedDateView(
         index > text.length -> "_"
         else -> text[index].toString()
     }
-    androidx.compose.material3.Text(
-        modifier = Modifier
+    Text(
+        modifier = modifier
             .width(40.dp)
             .wrapContentHeight(align = Alignment.CenterVertically),
         text = char,
@@ -104,7 +124,7 @@ fun FormattedDateView(
         } else {
             Color.LightGray
         },
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
 }
 
@@ -113,4 +133,3 @@ fun FormattedDateView(
 fun ExpiryDateInputPreview() {
     ExpiryDateInput(date = "", onDateChange = {}, onDone = {})
 }
-

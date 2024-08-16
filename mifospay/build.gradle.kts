@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 import org.mifospay.MifosBuildType
 
 plugins {
@@ -69,9 +78,6 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.swiperefresh.layout)
 
-//    implementation("androidx.vectordrawable:vectordrawable-animated:1.1.0")
-//    implementation("androidx.media:media:1.6.0")
-//    implementation("androidx.cardview:cardview:1.0.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     api("com.google.android.material:material:1.0.0") // update require alot of UI changes
 
@@ -122,10 +128,6 @@ dependencies {
 
     ksp(libs.hilt.compiler)
 
-    // we need it for country picker library
-//    implementation("androidx.compose.material:material:1.6.0")
-//    implementation(libs.compose.country.code.picker) // remove after moving auth code to module
-
     // Google Bar code scanner
     implementation(libs.google.play.services.code.scanner)
 
@@ -146,37 +148,7 @@ dependencies {
     runtimeOnly(libs.androidx.compose.runtime)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-//    implementation(libs.squareup.retrofit2) {
-//        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
-//        exclude(module = "okhttp")
-//    }
-//    implementation(libs.squareup.retrofit.adapter.rxjava)
-//    implementation(libs.squareup.retrofit.converter.gson)
-//    implementation(libs.squareup.okhttp)
-//    implementation(libs.squareup.logging.interceptor)
-//
-//    implementation(libs.android.pdf.viewer)
-//
-//    implementation(libs.reactivex.rxjava.android)
-//    implementation(libs.reactivex.rxjava)
-//
-//    implementation("io.michaelrocks:libphonenumber-android:8.11.0")
-//
-//    implementation("me.dm7.barcodescanner:zxing:1.9.13")
-//    implementation("com.journeyapps:zxing-android-embedded:4.2.0")
-
     implementation(libs.mifosPasscode)
-
-//    // Coil
-//    implementation("io.coil-kt:coil-compose:2.6.0")
-//
-//    implementation("com.google.android.gms:play-services-auth:20.7.0")
-//
-//    implementation("com.hbb20:ccp:2.2.0")
-//    implementation("com.github.MdFarhanRaja:SearchableSpinner:1.9")
-//    implementation("com.alimuzaffar.lib:pinentryedittext:1.3.1")
-//    implementation("de.hdodenhof:circleimageview:3.1.0")
-//    implementation("com.github.yalantis:ucrop:2.2.2")
 
     kspTest(libs.hilt.compiler)
 

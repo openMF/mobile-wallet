@@ -111,9 +111,9 @@ internal fun SpecificTransactionsScreen(
                     is SpecificTransactionsUiState.Success -> {
                         if (uiState.transactionsList.isEmpty()) {
                             EmptyContentScreen(
-                                modifier = Modifier,
                                 title = stringResource(id = R.string.feature_history_error_oops),
                                 subTitle = stringResource(id = R.string.feature_history_no_transactions_found),
+                                modifier = Modifier,
                                 iconTint = MaterialTheme.colorScheme.onSurface,
                                 iconImageVector = Icons.Rounded.Info,
                             )

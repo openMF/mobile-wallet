@@ -21,8 +21,8 @@ import org.mifospay.feature.make.transfer.MakeTransferScreenRoute
 
 const val MAKE_TRANSFER_ROUTE_BASE = "make_transfer_route"
 const val MAKE_TRANSFER_ROUTE = MAKE_TRANSFER_ROUTE_BASE +
-        "?${PAYEE_EXTERNAL_ID_ARG}={$PAYEE_EXTERNAL_ID_ARG}" +
-        "&${TRANSFER_AMOUNT_ARG}={$TRANSFER_AMOUNT_ARG}"
+    "?${PAYEE_EXTERNAL_ID_ARG}={$PAYEE_EXTERNAL_ID_ARG}" +
+    "&${TRANSFER_AMOUNT_ARG}={$TRANSFER_AMOUNT_ARG}"
 
 fun NavController.navigateToMakeTransferScreen(
     externalId: String? = null,
@@ -31,10 +31,10 @@ fun NavController.navigateToMakeTransferScreen(
 ) {
     val route = MAKE_TRANSFER_ROUTE_BASE + if (transferAmount != null) {
         "?${PAYEE_EXTERNAL_ID_ARG}=$externalId" +
-                "&${TRANSFER_AMOUNT_ARG}=$transferAmount"
+            "&${TRANSFER_AMOUNT_ARG}=$transferAmount"
     } else {
         "?${PAYEE_EXTERNAL_ID_ARG}=$externalId" +
-                "&${TRANSFER_AMOUNT_ARG}=${"0.0"}"
+            "&${TRANSFER_AMOUNT_ARG}=${"0.0"}"
     }
     navigate(route, navOptions)
 }

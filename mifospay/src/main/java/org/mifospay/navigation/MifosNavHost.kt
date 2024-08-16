@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.navigation
 
 import android.content.Context
@@ -86,7 +95,7 @@ import java.util.Objects
  * within each route is handled using state and Back Handlers.
  */
 @Composable
-@Suppress("MaxLineLength", "LongMethod")
+@Suppress("MaxLineLength", "LongMethod", "UnusedParameter")
 fun MifosNavHost(
     navController: NavHostController,
     onShowSnackbar: suspend (String, String?) -> Boolean,
@@ -151,7 +160,6 @@ fun MifosNavHost(
             )
         },
     )
-
 
     NavHost(
         navController = navController,
@@ -286,7 +294,7 @@ fun MifosNavHost(
                 context.startActivity(intent)
             },
             onRegisterSuccess = {
-                //Todo: Implement onRegisterSuccess
+                // Todo: Implement onRegisterSuccess
             },
         )
         mobileVerificationScreen(
@@ -305,7 +313,7 @@ fun MifosNavHost(
 
         loginScreen(
             onDismissSignUp = {
-                //Todo: Navigate to the main screen after successful login
+                // Todo: Navigate to the main screen after successful login
             },
             onNavigateToMobileVerificationScreen = { mifosSignedUp, googleDisplayName, googleEmail, googleFamilyName, googleGivenName ->
                 navController.navigateToMobileVerification(
@@ -324,7 +332,7 @@ private fun Context.logOut() {
     val intent = Intent(this, LoginActivity::class.java)
     intent.addFlags(
         Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK,
+            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK,
     )
     this.startActivity(intent)
 }
@@ -357,7 +365,8 @@ fun Context.openPassCodeActivity(deepLinkURI: Uri) {
 fun getUri(context: Context, file: File): Uri {
     val uri = FileProvider.getUriForFile(
         Objects.requireNonNull(context),
-        org.mifospay.BuildConfig.APPLICATION_ID + ".provider", file,
+        org.mifospay.BuildConfig.APPLICATION_ID + ".provider",
+        file,
     )
     return uri
 }

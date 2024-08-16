@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.utils
 
 import android.graphics.Canvas
@@ -65,14 +74,13 @@ class TextDrawable private constructor(builder: Builder) : ShapeDrawable(builder
         return Color.rgb(
             (SHADE_FACTOR * Color.red(color)).toInt(),
             (SHADE_FACTOR * Color.green(color)).toInt(),
-            (SHADE_FACTOR * Color.blue(color)).toInt()
+            (SHADE_FACTOR * Color.blue(color)).toInt(),
         )
     }
 
     override fun draw(canvas: Canvas) {
         super.draw(canvas)
         val r = bounds
-
 
         // draw border
         if (borderThickness > 0) {
@@ -87,8 +95,13 @@ class TextDrawable private constructor(builder: Builder) : ShapeDrawable(builder
         val fontSize = if (fontSize < 0) Math.min(width, height) / 2 else fontSize
         textPaint.textSize = fontSize.toFloat()
         canvas.drawText(
-            text, (width / 2).toFloat(), height / 2 - (textPaint.descent() +
-                    textPaint.ascent()) / 2, textPaint
+            text,
+            (width / 2).toFloat(),
+            height / 2 - (
+                textPaint.descent() +
+                    textPaint.ascent()
+                ) / 2,
+            textPaint,
         )
         canvas.restoreToCount(count)
     }
@@ -245,7 +258,7 @@ class TextDrawable private constructor(builder: Builder) : ShapeDrawable(builder
                 radius.toFloat(),
                 radius.toFloat(),
                 radius.toFloat(),
-                radius.toFloat()
+                radius.toFloat(),
             )
             shape = RoundRectShape(radii, null, null)
             return this
