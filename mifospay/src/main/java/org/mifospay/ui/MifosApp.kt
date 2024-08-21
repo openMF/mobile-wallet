@@ -95,11 +95,11 @@ fun MifosApp(
     MifosBackground(modifier) {
         MifosGradientBackground(
             gradientColors =
-            if (shouldShowGradientBackground) {
-                LocalGradientColors.current
-            } else {
-                GradientColors()
-            },
+                if (shouldShowGradientBackground) {
+                    LocalGradientColors.current
+                } else {
+                    GradientColors()
+                },
         ) {
             val snackbarHostState = remember { SnackbarHostState() }
 
@@ -120,11 +120,11 @@ fun MifosApp(
                 AnimatedVisibility(true) {
                     Box(
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .wrapContentSize(Alignment.TopEnd)
-                            .padding(end = 24.dp)
-                            .background(color = MaterialTheme.colorScheme.surface),
+                            Modifier
+                                .fillMaxWidth()
+                                .wrapContentSize(Alignment.TopEnd)
+                                .padding(end = 24.dp)
+                                .background(color = MaterialTheme.colorScheme.surface),
                     ) {
                         DropdownMenu(
                             modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
@@ -165,9 +165,9 @@ fun MifosApp(
 
             Scaffold(
                 modifier =
-                Modifier.semantics {
-                    testTagsAsResourceId = true
-                },
+                    Modifier.semantics {
+                        testTagsAsResourceId = true
+                    },
                 containerColor = Color.Transparent,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -202,9 +202,9 @@ fun MifosApp(
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
                             modifier =
-                            Modifier
-                                .testTag("NiaNavRail")
-                                .safeDrawingPadding(),
+                                Modifier
+                                    .testTag("NiaNavRail")
+                                    .safeDrawingPadding(),
                         )
                     }
 
@@ -216,13 +216,13 @@ fun MifosApp(
                                 titleRes = destination.titleTextId,
                                 actionIcon = MifosIcons.MoreVert,
                                 actionIconContentDescription =
-                                stringResource(
-                                    id = R.string.feature_profile_settings,
-                                ),
+                                    stringResource(
+                                        id = R.string.feature_profile_settings,
+                                    ),
                                 colors =
-                                TopAppBarDefaults.centerAlignedTopAppBarColors(
-                                    containerColor = Color.Transparent,
-                                ),
+                                    TopAppBarDefaults.centerAlignedTopAppBarColors(
+                                        containerColor = Color.Transparent,
+                                    ),
                                 onActionClick = { showHomeMenuOption = true },
                             )
                         }
@@ -331,11 +331,11 @@ private fun Modifier.notificationDot(): Modifier =
                 // however, its parameters are private, so we must depend on them implicitly
                 // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
                 center =
-                center +
-                    Offset(
-                        64.dp.toPx() * .45f,
-                        32.dp.toPx() * -.45f - 6.dp.toPx(),
-                    ),
+                    center +
+                        Offset(
+                            64.dp.toPx() * .45f,
+                            32.dp.toPx() * -.45f - 6.dp.toPx(),
+                        ),
             )
         }
     }
