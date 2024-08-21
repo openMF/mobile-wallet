@@ -30,7 +30,7 @@ fun MifosUserImage(
     if (bitmap == null) {
         MifosTextUserImage(
             text = username?.firstOrNull()?.toString() ?: "J",
-            modifier = modifier,
+            modifier = modifier
         )
     } else {
         Image(

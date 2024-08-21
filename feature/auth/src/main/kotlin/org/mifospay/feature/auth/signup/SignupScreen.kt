@@ -152,20 +152,7 @@ private fun SignupScreenContent(
 
         val isNameOfBusinessEmpty =
             data.mifosSavingsProductId == MIFOS_MERCHANT_SAVINGS_PRODUCT_ID &&
-                nameOfBusiness.isEmpty()
-                lastName.isEmpty() ||
-                email.isEmpty() ||
-                userName.isEmpty() ||
-                addressLine1.isEmpty() ||
-                addressLine2.isEmpty() ||
-                pinCode.isEmpty() ||
-                password.isEmpty() ||
-                confirmPassword.isEmpty() ||
-                selectedState == null
-
-        val isNameOfBusinessEmpty =
-            data.mifosSavingsProductId == MIFOS_MERCHANT_SAVINGS_PRODUCT_ID &&
-                nameOfBusiness.isEmpty()
+                    nameOfBusiness.isEmpty()
 
         if (!email.isValidEmail()) {
             Toast
@@ -208,17 +195,17 @@ private fun SignupScreenContent(
     Box(modifier) {
         Column(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surface)
-                .verticalScroll(rememberScrollState())
-                .focusable(!showProgressState),
+                Modifier
+                    .fillMaxSize()
+                    .background(color = MaterialTheme.colorScheme.surface)
+                    .verticalScroll(rememberScrollState())
+                    .focusable(!showProgressState),
         ) {
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .background(color = MaterialTheme.colorScheme.primary),
+                    Modifier
+                        .fillMaxWidth()
+                        .background(color = MaterialTheme.colorScheme.primary),
                 verticalArrangement = Arrangement.Top,
             ) {
                 Text(
@@ -228,12 +215,12 @@ private fun SignupScreenContent(
                 )
                 Text(
                     modifier =
-                    Modifier.padding(
-                        top = 4.dp,
-                        bottom = 32.dp,
-                        start = 24.dp,
-                        end = 24.dp,
-                    ),
+                        Modifier.padding(
+                            top = 4.dp,
+                            bottom = 32.dp,
+                            start = 24.dp,
+                            end = 24.dp,
+                        ),
                     text = stringResource(id = R.string.feature_auth_all_fields_are_mandatory),
                     style = MaterialTheme.typography.bodySmall.copy(color = Color.White),
                 )
@@ -241,16 +228,16 @@ private fun SignupScreenContent(
 
             Column(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 32.dp)
-                    .focusable(!showProgressState),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 32.dp)
+                        .focusable(!showProgressState),
             ) {
                 UserInfoTextField(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 16.dp),
                     label = stringResource(id = R.string.feature_auth_first_name),
                     value = firstName,
                 ) {
@@ -258,9 +245,9 @@ private fun SignupScreenContent(
                 }
                 UserInfoTextField(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_last_name),
                     value = lastName,
                 ) {
@@ -268,9 +255,9 @@ private fun SignupScreenContent(
                 }
                 UserInfoTextField(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_username),
                     value = userName,
                 ) {
@@ -290,9 +277,9 @@ private fun SignupScreenContent(
                 )
                 UserInfoTextField(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_email),
                     value = email,
                 ) {
@@ -301,9 +288,9 @@ private fun SignupScreenContent(
                 if (data.mifosSavingsProductId == MIFOS_MERCHANT_SAVINGS_PRODUCT_ID) {
                     UserInfoTextField(
                         modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(top = 8.dp),
                         label = stringResource(id = R.string.feature_auth_name_of_business),
                         value = nameOfBusiness,
                     ) {
@@ -312,9 +299,9 @@ private fun SignupScreenContent(
                 }
                 UserInfoTextField(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_address_line_1),
                     value = addressLine1,
                 ) {
@@ -322,9 +309,9 @@ private fun SignupScreenContent(
                 }
                 UserInfoTextField(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 8.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(top = 8.dp),
                     label = stringResource(id = R.string.feature_auth_address_line_2),
                     value = addressLine2,
                 ) {
@@ -348,9 +335,9 @@ private fun SignupScreenContent(
                 HorizontalDivider(thickness = 24.dp, color = Color.White)
                 Button(
                     modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                     enabled = true,
                     onClick = {
@@ -459,13 +446,13 @@ private fun PasswordAndConfirmPassword(
             onPasswordChange = onPasswordChange,
             modifier = Modifier.fillMaxWidth(),
             errorMessage =
-            if (password.isEmpty()) {
-                stringResource(id = R.string.feature_auth_password_cannot_be_empty)
-            } else if (password.length < 6) {
-                stringResource(id = R.string.feature_auth_password_must_be_least_6_characters)
-            } else {
-                null
-            },
+                if (password.isEmpty()) {
+                    stringResource(id = R.string.feature_auth_password_cannot_be_empty)
+                } else if (password.length < 6) {
+                    stringResource(id = R.string.feature_auth_password_must_be_least_6_characters)
+                } else {
+                    null
+                },
         )
         MfPasswordTextField(
             password = confirmPassword,
@@ -476,13 +463,13 @@ private fun PasswordAndConfirmPassword(
             onPasswordChange = onConfirmPasswordChange,
             modifier = Modifier.fillMaxWidth(),
             errorMessage =
-            if (confirmPassword.isEmpty()) {
-                stringResource(id = R.string.feature_auth_confirm_password_cannot_empty)
-            } else if (password != confirmPassword) {
-                stringResource(id = R.string.feature_auth_passwords_do_not_match)
-            } else {
-                null
-            },
+                if (confirmPassword.isEmpty()) {
+                    stringResource(id = R.string.feature_auth_confirm_password_cannot_empty)
+                } else if (password != confirmPassword) {
+                    stringResource(id = R.string.feature_auth_passwords_do_not_match)
+                } else {
+                    null
+                },
         )
         if (password.length >= 6) {
             Text(
