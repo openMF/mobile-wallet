@@ -7,17 +7,6 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.shared
+package org.mifospay.shared.core.data
 
-import androidx.compose.runtime.Composable
-
-@Composable
-fun MainView() = App()
-
-class JVMPlatform : Platform {
-    override val name: String = "Windows"
-}
-
-actual fun getPlatform(): Platform = JVMPlatform()
-
-actual interface CommonParcelable
+expect class PreferencesHelper

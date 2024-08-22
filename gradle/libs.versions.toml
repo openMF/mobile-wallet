@@ -86,8 +86,6 @@ cameraLifecycleVersion = "1.3.4"
 spotlessVersion = "6.23.3"
 koin = "3.6.0-Beta4"
 koinComposeMultiplatform = "1.2.0-Beta4"
-navigationCompose = "2.8.0-alpha02"
-lifecycleViewModel = "2.8.2"
 
 [libraries]
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }

@@ -1,6 +1,9 @@
 package org.mifospay.shared.di
 
-import org.koin.core.module.Module
+import android.content.Context
+import org.koin.dsl.module
+import org.mifospay.shared.core.data.PreferencesHelper
 
-actual val platformModule: Module
-    get() = TODO("Not yet implemented")
+actual val platformModule = module {
+    single { PreferencesHelper(get<Context>()) }
+}

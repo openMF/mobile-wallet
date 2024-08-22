@@ -11,6 +11,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     alias(libs.plugins.jetbrainsCompose)
+    id("kotlin-parcelize")
 }
 
 kotlin {
@@ -50,7 +51,9 @@ kotlin {
             //put your multiplatform dependencies here
             implementation(compose.material)
             implementation(compose.material3)
-
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.squareup.retrofit.converter.gson)
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
