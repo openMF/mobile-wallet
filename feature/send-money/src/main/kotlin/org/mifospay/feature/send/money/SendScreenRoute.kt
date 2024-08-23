@@ -200,9 +200,9 @@ internal fun SendMoneyScreen(
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 20.dp, bottom = 20.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 20.dp, bottom = 20.dp),
                 ) {
                     VpaMobileChip(
                         label = stringResource(id = R.string.feature_send_money_vpa),
@@ -256,9 +256,9 @@ internal fun SendMoneyScreen(
                     SendMethodType.MOBILE -> {
                         EnterPhoneScreen(
                             modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .padding(bottom = 8.dp),
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp),
                             initialPhoneNumber = mobileNumber,
                             onNumberUpdated = { _, fullPhone, valid ->
                                 if (valid) {
@@ -273,10 +273,10 @@ internal fun SendMoneyScreen(
                 Spacer(modifier = Modifier.height(16.dp))
                 MifosButton(
                     modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .padding(top = 16.dp)
-                            .align(Alignment.CenterHorizontally),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 16.dp)
+                        .align(Alignment.CenterHorizontally),
                     color = MaterialTheme.colorScheme.onSurface,
                     enabled = isValidInfo,
                     onClick = {
@@ -320,9 +320,9 @@ private fun EnterPhoneScreen(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
         colors =
-            TextFieldDefaults.outlinedTextFieldColors(
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
-            ),
+        TextFieldDefaults.outlinedTextFieldColors(
+            focusedBorderColor = MaterialTheme.colorScheme.primary,
+        ),
         initialPhoneNumber = initialPhoneNumber,
         onValueChange = { (code, phone), isValid ->
             onNumberUpdated(phone, code + phone, isValid)
@@ -343,9 +343,9 @@ private fun VpaMobileChip(
         onClick = onClick,
         color = if (selected) MaterialTheme.colorScheme.primary else Color.LightGray,
         modifier =
-            modifier
-                .padding(4.dp)
-                .wrapContentSize(),
+        modifier
+            .padding(4.dp)
+            .wrapContentSize(),
     ) {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),

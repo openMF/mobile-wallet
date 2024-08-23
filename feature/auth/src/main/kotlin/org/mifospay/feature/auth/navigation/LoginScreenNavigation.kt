@@ -16,16 +16,11 @@ import org.mifospay.feature.auth.login.LoginScreen
 
 const val LOGIN_ROUTE = "login_route"
 
-@Suppress("UnusedParameter")
 fun NavGraphBuilder.loginScreen(
-    onDismissSignUp: () -> Unit,
-    onNavigateToMobileVerificationScreen: (Int, String, String, String, String) -> Unit,
+    onNavigateToPasscodeScreen: () -> Unit,
 ) {
     composable(route = LOGIN_ROUTE) {
-        LoginScreen(
-//            onDismissSignUp = onDismissSignUp,
-//            onNavigateToMobileVerificationScreen = onNavigateToMobileVerificationScreen
-        )
+        LoginScreen(navigateToPasscodeScreen = onNavigateToPasscodeScreen)
     }
 }
 

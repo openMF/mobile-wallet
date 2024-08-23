@@ -12,9 +12,14 @@
     <item>
         <color android:color="@color/black" />
     </item>
-    <item>
+    <item
+        android:width="160dp"
+        android:height="160dp"
+        android:gravity="center"
+        >
         <bitmap
-            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:src="@drawable/splash_icon" />
     </item>
 </layer-list>

@@ -135,9 +135,9 @@ internal fun SetAmountDialog(
                             }
                         },
                         keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Number,
-                            ),
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                        ),
                     )
 
                     MfOutlinedTextField(
@@ -146,9 +146,9 @@ internal fun SetAmountDialog(
                         onValueChange = { currency = it },
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions =
-                            KeyboardOptions(
-                                keyboardType = KeyboardType.Text,
-                            ),
+                        KeyboardOptions(
+                            keyboardType = KeyboardType.Text,
+                        ),
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))

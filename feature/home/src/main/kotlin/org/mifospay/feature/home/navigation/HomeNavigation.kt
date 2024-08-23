@@ -17,7 +17,7 @@ import org.mifospay.feature.home.HomeRoute
 
 const val HOME_ROUTE = "home_route"
 
-fun NavController.navigateToHome(navOptions: NavOptions) = navigate(HOME_ROUTE, navOptions)
+fun NavController.navigateToHome(navOptions: NavOptions? = null) = navigate(HOME_ROUTE, navOptions)
 
 fun NavGraphBuilder.homeScreen(
     onRequest: (String) -> Unit,
