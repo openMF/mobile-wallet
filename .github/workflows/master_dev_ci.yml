@@ -4,7 +4,6 @@ on:
   push:
     branches: [ dev, master, payment_hub ]
   pull_request:
-  pull_request_target:
 
 concurrency:
   group: build-${{ github.ref }}
@@ -36,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        check: [ build_logic, spotless ]
+        check: [ build_logic, spotless, detekt ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -44,28 +43,30 @@ jobs:
           distribution: 'zulu'
           java-version: 17
       - name: Run ${{ matrix.check }}
+        id: run_check
         run: |
           if [ "${{ matrix.check }}" = "build_logic" ]; then
             ./gradlew check -p build-logic
           elif [ "${{ matrix.check }}" = "spotless" ]; then
             ./gradlew spotlessCheck --no-configuration-cache --no-daemon
+          elif [ "${{ matrix.check }}" = "detekt" ]; then
+            ./gradlew detekt
           fi
+
+      - name: Upload Detekt Reports
+        if: ${{ matrix.check }} == 'detekt' && steps.run_check.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: detekt-reports
+          path: |
+            **/build/reports/detekt/detekt.md
+
 
   dependency_guard:
     needs: setup
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          # Checkout the fork/head-repository and push changes to the fork.
-          # If you skip this, the base repository will be checked out and changes
-          # will be committed to the base repository!
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
-
-          # Checkout the branch made in the fork. Will automatically push changes
-          # back to this branch.
-          ref: ${{ github.head_ref }}
-
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
@@ -79,7 +80,7 @@ jobs:
       - name: Prevent updating Dependency Guard baselines if this is a fork
         id: checkfork_dependencyguard
         continue-on-error: false
-        if: steps.dependencyguard_verify.outcome == 'failure' && github.event_name != 'pull_request'
+        if: steps.dependencyguard_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
           echo "::error::Dependency Guard failed, please update baselines with: ./gradlew dependencyGuardBaseline" && exit 1
 
@@ -108,20 +109,19 @@ jobs:
         with:
           distribution: 'zulu'
           java-version: 17
-      - name: Run tests and lint
+      - name: Run tests
         run: |
-          ./gradlew testDemoDebug detekt
+          ./gradlew testDemoDebug
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-and-lint-reports
           path: |
-            **/build/reports/detekt/detekt.md
             **/build/test-results/test*UnitTest/**.xml
 
   build:
-    needs: [ checks, dependency_guard, tests_and_lint ]
+    needs: [ checks, tests_and_lint ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

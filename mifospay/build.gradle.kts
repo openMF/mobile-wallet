@@ -158,5 +158,8 @@ dependencies {
 }
 
 dependencyGuard {
-    configuration("prodReleaseRuntimeClasspath")
+    configuration("prodReleaseRuntimeClasspath") {
+        modules = true
+        tree = true
+    }
 }
