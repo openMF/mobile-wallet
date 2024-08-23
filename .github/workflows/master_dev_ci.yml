@@ -50,7 +50,7 @@ jobs:
             ./gradlew spotlessCheck --no-configuration-cache --no-daemon
           fi
 
-  dependency_check:
+  dependency_guard:
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -120,7 +120,7 @@ jobs:
             **/build/test-results/test*UnitTest/**.xml
 
   build:
-    needs: [ checks, dependency_check, tests_and_lint ]
+    needs: [ checks, dependency_guard, tests_and_lint ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
