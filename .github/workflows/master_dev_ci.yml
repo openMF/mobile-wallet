@@ -55,6 +55,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Checkout the fork/head-repository and push changes to the fork.
+          # If you skip this, the base repository will be checked out and changes
+          # will be committed to the base repository!
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+
+          # Checkout the branch made in the fork. Will automatically push changes
+          # back to this branch.
+          ref: ${{ github.head_ref }}
+
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
