@@ -35,7 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        check: [ build_logic, spotless, dependency_guard ]
+        check: [ build_logic, spotless ]
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -48,9 +48,45 @@ jobs:
             ./gradlew check -p build-logic
           elif [ "${{ matrix.check }}" = "spotless" ]; then
             ./gradlew spotlessCheck --no-configuration-cache --no-daemon
-          elif [ "${{ matrix.check }}" = "dependency_guard" ]; then
-            ./gradlew dependencyGuard
           fi
+
+  dependency_check:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Check Dependency Guard
+        id: dependencyguard_verify
+        continue-on-error: true
+        run: ./gradlew dependencyGuard
+
+      - name: Prevent updating Dependency Guard baselines if this is a fork
+        id: checkfork_dependencyguard
+        continue-on-error: false
+        if: steps.dependencyguard_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "::error::Dependency Guard failed, please update baselines with: ./gradlew dependencyGuardBaseline" && exit 1
+
+        # Runs if previous job failed
+      - name: Generate new Dependency Guard baselines if verification failed and it's a PR
+        id: dependencyguard_baseline
+        if: steps.dependencyguard_verify.outcome == 'failure' && github.event_name == 'pull_request'
+        run: |
+          ./gradlew dependencyGuardBaseline
+
+      - name: Push new Dependency Guard baselines if available
+        uses: stefanzweifel/git-auto-commit-action@v5
+        if: steps.dependencyguard_baseline.outcome == 'success'
+        with:
+          file_pattern: '**/dependencies/*.txt'
+          disable_globbing: true
+          commit_message: "🤖 Updates baselines for Dependency Guard"
+
 
   tests_and_lint:
     needs: setup
@@ -74,7 +110,7 @@ jobs:
             **/build/test-results/test*UnitTest/**.xml
 
   build:
-    needs: [ checks, tests_and_lint ]
+    needs: [ checks, dependency_check, tests_and_lint ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -84,11 +120,7 @@ jobs:
           java-version: 17
 
       - name: Build APKs
-        run: ./gradlew :app:assemble :benchmarks:assemble
-          -x pixel6Api33ProdNonMinifiedReleaseAndroidTest
-          -x pixel6Api33DemoNonMinifiedReleaseAndroidTest
-          -x collectDemoNonMinifiedReleaseBaselineProfile
-          -x collectProdNonMinifiedReleaseBaselineProfile
+        run: ./gradlew :app:assemble
 
       - name: Check badging
         run: ./gradlew :app:checkProdReleaseBadging
