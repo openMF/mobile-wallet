@@ -14,7 +14,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.material.navigation.rememberBottomSheetNavigator
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
@@ -40,13 +39,14 @@ import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.LocalTimeZone
-import org.mifospay.ui.MifosApp
+import org.mifospay.navigation.MifosNavGraph.LOGIN_GRAPH
+import org.mifospay.navigation.MifosNavGraph.PASSCODE_GRAPH
+import org.mifospay.navigation.RootNavGraph
 import org.mifospay.ui.rememberMifosAppState
 import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
-@Suppress("UnusedPrivateProperty")
 class MainActivity : ComponentActivity() {
 
     /**
@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
     @Inject
     lateinit var analyticsHelper: AnalyticsHelper
 
-    val viewModel: MainActivityViewModel by viewModels()
+    private val viewModel: MainActivityViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -81,9 +81,6 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        // Keep the splash screen on-screen until the UI state is loaded. This condition is
-        // evaluated each time the app needs to be redrawn so it should be fast to avoid blocking
-        // the UI.
         splashScreen.setKeepOnScreenCondition {
             when (uiState) {
                 Loading -> true
@@ -91,29 +88,47 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-        // Turn off the decor fitting system windows, which allows us to handle insets,
-        // including IME animations, and go edge-to-edge
-        // This also sets up the initial system bar style based on the platform theme
         enableEdgeToEdge()
 
         setContent {
-            val bottomSheetNavigator = rememberBottomSheetNavigator()
-            val navController = rememberNavController(bottomSheetNavigator)
+            val navController = rememberNavController()
+
             val appState = rememberMifosAppState(
                 windowSizeClass = calculateWindowSizeClass(this),
                 networkMonitor = networkMonitor,
                 timeZoneMonitor = timeZoneMonitor,
-                navController = navController,
             )
 
             val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
+
+            val navDestination = when (uiState) {
+                is Success -> if ((uiState as Success).userData.isAuthenticated) {
+                    PASSCODE_GRAPH
+                } else {
+                    LOGIN_GRAPH
+                }
+
+                else -> LOGIN_GRAPH
+            }
 
             CompositionLocalProvider(
                 LocalAnalyticsHelper provides analyticsHelper,
                 LocalTimeZone provides currentTimeZone,
             ) {
                 MifosTheme {
-                    MifosApp(appState, bottomSheetNavigator)
+                    RootNavGraph(
+                        appState = appState,
+                        navHostController = navController,
+                        startDestination = navDestination,
+                        onClickLogout = {
+                            viewModel.logOut()
+                            navController.navigate(LOGIN_GRAPH) {
+                                popUpTo(navController.graph.id) {
+                                    inclusive = true
+                                }
+                            }
+                        },
+                    )
                 }
             }
         }
@@ -128,16 +143,4 @@ class MainActivity : ComponentActivity() {
         super.onPause()
         lazyStats.get().isTrackingEnabled = false
     }
-
-    /**
-     * The default light scrim, as defined by androidx and the platform:
-     * https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:activity/activity/src/main/kotlin/androidx/activity/EdgeToEdge.kt;l=35-38;drc=27e7d52e8604a080133e8b842db10c89b4482598
-     */
-    private val lightScrim = android.graphics.Color.argb(0xe6, 0xFF, 0xFF, 0xFF)
-
-    /**
-     * The default dark scrim, as defined by androidx and the platform:
-     * https://cs.android.com/androidx/platform/frameworks/support/+/androidx-main:activity/activity/src/main/kotlin/androidx/activity/EdgeToEdge.kt;l=40-44;drc=27e7d52e8604a080133e8b842db10c89b4482598
-     */
-    private val darkScrim = android.graphics.Color.argb(0x80, 0x1b, 0x1b, 0x1b)
 }

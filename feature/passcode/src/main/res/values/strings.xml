@@ -12,4 +12,24 @@
     <string name="feature_passcode_passcode_title">Passcode will be reset, are you sure?</string>
     <string name="feature_passcode_cancel">Cancel</string>
     <string name="feature_passcode_yes">Yes</string>
+    <string name="pref_name">Passcode</string>
+    <string name="has_passcode">hasPasscode</string>
+    <string name="has_drag_passcode">hasDragPasscode</string>
+    <string name="passcode">passcode</string>
+    <string name="drag_passcode">drag_passcode</string>
+
+    <string name="create_passcode">Create Passcode</string>
+    <string name="confirm_passcode">Confirm Passcode</string>
+    <string name="enter_your_passcode">Enter your Passcode</string>
+    <string name="forgot_passcode">Forgot Passcode</string>
+    <string name="delete_passcode">Delete Passcode Key Button</string>
+    <string name="drag_guide">Drag your finger here only in one direction.</string>
+    <string name="drag_your_pattern">Drag your Pattern</string>
+    <string name="exit">Exit</string>
+    <string name="cancel">Cancel</string>
+    <string name="skip">Skip</string>
+    <string name="forgot_passcode_login_manually">Forgot Passcode, Login Manually</string>
+    <string name="try_again">Try again</string>
+    <string name="passcode_do_not_match">Passcode do not match!</string>
+    <string name="are_you_sure_you_want_to_exit">Are you sure you want to exit?</string>
 </resources>

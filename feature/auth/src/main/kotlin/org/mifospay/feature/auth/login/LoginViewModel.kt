@@ -11,7 +11,7 @@ package org.mifospay.feature.auth.login
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
+import com.mifospay.core.model.domain.client.Client
 import com.mifospay.core.model.domain.user.User
 import com.mifospay.core.model.entity.UserWithRole
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,12 +28,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val mUsecaseHandler: UseCaseHandler,
+    private val mUseCaseHandler: UseCaseHandler,
     private val authenticateUserUseCase: AuthenticateUser,
     private val fetchClientDataUseCase: FetchClientData,
     private val fetchUserDetailsUseCase: FetchUserDetails,
     private val preferencesHelper: PreferencesHelper,
-    private val passcodePreferencesHelper: PasscodePreferencesHelper,
 ) : ViewModel() {
 
     private val _showProgress = MutableStateFlow(false)
@@ -41,8 +40,6 @@ class LoginViewModel @Inject constructor(
 
     private val _isLoginSuccess = MutableStateFlow(false)
     val isLoginSuccess: StateFlow<Boolean> = _isLoginSuccess
-
-    val isPassCodeExist = passcodePreferencesHelper.passCode.isNotEmpty()
 
     fun updateProgressState(isVisible: Boolean) {
         _showProgress.update { isVisible }
@@ -68,7 +65,7 @@ class LoginViewModel @Inject constructor(
             AuthenticateUser.RequestValues(username, password)
 
         val requestValue = authenticateUserUseCase.walletRequestValues
-        mUsecaseHandler.execute(
+        mUseCaseHandler.execute(
             authenticateUserUseCase,
             requestValue,
             object : UseCaseCallback<AuthenticateUser.ResponseValue> {
@@ -91,7 +88,7 @@ class LoginViewModel @Inject constructor(
      * @param user
      */
     private fun fetchUserDetails(user: User) {
-        mUsecaseHandler.execute(
+        mUseCaseHandler.execute(
             fetchUserDetailsUseCase,
             FetchUserDetails.RequestValues(user.userId),
             object : UseCaseCallback<FetchUserDetails.ResponseValue> {
@@ -113,7 +110,7 @@ class LoginViewModel @Inject constructor(
      * @param user
      */
     private fun fetchClientData(user: User) {
-        mUsecaseHandler.execute(
+        mUseCaseHandler.execute(
             fetchClientDataUseCase,
             FetchClientData.RequestValues(user.clients.firstOrNull()),
             object : UseCaseCallback<FetchClientData.ResponseValue> {
@@ -154,7 +151,7 @@ class LoginViewModel @Inject constructor(
     /**
      * TODO remove name, clientId and mobileNo from pref and use from saved Client
      */
-    private fun saveClientDetails(client: com.mifospay.core.model.domain.client.Client?) {
+    private fun saveClientDetails(client: Client?) {
         preferencesHelper.saveFullName(client?.name)
         preferencesHelper.clientId = client?.clientId!!
         preferencesHelper.saveMobile(client.mobileNo)

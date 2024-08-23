@@ -116,6 +116,7 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.tracing.ktx)
@@ -123,8 +124,6 @@ dependencies {
     implementation(libs.coil.kt)
     implementation(libs.androidx.material.navigation)
     implementation(libs.accompanist.pager)
-
-    implementation(libs.mifosPasscode)
 
     ksp(libs.hilt.compiler)
 
@@ -148,8 +147,6 @@ dependencies {
     runtimeOnly(libs.androidx.compose.runtime)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    implementation(libs.mifosPasscode)
-
     kspTest(libs.hilt.compiler)
 
     testImplementation(libs.junit)
@@ -161,5 +158,8 @@ dependencies {
 }
 
 dependencyGuard {
-    configuration("prodReleaseRuntimeClasspath")
+    configuration("prodReleaseRuntimeClasspath") {
+        modules = true
+        tree = true
+    }
 }

@@ -9,6 +9,8 @@
  */
 package org.mifospay.ui
 
+import androidx.compose.material.navigation.BottomSheetNavigator
+import androidx.compose.material.navigation.rememberBottomSheetNavigator
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -47,11 +49,13 @@ fun rememberMifosAppState(
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavHostController = rememberNavController(),
+    bottomSheetNavigator: BottomSheetNavigator = rememberBottomSheetNavigator(),
+    navController: NavHostController = rememberNavController(bottomSheetNavigator),
 ): MifosAppState {
     NavigationTrackingSideEffect(navController)
     return remember(
         navController,
+        bottomSheetNavigator,
         coroutineScope,
         windowSizeClass,
         networkMonitor,
@@ -59,6 +63,7 @@ fun rememberMifosAppState(
     ) {
         MifosAppState(
             navController = navController,
+            bottomSheetNavigator = bottomSheetNavigator,
             coroutineScope = coroutineScope,
             windowSizeClass = windowSizeClass,
             networkMonitor = networkMonitor,
@@ -70,6 +75,7 @@ fun rememberMifosAppState(
 @Stable
 class MifosAppState(
     val navController: NavHostController,
+    val bottomSheetNavigator: BottomSheetNavigator,
     coroutineScope: CoroutineScope,
     val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,

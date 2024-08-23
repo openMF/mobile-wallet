@@ -112,8 +112,8 @@ fun EditProfileScreen(
 
     Box(
         modifier =
-            modifier
-                .fillMaxSize(),
+        modifier
+            .fillMaxSize(),
     ) {
         MifosScaffold(
             topBarTitle = R.string.feature_profile_edit_profile,
@@ -189,15 +189,15 @@ private fun EditProfileScreenContent(
 
     PermissionBox(
         requiredPermissions =
-            if (Build.VERSION.SDK_INT >= 33) {
-                listOf(Manifest.permission.CAMERA)
-            } else {
-                listOf(
-                    Manifest.permission.CAMERA,
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                )
-            },
+        if (Build.VERSION.SDK_INT >= 33) {
+            listOf(Manifest.permission.CAMERA)
+        } else {
+            listOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.READ_EXTERNAL_STORAGE,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            )
+        },
         title = R.string.feature_profile_permission_required,
         confirmButtonText = R.string.feature_profile_proceed,
         dismissButtonText = R.string.feature_profile_dismiss,
@@ -244,16 +244,16 @@ private fun EditProfileScreenContent(
     )
     Box(
         modifier =
-            modifier
-                .padding(contentPadding)
-                .fillMaxSize(),
+        modifier
+            .padding(contentPadding)
+            .fillMaxSize(),
     ) {
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .background(color = MaterialTheme.colorScheme.surface)
-                    .verticalScroll(rememberScrollState()),
+            Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.surface)
+                .verticalScroll(rememberScrollState()),
         ) {
             EditProfileScreenImage(
                 imageUri = imageUri,
@@ -264,33 +264,33 @@ private fun EditProfileScreenContent(
                 label = stringResource(id = R.string.feature_profile_username),
                 onValueChange = { username = it },
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
             )
             MfOutlinedTextField(
                 value = email,
                 label = stringResource(id = R.string.feature_profile_email),
                 onValueChange = { email = it },
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
             )
             MfOutlinedTextField(
                 value = vpa,
                 label = stringResource(id = R.string.feature_profile_vpa),
                 onValueChange = { vpa = it },
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
             )
             Box(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(start = 16.dp, end = 16.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 16.dp, end = 16.dp),
             ) {
                 val keyboardController = LocalSoftwareKeyboardController.current
                 if (LocalInspectionMode.current) {
@@ -302,9 +302,9 @@ private fun EditProfileScreenContent(
                         autoDetectCode = true,
                         shape = RoundedCornerShape(3.dp),
                         colors =
-                            TextFieldDefaults.outlinedTextFieldColors(
-                                focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-                            ),
+                        TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+                        ),
                         onValueChange = { (code, phone), isValid ->
                             if (isValid) {
                                 mobile = code + phone
@@ -356,16 +356,16 @@ fun EditProfileBottomSheetContent(
 ) {
     Column(
         modifier =
-            modifier
-                .background(MaterialTheme.colorScheme.surface)
-                .padding(top = 8.dp, bottom = 12.dp),
+        modifier
+            .background(MaterialTheme.colorScheme.surface)
+            .padding(top = 8.dp, bottom = 12.dp),
     ) {
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp)
-                    .clickable { onClickProfilePicture.invoke() },
+            Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+                .clickable { onClickProfilePicture.invoke() },
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -377,10 +377,10 @@ fun EditProfileBottomSheetContent(
         }
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp)
-                    .clickable { onChangeProfilePicture.invoke() },
+            Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+                .clickable { onChangeProfilePicture.invoke() },
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -392,10 +392,10 @@ fun EditProfileBottomSheetContent(
         }
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp)
-                    .clickable { onRemoveProfilePicture.invoke() },
+            Modifier
+                .fillMaxWidth()
+                .padding(12.dp)
+                .clickable { onRemoveProfilePicture.invoke() },
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -418,9 +418,9 @@ private fun EditProfileSaveButton(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
         modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+        modifier
+            .fillMaxWidth()
+            .padding(16.dp),
         shape = RoundedCornerShape(10.dp),
         contentPadding = PaddingValues(12.dp),
     ) {
