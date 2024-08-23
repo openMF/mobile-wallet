@@ -86,7 +86,7 @@ internal fun PasscodeHeader(
                         .offset(x = xTransitionHeader1.x.dp)
                         .alpha(alpha = alphaHeader1)
                         .scale(scale = scaleHeader1),
-                    text = stringResource(id = R.string.enter_your_passcode),
+                    text = stringResource(id = R.string.feature_passcode_enter_your_passcode),
                     style = TextStyle(fontSize = 20.sp),
                 )
             } else {
@@ -96,7 +96,7 @@ internal fun PasscodeHeader(
                             .offset(x = xTransitionHeader1.x.dp)
                             .alpha(alpha = alphaHeader1)
                             .scale(scale = scaleHeader1),
-                        text = stringResource(id = R.string.create_passcode),
+                        text = stringResource(id = R.string.feature_passcode_create_passcode),
                         style = TextStyle(fontSize = 20.sp),
                     )
                 } else if (activeStep == Step.Confirm) {
@@ -105,7 +105,7 @@ internal fun PasscodeHeader(
                             .offset(x = xTransitionHeader2.x.dp)
                             .alpha(alpha = alphaHeader2)
                             .scale(scale = scaleHeader2),
-                        text = stringResource(id = R.string.confirm_passcode),
+                        text = stringResource(id = R.string.feature_passcode_confirm_passcode),
                         style = TextStyle(fontSize = 20.sp),
                     )
                 }

@@ -1,5 +1,5 @@
 package: name='org.mifospay' versionCode='1' versionName='1.0' platformBuildVersionName='14' platformBuildVersionCode='34' compileSdkVersion='34' compileSdkVersionCodename='14'
-sdkVersion:'24'
+sdkVersion:'26'
 targetSdkVersion:'34'
 uses-permission: name='android.permission.INTERNET'
 uses-permission: name='android.permission.CAMERA'

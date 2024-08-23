@@ -111,13 +111,14 @@ jobs:
           java-version: 17
       - name: Run tests
         run: |
-          ./gradlew testDemoDebug
+          ./gradlew testDemoDebug lintProdRelease
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-and-lint-reports
           path: |
+            **/build/reports/lint-results-*.html
             **/build/test-results/test*UnitTest/**.xml
 
   build:
@@ -131,10 +132,10 @@ jobs:
           java-version: 17
 
       - name: Build APKs
-        run: ./gradlew :app:assemble
+        run: ./gradlew :mifospay:assembleDemoDebug
 
       - name: Check badging
-        run: ./gradlew :app:checkProdReleaseBadging
+        run: ./gradlew :mifospay:checkProdReleaseBadging
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4

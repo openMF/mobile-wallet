@@ -111,7 +111,7 @@ internal fun PasscodeKeys(
             )
             PasscodeKey(
                 modifier = Modifier.weight(weight = 1.0F),
-                keyIcon = ImageVector.vectorResource(id = R.drawable.ic_delete),
+                keyIcon = ImageVector.vectorResource(id = R.drawable.feature_passcode_ic_delete),
                 keyIconContentDescription = "Delete Passcode Key Button",
                 onClick = {
                     deleteKey()

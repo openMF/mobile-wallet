@@ -19,8 +19,6 @@ plugins {
     alias(libs.plugins.roborazzi)
 }
 
-apply(from = "../config/quality/quality.gradle")
-
 android {
     namespace = "org.mifospay"
     defaultConfig {

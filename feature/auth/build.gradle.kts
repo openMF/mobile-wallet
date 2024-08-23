@@ -19,8 +19,6 @@ android {
     }
 }
 
-apply(from = "${project.rootDir}/config/quality/quality.gradle")
-
 dependencies {
     implementation(projects.core.data)
 

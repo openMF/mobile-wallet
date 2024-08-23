@@ -63,7 +63,7 @@
     <string name="user_details">User details</string>
     <string name="send_money">Send money</string>
     <string name="sending_to">Sending to</string>
-    <string name="cancel">Cancel</string>
+    <string name="feature_passcode_cancel">Cancel</string>
     <string name="feature_accounts_confirm">Confirm</string>
     <string name="feature_send_money_send">Send</string>
     <string name="feature_accounts_add_account">ADD ACCOUNT</string>

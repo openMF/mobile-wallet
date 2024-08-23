@@ -14,22 +14,22 @@ import org.mifos.mobilewallet.mifospay.feature.passcode.R
 
 class PreferenceManager(context: Context) {
     private val sharedPreference = context.getSharedPreferences(
-        R.string.pref_name.toString(),
+        R.string.feature_passcode_pref_name.toString(),
         Context.MODE_PRIVATE,
     )
 
     var hasPasscode: Boolean
-        get() = sharedPreference.getBoolean(R.string.has_passcode.toString(), false)
-        set(value) = sharedPreference.edit().putBoolean(R.string.has_passcode.toString(), value)
+        get() = sharedPreference.getBoolean(R.string.feature_passcode_has_passcode.toString(), false)
+        set(value) = sharedPreference.edit().putBoolean(R.string.feature_passcode_has_passcode.toString(), value)
             .apply()
 
     fun savePasscode(passcode: String) {
-        sharedPreference.edit().putString(R.string.passcode.toString(), passcode).apply()
+        sharedPreference.edit().putString(R.string.feature_passcode.toString(), passcode).apply()
         hasPasscode = true
     }
 
     fun getSavedPasscode(): String {
-        return sharedPreference.getString(R.string.passcode.toString(), "").toString()
+        return sharedPreference.getString(R.string.feature_passcode.toString(), "").toString()
     }
 
     fun clearPasscode() {

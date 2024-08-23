@@ -17,8 +17,6 @@ android {
     namespace = "org.mifospay.core.model"
 }
 
-apply(from = "${project.rootDir}/config/quality/quality.gradle")
-
 dependencies {
     api(libs.kotlinx.datetime)
 

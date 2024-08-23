@@ -13,8 +13,6 @@ plugins {
     id("kotlinx-serialization")
 }
 
-apply(from = "${project.rootDir}/config/quality/quality.gradle")
-
 android {
     namespace = "org.mifospay.core.network"
     defaultConfig {

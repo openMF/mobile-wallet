@@ -14,10 +14,6 @@ plugins {
     id("kotlinx-serialization")
 }
 
-apply(from = "${project.rootDir}/config/quality/quality.gradle")
-
-group = "com.github.ankurs287"
-
 android {
     namespace = "org.mifospay.core.data"
     testOptions {
