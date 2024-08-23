@@ -3,6 +3,7 @@ name: Mobile-Wallet CI[Master/Dev]
 on:
   push:
     branches: [ dev, master, payment_hub ]
+  pull_request:
   pull_request_target:
 
 concurrency:
