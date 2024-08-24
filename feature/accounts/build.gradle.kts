@@ -20,5 +20,5 @@ dependencies {
     implementation(projects.core.data)
     // TODO:: this should be removed
     implementation(libs.compose.material)
-    implementation(projects.feature.upiSetup)
+//    implementation(projects.feature.upiSetup)
 }

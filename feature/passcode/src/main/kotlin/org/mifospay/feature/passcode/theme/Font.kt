@@ -17,17 +17,17 @@ import org.mifos.mobilewallet.mifospay.feature.passcode.R
 
 internal val LatoFonts = FontFamily(
     Font(
-        resId = R.font.lato_regular,
+        resId = R.font.feature_passcode_lato_regular,
         weight = FontWeight.Normal,
         style = FontStyle.Normal,
     ),
     Font(
-        resId = R.font.lato_bold,
+        resId = R.font.feature_passcode_lato_bold,
         weight = FontWeight.Bold,
         style = FontStyle.Normal,
     ),
     Font(
-        resId = R.font.lato_black,
+        resId = R.font.feature_passcode_lato_black,
         weight = FontWeight.Black,
         style = FontStyle.Normal,
     ),

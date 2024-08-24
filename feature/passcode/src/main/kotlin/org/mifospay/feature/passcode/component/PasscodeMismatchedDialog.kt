@@ -29,13 +29,13 @@ internal fun PasscodeMismatchedDialog(
             containerColor = Color.White,
             title = {
                 Text(
-                    text = stringResource(R.string.passcode_do_not_match),
+                    text = stringResource(R.string.feature_passcode_do_not_match),
                     color = Color.Black,
                 )
             },
             confirmButton = {
                 TextButton(onClick = onDismiss) {
-                    Text(text = stringResource(R.string.try_again), color = Color.Black)
+                    Text(text = stringResource(R.string.feature_passcode_try_again), color = Color.Black)
                 }
             },
             onDismissRequest = onDismiss,

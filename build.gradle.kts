@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
@@ -25,17 +26,15 @@ plugins {
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.detekt)
-    alias(libs.plugins.detekt.compiler)
+    alias(libs.plugins.detekt) apply true
     // Plugin applied to allow module graph generation
     alias(libs.plugins.module.graph) apply true
-    alias(libs.plugins.spotless)
+    alias(libs.plugins.spotless) apply true
 }
 
 val detektFormatting = libs.detekt.formatting
 val twitterComposeRules = libs.twitter.detekt.compose
 val ktlintVersion = "1.0.1"
-
 
 subprojects {
     apply {

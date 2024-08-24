@@ -39,7 +39,7 @@ internal fun PasscodeSkipButton(
             TextButton(
                 onClick = { onSkipButton.invoke() },
             ) {
-                Text(text = stringResource(R.string.skip), style = skipButtonStyle)
+                Text(text = stringResource(R.string.feature_passcode_skip), style = skipButtonStyle)
             }
         }
     }
@@ -62,7 +62,7 @@ internal fun PasscodeForgotButton(
                 onClick = { onForgotButton.invoke() },
             ) {
                 Text(
-                    text = stringResource(R.string.forgot_passcode_login_manually),
+                    text = stringResource(R.string.feature_passcode_login_manually),
                     style = forgotButtonStyle,
                 )
             }

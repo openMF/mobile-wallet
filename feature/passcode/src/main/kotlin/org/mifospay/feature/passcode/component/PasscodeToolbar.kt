@@ -74,18 +74,18 @@ private fun ExitWarningDialog(
             containerColor = Color.White,
             title = {
                 Text(
-                    text = stringResource(R.string.are_you_sure_you_want_to_exit),
+                    text = stringResource(R.string.feature_passcode_exit_message),
                     color = Color.Black,
                 )
             },
             confirmButton = {
                 TextButton(onClick = onConfirm) {
-                    Text(text = stringResource(R.string.exit))
+                    Text(text = stringResource(R.string.feature_passcode_exit))
                 }
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    Text(text = stringResource(R.string.cancel))
+                    Text(text = stringResource(R.string.feature_passcode_cancel))
                 }
             },
             onDismissRequest = onDismiss,

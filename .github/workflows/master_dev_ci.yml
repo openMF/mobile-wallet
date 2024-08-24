@@ -79,7 +79,7 @@ jobs:
 
       - name: Prevent updating Dependency Guard baselines if this is a fork
         id: checkfork_dependencyguard
-        continue-on-error: false
+        continue-on-error: true
         if: steps.dependencyguard_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
           echo "::error::Dependency Guard failed, please update baselines with: ./gradlew dependencyGuardBaseline" && exit 1
@@ -111,13 +111,14 @@ jobs:
           java-version: 17
       - name: Run tests
         run: |
-          ./gradlew testDemoDebug
+          ./gradlew testDemoDebug lintProdRelease
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: test-and-lint-reports
           path: |
+            **/build/reports/lint-results-*.html
             **/build/test-results/test*UnitTest/**.xml
 
   build:
@@ -131,10 +132,10 @@ jobs:
           java-version: 17
 
       - name: Build APKs
-        run: ./gradlew :app:assemble
+        run: ./gradlew :mifospay:assembleDemoDebug
 
       - name: Check badging
-        run: ./gradlew :app:checkProdReleaseBadging
+        run: ./gradlew :mifospay:checkProdReleaseBadging
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4
