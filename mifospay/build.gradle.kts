@@ -15,8 +15,8 @@ plugins {
     alias(libs.plugins.mifospay.android.application.flavors)
     alias(libs.plugins.mifospay.android.hilt)
     alias(libs.plugins.mifospay.android.application.firebase)
-    id("com.google.android.gms.oss-licenses-plugin")
     alias(libs.plugins.roborazzi)
+    id("com.google.android.gms.oss-licenses-plugin")
 }
 
 android {
@@ -66,23 +66,12 @@ android {
 
 dependencies {
     implementation(projects.core.data)
-    implementation(libs.androidx.constraintlayout)
-
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.activity.ktx)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.swiperefresh.layout)
-
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-    api("com.google.android.material:material:1.0.0") // update require alot of UI changes
 
     implementation(projects.feature.receipt)
     implementation(projects.feature.profile)
     implementation(projects.feature.auth)
-    implementation(projects.feature.passcode)
     implementation(projects.feature.makeTransfer)
     implementation(projects.feature.faq)
     implementation(projects.feature.editpassword)
@@ -102,45 +91,38 @@ dependencies {
     implementation(projects.feature.payments)
     implementation(projects.feature.sendMoney)
     implementation(projects.feature.standingInstruction)
+    implementation(projects.feature.search)
+
+    implementation(projects.libs.mifosPasscode)
+    implementation(projects.libs.material3Navigation)
 
     // Compose
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.core.splashscreen)
+
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.compose.material3.adaptive.layout)
     implementation(libs.androidx.compose.material3.adaptive.navigation)
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.compose.runtime.tracing)
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.core.splashscreen)
+
     implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.lifecycle.viewModelCompose)
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.profileinstaller)
-    implementation(libs.androidx.tracing.ktx)
-    implementation(libs.kotlinx.coroutines.guava)
-    implementation(libs.coil.kt)
-    implementation(libs.androidx.material.navigation)
-    implementation(libs.accompanist.pager)
-
     ksp(libs.hilt.compiler)
-
-    // Google Bar code scanner
-    implementation(libs.google.play.services.code.scanner)
-
-    //calender for date picking
-    implementation(libs.sheets.compose.dialogs.core)
-    implementation(libs.sheets.compose.dialogs.calender)
-
-    // ViewModel
-    implementation(libs.androidx.lifecycle.ktx)
-    implementation(libs.androidx.lifecycle.extensions)
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-    // Splash API
-    implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.lifecycle.runtimeCompose)
+    implementation(libs.androidx.lifecycle.viewModelCompose)
+    implementation(libs.androidx.lifecycle.ktx)
+    implementation(libs.androidx.lifecycle.extensions)
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.profileinstaller)
+    implementation(libs.androidx.tracing.ktx)
 
     runtimeOnly(libs.androidx.compose.runtime)
     debugImplementation(libs.androidx.compose.ui.tooling)
@@ -149,7 +131,9 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.hilt.android.testing)
+    testImplementation(libs.androidx.compose.ui.test)
 
+    androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.hilt.android.testing)

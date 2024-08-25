@@ -11,8 +11,6 @@ package org.mifospay.core.ui
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
-import androidx.compose.material3.Tab
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -22,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.launch
+import org.mifospay.core.designsystem.component.MifosTab
 import org.mifospay.core.ui.utility.TabContent
 
 @Suppress("MultipleEmitters")
@@ -44,13 +43,8 @@ fun MifosScrollableTabRow(
         edgePadding = edgePadding,
     ) {
         tabContents.forEachIndexed { index, currentTab ->
-            Tab(
-                text = {
-                    Text(
-                        text = currentTab.tabName,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                },
+            MifosTab(
+                text = currentTab.tabName,
                 selected = pagerState.currentPage == index,
                 selectedContentColor = selectedContentColor,
                 unselectedContentColor = unselectedContentColor,

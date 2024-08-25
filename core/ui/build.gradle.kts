@@ -26,8 +26,12 @@ dependencies {
     api(libs.androidx.metrics)
     api(projects.core.analytics)
 
+    implementation(libs.androidx.compose.runtime)
     implementation(libs.accompanist.pager)
     implementation(libs.androidx.browser)
     implementation(libs.coil.kt)
     implementation(libs.coil.kt.compose)
+
+    testImplementation(libs.androidx.compose.ui.test)
+    androidTestImplementation(libs.bundles.androidx.compose.ui.test)
 }

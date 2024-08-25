@@ -21,10 +21,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,7 +43,9 @@ import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
 import org.mifospay.core.designsystem.component.MifosBottomSheet
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.lightGrey
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.TransactionItemScreen
@@ -89,7 +87,7 @@ private fun HistoryScreen(
                 subTitle = stringResource(id = R.string.feature_history_empty_no_transaction_history_title),
                 modifier = Modifier,
                 iconTint = MaterialTheme.colorScheme.primary,
-                iconImageVector = Icons.Rounded.Info,
+                iconImageVector = MifosIcons.Info,
             )
         }
 
@@ -99,7 +97,7 @@ private fun HistoryScreen(
                 subTitle = stringResource(id = R.string.feature_history_unexpected_error_subtitle),
                 modifier = Modifier,
                 iconTint = MaterialTheme.colorScheme.primary,
-                iconImageVector = Icons.Rounded.Info,
+                iconImageVector = MifosIcons.Info,
             )
         }
 
@@ -183,13 +181,13 @@ private fun Chip(
 ) {
     val context = LocalContext.current
     val backgroundColor = if (selected) MaterialTheme.colorScheme.primary else lightGrey
-    Button(
+    MifosButton(
         modifier = modifier,
         onClick = {
             onClick()
             Toast.makeText(context, label, Toast.LENGTH_SHORT).show()
         },
-        colors = ButtonDefaults.buttonColors(backgroundColor),
+        color = backgroundColor,
     ) {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp),

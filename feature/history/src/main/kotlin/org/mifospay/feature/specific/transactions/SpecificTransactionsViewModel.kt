@@ -9,38 +9,44 @@
  */
 package org.mifospay.feature.specific.transactions
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.Transaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import org.mifospay.core.data.base.TaskLooper
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseFactory
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransfer
 import org.mifospay.core.data.util.Constants
+import org.mifospay.feature.specific.transactions.SpecificTransactionsUiState.Loading
+import org.mifospay.feature.specific.transactions.navigation.ACCOUNT_NUMBER_ARG
+import org.mifospay.feature.specific.transactions.navigation.TRANSACTIONS_ARG
 import javax.inject.Inject
 
 @HiltViewModel
 class SpecificTransactionsViewModel @Inject constructor(
     private val mUseCaseFactory: UseCaseFactory,
     private var mTaskLooper: TaskLooper? = null,
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<SpecificTransactionsUiState> =
-        MutableStateFlow(SpecificTransactionsUiState.Loading)
-    val uiState get() = _uiState
+    private val _uiState: MutableStateFlow<SpecificTransactionsUiState> = MutableStateFlow(Loading)
+    val uiState = _uiState.asStateFlow()
 
-    private val _transactions: MutableStateFlow<ArrayList<Transaction>> =
-        MutableStateFlow(ArrayList())
-    private val transactions get() = _transactions
+    init {
+        savedStateHandle.get<String>(ACCOUNT_NUMBER_ARG)?.let { accountNumber ->
+            savedStateHandle.get<ArrayList<Transaction>>(TRANSACTIONS_ARG)?.let { transactions ->
+                getSpecificTransactions(accountNumber, transactions)
+            }
+        }
+    }
 
-    private val _accountNumber: MutableStateFlow<String> = MutableStateFlow("")
-    private val accountNumber get() = _accountNumber
-
-    fun getSpecificTransactions(): ArrayList<Transaction> {
-        val transactions = transactions.value
-        val accountNumber = accountNumber.value
-
+    private fun getSpecificTransactions(
+        accountNumber: String,
+        transactions: ArrayList<Transaction>,
+    ): ArrayList<Transaction> {
         val specificTransactions = ArrayList<Transaction>()
         if (transactions.size > 0) {
             for (i in transactions.indices) {
@@ -56,43 +62,40 @@ class SpecificTransactionsViewModel @Inject constructor(
                     ),
                 )
             }
-            mTaskLooper!!.listen(object : TaskLooper.Listener {
-                override fun <R : UseCase.ResponseValue?> onTaskSuccess(
-                    taskData: TaskLooper.TaskData,
-                    response: R,
-                ) {
-                    when (taskData.taskName) {
-                        org.mifospay.common.Constants.TRANSFER_DETAILS -> {
-                            val responseValue = response as FetchAccountTransfer.ResponseValue
-                            val index = taskData.taskId
-                            transactions[index].transferDetail = responseValue.transferDetail
+            mTaskLooper!!.listen(
+                object : TaskLooper.Listener {
+                    override fun <R : UseCase.ResponseValue?> onTaskSuccess(
+                        taskData: TaskLooper.TaskData,
+                        response: R,
+                    ) {
+                        when (taskData.taskName) {
+                            org.mifospay.common.Constants.TRANSFER_DETAILS -> {
+                                val responseValue = response as FetchAccountTransfer.ResponseValue
+                                val index = taskData.taskId
+                                transactions[index].transferDetail = responseValue.transferDetail
+                            }
                         }
                     }
-                }
 
-                override fun onComplete() {
-                    for (transaction in transactions) {
-                        if (
-                            transaction.transferDetail.fromAccount.accountNo == accountNumber ||
-                            transaction.transferDetail.toAccount.accountNo == accountNumber
-                        ) {
-                            specificTransactions.add(transaction)
+                    override fun onComplete() {
+                        for (transaction in transactions) {
+                            if (
+                                transaction.transferDetail.fromAccount.accountNo == accountNumber ||
+                                transaction.transferDetail.toAccount.accountNo == accountNumber
+                            ) {
+                                specificTransactions.add(transaction)
+                            }
                         }
+                        _uiState.value = SpecificTransactionsUiState.Success(specificTransactions)
                     }
-                    _uiState.value = SpecificTransactionsUiState.Success(specificTransactions)
-                }
 
-                override fun onFailure(message: String?) {
-                    _uiState.value = SpecificTransactionsUiState.Error
-                }
-            })
+                    override fun onFailure(message: String?) {
+                        _uiState.value = SpecificTransactionsUiState.Error
+                    }
+                },
+            )
         }
         return specificTransactions
-    }
-
-    fun setArguments(transactions: ArrayList<Transaction>, accountNumber: String) {
-        _accountNumber.value = accountNumber
-        _transactions.value = transactions
     }
 }
 

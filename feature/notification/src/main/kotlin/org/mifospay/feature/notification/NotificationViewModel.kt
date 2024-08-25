@@ -33,7 +33,7 @@ class NotificationViewModel @Inject constructor(
 
     private val mNotificationUiState: MutableStateFlow<NotificationUiState> =
         MutableStateFlow(Loading)
-    val notificationUiState: StateFlow<NotificationUiState> = mNotificationUiState
+    val notificationUiState = mNotificationUiState.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> get() = _isRefreshing.asStateFlow()

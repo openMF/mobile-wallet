@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -82,7 +80,7 @@ internal fun StandingInstructionScreen(
                     subTitle = stringResource(id = R.string.feature_standing_instruction_empty_standing_instructions),
                     modifier = Modifier,
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = Icons.Rounded.Info,
+                    iconImageVector = MifosIcons.Info,
                 )
             }
 

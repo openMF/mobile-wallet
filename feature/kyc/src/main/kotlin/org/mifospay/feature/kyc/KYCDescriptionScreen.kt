@@ -22,14 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -51,8 +43,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mifos.library.pullrefresh.PullRefreshIndicator
+import com.mifos.library.pullrefresh.pullRefresh
+import com.mifos.library.pullrefresh.rememberPullRefreshState
 import com.mifospay.core.model.entity.kyc.KYCLevel1Details
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.kyc.R
 
@@ -87,7 +84,6 @@ fun KYCScreen(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun KYCDescriptionScreen(
     kUiState: KYCDescriptionUiState,
@@ -114,7 +110,7 @@ private fun KYCDescriptionScreen(
                     subTitle = stringResource(id = R.string.feature_kyc_unexpected_error_subtitle),
                     modifier = Modifier,
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = Icons.Rounded.Info,
+                    iconImageVector = MifosIcons.Info,
                 )
             }
 
@@ -224,7 +220,7 @@ private fun ButtonComponent(
     onButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Button(
+    MifosButton(
         modifier = modifier
             .width(130.dp)
             .heightIn(38.dp)
@@ -269,7 +265,7 @@ private fun IconComponent(
                 .height(23.dp),
         ) {
             Icon(
-                Icons.Filled.Check,
+                imageVector = MifosIcons.Check,
                 contentDescription = stringResource(R.string.feature_kyc_check),
                 modifier = Modifier
                     .size(20.dp),

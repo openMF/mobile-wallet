@@ -20,8 +20,7 @@ dependencies {
     implementation(projects.core.data)
 
     // we need it for country picker library
-    implementation(libs.compose.material)
-    implementation(libs.compose.country.code.picker) // remove after moving auth code to module
+    implementation(projects.libs.countryCodePicker)
 
     // Google Bar code scanner
     implementation(libs.google.play.services.code.scanner)

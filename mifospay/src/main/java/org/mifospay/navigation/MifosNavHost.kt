@@ -11,11 +11,11 @@ package org.mifospay.navigation
 
 import android.content.Context
 import android.net.Uri
-import androidx.compose.material.navigation.ModalBottomSheetLayout
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.content.FileProvider
 import androidx.navigation.compose.NavHost
+import com.mifos.library.material3.navigation.ModalBottomSheetLayout
 import org.mifospay.common.Constants
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.bank.accounts.AccountsScreen
@@ -46,6 +46,7 @@ import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.merchants.ui.MerchantScreen
+import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
@@ -59,6 +60,7 @@ import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.CardsScreen
 import org.mifospay.feature.savedcards.navigation.addCardScreen
+import org.mifospay.feature.search.searchScreen
 import org.mifospay.feature.send.money.SendScreenRoute
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
@@ -286,6 +288,10 @@ internal fun MifosNavHost(
                 onBackPress = navController::popBackStack,
                 onCancelChanges = navController::popBackStack,
             )
+
+            notificationScreen()
+
+            searchScreen(onBackClick = navController::popBackStack)
         }
     }
 }

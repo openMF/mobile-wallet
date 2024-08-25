@@ -15,8 +15,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 
 @Composable
@@ -109,7 +108,7 @@ internal fun RequestScreenContent(
                     onClick = { showQr(vpa) },
                 ) {
                     Icon(
-                        imageVector = Icons.Default.QrCode,
+                        imageVector = MifosIcons.QrCode,
                         tint = MaterialTheme.colorScheme.primary,
                         contentDescription = stringResource(id = R.string.feature_payments_show_code),
                     )

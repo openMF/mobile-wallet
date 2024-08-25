@@ -54,7 +54,7 @@ jobs:
           fi
 
       - name: Upload Detekt Reports
-        if: ${{ matrix.check }} == 'detekt' && steps.run_check.outcome == 'success'
+        if: ${{ matrix.check == 'detekt' && steps.run_check.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
           name: detekt-reports
@@ -79,7 +79,6 @@ jobs:
 
       - name: Prevent updating Dependency Guard baselines if this is a fork
         id: checkfork_dependencyguard
-        continue-on-error: true
         if: steps.dependencyguard_verify.outcome == 'failure' && github.event.pull_request.head.repo.full_name != github.repository
         run: |
           echo "::error::Dependency Guard failed, please update baselines with: ./gradlew dependencyGuardBaseline" && exit 1
@@ -99,7 +98,6 @@ jobs:
           disable_globbing: true
           commit_message: "🤖 Updates baselines for Dependency Guard"
 
-
   tests_and_lint:
     needs: setup
     runs-on: ubuntu-latest
@@ -111,7 +109,7 @@ jobs:
           java-version: 17
       - name: Run tests
         run: |
-          ./gradlew testDemoDebug lintProdRelease
+          ./gradlew testDemoDebug :lint:test :mifospay:lintProdRelease :lint:lint
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -122,7 +120,7 @@ jobs:
             **/build/test-results/test*UnitTest/**.xml
 
   build:
-    needs: [ checks, tests_and_lint ]
+    needs: [ checks, dependency_guard, tests_and_lint ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

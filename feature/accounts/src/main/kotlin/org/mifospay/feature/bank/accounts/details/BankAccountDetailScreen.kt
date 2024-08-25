@@ -17,9 +17,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ChevronRight
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,7 +28,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.mifospay.core.model.domain.BankAccountDetails
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosTopBar
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.feature.bank.accounts.R
 
 @Composable
@@ -194,7 +193,7 @@ private fun BankAccountDetailButton(
     hasTrailingIcon: Boolean = false,
 ) {
     if (isUpiEnabled) {
-        Button(
+        MifosButton(
             onClick = { onClick.invoke() },
             colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
             modifier = modifier
@@ -213,7 +212,7 @@ private fun BankAccountDetailButton(
                 )
                 if (hasTrailingIcon) {
                     Icon(
-                        imageVector = Icons.Filled.ChevronRight,
+                        imageVector = MifosIcons.ChevronRight,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimary,
                     )

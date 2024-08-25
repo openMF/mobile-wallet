@@ -11,8 +11,6 @@ package org.mifospay.core.ui.utility
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
@@ -23,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.mifospay.core.designsystem.icon.MifosIcons
 
 @Composable
 fun AddCardChip(
@@ -46,7 +45,7 @@ fun AddCardChip(
         },
         leadingIcon = {
             Icon(
-                imageVector = Icons.Filled.Add,
+                imageVector = MifosIcons.Add,
                 contentDescription = stringResource(btnText),
                 modifier = Modifier.size(16.dp),
                 tint = MaterialTheme.colorScheme.onPrimary,

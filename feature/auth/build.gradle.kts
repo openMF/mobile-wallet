@@ -22,9 +22,7 @@ android {
 dependencies {
     implementation(projects.core.data)
 
-    implementation(libs.compose.country.code.picker)
-    // TODO:: this should be removed
-    implementation(libs.compose.material)
+    implementation(projects.libs.countryCodePicker)
 
     // Credentials Manager
     implementation(libs.androidx.credentials)
