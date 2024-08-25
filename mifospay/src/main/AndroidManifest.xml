@@ -51,14 +51,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".common.ui.SearchActivity"
-            android:theme="@style/AppTheme" />
-
-        <activity
-            android:name=".feature.notification.NotificationActivity"
-            android:theme="@style/AppTheme" />
-
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="barcode_ui" />
@@ -89,10 +81,6 @@
         <meta-data
             android:name="google_analytics_adid_collection_enabled"
             android:value="false" />
-
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

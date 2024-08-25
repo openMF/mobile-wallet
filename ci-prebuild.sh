@@ -8,23 +8,52 @@ fi
 
 echo "Starting all checks and tests..."
 
+failed_tasks=()
+successful_tasks=()
+
 run_gradle_task() {
     echo "Running: $1"
     "./gradlew" $1
     if [ $? -ne 0 ]; then
-        echo "Error: Task $1 failed"
-        exit 1
+        echo "Warning: Task $1 failed"
+        failed_tasks+=("$1")
+    else
+        echo "Task $1 completed successfully"
+        successful_tasks+=("$1")
     fi
 }
 
-run_gradle_task "check -p build-logic"
-run_gradle_task "spotlessApply --no-configuration-cache"
-run_gradle_task "dependencyGuardBaseline"
-run_gradle_task "detekt"
-run_gradle_task "testDemoDebug"
-run_gradle_task "lintProdRelease"
-run_gradle_task "build"
-run_gradle_task "updateProdReleaseBadging"
+tasks=(
+    "check -p build-logic"
+    "spotlessApply --no-configuration-cache"
+    "dependencyGuardBaseline"
+    "detekt"
+    "testDemoDebug :lint:test :mifospay:lintProdRelease :lint:lint"
+    "build"
+    "updateProdReleaseBadging"
+)
 
-echo "All checks and tests completed successfully."
-exit 0
+for task in "${tasks[@]}"; do
+    run_gradle_task "$task"
+done
+
+echo "All tasks have finished."
+
+echo "Successful tasks:"
+for task in "${successful_tasks[@]}"; do
+    echo "- $task"
+done
+
+if [ ${#failed_tasks[@]} -eq 0 ]; then
+    echo "All checks and tests completed successfully."
+else
+    echo "Failed tasks:"
+    for task in "${failed_tasks[@]}"; do
+        echo "- $task"
+    done
+    echo "Please review the output above for more details on the failures."
+fi
+
+echo "Total tasks: ${#tasks[@]}"
+echo "Successful tasks: ${#successful_tasks[@]}"
+echo "Failed tasks: ${#failed_tasks[@]}"

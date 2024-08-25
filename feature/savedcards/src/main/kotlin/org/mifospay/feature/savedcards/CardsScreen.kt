@@ -23,10 +23,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
@@ -55,6 +51,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.savedcards.Card
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosDialogBox
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utility.AddCardChip
@@ -158,7 +155,7 @@ internal fun CardsScreen(
                     subTitle = stringResource(id = R.string.feature_savedcards_unexpected_error_subtitle),
                     modifier = Modifier,
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = Icons.Rounded.Info,
+                    iconImageVector = MifosIcons.Info,
                 )
             }
 
@@ -281,7 +278,7 @@ private fun SearchBarScreen(
         },
         leadingIcon = {
             Icon(
-                imageVector = Icons.Filled.Search,
+                imageVector = MifosIcons.Search,
                 contentDescription = stringResource(R.string.feature_savedcards_search),
             )
         },
@@ -290,7 +287,7 @@ private fun SearchBarScreen(
                 onClick = onClearQuery,
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Close,
+                    imageVector = MifosIcons.Close,
                     contentDescription = stringResource(R.string.feature_savedcards_close),
                 )
             }

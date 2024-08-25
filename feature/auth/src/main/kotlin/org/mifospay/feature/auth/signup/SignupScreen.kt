@@ -21,8 +21,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -53,6 +51,7 @@ import org.mifospay.core.data.util.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MfPasswordTextField
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.feature.auth.R
 import org.mifospay.feature.auth.utils.ValidateUtil.isValidEmail
@@ -333,12 +332,11 @@ private fun SignupScreenContent(
                     selectedState = it
                 }
                 HorizontalDivider(thickness = 24.dp, color = Color.White)
-                Button(
-                    modifier =
-                    Modifier
+                MifosButton(
+                    modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
+                    color = MaterialTheme.colorScheme.primary,
                     enabled = true,
                     onClick = {
                         validateAllFields()

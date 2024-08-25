@@ -29,12 +29,10 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.QrCode2
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -56,13 +54,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
-import com.togitech.ccp.component.TogiCountryCodePicker
+import com.mifos.library.countrycodepicker.CountryCodePicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosNavigationTopAppBar
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 
@@ -244,7 +243,7 @@ internal fun SendMoneyScreen(
                                     },
                                 ) {
                                     Icon(
-                                        imageVector = Icons.Filled.QrCode2,
+                                        imageVector = MifosIcons.QrCode2,
                                         contentDescription = "Scan QR",
                                         tint = MaterialTheme.colorScheme.primary,
                                     )
@@ -316,11 +315,10 @@ private fun EnterPhoneScreen(
     initialPhoneNumber: String? = null,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    TogiCountryCodePicker(
+    CountryCodePicker(
         modifier = modifier,
         shape = RoundedCornerShape(8.dp),
-        colors =
-        TextFieldDefaults.outlinedTextFieldColors(
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
         ),
         initialPhoneNumber = initialPhoneNumber,

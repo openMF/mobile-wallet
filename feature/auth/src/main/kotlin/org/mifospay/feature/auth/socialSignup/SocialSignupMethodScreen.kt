@@ -32,7 +32,6 @@ import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -63,6 +62,8 @@ import org.mifospay.common.Constants
 import org.mifospay.core.data.util.Constants.MIFOS_CONSUMER_SAVINGS_PRODUCT_ID
 import org.mifospay.core.data.util.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
 import org.mifospay.core.designsystem.component.MifosBottomSheet
+import org.mifospay.core.designsystem.component.MifosOutlinedButton
+import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.feature.auth.R
 
 const val TAG = "Social Login"
@@ -215,14 +216,16 @@ private fun SignupMethodContentScreen(
                 modifier = Modifier.padding(top = 16.dp),
                 text = stringResource(id = R.string.feature_auth_create_an_account),
             )
-            OutlinedButton(
+            MifosOutlinedButton(
                 modifier = Modifier.padding(top = 48.dp),
                 onClick = {
                     onSignUpAsMerchant.invoke(checkedGoogleAccountState)
                 },
                 border = BorderStroke(1.dp, Color.LightGray),
                 shape = RoundedCornerShape(4.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                ),
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_auth_sign_up_as_merchant).uppercase(),
@@ -254,14 +257,16 @@ private fun SignupMethodContentScreen(
                     thickness = 1.dp,
                 )
             }
-            OutlinedButton(
+            MifosOutlinedButton(
                 modifier = Modifier.padding(top = 24.dp),
                 onClick = {
                     onSignupAsCustomer.invoke(checkedGoogleAccountState)
                 },
                 border = BorderStroke(1.dp, Color.LightGray),
                 shape = RoundedCornerShape(4.dp),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                ),
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_auth_sign_up_as_customer).uppercase(),
@@ -322,7 +327,11 @@ private fun GoogleIdTokenCredential?.signUpWithMifos(
 @Preview
 @Composable
 private fun SignupMethodContentScreenPreview() {
-    MaterialTheme {
-        SignupMethodContentScreen(true, {}, {})
+    MifosTheme {
+        SignupMethodContentScreen(
+            showProgress = true,
+            onSignUpAsMerchant = {},
+            onSignupAsCustomer = {},
+        )
     }
 }

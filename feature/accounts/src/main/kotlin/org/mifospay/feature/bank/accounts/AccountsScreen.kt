@@ -17,12 +17,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -36,6 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.mifos.library.pullrefresh.PullRefreshIndicator
+import com.mifos.library.pullrefresh.pullRefresh
+import com.mifos.library.pullrefresh.rememberPullRefreshState
 import com.mifospay.core.model.domain.BankAccountDetails
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.ui.EmptyContentScreen
@@ -70,7 +69,6 @@ fun AccountsScreen(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 private fun AccountScreen(
     accountsUiState: AccountsUiState,

@@ -20,15 +20,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -42,7 +40,6 @@ import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.domain.client.Client
 import com.mifospay.core.model.entity.accounts.savings.SavingAccount
-import org.mifospay.common.Utils.toArrayList
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -56,22 +53,15 @@ import org.mifospay.feature.history.R
 
 @Composable
 internal fun SpecificTransactionsScreen(
-    accountNumber: String,
-    transactions: List<Transaction>,
     backPress: () -> Unit,
     transactionItemClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SpecificTransactionsViewModel = hiltViewModel(),
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
-
-    LaunchedEffect(key1 = Unit) {
-        viewModel.setArguments(transactions.toArrayList(), accountNumber)
-        viewModel.getSpecificTransactions()
-    }
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     SpecificTransactionsScreen(
-        uiState = uiState.value,
+        uiState = uiState,
         backPress = backPress,
         transactionItemClicked = transactionItemClicked,
         modifier = modifier,
@@ -115,7 +105,7 @@ internal fun SpecificTransactionsScreen(
                                 subTitle = stringResource(id = R.string.feature_history_no_transactions_found),
                                 modifier = Modifier,
                                 iconTint = MaterialTheme.colorScheme.onSurface,
-                                iconImageVector = Icons.Rounded.Info,
+                                iconImageVector = MifosIcons.Info,
                             )
                         } else {
                             SpecificTransactionsContent(

@@ -23,11 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -51,7 +46,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.grey
 import org.mifospay.core.designsystem.theme.styleNormal18sp
@@ -161,20 +158,19 @@ private fun LoginScreenContent(
                 },
                 trailingIcon = {
                     val image = if (passwordVisibility) {
-                        Icons.Filled.Visibility
+                        MifosIcons.Visibility
                     } else {
-                        Icons.Filled.VisibilityOff
+                        MifosIcons.VisibilityOff
                     }
                     IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                         Icon(imageVector = image, null)
                     }
                 },
             )
-            Button(
+            MifosButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 enabled = userName.text.isNotEmpty() && password.text.isNotEmpty(),
                 onClick = {
                     login.invoke(userName.text, password.text)

@@ -12,13 +12,13 @@ package org.mifospay.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
+import org.mifos.library.passcode.navigateToPasscodeScreen
 import org.mifospay.common.Constants
 import org.mifospay.feature.auth.navigation.LOGIN_ROUTE
 import org.mifospay.feature.auth.navigation.loginScreen
 import org.mifospay.feature.auth.navigation.mobileVerificationScreen
 import org.mifospay.feature.auth.navigation.navigateToSignup
 import org.mifospay.feature.auth.navigation.signupScreen
-import org.mifospay.feature.passcode.navigateToPasscodeScreen
 
 internal fun NavGraphBuilder.loginNavGraph(navController: NavController) {
     navigation(

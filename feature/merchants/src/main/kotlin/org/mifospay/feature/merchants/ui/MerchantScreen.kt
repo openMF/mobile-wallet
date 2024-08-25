@@ -17,14 +17,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -46,8 +38,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
+import com.mifos.library.pullrefresh.PullRefreshIndicator
+import com.mifos.library.pullrefresh.pullRefresh
+import com.mifos.library.pullrefresh.rememberPullRefreshState
 import com.mifospay.core.model.entity.accounts.savings.SavingsWithAssociations
 import org.mifospay.core.designsystem.component.MfLoadingWheel
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.feature.merchants.MerchantUiState
@@ -74,7 +70,6 @@ fun MerchantScreen(
     )
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @VisibleForTesting
 internal fun MerchantScreen(
@@ -99,7 +94,7 @@ internal fun MerchantScreen(
                         subTitle = stringResource(id = R.string.feature_merchants_empty_no_merchants_subtitle),
                         modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.primary,
-                        iconImageVector = Icons.Rounded.Info,
+                        iconImageVector = MifosIcons.Info,
                     )
                 }
 
@@ -109,7 +104,7 @@ internal fun MerchantScreen(
                         subTitle = stringResource(id = R.string.feature_merchants_unexpected_error_subtitle),
                         modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.primary,
-                        iconImageVector = Icons.Rounded.Info,
+                        iconImageVector = MifosIcons.Info,
                     )
                 }
 
@@ -224,7 +219,7 @@ private fun SearchBarScreen(
         },
         leadingIcon = {
             Icon(
-                imageVector = Icons.Filled.Search,
+                imageVector = MifosIcons.Search,
                 contentDescription = stringResource(R.string.feature_merchants_search),
             )
         },
@@ -233,7 +228,7 @@ private fun SearchBarScreen(
                 onClick = onClearQuery,
             ) {
                 Icon(
-                    imageVector = Icons.Filled.Close,
+                    imageVector = MifosIcons.Close,
                     contentDescription = stringResource(R.string.feature_merchants_close),
                 )
             }

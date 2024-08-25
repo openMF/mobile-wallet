@@ -31,11 +31,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -54,10 +53,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.togitech.ccp.component.TogiCountryCodePicker
+import com.mifos.library.countrycodepicker.CountryCodePicker
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.PermissionBox
@@ -296,13 +296,12 @@ private fun EditProfileScreenContent(
                 if (LocalInspectionMode.current) {
                     Text("Placeholder for TogiCountryCodePicker")
                 } else {
-                    TogiCountryCodePicker(
+                    CountryCodePicker(
                         modifier = Modifier,
                         initialPhoneNumber = " ",
                         autoDetectCode = true,
                         shape = RoundedCornerShape(3.dp),
-                        colors =
-                        TextFieldDefaults.outlinedTextFieldColors(
+                        colors = OutlinedTextFieldDefaults.colors(
                             focusedBorderColor = MaterialTheme.colorScheme.onSurface,
                         ),
                         onValueChange = { (code, phone), isValid ->
@@ -414,11 +413,10 @@ private fun EditProfileSaveButton(
     buttonText: Int,
     modifier: Modifier = Modifier,
 ) {
-    Button(
+    MifosButton(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(MaterialTheme.colorScheme.primary),
-        modifier =
-        modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(16.dp),
         shape = RoundedCornerShape(10.dp),

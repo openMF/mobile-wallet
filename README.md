@@ -98,20 +98,23 @@ Before you begin, you should have already downloaded the Android Studio SDK and 
     
 4. **Perform a Gradle Check**
     
-All your pull requests must pass the CI build only then, it will be allowed to merge. Sometimes, when the build doesn't pass you can use these commands in your local terminal and check for the errors,</br>
+All your pull requests must pass the CI build only then, it will be allowed to merge. 
+Sometimes, when the build doesn't pass you can use these commands in your local terminal and check for the errors,</br>
 
-For Mac OS, you can use the following commands:
+**We've commited to use Material3 design in our project. And added lint check for not to use any M2 libraries in our project.</br>**
+**And when adding new library, please make sure to follow the naming convention and place in sequential order(A->Z).**
 
-* `./gradlew check` quality checks on your project’s code using Checkstyle and generates reports from these checks.</br>
-* `./gradlew spotlessApply` an check and apply formatting to any plain-text file.</br>
-* `./gradlew build`  provides a command line to execute build script.</br>
+In MacOS, Windows or Linux, you should run the following commands before opening a PR, and make sure to pass all the commands:
 
+* `./gradlew check -p build-logic` this checks build-logic configured properly.</br>
+* `./gradlew spotlessApply --no-configuration-cache` an check and apply formatting to any file.</br>
+* `./gradlew dependencyGuardBaseline`  to generate dependency-guard baseline.</br>
+* `./gradlew detekt`  to check detekt error.</br>
+* `./gradlew testDemoDebug :lint:test :mifospay:lintProdRelease :lint:lint` to check lint and test error.</br>
+* `./gradlew build` to build the project.</br>
+* `./gradlew updateProdReleaseBadging` to update the badging for the project.</br>
 
-For Windows, you can use the following commands:
-
-* `gradlew check` quality checks on your project’s code using Checkstyle and generates reports from these checks.</br>
-* `gradlew spotlessApply` an check and apply formatting to any plain-text file.</br>
-* `gradlew build`  provides a command line to execute build script.</br>
+*Or Run the `ci-prebuild.sh` or `ci-prebuild.bat` script to run all the above commands in one go.*
 
 ### **Committing Your Changes**
 

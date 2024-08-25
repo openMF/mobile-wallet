@@ -18,8 +18,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import org.mifos.library.passcode.data.PasscodeManager
 import org.mifospay.core.data.repository.auth.UserDataRepository
-import org.mifospay.feature.passcode.data.PasscodeManager
 import javax.inject.Inject
 
 @HiltViewModel

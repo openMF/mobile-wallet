@@ -12,8 +12,8 @@ package org.mifospay.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
-import org.mifospay.feature.passcode.PASSCODE_SCREEN
-import org.mifospay.feature.passcode.passcodeRoute
+import org.mifos.library.passcode.PASSCODE_SCREEN
+import org.mifos.library.passcode.passcodeRoute
 
 internal fun NavGraphBuilder.passcodeNavGraph(navController: NavController) {
     navigation(

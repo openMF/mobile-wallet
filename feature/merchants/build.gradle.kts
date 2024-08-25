@@ -18,5 +18,5 @@ android {
 
 dependencies {
     implementation(projects.core.data)
-    implementation(libs.compose.material)
+    implementation(projects.libs.pullrefresh)
 }

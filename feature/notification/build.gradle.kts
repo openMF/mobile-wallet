@@ -18,8 +18,5 @@ android {
 
 dependencies {
     implementation(projects.core.data)
-    implementation(libs.androidx.appcompat)
-
-    //we need this for pull to refresh implementation
-    implementation(libs.compose.material)
+    implementation(projects.libs.pullrefresh)
 }
