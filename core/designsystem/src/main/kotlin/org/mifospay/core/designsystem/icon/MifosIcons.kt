@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowOutward
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Delete
@@ -52,6 +53,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * Mifos icons. Material icons are [ImageVector]s, custom icons are drawable resource IDs.
  */
 object MifosIcons {
+    val ChevronRight: ImageVector = Icons.Filled.ChevronRight
     val QrCode: ImageVector = Icons.Filled.QrCode
     val Close: ImageVector = Icons.Filled.Close
     val VisibilityOff: ImageVector = Icons.Filled.VisibilityOff

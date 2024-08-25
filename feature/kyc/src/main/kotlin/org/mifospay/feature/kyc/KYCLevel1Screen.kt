@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextFieldDefaults
@@ -48,6 +47,7 @@ import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import com.mifos.library.countrycodepicker.CountryCodePicker
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.kyc.R
@@ -236,7 +236,7 @@ private fun Kyc1Form(
             )
         }
 
-        Button(
+        MifosButton(
             onClick = {
                 submitData(kycDetails)
             },
