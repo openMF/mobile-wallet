@@ -43,7 +43,7 @@ jobs:
           distribution: 'zulu'
           java-version: 17
       - name: Run ${{ matrix.check }}
-        id: run_check_"${{ matrix.check }}"
+        id: run_check
         run: |
           if [ "${{ matrix.check }}" = "build_logic" ]; then
             ./gradlew check -p build-logic
@@ -54,7 +54,7 @@ jobs:
           fi
 
       - name: Upload Detekt Reports
-        if: ${{ matrix.check == 'detekt' && steps.run_check_detekt.outcome == 'success' }}
+        if: ${{ matrix.check == 'detekt' && steps.run_check.outcome == 'success' }}
         uses: actions/upload-artifact@v4
         with:
           name: detekt-reports
