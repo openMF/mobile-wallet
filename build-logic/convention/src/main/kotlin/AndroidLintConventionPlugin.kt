@@ -29,6 +29,8 @@ private fun Lint.configure() {
     xmlReport = true
     checkDependencies = true
     abortOnError = false
+    // Disable this rule until we ship the libraries to some maven.
+    disable += "ResourceName"
     baseline = File("lint-baseline.xml")
     explainIssues = true
     htmlReport = true

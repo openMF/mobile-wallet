@@ -14,8 +14,8 @@
     </item>
 
     <item
-        android:width="100dp"
-        android:height="100dp"
+        android:width="160dp"
+        android:height="160dp"
         android:drawable="@drawable/splash_icon"
         android:gravity="center" />
 </layer-list>
