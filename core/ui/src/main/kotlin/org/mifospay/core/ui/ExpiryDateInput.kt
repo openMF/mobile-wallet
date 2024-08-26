@@ -45,7 +45,7 @@ fun ExpiryDateInput(
     onDone: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val (a, b, c) = FocusRequester.createRefs()
+    val (b, c) = FocusRequester.createRefs()
     Row(
         modifier = modifier
             .fillMaxWidth()

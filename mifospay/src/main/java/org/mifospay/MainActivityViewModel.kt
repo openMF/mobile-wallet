@@ -17,12 +17,15 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import org.mifos.library.passcode.data.PasscodeManager
 import org.mifospay.core.data.repository.auth.UserDataRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    userDataRepository: UserDataRepository,
+    private val userDataRepository: UserDataRepository,
+    private val passcodeManager: PasscodeManager,
 ) : ViewModel() {
 
     val uiState: StateFlow<MainActivityUiState> = userDataRepository.userData.map {
@@ -32,6 +35,13 @@ class MainActivityViewModel @Inject constructor(
         initialValue = MainActivityUiState.Loading,
         started = SharingStarted.WhileSubscribed(5_000),
     )
+
+    fun logOut() {
+        viewModelScope.launch {
+            userDataRepository.logOut()
+            passcodeManager.clearPasscode()
+        }
+    }
 }
 
 sealed interface MainActivityUiState {

@@ -18,8 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,6 +33,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 
 @Composable
@@ -115,7 +114,7 @@ fun EmptyContentScreen(
     subTitle: String,
     modifier: Modifier = Modifier,
     iconTint: Color = MaterialTheme.colorScheme.surfaceTint,
-    iconImageVector: ImageVector = Icons.Rounded.Search,
+    iconImageVector: ImageVector = MifosIcons.Search,
 ) {
     EmptyContentScreen(
         title = title,
@@ -155,7 +154,7 @@ fun EmptyContentScreenImageVectorPreview() {
             subTitle = "Please check you connection or try again",
             modifier = Modifier,
             iconTint = MaterialTheme.colorScheme.primary,
-            iconImageVector = Icons.Rounded.Search,
+            iconImageVector = MifosIcons.Search,
         )
     }
 }

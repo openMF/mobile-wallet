@@ -19,9 +19,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -35,6 +33,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import org.mifospay.core.designsystem.icon.MifosIcons
 
 @Composable
 fun FaqItemScreen(
@@ -67,7 +66,7 @@ fun FaqItemScreen(
             )
 
             Icon(
-                imageVector = Icons.Default.ArrowDropDown,
+                imageVector = MifosIcons.ArrowDropDown,
                 contentDescription = "drop down",
                 tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier
@@ -93,6 +92,6 @@ fun FaqItemScreen(
             )
         }
 
-        Divider()
+        HorizontalDivider()
     }
 }

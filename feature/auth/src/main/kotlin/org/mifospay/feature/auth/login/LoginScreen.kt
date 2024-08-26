@@ -9,7 +9,6 @@
  */
 package org.mifospay.feature.auth.login
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,15 +18,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -48,31 +43,27 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mifos.mobile.passcode.utils.PassCodeConstants
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.grey
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 import org.mifospay.feature.auth.R
 import org.mifospay.feature.auth.socialSignup.SocialSignupMethodContentScreen
-import org.mifospay.feature.passcode.PassCodeActivity
 
 @Composable
 internal fun LoginScreen(
+    navigateToPasscodeScreen: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
     val showProgress by viewModel.showProgress.collectAsStateWithLifecycle()
     val isLoginSuccess by viewModel.isLoginSuccess.collectAsStateWithLifecycle()
-
-    if (viewModel.isPassCodeExist) {
-        startPassCodeActivity(context)
-    }
 
     LoginScreenContent(
         modifier = modifier,
@@ -89,7 +80,7 @@ internal fun LoginScreen(
     )
 
     if (isLoginSuccess) {
-        startPassCodeActivity(context)
+        navigateToPasscodeScreen()
     }
 }
 
@@ -120,11 +111,14 @@ private fun LoginScreenContent(
         }
     }
 
-    Box(modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface),
+    ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface)
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .padding(top = 100.dp, start = 48.dp, end = 48.dp),
             horizontalAlignment = Alignment.Start,
@@ -164,20 +158,19 @@ private fun LoginScreenContent(
                 },
                 trailingIcon = {
                     val image = if (passwordVisibility) {
-                        Icons.Filled.Visibility
+                        MifosIcons.Visibility
                     } else {
-                        Icons.Filled.VisibilityOff
+                        MifosIcons.VisibilityOff
                     }
                     IconButton(onClick = { passwordVisibility = !passwordVisibility }) {
                         Icon(imageVector = image, null)
                     }
                 },
             )
-            Button(
+            MifosButton(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
                 enabled = userName.text.isNotEmpty() && password.text.isNotEmpty(),
                 onClick = {
                     login.invoke(userName.text, password.text)
@@ -238,16 +231,6 @@ private fun LoginScreenContent(
             )
         }
     }
-}
-
-/**
- * Starts [PassCodeActivity] with `Constans.INTIAL_LOGIN` as true
- */
-private fun startPassCodeActivity(context: Context) {
-    PassCodeActivity.startPassCodeActivity(
-        context = context,
-        bundle = bundleOf(Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)),
-    )
 }
 
 @Preview(showSystemUi = true, device = "id:pixel_5")

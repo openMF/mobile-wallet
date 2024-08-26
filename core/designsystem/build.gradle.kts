@@ -12,8 +12,6 @@ plugins {
     alias(libs.plugins.mifospay.android.library.compose)
 }
 
-apply(from = "${project.rootDir}/config/quality/quality.gradle")
-
 android {
     defaultConfig {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -22,8 +20,11 @@ android {
 }
 
 dependencies {
+    lintPublish(projects.lint)
+
     implementation(projects.core.model)
 
+    api(libs.androidx.compose.ui)
     api(libs.androidx.compose.foundation)
     api(libs.androidx.compose.foundation.layout)
     api(libs.androidx.compose.material.iconsExtended)

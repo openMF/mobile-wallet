@@ -12,7 +12,6 @@ plugins {
     alias(libs.plugins.mifospay.android.hilt)
 }
 
-apply(from = "${project.rootDir}/config/quality/quality.gradle")
 
 android {
     namespace = "org.mifospay.core.datastore"

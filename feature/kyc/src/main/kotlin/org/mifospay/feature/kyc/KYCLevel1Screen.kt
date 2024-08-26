@@ -20,10 +20,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,8 +45,9 @@ import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
-import com.togitech.ccp.component.TogiCountryCodePicker
+import com.mifos.library.countrycodepicker.CountryCodePicker
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.kyc.R
@@ -187,10 +187,10 @@ private fun Kyc1Form(
                 .padding(vertical = 7.dp),
         ) {
             val keyboardController = LocalSoftwareKeyboardController.current
-            TogiCountryCodePicker(
+            CountryCodePicker(
                 modifier = Modifier,
                 shape = RoundedCornerShape(3.dp),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
+                colors = OutlinedTextFieldDefaults.colors(
                     focusedBorderColor = MaterialTheme.colorScheme.primary,
                 ),
                 onValueChange = { (code, phone), isValid ->
@@ -236,7 +236,7 @@ private fun Kyc1Form(
             )
         }
 
-        Button(
+        MifosButton(
             onClick = {
                 submitData(kycDetails)
             },

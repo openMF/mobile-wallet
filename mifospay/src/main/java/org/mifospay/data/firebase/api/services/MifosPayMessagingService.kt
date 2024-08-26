@@ -15,15 +15,14 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
-import android.os.Build
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import org.json.JSONException
 import org.json.JSONObject
+import org.mifospay.MainActivity
 import org.mifospay.R
-import org.mifospay.feature.notification.NotificationActivity
 import org.mifospay.utils.NotificationUtils
 
 @Suppress("UnusedPrivateMember")
@@ -132,7 +131,7 @@ class MifosPayMessagingService : FirebaseMessagingService() {
      * @param messageBody FCM message body received.
      */
     private fun sendNotification(title: String, messageBody: String) {
-        val intent = Intent(this, NotificationActivity::class.java)
+        val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val pendingIntent: PendingIntent = PendingIntent.getActivity(
             this,
@@ -152,14 +151,12 @@ class MifosPayMessagingService : FirebaseMessagingService() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
 
         // Since android Oreo notification channel is needed.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                channelId,
-                "Channel human readable title",
-                NotificationManager.IMPORTANCE_DEFAULT,
-            )
-            notificationManager.createNotificationChannel(channel)
-        }
+        val channel = NotificationChannel(
+            channelId,
+            "Channel human readable title",
+            NotificationManager.IMPORTANCE_DEFAULT,
+        )
+        notificationManager.createNotificationChannel(channel)
         notificationManager.notify(0, notificationBuilder.build())
     }
 

@@ -17,30 +17,28 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.mifospay.core.model.domain.Transaction
-import org.mifospay.common.Constants
 import org.mifospay.feature.specific.transactions.SpecificTransactionsScreen
 
-const val SPECIFIC_TRANSACTIONS_ROUTE = "specific_transactions_route"
+const val SPECIFIC_TRANSACTIONS_BASE_ROUTE = "specific_transactions_route"
+const val ACCOUNT_NUMBER_ARG = "accountNumber"
+const val TRANSACTIONS_ARG = "transactions"
+
+const val SPECIFIC_TRANSACTIONS_ROUTE = SPECIFIC_TRANSACTIONS_BASE_ROUTE +
+    "?${ACCOUNT_NUMBER_ARG}={$ACCOUNT_NUMBER_ARG}" +
+    "&${TRANSACTIONS_ARG}={$TRANSACTIONS_ARG}"
 
 fun NavGraphBuilder.specificTransactionsScreen(
     onBackClick: () -> Unit,
     onTransactionItemClicked: (String) -> Unit,
 ) {
     composable(
-        route = "$SPECIFIC_TRANSACTIONS_ROUTE?${Constants.ACCOUNT_NUMBER}={accountNumber}&${Constants.TRANSACTIONS}={transactions}",
+        route = SPECIFIC_TRANSACTIONS_ROUTE,
         arguments = listOf(
-            navArgument(Constants.ACCOUNT_NUMBER) { type = NavType.StringType },
-            navArgument(Constants.TRANSACTIONS) { type = NavType.StringType },
+            navArgument(ACCOUNT_NUMBER_ARG) { type = NavType.StringType },
+            navArgument(ACCOUNT_NUMBER_ARG) { type = NavType.StringType },
         ),
-    ) { backStackEntry ->
-        val accountNumber = backStackEntry.arguments?.getString(Constants.ACCOUNT_NUMBER) ?: ""
-        val transactions =
-            backStackEntry.arguments?.getParcelableArrayList<Transaction>(Constants.TRANSACTIONS)
-                ?: arrayListOf()
-
+    ) {
         SpecificTransactionsScreen(
-            accountNumber = accountNumber,
-            transactions = transactions.toList(),
             backPress = onBackClick,
             transactionItemClicked = onTransactionItemClicked,
         )
@@ -51,5 +49,5 @@ fun NavController.navigateToSpecificTransactions(
     accountNumber: String,
     transactions: ArrayList<Transaction>,
 ) {
-    this.navigate("$SPECIFIC_TRANSACTIONS_ROUTE?${Constants.ACCOUNT_NUMBER}=$accountNumber&${Constants.TRANSACTIONS}=$transactions")
+    this.navigate("$SPECIFIC_TRANSACTIONS_BASE_ROUTE?${ACCOUNT_NUMBER_ARG}=$accountNumber&${TRANSACTIONS_ARG}=$transactions")
 }

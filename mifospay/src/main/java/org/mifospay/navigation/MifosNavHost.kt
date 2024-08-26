@@ -10,25 +10,14 @@
 package org.mifospay.navigation
 
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.FileProvider
-import androidx.core.os.bundleOf
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.mifos.mobile.passcode.utils.PassCodeConstants
-import com.mifos.mobile.passcode.utils.PasscodePreferencesHelper
+import com.mifos.library.material3.navigation.ModalBottomSheetLayout
 import org.mifospay.common.Constants
 import org.mifospay.core.ui.utility.TabContent
-import org.mifospay.feature.auth.login.LoginActivity
-import org.mifospay.feature.auth.navigation.loginScreen
-import org.mifospay.feature.auth.navigation.mobileVerificationScreen
-import org.mifospay.feature.auth.navigation.navigateToMobileVerification
-import org.mifospay.feature.auth.navigation.navigateToSignup
-import org.mifospay.feature.auth.navigation.signupScreen
 import org.mifospay.feature.bank.accounts.AccountsScreen
 import org.mifospay.feature.bank.accounts.navigation.bankAccountDetailScreen
 import org.mifospay.feature.bank.accounts.navigation.linkBankAccountScreen
@@ -57,7 +46,7 @@ import org.mifospay.feature.make.transfer.navigation.makeTransferScreen
 import org.mifospay.feature.make.transfer.navigation.navigateToMakeTransferScreen
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.merchants.ui.MerchantScreen
-import org.mifospay.feature.passcode.PassCodeActivity
+import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
@@ -71,6 +60,7 @@ import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.CardsScreen
 import org.mifospay.feature.savedcards.navigation.addCardScreen
+import org.mifospay.feature.search.searchScreen
 import org.mifospay.feature.send.money.SendScreenRoute
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
@@ -84,6 +74,7 @@ import org.mifospay.feature.standing.instruction.newSiScreen
 import org.mifospay.feature.standing.instruction.siDetailsScreen
 import org.mifospay.feature.upiSetup.navigation.navigateToSetupUpiPin
 import org.mifospay.feature.upiSetup.navigation.setupUpiPinScreen
+import org.mifospay.ui.MifosAppState
 import java.io.File
 import java.util.Objects
 
@@ -94,15 +85,14 @@ import java.util.Objects
  * The navigation graph defined in this file defines the different top level routes. Navigation
  * within each route is handled using state and Back Handlers.
  */
+@Suppress("MaxLineLength", "LongMethod")
 @Composable
-@Suppress("MaxLineLength", "LongMethod", "UnusedParameter")
-fun MifosNavHost(
-    navController: NavHostController,
-    onShowSnackbar: suspend (String, String?) -> Boolean,
+internal fun MifosNavHost(
+    appState: MifosAppState,
+    onClickLogout: () -> Unit,
     modifier: Modifier = Modifier,
-    startDestination: String = HOME_ROUTE,
 ) {
-    val context = LocalContext.current
+    val navController = appState.navController
 
     val tabContents = listOf(
         TabContent(FinanceScreenContents.ACCOUNTS.name) {
@@ -161,205 +151,149 @@ fun MifosNavHost(
         },
     )
 
-    NavHost(
-        navController = navController,
-        startDestination = startDestination,
+    ModalBottomSheetLayout(
+        bottomSheetNavigator = appState.bottomSheetNavigator,
         modifier = modifier,
     ) {
-        homeScreen(
-            onRequest = navController::navigateToShowQrScreen,
-            onPay = navController::navigateToSendMoneyScreen,
-        )
-        paymentsScreen(
-            tabContents = paymentsTabContents,
-        )
-        financeScreen(
-            tabContents = tabContents,
-        )
-        addCardScreen(
-            onDismiss = navController::popBackStack,
-            onAddCard = {
-                // Handle adding the cards
-                navController.popBackStack()
-            },
-        )
-        profileScreen(
-            onEditProfile = navController::navigateToEditProfile,
-            onSettings = navController::navigateToSettings,
-        )
-        sendMoneyScreen(
-            onBackClick = navController::popBackStack,
-            proceedWithMakeTransferFlow = navController::navigateToMakeTransferScreen,
-        )
-        makeTransferScreen(
-            onDismiss = navController::popBackStack,
-        )
-        showQrScreen(
-            onBackClick = navController::popBackStack,
-        )
-        merchantTransferScreen(
-            proceedWithMakeTransferFlow = navController::navigateToMakeTransferScreen,
-            onBackPressed = navController::popBackStack,
-        )
-        settingsScreen(
-            onBackPress = navController::popBackStack,
-            navigateToEditPasswordScreen = navController::navigateToEditPassword,
-            onLogout = context::logOut,
-            onChangePasscode = context::onChangePasscodeClicked,
-        )
+        NavHost(
+            route = MifosNavGraph.MAIN_GRAPH,
+            startDestination = HOME_ROUTE,
+            navController = navController,
+        ) {
+            homeScreen(
+                onRequest = navController::navigateToShowQrScreen,
+                onPay = navController::navigateToSendMoneyScreen,
+            )
+            paymentsScreen(
+                tabContents = paymentsTabContents,
+            )
+            financeScreen(
+                tabContents = tabContents,
+            )
+            addCardScreen(
+                onDismiss = navController::popBackStack,
+                onAddCard = {
+                    // Handle adding the cards
+                    navController.popBackStack()
+                },
+            )
+            profileScreen(
+                onEditProfile = navController::navigateToEditProfile,
+                onSettings = navController::navigateToSettings,
+            )
+            sendMoneyScreen(
+                onBackClick = navController::popBackStack,
+                proceedWithMakeTransferFlow = navController::navigateToMakeTransferScreen,
+            )
+            makeTransferScreen(
+                onDismiss = navController::popBackStack,
+            )
+            showQrScreen(
+                onBackClick = navController::popBackStack,
+            )
+            merchantTransferScreen(
+                proceedWithMakeTransferFlow = navController::navigateToMakeTransferScreen,
+                onBackPressed = navController::popBackStack,
+            )
+            settingsScreen(
+                onBackPress = navController::popBackStack,
+                navigateToEditPasswordScreen = navController::navigateToEditPassword,
+                onLogout = onClickLogout,
+                onChangePasscode = {
+                    // TODO:: Implement change passcode screen
+                },
+            )
 
-        kycScreen(
-            onLevel1Clicked = navController::navigateToKYCLevel1,
-            onLevel2Clicked = navController::navigateToKYCLevel2,
-            onLevel3Clicked = navController::navigateToKYCLevel3,
-        )
-        kycLevel1Screen(
-            navigateToKycLevel2 = navController::navigateToKYCLevel2,
-        )
-        kycLevel2Screen(
-            onSuccessKyc2 = navController::navigateToKYCLevel3,
-        )
+            kycScreen(
+                onLevel1Clicked = navController::navigateToKYCLevel1,
+                onLevel2Clicked = navController::navigateToKYCLevel2,
+                onLevel3Clicked = navController::navigateToKYCLevel3,
+            )
+            kycLevel1Screen(
+                navigateToKycLevel2 = navController::navigateToKYCLevel2,
+            )
+            kycLevel2Screen(
+                onSuccessKyc2 = navController::navigateToKYCLevel3,
+            )
 
-        kycLevel3Screen()
+            kycLevel3Screen()
 
-        newSiScreen(onBackClick = navController::popBackStack)
+            newSiScreen(onBackClick = navController::popBackStack)
 
-        siDetailsScreen(
-            onClickCreateNew = navController::navigateToNewSiScreen,
-            onBackPress = navController::popBackStack,
-        )
+            siDetailsScreen(
+                onClickCreateNew = navController::navigateToNewSiScreen,
+                onBackPress = navController::popBackStack,
+            )
 
-        editProfileScreen(
-            onBackPress = navController::popBackStack,
-            getUri = ::getUri,
-        )
+            editProfileScreen(
+                onBackPress = navController::popBackStack,
+                getUri = ::getUri,
+            )
 
-        faqScreen(
-            navigateBack = navController::popBackStack,
-        )
-        readQrScreen(
-            onBackClick = navController::popBackStack,
-        )
+            faqScreen(
+                navigateBack = navController::popBackStack,
+            )
+            readQrScreen(
+                onBackClick = navController::popBackStack,
+            )
 
-        specificTransactionsScreen(
-            onBackClick = navController::popBackStack,
-            onTransactionItemClicked = { transactionId ->
-                navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + transactionId))
-            },
-        )
-        invoiceDetailScreen(
-            onBackPress = navController::popBackStack,
-            navigateToReceiptScreen = { uri ->
-                navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + uri))
-            },
-        )
-        receiptScreen(
-            openPassCodeActivity = context::openPassCodeActivity,
-            onBackClick = navController::popBackStack,
-        )
-        setupUpiPinScreen(
-            onBackPress = navController::popBackStack,
-        )
-        bankAccountDetailScreen(
-            onSetupUpiPin = { bankAccountDetails, index ->
-                navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.SETUP)
-            },
-            onChangeUpiPin = { bankAccountDetails, index ->
-                navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.CHANGE)
-            },
-            onForgotUpiPin = { bankAccountDetails, index ->
-                navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.FORGOT)
-            },
-            onBackClick = { bankAccountDetails, index ->
-                navController.previousBackStackEntry?.savedStateHandle?.set(
-                    Constants.UPDATED_BANK_ACCOUNT,
-                    bankAccountDetails,
-                )
-                navController.previousBackStackEntry?.savedStateHandle?.set(Constants.INDEX, index)
-                navController.popBackStack()
-            },
-        )
-        linkBankAccountScreen(
-            onBackClick = navController::popBackStack,
-        )
-        editPasswordScreen(
-            onBackPress = navController::popBackStack,
-            onCancelChanges = navController::popBackStack,
-        )
-        signupScreen(
-            onLoginSuccess = {
-                val intent = Intent(context, PassCodeActivity::class.java).apply {
-                    putExtra(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true)
-                }
-                context.startActivity(intent)
-            },
-            onRegisterSuccess = {
-                // Todo: Implement onRegisterSuccess
-            },
-        )
-        mobileVerificationScreen(
-            onOtpVerificationSuccess = { fullNumber, extraData ->
-                navController.navigateToSignup(
-                    savingProductId = extraData[Constants.MIFOS_SAVINGS_PRODUCT_ID] as Int,
-                    mobileNumber = fullNumber,
-                    country = "Canada",
-                    email = extraData[Constants.GOOGLE_EMAIL] as? String ?: "",
-                    firstName = extraData[Constants.GOOGLE_GIVEN_NAME] as? String ?: "",
-                    lastName = extraData[Constants.GOOGLE_FAMILY_NAME] as? String ?: "",
-                    businessName = extraData[Constants.GOOGLE_DISPLAY_NAME] as? String ?: "",
-                )
-            },
-        )
+            specificTransactionsScreen(
+                onBackClick = navController::popBackStack,
+                onTransactionItemClicked = { transactionId ->
+                    navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + transactionId))
+                },
+            )
+            invoiceDetailScreen(
+                onBackPress = navController::popBackStack,
+                navigateToReceiptScreen = { uri ->
+                    navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + uri))
+                },
+            )
+            receiptScreen(
+                openPassCodeActivity = {
+                    // TODO: Implement Passcode Screen for Receipt
+                },
+                onBackClick = navController::popBackStack,
+            )
+            setupUpiPinScreen(
+                onBackPress = navController::popBackStack,
+            )
 
-        loginScreen(
-            onDismissSignUp = {
-                // Todo: Navigate to the main screen after successful login
-            },
-            onNavigateToMobileVerificationScreen = { mifosSignedUp, googleDisplayName, googleEmail, googleFamilyName, googleGivenName ->
-                navController.navigateToMobileVerification(
-                    mifosSignedUp = mifosSignedUp,
-                    googleDisplayName = googleDisplayName,
-                    googleEmail = googleEmail,
-                    googleFamilyName = googleFamilyName,
-                    googleGivenName = googleGivenName,
-                )
-            },
-        )
+            bankAccountDetailScreen(
+                onSetupUpiPin = { bankAccountDetails, index ->
+                    navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.SETUP)
+                },
+                onChangeUpiPin = { bankAccountDetails, index ->
+                    navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.CHANGE)
+                },
+                onForgotUpiPin = { bankAccountDetails, index ->
+                    navController.navigateToSetupUpiPin(bankAccountDetails, index, Constants.FORGOT)
+                },
+                onBackClick = { bankAccountDetails, index ->
+                    navController.previousBackStackEntry?.savedStateHandle?.set(
+                        Constants.UPDATED_BANK_ACCOUNT,
+                        bankAccountDetails,
+                    )
+                    navController.previousBackStackEntry?.savedStateHandle?.set(
+                        Constants.INDEX,
+                        index,
+                    )
+                    navController.popBackStack()
+                },
+            )
+            linkBankAccountScreen(
+                onBackClick = navController::popBackStack,
+            )
+            editPasswordScreen(
+                onBackPress = navController::popBackStack,
+                onCancelChanges = navController::popBackStack,
+            )
+
+            notificationScreen()
+
+            searchScreen(onBackClick = navController::popBackStack)
+        }
     }
-}
-
-private fun Context.logOut() {
-    val intent = Intent(this, LoginActivity::class.java)
-    intent.addFlags(
-        Intent.FLAG_ACTIVITY_CLEAR_TOP or
-            Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK,
-    )
-    this.startActivity(intent)
-}
-
-private fun Context.onChangePasscodeClicked() {
-    val passcodePreferencesHelper = PasscodePreferencesHelper(this)
-
-    val currentPasscode = passcodePreferencesHelper.passCode
-    passcodePreferencesHelper.savePassCode("")
-
-    PassCodeActivity.startPassCodeActivity(
-        context = this,
-        bundle = bundleOf(
-            Pair(Constants.CURRENT_PASSCODE, currentPasscode),
-            Pair(Constants.UPDATE_PASSCODE, true),
-        ),
-    )
-}
-
-fun Context.openPassCodeActivity(deepLinkURI: Uri) {
-    PassCodeActivity.startPassCodeActivity(
-        context = this,
-        bundle = bundleOf(
-            Pair("uri", deepLinkURI.toString()),
-            Pair(PassCodeConstants.PASSCODE_INITIAL_LOGIN, true),
-        ),
-    )
 }
 
 fun getUri(context: Context, file: File): Uri {

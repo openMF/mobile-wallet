@@ -37,33 +37,23 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-
-        <meta-data
-            android:name="com.google.mlkit.vision.DEPENDENCIES"
-            android:value="barcode_ui" />
+        android:theme="@style/Theme.MifosSplash">
 
         <activity
-            android:name=".SplashScreenActivity"
+            android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/SplashScreenTheme">
+            android:theme="@style/Theme.MifosSplash"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".feature.auth.login.LoginActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateVisible" />
-        <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".common.ui.SearchActivity"
-            android:theme="@style/AppTheme" />
+
+        <meta-data
+            android:name="com.google.mlkit.vision.DEPENDENCIES"
+            android:value="barcode_ui" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -74,10 +64,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-
-        <activity
-            android:name=".feature.passcode.PassCodeActivity"
-            android:theme="@style/AppTheme" />
 
         <service
             android:name=".data.firebase.api.services.MifosPayMessagingService"
@@ -95,17 +81,6 @@
         <meta-data
             android:name="google_analytics_adid_collection_enabled"
             android:value="false" />
-
-        <meta-data
-            android:name="preloaded_fonts"
-            android:resource="@array/preloaded_fonts" />
-        <activity
-            android:name=".feature.notification.NotificationActivity"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name="com.yalantis.ucrop.UCropActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

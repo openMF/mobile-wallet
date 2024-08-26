@@ -23,6 +23,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import androidx.tracing.trace
+import com.mifos.library.material3.navigation.BottomSheetNavigator
+import com.mifos.library.material3.navigation.rememberBottomSheetNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -47,11 +49,13 @@ fun rememberMifosAppState(
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavHostController = rememberNavController(),
+    bottomSheetNavigator: BottomSheetNavigator = rememberBottomSheetNavigator(),
+    navController: NavHostController = rememberNavController(bottomSheetNavigator),
 ): MifosAppState {
     NavigationTrackingSideEffect(navController)
     return remember(
         navController,
+        bottomSheetNavigator,
         coroutineScope,
         windowSizeClass,
         networkMonitor,
@@ -59,6 +63,7 @@ fun rememberMifosAppState(
     ) {
         MifosAppState(
             navController = navController,
+            bottomSheetNavigator = bottomSheetNavigator,
             coroutineScope = coroutineScope,
             windowSizeClass = windowSizeClass,
             networkMonitor = networkMonitor,
@@ -70,6 +75,7 @@ fun rememberMifosAppState(
 @Stable
 class MifosAppState(
     val navController: NavHostController,
+    val bottomSheetNavigator: BottomSheetNavigator,
     coroutineScope: CoroutineScope,
     val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,

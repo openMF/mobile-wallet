@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.BottomSheetDefaults
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -45,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.mifospay.common.Constants
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 
 @Composable
@@ -246,7 +246,7 @@ private fun MakeTransferContent(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.End,
         ) {
-            Button(
+            MifosButton(
                 onClick = onCloseBottomSheet,
                 modifier = Modifier
                     .width(100.dp)
@@ -257,7 +257,7 @@ private fun MakeTransferContent(
 
             Spacer(modifier = Modifier.width(20.dp))
 
-            Button(
+            MifosButton(
                 onClick = {
                     makeTransfer(
                         toClientId,

@@ -81,12 +81,9 @@ private val DarkDefaultColorScheme = darkColorScheme(
     scrim = md_theme_dark_scrim,
 )
 
-@Suppress("UnusedParameter")
 @Composable
 fun MifosTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     // Color scheme

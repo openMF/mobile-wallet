@@ -17,4 +17,6 @@ interface UserDataRepository {
      * Stream of [UserData]
      */
     val userData: Flow<UserData>
+
+    fun logOut(): Unit
 }

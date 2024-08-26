@@ -18,10 +18,13 @@ android {
 
 dependencies {
     implementation(projects.core.data)
-    implementation(libs.compose.material)
+
+    implementation(projects.libs.countryCodePicker)
+    implementation(projects.libs.pullrefresh)
+
     implementation(libs.sheets.compose.dialogs.core)
     implementation(libs.sheets.compose.dialogs.calender)
-    implementation(libs.compose.country.code.picker)
+
     // TODO:: this should be removed
     implementation(libs.squareup.okhttp)
 }

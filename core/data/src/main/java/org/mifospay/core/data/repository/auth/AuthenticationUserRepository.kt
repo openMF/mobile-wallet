@@ -16,17 +16,21 @@ import org.mifospay.core.datastore.PreferencesHelper
 import javax.inject.Inject
 
 class AuthenticationUserRepository @Inject constructor(
-    preferencesHelper: PreferencesHelper,
+    private val preferencesHelper: PreferencesHelper,
 ) : UserDataRepository {
 
     override val userData: Flow<UserData> = flow {
         emit(
             UserData(
-                isAuthenticated = !preferencesHelper.token.isNullOrBlank(),
+                isAuthenticated = !preferencesHelper.token.isNullOrEmpty(),
                 userName = preferencesHelper.username,
                 // user = preferencesHelper.user,
                 clientId = preferencesHelper.clientId,
             ),
         )
+    }
+
+    override fun logOut() {
+        preferencesHelper.clear()
     }
 }

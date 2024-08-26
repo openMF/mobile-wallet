@@ -9,12 +9,12 @@
  */
 package org.mifospay.feature.make.transfer.navigation
 
-import androidx.compose.material.navigation.bottomSheet
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import com.mifos.library.material3.navigation.bottomSheet
 import org.mifospay.common.PAYEE_EXTERNAL_ID_ARG
 import org.mifospay.common.TRANSFER_AMOUNT_ARG
 import org.mifospay.feature.make.transfer.MakeTransferScreenRoute

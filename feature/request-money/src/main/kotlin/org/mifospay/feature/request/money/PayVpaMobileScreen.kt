@@ -7,12 +7,13 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
+package org.mifospay.feature.request.money
+
 import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -40,6 +41,7 @@ import com.google.zxing.WriterException
 import com.google.zxing.qrcode.QRCodeWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.theme.green
 import org.mifospay.core.designsystem.theme.grey
 import org.mifospay.core.designsystem.theme.styleMedium16sp
@@ -87,14 +89,13 @@ fun PayVpsMobileScreen(
                 )
             },
         )
-        Button(
+        MifosButton(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 16.dp),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary),
             enabled = amount.isNotEmpty() && description.isNotEmpty(),
-            onClick = {
-            },
+            onClick = {},
         ) {
             Text(
                 text = "Create Payment Request",

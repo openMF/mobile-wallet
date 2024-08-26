@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.android.test) apply false
+    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
@@ -25,20 +26,15 @@ plugins {
     alias(libs.plugins.secrets) apply false
     alias(libs.plugins.room) apply false
     alias(libs.plugins.kotlin.android) apply false
-    alias(libs.plugins.detekt)
-    alias(libs.plugins.detekt.compiler)
+    alias(libs.plugins.detekt) apply true
     // Plugin applied to allow module graph generation
     alias(libs.plugins.module.graph) apply true
-    alias(libs.plugins.spotless)
+    alias(libs.plugins.spotless) apply true
 }
 
 val detektFormatting = libs.detekt.formatting
 val twitterComposeRules = libs.twitter.detekt.compose
 val ktlintVersion = "1.0.1"
-
-val reportMerge by tasks.registering(io.gitlab.arturbosch.detekt.report.ReportMergeTask::class) {
-    output.set(rootProject.layout.buildDirectory.file("reports/detekt/merge.html")) // or "reports/detekt/merge.sarif"
-}
 
 subprojects {
     apply {
@@ -49,7 +45,7 @@ subprojects {
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         config.from(rootProject.files("config/detekt/detekt.yml"))
         reports.xml.required.set(true)
-        finalizedBy(reportMerge)
+        reports.html.required.set(true)
     }
 
     extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension> {
@@ -75,12 +71,6 @@ subprojects {
             // Look for the first XML tag that isn't a comment (<!--) or the xml declaration (<?xml)
             licenseHeaderFile(rootProject.file("spotless/copyright.xml"), "(<[^!?])")
         }
-    }
-
-    reportMerge {
-        input.from(tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().map {
-            it.htmlReportFile }
-        )
     }
 
     dependencies {

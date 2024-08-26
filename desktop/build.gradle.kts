@@ -11,15 +11,17 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
     kotlin("multiplatform")
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrainsCompose)
 }
 
 
 kotlin {
     jvm {
-        jvmToolchain(17)
         withJava()
     }
+
+    jvmToolchain(21)
 
     sourceSets {
         val jvmMain by getting {
