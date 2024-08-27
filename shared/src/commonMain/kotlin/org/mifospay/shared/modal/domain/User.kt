@@ -9,10 +9,6 @@
  */
 package org.mifospay.shared.modal.domain
 
-import org.mifospay.shared.CommonParcelable
-import org.mifospay.shared.CommonParcelize
-
-@CommonParcelize
 data class User(
     val username: String,
     val userId: Long = 0,
@@ -25,6 +21,4 @@ data class User(
     val clients: List<Long>,
     val shouldRenewPassword: Boolean,
     val isTwoFactorAuthenticationRequired: Boolean,
-): CommonParcelable {
-    companion object
-}
+)

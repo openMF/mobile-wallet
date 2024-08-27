@@ -20,20 +20,19 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 plugins {
-    kotlin("multiplatform")
+    alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.android.library)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.wire)
     id("kotlin-parcelize")
 }
 
 kotlin {
-    jvmToolchain(21)
-
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        compilerOptions() {
-            jvmTarget = JvmTarget.JVM_1_8
+        compilerOptions {
+            jvmTarget.set(JvmTarget.JVM_11)
         }
     }
 
@@ -61,14 +60,20 @@ kotlin {
 
         commonMain.dependencies {
             //put your multiplatform dependencies here
-            implementation(compose.material)
+            implementation(compose.runtime)
             implementation(compose.material3)
+            implementation(compose.ui)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
-            implementation(libs.squareup.retrofit.converter.gson)
+
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+
+            implementation(libs.datastore)
         }
 
         val desktopMain by getting {
@@ -82,14 +87,33 @@ kotlin {
     task("testClasses")
 }
 
+wire {
+    kotlin {}
+    sourcePath {
+        srcDir("src/commonMain/proto")
+    }
+}
+
 android {
     namespace = "org.mifospay.shared"
     compileSdk = 34
+
     defaultConfig {
         minSdk = 24
     }
+
+    packaging {
+        resources {
+            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+        }
+    }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    dependencies {
+        debugImplementation(compose.uiTooling)
     }
 }

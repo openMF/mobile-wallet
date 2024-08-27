@@ -9,15 +9,9 @@
  */
 package org.mifospay.shared.modal.domain
 
-import org.mifospay.shared.CommonParcelable
-import org.mifospay.shared.CommonParcelize
-
-@CommonParcelize
 data class Role(
     var id: String? = null,
     var name: String? = null,
     var description: String? = null,
     val disabled: Boolean,
-): CommonParcelable {
-    companion object
-}
+)

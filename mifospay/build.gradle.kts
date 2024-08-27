@@ -65,6 +65,8 @@ android {
 }
 
 dependencies {
+    implementation(projects.shared)
+
     implementation(projects.core.data)
     implementation(projects.core.ui)
     implementation(projects.core.designsystem)

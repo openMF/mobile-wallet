@@ -62,10 +62,6 @@ room = "2.6.1"
 roborazzi = "1.26.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 spotlessVersion = "6.23.3"
-
-koin = "3.6.0-Beta4"
-koinComposeMultiplatform = "1.2.0-Beta4"
-
 sheets_compose_dialogs_core = "1.3.0"
 secrets = "2.0.1"
 truth = "1.4.2"
@@ -73,6 +69,12 @@ twitter-detekt-compose = "0.0.26"
 zxingVersion = "3.5.3"
 # Multiplatform Dependencies
 compose-plugin = "1.6.11"
+
+koin = "3.6.0-Beta4"
+koinComposeMultiplatform = "1.2.0-Beta4"
+
+datastore = "1.1.1"
+wire = "5.0.0-alpha03"
 
 compileSdk = "34"
 minSdk = "24"
@@ -201,6 +203,9 @@ truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 twitter-detekt-compose = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "twitter-detekt-compose" }
 
+#Multiplatform Libraries
+datastore = { module = "androidx.datastore:datastore-core-okio", version.ref = "datastore" }
+
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
 android-tools-common = { group = "com.android.tools", name = "common", version.ref = "androidTools" }
@@ -233,12 +238,15 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
+kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 module-graph = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraph" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 room = { id = "androidx.room", version.ref = "room" }
 secrets = { id = "com.google.android.libraries.mapsplatform.secrets-gradle-plugin", version.ref = "secrets" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotlessVersion" }
+# Multiplatform Plugins
+wire = { id = "com.squareup.wire", version.ref = "wire" }
 
 # Plugins defined by this project
 mifospay-android-application = { id = "mifospay.android.application", version = "unspecified" }

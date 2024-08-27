@@ -9,10 +9,6 @@
  */
 package org.mifospay.shared.modal.domain
 
-import org.mifospay.shared.CommonParcelable
-import org.mifospay.shared.CommonParcelize
-
-@CommonParcelize
 data class Client(
     var name: String? = null,
     var image: String,
@@ -20,6 +16,4 @@ data class Client(
     var clientId: Long = 0L,
     var displayName: String,
     var mobileNo: String,
-) : CommonParcelable{
-    companion object
-}
+)

@@ -7,15 +7,14 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.shared
+package org.mifospay.shared.di
 
-import androidx.compose.ui.window.ComposeUIViewController
-import org.mifospay.shared.di.initKoin
+import org.koin.core.context.startKoin
+import org.koin.dsl.KoinAppDeclaration
 
-fun mainViewController() = ComposeUIViewController(
-    configure = {
-        initKoin()
-    },
-) {
-    App()
+fun initKoin(config: KoinAppDeclaration? = null) {
+    startKoin {
+        config?.invoke(this)
+        modules(sharedModule, platformModule)
+    }
 }
