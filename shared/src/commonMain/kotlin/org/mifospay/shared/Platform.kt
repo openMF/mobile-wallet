@@ -14,3 +14,13 @@ interface Platform {
 }
 
 expect fun getPlatform(): Platform
+
+// For Android @Parcelize
+@OptIn(ExperimentalMultiplatform::class)
+@OptionalExpectation
+@Target(AnnotationTarget.CLASS)
+@Retention(AnnotationRetention.BINARY)
+expect annotation class CommonParcelize()
+
+// For Android Parcelable
+expect interface CommonParcelable
