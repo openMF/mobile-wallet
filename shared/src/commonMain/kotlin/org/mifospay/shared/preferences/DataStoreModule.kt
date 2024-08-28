@@ -14,8 +14,7 @@ import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.okio.OkioStorage
 import okio.FileSystem
 import okio.Path
-import org.mifospay.shared.common.proto.UserPreferences
-
+import org.mifospay.shared.commonMain.proto.UserPreferences
 internal const val DATA_STORE_FILE_NAME = "user.preferences_pb"
 
 expect fun getDataStore(): DataStore<UserPreferences>

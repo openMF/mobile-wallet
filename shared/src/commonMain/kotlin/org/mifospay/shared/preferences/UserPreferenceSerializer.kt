@@ -13,7 +13,7 @@ import androidx.datastore.core.okio.OkioSerializer
 import okio.BufferedSink
 import okio.BufferedSource
 import okio.IOException
-import org.mifospay.shared.common.proto.UserPreferences
+import org.mifospay.shared.commonMain.proto.UserPreferences
 
 object UserPreferenceSerializer : OkioSerializer<UserPreferences> {
     override val defaultValue: UserPreferences

@@ -12,7 +12,7 @@ package org.mifospay.shared.preferences
 import androidx.datastore.core.DataStore
 import okio.FileSystem
 import okio.Path.Companion.toPath
-import org.mifospay.shared.common.proto.UserPreferences
+import org.mifospay.shared.commonMain.proto.UserPreferences
 
 actual fun getDataStore(): DataStore<UserPreferences> {
     return createDataStore(

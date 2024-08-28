@@ -74,7 +74,7 @@ koin = "3.6.0-Beta4"
 koinComposeMultiplatform = "1.2.0-Beta4"
 
 datastore = "1.1.1"
-wire = "5.0.0-alpha03"
+wire = "5.0.0"
 
 compileSdk = "34"
 minSdk = "24"
