@@ -12,7 +12,6 @@ plugins {
     alias(libs.plugins.android.application) apply false
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.android.test) apply false
-    alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.kotlin.jvm) apply false
     alias(libs.plugins.kotlin.serialization) apply false
     alias(libs.plugins.kotlin.parcelize) apply false
@@ -30,6 +29,11 @@ plugins {
     // Plugin applied to allow module graph generation
     alias(libs.plugins.module.graph) apply true
     alias(libs.plugins.spotless) apply true
+    // Multiplatform plugins
+    alias(libs.plugins.jetbrainsCompose) apply false
+    alias(libs.plugins.compose.compiler) apply false
+    alias(libs.plugins.kotlinMultiplatform) apply false
+    alias(libs.plugins.wire) apply false
 }
 
 val detektFormatting = libs.detekt.formatting

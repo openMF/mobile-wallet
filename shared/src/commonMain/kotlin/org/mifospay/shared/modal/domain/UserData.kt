@@ -7,15 +7,11 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.shared
+package org.mifospay.shared.modal.domain
 
-import androidx.compose.ui.window.ComposeUIViewController
-import org.mifospay.shared.di.initKoin
-
-fun mainViewController() = ComposeUIViewController(
-    configure = {
-        initKoin()
-    },
-) {
-    App()
-}
+data class UserData(
+    val authToken: String,
+    val user: String,
+    val userEmail: String,
+    val client: String,
+)
