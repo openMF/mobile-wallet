@@ -44,5 +44,10 @@ dependencies {
     implementation(libs.reactivex.rxjava.android)
     implementation(libs.reactivex.rxjava)
 
+    implementation(libs.bundles.ktor)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.logback.classic)
+
     testImplementation(libs.kotlinx.coroutines.test)
 }
