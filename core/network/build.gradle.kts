@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Packaging
+
 /*
  * Copyright 2024 Mifos Initiative
  *
@@ -23,6 +25,12 @@ android {
             isReturnDefaultValues = true
         }
     }
+    fun Packaging.() {
+        exclude("META-INF/kotlinx-io.kotlin_module")
+        exclude ("META-INF/atomicfu.kotlin_module")
+        exclude("META-INF/kotlinx-coroutines-io.kotlin_module")
+        exclude ("META-INF/kotlinx-coroutines-core.kotlin_module")
+    }
 }
 
 dependencies {
@@ -44,10 +52,15 @@ dependencies {
     implementation(libs.reactivex.rxjava.android)
     implementation(libs.reactivex.rxjava)
 
-    implementation(libs.bundles.ktor)
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.serialization)
-    implementation(libs.logback.classic)
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.0")
+    implementation("io.ktor:ktor-client-core:2.3.4")
+    implementation("io.ktor:ktor-client-android:2.3.4")
+    implementation("io.ktor:ktor-client-serialization:2.3.4")
+    implementation("io.ktor:ktor-client-logging:2.3.4")
+    implementation("io.ktor:ktor-client-content-negotiation:2.3.4")
+    implementation("io.ktor:ktor-client-json:2.3.4")
+    implementation("io.ktor:ktor-client-websockets:2.3.4")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.4")
 
     testImplementation(libs.kotlinx.coroutines.test)
 }

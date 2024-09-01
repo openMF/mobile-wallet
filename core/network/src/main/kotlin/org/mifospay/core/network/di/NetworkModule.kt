@@ -37,6 +37,7 @@ import org.mifospay.core.network.services.ClientService
 import org.mifospay.core.network.services.DocumentService
 import org.mifospay.core.network.services.InvoiceService
 import org.mifospay.core.network.services.KYCLevel1Service
+import org.mifospay.core.network.services.KtorAuthenticationService
 import org.mifospay.core.network.services.NotificationService
 import org.mifospay.core.network.services.RegistrationService
 import org.mifospay.core.network.services.RunReportService
@@ -174,6 +175,11 @@ class NetworkModule {
         }
     }
 
+    @Provides
+    @Singleton
+    fun provideAuthenticationService(client: HttpClient): KtorAuthenticationService {
+        return KtorAuthenticationService(client)
+    }
 
     // -----Fineract API Service---------//
 

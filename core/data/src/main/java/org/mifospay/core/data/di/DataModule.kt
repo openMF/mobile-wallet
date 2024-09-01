@@ -18,6 +18,7 @@ import org.mifospay.core.data.base.UseCaseThreadPoolScheduler
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.SelfServiceApiManager
+import org.mifospay.core.network.services.KtorAuthenticationService
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -36,7 +37,8 @@ class DataModule {
     fun providesFineractRepository(
         fineractApiManager: FineractApiManager,
         selfServiceApiManager: SelfServiceApiManager,
+        ktorAuthenticationService: KtorAuthenticationService
     ): FineractRepository {
-        return FineractRepository(fineractApiManager, selfServiceApiManager)
+        return FineractRepository(fineractApiManager, selfServiceApiManager, ktorAuthenticationService)
     }
 }
