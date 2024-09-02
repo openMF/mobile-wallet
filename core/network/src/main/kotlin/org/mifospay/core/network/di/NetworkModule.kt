@@ -177,8 +177,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthenticationService(client: HttpClient): KtorAuthenticationService {
-        return KtorAuthenticationService(client)
+    fun provideAuthenticationService(client: HttpClient, preferencesHelper: PreferencesHelper): KtorAuthenticationService {
+        return KtorAuthenticationService(client, preferencesHelper)
     }
 
     // -----Fineract API Service---------//

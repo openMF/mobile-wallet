@@ -11,11 +11,12 @@ package com.mifospay.core.model.entity
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class Role(
     var id: String? = null,
     var name: String? = null,
     var description: String? = null,
     val disabled: Boolean,
-) : Parcelable
+)
