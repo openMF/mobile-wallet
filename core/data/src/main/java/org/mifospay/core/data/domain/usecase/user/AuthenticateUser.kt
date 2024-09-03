@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.data.domain.usecase.user
 
-import android.util.Log
 import com.mifospay.core.model.domain.user.User
 import com.mifospay.core.model.entity.authentication.AuthenticationPayload
 import kotlinx.coroutines.CoroutineScope
@@ -32,12 +31,10 @@ class AuthenticateUser @Inject constructor(
                     AuthenticationPayload(requestValues.username, requestValues.password)
                 )
                 withContext(Dispatchers.Main) {
-                    Log.d("AuthPayload","$user")
                     useCaseCallback.onSuccess(ResponseValue(user))
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Log.d("AuthPayload","${e.message}")
                     useCaseCallback.onError(Constants.ERROR_LOGGING_IN)
                 }
             }

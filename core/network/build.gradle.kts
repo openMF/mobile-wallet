@@ -25,12 +25,6 @@ android {
             isReturnDefaultValues = true
         }
     }
-    fun Packaging.() {
-        exclude("META-INF/kotlinx-io.kotlin_module")
-        exclude ("META-INF/atomicfu.kotlin_module")
-        exclude("META-INF/kotlinx-coroutines-io.kotlin_module")
-        exclude ("META-INF/kotlinx-coroutines-core.kotlin_module")
-    }
 }
 
 dependencies {
@@ -39,8 +33,6 @@ dependencies {
     api(projects.core.model)
     api(projects.core.datastore)
 
-    implementation(libs.kotlinx.serialization.json)
-    
     implementation(libs.squareup.okhttp)
     implementation(libs.squareup.logging.interceptor)
 
@@ -61,7 +53,6 @@ dependencies {
     implementation(libs.ktor.client.json)
     implementation(libs.ktor.client.websockets)
     implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.kotlinx.serialization.json.v130)
     implementation(libs.logback.classic)
 
     testImplementation(libs.kotlinx.coroutines.test)
