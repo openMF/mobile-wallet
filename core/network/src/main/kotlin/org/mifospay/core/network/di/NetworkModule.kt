@@ -27,6 +27,7 @@ import kotlinx.serialization.json.Json
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.core.network.BaseURL
 import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.KtorInterceptor
 import org.mifospay.core.network.MifosWalletOkHttpClient
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.localAssets.LocalAssetManager
@@ -157,14 +158,19 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): HttpClient {
+    fun provideHttpClient(preferencesHelper: PreferencesHelper): HttpClient {
         return HttpClient(Android) {
             install(WebSockets)
+            install(KtorInterceptor) {
+                this.preferencesHelper = preferencesHelper
+            }
             install(ContentNegotiation) {
-                json(Json {
-                    ignoreUnknownKeys = true
-                    isLenient = true
-                })
+                json(
+                    Json {
+                        ignoreUnknownKeys = true
+                        isLenient = true
+                    },
+                )
             }
             install(HttpTimeout) {
                 requestTimeoutMillis = 15000
@@ -177,8 +183,8 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthenticationService(client: HttpClient, preferencesHelper: PreferencesHelper): KtorAuthenticationService {
-        return KtorAuthenticationService(client, preferencesHelper)
+    fun provideAuthenticationService(client: HttpClient): KtorAuthenticationService {
+        return KtorAuthenticationService(client)
     }
 
     // -----Fineract API Service---------//
