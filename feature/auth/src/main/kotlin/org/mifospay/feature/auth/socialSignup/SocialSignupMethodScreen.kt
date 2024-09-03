@@ -72,12 +72,14 @@ const val TAG = "Social Login"
 // Keeping until we fix sign up
 @Composable
 internal fun SocialSignupMethodContentScreen(
+    navigateToSignupScreen: () -> Unit = {},
     modifier: Modifier = Modifier,
     onDismissSignUp: () -> Unit = {},
 ) {
     SocialSignupMethodScreen(
         modifier = modifier,
         onDismissSignUp = onDismissSignUp,
+        navigateToSignupScreen = navigateToSignupScreen
     )
 }
 
@@ -86,6 +88,7 @@ internal fun SocialSignupMethodContentScreen(
 private fun SocialSignupMethodScreen(
     modifier: Modifier = Modifier,
     onDismissSignUp: () -> Unit = {},
+    navigateToSignupScreen: () -> Unit = {},
 ) {
     val context = LocalContext.current
     var mifosSavingProductId by remember { mutableIntStateOf(0) }
@@ -185,6 +188,7 @@ private fun SocialSignupMethodScreen(
                     mifosSavingProductId = MIFOS_CONSUMER_SAVINGS_PRODUCT_ID
                     signUp(checkedGoogleAccount)
                 },
+                navigateToSignupScreen=navigateToSignupScreen
             )
         },
         onDismiss = {
@@ -200,6 +204,7 @@ private fun SignupMethodContentScreen(
     onSignUpAsMerchant: (Boolean) -> Unit,
     onSignupAsCustomer: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    navigateToSignupScreen: () -> Unit = {},
 ) {
     var checkedGoogleAccountState by remember { mutableStateOf(true) }
 
@@ -219,7 +224,11 @@ private fun SignupMethodContentScreen(
             MifosOutlinedButton(
                 modifier = Modifier.padding(top = 48.dp),
                 onClick = {
-                    onSignUpAsMerchant.invoke(checkedGoogleAccountState)
+                    if(checkedGoogleAccountState){
+                        onSignUpAsMerchant.invoke(checkedGoogleAccountState)
+                    }else{
+                        navigateToSignupScreen.invoke()
+                    }
                 },
                 border = BorderStroke(1.dp, Color.LightGray),
                 shape = RoundedCornerShape(4.dp),
@@ -260,7 +269,11 @@ private fun SignupMethodContentScreen(
             MifosOutlinedButton(
                 modifier = Modifier.padding(top = 24.dp),
                 onClick = {
-                    onSignupAsCustomer.invoke(checkedGoogleAccountState)
+                    if(checkedGoogleAccountState){
+                        onSignupAsCustomer.invoke(checkedGoogleAccountState)
+                    }else{
+                        navigateToSignupScreen.invoke()
+                    }
                 },
                 border = BorderStroke(1.dp, Color.LightGray),
                 shape = RoundedCornerShape(4.dp),

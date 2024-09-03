@@ -60,6 +60,7 @@ internal fun LoginScreen(
     navigateToPasscodeScreen: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = hiltViewModel(),
+    navigateToSignupScreen: () -> Unit
 ) {
     val context = LocalContext.current
     val showProgress by viewModel.showProgress.collectAsStateWithLifecycle()
@@ -77,6 +78,7 @@ internal fun LoginScreen(
                 },
             )
         },
+        navigateToSignupScreen = navigateToSignupScreen
     )
 
     if (isLoginSuccess) {
@@ -90,6 +92,7 @@ private fun LoginScreenContent(
     showProgress: Boolean,
     login: (username: String, password: String) -> Unit,
     modifier: Modifier = Modifier,
+    navigateToSignupScreen: () -> Unit
 ) {
     var showSignUpScreen by rememberSaveable { mutableStateOf(false) }
 
@@ -106,7 +109,9 @@ private fun LoginScreenContent(
     var passwordVisibility: Boolean by remember { mutableStateOf(false) }
 
     if (showSignUpScreen) {
-        SocialSignupMethodContentScreen {
+        SocialSignupMethodContentScreen(
+            navigateToSignupScreen = navigateToSignupScreen
+        ) {
             showSignUpScreen = false
         }
     }
@@ -240,6 +245,7 @@ private fun LoanScreenPreview() {
         LoginScreenContent(
             showProgress = false,
             login = { _, _ -> },
+            navigateToSignupScreen = {}
         )
     }
 }
