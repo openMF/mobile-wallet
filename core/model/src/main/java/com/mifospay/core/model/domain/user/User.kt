@@ -14,15 +14,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class User(
-    val username: String,
+    val username: String? = null,
     val userId: Long = 0,
-    val base64EncodedAuthenticationKey: String,
+    val base64EncodedAuthenticationKey: String? = null,
     val authenticated: Boolean = false,
-    val officeId: Int,
-    val officeName: String,
-    val roles: List<Role>,
-    val permissions: List<String>,
+    val officeId: Int? = null,
+    val officeName: String? = null,
+    val roles: List<Role> = emptyList(),
+    val permissions: List<String> = emptyList(),
     val clients: List<Long> = emptyList(),
-    val shouldRenewPassword: Boolean,
-    val isTwoFactorAuthenticationRequired: Boolean,
+    val shouldRenewPassword: Boolean? = null,
+    val isTwoFactorAuthenticationRequired: Boolean? = null,
 )
