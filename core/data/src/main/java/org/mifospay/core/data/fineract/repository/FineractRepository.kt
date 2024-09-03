@@ -56,7 +56,7 @@ import javax.inject.Singleton
 class FineractRepository @Inject constructor(
     private val fineractApiManager: FineractApiManager,
     private val selfApiManager: SelfServiceApiManager,
-    private val ktorAuthenticationService: KtorAuthenticationService
+    private val ktorAuthenticationService: KtorAuthenticationService,
 ) {
     fun createClient(newClient: NewClient): Observable<CreateClient.ResponseValue> {
         return fineractApiManager.clientsApi.createClient(newClient)

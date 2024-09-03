@@ -28,7 +28,7 @@ class AuthenticateUser @Inject constructor(
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val user = apiRepository.loginSelf(
-                    AuthenticationPayload(requestValues.username, requestValues.password)
+                    AuthenticationPayload(requestValues.username, requestValues.password),
                 )
                 withContext(Dispatchers.Main) {
                     useCaseCallback.onSuccess(ResponseValue(user))

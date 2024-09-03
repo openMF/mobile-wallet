@@ -37,8 +37,12 @@ class DataModule {
     fun providesFineractRepository(
         fineractApiManager: FineractApiManager,
         selfServiceApiManager: SelfServiceApiManager,
-        ktorAuthenticationService: KtorAuthenticationService
+        ktorAuthenticationService: KtorAuthenticationService,
     ): FineractRepository {
-        return FineractRepository(fineractApiManager, selfServiceApiManager, ktorAuthenticationService)
+        return FineractRepository(
+            fineractApiManager,
+            selfServiceApiManager,
+            ktorAuthenticationService,
+        )
     }
 }
