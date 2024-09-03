@@ -1,3 +1,5 @@
+import com.android.build.api.dsl.Packaging
+
 /*
  * Copyright 2024 Mifos Initiative
  *
@@ -31,8 +33,6 @@ dependencies {
     api(projects.core.model)
     api(projects.core.datastore)
 
-    implementation(libs.kotlinx.serialization.json)
-    
     implementation(libs.squareup.okhttp)
     implementation(libs.squareup.logging.interceptor)
 
@@ -43,6 +43,17 @@ dependencies {
 
     implementation(libs.reactivex.rxjava.android)
     implementation(libs.reactivex.rxjava)
+
+    implementation(libs.jetbrains.kotlin.stdlib)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.android)
+    implementation(libs.ktor.client.serialization)
+    implementation(libs.ktor.client.logging)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.client.json)
+    implementation(libs.ktor.client.websockets)
+    implementation(libs.ktor.serialization.kotlinx.json)
+    implementation(libs.logback.classic)
 
     testImplementation(libs.kotlinx.coroutines.test)
 }

@@ -11,8 +11,9 @@ package com.mifospay.core.model.entity
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class UserWithRole(
     var id: String? = null,
     var username: String? = null,
@@ -20,4 +21,4 @@ data class UserWithRole(
     var lastname: String? = null,
     var email: String? = null,
     var selectedRoles: List<Role>? = ArrayList(),
-) : Parcelable
+)

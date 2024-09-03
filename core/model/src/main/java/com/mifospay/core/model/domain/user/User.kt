@@ -9,11 +9,10 @@
  */
 package com.mifospay.core.model.domain.user
 
-import android.os.Parcelable
 import com.mifospay.core.model.entity.Role
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class User(
     val username: String,
     val userId: Long = 0,
@@ -23,7 +22,7 @@ data class User(
     val officeName: String,
     val roles: List<Role>,
     val permissions: List<String>,
-    val clients: List<Long>,
+    val clients: List<Long> = emptyList(),
     val shouldRenewPassword: Boolean,
     val isTwoFactorAuthenticationRequired: Boolean,
-) : Parcelable
+)

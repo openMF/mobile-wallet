@@ -12,11 +12,21 @@ package com.mifospay.core.model.entity.authentication
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
-class AuthenticationPayload(
+//@Parcelize
+//class AuthenticationPayload(
+//    @SerializedName("username")
+//    val userName: String,
+//    @SerializedName("password")
+//    val password: String,
+//) : Parcelable
+
+
+@Serializable
+data class AuthenticationPayload(
     @SerializedName("username")
-    val userName: String,
+    val username: String,
     @SerializedName("password")
-    val password: String,
-) : Parcelable
+    val password: String
+)

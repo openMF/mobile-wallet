@@ -46,6 +46,7 @@ import org.mifospay.core.data.util.Constants
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.GenericResponse
 import org.mifospay.core.network.SelfServiceApiManager
+import org.mifospay.core.network.services.KtorAuthenticationService
 import rx.Observable
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -55,6 +56,7 @@ import javax.inject.Singleton
 class FineractRepository @Inject constructor(
     private val fineractApiManager: FineractApiManager,
     private val selfApiManager: SelfServiceApiManager,
+    private val ktorAuthenticationService: KtorAuthenticationService,
 ) {
     fun createClient(newClient: NewClient): Observable<CreateClient.ResponseValue> {
         return fineractApiManager.clientsApi.createClient(newClient)
@@ -273,8 +275,8 @@ class FineractRepository @Inject constructor(
     }
 
     // self user apis
-    fun loginSelf(payload: AuthenticationPayload): Observable<User> {
-        return selfApiManager.authenticationApi.authenticate(payload)
+    suspend fun loginSelf(payload: AuthenticationPayload): User {
+        return ktorAuthenticationService.authenticate(payload)
     }
 
     fun getSelfClientDetails(clientId: Long): Observable<Client> {
