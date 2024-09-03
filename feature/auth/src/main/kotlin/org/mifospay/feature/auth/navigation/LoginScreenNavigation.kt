@@ -18,9 +18,13 @@ const val LOGIN_ROUTE = "login_route"
 
 fun NavGraphBuilder.loginScreen(
     onNavigateToPasscodeScreen: () -> Unit,
+    onNavigateToSignupScreen: () -> Unit,
 ) {
     composable(route = LOGIN_ROUTE) {
-        LoginScreen(navigateToPasscodeScreen = onNavigateToPasscodeScreen)
+        LoginScreen(
+            navigateToPasscodeScreen = onNavigateToPasscodeScreen,
+            navigateToSignupScreen = onNavigateToSignupScreen
+        )
     }
 }
 
