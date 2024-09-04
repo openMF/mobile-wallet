@@ -9,6 +9,4 @@
  */
 package org.mifospay.core.network.services
 
-interface SavingsAccountsService {
-
-}
+interface SavingsAccountsService

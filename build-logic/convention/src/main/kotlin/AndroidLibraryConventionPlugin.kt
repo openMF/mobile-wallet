@@ -18,6 +18,9 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
                 apply("mifospay.android.lint")
+                apply("mifos.detekt.plugin")
+                apply("mifos.spotless.plugin")
+                apply("mifos.ktlint.plugin")
             }
 
             extensions.configure<LibraryExtension> {

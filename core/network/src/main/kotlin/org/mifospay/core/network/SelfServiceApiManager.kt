@@ -12,7 +12,6 @@ package org.mifospay.core.network
 import org.mifospay.core.network.services.AuthenticationService
 import org.mifospay.core.network.services.BeneficiaryService
 import org.mifospay.core.network.services.ClientService
-import org.mifospay.core.network.services.KtorAuthenticationService
 import org.mifospay.core.network.services.KtorSavingsAccountService
 import org.mifospay.core.network.services.RegistrationService
 import org.mifospay.core.network.services.SavingsAccountsService
@@ -26,7 +25,7 @@ class SelfServiceApiManager @Inject constructor(
     private val registrationService: RegistrationService,
     private val beneficiaryService: BeneficiaryService,
     private val thirdPartyTransferService: ThirdPartyTransferService,
-    private val ktorSavingsAccountService: KtorSavingsAccountService
+    private val ktorSavingsAccountService: KtorSavingsAccountService,
 ) {
     val authenticationApi: AuthenticationService
         get() = authenticationService

@@ -27,7 +27,7 @@ internal fun NavGraphBuilder.loginNavGraph(navController: NavController) {
     ) {
         loginScreen(
             onNavigateToPasscodeScreen = navController::navigateToPasscodeScreen,
-            onNavigateToSignupScreen = navController::navigateToSignup
+            onNavigateToSignupScreen = navController::navigateToSignup,
         )
 
         signupScreen(

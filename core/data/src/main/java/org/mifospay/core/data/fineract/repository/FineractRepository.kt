@@ -103,8 +103,8 @@ class FineractRepository @Inject constructor(
         return fineractApiManager.clientsApi.getAccounts(clientId, Constants.SAVINGS)
     }
 
-    suspend fun savingsAccounts(): Page<SavingsWithAssociations>
-        = fineractApiManager.ktorSavingsAccountApi.getSavingsAccounts(-1)
+    suspend fun savingsAccounts(): Page<SavingsWithAssociations> =
+        fineractApiManager.ktorSavingsAccountApi.getSavingsAccounts(-1)
 
     suspend fun blockUnblockAccount(accountId: Long, command: String?): GenericResponse {
         return fineractApiManager.ktorSavingsAccountApi.blockUnblockAccount(
