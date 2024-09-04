@@ -9,29 +9,6 @@
  */
 package org.mifospay.core.network.services
 
-import com.mifospay.core.model.entity.accounts.savings.Transactions
-import org.mifospay.core.network.ApiEndPoints
-import org.mifospay.core.network.GenericResponse
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
-import rx.Observable
-
 interface SavingsAccountsService {
 
-    @POST(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}")
-    fun blockUnblockAccount(
-        @Path("accountId") accountId: Long,
-        @Query("command") command: String?,
-    ): Observable<GenericResponse>
-
-    @GET(
-        ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}/" + ApiEndPoints.TRANSACTIONS +
-            "/{transactionId}",
-    )
-    fun getSavingAccountTransaction(
-        @Path("accountId") accountId: Long,
-        @Path("transactionId") transactionId: Long,
-    ): Observable<Transactions>
 }

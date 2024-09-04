@@ -9,12 +9,13 @@
  */
 package org.mifospay.core.data.domain.usecase.account
 
+import android.util.Log
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.repository.FineractRepository
-import org.mifospay.core.network.GenericResponse
-import rx.Subscriber
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import javax.inject.Inject
 
 class BlockUnblockCommand @Inject constructor(
@@ -22,23 +23,23 @@ class BlockUnblockCommand @Inject constructor(
 ) : UseCase<BlockUnblockCommand.RequestValues, BlockUnblockCommand.ResponseValue>() {
 
     override fun executeUseCase(requestValues: RequestValues) {
-        mFineractRepository.blockUnblockAccount(requestValues.accountId, requestValues.command)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe(
-                object : Subscriber<GenericResponse>() {
-                    override fun onCompleted() {}
-                    override fun onError(e: Throwable) {
-                        useCaseCallback.onError(
-                            "Error " + requestValues.command + "ing account",
-                        )
-                    }
-
-                    override fun onNext(genericResponse: GenericResponse) {
-                        useCaseCallback.onSuccess(ResponseValue)
-                    }
-                },
-            )
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val res = mFineractRepository.blockUnblockAccount(
+                    requestValues.accountId,
+                    requestValues.command,
+                )
+                withContext(Dispatchers.Main) {
+                    Log.d("BlockUnblockCommand@@@@","$res")
+                    useCaseCallback.onSuccess(ResponseValue)
+                }
+            } catch (e: Exception) {
+                Log.d("BlockUnblockCommand@@@@","${e.message}")
+                useCaseCallback.onError(
+                    "Error " + requestValues.command + "ing account",
+                )
+            }
+        }
     }
 
     data class RequestValues(val accountId: Long, val command: String) : UseCase.RequestValues

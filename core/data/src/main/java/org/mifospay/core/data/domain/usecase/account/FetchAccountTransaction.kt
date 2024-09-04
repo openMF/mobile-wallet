@@ -9,15 +9,16 @@
  */
 package org.mifospay.core.data.domain.usecase.account
 
+import android.util.Log
 import com.mifospay.core.model.domain.Transaction
-import com.mifospay.core.model.entity.accounts.savings.Transactions
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.entity.mapper.TransactionMapper
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
-import rx.Observer
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import javax.inject.Inject
 
 class FetchAccountTransaction @Inject constructor(
@@ -26,32 +27,31 @@ class FetchAccountTransaction @Inject constructor(
 ) :
     UseCase<FetchAccountTransaction.RequestValues, FetchAccountTransaction.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {
-        fineractRepository.getSelfAccountTransactionFromId(
-            requestValues.accountId,
-            requestValues.transactionId,
-        )
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe(
-                object : Observer<Transactions?> {
-                    override fun onCompleted() {}
-                    override fun onError(e: Throwable) {
-                        if (e.message == "HTTP 401 Unauthorized") {
-                            useCaseCallback.onError(Constants.UNAUTHORIZED_ERROR)
-                        } else {
-                            useCaseCallback.onError(
-                                Constants.ERROR_FETCHING_REMOTE_ACCOUNT_TRANSACTIONS,
-                            )
-                        }
-                    }
-
-                    override fun onNext(transaction: Transactions?) {
-                        useCaseCallback.onSuccess(
-                            ResponseValue(transactionMapper.transformInvoice(transaction)),
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val res = fineractRepository.getSelfAccountTransactionFromId(
+                    requestValues.accountId,
+                    requestValues.transactionId,
+                )
+                withContext(Dispatchers.Main) {
+                    Log.d("FetchTransactions@@@@","$res")
+                    useCaseCallback.onSuccess(
+                        ResponseValue(transactionMapper.transformInvoice(res)),
+                    )
+                }
+            } catch (e: Exception) {
+                Log.d("FetchTransactions@@@@","${e.message}")
+                withContext(Dispatchers.Main) {
+                    if (e.message == "HTTP 401 Unauthorized") {
+                        useCaseCallback.onError(Constants.UNAUTHORIZED_ERROR)
+                    } else {
+                        useCaseCallback.onError(
+                            Constants.ERROR_FETCHING_REMOTE_ACCOUNT_TRANSACTIONS,
                         )
                     }
-                },
-            )
+                }
+            }
+        }
     }
 
     data class RequestValues(
