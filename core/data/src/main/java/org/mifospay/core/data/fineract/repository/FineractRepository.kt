@@ -103,11 +103,11 @@ class FineractRepository @Inject constructor(
         return fineractApiManager.clientsApi.getAccounts(clientId, Constants.SAVINGS)
     }
 
-    val savingsAccounts: Observable<Page<SavingsWithAssociations>>
-        get() = fineractApiManager.savingsAccountsApi.getSavingsAccounts(-1)
+    suspend fun savingsAccounts(): Page<SavingsWithAssociations>
+        = fineractApiManager.ktorSavingsAccountApi.getSavingsAccounts(-1)
 
-    fun blockUnblockAccount(accountId: Long, command: String?): Observable<GenericResponse> {
-        return fineractApiManager.savingsAccountsApi.blockUnblockAccount(
+    suspend fun blockUnblockAccount(accountId: Long, command: String?): GenericResponse {
+        return fineractApiManager.ktorSavingsAccountApi.blockUnblockAccount(
             accountId,
             command,
         )
@@ -293,11 +293,11 @@ class FineractRepository @Inject constructor(
         )
     }
 
-    fun getSelfAccountTransactionFromId(
+    suspend fun getSelfAccountTransactionFromId(
         accountId: Long,
         transactionId: Long,
-    ): Observable<Transactions> {
-        return selfApiManager.savingAccountsListApi.getSavingAccountTransaction(
+    ): Transactions {
+        return selfApiManager.ktorSavingsAccountApi.getSavingAccountTransaction(
             accountId,
             transactionId,
         )
