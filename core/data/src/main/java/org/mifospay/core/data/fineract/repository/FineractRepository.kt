@@ -103,8 +103,8 @@ class FineractRepository @Inject constructor(
         return fineractApiManager.clientsApi.getAccounts(clientId, Constants.SAVINGS)
     }
 
-    val savingsAccounts: Observable<Page<SavingsWithAssociations>>
-        get() = fineractApiManager.savingsAccountsApi.getSavingsAccounts(-1)
+    suspend fun savingsAccounts(): Page<SavingsWithAssociations>
+        = fineractApiManager.ktorSavingsAccountApi.getSavingsAccounts(-1)
 
     fun blockUnblockAccount(accountId: Long, command: String?): Observable<GenericResponse> {
         return fineractApiManager.savingsAccountsApi.blockUnblockAccount(

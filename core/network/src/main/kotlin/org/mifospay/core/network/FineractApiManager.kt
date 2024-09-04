@@ -15,6 +15,7 @@ import org.mifospay.core.network.services.ClientService
 import org.mifospay.core.network.services.DocumentService
 import org.mifospay.core.network.services.InvoiceService
 import org.mifospay.core.network.services.KYCLevel1Service
+import org.mifospay.core.network.services.KtorSavingsAccountService
 import org.mifospay.core.network.services.NotificationService
 import org.mifospay.core.network.services.RegistrationService
 import org.mifospay.core.network.services.RunReportService
@@ -44,6 +45,7 @@ class FineractApiManager @Inject constructor(
     private val thirdPartyTransferService: ThirdPartyTransferService,
     private val standingInstructionService: StandingInstructionService,
     private val notificationService: NotificationService,
+    private val ktorSavingsAccountService: KtorSavingsAccountService,
 ) {
 
     val authenticationApi: AuthenticationService
@@ -93,4 +95,7 @@ class FineractApiManager @Inject constructor(
 
     val standingInstructionApi: StandingInstructionService
         get() = standingInstructionService
+
+    val ktorSavingsAccountApi: KtorSavingsAccountService
+        get() = ktorSavingsAccountService
 }

@@ -116,6 +116,7 @@ class NetworkModule {
         @Named("FineractThirdPartyTransferService") thirdPartyTransferService: ThirdPartyTransferService,
         standingInstructionService: StandingInstructionService,
         notificationService: NotificationService,
+        ktorSavingsAccountService: KtorSavingsAccountService
     ): FineractApiManager {
         return FineractApiManager(
             authenticationService,
@@ -134,6 +135,7 @@ class NetworkModule {
             thirdPartyTransferService,
             standingInstructionService,
             notificationService,
+            ktorSavingsAccountService
         )
     }
 
