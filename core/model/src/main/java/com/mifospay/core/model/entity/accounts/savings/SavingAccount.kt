@@ -9,12 +9,11 @@
  */
 package com.mifospay.core.model.entity.accounts.savings
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mifospay.core.model.entity.client.DepositType
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class SavingAccount(
 
     @SerializedName("id")
@@ -62,7 +61,7 @@ data class SavingAccount(
     @SerializedName("depositType")
     var depositType: DepositType? = null,
 
-) : Parcelable {
+) {
     fun isRecurring(): Boolean {
         return this.depositType != null && this.depositType!!.isRecurring
     }

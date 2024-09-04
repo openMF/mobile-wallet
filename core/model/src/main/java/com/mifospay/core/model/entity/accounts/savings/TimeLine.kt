@@ -9,11 +9,10 @@
  */
 package com.mifospay.core.model.entity.accounts.savings
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class TimeLine(
     @SerializedName("submittedOnDate")
     var submittedOnDate: List<Int?> = ArrayList(),
@@ -50,7 +49,7 @@ data class TimeLine(
 
     @SerializedName("activatedByLastname")
     var activatedByLastname: String? = null,
-) : Parcelable {
+) {
     constructor() : this(
         ArrayList(),
         null,

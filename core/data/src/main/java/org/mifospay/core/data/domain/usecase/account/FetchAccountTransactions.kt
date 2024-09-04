@@ -9,15 +9,16 @@
  */
 package org.mifospay.core.data.domain.usecase.account
 
+import android.util.Log
 import com.mifospay.core.model.domain.Transaction
-import com.mifospay.core.model.entity.accounts.savings.SavingsWithAssociations
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.entity.mapper.TransactionMapper
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
-import rx.Subscriber
-import rx.android.schedulers.AndroidSchedulers
-import rx.schedulers.Schedulers
 import javax.inject.Inject
 
 class FetchAccountTransactions @Inject constructor(
@@ -26,27 +27,26 @@ class FetchAccountTransactions @Inject constructor(
 ) : UseCase<FetchAccountTransactions.RequestValues, FetchAccountTransactions.ResponseValue?>() {
 
     override fun executeUseCase(requestValues: RequestValues) {
-        fineractRepository.getSelfAccountTransactions(requestValues.accountId)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeOn(Schedulers.io())
-            .subscribe(
-                object : Subscriber<SavingsWithAssociations>() {
-                    override fun onCompleted() {}
-                    override fun onError(e: Throwable) {
-                        useCaseCallback.onError(
-                            Constants.ERROR_FETCHING_REMOTE_ACCOUNT_TRANSACTIONS,
-                        )
-                    }
-
-                    override fun onNext(transactions: SavingsWithAssociations) {
-                        useCaseCallback.onSuccess(
-                            ResponseValue(
-                                transactionMapper.transformTransactionList(transactions),
-                            ),
-                        )
-                    }
-                },
-            )
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val api = fineractRepository.getSelfAccountTransactions(requestValues.accountId)
+                withContext(Dispatchers.Main) {
+                    Log.d("FetchTransactions@@@@","$api")
+                    useCaseCallback.onSuccess(
+                        ResponseValue(
+                            transactionMapper.transformTransactionList(api),
+                        ),
+                    )
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.d("FetchTransactions@@@@","${e.message}")
+                    useCaseCallback.onError(
+                        Constants.ERROR_FETCHING_REMOTE_ACCOUNT_TRANSACTIONS,
+                    )
+                }
+            }
+        }
     }
 
     data class RequestValues(var accountId: Long) : UseCase.RequestValues

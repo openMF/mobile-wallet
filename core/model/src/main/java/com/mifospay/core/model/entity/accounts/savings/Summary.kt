@@ -9,11 +9,10 @@
  */
 package com.mifospay.core.model.entity.accounts.savings
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class Summary(
     @SerializedName("currency")
     var currency: Currency? = null,
@@ -41,4 +40,4 @@ data class Summary(
 
     @SerializedName("lastInterestCalculationDate")
     var lastInterestCalculationDate: List<Int?>? = null,
-) : Parcelable
+)

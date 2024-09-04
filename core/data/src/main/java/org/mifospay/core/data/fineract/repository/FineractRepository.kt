@@ -286,8 +286,8 @@ class FineractRepository @Inject constructor(
     val selfClientDetails: Observable<Page<Client>>
         get() = selfApiManager.clientsApi.clients
 
-    fun getSelfAccountTransactions(accountId: Long): Observable<SavingsWithAssociations> {
-        return selfApiManager.savingAccountsListApi.getSavingsWithAssociations(
+    suspend fun getSelfAccountTransactions(accountId: Long): SavingsWithAssociations {
+        return selfApiManager.ktorSavingsAccountApi.getSavingsWithAssociations(
             accountId,
             Constants.TRANSACTIONS,
         )

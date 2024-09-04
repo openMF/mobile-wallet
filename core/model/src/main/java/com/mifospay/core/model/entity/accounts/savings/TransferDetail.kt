@@ -9,12 +9,10 @@
  */
 package com.mifospay.core.model.entity.accounts.savings
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import com.mifospay.core.model.domain.client.Client
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class TransferDetail(
     @SerializedName("id")
     var id: Long = 0L,
@@ -30,7 +28,7 @@ data class TransferDetail(
 
     @SerializedName("toAccount")
     var toAccount: SavingAccount = SavingAccount(),
-) : Parcelable {
+) {
     constructor() : this(
         0L,
         com.mifospay.core.model.domain.client.Client(),

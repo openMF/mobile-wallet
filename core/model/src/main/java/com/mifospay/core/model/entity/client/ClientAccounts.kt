@@ -9,14 +9,13 @@
  */
 package com.mifospay.core.model.entity.client
 
-import android.os.Parcelable
 import com.mifospay.core.model.entity.accounts.savings.SavingAccount
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class ClientAccounts(
     var savingsAccounts: List<SavingAccount> = ArrayList(),
-) : Parcelable {
+) {
 
     fun withSavingsAccounts(savingsAccounts: List<SavingAccount>): ClientAccounts {
         this.savingsAccounts = savingsAccounts

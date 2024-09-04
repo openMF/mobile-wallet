@@ -39,6 +39,7 @@ import org.mifospay.core.network.services.DocumentService
 import org.mifospay.core.network.services.InvoiceService
 import org.mifospay.core.network.services.KYCLevel1Service
 import org.mifospay.core.network.services.KtorAuthenticationService
+import org.mifospay.core.network.services.KtorSavingsAccountService
 import org.mifospay.core.network.services.NotificationService
 import org.mifospay.core.network.services.RegistrationService
 import org.mifospay.core.network.services.RunReportService
@@ -142,6 +143,7 @@ class NetworkModule {
         @Named("SelfServiceAuthenticationService") authenticationService: AuthenticationService,
         @Named("SelfServiceClientService") clientService: ClientService,
         @Named("SelfServiceSavingsAccountsService") savingsAccountsService: SavingsAccountsService,
+        ktorSavingsAccountService: KtorSavingsAccountService,
         @Named("SelfServiceRegistrationService") registrationService: RegistrationService,
         beneficiaryService: BeneficiaryService,
         @Named("SelfServiceThirdPartyTransferService") thirdPartyTransferService: ThirdPartyTransferService,
@@ -153,6 +155,7 @@ class NetworkModule {
             registrationService,
             beneficiaryService,
             thirdPartyTransferService,
+            ktorSavingsAccountService
         )
     }
 
@@ -185,6 +188,14 @@ class NetworkModule {
     @Singleton
     fun provideAuthenticationService(client: HttpClient): KtorAuthenticationService {
         return KtorAuthenticationService(client)
+    }
+
+    @Provides
+    @Singleton
+    fun providesKtorSavingsAccountService(
+        client: HttpClient
+    ): KtorSavingsAccountService {
+        return KtorSavingsAccountService(client)
     }
 
     // -----Fineract API Service---------//

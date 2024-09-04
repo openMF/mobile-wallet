@@ -9,11 +9,10 @@
  */
 package com.mifospay.core.model.entity.accounts.savings
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class Status(
 
     @SerializedName("id")
@@ -54,7 +53,7 @@ data class Status(
 
     @SerializedName("matured")
     var matured: Boolean? = null,
-) : Parcelable {
+) {
     constructor() : this(
         null,
         null,
