@@ -9,14 +9,13 @@
  */
 package com.mifospay.core.model.entity.standinginstruction
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mifospay.core.model.entity.accounts.savings.SavingAccount
 import com.mifospay.core.model.entity.client.Client
 import com.mifospay.core.model.entity.client.Status
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class StandingInstruction(
 
     val id: Long,
@@ -53,4 +52,4 @@ data class StandingInstruction(
 
     @SerializedName("recurrenceOnMonthDay")
     val recurrenceOnMonthDay: List<Int>,
-) : Parcelable
+)

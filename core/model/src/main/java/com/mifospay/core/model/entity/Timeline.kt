@@ -9,10 +9,9 @@
  */
 package com.mifospay.core.model.entity
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class Timeline(
     var submittedOnDate: List<Int?> = ArrayList(),
     var submittedByUsername: String? = null,
@@ -26,6 +25,6 @@ data class Timeline(
     var closedByUsername: String? = null,
     var closedByFirstname: String? = null,
     var closedByLastname: String? = null,
-) : Parcelable {
+) {
     constructor() : this(ArrayList(), "", "", "", ArrayList(), "", "", "", ArrayList(), "", "", "")
 }

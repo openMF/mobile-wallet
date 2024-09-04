@@ -9,11 +9,10 @@
  */
 package com.mifospay.core.model.entity.client
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class DepositType(
     @SerializedName("id")
     var id: Int? = null,
@@ -24,7 +23,7 @@ data class DepositType(
     @SerializedName("value")
     var value: String? = null,
 
-) : Parcelable {
+) {
     val isRecurring: Boolean
         get() = ServerTypes.RECURRING.id == id
     val endpoint: String

@@ -9,11 +9,10 @@
  */
 package com.mifospay.core.model.entity.accounts.savings
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class PaymentDetailData(
     @SerializedName("id")
     var id: Int? = null,
@@ -35,6 +34,6 @@ data class PaymentDetailData(
 
     @SerializedName("bankNumber")
     var bankNumber: String? = null,
-) : Parcelable {
+) {
     constructor() : this(null, null, null, null, null, null, null)
 }

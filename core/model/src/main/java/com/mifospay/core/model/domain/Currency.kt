@@ -9,14 +9,13 @@
  */
 package com.mifospay.core.model.domain
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class Currency(
     var code: String,
     var displaySymbol: String,
     var displayLabel: String,
-) : Parcelable {
+) {
     constructor() : this("", "", "")
 }

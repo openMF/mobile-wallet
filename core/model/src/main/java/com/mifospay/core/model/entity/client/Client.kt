@@ -13,8 +13,9 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mifospay.core.model.entity.Timeline
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class Client(
 
     @SerializedName("id")
@@ -76,7 +77,7 @@ data class Client(
 
     @SerializedName("mobileNo")
     var mobileNo: String = "",
-) : Parcelable {
+) {
     constructor() : this(
         0,
         "",

@@ -11,8 +11,9 @@ package com.mifospay.core.model.domain.client
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class Client(
     var name: String? = null,
     var image: String,
@@ -20,6 +21,6 @@ data class Client(
     var clientId: Long = 0L,
     var displayName: String,
     var mobileNo: String,
-) : Parcelable {
+) {
     constructor() : this("", "", "", 0L, "", "")
 }

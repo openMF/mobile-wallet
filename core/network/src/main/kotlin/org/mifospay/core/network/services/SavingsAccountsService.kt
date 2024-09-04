@@ -23,11 +23,6 @@ import retrofit2.http.Query
 import rx.Observable
 
 interface SavingsAccountsService {
-    @GET(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}")
-    fun getSavingsWithAssociations(
-        @Path("accountId") accountId: Long,
-        @Query("associations") associationType: String,
-    ): Observable<SavingsWithAssociations>
 
     @GET(ApiEndPoints.SAVINGS_ACCOUNTS)
     fun getSavingsAccounts(

@@ -9,12 +9,11 @@
  */
 package com.mifospay.core.model.entity.accounts.savings
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mifospay.core.model.entity.client.DepositType
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class SavingsWithAssociations(
 
     @SerializedName("id")
@@ -86,7 +85,7 @@ data class SavingsWithAssociations(
     @SerializedName("transactions")
     var transactions: List<Transactions> = ArrayList(),
 
-) : Parcelable {
+) {
     constructor() : this(
         0L,
         null,
