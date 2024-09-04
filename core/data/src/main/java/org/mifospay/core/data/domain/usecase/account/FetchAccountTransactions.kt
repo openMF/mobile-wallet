@@ -31,7 +31,7 @@ class FetchAccountTransactions @Inject constructor(
             try {
                 val api = fineractRepository.getSelfAccountTransactions(requestValues.accountId)
                 withContext(Dispatchers.Main) {
-                    Log.d("FetchTransactions@@@@","$api")
+                    Log.d("FetchTransactions@@@@", "$api")
                     useCaseCallback.onSuccess(
                         ResponseValue(
                             transactionMapper.transformTransactionList(api),
@@ -40,7 +40,7 @@ class FetchAccountTransactions @Inject constructor(
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Log.d("FetchTransactions@@@@","${e.message}")
+                    Log.d("FetchTransactions@@@@", "${e.message}")
                     useCaseCallback.onError(
                         Constants.ERROR_FETCHING_REMOTE_ACCOUNT_TRANSACTIONS,
                     )

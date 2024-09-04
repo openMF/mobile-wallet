@@ -30,11 +30,11 @@ class BlockUnblockCommand @Inject constructor(
                     requestValues.command,
                 )
                 withContext(Dispatchers.Main) {
-                    Log.d("BlockUnblockCommand@@@@","$res")
+                    Log.d("BlockUnblockCommand@@@@", "$res")
                     useCaseCallback.onSuccess(ResponseValue)
                 }
             } catch (e: Exception) {
-                Log.d("BlockUnblockCommand@@@@","${e.message}")
+                Log.d("BlockUnblockCommand@@@@", "${e.message}")
                 useCaseCallback.onError(
                     "Error " + requestValues.command + "ing account",
                 )

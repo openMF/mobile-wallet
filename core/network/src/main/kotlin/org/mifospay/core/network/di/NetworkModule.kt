@@ -116,7 +116,7 @@ class NetworkModule {
         @Named("FineractThirdPartyTransferService") thirdPartyTransferService: ThirdPartyTransferService,
         standingInstructionService: StandingInstructionService,
         notificationService: NotificationService,
-        ktorSavingsAccountService: KtorSavingsAccountService
+        ktorSavingsAccountService: KtorSavingsAccountService,
     ): FineractApiManager {
         return FineractApiManager(
             authenticationService,
@@ -135,7 +135,7 @@ class NetworkModule {
             thirdPartyTransferService,
             standingInstructionService,
             notificationService,
-            ktorSavingsAccountService
+            ktorSavingsAccountService,
         )
     }
 
@@ -157,7 +157,7 @@ class NetworkModule {
             registrationService,
             beneficiaryService,
             thirdPartyTransferService,
-            ktorSavingsAccountService
+            ktorSavingsAccountService,
         )
     }
 
@@ -195,7 +195,7 @@ class NetworkModule {
     @Provides
     @Singleton
     fun providesKtorSavingsAccountService(
-        client: HttpClient
+        client: HttpClient,
     ): KtorSavingsAccountService {
         return KtorSavingsAccountService(client)
     }

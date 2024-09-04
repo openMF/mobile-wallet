@@ -34,13 +34,13 @@ class FetchAccountTransaction @Inject constructor(
                     requestValues.transactionId,
                 )
                 withContext(Dispatchers.Main) {
-                    Log.d("FetchTransactions@@@@","$res")
+                    Log.d("FetchTransactions@@@@", "$res")
                     useCaseCallback.onSuccess(
                         ResponseValue(transactionMapper.transformInvoice(res)),
                     )
                 }
             } catch (e: Exception) {
-                Log.d("FetchTransactions@@@@","${e.message}")
+                Log.d("FetchTransactions@@@@", "${e.message}")
                 withContext(Dispatchers.Main) {
                     if (e.message == "HTTP 401 Unauthorized") {
                         useCaseCallback.onError(Constants.UNAUTHORIZED_ERROR)

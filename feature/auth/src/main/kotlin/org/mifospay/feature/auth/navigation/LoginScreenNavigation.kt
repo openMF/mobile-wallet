@@ -23,7 +23,7 @@ fun NavGraphBuilder.loginScreen(
     composable(route = LOGIN_ROUTE) {
         LoginScreen(
             navigateToPasscodeScreen = onNavigateToPasscodeScreen,
-            navigateToSignupScreen = onNavigateToSignupScreen
+            navigateToSignupScreen = onNavigateToSignupScreen,
         )
     }
 }

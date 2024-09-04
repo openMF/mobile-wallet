@@ -9,10 +9,8 @@
  */
 package com.mifospay.core.model.entity.client
 
-import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import com.mifospay.core.model.entity.Timeline
-import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
 @Serializable

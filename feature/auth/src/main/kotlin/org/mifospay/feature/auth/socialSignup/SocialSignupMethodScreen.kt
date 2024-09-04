@@ -72,14 +72,14 @@ const val TAG = "Social Login"
 // Keeping until we fix sign up
 @Composable
 internal fun SocialSignupMethodContentScreen(
-    navigateToSignupScreen: () -> Unit = {},
     modifier: Modifier = Modifier,
+    navigateToSignupScreen: () -> Unit = {},
     onDismissSignUp: () -> Unit = {},
 ) {
     SocialSignupMethodScreen(
         modifier = modifier,
         onDismissSignUp = onDismissSignUp,
-        navigateToSignupScreen = navigateToSignupScreen
+        navigateToSignupScreen = navigateToSignupScreen,
     )
 }
 
@@ -188,7 +188,7 @@ private fun SocialSignupMethodScreen(
                     mifosSavingProductId = MIFOS_CONSUMER_SAVINGS_PRODUCT_ID
                     signUp(checkedGoogleAccount)
                 },
-                navigateToSignupScreen=navigateToSignupScreen
+                navigateToSignupScreen = navigateToSignupScreen,
             )
         },
         onDismiss = {
@@ -224,9 +224,9 @@ private fun SignupMethodContentScreen(
             MifosOutlinedButton(
                 modifier = Modifier.padding(top = 48.dp),
                 onClick = {
-                    if(checkedGoogleAccountState){
+                    if (checkedGoogleAccountState) {
                         onSignUpAsMerchant.invoke(checkedGoogleAccountState)
-                    }else{
+                    } else {
                         navigateToSignupScreen.invoke()
                     }
                 },
@@ -269,9 +269,9 @@ private fun SignupMethodContentScreen(
             MifosOutlinedButton(
                 modifier = Modifier.padding(top = 24.dp),
                 onClick = {
-                    if(checkedGoogleAccountState){
+                    if (checkedGoogleAccountState) {
                         onSignupAsCustomer.invoke(checkedGoogleAccountState)
-                    }else{
+                    } else {
                         navigateToSignupScreen.invoke()
                     }
                 },
