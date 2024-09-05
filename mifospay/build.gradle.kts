@@ -43,9 +43,9 @@ android {
     signingConfigs {
         create("release") {
             storeFile = file(System.getenv("KEYSTORE_PATH") ?: "release_keystore.keystore")
-            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: ""
-            keyAlias = System.getenv("KEYSTORE_ALIAS") ?: ""
-            keyPassword = System.getenv("KEYSTORE_ALIAS_PASSWORD") ?: ""
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "Mifospay"
+            keyAlias = System.getenv("KEYSTORE_ALIAS") ?: "key0"
+            keyPassword = System.getenv("KEYSTORE_ALIAS_PASSWORD") ?: "Mifos@123"
             enableV1Signing = true
             enableV2Signing = true
         }
