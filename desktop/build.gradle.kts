@@ -15,7 +15,6 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
 }
 
-
 kotlin {
     jvm {
         withJava()
