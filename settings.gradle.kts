@@ -19,6 +19,16 @@ dependencyResolutionManagement {
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version("0.8.0")
+    id("org.ajoberstar.reckon.settings") version("0.18.3")
+}
+
+extensions.configure<org.ajoberstar.reckon.gradle.ReckonExtension> {
+    setDefaultInferredScope("patch")
+    stages("beta", "rc", "final")
+    setScopeCalc { java.util.Optional.of(org.ajoberstar.reckon.core.Scope.PATCH) }
+    setScopeCalc(calcScopeFromProp().or(calcScopeFromCommitMessages()))
+    setStageCalc(calcStageFromProp())
+    setTagWriter { it.toString() }
 }
 
 rootProject.name = "mobile-wallet"
