@@ -37,16 +37,19 @@ run_spotless_checks() {
 # Function to run ktlint checks
 run_dependency_guard() {
     printf "\n🚀 Brace yourself! We're about to generate dependency guard baseline!"
-    ./gradlew dependencyGuardBaseline
+    ./gradlew dependencyGuardBaseline > /tmp/dependency-result
     KT_EXIT_CODE=$?
 
     if [ ${KT_EXIT_CODE} -ne 0 ]; then
+        cat /tmp/dependency-result
+        rm /tmp/dependency-result
         printf "\n*********************************************************************************"
         echo "     💥 Oh no! Something went wrong! 💥"
         echo "     💡 Unable to generate dependency baseline. 🛠️"
         printf "*********************************************************************************\n"
         exit ${KT_EXIT_CODE}
     else
+        rm /tmp/dependency-result
         echo "🎉 Bravo! Dependency baseline has been generated successfully! Keep rocking that clean code! 🚀💫"
     fi
 }
@@ -74,16 +77,19 @@ run_detekt_checks() {
 # Function to run Version Catalog checks
 run_version_catalog_checks() {
     echo "\n🚀 Version catalog linter is now analyzing your catalog for potential issues!"
-    ./gradlew formatVersionCatalog
+    ./gradlew formatVersionCatalog > /tmp/catalog-result
     DETEKT_EXIT_CODE=$?
 
     if [ ${DETEKT_EXIT_CODE} -ne 0 ]; then
+        cat /tmp/catalog-result
+        rm /tmp/catalog-result
         echo "\n*********************************************************************************"
         echo "     💥 Oh no! Version Catalog found issues in the code! Time to fix those issues! 💥"
         echo "     💡 Tip: Review the Version Catalog logs to resolve these issues. 🛠️"
         echo "*********************************************************************************"
         exit ${DETEKT_EXIT_CODE}
     else
+        rm /tmp/catalog-result
         echo "🎉 Fantastic work! Your Version catalog has been formatted successfully 🚀🌟"
     fi
 }
