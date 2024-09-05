@@ -10,6 +10,7 @@
 package org.mifospay.shared.di
 
 import org.koin.core.module.Module
+import org.koin.dsl.module
 
 actual val platformModule: Module
-    get() = TODO("Not yet implemented")
+    get() = module { single {} }
