@@ -55,3 +55,14 @@ app/manifest-merger-release-report.txt
 
 # Exclude Google services from prod flavour
 mifospay/src/prod/google-services.json
+
+#*.keystore
+
+version.txt
+
+firebaseAppDistributionServiceCredentialsFile.json
+playStorePublishServiceCredentialsFile.json
+
+# Ruby stuff we don't care about
+.bundle/
+vendor/

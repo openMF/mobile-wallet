@@ -28,7 +28,9 @@ run_spotless_checks() {
         echo "      💡 Tip: Check the reported issues and fix formatting errors. 🛠️"
         echo "*********************************************************************************"
         echo "🚀 Attempting to apply Spotless formatting fixes..."
-        ./gradlew spotlessApply --daemon
+        ./gradlew spotlessApply --daemon > /tmp/spotless-result
+        rm /tmp/spotless-result
+        echo "🎉 Stellar job! Your code is pristine and has passed Spotless's formatting checks without a hitch! Keep shining bright! ✨🚀"
     else
         rm /tmp/spotless-result
         echo "🎉 Stellar job! Your code is pristine and has passed Spotless's formatting checks without a hitch! Keep shining bright! ✨🚀"
@@ -58,36 +60,46 @@ run_detekt_checks() {
 # Function to run ktlint checks
 run_dependency_guard() {
     printf "\n🚀 Brace yourself! We're about to generate dependency guard baseline!"
-    ./gradlew dependencyGuard
+    ./gradlew dependencyGuard > /tmp/dependency-result
     KT_EXIT_CODE=$?
 
     if [ ${KT_EXIT_CODE} -ne 0 ]; then
+        cat /tmp/dependency-result
+        rm /tmp/dependency-result
         printf "\n*********************************************************************************"
         echo "     💥 Oh no! Something went wrong! 💥"
         echo "     💡 Unable to generate dependency baseline. 🛠️"
         printf "*********************************************************************************\n"
         echo "🚀 Attempting to generate dependency baseline again..."
-        ./gradlew dependencyGuardBaseline
-    else
+        ./gradlew dependencyGuardBaseline > /tmp/dependency-result
+        rm /tmp/dependency-result
         echo "🎉 Bravo! Dependency baseline has been generated successfully! Keep rocking that clean code! 🚀💫"
+    else
+        rm /tmp/dependency-result
+        echo "🎉 Bravo! Dependency baseline has been checked successfully! Keep rocking that clean code! 🚀💫"
     fi
 }
 
 # Function to run Version Catalog checks
 run_version_catalog_checks() {
     echo "\n🚀 Version catalog linter is now analyzing your catalog for potential issues!"
-    ./gradlew checkVersionCatalog
+    ./gradlew checkVersionCatalog > /tmp/catalog-result
     DETEKT_EXIT_CODE=$?
 
     if [ ${DETEKT_EXIT_CODE} -ne 0 ]; then
+        cat /tmp/catalog-result
+        rm /tmp/catalog-result
         echo "\n*********************************************************************************"
         echo "     💥 Oh no! Version Catalog found issues in the code! Time to fix those issues! 💥"
         echo "     💡 Tip: Review the Version Catalog logs to resolve these issues. 🛠️"
         echo "*********************************************************************************"
         echo "🚀 Attempting to format the Version Catalog again..."
-        ./gradlew formatVersionCatalog
-    else
+        ./gradlew formatVersionCatalog > /tmp/catalog-result
+        rm /tmp/catalog-result
         echo "🎉 Fantastic work! Your Version catalog has been formatted successfully 🚀🌟"
+    else
+        rm /tmp/catalog-result
+        echo "🎉 Fantastic work! Your Version catalog has been formatted properly 🚀🌟"
     fi
 }
 

@@ -9,7 +9,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:728434912738:android:49282a75468730891a1dbb",
         "android_client_info": {
-          "package_name": "org.mifos.pisp.android"
+          "package_name": "org.mifospay"
         }
       },
       "oauth_client": [
@@ -38,7 +38,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:728434912738:android:ef7156e455c6a1a41a1dbb",
         "android_client_info": {
-          "package_name": "org.mifos.pisp.android.debug"
+          "package_name": "org.mifospay.demo.debug"
         }
       },
       "oauth_client": [
@@ -67,7 +67,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:728434912738:android:0490c291986f0a691a1dbb",
         "android_client_info": {
-          "package_name": "org.mifospay"
+          "package_name": "org.mifospay.debug"
         }
       },
       "oauth_client": [

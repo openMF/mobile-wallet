@@ -9,6 +9,16 @@
  */
 import org.mifospay.MifosBuildType
 
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
+
 plugins {
     alias(libs.plugins.mifospay.android.application)
     alias(libs.plugins.mifospay.android.application.compose)
@@ -21,29 +31,39 @@ plugins {
 
 android {
     namespace = "org.mifospay"
+
     defaultConfig {
         applicationId = "org.mifospay"
-        versionCode = 1
-        versionName = "1.0"
+        versionName = project.version.toString()
+        versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file(System.getenv("KEYSTORE_PATH") ?: "release_keystore.keystore")
+            storePassword = System.getenv("KEYSTORE_PASSWORD") ?: "Mifospay"
+            keyAlias = System.getenv("KEYSTORE_ALIAS") ?: "key0"
+            keyPassword = System.getenv("KEYSTORE_ALIAS_PASSWORD") ?: "Mifos@123"
+            enableV1Signing = true
+            enableV2Signing = true
+        }
+    }
+
     buildTypes {
         debug {
-            // applicationIdSuffix = MifosBuildType.DEBUG.applicationIdSuffix
+            applicationIdSuffix = MifosBuildType.DEBUG.applicationIdSuffix
         }
+
         release {
             isMinifyEnabled = true
-            // applicationIdSuffix = MifosBuildType.RELEASE.applicationIdSuffix
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-
-            // To publish on the Play store a private signing key is required, but to allow anyone
-            // who clones the code to sign and run the release variant, use the debug signing key.
-            // TODO: Abstract the signing configuration to a separate file to avoid hardcoding this.
-            signingConfig = signingConfigs.getByName("debug")
+            applicationIdSuffix = MifosBuildType.RELEASE.applicationIdSuffix
+            isShrinkResources = true
+            isDebuggable = false
+            isJniDebuggable = false
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
@@ -57,6 +77,7 @@ android {
             excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true

@@ -35,3 +35,10 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.wire) apply false
 }
+
+tasks.register("versionFile").configure {
+    group = "publishing"
+    doLast {
+        File(projectDir, "version.txt").writeText(project.version.toString())
+    }
+}
