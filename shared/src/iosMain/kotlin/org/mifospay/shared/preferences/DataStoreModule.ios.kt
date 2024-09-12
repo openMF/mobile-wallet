@@ -10,9 +10,13 @@
 package org.mifospay.shared.preferences
 
 import androidx.datastore.core.DataStore
+import kotlinx.cinterop.ExperimentalForeignApi
 import okio.FileSystem
 import okio.Path.Companion.toPath
 import org.mifospay.shared.commonMain.proto.UserPreferences
+import platform.Foundation.NSDocumentDirectory
+import platform.Foundation.NSFileManager
+import platform.Foundation.NSUserDomainMask
 
 actual fun getDataStore(): DataStore<UserPreferences> {
     return createDataStore(
@@ -21,6 +25,7 @@ actual fun getDataStore(): DataStore<UserPreferences> {
     )
 }
 
+@OptIn(ExperimentalForeignApi::class)
 private fun documentDirectory(): String {
     val documentDirectory = NSFileManager.defaultManager.URLForDirectory(
         directory = NSDocumentDirectory,

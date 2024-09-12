@@ -65,17 +65,19 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
-
             api(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
-
             implementation(libs.datastore)
+            implementation(project(":libs:cmp-mifos-passcode"))
+            api(project(":libs:cmp-mifos-passcode"))
         }
 
+        iosMain.dependencies {
+            api(project(":libs:cmp-mifos-passcode"))
+        }
         val desktopMain by getting {
             dependencies {
                 // Desktop specific dependencies

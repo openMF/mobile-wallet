@@ -12,10 +12,15 @@ package org.mifospay.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
-import org.mifos.library.passcode.PASSCODE_SCREEN
-import org.mifos.library.passcode.passcodeRoute
+import com.mifos.passcode.PASSCODE_SCREEN
+import com.mifos.passcode.passcodeRoute
+import com.mifos.passcode.utility.BioMetricUtil
 
-internal fun NavGraphBuilder.passcodeNavGraph(navController: NavController) {
+internal fun NavGraphBuilder.passcodeNavGraph(
+    navController: NavController,
+    bioMetricUtil: BioMetricUtil,
+    enableBiometric: Boolean
+) {
     navigation(
         route = MifosNavGraph.PASSCODE_GRAPH,
         startDestination = PASSCODE_SCREEN,
@@ -37,6 +42,12 @@ internal fun NavGraphBuilder.passcodeNavGraph(navController: NavController) {
                 navController.popBackStack()
                 navController.navigate(MifosNavGraph.MAIN_GRAPH)
             },
+            onBiometricAuthSucess = {
+                navController.popBackStack()
+                navController.navigate(MifosNavGraph.MAIN_GRAPH)
+            },
+            bioMetricUtil = bioMetricUtil,
+            enableBiometric = enableBiometric,
         )
     }
 }

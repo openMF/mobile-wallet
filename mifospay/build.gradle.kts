@@ -116,7 +116,7 @@ dependencies {
     implementation(projects.feature.standingInstruction)
     implementation(projects.feature.search)
 
-    implementation(projects.libs.mifosPasscode)
+    implementation(projects.libs.cmpMifosPasscode)
     implementation(projects.libs.material3Navigation)
 
     // Compose

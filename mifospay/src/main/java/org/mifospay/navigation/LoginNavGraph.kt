@@ -12,7 +12,7 @@ package org.mifospay.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
-import org.mifos.library.passcode.navigateToPasscodeScreen
+import com.mifos.passcode.navigateToPasscodeScreen
 import org.mifospay.common.Constants
 import org.mifospay.feature.auth.navigation.LOGIN_ROUTE
 import org.mifospay.feature.auth.navigation.loginScreen

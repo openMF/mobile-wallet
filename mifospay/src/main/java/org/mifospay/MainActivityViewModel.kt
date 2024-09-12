@@ -18,14 +18,13 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.mifos.library.passcode.data.PasscodeManager
 import org.mifospay.core.data.repository.auth.UserDataRepository
 import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository,
-    private val passcodeManager: PasscodeManager,
+//    private val passcodeManager: PasscodeManager,
 ) : ViewModel() {
 
     val uiState: StateFlow<MainActivityUiState> = userDataRepository.userData.map {
@@ -39,7 +38,7 @@ class MainActivityViewModel @Inject constructor(
     fun logOut() {
         viewModelScope.launch {
             userDataRepository.logOut()
-            passcodeManager.clearPasscode()
+//            passcodeManager.clearPasscode()
         }
     }
 }

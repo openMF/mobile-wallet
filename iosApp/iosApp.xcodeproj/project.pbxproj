@@ -11,6 +11,9 @@
 		189117BF2C6CC76200DABAA8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 189117BE2C6CC76200DABAA8 /* ContentView.swift */; };
 		189117C12C6CC76400DABAA8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 189117C02C6CC76400DABAA8 /* Assets.xcassets */; };
 		189117C42C6CC76400DABAA8 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 189117C32C6CC76400DABAA8 /* Preview Assets.xcassets */; };
+		8E096B732C90B3B600C3BEA6 /* BiometricUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E096B722C90B3B600C3BEA6 /* BiometricUtil.swift */; };
+		8E096B752C90B3C100C3BEA6 /* CipherUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E096B742C90B3C100C3BEA6 /* CipherUtil.swift */; };
+		8EAA94DE2C92A681005081E9 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 8EAA94DD2C92A681005081E9 /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +22,9 @@
 		189117BE2C6CC76200DABAA8 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		189117C02C6CC76400DABAA8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		189117C32C6CC76400DABAA8 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		8E096B722C90B3B600C3BEA6 /* BiometricUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiometricUtil.swift; sourceTree = "<group>"; };
+		8E096B742C90B3C100C3BEA6 /* CipherUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CipherUtil.swift; sourceTree = "<group>"; };
+		8EAA94DD2C92A681005081E9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,7 +57,9 @@
 		189117BB2C6CC76200DABAA8 /* iosApp */ = {
 			isa = PBXGroup;
 			children = (
+				8E096B712C90B3A000C3BEA6 /* Biometric */,
 				189117BC2C6CC76200DABAA8 /* iosAppApp.swift */,
+				8EAA94DD2C92A681005081E9 /* Info.plist */,
 				189117BE2C6CC76200DABAA8 /* ContentView.swift */,
 				189117C02C6CC76400DABAA8 /* Assets.xcassets */,
 				189117C22C6CC76400DABAA8 /* Preview Content */,
@@ -65,6 +73,15 @@
 				189117C32C6CC76400DABAA8 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		8E096B712C90B3A000C3BEA6 /* Biometric */ = {
+			isa = PBXGroup;
+			children = (
+				8E096B722C90B3B600C3BEA6 /* BiometricUtil.swift */,
+				8E096B742C90B3C100C3BEA6 /* CipherUtil.swift */,
+			);
+			path = Biometric;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -128,6 +145,7 @@
 			files = (
 				189117C42C6CC76400DABAA8 /* Preview Assets.xcassets in Resources */,
 				189117C12C6CC76400DABAA8 /* Assets.xcassets in Resources */,
+				8EAA94DE2C92A681005081E9 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +176,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8E096B752C90B3C100C3BEA6 /* CipherUtil.swift in Sources */,
+				8E096B732C90B3B600C3BEA6 /* BiometricUtil.swift in Sources */,
 				189117BF2C6CC76200DABAA8 /* ContentView.swift in Sources */,
 				189117BD2C6CC76200DABAA8 /* iosAppApp.swift in Sources */,
 			);

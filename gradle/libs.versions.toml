@@ -1,4 +1,5 @@
 [versions]
+agp = "8.3.0"
 accompanistPagerVersion = "0.34.0"
 activityVersion = "1.9.1"
 androidDesugarJdkLibs = "2.0.4"
@@ -81,6 +82,10 @@ twitter-detekt-compose = "0.0.26"
 versionCatalogLinterVersion = "1.0.3"
 wire = "5.0.0"
 zxingVersion = "3.5.3"
+lifecycleViewmodelKtx = "2.8.1"
+navigationComposeVersion = "2.7.0-alpha07"
+multiplatformSettings = "1.0.0"
+biometricKtx = "1.1.0"
 
 [libraries]
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanistPagerVersion" }
@@ -198,6 +203,11 @@ squareup-retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", vers
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 twitter-detekt-compose = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "twitter-detekt-compose" }
 zxing = { group = "com.google.zxing", name = "core", version.ref = "zxingVersion" }
+navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationComposeVersion" }
+multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettings" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+androidx-biometric = { module = "androidx.biometric:biometric", version.ref = "biometricKtx" }
+androidx-lifecycle-viewmodel-ktx = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleViewmodelKtx" }
 
 [bundles]
 androidx-compose-ui-test = [

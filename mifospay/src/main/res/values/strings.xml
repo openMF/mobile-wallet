@@ -16,5 +16,7 @@
     <string name="profile">Profile</string>
     <string name="not_connected">⚠️ You aren’t connected to the internet</string>
     <string name="faq">FAQ</string>
-
+    <string name="fingerprint_dialog_title">Login</string>
+    <string name="biometric_auth_title">Unlock Mifos</string>
+    <string name="biometric_auth_description">Confirm your screen lock pattern, PIN, password, or fingerprint to unlock</string>
 </resources>
