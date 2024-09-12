@@ -10,7 +10,6 @@
 package org.mifospay
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -21,12 +20,18 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
 import androidx.navigation.compose.rememberNavController
+import com.mifos.passcode.BiometricUtilAndroidImpl
+import com.mifos.passcode.CipherUtilAndroidImpl
+import com.mifos.passcode.data.PasscodeRepository
+import com.mifos.passcode.data.PasscodeRepositoryImpl
+import com.mifos.passcode.utility.PreferenceManager
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
@@ -47,7 +52,7 @@ import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
 
     /**
      * Lazily inject [JankStats], which is used to track jank throughout the app.
@@ -65,6 +70,12 @@ class MainActivity : ComponentActivity() {
     lateinit var analyticsHelper: AnalyticsHelper
 
     private val viewModel: MainActivityViewModel by viewModels()
+
+    private val bioMetricUtil by lazy {
+        BiometricUtilAndroidImpl(this, CipherUtilAndroidImpl())
+    }
+
+    private lateinit var passcodeRepository: PasscodeRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -87,6 +98,13 @@ class MainActivity : ComponentActivity() {
                 is Success -> false
             }
         }
+
+        bioMetricUtil.preparePrompt(
+            title = getString(R.string.biometric_auth_title),
+            subtitle = "",
+            description = getString(R.string.biometric_auth_description),
+        )
+        passcodeRepository = PasscodeRepositoryImpl(PreferenceManager())
 
         enableEdgeToEdge()
 
@@ -128,6 +146,8 @@ class MainActivity : ComponentActivity() {
                                 }
                             }
                         },
+                        bioMetricUtil = bioMetricUtil,
+                        enableBiometric = true,
                     )
                 }
             }

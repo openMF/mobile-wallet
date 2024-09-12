@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.mifos.passcode.utility.BioMetricUtil
 import org.mifospay.ui.MifosApp
 import org.mifospay.ui.MifosAppState
 
@@ -22,6 +23,8 @@ internal fun RootNavGraph(
     appState: MifosAppState,
     navHostController: NavHostController,
     startDestination: String,
+    bioMetricUtil: BioMetricUtil,
+    enableBiometric: Boolean,
     onClickLogout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -33,7 +36,11 @@ internal fun RootNavGraph(
     ) {
         loginNavGraph(navHostController)
 
-        passcodeNavGraph(navHostController)
+        passcodeNavGraph(
+            navHostController,
+            bioMetricUtil = bioMetricUtil,
+            enableBiometric = enableBiometric,
+        )
 
         composable(MifosNavGraph.MAIN_GRAPH) {
             MifosApp(

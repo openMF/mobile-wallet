@@ -78,6 +78,8 @@ include(":libs:country-code-picker")
 include(":libs:pullrefresh")
 include(":libs:material3-navigation")
 include(":libs:mifos-passcode")
+include(":libs:cmp-mifos-passcode")
 
 include(":shared")
 include(":desktop")
+
