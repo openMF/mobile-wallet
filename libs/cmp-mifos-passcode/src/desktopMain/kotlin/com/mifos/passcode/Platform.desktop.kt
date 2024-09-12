@@ -1,4 +1,8 @@
 package com.mifos.passcode
 
-actual fun getPlatform(): Platform {
+class DesktopPlatform: com.mifos.passcode.Platform {
+    //    override val name: String = UIDevice.currentDevice.systemName() + " " + UIDevice.currentDevice.systemVersion
+    override val name: String = "Desktop"
 }
+
+actual fun getPlatform(): Platform = DesktopPlatform()

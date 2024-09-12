@@ -37,7 +37,7 @@ fun PasscodeToolbar(activeStep: Step, hasPasscode: Boolean) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(top = 8.dp),
+            .padding(top = 40.dp),
         horizontalArrangement = Arrangement.Center
     ) {
         if (!hasPasscode) {

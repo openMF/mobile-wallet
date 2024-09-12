@@ -19,7 +19,7 @@ import com.mifos.passcode.utility.BioMetricUtil
 internal fun NavGraphBuilder.passcodeNavGraph(
     navController: NavController,
     bioMetricUtil: BioMetricUtil,
-    enableBiometric: Boolean
+    enableBiometric: Boolean,
 ) {
     navigation(
         route = MifosNavGraph.PASSCODE_GRAPH,

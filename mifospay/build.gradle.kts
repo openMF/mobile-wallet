@@ -7,6 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
+
 import org.mifospay.MifosBuildType
 
 /*

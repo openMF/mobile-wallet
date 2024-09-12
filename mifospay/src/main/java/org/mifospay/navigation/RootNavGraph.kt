@@ -26,7 +26,7 @@ internal fun RootNavGraph(
     bioMetricUtil: BioMetricUtil,
     enableBiometric: Boolean,
     onClickLogout: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     NavHost(
         navController = navHostController,
