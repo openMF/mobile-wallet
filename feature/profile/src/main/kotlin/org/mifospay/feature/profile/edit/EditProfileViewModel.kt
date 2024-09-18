@@ -13,7 +13,6 @@ import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.user.UpdateUserEntityEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCase

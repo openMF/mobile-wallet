@@ -41,7 +41,7 @@ fun ProfileImage(
                 .size(150.dp)
                 .border(
                     width = 4.dp,
-                    color = MifosBlue ,
+                    color = MifosBlue,
                     shape = CircleShape,
                 ),
         ) {
@@ -53,5 +53,3 @@ fun ProfileImage(
         }
     }
 }
-
-

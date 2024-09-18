@@ -51,7 +51,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -195,10 +194,10 @@ fun MifosTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    enabled: Boolean = true,
     modifier: Modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 20.dp),
+    enabled: Boolean = true,
     readOnly: Boolean = false,
     textStyle: TextStyle = LocalTextStyle.current,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -254,17 +253,17 @@ fun MifosTextField(
 }
 
 @Composable
-@Preview (showSystemUi = true)
+@Preview(showSystemUi = true)
 fun MfTextFieldPreview(modifier: Modifier = Modifier) {
     MifosTheme {
         Box(
-            modifier = Modifier.background(color = Color.White),
+            modifier = modifier.background(color = Color.White),
         ) {
-           MifosTextField(
-               value = "Text Field Value",
-               onValueChange = {},
-               label = "Text Field"
-           )
+            MifosTextField(
+                value = "Text Field Value",
+                onValueChange = {},
+                label = "Text Field",
+            )
         }
     }
 }

@@ -9,6 +9,7 @@
  */
 package org.mifospay.feature.profile
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,9 +29,15 @@ import androidx.compose.ui.unit.dp
 import org.mifospay.core.designsystem.theme.MifosBlue
 
 @Composable
-fun ProfileDetailsCard(name : String, email : String, vpa : String, mobile : String) {
+fun ProfileDetailsCard(
+    name: String,
+    email: String,
+    vpa: String,
+    mobile: String,
+    modifier: Modifier = Modifier,
+) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(20.dp),
         elevation = CardDefaults.cardElevation(
@@ -38,37 +45,42 @@ fun ProfileDetailsCard(name : String, email : String, vpa : String, mobile : Str
         ),
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White
+            containerColor = Color.White,
         ),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            ProfileItem(label = stringResource(id = R.string.feature_profile_username), value = name,)
-            Spacer(modifier = Modifier.height(10.dp))
+            ProfileItem(
+                label = stringResource(id = R.string.feature_profile_username),
+                value = name,
+            )
             ProfileItem(label = stringResource(id = R.string.feature_profile_email), value = email)
-            Spacer(modifier = Modifier.height(10.dp))
             ProfileItem(label = stringResource(id = R.string.feature_profile_vpa), value = vpa)
-            Spacer(modifier = Modifier.height(10.dp))
-            ProfileItem(label = stringResource(id = R.string.feature_profile_mobile), value = mobile)
+            ProfileItem(
+                label = stringResource(id = R.string.feature_profile_mobile),
+                value = mobile,
+            )
         }
     }
 }
 
 @Composable
-fun ProfileItem(label: String, value: String) {
+fun ProfileItem(
+    label: String,
+    value: String,
+    modifier: Modifier = Modifier,
+) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
     ) {
-        Text(text = label, color = MifosBlue,)
+        Text(text = label, color = MifosBlue)
         Spacer(modifier = Modifier.height(10.dp))
         Text(text = value, color = MaterialTheme.colorScheme.onSurface)
         Spacer(modifier = Modifier.height(4.dp))
         HorizontalDivider(thickness = 0.2.dp)
     }
 }
-
-
-

@@ -20,7 +20,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import org.mifospay.core.designsystem.component.MifosTextUserImage
 
 @Composable
 fun MifosUserImage(

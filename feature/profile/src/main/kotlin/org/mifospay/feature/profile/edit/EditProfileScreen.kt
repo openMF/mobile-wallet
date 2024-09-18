@@ -66,9 +66,9 @@ import org.mifospay.core.designsystem.component.PermissionBox
 import org.mifospay.core.designsystem.icon.MifosIcons.Camera
 import org.mifospay.core.designsystem.icon.MifosIcons.Delete
 import org.mifospay.core.designsystem.icon.MifosIcons.PhotoLibrary
+import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.historyItemTextStyle
-import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.feature.profile.R
 import java.io.File
@@ -112,17 +112,16 @@ fun EditProfileScreen(
     uri: Uri? = null,
 ) {
     var showDiscardChangesDialog by rememberSaveable { mutableStateOf(false) }
-    var snackBarhostState = remember { SnackbarHostState() }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Box(
-        modifier =
-        modifier
+        modifier = modifier
             .fillMaxSize(),
     ) {
         MifosScaffold(
             topBarTitle = R.string.feature_profile_edit_profile,
             backPress = { showDiscardChangesDialog = true },
-            snackbarHost = { SnackbarHost(hostState = snackBarhostState) },
+            snackbarHost = { SnackbarHost(snackbarHostState) },
             scaffoldContent = {
                 when (editProfileUiState) {
                     EditProfileUiState.Loading -> {
@@ -149,7 +148,6 @@ fun EditProfileScreen(
                             updateMobile = updateMobile,
                             onBackClick = onBackClick,
                             uri = uri,
-                            snackbarHostState = snackBarhostState,
                         )
                     }
                 }
@@ -184,7 +182,6 @@ private fun EditProfileScreenContent(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     uri: Uri? = null,
-    snackbarHostState: SnackbarHostState,
 ) {
     var username by rememberSaveable { mutableStateOf(initialUsername) }
     var mobile by rememberSaveable { mutableStateOf(initialMobile) }
@@ -257,8 +254,7 @@ private fun EditProfileScreenContent(
             .fillMaxSize(),
     ) {
         Column(
-            modifier =
-            Modifier
+            modifier = Modifier
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.surface)
                 .verticalScroll(rememberScrollState()),
@@ -317,16 +313,23 @@ private fun EditProfileScreenContent(
                     if (updateSuccess) {
                         // if user details is successfully saved then go back to Profile Activity
                         // same behaviour as onBackPress, hence reused the callback
-                        Toast.makeText(context, context.getString(R.string.feature_profile_updated_sucessfully), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.feature_profile_updated_sucessfully),
+                            Toast.LENGTH_SHORT,
+                        ).show()
                         onBackClick.invoke()
                     } else {
                         scope.launch {
-                            Toast.makeText(context, context.getString(R.string.feature_profile_failed_to_save_changes), Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                context,
+                                context.getString(R.string.feature_profile_failed_to_save_changes),
+                                Toast.LENGTH_SHORT,
+                            ).show()
                         }
                     }
                 },
             )
-
 
 //            Box(
 //                modifier =
@@ -389,7 +392,7 @@ private fun isDataSaveNecessary(
 ): Boolean = input == initialInput
 
 @Composable
-fun EditProfileBottomSheetContent(
+private fun EditProfileBottomSheetContent(
     onClickProfilePicture: () -> Unit,
     onChangeProfilePicture: () -> Unit,
     onRemoveProfilePicture: () -> Unit,
@@ -450,7 +453,7 @@ fun EditProfileBottomSheetContent(
 }
 
 @Composable
-private fun EditProfileSaveButton(
+internal fun EditProfileSaveButton(
     onClick: () -> Unit,
     buttonText: Int,
     modifier: Modifier = Modifier,

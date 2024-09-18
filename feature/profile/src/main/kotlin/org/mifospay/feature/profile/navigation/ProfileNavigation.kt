@@ -21,12 +21,8 @@ fun NavController.navigateToProfile(navOptions: NavOptions) = navigate(PROFILE_R
 
 fun NavGraphBuilder.profileScreen(
     onEditProfile: () -> Unit,
-    onSettings: () -> Unit,
 ) {
     composable(route = PROFILE_ROUTE) {
-        ProfileRoute(
-            onEditProfile = onEditProfile,
-            onSettings = onSettings,
-        )
+        ProfileRoute(onEditProfile = onEditProfile)
     }
 }

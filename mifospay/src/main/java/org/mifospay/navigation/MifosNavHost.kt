@@ -64,7 +64,6 @@ import org.mifospay.feature.search.searchScreen
 import org.mifospay.feature.send.money.SendScreenRoute
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
-import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.specific.transactions.navigation.navigateToSpecificTransactions
 import org.mifospay.feature.specific.transactions.navigation.specificTransactionsScreen
@@ -177,10 +176,8 @@ internal fun MifosNavHost(
                     navController.popBackStack()
                 },
             )
-            profileScreen(
-                onEditProfile = navController::navigateToEditProfile,
-                onSettings = navController::navigateToSettings,
-            )
+            profileScreen(onEditProfile = navController::navigateToEditProfile)
+
             sendMoneyScreen(
                 onBackClick = navController::popBackStack,
                 proceedWithMakeTransferFlow = navController::navigateToMakeTransferScreen,
