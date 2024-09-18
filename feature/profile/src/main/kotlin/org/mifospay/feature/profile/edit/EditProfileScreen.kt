@@ -24,28 +24,30 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -53,19 +55,20 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mifos.library.countrycodepicker.CountryCodePicker
+import kotlinx.coroutines.launch
 import org.mifospay.core.designsystem.component.MfLoadingWheel
-import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.PermissionBox
 import org.mifospay.core.designsystem.icon.MifosIcons.Camera
 import org.mifospay.core.designsystem.icon.MifosIcons.Delete
 import org.mifospay.core.designsystem.icon.MifosIcons.PhotoLibrary
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.historyItemTextStyle
+import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.feature.profile.R
 import java.io.File
@@ -109,6 +112,7 @@ fun EditProfileScreen(
     uri: Uri? = null,
 ) {
     var showDiscardChangesDialog by rememberSaveable { mutableStateOf(false) }
+    var snackBarhostState = remember { SnackbarHostState() }
 
     Box(
         modifier =
@@ -118,6 +122,7 @@ fun EditProfileScreen(
         MifosScaffold(
             topBarTitle = R.string.feature_profile_edit_profile,
             backPress = { showDiscardChangesDialog = true },
+            snackbarHost = { SnackbarHost(hostState = snackBarhostState) },
             scaffoldContent = {
                 when (editProfileUiState) {
                     EditProfileUiState.Loading -> {
@@ -144,6 +149,7 @@ fun EditProfileScreen(
                             updateMobile = updateMobile,
                             onBackClick = onBackClick,
                             uri = uri,
+                            snackbarHostState = snackBarhostState,
                         )
                     }
                 }
@@ -178,6 +184,7 @@ private fun EditProfileScreenContent(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
     uri: Uri? = null,
+    snackbarHostState: SnackbarHostState,
 ) {
     var username by rememberSaveable { mutableStateOf(initialUsername) }
     var mobile by rememberSaveable { mutableStateOf(initialMobile) }
@@ -186,6 +193,7 @@ private fun EditProfileScreenContent(
     var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     PermissionBox(
         requiredPermissions =
@@ -259,62 +267,46 @@ private fun EditProfileScreenContent(
                 imageUri = imageUri,
                 onCameraIconClick = { showBottomSheet = true },
             )
-            MfOutlinedTextField(
+
+            MifosTextField(
                 value = username,
-                label = stringResource(id = R.string.feature_profile_username),
                 onValueChange = { username = it },
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
+                label = stringResource(id = R.string.feature_profile_username),
             )
-            MfOutlinedTextField(
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            MifosTextField(
                 value = email,
-                label = stringResource(id = R.string.feature_profile_email),
                 onValueChange = { email = it },
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
+                label = stringResource(id = R.string.feature_profile_email),
             )
-            MfOutlinedTextField(
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            MifosTextField(
                 value = vpa,
-                label = stringResource(id = R.string.feature_profile_vpa),
                 onValueChange = { vpa = it },
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
+                label = stringResource(id = R.string.feature_profile_vpa),
             )
-            Box(
-                modifier =
-                Modifier
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            MifosTextField(
+                value = mobile,
+                onValueChange = { mobile = it },
+                label = stringResource(id = R.string.feature_profile_mobile),
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            MifosButton(
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
-            ) {
-                val keyboardController = LocalSoftwareKeyboardController.current
-                if (LocalInspectionMode.current) {
-                    Text("Placeholder for TogiCountryCodePicker")
-                } else {
-                    CountryCodePicker(
-                        modifier = Modifier,
-                        initialPhoneNumber = " ",
-                        autoDetectCode = true,
-                        shape = RoundedCornerShape(3.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-                        ),
-                        onValueChange = { (code, phone), isValid ->
-                            if (isValid) {
-                                mobile = code + phone
-                            }
-                        },
-                        label = { Text(stringResource(id = R.string.feature_profile_phone_number)) },
-                        keyboardActions = KeyboardActions { keyboardController?.hide() },
-                    )
-                }
-            }
-            EditProfileSaveButton(
+                    .padding(horizontal = 20.dp)
+                    .height(54.dp),
+                color = MifosBlue,
+                text = { Text(text = stringResource(id = R.string.feature_profile_save)) },
                 onClick = {
                     if (isDataSaveNecessary(email, initialEmail)) {
                         updateEmail(email)
@@ -325,18 +317,68 @@ private fun EditProfileScreenContent(
                     if (updateSuccess) {
                         // if user details is successfully saved then go back to Profile Activity
                         // same behaviour as onBackPress, hence reused the callback
+                        Toast.makeText(context, context.getString(R.string.feature_profile_updated_sucessfully), Toast.LENGTH_SHORT).show()
                         onBackClick.invoke()
                     } else {
-                        Toast
-                            .makeText(
-                                context,
-                                R.string.feature_profile_failed_to_save_changes,
-                                Toast.LENGTH_SHORT,
-                            ).show()
+                        scope.launch {
+                            Toast.makeText(context, context.getString(R.string.feature_profile_failed_to_save_changes), Toast.LENGTH_SHORT).show()
+                        }
                     }
                 },
-                buttonText = R.string.feature_profile_save,
             )
+
+
+//            Box(
+//                modifier =
+//                Modifier
+//                    .fillMaxWidth()
+//                    .padding(start = 16.dp, end = 16.dp),
+//            ) {
+//                val keyboardController = LocalSoftwareKeyboardController.current
+//                if (LocalInspectionMode.current) {
+//                    Text("Placeholder for TogiCountryCodePicker")
+//                } else {
+//                    CountryCodePicker(
+//                        modifier = Modifier,
+//                        initialPhoneNumber = " ",
+//                        autoDetectCode = true,
+//                        shape = RoundedCornerShape(3.dp),
+//                        colors = OutlinedTextFieldDefaults.colors(
+//                            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
+//                        ),
+//                        onValueChange = { (code, phone), isValid ->
+//                            if (isValid) {
+//                                mobile = code + phone
+//                            }
+//                        },
+//                        label = { Text(stringResource(id = R.string.feature_profile_phone_number)) },
+//                        keyboardActions = KeyboardActions { keyboardController?.hide() },
+//                    )
+//                }
+//            }
+//            EditProfileSaveButton(
+//                onClick = {
+//                    if (isDataSaveNecessary(email, initialEmail)) {
+//                        updateEmail(email)
+//                    }
+//                    if (isDataSaveNecessary(mobile, initialMobile)) {
+//                        updateMobile(mobile)
+//                    }
+//                    if (updateSuccess) {
+//                        // if user details is successfully saved then go back to Profile Activity
+//                        // same behaviour as onBackPress, hence reused the callback
+//                        onBackClick.invoke()
+//                    } else {
+//                        Toast
+//                            .makeText(
+//                                context,
+//                                R.string.feature_profile_failed_to_save_changes,
+//                                Toast.LENGTH_SHORT,
+//                            ).show()
+//                    }
+//                },
+//                buttonText = R.string.feature_profile_save,
+//            )
         }
     }
 }

@@ -19,18 +19,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import org.mifospay.core.designsystem.component.MifosTextUserImage
 
 @Composable
 fun MifosUserImage(
     modifier: Modifier = Modifier,
     bitmap: Bitmap? = null,
-    username: String? = null,
 ) {
     if (bitmap == null) {
-        MifosTextUserImage(
-            text = username?.firstOrNull()?.toString() ?: "J",
-            modifier = modifier,
+        Image(
+
+            modifier = modifier
+                .clip(CircleShape),
+            painter = painterResource(id = R.drawable.core_ui_ic_dp_placeholder),
+            contentDescription = "Empty profile Image",
+            contentScale = ContentScale.Crop,
         )
     } else {
         Image(

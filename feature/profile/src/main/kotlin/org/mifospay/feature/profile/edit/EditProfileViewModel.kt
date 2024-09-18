@@ -13,6 +13,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.user.UpdateUserEntityEmail
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCase
@@ -58,6 +59,7 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun updateEmail(email: String?) {
+        mEditProfileUiState.value = Loading
         mUseCaseHandler.execute(
             updateUserUseCase,
             UpdateUser.RequestValues(
@@ -74,6 +76,7 @@ class EditProfileViewModel @Inject constructor(
                 }
 
                 override fun onError(message: String) {
+                    fetchProfileDetails()
                     mUpdateSuccess.value = false
                 }
             },
@@ -81,6 +84,7 @@ class EditProfileViewModel @Inject constructor(
     }
 
     fun updateMobile(fullNumber: String?) {
+        mEditProfileUiState.value = Loading
         mUseCaseHandler.execute(
             updateClientUseCase,
             UpdateClient.RequestValues(
@@ -97,6 +101,7 @@ class EditProfileViewModel @Inject constructor(
                 }
 
                 override fun onError(message: String) {
+                    fetchProfileDetails()
                     mUpdateSuccess.value = false
                 }
             },

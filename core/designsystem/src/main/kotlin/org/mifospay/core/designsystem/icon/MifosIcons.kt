@@ -12,8 +12,11 @@ package org.mifospay.core.designsystem.icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
+import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowOutward
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.ChevronRight
@@ -24,6 +27,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.QrCode
@@ -33,6 +37,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Wallet
 import androidx.compose.material.icons.rounded.AccountBalance
@@ -54,8 +59,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
  */
 object MifosIcons {
     val ChevronRight: ImageVector = Icons.Filled.ChevronRight
+//    val Edit : ImageVector = Icons.Outlined.Edit
     val QrCode: ImageVector = Icons.Filled.QrCode
     val Close: ImageVector = Icons.Filled.Close
+    val AttachMoney : ImageVector = Icons.Filled.AttachMoney
     val VisibilityOff: ImageVector = Icons.Filled.VisibilityOff
     val Visibility: ImageVector = Icons.Filled.Visibility
     val Check: ImageVector = Icons.Default.Check
@@ -74,6 +81,7 @@ object MifosIcons {
     val Copy = Icons.Filled.ContentCopy
     val Share = Icons.Filled.Share
     val ArrowBack = Icons.AutoMirrored.Filled.ArrowBack
+    val ArrowBack2 = Icons.Filled.ArrowBackIos
     val Cancel = Icons.Outlined.Cancel
     val AccountCircle = Icons.Outlined.AccountCircle
     val SendRightTilted = Icons.Default.ArrowOutward
@@ -91,4 +99,5 @@ object MifosIcons {
     val FlashOff = Icons.Default.FlashOff
     val QrCode2 = Icons.Filled.QrCode2
     val Edit = Icons.Filled.Edit
+    val Edit2 = Icons.Outlined.Edit
 }

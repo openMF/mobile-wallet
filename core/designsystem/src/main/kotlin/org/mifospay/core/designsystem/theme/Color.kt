@@ -90,3 +90,5 @@ val primaryDarkBlue = Color(0xFF303F9F)
 val InitialAvatarBgColor = Color(0xFF9999CC)
 val submitButtonColor = Color(0xFF0000FF)
 val ElectricViolet = Color(0xFF6200EE)
+
+val MifosBlue = Color(0xFF0673BA)
