@@ -7,7 +7,6 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-import com.android.build.api.dsl.Packaging
 
 /*
  * Copyright 2024 Mifos Initiative
@@ -32,6 +31,7 @@ android {
     testOptions {
         unitTests {
             isReturnDefaultValues = true
+            isIncludeAndroidResources = true
         }
     }
 }

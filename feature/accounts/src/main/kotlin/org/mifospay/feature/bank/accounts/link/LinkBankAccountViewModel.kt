@@ -25,16 +25,12 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import org.koin.androidx.compose.koinViewModel
-import org.koin.core.error.NoDefinitionFoundException
-import org.koin.dsl.koinApplication
-import org.mifospay.core.data.repository.local.MifosLocalAssetRepository
-import org.mifospay.core.network.localAssets.MifosLocalAssetDataSource
+import org.mifospay.core.data.repository.local.LocalAssetRepository
 import org.mifospay.feature.bank.accounts.R
 import java.util.Random
 
 class LinkBankAccountViewModel (
-    localAssetRepository: MifosLocalAssetRepository
+    localAssetRepository: LocalAssetRepository
 ) : ViewModel() {
 
     private val searchQuery = MutableStateFlow("")

@@ -16,7 +16,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.network.localAssets.MifosLocalAssetDataSource
+import org.mifospay.core.network.localAssets.LocalAssetDataSource
 
 /**
  * Local implementation of the [LocalAssetRepository] that retrieves the countries, banks, cities
@@ -26,7 +26,7 @@ import org.mifospay.core.network.localAssets.MifosLocalAssetDataSource
 
 class MifosLocalAssetRepository (
     private val ioDispatcher: CoroutineDispatcher,
-    private val datasource: MifosLocalAssetDataSource,
+    private val datasource: LocalAssetDataSource,
 ) : LocalAssetRepository {
 
     override fun getCountries(): Flow<List<Country>> = flow {

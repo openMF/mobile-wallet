@@ -78,11 +78,12 @@ import org.mifospay.core.data.util.TimeZoneBroadcastMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.core.network.MifosDispatchers
+import org.mifospay.core.network.di.LocalModule
 import org.mifospay.core.network.localAssets.LocalAssetDataSource
-import org.mifospay.core.network.localAssets.LocalAssetManager
 import org.mifospay.core.network.localAssets.MifosLocalAssetDataSource
 
 val DataModule = module {
+    includes(LocalModule)
 
     single<UseCaseScheduler> { UseCaseThreadPoolScheduler() }
     single { UseCaseHandler(get()) }
@@ -190,7 +191,8 @@ val DataModule = module {
             ioDispatcher = get(
                 named(MifosDispatchers.IO.name),
             ),
-            networkJson = get()
+            networkJson = get(),
+            assets = get(),
         )
     }
 

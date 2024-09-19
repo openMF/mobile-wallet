@@ -10,14 +10,13 @@
 package org.mifospay.core.network.di
 
 
-
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import org.mifospay.core.network.localAssets.LocalAssetManager
 
 
-val LocalModule = module{
+val LocalModule = module {
     single {
-        LocalAssetManager {fileName-> androidContext().assets.open(fileName) }
+        LocalAssetManager { fileName -> androidContext().assets.open(fileName) }
     }
 }

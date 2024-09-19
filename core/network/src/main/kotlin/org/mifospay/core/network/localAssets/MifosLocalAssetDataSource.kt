@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.network.localAssets
 
-import android.annotation.SuppressLint
 import com.mifospay.core.model.City
 import com.mifospay.core.model.Country
 import com.mifospay.core.model.State
@@ -18,13 +17,11 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import org.mifospay.core.network.JvmLocalAssetManager
 
 class MifosLocalAssetDataSource (
     private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
-    @SuppressLint("VisibleForTests")
-    private val assets: LocalAssetManager = JvmLocalAssetManager,
+    private val assets: LocalAssetManager,
 ) : LocalAssetDataSource {
 
     @OptIn(ExperimentalSerializationApi::class)
