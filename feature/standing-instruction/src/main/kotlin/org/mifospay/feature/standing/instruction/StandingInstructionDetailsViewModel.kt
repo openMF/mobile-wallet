@@ -20,7 +20,7 @@ import org.mifospay.core.data.domain.usecase.standinginstruction.DeleteStandingI
 import org.mifospay.core.data.domain.usecase.standinginstruction.FetchStandingInstruction
 import org.mifospay.core.data.domain.usecase.standinginstruction.UpdateStandingInstruction
 
-class StandingInstructionDetailsViewModel (
+class StandingInstructionDetailsViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val fetchStandingInstruction: FetchStandingInstruction,
     private val updateStandingInstruction: UpdateStandingInstruction,

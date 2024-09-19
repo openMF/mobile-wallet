@@ -16,9 +16,8 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.feature.kyc.KYCLevel3UiState.Loading
 
-
 @Suppress("UnusedPrivateProperty")
-class KYCLevel3ViewModel (
+class KYCLevel3ViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
 ) : ViewModel() {

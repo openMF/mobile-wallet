@@ -20,7 +20,7 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.invoice.FetchInvoices
 import org.mifospay.core.datastore.PreferencesHelper
 
-class InvoicesViewModel (
+class InvoicesViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper,
     private val fetchInvoicesUseCase: FetchInvoices,

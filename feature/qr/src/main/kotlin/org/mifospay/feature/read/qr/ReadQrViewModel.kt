@@ -18,7 +18,7 @@ import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.feature.read.qr.utils.ScanQr
 
-class ReadQrViewModel (
+class ReadQrViewModel(
     private val useCaseHandler: UseCaseHandler,
     private val scanQrUseCase: ScanQr,
 ) : ViewModel() {

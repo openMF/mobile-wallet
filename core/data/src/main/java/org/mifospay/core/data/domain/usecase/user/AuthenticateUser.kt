@@ -19,7 +19,7 @@ import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
 
-class AuthenticateUser (
+class AuthenticateUser(
     private val apiRepository: FineractRepository,
 ) : UseCase<AuthenticateUser.RequestValues, AuthenticateUser.ResponseValue>() {
 

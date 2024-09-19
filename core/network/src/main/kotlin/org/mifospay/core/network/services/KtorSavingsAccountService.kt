@@ -25,7 +25,7 @@ import org.mifospay.core.network.ApiEndPoints.TRANSACTIONS
 import org.mifospay.core.network.BaseURL
 import org.mifospay.core.network.GenericResponse
 
-class KtorSavingsAccountService (
+class KtorSavingsAccountService(
     private val client: HttpClient,
 ) {
     suspend fun getSavingsWithAssociations(

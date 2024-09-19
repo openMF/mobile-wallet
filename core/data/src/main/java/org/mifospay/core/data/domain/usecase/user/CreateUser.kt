@@ -18,7 +18,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class CreateUser (private val apiRepository: FineractRepository) :
+class CreateUser(private val apiRepository: FineractRepository) :
     UseCase<CreateUser.RequestValues, CreateUser.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {
         apiRepository.createUser(requestValues.user)

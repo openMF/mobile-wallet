@@ -20,8 +20,7 @@ import org.mifospay.core.data.fineract.entity.mapper.TransactionMapper
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
 
-
-class FetchAccountTransaction (
+class FetchAccountTransaction(
     private val fineractRepository: FineractRepository,
     private val transactionMapper: TransactionMapper,
 ) :

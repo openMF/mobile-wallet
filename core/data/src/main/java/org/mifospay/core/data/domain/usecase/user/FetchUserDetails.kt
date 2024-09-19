@@ -16,7 +16,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class FetchUserDetails (
+class FetchUserDetails(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<FetchUserDetails.RequestValues, FetchUserDetails.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {

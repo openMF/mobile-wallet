@@ -17,7 +17,7 @@ import org.mifospay.core.analytics.AnalyticsHelper
 /**
  * Implementation of `AnalyticsHelper` which logs events to a Firebase backend.
  */
-internal class FirebaseAnalyticsHelper (
+internal class FirebaseAnalyticsHelper(
     private val firebaseAnalytics: FirebaseAnalytics,
 ) : AnalyticsHelper {
 

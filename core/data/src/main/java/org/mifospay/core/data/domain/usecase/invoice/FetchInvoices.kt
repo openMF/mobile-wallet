@@ -17,7 +17,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class FetchInvoices (
+class FetchInvoices(
     private val mFineractRepository: FineractRepository,
 ) :
     UseCase<FetchInvoices.RequestValues, FetchInvoices.ResponseValue>() {

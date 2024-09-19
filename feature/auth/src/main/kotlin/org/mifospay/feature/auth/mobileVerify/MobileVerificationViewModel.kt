@@ -24,7 +24,7 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.client.SearchClient
 
 @Suppress("UnusedParameter")
-class MobileVerificationViewModel (
+class MobileVerificationViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val searchClientUseCase: SearchClient,
 ) : ViewModel() {

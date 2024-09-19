@@ -9,14 +9,11 @@
  */
 package org.mifospay.core.data.di
 
-
-
 import androidx.lifecycle.SavedStateHandle
 import org.koin.dsl.module
 
-val LocalDataModule = module{
+val LocalDataModule = module {
     factory {
         SavedStateHandle()
     }
-
 }

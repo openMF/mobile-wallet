@@ -19,7 +19,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import org.mifospay.core.network.BaseURL
 
-class KtorAuthenticationService (
+class KtorAuthenticationService(
     private val client: HttpClient,
 ) {
 

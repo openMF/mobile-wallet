@@ -32,7 +32,7 @@ class MerchantViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mFetchMerchantsUseCase: FetchMerchants,
     private val mUseCaseFactory: UseCaseFactory,
-    private val mTaskLooper: TaskLooper
+    private val mTaskLooper: TaskLooper,
 
 ) : ViewModel() {
 

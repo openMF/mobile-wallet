@@ -14,7 +14,7 @@ import org.mifospay.core.data.domain.usecase.client.FetchClientDetails
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
 
-class UseCaseFactory (
+class UseCaseFactory(
     private val mFineractRepository: FineractRepository,
 ) {
     fun getUseCase(useCase: String): UseCase<*, *>? {

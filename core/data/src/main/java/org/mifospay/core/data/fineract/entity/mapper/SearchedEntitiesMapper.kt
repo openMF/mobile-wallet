@@ -12,7 +12,7 @@ package org.mifospay.core.data.fineract.entity.mapper
 import com.mifospay.core.model.domain.SearchResult
 import com.mifospay.core.model.entity.SearchedEntity
 
-class SearchedEntitiesMapper () {
+class SearchedEntitiesMapper {
     fun transformList(searchedEntities: List<SearchedEntity>?): List<SearchResult> {
         val searchResults: MutableList<SearchResult> = ArrayList()
 

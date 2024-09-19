@@ -16,7 +16,7 @@ import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransfer
 
-class TransactionDetailViewModel (
+class TransactionDetailViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mFetchAccountTransferUseCase: FetchAccountTransfer,
 ) : ViewModel() {

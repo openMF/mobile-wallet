@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.data.di
 
-
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -110,8 +109,6 @@ val DataModule = module {
         TransactionsHistory(
             mUseCaseHandler = get(),
             fetchAccountTransactionsUseCase = get(),
-            mTaskLooper = get(),
-            mUseCaseFactory = get(),
         )
     }
 
@@ -179,12 +176,10 @@ val DataModule = module {
 
     // Fineract Repository Local
 
-
     single {
         val preferencesHelper: PreferencesHelper = get()
         LocalRepository(preferencesHelper)
     }
-
 
     factory<LocalAssetDataSource> {
         MifosLocalAssetDataSource(
@@ -212,8 +207,7 @@ val DataModule = module {
     single<TimeZoneMonitor> {
         TimeZoneBroadcastMonitor(
             context = androidContext(),
-            appScope = get
-                (named("ApplicationScope")),
+            appScope = get(named("ApplicationScope")),
             ioDispatcher = get(named(MifosDispatchers.IO.name)),
         )
     }

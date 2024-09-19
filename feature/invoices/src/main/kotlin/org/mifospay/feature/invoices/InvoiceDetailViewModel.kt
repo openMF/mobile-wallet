@@ -21,7 +21,7 @@ import org.mifospay.core.data.domain.usecase.invoice.FetchInvoice
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.feature.invoices.navigation.INVOICE_DATA_ARG
 
-class InvoiceDetailViewModel (
+class InvoiceDetailViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper,
     private val fetchInvoiceUseCase: FetchInvoice,

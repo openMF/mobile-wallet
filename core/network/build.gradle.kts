@@ -20,7 +20,6 @@
 plugins {
     alias(libs.plugins.mifospay.android.library)
     id("kotlinx-serialization")
-    id("com.google.devtools.ksp")
 }
 
 android {
@@ -66,15 +65,6 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.kotlinx.coroutines.test)
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.core)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.androidx.navigation)
 
-    testImplementation(libs.koin.test)
-    testImplementation(libs.koin.test.junit4)
-    testImplementation(libs.koin.test.junit5)
-
-    implementation(libs.koin.annotations)
-    ksp(libs.koin.ksp.compiler)
+    implementation(libs.koin.android)
 }

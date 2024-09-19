@@ -27,7 +27,7 @@ import org.mifospay.core.data.domain.usecase.account.TransferFunds
 import org.mifospay.core.data.domain.usecase.client.SearchClient
 import org.mifospay.core.data.repository.local.LocalRepository
 
-class MakeTransferViewModel (
+class MakeTransferViewModel(
     savedStateHandle: SavedStateHandle,
     private val useCaseHandler: UseCaseHandler,
     private val searchClientUseCase: SearchClient,

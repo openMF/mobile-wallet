@@ -34,10 +34,9 @@ class MifosPayApp : Application() {
                     koinModules
                         .analyticsModules,
                     koinModules.commonModules,
-                    koinModules.libsModule
+                    koinModules.libsModule,
                 ),
             )
         }
-
     }
 }

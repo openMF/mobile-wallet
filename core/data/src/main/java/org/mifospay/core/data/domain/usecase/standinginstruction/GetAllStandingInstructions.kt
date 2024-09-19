@@ -17,7 +17,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class GetAllStandingInstructions (
+class GetAllStandingInstructions(
     private val apiRepository: FineractRepository,
 ) : UseCase<GetAllStandingInstructions.RequestValues, GetAllStandingInstructions.ResponseValue>() {
 

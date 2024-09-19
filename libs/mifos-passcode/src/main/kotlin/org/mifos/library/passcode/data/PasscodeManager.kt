@@ -9,13 +9,11 @@
  */
 package org.mifos.library.passcode.data
 
-import android.content.Context
 import org.mifos.library.passcode.utility.PreferenceManager
 
-class PasscodeManager (
-    private val passcodePreferencesHelper : PreferenceManager
+class PasscodeManager(
+    private val passcodePreferencesHelper: PreferenceManager,
 ) {
-
 
     val getPasscode = passcodePreferencesHelper.getSavedPasscode()
 

@@ -18,7 +18,7 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.feature.request.money.ShowQrUiState.Loading
 
-class ShowQrViewModel (
+class ShowQrViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val generateQrUseCase: GenerateQr,
     private val mPreferencesHelper: PreferencesHelper,

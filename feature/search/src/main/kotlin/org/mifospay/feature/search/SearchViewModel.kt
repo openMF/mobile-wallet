@@ -19,7 +19,7 @@ import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.client.SearchClient
 
-class SearchViewModel (
+class SearchViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val searchClient: SearchClient,
     private val savedStateHandle: SavedStateHandle,

@@ -31,7 +31,6 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
-import org.koin.androidx.compose.koinViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import org.mifospay.MainActivityUiState.Loading
@@ -54,19 +53,17 @@ class MainActivity : ComponentActivity() {
      * Lazily inject [JankStats], which is used to track jank throughout the app.
      */
 
+    private val networkMonitor: NetworkMonitor by inject()
 
-    private val networkMonitor : NetworkMonitor by inject()
-
-    private val timeZoneMonitor : TimeZoneMonitor by inject()
+    private val timeZoneMonitor: TimeZoneMonitor by inject()
 
     private val analyticsHelper: AnalyticsHelper by inject()
-
 
     private val viewModel: MainActivityViewModel by viewModel()
 
     private val myWindow: Window by inject { parametersOf(this) }
 
-    private val lazyStats : JankStats  by inject { parametersOf(myWindow) }
+    private val lazyStats: JankStats by inject { parametersOf(myWindow) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()

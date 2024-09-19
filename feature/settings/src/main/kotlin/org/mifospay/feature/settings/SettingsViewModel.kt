@@ -15,7 +15,7 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.BlockUnblockCommand
 import org.mifospay.core.data.repository.local.LocalRepository
 
-class SettingsViewModel (
+class SettingsViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val blockUnblockCommandUseCase: BlockUnblockCommand,

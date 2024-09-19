@@ -26,9 +26,8 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-
 @Suppress("UnusedPrivateMember")
-class TransferFunds (
+class TransferFunds(
     private val apiRepository: FineractRepository,
 ) : UseCase<TransferFunds.RequestValues, TransferFunds.ResponseValue>() {
 

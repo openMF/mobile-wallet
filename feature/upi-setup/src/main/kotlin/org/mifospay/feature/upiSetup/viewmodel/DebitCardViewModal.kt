@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class DebitCardViewModel  : ViewModel() {
+class DebitCardViewModel : ViewModel() {
 
     private val _debitCardUiState = MutableStateFlow<DebitCardUiState>(DebitCardUiState.Initials)
     val debitCardUiState: StateFlow<DebitCardUiState> = _debitCardUiState

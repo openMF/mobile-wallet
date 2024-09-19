@@ -1,3 +1,12 @@
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 package org.mifospay.di
 
 import org.koin.dsl.module
@@ -34,29 +43,31 @@ import org.mifospay.feature.standing.instruction.di.StandingInstructionModule
 import org.mifospay.feature.upiSetup.di.UpiSetupModule
 
 class KoinModules {
-    val analyticsModules= module {
+    val analyticsModules = module {
         includes(AnalyticsModule)
     }
     val commonModules = module {
-            includes(CoroutineScopesModule,DispatchersModule)
+        includes(CoroutineScopesModule, DispatchersModule)
     }
     val dataModules = module {
-            includes(DataModule,LocalDataModule)
+        includes(DataModule, LocalDataModule)
     }
     val coreDataStoreModules = module {
         includes(CoreDataStoreModule)
     }
-    val networkModules = module{
-       includes(LocalModule, NetworkModule)
+    val networkModules = module {
+        includes(LocalModule, NetworkModule)
     }
     val featureModules = module {
-        includes(AuthModule,AccountsModule,EditPasswordModule,FaqModule,HistoryModule,HomeModule,
-        InvoicesModule,KYCModule,MakeTransferModule,MerchantsModule,NotificationModule,
-        PaymentsModule,ProfileModule,QrModule,ReceiptModule,RequestMoneyModule,
-        SavedCardsModule,SearchModule,SendMoneyModule,SettingsModule,
-        StandingInstructionModule,UpiSetupModule)
+        includes(
+            AuthModule, AccountsModule, EditPasswordModule, FaqModule, HistoryModule, HomeModule,
+            InvoicesModule, KYCModule, MakeTransferModule, MerchantsModule, NotificationModule,
+            PaymentsModule, ProfileModule, QrModule, ReceiptModule, RequestMoneyModule,
+            SavedCardsModule, SearchModule, SendMoneyModule, SettingsModule,
+            StandingInstructionModule, UpiSetupModule,
+        )
     }
-    val mifosPayModule= module {
+    val mifosPayModule = module {
         includes(JankStatsModule)
     }
     val libsModule = module {

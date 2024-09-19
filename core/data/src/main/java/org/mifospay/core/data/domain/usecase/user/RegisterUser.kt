@@ -18,7 +18,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class RegisterUser (
+class RegisterUser(
     private val apiRepository: FineractRepository,
 ) : UseCase<RegisterUser.RequestValues, RegisterUser.ResponseValue>() {
 

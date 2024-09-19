@@ -49,9 +49,8 @@ import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.services.KtorAuthenticationService
 import rx.Observable
 
-
 @Suppress("TooManyFunctions")
-class FineractRepository (
+class FineractRepository(
     private val fineractApiManager: FineractApiManager,
     private val selfApiManager: SelfServiceApiManager,
     private val ktorAuthenticationService: KtorAuthenticationService,

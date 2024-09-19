@@ -16,7 +16,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class DeleteStandingInstruction (
+class DeleteStandingInstruction(
     private val apiRepository: FineractRepository,
 ) : UseCase<DeleteStandingInstruction.RequestValues, DeleteStandingInstruction.ResponseValue>() {
 

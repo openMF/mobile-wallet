@@ -11,7 +11,7 @@ package org.mifos.library.passcode.data
 
 import org.mifos.library.passcode.utility.PreferenceManager
 
-class PasscodeRepositoryImpl (
+class PasscodeRepositoryImpl(
     private val preferenceManager: PreferenceManager,
 ) : PasscodeRepository {
 

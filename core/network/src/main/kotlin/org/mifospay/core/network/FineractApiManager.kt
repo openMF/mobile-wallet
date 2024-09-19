@@ -27,8 +27,7 @@ import org.mifospay.core.network.services.ThirdPartyTransferService
 import org.mifospay.core.network.services.TwoFactorAuthService
 import org.mifospay.core.network.services.UserService
 
-
-class FineractApiManager (
+class FineractApiManager(
     private val authenticationService: AuthenticationService,
     private val clientService: ClientService,
     private val savingsAccountsService: SavingsAccountsService,

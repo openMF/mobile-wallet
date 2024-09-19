@@ -10,12 +10,12 @@
 package org.mifos.library.passcode.di
 
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
+import org.mifos.library.passcode.data.PasscodeManager
 import org.mifos.library.passcode.data.PasscodeRepository
 import org.mifos.library.passcode.data.PasscodeRepositoryImpl
 import org.mifos.library.passcode.utility.PreferenceManager
-import org.koin.core.module.dsl.viewModel
-import org.mifos.library.passcode.data.PasscodeManager
 import org.mifos.library.passcode.viewmodels.PasscodeViewModel
 
 val ApplicationModule = module {
@@ -32,5 +32,4 @@ val ApplicationModule = module {
     factory {
         PasscodeManager(passcodePreferencesHelper = get())
     }
-
 }

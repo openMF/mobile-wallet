@@ -12,7 +12,7 @@ package org.mifospay.core.data.fineract.entity.mapper
 import com.mifospay.core.model.domain.Account
 import com.mifospay.core.model.entity.client.ClientAccounts
 
-class AccountMapper (
+class AccountMapper(
     private val currencyMapper: CurrencyMapper,
 ) {
 

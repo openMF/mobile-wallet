@@ -13,9 +13,8 @@ import android.app.Activity
 import android.util.Log
 import android.view.Window
 import androidx.metrics.performance.JankStats
-import org.koin.dsl.module
 import org.koin.core.module.dsl.viewModel
-import org.koin.core.qualifier.named
+import org.koin.dsl.module
 import org.mifospay.MainActivityViewModel
 
 val JankStatsModule = module {
@@ -23,7 +22,7 @@ val JankStatsModule = module {
     factory { (activity: Activity) -> activity.window }
     factory { (window: Window) ->
         JankStats.createAndTrack(window) { frameData ->
-        // Make sure to only log janky frames.
+            // Make sure to only log janky frames.
             if (frameData.isJank) {
                 // We're currently logging this but would better report it to a backend.
                 Log.v("Mifos Jank", frameData.toString())
@@ -31,7 +30,7 @@ val JankStatsModule = module {
         }
     }
 
-    viewModel{
+    viewModel {
         MainActivityViewModel(userDataRepository = get(), passcodeManager = get())
     }
 }

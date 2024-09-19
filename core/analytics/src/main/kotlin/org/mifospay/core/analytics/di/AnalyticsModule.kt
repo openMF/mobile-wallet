@@ -14,7 +14,6 @@ import com.google.firebase.ktx.Firebase
 import org.koin.dsl.module
 import org.mifospay.core.analytics.AnalyticsHelper
 
-
 val AnalyticsModule = module {
 
     single {

@@ -24,7 +24,7 @@ import org.mifospay.core.network.localAssets.LocalAssetDataSource
  *
  */
 
-class MifosLocalAssetRepository (
+class MifosLocalAssetRepository(
     private val ioDispatcher: CoroutineDispatcher,
     private val datasource: LocalAssetDataSource,
 ) : LocalAssetRepository {

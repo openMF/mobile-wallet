@@ -10,25 +10,10 @@
 plugins {
     alias(libs.plugins.mifospay.android.feature)
     alias(libs.plugins.mifospay.android.library.compose)
-    id("com.google.devtools.ksp")
-
 }
 
 android {
     namespace = "org.mifospay.feature.make.transfer"
 }
 
-dependencies {
-    implementation(projects.core.data)
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.core)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.androidx.navigation)
-
-    testImplementation(libs.koin.test)
-    testImplementation(libs.koin.test.junit4)
-    testImplementation(libs.koin.test.junit5)
-
-    implementation(libs.koin.annotations)
-    ksp(libs.koin.ksp.compiler)
-}
+dependencies { }

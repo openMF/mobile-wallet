@@ -17,7 +17,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class DownloadTransactionReceipt (
+class DownloadTransactionReceipt(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<DownloadTransactionReceipt.RequestValues, DownloadTransactionReceipt.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {

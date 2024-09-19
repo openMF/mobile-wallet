@@ -16,7 +16,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class ValidateOTP (
+class ValidateOTP(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<ValidateOTP.RequestValues, ValidateOTP.ResponseValue>() {
 

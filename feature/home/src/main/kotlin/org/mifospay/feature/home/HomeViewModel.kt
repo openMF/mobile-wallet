@@ -24,7 +24,7 @@ import org.mifospay.core.data.domain.usecase.history.TransactionsHistory
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.core.datastore.PreferencesHelper
 
-class HomeViewModel (
+class HomeViewModel(
     private val useCaseHandler: UseCaseHandler,
     private val localRepository: LocalRepository,
     private val preferencesHelper: PreferencesHelper,

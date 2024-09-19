@@ -17,7 +17,7 @@ import com.google.zxing.common.HybridBinarizer
 import com.google.zxing.qrcode.QRCodeReader
 import org.mifospay.core.data.base.UseCase
 
-class ScanQr  : UseCase<ScanQr.RequestValues, ScanQr.ResponseValue?>() {
+class ScanQr : UseCase<ScanQr.RequestValues, ScanQr.ResponseValue?>() {
 
     override fun executeUseCase(requestValues: RequestValues) {
         val bitmap = requestValues.bitmap

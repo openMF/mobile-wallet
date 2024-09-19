@@ -21,7 +21,7 @@ import java.util.Base64
 /**
  * Created by naman on 8/7/17.
  */
-class GenerateQr  :
+class GenerateQr :
     UseCase<GenerateQr.RequestValues, GenerateQr.ResponseValue?>() {
     override fun executeUseCase(requestValues: RequestValues) {
         try {

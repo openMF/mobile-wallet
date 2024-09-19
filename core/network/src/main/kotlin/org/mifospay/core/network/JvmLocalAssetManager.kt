@@ -35,4 +35,3 @@ internal object JvmLocalAssetManager : LocalAssetManager {
 
     override fun open(fileName: String): InputStream = File(fileName).inputStream()
 }
-

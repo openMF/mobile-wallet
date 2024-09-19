@@ -17,7 +17,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class FetchNotifications (
+class FetchNotifications(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<FetchNotifications.RequestValues, FetchNotifications.ResponseValue>() {
 

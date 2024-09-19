@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.mifospay.core.datastore.PreferencesHelper
 
-class AuthenticationUserRepository (
+class AuthenticationUserRepository(
     private val preferencesHelper: PreferencesHelper,
 ) : UserDataRepository {
 

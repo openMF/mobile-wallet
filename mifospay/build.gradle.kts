@@ -8,6 +8,7 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 import org.mifospay.MifosBuildType
+import org.mifospay.dynamicVersion
 
 /*
  * Copyright 2024 Mifos Initiative
@@ -27,7 +28,6 @@ plugins {
     alias(libs.plugins.roborazzi)
     id("com.google.android.gms.oss-licenses-plugin")
     id("com.google.devtools.ksp")
-
 }
 
 android {
@@ -35,7 +35,7 @@ android {
 
     defaultConfig {
         applicationId = "org.mifospay"
-        versionName = project.version.toString()
+        versionName = project.dynamicVersion
         versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -157,18 +157,12 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
 
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.core)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.androidx.navigation)
+    implementation(libs.koin.android)
+    implementation(libs.ktor.client.core)
 
+    testImplementation(kotlin("test"))
     testImplementation(libs.koin.test)
     testImplementation(libs.koin.test.junit4)
-    testImplementation(libs.koin.test.junit5)
-
-    implementation(libs.koin.annotations)
-    ksp(libs.koin.ksp.compiler)
-
 }
 
 dependencyGuard {

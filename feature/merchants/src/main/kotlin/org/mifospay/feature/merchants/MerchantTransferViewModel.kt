@@ -31,8 +31,7 @@ import org.mifospay.core.data.util.Constants.FETCH_ACCOUNT_TRANSFER_USECASE
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.feature.merchants.MerchantTransferUiState.Loading
 
-
-class MerchantTransferViewModel (
+class MerchantTransferViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val localRepository: LocalRepository,
     private val preferencesHelper: PreferencesHelper,

@@ -17,7 +17,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class UploadKYCDocs (
+class UploadKYCDocs(
     private val apiRepository: FineractRepository,
 ) : UseCase<UploadKYCDocs.RequestValues, UploadKYCDocs.ResponseValue>() {
 

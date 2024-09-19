@@ -15,7 +15,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class RequestOTP (
+class RequestOTP(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<RequestOTP.RequestValues, RequestOTP.ResponseValue>() {
 

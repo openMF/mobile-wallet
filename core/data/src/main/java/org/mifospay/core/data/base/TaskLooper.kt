@@ -11,7 +11,7 @@ package org.mifospay.core.data.base
 
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
 
-class TaskLooper (
+class TaskLooper(
     private val mUseCaseHandler: UseCaseHandler,
 ) {
     var isFailed = false

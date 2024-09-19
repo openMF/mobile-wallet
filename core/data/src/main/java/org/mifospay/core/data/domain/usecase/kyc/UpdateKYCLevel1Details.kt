@@ -17,7 +17,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class UpdateKYCLevel1Details (
+class UpdateKYCLevel1Details(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<UpdateKYCLevel1Details.RequestValues, UpdateKYCLevel1Details.ResponseValue>() {
 

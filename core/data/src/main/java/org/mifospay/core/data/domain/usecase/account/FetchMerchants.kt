@@ -19,7 +19,7 @@ import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
 
-class FetchMerchants (
+class FetchMerchants(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<FetchMerchants.RequestValues, FetchMerchants.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {

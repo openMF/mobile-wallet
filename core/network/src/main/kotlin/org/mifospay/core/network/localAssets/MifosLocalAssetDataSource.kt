@@ -18,7 +18,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 
-class MifosLocalAssetDataSource (
+class MifosLocalAssetDataSource(
     private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
     private val assets: LocalAssetManager,

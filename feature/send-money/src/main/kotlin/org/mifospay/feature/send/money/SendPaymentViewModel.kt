@@ -20,7 +20,7 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.FetchAccount
 import org.mifospay.core.data.repository.local.LocalRepository
 
-class SendPaymentViewModel (
+class SendPaymentViewModel(
     private val useCaseHandler: UseCaseHandler,
     private val localRepository: LocalRepository,
     private val fetchAccount: FetchAccount,

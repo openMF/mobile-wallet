@@ -19,8 +19,7 @@ import org.mifospay.core.data.domain.usecase.account.FetchAccount
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransactions
 import org.mifospay.core.data.repository.local.LocalRepository
 
-
-class HistoryViewModel (
+class HistoryViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val mFetchAccountUseCase: FetchAccount,

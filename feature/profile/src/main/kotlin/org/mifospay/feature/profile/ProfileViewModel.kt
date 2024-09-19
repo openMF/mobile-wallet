@@ -24,7 +24,7 @@ import org.mifospay.core.data.domain.usecase.client.FetchClientImage
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.core.datastore.PreferencesHelper
 
-class ProfileViewModel (
+class ProfileViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val fetchClientImageUseCase: FetchClientImage,
     private val localRepository: LocalRepository,

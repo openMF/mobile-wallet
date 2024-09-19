@@ -2,8 +2,10 @@ name: Tag Weekly Release
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '0 4 * * 0'
+#    This is a weekly cron job that runs every Sunday at 4:00 AM UTC
+#    Turning off for now
+#  schedule:
+#    - cron: '0 4 * * 0'
 jobs:
   tag:
     name: Tag Weekly Release

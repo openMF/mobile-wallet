@@ -16,14 +16,9 @@ import com.google.gson.Gson
 import com.mifospay.core.model.domain.client.Client
 import com.mifospay.core.model.domain.user.User
 
-
-
-class PreferencesHelper ( private val context: Context?) {
-    private val sharedPreferences: SharedPreferences
-
-    init {
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
-    }
+class PreferencesHelper(private val context: Context?) {
+    private val sharedPreferences: SharedPreferences =
+        PreferenceManager.getDefaultSharedPreferences(context)
 
     fun clear() {
         sharedPreferences.edit().clear().apply()

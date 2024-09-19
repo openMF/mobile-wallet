@@ -18,7 +18,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class UpdateClient (
+class UpdateClient(
     private val fineractRepository: FineractRepository,
 ) : UseCase<UpdateClient.RequestValues, UpdateClient.ResponseValue>() {
 

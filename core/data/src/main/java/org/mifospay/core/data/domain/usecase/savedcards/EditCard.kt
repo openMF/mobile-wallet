@@ -17,7 +17,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class EditCard (
+class EditCard(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<EditCard.RequestValues, EditCard.ResponseValue>() {
 

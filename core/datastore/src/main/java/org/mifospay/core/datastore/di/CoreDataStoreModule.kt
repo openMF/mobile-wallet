@@ -9,17 +9,13 @@
  */
 package org.mifospay.core.datastore.di
 
-
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import org.mifospay.core.datastore.PreferencesHelper
 
-
 val CoreDataStoreModule = module {
-
 
     factory {
         PreferencesHelper(context = androidContext())
     }
-
 }

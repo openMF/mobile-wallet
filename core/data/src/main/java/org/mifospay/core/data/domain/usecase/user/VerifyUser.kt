@@ -18,7 +18,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class VerifyUser (
+class VerifyUser(
     private val apiRepository: FineractRepository,
 ) : UseCase<VerifyUser.RequestValues, VerifyUser.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {

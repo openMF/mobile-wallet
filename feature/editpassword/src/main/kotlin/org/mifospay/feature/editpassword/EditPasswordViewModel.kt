@@ -20,9 +20,8 @@ import org.mifospay.core.data.domain.usecase.user.AuthenticateUser
 import org.mifospay.core.data.domain.usecase.user.UpdateUser
 import org.mifospay.core.datastore.PreferencesHelper
 
-
 @Suppress("NestedBlockDepth")
-class EditPasswordViewModel (
+class EditPasswordViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper,
     private val authenticateUserUseCase: AuthenticateUser,

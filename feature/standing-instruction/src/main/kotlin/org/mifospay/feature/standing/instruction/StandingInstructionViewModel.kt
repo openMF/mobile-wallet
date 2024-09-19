@@ -19,7 +19,7 @@ import org.mifospay.core.data.domain.usecase.standinginstruction.GetAllStandingI
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.feature.standing.instruction.StandingInstructionsUiState.Loading
 
-class StandingInstructionViewModel (
+class StandingInstructionViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val localRepository: LocalRepository,
     private val getAllStandingInstructions: GetAllStandingInstructions,

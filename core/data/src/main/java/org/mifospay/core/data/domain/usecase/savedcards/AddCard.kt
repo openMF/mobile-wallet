@@ -17,7 +17,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class AddCard (
+class AddCard(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<AddCard.RequestValues, AddCard.ResponseValue>() {
     class RequestValues(val clientId: Long, val card: Card) : UseCase.RequestValues

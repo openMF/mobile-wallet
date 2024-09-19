@@ -20,7 +20,7 @@ import org.mifospay.core.data.fineract.entity.mapper.TransactionMapper
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
 
-class FetchAccountTransactions (
+class FetchAccountTransactions(
     private val fineractRepository: FineractRepository,
     private val transactionMapper: TransactionMapper,
 ) : UseCase<FetchAccountTransactions.RequestValues, FetchAccountTransactions.ResponseValue?>() {

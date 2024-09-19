@@ -40,7 +40,7 @@ import org.mifospay.core.data.domain.usecase.user.UpdateUser
 import org.mifospay.core.data.repository.local.LocalAssetRepository
 import org.mifospay.core.datastore.PreferencesHelper
 
-class SignupViewModel (
+class SignupViewModel(
     localAssetRepository: LocalAssetRepository,
     private val useCaseHandler: UseCaseHandler,
     private val preferencesHelper: PreferencesHelper,

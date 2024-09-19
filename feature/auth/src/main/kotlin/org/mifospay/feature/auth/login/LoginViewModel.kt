@@ -24,7 +24,7 @@ import org.mifospay.core.data.domain.usecase.user.AuthenticateUser
 import org.mifospay.core.data.domain.usecase.user.FetchUserDetails
 import org.mifospay.core.datastore.PreferencesHelper
 
-class LoginViewModel (
+class LoginViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val authenticateUserUseCase: AuthenticateUser,
     private val fetchClientDataUseCase: FetchClientData,

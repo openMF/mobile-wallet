@@ -21,7 +21,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class CreateStandingTransaction (
+class CreateStandingTransaction(
     private val apiRepository: FineractRepository,
 ) : UseCase<CreateStandingTransaction.RequestValues, CreateStandingTransaction.ResponseValue>() {
 

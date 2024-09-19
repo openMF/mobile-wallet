@@ -27,7 +27,7 @@ import org.mifospay.core.data.domain.usecase.savedcards.EditCard
 import org.mifospay.core.data.domain.usecase.savedcards.FetchSavedCards
 import org.mifospay.core.data.repository.local.LocalRepository
 
-class CardsScreenViewModel (
+class CardsScreenViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val addCardUseCase: AddCard,

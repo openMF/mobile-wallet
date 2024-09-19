@@ -17,7 +17,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class FetchClientImage (
+class FetchClientImage(
     private val mFineractRepository: FineractRepository,
 ) :
     UseCase<FetchClientImage.RequestValues, FetchClientImage.ResponseValue>() {

@@ -23,8 +23,7 @@ import org.mifospay.core.data.domain.usecase.kyc.FetchKYCLevel1Details
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.feature.kyc.KYCDescriptionUiState.Loading
 
-
-class KYCDescriptionViewModel (
+class KYCDescriptionViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val fetchKYCLevel1DetailsUseCase: FetchKYCLevel1Details,

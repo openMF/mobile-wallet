@@ -22,7 +22,7 @@ import org.mifospay.core.data.domain.usecase.notification.FetchNotifications
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.feature.notification.NotificationUiState.Loading
 
-class NotificationViewModel (
+class NotificationViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val fetchNotificationsUseCase: FetchNotifications,

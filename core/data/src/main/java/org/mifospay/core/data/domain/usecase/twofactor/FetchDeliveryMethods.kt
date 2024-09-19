@@ -16,7 +16,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class FetchDeliveryMethods (
+class FetchDeliveryMethods(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<FetchDeliveryMethods.RequestValues, FetchDeliveryMethods.ResponseValue>() {
 

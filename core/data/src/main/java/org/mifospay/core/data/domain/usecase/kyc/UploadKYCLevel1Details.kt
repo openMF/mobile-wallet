@@ -17,7 +17,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class UploadKYCLevel1Details (
+class UploadKYCLevel1Details(
     var mFineractRepository: FineractRepository,
 ) : UseCase<UploadKYCLevel1Details.RequestValues, UploadKYCLevel1Details.ResponseValue>() {
     class RequestValues(

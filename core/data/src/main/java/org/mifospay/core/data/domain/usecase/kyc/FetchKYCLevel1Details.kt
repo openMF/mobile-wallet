@@ -16,8 +16,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-
-class FetchKYCLevel1Details (
+class FetchKYCLevel1Details(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<FetchKYCLevel1Details.RequestValues, FetchKYCLevel1Details.ResponseValue>() {
 

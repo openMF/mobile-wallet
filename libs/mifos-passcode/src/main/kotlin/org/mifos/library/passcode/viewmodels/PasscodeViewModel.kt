@@ -21,8 +21,7 @@ import org.mifos.library.passcode.data.PasscodeRepository
 import org.mifos.library.passcode.utility.Constants.PASSCODE_LENGTH
 import org.mifos.library.passcode.utility.Step
 
-
-internal class PasscodeViewModel (
+internal class PasscodeViewModel(
     private val passcodeRepository: PasscodeRepository,
 ) : ViewModel() {
 

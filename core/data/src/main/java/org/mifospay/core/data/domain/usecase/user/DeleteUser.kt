@@ -16,7 +16,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class DeleteUser (
+class DeleteUser(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<DeleteUser.RequestValues, DeleteUser.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {

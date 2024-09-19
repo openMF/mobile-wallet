@@ -12,8 +12,7 @@ package org.mifospay.core.data.repository.local
 import com.mifospay.core.model.domain.client.Client
 import org.mifospay.core.datastore.PreferencesHelper
 
-
-class LocalRepository (
+class LocalRepository(
     val preferencesHelper: PreferencesHelper,
 ) {
 

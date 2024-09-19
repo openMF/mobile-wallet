@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 import org.mifos.library.passcode.data.PasscodeManager
 import org.mifospay.core.data.repository.auth.UserDataRepository
 
-class MainActivityViewModel (
+class MainActivityViewModel(
     private val userDataRepository: UserDataRepository,
     private val passcodeManager: PasscodeManager,
 ) : ViewModel() {

@@ -9,11 +9,9 @@
  */
 package org.mifospay.core.network.di
 
-
 import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import org.mifospay.core.network.localAssets.LocalAssetManager
-
 
 val LocalModule = module {
     single {

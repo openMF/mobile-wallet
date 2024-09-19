@@ -21,7 +21,7 @@ import org.mifospay.core.data.domain.usecase.user.UpdateUser
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.feature.profile.edit.EditProfileUiState.Loading
 
-class EditProfileViewModel (
+class EditProfileViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper,
     private val updateUserUseCase: UpdateUser,

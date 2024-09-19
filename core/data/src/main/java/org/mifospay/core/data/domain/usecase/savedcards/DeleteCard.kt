@@ -16,7 +16,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class DeleteCard (
+class DeleteCard(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<DeleteCard.RequestValues, DeleteCard.ResponseValue>() {
 

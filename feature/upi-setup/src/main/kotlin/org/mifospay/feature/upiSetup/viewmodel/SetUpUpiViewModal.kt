@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.BankAccountDetails
 
 @Suppress("UnusedParameter")
-class SetUpUpiViewModal  : ViewModel() {
+class SetUpUpiViewModal : ViewModel() {
 
     fun requestOtp(bankAccountDetails: BankAccountDetails?): String {
         val otp = "0000"

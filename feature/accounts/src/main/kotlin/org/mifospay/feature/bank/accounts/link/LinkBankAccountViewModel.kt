@@ -29,8 +29,8 @@ import org.mifospay.core.data.repository.local.LocalAssetRepository
 import org.mifospay.feature.bank.accounts.R
 import java.util.Random
 
-class LinkBankAccountViewModel (
-    localAssetRepository: LocalAssetRepository
+class LinkBankAccountViewModel(
+    localAssetRepository: LocalAssetRepository,
 ) : ViewModel() {
 
     private val searchQuery = MutableStateFlow("")

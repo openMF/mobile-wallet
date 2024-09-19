@@ -24,7 +24,7 @@ import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.feature.kyc.KYCLevel2UiState.Loading
 import java.io.File
 
-class KYCLevel2ViewModel (
+class KYCLevel2ViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val preferencesHelper: PreferencesHelper,
     private val uploadKYCDocsUseCase: UploadKYCDocs,

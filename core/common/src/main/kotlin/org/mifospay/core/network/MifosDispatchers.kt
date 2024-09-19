@@ -9,9 +9,7 @@
  */
 package org.mifospay.core.network
 
-
 import org.koin.core.annotation.Qualifier
-
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)

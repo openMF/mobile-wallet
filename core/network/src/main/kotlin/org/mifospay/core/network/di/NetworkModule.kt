@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.network.di
 
-import android.content.Context
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.android.Android
 import io.ktor.client.plugins.HttpTimeout
@@ -19,8 +18,6 @@ import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.websocket.WebSockets
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.parameter.parametersOf
 import org.koin.dsl.module
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.core.network.BaseURL
@@ -28,7 +25,6 @@ import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.KtorInterceptor
 import org.mifospay.core.network.MifosWalletOkHttpClient
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.localAssets.LocalAssetManager
 import org.mifospay.core.network.services.AccountTransfersService
 import org.mifospay.core.network.services.AuthenticationService
 import org.mifospay.core.network.services.BeneficiaryService
@@ -52,17 +48,14 @@ import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-
 @Suppress("TooManyFunctions")
-val NetworkModule = module{
-
+val NetworkModule = module {
 
     single {
-        Json{
+        Json {
             ignoreUnknownKeys = true
         }
     }
-
 
     single(SelfServiceApi) {
         val preferencesHelper: PreferencesHelper = get()
@@ -74,8 +67,7 @@ val NetworkModule = module{
             .build()
     }
 
-
-    single (FineractApi){
+    single(FineractApi) {
         val preferencesHelper: PreferencesHelper = get()
         Retrofit.Builder()
             .baseUrl(BaseURL().url)
@@ -84,8 +76,6 @@ val NetworkModule = module{
             .client(MifosWalletOkHttpClient(preferencesHelper).mifosOkHttpClient)
             .build()
     }
-
-
 
     single {
         FineractApiManager(
@@ -105,7 +95,7 @@ val NetworkModule = module{
             thirdPartyTransferService = get(FineractThirdPartyTransferService),
             standingInstructionService = get(),
             notificationService = get(),
-            ktorSavingsAccountService = get()
+            ktorSavingsAccountService = get(),
         )
     }
 
@@ -117,7 +107,7 @@ val NetworkModule = module{
             registrationService = get(SelfServiceRegistrationService),
             beneficiaryService = get(),
             thirdPartyTransferService = get(SelfServiceThirdPartyTransferService),
-            ktorSavingsAccountService = get()
+            ktorSavingsAccountService = get(),
         )
     }
 
@@ -149,101 +139,95 @@ val NetworkModule = module{
     single { KtorAuthenticationService(client = get()) }
     single { KtorSavingsAccountService(client = get()) }
 
-
     // -----Fineract API Service---------//
-
 
     single<AuthenticationService>(FineractAuthenticationService) {
         get<Retrofit>(FineractApi).create(AuthenticationService::class.java)
     }
 
-    single <ClientService>(FineractClientService){
+    single<ClientService>(FineractClientService) {
         get<Retrofit>(FineractApi).create(ClientService::class.java)
     }
 
-    single<SavingsAccountsService>(FineractSavingsAccountsService){
+    single<SavingsAccountsService>(FineractSavingsAccountsService) {
         get<Retrofit>(FineractApi).create(SavingsAccountsService::class.java)
     }
 
-    single <RegistrationService>(FineractRegistrationService){
+    single<RegistrationService>(FineractRegistrationService) {
         get<Retrofit>(FineractApi).create(RegistrationService::class.java)
     }
 
-    single<SearchService>{
+    single<SearchService> {
         get<Retrofit>(FineractApi).create(SearchService::class.java)
     }
 
-
-    single<SavedCardService>{
+    single<SavedCardService> {
         get<Retrofit>(FineractApi).create(SavedCardService::class.java)
     }
 
-    single<DocumentService>{
+    single<DocumentService> {
         get<Retrofit>(FineractApi).create(DocumentService::class.java)
     }
 
-    single<TwoFactorAuthService>{
+    single<TwoFactorAuthService> {
         get<Retrofit>(FineractApi).create(TwoFactorAuthService::class.java)
     }
 
-    single<AccountTransfersService>{
+    single<AccountTransfersService> {
         get<Retrofit>(FineractApi).create(AccountTransfersService::class.java)
     }
 
-    single<RunReportService>{
+    single<RunReportService> {
         get<Retrofit>(FineractApi).create(RunReportService::class.java)
     }
 
-    single<KYCLevel1Service>{
+    single<KYCLevel1Service> {
         get<Retrofit>(FineractApi).create(KYCLevel1Service::class.java)
     }
 
-    single<InvoiceService>{
+    single<InvoiceService> {
         get<Retrofit>(FineractApi).create(InvoiceService::class.java)
     }
 
-    single<UserService>{
+    single<UserService> {
         get<Retrofit>(FineractApi).create(UserService::class.java)
     }
 
-    single<ThirdPartyTransferService>(FineractThirdPartyTransferService){
+    single<ThirdPartyTransferService>(FineractThirdPartyTransferService) {
         get<Retrofit>(FineractApi).create(ThirdPartyTransferService::class.java)
     }
 
-    single<NotificationService>{
+    single<NotificationService> {
         get<Retrofit>(FineractApi).create(NotificationService::class.java)
     }
 
-    single<StandingInstructionService>{
+    single<StandingInstructionService> {
         get<Retrofit>(FineractApi).create(StandingInstructionService::class.java)
     }
 
-
-
     // -------SelfService API Service-------//
 
-    single <AuthenticationService>(SelfServiceAuthenticationService){
+    single<AuthenticationService>(SelfServiceAuthenticationService) {
         get<Retrofit>(SelfServiceApi).create(AuthenticationService::class.java)
     }
 
-    single <ClientService>(SelfServiceClientService){
+    single<ClientService>(SelfServiceClientService) {
         get<Retrofit>(SelfServiceApi).create(ClientService::class.java)
     }
 
-    single <SavingsAccountsService>(SelfServiceSavingsAccountsService){
+    single<SavingsAccountsService>(SelfServiceSavingsAccountsService) {
         get<Retrofit>(SelfServiceApi).create(SavingsAccountsService::class.java)
     }
 
-    single <RegistrationService>(SelfServiceRegistrationService){
+    single<RegistrationService>(SelfServiceRegistrationService) {
         get<Retrofit>(SelfServiceApi).create(RegistrationService::class.java)
     }
 
-    single <BeneficiaryService>{
+    single<BeneficiaryService> {
         get<Retrofit>(SelfServiceApi).create(BeneficiaryService::class.java)
     }
 
-    single <ThirdPartyTransferService>(SelfServiceThirdPartyTransferService){
+    single<ThirdPartyTransferService>(SelfServiceThirdPartyTransferService) {
         get<Retrofit>(SelfServiceApi).create(ThirdPartyTransferService::class.java)
     }
-
 }

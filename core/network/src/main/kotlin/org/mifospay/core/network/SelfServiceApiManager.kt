@@ -17,7 +17,7 @@ import org.mifospay.core.network.services.RegistrationService
 import org.mifospay.core.network.services.SavingsAccountsService
 import org.mifospay.core.network.services.ThirdPartyTransferService
 
-class SelfServiceApiManager (
+class SelfServiceApiManager(
     private val authenticationService: AuthenticationService,
     private val clientService: ClientService,
     private val savingsAccountsService: SavingsAccountsService,

@@ -29,8 +29,7 @@ import org.mifospay.core.data.domain.usecase.account.FetchAccountTransfer
 import org.mifospay.core.datastore.PreferencesHelper
 import java.io.File
 
-
-class ReceiptViewModel (
+class ReceiptViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val preferencesHelper: PreferencesHelper,
     private val downloadTransactionReceiptUseCase: DownloadTransactionReceipt,

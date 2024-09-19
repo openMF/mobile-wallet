@@ -15,8 +15,9 @@ import kotlinx.coroutines.SupervisorJob
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
-
 val CoroutineScopesModule = module {
 
-    single<CoroutineScope>(named("ApplicationScope")) { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
+    single<CoroutineScope>(named("ApplicationScope")) {
+        CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    }
 }

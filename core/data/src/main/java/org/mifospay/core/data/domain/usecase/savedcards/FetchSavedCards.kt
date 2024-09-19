@@ -17,7 +17,7 @@ import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class FetchSavedCards (
+class FetchSavedCards(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<FetchSavedCards.RequestValues, FetchSavedCards.ResponseValue>() {
 
