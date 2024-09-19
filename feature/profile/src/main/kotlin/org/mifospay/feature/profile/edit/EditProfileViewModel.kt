@@ -12,7 +12,6 @@ package org.mifospay.feature.profile.edit
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.user.UpdateUserEntityEmail
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCase
@@ -21,10 +20,8 @@ import org.mifospay.core.data.domain.usecase.client.UpdateClient
 import org.mifospay.core.data.domain.usecase.user.UpdateUser
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.feature.profile.edit.EditProfileUiState.Loading
-import javax.inject.Inject
 
-@HiltViewModel
-class EditProfileViewModel @Inject constructor(
+class EditProfileViewModel (
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper,
     private val updateUserUseCase: UpdateUser,

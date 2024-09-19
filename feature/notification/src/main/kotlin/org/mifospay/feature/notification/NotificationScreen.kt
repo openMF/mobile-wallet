@@ -32,12 +32,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifos.library.pullrefresh.PullRefreshIndicator
 import com.mifos.library.pullrefresh.pullRefresh
 import com.mifos.library.pullrefresh.rememberPullRefreshState
 import com.mifospay.core.model.domain.NotificationPayload
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -48,7 +48,7 @@ import org.mifospay.notification.R
 @Composable
 fun NotificationScreen(
     modifier: Modifier = Modifier,
-    viewmodel: NotificationViewModel = hiltViewModel(),
+    viewmodel: NotificationViewModel = koinViewModel(),
 ) {
     val uiState by viewmodel.notificationUiState.collectAsStateWithLifecycle()
     val isRefreshing by viewmodel.isRefreshing.collectAsStateWithLifecycle()

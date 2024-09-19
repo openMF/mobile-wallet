@@ -12,16 +12,13 @@ package org.mifospay.feature.request.money
 import android.graphics.Bitmap
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.feature.request.money.ShowQrUiState.Loading
-import javax.inject.Inject
 
-@HiltViewModel
-class ShowQrViewModel @Inject constructor(
+class ShowQrViewModel (
     private val mUseCaseHandler: UseCaseHandler,
     private val generateQrUseCase: GenerateQr,
     private val mPreferencesHelper: PreferencesHelper,

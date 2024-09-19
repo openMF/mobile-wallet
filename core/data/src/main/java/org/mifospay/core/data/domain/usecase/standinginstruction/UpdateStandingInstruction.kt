@@ -17,9 +17,8 @@ import org.mifospay.core.network.GenericResponse
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class UpdateStandingInstruction @Inject constructor(
+class UpdateStandingInstruction(
     private val apiRepository: FineractRepository,
 ) : UseCase<UpdateStandingInstruction.RequestValues, UpdateStandingInstruction.ResponseValue>() {
 

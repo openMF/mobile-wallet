@@ -9,14 +9,19 @@
  */
 package org.mifospay.core.network
 
-import javax.inject.Qualifier
-import kotlin.annotation.AnnotationRetention.RUNTIME
+
+import org.koin.core.annotation.Qualifier
+
 
 @Qualifier
-@Retention(RUNTIME)
+@Retention(AnnotationRetention.RUNTIME)
 annotation class Dispatcher(val mifosDispatcher: MifosDispatchers)
 
 enum class MifosDispatchers {
     Default,
     IO,
 }
+
+@Qualifier
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ApplicationScope

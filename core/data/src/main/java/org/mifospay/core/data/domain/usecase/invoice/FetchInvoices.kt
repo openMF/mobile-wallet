@@ -16,9 +16,8 @@ import org.mifospay.core.data.fineract.repository.FineractRepository
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class FetchInvoices @Inject constructor(
+class FetchInvoices (
     private val mFineractRepository: FineractRepository,
 ) :
     UseCase<FetchInvoices.RequestValues, FetchInvoices.ResponseValue>() {

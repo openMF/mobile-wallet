@@ -9,11 +9,23 @@
  */
 plugins {
     alias(libs.plugins.mifospay.android.library)
-    alias(libs.plugins.mifospay.android.hilt)
+    id("com.google.devtools.ksp")
 }
 
 android {
     namespace = "org.mifospay.common"
 }
 
-dependencies {}
+dependencies {
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
+    testImplementation(libs.koin.test.junit5)
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.androidx.navigation)
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
+}

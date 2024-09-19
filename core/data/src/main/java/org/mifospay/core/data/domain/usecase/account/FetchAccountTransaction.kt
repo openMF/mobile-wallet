@@ -19,9 +19,9 @@ import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.entity.mapper.TransactionMapper
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
-import javax.inject.Inject
 
-class FetchAccountTransaction @Inject constructor(
+
+class FetchAccountTransaction (
     private val fineractRepository: FineractRepository,
     private val transactionMapper: TransactionMapper,
 ) :

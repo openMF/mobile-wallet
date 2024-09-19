@@ -22,8 +22,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.FloatingActionButtonContent
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -35,7 +35,7 @@ fun StandingInstructionsScreenRoute(
     onNewSI: () -> Unit,
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: StandingInstructionViewModel = hiltViewModel(),
+    viewModel: StandingInstructionViewModel = koinViewModel(),
 ) {
     val standingInstructionsUiState by viewModel.standingInstructionsUiState.collectAsStateWithLifecycle()
 

@@ -16,9 +16,8 @@ import org.mifospay.core.network.GenericResponse
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class EditCard @Inject constructor(
+class EditCard (
     private val mFineractRepository: FineractRepository,
 ) : UseCase<EditCard.RequestValues, EditCard.ResponseValue>() {
 

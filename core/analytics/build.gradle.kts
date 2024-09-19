@@ -10,7 +10,7 @@
 plugins {
     alias(libs.plugins.mifospay.android.library)
     alias(libs.plugins.mifospay.android.library.compose)
-    alias(libs.plugins.mifospay.android.hilt)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -22,4 +22,15 @@ dependencies {
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.androidx.navigation)
+
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
+    testImplementation(libs.koin.test.junit5)
+
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
 }

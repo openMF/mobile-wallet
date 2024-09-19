@@ -51,9 +51,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifos.library.countrycodepicker.CountryCodePicker
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
@@ -78,7 +78,7 @@ fun EditProfileScreenRoute(
     onBackClick: () -> Unit,
     getUri: (context: Context, file: File) -> Uri,
     modifier: Modifier = Modifier,
-    viewModel: EditProfileViewModel = hiltViewModel(),
+    viewModel: EditProfileViewModel = koinViewModel(),
 ) {
     val editProfileUiState by viewModel.editProfileUiState.collectAsStateWithLifecycle()
     val updateSuccess by viewModel.updateSuccess.collectAsStateWithLifecycle()

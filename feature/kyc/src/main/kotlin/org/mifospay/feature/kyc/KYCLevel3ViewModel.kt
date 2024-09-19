@@ -10,17 +10,15 @@
 package org.mifospay.feature.kyc
 
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.feature.kyc.KYCLevel3UiState.Loading
-import javax.inject.Inject
 
-@HiltViewModel
+
 @Suppress("UnusedPrivateProperty")
-class KYCLevel3ViewModel @Inject constructor(
+class KYCLevel3ViewModel (
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
 ) : ViewModel() {

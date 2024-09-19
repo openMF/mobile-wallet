@@ -18,9 +18,8 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 import org.mifospay.core.network.BaseURL
-import javax.inject.Inject
 
-class KtorAuthenticationService @Inject constructor(
+class KtorAuthenticationService (
     private val client: HttpClient,
 ) {
 

@@ -18,9 +18,8 @@ import kotlinx.coroutines.withContext
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
-import javax.inject.Inject
 
-class FetchMerchants @Inject constructor(
+class FetchMerchants (
     private val mFineractRepository: FineractRepository,
 ) : UseCase<FetchMerchants.RequestValues, FetchMerchants.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {

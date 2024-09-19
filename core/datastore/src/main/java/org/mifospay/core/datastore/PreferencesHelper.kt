@@ -15,12 +15,10 @@ import android.preference.PreferenceManager
 import com.google.gson.Gson
 import com.mifospay.core.model.domain.client.Client
 import com.mifospay.core.model.domain.user.User
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class PreferencesHelper @Inject constructor(@ApplicationContext context: Context?) {
+
+
+class PreferencesHelper ( private val context: Context?) {
     private val sharedPreferences: SharedPreferences
 
     init {

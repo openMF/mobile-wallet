@@ -15,9 +15,8 @@ import org.mifospay.core.data.fineract.repository.FineractRepository
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class FetchStandingInstruction @Inject constructor(
+class FetchStandingInstruction(
     private val apiRepository: FineractRepository,
 ) : UseCase<FetchStandingInstruction.RequestValues, FetchStandingInstruction.ResponseValue>() {
 

@@ -12,7 +12,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
         with(target) {
             pluginManager.apply {
                 apply("mifospay.android.library")
-                apply("mifospay.android.hilt")
+
             }
             extensions.configure<LibraryExtension> {
                 defaultConfig {
@@ -29,21 +29,24 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 add("implementation", project(":libs:material3-navigation"))
 
                 add("implementation", libs.findLibrary("kotlinx.collections.immutable").get())
-                add("implementation", libs.findLibrary("androidx.hilt.navigation.compose").get())
                 add("implementation", libs.findLibrary("androidx.lifecycle.runtimeCompose").get())
                 add("implementation", libs.findLibrary("androidx.lifecycle.viewModelCompose").get())
                 add("implementation", libs.findLibrary("androidx.tracing.ktx").get())
 
+                add("implementation", platform(libs.findLibrary("koin-bom").get()))
+                add("implementation", libs.findLibrary("koin-android").get())
+                add("implementation", libs.findLibrary("koin.androidx.compose").get())
+
                 add("androidTestImplementation", libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
 
                 add("testImplementation", kotlin("test"))
-                add("testImplementation", libs.findLibrary("hilt.android.testing").get())
+
+                add("testImplementation", libs.findLibrary("koin.test").get())
+                add("testImplementation", libs.findLibrary("koin.test.junit4").get())
 
                 add("debugImplementation", libs.findLibrary("androidx.compose.ui.test.manifest").get())
                 add("androidTestImplementation", libs.findLibrary("androidx.navigation.testing").get())
                 add("androidTestImplementation", libs.findLibrary("androidx.compose.ui.test").get())
-                add("androidTestImplementation", libs.findLibrary("hilt.android.testing").get())
-                add("androidTestImplementation", libs.findLibrary("androidx.lifecycle.runtimeTesting").get())
             }
         }
     }

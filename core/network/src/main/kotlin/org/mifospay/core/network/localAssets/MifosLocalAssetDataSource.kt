@@ -18,13 +18,10 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
-import org.mifospay.core.network.Dispatcher
 import org.mifospay.core.network.JvmLocalAssetManager
-import org.mifospay.core.network.MifosDispatchers
-import javax.inject.Inject
 
-class MifosLocalAssetDataSource @Inject constructor(
-    @Dispatcher(MifosDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+class MifosLocalAssetDataSource (
+    private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
     @SuppressLint("VisibleForTests")
     private val assets: LocalAssetManager = JvmLocalAssetManager,

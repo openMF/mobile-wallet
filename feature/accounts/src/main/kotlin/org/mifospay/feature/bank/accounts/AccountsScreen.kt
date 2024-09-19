@@ -28,12 +28,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifos.library.pullrefresh.PullRefreshIndicator
 import com.mifos.library.pullrefresh.pullRefresh
 import com.mifos.library.pullrefresh.rememberPullRefreshState
 import com.mifospay.core.model.domain.BankAccountDetails
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.EmptyContentScreen
@@ -44,7 +44,7 @@ fun AccountsScreen(
     navigateToBankAccountDetailScreen: (BankAccountDetails, Int) -> Unit,
     navigateToLinkBankAccountScreen: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: AccountViewModel = hiltViewModel(),
+    viewModel: AccountViewModel = koinViewModel(),
 ) {
     val accountsUiState by viewModel.accountsUiState.collectAsStateWithLifecycle()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()

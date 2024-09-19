@@ -11,6 +11,7 @@ package org.mifospay.core.data.domain.usecase.client
 
 import com.mifospay.core.model.entity.Page
 import com.mifospay.core.model.entity.client.Client
+import org.koin.java.KoinJavaComponent.inject
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.entity.mapper.ClientDetailsMapper
 import org.mifospay.core.data.fineract.repository.FineractRepository
@@ -18,14 +19,11 @@ import org.mifospay.core.data.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class FetchClientData @Inject constructor(
+class FetchClientData (
     private val fineractRepository: FineractRepository,
+    private val clientDetailsMapper: ClientDetailsMapper
 ) : UseCase<FetchClientData.RequestValues, FetchClientData.ResponseValue>() {
-
-    @Inject
-    lateinit var clientDetailsMapper: ClientDetailsMapper
 
     override fun executeUseCase(requestValues: RequestValues) {
         requestValues.clientId?.let { clientId ->

@@ -20,13 +20,12 @@ import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
-import jakarta.inject.Inject
 import org.mifospay.core.network.ApiEndPoints.SAVINGS_ACCOUNTS
 import org.mifospay.core.network.ApiEndPoints.TRANSACTIONS
 import org.mifospay.core.network.BaseURL
 import org.mifospay.core.network.GenericResponse
 
-class KtorSavingsAccountService @Inject constructor(
+class KtorSavingsAccountService (
     private val client: HttpClient,
 ) {
     suspend fun getSavingsWithAssociations(

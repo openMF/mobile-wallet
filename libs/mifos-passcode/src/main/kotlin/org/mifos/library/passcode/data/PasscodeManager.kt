@@ -10,15 +10,12 @@
 package org.mifos.library.passcode.data
 
 import android.content.Context
-import dagger.hilt.android.qualifiers.ApplicationContext
 import org.mifos.library.passcode.utility.PreferenceManager
-import javax.inject.Inject
 
-class PasscodeManager @Inject constructor(
-    @ApplicationContext
-    private val context: Context,
+class PasscodeManager (
+    private val passcodePreferencesHelper : PreferenceManager
 ) {
-    private val passcodePreferencesHelper = PreferenceManager(context)
+
 
     val getPasscode = passcodePreferencesHelper.getSavedPasscode()
 

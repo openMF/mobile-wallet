@@ -10,6 +10,7 @@
 plugins {
     alias(libs.plugins.mifospay.android.library)
     alias(libs.plugins.protobuf)
+
 }
 
 android {

@@ -10,7 +10,7 @@
 plugins {
     alias(libs.plugins.mifospay.android.library)
     alias(libs.plugins.mifospay.android.library.compose)
-    alias(libs.plugins.mifospay.android.hilt)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -30,6 +30,17 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtimeCompose)
     implementation(libs.androidx.lifecycle.viewModelCompose)
     implementation(libs.androidx.navigation.compose)
-    implementation(libs.androidx.hilt.navigation.compose)
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.io.insert.koin.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.navigation)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.core.viewmodel)
+
+
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
+    testImplementation(libs.koin.test.junit5)
 
 }

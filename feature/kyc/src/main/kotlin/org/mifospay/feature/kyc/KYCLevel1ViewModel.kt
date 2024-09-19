@@ -11,7 +11,6 @@ package org.mifospay.feature.kyc
 
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.entity.kyc.KYCLevel1Details
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCase
@@ -19,10 +18,8 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.kyc.UploadKYCLevel1Details
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.feature.kyc.KYCLevel1UiState.Loading
-import javax.inject.Inject
 
-@HiltViewModel
-class KYCLevel1ViewModel @Inject constructor(
+class KYCLevel1ViewModel (
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val uploadKYCLevel1DetailsUseCase: UploadKYCLevel1Details,

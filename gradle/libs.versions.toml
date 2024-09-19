@@ -16,7 +16,7 @@ androidxComposeUi = "1.6.8"
 androidxComposeUiTest = "1.7.0-beta01"
 androidxCoreSplashscreen = "1.0.1"
 androidxDataStore = "1.1.1"
-androidxHilt = "1.2.0"
+#androidxHilt = "1.2.0"
 androidxLifecycle = "2.8.4"
 androidxMetrics = "1.0.0-beta01"
 androidxNavigation = "2.8.0-rc01"
@@ -41,10 +41,18 @@ gmsPlugin = "4.4.2"
 googleOss = "17.1.0"
 googleOssPlugin = "0.10.6"
 googleidVersion = "1.1.1"
-hilt = "2.52"
+#hilt = "2.52"
 junitVersion = "4.13.2"
-koin = "3.6.0-Beta4"
+koin = "4.0.0-RC2"
+koinAndroidxNavigationVersion = "4.0.0-RC2"
+koinAnnotationsVersion = "1.4.0-RC4"
+koinBomVersion = "4.0.0-RC2"
 koinComposeMultiplatform = "1.2.0-Beta4"
+koinCoreViewmodelVersion = "4.0.0-RC2"
+koinKspCompilerVersion = "1.4.0-RC4"
+koinTestJunit4Version = "4.0.0-RC2"
+koinTestJunit5Version = "4.0.0-RC2"
+koinTestVersion = "4.0.0-RC2"
 kotlin = "2.0.20"
 kotlinStdlibVersion = "1.9.0"
 kotlinxCoroutines = "1.8.1"
@@ -81,6 +89,7 @@ twitter-detekt-compose = "0.0.26"
 versionCatalogLinterVersion = "1.0.3"
 wire = "5.0.0"
 zxingVersion = "3.5.3"
+uiDesktopVersion = "1.7.0"
 
 [libraries]
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanistPagerVersion" }
@@ -117,7 +126,7 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 androidx-credentials = { group = "androidx.credentials", name = "credentials", version.ref = "credentialsVersion" }
 androidx-credentials-play-services-auth = { group = "androidx.credentials", name = "credentials-play-services-auth", version.ref = "credentialsVersion" }
 androidx-dataStore-core = { group = "androidx.datastore", name = "datastore", version.ref = "androidxDataStore" }
-androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHilt" }
+#androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHilt" }
 androidx-lifecycle-extensions = { group = "androidx.lifecycle", name = "lifecycle-extensions", version.ref = "lifecycleExtensionsVersion" }
 androidx-lifecycle-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleVersion" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
@@ -147,16 +156,26 @@ google-oss-licenses = { group = "com.google.android.gms", name = "play-services-
 google-oss-licenses-plugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version.ref = "googleOssPlugin" }
 google-play-services-code-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "playServicesCodeScanner" }
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleidVersion" }
-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
-hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+#hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+#hilt-android-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
+#hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+insert-koin-koin-core = { module = "io.insert-koin:koin-core" }
+io-insert-koin-koin-core = { module = "io.insert-koin:koin-core" }
 jetbrains-kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlibVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
+koin-androidx-navigation = { module = "io.insert-koin:koin-androidx-navigation", version.ref = "koinAndroidxNavigationVersion" }
+koin-annotations = { module = "io.insert-koin:koin-annotations", version.ref = "koinAnnotationsVersion" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBomVersion" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koinComposeMultiplatform" }
 koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koinComposeMultiplatform" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
+koin-core-viewmodel = { module = "io.insert-koin:koin-core-viewmodel", version.ref = "koinCoreViewmodelVersion" }
+koin-ksp-compiler = { module = "io.insert-koin:koin-ksp-compiler", version.ref = "koinKspCompilerVersion" }
+koin-test = { module = "io.insert-koin:koin-test", version.ref = "koinTestVersion" }
+koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4", version.ref = "koinTestJunit4Version" }
+koin-test-junit5 = { module = "io.insert-koin:koin-test-junit5", version.ref = "koinTestJunit5Version" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutable" }
@@ -198,6 +217,7 @@ squareup-retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", vers
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 twitter-detekt-compose = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "twitter-detekt-compose" }
 zxing = { group = "com.google.zxing", name = "core", version.ref = "zxingVersion" }
+androidx-ui-desktop = { group = "androidx.compose.ui", name = "ui-desktop", version.ref = "uiDesktopVersion" }
 
 [bundles]
 androidx-compose-ui-test = [
@@ -215,7 +235,7 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
 gms = { id = "com.google.gms.google-services", version.ref = "gmsPlugin" }
-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+#hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
@@ -233,7 +253,7 @@ mifospay-android-application-compose = { id = "mifospay.android.application.comp
 mifospay-android-application-firebase = { id = "mifospay.android.application.firebase", version = "unspecified" }
 mifospay-android-application-flavors = { id = "mifospay.android.application.flavors", version = "unspecified" }
 mifospay-android-feature = { id = "mifospay.android.feature", version = "unspecified" }
-mifospay-android-hilt = { id = "mifospay.android.hilt", version = "unspecified" }
+mifospay-android-koin = { id = "mifospay.android.koin", version = "unspecified" }
 mifospay-android-library = { id = "mifospay.android.library", version = "unspecified" }
 mifospay-android-library-compose = { id = "mifospay.android.library.compose", version = "unspecified" }
 mifospay-android-lint = { id = "mifospay.android.lint", version = "unspecified" }

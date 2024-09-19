@@ -18,4 +18,8 @@ android {
 
 dependencies {
     implementation(libs.accompanist.pager)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.compose.ui.util)
 }

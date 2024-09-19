@@ -23,9 +23,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.Invoice
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons.Info
 import org.mifospay.core.designsystem.theme.MifosTheme
@@ -36,7 +36,7 @@ import org.mifospay.invoices.R
 fun InvoiceScreenRoute(
     navigateToInvoiceDetailScreen: (Uri) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: InvoicesViewModel = hiltViewModel(),
+    viewModel: InvoicesViewModel = koinViewModel(),
 ) {
     val invoiceUiState by viewModel.invoiceUiState.collectAsStateWithLifecycle()
     InvoiceScreen(

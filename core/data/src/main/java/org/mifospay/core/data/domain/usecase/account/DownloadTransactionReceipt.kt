@@ -16,9 +16,8 @@ import org.mifospay.core.data.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class DownloadTransactionReceipt @Inject constructor(
+class DownloadTransactionReceipt (
     private val mFineractRepository: FineractRepository,
 ) : UseCase<DownloadTransactionReceipt.RequestValues, DownloadTransactionReceipt.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {

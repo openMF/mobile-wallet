@@ -9,7 +9,9 @@
  */
 package org.mifospay.core.network
 
+import android.annotation.SuppressLint
 import androidx.annotation.VisibleForTesting
+import org.koin.dsl.module
 import org.mifospay.core.network.localAssets.LocalAssetManager
 import java.io.File
 import java.io.InputStream
@@ -20,6 +22,7 @@ import java.util.Properties
  * It must remain on the root package for an easier [Class.getResource] with relative paths.
  * @see https://developer.android.com/reference/tools/gradle-api/7.3/com/android/build/api/dsl/UnitTestOptions
  */
+
 @VisibleForTesting
 internal object JvmLocalAssetManager : LocalAssetManager {
     private val config =
@@ -35,3 +38,4 @@ internal object JvmLocalAssetManager : LocalAssetManager {
 
     override fun open(fileName: String): InputStream = File(assets, fileName).inputStream()
 }
+

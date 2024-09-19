@@ -11,9 +11,8 @@ package org.mifospay.core.data.fineract.entity.mapper
 
 import com.mifospay.core.model.domain.Account
 import com.mifospay.core.model.entity.client.ClientAccounts
-import javax.inject.Inject
 
-class AccountMapper @Inject constructor(
+class AccountMapper (
     private val currencyMapper: CurrencyMapper,
 ) {
 

@@ -11,15 +11,12 @@ package org.mifospay.feature.transaction.detail
 
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransfer
-import javax.inject.Inject
 
-@HiltViewModel
-class TransactionDetailViewModel @Inject constructor(
+class TransactionDetailViewModel (
     private val mUseCaseHandler: UseCaseHandler,
     private val mFetchAccountTransferUseCase: FetchAccountTransfer,
 ) : ViewModel() {

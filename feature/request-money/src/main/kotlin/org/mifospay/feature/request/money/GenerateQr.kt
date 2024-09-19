@@ -17,12 +17,11 @@ import com.google.zxing.common.BitMatrix
 import org.mifospay.common.Constants
 import org.mifospay.core.data.base.UseCase
 import java.util.Base64
-import javax.inject.Inject
 
 /**
  * Created by naman on 8/7/17.
  */
-class GenerateQr @Inject constructor() :
+class GenerateQr  :
     UseCase<GenerateQr.RequestValues, GenerateQr.ResponseValue?>() {
     override fun executeUseCase(requestValues: RequestValues) {
         try {

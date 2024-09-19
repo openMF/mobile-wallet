@@ -15,9 +15,8 @@ import org.mifospay.core.network.GenericResponse
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class DeleteStandingInstruction @Inject constructor(
+class DeleteStandingInstruction (
     private val apiRepository: FineractRepository,
 ) : UseCase<DeleteStandingInstruction.RequestValues, DeleteStandingInstruction.ResponseValue>() {
 

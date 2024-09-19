@@ -46,11 +46,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -62,7 +62,7 @@ import java.util.Calendar
 internal fun NewSIScreenRoute(
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: NewSIViewModel = hiltViewModel(),
+    viewModel: NewSIViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.newSIUiState.collectAsStateWithLifecycle()
     val updateSuccess by viewModel.updateSuccess.collectAsStateWithLifecycle()

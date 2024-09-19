@@ -11,7 +11,6 @@ package org.mifospay.feature.kyc
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -24,10 +23,8 @@ import org.mifospay.core.data.domain.usecase.kyc.UploadKYCDocs
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.feature.kyc.KYCLevel2UiState.Loading
 import java.io.File
-import javax.inject.Inject
 
-@HiltViewModel
-class KYCLevel2ViewModel @Inject constructor(
+class KYCLevel2ViewModel (
     private val mUseCaseHandler: UseCaseHandler,
     private val preferencesHelper: PreferencesHelper,
     private val uploadKYCDocsUseCase: UploadKYCDocs,

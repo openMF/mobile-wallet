@@ -13,7 +13,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -24,10 +23,8 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.client.FetchClientImage
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.core.datastore.PreferencesHelper
-import javax.inject.Inject
 
-@HiltViewModel
-class ProfileViewModel @Inject constructor(
+class ProfileViewModel (
     private val mUseCaseHandler: UseCaseHandler,
     private val fetchClientImageUseCase: FetchClientImage,
     private val localRepository: LocalRepository,

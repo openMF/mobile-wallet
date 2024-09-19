@@ -13,30 +13,25 @@ import android.app.Activity
 import android.util.Log
 import android.view.Window
 import androidx.metrics.performance.JankStats
-import androidx.metrics.performance.JankStats.OnFrameListener
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityComponent
+import org.koin.dsl.module
+import org.koin.core.module.dsl.viewModel
+import org.koin.core.qualifier.named
+import org.mifospay.MainActivityViewModel
 
-@Module
-@InstallIn(ActivityComponent::class)
-object JankStatsModule {
-    @Provides
-    fun providesOnFrameListener(): OnFrameListener = OnFrameListener { frameData ->
+val JankStatsModule = module {
+
+    factory { (activity: Activity) -> activity.window }
+    factory { (window: Window) ->
+        JankStats.createAndTrack(window) { frameData ->
         // Make sure to only log janky frames.
-        if (frameData.isJank) {
-            // We're currently logging this but would better report it to a backend.
-            Log.v("Mifos Jank", frameData.toString())
+            if (frameData.isJank) {
+                // We're currently logging this but would better report it to a backend.
+                Log.v("Mifos Jank", frameData.toString())
+            }
         }
     }
 
-    @Provides
-    fun providesWindow(activity: Activity): Window = activity.window
-
-    @Provides
-    fun providesJankStats(
-        window: Window,
-        frameListener: OnFrameListener,
-    ): JankStats = JankStats.createAndTrack(window, frameListener)
+    viewModel{
+        MainActivityViewModel(userDataRepository = get(), passcodeManager = get())
+    }
 }

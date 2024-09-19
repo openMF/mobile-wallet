@@ -17,9 +17,8 @@ import org.mifospay.core.data.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class VerifyUser @Inject constructor(
+class VerifyUser (
     private val apiRepository: FineractRepository,
 ) : UseCase<VerifyUser.RequestValues, VerifyUser.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {

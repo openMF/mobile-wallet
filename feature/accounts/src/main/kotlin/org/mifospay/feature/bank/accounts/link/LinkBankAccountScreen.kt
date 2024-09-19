@@ -50,10 +50,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.domain.Bank
 import com.mifospay.core.model.domain.BankType
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosCard
@@ -67,7 +67,7 @@ import org.mifospay.feature.bank.accounts.choose.sim.ChooseSimDialogSheet
 
 @Composable
 internal fun LinkBankAccountRoute(
-    viewModel: LinkBankAccountViewModel = hiltViewModel(),
+    viewModel: LinkBankAccountViewModel = koinViewModel(),
     onBackClick: () -> Unit,
 ) {
     val bankUiState by viewModel.bankListUiState.collectAsStateWithLifecycle()

@@ -12,7 +12,6 @@ package org.mifospay.feature.specific.transactions
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.Transaction
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.mifospay.core.data.base.TaskLooper
@@ -23,10 +22,8 @@ import org.mifospay.core.data.util.Constants
 import org.mifospay.feature.specific.transactions.SpecificTransactionsUiState.Loading
 import org.mifospay.feature.specific.transactions.navigation.ACCOUNT_NUMBER_ARG
 import org.mifospay.feature.specific.transactions.navigation.TRANSACTIONS_ARG
-import javax.inject.Inject
 
-@HiltViewModel
-class SpecificTransactionsViewModel @Inject constructor(
+class SpecificTransactionsViewModel(
     private val mUseCaseFactory: UseCaseFactory,
     private var mTaskLooper: TaskLooper? = null,
     savedStateHandle: SavedStateHandle,

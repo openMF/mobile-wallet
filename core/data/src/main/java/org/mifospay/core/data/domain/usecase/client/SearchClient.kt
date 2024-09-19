@@ -11,6 +11,7 @@ package org.mifospay.core.data.domain.usecase.client
 
 import com.mifospay.core.model.domain.SearchResult
 import com.mifospay.core.model.entity.SearchedEntity
+import org.koin.java.KoinJavaComponent.inject
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.entity.mapper.SearchedEntitiesMapper
 import org.mifospay.core.data.fineract.repository.FineractRepository
@@ -18,14 +19,13 @@ import org.mifospay.core.data.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class SearchClient @Inject constructor(
+
+class SearchClient (
     private val apiRepository: FineractRepository,
+    private val searchedEntitiesMapper: SearchedEntitiesMapper
 ) : UseCase<SearchClient.RequestValues, SearchClient.ResponseValue>() {
 
-    @Inject
-    lateinit var searchedEntitiesMapper: SearchedEntitiesMapper
 
     data class RequestValues(val externalId: String) : UseCase.RequestValues
     data class ResponseValue(val results: List<SearchResult>) : UseCase.ResponseValue

@@ -20,9 +20,8 @@ import org.mifospay.core.data.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class CreateStandingTransaction @Inject constructor(
+class CreateStandingTransaction (
     private val apiRepository: FineractRepository,
 ) : UseCase<CreateStandingTransaction.RequestValues, CreateStandingTransaction.ResponseValue>() {
 

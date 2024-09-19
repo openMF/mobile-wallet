@@ -10,11 +10,34 @@
 package org.mifospay
 
 import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
+import org.mifospay.di.KoinModules
 
-@HiltAndroidApp
 class MifosPayApp : Application() {
     override fun onCreate() {
         super.onCreate()
+        val koinModules = KoinModules()
+
+        startKoin {
+            printLogger(Level.ERROR)
+            androidContext(this@MifosPayApp)
+            modules(
+                listOf(
+                    koinModules.dataModules,
+                    koinModules.mifosPayModule,
+                    koinModules
+                        .coreDataStoreModules,
+                    koinModules.featureModules,
+                    koinModules.networkModules,
+                    koinModules
+                        .analyticsModules,
+                    koinModules.commonModules,
+                    koinModules.libsModule
+                ),
+            )
+        }
+
     }
 }

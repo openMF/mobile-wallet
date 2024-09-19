@@ -17,9 +17,8 @@ import retrofit2.HttpException
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class UpdateClient @Inject constructor(
+class UpdateClient (
     private val fineractRepository: FineractRepository,
 ) : UseCase<UpdateClient.RequestValues, UpdateClient.ResponseValue>() {
 

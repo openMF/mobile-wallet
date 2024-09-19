@@ -38,7 +38,6 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.maxkeppeker.sheets.core.models.base.rememberUseCaseState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
@@ -46,6 +45,7 @@ import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import com.mifos.library.countrycodepicker.CountryCodePicker
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
@@ -57,7 +57,7 @@ import java.time.format.DateTimeFormatter
 internal fun KYCLevel1Screen(
     navigateToKycLevel2: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: KYCLevel1ViewModel = hiltViewModel(),
+    viewModel: KYCLevel1ViewModel = koinViewModel(),
 ) {
     val kyc1uiState by viewModel.kyc1uiState.collectAsStateWithLifecycle()
 

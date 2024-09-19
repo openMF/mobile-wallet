@@ -10,15 +10,12 @@
 package org.mifospay.feature.settings
 
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.BlockUnblockCommand
 import org.mifospay.core.data.repository.local.LocalRepository
-import javax.inject.Inject
 
-@HiltViewModel
-class SettingsViewModel @Inject constructor(
+class SettingsViewModel (
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val blockUnblockCommandUseCase: BlockUnblockCommand,

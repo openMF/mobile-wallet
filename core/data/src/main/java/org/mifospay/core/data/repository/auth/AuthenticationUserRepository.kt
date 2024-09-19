@@ -13,9 +13,8 @@ import com.mifospay.core.model.UserData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import org.mifospay.core.datastore.PreferencesHelper
-import javax.inject.Inject
 
-class AuthenticationUserRepository @Inject constructor(
+class AuthenticationUserRepository (
     private val preferencesHelper: PreferencesHelper,
 ) : UserDataRepository {
 

@@ -16,7 +16,6 @@ import android.content.IntentFilter
 import android.os.Build.VERSION
 import android.os.Build.VERSION_CODES
 import androidx.tracing.trace
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
@@ -30,26 +29,23 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinTimeZone
-import org.mifospay.core.network.Dispatcher
-import org.mifospay.core.network.MifosDispatchers
-import org.mifospay.core.network.di.ApplicationScope
 import java.time.ZoneId
-import javax.inject.Inject
-import javax.inject.Singleton
+
 
 /**
  * Utility for reporting current timezone the device has set.
  * It always emits at least once with default setting and then for each TZ change.
  */
+
 interface TimeZoneMonitor {
     val currentTimeZone: Flow<TimeZone>
 }
 
-@Singleton
-internal class TimeZoneBroadcastMonitor @Inject constructor(
-    @ApplicationContext private val context: Context,
-    @ApplicationScope appScope: CoroutineScope,
-    @Dispatcher(MifosDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
+
+internal class TimeZoneBroadcastMonitor (
+     private val context: Context,
+     appScope: CoroutineScope,
+     private val ioDispatcher: CoroutineDispatcher,
 ) : TimeZoneMonitor {
 
     override val currentTimeZone: SharedFlow<TimeZone> =

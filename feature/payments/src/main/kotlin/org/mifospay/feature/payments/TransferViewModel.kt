@@ -11,7 +11,6 @@ package org.mifospay.feature.payments
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,10 +18,8 @@ import org.mifospay.core.data.base.UseCase.UseCaseCallback
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.FetchAccount
 import org.mifospay.core.data.repository.local.LocalRepository
-import javax.inject.Inject
 
-@HiltViewModel
-class TransferViewModel @Inject constructor(
+class TransferViewModel (
     val mUsecaseHandler: UseCaseHandler,
     val localRepository: LocalRepository,
     val mFetchAccount: FetchAccount,

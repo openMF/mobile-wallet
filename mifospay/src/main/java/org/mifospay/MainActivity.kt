@@ -10,10 +10,10 @@
 package org.mifospay
 
 import android.os.Bundle
+import android.view.Window
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.viewModels
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
@@ -27,10 +27,13 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.metrics.performance.JankStats
 import androidx.navigation.compose.rememberNavController
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.koin.android.ext.android.inject
+import org.koin.androidx.compose.koinViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import org.mifospay.MainActivityUiState.Loading
 import org.mifospay.MainActivityUiState.Success
 import org.mifospay.core.analytics.AnalyticsHelper
@@ -43,28 +46,27 @@ import org.mifospay.navigation.MifosNavGraph.LOGIN_GRAPH
 import org.mifospay.navigation.MifosNavGraph.PASSCODE_GRAPH
 import org.mifospay.navigation.RootNavGraph
 import org.mifospay.ui.rememberMifosAppState
-import javax.inject.Inject
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     /**
      * Lazily inject [JankStats], which is used to track jank throughout the app.
      */
-    @Inject
-    lateinit var lazyStats: dagger.Lazy<JankStats>
 
-    @Inject
-    lateinit var networkMonitor: NetworkMonitor
 
-    @Inject
-    lateinit var timeZoneMonitor: TimeZoneMonitor
+    private val networkMonitor : NetworkMonitor by inject()
 
-    @Inject
-    lateinit var analyticsHelper: AnalyticsHelper
+    private val timeZoneMonitor : TimeZoneMonitor by inject()
 
-    private val viewModel: MainActivityViewModel by viewModels()
+    private val analyticsHelper: AnalyticsHelper by inject()
+
+
+    private val viewModel: MainActivityViewModel by viewModel()
+
+    private val myWindow: Window by inject { parametersOf(this) }
+
+    private val lazyStats : JankStats  by inject { parametersOf(myWindow) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val splashScreen = installSplashScreen()
@@ -136,11 +138,11 @@ class MainActivity : ComponentActivity() {
 
     override fun onResume() {
         super.onResume()
-        lazyStats.get().isTrackingEnabled = true
+        lazyStats.isTrackingEnabled = true
     }
 
     override fun onPause() {
         super.onPause()
-        lazyStats.get().isTrackingEnabled = false
+        lazyStats.isTrackingEnabled = false
     }
 }

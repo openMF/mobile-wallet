@@ -10,6 +10,7 @@
 plugins {
     alias(libs.plugins.mifospay.android.feature)
     alias(libs.plugins.mifospay.android.library.compose)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -21,6 +22,23 @@ dependencies {
     implementation(projects.core.data)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.compose.ui.util)
     // TODO:: this should be removed
     implementation("com.google.guava:guava:27.0.1-android")
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.androidx.navigation)
+
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
+    testImplementation(libs.koin.test.junit5)
+
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
 }

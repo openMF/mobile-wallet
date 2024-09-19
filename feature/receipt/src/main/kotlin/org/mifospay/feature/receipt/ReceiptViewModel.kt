@@ -15,7 +15,6 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,10 +28,9 @@ import org.mifospay.core.data.domain.usecase.account.FetchAccountTransaction
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransfer
 import org.mifospay.core.datastore.PreferencesHelper
 import java.io.File
-import javax.inject.Inject
 
-@HiltViewModel
-class ReceiptViewModel @Inject constructor(
+
+class ReceiptViewModel (
     private val mUseCaseHandler: UseCaseHandler,
     private val preferencesHelper: PreferencesHelper,
     private val downloadTransactionReceiptUseCase: DownloadTransactionReceipt,

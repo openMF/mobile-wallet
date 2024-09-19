@@ -23,10 +23,11 @@ plugins {
     alias(libs.plugins.mifospay.android.application)
     alias(libs.plugins.mifospay.android.application.compose)
     alias(libs.plugins.mifospay.android.application.flavors)
-    alias(libs.plugins.mifospay.android.hilt)
     alias(libs.plugins.mifospay.android.application.firebase)
     alias(libs.plugins.roborazzi)
     id("com.google.android.gms.oss-licenses-plugin")
+    id("com.google.devtools.ksp")
+
 }
 
 android {
@@ -132,8 +133,6 @@ dependencies {
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.compose.runtime.tracing)
 
-    implementation(libs.androidx.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
@@ -150,16 +149,26 @@ dependencies {
     runtimeOnly(libs.androidx.compose.runtime)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    kspTest(libs.hilt.compiler)
 
     testImplementation(libs.junit)
-    testImplementation(libs.hilt.android.testing)
     testImplementation(libs.androidx.compose.ui.test)
 
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.hilt.android.testing)
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.core)
+    implementation(libs.koin.androidx.compose)
+    implementation(libs.koin.androidx.navigation)
+
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
+    testImplementation(libs.koin.test.junit5)
+
+    implementation(libs.koin.annotations)
+    ksp(libs.koin.ksp.compiler)
+
 }
 
 dependencyGuard {
