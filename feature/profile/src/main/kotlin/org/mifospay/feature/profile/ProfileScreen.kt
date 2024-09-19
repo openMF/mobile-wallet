@@ -68,10 +68,10 @@ fun ProfileScreenContent(
                 ProfileImage(bitmap = profileState.bitmapImage)
 
                 ProfileDetailsCard(
-                    name = profileState.name ?: "Empty name",
-                    email = profileState.email ?: "Empty email",
+                    name = profileState.name ?: "",
+                    email = profileState.email ?: "",
                     vpa = profileState.vpa ?: "",
-                    mobile = profileState.mobile ?: "Empty mobile number",
+                    mobile = profileState.mobile ?: "",
                 )
 
                 MifosButton(

@@ -31,7 +31,7 @@ fun MifosUserImage(
         Image(
             modifier = modifier
                 .clip(CircleShape),
-            painter = painterResource(id = R.drawable.checker),
+            painter = painterResource(id = R.drawable.core_ui_ic_dp_placeholder),
             contentDescription = "Empty profile Image",
             contentScale = ContentScale.Fit,
         )

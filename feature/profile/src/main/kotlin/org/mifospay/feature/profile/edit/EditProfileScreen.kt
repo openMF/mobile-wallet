@@ -318,60 +318,6 @@ private fun EditProfileScreenContent(
             )
         }
     }
-
-    /*
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp),
-    ) {
-        val keyboardController = LocalSoftwareKeyboardController.current
-        if (LocalInspectionMode.current) {
-            Text("Placeholder for TogiCountryCodePicker")
-        } else {
-            CountryCodePicker(
-                modifier = Modifier,
-                initialPhoneNumber = " ",
-                autoDetectCode = true,
-                shape = RoundedCornerShape(3.dp),
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-                ),
-                onValueChange = { (code, phone), isValid ->
-                    if (isValid) {
-                        mobile = code + phone
-                    }
-                },
-                label = { Text(stringResource(id = R.string.feature_profile_phone_number)) },
-                keyboardActions = KeyboardActions { keyboardController?.hide() },
-            )
-        }
-    }
-
-    EditProfileSaveButton(
-        onClick = {
-            if (isDataSaveNecessary(email, initialEmail)) {
-                updateEmail(email)
-            }
-            if (isDataSaveNecessary(mobile, initialMobile)) {
-                updateMobile(mobile)
-            }
-            if (updateSuccess) {
-                // if user details is successfully saved then go back to Profile Activity
-                // same behaviour as onBackPress, hence reused the callback
-                onBackClick.invoke()
-            } else {
-                Toast
-                    .makeText(
-                        context,
-                        R.string.feature_profile_failed_to_save_changes,
-                        Toast.LENGTH_SHORT,
-                    ).show()
-            }
-        },
-        buttonText = R.string.feature_profile_save,
-    )
-     */
 }
 
 private fun isDataSaveNecessary(

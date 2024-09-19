@@ -10,6 +10,7 @@
 package org.mifospay.feature.profile.edit
 
 import android.net.Uri
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.offset
@@ -44,17 +45,29 @@ fun EditProfileScreenImage(
         modifier = modifier
             .size(150.dp),
     ) {
-        AsyncImage(
-            placeholder = painterResource(id = R.drawable.checker),
-            error = painterResource(id = R.drawable.checker),
-            model = imageUri,
-            modifier = Modifier
-                .size(150.dp)
-                .clip(CircleShape)
-                .border(4.dp, MifosBlue, CircleShape),
-            contentScale = ContentScale.Crop,
-            contentDescription = null,
-        )
+        if (imageUri != null) {
+            AsyncImage(
+                placeholder = painterResource(id = R.drawable.checker),
+                error = painterResource(id = R.drawable.checker),
+                model = imageUri,
+                modifier = Modifier
+                    .size(150.dp)
+                    .clip(CircleShape)
+                    .border(4.dp, MifosBlue, CircleShape),
+                contentScale = ContentScale.Crop,
+                contentDescription = null,
+            )
+        } else {
+            Image(
+                painter = painterResource(id = R.drawable.core_ui_ic_dp_placeholder),
+                contentDescription = "Empty UI",
+                modifier = Modifier
+                    .size(150.dp)
+                    .clip(CircleShape)
+                    .border(4.dp, MifosBlue, CircleShape),
+                contentScale = ContentScale.Crop,
+            )
+        }
 
         IconButton(
             onClick = onCameraIconClick,
