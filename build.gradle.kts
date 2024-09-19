@@ -36,9 +36,15 @@ plugins {
     alias(libs.plugins.wire) apply false
 }
 
-tasks.register("versionFile").configure {
-    group = "publishing"
-    doLast {
-        File(projectDir, "version.txt").writeText(project.version.toString())
+object DynamicVersion {
+    fun setDynamicVersion(file: File, version: String) {
+        val cleanedVersion = version.split('+')[0]
+        file.writeText(cleanedVersion)
     }
+}
+
+tasks.register("versionFile") {
+    val file = File(projectDir, "version.txt")
+
+    DynamicVersion.setDynamicVersion(file, project.version.toString())
 }

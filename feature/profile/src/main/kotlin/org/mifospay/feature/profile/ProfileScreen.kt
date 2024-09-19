@@ -9,7 +9,6 @@
  */
 package org.mifospay.feature.profile
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,7 +37,7 @@ import org.mifospay.core.ui.ProfileImage
 
 @Composable
 fun ProfileRoute(
-    onEditProfile: () -> Unit,
+    onLinkAccount: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
@@ -47,7 +45,7 @@ fun ProfileRoute(
 
     ProfileScreenContent(
         profileState = profileState,
-        onEditProfile = onEditProfile,
+        onLinkAccount = onLinkAccount,
         modifier = modifier,
     )
 }
@@ -55,14 +53,13 @@ fun ProfileRoute(
 @Composable
 fun ProfileScreenContent(
     profileState: ProfileUiState,
-    onEditProfile: () -> Unit,
+    onLinkAccount: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .background(MaterialTheme.colorScheme.surface),
+            .verticalScroll(rememberScrollState()),
     ) {
         when (profileState) {
             is ProfileUiState.Loading -> MfLoadingWheel()
@@ -102,15 +99,13 @@ fun ProfileScreenContent(
                         .height(55.dp),
                     color = MifosBlue,
                     text = { Text(text = stringResource(id = R.string.feature_profile_link_bank_account)) },
-                    onClick = {
-                        // remove this, this is just to navigate to onEditProfile as
-                        // we currently don't have any button to navigate to that screen
-                        onEditProfile()
-                    },
+                    onClick = onLinkAccount,
                     leadingIcon = {
                         Icon(imageVector = MifosIcons.AttachMoney, contentDescription = "")
                     },
                 )
+
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }
@@ -138,6 +133,6 @@ private fun ProfileScreenPreview(
 ) {
     ProfileScreenContent(
         profileState = profileState,
-        onEditProfile = {},
+        onLinkAccount = {},
     )
 }

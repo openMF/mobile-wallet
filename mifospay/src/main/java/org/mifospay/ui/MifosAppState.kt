@@ -41,6 +41,7 @@ import org.mifospay.feature.payments.PAYMENTS_ROUTE
 import org.mifospay.feature.payments.navigateToPayments
 import org.mifospay.feature.profile.navigation.PROFILE_ROUTE
 import org.mifospay.feature.profile.navigation.navigateToProfile
+import org.mifospay.navigation.MifosNavGraph
 import org.mifospay.navigation.TopLevelDestination
 
 @Composable
@@ -170,4 +171,22 @@ private fun NavigationTrackingSideEffect(navController: NavHostController) {
             navController.removeOnDestinationChangedListener(listener)
         }
     }
+}
+
+fun NavController.navigateToMainGraph() {
+    val options = navOptions {
+        // Pop up to the start destination of the graph to
+        // avoid building up a large stack of destinations
+        // on the back stack as users select items
+        popUpTo(graph.findStartDestination().id) {
+            saveState = false
+        }
+        // Avoid multiple copies of the same destination when
+        // reselecting the same item
+        launchSingleTop = true
+        // Restore state when reselecting a previously selected item
+        restoreState = false
+    }
+
+    navigate(MifosNavGraph.MAIN_GRAPH, options)
 }

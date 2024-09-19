@@ -8,6 +8,7 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 import org.mifospay.MifosBuildType
+import org.mifospay.dynamicVersion
 
 /*
  * Copyright 2024 Mifos Initiative
@@ -34,7 +35,7 @@ android {
 
     defaultConfig {
         applicationId = "org.mifospay"
-        versionName = project.version.toString()
+        versionName = project.dynamicVersion
         versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

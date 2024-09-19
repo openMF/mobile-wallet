@@ -23,6 +23,6 @@ fun NavGraphBuilder.profileScreen(
     onEditProfile: () -> Unit,
 ) {
     composable(route = PROFILE_ROUTE) {
-        ProfileRoute(onEditProfile = onEditProfile)
+        ProfileRoute(onLinkAccount = onEditProfile)
     }
 }

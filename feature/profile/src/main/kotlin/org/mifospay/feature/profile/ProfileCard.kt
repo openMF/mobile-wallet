@@ -23,10 +23,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.mifospay.core.designsystem.theme.MifosBlue
+import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun ProfileDetailsCard(
@@ -41,11 +41,11 @@ fun ProfileDetailsCard(
             .fillMaxWidth()
             .padding(20.dp),
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 4.dp,
+            defaultElevation = 1.dp,
         ),
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White,
+            containerColor = NewUi.containerColor,
         ),
     ) {
         Column(
@@ -77,10 +77,22 @@ fun ProfileItem(
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
-        Text(text = label, color = MifosBlue)
+        Text(
+            text = label,
+            color = NewUi.primaryColor,
+            style = MaterialTheme.typography.labelLarge,
+        )
         Spacer(modifier = Modifier.height(10.dp))
-        Text(text = value, color = MaterialTheme.colorScheme.onSurface)
+        Text(
+            text = value,
+            color = MaterialTheme.colorScheme.onSurface,
+            style = MaterialTheme.typography.labelLarge,
+            fontWeight = FontWeight(400),
+        )
         Spacer(modifier = Modifier.height(4.dp))
-        HorizontalDivider(thickness = 0.2.dp)
+        HorizontalDivider(
+            thickness = 1.dp,
+            color = NewUi.onSurface.copy(alpha = 0.05f),
+        )
     }
 }

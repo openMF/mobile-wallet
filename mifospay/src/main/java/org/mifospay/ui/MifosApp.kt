@@ -35,7 +35,6 @@ import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,6 +58,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
 import org.mifospay.R
+import org.mifospay.core.designsystem.component.IconBox
 import org.mifospay.core.designsystem.component.MifosBackground
 import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosNavigationBar
@@ -67,9 +67,9 @@ import org.mifospay.core.designsystem.component.MifosNavigationRail
 import org.mifospay.core.designsystem.component.MifosNavigationRailItem
 import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.GradientColors
 import org.mifospay.core.designsystem.theme.LocalGradientColors
 import org.mifospay.feature.faq.navigation.navigateToFAQ
+import org.mifospay.feature.profile.navigation.navigateToEditProfile
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.navigation.MifosNavHost
 import org.mifospay.navigation.TopLevelDestination
@@ -84,18 +84,11 @@ fun MifosApp(
     onClickLogout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val shouldShowGradientBackground =
-        appState.currentTopLevelDestination == TopLevelDestination.HOME
     var showHomeMenuOption by rememberSaveable { mutableStateOf(false) }
 
     MifosBackground(modifier) {
         MifosGradientBackground(
-            gradientColors =
-            if (shouldShowGradientBackground) {
-                LocalGradientColors.current
-            } else {
-                GradientColors()
-            },
+            gradientColors = LocalGradientColors.current,
         ) {
             val snackbarHostState = remember { SnackbarHostState() }
 
@@ -192,9 +185,8 @@ fun MifosApp(
                             destinationsWithUnreadResources = emptySet(),
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
-                            modifier =
-                            Modifier
-                                .testTag("NiaNavRail")
+                            modifier = Modifier
+                                .testTag("MifosNavRail")
                                 .safeDrawingPadding(),
                         )
                     }
@@ -205,16 +197,29 @@ fun MifosApp(
                         if (destination != null) {
                             MifosTopAppBar(
                                 titleRes = destination.titleTextId,
-                                actionIcon = MifosIcons.MoreVert,
-                                actionIconContentDescription =
-                                stringResource(
-                                    id = R.string.feature_profile_settings,
-                                ),
-                                colors =
-                                TopAppBarDefaults.centerAlignedTopAppBarColors(
-                                    containerColor = Color.Transparent,
-                                ),
-                                onActionClick = { showHomeMenuOption = true },
+                                actions = {
+                                    when (destination) {
+                                        TopLevelDestination.HOME -> {
+                                            IconBox(
+                                                icon = MifosIcons.SettingsOutlined,
+                                                onClick = {
+                                                    appState.navController.navigateToSettings()
+                                                },
+                                            )
+                                        }
+
+                                        TopLevelDestination.PROFILE -> {
+                                            IconBox(
+                                                icon = MifosIcons.Edit2,
+                                                onClick = {
+                                                    appState.navController.navigateToEditProfile()
+                                                },
+                                            )
+                                        }
+
+                                        else -> {}
+                                    }
+                                },
                             )
                         }
 

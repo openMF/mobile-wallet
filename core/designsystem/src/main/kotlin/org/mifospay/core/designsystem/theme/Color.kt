@@ -92,3 +92,15 @@ val submitButtonColor = Color(0xFF0000FF)
 val ElectricViolet = Color(0xFF6200EE)
 
 val MifosBlue = Color(0xFF0673BA)
+
+// This should be applied directly to the theme
+// New UI Colors
+object NewUi {
+    val gradientOne = Color(0xFFFFFFFF)
+    val gradientTwo = Color(0xFFD0D1D6)
+    val containerColor = Color(0xFFF5F5F5)
+    val primaryColor = Color(0xFF0673BA)
+    val tertiaryContainer = Color(0xFFFDFDFE)
+    val onSurface = Color(0xFF333333)
+    val secondaryColor = Color(0xFFFF3325)
+}

@@ -38,10 +38,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -54,8 +56,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun MfOutlinedTextField(
@@ -230,22 +232,28 @@ fun MifosTextField(
         singleLine = singleLine,
         maxLines = maxLines,
         minLines = minLines,
+        cursorBrush = SolidColor(NewUi.primaryColor),
         decorationBox = { innerTextField ->
             Column {
                 Text(
                     text = label,
-                    color = MifosBlue,
-                    modifier = Modifier.align(alignment = androidx.compose.ui.Alignment.Start),
+                    color = NewUi.primaryColor,
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.align(alignment = Alignment.Start),
                 )
 
-                Spacer(modifier = Modifier.height(10.dp))
+                Spacer(modifier = Modifier.height(5.dp))
 
                 innerTextField()
 
-                Spacer(modifier = Modifier.height(6.dp))
+                Spacer(modifier = Modifier.height(5.dp))
                 HorizontalDivider(
-                    thickness = 0.7f.dp,
-                    color = if (isFocused) Color.Red else Color.Gray,
+                    thickness = 1.dp,
+                    color = if (isFocused) {
+                        NewUi.secondaryColor
+                    } else {
+                        NewUi.onSurface.copy(alpha = 0.05f)
+                    },
                 )
             }
         },
@@ -253,7 +261,7 @@ fun MifosTextField(
 }
 
 @Composable
-@Preview(showSystemUi = true)
+@Preview
 fun MfTextFieldPreview(modifier: Modifier = Modifier) {
     MifosTheme {
         Box(
