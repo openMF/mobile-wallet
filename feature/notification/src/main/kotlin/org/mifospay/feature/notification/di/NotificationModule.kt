@@ -21,5 +21,4 @@ val NotificationModule = module {
             fetchNotificationsUseCase = get(),
         )
     }
-
 }

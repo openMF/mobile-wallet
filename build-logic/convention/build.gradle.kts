@@ -51,10 +51,6 @@ gradlePlugin {
             id = "mifospay.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
-        register("koin"){
-            id = "mifospay.android.koin"
-            implementationClass = "AndroidKoinConventionPlugin"
-        }
         register("androidLibraryCompose") {
             id = "mifospay.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
@@ -90,6 +86,10 @@ gradlePlugin {
         register("androidFlavors") {
             id = "mifospay.android.application.flavors"
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
+        }
+        register("androidKoin") {
+            id = "mifospay.android.koin"
+            implementationClass = "AndroidKoinConventionPlugin"
         }
         register("detekt") {
             id = "mifos.detekt.plugin"

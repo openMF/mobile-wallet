@@ -45,5 +45,4 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.koin.android)
-
 }

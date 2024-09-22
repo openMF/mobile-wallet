@@ -10,8 +10,6 @@
 plugins {
     alias(libs.plugins.mifospay.android.feature)
     alias(libs.plugins.mifospay.android.library.compose)
-
-
 }
 
 android {
@@ -32,5 +30,4 @@ dependencies {
     implementation(libs.googleid)
 
     implementation(libs.play.services.auth)
-
 }

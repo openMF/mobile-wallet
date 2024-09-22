@@ -9,7 +9,6 @@
  */
 plugins {
     alias(libs.plugins.mifospay.android.library)
-    id("com.google.devtools.ksp")
 }
 
 android {
@@ -19,5 +18,4 @@ android {
 dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
-
 }

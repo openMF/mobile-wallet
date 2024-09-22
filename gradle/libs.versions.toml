@@ -42,15 +42,8 @@ googleOssPlugin = "0.10.6"
 googleidVersion = "1.1.1"
 junitVersion = "4.13.2"
 koin = "4.0.0-RC2"
-koinAndroidxNavigationVersion = "4.0.0-RC2"
 koinAnnotationsVersion = "1.4.0-RC4"
-koinBomVersion = "4.0.0-RC2"
 koinComposeMultiplatform = "1.2.0-Beta4"
-koinCoreViewmodelVersion = "4.0.0-RC2"
-koinKspCompilerVersion = "1.4.0-RC4"
-koinTestJunit4Version = "4.0.0-RC2"
-koinTestJunit5Version = "4.0.0-RC2"
-koinTestVersion = "4.0.0-RC2"
 kotlin = "2.0.20"
 kotlinStdlibVersion = "1.9.0"
 kotlinxCoroutines = "1.8.1"
@@ -154,23 +147,21 @@ google-oss-licenses = { group = "com.google.android.gms", name = "play-services-
 google-oss-licenses-plugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version.ref = "googleOssPlugin" }
 google-play-services-code-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "playServicesCodeScanner" }
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleidVersion" }
-insert-koin-koin-core = { group = "io.insert-koin", name = "koin-core" }
-io-insert-koin-koin-core = { group = "io.insert-koin", name = "koin-core" }
 jetbrains-kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlinStdlibVersion" }
 junit = { group = "junit", name = "junit", version.ref = "junitVersion" }
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }
-koin-androidx-navigation = { group = "io.insert-koin", name = "koin-androidx-navigation", version.ref = "koinAndroidxNavigationVersion" }
+koin-androidx-navigation = { group = "io.insert-koin", name = "koin-androidx-navigation", version.ref = "koin" }
 koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotationsVersion" }
-koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koinBomVersion" }
+koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
 koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koinComposeMultiplatform" }
 koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koinComposeMultiplatform" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
-koin-core-viewmodel = { group = "io.insert-koin", name = "koin-core-viewmodel", version.ref = "koinCoreViewmodelVersion" }
-koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koinKspCompilerVersion" }
-koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koinTestVersion" }
-koin-test-junit4 = { group = "io.insert-koin", name = "koin-test-junit4", version.ref = "koinTestJunit4Version" }
-koin-test-junit5 = { group = "io.insert-koin", name = "koin-test-junit5", version.ref = "koinTestJunit5Version" }
+koin-core-viewmodel = { group = "io.insert-koin", name = "koin-core-viewmodel", version.ref = "koin" }
+koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koinAnnotationsVersion" }
+koin-test = { group = "io.insert-koin", name = "koin-test", version.ref = "koin" }
+koin-test-junit4 = { group = "io.insert-koin", name = "koin-test-junit4", version.ref = "koin" }
+koin-test-junit5 = { group = "io.insert-koin", name = "koin-test-junit5", version.ref = "koin" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-collections-immutable = { group = "org.jetbrains.kotlinx", name = "kotlinx-collections-immutable", version.ref = "kotlinxImmutable" }

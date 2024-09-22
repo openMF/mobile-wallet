@@ -10,16 +10,14 @@
 package org.mifospay.core.data.domain.usecase.history
 
 import com.mifospay.core.model.domain.Transaction
-import org.mifospay.core.data.base.TaskLooper
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
-import org.mifospay.core.data.base.UseCaseFactory
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransactions
 
 class TransactionsHistory(
     private val mUseCaseHandler: UseCaseHandler,
     private val fetchAccountTransactionsUseCase: FetchAccountTransactions,
-    ) {
+) {
     var delegate: HistoryContract.TransactionsHistoryAsync? = null
     private var transactions: List<Transaction>?
 

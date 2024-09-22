@@ -20,8 +20,6 @@
 plugins {
     alias(libs.plugins.mifospay.android.library)
     id("kotlinx-serialization")
-    id("mifospay.android.koin")
-
 }
 
 android {
@@ -67,10 +65,6 @@ dependencies {
 
     implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.kotlinx.coroutines.test)
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.core)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.androidx.navigation)
 
     implementation(libs.koin.android)
 }

@@ -8,7 +8,6 @@ import org.gradle.kotlin.dsl.named
 
 internal fun Project.configureDetekt(extension: DetektExtension) = extension.apply {
     tasks.named<Detekt>("detekt") {
-        jvmTarget = "17"
         reports {
             xml.required.set(true)
             html.required.set(true)

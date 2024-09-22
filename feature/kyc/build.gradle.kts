@@ -25,5 +25,4 @@ dependencies {
 
     // TODO:: this should be removed
     implementation(libs.squareup.okhttp)
-
 }
