@@ -16,6 +16,7 @@ import org.mifospay.feature.standing.instruction.StandingInstructionDetailsViewM
 import org.mifospay.feature.standing.instruction.StandingInstructionViewModel
 
 val StandingInstructionModule = module {
+
     viewModel {
         NewSIViewModel(
             mUseCaseHandler = get(),
@@ -36,7 +37,8 @@ val StandingInstructionModule = module {
     viewModel {
         StandingInstructionDetailsViewModel(
             mUseCaseHandler = get(),
-            fetchStandingInstruction = get(),
+            fetchStandingInstruction =
+            get(),
             updateStandingInstruction = get(),
             deleteStandingInstruction = get(),
             savedStateHandle = get(),

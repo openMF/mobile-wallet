@@ -16,4 +16,7 @@ android {
     namespace = "org.mifospay.feature.make.transfer"
 }
 
-dependencies { }
+dependencies {
+    implementation(projects.core.data)
+
+}

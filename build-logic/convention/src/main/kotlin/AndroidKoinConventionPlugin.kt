@@ -31,6 +31,7 @@ class AndroidKoinConventionPlugin : Plugin<Project> {
                 arg("USE_COMPOSE_VIEWMODEL", "false")
                 arg("KOIN_USE_COMPOSE_VIEWMODEL", "true")
             }
+
         }
     }
 }

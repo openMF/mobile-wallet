@@ -15,6 +15,7 @@ dependencyResolutionManagement {
         maven("https://www.jitpack.io")
         maven("https://plugins.gradle.org/m2/")
     }
+
 }
 
  plugins {
@@ -42,7 +43,6 @@ include(":core:designsystem")
 include(":core:ui")
 include(":core:common")
 include(":core:network")
-include(":core:network")
 include(":core:model")
 include(":core:datastore-proto")
 include(":core:analytics")
@@ -60,7 +60,6 @@ include(":feature:notification")
 include(":feature:editpassword")
 include(":feature:kyc")
 include(":feature:savedcards")
-include(":feature:invoices")
 include(":feature:invoices")
 include(":feature:settings")
 include(":feature:profile")
