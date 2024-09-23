@@ -13,9 +13,13 @@ import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import org.mifospay.feature.faq.FAQViewModel
 
+<<<<<<<< HEAD:feature/faq/src/main/kotlin/org/mifospay/feature/faq/di/FaqModule.kt
 val FaqModule = module {
 
     viewModel {
         FAQViewModel()
     }
 }
+========
+dependencies { }
+>>>>>>>> 35f52055 (Migrating from hilt to koin (This) (#1764)):feature/search/build.gradle.kts
