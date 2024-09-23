@@ -41,12 +41,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifos.library.pullrefresh.PullRefreshIndicator
 import com.mifos.library.pullrefresh.pullRefresh
 import com.mifos.library.pullrefresh.rememberPullRefreshState
 import com.mifospay.core.model.entity.kyc.KYCLevel1Details
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -59,7 +59,7 @@ fun KYCScreen(
     onLevel2Clicked: () -> Unit,
     onLevel3Clicked: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: KYCDescriptionViewModel = hiltViewModel(),
+    viewModel: KYCDescriptionViewModel = koinViewModel(),
 ) {
     val kUiState by viewModel.kycDescriptionState.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()

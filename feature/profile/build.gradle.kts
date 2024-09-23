@@ -7,7 +7,6 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-import com.android.build.gradle.internal.tasks.ApplicationIdWriterTask
 
 plugins {
     alias(libs.plugins.mifospay.android.feature)
@@ -22,8 +21,7 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
     implementation(projects.libs.countryCodePicker)
-
+    implementation(libs.squareup.okhttp)
     implementation(libs.coil.kt.compose)
 }

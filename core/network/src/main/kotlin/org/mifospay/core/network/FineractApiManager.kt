@@ -26,9 +26,8 @@ import org.mifospay.core.network.services.StandingInstructionService
 import org.mifospay.core.network.services.ThirdPartyTransferService
 import org.mifospay.core.network.services.TwoFactorAuthService
 import org.mifospay.core.network.services.UserService
-import javax.inject.Inject
 
-class FineractApiManager @Inject constructor(
+class FineractApiManager(
     private val authenticationService: AuthenticationService,
     private val clientService: ClientService,
     private val savingsAccountsService: SavingsAccountsService,

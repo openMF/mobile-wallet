@@ -7,7 +7,6 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-import com.android.build.api.dsl.Packaging
 
 /*
  * Copyright 2024 Mifos Initiative
@@ -20,7 +19,6 @@ import com.android.build.api.dsl.Packaging
  */
 plugins {
     alias(libs.plugins.mifospay.android.library)
-    alias(libs.plugins.mifospay.android.hilt)
     id("kotlinx-serialization")
 }
 
@@ -32,6 +30,7 @@ android {
     testOptions {
         unitTests {
             isReturnDefaultValues = true
+            isIncludeAndroidResources = true
         }
     }
 }
@@ -64,5 +63,8 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.logback.classic)
 
+    implementation(libs.kotlinx.serialization.json)
     testImplementation(libs.kotlinx.coroutines.test)
+
+    implementation(libs.koin.android)
 }

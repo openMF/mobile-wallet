@@ -10,9 +10,8 @@
 package org.mifospay.core.data.base
 
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
-import javax.inject.Inject
 
-class TaskLooper @Inject constructor(
+class TaskLooper(
     private val mUseCaseHandler: UseCaseHandler,
 ) {
     var isFailed = false

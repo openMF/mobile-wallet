@@ -15,9 +15,8 @@ import org.mifospay.core.data.fineract.repository.FineractRepository
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class FetchUserDetails @Inject constructor(
+class FetchUserDetails(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<FetchUserDetails.RequestValues, FetchUserDetails.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {

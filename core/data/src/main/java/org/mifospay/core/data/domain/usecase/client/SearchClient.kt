@@ -18,14 +18,11 @@ import org.mifospay.core.data.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class SearchClient @Inject constructor(
+class SearchClient(
     private val apiRepository: FineractRepository,
+    private val searchedEntitiesMapper: SearchedEntitiesMapper,
 ) : UseCase<SearchClient.RequestValues, SearchClient.ResponseValue>() {
-
-    @Inject
-    lateinit var searchedEntitiesMapper: SearchedEntitiesMapper
 
     data class RequestValues(val externalId: String) : UseCase.RequestValues
     data class ResponseValue(val results: List<SearchResult>) : UseCase.ResponseValue

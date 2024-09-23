@@ -42,11 +42,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.State
 import com.mifospay.core.model.signup.PasswordStrength
 import com.mifospay.core.model.signup.SignupData
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.data.util.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
@@ -68,7 +68,7 @@ internal fun SignupScreen(
     businessName: String,
     onLoginSuccess: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SignupViewModel = hiltViewModel(),
+    viewModel: SignupViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
 

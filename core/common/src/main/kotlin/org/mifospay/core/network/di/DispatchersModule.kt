@@ -9,24 +9,13 @@
  */
 package org.mifospay.core.network.di
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import org.mifospay.core.network.Dispatcher
-import org.mifospay.core.network.MifosDispatchers.Default
-import org.mifospay.core.network.MifosDispatchers.IO
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
+import org.mifospay.core.network.MifosDispatchers
 
-@Module
-@InstallIn(SingletonComponent::class)
-object DispatchersModule {
-    @Provides
-    @Dispatcher(IO)
-    fun providesIODispatcher(): CoroutineDispatcher = Dispatchers.IO
-
-    @Provides
-    @Dispatcher(Default)
-    fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
+val DispatchersModule = module {
+    single<CoroutineDispatcher>(named(MifosDispatchers.IO.name)) { Dispatchers.IO }
+    single<CoroutineDispatcher>(named(MifosDispatchers.Default.name)) { Dispatchers.Default }
 }

@@ -18,9 +18,8 @@ import kotlinx.coroutines.withContext
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
-import javax.inject.Inject
 
-class AuthenticateUser @Inject constructor(
+class AuthenticateUser(
     private val apiRepository: FineractRepository,
 ) : UseCase<AuthenticateUser.RequestValues, AuthenticateUser.ResponseValue>() {
 

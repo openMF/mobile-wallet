@@ -11,11 +11,8 @@ package org.mifospay.core.data.repository.local
 
 import com.mifospay.core.model.domain.client.Client
 import org.mifospay.core.datastore.PreferencesHelper
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class LocalRepository @Inject constructor(
+class LocalRepository(
     val preferencesHelper: PreferencesHelper,
 ) {
 

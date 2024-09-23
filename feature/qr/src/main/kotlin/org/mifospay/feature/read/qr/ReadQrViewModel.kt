@@ -11,17 +11,14 @@ package org.mifospay.feature.read.qr
 
 import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.feature.read.qr.utils.ScanQr
-import javax.inject.Inject
 
-@HiltViewModel
-class ReadQrViewModel @Inject constructor(
+class ReadQrViewModel(
     private val useCaseHandler: UseCaseHandler,
     private val scanQrUseCase: ScanQr,
 ) : ViewModel() {

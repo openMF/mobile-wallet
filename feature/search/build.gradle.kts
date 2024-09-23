@@ -16,6 +16,4 @@ android {
     namespace = "org.mifospay.feature.search"
 }
 
-dependencies {
-    implementation(projects.core.data)
-}
+dependencies { }

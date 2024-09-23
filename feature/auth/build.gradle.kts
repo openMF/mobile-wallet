@@ -20,8 +20,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
-
     implementation(projects.libs.countryCodePicker)
 
     // Credentials Manager

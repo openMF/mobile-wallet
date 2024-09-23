@@ -9,7 +9,6 @@
  */
 plugins {
     alias(libs.plugins.mifospay.android.library)
-    alias(libs.plugins.mifospay.android.hilt)
     alias(libs.plugins.kotlin.parcelize)
     id("kotlinx-serialization")
 }
@@ -43,4 +42,7 @@ dependencies {
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.espresso.core)
+
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.koin.android)
 }

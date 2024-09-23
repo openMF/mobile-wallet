@@ -16,6 +16,4 @@ android {
     namespace = "org.mifospay.savedcards"
 }
 
-dependencies {
-    implementation(projects.core.data)
-}
+dependencies {}

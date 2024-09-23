@@ -16,6 +16,4 @@ android {
     namespace = "org.mifospay.feature.editpassword"
 }
 
-dependencies {
-    implementation(projects.core.data)
-}
+dependencies {}

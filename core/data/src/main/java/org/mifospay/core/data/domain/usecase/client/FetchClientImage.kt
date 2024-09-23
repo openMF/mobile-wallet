@@ -16,9 +16,8 @@ import org.mifospay.core.data.util.ErrorJsonMessageHelper.getUserMessage
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class FetchClientImage @Inject constructor(
+class FetchClientImage(
     private val mFineractRepository: FineractRepository,
 ) :
     UseCase<FetchClientImage.RequestValues, FetchClientImage.ResponseValue>() {

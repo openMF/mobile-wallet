@@ -11,7 +11,6 @@ package org.mifospay.feature.standing.instruction
 
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.SearchResult
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCase
@@ -22,10 +21,8 @@ import org.mifospay.core.datastore.PreferencesHelper
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import javax.inject.Inject
 
-@HiltViewModel
-class NewSIViewModel @Inject constructor(
+class NewSIViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val preferencesHelper: PreferencesHelper,
     private val searchClient: SearchClient,

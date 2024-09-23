@@ -12,17 +12,14 @@ package org.mifospay.feature.bank.accounts
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mifospay.core.model.domain.BankAccountDetails
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Random
-import javax.inject.Inject
 
-@HiltViewModel
-class AccountViewModel @Inject constructor() : ViewModel() {
+class AccountViewModel : ViewModel() {
 
     private val _bankAccountDetailsList = MutableStateFlow<List<BankAccountDetails>>(emptyList())
     val bankAccountDetailsList: StateFlow<List<BankAccountDetails>> = _bankAccountDetailsList

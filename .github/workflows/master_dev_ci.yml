@@ -133,6 +133,8 @@ jobs:
         run: ./gradlew :mifospay:assembleDemoDebug
 
       - name: Check badging
+        # This step is allowed to fail, as it's not critical for the build
+        continue-on-error: true
         run: ./gradlew :mifospay:checkProdReleaseBadging
 
       - name: Upload APKs

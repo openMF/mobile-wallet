@@ -9,29 +9,15 @@
  */
 package org.mifospay.core.network.di
 
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import org.mifospay.core.network.Dispatcher
-import org.mifospay.core.network.MifosDispatchers.Default
-import javax.inject.Qualifier
-import javax.inject.Singleton
+import org.koin.core.qualifier.named
+import org.koin.dsl.module
 
-@Retention(AnnotationRetention.RUNTIME)
-@Qualifier
-annotation class ApplicationScope
+val CoroutineScopesModule = module {
 
-@Module
-@InstallIn(SingletonComponent::class)
-internal object CoroutineScopesModule {
-    @Provides
-    @Singleton
-    @ApplicationScope
-    fun providesCoroutineScope(
-        @Dispatcher(Default) dispatcher: CoroutineDispatcher,
-    ): CoroutineScope = CoroutineScope(SupervisorJob() + dispatcher)
+    single<CoroutineScope>(named("ApplicationScope")) {
+        CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    }
 }

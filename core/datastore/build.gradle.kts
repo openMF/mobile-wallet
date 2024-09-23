@@ -9,7 +9,6 @@
  */
 plugins {
     alias(libs.plugins.mifospay.android.library)
-    alias(libs.plugins.mifospay.android.hilt)
 }
 
 
@@ -31,5 +30,7 @@ dependencies {
     api(projects.core.datastoreProto)
     api(projects.core.common)
     api(projects.core.model)
+
     implementation(libs.squareup.retrofit.converter.gson)
+    implementation(libs.koin.android)
 }

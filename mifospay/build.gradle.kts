@@ -8,6 +8,7 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 import org.mifospay.MifosBuildType
+import org.mifospay.dynamicVersion
 
 /*
  * Copyright 2024 Mifos Initiative
@@ -23,10 +24,10 @@ plugins {
     alias(libs.plugins.mifospay.android.application)
     alias(libs.plugins.mifospay.android.application.compose)
     alias(libs.plugins.mifospay.android.application.flavors)
-    alias(libs.plugins.mifospay.android.hilt)
     alias(libs.plugins.mifospay.android.application.firebase)
     alias(libs.plugins.roborazzi)
     id("com.google.android.gms.oss-licenses-plugin")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -34,7 +35,7 @@ android {
 
     defaultConfig {
         applicationId = "org.mifospay"
-        versionName = project.version.toString()
+        versionName = project.dynamicVersion
         versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -132,8 +133,6 @@ dependencies {
     implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.compose.runtime.tracing)
 
-    implementation(libs.androidx.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
@@ -150,16 +149,20 @@ dependencies {
     runtimeOnly(libs.androidx.compose.runtime)
     debugImplementation(libs.androidx.compose.ui.tooling)
 
-    kspTest(libs.hilt.compiler)
 
     testImplementation(libs.junit)
-    testImplementation(libs.hilt.android.testing)
     testImplementation(libs.androidx.compose.ui.test)
 
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.hilt.android.testing)
+
+    implementation(libs.koin.android)
+    implementation(libs.ktor.client.core)
+
+    testImplementation(kotlin("test"))
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
 }
 
 dependencyGuard {

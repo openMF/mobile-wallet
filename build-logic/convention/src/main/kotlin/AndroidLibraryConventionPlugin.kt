@@ -21,6 +21,7 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 apply("mifos.detekt.plugin")
                 apply("mifos.spotless.plugin")
                 apply("mifos.ktlint.plugin")
+                apply("mifospay.android.koin")
             }
 
             extensions.configure<LibraryExtension> {
@@ -32,10 +33,12 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 // so resources inside ":core:module1" must be prefixed with "core_module1_"
                 resourcePrefix = path.split("""\W""".toRegex()).drop(1).distinct().joinToString(separator = "_").lowercase() + "_"
             }
+
             extensions.configure<LibraryAndroidComponentsExtension> {
                 configurePrintApksTask(this)
                 disableUnnecessaryAndroidTests(target)
             }
+
             dependencies {
                 add("testImplementation", kotlin("test"))
                 add("implementation", libs.findLibrary("androidx.tracing.ktx").get())

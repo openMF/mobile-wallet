@@ -16,9 +16,8 @@ import org.mifospay.core.data.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class FetchNotifications @Inject constructor(
+class FetchNotifications(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<FetchNotifications.RequestValues, FetchNotifications.ResponseValue>() {
 

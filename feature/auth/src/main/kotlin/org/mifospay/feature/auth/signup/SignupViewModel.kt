@@ -20,7 +20,6 @@ import com.mifospay.core.model.domain.user.UpdateUserEntityClients
 import com.mifospay.core.model.domain.user.User
 import com.mifospay.core.model.entity.UserWithRole
 import com.mifospay.core.model.signup.SignupData
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -40,10 +39,8 @@ import org.mifospay.core.data.domain.usecase.user.FetchUserDetails
 import org.mifospay.core.data.domain.usecase.user.UpdateUser
 import org.mifospay.core.data.repository.local.LocalAssetRepository
 import org.mifospay.core.datastore.PreferencesHelper
-import javax.inject.Inject
 
-@HiltViewModel
-class SignupViewModel @Inject constructor(
+class SignupViewModel(
     localAssetRepository: LocalAssetRepository,
     private val useCaseHandler: UseCaseHandler,
     private val preferencesHelper: PreferencesHelper,

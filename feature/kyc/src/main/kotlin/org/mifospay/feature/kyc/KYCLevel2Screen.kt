@@ -50,12 +50,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.shouldShowRequestPermissionRationale
 import androidx.core.content.ContextCompat
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
@@ -66,7 +66,7 @@ import org.mifospay.kyc.R
 internal fun KYCLevel2Screen(
     onSuccessKyc2: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: KYCLevel2ViewModel = hiltViewModel(),
+    viewModel: KYCLevel2ViewModel = koinViewModel(),
 ) {
     val kyc2uiState by viewModel.kyc2uiState.collectAsStateWithLifecycle()
 

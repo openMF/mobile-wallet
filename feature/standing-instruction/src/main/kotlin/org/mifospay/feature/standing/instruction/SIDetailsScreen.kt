@@ -27,12 +27,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.accounts.savings.SavingAccount
 import com.mifospay.core.model.entity.client.Client
 import com.mifospay.core.model.entity.client.Status
 import com.mifospay.core.model.entity.standinginstruction.StandingInstruction
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.FloatingActionButtonContent
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -43,7 +43,7 @@ internal fun SIDetailsScreen(
     onClickCreateNew: () -> Unit,
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: StandingInstructionDetailsViewModel = hiltViewModel(),
+    viewModel: StandingInstructionDetailsViewModel = koinViewModel(),
 ) {
     val siDetailUiState by viewModel.siDetailsUiState.collectAsStateWithLifecycle()
 

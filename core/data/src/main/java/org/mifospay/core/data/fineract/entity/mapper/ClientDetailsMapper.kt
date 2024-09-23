@@ -10,10 +10,9 @@
 package org.mifospay.core.data.fineract.entity.mapper
 
 import com.mifospay.core.model.entity.client.Client
-import javax.inject.Inject
 import com.mifospay.core.model.domain.client.Client as DomainClient
 
-class ClientDetailsMapper @Inject constructor() {
+class ClientDetailsMapper {
     fun transformList(clients: List<Client?>?): List<DomainClient> {
         val clientList: MutableList<DomainClient> = ArrayList()
         clients?.forEach { client ->

@@ -48,12 +48,9 @@ import org.mifospay.core.network.GenericResponse
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.services.KtorAuthenticationService
 import rx.Observable
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 @Suppress("TooManyFunctions")
-class FineractRepository @Inject constructor(
+class FineractRepository(
     private val fineractApiManager: FineractApiManager,
     private val selfApiManager: SelfServiceApiManager,
     private val ktorAuthenticationService: KtorAuthenticationService,

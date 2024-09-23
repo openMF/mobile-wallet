@@ -25,8 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
@@ -36,7 +36,7 @@ import org.mifospay.kyc.R
 @Composable
 internal fun KYCLevel3Screen(
     modifier: Modifier = Modifier,
-    viewModel: KYCLevel3ViewModel = hiltViewModel(),
+    viewModel: KYCLevel3ViewModel = koinViewModel(),
 ) {
     val kyc3uiState by viewModel.kyc3uiState.collectAsStateWithLifecycle()
 

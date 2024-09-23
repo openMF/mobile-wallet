@@ -15,9 +15,8 @@ import org.mifospay.core.network.GenericResponse
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class DeleteUser @Inject constructor(
+class DeleteUser(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<DeleteUser.RequestValues, DeleteUser.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {
