@@ -18,8 +18,10 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 plugins {
-    alias(libs.plugins.mifospay.android.library)
+    alias(libs.plugins.mifospay.kmp.library)
+    alias(libs.plugins.ktrofit)
     id("kotlinx-serialization")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -35,36 +37,48 @@ android {
     }
 }
 
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(libs.kotlinx.datetime)
+            api(projects.core.common)
+            api(projects.core.model)
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.json)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.serialization)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktorfit.lib)
+            implementation(libs.ktorfit.converters.call)
+            implementation(libs.ktorfit.converters.flow)
+        }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.android)
+            implementation(libs.koin.android)
+        }
+        appleMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+//        wasmJsMain.dependencies {
+//            implementation(libs.ktor.client.js)
+//        }
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.java)
+        }
+        mingwMain.dependencies {
+            implementation(libs.ktor.client.winhttp)
+        }
+    }
+}
+
 dependencies {
-    api(libs.kotlinx.datetime)
-    api(projects.core.common)
-    api(projects.core.model)
-    api(projects.core.datastore)
-
-    implementation(libs.squareup.okhttp)
-    implementation(libs.squareup.logging.interceptor)
-
-    implementation(libs.squareup.retrofit2)
-    implementation(libs.retrofit.kotlin.serialization)
-    implementation(libs.squareup.retrofit.adapter.rxjava)
-    implementation(libs.squareup.retrofit.converter.gson)
-
-    implementation(libs.reactivex.rxjava.android)
-    implementation(libs.reactivex.rxjava)
-
-    implementation(libs.jetbrains.kotlin.stdlib)
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.serialization)
-    implementation(libs.ktor.client.logging)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.client.json)
-    implementation(libs.ktor.client.websockets)
-    implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.logback.classic)
-
-    implementation(libs.kotlinx.serialization.json)
-    testImplementation(libs.kotlinx.coroutines.test)
-
-    implementation(libs.koin.android)
+    add("kspCommonMainMetadata", libs.ktorfit.ksp)
+    add("kspAndroid", libs.ktorfit.ksp)
+//    add("kspWasmJs", libs.ktorfit.ksp)
+    add("kspJvm", libs.ktorfit.ksp)
+    add("kspIosX64", libs.ktorfit.ksp)
+    add("kspIosArm64", libs.ktorfit.ksp)
+    add("kspIosSimulatorArm64", libs.ktorfit.ksp)
 }

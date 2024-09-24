@@ -79,7 +79,7 @@ internal fun ReceiptScreenRoute(
     viewModel: ReceiptViewModel = koinViewModel(),
 ) {
     /**
-     * This function serves as the main entry point for the Receipt screen UI.
+     * This function serves as the androidMain entry point for the Receipt screen UI.
      * It collects the receiptUiState and fileState from the ViewModel and
      * calls the ReceiptScreen function, passing the collected states and
      * other necessary parameters.

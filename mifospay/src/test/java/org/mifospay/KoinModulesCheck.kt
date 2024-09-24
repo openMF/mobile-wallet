@@ -15,12 +15,12 @@ import io.ktor.client.HttpClientConfig
 import io.ktor.client.engine.HttpClientEngine
 import org.koin.test.AutoCloseKoinTest
 import org.koin.test.verify.verify
+import org.mifos.core.network.services.KtorAuthenticationService
 import org.mifos.library.passcode.data.PasscodeManager
 import org.mifospay.core.data.repository.auth.UserDataRepository
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.services.KtorAuthenticationService
 import org.mifospay.di.KoinModules
 import kotlin.test.Test
 
