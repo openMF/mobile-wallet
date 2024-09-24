@@ -44,8 +44,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import org.mifos.library.passcode.component.MifosIcon
 import org.mifos.library.passcode.component.PasscodeForgotButton
 import org.mifos.library.passcode.component.PasscodeHeader
@@ -67,7 +67,7 @@ internal fun PasscodeScreen(
     onPasscodeConfirm: (String) -> Unit,
     onPasscodeRejected: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: PasscodeViewModel = hiltViewModel(),
+    viewModel: PasscodeViewModel = koinViewModel(),
 ) {
     val context = LocalContext.current
     val preferenceManager = remember { PreferenceManager(context) }

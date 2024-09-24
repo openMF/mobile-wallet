@@ -35,13 +35,13 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import com.mifos.library.pullrefresh.PullRefreshIndicator
 import com.mifos.library.pullrefresh.pullRefresh
 import com.mifos.library.pullrefresh.rememberPullRefreshState
 import com.mifospay.core.model.entity.accounts.savings.SavingsWithAssociations
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
@@ -54,7 +54,7 @@ import org.mifospay.feature.merchants.navigation.navigateToMerchantTransferScree
 @Composable
 fun MerchantScreen(
     modifier: Modifier = Modifier,
-    viewModel: MerchantViewModel = hiltViewModel(),
+    viewModel: MerchantViewModel = koinViewModel(),
 ) {
     val merchantUiState by viewModel.merchantUiState.collectAsStateWithLifecycle()
     val merchantsListUiState by viewModel.merchantsListUiState.collectAsStateWithLifecycle()

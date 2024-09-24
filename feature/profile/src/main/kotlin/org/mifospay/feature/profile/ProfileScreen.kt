@@ -38,8 +38,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.ProfileImage
@@ -49,7 +49,7 @@ fun ProfileRoute(
     onEditProfile: () -> Unit,
     onSettings: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ProfileViewModel = hiltViewModel(),
+    viewModel: ProfileViewModel = koinViewModel(),
 ) {
     val profileState by viewModel.profileState.collectAsStateWithLifecycle()
 

@@ -16,6 +16,4 @@ android {
     namespace = "org.mifospay.feature.upi_setup"
 }
 
-dependencies {
-    implementation(projects.core.data)
-}
+dependencies { }

@@ -23,8 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.VerifyStepHeader
@@ -38,7 +38,7 @@ internal fun DebitCardScreen(
     modifier: Modifier = Modifier,
     verificationStatus: Boolean = false,
     isContentVisible: Boolean = true,
-    viewModel: DebitCardViewModel = hiltViewModel(),
+    viewModel: DebitCardViewModel = koinViewModel(),
 ) {
     val debitCardUiState by viewModel.debitCardUiState.collectAsStateWithLifecycle()
 

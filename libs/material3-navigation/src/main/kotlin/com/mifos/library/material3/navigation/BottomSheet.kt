@@ -11,6 +11,7 @@ package com.mifos.library.material3.navigation
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.BottomSheetDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
@@ -24,6 +25,7 @@ import androidx.compose.ui.unit.Dp
  *
  * @see [ModalBottomSheetLayout]
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 public fun ModalBottomSheetLayout(
     bottomSheetNavigator: BottomSheetNavigator,

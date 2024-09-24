@@ -8,8 +8,7 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 plugins {
-    alias(libs.plugins.mifospay.android.library)
-    alias(libs.plugins.mifospay.android.hilt)
+    alias(libs.plugins.mifospay.kmp.library)
     alias(libs.plugins.kotlin.parcelize)
     id("kotlinx-serialization")
 }
@@ -24,23 +23,27 @@ android {
     }
 }
 
-dependencies {
-    api(projects.core.common)
-    api(projects.core.model)
-    api(projects.core.network)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            api(projects.core.common)
+            api(projects.core.datastore)
+            api(projects.core.network)
+            api(projects.core.model)
 
-    implementation(libs.squareup.retrofit2) {
-        // exclude Retrofit’s OkHttp peer-dependency module and define your own module import
-        exclude(module = "okhttp")
+            implementation(projects.core.analytics)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.test)
+            implementation(libs.kotlinx.serialization.json)
+        }
+
+        androidMain.dependencies {
+            implementation(libs.androidx.core.ktx)
+            implementation(libs.androidx.tracing.ktx)
+            implementation(libs.koin.android)
+        }
     }
-    implementation(libs.squareup.retrofit.adapter.rxjava)
-    implementation(libs.squareup.retrofit.converter.gson)
-    implementation(libs.squareup.okhttp)
-    implementation(libs.squareup.logging.interceptor)
-
-    implementation(libs.reactivex.rxjava.android)
-    implementation(libs.reactivex.rxjava)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.espresso.core)
 }

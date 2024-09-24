@@ -16,6 +16,4 @@ android {
     namespace = "org.mifospay.invoices"
 }
 
-dependencies {
-    implementation(projects.core.data)
-}
+dependencies {}

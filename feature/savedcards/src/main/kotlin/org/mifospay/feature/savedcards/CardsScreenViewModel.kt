@@ -12,7 +12,6 @@ package org.mifospay.feature.savedcards
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mifospay.core.model.entity.savedcards.Card
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,10 +26,8 @@ import org.mifospay.core.data.domain.usecase.savedcards.DeleteCard
 import org.mifospay.core.data.domain.usecase.savedcards.EditCard
 import org.mifospay.core.data.domain.usecase.savedcards.FetchSavedCards
 import org.mifospay.core.data.repository.local.LocalRepository
-import javax.inject.Inject
 
-@HiltViewModel
-class CardsScreenViewModel @Inject constructor(
+class CardsScreenViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val addCardUseCase: AddCard,

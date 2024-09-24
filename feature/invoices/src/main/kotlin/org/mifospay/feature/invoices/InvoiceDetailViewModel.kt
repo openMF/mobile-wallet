@@ -13,7 +13,6 @@ import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.entity.Invoice
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCase
@@ -21,10 +20,8 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.invoice.FetchInvoice
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.feature.invoices.navigation.INVOICE_DATA_ARG
-import javax.inject.Inject
 
-@HiltViewModel
-class InvoiceDetailViewModel @Inject constructor(
+class InvoiceDetailViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper,
     private val fetchInvoiceUseCase: FetchInvoice,

@@ -16,6 +16,4 @@ android {
     namespace = "org.mifospay.feature.settings"
 }
 
-dependencies {
-    implementation(projects.core.data)
-}
+dependencies {}

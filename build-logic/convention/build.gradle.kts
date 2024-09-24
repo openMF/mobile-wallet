@@ -51,10 +51,6 @@ gradlePlugin {
             id = "mifospay.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
-        register("androidHilt") {
-            id = "mifospay.android.hilt"
-            implementationClass = "AndroidHiltConventionPlugin"
-        }
         register("androidLibraryCompose") {
             id = "mifospay.android.library.compose"
             implementationClass = "AndroidLibraryComposeConventionPlugin"
@@ -64,6 +60,10 @@ gradlePlugin {
             implementationClass = "AndroidLibraryConventionPlugin"
         }
         register("androidFeature") {
+            id = "mifospay.cmp.feature"
+            implementationClass = "CMPFeatureConventionPlugin"
+        }
+        register("cmpFeature") {
             id = "mifospay.android.feature"
             implementationClass = "AndroidFeatureConventionPlugin"
         }
@@ -87,9 +87,25 @@ gradlePlugin {
             id = "mifospay.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
         }
+        register("kmpLibrary") {
+            id = "mifospay.kmp.library"
+            implementationClass = "KMPLibraryConventionPlugin"
+        }
+        register("kotlinInject") {
+            id = "mifospay.kmp.inject"
+            implementationClass = "KotlinInjectConventionPlugin"
+        }
         register("androidFlavors") {
             id = "mifospay.android.application.flavors"
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
+        }
+        register("androidKoin") {
+            id = "mifospay.android.koin"
+            implementationClass = "KoinConventionPlugin"
+        }
+        register("kmpKoin") {
+            id = "mifospay.kmp.koin"
+            implementationClass = "KMPKoinConventionPlugin"
         }
         register("detekt") {
             id = "mifos.detekt.plugin"

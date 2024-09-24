@@ -18,7 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.ui.FaqItemScreen
 
@@ -26,7 +26,7 @@ import org.mifospay.core.ui.FaqItemScreen
 internal fun FaqScreenRoute(
     navigateBack: () -> Unit,
     modifier: Modifier = Modifier,
-    faqViewModel: FAQViewModel = hiltViewModel(),
+    faqViewModel: FAQViewModel = koinViewModel(),
 ) {
     FaqScreen(
         modifier = modifier,

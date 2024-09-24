@@ -11,7 +11,6 @@ package org.mifospay.feature.history
 
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.Transaction
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCase
@@ -19,10 +18,8 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.FetchAccount
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransactions
 import org.mifospay.core.data.repository.local.LocalRepository
-import javax.inject.Inject
 
-@HiltViewModel
-class HistoryViewModel @Inject constructor(
+class HistoryViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val mFetchAccountUseCase: FetchAccount,

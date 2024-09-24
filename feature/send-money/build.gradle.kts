@@ -17,8 +17,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
-
     // we need it for country picker library
     implementation(projects.libs.countryCodePicker)
 

@@ -12,7 +12,6 @@ package org.mifospay.feature.notification
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mifospay.core.model.domain.NotificationPayload
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,10 +21,8 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.notification.FetchNotifications
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.feature.notification.NotificationUiState.Loading
-import javax.inject.Inject
 
-@HiltViewModel
-class NotificationViewModel @Inject constructor(
+class NotificationViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mLocalRepository: LocalRepository,
     private val fetchNotificationsUseCase: FetchNotifications,

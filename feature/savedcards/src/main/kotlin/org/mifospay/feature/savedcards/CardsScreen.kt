@@ -46,9 +46,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.savedcards.Card
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -61,7 +61,7 @@ import org.mifospay.savedcards.R
 fun CardsScreen(
     onEditCard: (Card) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: CardsScreenViewModel = hiltViewModel(),
+    viewModel: CardsScreenViewModel = koinViewModel(),
 ) {
     val cardState by viewModel.cardState.collectAsStateWithLifecycle()
     val cardListUiState by viewModel.cardListUiState.collectAsStateWithLifecycle()

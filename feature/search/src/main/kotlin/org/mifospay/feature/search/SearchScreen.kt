@@ -39,8 +39,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.mifospay.core.model.domain.SearchResult
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
@@ -49,7 +49,7 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 fun SearchScreenRoute(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: SearchViewModel = hiltViewModel(),
+    viewModel: SearchViewModel = koinViewModel(),
 ) {
     val searchQuery by viewModel.searchQuery.collectAsState()
     val searchResultState by viewModel.searchResults.collectAsState()

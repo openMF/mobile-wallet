@@ -19,5 +19,4 @@ android {
 dependencies {
     // TODO:: this should be removed
     implementation(libs.squareup.okhttp)
-    implementation(projects.core.data)
 }

@@ -12,7 +12,6 @@ package org.mifospay.feature.merchants
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mifospay.core.model.entity.accounts.savings.SavingsWithAssociations
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -28,17 +27,14 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.FetchMerchants
 import org.mifospay.core.data.domain.usecase.client.FetchClientDetails
 import org.mifospay.core.data.util.Constants
-import javax.inject.Inject
 
-@HiltViewModel
-class MerchantViewModel @Inject constructor(
+class MerchantViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mFetchMerchantsUseCase: FetchMerchants,
     private val mUseCaseFactory: UseCaseFactory,
-) : ViewModel() {
+    private val mTaskLooper: TaskLooper,
 
-    @Inject
-    lateinit var mTaskLooper: TaskLooper
+) : ViewModel() {
 
     private val _searchQuery = MutableStateFlow("")
     private val searchQuery: StateFlow<String> = _searchQuery.asStateFlow()

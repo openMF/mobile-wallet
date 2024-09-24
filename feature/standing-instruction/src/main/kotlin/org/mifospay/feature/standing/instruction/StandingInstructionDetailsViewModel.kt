@@ -12,7 +12,6 @@ package org.mifospay.feature.standing.instruction
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.entity.standinginstruction.StandingInstruction
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCase
@@ -20,10 +19,8 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.standinginstruction.DeleteStandingInstruction
 import org.mifospay.core.data.domain.usecase.standinginstruction.FetchStandingInstruction
 import org.mifospay.core.data.domain.usecase.standinginstruction.UpdateStandingInstruction
-import javax.inject.Inject
 
-@HiltViewModel
-class StandingInstructionDetailsViewModel @Inject constructor(
+class StandingInstructionDetailsViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val fetchStandingInstruction: FetchStandingInstruction,
     private val updateStandingInstruction: UpdateStandingInstruction,
