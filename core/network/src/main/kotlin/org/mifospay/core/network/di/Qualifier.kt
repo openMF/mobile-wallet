@@ -9,12 +9,19 @@
  */
 package org.mifospay.core.network.di
 
-import javax.inject.Qualifier
+import org.koin.core.qualifier.named
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class SelfServiceApi
+val SelfServiceApi = named("SelfServiceApi")
+val FineractApi = named("FineractApi")
 
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class FineractApi
+val FineractAuthenticationService = named("FineractAuthenticationService")
+val FineractClientService = named("FineractClientService")
+val FineractSavingsAccountsService = named("FineractSavingsAccountsService")
+val FineractRegistrationService = named("FineractRegistrationService")
+val FineractThirdPartyTransferService = named("FineractThirdPartyTransferService")
+
+val SelfServiceAuthenticationService = named("SelfServiceAuthenticationService")
+val SelfServiceClientService = named("SelfServiceClientService")
+val SelfServiceSavingsAccountsService = named("SelfServiceSavingsAccountsService")
+val SelfServiceRegistrationService = named("SelfServiceRegistrationService")
+val SelfServiceThirdPartyTransferService = named("SelfServiceThirdPartyTransferService")

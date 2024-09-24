@@ -31,7 +31,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.ui.utility.DialogState
@@ -44,7 +44,7 @@ fun SettingsScreenRoute(
     onLogout: () -> Unit,
     onChangePasscode: () -> Unit,
     modifier: Modifier = Modifier,
-    viewmodel: SettingsViewModel = hiltViewModel(),
+    viewmodel: SettingsViewModel = koinViewModel(),
 ) {
     var dialogState by remember { mutableStateOf(DialogState()) }
     val paddingValues = PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 4.dp)
@@ -196,6 +196,6 @@ private fun SettingsScreenPreview() {
         navigateToEditPasswordScreen = {},
         onLogout = {},
         onChangePasscode = {},
-        viewmodel = hiltViewModel(),
+        viewmodel = koinViewModel(),
     )
 }

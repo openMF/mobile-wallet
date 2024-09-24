@@ -15,9 +15,8 @@ import org.mifospay.core.network.GenericResponse
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class DeleteCard @Inject constructor(
+class DeleteCard(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<DeleteCard.RequestValues, DeleteCard.ResponseValue>() {
 

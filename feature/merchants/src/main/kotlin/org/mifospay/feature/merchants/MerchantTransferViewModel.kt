@@ -12,7 +12,6 @@ package org.mifospay.feature.merchants
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.Transaction
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -31,10 +30,8 @@ import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.core.data.util.Constants.FETCH_ACCOUNT_TRANSFER_USECASE
 import org.mifospay.core.datastore.PreferencesHelper
 import org.mifospay.feature.merchants.MerchantTransferUiState.Loading
-import javax.inject.Inject
 
-@HiltViewModel
-class MerchantTransferViewModel @Inject constructor(
+class MerchantTransferViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val localRepository: LocalRepository,
     private val preferencesHelper: PreferencesHelper,

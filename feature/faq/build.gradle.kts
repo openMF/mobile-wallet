@@ -16,6 +16,4 @@ android {
     namespace = "org.mifospay.feature.faq"
 }
 
-dependencies {
-
-}
+dependencies { }

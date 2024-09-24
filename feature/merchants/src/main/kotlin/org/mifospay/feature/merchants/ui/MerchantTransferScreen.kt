@@ -50,12 +50,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.domain.client.Client
 import com.mifospay.core.model.entity.accounts.savings.SavingAccount
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
@@ -78,7 +78,7 @@ internal fun MerchantTransferScreenRoute(
     onBackPressed: () -> Unit,
     proceedWithMakeTransferFlow: (String, String) -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MerchantTransferViewModel = hiltViewModel(),
+    viewModel: MerchantTransferViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val merchantName by viewModel.merchantName.collectAsStateWithLifecycle()

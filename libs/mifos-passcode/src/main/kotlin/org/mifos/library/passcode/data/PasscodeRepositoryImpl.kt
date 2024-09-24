@@ -10,9 +10,8 @@
 package org.mifos.library.passcode.data
 
 import org.mifos.library.passcode.utility.PreferenceManager
-import javax.inject.Inject
 
-class PasscodeRepositoryImpl @Inject constructor(
+class PasscodeRepositoryImpl(
     private val preferenceManager: PreferenceManager,
 ) : PasscodeRepository {
 

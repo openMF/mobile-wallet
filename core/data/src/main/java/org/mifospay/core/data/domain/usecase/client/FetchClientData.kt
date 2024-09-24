@@ -18,14 +18,11 @@ import org.mifospay.core.data.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class FetchClientData @Inject constructor(
+class FetchClientData(
     private val fineractRepository: FineractRepository,
+    private val clientDetailsMapper: ClientDetailsMapper,
 ) : UseCase<FetchClientData.RequestValues, FetchClientData.ResponseValue>() {
-
-    @Inject
-    lateinit var clientDetailsMapper: ClientDetailsMapper
 
     override fun executeUseCase(requestValues: RequestValues) {
         requestValues.clientId?.let { clientId ->

@@ -16,9 +16,8 @@ import org.mifospay.core.network.services.KtorSavingsAccountService
 import org.mifospay.core.network.services.RegistrationService
 import org.mifospay.core.network.services.SavingsAccountsService
 import org.mifospay.core.network.services.ThirdPartyTransferService
-import javax.inject.Inject
 
-class SelfServiceApiManager @Inject constructor(
+class SelfServiceApiManager(
     private val authenticationService: AuthenticationService,
     private val clientService: ClientService,
     private val savingsAccountsService: SavingsAccountsService,

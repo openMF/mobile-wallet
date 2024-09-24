@@ -12,7 +12,6 @@ package org.mifospay.feature.home
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.Account
 import com.mifospay.core.model.domain.Transaction
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,10 +23,8 @@ import org.mifospay.core.data.domain.usecase.history.HistoryContract
 import org.mifospay.core.data.domain.usecase.history.TransactionsHistory
 import org.mifospay.core.data.repository.local.LocalRepository
 import org.mifospay.core.datastore.PreferencesHelper
-import javax.inject.Inject
 
-@HiltViewModel
-class HomeViewModel @Inject constructor(
+class HomeViewModel(
     private val useCaseHandler: UseCaseHandler,
     private val localRepository: LocalRepository,
     private val preferencesHelper: PreferencesHelper,

@@ -10,26 +10,15 @@
 package org.mifospay.core.data.domain.usecase.history
 
 import com.mifospay.core.model.domain.Transaction
-import org.mifospay.core.data.base.TaskLooper
 import org.mifospay.core.data.base.UseCase.UseCaseCallback
-import org.mifospay.core.data.base.UseCaseFactory
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransactions
-import javax.inject.Inject
 
-class TransactionsHistory @Inject constructor(
+class TransactionsHistory(
     private val mUseCaseHandler: UseCaseHandler,
     private val fetchAccountTransactionsUseCase: FetchAccountTransactions,
 ) {
     var delegate: HistoryContract.TransactionsHistoryAsync? = null
-
-    @JvmField
-    @Inject
-    var mTaskLooper: TaskLooper? = null
-
-    @JvmField
-    @Inject
-    var mUseCaseFactory: UseCaseFactory? = null
     private var transactions: List<Transaction>?
 
     init {

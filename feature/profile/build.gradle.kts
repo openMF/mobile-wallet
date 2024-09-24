@@ -21,9 +21,11 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
     implementation(projects.libs.countryCodePicker)
 
     implementation(libs.qrkit)
+
+    implementation(libs.squareup.okhttp)
+
     implementation(libs.coil.kt.compose)
 }

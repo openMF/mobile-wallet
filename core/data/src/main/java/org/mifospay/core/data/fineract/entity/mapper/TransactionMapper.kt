@@ -14,9 +14,8 @@ import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.entity.accounts.savings.SavingsWithAssociations
 import com.mifospay.core.model.entity.accounts.savings.Transactions
 import com.mifospay.core.model.utils.DateHelper
-import javax.inject.Inject
 
-class TransactionMapper @Inject constructor(
+class TransactionMapper(
     private val currencyMapper: CurrencyMapper,
 ) {
 

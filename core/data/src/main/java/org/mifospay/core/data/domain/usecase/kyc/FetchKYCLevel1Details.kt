@@ -15,9 +15,8 @@ import org.mifospay.core.data.fineract.repository.FineractRepository
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class FetchKYCLevel1Details @Inject constructor(
+class FetchKYCLevel1Details(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<FetchKYCLevel1Details.RequestValues, FetchKYCLevel1Details.ResponseValue>() {
 

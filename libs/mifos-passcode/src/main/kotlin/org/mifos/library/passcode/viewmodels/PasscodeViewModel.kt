@@ -12,7 +12,6 @@ package org.mifos.library.passcode.viewmodels
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -21,10 +20,8 @@ import kotlinx.coroutines.launch
 import org.mifos.library.passcode.data.PasscodeRepository
 import org.mifos.library.passcode.utility.Constants.PASSCODE_LENGTH
 import org.mifos.library.passcode.utility.Step
-import javax.inject.Inject
 
-@HiltViewModel
-internal class PasscodeViewModel @Inject constructor(
+internal class PasscodeViewModel(
     private val passcodeRepository: PasscodeRepository,
 ) : ViewModel() {
 

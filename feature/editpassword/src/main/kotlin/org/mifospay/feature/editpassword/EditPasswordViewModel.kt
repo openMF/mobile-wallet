@@ -11,7 +11,6 @@ package org.mifospay.feature.editpassword
 
 import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.user.UpdateUserEntityPassword
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.common.Constants
@@ -20,11 +19,9 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.user.AuthenticateUser
 import org.mifospay.core.data.domain.usecase.user.UpdateUser
 import org.mifospay.core.datastore.PreferencesHelper
-import javax.inject.Inject
 
-@HiltViewModel
 @Suppress("NestedBlockDepth")
-class EditPasswordViewModel @Inject constructor(
+class EditPasswordViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val mPreferencesHelper: PreferencesHelper,
     private val authenticateUserUseCase: AuthenticateUser,

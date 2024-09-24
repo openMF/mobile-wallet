@@ -12,7 +12,6 @@ package org.mifospay
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mifospay.core.model.UserData
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -20,10 +19,8 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.mifos.library.passcode.data.PasscodeManager
 import org.mifospay.core.data.repository.auth.UserDataRepository
-import javax.inject.Inject
 
-@HiltViewModel
-class MainActivityViewModel @Inject constructor(
+class MainActivityViewModel(
     private val userDataRepository: UserDataRepository,
     private val passcodeManager: PasscodeManager,
 ) : ViewModel() {

@@ -16,9 +16,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.repository.FineractRepository
-import javax.inject.Inject
 
-class BlockUnblockCommand @Inject constructor(
+class BlockUnblockCommand(
     private val mFineractRepository: FineractRepository,
 ) : UseCase<BlockUnblockCommand.RequestValues, BlockUnblockCommand.ResponseValue>() {
 

@@ -14,7 +14,6 @@ import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.client.Client
 import com.mifospay.core.model.domain.user.User
 import com.mifospay.core.model.entity.UserWithRole
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -24,10 +23,8 @@ import org.mifospay.core.data.domain.usecase.client.FetchClientData
 import org.mifospay.core.data.domain.usecase.user.AuthenticateUser
 import org.mifospay.core.data.domain.usecase.user.FetchUserDetails
 import org.mifospay.core.datastore.PreferencesHelper
-import javax.inject.Inject
 
-@HiltViewModel
-class LoginViewModel @Inject constructor(
+class LoginViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val authenticateUserUseCase: AuthenticateUser,
     private val fetchClientDataUseCase: FetchClientData,

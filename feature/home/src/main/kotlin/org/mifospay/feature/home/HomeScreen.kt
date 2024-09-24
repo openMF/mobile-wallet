@@ -45,12 +45,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.domain.Account
 import com.mifospay.core.model.domain.Currency
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.common.Utils
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.theme.border
@@ -63,7 +63,7 @@ internal fun HomeRoute(
     onRequest: (String) -> Unit,
     onPay: () -> Unit,
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel = hiltViewModel(),
+    homeViewModel: HomeViewModel = koinViewModel(),
 ) {
     val homeUIState by homeViewModel
         .homeUIState

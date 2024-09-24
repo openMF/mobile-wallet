@@ -20,4 +20,5 @@ dependencies {
     implementation(projects.core.data)
 
     implementation(projects.libs.pullrefresh)
+    implementation(libs.play.services.auth)
 }

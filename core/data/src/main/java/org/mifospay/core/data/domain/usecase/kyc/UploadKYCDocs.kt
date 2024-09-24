@@ -16,9 +16,8 @@ import org.mifospay.core.network.GenericResponse
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class UploadKYCDocs @Inject constructor(
+class UploadKYCDocs(
     private val apiRepository: FineractRepository,
 ) : UseCase<UploadKYCDocs.RequestValues, UploadKYCDocs.ResponseValue>() {
 

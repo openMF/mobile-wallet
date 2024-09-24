@@ -9,11 +9,13 @@
  */
 plugins {
     alias(libs.plugins.mifospay.android.library)
-    alias(libs.plugins.mifospay.android.hilt)
 }
 
 android {
     namespace = "org.mifospay.common"
 }
 
-dependencies {}
+dependencies {
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.android)
+}

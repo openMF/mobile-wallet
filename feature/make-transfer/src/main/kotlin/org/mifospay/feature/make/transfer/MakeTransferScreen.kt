@@ -41,8 +41,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
@@ -51,7 +51,7 @@ import org.mifospay.core.designsystem.component.MifosLoadingWheel
 internal fun MakeTransferScreenRoute(
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: MakeTransferViewModel = hiltViewModel(),
+    viewModel: MakeTransferViewModel = koinViewModel(),
 ) {
     // TODO: commented out because not using it
     // val fetchPayeeClient by viewModel.fetchPayeeClient.collectAsStateWithLifecycle()

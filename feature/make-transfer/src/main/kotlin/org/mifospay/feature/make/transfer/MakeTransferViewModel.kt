@@ -12,7 +12,6 @@ package org.mifospay.feature.make.transfer
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -27,10 +26,8 @@ import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.TransferFunds
 import org.mifospay.core.data.domain.usecase.client.SearchClient
 import org.mifospay.core.data.repository.local.LocalRepository
-import javax.inject.Inject
 
-@HiltViewModel
-class MakeTransferViewModel @Inject constructor(
+class MakeTransferViewModel(
     savedStateHandle: SavedStateHandle,
     private val useCaseHandler: UseCaseHandler,
     private val searchClientUseCase: SearchClient,

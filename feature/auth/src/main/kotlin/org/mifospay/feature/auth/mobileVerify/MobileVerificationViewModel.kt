@@ -14,7 +14,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -23,11 +22,9 @@ import kotlinx.coroutines.launch
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.client.SearchClient
-import javax.inject.Inject
 
-@HiltViewModel
 @Suppress("UnusedParameter")
-class MobileVerificationViewModel @Inject constructor(
+class MobileVerificationViewModel(
     private val mUseCaseHandler: UseCaseHandler,
     private val searchClientUseCase: SearchClient,
 ) : ViewModel() {

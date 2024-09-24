@@ -18,7 +18,6 @@ android {
 
 dependencies {
     implementation(libs.zxing)
-    implementation(projects.core.data)
     implementation(libs.androidx.camera.view)
     implementation(libs.androidx.camera.lifecycle)
     // TODO:: this should be removed

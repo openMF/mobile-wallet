@@ -17,9 +17,8 @@ import org.mifospay.core.data.util.Constants
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class RegisterUser @Inject constructor(
+class RegisterUser(
     private val apiRepository: FineractRepository,
 ) : UseCase<RegisterUser.RequestValues, RegisterUser.ResponseValue>() {
 

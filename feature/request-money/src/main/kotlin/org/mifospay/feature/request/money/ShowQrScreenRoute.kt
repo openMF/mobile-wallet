@@ -35,8 +35,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.content.ContextCompat.startActivity
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -47,7 +47,7 @@ import org.mifospay.feature.request.money.util.ImageUtils
 internal fun ShowQrScreenRoute(
     backPress: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ShowQrViewModel = hiltViewModel(),
+    viewModel: ShowQrViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.showQrUiState.collectAsStateWithLifecycle()
     val vpaId by viewModel.vpaId.collectAsStateWithLifecycle()

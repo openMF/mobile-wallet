@@ -17,9 +17,8 @@ import retrofit2.HttpException
 import rx.Subscriber
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
-import javax.inject.Inject
 
-class CreateUser @Inject constructor(private val apiRepository: FineractRepository) :
+class CreateUser(private val apiRepository: FineractRepository) :
     UseCase<CreateUser.RequestValues, CreateUser.ResponseValue>() {
     override fun executeUseCase(requestValues: RequestValues) {
         apiRepository.createUser(requestValues.user)

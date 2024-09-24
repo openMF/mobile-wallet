@@ -20,8 +20,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
-
     implementation(libs.zxing)
     implementation(libs.coil.kt.compose)
 }

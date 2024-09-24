@@ -10,7 +10,6 @@
 plugins {
     alias(libs.plugins.mifospay.android.library)
     alias(libs.plugins.mifospay.android.library.compose)
-    alias(libs.plugins.mifospay.android.hilt)
 }
 
 android {

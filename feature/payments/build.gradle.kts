@@ -17,6 +17,5 @@ android {
 }
 
 dependencies {
-    implementation(projects.core.data)
     implementation(libs.accompanist.pager)
 }

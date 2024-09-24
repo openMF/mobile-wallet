@@ -55,11 +55,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.FileProvider
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
 import kotlinx.coroutines.launch
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.common.Constants
 import org.mifospay.core.designsystem.component.FloatingActionButtonContent
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
@@ -76,7 +76,7 @@ internal fun ReceiptScreenRoute(
     openPassCodeActivity: () -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
-    viewModel: ReceiptViewModel = hiltViewModel(),
+    viewModel: ReceiptViewModel = koinViewModel(),
 ) {
     /**
      * This function serves as the main entry point for the Receipt screen UI.

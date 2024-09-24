@@ -16,19 +16,17 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.network.Dispatcher
-import org.mifospay.core.network.MifosDispatchers
-import org.mifospay.core.network.localAssets.MifosLocalAssetDataSource
-import javax.inject.Inject
+import org.mifospay.core.network.localAssets.LocalAssetDataSource
 
 /**
  * Local implementation of the [LocalAssetRepository] that retrieves the countries, banks, cities
  * and state list from a JSON String.
  *
  */
-class MifosLocalAssetRepository @Inject constructor(
-    @Dispatcher(MifosDispatchers.IO) private val ioDispatcher: CoroutineDispatcher,
-    private val datasource: MifosLocalAssetDataSource,
+
+class MifosLocalAssetRepository(
+    private val ioDispatcher: CoroutineDispatcher,
+    private val datasource: LocalAssetDataSource,
 ) : LocalAssetRepository {
 
     override fun getCountries(): Flow<List<Country>> = flow {
