@@ -31,4 +31,5 @@
     <string name="feature_profile_click_profile_picture">Click profile picture</string>
     <string name="feature_profile_change_profile_picture">Pick profile picture from device</string>
     <string name="feature_profile_remove_profile_picture">Remove profile picture</string>
+    <string name="feature_profile_updated_sucessfully"> Updated Successfully</string>
 </resources>

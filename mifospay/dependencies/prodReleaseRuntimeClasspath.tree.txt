@@ -36,7 +36,9 @@
 |              |         |              +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1 (c)
 |              |         |              +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.8.1 (c)
 |              |         |              +--- org.jetbrains.kotlinx:kotlinx-coroutines-slf4j:1.8.1 (c)
-|              |         |              \--- org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1 (c)
+|              |         |              +--- org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.1 (c)
+|              |         |              +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1 (c)
+|              |         |              \--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.8.1 (c)
 |              |         +--- androidx.lifecycle:lifecycle-common-java8:2.8.4 (c)
 |              |         +--- androidx.lifecycle:lifecycle-livedata:2.8.4 (c)
 |              |         +--- androidx.lifecycle:lifecycle-livedata-core:2.8.4 (c)
@@ -238,6 +240,8 @@
 |    +--- androidx.compose.material:material-icons-extended-android:1.6.8 (c)
 |    +--- androidx.compose.animation:animation-android:1.6.8 -> 1.7.0-rc01 (c)
 |    +--- androidx.compose.ui:ui-unit:1.6.8 -> 1.7.0-rc01 (c)
+|    +--- androidx.compose.ui:ui-test-junit4:1.6.8 -> 1.7.0-rc01 (c)
+|    +--- androidx.compose.ui:ui-tooling:1.6.8 -> 1.7.0-rc01 (c)
 |    +--- androidx.compose.animation:animation-core-android:1.6.8 -> 1.7.0-rc01 (c)
 |    +--- androidx.compose.ui:ui-graphics:1.6.8 -> 1.7.0-rc01 (c)
 |    +--- androidx.compose.ui:ui-text:1.6.8 -> 1.7.0-rc01 (c)
@@ -247,12 +251,20 @@
 |    +--- androidx.compose.ui:ui-util-android:1.6.8 -> 1.7.0-rc01 (c)
 |    +--- androidx.compose.foundation:foundation-android:1.6.8 -> 1.7.0-rc01 (c)
 |    +--- androidx.compose.ui:ui-geometry-android:1.6.8 -> 1.7.0-rc01 (c)
+|    +--- androidx.compose.ui:ui-test-junit4-android:1.6.8 -> 1.7.0-rc01 (c)
+|    +--- androidx.compose.ui:ui-tooling-android:1.6.8 -> 1.7.0-rc01 (c)
 |    +--- androidx.compose.ui:ui-tooling-preview-android:1.6.8 -> 1.7.0-rc01 (c)
 |    +--- androidx.compose.ui:ui-graphics-android:1.6.8 -> 1.7.0-rc01 (c)
 |    +--- androidx.compose.ui:ui-text-android:1.6.8 -> 1.7.0-rc01 (c)
 |    +--- androidx.compose.material:material-icons-core-android:1.6.8 (c)
 |    +--- androidx.compose.material:material-ripple-android:1.6.8 (c)
-|    \--- androidx.compose.animation:animation-graphics-android:1.6.8 -> 1.7.0-rc01 (c)
+|    +--- androidx.compose.animation:animation-graphics-android:1.6.8 -> 1.7.0-rc01 (c)
+|    +--- androidx.compose.ui:ui-test:1.6.8 -> 1.7.0-rc01 (c)
+|    +--- androidx.compose.material:material:1.6.8 (c)
+|    +--- androidx.compose.ui:ui-tooling-data:1.6.8 -> 1.7.0-rc01 (c)
+|    +--- androidx.compose.ui:ui-test-android:1.6.8 -> 1.7.0-rc01 (c)
+|    +--- androidx.compose.ui:ui-tooling-data-android:1.6.8 -> 1.7.0-rc01 (c)
+|    \--- androidx.compose.material:material-android:1.6.8 (c)
 +--- androidx.compose.ui:ui-tooling-preview -> 1.7.0-rc01
 |    \--- androidx.compose.ui:ui-tooling-preview-android:1.7.0-rc01
 |         +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
@@ -268,7 +280,11 @@
 |         +--- androidx.compose.ui:ui:1.7.0-rc01 (c)
 |         +--- androidx.compose.ui:ui-geometry:1.7.0-rc01 (c)
 |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01 (c)
+|         +--- androidx.compose.ui:ui-test:1.7.0-rc01 (c)
+|         +--- androidx.compose.ui:ui-test-junit4:1.7.0-rc01 (c)
 |         +--- androidx.compose.ui:ui-text:1.7.0-rc01 (c)
+|         +--- androidx.compose.ui:ui-tooling:1.7.0-rc01 (c)
+|         +--- androidx.compose.ui:ui-tooling-data:1.7.0-rc01 (c)
 |         +--- androidx.compose.ui:ui-unit:1.7.0-rc01 (c)
 |         \--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
 +--- com.google.firebase:firebase-bom:33.1.2
@@ -774,16 +790,24 @@
 |    |    |         |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (c)
 |    |    |         |         |         +--- androidx.compose.ui:ui-geometry:1.7.0-rc01 (c)
 |    |    |         |         |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01 (c)
+|    |    |         |         |         +--- androidx.compose.ui:ui-test-junit4:1.7.0-rc01 (c)
 |    |    |         |         |         +--- androidx.compose.ui:ui-text:1.7.0-rc01 (c)
+|    |    |         |         |         +--- androidx.compose.ui:ui-tooling:1.7.0-rc01 (c)
 |    |    |         |         |         +--- androidx.compose.ui:ui-tooling-preview:1.7.0-rc01 (c)
-|    |    |         |         |         \--- androidx.compose.ui:ui-unit:1.7.0-rc01 (c)
+|    |    |         |         |         +--- androidx.compose.ui:ui-unit:1.7.0-rc01 (c)
+|    |    |         |         |         +--- androidx.compose.ui:ui-test:1.7.0-rc01 (c)
+|    |    |         |         |         \--- androidx.compose.ui:ui-tooling-data:1.7.0-rc01 (c)
 |    |    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 2.0.20 (*)
 |    |    |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-test-junit4:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-text:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-tooling:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-tooling-preview:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-unit:1.7.0-rc01 (c)
-|    |    |         |         \--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-test:1.7.0-rc01 (c)
+|    |    |         |         \--- androidx.compose.ui:ui-tooling-data:1.7.0-rc01 (c)
 |    |    |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01
 |    |    |         |    \--- androidx.compose.ui:ui-graphics-android:1.7.0-rc01
 |    |    |         |         +--- androidx.annotation:annotation:1.7.0 -> 1.8.1 (*)
@@ -805,9 +829,13 @@
 |    |    |         |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (c)
 |    |    |         |         |         +--- androidx.compose.ui:ui-geometry:1.7.0-rc01 (c)
 |    |    |         |         |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01 (c)
+|    |    |         |         |         +--- androidx.compose.ui:ui-test-junit4:1.7.0-rc01 (c)
 |    |    |         |         |         +--- androidx.compose.ui:ui-text:1.7.0-rc01 (c)
+|    |    |         |         |         +--- androidx.compose.ui:ui-tooling:1.7.0-rc01 (c)
 |    |    |         |         |         +--- androidx.compose.ui:ui-tooling-preview:1.7.0-rc01 (c)
-|    |    |         |         |         \--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
+|    |    |         |         |         +--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
+|    |    |         |         |         +--- androidx.compose.ui:ui-test:1.7.0-rc01 (c)
+|    |    |         |         |         \--- androidx.compose.ui:ui-tooling-data:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-util:1.7.0-rc01 (*)
 |    |    |         |         +--- androidx.core:core:1.12.0 -> 1.13.1 (*)
 |    |    |         |         +--- androidx.graphics:graphics-path:1.0.1
@@ -815,7 +843,11 @@
 |    |    |         |         |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 2.0.20 (*)
 |    |    |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-geometry:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-test:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-test-junit4:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-text:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-tooling:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-tooling-data:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-tooling-preview:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-unit:1.7.0-rc01 (c)
 |    |    |         |         \--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
@@ -836,6 +868,10 @@
 |    |    |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-geometry:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-test:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-test-junit4:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-tooling:1.7.0-rc01 (c)
+|    |    |         |         +--- androidx.compose.ui:ui-tooling-data:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-tooling-preview:1.7.0-rc01 (c)
 |    |    |         |         +--- androidx.compose.ui:ui-unit:1.7.0-rc01 (c)
 |    |    |         |         \--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
@@ -873,11 +909,15 @@
 |    |    |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3 -> 1.8.1 (*)
 |    |    |         +--- androidx.compose.ui:ui-geometry:1.7.0-rc01 (c)
 |    |    |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01 (c)
+|    |    |         +--- androidx.compose.ui:ui-test-junit4:1.7.0-rc01 (c)
 |    |    |         +--- androidx.compose.ui:ui-text:1.7.0-rc01 (c)
+|    |    |         +--- androidx.compose.ui:ui-tooling:1.7.0-rc01 (c)
 |    |    |         +--- androidx.compose.ui:ui-tooling-preview:1.7.0-rc01 (c)
 |    |    |         +--- androidx.compose.ui:ui-unit:1.7.0-rc01 (c)
 |    |    |         +--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
-|    |    |         \--- androidx.compose.foundation:foundation:1.7.0-rc01 (c)
+|    |    |         +--- androidx.compose.foundation:foundation:1.7.0-rc01 (c)
+|    |    |         +--- androidx.compose.ui:ui-test:1.7.0-rc01 (c)
+|    |    |         \--- androidx.compose.ui:ui-tooling-data:1.7.0-rc01 (c)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel:2.6.1 -> 2.8.4 (*)
 |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 2.0.20 (*)
 |    |    +--- androidx.activity:activity:1.9.1 (c)
@@ -1042,6 +1082,7 @@
 |    |              |    \--- androidx.compose.material:material-icons-core-android:1.6.8
 |    |              |         +--- androidx.compose.ui:ui:1.6.8 -> 1.7.0-rc01 (*)
 |    |              |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 2.0.20 (*)
+|    |              |         +--- androidx.compose.material:material:1.6.8 (c)
 |    |              |         +--- androidx.compose.material:material-icons-extended:1.6.8 (c)
 |    |              |         \--- androidx.compose.material:material-ripple:1.6.8 (c)
 |    |              +--- androidx.compose.material:material-ripple:1.6.0 -> 1.6.8
@@ -1050,6 +1091,7 @@
 |    |              |         +--- androidx.compose.foundation:foundation:1.6.8 -> 1.7.0-rc01 (*)
 |    |              |         +--- androidx.compose.runtime:runtime:1.6.8 -> 1.7.0-rc01 (*)
 |    |              |         +--- androidx.compose.ui:ui-util:1.6.8 -> 1.7.0-rc01 (*)
+|    |              |         +--- androidx.compose.material:material:1.6.8 (c)
 |    |              |         +--- androidx.compose.material:material-icons-core:1.6.8 (c)
 |    |              |         \--- androidx.compose.material:material-icons-extended:1.6.8 (c)
 |    |              +--- androidx.compose.runtime:runtime:1.6.0 -> 1.7.0-rc01 (*)
@@ -1355,6 +1397,7 @@
 |    |    |    \--- androidx.compose.material:material-icons-extended-android:1.6.8
 |    |    |         +--- androidx.compose.material:material-icons-core:1.6.8 (*)
 |    |    |         +--- androidx.compose.runtime:runtime:1.6.8 -> 1.7.0-rc01 (*)
+|    |    |         +--- androidx.compose.material:material:1.6.8 (c)
 |    |    |         +--- androidx.compose.material:material-icons-core:1.6.8 (c)
 |    |    |         \--- androidx.compose.material:material-ripple:1.6.8 (c)
 |    |    +--- androidx.compose.material3:material3 -> 1.2.1 (*)
@@ -1608,6 +1651,324 @@
 |    |    +--- androidx.compose.ui:ui-util:1.6.8 -> 1.7.0-rc01 (*)
 |    |    +--- org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7 (*)
 |    |    \--- io.michaelrocks:libphonenumber-android:8.13.35
+|    +--- network.chaintech:qr-kit:2.0.0
+|    |    \--- network.chaintech:qr-kit-android:2.0.0
+|    |         +--- androidx.compose.ui:ui-test-junit4:1.6.8 -> 1.7.0-rc01
+|    |         |    \--- androidx.compose.ui:ui-test-junit4-android:1.7.0-rc01
+|    |         |         +--- androidx.activity:activity:1.2.1 -> 1.9.1 (*)
+|    |         |         +--- androidx.activity:activity-compose:1.3.0 -> 1.9.1 (*)
+|    |         |         +--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+|    |         |         +--- androidx.compose.runtime:runtime-saveable:1.6.0 -> 1.7.0-rc01 (*)
+|    |         |         +--- androidx.compose.ui:ui-test:1.7.0-rc01
+|    |         |         |    \--- androidx.compose.ui:ui-test-android:1.7.0-rc01
+|    |         |         |         +--- androidx.activity:activity-compose:1.3.0 -> 1.9.1 (*)
+|    |         |         |         +--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+|    |         |         |         +--- androidx.compose.runtime:runtime:1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.ui:ui-text:1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.ui:ui-unit:1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.ui:ui-util:1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.core:core-ktx:1.12.0 -> 1.13.1 (*)
+|    |         |         |         +--- androidx.test:monitor:1.6.1
+|    |         |         |         |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|    |         |         |         |    +--- androidx.test:annotation:1.0.1
+|    |         |         |         |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|    |         |         |         |    |    \--- androidx.annotation:annotation-experimental:1.1.0 -> 1.4.1 (*)
+|    |         |         |         |    \--- androidx.tracing:tracing:1.0.0 -> 1.3.0-alpha02 (*)
+|    |         |         |         +--- androidx.test.espresso:espresso-core:3.5.0
+|    |         |         |         |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|    |         |         |         |    +--- androidx.test:core:1.5.0
+|    |         |         |         |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|    |         |         |         |    |    +--- androidx.test:monitor:1.6.0 -> 1.6.1 (*)
+|    |         |         |         |    |    +--- androidx.test.services:storage:1.4.2
+|    |         |         |         |    |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|    |         |         |         |    |    |    +--- androidx.test:monitor:1.6.0 -> 1.6.1 (*)
+|    |         |         |         |    |    |    +--- com.google.code.findbugs:jsr305:2.0.2 -> 3.0.2
+|    |         |         |         |    |    |    \--- androidx.test:annotation:1.0.1 (*)
+|    |         |         |         |    |    +--- androidx.lifecycle:lifecycle-common:2.3.1 -> 2.8.4 (*)
+|    |         |         |         |    |    +--- androidx.tracing:tracing:1.0.0 -> 1.3.0-alpha02 (*)
+|    |         |         |         |    |    +--- com.google.guava:listenablefuture:1.0 -> 9999.0-empty-to-avoid-conflict-with-guava
+|    |         |         |         |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.7.10 -> 2.0.20 (*)
+|    |         |         |         |    |    \--- androidx.concurrent:concurrent-futures:1.1.0 (*)
+|    |         |         |         |    +--- androidx.test:runner:1.5.0
+|    |         |         |         |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|    |         |         |         |    |    +--- androidx.test:annotation:1.0.1 (*)
+|    |         |         |         |    |    +--- androidx.test:monitor:1.6.0 -> 1.6.1 (*)
+|    |         |         |         |    |    +--- androidx.test.services:storage:1.4.2 (*)
+|    |         |         |         |    |    +--- androidx.tracing:tracing:1.0.0 -> 1.3.0-alpha02 (*)
+|    |         |         |         |    |    \--- junit:junit:4.13.2
+|    |         |         |         |    |         \--- org.hamcrest:hamcrest-core:1.3
+|    |         |         |         |    +--- androidx.test.espresso:espresso-idling-resource:3.5.0
+|    |         |         |         |    +--- com.squareup:javawriter:2.1.1
+|    |         |         |         |    +--- javax.inject:javax.inject:1
+|    |         |         |         |    +--- org.hamcrest:hamcrest-library:1.3
+|    |         |         |         |    |    \--- org.hamcrest:hamcrest-core:1.3
+|    |         |         |         |    +--- org.hamcrest:hamcrest-integration:1.3
+|    |         |         |         |    |    \--- org.hamcrest:hamcrest-library:1.3 (*)
+|    |         |         |         |    +--- com.google.code.findbugs:jsr305:2.0.2 -> 3.0.2
+|    |         |         |         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.7.10 -> 2.0.20 (*)
+|    |         |         |         |    \--- androidx.test:annotation:1.0.1 (*)
+|    |         |         |         +--- androidx.test.espresso:espresso-idling-resource:3.5.0
+|    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 2.0.20 (*)
+|    |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3 -> 1.8.1 (*)
+|    |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3 -> 1.8.1
+|    |         |         |         |    \--- org.jetbrains.kotlinx:kotlinx-coroutines-test-jvm:1.8.1
+|    |         |         |         |         +--- org.jetbrains:annotations:23.0.0
+|    |         |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.8.1 (*)
+|    |         |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.1 (*)
+|    |         |         |         |         \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.21 -> 2.0.20 (*)
+|    |         |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-geometry:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-test-junit4:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-text:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-tooling:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-tooling-data:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-tooling-preview:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-unit:1.7.0-rc01 (c)
+|    |         |         |         \--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
+|    |         |         +--- androidx.lifecycle:lifecycle-common:2.5.1 -> 2.8.4 (*)
+|    |         |         +--- androidx.lifecycle:lifecycle-runtime:2.5.1 -> 2.8.4 (*)
+|    |         |         +--- androidx.test:core:1.5.0 (*)
+|    |         |         +--- androidx.test:monitor:1.6.1 (*)
+|    |         |         +--- androidx.test.ext:junit:1.1.5
+|    |         |         |    +--- junit:junit:4.13.2 (*)
+|    |         |         |    +--- androidx.test:core:1.5.0 (*)
+|    |         |         |    +--- androidx.test:monitor:1.6.1 (*)
+|    |         |         |    \--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|    |         |         +--- junit:junit:4.13.2 (*)
+|    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 2.0.20 (*)
+|    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3 -> 1.8.1 (*)
+|    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3 -> 1.8.1 (*)
+|    |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-geometry:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-test:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-text:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-tooling:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-tooling-preview:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-unit:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
+|    |         |         \--- androidx.compose.ui:ui-tooling-data:1.7.0-rc01 (c)
+|    |         +--- androidx.core:core-ktx:1.13.1 (*)
+|    |         +--- androidx.activity:activity-compose:1.9.1 (*)
+|    |         +--- androidx.appcompat:appcompat:1.7.0 (*)
+|    |         +--- androidx.compose.ui:ui-tooling:1.6.8 -> 1.7.0-rc01
+|    |         |    \--- androidx.compose.ui:ui-tooling-android:1.7.0-rc01
+|    |         |         +--- androidx.activity:activity-compose:1.7.0 -> 1.9.1 (*)
+|    |         |         +--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+|    |         |         +--- androidx.compose.animation:animation:1.7.0-rc01 (*)
+|    |         |         +--- androidx.compose.material:material:1.0.0 -> 1.6.8
+|    |         |         |    \--- androidx.compose.material:material-android:1.6.8
+|    |         |         |         +--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+|    |         |         |         +--- androidx.compose.animation:animation:1.6.8 -> 1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.animation:animation-core:1.6.8 -> 1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.foundation:foundation:1.6.8 -> 1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.foundation:foundation-layout:1.6.8 -> 1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.material:material-icons-core:1.6.8 (*)
+|    |         |         |         +--- androidx.compose.material:material-ripple:1.6.8 (*)
+|    |         |         |         +--- androidx.compose.runtime:runtime:1.6.8 -> 1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.ui:ui:1.6.8 -> 1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.ui:ui-text:1.6.8 -> 1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.ui:ui-util:1.6.8 -> 1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.lifecycle:lifecycle-runtime:2.6.1 -> 2.8.4 (*)
+|    |         |         |         +--- androidx.lifecycle:lifecycle-viewmodel:2.6.1 -> 2.8.4 (*)
+|    |         |         |         +--- androidx.savedstate:savedstate:1.2.1 (*)
+|    |         |         |         +--- androidx.compose.material:material-icons-core:1.6.8 (c)
+|    |         |         |         +--- androidx.compose.material:material-icons-extended:1.6.8 (c)
+|    |         |         |         \--- androidx.compose.material:material-ripple:1.6.8 (c)
+|    |         |         +--- androidx.compose.runtime:runtime:1.7.0-rc01 (*)
+|    |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (*)
+|    |         |         +--- androidx.compose.ui:ui-tooling-data:1.7.0-rc01
+|    |         |         |    \--- androidx.compose.ui:ui-tooling-data-android:1.7.0-rc01
+|    |         |         |         +--- androidx.annotation:annotation:1.1.0 -> 1.8.1 (*)
+|    |         |         |         +--- androidx.annotation:annotation-experimental:1.4.0 -> 1.4.1 (*)
+|    |         |         |         +--- androidx.compose.runtime:runtime:1.7.0-rc01 (*)
+|    |         |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (*)
+|    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 2.0.20 (*)
+|    |         |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-geometry:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-test:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-test-junit4:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-text:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-tooling:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-tooling-preview:1.7.0-rc01 (c)
+|    |         |         |         +--- androidx.compose.ui:ui-unit:1.7.0-rc01 (c)
+|    |         |         |         \--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-tooling-preview:1.7.0-rc01 (*)
+|    |         |         +--- androidx.lifecycle:lifecycle-common:2.6.1 -> 2.8.4 (*)
+|    |         |         +--- androidx.savedstate:savedstate-ktx:1.2.1 (*)
+|    |         |         +--- androidx.compose.ui:ui:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-geometry:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-graphics:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-test:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-test-junit4:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-text:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-tooling-data:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-tooling-preview:1.7.0-rc01 (c)
+|    |         |         +--- androidx.compose.ui:ui-unit:1.7.0-rc01 (c)
+|    |         |         \--- androidx.compose.ui:ui-util:1.7.0-rc01 (c)
+|    |         +--- androidx.camera:camera-core:1.3.4
+|    |         |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|    |         |    +--- androidx.annotation:annotation-experimental:1.1.0 -> 1.4.1 (*)
+|    |         |    +--- androidx.concurrent:concurrent-futures:1.0.0 -> 1.1.0 (*)
+|    |         |    +--- androidx.core:core:1.1.0 -> 1.13.1 (*)
+|    |         |    +--- androidx.exifinterface:exifinterface:1.3.2 -> 1.3.7 (*)
+|    |         |    +--- androidx.lifecycle:lifecycle-common:2.1.0 -> 2.8.4 (*)
+|    |         |    +--- androidx.lifecycle:lifecycle-livedata:2.1.0 -> 2.8.4 (*)
+|    |         |    +--- com.google.auto.value:auto-value-annotations:1.6.3
+|    |         |    +--- com.google.guava:listenablefuture:1.0 -> 9999.0-empty-to-avoid-conflict-with-guava
+|    |         |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 2.0.20 (*)
+|    |         |    +--- androidx.camera:camera-camera2:1.3.4 (c)
+|    |         |    +--- androidx.camera:camera-lifecycle:1.3.4 (c)
+|    |         |    +--- androidx.camera:camera-video:1.3.4 (c)
+|    |         |    \--- androidx.camera:camera-view:1.3.4 (c)
+|    |         +--- androidx.camera:camera-camera2:1.3.4
+|    |         |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|    |         |    +--- androidx.camera:camera-core:1.3.4 (*)
+|    |         |    +--- androidx.concurrent:concurrent-futures:1.0.0 -> 1.1.0 (*)
+|    |         |    +--- androidx.core:core:1.1.0 -> 1.13.1 (*)
+|    |         |    +--- com.google.auto.value:auto-value-annotations:1.6.3
+|    |         |    +--- com.google.guava:listenablefuture:1.0 -> 9999.0-empty-to-avoid-conflict-with-guava
+|    |         |    +--- androidx.camera:camera-core:1.3.4 (c)
+|    |         |    +--- androidx.camera:camera-lifecycle:1.3.4 (c)
+|    |         |    +--- androidx.camera:camera-video:1.3.4 (c)
+|    |         |    \--- androidx.camera:camera-view:1.3.4 (c)
+|    |         +--- androidx.camera:camera-lifecycle:1.3.4
+|    |         |    +--- androidx.camera:camera-core:1.3.4 (*)
+|    |         |    +--- androidx.concurrent:concurrent-futures:1.0.0 -> 1.1.0 (*)
+|    |         |    +--- androidx.core:core:1.1.0 -> 1.13.1 (*)
+|    |         |    +--- androidx.lifecycle:lifecycle-common:2.1.0 -> 2.8.4 (*)
+|    |         |    +--- com.google.auto.value:auto-value-annotations:1.6.3
+|    |         |    +--- com.google.guava:listenablefuture:1.0 -> 9999.0-empty-to-avoid-conflict-with-guava
+|    |         |    +--- androidx.camera:camera-core:1.3.4 (c)
+|    |         |    +--- androidx.camera:camera-video:1.3.4 (c)
+|    |         |    +--- androidx.camera:camera-view:1.3.4 (c)
+|    |         |    \--- androidx.camera:camera-camera2:1.3.4 (c)
+|    |         +--- androidx.camera:camera-view:1.3.4
+|    |         |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|    |         |    +--- androidx.annotation:annotation-experimental:1.3.1 -> 1.4.1 (*)
+|    |         |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.7.0 (*)
+|    |         |    +--- androidx.camera:camera-core:1.3.4 (*)
+|    |         |    +--- androidx.camera:camera-lifecycle:1.3.4 (*)
+|    |         |    +--- androidx.camera:camera-video:1.3.4
+|    |         |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
+|    |         |    |    +--- androidx.camera:camera-core:1.3.4 (*)
+|    |         |    |    +--- androidx.concurrent:concurrent-futures:1.0.0 -> 1.1.0 (*)
+|    |         |    |    +--- androidx.core:core:1.1.0 -> 1.13.1 (*)
+|    |         |    |    +--- com.google.auto.value:auto-value-annotations:1.6.3
+|    |         |    |    +--- androidx.camera:camera-camera2:1.3.4 (c)
+|    |         |    |    +--- androidx.camera:camera-core:1.3.4 (c)
+|    |         |    |    +--- androidx.camera:camera-lifecycle:1.3.4 (c)
+|    |         |    |    \--- androidx.camera:camera-view:1.3.4 (c)
+|    |         |    +--- androidx.concurrent:concurrent-futures:1.0.0 -> 1.1.0 (*)
+|    |         |    +--- androidx.core:core:1.3.2 -> 1.13.1 (*)
+|    |         |    +--- androidx.lifecycle:lifecycle-common:2.0.0 -> 2.8.4 (*)
+|    |         |    +--- com.google.auto.value:auto-value-annotations:1.6.3
+|    |         |    +--- com.google.guava:listenablefuture:1.0 -> 9999.0-empty-to-avoid-conflict-with-guava
+|    |         |    +--- androidx.camera:camera-core:1.3.4 (c)
+|    |         |    +--- androidx.camera:camera-lifecycle:1.3.4 (c)
+|    |         |    +--- androidx.camera:camera-video:1.3.4 (c)
+|    |         |    \--- androidx.camera:camera-camera2:1.3.4 (c)
+|    |         +--- com.google.mlkit:barcode-scanning:17.2.0
+|    |         |    +--- com.google.android.gms:play-services-basement:18.1.0 -> 18.4.0 (*)
+|    |         |    +--- com.google.android.gms:play-services-mlkit-barcode-scanning:18.3.0
+|    |         |    |    +--- com.google.android.datatransport:transport-api:2.2.1 -> 3.2.0 (*)
+|    |         |    |    +--- com.google.android.datatransport:transport-backend-cct:2.3.3 -> 3.3.0 (*)
+|    |         |    |    +--- com.google.android.datatransport:transport-runtime:2.2.6 -> 3.3.0 (*)
+|    |         |    |    +--- com.google.android.gms:play-services-base:18.1.0 -> 18.3.0 (*)
+|    |         |    |    +--- com.google.android.gms:play-services-basement:18.1.0 -> 18.4.0 (*)
+|    |         |    |    +--- com.google.android.gms:play-services-tasks:18.0.2 -> 18.2.0 (*)
+|    |         |    |    +--- com.google.android.odml:image:1.0.0-beta1
+|    |         |    |    +--- com.google.firebase:firebase-components:16.1.0 -> 18.0.0 (*)
+|    |         |    |    +--- com.google.firebase:firebase-encoders:16.1.0 -> 17.0.0 (*)
+|    |         |    |    +--- com.google.firebase:firebase-encoders-json:17.1.0 -> 18.0.1 (*)
+|    |         |    |    +--- com.google.mlkit:barcode-scanning-common:17.0.0
+|    |         |    |    |    +--- com.google.android.gms:play-services-basement:18.0.0 -> 18.4.0 (*)
+|    |         |    |    |    \--- com.google.mlkit:vision-common:17.0.0 -> 17.3.0
+|    |         |    |    |         +--- androidx.exifinterface:exifinterface:1.0.0 -> 1.3.7 (*)
+|    |         |    |    |         +--- com.google.android.datatransport:transport-api:2.2.1 -> 3.2.0 (*)
+|    |         |    |    |         +--- com.google.android.datatransport:transport-backend-cct:2.3.3 -> 3.3.0 (*)
+|    |         |    |    |         +--- com.google.android.datatransport:transport-runtime:2.2.6 -> 3.3.0 (*)
+|    |         |    |    |         +--- com.google.android.gms:play-services-base:18.1.0 -> 18.3.0 (*)
+|    |         |    |    |         +--- com.google.android.gms:play-services-basement:18.1.0 -> 18.4.0 (*)
+|    |         |    |    |         +--- com.google.android.gms:play-services-tasks:18.0.2 -> 18.2.0 (*)
+|    |         |    |    |         +--- com.google.android.odml:image:1.0.0-beta1
+|    |         |    |    |         +--- com.google.firebase:firebase-components:16.1.0 -> 18.0.0 (*)
+|    |         |    |    |         +--- com.google.firebase:firebase-encoders:16.1.0 -> 17.0.0 (*)
+|    |         |    |    |         +--- com.google.firebase:firebase-encoders-json:17.1.0 -> 18.0.1 (*)
+|    |         |    |    |         \--- com.google.mlkit:common:18.6.0 -> 18.9.0
+|    |         |    |    |              +--- androidx.core:core:1.0.0 -> 1.13.1 (*)
+|    |         |    |    |              +--- com.google.android.datatransport:transport-api:2.2.1 -> 3.2.0 (*)
+|    |         |    |    |              +--- com.google.android.datatransport:transport-backend-cct:2.3.3 -> 3.3.0 (*)
+|    |         |    |    |              +--- com.google.android.datatransport:transport-runtime:2.2.6 -> 3.3.0 (*)
+|    |         |    |    |              +--- com.google.android.gms:play-services-base:18.1.0 -> 18.3.0 (*)
+|    |         |    |    |              +--- com.google.android.gms:play-services-basement:18.1.0 -> 18.4.0 (*)
+|    |         |    |    |              +--- com.google.android.gms:play-services-tasks:18.0.2 -> 18.2.0 (*)
+|    |         |    |    |              +--- com.google.firebase:firebase-components:16.1.0 -> 18.0.0 (*)
+|    |         |    |    |              +--- com.google.firebase:firebase-encoders:16.1.0 -> 17.0.0 (*)
+|    |         |    |    |              \--- com.google.firebase:firebase-encoders-json:17.1.0 -> 18.0.1 (*)
+|    |         |    |    +--- com.google.mlkit:common:18.9.0 (*)
+|    |         |    |    +--- com.google.mlkit:vision-common:17.3.0 (*)
+|    |         |    |    \--- com.google.mlkit:vision-interfaces:16.2.0
+|    |         |    |         +--- com.google.android.gms:play-services-basement:18.1.0 -> 18.4.0 (*)
+|    |         |    |         \--- com.google.android.gms:play-services-tasks:18.0.2 -> 18.2.0 (*)
+|    |         |    +--- com.google.mlkit:barcode-scanning-common:17.0.0 (*)
+|    |         |    +--- com.google.mlkit:common:18.9.0 (*)
+|    |         |    \--- com.google.mlkit:vision-common:17.3.0 (*)
+|    |         +--- com.google.accompanist:accompanist-permissions:0.34.0
+|    |         |    +--- androidx.activity:activity-compose:1.7.2 -> 1.9.1 (*)
+|    |         |    +--- androidx.compose.foundation:foundation:1.6.0 -> 1.7.0-rc01 (*)
+|    |         |    +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4 -> 1.8.1 (*)
+|    |         |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.9.22 -> 2.0.20 (*)
+|    |         +--- com.google.zxing:core:3.5.2 -> 3.5.3
+|    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.0 -> 2.0.20 (*)
+|    |         +--- org.jetbrains.compose.runtime:runtime:1.6.11 (*)
+|    |         +--- org.jetbrains.compose.material3:material3:1.6.11 (*)
+|    |         +--- org.jetbrains.compose.material:material-icons-extended:1.6.11
+|    |         |    \--- androidx.compose.material:material-icons-extended:1.6.7 -> 1.6.8 (*)
+|    |         +--- org.jetbrains.compose.components:components-resources:1.6.11 (*)
+|    |         +--- io.github.qdsfdhvh:image-loader:1.6.4
+|    |         |    \--- io.github.qdsfdhvh:image-loader-android:1.6.4
+|    |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.20 -> 1.9.20 (*)
+|    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2 -> 1.8.1 (*)
+|    |         |         +--- androidx.core:core-ktx:1.10.1 -> 1.13.1 (*)
+|    |         |         +--- androidx.appcompat:appcompat-resources:1.6.1 -> 1.7.0 (*)
+|    |         |         +--- androidx.exifinterface:exifinterface:1.3.6 -> 1.3.7 (*)
+|    |         |         +--- com.caverock:androidsvg-aar:1.4
+|    |         |         +--- org.jetbrains.compose.ui:ui:1.4.3 -> 1.6.11 (*)
+|    |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.2 -> 1.8.1 (*)
+|    |         |         +--- com.squareup.okio:okio:3.4.0 -> 3.9.0 (*)
+|    |         |         +--- io.ktor:ktor-client-core:2.3.3 -> 2.3.4 (*)
+|    |         |         +--- com.eygraber:uri-kmp:0.0.12
+|    |         |         |    \--- com.eygraber:uri-kmp-android:0.0.12
+|    |         |         |         \--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22 -> 1.9.20 (*)
+|    |         |         +--- io.ktor:ktor-client-okhttp:2.3.3
+|    |         |         |    \--- io.ktor:ktor-client-okhttp-jvm:2.3.3
+|    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22 -> 1.9.20 (*)
+|    |         |         |         +--- org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22 -> 1.9.20 (*)
+|    |         |         |         +--- org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.7.1 -> 1.8.1 (*)
+|    |         |         |         +--- org.slf4j:slf4j-api:1.7.36
+|    |         |         |         +--- io.ktor:ktor-client-core:2.3.3 -> 2.3.4 (*)
+|    |         |         |         +--- com.squareup.okhttp3:okhttp:4.11.0 -> 4.12.0 (*)
+|    |         |         |         +--- com.squareup.okio:okio:3.4.0 -> 3.9.0 (*)
+|    |         |         |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1 -> 1.8.1 (*)
+|    |         |         \--- androidx.collection:collection:1.3.0-alpha04 -> 1.4.2 (*)
+|    |         \--- network.chaintech:cmp-image-pick-n-crop:1.0.1
+|    |              \--- network.chaintech:cmp-image-pick-n-crop-android:1.0.1
+|    |                   +--- androidx.compose.ui:ui-test-junit4:1.6.8 -> 1.7.0-rc01 (*)
+|    |                   +--- org.jetbrains.compose.ui:ui-tooling:1.6.11
+|    |                   |    \--- androidx.compose.ui:ui-tooling:1.6.7 -> 1.7.0-rc01 (*)
+|    |                   +--- androidx.activity:activity-compose:1.9.0 -> 1.9.1 (*)
+|    |                   +--- com.google.accompanist:accompanist-permissions:0.34.0 (*)
+|    |                   +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.0 -> 2.0.20 (*)
+|    |                   +--- org.jetbrains.compose.runtime:runtime:1.6.11 (*)
+|    |                   +--- org.jetbrains.compose.foundation:foundation:1.6.11 (*)
+|    |                   +--- org.jetbrains.compose.material3:material3:1.6.11 (*)
+|    |                   +--- org.jetbrains.compose.components:components-resources:1.6.11 (*)
+|    |                   \--- org.jetbrains.compose.components:components-ui-tooling-preview:1.6.11 (*)
 |    +--- com.squareup.okhttp3:okhttp:4.12.0 (*)
 |    \--- io.coil-kt:coil-compose:2.6.0 (*)
 +--- project :feature:auth
@@ -1863,51 +2224,7 @@
 |    +--- androidx.compose:compose-bom:2024.08.00 (*)
 |    +--- androidx.compose.ui:ui-tooling-preview -> 1.7.0-rc01 (*)
 |    +--- com.google.zxing:core:3.5.3
-|    +--- androidx.camera:camera-view:1.3.4
-|    |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
-|    |    +--- androidx.annotation:annotation-experimental:1.3.1 -> 1.4.1 (*)
-|    |    +--- androidx.appcompat:appcompat:1.1.0 -> 1.7.0 (*)
-|    |    +--- androidx.camera:camera-core:1.3.4
-|    |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
-|    |    |    +--- androidx.annotation:annotation-experimental:1.1.0 -> 1.4.1 (*)
-|    |    |    +--- androidx.concurrent:concurrent-futures:1.0.0 -> 1.1.0 (*)
-|    |    |    +--- androidx.core:core:1.1.0 -> 1.13.1 (*)
-|    |    |    +--- androidx.exifinterface:exifinterface:1.3.2 -> 1.3.7 (*)
-|    |    |    +--- androidx.lifecycle:lifecycle-common:2.1.0 -> 2.8.4 (*)
-|    |    |    +--- androidx.lifecycle:lifecycle-livedata:2.1.0 -> 2.8.4 (*)
-|    |    |    +--- com.google.auto.value:auto-value-annotations:1.6.3
-|    |    |    +--- com.google.guava:listenablefuture:1.0 -> 9999.0-empty-to-avoid-conflict-with-guava
-|    |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:1.8.22 -> 2.0.20 (*)
-|    |    |    +--- androidx.camera:camera-lifecycle:1.3.4 (c)
-|    |    |    +--- androidx.camera:camera-video:1.3.4 (c)
-|    |    |    \--- androidx.camera:camera-view:1.3.4 (c)
-|    |    +--- androidx.camera:camera-lifecycle:1.3.4
-|    |    |    +--- androidx.camera:camera-core:1.3.4 (*)
-|    |    |    +--- androidx.concurrent:concurrent-futures:1.0.0 -> 1.1.0 (*)
-|    |    |    +--- androidx.core:core:1.1.0 -> 1.13.1 (*)
-|    |    |    +--- androidx.lifecycle:lifecycle-common:2.1.0 -> 2.8.4 (*)
-|    |    |    +--- com.google.auto.value:auto-value-annotations:1.6.3
-|    |    |    +--- com.google.guava:listenablefuture:1.0 -> 9999.0-empty-to-avoid-conflict-with-guava
-|    |    |    +--- androidx.camera:camera-core:1.3.4 (c)
-|    |    |    +--- androidx.camera:camera-video:1.3.4 (c)
-|    |    |    \--- androidx.camera:camera-view:1.3.4 (c)
-|    |    +--- androidx.camera:camera-video:1.3.4
-|    |    |    +--- androidx.annotation:annotation:1.2.0 -> 1.8.1 (*)
-|    |    |    +--- androidx.camera:camera-core:1.3.4 (*)
-|    |    |    +--- androidx.concurrent:concurrent-futures:1.0.0 -> 1.1.0 (*)
-|    |    |    +--- androidx.core:core:1.1.0 -> 1.13.1 (*)
-|    |    |    +--- com.google.auto.value:auto-value-annotations:1.6.3
-|    |    |    +--- androidx.camera:camera-core:1.3.4 (c)
-|    |    |    +--- androidx.camera:camera-lifecycle:1.3.4 (c)
-|    |    |    \--- androidx.camera:camera-view:1.3.4 (c)
-|    |    +--- androidx.concurrent:concurrent-futures:1.0.0 -> 1.1.0 (*)
-|    |    +--- androidx.core:core:1.3.2 -> 1.13.1 (*)
-|    |    +--- androidx.lifecycle:lifecycle-common:2.0.0 -> 2.8.4 (*)
-|    |    +--- com.google.auto.value:auto-value-annotations:1.6.3
-|    |    +--- com.google.guava:listenablefuture:1.0 -> 9999.0-empty-to-avoid-conflict-with-guava
-|    |    +--- androidx.camera:camera-core:1.3.4 (c)
-|    |    +--- androidx.camera:camera-lifecycle:1.3.4 (c)
-|    |    \--- androidx.camera:camera-video:1.3.4 (c)
+|    +--- androidx.camera:camera-view:1.3.4 (*)
 |    +--- androidx.camera:camera-lifecycle:1.3.4 (*)
 |    \--- com.google.guava:guava:27.0.1-android -> 31.1-android (*)
 +--- project :feature:invoices
@@ -2147,31 +2464,7 @@
 |         +--- com.google.firebase:firebase-components:16.1.0 -> 18.0.0 (*)
 |         +--- com.google.firebase:firebase-encoders:16.1.0 -> 17.0.0 (*)
 |         +--- com.google.firebase:firebase-encoders-json:17.1.0 -> 18.0.1 (*)
-|         +--- com.google.mlkit:barcode-scanning-common:17.0.0
-|         |    +--- com.google.android.gms:play-services-basement:18.0.0 -> 18.4.0 (*)
-|         |    \--- com.google.mlkit:vision-common:17.0.0
-|         |         +--- androidx.exifinterface:exifinterface:1.0.0 -> 1.3.7 (*)
-|         |         +--- com.google.android.datatransport:transport-api:2.2.1 -> 3.2.0 (*)
-|         |         +--- com.google.android.datatransport:transport-backend-cct:2.3.3 -> 3.3.0 (*)
-|         |         +--- com.google.android.datatransport:transport-runtime:2.2.6 -> 3.3.0 (*)
-|         |         +--- com.google.android.gms:play-services-base:18.0.1 -> 18.3.0 (*)
-|         |         +--- com.google.android.gms:play-services-basement:18.0.0 -> 18.4.0 (*)
-|         |         +--- com.google.android.gms:play-services-tasks:18.0.1 -> 18.2.0 (*)
-|         |         +--- com.google.android.odml:image:1.0.0-beta1
-|         |         +--- com.google.firebase:firebase-components:16.1.0 -> 18.0.0 (*)
-|         |         +--- com.google.firebase:firebase-encoders:16.1.0 -> 17.0.0 (*)
-|         |         +--- com.google.firebase:firebase-encoders-json:17.1.0 -> 18.0.1 (*)
-|         |         \--- com.google.mlkit:common:18.0.0 -> 18.9.0
-|         |              +--- androidx.core:core:1.0.0 -> 1.13.1 (*)
-|         |              +--- com.google.android.datatransport:transport-api:2.2.1 -> 3.2.0 (*)
-|         |              +--- com.google.android.datatransport:transport-backend-cct:2.3.3 -> 3.3.0 (*)
-|         |              +--- com.google.android.datatransport:transport-runtime:2.2.6 -> 3.3.0 (*)
-|         |              +--- com.google.android.gms:play-services-base:18.1.0 -> 18.3.0 (*)
-|         |              +--- com.google.android.gms:play-services-basement:18.1.0 -> 18.4.0 (*)
-|         |              +--- com.google.android.gms:play-services-tasks:18.0.2 -> 18.2.0 (*)
-|         |              +--- com.google.firebase:firebase-components:16.1.0 -> 18.0.0 (*)
-|         |              +--- com.google.firebase:firebase-encoders:16.1.0 -> 17.0.0 (*)
-|         |              \--- com.google.firebase:firebase-encoders-json:17.1.0 -> 18.0.1 (*)
+|         +--- com.google.mlkit:barcode-scanning-common:17.0.0 (*)
 |         \--- com.google.mlkit:common:18.9.0 (*)
 +--- project :feature:standing-instruction
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.20 (*)

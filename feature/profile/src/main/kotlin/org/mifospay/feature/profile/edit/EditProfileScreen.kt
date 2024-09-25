@@ -18,7 +18,6 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,46 +25,47 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mifos.library.countrycodepicker.CountryCodePicker
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
-import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.component.MifosScaffold
+import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.PermissionBox
-import org.mifospay.core.designsystem.icon.MifosIcons.Camera
-import org.mifospay.core.designsystem.icon.MifosIcons.Delete
-import org.mifospay.core.designsystem.icon.MifosIcons.PhotoLibrary
+import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.historyItemTextStyle
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.feature.profile.R
 import java.io.File
@@ -99,7 +99,7 @@ fun EditProfileScreenRoute(
 }
 
 @Composable
-fun EditProfileScreen(
+private fun EditProfileScreen(
     editProfileUiState: EditProfileUiState,
     updateSuccess: Boolean,
     onBackClick: () -> Unit,
@@ -109,18 +109,19 @@ fun EditProfileScreen(
     uri: Uri? = null,
 ) {
     var showDiscardChangesDialog by rememberSaveable { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Box(
-        modifier =
-        modifier
+        modifier = modifier
             .fillMaxSize(),
     ) {
         MifosScaffold(
             topBarTitle = R.string.feature_profile_edit_profile,
             backPress = { showDiscardChangesDialog = true },
+            snackbarHost = { SnackbarHost(snackbarHostState) },
             scaffoldContent = {
                 when (editProfileUiState) {
-                    EditProfileUiState.Loading -> {
+                    is EditProfileUiState.Loading -> {
                         MfLoadingWheel(
                             contentDesc = stringResource(R.string.feature_profile_loading),
                             backgroundColor = MaterialTheme.colorScheme.surface,
@@ -128,16 +129,8 @@ fun EditProfileScreen(
                     }
 
                     is EditProfileUiState.Success -> {
-                        val initialUsername = editProfileUiState.username
-                        val initialMobile = editProfileUiState.mobile
-                        val initialVpa = editProfileUiState.vpa
-                        val initialEmail = editProfileUiState.email
-
                         EditProfileScreenContent(
-                            initialUsername,
-                            initialMobile,
-                            initialVpa,
-                            initialEmail,
+                            editProfileUiState = editProfileUiState,
                             updateSuccess = updateSuccess,
                             contentPadding = it,
                             updateEmail = updateEmail,
@@ -167,10 +160,7 @@ fun EditProfileScreen(
 @Suppress("LongMethod")
 @Composable
 private fun EditProfileScreenContent(
-    initialUsername: String,
-    initialMobile: String,
-    initialVpa: String,
-    initialEmail: String,
+    editProfileUiState: EditProfileUiState.Success,
     updateSuccess: Boolean,
     contentPadding: PaddingValues,
     updateEmail: (String) -> Unit,
@@ -179,17 +169,17 @@ private fun EditProfileScreenContent(
     modifier: Modifier = Modifier,
     uri: Uri? = null,
 ) {
-    var username by rememberSaveable { mutableStateOf(initialUsername) }
-    var mobile by rememberSaveable { mutableStateOf(initialMobile) }
-    var vpa by rememberSaveable { mutableStateOf(initialVpa) }
-    var email by rememberSaveable { mutableStateOf(initialEmail) }
+    var username by rememberSaveable { mutableStateOf(editProfileUiState.username) }
+    var mobile by rememberSaveable { mutableStateOf(editProfileUiState.mobile) }
+    var vpa by rememberSaveable { mutableStateOf(editProfileUiState.vpa) }
+    var email by rememberSaveable { mutableStateOf(editProfileUiState.email) }
     var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
     var showBottomSheet by rememberSaveable { mutableStateOf(false) }
     val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     PermissionBox(
-        requiredPermissions =
-        if (Build.VERSION.SDK_INT >= 33) {
+        requiredPermissions = if (Build.VERSION.SDK_INT >= 33) {
             listOf(Manifest.permission.CAMERA)
         } else {
             listOf(
@@ -242,100 +232,89 @@ private fun EditProfileScreenContent(
             }
         },
     )
-    Box(
-        modifier =
-        modifier
+
+    LazyColumn(
+        modifier = modifier
             .padding(contentPadding)
             .fillMaxSize(),
+        contentPadding = PaddingValues(top = 30.dp, bottom = 10.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column(
-            modifier =
-            Modifier
-                .fillMaxSize()
-                .background(color = MaterialTheme.colorScheme.surface)
-                .verticalScroll(rememberScrollState()),
-        ) {
+        item {
             EditProfileScreenImage(
                 imageUri = imageUri,
                 onCameraIconClick = { showBottomSheet = true },
+                modifier = Modifier.padding(bottom = 5.dp),
             )
-            MfOutlinedTextField(
+        }
+
+        item {
+            MifosTextField(
                 value = username,
-                label = stringResource(id = R.string.feature_profile_username),
                 onValueChange = { username = it },
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
+                label = stringResource(id = R.string.feature_profile_username),
             )
-            MfOutlinedTextField(
+        }
+
+        item {
+            MifosTextField(
                 value = email,
-                label = stringResource(id = R.string.feature_profile_email),
                 onValueChange = { email = it },
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
+                label = stringResource(id = R.string.feature_profile_email),
             )
-            MfOutlinedTextField(
+        }
+
+        item {
+            MifosTextField(
                 value = vpa,
-                label = stringResource(id = R.string.feature_profile_vpa),
                 onValueChange = { vpa = it },
-                modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
+                label = stringResource(id = R.string.feature_profile_vpa),
             )
-            Box(
-                modifier =
-                Modifier
+        }
+
+        item {
+            MifosTextField(
+                value = mobile,
+                onValueChange = { mobile = it },
+                label = stringResource(id = R.string.feature_profile_mobile),
+            )
+        }
+
+        item {
+            MifosButton(
+                modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 16.dp, end = 16.dp),
-            ) {
-                val keyboardController = LocalSoftwareKeyboardController.current
-                if (LocalInspectionMode.current) {
-                    Text("Placeholder for TogiCountryCodePicker")
-                } else {
-                    CountryCodePicker(
-                        modifier = Modifier,
-                        initialPhoneNumber = " ",
-                        autoDetectCode = true,
-                        shape = RoundedCornerShape(3.dp),
-                        colors = OutlinedTextFieldDefaults.colors(
-                            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-                        ),
-                        onValueChange = { (code, phone), isValid ->
-                            if (isValid) {
-                                mobile = code + phone
-                            }
-                        },
-                        label = { Text(stringResource(id = R.string.feature_profile_phone_number)) },
-                        keyboardActions = KeyboardActions { keyboardController?.hide() },
-                    )
-                }
-            }
-            EditProfileSaveButton(
+                    .padding(horizontal = 20.dp)
+                    .height(54.dp),
+                color = MifosBlue,
+                text = { Text(text = stringResource(id = R.string.feature_profile_save)) },
                 onClick = {
-                    if (isDataSaveNecessary(email, initialEmail)) {
+                    if (isDataSaveNecessary(email, editProfileUiState.email)) {
                         updateEmail(email)
                     }
-                    if (isDataSaveNecessary(mobile, initialMobile)) {
+                    if (isDataSaveNecessary(mobile, editProfileUiState.mobile)) {
                         updateMobile(mobile)
                     }
                     if (updateSuccess) {
                         // if user details is successfully saved then go back to Profile Activity
                         // same behaviour as onBackPress, hence reused the callback
+                        Toast.makeText(
+                            context,
+                            context.getString(R.string.feature_profile_updated_sucessfully),
+                            Toast.LENGTH_SHORT,
+                        ).show()
                         onBackClick.invoke()
                     } else {
-                        Toast
-                            .makeText(
+                        scope.launch {
+                            Toast.makeText(
                                 context,
-                                R.string.feature_profile_failed_to_save_changes,
+                                context.getString(R.string.feature_profile_failed_to_save_changes),
                                 Toast.LENGTH_SHORT,
                             ).show()
+                        }
                     }
                 },
-                buttonText = R.string.feature_profile_save,
             )
         }
     }
@@ -347,68 +326,68 @@ private fun isDataSaveNecessary(
 ): Boolean = input == initialInput
 
 @Composable
-fun EditProfileBottomSheetContent(
+private fun EditProfileBottomSheetContent(
     onClickProfilePicture: () -> Unit,
     onChangeProfilePicture: () -> Unit,
     onRemoveProfilePicture: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier =
-        modifier
+        modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
-            .padding(top = 8.dp, bottom = 12.dp),
+            .padding(vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        ImagePickerOption(
+            label = stringResource(id = R.string.feature_profile_click_profile_picture),
+            icon = MifosIcons.Camera,
+            onClick = onClickProfilePicture,
+        )
+
+        ImagePickerOption(
+            label = stringResource(id = R.string.feature_profile_change_profile_picture),
+            icon = MifosIcons.PhotoLibrary,
+            onClick = onChangeProfilePicture,
+        )
+
+        ImagePickerOption(
+            label = stringResource(id = R.string.feature_profile_remove_profile_picture),
+            icon = MifosIcons.Delete,
+            onClick = onRemoveProfilePicture,
+        )
+    }
+}
+
+@Composable
+private fun ImagePickerOption(
+    label: String,
+    icon: ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        onClick = onClick,
+        modifier = modifier
+            .fillMaxWidth()
+            .height(48.dp),
+        shape = RoundedCornerShape(4.dp),
+        color = Color.Transparent,
     ) {
         Row(
-            modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-                .clickable { onClickProfilePicture.invoke() },
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 12.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(imageVector = Camera, contentDescription = null)
-            Text(
-                text = stringResource(id = R.string.feature_profile_click_profile_picture),
-                style = historyItemTextStyle,
-            )
-        }
-        Row(
-            modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-                .clickable { onChangeProfilePicture.invoke() },
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(imageVector = PhotoLibrary, contentDescription = null)
-            Text(
-                text = stringResource(id = R.string.feature_profile_change_profile_picture),
-                style = historyItemTextStyle,
-            )
-        }
-        Row(
-            modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(12.dp)
-                .clickable { onRemoveProfilePicture.invoke() },
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(imageVector = Delete, contentDescription = null)
-            Text(
-                text = stringResource(id = R.string.feature_profile_remove_profile_picture),
-                style = historyItemTextStyle,
-            )
+            Icon(imageVector = icon, contentDescription = null)
+            Text(text = label)
         }
     }
 }
 
 @Composable
-private fun EditProfileSaveButton(
+internal fun EditProfileSaveButton(
     onClick: () -> Unit,
     buttonText: Int,
     modifier: Modifier = Modifier,

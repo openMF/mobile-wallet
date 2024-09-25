@@ -12,12 +12,14 @@
 package org.mifospay.core.designsystem.component
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -67,6 +69,26 @@ fun MifosTopAppBar(
                 }
             }
         },
+        colors = colors,
+        modifier = modifier.testTag("mifosTopAppBar"),
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MifosTopAppBar(
+    @StringRes titleRes: Int,
+    modifier: Modifier = Modifier,
+    actions:
+    @Composable()
+    (RowScope.() -> Unit) = {},
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(
+        containerColor = Color.Transparent,
+    ),
+) {
+    TopAppBar(
+        title = { Text(text = stringResource(id = titleRes)) },
+        actions = actions,
         colors = colors,
         modifier = modifier.testTag("mifosTopAppBar"),
     )

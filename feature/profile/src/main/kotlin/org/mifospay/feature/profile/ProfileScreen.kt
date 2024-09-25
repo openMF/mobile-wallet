@@ -9,45 +9,35 @@
  */
 package org.mifospay.feature.profile
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.ui.ProfileImage
 
 @Composable
 fun ProfileRoute(
-    onEditProfile: () -> Unit,
-    onSettings: () -> Unit,
+    onLinkAccount: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = koinViewModel(),
 ) {
@@ -55,22 +45,17 @@ fun ProfileRoute(
 
     ProfileScreenContent(
         profileState = profileState,
-        onEditProfile = onEditProfile,
-        onSettings = onSettings,
+        onLinkAccount = onLinkAccount,
         modifier = modifier,
     )
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun ProfileScreenContent(
     profileState: ProfileUiState,
-    onEditProfile: () -> Unit,
-    onSettings: () -> Unit,
+    onLinkAccount: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var showDetails by remember { mutableStateOf(false) }
-
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -81,93 +66,46 @@ fun ProfileScreenContent(
 
             is ProfileUiState.Success -> {
                 ProfileImage(bitmap = profileState.bitmapImage)
-                Row(
+
+                ProfileDetailsCard(
+                    name = profileState.name ?: "",
+                    email = profileState.email ?: "",
+                    vpa = profileState.vpa ?: "",
+                    mobile = profileState.mobile ?: "",
+                )
+
+                MifosButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 12.dp, bottom = 8.dp),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = profileState.name.toString(),
-                        style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Medium),
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                    IconButton(onClick = { showDetails = !showDetails }) {
+                        .padding(horizontal = 20.dp)
+                        .height(54.dp),
+                    color = MifosBlue,
+                    text = { Text(text = stringResource(id = R.string.feature_profile_personal_qr_code)) },
+                    onClick = { /*TODO*/ },
+                    leadingIcon = {
                         Icon(
-                            imageVector = MifosIcons.ArrowDropDown,
-                            tint = MaterialTheme.colorScheme.onSurface,
-                            contentDescription = null,
+                            imageVector = MifosIcons.QrCode,
+                            contentDescription = "Personal QR Code",
                         )
-                    }
-                }
+                    },
+                )
 
-                if (showDetails) {
-                    Column(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                    ) {
-                        DetailItem(
-                            label = stringResource(id = R.string.feature_profile_email),
-                            value = profileState.email.toString(),
-                        )
-                        DetailItem(
-                            label = stringResource(id = R.string.feature_profile_vpa),
-                            value = profileState.vpa.toString(),
-                        )
-                        DetailItem(
-                            label = stringResource(id = R.string.feature_profile_mobile),
-                            value = profileState.mobile.toString(),
-                        )
-                    }
-                }
+                Spacer(modifier = Modifier.height(20.dp))
 
-                Column(
+                MifosButton(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(start = 24.dp, end = 24.dp),
-                ) {
-                    FlowRow(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        maxItemsInEachRow = 2,
-                    ) {
-                        ProfileItemCard(
-                            modifier = Modifier
-                                .padding(end = 8.dp, bottom = 8.dp)
-                                .weight(1f),
-                            icon = MifosIcons.QR,
-                            text = R.string.feature_profile_personal_qr_code,
-                            onClick = {},
-                        )
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp)
+                        .height(55.dp),
+                    color = MifosBlue,
+                    text = { Text(text = stringResource(id = R.string.feature_profile_link_bank_account)) },
+                    onClick = onLinkAccount,
+                    leadingIcon = {
+                        Icon(imageVector = MifosIcons.AttachMoney, contentDescription = "")
+                    },
+                )
 
-                        ProfileItemCard(
-                            modifier = Modifier
-                                .padding(start = 8.dp, bottom = 8.dp)
-                                .weight(1f),
-                            icon = MifosIcons.Bank,
-                            text = R.string.feature_profile_link_bank_account,
-                            onClick = {},
-                        )
-
-                        ProfileItemCard(
-                            modifier = Modifier
-                                .padding(top = 8.dp, bottom = 8.dp),
-                            icon = MifosIcons.Contact,
-                            text = R.string.feature_profile_edit_profile,
-                            onClick = { onEditProfile.invoke() },
-                        )
-
-                        ProfileItemCard(
-                            modifier = Modifier
-                                .padding(top = 8.dp),
-                            icon = MifosIcons.Settings,
-                            text = R.string.feature_profile_settings,
-                            onClick = { onSettings.invoke() },
-                        )
-                    }
-                }
+                Spacer(modifier = Modifier.height(20.dp))
             }
         }
     }
@@ -195,7 +133,6 @@ private fun ProfileScreenPreview(
 ) {
     ProfileScreenContent(
         profileState = profileState,
-        onEditProfile = {},
-        onSettings = {},
+        onLinkAccount = {},
     )
 }

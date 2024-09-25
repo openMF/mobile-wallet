@@ -55,6 +55,7 @@ class EditProfileViewModel(
     }
 
     fun updateEmail(email: String?) {
+        mEditProfileUiState.value = Loading
         mUseCaseHandler.execute(
             updateUserUseCase,
             UpdateUser.RequestValues(
@@ -71,6 +72,7 @@ class EditProfileViewModel(
                 }
 
                 override fun onError(message: String) {
+                    fetchProfileDetails()
                     mUpdateSuccess.value = false
                 }
             },
@@ -78,6 +80,7 @@ class EditProfileViewModel(
     }
 
     fun updateMobile(fullNumber: String?) {
+        mEditProfileUiState.value = Loading
         mUseCaseHandler.execute(
             updateClientUseCase,
             UpdateClient.RequestValues(
@@ -94,6 +97,7 @@ class EditProfileViewModel(
                 }
 
                 override fun onError(message: String) {
+                    fetchProfileDetails()
                     mUpdateSuccess.value = false
                 }
             },

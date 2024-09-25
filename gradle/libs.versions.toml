@@ -65,6 +65,7 @@ playServicesAuthVersion = "21.2.0"
 playServicesCodeScanner = "16.1.0"
 protobuf = "4.26.0"
 protobufPlugin = "0.9.4"
+qrkitVersion = "2.0.0"
 retrofitKotlinxSerializationJson = "1.0.0"
 retrofitVersion = "2.11.0"
 roborazzi = "1.26.0"
@@ -188,6 +189,7 @@ logback-classic = { group = "ch.qos.logback", name = "logback-classic", version.
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuthVersion" }
 protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-lite", version.ref = "protobuf" }
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
+qrkit = { group = "network.chaintech", name = "qr-kit", version.ref = "qrkitVersion" }
 reactivex-rxjava = { group = "io.reactivex", name = "rxjava", version.ref = "rxjavaVersion" }
 reactivex-rxjava-android = { group = "io.reactivex", name = "rxandroid", version.ref = "rxandroidVersion" }
 retrofit-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }

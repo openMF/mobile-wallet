@@ -15,7 +15,10 @@ import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.mifospay.core.designsystem.theme.NewUi.gradientOne
+import org.mifospay.core.designsystem.theme.NewUi.gradientTwo
 
 private val LightDefaultColorScheme = lightColorScheme(
     primary = md_theme_light_primary,
@@ -91,16 +94,16 @@ fun MifosTheme(
         else -> if (darkTheme) DarkDefaultColorScheme else LightDefaultColorScheme
     }
     val defaultGradientColors = GradientColors(
-        top = colorScheme.inverseOnSurface,
-        bottom = colorScheme.primaryContainer,
-        container = colorScheme.surface,
+        top = gradientOne,
+        bottom = gradientTwo,
+        container = Color.Transparent,
     )
     val gradientColors = when {
         else -> defaultGradientColors
     }
     // Background theme
     val defaultBackgroundTheme = BackgroundTheme(
-        color = colorScheme.surface,
+        color = Color.Transparent,
         tonalElevation = 2.dp,
     )
     val backgroundTheme = when {

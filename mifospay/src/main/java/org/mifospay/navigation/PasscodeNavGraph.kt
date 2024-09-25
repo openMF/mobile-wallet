@@ -14,6 +14,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navigation
 import org.mifos.library.passcode.PASSCODE_SCREEN
 import org.mifos.library.passcode.passcodeRoute
+import org.mifospay.ui.navigateToMainGraph
 
 internal fun NavGraphBuilder.passcodeNavGraph(navController: NavController) {
     navigation(
@@ -23,19 +24,19 @@ internal fun NavGraphBuilder.passcodeNavGraph(navController: NavController) {
         passcodeRoute(
             onForgotButton = {
                 navController.popBackStack()
-                navController.navigate(MifosNavGraph.MAIN_GRAPH)
+                navController.navigateToMainGraph()
             },
             onSkipButton = {
                 navController.popBackStack()
-                navController.navigate(MifosNavGraph.MAIN_GRAPH)
+                navController.navigateToMainGraph()
             },
             onPasscodeConfirm = {
                 navController.popBackStack()
-                navController.navigate(MifosNavGraph.MAIN_GRAPH)
+                navController.navigateToMainGraph()
             },
             onPasscodeRejected = {
                 navController.popBackStack()
-                navController.navigate(MifosNavGraph.MAIN_GRAPH)
+                navController.navigateToMainGraph()
             },
         )
     }

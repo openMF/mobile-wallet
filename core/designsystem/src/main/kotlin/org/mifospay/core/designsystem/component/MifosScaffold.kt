@@ -49,6 +49,7 @@ fun MifosScaffold(
         snackbarHost = snackbarHost,
         content = scaffoldContent,
         modifier = modifier,
+        containerColor = Color.Transparent,
     )
 }
 
