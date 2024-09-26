@@ -38,7 +38,7 @@ import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
 import org.koin.androidx.compose.koinViewModel
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.ErrorScreenContent

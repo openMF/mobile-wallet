@@ -10,7 +10,7 @@
 package org.mifospay.feature.kyc
 
 import androidx.lifecycle.ViewModel
-import com.mifospay.core.model.entity.kyc.KYCLevel1Details
+import org.mifospay.core.model.entity.kyc.KYCLevel1Details
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCase
@@ -72,8 +72,8 @@ data class KYCLevel1DetailsState(
     val currentLevel: String = "1",
 )
 
-internal fun KYCLevel1DetailsState.toModel(): KYCLevel1Details {
-    return KYCLevel1Details(
+internal fun KYCLevel1DetailsState.toModel(): org.mifospay.core.model.entity.kyc.KYCLevel1Details {
+    return org.mifospay.core.model.entity.kyc.KYCLevel1Details(
         firstName = firstName.trim(),
         lastName = lastName.trim(),
         addressLine1 = addressLine1.trim(),

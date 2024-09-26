@@ -15,14 +15,14 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import com.mifos.library.material3.navigation.bottomSheet
-import org.mifospay.common.PAYEE_EXTERNAL_ID_ARG
-import org.mifospay.common.TRANSFER_AMOUNT_ARG
+import org.mifospay.core.common.PAYEE_EXTERNAL_ID_ARG
+import org.mifospay.core.common.TRANSFER_AMOUNT_ARG
 import org.mifospay.feature.make.transfer.MakeTransferScreenRoute
 
 const val MAKE_TRANSFER_ROUTE_BASE = "make_transfer_route"
 const val MAKE_TRANSFER_ROUTE = MAKE_TRANSFER_ROUTE_BASE +
-    "?${PAYEE_EXTERNAL_ID_ARG}={$PAYEE_EXTERNAL_ID_ARG}" +
-    "&${TRANSFER_AMOUNT_ARG}={$TRANSFER_AMOUNT_ARG}"
+    "?$PAYEE_EXTERNAL_ID_ARG={$PAYEE_EXTERNAL_ID_ARG}" +
+    "&$TRANSFER_AMOUNT_ARG={$TRANSFER_AMOUNT_ARG}"
 
 fun NavController.navigateToMakeTransferScreen(
     externalId: String? = null,
@@ -30,11 +30,11 @@ fun NavController.navigateToMakeTransferScreen(
     navOptions: NavOptions? = null,
 ) {
     val route = MAKE_TRANSFER_ROUTE_BASE + if (transferAmount != null) {
-        "?${PAYEE_EXTERNAL_ID_ARG}=$externalId" +
-            "&${TRANSFER_AMOUNT_ARG}=$transferAmount"
+        "?$PAYEE_EXTERNAL_ID_ARG=$externalId" +
+            "&$TRANSFER_AMOUNT_ARG=$transferAmount"
     } else {
-        "?${PAYEE_EXTERNAL_ID_ARG}=$externalId" +
-            "&${TRANSFER_AMOUNT_ARG}=${"0.0"}"
+        "?$PAYEE_EXTERNAL_ID_ARG=$externalId" +
+            "&$TRANSFER_AMOUNT_ARG=${"0.0"}"
     }
     navigate(route, navOptions)
 }

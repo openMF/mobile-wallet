@@ -15,8 +15,8 @@ import org.mifospay.core.analytics.di.AnalyticsModule
 import org.mifospay.core.data.di.DataModule
 import org.mifospay.core.data.di.LocalDataModule
 import org.mifospay.core.datastore.di.CoreDataStoreModule
-import org.mifospay.core.network.di.CoroutineScopesModule
-import org.mifospay.core.network.di.DispatchersModule
+import org.mifospay.core.common.di.CoroutineScopesModule
+import org.mifospay.core.common.di.DispatchersModule
 import org.mifospay.core.network.di.LocalModule
 import org.mifospay.core.network.di.NetworkModule
 import org.mifospay.feature.auth.di.AuthModule

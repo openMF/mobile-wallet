@@ -60,7 +60,7 @@ import com.mifospay.core.model.domain.TransactionType
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import org.mifospay.core.designsystem.component.FloatingActionButtonContent
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold

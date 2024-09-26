@@ -16,7 +16,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.mifospay.core.model.domain.BankAccountDetails
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import org.mifospay.feature.upiSetup.screens.SetupUpiPinScreenRoute
 
 const val SETUP_UPI_PIN_ROUTE = "setup_upi_pin_route"

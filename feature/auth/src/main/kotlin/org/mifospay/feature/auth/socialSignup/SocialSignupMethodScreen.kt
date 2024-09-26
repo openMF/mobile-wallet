@@ -58,7 +58,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.android.libraries.identity.googleid.GoogleIdTokenParsingException
 import kotlinx.coroutines.launch
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import org.mifospay.core.data.util.Constants.MIFOS_CONSUMER_SAVINGS_PRODUCT_ID
 import org.mifospay.core.data.util.Constants.MIFOS_MERCHANT_SAVINGS_PRODUCT_ID
 import org.mifospay.core.designsystem.component.MifosBottomSheet

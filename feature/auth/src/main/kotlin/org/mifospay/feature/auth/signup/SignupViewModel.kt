@@ -14,7 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mifospay.core.model.State
+import org.mifospay.core.model.State
 import com.mifospay.core.model.domain.user.NewUser
 import com.mifospay.core.model.domain.user.UpdateUserEntityClients
 import com.mifospay.core.model.domain.user.User
@@ -25,8 +25,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.mifospay.common.Constants
-import org.mifospay.common.DebugUtil
+import org.mifospay.core.common.Constants
+import org.mifospay.core.common.DebugUtil
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.client.CreateClient

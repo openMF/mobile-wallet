@@ -16,7 +16,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.mifospay.core.model.domain.BankAccountDetails
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import org.mifospay.feature.bank.accounts.details.BankAccountDetailScreen
 
 const val BANK_ACCOUNT_DETAIL_ROUTE = "bank_account_detail_route"

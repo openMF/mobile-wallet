@@ -10,7 +10,7 @@
 package org.mifospay.core.network.services
 
 import com.mifospay.core.model.entity.beneficary.Beneficiary
-import com.mifospay.core.model.entity.beneficary.BeneficiaryPayload
+import org.mifospay.core.model.entity.beneficary.BeneficiaryPayload
 import com.mifospay.core.model.entity.beneficary.BeneficiaryUpdatePayload
 import com.mifospay.core.model.entity.templates.beneficiary.BeneficiaryTemplate
 import okhttp3.ResponseBody
@@ -34,7 +34,7 @@ interface BeneficiaryService {
     val beneficiaryTemplate: Observable<BeneficiaryTemplate>
 
     @POST(ApiEndPoints.BENEFICIARIES + "/tpt")
-    fun createBeneficiary(@Body beneficiaryPayload: BeneficiaryPayload): Observable<ResponseBody>
+    fun createBeneficiary(@Body beneficiaryPayload: org.mifospay.core.model.entity.beneficary.BeneficiaryPayload): Observable<ResponseBody>
 
     @PUT(ApiEndPoints.BENEFICIARIES + "/tpt/{beneficiaryId}")
     fun updateBeneficiary(

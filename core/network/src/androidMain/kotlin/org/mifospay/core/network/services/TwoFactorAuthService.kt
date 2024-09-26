@@ -10,7 +10,7 @@
 package org.mifospay.core.network.services
 
 import com.mifospay.core.model.domain.twofactor.AccessToken
-import com.mifospay.core.model.domain.twofactor.DeliveryMethod
+import org.mifospay.core.model.domain.twofactor.DeliveryMethod
 import org.mifospay.core.network.ApiEndPoints
 import retrofit2.http.GET
 import retrofit2.http.POST
@@ -22,7 +22,7 @@ import rx.Observable
  */
 interface TwoFactorAuthService {
     @get:GET(ApiEndPoints.TWOFACTOR)
-    val deliveryMethods: Observable<List<DeliveryMethod>>
+    val deliveryMethods: Observable<List<org.mifospay.core.model.domain.twofactor.DeliveryMethod>>
 
     @POST(ApiEndPoints.TWOFACTOR)
     fun requestOTP(@Query("deliveryMethod") deliveryMethod: String): Observable<String>

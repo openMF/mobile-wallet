@@ -37,9 +37,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.entity.Invoice
-import com.mifospay.core.model.utils.DateHelper
+import org.mifospay.core.model.utils.DateHelper
 import org.koin.androidx.compose.koinViewModel
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.theme.MifosTheme
@@ -263,7 +263,7 @@ private fun InvoiceDetailsContent(
                 modifier = Modifier.padding(top = 10.dp),
             )
             Text(
-                text = DateHelper.getDateAsString(invoice!!.date),
+                text = org.mifospay.core.model.utils.DateHelper.getDateAsString(invoice!!.date),
                 modifier = Modifier.padding(top = 10.dp),
             )
         }
