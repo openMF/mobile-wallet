@@ -7,16 +7,20 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.network.di
+package org.mifospay.core.common.di
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
+import org.mifospay.core.common.MifosDispatchers
 
-val CoroutineScopesModule = module {
-
+val DispatchersModule = module {
+    single<CoroutineDispatcher>(named(MifosDispatchers.IO.name)) { Dispatchers.IO }
+    single<CoroutineDispatcher>(named(MifosDispatchers.Default.name)) { Dispatchers.Default }
     single<CoroutineScope>(named("ApplicationScope")) {
         CoroutineScope(SupervisorJob() + Dispatchers.Default)
     }

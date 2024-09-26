@@ -14,7 +14,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.WriterException
 import com.google.zxing.common.BitMatrix
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import org.mifospay.core.data.base.UseCase
 import java.util.Base64
 

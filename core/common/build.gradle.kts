@@ -16,6 +16,18 @@ android {
 }
 
 kotlin {
+
+    listOf(
+        iosX64(),
+        iosArm64(),
+        iosSimulatorArm64()
+    ).forEach {
+        it.binaries.framework {
+            isStatic = false
+            export(libs.kermit.simple)
+        }
+    }
+
     sourceSets {
         commonMain.dependencies {
             implementation(libs.kotlinx.coroutines.core)
@@ -23,12 +35,17 @@ kotlin {
             api(libs.coil.core)
             api(libs.coil.svg)
             api(libs.coil.network.ktor)
+            api(libs.kermit.logging)
+            api(libs.squareup.okio)
         }
         androidMain.dependencies {
             implementation(libs.kotlinx.coroutines.android)
         }
         commonTest.dependencies {
             implementation(libs.kotlinx.coroutines.test)
+        }
+        iosMain.dependencies {
+            api(libs.kermit.simple)
         }
     }
 }

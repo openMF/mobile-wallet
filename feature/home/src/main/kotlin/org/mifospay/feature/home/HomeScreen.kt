@@ -51,7 +51,7 @@ import com.mifospay.core.model.domain.Currency
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import org.koin.androidx.compose.koinViewModel
-import org.mifospay.common.Utils
+import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.theme.border
 import org.mifospay.core.designsystem.theme.lightGrey
@@ -174,9 +174,11 @@ private fun MifosWalletCardScreen(
             Spacer(modifier = Modifier.height(10.dp))
             val accountBalance =
                 if (account != null) {
-                    Utils.getFormattedAccountBalance(
-                        account.balance,
-                        account.currency.code,
+                    val currencyFormatter = CurrencyFormatter()
+                    currencyFormatter.format(
+                        balance = account.balance,
+                        currencyCode = account.currency.code,
+                        maximumFractionDigits = null,
                     )
                 } else {
                     "0"

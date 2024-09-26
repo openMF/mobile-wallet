@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.user.UpdateUserEntityPassword
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.user.AuthenticateUser

@@ -13,14 +13,16 @@ import android.net.Uri
 import android.os.Environment
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.entity.accounts.savings.TransferDetail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
-import org.mifospay.common.Constants
-import org.mifospay.common.FileUtils
+import org.mifospay.core.common.Constants
+import org.mifospay.core.common.createPlatformFileUtils
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.DownloadTransactionReceipt
@@ -67,16 +69,23 @@ class ReceiptViewModel(
     }
 
     fun writeReceiptToPDF(responseBody: ResponseBody?, filename: String) {
-        val mifosDirectory = File(
-            Environment.getExternalStorageDirectory(),
-            Constants.MIFOSPAY,
-        )
-        if (!mifosDirectory.exists()) {
-            mifosDirectory.mkdirs()
-        }
-        val documentFile = File(mifosDirectory.path, filename)
-        if (FileUtils.writeInputStreamDataToFile(responseBody!!.byteStream(), documentFile)) {
-            mFileState.value = PassFileState(documentFile)
+        viewModelScope.launch {
+            val mifosDirectory = File(
+                Environment.getExternalStorageDirectory(),
+                Constants.MIFOSPAY,
+            )
+            if (!mifosDirectory.exists()) {
+                mifosDirectory.mkdirs()
+            }
+            val documentFile = File(mifosDirectory.path, filename)
+            val fileUtils = createPlatformFileUtils()
+            val result = fileUtils.writeInputStreamDataToFile(
+                responseBody!!.bytes(),
+                documentFile.path,
+            )
+            if (result) {
+                mFileState.value = PassFileState(documentFile)
+            }
         }
     }
 
