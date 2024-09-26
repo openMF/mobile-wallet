@@ -81,7 +81,7 @@ class EditProfileViewModel(
         mUseCaseHandler.execute(
             updateClientUseCase,
             UpdateClient.RequestValues(
-                com.mifospay.core.model.domain.client.UpdateClientEntityMobile(
+                org.mifospay.core.model.domain.client.UpdateClientEntityMobile(
                     fullNumber!!,
                 ),
                 mPreferencesHelper.clientId.toInt().toLong(),

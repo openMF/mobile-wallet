@@ -23,8 +23,5 @@ kotlin {
             api(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
         }
-        androidMain.dependencies {
-            implementation(libs.squareup.retrofit.converter.gson)
-        }
     }
 }
