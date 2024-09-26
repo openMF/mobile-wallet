@@ -11,7 +11,7 @@ package org.mifospay.feature.kyc
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mifospay.core.model.entity.kyc.KYCLevel1Details
+import org.mifospay.core.model.entity.kyc.KYCLevel1Details
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -74,7 +74,7 @@ class KYCDescriptionViewModel(
 }
 
 sealed interface KYCDescriptionUiState {
-    data class KYCDescription(val kycLevel1Details: KYCLevel1Details?) : KYCDescriptionUiState
+    data class KYCDescription(val kycLevel1Details: org.mifospay.core.model.entity.kyc.KYCLevel1Details?) : KYCDescriptionUiState
     data object Error : KYCDescriptionUiState
     data object Loading : KYCDescriptionUiState
 }

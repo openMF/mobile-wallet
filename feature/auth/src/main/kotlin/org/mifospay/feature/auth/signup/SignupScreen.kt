@@ -43,7 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.mifospay.core.model.State
+import org.mifospay.core.model.State
 import com.mifospay.core.model.signup.PasswordStrength
 import com.mifospay.core.model.signup.SignupData
 import org.koin.androidx.compose.koinViewModel

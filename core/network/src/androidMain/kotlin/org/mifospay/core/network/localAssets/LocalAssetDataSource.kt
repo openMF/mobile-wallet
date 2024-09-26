@@ -9,9 +9,9 @@
  */
 package org.mifospay.core.network.localAssets
 
-import com.mifospay.core.model.City
-import com.mifospay.core.model.Country
-import com.mifospay.core.model.State
+import org.mifospay.core.model.City
+import org.mifospay.core.model.Country
+import org.mifospay.core.model.State
 
 interface LocalAssetDataSource {
 

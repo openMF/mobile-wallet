@@ -14,7 +14,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mifospay.core.model.State
+import org.mifospay.core.model.State
 import com.mifospay.core.model.domain.user.NewUser
 import com.mifospay.core.model.domain.user.UpdateUserEntityClients
 import com.mifospay.core.model.domain.user.User
