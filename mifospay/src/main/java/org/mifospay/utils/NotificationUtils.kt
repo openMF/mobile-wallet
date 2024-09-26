@@ -27,7 +27,7 @@ import android.util.Log
 import android.util.Patterns
 import androidx.core.app.NotificationCompat
 import org.mifospay.R
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import java.io.IOException
 import java.net.HttpURLConnection
 import java.net.URL

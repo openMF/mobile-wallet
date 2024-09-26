@@ -14,11 +14,11 @@ import androidx.lifecycle.ViewModel
 import com.mifospay.core.model.domain.Transaction
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.mifospay.core.common.Constants
 import org.mifospay.core.data.base.TaskLooper
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseFactory
 import org.mifospay.core.data.domain.usecase.account.FetchAccountTransfer
-import org.mifospay.core.data.util.Constants
 import org.mifospay.feature.specific.transactions.SpecificTransactionsUiState.Loading
 import org.mifospay.feature.specific.transactions.navigation.ACCOUNT_NUMBER_ARG
 import org.mifospay.feature.specific.transactions.navigation.TRANSACTIONS_ARG
@@ -54,7 +54,7 @@ class SpecificTransactionsViewModel(
                         as UseCase<FetchAccountTransfer.RequestValues, FetchAccountTransfer.ResponseValue>,
                     values = FetchAccountTransfer.RequestValues(transferId),
                     taskData = TaskLooper.TaskData(
-                        org.mifospay.common.Constants.TRANSFER_DETAILS,
+                        Constants.TRANSFER_DETAILS,
                         i,
                     ),
                 )
@@ -66,7 +66,7 @@ class SpecificTransactionsViewModel(
                         response: R,
                     ) {
                         when (taskData.taskName) {
-                            org.mifospay.common.Constants.TRANSFER_DETAILS -> {
+                            Constants.TRANSFER_DETAILS -> {
                                 val responseValue = response as FetchAccountTransfer.ResponseValue
                                 val index = taskData.taskId
                                 transactions[index].transferDetail = responseValue.transferDetail

@@ -16,7 +16,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import org.mifospay.feature.auth.mobileVerify.MobileVerificationScreen
 
 const val MOBILE_VERIFICATION_ROUTE = "mobile_verification_route"

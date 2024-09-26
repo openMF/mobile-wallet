@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.network
+package org.mifospay.core.common
 
 import org.koin.core.annotation.Qualifier
 

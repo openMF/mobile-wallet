@@ -7,7 +7,17 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.common
+package org.mifospay.core.common
 
-const val PAYEE_EXTERNAL_ID_ARG = "payeeExternalId"
-const val TRANSFER_AMOUNT_ARG = "transferAmount"
+import co.touchlab.kermit.Logger
+
+object DebugUtil {
+
+    private val logger = Logger.withTag("QXZ")
+
+    fun log(vararg objects: Any): Array<out Any> {
+        val stringToPrint = objects.joinToString(", ")
+        logger.d { stringToPrint }
+        return objects
+    }
+}

@@ -16,7 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.core.content.FileProvider
 import androidx.navigation.compose.NavHost
 import com.mifos.library.material3.navigation.ModalBottomSheetLayout
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.bank.accounts.AccountsScreen
 import org.mifospay.feature.bank.accounts.navigation.bankAccountDetailScreen

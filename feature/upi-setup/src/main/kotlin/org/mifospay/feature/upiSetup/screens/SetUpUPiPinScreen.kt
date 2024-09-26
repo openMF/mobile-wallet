@@ -30,7 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.mifospay.core.model.domain.BankAccountDetails
 import org.koin.androidx.compose.koinViewModel
-import org.mifospay.common.Constants
+import org.mifospay.core.common.Constants
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.feature.upiSetup.viewmodel.SetUpUpiViewModal
 import org.mifospay.feature.upi_setup.R

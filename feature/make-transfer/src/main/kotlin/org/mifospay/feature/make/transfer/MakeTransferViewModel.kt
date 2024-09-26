@@ -19,8 +19,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import org.mifospay.common.PAYEE_EXTERNAL_ID_ARG
-import org.mifospay.common.TRANSFER_AMOUNT_ARG
+import org.mifospay.core.common.PAYEE_EXTERNAL_ID_ARG
+import org.mifospay.core.common.TRANSFER_AMOUNT_ARG
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.account.TransferFunds

@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.common
+package org.mifospay.core.common
 
 /**
  * Created by naman on 17/6/17.
