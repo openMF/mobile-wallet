@@ -139,10 +139,8 @@ private fun HistoryScreen(
                             TransactionItemScreen(
                                 transaction = it,
                                 modifier = Modifier
-                                    .padding(start = 24.dp, end = 24.dp)
                                     .clickable { transactionDetailState = it },
                             )
-                            Spacer(modifier = Modifier.height(16.dp))
                         }
                     }
                 }

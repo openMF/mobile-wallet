@@ -103,4 +103,8 @@ object NewUi {
     val tertiaryContainer = Color(0xFFFDFDFE)
     val onSurface = Color(0xFF333333)
     val secondaryColor = Color(0xFFFF3325)
+
+    // general color
+    val walletColor1 = Color(0xFF1f7dd5)
+    val walletColor2 = Color(0xFF1ec0a0)
 }
