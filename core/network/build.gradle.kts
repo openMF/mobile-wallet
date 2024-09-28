@@ -19,6 +19,7 @@
  */
 plugins {
     alias(libs.plugins.mifospay.kmp.library)
+    alias(libs.plugins.mifospay.kotlin.inject)
     alias(libs.plugins.ktrofit)
     id("kotlinx-serialization")
     id("com.google.devtools.ksp")
@@ -49,10 +50,13 @@ kotlin {
             implementation(libs.ktor.client.logging)
             implementation(libs.ktor.client.serialization)
             implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.auth)
+            implementation(libs.ktor.client.cio)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktorfit.lib)
             implementation(libs.ktorfit.converters.call)
             implementation(libs.ktorfit.converters.flow)
+            implementation(libs.squareup.okio)
         }
         androidMain.dependencies {
             implementation(libs.ktor.client.android)
