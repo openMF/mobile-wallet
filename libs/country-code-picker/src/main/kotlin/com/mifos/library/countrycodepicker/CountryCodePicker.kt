@@ -87,7 +87,7 @@ private const val TAG = "CountryCodePicker"
  * @param modifier Modifier to be applied to the inner OutlinedTextField.
  * @param autoDetectCode Boolean indicating if will auto detect the code from initial phone number
  * @param enabled Boolean indicating whether the field is enabled.
-// * @param shape Shape of the text field.
+ * @param shape Shape of the text field.
  * @param showCountryCode Whether to show the country code in the text field.
  * @param showCountryFlag Whether to show the country flag in the text field.
  * @param colors TextFieldColors to be used for the text field.
@@ -287,9 +287,8 @@ fun CountryCodePicker(
     )
 }
 
-
 @OptIn(ExperimentalComposeUiApi::class)
-@Suppress("LongMethod", "LongParameterList")
+@Suppress("LongMethod", "LongParameterList", "ComplexMethod")
 @Composable
 fun CountryCodePickerPayment(
     onValueChange: (Pair<PhoneCode, String>, Boolean) -> Unit,
@@ -454,7 +453,7 @@ fun CountryCodePickerPayment(
                                     country.countryPhoneCode to phoneNumber.text,
                                     isNumberValid,
                                 )
-                            }
+                            },
                         )
                     }
                 }
@@ -501,7 +500,7 @@ fun CountryCodeDialogWrapper(
     includeOnly: ImmutableSet<String>?,
     showCountryCode: Boolean,
     showFlag: Boolean,
-    textStyle: TextStyle
+    textStyle: TextStyle,
 ) {
     CountryCodeDialog(
         selectedCountry = country,
@@ -518,13 +517,13 @@ fun ClearIconButtonWrapper(
     clearIcon: ImageVector,
     colors: TextFieldColors,
     isNumberValid: Boolean,
-    onClearClick: () -> Unit
+    onClearClick: () -> Unit,
 ) {
     ClearIconButton(
         imageVector = clearIcon,
         colors = colors,
         isNumberValid = isNumberValid,
-        onClick = onClearClick
+        onClick = onClearClick,
     )
 }
 
