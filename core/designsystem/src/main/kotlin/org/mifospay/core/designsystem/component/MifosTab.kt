@@ -9,12 +9,17 @@
  */
 package org.mifospay.core.designsystem.component
 
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun MifosTab(
@@ -22,18 +27,21 @@ fun MifosTab(
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    selectedContentColor: Color = MaterialTheme.colorScheme.onSurface,
-    unselectedContentColor: Color = Color.LightGray,
+    selectedContentColor: Color = NewUi.primaryColor,
+    unselectedContentColor: Color = NewUi.containerColor,
 ) {
     Tab(
         text = {
             Text(
                 text = text,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = if (selected) NewUi.gradientOne else NewUi.onSurface,
             )
         },
         selected = selected,
-        modifier = modifier,
+        modifier = modifier
+            .clip(RoundedCornerShape(25.dp))
+            .background(if (selected) selectedContentColor else unselectedContentColor)
+            .padding(horizontal = 20.dp),
         selectedContentColor = selectedContentColor,
         unselectedContentColor = unselectedContentColor,
         onClick = onClick,

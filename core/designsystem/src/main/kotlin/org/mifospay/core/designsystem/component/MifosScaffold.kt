@@ -16,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun MifosScaffold(
@@ -43,6 +44,7 @@ fun MifosScaffold(
                     onClick = content.onClick,
                     contentColor = content.contentColor,
                     content = content.content,
+                    containerColor = NewUi.primaryColor,
                 )
             }
         },

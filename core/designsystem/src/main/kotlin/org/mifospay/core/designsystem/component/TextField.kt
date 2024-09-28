@@ -14,6 +14,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -209,6 +210,9 @@ fun MifosTextField(
     minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+    trailingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    indicatorColor: Color? = null,
 ) {
     var isFocused by rememberSaveable { mutableStateOf(false) }
 
@@ -244,19 +248,44 @@ fun MifosTextField(
 
                 Spacer(modifier = Modifier.height(5.dp))
 
-                innerTextField()
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    if (leadingIcon != null) {
+                        leadingIcon()
+                    }
 
-                Spacer(modifier = Modifier.height(5.dp))
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = if (isFocused) {
-                        NewUi.secondaryColor
-                    } else {
-                        NewUi.onSurface.copy(alpha = 0.05f)
-                    },
-                )
+                    Box(modifier = Modifier.weight(1f)) {
+                        innerTextField()
+                    }
+
+                    if (trailingIcon != null) {
+                        trailingIcon()
+                    }
+                }
+                indicatorColor?.let { color ->
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = if (isFocused) {
+                            color
+                        } else {
+                            NewUi.onSurface.copy(alpha = 0.05f)
+                        },
+                    )
+                } ?: run {
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = if (isFocused) {
+                            NewUi.secondaryColor
+                        } else {
+                            NewUi.onSurface.copy(alpha = 0.05f)
+                        },
+                    )
+                }
             }
         },
+
     )
 }
 

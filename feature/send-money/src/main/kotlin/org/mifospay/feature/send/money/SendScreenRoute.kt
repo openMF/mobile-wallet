@@ -15,6 +15,7 @@ import android.provider.ContactsContract
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.VisibleForTesting
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -22,13 +23,15 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -42,7 +45,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
@@ -54,14 +56,16 @@ import com.google.mlkit.vision.barcode.common.Barcode
 import com.google.mlkit.vision.codescanner.GmsBarcodeScannerOptions
 import com.google.mlkit.vision.codescanner.GmsBarcodeScanning
 import com.mifos.library.countrycodepicker.CountryCodePicker
+import com.mifos.library.countrycodepicker.CountryCodePickerPayment
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
-import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosNavigationTopAppBar
+import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 
@@ -182,7 +186,11 @@ internal fun SendMoneyScreen(
             }
     }
 
-    Box(modifier) {
+    Box(
+        modifier
+            .padding(top = 5.dp)
+            .imePadding(),
+    ) {
         Column(Modifier.fillMaxSize()) {
             if (showToolBar) {
                 MifosNavigationTopAppBar(
@@ -190,113 +198,125 @@ internal fun SendMoneyScreen(
                     onNavigationClick = onBackClick,
                 )
             }
+
+            MifosTextField(
+                value = amount,
+                label = stringResource(id = R.string.feature_send_money_amount),
+                onValueChange = {
+                    amount = it
+                    validateInfo()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                singleLine = true,
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.AttachMoney,
+                        contentDescription = null,
+                        tint = NewUi.onSurface,
+                        modifier = Modifier.padding(end = 8.dp),
+                    )
+                },
+                indicatorColor = NewUi.primaryColor,
+            )
+
+            when (sendMethodType) {
+                SendMethodType.VPA -> {
+                    MifosTextField(
+                        value = vpa,
+                        label = stringResource(id = R.string.feature_send_money_virtual_payment_address),
+                        onValueChange = {
+                            vpa = it
+                            validateInfo()
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        trailingIcon = {
+                            IconButton(
+                                onClick = { startScan() },
+                            ) {
+                                Icon(
+                                    imageVector = MifosIcons.QrCode2,
+                                    contentDescription = "Scan QR",
+                                    tint = MaterialTheme.colorScheme.primary,
+                                )
+                            }
+                        },
+                        indicatorColor = NewUi.primaryColor,
+                    )
+                }
+
+                SendMethodType.MOBILE -> {
+                    EnterPhoneScreen(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                        initialPhoneNumber = mobileNumber,
+                        onNumberUpdated = { _, fullPhone, valid ->
+                            if (valid) {
+                                mobileNumber = fullPhone
+                            }
+                            isValidMobileNumber = valid
+                            validateInfo()
+                        },
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.weight(1f))
+
             Text(
                 modifier = Modifier.padding(start = 20.dp, top = 20.dp),
                 text = stringResource(id = R.string.feature_send_money_select_transfer_method),
                 style = styleNormal18sp,
             )
-            Column(modifier = Modifier.padding(16.dp)) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 20.dp, bottom = 20.dp),
-                ) {
-                    VpaMobileChip(
-                        label = stringResource(id = R.string.feature_send_money_vpa),
-                        selected = sendMethodType == SendMethodType.VPA,
-                        onClick = { sendMethodType = SendMethodType.VPA },
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    VpaMobileChip(
-                        label = stringResource(id = R.string.feature_send_money_mobile),
-                        selected = sendMethodType == SendMethodType.MOBILE,
-                        onClick = { sendMethodType = SendMethodType.MOBILE },
-                    )
-                }
-                MfOutlinedTextField(
-                    value = amount,
-                    label = stringResource(id = R.string.feature_send_money_amount),
-                    onValueChange = {
-                        amount = it
-                        validateInfo()
-                    },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+            ) {
+                VpaMobileChip(
+                    label = stringResource(id = R.string.feature_send_money_vpa),
+                    selected = sendMethodType == SendMethodType.VPA,
+                    onClick = { sendMethodType = SendMethodType.VPA },
                 )
-                when (sendMethodType) {
-                    SendMethodType.VPA -> {
-                        MfOutlinedTextField(
-                            value = vpa,
-                            label = stringResource(id = R.string.feature_send_money_virtual_payment_address),
-                            onValueChange = {
-                                vpa = it
-                                validateInfo()
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            trailingIcon = {
-                                IconButton(
-                                    onClick = {
-                                        startScan()
-                                    },
-                                ) {
-                                    Icon(
-                                        imageVector = MifosIcons.QrCode2,
-                                        contentDescription = "Scan QR",
-                                        tint = MaterialTheme.colorScheme.primary,
-                                    )
-                                }
-                            },
-                        )
-                    }
+                Spacer(modifier = Modifier.width(8.dp))
+                VpaMobileChip(
+                    label = stringResource(id = R.string.feature_send_money_mobile),
+                    selected = sendMethodType == SendMethodType.MOBILE,
+                    onClick = { sendMethodType = SendMethodType.MOBILE },
+                )
+            }
 
-                    SendMethodType.MOBILE -> {
-                        EnterPhoneScreen(
-                            modifier =
-                            Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 8.dp),
-                            initialPhoneNumber = mobileNumber,
-                            onNumberUpdated = { _, fullPhone, valid ->
-                                if (valid) {
-                                    mobileNumber = fullPhone
-                                }
-                                isValidMobileNumber = valid
-                                validateInfo()
-                            },
-                        )
-                    }
-                }
-                Spacer(modifier = Modifier.height(16.dp))
-                MifosButton(
-                    modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                        .align(Alignment.CenterHorizontally),
-                    color = MaterialTheme.colorScheme.onSurface,
-                    enabled = isValidInfo,
-                    onClick = {
-                        if (!isValidInfo) return@MifosButton
-                        onSubmit(
-                            amount,
-                            when (sendMethodType) {
-                                SendMethodType.VPA -> vpa
-                                SendMethodType.MOBILE -> mobileNumber
-                            },
-                            sendMethodType,
-                        )
-                        // TODO: Navigate to MakeTransferScreenRoute
-                    },
-                    contentPadding = PaddingValues(12.dp),
-                ) {
-                    Text(
-                        stringResource(id = R.string.feature_send_money_submit),
-                        style = styleMedium16sp.copy(color = MaterialTheme.colorScheme.surface),
+            MifosButton(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                color = NewUi.primaryColor,
+                enabled = isValidInfo,
+                onClick = {
+                    if (!isValidInfo) return@MifosButton
+                    onSubmit(
+                        amount,
+                        when (sendMethodType) {
+                            SendMethodType.VPA -> vpa
+                            SendMethodType.MOBILE -> mobileNumber
+                        },
+                        sendMethodType,
                     )
-                }
+                    // TODO: Navigate to MakeTransferScreenRoute
+                },
+                contentPadding = PaddingValues(18.dp),
+            ) {
+                Text(
+                    stringResource(id = R.string.feature_send_money_submit),
+                    style = styleMedium16sp.copy(color = MaterialTheme.colorScheme.surface),
+                )
             }
         }
 
@@ -315,9 +335,8 @@ private fun EnterPhoneScreen(
     initialPhoneNumber: String? = null,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
-    CountryCodePicker(
+    CountryCodePickerPayment(
         modifier = modifier,
-        shape = RoundedCornerShape(8.dp),
         colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.primary,
         ),
@@ -325,8 +344,15 @@ private fun EnterPhoneScreen(
         onValueChange = { (code, phone), isValid ->
             onNumberUpdated(phone, code + phone, isValid)
         },
-        label = { Text(stringResource(id = R.string.feature_send_money_phone_number)) },
+        label = {
+            Text(
+                stringResource(id = R.string.feature_send_money_phone_number),
+                color = NewUi.primaryColor,
+            )
+        },
         keyboardActions = KeyboardActions { keyboardController?.hide() },
+        indicatorColor = NewUi.primaryColor,
+        errorIndicatorColor = NewUi.secondaryColor,
     )
 }
 
@@ -339,14 +365,26 @@ private fun VpaMobileChip(
 ) {
     MifosButton(
         onClick = onClick,
-        color = if (selected) MaterialTheme.colorScheme.primary else Color.LightGray,
+        color = NewUi.gradientOne,
         modifier =
         modifier
+            .wrapContentSize()
             .padding(4.dp)
-            .wrapContentSize(),
+            .then(
+                if (selected) {
+                    Modifier.border(
+                        width = 1.dp,
+                        color = NewUi.primaryColor,
+                        shape = RoundedCornerShape(25.dp),
+                    )
+                } else {
+                    Modifier
+                },
+            ),
     ) {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
+            color = NewUi.onSurface,
             text = label,
         )
     }

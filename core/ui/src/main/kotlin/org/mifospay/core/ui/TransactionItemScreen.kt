@@ -46,29 +46,11 @@ fun TransactionItemScreen(
             .padding(bottom = 16.dp),
         horizontalArrangement = Arrangement.Absolute.SpaceBetween,
     ) {
-        Image(
-            modifier = Modifier
-                .size(20.dp)
-                .padding(top = 2.dp),
-            painter = painterResource(
-                id = when (transaction.transactionType) {
-                    TransactionType.DEBIT -> R.drawable.core_ui_money_out
-                    TransactionType.CREDIT -> R.drawable.core_ui_money_in
-                    else -> R.drawable.core_ui_money_in
-                },
-            ),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-        )
-        Column(
-            modifier = Modifier
-                .padding(start = 32.dp)
-                .weight(.3f),
-        ) {
+        Column {
             Text(
                 text = transaction.transactionType.toString(),
                 style = TextStyle(
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     fontWeight = FontWeight(400),
                     color = MaterialTheme.colorScheme.onSurface,
 
@@ -77,7 +59,7 @@ fun TransactionItemScreen(
             Text(
                 text = transaction.date.toString(),
                 style = TextStyle(
-                    fontSize = 10.sp,
+                    fontSize = 13.sp,
                     fontWeight = FontWeight(400),
                     color = Color(0x66000000),
                 ),
@@ -93,20 +75,35 @@ fun TransactionItemScreen(
             TransactionType.CREDIT -> "+ $formattedAmount"
             else -> formattedAmount
         }
-        Text(
-            modifier = Modifier.weight(.3f),
-            text = amount,
-            style = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
-                color = when (transaction.transactionType) {
-                    TransactionType.DEBIT -> red
-                    TransactionType.CREDIT -> green
-                    else -> Color.Black
-                },
-                textAlign = TextAlign.End,
-            ),
-        )
+        Row {
+            Image(
+                modifier = Modifier
+                    .size(20.dp)
+                    .padding(top = 2.dp),
+                painter = painterResource(
+                    id = when (transaction.transactionType) {
+                        TransactionType.DEBIT -> R.drawable.core_ui_money_out
+                        TransactionType.CREDIT -> R.drawable.core_ui_money_in
+                        else -> R.drawable.core_ui_money_in
+                    },
+                ),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+            )
+            Text(
+                text = amount,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = when (transaction.transactionType) {
+                        TransactionType.DEBIT -> red
+                        TransactionType.CREDIT -> green
+                        else -> Color.Black
+                    },
+                    textAlign = TextAlign.End,
+                ),
+            )
+        }
     }
 }
 

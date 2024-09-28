@@ -13,12 +13,12 @@
     <string name="feature_send_money_error_fetching_balance">Error fetching balance</string>
     <string name="feature_send_money_not_allowed">Self Account transfer is not allowed</string>
     <string name="feature_send_money_send">Send</string>
-    <string name="feature_send_money_select_transfer_method">Select transfer method</string>
+    <string name="feature_send_money_select_transfer_method">Select Method</string>
     <string name="feature_send_money_vpa">VPA</string>
     <string name="feature_send_money_mobile">Mobile number</string>
-    <string name="feature_send_money_amount">Amount</string>
+    <string name="feature_send_money_amount">Enter your Amount</string>
     <string name="feature_send_money_virtual_payment_address">Virtual Payment Address</string>
-    <string name="feature_send_money_submit">Submit</string>
+    <string name="feature_send_money_submit">Proceed</string>
     <string name="feature_send_money_please_wait">Please wait…</string>
-    <string name="feature_send_money_phone_number">Phone Number</string>
+    <string name="feature_send_money_phone_number">Enter Mobile Number</string>
 </resources>

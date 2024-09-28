@@ -10,11 +10,13 @@
 package org.mifospay.feature.payments
 
 import androidx.annotation.VisibleForTesting
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -30,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun RequestScreen(
@@ -64,46 +67,25 @@ internal fun RequestScreenContent(
             modifier = Modifier.padding(start = 20.dp, top = 30.dp),
             text = stringResource(id = R.string.feature_payments_receive),
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary,
+            color = NewUi.primaryColor,
         )
-
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
+                .padding(start = 20.dp, top = 20.dp, end = 15.dp)
+                .weight(1f),
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp)
-                    .weight(1f),
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Column {
-                    Text(text = stringResource(id = R.string.feature_payments_virtual_payment_address_vpa))
-                    Text(
-                        text = vpa,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                }
-
-                Column(modifier = Modifier.padding(top = 10.dp)) {
-                    Text(text = stringResource(id = R.string.feature_payments_mobile_number))
-                    Text(
-                        text = mobile,
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                }
-            }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
+                Text(text = stringResource(id = R.string.feature_payments_virtual_payment_address_vpa))
+                Text(
+                    text = vpa,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
                 IconButton(
                     onClick = { showQr(vpa) },
                 ) {
@@ -113,9 +95,15 @@ internal fun RequestScreenContent(
                         contentDescription = stringResource(id = R.string.feature_payments_show_code),
                     )
                 }
+            }
 
+            HorizontalDivider(thickness = 1.dp, color = NewUi.gradientTwo)
+            Column(modifier = Modifier.padding(top = 10.dp)) {
+                Text(text = stringResource(id = R.string.feature_payments_mobile_number))
                 Text(
-                    text = stringResource(id = R.string.feature_payments_show_code),
+                    text = mobile,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
         }

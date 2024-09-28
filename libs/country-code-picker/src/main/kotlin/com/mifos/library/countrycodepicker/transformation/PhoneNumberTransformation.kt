@@ -53,6 +53,9 @@ class PhoneNumberTransformation(countryCode: String, context: Context) : VisualT
 
     @Suppress("AvoidMutableCollections", "AvoidVarsExceptWithDelegate")
     private fun reformat(s: CharSequence, cursor: Int): Transformation {
+        if (s.isEmpty()) {
+            return Transformation("", listOf(0), listOf(0))
+        }
         phoneNumberFormatter.clear()
 
         val curIndex = cursor - 1
@@ -79,17 +82,34 @@ class PhoneNumberTransformation(countryCode: String, context: Context) : VisualT
         val originalToTransformed = mutableListOf<Int>()
         val transformedToOriginal = mutableListOf<Int>()
         var specialCharsCount = 0
-        formatted?.forEachIndexed { index, char ->
-            if (!PhoneNumberUtils.isNonSeparator(char)) {
-                specialCharsCount++
-            } else {
-                originalToTransformed.add(index)
+//        formatted?.forEachIndexed { index, char ->
+//            if (!PhoneNumberUtils.isNonSeparator(char)) {
+//                specialCharsCount++
+//            } else {
+//                originalToTransformed.add(index)
+//            }
+//            transformedToOriginal.add(index - specialCharsCount)
+//        }
+//        originalToTransformed.add(originalToTransformed.maxOrNull()?.plus(1) ?: 0)
+//        transformedToOriginal.add(transformedToOriginal.maxOrNull()?.plus(1) ?: 0)
+        if (formatted != null) {
+            formatted?.forEachIndexed { index, char ->
+                if (!PhoneNumberUtils.isNonSeparator(char)) {
+                    specialCharsCount++
+                } else {
+                    originalToTransformed.add(index)
+                }
+                transformedToOriginal.add(index - specialCharsCount)
             }
-            transformedToOriginal.add(index - specialCharsCount)
+            originalToTransformed.add(originalToTransformed.maxOrNull()?.plus(1) ?: 0)
+            transformedToOriginal.add(transformedToOriginal.maxOrNull()?.plus(1) ?: 0)
+        } else {
+            originalToTransformed.add(0)
+            transformedToOriginal.add(0)
         }
-        originalToTransformed.add(originalToTransformed.maxOrNull()?.plus(1) ?: 0)
-        transformedToOriginal.add(transformedToOriginal.maxOrNull()?.plus(1) ?: 0)
-
+        if (transformedToOriginal.any { it < 0 }) {
+            transformedToOriginal.replaceAll { if (it < 0) 0 else it }
+        }
         return Transformation(formatted, originalToTransformed, transformedToOriginal)
     }
 
