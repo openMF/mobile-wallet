@@ -58,7 +58,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun MfOutlinedTextField(
@@ -236,12 +235,12 @@ fun MifosTextField(
         singleLine = singleLine,
         maxLines = maxLines,
         minLines = minLines,
-        cursorBrush = SolidColor(NewUi.primaryColor),
+        cursorBrush =  SolidColor(MaterialTheme.colorScheme.primary),
         decorationBox = { innerTextField ->
             Column {
                 Text(
                     text = label,
-                    color = NewUi.primaryColor,
+                    color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier.align(alignment = Alignment.Start),
                 )
@@ -270,16 +269,16 @@ fun MifosTextField(
                         color = if (isFocused) {
                             color
                         } else {
-                            NewUi.onSurface.copy(alpha = 0.05f)
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
                         },
                     )
                 } ?: run {
                     HorizontalDivider(
                         thickness = 1.dp,
                         color = if (isFocused) {
-                            NewUi.secondaryColor
+                            MaterialTheme.colorScheme.primary
                         } else {
-                            NewUi.onSurface.copy(alpha = 0.05f)
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
                         },
                     )
                 }

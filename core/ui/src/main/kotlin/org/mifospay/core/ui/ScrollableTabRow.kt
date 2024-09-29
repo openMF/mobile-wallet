@@ -9,6 +9,7 @@
  */
 package org.mifospay.core.ui
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -20,7 +21,6 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.launch
 import org.mifospay.core.designsystem.component.MifosTab
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.ui.utility.TabContent
 
 @Suppress("MultipleEmitters")
@@ -29,9 +29,9 @@ fun MifosScrollableTabRow(
     tabContents: List<TabContent>,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    containerColor: Color = NewUi.containerColor,
-    selectedContentColor: Color = NewUi.primaryColor,
-    unselectedContentColor: Color = NewUi.containerColor,
+    containerColor : Color = MaterialTheme.colorScheme.primaryContainer,
+    selectedContentColor : Color = MaterialTheme.colorScheme.primary,
+    unselectedContentColor : Color =  MaterialTheme.colorScheme.primaryContainer,
     edgePadding: Dp = 8.dp,
 ) {
     val scope = rememberCoroutineScope()

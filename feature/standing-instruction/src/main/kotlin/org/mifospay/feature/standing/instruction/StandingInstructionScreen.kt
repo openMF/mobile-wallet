@@ -28,7 +28,6 @@ import org.mifospay.core.designsystem.component.FloatingActionButtonContent
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.ui.EmptyContentScreen
 
 @Composable
@@ -58,7 +57,7 @@ internal fun StandingInstructionScreen(
 ) {
     val floatingActionButtonContent = FloatingActionButtonContent(
         onClick = onNewSI,
-        contentColor = NewUi.gradientOne,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
         content = {
             Icon(
                 imageVector = MifosIcons.Add,

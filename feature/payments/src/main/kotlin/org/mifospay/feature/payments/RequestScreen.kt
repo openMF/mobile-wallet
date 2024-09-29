@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun RequestScreen(
@@ -67,7 +66,7 @@ internal fun RequestScreenContent(
             modifier = Modifier.padding(start = 20.dp, top = 30.dp),
             text = stringResource(id = R.string.feature_payments_receive),
             style = MaterialTheme.typography.titleMedium,
-            color = NewUi.primaryColor,
+            color = MaterialTheme.colorScheme.primary
         )
         Column(
             modifier = Modifier
@@ -91,13 +90,14 @@ internal fun RequestScreenContent(
                 ) {
                     Icon(
                         imageVector = MifosIcons.QrCode,
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         contentDescription = stringResource(id = R.string.feature_payments_show_code),
                     )
                 }
             }
 
-            HorizontalDivider(thickness = 1.dp, color = NewUi.gradientTwo)
+            HorizontalDivider(thickness = 1.dp,color = MaterialTheme.colorScheme.onSurface.copy
+                (alpha = 0.05f))
             Column(modifier = Modifier.padding(top = 10.dp)) {
                 Text(text = stringResource(id = R.string.feature_payments_mobile_number))
                 Text(

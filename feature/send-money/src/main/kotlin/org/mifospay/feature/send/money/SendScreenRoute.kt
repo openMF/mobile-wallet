@@ -64,7 +64,7 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosNavigationTopAppBar
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
+import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 
@@ -214,11 +214,11 @@ internal fun SendMoneyScreen(
                     Icon(
                         imageVector = Icons.Default.AttachMoney,
                         contentDescription = null,
-                        tint = NewUi.onSurface,
+                        tint = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(end = 8.dp),
                     )
                 },
-                indicatorColor = NewUi.primaryColor,
+                indicatorColor = MifosBlue,
             )
 
             when (sendMethodType) {
@@ -240,11 +240,11 @@ internal fun SendMoneyScreen(
                                 Icon(
                                     imageVector = MifosIcons.QrCode2,
                                     contentDescription = "Scan QR",
-                                    tint = MaterialTheme.colorScheme.primary,
+                                    tint = MaterialTheme.colorScheme.onSurface,
                                 )
                             }
                         },
-                        indicatorColor = NewUi.primaryColor,
+                        indicatorColor = MaterialTheme.colorScheme.primary
                     )
                 }
 
@@ -296,7 +296,7 @@ internal fun SendMoneyScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
-                color = NewUi.primaryColor,
+                color = MaterialTheme.colorScheme.primary,
                 enabled = isValidInfo,
                 onClick = {
                     if (!isValidInfo) return@MifosButton
@@ -346,12 +346,12 @@ private fun EnterPhoneScreen(
         label = {
             Text(
                 stringResource(id = R.string.feature_send_money_phone_number),
-                color = NewUi.primaryColor,
+                color =  MaterialTheme.colorScheme.primary,
             )
         },
         keyboardActions = KeyboardActions { keyboardController?.hide() },
-        indicatorColor = NewUi.primaryColor,
-        errorIndicatorColor = NewUi.secondaryColor,
+        indicatorColor = MaterialTheme.colorScheme.primary,
+        errorIndicatorColor =  MaterialTheme.colorScheme.error,
     )
 }
 
@@ -364,7 +364,7 @@ private fun VpaMobileChip(
 ) {
     MifosButton(
         onClick = onClick,
-        color = NewUi.gradientOne,
+        color =  MaterialTheme.colorScheme.onPrimary,
         modifier =
         modifier
             .wrapContentSize()
@@ -373,7 +373,7 @@ private fun VpaMobileChip(
                 if (selected) {
                     Modifier.border(
                         width = 1.dp,
-                        color = NewUi.primaryColor,
+                        color =  MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(25.dp),
                     )
                 } else {
@@ -383,7 +383,7 @@ private fun VpaMobileChip(
     ) {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
-            color = NewUi.onSurface,
+            color =  MaterialTheme.colorScheme.onSurface,
             text = label,
         )
     }

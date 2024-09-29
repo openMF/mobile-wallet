@@ -49,7 +49,6 @@ import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.TransactionItemScreen
 import org.mifospay.feature.transaction.detail.TransactionDetailScreen
@@ -184,13 +183,13 @@ private fun Chip(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val backgroundColor = NewUi.gradientOne
+    val backgroundColor = MaterialTheme.colorScheme.onPrimary
     MifosButton(
         modifier = modifier.then(
             if (selected) {
                 Modifier.border(
                     width = 1.dp,
-                    color = NewUi.primaryColor,
+                    color = MaterialTheme.colorScheme.primary,
                     shape = RoundedCornerShape(25.dp),
                 )
             } else {
@@ -206,7 +205,7 @@ private fun Chip(
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp),
             text = label,
-            color = NewUi.onSurface,
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
