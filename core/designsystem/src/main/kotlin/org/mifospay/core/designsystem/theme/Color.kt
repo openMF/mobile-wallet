@@ -12,7 +12,7 @@ package org.mifospay.core.designsystem.theme
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFF0673BA) // primary
-val md_theme_light_onPrimary = Color(0xFFFFFFFF) //gradientOne
+val md_theme_light_onPrimary = Color(0xFFFFFFFF) // gradientOne
 val md_theme_light_primaryContainer = Color(0xFFF5F5F5) // container color
 val md_theme_light_onPrimaryContainer = Color(0xFF3E001D)
 val md_theme_light_secondary = Color(0xFF984061)

@@ -84,18 +84,15 @@ fun MfOutlinedTextField(
         },
         singleLine = singleLine,
         trailingIcon = trailingIcon,
-        keyboardActions =
-        KeyboardActions {
+        keyboardActions = KeyboardActions {
             onKeyboardActions?.invoke()
         },
         keyboardOptions = keyboardOptions,
-        colors =
-        OutlinedTextFieldDefaults.colors(
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.onSurface,
             focusedLabelColor = MaterialTheme.colorScheme.onSurface,
         ),
-        textStyle =
-        LocalDensity.current.run {
+        textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
     )
@@ -118,8 +115,7 @@ fun MfPasswordTextField(
         onValueChange = onPasswordChange,
         label = { Text(label) },
         isError = isError,
-        visualTransformation =
-        if (isPasswordVisible) {
+        visualTransformation = if (isPasswordVisible) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()
@@ -157,14 +153,12 @@ fun MifosOutlinedTextField(
         onValueChange = onValueChange,
         label = { Text(stringResource(id = label)) },
         modifier = modifier,
-        leadingIcon =
-        if (icon != null) {
+        leadingIcon = if (icon != null) {
             {
                 Image(
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    colorFilter =
-                    ColorFilter.tint(
+                    colorFilter = ColorFilter.tint(
                         MaterialTheme.colorScheme.onSurface,
                     ),
                 )
@@ -175,13 +169,11 @@ fun MifosOutlinedTextField(
         trailingIcon = trailingIcon,
         maxLines = maxLines,
         singleLine = singleLine,
-        colors =
-        OutlinedTextFieldDefaults.colors(
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.onSurface,
             focusedLabelColor = MaterialTheme.colorScheme.onSurface,
         ),
-        textStyle =
-        LocalDensity.current.run {
+        textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -235,7 +227,7 @@ fun MifosTextField(
         singleLine = singleLine,
         maxLines = maxLines,
         minLines = minLines,
-        cursorBrush =  SolidColor(MaterialTheme.colorScheme.primary),
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
         decorationBox = { innerTextField ->
             Column {
                 Text(

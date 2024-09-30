@@ -66,7 +66,7 @@ internal fun RequestScreenContent(
             modifier = Modifier.padding(start = 20.dp, top = 30.dp),
             text = stringResource(id = R.string.feature_payments_receive),
             style = MaterialTheme.typography.titleMedium,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.primary,
         )
         Column(
             modifier = Modifier
@@ -96,8 +96,11 @@ internal fun RequestScreenContent(
                 }
             }
 
-            HorizontalDivider(thickness = 1.dp,color = MaterialTheme.colorScheme.onSurface.copy
-                (alpha = 0.05f))
+            HorizontalDivider(
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.onSurface.copy
+                    (alpha = 0.05f),
+            )
             Column(modifier = Modifier.padding(top = 10.dp)) {
                 Text(text = stringResource(id = R.string.feature_payments_mobile_number))
                 Text(

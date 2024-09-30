@@ -28,14 +28,17 @@ fun MifosTab(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     selectedContentColor: Color = MaterialTheme.colorScheme.primary,
-    unselectedContentColor: Color = MaterialTheme.colorScheme.primaryContainer
+    unselectedContentColor: Color = MaterialTheme.colorScheme.primaryContainer,
 ) {
     Tab(
         text = {
             Text(
                 text = text,
-                color = if(selected)  MaterialTheme.colorScheme.onPrimary else  MaterialTheme
-                    .colorScheme.onSurface
+                color = if (selected) {
+                    MaterialTheme.colorScheme.onPrimary
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                },
             )
         },
         selected = selected,

@@ -244,7 +244,7 @@ internal fun SendMoneyScreen(
                                 )
                             }
                         },
-                        indicatorColor = MaterialTheme.colorScheme.primary
+                        indicatorColor = MaterialTheme.colorScheme.primary,
                     )
                 }
 
@@ -346,12 +346,12 @@ private fun EnterPhoneScreen(
         label = {
             Text(
                 stringResource(id = R.string.feature_send_money_phone_number),
-                color =  MaterialTheme.colorScheme.primary,
+                color = MaterialTheme.colorScheme.primary,
             )
         },
         keyboardActions = KeyboardActions { keyboardController?.hide() },
         indicatorColor = MaterialTheme.colorScheme.primary,
-        errorIndicatorColor =  MaterialTheme.colorScheme.error,
+        errorIndicatorColor = MaterialTheme.colorScheme.error,
     )
 }
 
@@ -364,7 +364,7 @@ private fun VpaMobileChip(
 ) {
     MifosButton(
         onClick = onClick,
-        color =  MaterialTheme.colorScheme.onPrimary,
+        color = MaterialTheme.colorScheme.onPrimary,
         modifier =
         modifier
             .wrapContentSize()
@@ -373,7 +373,7 @@ private fun VpaMobileChip(
                 if (selected) {
                     Modifier.border(
                         width = 1.dp,
-                        color =  MaterialTheme.colorScheme.primary,
+                        color = MaterialTheme.colorScheme.primary,
                         shape = RoundedCornerShape(25.dp),
                     )
                 } else {
@@ -383,7 +383,7 @@ private fun VpaMobileChip(
     ) {
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),
-            color =  MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onSurface,
             text = label,
         )
     }

@@ -44,7 +44,7 @@ fun ProfileDetailsCard(
         ),
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor =  MaterialTheme.colorScheme.primaryContainer
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
     ) {
         Column(
@@ -78,7 +78,7 @@ fun ProfileItem(
     ) {
         Text(
             text = label,
-            color =  MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelLarge,
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -91,7 +91,7 @@ fun ProfileItem(
         Spacer(modifier = Modifier.height(4.dp))
         HorizontalDivider(
             thickness = 1.dp,
-            color =  MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
         )
     }
 }

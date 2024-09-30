@@ -44,7 +44,7 @@ fun MifosScaffold(
                     onClick = content.onClick,
                     contentColor = content.contentColor,
                     content = content.content,
-                    containerColor =  MaterialTheme.colorScheme.primary
+                    containerColor = MaterialTheme.colorScheme.primary,
                 )
             }
         },
