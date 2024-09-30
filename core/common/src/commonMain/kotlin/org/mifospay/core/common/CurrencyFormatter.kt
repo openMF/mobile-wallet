@@ -7,16 +7,12 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.model.domain.client
+package org.mifospay.core.common
 
-import kotlinx.serialization.Serializable
+expect object CurrencyFormatter {
+    fun format(balance: Double?, currencyCode: String?, maximumFractionDigits: Int?): String
+}
 
-@Serializable
-data class Client(
-    val name: String? = null,
-    val image: String? = null,
-    val externalId: String? = null,
-    val clientId: Long = 0L,
-    val displayName: String? = null,
-    val mobileNo: String? = null,
-)
+fun <T> List<T>.toArrayList(): ArrayList<T> {
+    return ArrayList(this)
+}

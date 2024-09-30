@@ -18,7 +18,6 @@ class KMPLibraryConventionPlugin: Plugin<Project> {
                 apply("mifospay.kmp.koin")
                 apply("mifos.detekt.plugin")
                 apply("mifos.spotless.plugin")
-                apply("mifos.ktlint.plugin")
             }
 
             configureKotlinMultiplatform()
