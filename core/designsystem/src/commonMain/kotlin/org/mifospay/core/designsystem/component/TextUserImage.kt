@@ -30,8 +30,7 @@ fun MifosTextUserImage(
     size: Dp = 100.dp,
 ) {
     Box(
-        modifier =
-        modifier
+        modifier = modifier
             .size(size)
             .clip(CircleShape)
             .background(color = MaterialTheme.colorScheme.primary),

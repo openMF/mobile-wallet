@@ -21,7 +21,7 @@ import androidx.compose.ui.graphics.Color
 fun MifosScaffold(
     backPress: () -> Unit,
     modifier: Modifier = Modifier,
-    topBarTitle: Int? = null,
+    topBarTitle: String? = null,
     floatingActionButtonContent: FloatingActionButtonContent? = null,
     snackbarHost: @Composable () -> Unit = {},
     scaffoldContent: @Composable (PaddingValues) -> Unit = {},

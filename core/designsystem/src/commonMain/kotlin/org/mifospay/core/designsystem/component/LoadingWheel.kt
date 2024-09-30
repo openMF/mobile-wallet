@@ -46,7 +46,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.mifospay.core.designsystem.theme.MifosTheme
@@ -189,7 +188,7 @@ fun MfLoadingWheel(
     }
 }
 
-@Preview
+@ThemePreviews
 @Composable
 fun MifosLoadingWheelPreview() {
     MifosTheme {
@@ -199,7 +198,7 @@ fun MifosLoadingWheelPreview() {
     }
 }
 
-@Preview
+@ThemePreviews
 @Composable
 fun NiaOverlayLoadingWheelPreview() {
     MifosTheme {

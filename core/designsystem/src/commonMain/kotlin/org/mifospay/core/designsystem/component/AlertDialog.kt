@@ -16,27 +16,26 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 
 @Composable
 fun MifosDialogBox(
+    title: String,
     showDialogState: Boolean,
-    onDismiss: () -> Unit,
-    title: Int,
-    confirmButtonText: Int,
+    confirmButtonText: String,
+    dismissButtonText: String,
     onConfirm: () -> Unit,
-    dismissButtonText: Int,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
-    message: Int? = null,
+    message: String? = null,
 ) {
     if (showDialogState) {
         AlertDialog(
             modifier = modifier,
             onDismissRequest = onDismiss,
-            title = { Text(text = stringResource(id = title)) },
+            title = { Text(text = title) },
             text = {
                 if (message != null) {
-                    Text(text = stringResource(id = message))
+                    Text(text = message)
                 }
             },
             confirmButton = {
@@ -45,12 +44,12 @@ fun MifosDialogBox(
                         onConfirm()
                     },
                 ) {
-                    Text(stringResource(id = confirmButtonText))
+                    Text(text = confirmButtonText)
                 }
             },
             dismissButton = {
                 TextButton(onClick = onDismiss) {
-                    Text(stringResource(id = dismissButtonText))
+                    Text(text = dismissButtonText)
                 }
             },
         )
