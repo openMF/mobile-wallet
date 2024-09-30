@@ -11,16 +11,16 @@ package org.mifospay.core.model.entity.standinginstruction
 
 import kotlinx.serialization.Serializable
 import org.mifospay.core.model.entity.accounts.savings.SavingAccount
-import org.mifospay.core.model.entity.client.Client
+import org.mifospay.core.model.entity.client.ClientEntity
 import org.mifospay.core.model.entity.client.Status
 
 @Serializable
 data class StandingInstruction(
     val id: Long,
     val name: String,
-    val fromClient: Client,
+    val fromClient: ClientEntity,
     val fromAccount: SavingAccount,
-    val toClient: Client,
+    val toClient: ClientEntity,
     val toAccount: SavingAccount,
     val status: Status,
     val amount: Double,

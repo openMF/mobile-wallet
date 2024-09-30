@@ -14,18 +14,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Client(
     val name: String? = null,
-    val image: String,
+    val image: String? = null,
     val externalId: String? = null,
     val clientId: Long = 0L,
-    val displayName: String,
-    val mobileNo: String,
-) {
-    constructor() : this(
-        name = "",
-        image = "",
-        externalId = "",
-        clientId = 0L,
-        displayName = "",
-        mobileNo = "",
-    )
-}
+    val displayName: String? = null,
+    val mobileNo: String? = null,
+)

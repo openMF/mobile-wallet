@@ -30,7 +30,7 @@ datastore = "1.1.1"
 dependencyGuard = "0.5.0"
 detekt = "1.23.7"
 espresso-core = "3.6.1"
-fineractSdk = "1.06"
+fineractSdk = "1.0.3"
 firebaseBom = "33.3.0"
 firebaseCrashlyticsPlugin = "3.0.2"
 firebasePerfPlugin = "1.4.2"
@@ -188,6 +188,8 @@ kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 ktlint-gradlePlugin = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint" }
 ktor-client-android = { group = "io.ktor", name = "ktor-client-android", version.ref = "ktorVersion" }
+ktor-client-auth = { group = "io.ktor", name = "ktor-client-auth", version.ref = "ktorVersion" }
+ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio", version.ref = "ktorVersion" }
 ktor-client-content-negotiation = { group = "io.ktor", name = "ktor-client-content-negotiation", version.ref = "ktorVersion" }
 ktor-client-core = { group = "io.ktor", name = "ktor-client-core", version.ref = "ktorVersion" }
 ktor-client-darwin = { group = "io.ktor", name = "ktor-client-darwin", version.ref = "ktorVersion" }
@@ -231,6 +233,7 @@ squareup-retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", vers
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
 twitter-detekt-compose = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "twitter-detekt-compose" }
 zxing = { group = "com.google.zxing", name = "core", version.ref = "zxingVersion" }
+fineract-api = { group = "io.github.niyajali", name = "fineract-client-kmp", version.ref = "fineractSdk" }
 
 [bundles]
 androidx-compose-ui-test = [
@@ -276,6 +279,7 @@ mifospay-cmp-feature = { id = "mifospay.cmp.feature", version = "unspecified" }
 mifospay-jvm-library = { id = "mifospay.jvm.library", version = "unspecified" }
 mifospay-kmp-koin = { id = "mifospay.kmp.koin", version = "unspecified" }
 mifospay-kmp-library = { id = "mifospay.kmp.library", version = "unspecified" }
+mifospay-kotlin-inject = { id = "mifospay.kmp.inject", version = "unspecified" }
 module-graph = { id = "com.jraska.module.graph.assertion", version.ref = "moduleGraph" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }

@@ -30,4 +30,6 @@ data class TransactionType(
     val overdraftFee: Boolean = false,
     val withholdTax: Boolean = false,
     val escheat: Boolean? = null,
+    val amountHold: Boolean = false,
+    val amountRelease: Boolean = false,
 )
