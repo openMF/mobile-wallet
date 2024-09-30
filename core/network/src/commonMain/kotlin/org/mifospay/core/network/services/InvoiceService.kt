@@ -20,32 +20,33 @@ import org.mifospay.core.model.entity.Invoice
 import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.model.GenericResponse
 
+// TODO:: Fix this endpoints, there's no such endpoint for invoices
 interface InvoiceService {
-    @POST(ApiEndPoints.DATATABLES + "/invoices/{clientId}")
-    fun addInvoice(
-        @Path("clientId") clientId: String,
-        @Body invoice: Invoice?,
-    )
-
     @GET(ApiEndPoints.DATATABLES + "/invoices/{clientId}")
-    fun getInvoices(@Path("clientId") clientId: String): Flow<List<Invoice>>
+    fun getInvoices(@Path("clientId") clientId: Int): Flow<List<Invoice>>
 
     @GET(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
     fun getInvoice(
-        @Path("clientId") clientId: String,
-        @Path("invoiceId") invoiceId: String,
-    ): Flow<List<Invoice>>
-
-    @DELETE(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
-    fun deleteInvoice(
-        @Path("clientId") clientId: String,
+        @Path("clientId") clientId: Int,
         @Path("invoiceId") invoiceId: Int,
-    ): Flow<GenericResponse>
+    ): Flow<Invoice>
+
+    @POST(ApiEndPoints.DATATABLES + "/invoices/{clientId}")
+    fun addInvoice(
+        @Path("clientId") clientId: Int,
+        @Body invoice: Invoice?,
+    ): Unit
 
     @PUT(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
     fun updateInvoice(
-        @Path("clientId") clientId: String,
-        @Path("invoiceId") invoiceId: Long,
+        @Path("clientId") clientId: Int,
+        @Path("invoiceId") invoiceId: Int,
         @Body invoice: Invoice?,
+    ): Flow<GenericResponse>
+
+    @DELETE(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
+    fun deleteInvoice(
+        @Path("clientId") clientId: Int,
+        @Path("invoiceId") invoiceId: Int,
     ): Flow<GenericResponse>
 }

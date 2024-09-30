@@ -17,45 +17,44 @@ import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.entity.Page
 import org.mifospay.core.model.entity.accounts.savings.SavingAccount
-import org.mifospay.core.model.entity.accounts.savings.SavingsWithAssociations
-import org.mifospay.core.model.entity.accounts.savings.Transactions
+import org.mifospay.core.model.entity.accounts.savings.SavingsWithAssociationsEntity
+import org.mifospay.core.model.entity.accounts.savings.TransactionsEntity
 import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.model.GenericResponse
 
 interface SavingsAccountsService {
     @GET(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}")
-    fun getSavingsWithAssociations(
+    suspend fun getSavingsWithAssociations(
         @Path("accountId") accountId: Long,
         @Query("associations") associationType: String,
-    ): Flow<SavingsWithAssociations>
+    ): Flow<SavingsWithAssociationsEntity>
 
     @GET(ApiEndPoints.SAVINGS_ACCOUNTS)
-    fun getSavingsAccounts(
+    suspend fun getSavingsAccounts(
         @Query("limit") limit: Int,
-    ): Flow<Page<SavingsWithAssociations>>
+    ): Flow<Page<SavingsWithAssociationsEntity>>
 
     @POST(ApiEndPoints.SAVINGS_ACCOUNTS)
-    fun createSavingsAccount(@Body savingAccount: SavingAccount): Flow<GenericResponse>
+    suspend fun createSavingsAccount(@Body savingAccount: SavingAccount): Flow<GenericResponse>
 
     @POST(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}")
-    fun blockUnblockAccount(
+    suspend fun blockUnblockAccount(
         @Path("accountId") accountId: Long,
         @Query("command") command: String?,
     ): Flow<GenericResponse>
 
     @GET(
         ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}/" + ApiEndPoints.TRANSACTIONS +
-                "/{transactionId}",
+            "/{transactionId}",
     )
-    fun getSavingAccountTransaction(
+    suspend fun getSavingAccountTransaction(
         @Path("accountId") accountId: Long,
         @Path("transactionId") transactionId: Long,
-    ): Flow<Transactions>
+    ): Flow<TransactionsEntity>
 
     @POST(
         ApiEndPoints.SAVINGS_ACCOUNTS +
-                "/{accountId}/" + ApiEndPoints.TRANSACTIONS + "?command=deposit",
+            "/{accountId}/" + ApiEndPoints.TRANSACTIONS + "?command=deposit",
     )
-    fun payViaMobile(@Path("accountId") accountId: Long): Flow<Transactions>
+    suspend fun payViaMobile(@Path("accountId") accountId: Long): Flow<TransactionsEntity>
 }
-

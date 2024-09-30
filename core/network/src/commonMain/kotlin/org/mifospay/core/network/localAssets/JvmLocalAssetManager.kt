@@ -14,9 +14,8 @@ import okio.FileSystem
 import okio.Path.Companion.toPath
 import okio.SYSTEM
 
-
 internal object JvmLocalAssetManager : LocalAssetManager {
-    override fun open(fileName: String):  FileHandle {
+    override fun open(fileName: String): FileHandle {
         val path = fileName.toPath()
         return FileSystem.SYSTEM.openReadOnly(path)
     }

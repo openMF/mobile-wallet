@@ -44,7 +44,7 @@ val NetworkModule = module {
 
     single {
         SelfServiceApiManager(
-            ktorfitClient = get(SelfClient)
+            ktorfitClient = get(SelfClient),
         )
     }
 }

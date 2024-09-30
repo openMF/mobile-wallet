@@ -31,14 +31,14 @@ interface BeneficiaryService {
     fun beneficiaryTemplate(): Flow<BeneficiaryTemplate>
 
     @POST(ApiEndPoints.BENEFICIARIES + "/tpt")
-    fun createBeneficiary(@Body beneficiaryPayload: BeneficiaryPayload): CommonResponse
+    fun createBeneficiary(@Body beneficiaryPayload: BeneficiaryPayload): Flow<CommonResponse>
 
     @PUT(ApiEndPoints.BENEFICIARIES + "/tpt/{beneficiaryId}")
     fun updateBeneficiary(
         @Path("beneficiaryId") beneficiaryId: Long,
         @Body payload: BeneficiaryUpdatePayload,
-    ): CommonResponse
+    ): Flow<CommonResponse>
 
     @DELETE(ApiEndPoints.BENEFICIARIES + "/tpt/{beneficiaryId}")
-    fun deleteBeneficiary(@Path("beneficiaryId") beneficiaryId: Long): CommonResponse
+    fun deleteBeneficiary(@Path("beneficiaryId") beneficiaryId: Long): Flow<CommonResponse>
 }

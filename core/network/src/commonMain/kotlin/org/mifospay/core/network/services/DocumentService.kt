@@ -40,11 +40,11 @@ interface DocumentService {
     @Multipart
     fun createDocument(
         @Path("entityType") entityType: String,
-        @Path("entityId") entityId: Long,
+        @Path("entityId") entityId: Int,
         @Part("name") nameOfDocument: String,
         @Part("description") description: String,
         @Part typedFile: PartData,
-    )
+    ): Flow<Unit>
 
     /**
      * This Service is for downloading the Document with EntityType and EntityId and Document Id
@@ -81,7 +81,7 @@ interface DocumentService {
         @Path("entityType") entityType: String,
         @Path("entityId") entityId: Int,
         @Path("documentId") documentId: Int,
-    )
+    ): Flow<Unit>
 
     /**
      * This Service for Updating the Document with EntityType and EntityId and Document Id.
@@ -107,5 +107,5 @@ interface DocumentService {
         @Part("name") nameOfDocument: String,
         @Part("description") description: String,
         @Part typedFile: PartData,
-    )
+    ): Flow<Unit>
 }

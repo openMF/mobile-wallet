@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.network
 
-
 object BaseURL {
     private const val PROTOCOL_HTTPS = "https://"
     private const val API_ENDPOINT = "venus.mifos.community"
@@ -29,5 +28,3 @@ object BaseURL {
     val selfServiceUrl: String
         get() = PROTOCOL_HTTPS + API_ENDPOINT_SELF + API_PATH_SELF
 }
-
-

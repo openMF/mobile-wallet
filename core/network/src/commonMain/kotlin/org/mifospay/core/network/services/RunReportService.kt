@@ -11,6 +11,8 @@ package org.mifospay.core.network.services
 
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Query
+import kotlinx.coroutines.flow.Flow
+import org.mifospay.core.model.entity.accounts.savings.TransactionsEntity
 import org.mifospay.core.network.ApiEndPoints
 
 interface RunReportService {
@@ -18,5 +20,5 @@ interface RunReportService {
     fun getTransactionReceipt(
         @Query("output-type") outputType: String,
         @Query("R_transactionId") transactionId: String,
-    )
+    ): Flow<TransactionsEntity>
 }

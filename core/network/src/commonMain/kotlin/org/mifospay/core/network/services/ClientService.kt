@@ -19,32 +19,32 @@ import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.domain.client.NewClient
 import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.client.Client
 import org.mifospay.core.model.entity.client.ClientAccounts
+import org.mifospay.core.model.entity.client.ClientEntity
 import org.mifospay.core.network.ApiEndPoints
 
 interface ClientService {
     @GET(ApiEndPoints.CLIENTS)
-    fun clients(): Flow<Page<Client>>
+    fun clients(): Flow<Page<ClientEntity>>
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}")
-    fun getClientForId(@Path("clientId") clientId: Long): Flow<Client>
+    fun getClientForId(@Path("clientId") clientId: Long): Flow<ClientEntity>
 
     @PUT(ApiEndPoints.CLIENTS + "/{clientId}")
     fun updateClient(
         @Path("clientId") clientId: Long,
         @Body payload: Any,
-    )
+    ): Flow<Unit>
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/images")
     @Headers("Accept: text/plain")
-    fun getClientImage(@Path("clientId") clientId: Long): String
+    fun getClientImage(@Path("clientId") clientId: Long): Flow<String>
 
     @PUT(ApiEndPoints.CLIENTS + "/{clientId}/images")
     fun updateClientImage(
         @Path("clientId") clientId: Long,
         @Body typedFile: String?,
-    )
+    ): Flow<Unit>
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
     fun getClientAccounts(@Path("clientId") clientId: Long): Flow<ClientAccounts>
@@ -56,5 +56,5 @@ interface ClientService {
     ): Flow<ClientAccounts>
 
     @POST(ApiEndPoints.CLIENTS)
-    fun createClient(@Body newClient: NewClient): Flow<Client>
+    fun createClient(@Body newClient: NewClient): Flow<ClientEntity>
 }

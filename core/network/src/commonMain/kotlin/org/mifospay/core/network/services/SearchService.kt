@@ -17,7 +17,7 @@ import org.mifospay.core.network.ApiEndPoints
 
 interface SearchService {
     @GET(ApiEndPoints.SEARCH)
-    fun searchResources(
+    suspend fun searchResources(
         @Query("query") query: String,
         @Query("resource") resources: String,
         @Query("exactMatch") exactMatch: Boolean,
