@@ -7,16 +7,13 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.model.domain.client
+package org.mifospay.core.ui
 
-import kotlinx.serialization.Serializable
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
-@Serializable
-data class Client(
-    val name: String? = null,
-    val image: String? = null,
-    val externalId: String? = null,
-    val clientId: Long = 0L,
-    val displayName: String? = null,
-    val mobileNo: String? = null,
-)
+/**
+ * Multipreview annotation that represents various device sizes. Add this annotation to a composable
+ * to render various devices.
+ */
+@Preview
+annotation class DevicePreviews

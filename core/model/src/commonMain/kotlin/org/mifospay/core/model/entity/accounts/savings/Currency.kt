@@ -19,7 +19,7 @@ data class Currency(
     val inMultiplesOf: Int? = null,
     val displaySymbol: String = "",
     val nameCode: String = "",
-    val displayLabel: String = ""
+    val displayLabel: String = "",
 ) {
     constructor() : this(
         code = "",

@@ -23,7 +23,7 @@ data class Invoice(
     val title: String? = null,
     val date: List<Int> = ArrayList(),
 
-    ) {
+) {
     constructor() : this(
         consumerId = null,
         consumerName = null,

@@ -30,7 +30,7 @@ data class DepositType(
         RECURRING(
             id = 300,
             code = "depositAccountType.recurringDeposit",
-            endpoint = "recurringdepositaccounts"
+            endpoint = "recurringdepositaccounts",
         ),
         ;
 
