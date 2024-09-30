@@ -11,6 +11,7 @@
 <resources>
     <string name="feature_settings_alert_disable_account">Are you sure you want to disable account?</string>
     <string name="feature_settings_notification_settings">Notification Settings</string>
+    <string name="feature_settings_faq">FAQ</string>
     <string name="feature_settings_settings">Settings</string>
     <string name="feature_settings_change_password">Change Password</string>
     <string name="feature_settings_change_passcode">Change Passcode</string>
