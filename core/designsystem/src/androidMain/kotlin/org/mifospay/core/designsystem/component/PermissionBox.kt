@@ -30,15 +30,16 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 
+// TODO:: Support for compose multiplatform
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
 fun PermissionBox(
+    title: String,
+    confirmButtonText: String,
+    dismissButtonText: String,
     requiredPermissions: List<String>,
-    title: Int,
-    confirmButtonText: Int,
-    dismissButtonText: Int,
     modifier: Modifier = Modifier,
-    description: Int? = null,
+    description: String? = null,
     onGranted: @Composable (() -> Unit)? = null,
 ) {
     val context = LocalContext.current

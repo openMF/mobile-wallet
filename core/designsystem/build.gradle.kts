@@ -74,8 +74,17 @@ kotlin {
             implementation(compose.uiUtil)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(libs.back.handler)
+            implementation(libs.moko.permission)
+            implementation(libs.moko.permission.compose)
         }
     }
+}
+
+compose.resources {
+    publicResClass = true
+    packageOfResClass = "org.mifospay.core.designsystem.resources"
+    generateResClass = always
 }
 
 dependencies {
