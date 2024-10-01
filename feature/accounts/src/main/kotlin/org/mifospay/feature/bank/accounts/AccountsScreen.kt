@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -107,9 +108,13 @@ private fun AccountScreen(
                         item {
                             Text(
                                 text = stringResource(id = R.string.feature_accounts_linked_bank_account),
-                                fontSize = 16.sp,
+                                fontSize = 19.sp,
                                 color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(top = 48.dp, start = 24.dp),
+                                modifier = Modifier.padding(
+                                    top = 45.dp,
+                                    start = 25.dp,
+                                    bottom = 15.dp,
+                                ),
                             )
                         }
                         items(bankAccountDetailsList) { bankAccountDetails ->
@@ -121,6 +126,7 @@ private fun AccountScreen(
                                 },
                             )
                             HorizontalDivider(
+                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
                                 modifier = Modifier.padding(8.dp),
                             )
                         }
@@ -129,7 +135,7 @@ private fun AccountScreen(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(16.dp)
-                                    .background(MaterialTheme.colorScheme.surface),
+                                    .background(Color.Transparent),
                             ) {
                                 AddCardChip(
                                     text = R.string.feature_accounts_add_account,
