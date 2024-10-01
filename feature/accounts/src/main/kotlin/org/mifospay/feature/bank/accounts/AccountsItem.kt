@@ -9,6 +9,7 @@
  */
 package org.mifospay.feature.bank.accounts
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -39,35 +40,29 @@ internal fun AccountsItem(
     ) {
         Column {
             Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp),
             ) {
-                Column {
-                    Text(
-                        text = bankAccountDetails.accountholderName.toString(),
-                        color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.bodyLarge,
-                    )
-                    Text(
-                        text = bankAccountDetails.bankName.toString(),
-                        modifier = Modifier.padding(top = 4.dp),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-                    )
-                }
-                Column(
-                    horizontalAlignment = Alignment.End,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    Text(
-                        text = bankAccountDetails.branch.toString(),
-                        modifier = Modifier.padding(16.dp),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                }
+                Text(
+                    text = bankAccountDetails.accountholderName.toString(),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                Text(
+                    text = bankAccountDetails.bankName.toString(),
+                    modifier = Modifier.padding(top = 4.dp),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                )
             }
+            Text(
+                text = bankAccountDetails.branch.toString(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
         }
     }
 }

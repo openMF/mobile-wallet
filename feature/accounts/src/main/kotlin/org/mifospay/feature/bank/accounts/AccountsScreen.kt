@@ -26,9 +26,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifos.library.pullrefresh.PullRefreshIndicator
 import com.mifos.library.pullrefresh.pullRefresh
@@ -108,7 +108,8 @@ private fun AccountScreen(
                         item {
                             Text(
                                 text = stringResource(id = R.string.feature_accounts_linked_bank_account),
-                                fontSize = 19.sp,
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary,
                                 modifier = Modifier.padding(
                                     top = 45.dp,

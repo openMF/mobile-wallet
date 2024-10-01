@@ -9,7 +9,6 @@
  */
 package org.mifospay.feature.home
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,7 +18,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -27,24 +25,32 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowOutward
+import androidx.compose.material.icons.filled.KeyboardArrowUp
+import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifospay.core.model.domain.Account
 import com.mifospay.core.model.domain.Currency
@@ -53,8 +59,7 @@ import com.mifospay.core.model.domain.TransactionType
 import org.koin.androidx.compose.koinViewModel
 import org.mifospay.common.Utils
 import org.mifospay.core.designsystem.component.MfLoadingWheel
-import org.mifospay.core.designsystem.theme.border
-import org.mifospay.core.designsystem.theme.lightGrey
+import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.TransactionItemScreen
 
@@ -110,99 +115,139 @@ private fun HomeScreen(
 ) {
     LazyColumn(
         modifier = modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.surface),
-        contentPadding = PaddingValues(start = 16.dp, end = 16.dp),
+            .fillMaxSize(),
+        contentPadding = PaddingValues(horizontal = 20.dp),
     ) {
         item {
-            MifosWalletCardScreen(account = account)
-        }
-        item {
-            PayRequestScreen(
-                onRequest = onRequest,
-                onPay = onPay,
+            MifosWalletCard(
+                modifier = Modifier.padding(top = 20.dp),
+                account = account,
             )
         }
+
+        item {
+            PayRequestScreen(
+                modifier = Modifier.padding(vertical = 20.dp),
+                onRequest = onRequest,
+                onSend = onPay,
+            )
+        }
+
+        item {
+            MifosSendMoneyFreeCard()
+        }
+
         if (transactions.isNotEmpty()) {
             item {
-                Text(
-                    modifier = Modifier.padding(top = 32.dp),
-                    text = "Recent Transactions",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface,
+                TransactionHistoryCard(
+                    modifier = Modifier.padding(vertical = 20.dp),
+                    transactions = transactions,
                 )
-                Spacer(modifier = Modifier.height(16.dp))
             }
-        }
-        items(transactions) { transaction ->
-            TransactionItemScreen(transaction = transaction)
-        }
-        item {
-            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
 
 @Composable
-private fun MifosWalletCardScreen(
+private fun MifosWalletCard(
     modifier: Modifier = Modifier,
     account: Account? = null,
 ) {
-    Card(
+    Box(
         modifier = modifier
             .fillMaxWidth()
-            .height(225.dp)
-            .padding(top = 20.dp, bottom = 32.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.onSurface),
+            .height(200.dp)
+            .background(
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        NewUi.walletColor1,
+                        NewUi.walletColor2,
+                    ),
+                ),
+                shape = RoundedCornerShape(16.dp),
+            ),
     ) {
-        Column(
+        Card(
             modifier = Modifier
-                .fillMaxHeight()
-                .padding(start = 36.dp),
-            verticalArrangement = Arrangement.Center,
+                .fillMaxSize(),
+            colors = CardDefaults.cardColors(
+                containerColor = Color.Transparent,
+            ),
         ) {
-            val walletBalanceLabel =
-                if (account != null) "(${account.currency.displayLabel})" else ""
-            Text(
-                text = "Wallet Balance $walletBalanceLabel",
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.W400,
-                    color = lightGrey,
-                ),
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            val accountBalance =
-                if (account != null) {
-                    Utils.getFormattedAccountBalance(
-                        account.balance,
-                        account.currency.code,
-                    )
-                } else {
-                    "0"
+            Column(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                ) {
+                    Column(modifier = Modifier.padding(20.dp)) {
+                        Text(
+                            text = "Client Name",
+                            fontWeight = FontWeight(300),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.surface,
+                        )
+
+                        Text(
+                            text = account?.name ?: "Username",
+                            fontWeight = FontWeight(400),
+                            color = MaterialTheme.colorScheme.surface,
+                        )
+                    }
+
+                    IconButton(onClick = { }, modifier = Modifier.padding(end = 12.dp)) {
+                        Icon(
+                            imageVector = Icons.Filled.MoreHoriz,
+                            contentDescription = "more",
+                            tint = MaterialTheme.colorScheme.surface,
+                        )
+                    }
                 }
-            Text(
-                text = accountBalance,
-                style = TextStyle(
-                    fontSize = 42.sp,
-                    fontWeight = FontWeight(600),
-                    color = MaterialTheme.colorScheme.surface,
-                ),
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            val currencyEqual = if (account != null) {
-                "${account.currency.code}1 ${account.currency.displayLabel}"
-            } else {
-                ""
+
+                Spacer(modifier = Modifier.weight(1f))
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(20.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.Bottom,
+                ) {
+                    Column {
+                        Text(
+                            text = "Wallet Balance",
+                            fontWeight = FontWeight(300),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.surface,
+                        )
+
+                        val accountBalance =
+                            if (account != null) {
+                                Utils.getNewCurrencyFormatter(
+                                    account.balance,
+                                    account.currency.displaySymbol,
+                                )
+                            } else {
+                                "0"
+                            }
+                        Text(
+                            text = accountBalance,
+                            color = MaterialTheme.colorScheme.surface,
+                            style = MaterialTheme.typography.headlineLarge,
+                        )
+                    }
+
+                    Icon(
+                        modifier = Modifier
+                            .graphicsLayer(rotationZ = 90f)
+                            .padding(4.dp),
+                        imageVector = Icons.Filled.KeyboardArrowUp,
+                        contentDescription = "arrow",
+                        tint = MaterialTheme.colorScheme.surface,
+                    )
+                }
             }
-            Text(
-                text = currencyEqual,
-                style = TextStyle(
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight(500),
-                    color = lightGrey,
-                ),
-            )
         }
     }
 }
@@ -210,70 +255,157 @@ private fun MifosWalletCardScreen(
 @Composable
 private fun PayRequestScreen(
     onRequest: () -> Unit,
-    onPay: () -> Unit,
+    onSend: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        PayCard(
-            title = "Request",
-            icon = R.drawable.core_ui_money_in,
-            {
-                onRequest.invoke()
+        PaymentButton(
+            modifier = Modifier
+                .weight(1f)
+                .height(55.dp),
+            text = "Request",
+            onClick = onRequest,
+            leadingIcon = {
+                Icon(
+                    modifier = Modifier
+                        .size(26.dp)
+                        .graphicsLayer(rotationZ = 180f),
+                    imageVector = Icons.Filled.ArrowOutward,
+                    contentDescription = "request money",
+                )
             },
-            modifier = Modifier.weight(1f),
         )
-        Spacer(modifier = Modifier.width(16.dp))
-        PayCard(
-            title = "Pay",
-            icon = R.drawable.core_ui_money_out,
-            {
-                onPay.invoke()
+
+        Spacer(modifier = Modifier.width(20.dp))
+
+        PaymentButton(
+            modifier = Modifier
+                .weight(1f)
+                .height(55.dp),
+            text = "Send",
+            onClick = onSend,
+            leadingIcon = {
+                Icon(
+                    modifier = Modifier.size(26.dp),
+                    imageVector = Icons.Filled.ArrowOutward,
+                    contentDescription = "Send money",
+                )
             },
-            modifier = Modifier.weight(1f),
         )
     }
 }
 
 @Composable
-private fun PayCard(
-    title: String,
-    icon: Int,
-    onClickCard: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
+@Preview(showSystemUi = true)
+fun MifosSendMoneyFreeCard(modifier: Modifier = Modifier) {
     Card(
-        modifier = modifier
-            .height(144.dp)
-            .clickable { onClickCard.invoke() },
-        border = BorderStroke(1.dp, border),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        modifier = modifier,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+        ),
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxHeight()
-                .padding(top = 20.dp, bottom = 20.dp, start = 20.dp),
-            verticalArrangement = Arrangement.SpaceBetween,
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Box(
+            Column(
                 modifier = Modifier
-                    .size(40.dp)
-                    .background(
-                        MaterialTheme.colorScheme.onSurface,
-                        shape = RoundedCornerShape(4.dp),
-                    ),
-                contentAlignment = Alignment.Center,
+                    .padding(start = 20.dp, end = 10.dp, top = 20.dp, bottom = 20.dp)
+                    .weight(7.5f),
             ) {
-                Image(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(id = icon),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surface),
+                Text(
+                    text = stringResource(id = R.string.start_sending_your_money_tax_free),
+                    color = NewUi.primaryColor,
+                    fontWeight = FontWeight(500),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+                Text(
+                    text = "Mifos Pay is the best place for users to receive and send money. Start saving money now!",
+                    color = NewUi.onSurface,
+                    style = MaterialTheme.typography.bodySmall,
+                    fontWeight = FontWeight(300),
                 )
             }
-            Text(text = title)
+
+            Image(
+                modifier = Modifier.weight(2.5f),
+                contentScale = ContentScale.Fit,
+                painter = painterResource(id = R.drawable.coin_image),
+                contentDescription = "coin Image",
+            )
+        }
+    }
+}
+
+@Composable
+fun TransactionHistoryCard(transactions: List<Transaction>, modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.White,
+        ),
+    ) {
+        Column {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 20.dp, bottom = 10.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Text(
+                    text = "Transaction History",
+                    color = NewUi.primaryColor,
+                    fontWeight = FontWeight(500),
+                )
+
+                Box(
+                    modifier = Modifier.clickable(
+                        onClick = { },
+                    ),
+                ) {
+                    Text(
+                        text = "See All",
+                        color = MaterialTheme.colorScheme.onSurface,
+                        style = MaterialTheme.typography.bodySmall,
+                        fontWeight = FontWeight(300),
+                    )
+                }
+            }
+            transactions.forEachIndexed { _, transaction ->
+                TransactionItemScreen(transaction = transaction)
+            }
+        }
+    }
+}
+
+@Composable
+private fun PaymentButton(
+    text: String,
+    leadingIcon: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+) {
+    Button(
+        modifier = modifier,
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.onSurface,
+        ),
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            leadingIcon()
+            Spacer(modifier = Modifier.width(4.dp))
+            Text(
+                text = text,
+                fontWeight = FontWeight(400),
+            )
         }
     }
 }
@@ -316,15 +448,4 @@ private fun HomeScreenPreview() {
 @Composable
 private fun PayRequestScreenPreview() {
     PayRequestScreen({}, {})
-}
-
-@Preview
-@Composable
-private fun PayCardPreview() {
-    PayCard(
-        "Request",
-        R.drawable.feature_home_ic_arrow_back_black_24dp,
-        { },
-        Modifier.width(150.dp),
-    )
 }
