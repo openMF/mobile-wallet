@@ -26,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun ProfileDetailsCard(
@@ -45,7 +44,7 @@ fun ProfileDetailsCard(
         ),
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = NewUi.containerColor,
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
         ),
     ) {
         Column(
@@ -79,7 +78,7 @@ fun ProfileItem(
     ) {
         Text(
             text = label,
-            color = NewUi.primaryColor,
+            color = MaterialTheme.colorScheme.primary,
             style = MaterialTheme.typography.labelLarge,
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -92,7 +91,7 @@ fun ProfileItem(
         Spacer(modifier = Modifier.height(4.dp))
         HorizontalDivider(
             thickness = 1.dp,
-            color = NewUi.onSurface.copy(alpha = 0.05f),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
         )
     }
 }

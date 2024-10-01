@@ -57,7 +57,7 @@ internal fun StandingInstructionScreen(
 ) {
     val floatingActionButtonContent = FloatingActionButtonContent(
         onClick = onNewSI,
-        contentColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
         content = {
             Icon(
                 imageVector = MifosIcons.Add,
@@ -70,8 +70,7 @@ internal fun StandingInstructionScreen(
         backPress = onBackPress,
         floatingActionButtonContent = floatingActionButtonContent,
         modifier = modifier,
-        scaffoldContent = {
-        },
+        scaffoldContent = {},
     ) {
         when (standingInstructionsUiState) {
             StandingInstructionsUiState.Empty -> {
