@@ -26,6 +26,19 @@ object Utils {
         return accountBalanceFormatter.format(balance)
     }
 
+    // returns in "$ 10,000.00" format
+    fun getNewCurrencyFormatter(
+        balance: Double,
+        currencySymbol: String,
+        minimumFractionDigit: Int = 0,
+    ): String {
+        val accountBalanceFormatter = NumberFormat.getNumberInstance().apply {
+            maximumFractionDigits = 2
+            minimumFractionDigits = minimumFractionDigit
+        }
+        return currencySymbol + " " + accountBalanceFormatter.format(balance)
+    }
+
     fun <T> List<T>.toArrayList(): ArrayList<T> {
         val array: ArrayList<T> = ArrayList()
         for (index in this) array.add(index)
