@@ -52,16 +52,16 @@ internal fun AccountsItem(
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
-                    text = bankAccountDetails.bankName.toString(),
-                    modifier = Modifier.padding(top = 4.dp),
+                    text = bankAccountDetails.branch.toString(),
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
             Text(
-                text = bankAccountDetails.branch.toString(),
+                text = bankAccountDetails.bankName.toString(),
+                modifier = Modifier.padding(top = 4.dp),
                 style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
             )
         }
     }
