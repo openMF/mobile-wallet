@@ -29,7 +29,6 @@ fun AddCardChip(
     btnText: Int,
     onAddBtn: () -> Unit,
     modifier: Modifier = Modifier,
-    border: Int = 1,
 ) {
     AssistChip(
         modifier = modifier,
