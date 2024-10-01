@@ -26,6 +26,7 @@ fun NavGraphBuilder.settingsScreen(
     navigateToEditPasswordScreen: () -> Unit,
     onLogout: () -> Unit,
     onChangePasscode: () -> Unit,
+    navigateToFaqScreen: () -> Unit,
 ) {
     composable(route = SETTINGS_ROUTE) {
         SettingsScreenRoute(
@@ -33,6 +34,7 @@ fun NavGraphBuilder.settingsScreen(
             navigateToEditPasswordScreen = navigateToEditPasswordScreen,
             onLogout = onLogout,
             onChangePasscode = onChangePasscode,
+            navigateToFaqScreen = navigateToFaqScreen,
         )
     }
 }

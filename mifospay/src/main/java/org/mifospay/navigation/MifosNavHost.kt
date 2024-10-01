@@ -26,6 +26,7 @@ import org.mifospay.feature.bank.accounts.navigation.navigateToLinkBankAccount
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
+import org.mifospay.feature.faq.navigation.navigateToFAQ
 import org.mifospay.feature.finance.FinanceScreenContents
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.history.HistoryScreen
@@ -199,6 +200,7 @@ internal fun MifosNavHost(
                 onChangePasscode = {
                     // TODO:: Implement change passcode screen
                 },
+                navigateToFaqScreen = navController::navigateToFAQ,
             )
 
             kycScreen(
