@@ -82,16 +82,6 @@ class PhoneNumberTransformation(countryCode: String, context: Context) : VisualT
         val originalToTransformed = mutableListOf<Int>()
         val transformedToOriginal = mutableListOf<Int>()
         var specialCharsCount = 0
-//        formatted?.forEachIndexed { index, char ->
-//            if (!PhoneNumberUtils.isNonSeparator(char)) {
-//                specialCharsCount++
-//            } else {
-//                originalToTransformed.add(index)
-//            }
-//            transformedToOriginal.add(index - specialCharsCount)
-//        }
-//        originalToTransformed.add(originalToTransformed.maxOrNull()?.plus(1) ?: 0)
-//        transformedToOriginal.add(transformedToOriginal.maxOrNull()?.plus(1) ?: 0)
         if (formatted != null) {
             formatted?.forEachIndexed { index, char ->
                 if (!PhoneNumberUtils.isNonSeparator(char)) {

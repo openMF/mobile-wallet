@@ -141,7 +141,6 @@ private fun HistoryScreen(
                             TransactionItemScreen(
                                 transaction = it,
                                 modifier = Modifier
-                                    .padding(start = 24.dp, end = 24.dp)
                                     .clickable { transactionDetailState = it },
                             )
                             HorizontalDivider(thickness = 0.5.dp, modifier = Modifier.padding(5.dp))
