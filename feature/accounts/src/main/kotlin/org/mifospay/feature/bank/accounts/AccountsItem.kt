@@ -33,7 +33,7 @@ internal fun AccountsItem(
     modifier: Modifier = Modifier,
 ) {
     MifosCard(
-        modifier = modifier.padding(start = 25.dp, end = 15.dp),
+        modifier = modifier.padding(vertical = 15.dp),
         onClick = { onAccountClicked.invoke() },
         colors = CardDefaults.cardColors(Color.Transparent),
         elevation = 0.dp,
@@ -42,9 +42,7 @@ internal fun AccountsItem(
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 16.dp),
+                modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
                     text = bankAccountDetails.accountholderName.toString(),
@@ -59,7 +57,6 @@ internal fun AccountsItem(
             }
             Text(
                 text = bankAccountDetails.bankName.toString(),
-                modifier = Modifier.padding(top = 4.dp),
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
             )

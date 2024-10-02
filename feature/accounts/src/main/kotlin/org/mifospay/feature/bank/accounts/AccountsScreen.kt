@@ -103,7 +103,8 @@ private fun AccountScreen(
                     LazyColumn(
                         modifier = Modifier
                             .weight(1f)
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .padding(horizontal = 25.dp, vertical = 7.dp),
                     ) {
                         item {
                             Text(
@@ -111,11 +112,7 @@ private fun AccountScreen(
                                 style = MaterialTheme.typography.bodyLarge,
                                 fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(
-                                    top = 45.dp,
-                                    start = 25.dp,
-                                    bottom = 15.dp,
-                                ),
+                                modifier = Modifier.padding(vertical = 25.dp),
                             )
                         }
                         items(bankAccountDetailsList) { bankAccountDetails ->
@@ -126,10 +123,7 @@ private fun AccountScreen(
                                     onUpdateAccount(bankAccountDetails, index)
                                 },
                             )
-                            HorizontalDivider(
-                                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
-                                modifier = Modifier.padding(8.dp),
-                            )
+                            HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
                         }
                         item {
                             Box(
