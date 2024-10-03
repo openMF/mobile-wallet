@@ -46,7 +46,7 @@ private fun FaqScreen(
             .fillMaxSize(),
     ) {
         MifosTopBar(
-            topBarTitle = R.string.feature_faq_frequently_asked_questions,
+            topBarTitle = R.string.feature_faq,
             backPress = { navigateBack.invoke() },
         )
         LazyColumn(

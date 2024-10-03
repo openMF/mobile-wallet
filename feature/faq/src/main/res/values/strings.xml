@@ -17,5 +17,5 @@
     <string name="feature_faq_answer2">Navigate to Payments section. You will find your payment history under the History tab.</string>
     <string name="feature_faq_answer3">To make a transfer, navigate to Payments section.Under the Send tab, from there you can choose the type of transfer, add the amount and submit.</string>
     <string name="feature_faq_answer4">Navigate to Finance section. Click on Add Card under the Cards tab.</string>
-    <string name="feature_faq_frequently_asked_questions">Frequently Asked Question</string>
+    <string name="feature_faq">FAQ\'s</string>
 </resources>

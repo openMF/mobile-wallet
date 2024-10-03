@@ -26,6 +26,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.QrCode
@@ -66,7 +67,7 @@ object MifosIcons {
     val VisibilityOff: ImageVector = Icons.Filled.VisibilityOff
     val Visibility: ImageVector = Icons.Filled.Visibility
     val Check: ImageVector = Icons.Default.Check
-    val ArrowDropDown: ImageVector = Icons.Default.ArrowDropDown
+    val ArrowDropDown: ImageVector = Icons.Default.KeyboardArrowDown
     val Home = Icons.Outlined.Home
     val HomeBoarder = Icons.Rounded.Home
     val Payment = Icons.Rounded.SwapHoriz
