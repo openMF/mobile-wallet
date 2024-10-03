@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -134,17 +133,14 @@ private fun HistoryScreen(
                         label = stringResource(R.string.feature_history_debits),
                     )
                 }
-                Spacer(modifier = Modifier.height(24.dp))
+                Spacer(modifier = Modifier.height(12.dp))
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
                     items(filteredTransactions) {
                         Column {
                             TransactionItemScreen(
                                 transaction = it,
-                                modifier = Modifier
-                                    .clickable { transactionDetailState = it },
+                                modifier = Modifier.clickable { transactionDetailState = it },
                             )
-                            HorizontalDivider(thickness = 0.5.dp, modifier = Modifier.padding(5.dp))
-                            Spacer(modifier = Modifier.height(15.dp))
                         }
                     }
                 }
