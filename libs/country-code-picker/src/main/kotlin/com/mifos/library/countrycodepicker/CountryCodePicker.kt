@@ -15,12 +15,19 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.interaction.InteractionSource
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
@@ -37,6 +44,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.AutofillType
@@ -276,6 +284,246 @@ fun CountryCodePicker(
         singleLine = true,
         shape = shape,
         colors = colors,
+    )
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Suppress("LongMethod", "LongParameterList", "ComplexMethod")
+@Composable
+fun CountryCodePickerPayment(
+    onValueChange: (Pair<PhoneCode, String>, Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    autoDetectCode: Boolean = false,
+    enabled: Boolean = true,
+    showCountryCode: Boolean = true,
+    showCountryFlag: Boolean = true,
+    colors: TextFieldColors = OutlinedTextFieldDefaults.colors(),
+    fallbackCountry: CountryData = CountryData.UnitedStates,
+    showPlaceholder: Boolean = true,
+    includeOnly: ImmutableSet<String>? = null,
+    clearIcon: ImageVector? = Icons.Filled.Clear,
+    initialPhoneNumber: String? = null,
+    initialCountryIsoCode: Iso31661alpha2? = null,
+    initialCountryPhoneCode: PhoneCode? = null,
+    label: @Composable (() -> Unit)? = null,
+    textStyle: TextStyle = LocalTextStyle.current,
+    keyboardOptions: KeyboardOptions? = null,
+    keyboardActions: KeyboardActions? = null,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    showError: Boolean = true,
+    indicatorColor: Color? = null,
+    errorIndicatorColor: Color? = null,
+) {
+    val context = LocalContext.current
+    val focusRequester = remember { FocusRequester() }
+
+    val countryCode = autoDetectedCountryCode(
+        autoDetectCode = autoDetectCode,
+        initialPhoneNumber = initialPhoneNumber,
+    )
+
+    val phoneNumberWithoutCode = if (countryCode != null) {
+        initialPhoneNumber?.replace(countryCode, "")
+    } else {
+        initialPhoneNumber
+    }
+
+    var phoneNumber by remember {
+        mutableStateOf(
+            TextFieldValue(
+                text = phoneNumberWithoutCode.orEmpty(),
+                selection = TextRange(phoneNumberWithoutCode?.length ?: 0),
+            ),
+        )
+    }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    var country: CountryData by rememberSaveable(
+        context,
+        countryCode,
+        initialCountryPhoneCode,
+        initialCountryIsoCode,
+    ) {
+        mutableStateOf(
+            configureInitialCountry(
+                initialCountryPhoneCode = countryCode ?: initialCountryPhoneCode,
+                context = context,
+                initialCountryIsoCode = initialCountryIsoCode,
+                fallbackCountry = fallbackCountry,
+            ),
+        )
+    }
+
+    val phoneNumberTransformation = remember(country) {
+        PhoneNumberTransformation(country.countryIso, context)
+    }
+    val validatePhoneNumber = remember(context) { ValidatePhoneNumber(context) }
+
+    var isNumberValid: Boolean by rememberSaveable(country, phoneNumber) {
+        mutableStateOf(
+            validatePhoneNumber(
+                fullPhoneNumber = country.countryPhoneCode + phoneNumber.text,
+            ),
+        )
+    }
+
+    val coroutineScope = rememberCoroutineScope()
+    BasicTextField(
+        value = phoneNumber,
+        onValueChange = { enteredPhoneNumber ->
+            val preFilteredPhoneNumber = phoneNumberTransformation.preFilter(enteredPhoneNumber)
+            phoneNumber = TextFieldValue(
+                text = preFilteredPhoneNumber,
+                selection = TextRange(preFilteredPhoneNumber.length),
+            )
+            isNumberValid = validatePhoneNumber(
+                fullPhoneNumber = country.countryPhoneCode + phoneNumber.text,
+            )
+            onValueChange(country.countryPhoneCode to phoneNumber.text, isNumberValid)
+        },
+        modifier = modifier
+            .fillMaxWidth()
+            .focusable()
+            .autofill(
+                autofillTypes = listOf(AutofillType.PhoneNumberNational),
+                onFill = { filledPhoneNumber ->
+                    val preFilteredPhoneNumber =
+                        phoneNumberTransformation.preFilter(filledPhoneNumber)
+                    phoneNumber = TextFieldValue(
+                        text = preFilteredPhoneNumber,
+                        selection = TextRange(preFilteredPhoneNumber.length),
+                    )
+                    isNumberValid = validatePhoneNumber(
+                        fullPhoneNumber = country.countryPhoneCode + phoneNumber.text,
+                    )
+                    onValueChange(country.countryPhoneCode to phoneNumber.text, isNumberValid)
+                    keyboardController?.hide()
+                    coroutineScope.launch {
+                        focusRequester.safeFreeFocus()
+                    }
+                },
+                focusRequester = focusRequester,
+            )
+            .focusRequester(focusRequester = focusRequester),
+        enabled = enabled,
+        textStyle = textStyle,
+        decorationBox = { innerTextField ->
+            Column {
+                if (label != null) {
+                    label()
+                }
+                Spacer(modifier = Modifier.height(5.dp))
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    CountryCodeDialogWrapper(
+                        country = country,
+                        onCountryChange = { countryData ->
+                            country = countryData
+                            isNumberValid = validatePhoneNumber(
+                                fullPhoneNumber = country.countryPhoneCode + phoneNumber.text,
+                            )
+                            onValueChange(
+                                country.countryPhoneCode to phoneNumber.text,
+                                isNumberValid,
+                            )
+                        },
+                        includeOnly = includeOnly,
+                        showCountryCode = showCountryCode,
+                        showFlag = showCountryFlag,
+                        textStyle = textStyle,
+                    )
+
+                    Box(modifier = Modifier.weight(1f)) {
+                        innerTextField()
+                        if (showPlaceholder && phoneNumber.text.isEmpty()) {
+                            PlaceholderNumberHint(country.countryIso)
+                        }
+                    }
+                    if (clearIcon != null) {
+                        ClearIconButtonWrapper(
+                            clearIcon = clearIcon,
+                            colors = colors,
+                            isNumberValid = !showError || isNumberValid,
+                            onClearClick = {
+                                phoneNumber = TextFieldValue("")
+                                isNumberValid = false
+                                onValueChange(
+                                    country.countryPhoneCode to phoneNumber.text,
+                                    isNumberValid,
+                                )
+                            },
+                        )
+                    }
+                }
+                if (showError && !isNumberValid) {
+                    errorIndicatorColor?.let {
+                        HorizontalDivider(
+                            thickness = 1.dp,
+                            color = it,
+                        )
+                    }
+                } else {
+                    indicatorColor?.let {
+                        HorizontalDivider(
+                            thickness = 1.dp,
+                            color = it,
+                        )
+                    }
+                }
+            }
+        },
+        interactionSource = interactionSource,
+        visualTransformation = phoneNumberTransformation,
+        keyboardOptions = keyboardOptions ?: KeyboardOptions.Default.copy(
+            keyboardType = KeyboardType.Phone,
+            autoCorrect = true,
+            imeAction = ImeAction.Done,
+        ),
+        keyboardActions = keyboardActions ?: KeyboardActions(
+            onDone = {
+                keyboardController?.hide()
+                coroutineScope.launch {
+                    focusRequester.safeFreeFocus()
+                }
+            },
+        ),
+        singleLine = true,
+    )
+}
+
+@Composable
+fun CountryCodeDialogWrapper(
+    country: CountryData,
+    onCountryChange: (CountryData) -> Unit,
+    includeOnly: ImmutableSet<String>?,
+    showCountryCode: Boolean,
+    showFlag: Boolean,
+    textStyle: TextStyle,
+) {
+    CountryCodeDialog(
+        selectedCountry = country,
+        includeOnly = includeOnly,
+        onCountryChange = onCountryChange,
+        showCountryCode = showCountryCode,
+        showFlag = showFlag,
+        textStyle = textStyle,
+    )
+}
+
+@Composable
+fun ClearIconButtonWrapper(
+    clearIcon: ImageVector,
+    colors: TextFieldColors,
+    isNumberValid: Boolean,
+    onClearClick: () -> Unit,
+) {
+    ClearIconButton(
+        imageVector = clearIcon,
+        colors = colors,
+        isNumberValid = isNumberValid,
+        onClick = onClearClick,
     )
 }
 

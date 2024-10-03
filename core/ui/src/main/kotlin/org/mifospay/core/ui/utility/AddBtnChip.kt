@@ -40,9 +40,10 @@ fun AddCardChip(
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onPrimary,
                 ),
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier.padding(horizontal = 8.dp, vertical = 9.dp),
             )
         },
+        border = null,
         leadingIcon = {
             Icon(
                 imageVector = MifosIcons.Add,

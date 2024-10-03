@@ -42,6 +42,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -154,8 +155,8 @@ internal fun CardsScreen(
                     title = stringResource(id = R.string.feature_savedcards_error_oops),
                     subTitle = stringResource(id = R.string.feature_savedcards_unexpected_error_subtitle),
                     modifier = Modifier,
-                    iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = MifosIcons.Info,
+                    iconTint = Color.Unspecified,
+                    iconDrawable = R.drawable.artwork,
                 )
             }
 

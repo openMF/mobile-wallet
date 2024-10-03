@@ -10,13 +10,17 @@
 package org.mifospay.feature.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -26,14 +30,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import com.mifospay.core.model.entity.savedcards.Card
 import org.koin.androidx.compose.koinViewModel
-import org.mifospay.core.designsystem.component.MifosCard
 import org.mifospay.core.designsystem.component.MifosTopBar
+import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.ui.utility.DialogState
 import org.mifospay.core.ui.utility.DialogType
 
@@ -43,11 +48,11 @@ fun SettingsScreenRoute(
     navigateToEditPasswordScreen: () -> Unit,
     onLogout: () -> Unit,
     onChangePasscode: () -> Unit,
+    navigateToFaqScreen: () -> Unit,
     modifier: Modifier = Modifier,
     viewmodel: SettingsViewModel = koinViewModel(),
 ) {
     var dialogState by remember { mutableStateOf(DialogState()) }
-    val paddingValues = PaddingValues(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 4.dp)
 
     DialogManager(
         dialogState = dialogState,
@@ -67,125 +72,90 @@ fun SettingsScreenRoute(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colorScheme.surface)
-                .padding(contentPadding),
+                .padding(contentPadding)
+                .verticalScroll(rememberScrollState()),
         ) {
-            Row(
-                modifier = Modifier.padding(paddingValues),
-            ) {
-                MifosCard(
-                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.feature_settings_notification_settings),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(20.dp),
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        ),
-                    )
-                }
-            }
+            SettingsCardItem(
+                title = stringResource(id = R.string.feature_settings_notification_settings),
+            )
 
-            Row(
-                modifier = Modifier
-                    .padding(paddingValues),
-            ) {
-                MifosCard(
-                    onClick = { onChangePasswordClicked(navigateToEditPasswordScreen) },
-                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.feature_settings_change_password),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(20.dp),
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        ),
-                    )
-                }
-            }
+            SettingsCardItem(
+                title = stringResource(id = R.string.feature_settings_faq),
+                onClick = navigateToFaqScreen,
+            )
 
-            Row(
-                modifier = Modifier
-                    .padding(paddingValues),
-            ) {
-                MifosCard(
-                    onClick = onChangePasscode,
-                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.surface),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.feature_settings_change_passcode),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(20.dp),
-                        style = TextStyle(
-                            fontSize = 18.sp,
-                            color = MaterialTheme.colorScheme.onSurface,
-                        ),
-                    )
-                }
-            }
+            SettingsCardItem(
+                title = stringResource(id = R.string.feature_settings_change_password),
+                onClick = navigateToEditPasswordScreen,
+            )
 
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .weight(1f),
-            ) {}
+            SettingsCardItem(
+                title = stringResource(id = R.string.feature_settings_change_passcode),
+                onClick = onChangePasscode,
+            )
 
-            Row(modifier = Modifier.padding(8.dp)) {
-                MifosCard(
-                    onClick = {
-                        dialogState = DialogState(
-                            type = DialogType.DISABLE_ACCOUNT,
-                            onConfirm = { viewmodel.disableAccount() },
-                        )
-                    },
-                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.error),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.feature_settings_disable_account).uppercase(),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(20.dp),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onError,
+            SettingsCardItem(
+                title = stringResource(id = R.string.feature_settings_log_out),
+                onClick = {
+                    dialogState = DialogState(
+                        type = DialogType.LOGOUT,
+                        onConfirm = {
+                            viewmodel.logout()
+                            onLogout()
+                        },
                     )
-                }
-            }
+                },
+            )
 
-            Row(modifier = Modifier.padding(8.dp)) {
-                MifosCard(
-                    onClick = {
-                        dialogState = DialogState(
-                            type = DialogType.LOGOUT,
-                            onConfirm = {
-                                viewmodel.logout()
-                                onLogout()
-                            },
-                        )
-                    },
-                    colors = CardDefaults.cardColors(MaterialTheme.colorScheme.secondary),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.feature_settings_log_out).uppercase(),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(20.dp),
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSecondary,
+            SettingsCardItem(
+                title = stringResource(id = R.string.feature_settings_disable_account),
+                color = Color.Red,
+                onClick = {
+                    dialogState = DialogState(
+                        type = DialogType.DISABLE_ACCOUNT,
+                        onConfirm = { viewmodel.disableAccount() },
                     )
-                }
-            }
+                },
+                hasHorizontalDivider = false,
+            )
         }
     }
 }
 
-private fun onChangePasswordClicked(navigateToEditPasswordScreen: () -> Unit) {
-    navigateToEditPasswordScreen.invoke()
+@Composable
+fun SettingsCardItem(
+    title: String,
+    modifier: Modifier = Modifier,
+    color: Color = NewUi.onSurface,
+    onClick: (() -> Unit)? = null,
+    hasHorizontalDivider: Boolean = true,
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
+        shape = RoundedCornerShape(0.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent,
+        ),
+    ) {
+        Text(
+            text = title,
+            fontWeight = FontWeight(400),
+            modifier = Modifier.padding(20.dp),
+            color = color,
+        )
+
+        if (hasHorizontalDivider) {
+            HorizontalDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                thickness = 1.dp,
+                color = NewUi.onSurface.copy(alpha = 0.05f),
+            )
+        }
+    }
 }
 
 @Preview(showSystemUi = true)
@@ -197,5 +167,6 @@ private fun SettingsScreenPreview() {
         onLogout = {},
         onChangePasscode = {},
         viewmodel = koinViewModel(),
+        navigateToFaqScreen = { },
     )
 }

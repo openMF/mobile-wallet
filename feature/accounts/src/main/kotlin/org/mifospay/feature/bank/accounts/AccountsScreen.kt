@@ -24,10 +24,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.mifos.library.pullrefresh.PullRefreshIndicator
 import com.mifos.library.pullrefresh.pullRefresh
@@ -102,14 +103,16 @@ private fun AccountScreen(
                     LazyColumn(
                         modifier = Modifier
                             .weight(1f)
-                            .fillMaxSize(),
+                            .fillMaxSize()
+                            .padding(horizontal = 25.dp, vertical = 7.dp),
                     ) {
                         item {
                             Text(
                                 text = stringResource(id = R.string.feature_accounts_linked_bank_account),
-                                fontSize = 16.sp,
+                                style = MaterialTheme.typography.bodyLarge,
+                                fontWeight = FontWeight.Bold,
                                 color = MaterialTheme.colorScheme.primary,
-                                modifier = Modifier.padding(top = 48.dp, start = 24.dp),
+                                modifier = Modifier.padding(vertical = 25.dp),
                             )
                         }
                         items(bankAccountDetailsList) { bankAccountDetails ->
@@ -120,16 +123,14 @@ private fun AccountScreen(
                                     onUpdateAccount(bankAccountDetails, index)
                                 },
                             )
-                            HorizontalDivider(
-                                modifier = Modifier.padding(8.dp),
-                            )
+                            HorizontalDivider(color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f))
                         }
                         item {
                             Box(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(16.dp)
-                                    .background(MaterialTheme.colorScheme.surface),
+                                    .background(Color.Transparent),
                             ) {
                                 AddCardChip(
                                     text = R.string.feature_accounts_add_account,

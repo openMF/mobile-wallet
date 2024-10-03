@@ -11,9 +11,9 @@ package org.mifospay.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
-val md_theme_light_primary = Color(0xFF000000)
-val md_theme_light_onPrimary = Color(0xFFFFFFFF)
-val md_theme_light_primaryContainer = Color(0xFFFFD9E2)
+val md_theme_light_primary = Color(0xFF0673BA) // primary
+val md_theme_light_onPrimary = Color(0xFFFFFFFF) // gradientOne
+val md_theme_light_primaryContainer = Color(0xFFF5F5F5) // container color
 val md_theme_light_onPrimaryContainer = Color(0xFF3E001D)
 val md_theme_light_secondary = Color(0xFF984061)
 val md_theme_light_onSecondary = Color(0xFFFFFFFF)
@@ -30,7 +30,7 @@ val md_theme_light_onErrorContainer = Color(0xFF410002)
 val md_theme_light_background = Color(0xFFFFFBFF)
 val md_theme_light_onBackground = Color(0xFF330045)
 val md_theme_light_surface = Color(0xFFFFFBFF)
-val md_theme_light_onSurface = Color(0xFF000000)
+val md_theme_light_onSurface = Color(0xFF333333) // onSurface
 val md_theme_light_surfaceVariant = Color(0xFFF2DDE1)
 val md_theme_light_onSurfaceVariant = Color(0xFF514347)
 val md_theme_light_outline = Color(0xFF837377)
@@ -103,4 +103,8 @@ object NewUi {
     val tertiaryContainer = Color(0xFFFDFDFE)
     val onSurface = Color(0xFF333333)
     val secondaryColor = Color(0xFFFF3325)
+
+    // general color
+    val walletColor1 = Color(0xFF1f7dd5)
+    val walletColor2 = Color(0xFF1ec0a0)
 }

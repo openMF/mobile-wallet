@@ -14,6 +14,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -57,7 +58,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun MfOutlinedTextField(
@@ -84,18 +84,15 @@ fun MfOutlinedTextField(
         },
         singleLine = singleLine,
         trailingIcon = trailingIcon,
-        keyboardActions =
-        KeyboardActions {
+        keyboardActions = KeyboardActions {
             onKeyboardActions?.invoke()
         },
         keyboardOptions = keyboardOptions,
-        colors =
-        OutlinedTextFieldDefaults.colors(
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.onSurface,
             focusedLabelColor = MaterialTheme.colorScheme.onSurface,
         ),
-        textStyle =
-        LocalDensity.current.run {
+        textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
     )
@@ -118,8 +115,7 @@ fun MfPasswordTextField(
         onValueChange = onPasswordChange,
         label = { Text(label) },
         isError = isError,
-        visualTransformation =
-        if (isPasswordVisible) {
+        visualTransformation = if (isPasswordVisible) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()
@@ -157,14 +153,12 @@ fun MifosOutlinedTextField(
         onValueChange = onValueChange,
         label = { Text(stringResource(id = label)) },
         modifier = modifier,
-        leadingIcon =
-        if (icon != null) {
+        leadingIcon = if (icon != null) {
             {
                 Image(
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    colorFilter =
-                    ColorFilter.tint(
+                    colorFilter = ColorFilter.tint(
                         MaterialTheme.colorScheme.onSurface,
                     ),
                 )
@@ -175,13 +169,11 @@ fun MifosOutlinedTextField(
         trailingIcon = trailingIcon,
         maxLines = maxLines,
         singleLine = singleLine,
-        colors =
-        OutlinedTextFieldDefaults.colors(
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.onSurface,
             focusedLabelColor = MaterialTheme.colorScheme.onSurface,
         ),
-        textStyle =
-        LocalDensity.current.run {
+        textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -209,6 +201,9 @@ fun MifosTextField(
     minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+    trailingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    indicatorColor: Color? = null,
 ) {
     var isFocused by rememberSaveable { mutableStateOf(false) }
 
@@ -232,31 +227,56 @@ fun MifosTextField(
         singleLine = singleLine,
         maxLines = maxLines,
         minLines = minLines,
-        cursorBrush = SolidColor(NewUi.primaryColor),
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
         decorationBox = { innerTextField ->
             Column {
                 Text(
                     text = label,
-                    color = NewUi.primaryColor,
+                    color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier.align(alignment = Alignment.Start),
                 )
 
                 Spacer(modifier = Modifier.height(5.dp))
 
-                innerTextField()
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    if (leadingIcon != null) {
+                        leadingIcon()
+                    }
 
-                Spacer(modifier = Modifier.height(5.dp))
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = if (isFocused) {
-                        NewUi.secondaryColor
-                    } else {
-                        NewUi.onSurface.copy(alpha = 0.05f)
-                    },
-                )
+                    Box(modifier = Modifier.weight(1f)) {
+                        innerTextField()
+                    }
+
+                    if (trailingIcon != null) {
+                        trailingIcon()
+                    }
+                }
+                indicatorColor?.let { color ->
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = if (isFocused) {
+                            color
+                        } else {
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+                        },
+                    )
+                } ?: run {
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = if (isFocused) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+                        },
+                    )
+                }
             }
         },
+
     )
 }
 

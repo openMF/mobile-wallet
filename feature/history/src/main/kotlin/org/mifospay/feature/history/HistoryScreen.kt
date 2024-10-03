@@ -10,6 +10,7 @@
 package org.mifospay.feature.history
 
 import android.widget.Toast
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +22,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,7 +49,6 @@ import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.lightGrey
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.TransactionItemScreen
 import org.mifospay.feature.transaction.detail.TransactionDetailScreen
@@ -139,10 +141,10 @@ private fun HistoryScreen(
                             TransactionItemScreen(
                                 transaction = it,
                                 modifier = Modifier
-                                    .padding(start = 24.dp, end = 24.dp)
                                     .clickable { transactionDetailState = it },
                             )
-                            Spacer(modifier = Modifier.height(16.dp))
+                            HorizontalDivider(thickness = 0.5.dp, modifier = Modifier.padding(5.dp))
+                            Spacer(modifier = Modifier.height(15.dp))
                         }
                     }
                 }
@@ -180,9 +182,19 @@ private fun Chip(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val backgroundColor = if (selected) MaterialTheme.colorScheme.primary else lightGrey
+    val backgroundColor = MaterialTheme.colorScheme.onPrimary
     MifosButton(
-        modifier = modifier,
+        modifier = modifier.then(
+            if (selected) {
+                Modifier.border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = RoundedCornerShape(25.dp),
+                )
+            } else {
+                Modifier
+            },
+        ),
         onClick = {
             onClick()
             Toast.makeText(context, label, Toast.LENGTH_SHORT).show()
@@ -192,7 +204,7 @@ private fun Chip(
         Text(
             modifier = Modifier.padding(top = 4.dp, bottom = 4.dp, start = 16.dp, end = 16.dp),
             text = label,
-            color = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface,
+            color = MaterialTheme.colorScheme.onSurface,
         )
     }
 }

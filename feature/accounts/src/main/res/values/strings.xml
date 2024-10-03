@@ -26,7 +26,7 @@
     <string name="feature_accounts_other_banks">Other Banks</string>
     <string name="feature_accounts_error_oops">Oops!</string>
     <string name="feature_accounts_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
-    <string name="feature_accounts_linked_bank_account">Linked bank accounts</string>
+    <string name="feature_accounts_linked_bank_account">Linked Bank Accounts</string>
     <string name="feature_accounts_add_account">ADD ACCOUNT</string>
     <string name="feature_accounts_add_cards">Please Add Cards</string>
     <string name="feature_accounts_no_linked_bank_accounts">No Linked Bank Accounts</string>
