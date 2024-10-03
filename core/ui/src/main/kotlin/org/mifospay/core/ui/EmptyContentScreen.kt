@@ -66,6 +66,7 @@ fun EmptyContentScreen(
                     .fillMaxWidth()
                     .padding(start = 24.dp, end = 24.dp),
                 textAlign = TextAlign.Center,
+                color = MaterialTheme.colorScheme.primary,
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
             )
@@ -76,9 +77,9 @@ fun EmptyContentScreen(
                 text = subTitle,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 24.dp, end = 24.dp),
+                    .padding(start = 37.dp, end = 37.dp),
                 textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.bodyLarge,
                 color = MaterialTheme.colorScheme.onSurface,
             )
         }
@@ -98,7 +99,7 @@ fun EmptyContentScreen(
         subTitle = subTitle,
         imageContent = {
             Image(
-                modifier = Modifier.size(64.dp),
+                modifier = Modifier.size(200.dp),
                 painter = painterResource(id = iconDrawable),
                 colorFilter = if (iconTint != Color.Unspecified) ColorFilter.tint(iconTint) else null,
                 contentDescription = null,
