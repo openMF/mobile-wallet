@@ -10,15 +10,20 @@
 package org.mifospay.core.ui
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
-import androidx.compose.foundation.clickable
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,9 +36,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun FaqItemScreen(
@@ -42,56 +50,73 @@ fun FaqItemScreen(
     answer: String? = null,
 ) {
     var isSelected by remember { mutableStateOf(false) }
+    val density = LocalDensity.current
 
-    Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        onClick = { isSelected = !isSelected },
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent,
+        ),
+        shape = RoundedCornerShape(0.dp),
     ) {
-        Row(
-            modifier = Modifier
-                .clickable {
-                    isSelected = !isSelected
-                }
-                .padding(vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = question.orEmpty(),
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-            )
-
-            Icon(
-                imageVector = MifosIcons.ArrowDropDown,
-                contentDescription = "drop down",
-                tint = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .scale(1f, if (isSelected) -1f else 1f),
-            )
-        }
-
-        AnimatedVisibility(
-            visible = isSelected,
-            enter = fadeIn() + expandVertically(
-                animationSpec = spring(
-                    stiffness = Spring.StiffnessMedium,
-                ),
+        Column(
+            modifier = Modifier.padding(
+                horizontal = 20.dp,
+                vertical = 25.dp,
             ),
         ) {
-            Text(
-                text = answer.orEmpty(),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-            )
+            Row {
+                Text(
+                    text = question.orEmpty(),
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight(500),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                )
+
+                Icon(
+                    imageVector = MifosIcons.KeyboardArrowDown,
+                    contentDescription = "drop down",
+                    tint = MaterialTheme.colorScheme.onSurface,
+                    modifier = Modifier.scale(1f, if (isSelected) -1f else 1f),
+                )
+            }
+            Row {
+                AnimatedVisibility(
+                    modifier = Modifier.weight(1f),
+                    visible = isSelected,
+                    enter = slideInVertically {
+                        with(density) { -40.dp.roundToPx() }
+                    } + expandVertically(
+                        expandFrom = Alignment.Top,
+                    ) + fadeIn(
+                        initialAlpha = 0.3f,
+                    ),
+                    exit = slideOutVertically() + shrinkVertically() + fadeOut(),
+                ) {
+                    Text(
+                        text = answer.orEmpty(),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 4.dp)
+                            .weight(1f),
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(.1f))
+            }
         }
 
-        HorizontalDivider()
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
+            thickness = 1.dp,
+            color = NewUi.onSurface.copy(alpha = 0.05f),
+        )
     }
 }

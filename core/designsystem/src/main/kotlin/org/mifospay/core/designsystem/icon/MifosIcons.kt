@@ -12,7 +12,6 @@ package org.mifospay.core.designsystem.icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowOutward
 import androidx.compose.material.icons.filled.AttachMoney
 import androidx.compose.material.icons.filled.Camera
@@ -26,6 +25,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.QrCode
@@ -58,15 +58,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
  */
 object MifosIcons {
     val ChevronRight: ImageVector = Icons.Filled.ChevronRight
-
-//    val Edit : ImageVector = Icons.Outlined.Edit
     val QrCode: ImageVector = Icons.Filled.QrCode
     val Close: ImageVector = Icons.Filled.Close
     val AttachMoney: ImageVector = Icons.Filled.AttachMoney
     val VisibilityOff: ImageVector = Icons.Filled.VisibilityOff
     val Visibility: ImageVector = Icons.Filled.Visibility
     val Check: ImageVector = Icons.Default.Check
-    val ArrowDropDown: ImageVector = Icons.Default.ArrowDropDown
+    val KeyboardArrowDown: ImageVector = Icons.Default.KeyboardArrowDown
     val Home = Icons.Outlined.Home
     val HomeBoarder = Icons.Rounded.Home
     val Payment = Icons.Rounded.SwapHoriz
