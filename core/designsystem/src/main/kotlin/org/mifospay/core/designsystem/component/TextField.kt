@@ -111,12 +111,18 @@ fun MfPasswordTextField(
     onPasswordChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     errorMessage: String? = null,
+
 ) {
+
     OutlinedTextField(
         modifier = modifier,
         value = password,
         onValueChange = onPasswordChange,
-        label = { Text(label) },
+        label = { Text(
+            label,
+            color = NewUi.primaryColor,
+            style = MaterialTheme.typography.labelLarge
+            ) },
         isError = isError,
         visualTransformation =
         if (isPasswordVisible) {
@@ -132,9 +138,16 @@ fun MfPasswordTextField(
                 Icon(
                     if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                     contentDescription = "Show password",
+                    tint = Color.Black,
                 )
             }
         },
+        colors = OutlinedTextFieldDefaults.colors(
+            focusedBorderColor = Color.Transparent, // Cor da borda quando focado
+            unfocusedBorderColor = Color.Transparent, // Cor da borda quando não focado
+            errorBorderColor = Color.Transparent, // Cor da borda quando em erro
+            disabledBorderColor = Color.Transparent, // Cor da borda quando desabilitado
+        )
     )
 }
 
@@ -301,8 +314,12 @@ fun MfOutlinedTextFieldPreview() {
 fun MfPasswordTextFieldPreview() {
     MifosTheme {
         val password = " "
+
         Box(
+
             modifier = Modifier.background(color = Color.White),
+
+
         ) {
             MfPasswordTextField(
                 password = password,
@@ -313,6 +330,7 @@ fun MfPasswordTextFieldPreview() {
                 onPasswordChange = { },
                 modifier = Modifier.fillMaxWidth(),
                 errorMessage = "Password must be at least 6 characters",
+
             )
         }
     }
