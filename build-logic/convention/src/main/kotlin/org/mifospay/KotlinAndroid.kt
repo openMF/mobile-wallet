@@ -79,5 +79,6 @@ private inline fun <reified T : KotlinTopLevelExtension> Project.configureKotlin
         freeCompilerArgs.add(
             "-opt-in=androidx.compose.material3.ExperimentalMaterial3Api"
         )
+        jvmToolchain(17)
     }
 }

@@ -120,6 +120,11 @@ This will ensure that the Git hooks are installed on your local machine.**</br>
 
 *Or Run the `ci-prebuild.sh` or `ci-prebuild.bat` script to run all the above commands in one go.*
 
+5. **Install JDK**
+
+You need to install any JDK version between 17...21
+
+
 ### **Committing Your Changes**
 
 When you've finished making your changes and have tested them locally, it's time to commit your work:
