@@ -84,18 +84,15 @@ fun MfOutlinedTextField(
         },
         singleLine = singleLine,
         trailingIcon = trailingIcon,
-        keyboardActions =
-        KeyboardActions {
+        keyboardActions = KeyboardActions {
             onKeyboardActions?.invoke()
         },
         keyboardOptions = keyboardOptions,
-        colors =
-        OutlinedTextFieldDefaults.colors(
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.onSurface,
             focusedLabelColor = MaterialTheme.colorScheme.onSurface,
         ),
-        textStyle =
-        LocalDensity.current.run {
+        textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
     )
@@ -111,21 +108,20 @@ fun MfPasswordTextField(
     onPasswordChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     errorMessage: String? = null,
-
 ) {
-
     OutlinedTextField(
         modifier = modifier,
         value = password,
         onValueChange = onPasswordChange,
-        label = { Text(
-            label,
-            color = NewUi.primaryColor,
-            style = MaterialTheme.typography.labelLarge
-            ) },
+        label = {
+            Text(
+                label,
+                color = NewUi.primaryColor,
+                style = MaterialTheme.typography.labelLarge,
+            )
+        },
         isError = isError,
-        visualTransformation =
-        if (isPasswordVisible) {
+        visualTransformation = if (isPasswordVisible) {
             VisualTransformation.None
         } else {
             PasswordVisualTransformation()
@@ -143,11 +139,11 @@ fun MfPasswordTextField(
             }
         },
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color.Transparent, // Cor da borda quando focado
-            unfocusedBorderColor = Color.Transparent, // Cor da borda quando não focado
-            errorBorderColor = Color.Transparent, // Cor da borda quando em erro
-            disabledBorderColor = Color.Transparent, // Cor da borda quando desabilitado
-        )
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            errorBorderColor = Color.Transparent,
+            disabledBorderColor = Color.Transparent,
+        ),
     )
 }
 
@@ -170,14 +166,12 @@ fun MifosOutlinedTextField(
         onValueChange = onValueChange,
         label = { Text(stringResource(id = label)) },
         modifier = modifier,
-        leadingIcon =
-        if (icon != null) {
+        leadingIcon = if (icon != null) {
             {
                 Image(
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    colorFilter =
-                    ColorFilter.tint(
+                    colorFilter = ColorFilter.tint(
                         MaterialTheme.colorScheme.onSurface,
                     ),
                 )
@@ -188,13 +182,11 @@ fun MifosOutlinedTextField(
         trailingIcon = trailingIcon,
         maxLines = maxLines,
         singleLine = singleLine,
-        colors =
-        OutlinedTextFieldDefaults.colors(
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.onSurface,
             focusedLabelColor = MaterialTheme.colorScheme.onSurface,
         ),
-        textStyle =
-        LocalDensity.current.run {
+        textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -318,7 +310,6 @@ fun MfPasswordTextFieldPreview() {
         Box(
 
             modifier = Modifier.background(color = Color.White),
-
 
         ) {
             MfPasswordTextField(

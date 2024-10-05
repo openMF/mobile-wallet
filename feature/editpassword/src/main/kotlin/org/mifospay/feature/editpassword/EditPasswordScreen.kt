@@ -12,7 +12,6 @@ package org.mifospay.feature.editpassword
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -47,7 +46,6 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.NewUi.gradientOne
-
 
 @Composable
 internal fun EditPasswordScreen(
@@ -126,7 +124,7 @@ private fun EditPasswordScreen(
                     .fillMaxSize()
                     .padding(paddingValues),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement =  Arrangement.Center
+                verticalArrangement = Arrangement.Center,
             ) {
                 MfPasswordTextField(
                     password = currentPassword,
@@ -141,7 +139,7 @@ private fun EditPasswordScreen(
                         .fillMaxWidth(0.9f)
                         .padding(vertical = 8.dp),
 
-                    )
+                )
                 MfPasswordTextField(
                     password = newPassword,
 
@@ -189,16 +187,16 @@ private fun EditPasswordScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 20.dp, start = 16.dp, end = 16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally, // Alinha os botões ao centro
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Spacer(modifier = Modifier.weight(1f))
+                    Spacer(Modifier.weight(1f))
 
                     MifosButton(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp)
                             .height(54.dp),
-                        color = MifosBlue,  // Cor do botão de "Salvar"
+                        color = MifosBlue,
                         onClick = {
                             onSave.invoke(currentPassword, newPassword, confirmNewPassword)
                         },
@@ -206,8 +204,6 @@ private fun EditPasswordScreen(
                         content = { Text(text = stringResource(id = R.string.feature_editpassword_save)) },
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-
-
 
                     MifosButton(
                         modifier = Modifier
