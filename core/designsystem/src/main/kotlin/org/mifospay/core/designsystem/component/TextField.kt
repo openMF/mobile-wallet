@@ -84,22 +84,20 @@ fun MfOutlinedTextField(
         },
         singleLine = singleLine,
         trailingIcon = trailingIcon,
-        keyboardActions =
-        KeyboardActions {
+        keyboardActions = KeyboardActions {
             onKeyboardActions?.invoke()
         },
         keyboardOptions = keyboardOptions,
-        colors =
-        OutlinedTextFieldDefaults.colors(
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.onSurface,
             focusedLabelColor = MaterialTheme.colorScheme.onSurface,
         ),
-        textStyle =
-        LocalDensity.current.run {
+        textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
     )
 }
+
 
 @Composable
 fun MfPasswordTextField(
@@ -111,43 +109,75 @@ fun MfPasswordTextField(
     onPasswordChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     errorMessage: String? = null,
-
 ) {
+    var isFocused by rememberSaveable { mutableStateOf(false) }
 
-    OutlinedTextField(
-        modifier = modifier,
+    BasicTextField(
         value = password,
         onValueChange = onPasswordChange,
-        label = { Text(
-            label,
-            color = NewUi.primaryColor,
-            style = MaterialTheme.typography.labelLarge
-            ) },
-        isError = isError,
-        visualTransformation =
-        if (isPasswordVisible) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
-        },
-        supportingText = {
-            errorMessage?.let { Text(text = it) }
-        },
-        trailingIcon = {
-            IconButton(onClick = onTogglePasswordVisibility) {
-                Icon(
-                    if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                    contentDescription = "Show password",
-                    tint = Color.Black,
+        textStyle = LocalTextStyle.current.copy(color = Color.Black),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .padding(top = 10.dp)
+            .onFocusChanged { focusState -> isFocused = focusState.isFocused }
+            .semantics(mergeDescendants = true) {},
+        enabled = true,
+        readOnly = false,
+        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+        keyboardActions = KeyboardActions.Default,
+        singleLine = true,
+        maxLines = 1,
+        minLines = 1,
+        cursorBrush = SolidColor(NewUi.primaryColor),
+        decorationBox = { innerTextField ->
+            Column {
+                Text(
+                    text = label,
+                    color = NewUi.primaryColor,
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.align(alignment = Alignment.Start),
                 )
+
+                Spacer(modifier = Modifier.height(5.dp))
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(Color.Transparent),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    innerTextField()
+
+                    IconButton(
+                        onClick = onTogglePasswordVisibility,
+                        modifier = Modifier.align(Alignment.CenterEnd))
+                    {
+                        Icon(
+                            if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            contentDescription = "Toggle password visibility",
+                            tint = Color.Black,
+                        )
+                    }
+                }
+
+                Spacer(modifier = Modifier.height(5.dp))
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = if (isFocused) NewUi.secondaryColor else NewUi.onSurface.copy(alpha = 0.05f),
+                )
+
+                if (isError && errorMessage != null) {
+                    Text(
+                        text = errorMessage,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
             }
         },
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = Color.Transparent, // Cor da borda quando focado
-            unfocusedBorderColor = Color.Transparent, // Cor da borda quando não focado
-            errorBorderColor = Color.Transparent, // Cor da borda quando em erro
-            disabledBorderColor = Color.Transparent, // Cor da borda quando desabilitado
-        )
     )
 }
 
@@ -170,14 +200,12 @@ fun MifosOutlinedTextField(
         onValueChange = onValueChange,
         label = { Text(stringResource(id = label)) },
         modifier = modifier,
-        leadingIcon =
-        if (icon != null) {
+        leadingIcon = if (icon != null) {
             {
                 Image(
                     painter = painterResource(id = icon),
                     contentDescription = null,
-                    colorFilter =
-                    ColorFilter.tint(
+                    colorFilter = ColorFilter.tint(
                         MaterialTheme.colorScheme.onSurface,
                     ),
                 )
@@ -188,13 +216,11 @@ fun MifosOutlinedTextField(
         trailingIcon = trailingIcon,
         maxLines = maxLines,
         singleLine = singleLine,
-        colors =
-        OutlinedTextFieldDefaults.colors(
+        colors = OutlinedTextFieldDefaults.colors(
             focusedBorderColor = MaterialTheme.colorScheme.onSurface,
             focusedLabelColor = MaterialTheme.colorScheme.onSurface,
         ),
-        textStyle =
-        LocalDensity.current.run {
+        textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -318,7 +344,6 @@ fun MfPasswordTextFieldPreview() {
         Box(
 
             modifier = Modifier.background(color = Color.White),
-
 
         ) {
             MfPasswordTextField(
