@@ -11,12 +11,11 @@ package org.mifospay.core.network.services
 
 import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.POST
-import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.domain.user.User
 import org.mifospay.core.model.entity.authentication.AuthenticationPayload
 import org.mifospay.core.network.ApiEndPoints
 
 interface AuthenticationService {
     @POST(ApiEndPoints.AUTHENTICATION)
-    fun authenticate(@Body authPayload: AuthenticationPayload): Flow<User>
+    suspend fun authenticate(@Body authPayload: AuthenticationPayload): User
 }

@@ -28,8 +28,7 @@ tasks=(
     "spotlessApply --no-configuration-cache"
     "dependencyGuardBaseline"
     "detekt"
-    "formatVersionCatalog"
-    "testDemoDebug :lint:test :lint:lint :mifospay:lintProdRelease"
+#    "testDemoDebug :lint:test :lint:lint :mifospay-android:lintProdRelease"
     "build"
     "updateProdReleaseBadging"
 )

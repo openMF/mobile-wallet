@@ -9,53 +9,55 @@
  */
 package org.mifospay.core.model.domain.client
 
+import kotlinx.serialization.Serializable
 import org.mifospay.core.model.utils.DateHelper
 
+@Serializable
 data class NewClient(
-    val fullname: String?,
-    val userName: String?,
-    val addressLine1: String?,
-    val addressLine2: String?,
-    val city: String?,
-    val postalCode: String?,
-    val stateProvinceId: String?,
-    val countryId: String?,
-    val mobileNo: String?,
-    val mifosSavingsProductId: Int?,
+    val firstname: String,
+    val lastname: String,
+    val externalId: String,
+    val mobileNo: String,
+    val address: Address,
+    val savingsProductId: Int,
+    val officeId: Int,
+    val legalFormId: Int,
+    val active: Boolean,
+    val dateFormat: String,
+    val activationDate: String,
+    val submittedOnDate: String,
+    val locale: String,
 ) {
-    private val address: MutableList<Address> = mutableListOf()
-    private val activationDate: String = DateHelper.formattedDate
-    val submittedOnDate: String = activationDate
-    val savingsProductId: Int = mifosSavingsProductId ?: 0
-    val externalId: String = "$userName@mifos"
-
-    init {
-        address.add(
-            Address(
-                addressLine1 = addressLine1,
-                addressLine2 = addressLine2,
-                street = city,
-                postalCode = postalCode,
-                stateProvinceId = stateProvinceId,
-                countryId = countryId,
-            ),
-        )
-    }
-
-    data class Address(
-        val addressLine1: String?,
-        val addressLine2: String?,
-        val street: String?,
-        val postalCode: String?,
-        val stateProvinceId: String?,
-        val countryId: String?,
-    )
-
-    data class CustomDataTable(
-        val registeredTableName: String = "client_info",
-        val data: HashMap<String, Any> = hashMapOf(
-            "locale" to "en",
-            "info_id" to 1,
-        ),
+    constructor(
+        firstname: String,
+        lastname: String,
+        externalId: String,
+        mobileNo: String,
+        address: Address,
+        savingsProductId: Int,
+    ) : this(
+        firstname = firstname,
+        lastname = lastname,
+        externalId = externalId,
+        mobileNo = mobileNo,
+        address = address,
+        savingsProductId = savingsProductId,
+        officeId = 1,
+        legalFormId = 1,
+        active = true,
+        dateFormat = DateHelper.SHORT_MONTH,
+        activationDate = DateHelper.formattedShortDate,
+        submittedOnDate = DateHelper.formattedShortDate,
+        locale = "en_US",
     )
 }
+
+@Serializable
+data class Address(
+    val addressLine1: String,
+    val addressLine2: String,
+    val postalCode: String,
+    val stateProvinceId: String,
+    val countryId: String,
+    val addressTypeId: Int = 805,
+)

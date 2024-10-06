@@ -20,5 +20,5 @@ import org.mifospay.core.network.ApiEndPoints
  */
 interface AccountTransfersService {
     @GET(ApiEndPoints.ACCOUNT_TRANSFER + "/{transferId}")
-    fun getAccountTransfer(@Path("transferId") transferId: Long): Flow<TransferDetail>
+    suspend fun getAccountTransfer(@Path("transferId") transferId: Long): Flow<TransferDetail>
 }

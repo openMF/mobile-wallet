@@ -23,29 +23,29 @@ import org.mifospay.core.network.model.GenericResponse
 // TODO:: Fix this endpoints, there's no such endpoint for invoices
 interface InvoiceService {
     @GET(ApiEndPoints.DATATABLES + "/invoices/{clientId}")
-    fun getInvoices(@Path("clientId") clientId: Int): Flow<List<Invoice>>
+    suspend fun getInvoices(@Path("clientId") clientId: Int): Flow<List<Invoice>>
 
     @GET(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
-    fun getInvoice(
+    suspend fun getInvoice(
         @Path("clientId") clientId: Int,
         @Path("invoiceId") invoiceId: Int,
     ): Flow<Invoice>
 
     @POST(ApiEndPoints.DATATABLES + "/invoices/{clientId}")
-    fun addInvoice(
+    suspend fun addInvoice(
         @Path("clientId") clientId: Int,
         @Body invoice: Invoice?,
     ): Unit
 
     @PUT(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
-    fun updateInvoice(
+    suspend fun updateInvoice(
         @Path("clientId") clientId: Int,
         @Path("invoiceId") invoiceId: Int,
         @Body invoice: Invoice?,
     ): Flow<GenericResponse>
 
     @DELETE(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
-    fun deleteInvoice(
+    suspend fun deleteInvoice(
         @Path("clientId") clientId: Int,
         @Path("invoiceId") invoiceId: Int,
     ): Flow<GenericResponse>

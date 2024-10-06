@@ -18,6 +18,7 @@ annotation class Dispatcher(val mifosDispatcher: MifosDispatchers)
 enum class MifosDispatchers {
     Default,
     IO,
+    Unconfined,
 }
 
 @Qualifier

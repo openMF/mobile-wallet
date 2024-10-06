@@ -10,13 +10,13 @@
 package org.mifospay.feature.kyc
 
 import androidx.lifecycle.ViewModel
-import org.mifospay.core.model.entity.kyc.KYCLevel1Details
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.kyc.UploadKYCLevel1Details
 import org.mifospay.core.data.repository.local.LocalRepository
+import org.mifospay.core.model.entity.kyc.KYCLevel1Details
 import org.mifospay.feature.kyc.KYCLevel1UiState.Loading
 
 class KYCLevel1ViewModel(

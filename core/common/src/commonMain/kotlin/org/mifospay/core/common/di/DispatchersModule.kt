@@ -21,6 +21,7 @@ import org.mifospay.core.common.MifosDispatchers
 val DispatchersModule = module {
     single<CoroutineDispatcher>(named(MifosDispatchers.IO.name)) { Dispatchers.IO }
     single<CoroutineDispatcher>(named(MifosDispatchers.Default.name)) { Dispatchers.Default }
+    single<CoroutineDispatcher>(named(MifosDispatchers.Unconfined.name)) { Dispatchers.Unconfined }
     single<CoroutineScope>(named("ApplicationScope")) {
         CoroutineScope(SupervisorJob() + Dispatchers.Default)
     }

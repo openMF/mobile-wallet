@@ -10,10 +10,8 @@
 package org.mifospay.core.data.repositoryImp
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.SearchRepository
 import org.mifospay.core.model.entity.SearchedEntity
 import org.mifospay.core.network.FineractApiManager
@@ -26,9 +24,15 @@ class SearchRepositoryImpl(
         query: String,
         resources: String,
         exactMatch: Boolean,
-    ): Flow<Result<List<SearchedEntity>>> {
-        return apiManager.searchApi
-            .searchResources(query, resources, exactMatch)
-            .asResult().flowOn(ioDispatcher)
+    ): Result<List<SearchedEntity>> {
+        return try {
+            val result = withContext(ioDispatcher) {
+                apiManager.searchApi.searchResources(query, resources, exactMatch)
+            }
+
+            Result.Success(result)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 }

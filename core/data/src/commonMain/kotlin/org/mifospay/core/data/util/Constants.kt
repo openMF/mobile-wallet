@@ -16,7 +16,7 @@ object Constants {
     const val WALLET_ACCOUNT_SAVINGS_PRODUCT_ID = 1
     const val MIFOS_MERCHANT_SAVINGS_PRODUCT_ID = 165 // 372
     const val MIFOS_CONSUMER_SAVINGS_PRODUCT_ID = 165 // 373
-    private const val MOBILE_WALLET_ROLE_ID = 471
+    private const val MOBILE_WALLET_ROLE_ID = 2
     private const val SUPER_USER_ROLE_ID = 1
 
     val NEW_USER_ROLE_IDS: List<Int> = listOf(MOBILE_WALLET_ROLE_ID, SUPER_USER_ROLE_ID)

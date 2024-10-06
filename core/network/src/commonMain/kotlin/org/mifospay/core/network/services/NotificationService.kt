@@ -17,5 +17,5 @@ import org.mifospay.core.network.ApiEndPoints
 
 interface NotificationService {
     @GET(ApiEndPoints.DATATABLES + "/notifications/{clientId}")
-    fun fetchNotifications(@Path("clientId") clientId: Long): Flow<List<NotificationPayload>>
+    suspend fun fetchNotifications(@Path("clientId") clientId: Long): Flow<List<NotificationPayload>>
 }

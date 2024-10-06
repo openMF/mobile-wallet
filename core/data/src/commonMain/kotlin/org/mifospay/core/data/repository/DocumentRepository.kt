@@ -15,9 +15,9 @@ import org.mifospay.core.common.Result
 import org.mifospay.core.model.entity.noncore.Document
 
 interface DocumentRepository {
-    fun getDocuments(entityType: String, entityId: Int): Flow<Result<List<Document>>>
+    suspend fun getDocuments(entityType: String, entityId: Int): Flow<Result<List<Document>>>
 
-    fun createDocument(
+    suspend fun createDocument(
         entityType: String,
         entityId: Int,
         name: String,
@@ -25,11 +25,11 @@ interface DocumentRepository {
         fileName: PartData.FileItem,
     ): Flow<Result<Unit>>
 
-    fun downloadDocument(entityType: String, entityId: Int, documentId: Int): Flow<Result<Document>>
+    suspend fun downloadDocument(entityType: String, entityId: Int, documentId: Int): Flow<Result<Document>>
 
-    fun deleteDocument(entityType: String, entityId: Int, documentId: Int): Flow<Result<Unit>>
+    suspend fun deleteDocument(entityType: String, entityId: Int, documentId: Int): Flow<Result<Unit>>
 
-    fun updateDocument(
+    suspend fun updateDocument(
         entityType: String,
         entityId: Int,
         documentId: Int,

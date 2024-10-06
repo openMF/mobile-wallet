@@ -12,6 +12,7 @@ package org.mifospay.core.network
 object ApiEndPoints {
     // This class contains all the Constants for API End Points
     const val AUTHENTICATION = "authentication"
+    const val AUTHENTICATION_OAUTH = "oauth/token"
     const val REGISTRATION = "registration"
     const val CLIENTS = "clients"
     const val SAVINGS_ACCOUNTS = "savingsaccounts"

@@ -19,11 +19,11 @@ import org.mifospay.core.network.ApiEndPoints
 
 interface TwoFactorAuthService {
     @GET(ApiEndPoints.TWOFACTOR)
-    fun deliveryMethods(): Flow<List<DeliveryMethod>>
+    suspend fun deliveryMethods(): Flow<List<DeliveryMethod>>
 
     @POST(ApiEndPoints.TWOFACTOR)
-    fun requestOTP(@Query("deliveryMethod") deliveryMethod: String): Flow<String>
+    suspend fun requestOTP(@Query("deliveryMethod") deliveryMethod: String): Flow<String>
 
     @POST(ApiEndPoints.TWOFACTOR + "/validate")
-    fun validateToken(@Query("token") token: String): Flow<AccessToken>
+    suspend fun validateToken(@Query("token") token: String): Flow<AccessToken>
 }

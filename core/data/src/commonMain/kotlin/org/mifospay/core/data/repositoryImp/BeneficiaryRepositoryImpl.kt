@@ -26,15 +26,15 @@ class BeneficiaryRepositoryImpl(
     private val apiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : BeneficiaryRepository {
-    override fun getBeneficiaryList(): Flow<Result<List<Beneficiary>>> {
+    override suspend fun getBeneficiaryList(): Flow<Result<List<Beneficiary>>> {
         return apiManager.beneficiaryApi.beneficiaryList().asResult().flowOn(ioDispatcher)
     }
 
-    override fun getBeneficiaryTemplate(): Flow<Result<BeneficiaryTemplate>> {
+    override suspend fun getBeneficiaryTemplate(): Flow<Result<BeneficiaryTemplate>> {
         return apiManager.beneficiaryApi.beneficiaryTemplate().asResult().flowOn(ioDispatcher)
     }
 
-    override fun createBeneficiary(
+    override suspend fun createBeneficiary(
         beneficiaryPayload: BeneficiaryPayload,
     ): Flow<Result<CommonResponse>> {
         return apiManager
@@ -43,7 +43,7 @@ class BeneficiaryRepositoryImpl(
             .asResult().flowOn(ioDispatcher)
     }
 
-    override fun updateBeneficiary(
+    override suspend fun updateBeneficiary(
         beneficiaryId: Long,
         payload: BeneficiaryUpdatePayload,
     ): Flow<Result<CommonResponse>> {
@@ -52,7 +52,7 @@ class BeneficiaryRepositoryImpl(
             .asResult().flowOn(ioDispatcher)
     }
 
-    override fun deleteBeneficiary(beneficiaryId: Long): Flow<Result<CommonResponse>> {
+    override suspend fun deleteBeneficiary(beneficiaryId: Long): Flow<Result<CommonResponse>> {
         return apiManager.beneficiaryApi
             .deleteBeneficiary(beneficiaryId)
             .asResult().flowOn(ioDispatcher)

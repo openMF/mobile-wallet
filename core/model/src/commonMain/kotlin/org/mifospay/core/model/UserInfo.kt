@@ -11,7 +11,7 @@ package org.mifospay.core.model
 
 data class UserInfo(
     val username: String,
-    val userId: Int,
+    val userId: Long,
     val base64EncodedAuthenticationKey: String,
     val authenticated: Boolean,
     val officeId: Int,

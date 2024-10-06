@@ -23,7 +23,7 @@ import org.mifospay.core.network.ApiEndPoints
 
 interface DocumentService {
     @GET("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS)
-    fun getDocuments(
+    suspend fun getDocuments(
         @Path("entityType") entityType: String,
         @Path("entityId") entityId: Int,
     ): Flow<List<Document>>
@@ -38,7 +38,7 @@ interface DocumentService {
      */
     @POST("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS)
     @Multipart
-    fun createDocument(
+    suspend fun createDocument(
         @Path("entityType") entityType: String,
         @Path("entityId") entityId: Int,
         @Part("name") nameOfDocument: String,
@@ -59,7 +59,7 @@ interface DocumentService {
      * @return ResponseBody
      */
     @GET("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS + "/{documentId}/attachment")
-    fun downloadDocument(
+    suspend fun downloadDocument(
         @Path("entityType") entityType: String,
         @Path("entityId") entityId: Int,
         @Path("documentId") documentId: Int,
@@ -77,7 +77,7 @@ interface DocumentService {
      * @param documentId - Document Id
      */
     @DELETE("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS + "/{documentId}")
-    fun removeDocument(
+    suspend fun removeDocument(
         @Path("entityType") entityType: String,
         @Path("entityId") entityId: Int,
         @Path("documentId") documentId: Int,
@@ -100,7 +100,7 @@ interface DocumentService {
      */
     @PUT("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS + "/{documentId}")
     @Multipart
-    fun updateDocument(
+    suspend fun updateDocument(
         @Path("entityType") entityType: String,
         @Path("entityId") entityId: Int,
         @Path("documentId") documentId: Int,

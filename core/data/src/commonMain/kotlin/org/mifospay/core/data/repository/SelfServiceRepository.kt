@@ -24,9 +24,9 @@ import org.mifospay.core.model.entity.client.ClientAccounts
 import org.mifospay.core.network.model.CommonResponse
 
 interface SelfServiceRepository {
-    suspend fun loginSelf(payload: AuthenticationPayload): Flow<Result<User>>
+    suspend fun loginSelf(payload: AuthenticationPayload): Result<User>
 
-    suspend fun getSelfClientDetails(clientId: Long): Flow<Result<Client>>
+    suspend fun getSelfClientDetails(clientId: Long): Result<Client>
 
     suspend fun getSelfClientDetails(): Flow<Result<Page<Client>>>
 

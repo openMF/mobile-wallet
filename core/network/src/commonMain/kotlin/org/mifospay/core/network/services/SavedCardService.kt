@@ -22,22 +22,22 @@ import org.mifospay.core.network.model.GenericResponse
 
 interface SavedCardService {
     @POST(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}")
-    fun addSavedCard(
+    suspend fun addSavedCard(
         @Path("clientId") clientId: Int,
         @Body card: Card,
     ): Flow<GenericResponse>
 
     @GET(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}")
-    fun getSavedCards(@Path("clientId") clientId: Int): Flow<List<Card>>
+    suspend fun getSavedCards(@Path("clientId") clientId: Int): Flow<List<Card>>
 
     @DELETE(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}/{cardId}")
-    fun deleteCard(
+    suspend fun deleteCard(
         @Path("clientId") clientId: Int,
         @Path("cardId") cardId: Int,
     ): Flow<GenericResponse>
 
     @PUT(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}/{cardId}")
-    fun updateCard(
+    suspend fun updateCard(
         @Path("clientId") clientId: Int,
         @Path("cardId") cardId: Int,
         @Body card: Card,

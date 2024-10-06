@@ -9,21 +9,49 @@
  */
 package org.mifospay.core.model.domain.user
 
+import kotlinx.serialization.Serializable
+
+// Mandatory Fields
+// username, firstname, lastname, email, officeId, roles, sendPasswordToEmail
+//
+// Optional Fields
+// staffId,passwordNeverExpires,isSelfServiceUser,clients
+
+@Serializable
 class NewUser(
-    val username: String?,
-    val firstname: String?,
-    val lastname: String?,
-    val email: String?,
-    val password: String?,
+    val username: String,
+    val firstname: String,
+    val lastname: String,
+    val email: String,
+    val password: String,
+    val officeId: Int,
+    val roles: ArrayList<Int>,
+    val sendPasswordToEmail: Boolean,
+    val isSelfServiceUser: Boolean,
+    val repeatPassword: String,
 ) {
-    val officeId = "1"
-    val roles: MutableList<Int> = NEW_USER_ROLE_IDS.toMutableList()
-    val sendPasswordToEmail = false
-    val isSelfServiceUser = true
-    val repeatPassword: String? = password
+    constructor(
+        username: String,
+        firstname: String,
+        lastname: String,
+        email: String,
+        password: String,
+    ) : this(
+        username = username,
+        firstname = firstname,
+        lastname = lastname,
+        email = email,
+        password = password,
+        officeId = OFFICE_ID,
+        roles = NEW_USER_ROLE_IDS,
+        sendPasswordToEmail = false,
+        isSelfServiceUser = true,
+        repeatPassword = password,
+    )
 }
 
-private const val MOBILE_WALLET_ROLE_ID = 471
+private const val OFFICE_ID = 1
+private const val MOBILE_WALLET_ROLE_ID = 2
 private const val SUPER_USER_ROLE_ID = 1
 
-val NEW_USER_ROLE_IDS: Collection<Int> = listOf(MOBILE_WALLET_ROLE_ID, SUPER_USER_ROLE_ID)
+val NEW_USER_ROLE_IDS: ArrayList<Int> = arrayListOf(MOBILE_WALLET_ROLE_ID, SUPER_USER_ROLE_ID)

@@ -48,14 +48,18 @@ import org.mifospay.core.data.repositoryImp.StandingInstructionRepositoryImpl
 import org.mifospay.core.data.repositoryImp.ThirdPartyTransferRepositoryImpl
 import org.mifospay.core.data.repositoryImp.TwoFactorAuthRepositoryImpl
 import org.mifospay.core.data.repositoryImp.UserRepositoryImpl
+import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.util.TimeZoneMonitor
 
 private val ioDispatcher = named(MifosDispatchers.IO.name)
 
-val repositoryModule = module {
+val RepositoryModule = module {
     single<AccountRepository> { AccountRepositoryImpl(get(), get(ioDispatcher)) }
-    single<AuthenticationRepository> { AuthenticationRepositoryImpl(get(), get(ioDispatcher)) }
+    single<AuthenticationRepository> {
+        AuthenticationRepositoryImpl(get(), get(ioDispatcher))
+    }
     single<BeneficiaryRepository> { BeneficiaryRepositoryImpl(get(), get(ioDispatcher)) }
-    single<ClientRepository> { ClientRepositoryImpl(get(), get(ioDispatcher)) }
+    single<ClientRepository> { ClientRepositoryImpl(get(), get(), get(ioDispatcher)) }
     single<DocumentRepository> { DocumentRepositoryImpl(get(), get(ioDispatcher)) }
     single<InvoiceRepository> { InvoiceRepositoryImpl(get(), get(ioDispatcher)) }
     single<KycLevelRepository> { KycLevelRepositoryImpl(get(), get(ioDispatcher)) }
@@ -74,4 +78,9 @@ val repositoryModule = module {
     }
     single<TwoFactorAuthRepository> { TwoFactorAuthRepositoryImpl(get(), get(ioDispatcher)) }
     single<UserRepository> { UserRepositoryImpl(get(), get(ioDispatcher)) }
+
+    includes(platformModule)
+    single<PlatformDependentDataModule> { getPlatformDataModule }
+    single<NetworkMonitor> { getPlatformDataModule.networkMonitor }
+    single<TimeZoneMonitor> { getPlatformDataModule.timeZoneMonitor }
 }

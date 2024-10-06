@@ -36,15 +36,24 @@ class SelfServiceRepositoryImpl(
     private val dispatcher: CoroutineDispatcher,
 ) : SelfServiceRepository {
 
-    override suspend fun loginSelf(payload: AuthenticationPayload): Flow<Result<User>> {
-        return apiManager.authenticationApi.authenticate(payload).asResult().flowOn(dispatcher)
+    override suspend fun loginSelf(payload: AuthenticationPayload): Result<User> {
+        return try {
+            val result = apiManager.authenticationApi.authenticate(payload)
+                ?: return Result.Error(Exception("Authentication failed"))
+
+            Result.Success(result)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
-    override suspend fun getSelfClientDetails(clientId: Long): Flow<Result<Client>> {
-        return apiManager.clientsApi
-            .getClientForId(clientId)
-            .map { it.toModel() }
-            .asResult().flowOn(dispatcher)
+    override suspend fun getSelfClientDetails(clientId: Long): Result<Client> {
+        return try {
+            val result = apiManager.clientsApi.getClientForId(clientId).toModel()
+            Result.Success(result)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
     override suspend fun getSelfClientDetails(): Flow<Result<Page<Client>>> {

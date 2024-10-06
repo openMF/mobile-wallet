@@ -22,16 +22,16 @@ import org.mifospay.core.network.model.GenericResponse
 interface KYCLevel1Service {
 
     @GET(ApiEndPoints.DATATABLES + "/kyc_level1_details/{clientId}")
-    fun fetchKYCLevel1Details(@Path("clientId") clientId: Int): Flow<List<KYCLevel1Details>>
+    suspend fun fetchKYCLevel1Details(@Path("clientId") clientId: Int): Flow<List<KYCLevel1Details>>
 
     @POST(ApiEndPoints.DATATABLES + "/kyc_level1_details/{clientId}")
-    fun addKYCLevel1Details(
+    suspend fun addKYCLevel1Details(
         @Path("clientId") clientId: Int,
         @Body kycLevel1Details: KYCLevel1Details,
     ): Flow<GenericResponse>
 
     @PUT(ApiEndPoints.DATATABLES + "/kyc_level1_details/{clientId}/")
-    fun updateKYCLevel1Details(
+    suspend fun updateKYCLevel1Details(
         @Path("clientId") clientId: Int,
         @Body kycLevel1Details: KYCLevel1Details,
     ): Flow<GenericResponse>

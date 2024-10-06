@@ -26,7 +26,7 @@ import org.mifospay.core.network.model.GenericResponse
 interface StandingInstructionService {
 
     @POST(ApiEndPoints.STANDING_INSTRUCTION)
-    fun createStandingInstruction(
+    suspend fun createStandingInstruction(
         @Body
         standingInstructionPayload: StandingInstructionPayload,
     ): Flow<SDIResponse>
@@ -35,12 +35,12 @@ interface StandingInstructionService {
      * @param clientId - passed as Query to limit the response to client specific response
      */
     @GET(ApiEndPoints.STANDING_INSTRUCTION)
-    fun getAllStandingInstructions(
+    suspend fun getAllStandingInstructions(
         @Query("clientId") clientId: Long,
     ): Flow<Page<StandingInstruction>>
 
     @GET("${ApiEndPoints.STANDING_INSTRUCTION}/{standingInstructionId}")
-    fun getStandingInstruction(
+    suspend fun getStandingInstruction(
         @Path("standingInstructionId")
         standingInstructionId: Long,
     ): Flow<StandingInstruction>
@@ -53,13 +53,13 @@ interface StandingInstructionService {
      *                                will be performed.
      */
     @PUT("${ApiEndPoints.STANDING_INSTRUCTION}/{standingInstructionId}")
-    fun deleteStandingInstruction(
+    suspend fun deleteStandingInstruction(
         @Path("standingInstructionId") standingInstructionId: Long,
         @Query("command") command: String,
     ): Flow<GenericResponse>
 
     @PUT("${ApiEndPoints.STANDING_INSTRUCTION}/{standingInstructionId}")
-    fun updateStandingInstruction(
+    suspend fun updateStandingInstruction(
         @Path("standingInstructionId") standingInstructionId: Long,
         @Body standingInstructionPayload: StandingInstructionPayload,
         @Query("command") command: String,

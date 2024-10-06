@@ -19,7 +19,6 @@
  */
 plugins {
     alias(libs.plugins.mifospay.kmp.library)
-    alias(libs.plugins.mifospay.kotlin.inject)
     alias(libs.plugins.ktrofit)
     id("kotlinx-serialization")
     id("com.google.devtools.ksp")
@@ -44,6 +43,7 @@ kotlin {
             api(libs.kotlinx.datetime)
             api(projects.core.common)
             api(projects.core.model)
+            implementation(projects.core.datastore)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.json)
@@ -58,22 +58,28 @@ kotlin {
             implementation(libs.ktorfit.converters.flow)
             implementation(libs.squareup.okio)
         }
+
         androidMain.dependencies {
-            implementation(libs.ktor.client.android)
+            implementation(libs.ktor.client.okhttp)
             implementation(libs.koin.android)
         }
-        appleMain.dependencies {
+        nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
+
+        val desktopMain by getting {
+            dependencies {
+                implementation(libs.ktor.client.okhttp)
+            }
+        }
+
 //        wasmJsMain.dependencies {
 //            implementation(libs.ktor.client.js)
 //        }
-        jvmMain.dependencies {
-            implementation(libs.ktor.client.java)
-        }
-        mingwMain.dependencies {
-            implementation(libs.ktor.client.winhttp)
-        }
+//
+//        mingwMain.dependencies {
+//            implementation(libs.ktor.client.winhttp)
+//        }
     }
 }
 
@@ -81,7 +87,7 @@ dependencies {
     add("kspCommonMainMetadata", libs.ktorfit.ksp)
     add("kspAndroid", libs.ktorfit.ksp)
 //    add("kspWasmJs", libs.ktorfit.ksp)
-    add("kspJvm", libs.ktorfit.ksp)
+    add("kspDesktop", libs.ktorfit.ksp)
     add("kspIosX64", libs.ktorfit.ksp)
     add("kspIosArm64", libs.ktorfit.ksp)
     add("kspIosSimulatorArm64", libs.ktorfit.ksp)

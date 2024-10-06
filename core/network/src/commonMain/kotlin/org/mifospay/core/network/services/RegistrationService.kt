@@ -17,8 +17,8 @@ import org.mifospay.core.network.ApiEndPoints
 
 interface RegistrationService {
     @POST(ApiEndPoints.REGISTRATION)
-    fun registerUser(@Body registerPayload: RegisterPayload)
+    suspend fun registerUser(@Body registerPayload: RegisterPayload)
 
     @POST(ApiEndPoints.REGISTRATION + "/user")
-    fun verifyUser(@Body userVerify: UserVerify)
+    suspend fun verifyUser(@Body userVerify: UserVerify)
 }

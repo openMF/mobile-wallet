@@ -15,13 +15,13 @@ import org.mifospay.core.model.entity.Role
 @Serializable
 data class User(
     val username: String,
-    val userId: Long = 0,
+    val userId: Long,
     val base64EncodedAuthenticationKey: String,
-    val authenticated: Boolean = false,
+    val authenticated: Boolean,
     val officeId: Int,
     val officeName: String,
-    val roles: List<Role>,
-    val permissions: List<String>,
+    val roles: List<Role> = emptyList(),
+    val permissions: List<String> = emptyList(),
     val clients: List<Long> = emptyList(),
     val shouldRenewPassword: Boolean,
     val isTwoFactorAuthenticationRequired: Boolean,

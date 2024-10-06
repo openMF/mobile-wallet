@@ -11,7 +11,6 @@ package org.mifospay.core.network.services
 
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Query
-import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.entity.SearchedEntity
 import org.mifospay.core.network.ApiEndPoints
 
@@ -21,5 +20,5 @@ interface SearchService {
         @Query("query") query: String,
         @Query("resource") resources: String,
         @Query("exactMatch") exactMatch: Boolean,
-    ): Flow<List<SearchedEntity>>
+    ): List<SearchedEntity>
 }

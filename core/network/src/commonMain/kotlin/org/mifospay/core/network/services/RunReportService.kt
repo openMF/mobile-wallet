@@ -17,7 +17,7 @@ import org.mifospay.core.network.ApiEndPoints
 
 interface RunReportService {
     @GET(ApiEndPoints.RUN_REPORT + "/Savings Transaction Receipt")
-    fun getTransactionReceipt(
+    suspend fun getTransactionReceipt(
         @Query("output-type") outputType: String,
         @Query("R_transactionId") transactionId: String,
     ): Flow<TransactionsEntity>

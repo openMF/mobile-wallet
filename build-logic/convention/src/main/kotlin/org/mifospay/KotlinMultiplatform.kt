@@ -9,7 +9,7 @@ internal fun Project.configureKotlinMultiplatform() {
     extensions.configure<KotlinMultiplatformExtension> {
         applyDefaultHierarchyTemplate()
 
-        jvm()
+        jvm("desktop")
         androidTarget()
         iosSimulatorArm64()
         iosX64()

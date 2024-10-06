@@ -13,15 +13,5 @@ import org.koin.core.qualifier.named
 
 val SelfClient = named("SelfClient")
 val BaseClient = named("BaseClient")
-
-val FineractAuthenticationService = named("FineractAuthenticationService")
-val FineractClientService = named("FineractClientService")
-val FineractSavingsAccountsService = named("FineractSavingsAccountsService")
-val FineractRegistrationService = named("FineractRegistrationService")
-val FineractThirdPartyTransferService = named("FineractThirdPartyTransferService")
-
-val SelfServiceAuthenticationService = named("SelfServiceAuthenticationService")
-val SelfServiceClientService = named("SelfServiceClientService")
-val SelfServiceSavingsAccountsService = named("SelfServiceSavingsAccountsService")
-val SelfServiceRegistrationService = named("SelfServiceRegistrationService")
-val SelfServiceThirdPartyTransferService = named("SelfServiceThirdPartyTransferService")
+val KtorClient = named("KtorClient")
+val KtorBaseClient = named("KtorBaseClient")

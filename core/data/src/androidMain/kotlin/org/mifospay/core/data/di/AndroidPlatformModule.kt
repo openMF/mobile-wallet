@@ -10,6 +10,7 @@
 package org.mifospay.core.data.di
 
 import org.koin.android.ext.koin.androidContext
+import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.mifospay.core.common.MifosDispatchers
@@ -18,7 +19,7 @@ import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneBroadcastMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 
-val androidDataModule = module {
+val AndroidDataModule = module {
     single<NetworkMonitor> {
         ConnectivityManagerNetworkMonitor(androidContext(), get(named(MifosDispatchers.IO.name)))
     }
@@ -39,3 +40,8 @@ val androidDataModule = module {
         )
     }
 }
+
+actual val platformModule: Module = AndroidDataModule
+
+actual val getPlatformDataModule: PlatformDependentDataModule
+    get() = org.koin.core.context.GlobalContext.get().get()

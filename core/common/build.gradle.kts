@@ -9,6 +9,7 @@
  */
 plugins {
     alias(libs.plugins.mifospay.kmp.library)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
@@ -20,7 +21,7 @@ kotlin {
     listOf(
         iosX64(),
         iosArm64(),
-        iosSimulatorArm64()
+        iosSimulatorArm64(),
     ).forEach {
         it.binaries.framework {
             isStatic = false
@@ -37,7 +38,9 @@ kotlin {
             api(libs.coil.network.ktor)
             api(libs.kermit.logging)
             api(libs.squareup.okio)
+            api(libs.jb.kotlin.stdlib)
         }
+
         androidMain.dependencies {
             implementation(libs.kotlinx.coroutines.android)
         }
@@ -46,6 +49,11 @@ kotlin {
         }
         iosMain.dependencies {
             api(libs.kermit.simple)
+        }
+
+        desktopMain.dependencies {
+            implementation(libs.kotlinx.coroutines.swing)
+            implementation(libs.kotlin.reflect)
         }
     }
 }
