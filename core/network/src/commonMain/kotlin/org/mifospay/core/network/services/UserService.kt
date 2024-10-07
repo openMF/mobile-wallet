@@ -18,9 +18,9 @@ import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.domain.user.NewUser
 import org.mifospay.core.model.entity.UserWithRole
-import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.model.CommonResponse
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface UserService {
     @GET(ApiEndPoints.USER)

@@ -51,11 +51,8 @@ kotlin {
             implementation(libs.ktor.client.serialization)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.client.auth)
-            implementation(libs.ktor.client.cio)
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.ktorfit.lib)
-            implementation(libs.ktorfit.converters.call)
-            implementation(libs.ktorfit.converters.flow)
             implementation(libs.squareup.okio)
         }
 
@@ -72,21 +69,20 @@ kotlin {
                 implementation(libs.ktor.client.okhttp)
             }
         }
-
-//        wasmJsMain.dependencies {
-//            implementation(libs.ktor.client.js)
-//        }
-//
-//        mingwMain.dependencies {
-//            implementation(libs.ktor.client.winhttp)
-//        }
+        jsMain.dependencies {
+            implementation(libs.ktor.client.js)
+        }
+        wasmJsMain.dependencies {
+            implementation(libs.ktor.client.js)
+        }
     }
 }
 
 dependencies {
     add("kspCommonMainMetadata", libs.ktorfit.ksp)
     add("kspAndroid", libs.ktorfit.ksp)
-//    add("kspWasmJs", libs.ktorfit.ksp)
+    add("kspJs", libs.ktorfit.ksp)
+    add("kspWasmJs", libs.ktorfit.ksp)
     add("kspDesktop", libs.ktorfit.ksp)
     add("kspIosX64", libs.ktorfit.ksp)
     add("kspIosArm64", libs.ktorfit.ksp)

@@ -19,7 +19,7 @@ import de.jensklingenberg.ktorfit.http.Path
 import io.ktor.http.content.PartData
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.entity.noncore.Document
-import org.mifospay.core.network.ApiEndPoints
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface DocumentService {
     @GET("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS)

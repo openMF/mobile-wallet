@@ -21,6 +21,7 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.core.domain)
+            api(projects.core.data)
             //put your multiplatform dependencies here
             api(compose.material3)
             api(compose.foundation)

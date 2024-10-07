@@ -14,7 +14,14 @@ internal fun Project.configureKotlinMultiplatform() {
         iosSimulatorArm64()
         iosX64()
         iosArm64()
-
+        js(IR) {
+            this.nodejs()
+            binaries.executable()
+        }
+        wasmJs() {
+            browser()
+            nodejs()
+        }
         // Suppress 'expect'/'actual' classes are in Beta.
         targets.configureEach {
             compilations.configureEach {

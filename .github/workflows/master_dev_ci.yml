@@ -75,7 +75,7 @@ jobs:
       - name: Check Dependency Guard
         id: dependencyguard_verify
         continue-on-error: true
-        run: ./gradlew dependencyGuard
+        run: ./gradlew :mifospay-android:dependencyGuard
 
       - name: Prevent updating Dependency Guard baselines if this is a fork
         id: checkfork_dependencyguard
@@ -88,7 +88,7 @@ jobs:
         id: dependencyguard_baseline
         if: steps.dependencyguard_verify.outcome == 'failure' && github.event_name == 'pull_request'
         run: |
-          ./gradlew dependencyGuardBaseline
+          ./gradlew :mifospay-android:dependencyGuardBaseline
 
       - name: Push new Dependency Guard baselines if available
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -109,7 +109,7 @@ jobs:
           java-version: 17
       - name: Run tests
         run: |
-          ./gradlew testDemoDebug
+          ./gradlew :mifospay-android:testDemoDebug
 #          ./gradlew testDemoDebug :lint:test :mifospay-android:lintProdRelease :lint:lint
       - name: Upload reports
         if: always()

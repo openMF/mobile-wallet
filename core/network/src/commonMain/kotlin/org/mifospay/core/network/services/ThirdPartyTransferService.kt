@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.entity.TPTResponse
 import org.mifospay.core.model.entity.payload.TransferPayload
 import org.mifospay.core.model.entity.templates.account.AccountOptionsTemplate
-import org.mifospay.core.network.ApiEndPoints
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface ThirdPartyTransferService {
     @GET(ApiEndPoints.ACCOUNT_TRANSFER + "/template?type=tpt")

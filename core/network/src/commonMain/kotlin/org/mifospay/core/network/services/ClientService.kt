@@ -22,8 +22,8 @@ import org.mifospay.core.model.domain.client.NewClient
 import org.mifospay.core.model.entity.Page
 import org.mifospay.core.model.entity.client.ClientAccounts
 import org.mifospay.core.model.entity.client.ClientEntity
-import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.model.ClientResponse
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface ClientService {
     @GET(ApiEndPoints.CLIENTS)

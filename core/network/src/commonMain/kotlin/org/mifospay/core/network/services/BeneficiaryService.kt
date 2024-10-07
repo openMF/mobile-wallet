@@ -20,8 +20,8 @@ import org.mifospay.core.model.entity.beneficary.Beneficiary
 import org.mifospay.core.model.entity.beneficary.BeneficiaryPayload
 import org.mifospay.core.model.entity.beneficary.BeneficiaryUpdatePayload
 import org.mifospay.core.model.entity.templates.beneficiary.BeneficiaryTemplate
-import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.model.CommonResponse
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface BeneficiaryService {
     @GET(ApiEndPoints.BENEFICIARIES + "/tpt")

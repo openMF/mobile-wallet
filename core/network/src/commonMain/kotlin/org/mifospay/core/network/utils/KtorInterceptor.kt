@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.network
+package org.mifospay.core.network.utils
 
 import io.ktor.client.HttpClient
 import io.ktor.client.plugins.HttpClientPlugin

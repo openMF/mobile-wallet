@@ -20,8 +20,8 @@ import org.mifospay.core.model.entity.Page
 import org.mifospay.core.model.entity.payload.StandingInstructionPayload
 import org.mifospay.core.model.entity.standinginstruction.SDIResponse
 import org.mifospay.core.model.entity.standinginstruction.StandingInstruction
-import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface StandingInstructionService {
 

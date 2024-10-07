@@ -13,7 +13,7 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.domain.NotificationPayload
-import org.mifospay.core.network.ApiEndPoints
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface NotificationService {
     @GET(ApiEndPoints.DATATABLES + "/notifications/{clientId}")

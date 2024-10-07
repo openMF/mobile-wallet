@@ -13,7 +13,7 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.POST
 import org.mifospay.core.model.domain.user.User
 import org.mifospay.core.model.entity.authentication.AuthenticationPayload
-import org.mifospay.core.network.ApiEndPoints
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface AuthenticationService {
     @POST(ApiEndPoints.AUTHENTICATION)

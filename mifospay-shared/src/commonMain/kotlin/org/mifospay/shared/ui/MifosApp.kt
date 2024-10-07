@@ -9,7 +9,6 @@
  */
 package org.mifospay.shared.ui
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,17 +17,17 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
@@ -43,7 +42,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
@@ -65,14 +63,12 @@ import org.mifospay.core.designsystem.component.MifosNavigationBar
 import org.mifospay.core.designsystem.component.MifosNavigationBarItem
 import org.mifospay.core.designsystem.component.MifosNavigationRail
 import org.mifospay.core.designsystem.component.MifosNavigationRailItem
-import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.GradientColors
 import org.mifospay.core.designsystem.theme.LocalGradientColors
 import org.mifospay.shared.navigation.MifosNavHost
 import org.mifospay.shared.utils.TopLevelDestination
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MifosApp(
     appState: MifosAppState,
@@ -81,7 +77,6 @@ internal fun MifosApp(
 ) {
     val shouldShowGradientBackground =
         appState.currentTopLevelDestination == TopLevelDestination.HOME
-    var showHomeMenuOption by rememberSaveable { mutableStateOf(false) }
 
     MifosBackground(modifier) {
         MifosGradientBackground(
@@ -104,16 +99,6 @@ internal fun MifosApp(
                         duration = Indefinite,
                     )
                 }
-            }
-
-            AnimatedVisibility(showHomeMenuOption) {
-                HomeMenu(
-                    showHomeMenuOption = showHomeMenuOption,
-                    onDismissRequest = { showHomeMenuOption = false },
-                    onClickLogout = onClickLogout,
-                    onNavigateToFaq = {},
-                    onNavigateToSettings = {},
-                )
             }
 
             Scaffold(
@@ -161,16 +146,11 @@ internal fun MifosApp(
                         // Show the top app bar on top level destinations.
                         val destination = appState.currentTopLevelDestination
                         if (destination != null) {
-                            MifosTopAppBar(
-                                titleRes = stringResource(destination.titleText),
-                                actionIcon = MifosIcons.MoreVert,
-                                actionIconContentDescription = stringResource(
-                                    destination.titleText,
-                                ),
-                                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                                    containerColor = Color.Transparent,
-                                ),
-                                onActionClick = { showHomeMenuOption = true },
+                            MifosAppBar(
+                                title = stringResource(destination.titleText),
+                                onClickLogout = onClickLogout,
+                                onNavigateToFaq = {},
+                                onNavigateToSettings = {},
                             )
                         }
 
@@ -194,59 +174,90 @@ private fun HomeMenu(
     onNavigateToSettings: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .wrapContentSize(Alignment.TopEnd)
-            .padding(end = 24.dp)
-            .background(color = MaterialTheme.colorScheme.surface),
+    DropdownMenu(
+        modifier = modifier.background(color = MaterialTheme.colorScheme.surface),
+        expanded = showHomeMenuOption,
+        onDismissRequest = onDismissRequest,
     ) {
-        DropdownMenu(
-            modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
-            expanded = showHomeMenuOption,
-            onDismissRequest = onDismissRequest,
-        ) {
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        text = stringResource(Res.string.faq),
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                },
-                onClick = {
-                    onDismissRequest()
-                    onNavigateToFaq()
-                },
-            )
+        DropdownMenuItem(
+            text = {
+                Text(
+                    text = stringResource(Res.string.faq),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+            onClick = {
+                onDismissRequest()
+                onNavigateToFaq()
+            },
+        )
 
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        text = stringResource(Res.string.settings),
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                },
-                onClick = {
-                    onDismissRequest()
-                    onNavigateToSettings()
-                },
-            )
+        DropdownMenuItem(
+            text = {
+                Text(
+                    text = stringResource(Res.string.settings),
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+            onClick = {
+                onDismissRequest()
+                onNavigateToSettings()
+            },
+        )
 
-            // TODO:: this could be removed, just added for testing
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        text = "Logout",
-                        color = MaterialTheme.colorScheme.onSurface,
-                    )
-                },
-                onClick = {
-                    onDismissRequest()
-                    onClickLogout()
-                },
-            )
-        }
+        // TODO:: this could be removed, just added for testing
+        DropdownMenuItem(
+            text = {
+                Text(
+                    text = "Logout",
+                    color = MaterialTheme.colorScheme.onSurface,
+                )
+            },
+            onClick = {
+                onDismissRequest()
+                onClickLogout()
+            },
+        )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MifosAppBar(
+    title: String,
+    onClickLogout: () -> Unit,
+    onNavigateToFaq: () -> Unit,
+    onNavigateToSettings: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var showHomeMenuOption by rememberSaveable { mutableStateOf(false) }
+
+    CenterAlignedTopAppBar(
+        title = { Text(text = title) },
+        actions = {
+            Box {
+                IconButton(onClick = { showHomeMenuOption = true }) {
+                    Icon(
+                        imageVector = MifosIcons.MoreVert,
+                        contentDescription = "View More",
+                        tint = MaterialTheme.colorScheme.onSurface,
+                    )
+                }
+
+                HomeMenu(
+                    showHomeMenuOption = showHomeMenuOption,
+                    onDismissRequest = { showHomeMenuOption = false },
+                    onClickLogout = onClickLogout,
+                    onNavigateToFaq = onNavigateToFaq,
+                    onNavigateToSettings = onNavigateToSettings,
+                )
+            }
+        },
+        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Transparent,
+        ),
+        modifier = modifier.testTag("mifosTopAppBar"),
+    )
 }
 
 @Composable

@@ -13,7 +13,7 @@ import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.entity.accounts.savings.TransferDetail
-import org.mifospay.core.network.ApiEndPoints
+import org.mifospay.core.network.utils.ApiEndPoints
 
 /**
  * Created by ankur on 05/June/2018

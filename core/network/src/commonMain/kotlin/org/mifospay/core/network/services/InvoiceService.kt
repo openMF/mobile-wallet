@@ -17,8 +17,8 @@ import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.entity.Invoice
-import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.utils.ApiEndPoints
 
 // TODO:: Fix this endpoints, there's no such endpoint for invoices
 interface InvoiceService {

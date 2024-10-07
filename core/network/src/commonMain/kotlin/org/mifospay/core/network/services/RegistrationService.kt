@@ -13,7 +13,7 @@ import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.POST
 import org.mifospay.core.model.entity.register.RegisterPayload
 import org.mifospay.core.model.entity.register.UserVerify
-import org.mifospay.core.network.ApiEndPoints
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface RegistrationService {
     @POST(ApiEndPoints.REGISTRATION)

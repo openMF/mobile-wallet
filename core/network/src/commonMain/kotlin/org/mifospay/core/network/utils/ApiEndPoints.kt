@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.network
+package org.mifospay.core.network.utils
 
 object ApiEndPoints {
     // This class contains all the Constants for API End Points

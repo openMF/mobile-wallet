@@ -10,8 +10,6 @@
 package org.mifospay.core.network
 
 import de.jensklingenberg.ktorfit.Ktorfit
-import de.jensklingenberg.ktorfit.converter.CallConverterFactory
-import de.jensklingenberg.ktorfit.converter.FlowConverterFactory
 import io.ktor.client.HttpClient
 import org.mifospay.core.network.services.createAccountTransfersService
 import org.mifospay.core.network.services.createAuthenticationService
@@ -30,6 +28,7 @@ import org.mifospay.core.network.services.createStandingInstructionService
 import org.mifospay.core.network.services.createThirdPartyTransferService
 import org.mifospay.core.network.services.createTwoFactorAuthService
 import org.mifospay.core.network.services.createUserService
+import org.mifospay.core.network.utils.FlowConverterFactory
 
 class KtorfitClient(
     ktorfit: Ktorfit,
@@ -86,7 +85,6 @@ class KtorfitClient(
             val ktorfitBuilder = Ktorfit.Builder()
                 .httpClient(httpClient)
                 .baseUrl(baseURL)
-                .converterFactories(CallConverterFactory())
                 .converterFactories(FlowConverterFactory())
                 .build()
 

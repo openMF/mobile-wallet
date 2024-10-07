@@ -38,7 +38,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(":mifospay-shared")
 include(":mifospay-android")
 include(":mifospay-desktop")
-//include(":mifospay-web")
+include(":mifospay-web")
 
 include(":core:data")
 include(":core:domain")

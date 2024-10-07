@@ -16,12 +16,12 @@ import io.ktor.client.plugins.auth.providers.basic
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
 import org.koin.dsl.module
-import org.mifospay.core.network.BaseURL
 import org.mifospay.core.network.FineractApiManager
-import org.mifospay.core.network.KtorInterceptor
 import org.mifospay.core.network.KtorfitClient
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.ktorHttpClient
+import org.mifospay.core.network.utils.BaseURL
+import org.mifospay.core.network.utils.KtorInterceptor
 
 val NetworkModule = module {
 

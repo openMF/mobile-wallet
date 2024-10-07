@@ -12,17 +12,19 @@ package org.mifospay.core.common.di
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.SupervisorJob
+import org.koin.core.module.Module
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.mifospay.core.common.MifosDispatchers
 
 val DispatchersModule = module {
-    single<CoroutineDispatcher>(named(MifosDispatchers.IO.name)) { Dispatchers.IO }
+    includes(ioDispatcherModule)
     single<CoroutineDispatcher>(named(MifosDispatchers.Default.name)) { Dispatchers.Default }
     single<CoroutineDispatcher>(named(MifosDispatchers.Unconfined.name)) { Dispatchers.Unconfined }
     single<CoroutineScope>(named("ApplicationScope")) {
         CoroutineScope(SupervisorJob() + Dispatchers.Default)
     }
 }
+
+expect val ioDispatcherModule: Module
