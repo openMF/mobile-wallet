@@ -34,6 +34,7 @@ kotlin {
             api(libs.koin.compose.viewmodel)
 
             api(projects.feature.auth)
+            api(projects.libs.mifosPasscode)
         }
 
         desktopMain.dependencies {

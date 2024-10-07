@@ -14,6 +14,7 @@ import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
+import org.mifos.library.passcode.di.PasscodeModule
 import org.mifospay.core.common.di.DispatchersModule
 import org.mifospay.core.data.di.RepositoryModule
 import org.mifospay.core.datastore.di.PreferencesModule
@@ -47,6 +48,9 @@ object KoinModules {
             AuthModule,
         )
     }
+    private val LibraryModule = module {
+        includes(PasscodeModule)
+    }
 
     val allModules = listOf(
         commonModules,
@@ -56,6 +60,7 @@ object KoinModules {
         networkModules,
         featureModules,
         sharedModule,
+        LibraryModule,
     )
 }
 
