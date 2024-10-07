@@ -17,27 +17,27 @@ import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.entity.savedcards.Card
-import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface SavedCardService {
     @POST(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}")
-    fun addSavedCard(
+    suspend fun addSavedCard(
         @Path("clientId") clientId: Int,
         @Body card: Card,
     ): Flow<GenericResponse>
 
     @GET(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}")
-    fun getSavedCards(@Path("clientId") clientId: Int): Flow<List<Card>>
+    suspend fun getSavedCards(@Path("clientId") clientId: Int): Flow<List<Card>>
 
     @DELETE(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}/{cardId}")
-    fun deleteCard(
+    suspend fun deleteCard(
         @Path("clientId") clientId: Int,
         @Path("cardId") cardId: Int,
     ): Flow<GenericResponse>
 
     @PUT(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}/{cardId}")
-    fun updateCard(
+    suspend fun updateCard(
         @Path("clientId") clientId: Int,
         @Path("cardId") cardId: Int,
         @Body card: Card,

@@ -10,10 +10,8 @@
 package org.mifospay.core.data.repositoryImp
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.model.domain.user.User
 import org.mifospay.core.model.entity.authentication.AuthenticationPayload
@@ -23,7 +21,17 @@ class AuthenticationRepositoryImpl(
     private val apiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : AuthenticationRepository {
-    override suspend fun authenticate(payload: AuthenticationPayload): Flow<Result<User>> {
-        return apiManager.authenticationApi.authenticate(payload).asResult().flowOn(ioDispatcher)
+    override suspend fun authenticate(username: String, password: String): Result<User> {
+        return try {
+            val payload = AuthenticationPayload(username, password)
+
+            val result = withContext(ioDispatcher) {
+                apiManager.authenticationApi.authenticate(payload)
+            }
+
+            Result.Success(result)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 }

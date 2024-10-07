@@ -12,6 +12,7 @@ package org.mifospay.core.data.repositoryImp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.UserRepository
@@ -25,23 +26,54 @@ class UserRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : UserRepository {
-    override fun getUsers(): Flow<Result<List<UserWithRole>>> {
+    override suspend fun getUsers(): Flow<Result<List<UserWithRole>>> {
         return apiManager.userApi.users().asResult().flowOn(ioDispatcher)
     }
 
-    override fun getUser(): Flow<Result<UserWithRole>> {
+    override suspend fun getUser(): Flow<Result<UserWithRole>> {
         return apiManager.userApi.getUser().asResult().flowOn(ioDispatcher)
     }
 
-    override fun createUser(newUser: NewUser): Flow<Result<CommonResponse>> {
-        return apiManager.userApi.createUser(newUser).asResult().flowOn(ioDispatcher)
+    override suspend fun createUser(newUser: NewUser): Result<CommonResponse> {
+        return try {
+            val result = withContext(ioDispatcher) {
+                apiManager.userApi.createUser(newUser)
+            }
+
+            Result.Success(result)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
-    override fun updateUser(userId: Int, updatedUser: NewUser): Flow<Result<GenericResponse>> {
+    override suspend fun updateUser(
+        userId: Int,
+        updatedUser: NewUser,
+    ): Flow<Result<GenericResponse>> {
         return apiManager.userApi.updateUser(userId, updatedUser).asResult().flowOn(ioDispatcher)
     }
 
-    override fun deleteUser(userId: Int): Flow<Result<GenericResponse>> {
-        return apiManager.userApi.deleteUser(userId).asResult().flowOn(ioDispatcher)
+    override suspend fun deleteUser(userId: Int): Result<CommonResponse> {
+        return try {
+            val result = withContext(ioDispatcher) {
+                apiManager.userApi.deleteUser(userId)
+            }
+
+            Result.Success(result)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    override suspend fun assignClientToUser(userId: Int, clientId: Int): Result<Unit> {
+        return try {
+            val result = withContext(ioDispatcher) {
+                apiManager.userApi.assignClientToUser(userId, mapOf("clients" to listOf(clientId)))
+            }
+
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 }

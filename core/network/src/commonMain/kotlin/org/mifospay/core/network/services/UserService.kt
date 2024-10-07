@@ -18,28 +18,34 @@ import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.model.domain.user.NewUser
 import org.mifospay.core.model.entity.UserWithRole
-import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.model.CommonResponse
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface UserService {
     @GET(ApiEndPoints.USER)
-    fun users(): Flow<List<UserWithRole>>
+    suspend fun users(): Flow<List<UserWithRole>>
 
     @POST(ApiEndPoints.USER)
-    fun createUser(@Body user: NewUser): Flow<CommonResponse>
+    suspend fun createUser(@Body user: NewUser): CommonResponse
 
     @PUT(ApiEndPoints.USER + "/{userId}")
-    fun updateUser(
+    suspend fun updateUser(
         @Path("userId") userId: Int,
         @Body updateUserEntity: NewUser,
     ): Flow<GenericResponse>
 
     @DELETE(ApiEndPoints.USER + "/{userId}")
-    fun deleteUser(
+    suspend fun deleteUser(
         @Path("userId") userId: Int,
-    ): Flow<GenericResponse>
+    ): CommonResponse
 
     @GET("self/userdetails")
-    fun getUser(): Flow<UserWithRole>
+    suspend fun getUser(): Flow<UserWithRole>
+
+    @PUT(ApiEndPoints.USER + "/{userId}")
+    suspend fun assignClientToUser(
+        @Path("userId") userId: Int,
+        @Body clients: Map<String, List<Int>>,
+    )
 }

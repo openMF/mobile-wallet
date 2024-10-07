@@ -20,25 +20,25 @@ import org.mifospay.core.model.entity.beneficary.Beneficiary
 import org.mifospay.core.model.entity.beneficary.BeneficiaryPayload
 import org.mifospay.core.model.entity.beneficary.BeneficiaryUpdatePayload
 import org.mifospay.core.model.entity.templates.beneficiary.BeneficiaryTemplate
-import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.model.CommonResponse
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface BeneficiaryService {
     @GET(ApiEndPoints.BENEFICIARIES + "/tpt")
-    fun beneficiaryList(): Flow<List<Beneficiary>>
+    suspend fun beneficiaryList(): Flow<List<Beneficiary>>
 
     @GET(ApiEndPoints.BENEFICIARIES + "/tpt/template")
-    fun beneficiaryTemplate(): Flow<BeneficiaryTemplate>
+    suspend fun beneficiaryTemplate(): Flow<BeneficiaryTemplate>
 
     @POST(ApiEndPoints.BENEFICIARIES + "/tpt")
-    fun createBeneficiary(@Body beneficiaryPayload: BeneficiaryPayload): Flow<CommonResponse>
+    suspend fun createBeneficiary(@Body beneficiaryPayload: BeneficiaryPayload): Flow<CommonResponse>
 
     @PUT(ApiEndPoints.BENEFICIARIES + "/tpt/{beneficiaryId}")
-    fun updateBeneficiary(
+    suspend fun updateBeneficiary(
         @Path("beneficiaryId") beneficiaryId: Long,
         @Body payload: BeneficiaryUpdatePayload,
     ): Flow<CommonResponse>
 
     @DELETE(ApiEndPoints.BENEFICIARIES + "/tpt/{beneficiaryId}")
-    fun deleteBeneficiary(@Path("beneficiaryId") beneficiaryId: Long): Flow<CommonResponse>
+    suspend fun deleteBeneficiary(@Path("beneficiaryId") beneficiaryId: Long): Flow<CommonResponse>
 }

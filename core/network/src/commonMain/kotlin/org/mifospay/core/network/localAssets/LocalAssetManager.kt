@@ -9,8 +9,6 @@
  */
 package org.mifospay.core.network.localAssets
 
-import okio.FileHandle
-
 fun interface LocalAssetManager {
-    fun open(fileName: String): FileHandle
+    fun open(fileName: String): String
 }

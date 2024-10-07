@@ -18,7 +18,6 @@ import org.mifospay.core.model.State
 class MifosLocalAssetDataSource(
     private val ioDispatcher: CoroutineDispatcher,
     private val networkJson: Json,
-    private val assets: LocalAssetManager,
 ) : LocalAssetDataSource {
 
     override suspend fun getCountries(): List<Country> {

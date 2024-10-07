@@ -18,16 +18,16 @@ import org.mifospay.core.model.entity.templates.beneficiary.BeneficiaryTemplate
 import org.mifospay.core.network.model.CommonResponse
 
 interface BeneficiaryRepository {
-    fun getBeneficiaryList(): Flow<Result<List<Beneficiary>>>
+    suspend fun getBeneficiaryList(): Flow<Result<List<Beneficiary>>>
 
-    fun getBeneficiaryTemplate(): Flow<Result<BeneficiaryTemplate>>
+    suspend fun getBeneficiaryTemplate(): Flow<Result<BeneficiaryTemplate>>
 
-    fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload): Flow<Result<CommonResponse>>
+    suspend fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload): Flow<Result<CommonResponse>>
 
-    fun updateBeneficiary(
+    suspend fun updateBeneficiary(
         beneficiaryId: Long,
         payload: BeneficiaryUpdatePayload,
     ): Flow<Result<CommonResponse>>
 
-    fun deleteBeneficiary(beneficiaryId: Long): Flow<Result<CommonResponse>>
+    suspend fun deleteBeneficiary(beneficiaryId: Long): Flow<Result<CommonResponse>>
 }

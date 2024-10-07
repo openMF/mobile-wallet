@@ -21,12 +21,12 @@ class AndroidPlatformDependentDataModule(
     private val context: Context,
     private val dispatcher: CoroutineDispatcher,
     private val scope: CoroutineScope,
-) : PlatformDependentDataModule() {
-    override fun bindsNetworkMonitor(): NetworkMonitor {
-        return ConnectivityManagerNetworkMonitor(context, dispatcher)
+) : PlatformDependentDataModule {
+    override val networkMonitor: NetworkMonitor by lazy {
+        ConnectivityManagerNetworkMonitor(context, dispatcher)
     }
 
-    override fun bindsTimeZoneMonitor(): TimeZoneMonitor {
-        return TimeZoneBroadcastMonitor(context, scope, dispatcher)
+    override val timeZoneMonitor: TimeZoneMonitor by lazy {
+        TimeZoneBroadcastMonitor(context, scope, dispatcher)
     }
 }

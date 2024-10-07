@@ -9,11 +9,9 @@
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
 import org.mifospay.core.model.domain.user.User
-import org.mifospay.core.model.entity.authentication.AuthenticationPayload
 
 interface AuthenticationRepository {
-    suspend fun authenticate(payload: AuthenticationPayload): Flow<Result<User>>
+    suspend fun authenticate(username: String, password: String): Result<User>
 }

@@ -14,9 +14,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SearchedEntity(
     val entityId: Int = 0,
-    val entityAccountNo: String = " ",
-    val entityName: String = " ",
-    val entityType: String = " ",
+    val entityAccountNo: String = "",
+    val entityName: String = "",
+    val entityType: String = "",
     val parentId: Int = 0,
-    val parentName: String = " ",
+    val parentName: String = "",
 )

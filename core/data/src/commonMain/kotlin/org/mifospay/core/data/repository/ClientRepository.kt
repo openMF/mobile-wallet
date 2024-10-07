@@ -15,12 +15,13 @@ import org.mifospay.core.model.domain.client.Client
 import org.mifospay.core.model.domain.client.NewClient
 import org.mifospay.core.model.entity.Page
 import org.mifospay.core.model.entity.client.ClientAccounts
+import org.mifospay.core.network.model.ClientResponse
 
 interface ClientRepository {
 
     suspend fun getClients(): Flow<Result<Page<Client>>>
 
-    suspend fun getClient(clientId: Long): Flow<Result<Client>>
+    suspend fun getClient(clientId: Long): Result<Client>
 
     suspend fun updateClient(clientId: Long, client: Client): Flow<Result<Unit>>
 
@@ -32,5 +33,7 @@ interface ClientRepository {
 
     suspend fun getAccounts(clientId: Long, accountType: String): Flow<Result<ClientAccounts>>
 
-    suspend fun createClient(newClient: NewClient): Flow<Result<Client>>
+    suspend fun createClient(newClient: NewClient): Result<ClientResponse>
+
+    suspend fun deleteClient(clientId: Int): Result<ClientResponse>
 }

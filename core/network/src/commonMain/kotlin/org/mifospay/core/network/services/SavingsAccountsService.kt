@@ -19,8 +19,8 @@ import org.mifospay.core.model.entity.Page
 import org.mifospay.core.model.entity.accounts.savings.SavingAccount
 import org.mifospay.core.model.entity.accounts.savings.SavingsWithAssociationsEntity
 import org.mifospay.core.model.entity.accounts.savings.TransactionsEntity
-import org.mifospay.core.network.ApiEndPoints
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.utils.ApiEndPoints
 
 interface SavingsAccountsService {
     @GET(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}")

@@ -17,13 +17,15 @@ import org.mifospay.core.network.model.CommonResponse
 import org.mifospay.core.network.model.GenericResponse
 
 interface UserRepository {
-    fun getUsers(): Flow<Result<List<UserWithRole>>>
+    suspend fun getUsers(): Flow<Result<List<UserWithRole>>>
 
-    fun getUser(): Flow<Result<UserWithRole>>
+    suspend fun getUser(): Flow<Result<UserWithRole>>
 
-    fun createUser(newUser: NewUser): Flow<Result<CommonResponse>>
+    suspend fun createUser(newUser: NewUser): Result<CommonResponse>
 
-    fun updateUser(userId: Int, updatedUser: NewUser): Flow<Result<GenericResponse>>
+    suspend fun updateUser(userId: Int, updatedUser: NewUser): Flow<Result<GenericResponse>>
 
-    fun deleteUser(userId: Int): Flow<Result<GenericResponse>>
+    suspend fun deleteUser(userId: Int): Result<CommonResponse>
+
+    suspend fun assignClientToUser(userId: Int, clientId: Int): Result<Unit>
 }

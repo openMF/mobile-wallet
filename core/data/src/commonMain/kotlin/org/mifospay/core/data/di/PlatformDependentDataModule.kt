@@ -9,11 +9,16 @@
  */
 package org.mifospay.core.data.di
 
+import org.koin.core.module.Module
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 
-abstract class PlatformDependentDataModule {
-    abstract fun bindsNetworkMonitor(): NetworkMonitor
+interface PlatformDependentDataModule {
+    val networkMonitor: NetworkMonitor
 
-    abstract fun bindsTimeZoneMonitor(): TimeZoneMonitor
+    val timeZoneMonitor: TimeZoneMonitor
 }
+
+expect val platformModule: Module
+
+expect val getPlatformDataModule: PlatformDependentDataModule

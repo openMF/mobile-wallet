@@ -23,13 +23,13 @@ class DocumentRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : DocumentRepository {
-    override fun getDocuments(entityType: String, entityId: Int): Flow<Result<List<Document>>> {
+    override suspend fun getDocuments(entityType: String, entityId: Int): Flow<Result<List<Document>>> {
         return apiManager.documentApi
             .getDocuments(entityType, entityId)
             .asResult().flowOn(ioDispatcher)
     }
 
-    override fun createDocument(
+    override suspend fun createDocument(
         entityType: String,
         entityId: Int,
         name: String,
@@ -41,7 +41,7 @@ class DocumentRepositoryImpl(
             .asResult().flowOn(ioDispatcher)
     }
 
-    override fun downloadDocument(
+    override suspend fun downloadDocument(
         entityType: String,
         entityId: Int,
         documentId: Int,
@@ -51,7 +51,7 @@ class DocumentRepositoryImpl(
             .asResult().flowOn(ioDispatcher)
     }
 
-    override fun deleteDocument(
+    override suspend fun deleteDocument(
         entityType: String,
         entityId: Int,
         documentId: Int,
@@ -61,7 +61,7 @@ class DocumentRepositoryImpl(
             .asResult().flowOn(ioDispatcher)
     }
 
-    override fun updateDocument(
+    override suspend fun updateDocument(
         entityType: String,
         entityId: Int,
         documentId: Int,

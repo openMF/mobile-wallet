@@ -9,42 +9,73 @@
  */
 package org.mifospay.core.network.di
 
-import kotlinx.serialization.json.Json
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.auth.Auth
+import io.ktor.client.plugins.auth.providers.BasicAuthCredentials
+import io.ktor.client.plugins.auth.providers.basic
+import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.request.header
 import org.koin.dsl.module
-import org.mifospay.core.network.BaseURL
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.KtorfitClient
 import org.mifospay.core.network.SelfServiceApiManager
+import org.mifospay.core.network.ktorHttpClient
+import org.mifospay.core.network.utils.BaseURL
+import org.mifospay.core.network.utils.KtorInterceptor
 
 val NetworkModule = module {
 
-    single {
-        Json {
-            ignoreUnknownKeys = true
+    single<HttpClient>(KtorClient) {
+        ktorHttpClient.config {
+            install(Auth)
+            install(KtorInterceptor) {
+                preferenceRepository = get()
+            }
+        }
+    }
+
+    // TODO:: This could be removed, added for testing
+    single<HttpClient>(KtorBaseClient) {
+        ktorHttpClient.config {
+            install(Auth) {
+                basic {
+                    sendWithoutRequest { true }
+                    credentials {
+                        BasicAuthCredentials(
+                            username = "mifos",
+                            password = "password",
+                        )
+                    }
+                }
+            }
+
+            defaultRequest {
+                header("Fineract-Platform-TenantId", "default")
+                header("Content-Type", "application/json")
+                header("Accept", "application/json")
+            }
         }
     }
 
     single<KtorfitClient>(BaseClient) {
         KtorfitClient.builder()
+            .httpClient(get(KtorBaseClient))
             .baseURL(BaseURL.url)
             .build()
     }
 
-    single(SelfClient) {
+    single<KtorfitClient>(SelfClient) {
         KtorfitClient.builder()
+            .httpClient(get(KtorClient))
             .baseURL(BaseURL.selfServiceUrl)
             .build()
     }
 
     single {
-        FineractApiManager(
-            ktorfitClient = get(BaseClient),
-        )
+        FineractApiManager(ktorfitClient = get(BaseClient))
     }
 
     single {
-        SelfServiceApiManager(
-            ktorfitClient = get(SelfClient),
-        )
+        SelfServiceApiManager(ktorfitClient = get(SelfClient))
     }
 }

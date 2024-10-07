@@ -35,8 +35,13 @@ kotlin {
             implementation(projects.core.common)
             implementation(projects.core.datastoreProto)
         }
+
         commonTest.dependencies {
             implementation(libs.multiplatform.settings.test)
+        }
+
+        desktopMain.dependencies {
+            implementation(libs.kotlinx.coroutines.swing)
         }
     }
 }

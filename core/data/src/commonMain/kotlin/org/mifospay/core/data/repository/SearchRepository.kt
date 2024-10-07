@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.data.repository
 
-import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
 import org.mifospay.core.model.entity.SearchedEntity
 
@@ -18,5 +17,5 @@ interface SearchRepository {
         query: String,
         resources: String,
         exactMatch: Boolean,
-    ): Flow<Result<List<SearchedEntity>>>
+    ): Result<List<SearchedEntity>>
 }
