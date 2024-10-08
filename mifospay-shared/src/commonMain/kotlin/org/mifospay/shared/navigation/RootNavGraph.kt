@@ -33,7 +33,7 @@ internal fun RootNavGraph(
     ) {
         loginNavGraph(navHostController)
 
-//        passcodeNavGraph(navHostController)
+        passcodeNavGraph(navHostController)
 
         composable(MifosNavGraph.MAIN_GRAPH) {
             MifosApp(

@@ -18,9 +18,11 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.UserInfo
+import proto.org.mifos.library.passcode.data.PasscodeManager
 
 class MifosPayViewModel(
     private val userDataRepository: UserPreferencesRepository,
+    private val passcodeManager: PasscodeManager,
 ) : ViewModel() {
     val uiState: StateFlow<MainUiState> = userDataRepository.userInfo.map {
         MainUiState.Success(it)
@@ -33,7 +35,7 @@ class MifosPayViewModel(
     fun logOut() {
         viewModelScope.launch {
             userDataRepository.logOut()
-//            passcodeManager.clearPasscode()
+            passcodeManager.clearPasscode()
         }
     }
 }

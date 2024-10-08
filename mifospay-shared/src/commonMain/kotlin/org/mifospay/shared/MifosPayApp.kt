@@ -25,7 +25,7 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.LocalTimeZone
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
-import org.mifospay.shared.navigation.MifosNavGraph.MAIN_GRAPH
+import org.mifospay.shared.navigation.MifosNavGraph.PASSCODE_GRAPH
 import org.mifospay.shared.navigation.RootNavGraph
 import org.mifospay.shared.ui.rememberMifosAppState
 
@@ -60,7 +60,7 @@ private fun MifosPayApp(
     val navDestination = when (uiState) {
         is MainUiState.Loading -> LOGIN_GRAPH
         is Success -> if ((uiState as Success).userData.authenticated) {
-            MAIN_GRAPH
+            PASSCODE_GRAPH
         } else {
             LOGIN_GRAPH
         }
