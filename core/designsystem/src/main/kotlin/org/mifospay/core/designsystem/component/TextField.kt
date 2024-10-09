@@ -98,7 +98,6 @@ fun MfOutlinedTextField(
     )
 }
 
-
 @Composable
 fun MfPasswordTextField(
     password: String,
@@ -146,14 +145,14 @@ fun MfPasswordTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(Color.Transparent),
-                    contentAlignment = Alignment.CenterStart
+                    contentAlignment = Alignment.CenterStart,
                 ) {
                     innerTextField()
 
                     IconButton(
                         onClick = onTogglePasswordVisibility,
-                        modifier = Modifier.align(Alignment.CenterEnd))
-                    {
+                        modifier = Modifier.align(Alignment.CenterEnd),
+                    ) {
                         Icon(
                             if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                             contentDescription = "Toggle password visibility",
@@ -173,7 +172,7 @@ fun MfPasswordTextField(
                         text = errorMessage,
                         color = MaterialTheme.colorScheme.error,
                         style = MaterialTheme.typography.bodySmall,
-                        modifier = Modifier.padding(top = 4.dp)
+                        modifier = Modifier.padding(top = 4.dp),
                     )
                 }
             }
