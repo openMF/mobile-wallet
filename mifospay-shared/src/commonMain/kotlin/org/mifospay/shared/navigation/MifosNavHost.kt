@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.homeScreen
+import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.shared.ui.MifosAppState
 
 @Composable
@@ -34,6 +35,15 @@ internal fun MifosNavHost(
             onNavigateBack = navController::popBackStack,
             onRequest = {},
             onPay = {},
+        )
+
+        settingsScreen(
+            onBackPress = navController::navigateUp,
+            onLogout = onClickLogout,
+            onChangePasscode = {},
+            navigateToEditPasswordScreen = {},
+            navigateToFaqScreen = {},
+            navigateToNotificationScreen = {},
         )
     }
 }

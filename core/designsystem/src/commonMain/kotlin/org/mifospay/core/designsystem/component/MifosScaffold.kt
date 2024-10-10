@@ -22,7 +22,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -35,8 +34,8 @@ fun MifosScaffold(
     topBarTitle: String? = null,
     floatingActionButtonContent: FloatingActionButtonContent? = null,
     snackbarHost: @Composable () -> Unit = {},
-    scaffoldContent: @Composable (PaddingValues) -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
+    content: @Composable (PaddingValues) -> Unit = {},
 ) {
     Scaffold(
         topBar = {
@@ -58,7 +57,8 @@ fun MifosScaffold(
             }
         },
         snackbarHost = snackbarHost,
-        content = scaffoldContent,
+        containerColor = Color.Transparent,
+        content = content,
         modifier = modifier,
     )
 }
@@ -71,8 +71,8 @@ fun MifosScaffold(
     floatingActionButton: @Composable () -> Unit = {},
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     floatingActionButtonPosition: FabPosition = FabPosition.End,
-    containerColor: Color = MaterialTheme.colorScheme.background,
-    contentColor: Color = contentColorFor(containerColor),
+    containerColor: Color = Color.Transparent,
+    contentColor: Color = MaterialTheme.colorScheme.onSurface,
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues) -> Unit,
 ) {

@@ -10,6 +10,7 @@
 :core:ui
 :feature:auth
 :feature:home
+:feature:settings
 :libs:country-code-picker
 :libs:mifos-passcode
 :mifospay-shared

@@ -37,6 +37,7 @@ kotlin {
             api(projects.feature.auth)
             api(projects.libs.mifosPasscode)
             api(projects.feature.home)
+            api(projects.feature.settings)
         }
 
         desktopMain.dependencies {

@@ -23,6 +23,7 @@ import org.mifospay.core.network.di.LocalModule
 import org.mifospay.core.network.di.NetworkModule
 import org.mifospay.feature.auth.di.AuthModule
 import org.mifospay.feature.home.di.HomeModule
+import org.mifospay.feature.settings.di.SettingsModule
 import org.mifospay.shared.MifosPayViewModel
 
 object KoinModules {
@@ -48,6 +49,7 @@ object KoinModules {
         includes(
             AuthModule,
             HomeModule,
+            SettingsModule,
         )
     }
     private val LibraryModule = module {

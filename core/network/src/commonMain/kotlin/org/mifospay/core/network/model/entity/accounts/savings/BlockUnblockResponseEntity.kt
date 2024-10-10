@@ -7,12 +7,20 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.network.model.entity.accounts
+package org.mifospay.core.network.model.entity.accounts.savings
 
 import kotlinx.serialization.Serializable
-import org.mifospay.core.network.model.entity.accounts.savings.SavingAccountEntity
 
 @Serializable
-data class SavingAccountsListResponse(
-    var savingsAccounts: List<SavingAccountEntity> = ArrayList(),
+data class BlockUnblockResponseEntity(
+    val officeId: Long,
+    val clientId: Long,
+    val savingsId: Long,
+    val resourceId: Long,
+    val changes: ChangesEntity,
+)
+
+@Serializable
+data class ChangesEntity(
+    val subStatus: SubStatus,
 )

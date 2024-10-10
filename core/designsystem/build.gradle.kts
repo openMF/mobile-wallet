@@ -64,7 +64,3 @@ compose.resources {
     publicResClass = true
     generateResClass = always
 }
-
-dependencies {
-    lintPublish(projects.lint)
-}

@@ -37,6 +37,9 @@ import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Wallet
 import androidx.compose.material.icons.rounded.AccountBalance
@@ -57,6 +60,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
  * Mifos icons. Material icons are [ImageVector]s, custom icons are drawable resource IDs.
  */
 object MifosIcons {
+    val OutlinedInfo = Icons.Outlined.Info
+    val OutlinedLock = Icons.Outlined.Lock
+    val OutlinedNotifications = Icons.Outlined.Notifications
     val ChevronRight: ImageVector = Icons.Filled.ChevronRight
     val QrCode: ImageVector = Icons.Filled.QrCode
     val Close: ImageVector = Icons.Filled.Close

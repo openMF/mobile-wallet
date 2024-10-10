@@ -17,6 +17,7 @@ import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.network.model.GenericResponse
 import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.accounts.savings.BlockUnblockResponseEntity
 import org.mifospay.core.network.model.entity.accounts.savings.SavingAccountEntity
 import org.mifospay.core.network.model.entity.accounts.savings.SavingsWithAssociationsEntity
 import org.mifospay.core.network.model.entity.accounts.savings.TransactionsEntity
@@ -41,7 +42,7 @@ interface SavingsAccountsService {
     suspend fun blockUnblockAccount(
         @Path("accountId") accountId: Long,
         @Query("command") command: String?,
-    ): Flow<GenericResponse>
+    ): BlockUnblockResponseEntity
 
     @GET(
         ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}/" + ApiEndPoints.TRANSACTIONS +
