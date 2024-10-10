@@ -9,15 +9,18 @@
  */
 package org.mifospay.core.data.mapper
 
-import org.mifospay.core.model.domain.SearchResult
-import org.mifospay.core.model.entity.SearchedEntity
+import org.mifospay.core.model.search.SearchResult
+import org.mifospay.core.network.model.entity.SearchedEntity
 
-fun SearchedEntity.toSearchResult(): SearchResult {
+fun SearchedEntity.toModel(): SearchResult {
     return SearchResult(
-        resultId = this.entityId,
-        resultName = this.entityName,
-        resultType = this.entityType,
+        entityId = entityId,
+        entityAccountNo = entityAccountNo,
+        entityName = entityName,
+        entityType = entityType,
+        parentId = parentId,
+        parentName = parentName,
     )
 }
 
-fun List<SearchedEntity>.toSearchResult(): List<SearchResult> = map { it.toSearchResult() }
+fun List<SearchedEntity>.toSearchResult(): List<SearchResult> = map { it.toModel() }

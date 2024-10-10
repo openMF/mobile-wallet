@@ -11,7 +11,7 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.domain.Transaction
+import org.mifospay.core.model.savingsaccount.Transaction
 
 interface RunReportRepository {
     suspend fun getTransactionReceipt(

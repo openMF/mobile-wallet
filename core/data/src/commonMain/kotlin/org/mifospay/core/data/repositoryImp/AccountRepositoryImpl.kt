@@ -12,10 +12,12 @@ package org.mifospay.core.data.repositoryImp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
+import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.repository.AccountRepository
-import org.mifospay.core.model.entity.accounts.savings.TransferDetail
+import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.network.FineractApiManager
 
 class AccountRepositoryImpl(
@@ -26,6 +28,7 @@ class AccountRepositoryImpl(
         return apiManager
             .accountTransfersApi
             .getAccountTransfer(transferId)
+            .map { it.toModel() }
             .asResult()
             .flowOn(ioDispatcher)
     }

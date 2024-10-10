@@ -18,7 +18,7 @@ import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 import org.mifospay.core.common.Result
 import org.mifospay.core.domain.LoginUseCase
-import org.mifospay.core.model.domain.user.User
+import org.mifospay.core.model.user.UserInfo
 import org.mifospay.core.ui.utils.BaseViewModel
 
 private const val KEY_STATE = "state"
@@ -148,7 +148,7 @@ sealed class LoginAction {
 
     sealed class Internal : LoginAction() {
         data class ReceiveLoginResult(
-            val loginResult: Result<User>,
+            val loginResult: Result<UserInfo>,
         ) : Internal()
     }
 }

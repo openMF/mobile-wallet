@@ -48,6 +48,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
 
 @Composable
@@ -188,7 +189,7 @@ fun MfLoadingWheel(
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun MifosLoadingWheelPreview() {
     MifosTheme {
@@ -198,7 +199,7 @@ fun MifosLoadingWheelPreview() {
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun NiaOverlayLoadingWheelPreview() {
     MifosTheme {

@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.flowOn
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.SavedCardRepository
-import org.mifospay.core.model.entity.savedcards.Card
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.savedcards.Card
 
 class SavedCardRepositoryImpl(
     private val apiManager: FineractApiManager,

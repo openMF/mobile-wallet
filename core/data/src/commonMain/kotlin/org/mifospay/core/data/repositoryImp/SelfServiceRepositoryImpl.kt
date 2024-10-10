@@ -11,25 +11,28 @@ package org.mifospay.core.data.repositoryImp
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
+import org.mifospay.core.data.mapper.toAccount
 import org.mifospay.core.data.mapper.toModel
+import org.mifospay.core.data.mapper.toTransactionList
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.data.util.Constants
-import org.mifospay.core.model.domain.client.Client
-import org.mifospay.core.model.domain.user.User
-import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.accounts.savings.SavingsWithAssociationsEntity
-import org.mifospay.core.model.entity.accounts.savings.TransactionsEntity
-import org.mifospay.core.model.entity.authentication.AuthenticationPayload
-import org.mifospay.core.model.entity.beneficary.Beneficiary
-import org.mifospay.core.model.entity.beneficary.BeneficiaryPayload
-import org.mifospay.core.model.entity.beneficary.BeneficiaryUpdatePayload
-import org.mifospay.core.model.entity.client.ClientAccounts
+import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.CommonResponse
+import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.authentication.AuthenticationPayload
+import org.mifospay.core.network.model.entity.beneficary.Beneficiary
+import org.mifospay.core.network.model.entity.beneficary.BeneficiaryPayload
+import org.mifospay.core.network.model.entity.beneficary.BeneficiaryUpdatePayload
+import org.mifospay.core.network.model.entity.user.User
 
 class SelfServiceRepositoryImpl(
     private val apiManager: SelfServiceApiManager,
@@ -39,7 +42,6 @@ class SelfServiceRepositoryImpl(
     override suspend fun loginSelf(payload: AuthenticationPayload): Result<User> {
         return try {
             val result = apiManager.authenticationApi.authenticate(payload)
-                ?: return Result.Error(Exception("Authentication failed"))
 
             Result.Success(result)
         } catch (e: Exception) {
@@ -60,34 +62,60 @@ class SelfServiceRepositoryImpl(
         return apiManager.clientsApi.clients().map { it.toModel() }.asResult().flowOn(dispatcher)
     }
 
-    override suspend fun getSelfAccountTransactions(
+    override fun getSelfAccountTransactions(
         accountId: Long,
-    ): Flow<Result<SavingsWithAssociationsEntity>> {
-        return apiManager.savingAccountsListApi
-            .getSavingsWithAssociations(accountId, Constants.TRANSACTIONS)
-            .asResult().flowOn(dispatcher)
+    ): Flow<List<Transaction>> {
+        return flow {
+            try {
+                val result = withContext(dispatcher) {
+                    apiManager.savingAccountsListApi
+                        .getSavingsWithAssociations(accountId, Constants.TRANSACTIONS)
+                }
+
+                emit(result.toTransactionList())
+            } catch (e: Exception) {
+                throw e
+            }
+        }
     }
 
     override suspend fun getSelfAccountTransactionFromId(
         accountId: Long,
         transactionId: Long,
-    ): Flow<Result<TransactionsEntity>> {
-        return apiManager.savingAccountsListApi
-            .getSavingAccountTransaction(accountId, transactionId)
-            .asResult().flowOn(dispatcher)
+    ): Result<Flow<Transaction>> {
+        return try {
+            val result = withContext(dispatcher) {
+                apiManager.savingAccountsListApi.getSavingAccountTransaction(
+                    accountId,
+                    transactionId,
+                )
+            }
+
+            Result.Success(result.map { it.toModel() })
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
-    override suspend fun getSelfAccounts(clientId: Long): Flow<Result<ClientAccounts>> {
-        return apiManager.clientsApi
-            .getAccounts(clientId, Constants.SAVINGS)
-            .asResult().flowOn(dispatcher)
+    override suspend fun getSelfAccounts(clientId: Long): Result<List<Account>> {
+        return try {
+            val result = withContext(dispatcher) {
+                apiManager.clientsApi.getAccounts(clientId, Constants.SAVINGS)
+            }
+
+            Result.Success(result.toAccount())
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
     override suspend fun getBeneficiaryList(): Flow<Result<List<Beneficiary>>> {
         return apiManager.beneficiaryApi.beneficiaryList().asResult().flowOn(dispatcher)
     }
 
-    override suspend fun createBeneficiary(beneficiaryPayload: BeneficiaryPayload): Flow<Result<CommonResponse>> {
+    override suspend fun createBeneficiary(
+        beneficiaryPayload: BeneficiaryPayload,
+    ): Flow<Result<CommonResponse>> {
         return apiManager.beneficiaryApi
             .createBeneficiary(beneficiaryPayload)
             .asResult().flowOn(dispatcher)

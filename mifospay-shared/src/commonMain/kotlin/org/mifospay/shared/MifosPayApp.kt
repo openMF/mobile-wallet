@@ -9,10 +9,7 @@
  */
 package org.mifospay.shared
 
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -22,12 +19,10 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.ui.LocalTimeZone
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
 import org.mifospay.shared.navigation.MifosNavGraph.PASSCODE_GRAPH
 import org.mifospay.shared.navigation.RootNavGraph
-import org.mifospay.shared.ui.rememberMifosAppState
 
 @Composable
 fun MifosPaySharedApp(
@@ -38,7 +33,6 @@ fun MifosPaySharedApp(
     MifosPayApp(modifier, networkMonitor, timeZoneMonitor)
 }
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 private fun MifosPayApp(
     modifier: Modifier = Modifier,
@@ -49,14 +43,6 @@ private fun MifosPayApp(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navController = rememberNavController()
 
-    val appState = rememberMifosAppState(
-        windowSizeClass = calculateWindowSizeClass(),
-        networkMonitor = networkMonitor,
-        timeZoneMonitor = timeZoneMonitor,
-    )
-
-    val currentTimeZone by appState.currentTimeZone.collectAsStateWithLifecycle()
-
     val navDestination = when (uiState) {
         is MainUiState.Loading -> LOGIN_GRAPH
         is Success -> if ((uiState as Success).userData.authenticated) {
@@ -66,24 +52,21 @@ private fun MifosPayApp(
         }
     }
 
-    CompositionLocalProvider(
-        LocalTimeZone provides currentTimeZone,
-    ) {
-        MifosTheme {
-            RootNavGraph(
-                appState = appState,
-                navHostController = navController,
-                startDestination = navDestination,
-                modifier = modifier,
-                onClickLogout = {
-                    viewModel.logOut()
-                    navController.navigate(LOGIN_GRAPH) {
-                        popUpTo(navController.graph.id) {
-                            inclusive = true
-                        }
+    MifosTheme {
+        RootNavGraph(
+            networkMonitor = networkMonitor,
+            timeZoneMonitor = timeZoneMonitor,
+            navHostController = navController,
+            startDestination = navDestination,
+            modifier = modifier,
+            onClickLogout = {
+                viewModel.logOut()
+                navController.navigate(LOGIN_GRAPH) {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
                     }
-                },
-            )
-        }
+                }
+            },
+        )
     }
 }

@@ -11,17 +11,16 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.domain.client.Client
-import org.mifospay.core.model.domain.user.User
-import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.accounts.savings.SavingsWithAssociationsEntity
-import org.mifospay.core.model.entity.accounts.savings.TransactionsEntity
-import org.mifospay.core.model.entity.authentication.AuthenticationPayload
-import org.mifospay.core.model.entity.beneficary.Beneficiary
-import org.mifospay.core.model.entity.beneficary.BeneficiaryPayload
-import org.mifospay.core.model.entity.beneficary.BeneficiaryUpdatePayload
-import org.mifospay.core.model.entity.client.ClientAccounts
+import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.network.model.CommonResponse
+import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.authentication.AuthenticationPayload
+import org.mifospay.core.network.model.entity.beneficary.Beneficiary
+import org.mifospay.core.network.model.entity.beneficary.BeneficiaryPayload
+import org.mifospay.core.network.model.entity.beneficary.BeneficiaryUpdatePayload
+import org.mifospay.core.network.model.entity.user.User
 
 interface SelfServiceRepository {
     suspend fun loginSelf(payload: AuthenticationPayload): Result<User>
@@ -30,16 +29,16 @@ interface SelfServiceRepository {
 
     suspend fun getSelfClientDetails(): Flow<Result<Page<Client>>>
 
-    suspend fun getSelfAccountTransactions(
+    fun getSelfAccountTransactions(
         accountId: Long,
-    ): Flow<Result<SavingsWithAssociationsEntity>>
+    ): Flow<List<Transaction>>
 
     suspend fun getSelfAccountTransactionFromId(
         accountId: Long,
         transactionId: Long,
-    ): Flow<Result<TransactionsEntity>>
+    ): Result<Flow<Transaction>>
 
-    suspend fun getSelfAccounts(clientId: Long): Flow<Result<ClientAccounts>>
+    suspend fun getSelfAccounts(clientId: Long): Result<List<Account>>
 
     suspend fun getBeneficiaryList(): Flow<Result<List<Beneficiary>>>
 

@@ -11,11 +11,11 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.entity.beneficary.Beneficiary
-import org.mifospay.core.model.entity.beneficary.BeneficiaryPayload
-import org.mifospay.core.model.entity.beneficary.BeneficiaryUpdatePayload
-import org.mifospay.core.model.entity.templates.beneficiary.BeneficiaryTemplate
 import org.mifospay.core.network.model.CommonResponse
+import org.mifospay.core.network.model.entity.beneficary.Beneficiary
+import org.mifospay.core.network.model.entity.beneficary.BeneficiaryPayload
+import org.mifospay.core.network.model.entity.beneficary.BeneficiaryUpdatePayload
+import org.mifospay.core.network.model.entity.templates.beneficiary.BeneficiaryTemplate
 
 interface BeneficiaryRepository {
     suspend fun getBeneficiaryList(): Flow<Result<List<Beneficiary>>>

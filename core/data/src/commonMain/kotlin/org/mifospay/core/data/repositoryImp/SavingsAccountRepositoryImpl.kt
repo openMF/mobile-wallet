@@ -11,19 +11,21 @@ package org.mifospay.core.data.repositoryImp
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.repository.SavingsAccountRepository
-import org.mifospay.core.model.domain.Transaction
-import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.accounts.savings.SavingAccount
-import org.mifospay.core.model.entity.accounts.savings.SavingsWithAssociationsEntity
-import org.mifospay.core.model.entity.accounts.savings.TransactionsEntity
+import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.accounts.savings.SavingAccountEntity
+import org.mifospay.core.network.model.entity.accounts.savings.SavingsWithAssociationsEntity
+import org.mifospay.core.network.model.entity.accounts.savings.TransactionsEntity
 
 class SavingsAccountRepositoryImpl(
     private val apiManager: FineractApiManager,
@@ -41,13 +43,22 @@ class SavingsAccountRepositoryImpl(
         accountId: Long,
         associationType: String,
     ): Flow<Result<SavingsWithAssociationsEntity>> {
-        return apiManager.savingsAccountsApi
-            .getSavingsWithAssociations(accountId, associationType)
-            .asResult().flowOn(ioDispatcher)
+        return flow {
+            try {
+                val result = withContext(ioDispatcher) {
+                    apiManager.savingsAccountsApi
+                        .getSavingsWithAssociations(accountId, associationType)
+                }
+
+                emit(Result.Success(result))
+            } catch (e: Exception) {
+                emit(Result.Error(e))
+            }
+        }
     }
 
     override suspend fun createSavingsAccount(
-        savingAccount: SavingAccount,
+        savingAccount: SavingAccountEntity,
     ): Flow<Result<GenericResponse>> {
         return apiManager.savingsAccountsApi
             .createSavingsAccount(savingAccount)

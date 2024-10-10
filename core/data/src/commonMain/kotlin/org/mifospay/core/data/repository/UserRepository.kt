@@ -11,17 +11,17 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.domain.user.NewUser
-import org.mifospay.core.model.entity.UserWithRole
+import org.mifospay.core.model.user.NewUser
 import org.mifospay.core.network.model.CommonResponse
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.UserWithRole
 
 interface UserRepository {
     suspend fun getUsers(): Flow<Result<List<UserWithRole>>>
 
     suspend fun getUser(): Flow<Result<UserWithRole>>
 
-    suspend fun createUser(newUser: NewUser): Result<CommonResponse>
+    suspend fun createUser(newUser: NewUser): Result<Int>
 
     suspend fun updateUser(userId: Int, updatedUser: NewUser): Flow<Result<GenericResponse>>
 

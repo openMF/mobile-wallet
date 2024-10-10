@@ -12,7 +12,7 @@ package org.mifospay.core.network.services
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.model.entity.accounts.savings.TransferDetail
+import org.mifospay.core.network.model.entity.accounts.savings.TransferDetailEntity
 import org.mifospay.core.network.utils.ApiEndPoints
 
 /**
@@ -20,5 +20,5 @@ import org.mifospay.core.network.utils.ApiEndPoints
  */
 interface AccountTransfersService {
     @GET(ApiEndPoints.ACCOUNT_TRANSFER + "/{transferId}")
-    suspend fun getAccountTransfer(@Path("transferId") transferId: Long): Flow<TransferDetail>
+    suspend fun getAccountTransfer(@Path("transferId") transferId: Long): Flow<TransferDetailEntity>
 }

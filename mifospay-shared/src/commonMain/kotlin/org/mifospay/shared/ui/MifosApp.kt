@@ -22,18 +22,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -57,6 +56,9 @@ import mobile_wallet.mifospay_shared.generated.resources.faq
 import mobile_wallet.mifospay_shared.generated.resources.not_connected
 import mobile_wallet.mifospay_shared.generated.resources.settings
 import org.jetbrains.compose.resources.stringResource
+import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.util.TimeZoneMonitor
+import org.mifospay.core.designsystem.component.IconBox
 import org.mifospay.core.designsystem.component.MifosBackground
 import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosNavigationBar
@@ -64,28 +66,26 @@ import org.mifospay.core.designsystem.component.MifosNavigationBarItem
 import org.mifospay.core.designsystem.component.MifosNavigationRail
 import org.mifospay.core.designsystem.component.MifosNavigationRailItem
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.GradientColors
 import org.mifospay.core.designsystem.theme.LocalGradientColors
 import org.mifospay.shared.navigation.MifosNavHost
 import org.mifospay.shared.utils.TopLevelDestination
 
 @Composable
 internal fun MifosApp(
-    appState: MifosAppState,
+    networkMonitor: NetworkMonitor,
+    timeZoneMonitor: TimeZoneMonitor,
     onClickLogout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val shouldShowGradientBackground =
-        appState.currentTopLevelDestination == TopLevelDestination.HOME
-
     MifosBackground(modifier) {
         MifosGradientBackground(
-            gradientColors = if (shouldShowGradientBackground) {
-                LocalGradientColors.current
-            } else {
-                GradientColors()
-            },
+            gradientColors = LocalGradientColors.current,
         ) {
+            val appState = rememberMifosAppState(
+                networkMonitor = networkMonitor,
+                timeZoneMonitor = timeZoneMonitor,
+            )
+
             val snackbarHostState = remember { SnackbarHostState() }
 
             val isOffline by appState.isOffline.collectAsStateWithLifecycle()
@@ -151,6 +151,7 @@ internal fun MifosApp(
                                 onClickLogout = onClickLogout,
                                 onNavigateToFaq = {},
                                 onNavigateToSettings = {},
+                                destination = destination,
                             )
                         }
 
@@ -165,6 +166,7 @@ internal fun MifosApp(
     }
 }
 
+// TODO:: This could be removed
 @Composable
 private fun HomeMenu(
     showHomeMenuOption: Boolean,
@@ -228,22 +230,40 @@ private fun MifosAppBar(
     onClickLogout: () -> Unit,
     onNavigateToFaq: () -> Unit,
     onNavigateToSettings: () -> Unit,
+    destination: TopLevelDestination?,
     modifier: Modifier = Modifier,
 ) {
     var showHomeMenuOption by rememberSaveable { mutableStateOf(false) }
 
-    CenterAlignedTopAppBar(
+    TopAppBar(
         title = { Text(text = title) },
         actions = {
             Box {
-                IconButton(onClick = { showHomeMenuOption = true }) {
-                    Icon(
-                        imageVector = MifosIcons.MoreVert,
-                        contentDescription = "View More",
-                        tint = MaterialTheme.colorScheme.onSurface,
-                    )
+                when (destination) {
+                    TopLevelDestination.HOME -> {
+                        IconBox(
+                            icon = MifosIcons.SettingsOutlined,
+                            onClick = {
+                                showHomeMenuOption = true
+                                // appState.navController.navigateToSettings()
+                            },
+                        )
+                    }
+
+                    TopLevelDestination.PROFILE -> {
+                        IconBox(
+                            icon = MifosIcons.Edit2,
+                            onClick = {
+                                showHomeMenuOption = true
+                                // appState.navController.navigateToEditProfile()
+                            },
+                        )
+                    }
+
+                    else -> {}
                 }
 
+                // TODO:: this could be removed
                 HomeMenu(
                     showHomeMenuOption = showHomeMenuOption,
                     onDismissRequest = { showHomeMenuOption = false },
@@ -253,7 +273,7 @@ private fun MifosAppBar(
                 )
             }
         },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color.Transparent,
         ),
         modifier = modifier.testTag("mifosTopAppBar"),

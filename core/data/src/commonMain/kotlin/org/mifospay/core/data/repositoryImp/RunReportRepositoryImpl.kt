@@ -17,7 +17,7 @@ import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.repository.RunReportRepository
-import org.mifospay.core.model.domain.Transaction
+import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.network.FineractApiManager
 
 class RunReportRepositoryImpl(

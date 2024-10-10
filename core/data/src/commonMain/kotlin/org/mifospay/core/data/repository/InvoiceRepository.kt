@@ -11,8 +11,8 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.entity.Invoice
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.Invoice
 
 interface InvoiceRepository {
     suspend fun getInvoice(clientId: Int, invoiceId: Int): Flow<Result<Invoice>>

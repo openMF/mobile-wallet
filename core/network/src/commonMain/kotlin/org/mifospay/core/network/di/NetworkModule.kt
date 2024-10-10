@@ -16,6 +16,7 @@ import io.ktor.client.plugins.auth.providers.basic
 import io.ktor.client.plugins.defaultRequest
 import io.ktor.client.request.header
 import org.koin.dsl.module
+import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.KtorfitClient
 import org.mifospay.core.network.SelfServiceApiManager
@@ -24,12 +25,13 @@ import org.mifospay.core.network.utils.BaseURL
 import org.mifospay.core.network.utils.KtorInterceptor
 
 val NetworkModule = module {
-
     single<HttpClient>(KtorClient) {
+        val preferencesRepository = get<UserPreferencesRepository>()
+
         ktorHttpClient.config {
             install(Auth)
             install(KtorInterceptor) {
-                preferenceRepository = get()
+                getToken = { preferencesRepository.authToken }
             }
         }
     }

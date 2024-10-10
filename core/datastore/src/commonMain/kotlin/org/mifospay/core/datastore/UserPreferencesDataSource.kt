@@ -23,8 +23,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.mifospay.core.datastore.proto.ClientPreferences
 import org.mifospay.core.datastore.proto.UserInfoPreferences
-import org.mifospay.core.model.ClientInfo
-import org.mifospay.core.model.UserInfo
+import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.user.UserInfo
 
 private const val USER_INFO_KEY = "userInfo"
 private const val CLIENT_INFO_KEY = "clientInfo"
@@ -56,16 +56,17 @@ class UserPreferencesDataSource(
         ),
     )
 
-    val token = _userInfo.map(UserInfoPreferences::toUserInfo).map {
+    val token = _userInfo.map {
         it.base64EncodedAuthenticationKey
     }
     val userInfo = _userInfo.map(UserInfoPreferences::toUserInfo)
+
     val clientInfo = _clientInfo.map(ClientPreferences::toClientInfo)
 
-    suspend fun updateClientInfo(clientInfo: ClientInfo) {
+    suspend fun updateClientInfo(client: Client) {
         withContext(dispatcher) {
-            settings.putClientPreference(clientInfo.toClientPreferences())
-            _clientInfo.value = clientInfo.toClientPreferences()
+            settings.putClientPreference(client.toClientPreferences())
+            _clientInfo.value = client.toClientPreferences()
         }
     }
 
@@ -74,6 +75,27 @@ class UserPreferencesDataSource(
             settings.putUserInfoPreference(userInfo.toUserInfoPreferences())
             _userInfo.value = userInfo.toUserInfoPreferences()
         }
+    }
+
+    suspend fun updateToken(token: String) {
+        withContext(dispatcher) {
+            settings.putUserInfoPreference(
+                UserInfoPreferences.DEFAULT.copy(
+                    base64EncodedAuthenticationKey = token,
+                ),
+            )
+            _userInfo.value = UserInfoPreferences.DEFAULT.copy(
+                base64EncodedAuthenticationKey = token,
+            )
+        }
+    }
+
+    fun updateAuthToken(token: String) {
+        settings.putString("authToken", token)
+    }
+
+    fun getAuthToken(): String? {
+        return settings.getString("authToken", "").ifEmpty { null }
     }
 
     suspend fun clearInfo() {

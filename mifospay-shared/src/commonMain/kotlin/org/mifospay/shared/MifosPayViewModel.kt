@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import org.mifospay.core.datastore.UserPreferencesRepository
-import org.mifospay.core.model.UserInfo
+import org.mifospay.core.model.user.UserInfo
 import proto.org.mifos.library.passcode.data.PasscodeManager
 
 class MifosPayViewModel(

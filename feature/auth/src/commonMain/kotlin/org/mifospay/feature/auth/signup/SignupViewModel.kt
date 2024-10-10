@@ -24,9 +24,9 @@ import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.SearchRepository
 import org.mifospay.core.data.repository.UserRepository
 import org.mifospay.core.data.util.Constants
-import org.mifospay.core.model.domain.client.Address
-import org.mifospay.core.model.domain.client.NewClient
-import org.mifospay.core.model.domain.user.NewUser
+import org.mifospay.core.model.client.ClientAddress
+import org.mifospay.core.model.client.NewClient
+import org.mifospay.core.model.user.NewUser
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.core.ui.utils.PasswordChecker
 import org.mifospay.core.ui.utils.PasswordStrength
@@ -406,7 +406,7 @@ class SignupViewModel(
                 }
 
                 is Result.Success -> {
-                    createClient(result.data.resourceId)
+                    createClient(result.data)
                 }
 
                 is Result.Loading -> Unit
@@ -422,7 +422,7 @@ class SignupViewModel(
                 externalId = state.userNameInput.plus("_client"),
                 mobileNo = state.mobileNumberInput,
                 savingsProductId = state.savingsProductId,
-                address = Address(
+                address = ClientAddress(
                     addressLine1 = state.addressLine1Input,
                     addressLine2 = state.addressLine2Input,
                     postalCode = state.pinCodeInput,
@@ -441,7 +441,7 @@ class SignupViewModel(
                 }
 
                 is Result.Success -> {
-                    assignClientToUser(result.data.clientId, userId)
+                    assignClientToUser(result.data, userId)
                 }
 
                 is Result.Loading -> Unit

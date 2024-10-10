@@ -18,11 +18,11 @@ import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.model.domain.client.NewClient
-import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.client.ClientAccounts
-import org.mifospay.core.model.entity.client.ClientEntity
-import org.mifospay.core.network.model.ClientResponse
+import org.mifospay.core.network.model.ClientResponseEntity
+import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
+import org.mifospay.core.network.model.entity.client.ClientEntity
+import org.mifospay.core.network.model.entity.client.NewClientEntity
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface ClientService {
@@ -49,17 +49,17 @@ interface ClientService {
     ): Flow<Unit>
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
-    suspend fun getClientAccounts(@Path("clientId") clientId: Long): Flow<ClientAccounts>
+    suspend fun getClientAccounts(@Path("clientId") clientId: Long): Flow<ClientAccountsEntity>
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
     suspend fun getAccounts(
         @Path("clientId") clientId: Long,
         @Query("fields") accountType: String,
-    ): Flow<ClientAccounts>
+    ): ClientAccountsEntity
 
     @POST(ApiEndPoints.CLIENTS)
-    suspend fun createClient(@Body newClient: NewClient): ClientResponse
+    suspend fun createClient(@Body newClient: NewClientEntity): ClientResponseEntity
 
     @DELETE(ApiEndPoints.CLIENTS + "/{clientId}")
-    suspend fun deleteClient(@Path("clientId") clientId: Int): ClientResponse
+    suspend fun deleteClient(@Path("clientId") clientId: Int): ClientResponseEntity
 }

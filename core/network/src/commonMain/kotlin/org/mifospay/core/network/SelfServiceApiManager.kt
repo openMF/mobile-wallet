@@ -9,26 +9,18 @@
  */
 package org.mifospay.core.network
 
-import org.mifospay.core.network.services.AuthenticationService
-import org.mifospay.core.network.services.BeneficiaryService
-import org.mifospay.core.network.services.ClientService
-import org.mifospay.core.network.services.RegistrationService
-import org.mifospay.core.network.services.SavingsAccountsService
-import org.mifospay.core.network.services.ThirdPartyTransferService
-
 class SelfServiceApiManager(
     private val ktorfitClient: KtorfitClient,
 ) {
-    val authenticationApi: AuthenticationService
-        get() = ktorfitClient.authenticationApi
-    val clientsApi: ClientService
-        get() = ktorfitClient.clientsApi
-    val savingAccountsListApi: SavingsAccountsService
-        get() = ktorfitClient.savingsAccountsApi
-    val registrationAPi: RegistrationService
-        get() = ktorfitClient.registrationAPi
-    val beneficiaryApi: BeneficiaryService
-        get() = ktorfitClient.beneficiaryApi
-    val thirdPartyTransferApi: ThirdPartyTransferService
-        get() = ktorfitClient.thirdPartyTransferApi
+    val authenticationApi by lazy { ktorfitClient.authenticationApi }
+
+    val clientsApi by lazy { ktorfitClient.clientsApi }
+
+    val savingAccountsListApi by lazy { ktorfitClient.savingsAccountsApi }
+
+    val registrationAPi by lazy { ktorfitClient.registrationAPi }
+
+    val beneficiaryApi by lazy { ktorfitClient.beneficiaryApi }
+
+    val thirdPartyTransferApi by lazy { ktorfitClient.thirdPartyTransferApi }
 }

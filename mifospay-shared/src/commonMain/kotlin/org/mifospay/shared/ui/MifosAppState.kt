@@ -9,8 +9,10 @@
  */
 package org.mifospay.shared.ui
 
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
@@ -31,11 +33,12 @@ import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.shared.utils.TopLevelDestination
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 internal fun rememberMifosAppState(
-    windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
+    windowSizeClass: WindowSizeClass = calculateWindowSizeClass(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
 ): MifosAppState {

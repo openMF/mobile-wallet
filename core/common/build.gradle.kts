@@ -39,6 +39,7 @@ kotlin {
             api(libs.kermit.logging)
             api(libs.squareup.okio)
             api(libs.jb.kotlin.stdlib)
+            api(libs.kotlinx.datetime)
         }
 
         androidMain.dependencies {

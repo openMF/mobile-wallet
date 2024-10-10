@@ -11,11 +11,11 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.domain.client.Client
-import org.mifospay.core.model.domain.client.NewClient
-import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.client.ClientAccounts
-import org.mifospay.core.network.model.ClientResponse
+import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.client.NewClient
+import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
 
 interface ClientRepository {
 
@@ -29,11 +29,11 @@ interface ClientRepository {
 
     suspend fun updateClientImage(clientId: Long, image: String): Flow<Result<Unit>>
 
-    suspend fun getClientAccounts(clientId: Long): Flow<Result<ClientAccounts>>
+    suspend fun getClientAccounts(clientId: Long): Flow<Result<ClientAccountsEntity>>
 
-    suspend fun getAccounts(clientId: Long, accountType: String): Flow<Result<ClientAccounts>>
+    suspend fun getAccounts(clientId: Long, accountType: String): Result<List<Account>>
 
-    suspend fun createClient(newClient: NewClient): Result<ClientResponse>
+    suspend fun createClient(newClient: NewClient): Result<Int>
 
-    suspend fun deleteClient(clientId: Int): Result<ClientResponse>
+    suspend fun deleteClient(clientId: Int): Result<Int>
 }

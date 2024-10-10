@@ -15,15 +15,17 @@ import kotlinx.coroutines.flow.flowOn
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.KycLevelRepository
-import org.mifospay.core.model.entity.kyc.KYCLevel1Details
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.kyc.KYCLevel1Details
 
 class KycLevelRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : KycLevelRepository {
-    override suspend fun fetchKYCLevel1Details(clientId: Int): Flow<Result<List<KYCLevel1Details>>> {
+    override suspend fun fetchKYCLevel1Details(
+        clientId: Int,
+    ): Flow<Result<List<KYCLevel1Details>>> {
         return apiManager.kycLevel1Api
             .fetchKYCLevel1Details(clientId)
             .asResult().flowOn(ioDispatcher)

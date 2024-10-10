@@ -66,7 +66,7 @@ fun FaqItemScreen(
             )
 
             Icon(
-                imageVector = MifosIcons.ArrowDropDown,
+                imageVector = MifosIcons.KeyboardArrowDown,
                 contentDescription = "drop down",
                 tint = MaterialTheme.colorScheme.onSurface,
                 modifier = Modifier

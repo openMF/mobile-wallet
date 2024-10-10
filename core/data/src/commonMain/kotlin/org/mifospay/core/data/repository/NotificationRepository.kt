@@ -11,7 +11,7 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.domain.NotificationPayload
+import org.mifospay.core.network.model.NotificationPayload
 
 interface NotificationRepository {
     suspend fun fetchNotifications(clientId: Long): Flow<Result<List<NotificationPayload>>>

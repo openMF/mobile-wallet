@@ -9,11 +9,11 @@
  */
 package org.mifospay.core.data.mapper
 
-import org.mifospay.core.model.domain.Transaction
-import org.mifospay.core.model.domain.TransactionType
-import org.mifospay.core.model.entity.accounts.savings.SavingsWithAssociationsEntity
-import org.mifospay.core.model.entity.accounts.savings.TransactionsEntity
-import org.mifospay.core.model.utils.DateHelper
+import org.mifospay.core.common.DateHelper
+import org.mifospay.core.model.savingsaccount.Transaction
+import org.mifospay.core.model.savingsaccount.TransactionType
+import org.mifospay.core.network.model.entity.accounts.savings.SavingsWithAssociationsEntity
+import org.mifospay.core.network.model.entity.accounts.savings.TransactionsEntity
 
 fun SavingsWithAssociationsEntity.toTransactionList(): List<Transaction> {
     return this.transactions.map { it.toModel() }
@@ -32,5 +32,8 @@ fun TransactionsEntity.toModel(): Transaction {
             else -> TransactionType.OTHER
         },
         transferId = this.originalTransactionId ?: 0,
+        clientId = 0,
+        accountId = this.accountId?.toLong() ?: 0L,
+        transferDetail = null,
     )
 }

@@ -31,12 +31,11 @@ import mobile_wallet.core.ui.generated.resources.Res
 import mobile_wallet.core.ui.generated.resources.core_ui_money_in
 import mobile_wallet.core.ui.generated.resources.core_ui_money_out
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.theme.green
 import org.mifospay.core.designsystem.theme.red
-import org.mifospay.core.model.domain.Transaction
-import org.mifospay.core.model.domain.TransactionType
+import org.mifospay.core.model.savingsaccount.Transaction
+import org.mifospay.core.model.savingsaccount.TransactionType
 
 @Composable
 fun TransactionItemScreen(
@@ -111,10 +110,4 @@ fun TransactionItemScreen(
             ),
         )
     }
-}
-
-@Preview
-@Composable
-fun ItemTransactionPreview() {
-    TransactionItemScreen(Transaction(), modifier = Modifier)
 }

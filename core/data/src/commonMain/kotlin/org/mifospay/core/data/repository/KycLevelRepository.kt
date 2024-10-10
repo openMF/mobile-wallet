@@ -11,8 +11,8 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.entity.kyc.KYCLevel1Details
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.kyc.KYCLevel1Details
 
 interface KycLevelRepository {
     suspend fun fetchKYCLevel1Details(clientId: Int): Flow<Result<List<KYCLevel1Details>>>

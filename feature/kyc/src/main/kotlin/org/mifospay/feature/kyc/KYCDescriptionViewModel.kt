@@ -20,7 +20,7 @@ import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.kyc.FetchKYCLevel1Details
 import org.mifospay.core.data.repository.local.LocalRepository
-import org.mifospay.core.model.entity.kyc.KYCLevel1Details
+import org.mifospay.core.network.model.entity.kyc.KYCLevel1Details
 import org.mifospay.feature.kyc.KYCDescriptionUiState.Loading
 
 class KYCDescriptionViewModel(

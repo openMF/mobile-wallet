@@ -15,12 +15,13 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
+import org.mifospay.core.data.mapper.toEntity
 import org.mifospay.core.data.repository.UserRepository
-import org.mifospay.core.model.domain.user.NewUser
-import org.mifospay.core.model.entity.UserWithRole
+import org.mifospay.core.model.user.NewUser
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.CommonResponse
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.UserWithRole
 
 class UserRepositoryImpl(
     private val apiManager: FineractApiManager,
@@ -34,13 +35,13 @@ class UserRepositoryImpl(
         return apiManager.userApi.getUser().asResult().flowOn(ioDispatcher)
     }
 
-    override suspend fun createUser(newUser: NewUser): Result<CommonResponse> {
+    override suspend fun createUser(newUser: NewUser): Result<Int> {
         return try {
             val result = withContext(ioDispatcher) {
-                apiManager.userApi.createUser(newUser)
+                apiManager.userApi.createUser(newUser.toEntity())
             }
 
-            Result.Success(result)
+            Result.Success(result.resourceId)
         } catch (e: Exception) {
             Result.Error(e)
         }
@@ -50,7 +51,9 @@ class UserRepositoryImpl(
         userId: Int,
         updatedUser: NewUser,
     ): Flow<Result<GenericResponse>> {
-        return apiManager.userApi.updateUser(userId, updatedUser).asResult().flowOn(ioDispatcher)
+        return apiManager.userApi
+            .updateUser(userId, updatedUser.toEntity())
+            .asResult().flowOn(ioDispatcher)
     }
 
     override suspend fun deleteUser(userId: Int): Result<CommonResponse> {

@@ -15,10 +15,10 @@ import kotlinx.coroutines.flow.flowOn
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
-import org.mifospay.core.model.entity.TPTResponse
-import org.mifospay.core.model.entity.payload.TransferPayload
-import org.mifospay.core.model.entity.templates.account.AccountOptionsTemplate
 import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.model.entity.TPTResponse
+import org.mifospay.core.network.model.entity.payload.TransferPayload
+import org.mifospay.core.network.model.entity.templates.account.AccountOptionsTemplate
 
 class ThirdPartyTransferRepositoryImpl(
     private val apiManager: FineractApiManager,

@@ -9,72 +9,39 @@
  */
 package org.mifospay.core.network
 
-import org.mifospay.core.network.services.AccountTransfersService
-import org.mifospay.core.network.services.AuthenticationService
-import org.mifospay.core.network.services.ClientService
-import org.mifospay.core.network.services.DocumentService
-import org.mifospay.core.network.services.InvoiceService
-import org.mifospay.core.network.services.KYCLevel1Service
-import org.mifospay.core.network.services.NotificationService
-import org.mifospay.core.network.services.RegistrationService
-import org.mifospay.core.network.services.RunReportService
-import org.mifospay.core.network.services.SavedCardService
-import org.mifospay.core.network.services.SavingsAccountsService
-import org.mifospay.core.network.services.SearchService
-import org.mifospay.core.network.services.StandingInstructionService
-import org.mifospay.core.network.services.ThirdPartyTransferService
-import org.mifospay.core.network.services.TwoFactorAuthService
-import org.mifospay.core.network.services.UserService
-
 class FineractApiManager(
     private val ktorfitClient: KtorfitClient,
 ) {
 
-    val authenticationApi: AuthenticationService
-        get() = ktorfitClient.authenticationApi
+    val authenticationApi by lazy { ktorfitClient.authenticationApi }
 
-    val clientsApi: ClientService
-        get() = ktorfitClient.clientsApi
+    val clientsApi by lazy { ktorfitClient.clientsApi }
 
-    val registrationAPi: RegistrationService
-        get() = ktorfitClient.registrationAPi
+    val registrationAPi by lazy { ktorfitClient.registrationAPi }
 
-    val searchApi: SearchService
-        get() = ktorfitClient.searchApi
+    val searchApi by lazy { ktorfitClient.searchApi }
 
-    val documentApi: DocumentService
-        get() = ktorfitClient.documentApi
+    val documentApi by lazy { ktorfitClient.documentApi }
 
-    val runReportApi: RunReportService
-        get() = ktorfitClient.runReportApi
+    val runReportApi by lazy { ktorfitClient.runReportApi }
 
-    val twoFactorAuthApi: TwoFactorAuthService
-        get() = ktorfitClient.twoFactorAuthApi
+    val twoFactorAuthApi by lazy { ktorfitClient.twoFactorAuthApi }
 
-    val accountTransfersApi: AccountTransfersService
-        get() = ktorfitClient.accountTransfersApi
+    val accountTransfersApi by lazy { ktorfitClient.accountTransfersApi }
 
-    val savedCardApi: SavedCardService
-        get() = ktorfitClient.savedCardApi
+    val savedCardApi by lazy { ktorfitClient.savedCardApi }
 
-    val kycLevel1Api: KYCLevel1Service
-        get() = ktorfitClient.kycLevel1Api
+    val kycLevel1Api by lazy { ktorfitClient.kycLevel1Api }
 
-    val invoiceApi: InvoiceService
-        get() = ktorfitClient.invoiceApi
+    val invoiceApi by lazy { ktorfitClient.invoiceApi }
 
-    val userApi: UserService
-        get() = ktorfitClient.userApi
+    val userApi by lazy { ktorfitClient.userApi }
 
-    val thirdPartyTransferApi: ThirdPartyTransferService
-        get() = ktorfitClient.thirdPartyTransferApi
+    val thirdPartyTransferApi by lazy { ktorfitClient.thirdPartyTransferApi }
 
-    val notificationApi: NotificationService
-        get() = ktorfitClient.notificationApi
+    val notificationApi by lazy { ktorfitClient.notificationApi }
 
-    val savingsAccountsApi: SavingsAccountsService
-        get() = ktorfitClient.savingsAccountsApi
+    val savingsAccountsApi by lazy { ktorfitClient.savingsAccountsApi }
 
-    val standingInstructionApi: StandingInstructionService
-        get() = ktorfitClient.standingInstructionApi
+    val standingInstructionApi by lazy { ktorfitClient.standingInstructionApi }
 }

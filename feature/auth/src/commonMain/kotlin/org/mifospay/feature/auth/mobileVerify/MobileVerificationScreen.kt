@@ -22,12 +22,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.auth.generated.resources.Res
 import mobile_wallet.feature.auth.generated.resources.feature_auth_enter_mobile_number
@@ -60,7 +60,7 @@ internal fun MobileVerificationScreen(
     modifier: Modifier = Modifier,
     viewModel: MobileVerificationViewModel = koinViewModel(),
 ) {
-    val state by viewModel.stateFlow.collectAsState()
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 

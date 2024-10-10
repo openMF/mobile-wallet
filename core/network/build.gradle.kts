@@ -7,16 +7,6 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-
-/*
- * Copyright 2024 Mifos Initiative
- *
- * This Source Code Form is subject to the terms of the Mozilla Public
- * License, v. 2.0. If a copy of the MPL was not distributed with this
- * file, You can obtain one at https://mozilla.org/MPL/2.0/.
- *
- * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
- */
 plugins {
     alias(libs.plugins.mifospay.kmp.library)
     alias(libs.plugins.ktrofit)
@@ -40,9 +30,7 @@ android {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            api(libs.kotlinx.datetime)
             api(projects.core.common)
-            api(projects.core.model)
             implementation(projects.core.datastore)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.ktor.client.core)

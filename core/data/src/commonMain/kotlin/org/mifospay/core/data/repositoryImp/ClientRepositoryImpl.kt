@@ -16,15 +16,17 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
+import org.mifospay.core.data.mapper.toAccount
+import org.mifospay.core.data.mapper.toEntity
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.repository.ClientRepository
-import org.mifospay.core.model.domain.client.Client
-import org.mifospay.core.model.domain.client.NewClient
-import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.client.ClientAccounts
+import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.client.NewClient
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.SelfServiceApiManager
-import org.mifospay.core.network.model.ClientResponse
+import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
 
 class ClientRepositoryImpl(
     private val apiManager: SelfServiceApiManager,
@@ -37,8 +39,8 @@ class ClientRepositoryImpl(
 
     override suspend fun getClient(clientId: Long): Result<Client> {
         return try {
-            val result = apiManager.clientsApi.getClientForId(clientId).toModel()
-            Result.Success(result)
+            val result = apiManager.clientsApi.getClientForId(clientId)
+            Result.Success(result.toModel())
         } catch (e: Exception) {
             Result.Error(e)
         }
@@ -60,7 +62,7 @@ class ClientRepositoryImpl(
             .asResult().flowOn(ioDispatcher)
     }
 
-    override suspend fun getClientAccounts(clientId: Long): Flow<Result<ClientAccounts>> {
+    override suspend fun getClientAccounts(clientId: Long): Flow<Result<ClientAccountsEntity>> {
         return apiManager.clientsApi
             .getClientAccounts(clientId)
             .asResult().flowOn(ioDispatcher)
@@ -69,31 +71,37 @@ class ClientRepositoryImpl(
     override suspend fun getAccounts(
         clientId: Long,
         accountType: String,
-    ): Flow<Result<ClientAccounts>> {
-        return apiManager.clientsApi
-            .getAccounts(clientId, accountType)
-            .asResult().flowOn(ioDispatcher)
-    }
-
-    override suspend fun createClient(newClient: NewClient): Result<ClientResponse> {
+    ): Result<List<Account>> {
         return try {
             val result = withContext(ioDispatcher) {
-                fineractApiManager.clientsApi.createClient(newClient)
+                apiManager.clientsApi.getAccounts(clientId, accountType)
             }
 
-            Result.Success(result)
+            Result.Success(result.toAccount())
         } catch (e: Exception) {
             Result.Error(e)
         }
     }
 
-    override suspend fun deleteClient(clientId: Int): Result<ClientResponse> {
+    override suspend fun createClient(newClient: NewClient): Result<Int> {
+        return try {
+            val result = withContext(ioDispatcher) {
+                fineractApiManager.clientsApi.createClient(newClient.toEntity())
+            }
+
+            Result.Success(result.clientId)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    override suspend fun deleteClient(clientId: Int): Result<Int> {
         return try {
             val result = withContext(ioDispatcher) {
                 fineractApiManager.clientsApi.deleteClient(clientId)
             }
 
-            Result.Success(result)
+            Result.Success(result.clientId)
         } catch (e: Exception) {
             Result.Error(e)
         }

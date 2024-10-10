@@ -15,12 +15,12 @@ import kotlinx.coroutines.flow.flowOn
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.BeneficiaryRepository
-import org.mifospay.core.model.entity.beneficary.Beneficiary
-import org.mifospay.core.model.entity.beneficary.BeneficiaryPayload
-import org.mifospay.core.model.entity.beneficary.BeneficiaryUpdatePayload
-import org.mifospay.core.model.entity.templates.beneficiary.BeneficiaryTemplate
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.CommonResponse
+import org.mifospay.core.network.model.entity.beneficary.Beneficiary
+import org.mifospay.core.network.model.entity.beneficary.BeneficiaryPayload
+import org.mifospay.core.network.model.entity.beneficary.BeneficiaryUpdatePayload
+import org.mifospay.core.network.model.entity.templates.beneficiary.BeneficiaryTemplate
 
 class BeneficiaryRepositoryImpl(
     private val apiManager: SelfServiceApiManager,

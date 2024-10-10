@@ -12,7 +12,7 @@ package org.mifospay.core.data.repository
 import io.ktor.http.content.PartData
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.entity.noncore.Document
+import org.mifospay.core.network.model.entity.noncore.Document
 
 interface DocumentRepository {
     suspend fun getDocuments(entityType: String, entityId: Int): Flow<Result<List<Document>>>

@@ -12,19 +12,21 @@ package org.mifospay.core.datastore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.ClientInfo
-import org.mifospay.core.model.UserInfo
-import org.mifospay.core.model.domain.client.Client
-import org.mifospay.core.model.domain.user.User
+import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.user.UserInfo
 
 interface UserPreferencesRepository {
     val userInfo: Flow<UserInfo>
 
     val token: StateFlow<String?>
 
-    val clientInfo: Flow<ClientInfo>
+    val client: StateFlow<Client?>
 
-    suspend fun updateUserInfo(user: User): Result<Unit>
+    val authToken: String?
+
+    suspend fun updateToken(token: String): Result<Unit>
+
+    suspend fun updateUserInfo(user: UserInfo): Result<Unit>
 
     suspend fun updateClientInfo(client: Client): Result<Unit>
 

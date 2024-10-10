@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.flowOn
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.NotificationRepository
-import org.mifospay.core.model.domain.NotificationPayload
 import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.model.NotificationPayload
 
 class NotificationRepositoryImpl(
     private val apiManager: FineractApiManager,
