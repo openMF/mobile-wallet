@@ -12,12 +12,12 @@ package org.mifospay.core.datastore
 import org.mifospay.core.datastore.proto.ClientPreferences
 import org.mifospay.core.datastore.proto.RolePreferences
 import org.mifospay.core.datastore.proto.UserInfoPreferences
-import org.mifospay.core.model.ClientInfo
-import org.mifospay.core.model.RoleInfo
-import org.mifospay.core.model.UserInfo
+import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.user.RoleInfo
+import org.mifospay.core.model.user.UserInfo
 
-fun ClientPreferences.toClientInfo(): ClientInfo {
-    return ClientInfo(
+fun ClientPreferences.toClientInfo(): Client {
+    return Client(
         name = name,
         image = image,
         externalId = externalId,
@@ -27,7 +27,7 @@ fun ClientPreferences.toClientInfo(): ClientInfo {
     )
 }
 
-fun ClientInfo.toClientPreferences(): ClientPreferences {
+fun Client.toClientPreferences(): ClientPreferences {
     return ClientPreferences(
         name = name,
         image = image,

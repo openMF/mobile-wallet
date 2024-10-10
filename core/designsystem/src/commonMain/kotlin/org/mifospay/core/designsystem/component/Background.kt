@@ -16,7 +16,11 @@ import androidx.compose.material3.LocalAbsoluteTonalElevation
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -59,13 +63,14 @@ fun MifosBackground(
  * @param gradientColors The gradient colors to be rendered.
  * @param content The background content.
  */
-// TODO:: Fix the gradient background based on NewUI
 @Composable
 fun MifosGradientBackground(
     modifier: Modifier = Modifier,
     gradientColors: GradientColors = LocalGradientColors.current,
     content: @Composable () -> Unit,
 ) {
+    val currentTopColor by rememberUpdatedState(gradientColors.top)
+    val currentBottomColor by rememberUpdatedState(gradientColors.bottom)
     Surface(
         color = if (gradientColors.container == Color.Unspecified) {
             Color.Transparent
@@ -76,21 +81,24 @@ fun MifosGradientBackground(
     ) {
         Box(
             Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .drawWithCache {
+                    val mainGradient = Brush.linearGradient(
+                        colors = listOf(currentTopColor, currentBottomColor),
+                    )
+
+                    onDrawBehind {
+                        // There is overlap here, so order is important
+                        drawRect(mainGradient)
+                    }
+                },
         ) {
             content()
         }
     }
 }
 
-/**
- * Multipreview annotation that represents light and dark themes. Add this annotation to a
- * composable to render the both themes.
- */
 @Preview
-annotation class ThemePreviews
-
-@ThemePreviews
 @Composable
 fun BackgroundDefault() {
     MifosTheme {
@@ -98,7 +106,7 @@ fun BackgroundDefault() {
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun BackgroundDynamic() {
     MifosTheme {
@@ -106,7 +114,7 @@ fun BackgroundDynamic() {
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun BackgroundAndroid() {
     MifosTheme {
@@ -114,7 +122,7 @@ fun BackgroundAndroid() {
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun GradientBackgroundDefault() {
     MifosTheme {
@@ -122,7 +130,7 @@ fun GradientBackgroundDefault() {
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun GradientBackgroundDynamic() {
     MifosTheme {
@@ -130,7 +138,7 @@ fun GradientBackgroundDynamic() {
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun GradientBackgroundAndroid() {
     MifosTheme {

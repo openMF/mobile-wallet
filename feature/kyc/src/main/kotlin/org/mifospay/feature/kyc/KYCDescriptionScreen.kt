@@ -136,7 +136,7 @@ private fun KYCDescriptionScreen(
 
 @Composable
 private fun KYCDescriptionScreen(
-    kyc: org.mifospay.core.model.entity.kyc.KYCLevel1Details,
+    kyc: org.mifospay.core.network.model.entity.kyc.KYCLevel1Details,
     onLevel1Clicked: () -> Unit,
     onLevel2Clicked: () -> Unit,
     onLevel3Clicked: () -> Unit,
@@ -284,7 +284,7 @@ private fun KYCDescriptionPreview() {
     val onLevel2Clicked: () -> Unit = { }
     val onLevel3Clicked: () -> Unit = { }
     KYCDescriptionScreen(
-        kyc = org.mifospay.core.model.entity.kyc.KYCLevel1Details(),
+        kyc = org.mifospay.core.network.model.entity.kyc.KYCLevel1Details(),
         onLevel1Clicked,
         onLevel2Clicked,
         onLevel3Clicked,
@@ -297,22 +297,22 @@ internal class KYCDescriptionUiStatePreviewProvider :
         KYCDescriptionUiState.Loading,
         KYCDescriptionUiState.Error,
         KYCDescriptionUiState.KYCDescription(
-            org.mifospay.core.model.entity.kyc.KYCLevel1Details().apply {
+            org.mifospay.core.network.model.entity.kyc.KYCLevel1Details().apply {
                 currentLevel = "0"
             },
         ),
         KYCDescriptionUiState.KYCDescription(
-            org.mifospay.core.model.entity.kyc.KYCLevel1Details().apply {
+            org.mifospay.core.network.model.entity.kyc.KYCLevel1Details().apply {
                 currentLevel = "1"
             },
         ),
         KYCDescriptionUiState.KYCDescription(
-            org.mifospay.core.model.entity.kyc.KYCLevel1Details().apply {
+            org.mifospay.core.network.model.entity.kyc.KYCLevel1Details().apply {
                 currentLevel = "2"
             },
         ),
         KYCDescriptionUiState.KYCDescription(
-            org.mifospay.core.model.entity.kyc.KYCLevel1Details().apply {
+            org.mifospay.core.network.model.entity.kyc.KYCLevel1Details().apply {
                 currentLevel = "3"
             },
         ),

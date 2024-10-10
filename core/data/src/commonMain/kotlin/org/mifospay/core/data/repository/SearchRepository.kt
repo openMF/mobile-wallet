@@ -10,12 +10,12 @@
 package org.mifospay.core.data.repository
 
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.entity.SearchedEntity
+import org.mifospay.core.model.search.SearchResult
 
 interface SearchRepository {
     suspend fun searchResources(
         query: String,
         resources: String,
         exactMatch: Boolean,
-    ): Result<List<SearchedEntity>>
+    ): Result<List<SearchResult>>
 }

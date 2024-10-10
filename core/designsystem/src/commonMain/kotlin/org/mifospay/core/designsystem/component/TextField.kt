@@ -34,6 +34,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.sp
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
 
 @Composable
@@ -157,7 +158,7 @@ fun MifosOutlinedTextField(
     )
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun MfOutlinedTextFieldPreview() {
     MifosTheme {
@@ -177,7 +178,7 @@ fun MfOutlinedTextFieldPreview() {
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun MfPasswordTextFieldPreview() {
     MifosTheme {

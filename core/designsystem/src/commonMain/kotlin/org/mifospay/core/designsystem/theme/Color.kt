@@ -11,9 +11,9 @@ package org.mifospay.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 
-val md_theme_light_primary = Color(0xFF000000)
-val md_theme_light_onPrimary = Color(0xFFFFFFFF)
-val md_theme_light_primaryContainer = Color(0xFFFFD9E2)
+val md_theme_light_primary = Color(0xFF0673BA) // primary
+val md_theme_light_onPrimary = Color(0xFFFFFFFF) // gradientOne
+val md_theme_light_primaryContainer = Color(0xFFF5F5F5) // container color
 val md_theme_light_onPrimaryContainer = Color(0xFF3E001D)
 val md_theme_light_secondary = Color(0xFF984061)
 val md_theme_light_onSecondary = Color(0xFFFFFFFF)
@@ -30,7 +30,7 @@ val md_theme_light_onErrorContainer = Color(0xFF410002)
 val md_theme_light_background = Color(0xFFFFFBFF)
 val md_theme_light_onBackground = Color(0xFF330045)
 val md_theme_light_surface = Color(0xFFFFFBFF)
-val md_theme_light_onSurface = Color(0xFF000000)
+val md_theme_light_onSurface = Color(0xFF333333) // onSurface
 val md_theme_light_surfaceVariant = Color(0xFFF2DDE1)
 val md_theme_light_onSurfaceVariant = Color(0xFF514347)
 val md_theme_light_outline = Color(0xFF837377)
@@ -90,3 +90,21 @@ val primaryDarkBlue = Color(0xFF303F9F)
 val InitialAvatarBgColor = Color(0xFF9999CC)
 val submitButtonColor = Color(0xFF0000FF)
 val ElectricViolet = Color(0xFF6200EE)
+
+val MifosBlue = Color(0xFF0673BA)
+
+// This should be applied directly to the theme
+// New UI Colors
+object NewUi {
+    val gradientOne = Color(0xFFFFFFFF)
+    val gradientTwo = Color(0xFFD0D1D6)
+    val containerColor = Color(0xFFF5F5F5)
+    val primaryColor = Color(0xFF0673BA)
+    val tertiaryContainer = Color(0xFFFDFDFE)
+    val onSurface = Color(0xFF333333)
+    val secondaryColor = Color(0xFFFF3325)
+
+    // general color
+    val walletColor1 = Color(0xFF1f7dd5)
+    val walletColor2 = Color(0xFF1ec0a0)
+}

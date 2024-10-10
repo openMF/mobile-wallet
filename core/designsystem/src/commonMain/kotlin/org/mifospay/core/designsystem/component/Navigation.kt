@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 
@@ -61,8 +62,7 @@ fun RowScope.MifosNavigationBarItem(
         enabled = enabled,
         label = label,
         alwaysShowLabel = alwaysShowLabel,
-        colors =
-        NavigationBarItemDefaults.colors(
+        colors = NavigationBarItemDefaults.colors(
             selectedIconColor = MifosNavigationDefaults.navigationSelectedItemColor(),
             unselectedIconColor = MifosNavigationDefaults.navigationContentColor(),
             selectedTextColor = MifosNavigationDefaults.navigationSelectedItemColor(),
@@ -86,6 +86,7 @@ fun MifosNavigationBar(
 ) {
     NavigationBar(
         modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.background,
         contentColor = MifosNavigationDefaults.navigationContentColor(),
         tonalElevation = 0.dp,
         content = content,
@@ -126,8 +127,7 @@ fun MifosNavigationRailItem(
         enabled = enabled,
         label = label,
         alwaysShowLabel = alwaysShowLabel,
-        colors =
-        NavigationRailItemDefaults.colors(
+        colors = NavigationRailItemDefaults.colors(
             selectedIconColor = MifosNavigationDefaults.navigationSelectedItemColor(),
             unselectedIconColor = MifosNavigationDefaults.navigationContentColor(),
             selectedTextColor = MifosNavigationDefaults.navigationSelectedItemColor(),
@@ -160,7 +160,7 @@ fun MifosNavigationRail(
     )
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun MifosNavigationBarPreview() {
     val items = listOf("Home", "Payments", "Finance", "Profile")
@@ -204,7 +204,7 @@ fun MifosNavigationBarPreview() {
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun MifosNavigationRailPreview() {
     val items = listOf("Home", "Payments", "Finance", "Profile")

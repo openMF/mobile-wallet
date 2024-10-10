@@ -31,12 +31,6 @@ fun getFontFamily() = FontFamily(
 
 @Composable
 fun getTypography(): Typography {
-    val fontFamily = FontFamily(
-        Font(Res.font.lib_mifos_passcode_lato_regular, FontWeight.Normal, FontStyle.Normal),
-        Font(Res.font.lib_mifos_passcode_lato_bold, FontWeight.Bold, FontStyle.Normal),
-        Font(Res.font.lib_mifos_passcode_lato_black, FontWeight.Black, FontStyle.Normal),
-    )
-
     return Typography(
         displayLarge = TextStyle(
             fontFamily = getFontFamily(),

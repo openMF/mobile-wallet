@@ -11,11 +11,11 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.payload.StandingInstructionPayload
-import org.mifospay.core.model.entity.standinginstruction.SDIResponse
-import org.mifospay.core.model.entity.standinginstruction.StandingInstruction
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.payload.StandingInstructionPayload
+import org.mifospay.core.network.model.entity.standinginstruction.SDIResponse
+import org.mifospay.core.network.model.entity.standinginstruction.StandingInstruction
 
 interface StandingInstructionRepository {
     suspend fun getAllStandingInstructions(

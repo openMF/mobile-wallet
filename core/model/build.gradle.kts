@@ -20,7 +20,7 @@ android {
 kotlin {
     sourceSets {
         commonMain.dependencies {
-            api(libs.kotlinx.datetime)
+            implementation(projects.core.common)
             implementation(libs.kotlinx.serialization.json)
         }
     }

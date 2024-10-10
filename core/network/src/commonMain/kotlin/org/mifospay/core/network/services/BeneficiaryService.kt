@@ -16,11 +16,11 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.model.entity.beneficary.Beneficiary
-import org.mifospay.core.model.entity.beneficary.BeneficiaryPayload
-import org.mifospay.core.model.entity.beneficary.BeneficiaryUpdatePayload
-import org.mifospay.core.model.entity.templates.beneficiary.BeneficiaryTemplate
 import org.mifospay.core.network.model.CommonResponse
+import org.mifospay.core.network.model.entity.beneficary.Beneficiary
+import org.mifospay.core.network.model.entity.beneficary.BeneficiaryPayload
+import org.mifospay.core.network.model.entity.beneficary.BeneficiaryUpdatePayload
+import org.mifospay.core.network.model.entity.templates.beneficiary.BeneficiaryTemplate
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface BeneficiaryService {

@@ -15,11 +15,11 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.accounts.savings.SavingAccount
-import org.mifospay.core.model.entity.accounts.savings.SavingsWithAssociationsEntity
-import org.mifospay.core.model.entity.accounts.savings.TransactionsEntity
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.accounts.savings.SavingAccountEntity
+import org.mifospay.core.network.model.entity.accounts.savings.SavingsWithAssociationsEntity
+import org.mifospay.core.network.model.entity.accounts.savings.TransactionsEntity
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface SavingsAccountsService {
@@ -27,7 +27,7 @@ interface SavingsAccountsService {
     suspend fun getSavingsWithAssociations(
         @Path("accountId") accountId: Long,
         @Query("associations") associationType: String,
-    ): Flow<SavingsWithAssociationsEntity>
+    ): SavingsWithAssociationsEntity
 
     @GET(ApiEndPoints.SAVINGS_ACCOUNTS)
     suspend fun getSavingsAccounts(
@@ -35,7 +35,7 @@ interface SavingsAccountsService {
     ): Flow<Page<SavingsWithAssociationsEntity>>
 
     @POST(ApiEndPoints.SAVINGS_ACCOUNTS)
-    suspend fun createSavingsAccount(@Body savingAccount: SavingAccount): Flow<GenericResponse>
+    suspend fun createSavingsAccount(@Body savingAccount: SavingAccountEntity): Flow<GenericResponse>
 
     @POST(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}")
     suspend fun blockUnblockAccount(

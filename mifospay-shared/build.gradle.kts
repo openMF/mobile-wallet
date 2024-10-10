@@ -22,6 +22,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.core.domain)
             api(projects.core.data)
+            api(projects.core.network)
             //put your multiplatform dependencies here
             api(compose.material3)
             api(compose.foundation)
@@ -35,6 +36,7 @@ kotlin {
 
             api(projects.feature.auth)
             api(projects.libs.mifosPasscode)
+            api(projects.feature.home)
         }
 
         desktopMain.dependencies {

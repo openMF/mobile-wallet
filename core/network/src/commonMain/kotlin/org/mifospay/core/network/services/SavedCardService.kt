@@ -16,8 +16,8 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.model.entity.savedcards.Card
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.savedcards.Card
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface SavedCardService {

@@ -16,11 +16,11 @@ import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.payload.StandingInstructionPayload
-import org.mifospay.core.model.entity.standinginstruction.SDIResponse
-import org.mifospay.core.model.entity.standinginstruction.StandingInstruction
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.payload.StandingInstructionPayload
+import org.mifospay.core.network.model.entity.standinginstruction.SDIResponse
+import org.mifospay.core.network.model.entity.standinginstruction.StandingInstruction
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface StandingInstructionService {

@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.flowOn
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.TwoFactorAuthRepository
-import org.mifospay.core.model.domain.twofactor.AccessToken
-import org.mifospay.core.model.domain.twofactor.DeliveryMethod
 import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.model.twofactor.AccessToken
+import org.mifospay.core.network.model.twofactor.DeliveryMethod
 
 class TwoFactorAuthRepositoryImpl(
     private val apiManager: FineractApiManager,

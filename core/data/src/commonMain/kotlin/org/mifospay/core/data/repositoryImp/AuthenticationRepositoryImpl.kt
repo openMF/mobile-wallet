@@ -12,16 +12,17 @@ package org.mifospay.core.data.repositoryImp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.Result
+import org.mifospay.core.data.mapper.toUserInfo
 import org.mifospay.core.data.repository.AuthenticationRepository
-import org.mifospay.core.model.domain.user.User
-import org.mifospay.core.model.entity.authentication.AuthenticationPayload
+import org.mifospay.core.model.user.UserInfo
 import org.mifospay.core.network.SelfServiceApiManager
+import org.mifospay.core.network.model.entity.authentication.AuthenticationPayload
 
 class AuthenticationRepositoryImpl(
     private val apiManager: SelfServiceApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : AuthenticationRepository {
-    override suspend fun authenticate(username: String, password: String): Result<User> {
+    override suspend fun authenticate(username: String, password: String): Result<UserInfo> {
         return try {
             val payload = AuthenticationPayload(username, password)
 
@@ -29,7 +30,7 @@ class AuthenticationRepositoryImpl(
                 apiManager.authenticationApi.authenticate(payload)
             }
 
-            Result.Success(result)
+            Result.Success(result.toUserInfo())
         } catch (e: Exception) {
             Result.Error(e)
         }

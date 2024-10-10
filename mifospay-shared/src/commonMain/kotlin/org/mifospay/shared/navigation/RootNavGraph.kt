@@ -14,12 +14,14 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import org.mifospay.core.data.util.NetworkMonitor
+import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.shared.ui.MifosApp
-import org.mifospay.shared.ui.MifosAppState
 
 @Composable
 internal fun RootNavGraph(
-    appState: MifosAppState,
+    networkMonitor: NetworkMonitor,
+    timeZoneMonitor: TimeZoneMonitor,
     navHostController: NavHostController,
     startDestination: String,
     onClickLogout: () -> Unit,
@@ -37,7 +39,8 @@ internal fun RootNavGraph(
 
         composable(MifosNavGraph.MAIN_GRAPH) {
             MifosApp(
-                appState = appState,
+                networkMonitor = networkMonitor,
+                timeZoneMonitor = timeZoneMonitor,
                 onClickLogout = onClickLogout,
             )
         }

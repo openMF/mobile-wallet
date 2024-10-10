@@ -16,10 +16,10 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.model.domain.user.NewUser
-import org.mifospay.core.model.entity.UserWithRole
 import org.mifospay.core.network.model.CommonResponse
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.UserWithRole
+import org.mifospay.core.network.model.entity.user.NewUserEntity
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface UserService {
@@ -27,12 +27,12 @@ interface UserService {
     suspend fun users(): Flow<List<UserWithRole>>
 
     @POST(ApiEndPoints.USER)
-    suspend fun createUser(@Body user: NewUser): CommonResponse
+    suspend fun createUser(@Body user: NewUserEntity): CommonResponse
 
     @PUT(ApiEndPoints.USER + "/{userId}")
     suspend fun updateUser(
         @Path("userId") userId: Int,
-        @Body updateUserEntity: NewUser,
+        @Body updateUserEntity: NewUserEntity,
     ): Flow<GenericResponse>
 
     @DELETE(ApiEndPoints.USER + "/{userId}")

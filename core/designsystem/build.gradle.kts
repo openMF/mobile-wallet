@@ -48,21 +48,20 @@ kotlin {
             implementation(libs.coil.kt.compose)
             implementation(compose.runtime)
             implementation(compose.foundation)
-            implementation(compose.material)
             implementation(compose.material3)
             implementation(compose.materialIconsExtended)
             implementation(compose.ui)
             implementation(compose.uiUtil)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.back.handler)
+            api(libs.back.handler)
+            api(libs.window.size)
         }
     }
 }
 
 compose.resources {
     publicResClass = true
-    packageOfResClass = "org.mifospay.core.designsystem.resources"
     generateResClass = always
 }
 

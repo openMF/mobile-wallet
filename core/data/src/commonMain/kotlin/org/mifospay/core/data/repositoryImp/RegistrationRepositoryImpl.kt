@@ -13,9 +13,9 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.Result
 import org.mifospay.core.data.repository.RegistrationRepository
-import org.mifospay.core.model.entity.register.RegisterPayload
-import org.mifospay.core.model.entity.register.UserVerify
 import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.model.entity.register.RegisterPayload
+import org.mifospay.core.network.model.entity.register.UserVerify
 
 class RegistrationRepositoryImpl(
     private val apiManager: FineractApiManager,

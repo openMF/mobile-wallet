@@ -9,10 +9,10 @@
  */
 package org.mifospay.core.data.mapper
 
-import org.mifospay.core.model.entity.accounts.savings.Currency
-import org.mifospay.core.model.domain.Currency as DomainCurrency
+import org.mifospay.core.network.model.entity.accounts.savings.CurrencyEntity
+import org.mifospay.core.model.savingsaccount.Currency as DomainCurrency
 
-fun Currency.toModel(): DomainCurrency {
+fun CurrencyEntity.toModel(): DomainCurrency {
     return DomainCurrency(
         code = this.code,
         displayLabel = this.displayLabel,

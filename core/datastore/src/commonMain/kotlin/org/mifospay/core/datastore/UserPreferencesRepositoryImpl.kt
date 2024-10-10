@@ -17,11 +17,8 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import org.mifospay.core.common.Result
-import org.mifospay.core.datastore.utils.toUserInfo
-import org.mifospay.core.model.ClientInfo
-import org.mifospay.core.model.UserInfo
-import org.mifospay.core.model.domain.client.Client
-import org.mifospay.core.model.domain.user.User
+import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.user.UserInfo
 
 class UserPreferencesRepositoryImpl(
     private val preferenceManager: UserPreferencesDataSource,
@@ -35,17 +32,24 @@ class UserPreferencesRepositoryImpl(
 
     override val token: StateFlow<String?>
         get() = preferenceManager.token.stateIn(
-            unconfinedScope,
+            scope = unconfinedScope,
             initialValue = null,
             started = SharingStarted.Eagerly,
         )
 
-    override val clientInfo: Flow<ClientInfo>
-        get() = preferenceManager.clientInfo.flowOn(ioDispatcher)
+    override val client: StateFlow<Client?>
+        get() = preferenceManager.clientInfo.stateIn(
+            scope = unconfinedScope,
+            initialValue = null,
+            started = SharingStarted.Eagerly,
+        )
 
-    override suspend fun updateClientInfo(client: Client): Result<Unit> {
+    override val authToken: String?
+        get() = preferenceManager.getAuthToken()
+
+    override suspend fun updateToken(token: String): Result<Unit> {
         return try {
-            val result = preferenceManager.updateClientInfo(client.toUserInfo())
+            val result = preferenceManager.updateAuthToken(token)
 
             Result.Success(result)
         } catch (e: Exception) {
@@ -53,9 +57,19 @@ class UserPreferencesRepositoryImpl(
         }
     }
 
-    override suspend fun updateUserInfo(user: User): Result<Unit> {
+    override suspend fun updateClientInfo(client: Client): Result<Unit> {
         return try {
-            val result = preferenceManager.updateUserInfo(user.toUserInfo())
+            val result = preferenceManager.updateClientInfo(client)
+
+            Result.Success(result)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    override suspend fun updateUserInfo(user: UserInfo): Result<Unit> {
+        return try {
+            val result = preferenceManager.updateUserInfo(user)
 
             Result.Success(result)
         } catch (e: Exception) {

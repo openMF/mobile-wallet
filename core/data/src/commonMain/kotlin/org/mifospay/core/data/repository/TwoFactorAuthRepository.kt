@@ -11,8 +11,8 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.domain.twofactor.AccessToken
-import org.mifospay.core.model.domain.twofactor.DeliveryMethod
+import org.mifospay.core.network.model.twofactor.AccessToken
+import org.mifospay.core.network.model.twofactor.DeliveryMethod
 
 interface TwoFactorAuthRepository {
     suspend fun deliveryMethods(): Flow<Result<List<DeliveryMethod>>>

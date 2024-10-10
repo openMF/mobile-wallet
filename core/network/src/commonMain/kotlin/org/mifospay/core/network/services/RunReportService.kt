@@ -12,7 +12,7 @@ package org.mifospay.core.network.services
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.model.entity.accounts.savings.TransactionsEntity
+import org.mifospay.core.network.model.entity.accounts.savings.TransactionsEntity
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface RunReportService {

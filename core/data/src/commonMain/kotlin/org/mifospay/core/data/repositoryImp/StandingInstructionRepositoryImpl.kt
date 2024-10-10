@@ -15,12 +15,12 @@ import kotlinx.coroutines.flow.flowOn
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.StandingInstructionRepository
-import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.payload.StandingInstructionPayload
-import org.mifospay.core.model.entity.standinginstruction.SDIResponse
-import org.mifospay.core.model.entity.standinginstruction.StandingInstruction
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.payload.StandingInstructionPayload
+import org.mifospay.core.network.model.entity.standinginstruction.SDIResponse
+import org.mifospay.core.network.model.entity.standinginstruction.StandingInstruction
 
 class StandingInstructionRepositoryImpl(
     private val apiManager: FineractApiManager,

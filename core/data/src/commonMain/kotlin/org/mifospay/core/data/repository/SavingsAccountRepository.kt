@@ -11,11 +11,11 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
-import org.mifospay.core.model.domain.Transaction
-import org.mifospay.core.model.entity.Page
-import org.mifospay.core.model.entity.accounts.savings.SavingAccount
-import org.mifospay.core.model.entity.accounts.savings.SavingsWithAssociationsEntity
+import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.Page
+import org.mifospay.core.network.model.entity.accounts.savings.SavingAccountEntity
+import org.mifospay.core.network.model.entity.accounts.savings.SavingsWithAssociationsEntity
 
 interface SavingsAccountRepository {
     suspend fun getSavingsAccounts(limit: Int): Flow<Result<Page<SavingsWithAssociationsEntity>>>
@@ -25,9 +25,12 @@ interface SavingsAccountRepository {
         associationType: String,
     ): Flow<Result<SavingsWithAssociationsEntity>>
 
-    suspend fun createSavingsAccount(savingAccount: SavingAccount): Flow<Result<GenericResponse>>
+    suspend fun createSavingsAccount(savingAccount: SavingAccountEntity): Flow<Result<GenericResponse>>
 
-    suspend fun blockUnblockAccount(accountId: Long, command: String?): Flow<Result<GenericResponse>>
+    suspend fun blockUnblockAccount(
+        accountId: Long,
+        command: String?,
+    ): Flow<Result<GenericResponse>>
 
     suspend fun getSavingAccountTransaction(
         accountId: Long,

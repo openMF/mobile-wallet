@@ -12,7 +12,7 @@ package org.mifospay.core.network.services
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.model.domain.NotificationPayload
+import org.mifospay.core.network.model.NotificationPayload
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface NotificationService {

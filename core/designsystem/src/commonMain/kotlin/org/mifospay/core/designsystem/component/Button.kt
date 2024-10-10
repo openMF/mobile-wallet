@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 
@@ -283,7 +284,7 @@ private fun MifosButtonContent(
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun MifosButtonPreview() {
     MifosTheme {
@@ -293,7 +294,7 @@ fun MifosButtonPreview() {
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun MifosOutlinedButtonPreview() {
     MifosTheme {
@@ -303,7 +304,7 @@ fun MifosOutlinedButtonPreview() {
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun MifosButtonLeadingIconPreview() {
     MifosTheme {

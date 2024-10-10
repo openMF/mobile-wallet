@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.flowOn
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.InvoiceRepository
-import org.mifospay.core.model.entity.Invoice
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.network.model.entity.Invoice
 
 class InvoiceRepositoryImpl(
     private val apiManager: FineractApiManager,
@@ -49,7 +49,10 @@ class InvoiceRepositoryImpl(
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun deleteInvoice(clientId: Int, invoiceId: Int): Flow<Result<GenericResponse>> {
+    override suspend fun deleteInvoice(
+        clientId: Int,
+        invoiceId: Int,
+    ): Flow<Result<GenericResponse>> {
         return apiManager.invoiceApi
             .deleteInvoice(clientId, invoiceId).asResult()
             .flowOn(ioDispatcher)

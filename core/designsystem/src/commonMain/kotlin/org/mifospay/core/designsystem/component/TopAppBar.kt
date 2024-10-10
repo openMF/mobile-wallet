@@ -24,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 
@@ -87,7 +88,7 @@ fun MifosNavigationTopAppBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@ThemePreviews
+@Preview
 @Composable
 private fun MifosTopAppBarPreview() {
     MifosTheme {

@@ -16,8 +16,8 @@ import kotlinx.coroutines.flow.flowOn
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.repository.DocumentRepository
-import org.mifospay.core.model.entity.noncore.Document
 import org.mifospay.core.network.FineractApiManager
+import org.mifospay.core.network.model.entity.noncore.Document
 
 class DocumentRepositoryImpl(
     private val apiManager: FineractApiManager,

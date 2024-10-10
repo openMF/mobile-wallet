@@ -16,7 +16,7 @@ import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.base.UseCaseHandler
 import org.mifospay.core.data.domain.usecase.kyc.UploadKYCLevel1Details
 import org.mifospay.core.data.repository.local.LocalRepository
-import org.mifospay.core.model.entity.kyc.KYCLevel1Details
+import org.mifospay.core.network.model.entity.kyc.KYCLevel1Details
 import org.mifospay.feature.kyc.KYCLevel1UiState.Loading
 
 class KYCLevel1ViewModel(
@@ -72,8 +72,8 @@ data class KYCLevel1DetailsState(
     val currentLevel: String = "1",
 )
 
-internal fun KYCLevel1DetailsState.toModel(): org.mifospay.core.model.entity.kyc.KYCLevel1Details {
-    return org.mifospay.core.model.entity.kyc.KYCLevel1Details(
+internal fun KYCLevel1DetailsState.toModel(): org.mifospay.core.network.model.entity.kyc.KYCLevel1Details {
+    return org.mifospay.core.network.model.entity.kyc.KYCLevel1Details(
         firstName = firstName.trim(),
         lastName = lastName.trim(),
         addressLine1 = addressLine1.trim(),
