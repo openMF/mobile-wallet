@@ -12,6 +12,19 @@ package org.mifospay.core.network.model.entity.user
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class UpdateUserEntityPassword(val password: String) {
-    val repeatPassword: String = password
-}
+data class UpdateUserEntityPassword(
+    val password: String,
+    val repeatPassword: String,
+)
+
+@Serializable
+data class UpdateUserPasswordResponse(
+    val officeId: Long,
+    val resourceId: Long,
+    val changes: Changes,
+)
+
+@Serializable
+data class Changes(
+    val passwordEncoded: String,
+)

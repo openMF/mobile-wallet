@@ -17,13 +17,13 @@ import org.mifospay.feature.editpassword.EditPasswordScreen
 const val EDIT_PASSWORD_ROUTE = "edit_password_route"
 
 fun NavGraphBuilder.editPasswordScreen(
-    onBackPress: () -> Unit,
-    onCancelChanges: () -> Unit,
+    navigateBack: () -> Unit,
+    onLogOut: () -> Unit,
 ) {
     composable(route = EDIT_PASSWORD_ROUTE) {
         EditPasswordScreen(
-            onBackPress = onBackPress,
-            onCancelChanges = onCancelChanges,
+            navigateBack = navigateBack,
+            onLogout = onLogOut,
         )
     }
 }

@@ -14,7 +14,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -33,6 +32,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.mifospay.core.designsystem.component.MifosCustomTextField
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.utils.tabNavigation
 
@@ -54,11 +54,11 @@ fun MifosPasswordField(
     keyboardActions: KeyboardActions = KeyboardActions.Default,
 ) {
     val focusRequester = remember { FocusRequester() }
-    OutlinedTextField(
+    MifosCustomTextField(
         modifier = modifier
             .tabNavigation()
             .focusRequester(focusRequester),
-        label = { Text(text = label) },
+        label = label,
         value = value,
         onValueChange = onValueChange,
         visualTransformation = when {
@@ -86,16 +86,15 @@ fun MifosPasswordField(
                 onClick = { showPasswordChange.invoke(!showPassword) },
             ) {
                 val imageVector = if (showPassword) {
-                    MifosIcons.VisibilityOff
+                    MifosIcons.OutlinedVisibilityOff
                 } else {
-                    MifosIcons.Visibility
+                    MifosIcons.OutlinedVisibility
                 }
 
                 Icon(
                     modifier = Modifier.semantics { showPasswordTestTag?.let { testTag = it } },
                     imageVector = imageVector,
                     contentDescription = "togglePassword",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         },

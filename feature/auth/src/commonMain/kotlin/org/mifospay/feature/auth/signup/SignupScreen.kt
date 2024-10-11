@@ -64,6 +64,7 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.MifosPasswordField
+import org.mifospay.core.ui.PasswordStrengthIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 
 @OptIn(ExperimentalMaterial3Api::class)

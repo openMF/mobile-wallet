@@ -25,6 +25,8 @@ interface UserRepository {
 
     suspend fun updateUser(userId: Int, updatedUser: NewUser): Flow<Result<GenericResponse>>
 
+    suspend fun updateUserPassword(userId: Long, password: String): Result<String>
+
     suspend fun deleteUser(userId: Int): Result<CommonResponse>
 
     suspend fun assignClientToUser(userId: Int, clientId: Int): Result<Unit>

@@ -9,6 +9,7 @@
 :core:network
 :core:ui
 :feature:auth
+:feature:editpassword
 :feature:faq
 :feature:home
 :feature:settings
