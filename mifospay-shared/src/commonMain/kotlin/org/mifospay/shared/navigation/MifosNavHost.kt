@@ -12,6 +12,8 @@ package org.mifospay.shared.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import org.mifospay.feature.faq.navigation.faqScreen
+import org.mifospay.feature.faq.navigation.navigateToFAQ
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.homeScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
@@ -42,8 +44,12 @@ internal fun MifosNavHost(
             onLogout = onClickLogout,
             onChangePasscode = {},
             navigateToEditPasswordScreen = {},
-            navigateToFaqScreen = {},
+            navigateToFaqScreen = navController::navigateToFAQ,
             navigateToNotificationScreen = {},
+        )
+
+        faqScreen(
+            navigateBack = navController::navigateUp,
         )
     }
 }

@@ -9,6 +9,7 @@
 :core:network
 :core:ui
 :feature:auth
+:feature:faq
 :feature:home
 :feature:settings
 :libs:country-code-picker

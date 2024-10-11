@@ -9,7 +9,10 @@
  */
 package org.mifospay.feature.faq
 
+import org.jetbrains.compose.resources.StringResource
+
 internal data class FAQ(
-    var question: Int,
-    var answer: Int? = null,
+    val faqId: Int,
+    val question: StringResource,
+    val answer: StringResource,
 )
