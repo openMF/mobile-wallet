@@ -2022,6 +2022,7 @@
 |    |    +--- org.jetbrains.compose.components:components-resources:1.7.0-rc01 (*)
 |    |    +--- org.jetbrains.compose.components:components-ui-tooling-preview:1.7.0-rc01 (*)
 |    |    \--- org.jetbrains.kotlin:kotlin-parcelize-runtime:2.0.20 (*)
+|    +--- project :feature:faq
 |    +--- project :feature:editpassword
 |    |    +--- androidx.lifecycle:lifecycle-runtime-compose:2.8.6 (*)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6 (*)
