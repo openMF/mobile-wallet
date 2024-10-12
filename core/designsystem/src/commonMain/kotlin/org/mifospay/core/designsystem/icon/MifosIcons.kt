@@ -41,6 +41,8 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.Wallet
 import androidx.compose.material.icons.rounded.AccountBalance
 import androidx.compose.material.icons.rounded.AccountCircle
@@ -67,6 +69,8 @@ object MifosIcons {
     val QrCode: ImageVector = Icons.Filled.QrCode
     val Close: ImageVector = Icons.Filled.Close
     val AttachMoney: ImageVector = Icons.Filled.AttachMoney
+    val OutlinedVisibilityOff: ImageVector = Icons.Outlined.VisibilityOff
+    val OutlinedVisibility: ImageVector = Icons.Outlined.Visibility
     val VisibilityOff: ImageVector = Icons.Filled.VisibilityOff
     val Visibility: ImageVector = Icons.Filled.Visibility
     val Check: ImageVector = Icons.Default.Check

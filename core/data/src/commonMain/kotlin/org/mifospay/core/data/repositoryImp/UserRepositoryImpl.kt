@@ -22,6 +22,7 @@ import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.CommonResponse
 import org.mifospay.core.network.model.GenericResponse
 import org.mifospay.core.network.model.entity.UserWithRole
+import org.mifospay.core.network.model.entity.user.UpdateUserEntityPassword
 
 class UserRepositoryImpl(
     private val apiManager: FineractApiManager,
@@ -54,6 +55,19 @@ class UserRepositoryImpl(
         return apiManager.userApi
             .updateUser(userId, updatedUser.toEntity())
             .asResult().flowOn(ioDispatcher)
+    }
+
+    override suspend fun updateUserPassword(userId: Long, password: String): Result<String> {
+        return try {
+            apiManager.userApi.updateUserPassword(
+                userId = userId,
+                updateUserEntity = UpdateUserEntityPassword(password, password),
+            )
+
+            Result.Success("Password updated successfully")
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
     override suspend fun deleteUser(userId: Int): Result<CommonResponse> {
