@@ -65,13 +65,30 @@ class SavingsAccountRepositoryImpl(
             .asResult().flowOn(ioDispatcher)
     }
 
-    override suspend fun blockUnblockAccount(
+    override suspend fun unblockAccount(
         accountId: Long,
-        command: String?,
-    ): Flow<Result<GenericResponse>> {
-        return apiManager.savingsAccountsApi
-            .blockUnblockAccount(accountId, command)
-            .asResult().flowOn(ioDispatcher)
+    ): Result<String> {
+        return try {
+            withContext(ioDispatcher) {
+                apiManager.savingsAccountsApi.blockUnblockAccount(accountId, "unblock")
+            }
+
+            Result.Success("Account unblocked successfully")
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    override suspend fun blockAccount(accountId: Long): Result<String> {
+        return try {
+            withContext(ioDispatcher) {
+                apiManager.savingsAccountsApi.blockUnblockAccount(accountId, "block")
+            }
+
+            Result.Success("Account blocked successfully")
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
     override suspend fun getSavingAccountTransaction(

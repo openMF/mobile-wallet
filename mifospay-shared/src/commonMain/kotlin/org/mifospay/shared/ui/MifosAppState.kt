@@ -31,6 +31,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.TimeZone
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
+import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.shared.utils.TopLevelDestination
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -73,11 +74,11 @@ internal class MifosAppState(
 
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
-//            HOME_ROUTE -> TopLevelDestination.HOME
+            HOME_ROUTE -> TopLevelDestination.HOME
 //            PAYMENTS_ROUTE -> TopLevelDestination.PAYMENTS
 //            FINANCE_ROUTE -> TopLevelDestination.FINANCE
 //            PROFILE_ROUTE -> TopLevelDestination.PROFILE
-            else -> TopLevelDestination.HOME
+            else -> null
         }
 
     val shouldShowBottomBar: Boolean

@@ -27,10 +27,13 @@ interface SavingsAccountRepository {
 
     suspend fun createSavingsAccount(savingAccount: SavingAccountEntity): Flow<Result<GenericResponse>>
 
-    suspend fun blockUnblockAccount(
+    suspend fun unblockAccount(
         accountId: Long,
-        command: String?,
-    ): Flow<Result<GenericResponse>>
+    ): Result<String>
+
+    suspend fun blockAccount(
+        accountId: Long,
+    ): Result<String>
 
     suspend fun getSavingAccountTransaction(
         accountId: Long,

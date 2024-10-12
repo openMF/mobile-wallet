@@ -10,8 +10,9 @@
 package org.mifospay.core.network.model.entity.accounts
 
 import kotlinx.serialization.Serializable
+import org.mifospay.core.network.model.entity.accounts.savings.SavingAccountEntity
 
 @Serializable
 data class SavingAccountsListResponse(
-    var savingsAccounts: List<org.mifospay.core.network.model.entity.accounts.savings.SavingAccountEntity> = ArrayList(),
+    var savingsAccounts: List<SavingAccountEntity> = ArrayList(),
 )

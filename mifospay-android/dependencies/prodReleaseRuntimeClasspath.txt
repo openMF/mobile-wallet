@@ -9,7 +9,10 @@
 :core:network
 :core:ui
 :feature:auth
+:feature:editpassword
+:feature:faq
 :feature:home
+:feature:settings
 :libs:country-code-picker
 :libs:mifos-passcode
 :mifospay-shared

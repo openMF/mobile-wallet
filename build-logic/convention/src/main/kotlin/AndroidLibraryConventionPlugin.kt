@@ -20,7 +20,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                 apply("mifospay.android.lint")
                 apply("mifos.detekt.plugin")
                 apply("mifos.spotless.plugin")
-                apply("mifos.ktlint.plugin")
                 apply("mifospay.android.koin")
             }
 

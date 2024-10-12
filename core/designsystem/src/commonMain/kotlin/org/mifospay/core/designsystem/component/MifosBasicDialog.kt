@@ -62,6 +62,58 @@ fun MifosBasicDialog(
     }
 }
 
+@Composable
+fun MifosBasicDialog(
+    visibilityState: BasicDialogState,
+    onConfirm: () -> Unit,
+    onDismissRequest: () -> Unit,
+): Unit = when (visibilityState) {
+    BasicDialogState.Hidden -> Unit
+    is BasicDialogState.Shown -> {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            confirmButton = {
+                MifosTextButton(
+                    content = {
+                        Text(text = "Ok")
+                    },
+                    onClick = onConfirm,
+                    modifier = Modifier.testTag("AcceptAlertButton"),
+                )
+            },
+            dismissButton = {
+                MifosTextButton(
+                    content = {
+                        Text(text = "Cancel")
+                    },
+                    onClick = onDismissRequest,
+                    modifier = Modifier.testTag("DismissAlertButton"),
+                )
+            },
+            title = visibilityState.title.let {
+                {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.testTag("AlertTitleText"),
+                    )
+                }
+            },
+            text = {
+                Text(
+                    text = visibilityState.message,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.testTag("AlertContentText"),
+                )
+            },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            modifier = Modifier.semantics {
+                testTag = "AlertPopup"
+            },
+        )
+    }
+}
+
 @Preview
 @Composable
 private fun MifosBasicDialog_preview() {

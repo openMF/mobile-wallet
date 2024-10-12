@@ -27,6 +27,7 @@ import org.mifospay.core.data.util.Constants
 import org.mifospay.core.model.client.ClientAddress
 import org.mifospay.core.model.client.NewClient
 import org.mifospay.core.model.user.NewUser
+import org.mifospay.core.ui.PasswordStrengthState
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.core.ui.utils.PasswordChecker
 import org.mifospay.core.ui.utils.PasswordStrength

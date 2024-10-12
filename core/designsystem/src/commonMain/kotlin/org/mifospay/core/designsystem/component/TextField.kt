@@ -10,32 +10,56 @@
 package org.mifospay.core.designsystem.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun MfOutlinedTextField(
@@ -50,11 +74,11 @@ fun MfOutlinedTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
 ) {
-    OutlinedTextField(
+    MifosCustomTextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
+        label = label,
         supportingText = {
             if (isError) {
                 Text(text = errorMessage)
@@ -66,10 +90,6 @@ fun MfOutlinedTextField(
             onKeyboardActions?.invoke()
         },
         keyboardOptions = keyboardOptions,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-            focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-        ),
         textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
@@ -156,6 +176,190 @@ fun MifosOutlinedTextField(
         visualTransformation = visualTransformation,
         isError = error,
     )
+}
+
+@Composable
+fun MifosTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 20.dp),
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = true,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    minLines: Int = 1,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+    trailingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    indicatorColor: Color? = null,
+) {
+    var isFocused by rememberSaveable { mutableStateOf(false) }
+
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        textStyle = textStyle,
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(top = 10.dp)
+            .onFocusChanged { focusState ->
+                isFocused = focusState.isFocused
+            }
+            .semantics(mergeDescendants = true) {},
+        enabled = enabled,
+        readOnly = readOnly,
+        visualTransformation = visualTransformation,
+        keyboardOptions = keyboardOptions,
+        keyboardActions = keyboardActions,
+        interactionSource = interactionSource,
+        singleLine = singleLine,
+        maxLines = maxLines,
+        minLines = minLines,
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+        decorationBox = { innerTextField ->
+            Column {
+                Text(
+                    text = label,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.align(alignment = Alignment.Start),
+                )
+
+                Spacer(modifier = Modifier.height(5.dp))
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    if (leadingIcon != null) {
+                        leadingIcon()
+                    }
+
+                    Box(modifier = Modifier.weight(1f)) {
+                        innerTextField()
+                    }
+
+                    if (trailingIcon != null) {
+                        trailingIcon()
+                    }
+                }
+                indicatorColor?.let { color ->
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = if (isFocused) {
+                            color
+                        } else {
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+                        },
+                    )
+                } ?: run {
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = if (isFocused) {
+                            MaterialTheme.colorScheme.primary
+                        } else {
+                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
+                        },
+                    )
+                }
+            }
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MifosCustomTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 20.dp),
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = true,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    minLines: Int = 1,
+    isError: Boolean = false,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+    trailingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    supportingText:
+    @Composable()
+    (() -> Unit)? = null,
+) {
+    val colors = TextFieldDefaults.colors().copy(
+        cursorColor = MaterialTheme.colorScheme.primary,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        errorContainerColor = Color.Transparent,
+        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+        unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
+        focusedTrailingIconColor = NewUi.onSurface.copy(0.15f),
+        unfocusedTrailingIconColor = NewUi.onSurface.copy(0.15f),
+    )
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        interactionSource = interactionSource,
+        enabled = enabled,
+        singleLine = singleLine,
+        readOnly = readOnly,
+        textStyle = textStyle,
+        visualTransformation = visualTransformation,
+        keyboardActions = keyboardActions,
+        maxLines = maxLines,
+        minLines = minLines,
+        keyboardOptions = keyboardOptions,
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+    ) {
+        TextFieldDefaults.DecorationBox(
+            value = value,
+            visualTransformation = VisualTransformation.None,
+            innerTextField = it,
+            singleLine = singleLine,
+            enabled = enabled,
+            interactionSource = interactionSource,
+            label = {
+                Text(
+                    text = label,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.padding(bottom = 10.dp),
+                )
+            },
+            trailingIcon = trailingIcon,
+            leadingIcon = leadingIcon,
+            supportingText = supportingText,
+            colors = colors,
+            isError = isError,
+            contentPadding = PaddingValues(bottom = 10.dp),
+            container = {
+                TextFieldDefaults.Container(
+                    enabled = enabled,
+                    isError = isError,
+                    colors = colors,
+                    interactionSource = interactionSource,
+                    shape = RectangleShape,
+                    focusedIndicatorLineThickness = 1.dp,
+                    unfocusedIndicatorLineThickness = 1.dp,
+                )
+            },
+        )
+    }
 }
 
 @Preview

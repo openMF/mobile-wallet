@@ -20,6 +20,8 @@ import org.mifospay.core.network.model.CommonResponse
 import org.mifospay.core.network.model.GenericResponse
 import org.mifospay.core.network.model.entity.UserWithRole
 import org.mifospay.core.network.model.entity.user.NewUserEntity
+import org.mifospay.core.network.model.entity.user.UpdateUserEntityPassword
+import org.mifospay.core.network.model.entity.user.UpdateUserPasswordResponse
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface UserService {
@@ -34,6 +36,12 @@ interface UserService {
         @Path("userId") userId: Int,
         @Body updateUserEntity: NewUserEntity,
     ): Flow<GenericResponse>
+
+    @PUT(ApiEndPoints.USER + "/{userId}")
+    suspend fun updateUserPassword(
+        @Path("userId") userId: Long,
+        @Body updateUserEntity: UpdateUserEntityPassword,
+    ): UpdateUserPasswordResponse
 
     @DELETE(ApiEndPoints.USER + "/{userId}")
     suspend fun deleteUser(

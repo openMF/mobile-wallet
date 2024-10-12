@@ -19,6 +19,9 @@ class CMPFeatureConventionPlugin : Plugin<Project> {
                 add("commonMainImplementation", project(":core:designsystem"))
                 add("commonMainImplementation", project(":core:data"))
 
+                add("commonMainImplementation", libs.findLibrary("koin.compose").get())
+                add("commonMainImplementation", libs.findLibrary("koin.compose.viewmodel").get())
+
                 add("commonMainImplementation", libs.findLibrary("jb.composeRuntime").get())
                 add("commonMainImplementation", libs.findLibrary("jb.composeViewmodel").get())
                 add("commonMainImplementation", libs.findLibrary("jb.lifecycleViewmodel").get())

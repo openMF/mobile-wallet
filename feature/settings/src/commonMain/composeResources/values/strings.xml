@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_settings_alert_disable_account">Are you sure you want to disable account?</string>
+    <string name="feature_settings_notification_settings">Notification Settings</string>
+    <string name="feature_settings_faq">FAQ</string>
+    <string name="feature_settings_settings">Settings</string>
+    <string name="feature_settings_change_password">Change Password</string>
+    <string name="feature_settings_change_passcode">Change Passcode</string>
+    <string name="feature_settings_log_out">Log out</string>
+    <string name="feature_settings_disable_account">Disable account</string>
+    <string name="feature_settings_alert_disable_account_desc">This will delete all the information about your account</string>
+    <string name="feature_settings_ok">OK</string>
+    <string name="feature_settings_cancel">Cancel</string>
+    <string name="feature_settings_log_out_title">Do you want to logout?</string>
+    <string name="feature_settings_empty"/>
+    <string name="feature_settings_yes">Yes</string>
+    <string name="feature_settings_no">No</string>
+</resources>
