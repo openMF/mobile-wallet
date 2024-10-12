@@ -7,9 +7,12 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.faq
+package org.mifospay.feature.editpassword.di
 
-internal data class FAQ(
-    var question: Int,
-    var answer: Int? = null,
-)
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.module
+import org.mifospay.feature.editpassword.EditPasswordViewModel
+
+val EditPasswordModule = module {
+    viewModelOf(::EditPasswordViewModel)
+}

@@ -12,9 +12,6 @@ package org.mifospay.core.designsystem.component
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -38,10 +35,10 @@ fun MifosOutlinedTextField(
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
 ) {
-    OutlinedTextField(
+    MifosCustomTextField(
         value = value,
         onValueChange = onValueChange,
-        label = { Text(label) },
+        label = label,
         modifier = modifier,
         leadingIcon = if (icon != null) {
             {
@@ -56,10 +53,6 @@ fun MifosOutlinedTextField(
         trailingIcon = trailingIcon,
         maxLines = maxLines,
         singleLine = singleLine,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-            focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-        ),
         textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
