@@ -79,7 +79,14 @@ internal fun RequestScreenContent(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(text = stringResource(id = R.string.feature_payments_virtual_payment_address_vpa))
+                Text(
+                    text = stringResource(
+                        id = R.string
+                            .feature_payments_virtual_payment_address_vpa,
+                    ),
+                    color = MaterialTheme
+                        .colorScheme.onSurface,
+                )
                 Text(
                     text = vpa,
                     style = MaterialTheme.typography.bodyMedium,
@@ -99,10 +106,14 @@ internal fun RequestScreenContent(
             HorizontalDivider(
                 thickness = 1.dp,
                 color = MaterialTheme.colorScheme.onSurface.copy
-                    (alpha = 0.05f),
+                    (alpha = 0.13f),
             )
             Column(modifier = Modifier.padding(top = 10.dp)) {
-                Text(text = stringResource(id = R.string.feature_payments_mobile_number))
+                Text(
+                    text = stringResource(id = R.string.feature_payments_mobile_number),
+                    color =
+                    MaterialTheme.colorScheme.onSurface,
+                )
                 Text(
                     text = mobile,
                     style = MaterialTheme.typography.bodyMedium,
