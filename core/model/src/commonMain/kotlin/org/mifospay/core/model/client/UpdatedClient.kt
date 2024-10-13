@@ -13,23 +13,10 @@ import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 
 @Parcelize
-data class Client(
-    val id: Long,
-    val accountNo: String,
-    val externalId: String,
-    val active: Boolean,
-    val activationDate: List<Long>,
+data class UpdatedClient(
     val firstname: String,
     val lastname: String,
-    val displayName: String,
+    val externalId: String,
     val mobileNo: String,
     val emailAddress: String,
-    val dateOfBirth: List<Long>,
-    val isStaff: Boolean,
-    val officeId: Long,
-    val officeName: String,
-    val savingsProductName: String,
-    val timeline: ClientTimeline = ClientTimeline(),
-    val status: ClientStatus = ClientStatus(),
-    val legalForm: ClientStatus = ClientStatus(),
 ) : Parcelable

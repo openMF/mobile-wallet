@@ -84,6 +84,8 @@ import org.mifospay.core.designsystem.component.scrollbar.scrollbarState
 import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.client.ClientStatus
+import org.mifospay.core.model.client.ClientTimeline
 import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
@@ -201,7 +203,7 @@ private fun HomeScreen(
             item {
                 MifosWalletCard(
                     account = account,
-                    clientName = client.name,
+                    clientName = client.displayName,
                 )
             }
 
@@ -554,12 +556,38 @@ private fun HomeScreenPreview() {
             productId = 1223,
         ),
         client = Client(
-            name = "Morris Dillon",
-            image = "sale",
-            externalId = "condimentum",
-            clientId = 2028,
-            displayName = "Carlo Wyatt",
-            mobileNo = "sed",
+            id = 8858,
+            accountNo = "dignissim",
+            externalId = "sonet",
+            active = false,
+            activationDate = listOf(),
+            firstname = "Hollis Tyler",
+            lastname = "Lindsay Salazar",
+            displayName = "Janell Howell",
+            mobileNo = "principes",
+            emailAddress = "vicky.dominguez@example.com",
+            dateOfBirth = listOf(),
+            isStaff = false,
+            officeId = 2628,
+            officeName = "Enrique Dickson",
+            savingsProductName = "Lamont Brady",
+            timeline = ClientTimeline(
+                submittedOnDate = listOf(),
+                activatedOnDate = listOf(),
+                activatedByUsername = null,
+                activatedByFirstname = null,
+                activatedByLastname = null,
+            ),
+            status = ClientStatus(
+                id = 6242,
+                code = "possim",
+                value = "accommodare",
+            ),
+            legalForm = ClientStatus(
+                id = 2235,
+                code = "unum",
+                value = "laudem",
+            ),
         ),
         transactions = List(25) { index ->
             Transaction(

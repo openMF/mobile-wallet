@@ -9,4 +9,13 @@
  */
 package org.mifospay.core.network.model.entity.client
 
-data class UpdateClientEntityMobile(val mobileNo: String)
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class UpdateClientEntity(
+    val firstname: String,
+    val lastname: String,
+    val externalId: String,
+    val mobileNo: String,
+    val emailAddress: String,
+)

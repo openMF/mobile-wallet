@@ -18,23 +18,41 @@ import org.mifospay.core.model.user.UserInfo
 
 fun ClientPreferences.toClientInfo(): Client {
     return Client(
-        name = name,
-        image = image,
+        id = id,
+        accountNo = accountNo,
         externalId = externalId,
-        clientId = clientId,
+        active = active,
+        activationDate = activationDate,
+        firstname = firstname,
+        lastname = lastname,
         displayName = displayName,
         mobileNo = mobileNo,
+        emailAddress = emailAddress,
+        dateOfBirth = dateOfBirth,
+        isStaff = isStaff,
+        officeId = officeId,
+        officeName = officeName,
+        savingsProductName = savingsProductName,
     )
 }
 
 fun Client.toClientPreferences(): ClientPreferences {
     return ClientPreferences(
-        name = name,
-        image = image,
+        id = id,
+        accountNo = accountNo,
         externalId = externalId,
-        clientId = clientId,
+        active = active,
+        activationDate = activationDate,
+        firstname = firstname,
+        lastname = lastname,
         displayName = displayName,
         mobileNo = mobileNo,
+        emailAddress = emailAddress,
+        dateOfBirth = dateOfBirth,
+        isStaff = isStaff,
+        officeId = officeId,
+        officeName = officeName,
+        savingsProductName = savingsProductName,
     )
 }
 

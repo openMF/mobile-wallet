@@ -10,9 +10,14 @@
 package org.mifospay.core.data.repositoryImp
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
@@ -23,6 +28,7 @@ import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.NewClient
+import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.SelfServiceApiManager
 import org.mifospay.core.network.model.entity.Page
@@ -32,34 +38,67 @@ class ClientRepositoryImpl(
     private val apiManager: SelfServiceApiManager,
     private val fineractApiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
+    unconfinedDispatcher: CoroutineDispatcher,
 ) : ClientRepository {
+    private val coroutineScope = CoroutineScope(unconfinedDispatcher)
+
     override suspend fun getClients(): Flow<Result<Page<Client>>> {
         return apiManager.clientsApi.clients().map { it.toModel() }.asResult().flowOn(ioDispatcher)
     }
 
+    override fun getClientInfo(clientId: Long): StateFlow<Result<Client>> {
+        return fineractApiManager.clientsApi
+            .getClient(clientId)
+            .catch { Result.Error(it) }
+            .map { Result.Success(it.toModel()) }
+            .stateIn(
+                scope = coroutineScope,
+                started = SharingStarted.Eagerly,
+                initialValue = Result.Loading,
+            )
+    }
+
     override suspend fun getClient(clientId: Long): Result<Client> {
         return try {
-            val result = apiManager.clientsApi.getClientForId(clientId)
+            val result = fineractApiManager.clientsApi.getClientForId(clientId)
             Result.Success(result.toModel())
         } catch (e: Exception) {
             Result.Error(e)
         }
     }
 
-    override suspend fun updateClient(clientId: Long, client: Client): Flow<Result<Unit>> {
-        return apiManager.clientsApi
-            .updateClient(clientId, client)
-            .asResult().flowOn(ioDispatcher)
+    override suspend fun updateClient(clientId: Long, client: UpdatedClient): Result<String> {
+        return try {
+            withContext(ioDispatcher) {
+                fineractApiManager.clientsApi.updateClient(clientId, client.toEntity())
+            }
+
+            Result.Success("Client updated successfully")
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
-    override suspend fun getClientImage(clientId: Long): Flow<Result<String>> {
-        return apiManager.clientsApi.getClientImage(clientId).asResult().flowOn(ioDispatcher)
+    override fun getClientImage(clientId: Long): Flow<Result<String>> {
+        return fineractApiManager.clientsApi
+            .getClientImage(clientId)
+            .catch { Result.Error(it) }
+            .map { Result.Success(it) }
     }
 
-    override suspend fun updateClientImage(clientId: Long, image: String): Flow<Result<Unit>> {
-        return apiManager.clientsApi
-            .updateClientImage(clientId, image)
-            .asResult().flowOn(ioDispatcher)
+    override suspend fun updateClientImage(clientId: Long, image: String): Result<String> {
+        return try {
+            withContext(ioDispatcher) {
+                fineractApiManager.clientsApi.updateClientImage(
+                    clientId = clientId,
+                    typedFile = "data:image/png;base64,$image",
+                )
+            }
+
+            Result.Success("Client image updated successfully")
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
     }
 
     override suspend fun getClientAccounts(clientId: Long): Flow<Result<ClientAccountsEntity>> {

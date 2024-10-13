@@ -24,6 +24,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import org.mifospay.core.datastore.proto.ClientPreferences
 import org.mifospay.core.datastore.proto.UserInfoPreferences
 import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.user.UserInfo
 
 private const val USER_INFO_KEY = "userInfo"
@@ -63,6 +64,8 @@ class UserPreferencesDataSource(
 
     val clientInfo = _clientInfo.map(ClientPreferences::toClientInfo)
 
+    val clientId = _clientInfo.map { it.id }
+
     suspend fun updateClientInfo(client: Client) {
         withContext(dispatcher) {
             settings.putClientPreference(client.toClientPreferences())
@@ -74,6 +77,22 @@ class UserPreferencesDataSource(
         withContext(dispatcher) {
             settings.putUserInfoPreference(userInfo.toUserInfoPreferences())
             _userInfo.value = userInfo.toUserInfoPreferences()
+        }
+    }
+
+    suspend fun updateClientProfile(client: UpdatedClient) {
+        withContext(dispatcher) {
+            val updatedClient = _clientInfo.value.copy(
+                firstname = client.firstname,
+                lastname = client.lastname,
+                displayName = client.firstname + " " + client.lastname,
+                emailAddress = client.emailAddress,
+                mobileNo = client.mobileNo,
+                externalId = client.externalId,
+            )
+
+            settings.putClientPreference(updatedClient)
+            _clientInfo.value = updatedClient
         }
     }
 

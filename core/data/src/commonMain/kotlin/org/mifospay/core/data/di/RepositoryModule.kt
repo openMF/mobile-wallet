@@ -52,6 +52,7 @@ import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 
 private val ioDispatcher = named(MifosDispatchers.IO.name)
+private val unconfined = named(MifosDispatchers.Unconfined.name)
 
 val RepositoryModule = module {
     single<AccountRepository> { AccountRepositoryImpl(get(), get(ioDispatcher)) }
@@ -59,7 +60,14 @@ val RepositoryModule = module {
         AuthenticationRepositoryImpl(get(), get(ioDispatcher))
     }
     single<BeneficiaryRepository> { BeneficiaryRepositoryImpl(get(), get(ioDispatcher)) }
-    single<ClientRepository> { ClientRepositoryImpl(get(), get(), get(ioDispatcher)) }
+    single<ClientRepository> {
+        ClientRepositoryImpl(
+            apiManager = get(),
+            fineractApiManager = get(),
+            ioDispatcher = get(ioDispatcher),
+            unconfinedDispatcher = get(unconfined),
+        )
+    }
     single<DocumentRepository> { DocumentRepositoryImpl(get(), get(ioDispatcher)) }
     single<InvoiceRepository> { InvoiceRepositoryImpl(get(), get(ioDispatcher)) }
     single<KycLevelRepository> { KycLevelRepositoryImpl(get(), get(ioDispatcher)) }

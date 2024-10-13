@@ -109,7 +109,7 @@ class SettingsViewModel(
 
         // TODO:: this shouldn't work, we need account id to block account
         viewModelScope.launch {
-            val result = repository.blockAccount(state.client.clientId)
+            val result = repository.blockAccount(state.client.id)
             sendAction(DisableAccountResult(result))
         }
     }

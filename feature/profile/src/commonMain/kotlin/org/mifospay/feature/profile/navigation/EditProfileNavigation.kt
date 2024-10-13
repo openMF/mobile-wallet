@@ -13,20 +13,18 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import org.mifospay.feature.profile.ProfileRoute
+import org.mifospay.feature.profile.edit.EditProfileScreen
 
-const val PROFILE_ROUTE = "profile_route"
+const val EDIT_PROFILE_ROUTE = "edit_profile_route"
+fun NavController.navigateToEditProfile(navOptions: NavOptions? = null) =
+    navigate(EDIT_PROFILE_ROUTE, navOptions)
 
-fun NavController.navigateToProfile(navOptions: NavOptions) = navigate(PROFILE_ROUTE, navOptions)
-
-fun NavGraphBuilder.profileScreen(
-    onEditProfile: () -> Unit,
-    onSettings: () -> Unit,
+internal fun NavGraphBuilder.editProfileScreen(
+    onBackPress: () -> Unit,
 ) {
-    composable(route = PROFILE_ROUTE) {
-        ProfileRoute(
-            onEditProfile = onEditProfile,
-            onSettings = onSettings,
+    composable(route = EDIT_PROFILE_ROUTE) {
+        EditProfileScreen(
+            onBackClick = onBackPress,
         )
     }
 }

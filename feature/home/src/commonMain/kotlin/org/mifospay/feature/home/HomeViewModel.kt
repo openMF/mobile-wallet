@@ -45,6 +45,14 @@ class HomeViewModel(
 ) {
     init {
         trySendAction(HomeAction.Internal.LoadAccounts)
+
+        preferencesRepository.client.onEach { data ->
+            data?.let { client ->
+                mutableStateFlow.update {
+                    it.copy(client = client)
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 
     override fun handleAction(action: HomeAction) {
@@ -80,7 +88,7 @@ class HomeViewModel(
                 sendEvent(HomeEvent.NavigateBack)
             }
 
-            is HomeAction.Internal.LoadAccounts -> loadAccounts(state.client.clientId)
+            is HomeAction.Internal.LoadAccounts -> loadAccounts(state.client.id)
 
             is SelectAccount -> selectAccount(action.accountId)
         }

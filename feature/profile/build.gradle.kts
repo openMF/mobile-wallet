@@ -9,19 +9,39 @@
  */
 
 plugins {
-    alias(libs.plugins.mifospay.android.feature)
-    alias(libs.plugins.mifospay.android.library.compose)
+    alias(libs.plugins.mifospay.cmp.feature)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
     namespace = "org.mifospay.feature.profile"
-    buildFeatures {
-        buildConfig = true
+
+    defaultConfig {
+        consumerProguardFiles("consumer-rules.pro")
     }
 }
 
-dependencies {
-    implementation(projects.libs.countryCodePicker)
-    implementation(libs.squareup.okhttp)
-    implementation(libs.coil.kt.compose)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(compose.ui)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.coil.kt.compose)
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.compose)
+        }
+    }
+}
+
+compose.desktop {
+    application {
+        nativeDistributions {
+            linux {
+                modules("jdk.security.auth")
+            }
+        }
+    }
 }

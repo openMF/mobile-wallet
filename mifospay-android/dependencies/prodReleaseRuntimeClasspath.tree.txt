@@ -2022,7 +2022,6 @@
 |    |    +--- org.jetbrains.compose.components:components-resources:1.7.0-rc01 (*)
 |    |    +--- org.jetbrains.compose.components:components-ui-tooling-preview:1.7.0-rc01 (*)
 |    |    \--- org.jetbrains.kotlin:kotlin-parcelize-runtime:2.0.20 (*)
-|    +--- project :feature:faq
 |    +--- project :feature:editpassword
 |    |    +--- androidx.lifecycle:lifecycle-runtime-compose:2.8.6 (*)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6 (*)
@@ -2054,7 +2053,7 @@
 |    |    +--- org.jetbrains.compose.components:components-resources:1.7.0-rc01 (*)
 |    |    +--- org.jetbrains.compose.components:components-ui-tooling-preview:1.7.0-rc01 (*)
 |    |    \--- org.jetbrains.kotlin:kotlin-parcelize-runtime:2.0.20 (*)
-|    +--- project :feature:settings
+|    +--- project :feature:profile
 |    |    +--- androidx.lifecycle:lifecycle-runtime-compose:2.8.6 (*)
 |    |    +--- androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6 (*)
 |    |    +--- androidx.tracing:tracing-ktx:1.3.0-alpha02 (*)
@@ -2069,6 +2068,8 @@
 |    |    +--- project :core:ui (*)
 |    |    +--- project :core:designsystem (*)
 |    |    +--- project :core:data (*)
+|    |    +--- io.insert-koin:koin-compose:1.2.0-Beta4 -> 4.0.0-RC2 (*)
+|    |    +--- io.insert-koin:koin-compose-viewmodel:1.2.0-Beta4 -> 4.0.0-RC2 (*)
 |    |    +--- org.jetbrains.compose.runtime:runtime:1.7.0-rc01 (*)
 |    |    +--- org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose:2.8.2 (*)
 |    |    +--- org.jetbrains.androidx.lifecycle:lifecycle-viewmodel:2.8.2 -> 2.8.3-rc01 (*)
@@ -2082,8 +2083,20 @@
 |    |    +--- org.jetbrains.compose.material3:material3:1.7.0-rc01 (*)
 |    |    +--- org.jetbrains.compose.components:components-resources:1.7.0-rc01 (*)
 |    |    +--- org.jetbrains.compose.components:components-ui-tooling-preview:1.7.0-rc01 (*)
-|    |    +--- io.insert-koin:koin-compose-viewmodel:1.2.0-Beta4 -> 4.0.0-RC2 (*)
-|    |    +--- io.insert-koin:koin-compose:1.2.0-Beta4 -> 4.0.0-RC2 (*)
+|    |    +--- io.coil-kt.coil3:coil-compose-core:3.0.0-alpha10 (*)
+|    |    +--- io.github.vinceglb:filekit-core:0.8.7
+|    |    |    \--- io.github.vinceglb:filekit-core-android:0.8.7
+|    |    |         +--- androidx.activity:activity-ktx:1.9.2 (*)
+|    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.20 (*)
+|    |    |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0 (*)
+|    |    +--- io.github.vinceglb:filekit-compose:0.8.7
+|    |    |    \--- io.github.vinceglb:filekit-compose-android:0.8.7
+|    |    |         +--- androidx.activity:activity-compose:1.9.2 (*)
+|    |    |         +--- io.github.vinceglb:filekit-core:0.8.7 (*)
+|    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.20 (*)
+|    |    |         +--- org.jetbrains.compose.runtime:runtime:1.6.11 -> 1.7.0-rc01 (*)
+|    |    |         +--- org.jetbrains.compose.ui:ui:1.6.11 -> 1.7.0-rc01 (*)
+|    |    |         \--- org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0 (*)
 |    |    \--- org.jetbrains.kotlin:kotlin-parcelize-runtime:2.0.20 (*)
 |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.20 (*)
 |    +--- io.insert-koin:koin-annotations:1.4.0-RC4 (*)

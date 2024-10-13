@@ -9,30 +9,35 @@
  */
 package org.mifospay.core.network.model.entity.client
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClientEntity(
-    val id: Int = 0,
+    val id: Long? = null,
     val accountNo: String? = null,
+    val externalId: String? = null,
     val status: Status? = null,
-    val active: Boolean? = null,
-    val activationDate: List<Int?> = ArrayList(),
-    val dobDate: List<Int?> = ArrayList(),
+    val active: Boolean = false,
+    val activationDate: List<Long> = emptyList(),
     val firstname: String? = null,
-    val middlename: String? = null,
     val lastname: String? = null,
     val displayName: String? = null,
-    val fullname: String? = null,
-    val officeId: Int = 0,
+    val mobileNo: String? = null,
+    val emailAddress: String? = null,
+    val dateOfBirth: List<Long> = emptyList(),
+    val isStaff: Boolean? = null,
+    val officeId: Long? = null,
     val officeName: String? = null,
-    val staffId: Int? = null,
-    val staffName: String? = null,
-    val timeline: org.mifospay.core.network.model.entity.Timeline? = null,
-    val imageId: Int = 0,
-    @SerialName("imagePresent")
-    val isImagePresent: Boolean = false,
-    val externalId: String = "",
-    val mobileNo: String = "",
+    val timeline: ClientTimelineEntity? = null,
+    val savingsProductName: String? = null,
+    val legalForm: Status? = null,
+)
+
+@Serializable
+data class ClientTimelineEntity(
+    val submittedOnDate: List<Long> = emptyList(),
+    val activatedOnDate: List<Long> = emptyList(),
+    val activatedByUsername: String? = null,
+    val activatedByFirstname: String? = null,
+    val activatedByLastname: String? = null,
 )
