@@ -11,20 +11,38 @@ package org.mifospay.core.data.mapper
 
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.ClientAddress
+import org.mifospay.core.model.client.ClientStatus
+import org.mifospay.core.model.client.ClientTimeline
 import org.mifospay.core.model.client.NewClient
+import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.network.model.entity.Page
 import org.mifospay.core.network.model.entity.client.Address
 import org.mifospay.core.network.model.entity.client.ClientEntity
+import org.mifospay.core.network.model.entity.client.ClientTimelineEntity
 import org.mifospay.core.network.model.entity.client.NewClientEntity
+import org.mifospay.core.network.model.entity.client.Status
+import org.mifospay.core.network.model.entity.client.UpdateClientEntity
 
 fun ClientEntity.toModel(): Client {
     return Client(
-        name = this.displayName ?: "",
-        clientId = this.id.toLong(),
-        externalId = this.externalId,
-        mobileNo = this.mobileNo,
-        displayName = this.displayName ?: "",
-        image = this.imageId.toString(),
+        id = id ?: 0,
+        accountNo = accountNo ?: "",
+        externalId = externalId ?: "",
+        active = active,
+        activationDate = activationDate,
+        firstname = firstname ?: "",
+        lastname = lastname ?: "",
+        displayName = displayName ?: "",
+        mobileNo = mobileNo ?: "",
+        emailAddress = emailAddress ?: "",
+        dateOfBirth = dateOfBirth,
+        isStaff = isStaff ?: false,
+        officeId = officeId ?: 0,
+        officeName = officeName ?: "",
+        savingsProductName = savingsProductName ?: "",
+        status = status?.toModel() ?: ClientStatus(),
+        timeline = timeline?.toModel() ?: ClientTimeline(),
+        legalForm = legalForm?.toModel() ?: ClientStatus(),
     )
 }
 
@@ -56,5 +74,33 @@ fun ClientAddress.toEntity(): Address {
         stateProvinceId = stateProvinceId,
         countryId = countryId,
         addressTypeId = addressTypeId,
+    )
+}
+
+fun Status.toModel(): ClientStatus {
+    return ClientStatus(
+        id = id ?: 0,
+        code = code ?: "",
+        value = value ?: "",
+    )
+}
+
+fun ClientTimelineEntity.toModel(): ClientTimeline {
+    return ClientTimeline(
+        submittedOnDate = submittedOnDate,
+        activatedOnDate = activatedOnDate,
+        activatedByUsername = activatedByUsername,
+        activatedByFirstname = activatedByFirstname,
+        activatedByLastname = activatedByLastname,
+    )
+}
+
+fun UpdatedClient.toEntity(): UpdateClientEntity {
+    return UpdateClientEntity(
+        firstname = firstname,
+        lastname = lastname,
+        externalId = externalId,
+        mobileNo = mobileNo,
+        emailAddress = emailAddress,
     )
 }

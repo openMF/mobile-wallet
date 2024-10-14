@@ -12,6 +12,7 @@
 :feature:editpassword
 :feature:faq
 :feature:home
+:feature:profile
 :feature:settings
 :libs:country-code-picker
 :libs:mifos-passcode
@@ -258,6 +259,10 @@ io.coil-kt.coil3:coil-network-ktor3:3.0.0-alpha10
 io.coil-kt.coil3:coil-svg-android:3.0.0-alpha10
 io.coil-kt.coil3:coil-svg:3.0.0-alpha10
 io.coil-kt.coil3:coil:3.0.0-alpha10
+io.github.vinceglb:filekit-compose-android:0.8.7
+io.github.vinceglb:filekit-compose:0.8.7
+io.github.vinceglb:filekit-core-android:0.8.7
+io.github.vinceglb:filekit-core:0.8.7
 io.insert-koin:koin-android:4.0.0-RC2
 io.insert-koin:koin-androidx-compose:4.0.0-RC2
 io.insert-koin:koin-androidx-navigation:4.0.0-RC2

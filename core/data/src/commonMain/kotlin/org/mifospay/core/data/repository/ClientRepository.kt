@@ -10,24 +10,28 @@
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.common.Result
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.NewClient
+import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.network.model.entity.Page
 import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
 
 interface ClientRepository {
 
+    fun getClientInfo(clientId: Long): StateFlow<Result<Client>>
+
     suspend fun getClients(): Flow<Result<Page<Client>>>
 
     suspend fun getClient(clientId: Long): Result<Client>
 
-    suspend fun updateClient(clientId: Long, client: Client): Flow<Result<Unit>>
+    suspend fun updateClient(clientId: Long, client: UpdatedClient): Result<String>
 
-    suspend fun getClientImage(clientId: Long): Flow<Result<String>>
+    fun getClientImage(clientId: Long): Flow<Result<String>>
 
-    suspend fun updateClientImage(clientId: Long, image: String): Flow<Result<Unit>>
+    suspend fun updateClientImage(clientId: Long, image: String): Result<String>
 
     suspend fun getClientAccounts(clientId: Long): Flow<Result<ClientAccountsEntity>>
 

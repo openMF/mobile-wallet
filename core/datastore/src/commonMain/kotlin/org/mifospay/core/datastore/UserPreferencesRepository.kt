@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.core.common.Result
 import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.user.UserInfo
 
 interface UserPreferencesRepository {
@@ -22,6 +23,8 @@ interface UserPreferencesRepository {
 
     val client: StateFlow<Client?>
 
+    val clientId: StateFlow<Long?>
+
     val authToken: String?
 
     suspend fun updateToken(token: String): Result<Unit>
@@ -29,6 +32,8 @@ interface UserPreferencesRepository {
     suspend fun updateUserInfo(user: UserInfo): Result<Unit>
 
     suspend fun updateClientInfo(client: Client): Result<Unit>
+
+    suspend fun updateClientProfile(client: UpdatedClient): Result<Unit>
 
     suspend fun logOut(): Unit
 }

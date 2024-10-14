@@ -18,6 +18,7 @@ import org.mifospay.feature.faq.navigation.faqScreen
 import org.mifospay.feature.faq.navigation.navigateToFAQ
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.homeScreen
+import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.shared.ui.MifosAppState
 
@@ -57,6 +58,11 @@ internal fun MifosNavHost(
         editPasswordScreen(
             navigateBack = navController::navigateUp,
             onLogOut = onClickLogout,
+        )
+
+        profileNavGraph(
+            navController = navController,
+            onLinkBankAccount = {},
         )
     }
 }

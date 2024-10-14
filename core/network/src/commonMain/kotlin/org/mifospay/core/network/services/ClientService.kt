@@ -23,6 +23,7 @@ import org.mifospay.core.network.model.entity.Page
 import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
 import org.mifospay.core.network.model.entity.client.ClientEntity
 import org.mifospay.core.network.model.entity.client.NewClientEntity
+import org.mifospay.core.network.model.entity.client.UpdateClientEntity
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface ClientService {
@@ -32,21 +33,24 @@ interface ClientService {
     @GET(ApiEndPoints.CLIENTS + "/{clientId}")
     suspend fun getClientForId(@Path("clientId") clientId: Long): ClientEntity
 
+    @GET(ApiEndPoints.CLIENTS + "/{clientId}")
+    fun getClient(@Path("clientId") clientId: Long): Flow<ClientEntity>
+
     @PUT(ApiEndPoints.CLIENTS + "/{clientId}")
     suspend fun updateClient(
         @Path("clientId") clientId: Long,
-        @Body payload: Any,
-    ): Flow<Unit>
+        @Body payload: UpdateClientEntity,
+    ): Unit
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/images")
     @Headers("Accept: text/plain")
-    suspend fun getClientImage(@Path("clientId") clientId: Long): Flow<String>
+    fun getClientImage(@Path("clientId") clientId: Long): Flow<String>
 
     @PUT(ApiEndPoints.CLIENTS + "/{clientId}/images")
     suspend fun updateClientImage(
         @Path("clientId") clientId: Long,
-        @Body typedFile: String?,
-    ): Flow<Unit>
+        @Body typedFile: String,
+    ): Unit
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
     suspend fun getClientAccounts(@Path("clientId") clientId: Long): Flow<ClientAccountsEntity>

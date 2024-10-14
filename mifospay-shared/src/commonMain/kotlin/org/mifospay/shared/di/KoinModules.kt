@@ -25,6 +25,7 @@ import org.mifospay.feature.auth.di.AuthModule
 import org.mifospay.feature.editpassword.di.EditPasswordModule
 import org.mifospay.feature.faq.di.FaqModule
 import org.mifospay.feature.home.di.HomeModule
+import org.mifospay.feature.profile.di.ProfileModule
 import org.mifospay.feature.settings.di.SettingsModule
 import org.mifospay.shared.MifosPayViewModel
 
@@ -54,6 +55,7 @@ object KoinModules {
             SettingsModule,
             FaqModule,
             EditPasswordModule,
+            ProfileModule,
         )
     }
     private val LibraryModule = module {

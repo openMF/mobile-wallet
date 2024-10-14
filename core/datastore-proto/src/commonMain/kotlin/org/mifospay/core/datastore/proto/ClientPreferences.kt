@@ -13,21 +13,39 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ClientPreferences(
-    val name: String,
-    val image: String,
+    val id: Long,
+    val accountNo: String,
     val externalId: String,
-    val clientId: Long,
+    val active: Boolean,
+    val activationDate: List<Long>,
+    val firstname: String,
+    val lastname: String,
     val displayName: String,
     val mobileNo: String,
+    val emailAddress: String,
+    val dateOfBirth: List<Long>,
+    val isStaff: Boolean,
+    val officeId: Long,
+    val officeName: String,
+    val savingsProductName: String,
 ) {
     companion object {
         val DEFAULT = ClientPreferences(
-            name = "",
-            image = "",
+            id = 0L,
+            accountNo = "",
             externalId = "",
-            clientId = 0,
+            active = false,
+            activationDate = emptyList(),
+            firstname = "",
+            lastname = "",
             displayName = "",
             mobileNo = "",
+            emailAddress = "",
+            dateOfBirth = emptyList(),
+            isStaff = false,
+            officeId = 0,
+            officeName = "",
+            savingsProductName = "",
         )
     }
 }

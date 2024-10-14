@@ -18,6 +18,7 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
 import org.mifospay.core.common.Result
 import org.mifospay.core.model.client.Client
+import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.user.UserInfo
 
 class UserPreferencesRepositoryImpl(
@@ -44,6 +45,13 @@ class UserPreferencesRepositoryImpl(
             started = SharingStarted.Eagerly,
         )
 
+    override val clientId: StateFlow<Long?>
+        get() = preferenceManager.clientId.stateIn(
+            scope = unconfinedScope,
+            initialValue = null,
+            started = SharingStarted.Eagerly,
+        )
+
     override val authToken: String?
         get() = preferenceManager.getAuthToken()
 
@@ -61,6 +69,15 @@ class UserPreferencesRepositoryImpl(
         return try {
             val result = preferenceManager.updateClientInfo(client)
 
+            Result.Success(result)
+        } catch (e: Exception) {
+            Result.Error(e)
+        }
+    }
+
+    override suspend fun updateClientProfile(client: UpdatedClient): Result<Unit> {
+        return try {
+            val result = preferenceManager.updateClientProfile(client)
             Result.Success(result)
         } catch (e: Exception) {
             Result.Error(e)
