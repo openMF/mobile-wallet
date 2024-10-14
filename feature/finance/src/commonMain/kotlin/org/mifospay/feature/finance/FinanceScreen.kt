@@ -11,10 +11,10 @@ package org.mifospay.feature.finance
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.google.accompanist.pager.rememberPagerState
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
 
@@ -23,7 +23,7 @@ internal fun FinanceRoute(
     tabContents: List<TabContent>,
     modifier: Modifier = Modifier,
 ) {
-    val pagerState = rememberPagerState(initialPage = 0)
+    val pagerState = rememberPagerState(pageCount = { tabContents.size })
 
     Column(modifier = modifier.fillMaxSize()) {
         MifosScrollableTabRow(
@@ -40,7 +40,7 @@ enum class FinanceScreenContents {
     KYC,
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun FinanceScreenPreview() {
     FinanceRoute(

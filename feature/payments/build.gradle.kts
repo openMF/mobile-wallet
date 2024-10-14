@@ -24,9 +24,6 @@ kotlin {
             implementation(compose.material3)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-
-            implementation(libs.koin.compose.viewmodel)
-            implementation(libs.koin.compose)
         }
     }
 }
