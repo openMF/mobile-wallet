@@ -22,7 +22,7 @@ import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.utils.BaseViewModel
 
-internal class HistoryViewModel(
+class HistoryViewModel(
     private val preferencesRepository: UserPreferencesRepository,
     private val repository: SelfServiceRepository,
 ) : BaseViewModel<HistoryState, HistoryEvent, HistoryAction>(
@@ -114,7 +114,7 @@ internal class HistoryViewModel(
     }
 }
 
-internal data class HistoryState(
+data class HistoryState(
     val clientId: Long,
     val viewState: ViewState,
     val transactionType: TransactionType,

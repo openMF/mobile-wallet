@@ -31,10 +31,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.TimeZone
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
-import org.mifospay.feature.history.navigation.HISTORY_ROUTE
-import org.mifospay.feature.history.navigation.navigateToHistory
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.navigateToHome
+import org.mifospay.feature.payments.PAYMENTS_ROUTE
+import org.mifospay.feature.payments.navigateToPayments
 import org.mifospay.feature.profile.navigation.PROFILE_ROUTE
 import org.mifospay.feature.profile.navigation.navigateToProfile
 import org.mifospay.shared.utils.TopLevelDestination
@@ -80,7 +80,7 @@ internal class MifosAppState(
     val currentTopLevelDestination: TopLevelDestination?
         @Composable get() = when (currentDestination?.route) {
             HOME_ROUTE -> TopLevelDestination.HOME
-            HISTORY_ROUTE -> TopLevelDestination.PAYMENTS
+            PAYMENTS_ROUTE -> TopLevelDestination.PAYMENTS
 //            FINANCE_ROUTE -> TopLevelDestination.FINANCE
             PROFILE_ROUTE -> TopLevelDestination.PROFILE
             else -> null
@@ -127,7 +127,7 @@ internal class MifosAppState(
 
             when (topLevelDestination) {
                 TopLevelDestination.HOME -> navController.navigateToHome(topLevelNavOptions)
-                TopLevelDestination.PAYMENTS -> navController.navigateToHistory(topLevelNavOptions)
+                TopLevelDestination.PAYMENTS -> navController.navigateToPayments(topLevelNavOptions)
 //                TopLevelDestination.FINANCE -> navController.navigateToFinance(topLevelNavOptions)
                 TopLevelDestination.PROFILE -> navController.navigateToProfile(topLevelNavOptions)
                 else -> Unit

@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.MaterialTheme
@@ -24,16 +23,15 @@ import kotlinx.coroutines.launch
 import org.mifospay.core.designsystem.component.MifosTab
 import org.mifospay.core.ui.utility.TabContent
 
-@OptIn(ExperimentalFoundationApi::class)
 @Suppress("MultipleEmitters")
 @Composable
 fun MifosScrollableTabRow(
     tabContents: List<TabContent>,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.surface,
-    selectedContentColor: Color = MaterialTheme.colorScheme.onSurface,
-    unselectedContentColor: Color = Color.LightGray,
+    containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    selectedContentColor: Color = MaterialTheme.colorScheme.primary,
+    unselectedContentColor: Color = MaterialTheme.colorScheme.primaryContainer,
     edgePadding: Dp = 8.dp,
 ) {
     val scope = rememberCoroutineScope()
@@ -43,13 +41,15 @@ fun MifosScrollableTabRow(
         containerColor = containerColor,
         selectedTabIndex = pagerState.currentPage,
         edgePadding = edgePadding,
+        indicator = {},
+        divider = {},
     ) {
         tabContents.forEachIndexed { index, currentTab ->
             MifosTab(
                 text = currentTab.tabName,
                 selected = pagerState.currentPage == index,
-                selectedContentColor = selectedContentColor,
-                unselectedContentColor = unselectedContentColor,
+                selectedColor = selectedContentColor,
+                unselectedColor = unselectedContentColor,
                 onClick = {
                     scope.launch {
                         pagerState.animateScrollToPage(index)

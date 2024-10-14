@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -37,7 +38,7 @@ import org.mifospay.feature.history.components.HistoryScreenFilter
 import org.mifospay.feature.history.components.TransactionList
 
 @Composable
-internal fun HistoryScreen(
+fun HistoryScreen(
     viewTransferDetail: (Long) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HistoryViewModel = koinViewModel(),
@@ -125,6 +126,7 @@ private fun HistoryScreenContent(
         HistoryScreenFilter(
             selectedTransactionType = selectedTransactionType,
             onAction = onAction,
+            modifier = Modifier.padding(top = 8.dp),
         )
 
         TransactionList(
