@@ -11,8 +11,11 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.Result
+import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransferDetail
 
 interface AccountRepository {
-    suspend fun getAccountTransfer(transferId: Long): Flow<Result<TransferDetail>>
+    fun getTransaction(accountId: Long, transactionId: Long): Flow<Result<Transaction>>
+
+    fun getAccountTransfer(transferId: Long): Flow<Result<TransferDetail>>
 }

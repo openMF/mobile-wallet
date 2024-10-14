@@ -39,6 +39,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -103,6 +104,7 @@ internal fun HomeRoute(
     onNavigateBack: () -> Unit,
     onRequest: (String) -> Unit,
     onPay: () -> Unit,
+    navigateToTransactionDetail: (Long, Long) -> Unit,
     modifier: Modifier = Modifier,
     homeViewModel: HomeViewModel = koinViewModel(),
 ) {
@@ -116,7 +118,9 @@ internal fun HomeRoute(
             is HomeEvent.NavigateToRequestScreen -> onRequest(event.vpa)
             is HomeEvent.NavigateToSendScreen -> onPay.invoke()
             is HomeEvent.NavigateToClientDetailScreen -> {}
-            is HomeEvent.NavigateToTransactionDetail -> {}
+            is HomeEvent.NavigateToTransactionDetail -> {
+                navigateToTransactionDetail(event.accountId, event.transactionId)
+            }
             is HomeEvent.NavigateToTransactionScreen -> {}
             is HomeEvent.ShowToast -> {
                 scope.launch {
@@ -146,17 +150,10 @@ internal fun HomeRoute(
                 val successState = homeUIState.viewState as HomeState.ViewState.Content
 
                 HomeScreen(
-                    account = successState.account,
-                    transactions = successState.transactions,
                     client = homeUIState.client,
-                    onRequest = remember(homeViewModel) {
-                        { homeViewModel.trySendAction(HomeAction.RequestClicked) }
-                    },
-                    onPay = remember(homeViewModel) {
-                        { homeViewModel.trySendAction(HomeAction.SendClicked) }
-                    },
-                    onClickViewAll = remember(homeViewModel) {
-                        { homeViewModel.trySendAction(HomeAction.OnClickSeeAllTransactions) }
+                    viewState = successState,
+                    onAction = remember(homeViewModel) {
+                        { homeViewModel.trySendAction(it) }
                     },
                     modifier = Modifier,
                 )
@@ -176,12 +173,9 @@ internal fun HomeRoute(
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
 private fun HomeScreen(
-    account: Account,
-    transactions: List<Transaction>,
     client: Client,
-    onRequest: () -> Unit,
-    onPay: () -> Unit,
-    onClickViewAll: () -> Unit,
+    viewState: HomeState.ViewState.Content,
+    onAction: (HomeAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val windowSizeClass = calculateWindowSizeClass()
@@ -202,7 +196,7 @@ private fun HomeScreen(
         ) {
             item {
                 MifosWalletCard(
-                    account = account,
+                    account = viewState.account,
                     clientName = client.displayName,
                 )
             }
@@ -210,8 +204,12 @@ private fun HomeScreen(
             item {
                 PayRequestScreen(
                     modifier = Modifier.padding(vertical = 20.dp),
-                    onRequest = onRequest,
-                    onSend = onPay,
+                    onRequest = {
+                        onAction(HomeAction.RequestClicked)
+                    },
+                    onSend = {
+                        onAction(HomeAction.SendClicked)
+                    },
                 )
             }
 
@@ -222,8 +220,13 @@ private fun HomeScreen(
             item {
                 TransactionHistoryCard(
                     modifier = Modifier.padding(vertical = 20.dp),
-                    transactions = transactions,
-                    onClickViewAll = onClickViewAll,
+                    transactions = viewState.transactions,
+                    onClickViewAll = {
+                        onAction(HomeAction.OnClickSeeAllTransactions)
+                    },
+                    onViewTransaction = { accountId, transactionId ->
+                        onAction(HomeAction.TransactionClicked(accountId, transactionId))
+                    },
                 )
             }
         }
@@ -444,6 +447,7 @@ fun TransactionHistoryCard(
     transactions: List<Transaction>,
     modifier: Modifier = Modifier,
     onClickViewAll: () -> Unit,
+    onViewTransaction: (Long, Long) -> Unit,
 ) {
     Card(
         modifier = modifier
@@ -484,8 +488,21 @@ fun TransactionHistoryCard(
                 }
             }
 
-            transactions.forEachIndexed { _, transaction ->
-                TransactionItemScreen(transaction = transaction)
+            transactions.forEachIndexed { i, transaction ->
+                TransactionItemScreen(
+                    transaction = transaction,
+                    onClick = onViewTransaction,
+                )
+
+                if (i != transactions.size - 1) {
+                    HorizontalDivider(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp),
+                        thickness = 1.dp,
+                        color = NewUi.onSurface.copy(alpha = 0.05f),
+                    )
+                }
             }
         }
     }
@@ -542,18 +559,38 @@ private fun HomeDialogs(
 @Composable
 private fun HomeScreenPreview() {
     HomeScreen(
-        account = Account(
-            image = "",
-            name = "Mifos",
-            number = "1234567890",
-            balance = 10000.0,
-            id = 1L,
-            currency = Currency(
-                code = "USD",
-                displayLabel = "$",
-                displaySymbol = "$",
+        viewState = HomeState.ViewState.Content(
+            account = Account(
+                image = "",
+                name = "Mifos",
+                number = "1234567890",
+                balance = 10000.0,
+                id = 1L,
+                currency = Currency(
+                    code = "USD",
+                    displayLabel = "$",
+                    displaySymbol = "$",
+                ),
+                productId = 1223,
             ),
-            productId = 1223,
+            transactions = List(25) { index ->
+                Transaction(
+                    accountId = 5505,
+                    amount = 2.3,
+                    date = "eum",
+                    currency = Currency(
+                        code = "molestie",
+                        displaySymbol = "viris",
+                        displayLabel = "metus",
+                    ),
+                    transactionType = TransactionType.DEBIT,
+                    transactionId = index.toLong(),
+                    accountNo = "placerat",
+                    transferId = 9075,
+                    originalTransactionId = 1692,
+                    paymentDetailId = 8149,
+                )
+            },
         ),
         client = Client(
             id = 8858,
@@ -589,27 +626,7 @@ private fun HomeScreenPreview() {
                 value = "laudem",
             ),
         ),
-        transactions = List(25) { index ->
-            Transaction(
-                transactionId = index.toString(),
-                amount = 23004.0,
-                currency = Currency(
-                    code = "USD",
-                    displayLabel = "$",
-                    displaySymbol = "$",
-                ),
-                transactionType = TransactionType.CREDIT,
-                clientId = 2455,
-                accountId = 4898,
-                date = "putent",
-                transferId = 8928,
-                transferDetail = null,
-                receiptId = null,
-            )
-        },
-        onPay = {},
-        onRequest = {},
-        onClickViewAll = {},
+        onAction = {},
     )
 }
 

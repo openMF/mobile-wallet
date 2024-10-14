@@ -9,10 +9,12 @@
  */
 package org.mifospay.core.model.savingsaccount
 
+import kotlinx.serialization.Serializable
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 
 @Parcelize
+@Serializable
 data class Currency(
     val code: String,
     val displaySymbol: String,

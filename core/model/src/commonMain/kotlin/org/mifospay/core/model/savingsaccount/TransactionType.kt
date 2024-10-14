@@ -10,7 +10,7 @@
 package org.mifospay.core.model.savingsaccount
 
 enum class TransactionType {
+    OTHER,
     DEBIT,
     CREDIT,
-    OTHER,
 }

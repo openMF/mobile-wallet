@@ -17,6 +17,7 @@ import org.mifospay.core.common.Result
 import org.mifospay.core.common.asResult
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.network.FineractApiManager
 
@@ -24,12 +25,20 @@ class AccountRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : AccountRepository {
-    override suspend fun getAccountTransfer(transferId: Long): Flow<Result<TransferDetail>> {
-        return apiManager
-            .accountTransfersApi
-            .getAccountTransfer(transferId)
+
+    override fun getTransaction(
+        accountId: Long,
+        transactionId: Long,
+    ): Flow<Result<Transaction>> {
+        return apiManager.accountTransfersApi
+            .getTransaction(accountId, transactionId)
             .map { it.toModel() }
-            .asResult()
-            .flowOn(ioDispatcher)
+            .asResult().flowOn(ioDispatcher)
+    }
+
+    override fun getAccountTransfer(transferId: Long): Flow<Result<TransferDetail>> {
+        return apiManager.accountTransfersApi
+            .getAccountTransfer(transferId.toInt())
+            .asResult().flowOn(ioDispatcher)
     }
 }

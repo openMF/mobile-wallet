@@ -75,7 +75,12 @@ class HomeViewModel(
             }
 
             is HomeAction.TransactionClicked -> {
-                sendEvent(HomeEvent.NavigateToTransactionDetail(action.transactionId))
+                sendEvent(
+                    HomeEvent.NavigateToTransactionDetail(
+                        action.accountId,
+                        action.transactionId,
+                    ),
+                )
             }
 
             is HomeAction.OnDismissDialog -> {
@@ -196,7 +201,7 @@ sealed interface HomeEvent {
     data class NavigateToRequestScreen(val vpa: String) : HomeEvent
     data object NavigateToSendScreen : HomeEvent
     data object NavigateToTransactionScreen : HomeEvent
-    data class NavigateToTransactionDetail(val transactionId: Int) : HomeEvent
+    data class NavigateToTransactionDetail(val accountId: Long, val transactionId: Long) : HomeEvent
     data object NavigateToClientDetailScreen : HomeEvent
     data class ShowToast(val message: String) : HomeEvent
 }
@@ -208,7 +213,8 @@ sealed interface HomeAction {
     data object OnClickSeeAllTransactions : HomeAction
     data object OnDismissDialog : HomeAction
     data object OnNavigateBack : HomeAction
-    data class TransactionClicked(val transactionId: Int) : HomeAction
+
+    data class TransactionClicked(val accountId: Long, val transactionId: Long) : HomeAction
 
     sealed interface Internal : HomeAction {
         data object LoadAccounts : HomeAction

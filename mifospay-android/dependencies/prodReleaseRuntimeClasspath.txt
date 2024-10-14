@@ -11,6 +11,7 @@
 :feature:auth
 :feature:editpassword
 :feature:faq
+:feature:history
 :feature:home
 :feature:profile
 :feature:settings

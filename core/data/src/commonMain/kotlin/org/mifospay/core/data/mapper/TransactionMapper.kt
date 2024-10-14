@@ -21,8 +21,7 @@ fun SavingsWithAssociationsEntity.toTransactionList(): List<Transaction> {
 
 fun TransactionsEntity.toModel(): Transaction {
     return Transaction(
-        transactionId = this.id.toString(),
-        receiptId = this.paymentDetailData?.receiptNumber,
+        transactionId = this.id,
         amount = this.amount,
         date = DateHelper.getDateAsString(this.submittedOnDate),
         currency = this.currency.toModel(),
@@ -31,9 +30,10 @@ fun TransactionsEntity.toModel(): Transaction {
             this.transactionType.withdrawal -> TransactionType.DEBIT
             else -> TransactionType.OTHER
         },
-        transferId = this.originalTransactionId ?: 0,
-        clientId = 0,
-        accountId = this.accountId?.toLong() ?: 0L,
-        transferDetail = null,
+        transferId = this.transfer?.id,
+        accountId = this.accountId,
+        accountNo = this.accountNo,
+        originalTransactionId = this.originalTransactionId,
+        paymentDetailId = this.paymentDetailData?.id,
     )
 }

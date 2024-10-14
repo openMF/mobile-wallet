@@ -11,7 +11,9 @@ package org.mifospay.core.common
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.format
@@ -52,8 +54,12 @@ object DateHelper {
         return stringBuilder.toString()
     }
 
-    fun getDateAsString(integersOfDate: List<Int>, pattern: String): String {
-        return getFormatConverter(FULL_MONTH, pattern, getDateAsString(integersOfDate))
+    fun getDateAsString(integersOfDate: List<Long>, pattern: String): String {
+        return getFormatConverter(
+            currentFormat = FULL_MONTH,
+            requiredFormat = pattern,
+            dateString = getDateAsString(integersOfDate.map { it.toInt() }),
+        )
     }
 
     /**
@@ -79,6 +85,23 @@ object DateHelper {
         val finalFormat = LocalDateTime.Format { byUnicodePattern(requiredFormat) }
 
         return pickerFormat.parse(dateString).format(finalFormat)
+    }
+
+    fun formatTransferDate(dateArray: List<Int>, pattern: String = "dd MM yyyy"): String {
+        val localDate = LocalDate(dateArray[0], Month(dateArray[1]), dateArray[2])
+        return localDate.format(pattern)
+    }
+
+    // Extension function to format LocalDate
+    fun LocalDate.format(pattern: String): String {
+        val year = this.year.toString().padStart(4, '0')
+        val month = this.monthNumber.toString().padStart(2, '0')
+        val day = this.dayOfMonth.toString().padStart(2, '0')
+
+        return pattern
+            .replace("yyyy", year)
+            .replace("MM", month)
+            .replace("dd", day)
     }
 
     /**

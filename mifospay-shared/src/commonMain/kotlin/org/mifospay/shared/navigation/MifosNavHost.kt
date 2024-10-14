@@ -16,6 +16,11 @@ import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
 import org.mifospay.feature.faq.navigation.navigateToFAQ
+import org.mifospay.feature.history.navigation.historyNavigation
+import org.mifospay.feature.history.navigation.navigateToSpecificTransaction
+import org.mifospay.feature.history.navigation.navigateToTransactionDetail
+import org.mifospay.feature.history.navigation.specificTransactionsScreen
+import org.mifospay.feature.history.navigation.transactionDetailNavigation
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.homeScreen
 import org.mifospay.feature.profile.navigation.profileNavGraph
@@ -40,6 +45,7 @@ internal fun MifosNavHost(
             onNavigateBack = navController::popBackStack,
             onRequest = {},
             onPay = {},
+            navigateToTransactionDetail = navController::navigateToSpecificTransaction,
         )
 
         settingsScreen(
@@ -63,6 +69,19 @@ internal fun MifosNavHost(
         profileNavGraph(
             navController = navController,
             onLinkBankAccount = {},
+        )
+
+        historyNavigation(
+            viewTransactionDetail = navController::navigateToTransactionDetail,
+        )
+
+        specificTransactionsScreen(
+            navigateBack = navController::navigateUp,
+            viewTransactionDetail = navController::navigateToTransactionDetail,
+        )
+
+        transactionDetailNavigation(
+            navigateBack = navController::navigateUp,
         )
     }
 }
