@@ -13,23 +13,86 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TransactionsEntity(
-    val id: Int? = null,
-    val entryType: String? = null,
-    val transactionType: TransactionType = TransactionType(),
-    val accountId: Int? = null,
-    val accountNo: String? = null,
-    val date: List<Int?> = ArrayList(),
-    val currency: CurrencyEntity = CurrencyEntity(),
+    val id: Long,
+    val transactionType: TransactionType,
+    val entryType: String,
+    val accountId: Long,
+    val accountNo: String,
+    val date: List<Int>,
+    val currency: CurrencyEntity,
+    val amount: Double,
+    val runningBalance: Double,
+    val reversed: Boolean,
+    val transfer: Transfer? = null,
+    val submittedOnDate: List<Int>,
+    val interestedPostedAsOn: Boolean,
+    val submittedByUsername: String,
+    val isManualTransaction: Boolean,
+    val isReversal: Boolean,
+    val originalTransactionId: Long,
+    val lienTransaction: Boolean,
+    val releaseTransactionId: Long,
     val paymentDetailData: PaymentDetailData? = null,
-    val amount: Double = 0.0,
-    val runningBalance: Double? = null,
-    val reversed: Boolean? = null,
-    val submittedOnDate: List<Int> = ArrayList(),
-    val interestedPostedAsOn: Boolean? = null,
-    val submittedByUsername: String? = null,
-    val isManualTransaction: Boolean = false,
-    val isReversal: Boolean = false,
-    val originalTransactionId: Long? = null,
-    val lienTransaction: Boolean = false,
-    val releaseTransactionId: Long? = null,
-)
+) {
+    @Serializable
+    data class Currency(
+        val code: String,
+        val name: String,
+        val decimalPlaces: Long,
+        val inMultiplesOf: Long,
+        val displaySymbol: String,
+        val nameCode: String,
+        val displayLabel: String,
+    )
+
+    @Serializable
+    data class TransactionType(
+        val id: Long,
+        val code: String,
+        val value: String,
+        val deposit: Boolean,
+        val dividendPayout: Boolean,
+        val withdrawal: Boolean,
+        val interestPosting: Boolean,
+        val feeDeduction: Boolean,
+        val initiateTransfer: Boolean,
+        val approveTransfer: Boolean,
+        val withdrawTransfer: Boolean,
+        val rejectTransfer: Boolean,
+        val overdraftInterest: Boolean,
+        val writtenoff: Boolean,
+        val overdraftFee: Boolean,
+        val withholdTax: Boolean,
+        val escheat: Boolean,
+        val amountHold: Boolean,
+        val amountRelease: Boolean,
+    )
+
+    @Serializable
+    data class Transfer(
+        val id: Long,
+        val reversed: Boolean,
+        val currency: Currency,
+        val transferAmount: Double,
+        val transferDate: List<Long>,
+        val transferDescription: String,
+    )
+
+    @Serializable
+    data class PaymentDetailData(
+        val id: Long,
+        val paymentType: PaymentType,
+        val accountNumber: String,
+        val checkNumber: String,
+        val routingCode: String,
+        val receiptNumber: String,
+        val bankNumber: String,
+    )
+
+    @Serializable
+    data class PaymentType(
+        val id: Long,
+        val name: String,
+        val isSystemDefined: Boolean,
+    )
+}

@@ -12,21 +12,9 @@ package org.mifospay.core.data.mapper
 import org.mifospay.core.model.savingsaccount.DepositType
 import org.mifospay.core.model.savingsaccount.SavingAccount
 import org.mifospay.core.model.savingsaccount.Status
-import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.network.model.entity.accounts.savings.SavingAccountEntity
 import org.mifospay.core.network.model.entity.accounts.savings.StatusEntity
-import org.mifospay.core.network.model.entity.accounts.savings.TransferDetailEntity
 import org.mifospay.core.network.model.entity.client.DepositTypeEntity
-
-fun TransferDetailEntity.toModel(): TransferDetail {
-    return TransferDetail(
-        id = id,
-        fromClient = fromClient.toModel(),
-        fromAccount = fromAccount.toModel(),
-        toClient = toClient.toModel(),
-        toAccount = toAccount.toModel(),
-    )
-}
 
 fun SavingAccountEntity.toModel(): SavingAccount {
     return SavingAccount(

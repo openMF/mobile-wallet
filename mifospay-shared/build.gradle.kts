@@ -41,6 +41,7 @@ kotlin {
             api(projects.feature.faq)
             api(projects.feature.editpassword)
             api(projects.feature.profile)
+            api(projects.feature.history)
         }
 
         desktopMain.dependencies {

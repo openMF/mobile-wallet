@@ -9,15 +9,89 @@
  */
 package org.mifospay.core.model.savingsaccount
 
-import org.mifospay.core.common.Parcelable
-import org.mifospay.core.common.Parcelize
-import org.mifospay.core.model.client.Client
+import kotlinx.serialization.Serializable
 
-@Parcelize
+@Serializable
 data class TransferDetail(
     val id: Long,
-    val fromClient: Client,
-    val fromAccount: SavingAccount,
-    val toClient: Client,
-    val toAccount: SavingAccount,
-) : Parcelable
+    val reversed: Boolean = false,
+    val currency: Currency = Currency(),
+    val transferAmount: Double = 0.0,
+    val transferDate: List<Int>,
+    val transferDescription: String? = null,
+    val fromOffice: FromOffice,
+    val fromClient: FromClient,
+    val fromAccountType: FromAccountType,
+    val fromAccount: FromAccount,
+    val toOffice: ToOffice,
+    val toClient: ToClient,
+    val toAccountType: ToAccountType,
+    val toAccount: ToAccount,
+) {
+    @Serializable
+    data class Currency(
+        val code: String = "",
+        val name: String = "",
+        val decimalPlaces: Long = 0L,
+        val inMultiplesOf: Long = 0L,
+        val displaySymbol: String = "",
+        val nameCode: String = "",
+        val displayLabel: String = "",
+    )
+
+    @Serializable
+    data class FromOffice(
+        val id: Long = 0,
+        val name: String = "",
+    )
+
+    @Serializable
+    data class FromClient(
+        val id: Long = 0,
+        val displayName: String = "",
+        val isStaff: Boolean = false,
+        val officeId: Long = 0,
+        val officeName: String = "",
+    )
+
+    @Serializable
+    data class FromAccountType(
+        val id: Long = 0,
+        val code: String = "",
+        val value: String = "",
+    )
+
+    @Serializable
+    data class FromAccount(
+        val id: Long = 0,
+        val accountNo: String = "",
+    )
+
+    @Serializable
+    data class ToOffice(
+        val id: Long = 0,
+        val name: String = "",
+    )
+
+    @Serializable
+    data class ToClient(
+        val id: Long = 0,
+        val displayName: String = "",
+        val isStaff: Boolean = false,
+        val officeId: Long = 0,
+        val officeName: String = "",
+    )
+
+    @Serializable
+    data class ToAccountType(
+        val id: Long = 0,
+        val code: String = "",
+        val value: String = "",
+    )
+
+    @Serializable
+    data class ToAccount(
+        val id: Long = 0,
+        val accountNo: String = "",
+    )
+}

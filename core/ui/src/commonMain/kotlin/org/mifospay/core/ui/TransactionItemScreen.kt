@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -40,74 +41,84 @@ import org.mifospay.core.model.savingsaccount.TransactionType
 @Composable
 fun TransactionItemScreen(
     transaction: Transaction,
+    onClick: (Long, Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+    Surface(
+        modifier = modifier,
+        onClick = {
+            onClick(transaction.accountId, transaction.transactionId)
+        },
+        color = Color.Transparent,
+        contentColor = MaterialTheme.colorScheme.onSurface,
     ) {
-        Image(
-            modifier = Modifier
-                .size(20.dp)
-                .padding(top = 2.dp),
-            painter = painterResource(
-                resource = when (transaction.transactionType) {
-                    TransactionType.DEBIT -> Res.drawable.core_ui_money_out
-                    TransactionType.CREDIT -> Res.drawable.core_ui_money_in
-                    else -> Res.drawable.core_ui_money_in
-                },
-            ),
-            contentDescription = null,
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-        )
-        Column(
-            modifier = Modifier
-                .padding(start = 32.dp)
-                .weight(.3f),
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
         ) {
-            Text(
-                text = transaction.transactionType.toString(),
-                style = TextStyle(
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight(400),
-                    color = MaterialTheme.colorScheme.onSurface,
+            Image(
+                modifier = Modifier
+                    .size(20.dp)
+                    .padding(top = 2.dp),
+                painter = painterResource(
+                    resource = when (transaction.transactionType) {
+                        TransactionType.DEBIT -> Res.drawable.core_ui_money_out
+                        TransactionType.CREDIT -> Res.drawable.core_ui_money_in
+                        else -> Res.drawable.core_ui_money_in
+                    },
+                ),
+                contentDescription = null,
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+            )
+            Column(
+                modifier = Modifier
+                    .padding(start = 32.dp)
+                    .weight(.3f),
+            ) {
+                Text(
+                    text = transaction.transactionType.toString(),
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight(400),
+                        color = MaterialTheme.colorScheme.onSurface,
 
-                ),
+                    ),
+                )
+                Text(
+                    text = transaction.date.toString(),
+                    style = TextStyle(
+                        fontSize = 10.sp,
+                        fontWeight = FontWeight(400),
+                        color = Color(0x66000000),
+                    ),
+                )
+            }
+            val formattedAmount = CurrencyFormatter.format(
+                balance = transaction.amount,
+                currencyCode = transaction.currency.code,
+                maximumFractionDigits = 2,
             )
+            val amount = when (transaction.transactionType) {
+                TransactionType.DEBIT -> "- $formattedAmount"
+                TransactionType.CREDIT -> "+ $formattedAmount"
+                else -> formattedAmount
+            }
             Text(
-                text = transaction.date.toString(),
+                modifier = Modifier.weight(.3f),
+                text = amount,
                 style = TextStyle(
-                    fontSize = 10.sp,
-                    fontWeight = FontWeight(400),
-                    color = Color(0x66000000),
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = when (transaction.transactionType) {
+                        TransactionType.DEBIT -> red
+                        TransactionType.CREDIT -> green
+                        else -> Color.Black
+                    },
+                    textAlign = TextAlign.End,
                 ),
             )
         }
-        val formattedAmount = CurrencyFormatter.format(
-            balance = transaction.amount,
-            currencyCode = transaction.currency.code,
-            maximumFractionDigits = 2,
-        )
-        val amount = when (transaction.transactionType) {
-            TransactionType.DEBIT -> "- $formattedAmount"
-            TransactionType.CREDIT -> "+ $formattedAmount"
-            else -> formattedAmount
-        }
-        Text(
-            modifier = Modifier.weight(.3f),
-            text = amount,
-            style = TextStyle(
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Normal,
-                color = when (transaction.transactionType) {
-                    TransactionType.DEBIT -> red
-                    TransactionType.CREDIT -> green
-                    else -> Color.Black
-                },
-                textAlign = TextAlign.End,
-            ),
-        )
     }
 }

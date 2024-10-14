@@ -41,6 +41,7 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.Wallet
@@ -88,6 +89,7 @@ object MifosIcons {
     val Back = Icons.AutoMirrored.Outlined.ArrowBack
     val Copy = Icons.Filled.ContentCopy
     val Share = Icons.Filled.Share
+    val OutlinedShare = Icons.Outlined.Share
     val ArrowBack = Icons.AutoMirrored.Filled.ArrowBack
     val ArrowBack2 = Icons.Filled.ChevronLeft
     val Cancel = Icons.Outlined.Cancel

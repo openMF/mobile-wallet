@@ -23,12 +23,14 @@ fun NavGraphBuilder.homeScreen(
     onNavigateBack: () -> Unit,
     onRequest: (String) -> Unit,
     onPay: () -> Unit,
+    navigateToTransactionDetail: (Long, Long) -> Unit,
 ) {
     composable(route = HOME_ROUTE) {
         HomeRoute(
             onRequest = onRequest,
             onPay = onPay,
             onNavigateBack = onNavigateBack,
+            navigateToTransactionDetail = navigateToTransactionDetail,
         )
     }
 }
