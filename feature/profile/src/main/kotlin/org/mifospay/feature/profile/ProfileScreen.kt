@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +33,6 @@ import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.ui.ProfileImage
 
 @Composable
@@ -79,7 +79,7 @@ fun ProfileScreenContent(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
                         .height(54.dp),
-                    color = MifosBlue,
+                    color = MaterialTheme.colorScheme.primary,
                     text = { Text(text = stringResource(id = R.string.feature_profile_personal_qr_code)) },
                     onClick = { /*TODO*/ },
                     leadingIcon = {
@@ -97,7 +97,7 @@ fun ProfileScreenContent(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp)
                         .height(55.dp),
-                    color = MifosBlue,
+                    color = MaterialTheme.colorScheme.primary,
                     text = { Text(text = stringResource(id = R.string.feature_profile_link_bank_account)) },
                     onClick = onLinkAccount,
                     leadingIcon = {
@@ -128,8 +128,7 @@ internal class ProfilePreviewProvider : PreviewParameterProvider<ProfileUiState>
 @Preview(showSystemUi = true, showBackground = true)
 @Composable
 private fun ProfileScreenPreview(
-    @PreviewParameter(ProfilePreviewProvider::class)
-    profileState: ProfileUiState,
+    @PreviewParameter(ProfilePreviewProvider::class) profileState: ProfileUiState,
 ) {
     ProfileScreenContent(
         profileState = profileState,

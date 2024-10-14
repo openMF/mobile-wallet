@@ -178,7 +178,7 @@ private fun Chip(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val backgroundColor = MaterialTheme.colorScheme.onPrimary
+    val backgroundColor = MaterialTheme.colorScheme.onPrimaryContainer
     MifosButton(
         modifier = modifier.then(
             if (selected) {

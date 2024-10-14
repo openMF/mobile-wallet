@@ -29,9 +29,9 @@ fun MifosScrollableTabRow(
     tabContents: List<TabContent>,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
     selectedContentColor: Color = MaterialTheme.colorScheme.primary,
-    unselectedContentColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    unselectedContentColor: Color = MaterialTheme.colorScheme.surface,
     edgePadding: Dp = 8.dp,
 ) {
     val scope = rememberCoroutineScope()

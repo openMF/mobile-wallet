@@ -19,11 +19,11 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -42,8 +42,7 @@ fun EditProfileScreenImage(
     onCameraIconClick: () -> Unit,
 ) {
     Box(
-        modifier = modifier
-            .size(150.dp),
+        modifier = modifier.size(150.dp),
     ) {
         if (imageUri != null) {
             AsyncImage(
@@ -76,13 +75,13 @@ fun EditProfileScreenImage(
                 .size(36.dp)
                 .clip(CircleShape)
                 .align(Alignment.BottomCenter),
-            colors = IconButtonDefaults.iconButtonColors(Color.White),
+            colors = IconButtonDefaults.iconButtonColors(MaterialTheme.colorScheme.onPrimaryContainer),
         ) {
             Icon(
                 painter = rememberVectorPainter(MifosIcons.Edit2),
                 contentDescription = null,
-                modifier = Modifier
-                    .size(24.dp),
+                modifier = Modifier.size(24.dp),
+                tint = MaterialTheme.colorScheme.onSurface,
             )
         }
     }

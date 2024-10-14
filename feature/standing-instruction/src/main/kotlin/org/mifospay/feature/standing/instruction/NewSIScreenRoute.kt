@@ -28,6 +28,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -227,7 +228,7 @@ private fun NewSIBody(
                         Icon(
                             imageVector = MifosIcons.QrCode2,
                             contentDescription = "Scan QR",
-                            tint = Color.Blue,
+                            tint = MaterialTheme.colorScheme.surface,
                         )
                     }
                 },
@@ -257,11 +258,12 @@ private fun NewSIBody(
                     .width(150.dp)
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally),
+                color = MaterialTheme.colorScheme.primary,
                 onClick = { showDatePickerDialog() },
             ) {
                 val text =
                     selectedDate.ifEmpty { stringResource(R.string.feature_standing_instruction_select_date) }
-                Text(text = text, color = Color.White)
+                Text(text = text, color = MaterialTheme.colorScheme.onPrimary)
             }
 
             MifosButton(
@@ -269,6 +271,7 @@ private fun NewSIBody(
                     .width(150.dp)
                     .padding(top = 16.dp)
                     .align(Alignment.CenterHorizontally),
+                color = MaterialTheme.colorScheme.primary,
                 onClick = {
                     fetchClient(vpa)
                     if (updateSuccess) {
@@ -293,7 +296,7 @@ private fun NewSIBody(
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_submit),
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
         }
@@ -347,9 +350,12 @@ private fun ConfirmTransfer(
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_sending_to),
-                    style = TextStyle(color = Color.Blue, fontSize = 15.sp),
+                    style = TextStyle(color = MaterialTheme.colorScheme.primary, fontSize = 15.sp),
                 )
-                Text(text = clientName, style = TextStyle(color = Color.Black, fontSize = 20.sp))
+                Text(
+                    text = clientName,
+                    style = TextStyle(color = MaterialTheme.colorScheme.primary, fontSize = 20.sp),
+                )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -358,9 +364,12 @@ private fun ConfirmTransfer(
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_vpa),
-                    style = TextStyle(color = Color.Black, fontSize = 15.sp),
+                    style = TextStyle(color = MaterialTheme.colorScheme.primary, fontSize = 15.sp),
                 )
-                Text(text = clientVpa, style = TextStyle(color = Color.Black, fontSize = 20.sp))
+                Text(
+                    text = clientVpa,
+                    style = TextStyle(color = MaterialTheme.colorScheme.primary, fontSize = 20.sp),
+                )
             }
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -369,11 +378,11 @@ private fun ConfirmTransfer(
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_amount),
-                    style = TextStyle(color = Color.Blue, fontSize = 15.sp),
+                    style = TextStyle(color = MaterialTheme.colorScheme.primary, fontSize = 15.sp),
                 )
                 Text(
                     text = amount,
-                    style = TextStyle(color = Color.Black, fontSize = 20.sp),
+                    style = TextStyle(color = MaterialTheme.colorScheme.primary, fontSize = 20.sp),
                 )
             }
         }
@@ -387,11 +396,12 @@ private fun ConfirmTransfer(
                 modifier = Modifier
                     .width(150.dp)
                     .padding(top = 16.dp),
+                color = MaterialTheme.colorScheme.primary,
                 onClick = { cancel.invoke() },
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_cancel),
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
 
@@ -399,6 +409,7 @@ private fun ConfirmTransfer(
                 modifier = Modifier
                     .width(150.dp)
                     .padding(top = 16.dp),
+                color = MaterialTheme.colorScheme.primary,
                 onClick = {
                     if (amount.isNotEmpty()) {
                         confirm.invoke(
@@ -435,7 +446,7 @@ private fun ConfirmTransfer(
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_standing_instruction_confirm),
-                    color = Color.White,
+                    color = MaterialTheme.colorScheme.onPrimary,
                 )
             }
         }

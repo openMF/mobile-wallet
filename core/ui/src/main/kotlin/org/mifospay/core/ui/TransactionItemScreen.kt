@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import com.mifospay.core.model.domain.Transaction
 import com.mifospay.core.model.domain.TransactionType
 import org.mifospay.common.Utils.getNewCurrencyFormatter
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.designsystem.theme.green
 import org.mifospay.core.designsystem.theme.red
 
@@ -77,8 +76,15 @@ fun TransactionItemScreen(
                     },
                     modifier = when (transaction.transactionType) {
                         TransactionType.DEBIT -> Modifier.size(16.dp)
-                        TransactionType.CREDIT -> Modifier.graphicsLayer(rotationZ = 180f).size(16.dp)
-                        else -> Modifier.graphicsLayer(rotationZ = 180f).size(16.dp)
+                        TransactionType.CREDIT ->
+                            Modifier
+                                .graphicsLayer(rotationZ = 180f)
+                                .size(16.dp)
+
+                        else ->
+                            Modifier
+                                .graphicsLayer(rotationZ = 180f)
+                                .size(16.dp)
                     },
                     tint = when (transaction.transactionType) {
                         TransactionType.CREDIT -> green
@@ -104,7 +110,7 @@ fun TransactionItemScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 20.dp),
             thickness = 1.dp,
-            color = NewUi.onSurface.copy(alpha = 0.05f),
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.13f),
         )
     }
 }

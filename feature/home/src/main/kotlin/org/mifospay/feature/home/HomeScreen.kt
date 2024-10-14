@@ -115,7 +115,8 @@ private fun HomeScreen(
 ) {
     LazyColumn(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.surface),
         contentPadding = PaddingValues(horizontal = 20.dp),
     ) {
         item {
@@ -304,7 +305,7 @@ fun MifosSendMoneyFreeCard(modifier: Modifier = Modifier) {
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
         ),
     ) {
         Row(
@@ -318,15 +319,16 @@ fun MifosSendMoneyFreeCard(modifier: Modifier = Modifier) {
             ) {
                 Text(
                     text = stringResource(id = R.string.start_sending_your_money_tax_free),
-                    color = NewUi.primaryColor,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight(500),
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
                     text = "Mifos Pay is the best place for users to receive and send money. Start saving money now!",
-                    color = NewUi.onSurface,
+                    color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight(300),
+                    modifier = Modifier.padding(top = 15.dp),
                 )
             }
 
@@ -346,7 +348,7 @@ fun TransactionHistoryCard(transactions: List<Transaction>, modifier: Modifier =
         modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
         ),
     ) {
         Column {
@@ -360,7 +362,7 @@ fun TransactionHistoryCard(transactions: List<Transaction>, modifier: Modifier =
             ) {
                 Text(
                     text = "Transaction History",
-                    color = NewUi.primaryColor,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight(500),
                 )
 
@@ -395,7 +397,7 @@ private fun PaymentButton(
         modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
             contentColor = MaterialTheme.colorScheme.onSurface,
         ),
     ) {
