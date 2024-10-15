@@ -32,8 +32,8 @@ that can be used as a dependency in any other wallet based project. It is develo
 | :feature:profile              | Done              | ✅                 | ✅                  | ❔                 | ✅                 | ❔                      | 
 | :feature:settings             | Done              | ✅                 | ✅                  | ❔                 | ✅                 | ❔                      | 
 | :feature:payments             | Done              | ✅                 | ✅                  | ✅                 | ✅                 | ❔                      |
-| :feature:account              | Not started       | ❌                 | ❌                  | ❌                 | ❌                 | ❌                      | 
-| :feature:finance              | Not started       | ❌                 | ❌                  | ❌                 | ❌                 | ❌                      | 
+| :feature:finance              | Done              | ✅                 | ✅                  | ✅                 | ✅                 | ❔                      |
+| :feature:account              | Not started       | ❌                 | ❌                  | ❌                 | ❌                 | ❌                      |
 | :feature:invoices             | Not started       | ❌                 | ❌                  | ❌                 | ❌                 | ❌                      | 
 | :feature:kyc                  | Not started       | ❌                 | ❌                  | ❌                 | ❌                 | ❌                      | 
 | :feature:make-transfer        | Not started       | ❌                 | ❌                  | ❌                 | ❌                 | ❌                      | 

@@ -9,7 +9,11 @@
  */
 package org.mifospay.shared.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import org.mifospay.core.ui.utility.TabContent
@@ -17,6 +21,8 @@ import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
 import org.mifospay.feature.faq.navigation.navigateToFAQ
+import org.mifospay.feature.finance.FinanceScreenContents
+import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.history.HistoryScreen
 import org.mifospay.feature.history.navigation.historyNavigation
 import org.mifospay.feature.history.navigation.navigateToSpecificTransaction
@@ -57,6 +63,29 @@ internal fun MifosNavHost(
         },
     )
 
+    val tabContents = listOf(
+        TabContent(FinanceScreenContents.ACCOUNTS.name) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Accounts Screen || TODO", modifier = Modifier.align(Alignment.Center))
+            }
+        },
+        TabContent(FinanceScreenContents.CARDS.name) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Cards Screen || TODO", modifier = Modifier.align(Alignment.Center))
+            }
+        },
+        TabContent(FinanceScreenContents.MERCHANTS.name) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("Merchants Screen || TODO", modifier = Modifier.align(Alignment.Center))
+            }
+        },
+        TabContent(FinanceScreenContents.KYC.name) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Text("KYC Screen || TODO", modifier = Modifier.align(Alignment.Center))
+            }
+        },
+    )
+    
     NavHost(
         route = MifosNavGraph.MAIN_GRAPH,
         startDestination = HOME_ROUTE,
@@ -97,9 +126,9 @@ internal fun MifosNavHost(
             viewTransactionDetail = navController::navigateToTransactionDetail,
         )
 
-        paymentsScreen(
-            tabContents = paymentsTabContents,
-        )
+        paymentsScreen(tabContents = paymentsTabContents)
+
+        financeScreen(tabContents = tabContents)
 
         specificTransactionsScreen(
             navigateBack = navController::navigateUp,
