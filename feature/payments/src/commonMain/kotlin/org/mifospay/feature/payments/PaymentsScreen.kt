@@ -11,10 +11,10 @@ package org.mifospay.feature.payments
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import com.google.accompanist.pager.rememberPagerState
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
 
@@ -34,9 +34,12 @@ private fun PaymentScreenContent(
     tabContents: List<TabContent>,
     modifier: Modifier = Modifier,
 ) {
-    val pagerState = rememberPagerState(initialPage = 0)
+    val pagerState = rememberPagerState(pageCount = { tabContents.size })
 
-    Column(modifier = modifier.fillMaxSize()) {
+    Column(
+        modifier = modifier
+            .fillMaxSize(),
+    ) {
         MifosScrollableTabRow(
             tabContents = tabContents,
             pagerState = pagerState,
@@ -52,7 +55,7 @@ enum class PaymentsScreenContents {
     INVOICES,
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun PaymentsScreenPreview() {
     PaymentScreenContent(

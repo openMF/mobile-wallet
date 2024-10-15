@@ -9,7 +9,7 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
-    <string name="feature_payments_virtual_payment_address_vpa">Virtual Payment Address (VPA)</string>
+    <string name="feature_payments_vpa">Virtual Payment Address (VPA)</string>
     <string name="feature_payments_mobile_number">Mobile Number</string>
     <string name="feature_payments_receive">Receive</string>
     <string name="feature_payments_show_code">Show code</string>

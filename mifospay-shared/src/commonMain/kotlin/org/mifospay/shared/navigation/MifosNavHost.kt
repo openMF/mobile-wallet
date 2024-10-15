@@ -12,10 +12,12 @@ package org.mifospay.shared.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
 import org.mifospay.feature.faq.navigation.navigateToFAQ
+import org.mifospay.feature.history.HistoryScreen
 import org.mifospay.feature.history.navigation.historyNavigation
 import org.mifospay.feature.history.navigation.navigateToSpecificTransaction
 import org.mifospay.feature.history.navigation.navigateToTransactionDetail
@@ -23,6 +25,9 @@ import org.mifospay.feature.history.navigation.specificTransactionsScreen
 import org.mifospay.feature.history.navigation.transactionDetailNavigation
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.homeScreen
+import org.mifospay.feature.payments.PaymentsScreenContents
+import org.mifospay.feature.payments.RequestScreen
+import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.shared.ui.MifosAppState
@@ -34,6 +39,23 @@ internal fun MifosNavHost(
     modifier: Modifier = Modifier,
 ) {
     val navController = appState.navController
+
+    val paymentsTabContents = listOf(
+        TabContent(PaymentsScreenContents.SEND.name) {
+        },
+        TabContent(PaymentsScreenContents.REQUEST.name) {
+            RequestScreen(showQr = {})
+        },
+        TabContent(PaymentsScreenContents.HISTORY.name) {
+            HistoryScreen(
+                viewTransferDetail = navController::navigateToTransactionDetail,
+            )
+        },
+        TabContent(PaymentsScreenContents.SI.name) {
+        },
+        TabContent(PaymentsScreenContents.INVOICES.name) {
+        },
+    )
 
     NavHost(
         route = MifosNavGraph.MAIN_GRAPH,
@@ -73,6 +95,10 @@ internal fun MifosNavHost(
 
         historyNavigation(
             viewTransactionDetail = navController::navigateToTransactionDetail,
+        )
+
+        paymentsScreen(
+            tabContents = paymentsTabContents,
         )
 
         specificTransactionsScreen(
