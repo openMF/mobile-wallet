@@ -7,10 +7,10 @@ Mobile Wallet is an Android-based framework for mobile wallets based on top of <
 that can be used as a dependency in any other wallet based project. It is developed at <a href='https://mifos.org/'>MIFOS</a> together with a global community.
 
 # Run the project
+![Screenshot 2024-10-19 005524](https://github.com/user-attachments/assets/8023c529-1215-4c4b-b212-630f0233223f)
 - To run the android-app select the `mifospay-android` run configuration and click run.
 - To run the desktop-app select the `mifospay-desktop` run configuration and click run.
 - To run the web-app-js select the `mifospay-web-js` run configuration and click run.
-
 
 ## KMP Status for modules
 
