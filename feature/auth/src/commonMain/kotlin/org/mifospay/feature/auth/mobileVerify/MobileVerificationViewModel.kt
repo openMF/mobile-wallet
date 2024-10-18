@@ -15,9 +15,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.mifospay.core.common.DataState
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
-import org.mifospay.core.common.Result
 import org.mifospay.core.data.repository.SearchRepository
 import org.mifospay.core.data.util.Constants
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -102,7 +102,7 @@ class MobileVerificationViewModel(
             )
 
             when (result) {
-                is Result.Error -> {
+                is DataState.Error -> {
                     val message = result.exception.message ?: "Something Went Wrong!"
                     mutableStateFlow.update {
                         currentState.copy(
@@ -111,13 +111,13 @@ class MobileVerificationViewModel(
                     }
                 }
 
-                is Result.Loading -> {
+                is DataState.Loading -> {
                     mutableStateFlow.update {
                         currentState.copy(dialogState = MobileVerificationState.DialogState.Loading)
                     }
                 }
 
-                is Result.Success -> {
+                is DataState.Success -> {
                     if (result.data.isEmpty()) {
                         requestAnOtpToPhoneNo(phoneNo)
                     } else {
@@ -153,7 +153,7 @@ class MobileVerificationViewModel(
                     )
                 }
 
-                sendAction(ReceiveOtpVerifyResult(Result.Success(state.phoneNo)))
+                sendAction(ReceiveOtpVerifyResult(DataState.Success(state.phoneNo)))
             } else {
                 mutableStateFlow.update {
                     state.copy(
@@ -166,7 +166,7 @@ class MobileVerificationViewModel(
 
     private fun handleOtpVerifyResult(action: ReceiveOtpVerifyResult) {
         when (action.loginResult) {
-            is Result.Error -> {
+            is DataState.Error -> {
                 mutableStateFlow.update {
                     (state as? MobileVerificationState.VerifyOtpState)?.copy(
                         dialogState = MobileVerificationState.DialogState.Error("Otp Verification Failed"),
@@ -174,7 +174,7 @@ class MobileVerificationViewModel(
                 }
             }
 
-            is Result.Loading -> {
+            is DataState.Loading -> {
                 mutableStateFlow.update {
                     (state as? MobileVerificationState.VerifyOtpState)?.copy(
                         dialogState = MobileVerificationState.DialogState.Loading,
@@ -182,7 +182,7 @@ class MobileVerificationViewModel(
                 }
             }
 
-            is Result.Success -> {
+            is DataState.Success -> {
                 mutableStateFlow.update {
                     (state as? MobileVerificationState.VerifyOtpState)?.copy(
                         dialogState = null,
@@ -281,7 +281,7 @@ sealed interface MobileVerificationAction {
 
     sealed class Internal : MobileVerificationAction {
         data class ReceiveOtpVerifyResult(
-            val loginResult: Result<String>,
+            val loginResult: DataState<String>,
         ) : Internal()
     }
 }

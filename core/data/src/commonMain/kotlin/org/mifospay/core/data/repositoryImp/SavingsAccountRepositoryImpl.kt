@@ -11,21 +11,25 @@ package org.mifospay.core.data.repositoryImp
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
+import org.mifospay.core.common.Constants
+import org.mifospay.core.common.DataState
+import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.mapper.toModel
+import org.mifospay.core.data.mapper.toSavingDetail
 import org.mifospay.core.data.repository.SavingsAccountRepository
+import org.mifospay.core.model.savingsaccount.CreateNewSavingEntity
+import org.mifospay.core.model.savingsaccount.SavingAccountDetail
+import org.mifospay.core.model.savingsaccount.SavingAccountTemplate
+import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
 import org.mifospay.core.model.savingsaccount.Transaction
+import org.mifospay.core.model.savingsaccount.TransactionsEntity
+import org.mifospay.core.model.savingsaccount.UpdateSavingAccountEntity
 import org.mifospay.core.network.FineractApiManager
-import org.mifospay.core.network.model.GenericResponse
 import org.mifospay.core.network.model.entity.Page
-import org.mifospay.core.network.model.entity.accounts.savings.SavingAccountEntity
-import org.mifospay.core.network.model.entity.accounts.savings.SavingsWithAssociationsEntity
-import org.mifospay.core.network.model.entity.accounts.savings.TransactionsEntity
 
 class SavingsAccountRepositoryImpl(
     private val apiManager: FineractApiManager,
@@ -33,79 +37,110 @@ class SavingsAccountRepositoryImpl(
 ) : SavingsAccountRepository {
     override suspend fun getSavingsAccounts(
         limit: Int,
-    ): Flow<Result<Page<SavingsWithAssociationsEntity>>> {
+    ): Flow<DataState<Page<SavingsWithAssociationsEntity>>> {
         return apiManager.savingsAccountsApi
             .getSavingsAccounts(limit)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun getSavingsWithAssociations(
         accountId: Long,
         associationType: String,
-    ): Flow<Result<SavingsWithAssociationsEntity>> {
-        return flow {
-            try {
-                val result = withContext(ioDispatcher) {
-                    apiManager.savingsAccountsApi
-                        .getSavingsWithAssociations(accountId, associationType)
-                }
+    ): Flow<DataState<SavingsWithAssociationsEntity>> {
+        return apiManager.savingsAccountsApi
+            .getSavingsWithAssociations(accountId, associationType)
+            .catch { DataState.Error(it, null) }
+            .asDataStateFlow()
+            .flowOn(ioDispatcher)
+    }
 
-                emit(Result.Success(result))
-            } catch (e: Exception) {
-                emit(Result.Error(e))
-            }
-        }
+    override fun getAccountDetail(accountId: Long): Flow<DataState<SavingAccountDetail>> {
+        return apiManager.savingsAccountsApi
+            .getSavingsWithAssociations(accountId, Constants.TRANSACTIONS)
+            .catch { DataState.Error(it, null) }
+            .map(SavingsWithAssociationsEntity::toSavingDetail)
+            .asDataStateFlow()
+            .flowOn(ioDispatcher)
     }
 
     override suspend fun createSavingsAccount(
-        savingAccount: SavingAccountEntity,
-    ): Flow<Result<GenericResponse>> {
-        return apiManager.savingsAccountsApi
-            .createSavingsAccount(savingAccount)
-            .asResult().flowOn(ioDispatcher)
+        savingAccount: CreateNewSavingEntity,
+    ): DataState<String> {
+        return try {
+            withContext(ioDispatcher) {
+                apiManager.savingsAccountsApi.createSavingsAccount(savingAccount)
+            }
+
+            DataState.Success("Savings Account Created Successfully")
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
+    }
+
+    override suspend fun updateSavingsAccount(
+        accountId: Long,
+        savingAccount: UpdateSavingAccountEntity,
+    ): DataState<String> {
+        return try {
+            withContext(ioDispatcher) {
+                apiManager.savingsAccountsApi.updateSavingsAccount(accountId, savingAccount)
+            }
+
+            DataState.Success("Savings Account Updated Successfully")
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
     }
 
     override suspend fun unblockAccount(
         accountId: Long,
-    ): Result<String> {
+    ): DataState<String> {
         return try {
             withContext(ioDispatcher) {
                 apiManager.savingsAccountsApi.blockUnblockAccount(accountId, "unblock")
             }
 
-            Result.Success("Account unblocked successfully")
+            DataState.Success("Account unblocked successfully")
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 
-    override suspend fun blockAccount(accountId: Long): Result<String> {
+    override suspend fun blockAccount(accountId: Long): DataState<String> {
         return try {
             withContext(ioDispatcher) {
                 apiManager.savingsAccountsApi.blockUnblockAccount(accountId, "block")
             }
 
-            Result.Success("Account blocked successfully")
+            DataState.Success("Account blocked successfully")
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 
     override suspend fun getSavingAccountTransaction(
         accountId: Long,
         transactionId: Long,
-    ): Flow<Result<Transaction>> {
+    ): Flow<DataState<Transaction>> {
         return apiManager.savingsAccountsApi
             .getSavingAccountTransaction(accountId, transactionId)
             .map(TransactionsEntity::toModel)
-            .asResult()
+            .asDataStateFlow()
             .flowOn(ioDispatcher)
     }
 
-    override suspend fun payViaMobile(accountId: Long): Flow<Result<Transaction>> {
+    override suspend fun payViaMobile(accountId: Long): Flow<DataState<Transaction>> {
         return apiManager.savingsAccountsApi
             .payViaMobile(accountId)
             .map(TransactionsEntity::toModel)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
+    }
+
+    override fun getSavingAccountTemplate(clientId: Long): Flow<DataState<SavingAccountTemplate>> {
+        return apiManager.savingsAccountsApi
+            .getSavingAccountTemplate(clientId)
+            .catch { DataState.Error(it, null) }
+            .asDataStateFlow()
+            .flowOn(ioDispatcher)
     }
 }

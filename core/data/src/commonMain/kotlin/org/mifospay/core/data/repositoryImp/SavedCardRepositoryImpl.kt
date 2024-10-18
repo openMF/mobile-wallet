@@ -12,8 +12,8 @@ package org.mifospay.core.data.repositoryImp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
+import org.mifospay.core.common.DataState
+import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.SavedCardRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.GenericResponse
@@ -23,25 +23,25 @@ class SavedCardRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : SavedCardRepository {
-    override suspend fun getSavedCards(clientId: Int): Flow<Result<List<Card>>> {
-        return apiManager.savedCardApi.getSavedCards(clientId).asResult().flowOn(ioDispatcher)
+    override suspend fun getSavedCards(clientId: Int): Flow<DataState<List<Card>>> {
+        return apiManager.savedCardApi.getSavedCards(clientId).asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun addSavedCard(clientId: Int, card: Card): Flow<Result<GenericResponse>> {
-        return apiManager.savedCardApi.addSavedCard(clientId, card).asResult().flowOn(ioDispatcher)
+    override suspend fun addSavedCard(clientId: Int, card: Card): Flow<DataState<GenericResponse>> {
+        return apiManager.savedCardApi.addSavedCard(clientId, card).asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun deleteCard(clientId: Int, cardId: Int): Flow<Result<GenericResponse>> {
-        return apiManager.savedCardApi.deleteCard(clientId, cardId).asResult().flowOn(ioDispatcher)
+    override suspend fun deleteCard(clientId: Int, cardId: Int): Flow<DataState<GenericResponse>> {
+        return apiManager.savedCardApi.deleteCard(clientId, cardId).asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun updateCard(
         clientId: Int,
         cardId: Int,
         card: Card,
-    ): Flow<Result<GenericResponse>> {
+    ): Flow<DataState<GenericResponse>> {
         return apiManager.savedCardApi
             .updateCard(clientId, cardId, card)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 }

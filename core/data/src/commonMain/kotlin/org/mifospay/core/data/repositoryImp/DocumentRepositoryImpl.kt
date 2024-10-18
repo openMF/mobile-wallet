@@ -13,8 +13,8 @@ import io.ktor.http.content.PartData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
+import org.mifospay.core.common.DataState
+import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.DocumentRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.entity.noncore.Document
@@ -23,10 +23,10 @@ class DocumentRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : DocumentRepository {
-    override suspend fun getDocuments(entityType: String, entityId: Int): Flow<Result<List<Document>>> {
+    override suspend fun getDocuments(entityType: String, entityId: Int): Flow<DataState<List<Document>>> {
         return apiManager.documentApi
             .getDocuments(entityType, entityId)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun createDocument(
@@ -35,30 +35,30 @@ class DocumentRepositoryImpl(
         name: String,
         description: String,
         fileName: PartData.FileItem,
-    ): Flow<Result<Unit>> {
+    ): Flow<DataState<Unit>> {
         return apiManager.documentApi
             .createDocument(entityType, entityId, name, description, fileName)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun downloadDocument(
         entityType: String,
         entityId: Int,
         documentId: Int,
-    ): Flow<Result<Document>> {
+    ): Flow<DataState<Document>> {
         return apiManager.documentApi
             .downloadDocument(entityType, entityId, documentId)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun deleteDocument(
         entityType: String,
         entityId: Int,
         documentId: Int,
-    ): Flow<Result<Unit>> {
+    ): Flow<DataState<Unit>> {
         return apiManager.documentApi
             .removeDocument(entityType, entityId, documentId)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun updateDocument(
@@ -68,10 +68,10 @@ class DocumentRepositoryImpl(
         name: String,
         description: String,
         fileName: PartData.FileItem,
-    ): Flow<Result<Unit>> {
+    ): Flow<DataState<Unit>> {
         return apiManager.documentApi
             .updateDocument(entityType, entityId, documentId, name, description, fileName)
-            .asResult()
+            .asDataStateFlow()
             .flowOn(ioDispatcher)
     }
 }

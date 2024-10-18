@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
@@ -57,7 +58,8 @@ fun MifosButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier
+            .height(48.dp),
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(containerColor = color),
         contentPadding = contentPadding,
@@ -104,7 +106,7 @@ fun MifosButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    color: Color = MaterialTheme.colorScheme.onBackground,
+    color: Color = MaterialTheme.colorScheme.primary,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     MifosButton(

@@ -29,5 +29,5 @@ data class ClientPayload(
     val clientClassificationId: Int? = null,
     val dateFormat: String? = "DD_MMMM_YYYY",
     val locale: String? = "en",
-    val datatables: List<org.mifospay.core.network.model.entity.payload.DataTablePayload> = ArrayList(),
+    val datatables: List<DataTablePayload> = ArrayList(),
 )

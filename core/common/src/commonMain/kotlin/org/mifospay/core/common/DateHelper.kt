@@ -27,7 +27,17 @@ import kotlin.time.Duration.Companion.days
 @OptIn(FormatStringsInDatetimeFormats::class)
 object DateHelper {
     private const val LOG_TAG = "DateHelper"
+
+    /*
+     * This is the full month format for the date picker.
+     * "dd MM yyyy" is the format of the date picker.
+     */
     const val FULL_MONTH = "dd MM yyyy"
+
+    /*
+     * This is the short month format for the date picker.
+     * "dd-MM-yyyy" is the format of the date picker.
+     */
     const val SHORT_MONTH = "dd-MM-yyyy"
 
     private val fullMonthFormat = LocalDateTime.Format {
@@ -168,6 +178,16 @@ object DateHelper {
     }
 
     val currentDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+
+    /*
+     * This is the full date format for the date picker.
+     * "dd MM yyyy" is the format of the date picker.
+     */
     val formattedFullDate = currentDate.format(fullMonthFormat)
+
+    /*
+     * This is the short date format for the date picker.
+     * "dd-MM-yyyy" is the format of the date picker.
+     */
     val formattedShortDate = currentDate.format(shortMonthFormat)
 }

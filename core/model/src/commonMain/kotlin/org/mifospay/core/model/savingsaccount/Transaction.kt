@@ -25,24 +25,12 @@ data class Transaction(
     val transferId: Long?,
     val originalTransactionId: Long,
     val paymentDetailId: Long?,
-) : Parcelable
-
-@Serializable
-data class TransactionInfo(
-    val id: Long,
-    val officeId: Long,
-    val officeName: String,
-    val type: Type,
-    val date: List<Long>,
-    val currency: Currency,
-    val amount: Double,
-    val submittedOnDate: List<Long>,
-    val reversed: Boolean,
-)
-
-@Serializable
-data class Type(
-    val id: Long,
-    val code: String,
-    val value: String,
-)
+) : Parcelable {
+    @Serializable
+    @Parcelize
+    data class Type(
+        val id: Long,
+        val code: String,
+        val value: String,
+    ) : Parcelable
+}

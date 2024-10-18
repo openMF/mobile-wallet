@@ -10,16 +10,16 @@
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.Result
+import org.mifospay.core.common.DataState
 import org.mifospay.core.network.model.GenericResponse
 import org.mifospay.core.network.model.entity.savedcards.Card
 
 interface SavedCardRepository {
-    suspend fun getSavedCards(clientId: Int): Flow<Result<List<Card>>>
+    suspend fun getSavedCards(clientId: Int): Flow<DataState<List<Card>>>
 
-    suspend fun addSavedCard(clientId: Int, card: Card): Flow<Result<GenericResponse>>
+    suspend fun addSavedCard(clientId: Int, card: Card): Flow<DataState<GenericResponse>>
 
-    suspend fun deleteCard(clientId: Int, cardId: Int): Flow<Result<GenericResponse>>
+    suspend fun deleteCard(clientId: Int, cardId: Int): Flow<DataState<GenericResponse>>
 
-    suspend fun updateCard(clientId: Int, cardId: Int, card: Card): Flow<Result<GenericResponse>>
+    suspend fun updateCard(clientId: Int, cardId: Int, card: Card): Flow<DataState<GenericResponse>>
 }

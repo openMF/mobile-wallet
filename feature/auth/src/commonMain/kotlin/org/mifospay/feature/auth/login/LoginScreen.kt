@@ -20,8 +20,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -33,8 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -54,10 +50,10 @@ import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
-import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.grey
 import org.mifospay.core.designsystem.theme.styleNormal18sp
+import org.mifospay.core.ui.MifosPasswordField
 import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
@@ -165,29 +161,16 @@ private fun LoginScreenContent(
             modifier = Modifier.fillMaxWidth(),
         )
         Spacer(modifier = Modifier.padding(top = 16.dp))
-        MifosOutlinedTextField(
+        MifosPasswordField(
             label = stringResource(Res.string.feature_auth_password),
             value = state.password,
             onValueChange = {
                 onEvent(LoginAction.PasswordChanged(it))
             },
             modifier = Modifier.fillMaxWidth(),
-            visualTransformation = if (state.isPasswordVisible) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
-            trailingIcon = {
-                val icon = if (state.isPasswordVisible) {
-                    MifosIcons.Visibility
-                } else {
-                    MifosIcons.VisibilityOff
-                }
-                IconButton(
-                    onClick = { onEvent(LoginAction.TogglePasswordVisibility) },
-                ) {
-                    Icon(imageVector = icon, null)
-                }
+            showPassword = state.isPasswordVisible,
+            showPasswordChange = {
+                onEvent(LoginAction.TogglePasswordVisibility)
             },
         )
         val isLoginButtonEnabled = state.username.isNotEmpty() && state.password.isNotEmpty()

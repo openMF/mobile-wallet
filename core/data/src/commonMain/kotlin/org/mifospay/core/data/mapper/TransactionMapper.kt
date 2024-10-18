@@ -10,10 +10,10 @@
 package org.mifospay.core.data.mapper
 
 import org.mifospay.core.common.DateHelper
+import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
-import org.mifospay.core.network.model.entity.accounts.savings.SavingsWithAssociationsEntity
-import org.mifospay.core.network.model.entity.accounts.savings.TransactionsEntity
+import org.mifospay.core.model.savingsaccount.TransactionsEntity
 
 fun SavingsWithAssociationsEntity.toTransactionList(): List<Transaction> {
     return this.transactions.map { it.toModel() }
@@ -24,7 +24,7 @@ fun TransactionsEntity.toModel(): Transaction {
         transactionId = this.id,
         amount = this.amount,
         date = DateHelper.getDateAsString(this.submittedOnDate),
-        currency = this.currency.toModel(),
+        currency = this.currency,
         transactionType = when {
             this.transactionType.deposit -> TransactionType.CREDIT
             this.transactionType.withdrawal -> TransactionType.DEBIT

@@ -37,10 +37,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosCustomDialog
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
+import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.icon.MifosIcons
 
 @Suppress("MaxLineLength", "ReturnCount")
@@ -117,7 +117,7 @@ internal fun SetAmountDialog(
 
                     Spacer(modifier = Modifier.height(8.dp))
 
-                    MfOutlinedTextField(
+                    MifosOutlinedTextField(
                         value = amount,
                         label = stringResource(id = R.string.feature_request_money_set_amount),
                         onValueChange = { amount = it },
@@ -140,7 +140,7 @@ internal fun SetAmountDialog(
                         ),
                     )
 
-                    MfOutlinedTextField(
+                    MifosOutlinedTextField(
                         value = currency,
                         label = stringResource(id = R.string.feature_request_money_currency),
                         onValueChange = { currency = it },
