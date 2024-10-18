@@ -16,9 +16,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.mifospay.core.common.DataState
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
-import org.mifospay.core.common.Result
 import org.mifospay.core.common.utils.isValidEmail
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.SearchRepository
@@ -210,18 +210,18 @@ class SignupViewModel(
 
     private fun handleSignUpResult(action: SignUpAction.Internal.ReceiveRegisterResult) {
         when (val result = action.registerResult) {
-            is Result.Success -> {
+            is DataState.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(SignUpEvent.NavigateToLogin(result.data))
             }
 
-            is Result.Error -> {
+            is DataState.Error -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = SignUpDialog.Error(result.exception.message.toString()))
                 }
             }
 
-            Result.Loading -> {
+            DataState.Loading -> {
                 mutableStateFlow.update { it.copy(dialogState = SignUpDialog.Loading) }
             }
 
@@ -365,14 +365,14 @@ class SignupViewModel(
             )
 
             when (result) {
-                is Result.Error -> {
+                is DataState.Error -> {
                     val message = result.exception.message.toString()
                     mutableStateFlow.update {
                         it.copy(dialogState = SignUpDialog.Error(message))
                     }
                 }
 
-                is Result.Success -> {
+                is DataState.Success -> {
                     if (result.data.isEmpty()) {
                         // Username is unique
                         val newUser = NewUser(
@@ -391,7 +391,7 @@ class SignupViewModel(
                     }
                 }
 
-                is Result.Loading -> Unit
+                is DataState.Loading -> Unit
             }
         }
     }
@@ -399,18 +399,18 @@ class SignupViewModel(
     private fun createUser(newUser: NewUser) {
         viewModelScope.launch {
             when (val result = userRepository.createUser(newUser)) {
-                is Result.Error -> {
+                is DataState.Error -> {
                     val message = result.exception.message.toString()
                     mutableStateFlow.update {
                         it.copy(dialogState = SignUpDialog.Error(message))
                     }
                 }
 
-                is Result.Success -> {
+                is DataState.Success -> {
                     createClient(result.data)
                 }
 
-                is Result.Loading -> Unit
+                is DataState.Loading -> Unit
             }
         }
     }
@@ -433,7 +433,7 @@ class SignupViewModel(
             )
 
             when (val result = clientRepository.createClient(newClient)) {
-                is Result.Error -> {
+                is DataState.Error -> {
                     deleteUser(userId)
                     val message = result.exception.message.toString()
                     mutableStateFlow.update {
@@ -441,11 +441,11 @@ class SignupViewModel(
                     }
                 }
 
-                is Result.Success -> {
+                is DataState.Success -> {
                     assignClientToUser(result.data, userId)
                 }
 
-                is Result.Loading -> Unit
+                is DataState.Loading -> Unit
             }
         }
     }
@@ -453,7 +453,7 @@ class SignupViewModel(
     private fun assignClientToUser(clientId: Int, userId: Int) {
         viewModelScope.launch {
             when (val result = userRepository.assignClientToUser(userId, clientId)) {
-                is Result.Error -> {
+                is DataState.Error -> {
                     deleteUser(userId)
                     deleteClient(clientId)
                     val message = result.exception.message.toString()
@@ -462,19 +462,19 @@ class SignupViewModel(
                     }
                 }
 
-                is Result.Success -> {
+                is DataState.Success -> {
                     mutableStateFlow.update {
                         it.copy(dialogState = null)
                     }
                     sendEvent(SignUpEvent.ShowToast("Registration successful."))
                     sendAction(
                         SignUpAction.Internal.ReceiveRegisterResult(
-                            Result.Success(state.userNameInput),
+                            DataState.Success(state.userNameInput),
                         ),
                     )
                 }
 
-                is Result.Loading -> Unit
+                is DataState.Loading -> Unit
             }
         }
     }
@@ -582,7 +582,7 @@ sealed interface SignUpAction {
 
     sealed class Internal : SignUpAction {
         data class ReceiveRegisterResult(
-            val registerResult: Result<String>,
+            val registerResult: DataState<String>,
         ) : Internal()
 
         data class ReceivePasswordStrengthResult(

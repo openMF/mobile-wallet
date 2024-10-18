@@ -17,6 +17,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import org.mifospay.core.ui.utility.TabContent
+import org.mifospay.feature.accounts.AccountsScreen
+import org.mifospay.feature.accounts.beneficiary.addEditBeneficiaryScreen
+import org.mifospay.feature.accounts.beneficiary.navigateToBeneficiaryAddEdit
+import org.mifospay.feature.accounts.savingsaccount.addEditSavingAccountScreen
+import org.mifospay.feature.accounts.savingsaccount.details.navigateToSavingAccountDetails
+import org.mifospay.feature.accounts.savingsaccount.details.savingAccountDetailRoute
+import org.mifospay.feature.accounts.savingsaccount.navigateToSavingAccountAddEdit
 import org.mifospay.feature.editpassword.navigation.editPasswordScreen
 import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
@@ -65,9 +72,11 @@ internal fun MifosNavHost(
 
     val tabContents = listOf(
         TabContent(FinanceScreenContents.ACCOUNTS.name) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Accounts Screen || TODO", modifier = Modifier.align(Alignment.Center))
-            }
+            AccountsScreen(
+                onAddEditSavingsAccount = navController::navigateToSavingAccountAddEdit,
+                onViewSavingAccountDetails = navController::navigateToSavingAccountDetails,
+                onAddOrEditBeneficiary = navController::navigateToBeneficiaryAddEdit,
+            )
         },
         TabContent(FinanceScreenContents.CARDS.name) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -85,7 +94,7 @@ internal fun MifosNavHost(
             }
         },
     )
-    
+
     NavHost(
         route = MifosNavGraph.MAIN_GRAPH,
         startDestination = HOME_ROUTE,
@@ -97,6 +106,7 @@ internal fun MifosNavHost(
             onRequest = {},
             onPay = {},
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
+            navigateToAccountDetail = navController::navigateToSavingAccountDetails,
         )
 
         settingsScreen(
@@ -136,6 +146,19 @@ internal fun MifosNavHost(
         )
 
         transactionDetailNavigation(
+            navigateBack = navController::navigateUp,
+        )
+
+        addEditBeneficiaryScreen(
+            navigateBack = navController::navigateUp,
+        )
+
+        savingAccountDetailRoute(
+            navigateBack = navController::navigateUp,
+            onViewTransaction = navController::navigateToSpecificTransaction,
+        )
+
+        addEditSavingAccountScreen(
             navigateBack = navController::navigateUp,
         )
     }

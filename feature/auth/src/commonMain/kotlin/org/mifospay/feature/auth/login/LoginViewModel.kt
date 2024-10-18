@@ -13,10 +13,10 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.mifospay.core.common.DataState
 import org.mifospay.core.common.IgnoredOnParcel
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
-import org.mifospay.core.common.Result
 import org.mifospay.core.domain.LoginUseCase
 import org.mifospay.core.model.user.UserInfo
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -76,7 +76,7 @@ class LoginViewModel(
 
     private fun handleLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
         when (action.loginResult) {
-            is Result.Error -> {
+            is DataState.Error -> {
                 val message = action.loginResult.exception.message ?: ""
 
                 mutableStateFlow.update {
@@ -84,13 +84,13 @@ class LoginViewModel(
                 }
             }
 
-            is Result.Loading -> {
+            is DataState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = LoginState.DialogState.Loading)
                 }
             }
 
-            is Result.Success -> {
+            is DataState.Success -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = null)
                 }
@@ -148,7 +148,7 @@ sealed class LoginAction {
 
     sealed class Internal : LoginAction() {
         data class ReceiveLoginResult(
-            val loginResult: Result<UserInfo>,
+            val loginResult: DataState<UserInfo>,
         ) : Internal()
     }
 }

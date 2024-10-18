@@ -13,6 +13,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AccountOptionsTemplate(
-    val fromAccountOptions: List<org.mifospay.core.network.model.entity.templates.account.AccountOption>? = listOf(),
-    val toAccountOptions: List<org.mifospay.core.network.model.entity.templates.account.AccountOption>? = listOf(),
+    val fromAccountOptions: List<AccountOption>? = listOf(),
+    val toAccountOptions: List<AccountOption>? = listOf(),
 )

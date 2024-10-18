@@ -56,10 +56,10 @@ interface ClientService {
     suspend fun getClientAccounts(@Path("clientId") clientId: Long): Flow<ClientAccountsEntity>
 
     @GET(ApiEndPoints.CLIENTS + "/{clientId}/accounts")
-    suspend fun getAccounts(
+    fun getAccounts(
         @Path("clientId") clientId: Long,
         @Query("fields") accountType: String,
-    ): ClientAccountsEntity
+    ): Flow<ClientAccountsEntity>
 
     @POST(ApiEndPoints.CLIENTS)
     suspend fun createClient(@Body newClient: NewClientEntity): ClientResponseEntity

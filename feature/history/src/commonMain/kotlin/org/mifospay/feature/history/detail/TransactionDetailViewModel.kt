@@ -14,7 +14,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import org.mifospay.core.common.Result
+import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -53,19 +53,19 @@ internal class TransactionDetailViewModel(
 
     private fun handleTransferDetailReceive(action: TransferDetailReceive) {
         when (action.result) {
-            is Result.Error -> {
+            is DataState.Error -> {
                 mutableStateFlow.update {
                     it.copy(viewState = Error(action.result.exception.message ?: "Error"))
                 }
             }
 
-            is Result.Loading -> {
+            is DataState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(viewState = TransactionDetailState.ViewState.Loading)
                 }
             }
 
-            is Result.Success -> {
+            is DataState.Success -> {
                 mutableStateFlow.update {
                     it.copy(viewState = Content(action.result.data))
                 }
@@ -92,5 +92,5 @@ internal sealed interface TransactionDetailEvent {
 internal sealed interface TransactionDetailAction {
     data object NavigateBack : TransactionDetailAction
     data object ShareTransaction : TransactionDetailAction
-    data class TransferDetailReceive(val result: Result<TransferDetail>) : TransactionDetailAction
+    data class TransferDetailReceive(val result: DataState<TransferDetail>) : TransactionDetailAction
 }

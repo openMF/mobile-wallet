@@ -19,13 +19,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
-import androidx.compose.material3.pulltorefresh.pullToRefresh
-import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -44,13 +40,13 @@ import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosOverlayLoadingWheel
+import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.profile.components.ProfileDetailsCard
 import org.mifospay.feature.profile.components.ProfileImage
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ProfileScreen(
     onEditProfile: () -> Unit,
@@ -58,8 +54,8 @@ internal fun ProfileScreen(
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = koinViewModel(),
 ) {
-    val pullToRefreshState = rememberPullToRefreshState()
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val clientState by viewModel.clientState.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -71,70 +67,61 @@ internal fun ProfileScreen(
         }
     }
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .pullToRefresh(
-                isRefreshing = state.viewState is ProfileState.ViewState.Loading,
-                state = pullToRefreshState,
-                onRefresh = remember(viewModel) {
-                    { viewModel.trySendAction(ProfileAction.RefreshProfile) }
-                },
-            ),
-        contentAlignment = Alignment.Center,
-    ) {
-        ProfileScreenContent(
-            state = state,
-            onAction = remember(viewModel) {
-                { action -> viewModel.trySendAction(action) }
-            },
-            modifier = Modifier.align(Alignment.Center),
-        )
+    ProfileDialogs(
+        dialogState = state.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(ProfileAction.DismissErrorDialog) }
+        },
+    )
 
-        ProfileDialogs(
-            dialogState = state.dialogState,
-            onDismissRequest = remember(viewModel) {
-                { viewModel.trySendAction(ProfileAction.DismissErrorDialog) }
-            },
-        )
-
-        PullToRefreshDefaults.Indicator(
-            modifier = Modifier
-                .align(Alignment.TopCenter),
-            isRefreshing = state.viewState is ProfileState.ViewState.Loading,
-            state = pullToRefreshState,
-        )
-    }
+    ProfileScreenContent(
+        state = state,
+        clientState = clientState,
+        onAction = remember(viewModel) {
+            { action -> viewModel.trySendAction(action) }
+        },
+        modifier = modifier.fillMaxSize(),
+    )
 }
 
 @Composable
 internal fun ProfileScreenContent(
     state: ProfileState,
+    clientState: ProfileState.ViewState,
     onAction: (ProfileAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (state.viewState) {
-        is ProfileState.ViewState.Loading -> {
-            MifosOverlayLoadingWheel(
-                contentDesc = "ProfileLoading",
-                modifier = modifier,
-            )
-        }
+    MifosScaffold(
+        modifier = modifier,
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            when (clientState) {
+                is ProfileState.ViewState.Loading -> {
+                    MifosOverlayLoadingWheel(
+                        contentDesc = "ProfileLoading",
+                        modifier = Modifier.align(Alignment.Center),
+                    )
+                }
 
-        is ProfileState.ViewState.Error -> {
-            ErrorScreenContent(
-                onClickRetry = { onAction(ProfileAction.RefreshProfile) },
-                modifier = modifier,
-            )
-        }
+                is ProfileState.ViewState.Error -> {
+                    ErrorScreenContent(
+                        onClickRetry = { },
+                        modifier = Modifier.align(Alignment.Center),
+                    )
+                }
 
-        is ProfileState.ViewState.Success -> {
-            ProfileScreenContent(
-                state = state.viewState,
-                clientImage = state.clientImage,
-                onAction = onAction,
-                modifier = modifier,
-            )
+                is ProfileState.ViewState.Success -> {
+                    ProfileScreenContent(
+                        state = clientState,
+                        clientImage = state.clientImage,
+                        onAction = onAction,
+                        modifier = Modifier,
+                    )
+                }
+            }
         }
     }
 }

@@ -9,6 +9,7 @@
  */
 package org.mifospay.feature.home
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,17 +32,20 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowUp
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -50,16 +54,19 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import mobile_wallet.feature.home.generated.resources.Res
@@ -79,19 +86,16 @@ import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
+import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.scrollbar.DraggableScrollbar
 import org.mifospay.core.designsystem.component.scrollbar.rememberDraggableScroller
 import org.mifospay.core.designsystem.component.scrollbar.scrollbarState
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.account.Account
-import org.mifospay.core.model.client.Client
-import org.mifospay.core.model.client.ClientStatus
-import org.mifospay.core.model.client.ClientTimeline
-import org.mifospay.core.model.savingsaccount.Currency
-import org.mifospay.core.model.savingsaccount.Transaction
-import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.ErrorScreenContent
-import org.mifospay.core.ui.TransactionItemScreen
+import org.mifospay.core.ui.MifosSmallChip
+import org.mifospay.core.ui.TransactionHistoryCard
 import org.mifospay.core.ui.utils.EventsEffect
 
 /*
@@ -100,19 +104,22 @@ import org.mifospay.core.ui.utils.EventsEffect
  * Show transaction history of selected account
  */
 @Composable
-internal fun HomeRoute(
+internal fun HomeScreen(
     onNavigateBack: () -> Unit,
     onRequest: (String) -> Unit,
     onPay: () -> Unit,
     navigateToTransactionDetail: (Long, Long) -> Unit,
+    navigateToAccountDetail: (Long) -> Unit,
     modifier: Modifier = Modifier,
-    homeViewModel: HomeViewModel = koinViewModel(),
+    viewModel: HomeViewModel = koinViewModel(),
 ) {
     val snackbarState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
-    val homeUIState by homeViewModel.stateFlow.collectAsStateWithLifecycle()
 
-    EventsEffect(homeViewModel) { event ->
+    val homeUIState by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val accountState by viewModel.accountState.collectAsStateWithLifecycle()
+
+    EventsEffect(viewModel) { event ->
         when (event) {
             is HomeEvent.NavigateBack -> onNavigateBack.invoke()
             is HomeEvent.NavigateToRequestScreen -> onRequest(event.vpa)
@@ -121,50 +128,76 @@ internal fun HomeRoute(
             is HomeEvent.NavigateToTransactionDetail -> {
                 navigateToTransactionDetail(event.accountId, event.transactionId)
             }
+
             is HomeEvent.NavigateToTransactionScreen -> {}
             is HomeEvent.ShowToast -> {
                 scope.launch {
                     snackbarState.showSnackbar(event.message)
                 }
             }
+
+            is HomeEvent.NavigateToAccountDetail -> {
+                navigateToAccountDetail(event.accountId)
+            }
         }
     }
 
-    Box(modifier = modifier.fillMaxSize()) {
-        HomeDialogs(
-            dialogState = homeUIState.dialogState,
-            onDismissRequest = remember(homeViewModel) {
-                { homeViewModel.trySendAction(HomeAction.OnDismissDialog) }
-            },
-        )
+    HomeScreenDialog(
+        dialogState = homeUIState.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(HomeAction.OnDismissDialog) }
+        },
+    )
 
-        when (homeUIState.viewState) {
-            is HomeState.ViewState.Loading -> {
-                MfLoadingWheel(
-                    contentDesc = stringResource(Res.string.feature_home_loading),
-                    backgroundColor = MaterialTheme.colorScheme.surface,
-                )
-            }
+    HomeScreenContent(
+        viewState = accountState,
+        defaultAccountId = homeUIState.defaultAccountId,
+        snackbarHostState = snackbarState,
+        modifier = modifier,
+        onAction = remember(viewModel) {
+            { viewModel.trySendAction(it) }
+        },
+    )
+}
 
-            is HomeState.ViewState.Content -> {
-                val successState = homeUIState.viewState as HomeState.ViewState.Content
+@Composable
+fun HomeScreenContent(
+    viewState: ViewState,
+    defaultAccountId: Long?,
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
+    onAction: (HomeAction) -> Unit,
+) {
+    MifosScaffold(
+        modifier = modifier,
+        snackbarHostState = snackbarHostState,
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it),
+            contentAlignment = Alignment.Center,
+        ) {
+            when (viewState) {
+                is ViewState.Loading -> {
+                    MfLoadingWheel(
+                        contentDesc = stringResource(Res.string.feature_home_loading),
+                        backgroundColor = MaterialTheme.colorScheme.surface,
+                    )
+                }
 
-                HomeScreen(
-                    client = homeUIState.client,
-                    viewState = successState,
-                    onAction = remember(homeViewModel) {
-                        { homeViewModel.trySendAction(it) }
-                    },
-                    modifier = Modifier,
-                )
-            }
+                is ViewState.Content -> {
+                    HomeScreenContent(
+                        viewState = viewState,
+                        defaultAccountId = defaultAccountId,
+                        onAction = onAction,
+                        modifier = Modifier,
+                    )
+                }
 
-            is HomeState.ViewState.Error -> {
-                ErrorScreenContent(
-                    onClickRetry = remember(homeViewModel) {
-                        { homeViewModel.trySendAction(HomeAction.Internal.LoadAccounts) }
-                    },
-                )
+                is ViewState.Error -> {
+                    ErrorScreenContent()
+                }
             }
         }
     }
@@ -172,9 +205,9 @@ internal fun HomeRoute(
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-private fun HomeScreen(
-    client: Client,
-    viewState: HomeState.ViewState.Content,
+private fun HomeScreenContent(
+    viewState: ViewState.Content,
+    defaultAccountId: Long?,
     onAction: (HomeAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -192,12 +225,18 @@ private fun HomeScreen(
             modifier = modifier
                 .fillMaxSize(),
             state = state,
-            contentPadding = PaddingValues(8.dp),
+            contentPadding = PaddingValues(12.dp),
         ) {
             item {
-                MifosWalletCard(
-                    account = viewState.account,
-                    clientName = client.displayName,
+                AccountList(
+                    accounts = viewState.accounts,
+                    defaultAccountId = defaultAccountId,
+                    onClick = {
+                        onAction(HomeAction.AccountDetailsClicked(it))
+                    },
+                    onMarkAsDefault = {
+                        onAction(HomeAction.MarkAsDefault(it))
+                    },
                 )
             }
 
@@ -249,106 +288,186 @@ private fun HomeScreen(
 }
 
 @Composable
-private fun MifosWalletCard(
-    clientName: String,
-    account: Account,
+private fun AccountList(
+    accounts: List<Account>,
+    defaultAccountId: Long?,
     modifier: Modifier = Modifier,
+    onMarkAsDefault: (Long) -> Unit,
+    onClick: (Long) -> Unit,
 ) {
+    val pagerState = rememberPagerState { accounts.size }
+
+    HorizontalPager(
+        state = pagerState,
+        modifier = modifier,
+    ) {
+        AccountCard(
+            account = accounts[it],
+            defaultAccountId = defaultAccountId,
+            onMarkAsDefault = onMarkAsDefault,
+            onClick = onClick,
+        )
+    }
+}
+
+@Composable
+private fun AccountCard(
+    account: Account,
+    defaultAccountId: Long?,
+    onMarkAsDefault: (Long) -> Unit,
+    modifier: Modifier = Modifier,
+    onClick: (Long) -> Unit,
+) {
+    val brush = remember {
+        Brush.linearGradient(
+            colors = listOf(NewUi.walletColor1, NewUi.walletColor2),
+        )
+    }
+
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(200.dp)
             .background(
-                brush = Brush.linearGradient(
-                    colors = listOf(
-                        NewUi.walletColor1,
-                        NewUi.walletColor2,
-                    ),
-                ),
+                brush = brush,
                 shape = RoundedCornerShape(16.dp),
-            ),
+            )
+            .clip(RoundedCornerShape(16.dp))
+            .clickable {
+                onClick(account.id)
+            },
     ) {
-        Card(
+        Column(
             modifier = Modifier
-                .fillMaxSize(),
-            colors = CardDefaults.cardColors(
-                containerColor = Color.Transparent,
-            ),
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.SpaceBetween,
         ) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                ) {
-                    Column(modifier = Modifier.padding(20.dp)) {
-                        Text(
-                            text = "Client Name",
-                            fontWeight = FontWeight(300),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.surface,
-                        )
+                Column {
+                    Text(
+                        text = "Account Type",
+                        fontWeight = FontWeight(300),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.surface,
+                    )
 
-                        Text(
-                            text = clientName,
-                            fontWeight = FontWeight(400),
-                            color = MaterialTheme.colorScheme.surface,
-                        )
-                    }
-
-                    IconButton(
-                        onClick = { },
-                        modifier = Modifier.padding(end = 12.dp),
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            contentDescription = "more",
-                            tint = MaterialTheme.colorScheme.surface,
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.Bottom,
-                ) {
-                    Column {
-                        Text(
-                            text = "Wallet Balance",
-                            fontWeight = FontWeight(300),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.surface,
-                        )
-
-                        val accountBalance = CurrencyFormatter.format(
-                            balance = account.balance,
-                            currencyCode = account.currency.code,
-                            maximumFractionDigits = null,
-                        )
-
-                        Text(
-                            text = accountBalance,
-                            color = MaterialTheme.colorScheme.surface,
-                            style = MaterialTheme.typography.headlineLarge,
-                        )
-                    }
-
-                    Icon(
-                        modifier = Modifier
-                            .graphicsLayer(rotationZ = 90f)
-                            .padding(4.dp),
-                        imageVector = Icons.Filled.KeyboardArrowUp,
-                        contentDescription = "arrow",
-                        tint = MaterialTheme.colorScheme.surface,
+                    Text(
+                        text = account.name,
+                        fontWeight = FontWeight(400),
+                        color = MaterialTheme.colorScheme.surface,
                     )
                 }
+
+                AnimatedContent(
+                    targetState = account.id == defaultAccountId,
+                ) {
+                    if (it) {
+                        MifosSmallChip(
+                            label = "Default",
+                            containerColor = MaterialTheme.colorScheme.primary,
+                        )
+                    } else {
+                        CardDropdownBox(
+                            onClickDefault = {
+                                onMarkAsDefault(account.id)
+                            },
+                        )
+                    }
+                }
             }
+
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = account.number,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.surface,
+                    style = MaterialTheme.typography.headlineMedium,
+                    letterSpacing = 0.50.sp,
+                )
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Bottom,
+            ) {
+                Column {
+                    Text(
+                        text = "Wallet Balance",
+                        fontWeight = FontWeight(300),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.surface,
+                    )
+
+                    val accountBalance = CurrencyFormatter.format(
+                        balance = account.balance,
+                        currencyCode = account.currency.code,
+                        maximumFractionDigits = null,
+                    )
+
+                    Text(
+                        text = accountBalance,
+                        color = MaterialTheme.colorScheme.surface,
+                        style = MaterialTheme.typography.headlineLarge,
+                    )
+                }
+
+                Icon(
+                    modifier = Modifier
+                        .graphicsLayer(rotationZ = 90f)
+                        .padding(4.dp),
+                    imageVector = Icons.Filled.KeyboardArrowUp,
+                    contentDescription = "arrow",
+                    tint = MaterialTheme.colorScheme.surface,
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun CardDropdownBox(
+    onClickDefault: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    var showDropdown by remember { mutableStateOf(false) }
+
+    Box(modifier = modifier) {
+        IconButton(
+            onClick = {
+                showDropdown = !showDropdown
+            },
+            colors = IconButtonDefaults.iconButtonColors(
+                contentColor = MaterialTheme.colorScheme.surface,
+            ),
+        ) {
+            Icon(
+                imageVector = MifosIcons.MoreVert,
+                contentDescription = "View More",
+            )
+        }
+
+        DropdownMenu(
+            expanded = showDropdown,
+            onDismissRequest = { showDropdown = false },
+        ) {
+            DropdownMenuItem(
+                text = { Text("Mark as Default") },
+                onClick = {
+                    onClickDefault()
+                    showDropdown = false
+                },
+            )
         }
     }
 }
@@ -402,7 +521,9 @@ private fun PayRequestScreen(
 
 @Composable
 @Preview
-fun MifosSendMoneyFreeCard(modifier: Modifier = Modifier) {
+private fun MifosSendMoneyFreeCard(
+    modifier: Modifier = Modifier,
+) {
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
@@ -443,72 +564,6 @@ fun MifosSendMoneyFreeCard(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun TransactionHistoryCard(
-    transactions: List<Transaction>,
-    modifier: Modifier = Modifier,
-    onClickViewAll: () -> Unit,
-    onViewTransaction: (Long, Long) -> Unit,
-) {
-    Card(
-        modifier = modifier
-            .fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.White,
-        ),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
-        ) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp, bottom = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "Transaction History",
-                    color = NewUi.primaryColor,
-                    fontWeight = FontWeight(500),
-                )
-
-                Box(
-                    modifier = Modifier.clickable(
-                        onClick = onClickViewAll,
-                    ),
-                ) {
-                    Text(
-                        text = "See All",
-                        color = MaterialTheme.colorScheme.onSurface,
-                        style = MaterialTheme.typography.bodySmall,
-                        fontWeight = FontWeight(300),
-                    )
-                }
-            }
-
-            transactions.forEachIndexed { i, transaction ->
-                TransactionItemScreen(
-                    transaction = transaction,
-                    onClick = onViewTransaction,
-                )
-
-                if (i != transactions.size - 1) {
-                    HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 20.dp),
-                        thickness = 1.dp,
-                        color = NewUi.onSurface.copy(alpha = 0.05f),
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
 private fun PaymentButton(
     text: String,
     leadingIcon: @Composable () -> Unit,
@@ -535,7 +590,7 @@ private fun PaymentButton(
 }
 
 @Composable
-private fun HomeDialogs(
+private fun HomeScreenDialog(
     dialogState: HomeState.DialogState?,
     onDismissRequest: () -> Unit,
 ) {
@@ -553,88 +608,4 @@ private fun HomeDialogs(
 
         null -> Unit
     }
-}
-
-@Preview
-@Composable
-private fun HomeScreenPreview() {
-    HomeScreen(
-        viewState = HomeState.ViewState.Content(
-            account = Account(
-                image = "",
-                name = "Mifos",
-                number = "1234567890",
-                balance = 10000.0,
-                id = 1L,
-                currency = Currency(
-                    code = "USD",
-                    displayLabel = "$",
-                    displaySymbol = "$",
-                ),
-                productId = 1223,
-            ),
-            transactions = List(25) { index ->
-                Transaction(
-                    accountId = 5505,
-                    amount = 2.3,
-                    date = "eum",
-                    currency = Currency(
-                        code = "molestie",
-                        displaySymbol = "viris",
-                        displayLabel = "metus",
-                    ),
-                    transactionType = TransactionType.DEBIT,
-                    transactionId = index.toLong(),
-                    accountNo = "placerat",
-                    transferId = 9075,
-                    originalTransactionId = 1692,
-                    paymentDetailId = 8149,
-                )
-            },
-        ),
-        client = Client(
-            id = 8858,
-            accountNo = "dignissim",
-            externalId = "sonet",
-            active = false,
-            activationDate = listOf(),
-            firstname = "Hollis Tyler",
-            lastname = "Lindsay Salazar",
-            displayName = "Janell Howell",
-            mobileNo = "principes",
-            emailAddress = "vicky.dominguez@example.com",
-            dateOfBirth = listOf(),
-            isStaff = false,
-            officeId = 2628,
-            officeName = "Enrique Dickson",
-            savingsProductName = "Lamont Brady",
-            timeline = ClientTimeline(
-                submittedOnDate = listOf(),
-                activatedOnDate = listOf(),
-                activatedByUsername = null,
-                activatedByFirstname = null,
-                activatedByLastname = null,
-            ),
-            status = ClientStatus(
-                id = 6242,
-                code = "possim",
-                value = "accommodare",
-            ),
-            legalForm = ClientStatus(
-                id = 2235,
-                code = "unum",
-                value = "laudem",
-            ),
-        ),
-        onAction = {},
-    )
-}
-
-@Preview
-@Composable
-private fun PayRequestScreenPreview() {
-    PayRequestScreen(
-        onRequest = {},
-        onSend = {},
-    )
 }

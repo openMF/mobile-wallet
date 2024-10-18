@@ -10,7 +10,7 @@
 package org.mifospay.core.network.model.entity.client
 
 import kotlinx.serialization.Serializable
-import org.mifospay.core.network.model.entity.accounts.savings.SavingAccountEntity
+import org.mifospay.core.model.savingsaccount.SavingAccountEntity
 
 @Serializable
 data class ClientAccountsEntity(
@@ -32,7 +32,7 @@ data class ClientAccountsEntity(
     private fun getSavingsAccounts(wantRecurring: Boolean): List<SavingAccountEntity?> {
         val result: MutableList<SavingAccountEntity?> = ArrayList()
         for (account in savingsAccounts) {
-            if (account.isRecurring() == wantRecurring) {
+            if (account.depositType?.isRecurring == wantRecurring) {
                 result.add(account)
             }
         }

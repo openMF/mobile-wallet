@@ -13,5 +13,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BeneficiaryTemplate(
-    val accountTypeOptions: List<org.mifospay.core.network.model.entity.templates.beneficiary.AccountTypeOption?>? = null,
+    val accountTypeOptions: List<AccountTypeOption?>? = null,
 )

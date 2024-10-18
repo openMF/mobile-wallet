@@ -12,8 +12,8 @@ package org.mifospay.core.data.repositoryImp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
+import org.mifospay.core.common.DataState
+import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.entity.TPTResponse
@@ -24,15 +24,15 @@ class ThirdPartyTransferRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : ThirdPartyTransferRepository {
-    override suspend fun getTransferTemplate(): Flow<Result<AccountOptionsTemplate>> {
+    override suspend fun getTransferTemplate(): Flow<DataState<AccountOptionsTemplate>> {
         return apiManager.thirdPartyTransferApi
             .accountTransferTemplate()
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun makeTransfer(payload: TransferPayload): Flow<Result<TPTResponse>> {
+    override suspend fun makeTransfer(payload: TransferPayload): Flow<DataState<TPTResponse>> {
         return apiManager.thirdPartyTransferApi
             .makeTransfer(payload)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 }

@@ -10,22 +10,22 @@
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.Result
+import org.mifospay.core.common.DataState
 import org.mifospay.core.network.model.GenericResponse
 import org.mifospay.core.network.model.entity.Invoice
 
 interface InvoiceRepository {
-    suspend fun getInvoice(clientId: Int, invoiceId: Int): Flow<Result<Invoice>>
+    suspend fun getInvoice(clientId: Int, invoiceId: Int): Flow<DataState<Invoice>>
 
-    suspend fun getInvoices(clientId: Int): Flow<Result<List<Invoice>>>
+    suspend fun getInvoices(clientId: Int): Flow<DataState<List<Invoice>>>
 
-    suspend fun createInvoice(clientId: Int, invoice: Invoice): Result<Unit>
+    suspend fun createInvoice(clientId: Int, invoice: Invoice): DataState<Unit>
 
     suspend fun updateInvoice(
         clientId: Int,
         invoiceId: Int,
         invoice: Invoice,
-    ): Flow<Result<GenericResponse>>
+    ): Flow<DataState<GenericResponse>>
 
-    suspend fun deleteInvoice(clientId: Int, invoiceId: Int): Flow<Result<GenericResponse>>
+    suspend fun deleteInvoice(clientId: Int, invoiceId: Int): Flow<DataState<GenericResponse>>
 }

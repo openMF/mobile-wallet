@@ -35,6 +35,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.AccountCircle
 import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
@@ -99,6 +100,7 @@ object MifosIcons {
     val Camera = Icons.Filled.Camera
     val PhotoLibrary = Icons.Filled.PhotoLibrary
     val Delete = Icons.Filled.Delete
+    val OutlinedDelete = Icons.Outlined.DeleteOutline
     val RoundedInfo = Icons.Rounded.Info
     val Contact = Icons.Rounded.Contacts
     val Settings = Icons.Rounded.Settings

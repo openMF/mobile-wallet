@@ -12,8 +12,8 @@ package org.mifospay.core.network.services
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
+import org.mifospay.core.model.savingsaccount.TransactionsEntity
 import org.mifospay.core.model.savingsaccount.TransferDetail
-import org.mifospay.core.network.model.entity.accounts.savings.TransactionsEntity
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface AccountTransfersService {

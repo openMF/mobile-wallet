@@ -15,10 +15,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.mifospay.core.common.DataState
 import org.mifospay.core.common.IgnoredOnParcel
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
-import org.mifospay.core.common.Result
 import org.mifospay.core.common.utils.isValidEmail
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
@@ -116,19 +116,19 @@ internal class EditProfileViewModel(
 
     private fun handleLoadClientImageResult(action: HandleLoadClientImageResult) {
         when (action.result) {
-            is Result.Success -> {
+            is DataState.Success -> {
                 mutableStateFlow.update {
                     it.copy(imageInput = action.result.data)
                 }
             }
 
-            is Result.Error -> {
+            is DataState.Error -> {
 //                mutableStateFlow.update {
 //                    it.copy(dialogState = Error(action.result.exception.message ?: ""))
 //                }
             }
 
-            is Result.Loading -> {
+            is DataState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = EditProfileState.DialogState.Loading)
                 }
@@ -198,19 +198,19 @@ internal class EditProfileViewModel(
 
     private fun handleUpdateProfileResult(action: OnUpdateProfileResult) {
         when (action.result) {
-            is Result.Error -> {
+            is DataState.Error -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = Error(action.result.exception.message ?: ""))
                 }
             }
 
-            is Result.Loading -> {
+            is DataState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = EditProfileState.DialogState.Loading)
                 }
             }
 
-            is Result.Success -> {
+            is DataState.Success -> {
                 viewModelScope.launch {
                     if (state.imageInput != null) {
                         val result = clientRepository.updateClientImage(
@@ -223,7 +223,7 @@ internal class EditProfileViewModel(
                     val result = preferencesRepository.updateClientProfile(state.updatedClient)
 
                     when (result) {
-                        is Result.Success -> {
+                        is DataState.Success -> {
                             sendEvent(EditProfileEvent.ShowToast("Profile updated successfully"))
                             trySendAction(EditProfileAction.NavigateBack)
                         }
@@ -237,19 +237,19 @@ internal class EditProfileViewModel(
 
     private fun handleUpdateClientImageResult(action: HandleUpdateClientImageResult) {
         when (action.result) {
-            is Result.Error -> {
+            is DataState.Error -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = Error(action.result.exception.message ?: ""))
                 }
             }
 
-            is Result.Loading -> {
+            is DataState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = EditProfileState.DialogState.Loading)
                 }
             }
 
-            is Result.Success -> {
+            is DataState.Success -> {
                 sendEvent(EditProfileEvent.ShowToast("Profile image updated successfully"))
             }
         }
@@ -306,10 +306,10 @@ sealed interface EditProfileAction {
 
     sealed interface Internal : EditProfileAction {
         data class LoadClientImage(val clientId: Long) : Internal
-        data class HandleLoadClientImageResult(val result: Result<String>) : Internal
+        data class HandleLoadClientImageResult(val result: DataState<String>) : Internal
 
-        data class OnUpdateProfileResult(val result: Result<String>) : Internal
+        data class OnUpdateProfileResult(val result: DataState<String>) : Internal
 
-        data class HandleUpdateClientImageResult(val result: Result<String>) : Internal
+        data class HandleUpdateClientImageResult(val result: DataState<String>) : Internal
     }
 }

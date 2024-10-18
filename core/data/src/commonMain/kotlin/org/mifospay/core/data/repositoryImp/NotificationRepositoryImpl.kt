@@ -12,8 +12,8 @@ package org.mifospay.core.data.repositoryImp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
+import org.mifospay.core.common.DataState
+import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.NotificationRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.NotificationPayload
@@ -24,9 +24,9 @@ class NotificationRepositoryImpl(
 ) : NotificationRepository {
     override suspend fun fetchNotifications(
         clientId: Long,
-    ): Flow<Result<List<NotificationPayload>>> {
+    ): Flow<DataState<List<NotificationPayload>>> {
         return apiManager.notificationApi
             .fetchNotifications(clientId)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 }

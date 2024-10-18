@@ -18,9 +18,9 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.mifospay.core.common.DataState
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
-import org.mifospay.core.common.Result
 import org.mifospay.core.data.repository.UserRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.ui.PasswordStrengthState
@@ -129,19 +129,19 @@ internal class EditPasswordViewModel(
 
     private fun handleResult(action: ReceiveUpdatePasswordResult) {
         when (val result = action.result) {
-            is Result.Success -> {
+            is DataState.Success -> {
                 mutableStateFlow.update { it.copy(dialogState = null) }
                 sendEvent(EditPasswordEvent.ShowToast(result.data))
                 sendEvent(EditPasswordEvent.OnLogoutUser)
             }
 
-            is Result.Error -> {
+            is DataState.Error -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = Error(result.exception.message.toString()))
                 }
             }
 
-            Result.Loading -> {
+            DataState.Loading -> {
                 mutableStateFlow.update { it.copy(dialogState = EditPasswordDialog.Loading) }
             }
         }
@@ -257,7 +257,7 @@ internal sealed interface EditPasswordAction {
 
     sealed class Internal : EditPasswordAction {
         data class ReceiveUpdatePasswordResult(
-            val result: Result<String>,
+            val result: DataState<String>,
         ) : Internal()
 
         data class ReceivePasswordStrengthResult(

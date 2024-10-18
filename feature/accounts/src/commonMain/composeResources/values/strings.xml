@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_accounts_bank_account_details">Bank Account Details</string>
+    <string name="feature_accounts_bank_name">Bank Name</string>
+    <string name="feature_accounts_ac_holder_name">A/C Holder Name</string>
+    <string name="feature_accounts_branch_name">Branch Name</string>
+    <string name="feature_accounts_ifsc">IFSC</string>
+    <string name="feature_accounts_type">Type</string>
+    <string name="feature_accounts_setup_upi">Setup UPI</string>
+    <string name="feature_accounts_delete_bank">Delete Bank</string>
+    <string name="feature_accounts_change_upi_pin">Change UPI PIN</string>
+    <string name="feature_accounts_forgot_upi_pin">Forgot UPI PIN</string>
+    <string name="feature_accounts_link_bank_account">Link Bank Account</string>
+    <string name="feature_accounts_loading">Loading</string>
+    <string name="feature_accounts_search">Search</string>
+    <string name="feature_accounts_popular_banks">Popular Banks</string>
+    <string name="feature_accounts_other_banks">Other Banks</string>
+    <string name="feature_accounts_error_oops">Oops!</string>
+    <string name="feature_accounts_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+    <string name="feature_accounts_linked_bank_account">Linked bank accounts</string>
+    <string name="feature_accounts_add_account">ADD ACCOUNT</string>
+    <string name="feature_accounts_add_cards">Please Add Cards</string>
+    <string name="feature_accounts_no_linked_bank_accounts">No Linked Bank Accounts</string>
+    <string name="feature_accounts_verify_mobile_number">Verify Mobile Number</string>
+    <string name="feature_accounts_confirm_mobile_number_message">To confirm your mobile number \n we need to send an
+        SMS from \n your phone*
+    </string>
+    <string name="feature_accounts_or">or</string>
+    <string name="feature_accounts_regular_charges_will_apply">*Regular charges will apply</string>
+    <string name="feature_accounts_choose_a_sim">Please choose a SIM</string>
+    <string name="feature_accounts_confirm">Confirm</string>
+    <string name="feature_accounts_bank_account_mobile_verification_conditions">Make sure that the following
+        conditions are met: \n1. Mobile Number is linked with your Bank Account. \n2. Mobile Number
+        is
+        registered on MifosPay. \n3. It\'s sim is on this device.
+    </string>
+    <string name="delete_beneficiary_title">Delete Beneficiary</string>
+    <string name="delete_beneficiary_subtitle">Are you sure you want to delete this beneficiary?</string>
+</resources>

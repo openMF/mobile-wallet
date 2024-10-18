@@ -16,37 +16,4 @@ data class DepositTypeEntity(
     val id: Int? = null,
     val code: String? = null,
     val value: String? = null,
-) {
-    val isRecurring: Boolean
-        get() = ServerTypes.RECURRING.id == id
-    val endpoint: String
-        get() = ServerTypes.fromId(
-            id!!,
-        ).endpoint
-    val serverType: ServerTypes
-        get() = ServerTypes.fromId(
-            id!!,
-        )
-
-    enum class ServerTypes(val id: Int, val code: String, val endpoint: String) {
-        SAVINGS(id = 100, code = "depositAccountType.savingsDeposit", endpoint = "savingsaccounts"),
-        FIXED(id = 200, code = "depositAccountType.fixedDeposit", endpoint = "savingsaccounts"),
-        RECURRING(
-            id = 300,
-            code = "depositAccountType.recurringDeposit",
-            endpoint = "recurringdepositaccounts",
-        ),
-        ;
-
-        companion object {
-            fun fromId(id: Int): ServerTypes {
-                for (type in entries) {
-                    if (type.id == id) {
-                        return type
-                    }
-                }
-                return ServerTypes.SAVINGS
-            }
-        }
-    }
-}
+)

@@ -18,7 +18,7 @@ import mobile_wallet.feature.settings.generated.resources.feature_settings_alert
 import mobile_wallet.feature.settings.generated.resources.feature_settings_empty
 import mobile_wallet.feature.settings.generated.resources.feature_settings_log_out_title
 import org.jetbrains.compose.resources.StringResource
-import org.mifospay.core.common.Result
+import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SavingsAccountRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.client.Client
@@ -116,7 +116,7 @@ class SettingsViewModel(
 
     private fun handleDisableAccountResult(action: DisableAccountResult) {
         when (action.result) {
-            is Result.Error -> {
+            is DataState.Error -> {
                 mutableStateFlow.update {
                     it.copy(
                         dialogState = DialogState.Error(
@@ -126,13 +126,13 @@ class SettingsViewModel(
                 }
             }
 
-            is Result.Loading -> {
+            is DataState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = DialogState.Loading)
                 }
             }
 
-            is Result.Success -> {
+            is DataState.Success -> {
                 mutableStateFlow.update {
                     it.copy(dialogState = null)
                 }
@@ -184,6 +184,6 @@ sealed interface SettingsAction {
 
     sealed interface Internal : SettingsAction {
         data object DisableAccount : Internal
-        data class DisableAccountResult(val result: Result<String>) : Internal
+        data class DisableAccountResult(val result: DataState<String>) : Internal
     }
 }

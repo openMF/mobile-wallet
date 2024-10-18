@@ -10,12 +10,12 @@
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.Result
+import org.mifospay.core.common.DataState
 import org.mifospay.core.model.savingsaccount.Transaction
 
 interface RunReportRepository {
     suspend fun getTransactionReceipt(
         outputType: String,
         transactionId: String,
-    ): Flow<Result<Transaction>>
+    ): Flow<DataState<Transaction>>
 }

@@ -9,12 +9,12 @@
  */
 package org.mifospay.core.data.repository
 
-import org.mifospay.core.common.Result
+import org.mifospay.core.common.DataState
 import org.mifospay.core.network.model.entity.register.RegisterPayload
 import org.mifospay.core.network.model.entity.register.UserVerify
 
 interface RegistrationRepository {
-    suspend fun registerUser(registerPayload: RegisterPayload): Result<Unit>
+    suspend fun registerUser(registerPayload: RegisterPayload): DataState<Unit>
 
-    suspend fun verifyUser(userVerify: UserVerify): Result<Unit>
+    suspend fun verifyUser(userVerify: UserVerify): DataState<Unit>
 }

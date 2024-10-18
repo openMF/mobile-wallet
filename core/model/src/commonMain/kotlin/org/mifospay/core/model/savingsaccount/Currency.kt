@@ -17,6 +17,10 @@ import org.mifospay.core.common.Parcelize
 @Serializable
 data class Currency(
     val code: String,
+    val name: String,
+    val decimalPlaces: Int,
+    val inMultiplesOf: Int,
     val displaySymbol: String,
+    val nameCode: String,
     val displayLabel: String,
 ) : Parcelable

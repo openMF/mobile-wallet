@@ -16,29 +16,28 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.network.model.CommonResponse
-import org.mifospay.core.network.model.entity.beneficary.Beneficiary
-import org.mifospay.core.network.model.entity.beneficary.BeneficiaryPayload
-import org.mifospay.core.network.model.entity.beneficary.BeneficiaryUpdatePayload
+import org.mifospay.core.model.beneficiary.Beneficiary
+import org.mifospay.core.model.beneficiary.BeneficiaryPayload
+import org.mifospay.core.model.beneficiary.BeneficiaryUpdatePayload
 import org.mifospay.core.network.model.entity.templates.beneficiary.BeneficiaryTemplate
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface BeneficiaryService {
     @GET(ApiEndPoints.BENEFICIARIES + "/tpt")
-    suspend fun beneficiaryList(): Flow<List<Beneficiary>>
+    fun beneficiaryList(): Flow<List<Beneficiary>>
 
     @GET(ApiEndPoints.BENEFICIARIES + "/tpt/template")
     suspend fun beneficiaryTemplate(): Flow<BeneficiaryTemplate>
 
     @POST(ApiEndPoints.BENEFICIARIES + "/tpt")
-    suspend fun createBeneficiary(@Body beneficiaryPayload: BeneficiaryPayload): Flow<CommonResponse>
+    suspend fun createBeneficiary(@Body beneficiaryPayload: BeneficiaryPayload)
 
     @PUT(ApiEndPoints.BENEFICIARIES + "/tpt/{beneficiaryId}")
     suspend fun updateBeneficiary(
         @Path("beneficiaryId") beneficiaryId: Long,
         @Body payload: BeneficiaryUpdatePayload,
-    ): Flow<CommonResponse>
+    )
 
     @DELETE(ApiEndPoints.BENEFICIARIES + "/tpt/{beneficiaryId}")
-    suspend fun deleteBeneficiary(@Path("beneficiaryId") beneficiaryId: Long): Flow<CommonResponse>
+    suspend fun deleteBeneficiary(@Path("beneficiaryId") beneficiaryId: Long): Unit
 }

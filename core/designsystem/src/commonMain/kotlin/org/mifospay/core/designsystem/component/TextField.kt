@@ -9,60 +9,44 @@
  */
 package org.mifospay.core.designsystem.component
 
-import androidx.compose.foundation.background
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
-fun MfOutlinedTextField(
+fun MifosOutlinedTextField(
     value: String,
     label: String,
     onValueChange: (String) -> Unit,
@@ -70,111 +54,50 @@ fun MfOutlinedTextField(
     isError: Boolean = false,
     errorMessage: String = "",
     singleLine: Boolean = false,
+    showClearIcon: Boolean = true,
+    readOnly: Boolean = false,
+    clearIcon: ImageVector = MifosIcons.Close,
+    onClickClearIcon: () -> Unit = {},
     onKeyboardActions: (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
+    val isFocused by interactionSource.collectIsFocusedAsState()
+
     MifosCustomTextField(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         value = value,
         onValueChange = onValueChange,
         label = label,
+        readOnly = readOnly,
         supportingText = {
             if (isError) {
                 Text(text = errorMessage)
             }
         },
         singleLine = singleLine,
-        trailingIcon = trailingIcon,
+        leadingIcon = leadingIcon,
+        trailingIcon = @Composable {
+            if (showClearIcon && isFocused) {
+                ClearIconButton(
+                    showClearIcon = true,
+                    clearIcon = clearIcon,
+                    onClickClearIcon = onClickClearIcon,
+                )
+            } else {
+                trailingIcon?.invoke()
+            }
+        },
         keyboardActions = KeyboardActions {
             onKeyboardActions?.invoke()
         },
         keyboardOptions = keyboardOptions,
+        interactionSource = interactionSource,
         textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
-    )
-}
-
-@Composable
-fun MfPasswordTextField(
-    password: String,
-    label: String,
-    isError: Boolean,
-    isPasswordVisible: Boolean,
-    onTogglePasswordVisibility: () -> Unit,
-    onPasswordChange: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    errorMessage: String? = null,
-) {
-    OutlinedTextField(
-        modifier = modifier,
-        value = password,
-        onValueChange = onPasswordChange,
-        label = { Text(label) },
-        isError = isError,
-        visualTransformation = if (isPasswordVisible) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
-        },
-        supportingText = {
-            errorMessage?.let { Text(text = it) }
-        },
-        trailingIcon = {
-            IconButton(onClick = onTogglePasswordVisibility) {
-                Icon(
-                    if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                    contentDescription = "Show password",
-                )
-            }
-        },
-    )
-}
-
-@Composable
-fun MifosOutlinedTextField(
-    label: String,
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
-    modifier: Modifier = Modifier,
-    maxLines: Int = 1,
-    singleLine: Boolean = true,
-    icon: ImageVector? = null,
-    visualTransformation: VisualTransformation = VisualTransformation.None,
-    trailingIcon: @Composable (() -> Unit)? = null,
-    keyboardActions: KeyboardActions = KeyboardActions.Default,
-    error: Boolean = false,
-) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        label = { Text(label) },
-        modifier = modifier,
-        leadingIcon = if (icon != null) {
-            {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = icon.name,
-                )
-            }
-        } else {
-            null
-        },
-        trailingIcon = trailingIcon,
-        maxLines = maxLines,
-        singleLine = singleLine,
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = MaterialTheme.colorScheme.onSurface,
-            focusedLabelColor = MaterialTheme.colorScheme.onSurface,
-        ),
-        textStyle = LocalDensity.current.run {
-            TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
-        },
-        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-        keyboardActions = keyboardActions,
-        visualTransformation = visualTransformation,
-        isError = error,
     )
 }
 
@@ -183,11 +106,12 @@ fun MifosTextField(
     value: String,
     onValueChange: (String) -> Unit,
     label: String,
-    modifier: Modifier = Modifier
-        .fillMaxWidth()
-        .padding(horizontal = 20.dp),
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    showClearIcon: Boolean = true,
     readOnly: Boolean = false,
+    clearIcon: ImageVector = MifosIcons.Close,
+    onClickClearIcon: () -> Unit = {},
     textStyle: TextStyle = LocalTextStyle.current,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -198,21 +122,15 @@ fun MifosTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
-    indicatorColor: Color? = null,
 ) {
-    var isFocused by rememberSaveable { mutableStateOf(false) }
+    val isFocused by interactionSource.collectIsFocusedAsState()
 
-    BasicTextField(
+    MifosCustomTextField(
         value = value,
+        label = label,
         onValueChange = onValueChange,
         textStyle = textStyle,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 10.dp)
-            .onFocusChanged { focusState ->
-                isFocused = focusState.isFocused
-            }
-            .semantics(mergeDescendants = true) {},
+        modifier = modifier.fillMaxWidth(),
         enabled = enabled,
         readOnly = readOnly,
         visualTransformation = visualTransformation,
@@ -222,55 +140,18 @@ fun MifosTextField(
         singleLine = singleLine,
         maxLines = maxLines,
         minLines = minLines,
-        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-        decorationBox = { innerTextField ->
-            Column {
-                Text(
-                    text = label,
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.align(alignment = Alignment.Start),
+        trailingIcon = @Composable {
+            if (showClearIcon && isFocused) {
+                ClearIconButton(
+                    showClearIcon = true,
+                    clearIcon = clearIcon,
+                    onClickClearIcon = onClickClearIcon,
                 )
-
-                Spacer(modifier = Modifier.height(5.dp))
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    if (leadingIcon != null) {
-                        leadingIcon()
-                    }
-
-                    Box(modifier = Modifier.weight(1f)) {
-                        innerTextField()
-                    }
-
-                    if (trailingIcon != null) {
-                        trailingIcon()
-                    }
-                }
-                indicatorColor?.let { color ->
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = if (isFocused) {
-                            color
-                        } else {
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
-                        },
-                    )
-                } ?: run {
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = if (isFocused) {
-                            MaterialTheme.colorScheme.primary
-                        } else {
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
-                        },
-                    )
-                }
+            } else {
+                trailingIcon?.invoke()
             }
         },
+        leadingIcon = leadingIcon,
     )
 }
 
@@ -296,9 +177,7 @@ fun MifosCustomTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
-    supportingText:
-    @Composable()
-    (() -> Unit)? = null,
+    supportingText: @Composable (() -> Unit)? = null,
 ) {
     val colors = TextFieldDefaults.colors().copy(
         cursorColor = MaterialTheme.colorScheme.primary,
@@ -362,43 +241,112 @@ fun MifosCustomTextField(
     }
 }
 
-@Preview
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MfOutlinedTextFieldPreview() {
-    MifosTheme {
-        Box(
-            modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
-        ) {
-            MfOutlinedTextField(
-                value = "Text Field Value",
-                label = "Text Field",
-                onValueChange = { },
-                modifier = Modifier,
-                isError = true,
-                errorMessage = "Error Message",
-                onKeyboardActions = { },
-            )
-        }
+fun MifosCustomTextField(
+    value: TextFieldValue,
+    onValueChange: (TextFieldValue) -> Unit,
+    label: String,
+    modifier: Modifier = Modifier
+        .fillMaxWidth()
+        .padding(horizontal = 20.dp),
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
+    visualTransformation: VisualTransformation = VisualTransformation.None,
+    keyboardActions: KeyboardActions = KeyboardActions.Default,
+    singleLine: Boolean = true,
+    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    minLines: Int = 1,
+    isError: Boolean = false,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+    trailingIcon: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    supportingText: @Composable (() -> Unit)? = null,
+) {
+    val colors = TextFieldDefaults.colors().copy(
+        cursorColor = MaterialTheme.colorScheme.primary,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        errorContainerColor = Color.Transparent,
+        focusedIndicatorColor = MaterialTheme.colorScheme.primary,
+        unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
+        focusedTrailingIconColor = NewUi.onSurface.copy(0.15f),
+        unfocusedTrailingIconColor = NewUi.onSurface.copy(0.15f),
+    )
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        interactionSource = interactionSource,
+        enabled = enabled,
+        singleLine = singleLine,
+        readOnly = readOnly,
+        textStyle = textStyle,
+        visualTransformation = visualTransformation,
+        keyboardActions = keyboardActions,
+        maxLines = maxLines,
+        minLines = minLines,
+        keyboardOptions = keyboardOptions,
+        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+    ) {
+        TextFieldDefaults.DecorationBox(
+            value = value.text,
+            visualTransformation = VisualTransformation.None,
+            innerTextField = it,
+            singleLine = singleLine,
+            enabled = enabled,
+            interactionSource = interactionSource,
+            label = {
+                Text(
+                    text = label,
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.padding(bottom = 10.dp),
+                )
+            },
+            trailingIcon = trailingIcon,
+            leadingIcon = leadingIcon,
+            supportingText = supportingText,
+            colors = colors,
+            isError = isError,
+            contentPadding = PaddingValues(bottom = 10.dp),
+            container = {
+                TextFieldDefaults.Container(
+                    enabled = enabled,
+                    isError = isError,
+                    colors = colors,
+                    interactionSource = interactionSource,
+                    shape = RectangleShape,
+                    focusedIndicatorLineThickness = 1.dp,
+                    unfocusedIndicatorLineThickness = 1.dp,
+                )
+            },
+        )
     }
 }
 
-@Preview
 @Composable
-fun MfPasswordTextFieldPreview() {
-    MifosTheme {
-        val password = " "
-        Box(
-            modifier = Modifier.background(color = Color.White),
+private fun ClearIconButton(
+    showClearIcon: Boolean,
+    clearIcon: ImageVector,
+    onClickClearIcon: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    AnimatedVisibility(
+        visible = showClearIcon,
+        modifier = modifier,
+    ) {
+        IconButton(
+            onClick = onClickClearIcon,
+            modifier = Modifier.semantics {
+                contentDescription = "clearIcon"
+            },
         ) {
-            MfPasswordTextField(
-                password = password,
-                label = "Password",
-                isError = true,
-                isPasswordVisible = true,
-                onTogglePasswordVisibility = { },
-                onPasswordChange = { },
-                modifier = Modifier.fillMaxWidth(),
-                errorMessage = "Password must be at least 6 characters",
+            Icon(
+                imageVector = clearIcon,
+                contentDescription = "trailingIcon",
             )
         }
     }

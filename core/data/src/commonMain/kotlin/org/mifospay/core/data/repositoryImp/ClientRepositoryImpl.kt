@@ -10,17 +10,13 @@
 package org.mifospay.core.data.repositoryImp
 
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
-import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
+import org.mifospay.core.common.DataState
+import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.mapper.toAccount
 import org.mifospay.core.data.mapper.toEntity
 import org.mifospay.core.data.mapper.toModel
@@ -38,55 +34,48 @@ class ClientRepositoryImpl(
     private val apiManager: SelfServiceApiManager,
     private val fineractApiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
-    unconfinedDispatcher: CoroutineDispatcher,
 ) : ClientRepository {
-    private val coroutineScope = CoroutineScope(unconfinedDispatcher)
-
-    override suspend fun getClients(): Flow<Result<Page<Client>>> {
-        return apiManager.clientsApi.clients().map { it.toModel() }.asResult().flowOn(ioDispatcher)
+    override suspend fun getClients(): Flow<DataState<Page<Client>>> {
+        return apiManager.clientsApi.clients().map { it.toModel() }.asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override fun getClientInfo(clientId: Long): StateFlow<Result<Client>> {
+    override fun getClientInfo(clientId: Long): Flow<DataState<Client>> {
         return fineractApiManager.clientsApi
             .getClient(clientId)
-            .catch { Result.Error(it) }
-            .map { Result.Success(it.toModel()) }
-            .stateIn(
-                scope = coroutineScope,
-                started = SharingStarted.Eagerly,
-                initialValue = Result.Loading,
-            )
+            .catch { DataState.Error(it, null) }
+            .map { DataState.Success(it.toModel()) }
+            .flowOn(ioDispatcher)
     }
 
-    override suspend fun getClient(clientId: Long): Result<Client> {
+    override suspend fun getClient(clientId: Long): DataState<Client> {
         return try {
             val result = fineractApiManager.clientsApi.getClientForId(clientId)
-            Result.Success(result.toModel())
+            DataState.Success(result.toModel())
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 
-    override suspend fun updateClient(clientId: Long, client: UpdatedClient): Result<String> {
+    override suspend fun updateClient(clientId: Long, client: UpdatedClient): DataState<String> {
         return try {
             withContext(ioDispatcher) {
                 fineractApiManager.clientsApi.updateClient(clientId, client.toEntity())
             }
 
-            Result.Success("Client updated successfully")
+            DataState.Success("Client updated successfully")
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 
-    override fun getClientImage(clientId: Long): Flow<Result<String>> {
+    override fun getClientImage(clientId: Long): Flow<DataState<String>> {
         return fineractApiManager.clientsApi
             .getClientImage(clientId)
-            .catch { Result.Error(it) }
-            .map { Result.Success(it) }
+            .catch { DataState.Error(it, null) }
+            .map { DataState.Success(it) }
     }
 
-    override suspend fun updateClientImage(clientId: Long, image: String): Result<String> {
+    override suspend fun updateClientImage(clientId: Long, image: String): DataState<String> {
         return try {
             withContext(ioDispatcher) {
                 fineractApiManager.clientsApi.updateClientImage(
@@ -95,54 +84,49 @@ class ClientRepositoryImpl(
                 )
             }
 
-            Result.Success("Client image updated successfully")
+            DataState.Success("Client image updated successfully")
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 
-    override suspend fun getClientAccounts(clientId: Long): Flow<Result<ClientAccountsEntity>> {
+    override suspend fun getClientAccounts(clientId: Long): Flow<DataState<ClientAccountsEntity>> {
         return apiManager.clientsApi
             .getClientAccounts(clientId)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun getAccounts(
         clientId: Long,
         accountType: String,
-    ): Result<List<Account>> {
-        return try {
-            val result = withContext(ioDispatcher) {
-                apiManager.clientsApi.getAccounts(clientId, accountType)
-            }
-
-            Result.Success(result.toAccount())
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
+    ): Flow<DataState<List<Account>>> {
+        return apiManager.clientsApi
+            .getAccounts(clientId, accountType)
+            .map { it.toAccount() }
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun createClient(newClient: NewClient): Result<Int> {
+    override suspend fun createClient(newClient: NewClient): DataState<Int> {
         return try {
             val result = withContext(ioDispatcher) {
                 fineractApiManager.clientsApi.createClient(newClient.toEntity())
             }
 
-            Result.Success(result.clientId)
+            DataState.Success(result.clientId)
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 
-    override suspend fun deleteClient(clientId: Int): Result<Int> {
+    override suspend fun deleteClient(clientId: Int): DataState<Int> {
         return try {
             val result = withContext(ioDispatcher) {
                 fineractApiManager.clientsApi.deleteClient(clientId)
             }
 
-            Result.Success(result.clientId)
+            DataState.Success(result.clientId)
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 }

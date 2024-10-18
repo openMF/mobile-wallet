@@ -9,6 +9,7 @@
  */
 package org.mifospay.feature.history.components
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -90,6 +91,7 @@ internal fun TransactionList(
 internal fun TransactionItem(
     transaction: Transaction,
     modifier: Modifier = Modifier,
+    showLeadingIcon: Boolean = true,
     onClick: (Long) -> Unit,
 ) {
     Surface(
@@ -112,20 +114,22 @@ internal fun TransactionItem(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Image(
-                    modifier = Modifier
-                        .size(20.dp)
-                        .padding(top = 2.dp),
-                    painter = painterResource(
-                        resource = when (transaction.transactionType) {
-                            TransactionType.DEBIT -> Res.drawable.core_ui_money_out
-                            TransactionType.CREDIT -> Res.drawable.core_ui_money_in
-                            else -> Res.drawable.core_ui_money_in
-                        },
-                    ),
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
-                )
+                AnimatedVisibility(showLeadingIcon) {
+                    Image(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .padding(top = 2.dp),
+                        painter = painterResource(
+                            resource = when (transaction.transactionType) {
+                                TransactionType.DEBIT -> Res.drawable.core_ui_money_out
+                                TransactionType.CREDIT -> Res.drawable.core_ui_money_in
+                                else -> Res.drawable.core_ui_money_in
+                            },
+                        ),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
+                    )
+                }
 
                 Column {
                     Text(

@@ -14,6 +14,7 @@ import org.mifospay.core.common.Parcelize
 
 @Parcelize
 data class BankAccountDetails(
+    val accountNo: String,
     val bankName: String?,
     val accountHolderName: String?,
     val branch: String?,

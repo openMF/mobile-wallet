@@ -15,20 +15,21 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.Path
 import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.network.model.GenericResponse
+import org.mifospay.core.model.savingsaccount.BlockUnblockResponseEntity
+import org.mifospay.core.model.savingsaccount.CreateNewSavingEntity
+import org.mifospay.core.model.savingsaccount.SavingAccountTemplate
+import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
+import org.mifospay.core.model.savingsaccount.TransactionsEntity
+import org.mifospay.core.model.savingsaccount.UpdateSavingAccountEntity
 import org.mifospay.core.network.model.entity.Page
-import org.mifospay.core.network.model.entity.accounts.savings.BlockUnblockResponseEntity
-import org.mifospay.core.network.model.entity.accounts.savings.SavingAccountEntity
-import org.mifospay.core.network.model.entity.accounts.savings.SavingsWithAssociationsEntity
-import org.mifospay.core.network.model.entity.accounts.savings.TransactionsEntity
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface SavingsAccountsService {
     @GET(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}")
-    suspend fun getSavingsWithAssociations(
+    fun getSavingsWithAssociations(
         @Path("accountId") accountId: Long,
         @Query("associations") associationType: String,
-    ): SavingsWithAssociationsEntity
+    ): Flow<SavingsWithAssociationsEntity>
 
     @GET(ApiEndPoints.SAVINGS_ACCOUNTS)
     suspend fun getSavingsAccounts(
@@ -36,7 +37,13 @@ interface SavingsAccountsService {
     ): Flow<Page<SavingsWithAssociationsEntity>>
 
     @POST(ApiEndPoints.SAVINGS_ACCOUNTS)
-    suspend fun createSavingsAccount(@Body savingAccount: SavingAccountEntity): Flow<GenericResponse>
+    suspend fun createSavingsAccount(@Body savingAccount: CreateNewSavingEntity)
+
+    @POST(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}")
+    suspend fun updateSavingsAccount(
+        @Path("accountId") accountId: Long,
+        @Body savingAccount: UpdateSavingAccountEntity,
+    )
 
     @POST(ApiEndPoints.SAVINGS_ACCOUNTS + "/{accountId}")
     suspend fun blockUnblockAccount(
@@ -58,4 +65,7 @@ interface SavingsAccountsService {
             "/{accountId}/" + ApiEndPoints.TRANSACTIONS + "?command=deposit",
     )
     suspend fun payViaMobile(@Path("accountId") accountId: Long): Flow<TransactionsEntity>
+
+    @GET(ApiEndPoints.SAVINGS_ACCOUNTS + "/template")
+    fun getSavingAccountTemplate(@Query("clientId") clientId: Long): Flow<SavingAccountTemplate>
 }

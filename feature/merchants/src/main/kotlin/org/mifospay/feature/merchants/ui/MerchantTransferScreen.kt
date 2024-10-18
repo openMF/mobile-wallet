@@ -57,9 +57,9 @@ import com.mifospay.core.model.domain.client.Client
 import com.mifospay.core.model.entity.accounts.savings.SavingAccount
 import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
-import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton
+import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.ElectricViolet
@@ -227,7 +227,7 @@ private fun MerchantBottomSheet(
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
-                MfOutlinedTextField(
+                MifosOutlinedTextField(
                     value = amount,
                     label = stringResource(id = R.string.feature_merchants_amount),
                     onValueChange = onAmountChange,

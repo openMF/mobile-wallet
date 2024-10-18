@@ -10,7 +10,7 @@
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.Result
+import org.mifospay.core.common.DataState
 import org.mifospay.core.network.model.GenericResponse
 import org.mifospay.core.network.model.entity.Page
 import org.mifospay.core.network.model.entity.payload.StandingInstructionPayload
@@ -20,18 +20,18 @@ import org.mifospay.core.network.model.entity.standinginstruction.StandingInstru
 interface StandingInstructionRepository {
     suspend fun getAllStandingInstructions(
         clientId: Long,
-    ): Flow<Result<Page<StandingInstruction>>>
+    ): Flow<DataState<Page<StandingInstruction>>>
 
-    suspend fun getStandingInstruction(instructionId: Long): Flow<Result<StandingInstruction>>
+    suspend fun getStandingInstruction(instructionId: Long): Flow<DataState<StandingInstruction>>
 
     suspend fun createStandingInstruction(
         payload: StandingInstructionPayload,
-    ): Flow<Result<SDIResponse>>
+    ): Flow<DataState<SDIResponse>>
 
     suspend fun updateStandingInstruction(
         instructionId: Long,
         payload: StandingInstructionPayload,
-    ): Flow<Result<GenericResponse>>
+    ): Flow<DataState<GenericResponse>>
 
-    suspend fun deleteStandingInstruction(instructionId: Long): Flow<Result<GenericResponse>>
+    suspend fun deleteStandingInstruction(instructionId: Long): Flow<DataState<GenericResponse>>
 }

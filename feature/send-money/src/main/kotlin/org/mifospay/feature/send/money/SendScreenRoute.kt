@@ -57,10 +57,10 @@ import com.mifos.library.countrycodepicker.CountryCodePicker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.koin.androidx.compose.koinViewModel
-import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MfOverlayLoadingWheel
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosNavigationTopAppBar
+import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.designsystem.theme.styleNormal18sp
@@ -215,7 +215,7 @@ internal fun SendMoneyScreen(
                         onClick = { sendMethodType = SendMethodType.MOBILE },
                     )
                 }
-                MfOutlinedTextField(
+                MifosOutlinedTextField(
                     value = amount,
                     label = stringResource(id = R.string.feature_send_money_amount),
                     onValueChange = {
@@ -228,7 +228,7 @@ internal fun SendMoneyScreen(
                 )
                 when (sendMethodType) {
                     SendMethodType.VPA -> {
-                        MfOutlinedTextField(
+                        MifosOutlinedTextField(
                             value = vpa,
                             label = stringResource(id = R.string.feature_send_money_virtual_payment_address),
                             onValueChange = {

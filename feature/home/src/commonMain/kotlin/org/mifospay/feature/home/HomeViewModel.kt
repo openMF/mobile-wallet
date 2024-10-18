@@ -10,50 +10,59 @@
 package org.mifospay.feature.home
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.mifospay.core.common.DataState
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
-import org.mifospay.core.common.Result
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.ui.utils.BaseViewModel
-import org.mifospay.feature.home.HomeAction.Internal.SelectAccount
 
-/*
- * Feature Enhancement
- * Show all saving accounts as stacked card
- * Show transaction history of selected account
- */
+private const val TRANSACTION_LIMIT = 5
+
+@OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(
     private val preferencesRepository: UserPreferencesRepository,
-    private val repository: SelfServiceRepository,
+    repository: SelfServiceRepository,
 ) : BaseViewModel<HomeState, HomeEvent, HomeAction>(
     initialState = run {
         val client = requireNotNull(preferencesRepository.client.value)
+        val defaultAccountId = preferencesRepository.defaultAccount
         HomeState(
             client = client,
-            viewState = HomeState.ViewState.Loading,
+            defaultAccountId = defaultAccountId,
         )
     },
 ) {
-    init {
-        trySendAction(HomeAction.Internal.LoadAccounts)
+    val accountState = repository.getActiveAccountsWithTransactions(
+        clientId = state.client.id,
+        limit = TRANSACTION_LIMIT,
+    ).mapLatest { result ->
+        when (result) {
+            is DataState.Error -> ViewState.Error("No accounts found")
 
-        preferencesRepository.client.onEach { data ->
-            data?.let { client ->
-                mutableStateFlow.update {
-                    it.copy(client = client)
-                }
+            is DataState.Loading -> ViewState.Loading
+
+            is DataState.Success -> {
+                ViewState.Content(
+                    accounts = result.data.accounts,
+                    transactions = result.data.transactions,
+                )
             }
-        }.launchIn(viewModelScope)
-    }
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = ViewState.Loading,
+    )
 
     override fun handleAction(action: HomeAction) {
         when (action) {
@@ -93,97 +102,39 @@ class HomeViewModel(
                 sendEvent(HomeEvent.NavigateBack)
             }
 
-            is HomeAction.Internal.LoadAccounts -> loadAccounts(state.client.id)
+            is HomeAction.AccountDetailsClicked -> {
+                sendEvent(HomeEvent.NavigateToAccountDetail(action.accountId))
+            }
 
-            is SelectAccount -> selectAccount(action.accountId)
-        }
-    }
+            is HomeAction.MarkAsDefault -> {
+                viewModelScope.launch {
+                    val result = preferencesRepository.updateDefaultAccount(action.accountId)
 
-    private fun loadAccounts(clientId: Long) {
-        viewModelScope.launch {
-            mutableStateFlow.update { it.copy(viewState = HomeState.ViewState.Loading) }
-            when (val result = repository.getSelfAccounts(clientId)) {
-                is Result.Error -> {
-                    mutableStateFlow.update {
-                        it.copy(viewState = HomeState.ViewState.Error("No accounts found"))
+                    when (result) {
+                        is DataState.Loading -> {}
+                        is DataState.Error -> {
+                            sendEvent(HomeEvent.ShowToast("Error marking account as default"))
+                        }
+
+                        is DataState.Success -> {
+                            mutableStateFlow.update {
+                                it.copy(defaultAccountId = action.accountId)
+                            }
+                            sendEvent(HomeEvent.ShowToast("Account marked as default"))
+                        }
                     }
-                }
-
-                is Result.Loading -> {
-                    mutableStateFlow.update { it.copy(viewState = HomeState.ViewState.Loading) }
-                }
-
-                is Result.Success -> {
-                    mutableStateFlow.update {
-                        it.copy(
-                            viewState = HomeState.ViewState.Content(
-                                account = result.data.first(),
-                                selectedAccountId = result.data.firstOrNull()?.id,
-                            ),
-                        )
-                    }
-                    sendAction(SelectAccount(result.data.firstOrNull()?.id ?: 0))
                 }
             }
         }
-    }
-
-    private fun selectAccount(accountId: Long) {
-        viewModelScope.launch {
-            mutableStateFlow.update { currentState ->
-                when (val viewState = currentState.viewState) {
-                    is HomeState.ViewState.Content -> {
-                        currentState.copy(
-                            viewState = viewState.copy(selectedAccountId = accountId),
-                        )
-                    }
-
-                    else -> currentState
-                }
-            }
-        }
-        loadTransactions(accountId)
-    }
-
-    private fun loadTransactions(accountId: Long) {
-        repository.getSelfAccountTransactions(accountId).onEach { result ->
-            mutableStateFlow.update { currentState ->
-                val state = currentState.viewState as HomeState.ViewState.Content
-                currentState.copy(
-                    viewState = HomeState.ViewState.Content(
-                        account = state.account,
-                        transactions = result,
-                        selectedAccountId = accountId,
-                    ),
-                    dialogState = null,
-                )
-            }
-        }.catch {
-            mutableStateFlow.update {
-                it.copy(dialogState = HomeState.DialogState.Error("Failed to load transactions"))
-            }
-        }.launchIn(viewModelScope)
     }
 }
 
 @Parcelize
 data class HomeState(
     val client: Client,
-    val viewState: ViewState,
+    val defaultAccountId: Long?,
     val dialogState: DialogState? = null,
 ) : Parcelable {
-
-    @Parcelize
-    sealed class ViewState : Parcelable {
-        data object Loading : ViewState()
-        data class Error(val message: String) : ViewState()
-        data class Content(
-            // val accounts: List<Account>,
-            val account: Account,
-            val transactions: List<Transaction> = emptyList(),
-            val selectedAccountId: Long? = null,
-        ) : ViewState()
-    }
 
     @Parcelize
     sealed class DialogState : Parcelable {
@@ -196,13 +147,26 @@ data class HomeState(
     }
 }
 
+sealed interface ViewState {
+    data object Loading : ViewState
+
+    data class Error(val message: String) : ViewState
+
+    data class Content(
+        val accounts: List<Account>,
+        val transactions: List<Transaction>,
+    ) : ViewState
+}
+
 sealed interface HomeEvent {
     data object NavigateBack : HomeEvent
-    data class NavigateToRequestScreen(val vpa: String) : HomeEvent
     data object NavigateToSendScreen : HomeEvent
     data object NavigateToTransactionScreen : HomeEvent
-    data class NavigateToTransactionDetail(val accountId: Long, val transactionId: Long) : HomeEvent
     data object NavigateToClientDetailScreen : HomeEvent
+    data class NavigateToRequestScreen(val vpa: String) : HomeEvent
+    data class NavigateToTransactionDetail(val accountId: Long, val transactionId: Long) : HomeEvent
+    data class NavigateToAccountDetail(val accountId: Long) : HomeEvent
+
     data class ShowToast(val message: String) : HomeEvent
 }
 
@@ -214,10 +178,7 @@ sealed interface HomeAction {
     data object OnDismissDialog : HomeAction
     data object OnNavigateBack : HomeAction
 
+    data class MarkAsDefault(val accountId: Long) : HomeAction
+    data class AccountDetailsClicked(val accountId: Long) : HomeAction
     data class TransactionClicked(val accountId: Long, val transactionId: Long) : HomeAction
-
-    sealed interface Internal : HomeAction {
-        data object LoadAccounts : HomeAction
-        data class SelectAccount(val accountId: Long) : HomeAction
-    }
 }
