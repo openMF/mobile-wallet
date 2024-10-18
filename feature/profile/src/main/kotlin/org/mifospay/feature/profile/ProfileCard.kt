@@ -44,7 +44,7 @@ fun ProfileDetailsCard(
         ),
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            containerColor = MaterialTheme.colorScheme.onPrimaryContainer,
         ),
     ) {
         Column(

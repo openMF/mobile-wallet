@@ -64,7 +64,6 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosNavigationTopAppBar
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 
@@ -145,13 +144,12 @@ internal fun SendMoneyScreen(
     val contactUri by rememberSaveable { mutableStateOf<Uri?>(null) }
 
     fun validateInfo() {
-        isValidInfo =
-            when (sendMethodType) {
-                SendMethodType.VPA -> amount.isNotEmpty() && vpa.isNotEmpty()
-                SendMethodType.MOBILE -> {
-                    isValidMobileNumber && mobileNumber.isNotEmpty() && amount.isNotEmpty()
-                }
+        isValidInfo = when (sendMethodType) {
+            SendMethodType.VPA -> amount.isNotEmpty() && vpa.isNotEmpty()
+            SendMethodType.MOBILE -> {
+                isValidMobileNumber && mobileNumber.isNotEmpty() && amount.isNotEmpty()
             }
+        }
     }
 
     LaunchedEffect(key1 = contactUri) {
@@ -160,29 +158,24 @@ internal fun SendMoneyScreen(
         }
     }
 
-    val options =
-        GmsBarcodeScannerOptions
-            .Builder()
-            .setBarcodeFormats(
-                Barcode.FORMAT_QR_CODE,
-                Barcode.FORMAT_AZTEC,
-            ).build()
+    val options = GmsBarcodeScannerOptions.Builder().setBarcodeFormats(
+        Barcode.FORMAT_QR_CODE,
+        Barcode.FORMAT_AZTEC,
+    ).build()
 
     val scanner = GmsBarcodeScanning.getClient(context, options)
 
     fun startScan() {
-        scanner
-            .startScan()
-            .addOnSuccessListener { barcode ->
-                barcode.rawValue?.let {
-                    vpa = it
-                }
-            }.addOnCanceledListener {
-                // Task canceled
-            }.addOnFailureListener { e ->
-                // Task failed with an exception
-                e.localizedMessage?.let { Log.d("SendMoney: Barcode scan failed", it) }
+        scanner.startScan().addOnSuccessListener { barcode ->
+            barcode.rawValue?.let {
+                vpa = it
             }
+        }.addOnCanceledListener {
+            // Task canceled
+        }.addOnFailureListener { e ->
+            // Task failed with an exception
+            e.localizedMessage?.let { Log.d("SendMoney: Barcode scan failed", it) }
+        }
     }
 
     Box(
@@ -218,7 +211,10 @@ internal fun SendMoneyScreen(
                         modifier = Modifier.padding(end = 8.dp),
                     )
                 },
-                indicatorColor = MifosBlue,
+                indicatorColor = MaterialTheme.colorScheme.primary,
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
             )
 
             when (sendMethodType) {
@@ -245,6 +241,9 @@ internal fun SendMoneyScreen(
                             }
                         },
                         indicatorColor = MaterialTheme.colorScheme.primary,
+                        textStyle = MaterialTheme.typography.bodyLarge.copy(
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
                     )
                 }
 
@@ -261,6 +260,7 @@ internal fun SendMoneyScreen(
                             isValidMobileNumber = valid
                             validateInfo()
                         },
+
                     )
                 }
             }
@@ -274,8 +274,7 @@ internal fun SendMoneyScreen(
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier =
-                Modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp),
             ) {
@@ -352,6 +351,9 @@ private fun EnterPhoneScreen(
         keyboardActions = KeyboardActions { keyboardController?.hide() },
         indicatorColor = MaterialTheme.colorScheme.primary,
         errorIndicatorColor = MaterialTheme.colorScheme.error,
+        textStyle = MaterialTheme.typography.bodyLarge.copy(
+            color = MaterialTheme.colorScheme.onSurface,
+        ),
     )
 }
 
@@ -364,9 +366,8 @@ private fun VpaMobileChip(
 ) {
     MifosButton(
         onClick = onClick,
-        color = MaterialTheme.colorScheme.onPrimary,
-        modifier =
-        modifier
+        color = MaterialTheme.colorScheme.onPrimaryContainer,
+        modifier = modifier
             .wrapContentSize()
             .padding(4.dp)
             .then(
@@ -395,14 +396,13 @@ private suspend fun getContactPhoneNumber(
 ): String {
     val contactId: String = uri.lastPathSegment ?: return ""
     return withContext(Dispatchers.IO) {
-        val phoneCursor =
-            context.contentResolver.query(
-                ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
-                "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
-                arrayOf(contactId),
-                null,
-            )
+        val phoneCursor = context.contentResolver.query(
+            ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+            arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER),
+            "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?",
+            arrayOf(contactId),
+            null,
+        )
         phoneCursor?.use { cursor ->
             if (cursor.moveToFirst()) {
                 val phoneNumberIndex =

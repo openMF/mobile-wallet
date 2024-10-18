@@ -35,10 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.mifospay.core.model.entity.savedcards.Card
 import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MifosTopBar
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.ui.utility.DialogState
 import org.mifospay.core.ui.utility.DialogType
 
@@ -126,7 +124,7 @@ fun SettingsScreenRoute(
 fun SettingsCardItem(
     title: String,
     modifier: Modifier = Modifier,
-    color: Color = NewUi.onSurface,
+    color: Color = MaterialTheme.colorScheme.onSurface,
     onClick: (() -> Unit)? = null,
     hasHorizontalDivider: Boolean = true,
 ) {
@@ -152,7 +150,7 @@ fun SettingsCardItem(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
                 thickness = 1.dp,
-                color = NewUi.onSurface.copy(alpha = 0.05f),
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
             )
         }
     }

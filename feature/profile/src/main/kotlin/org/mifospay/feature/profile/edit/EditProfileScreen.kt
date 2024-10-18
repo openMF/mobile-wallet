@@ -64,7 +64,6 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.PermissionBox
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.feature.profile.R
@@ -112,8 +111,7 @@ private fun EditProfileScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     Box(
-        modifier = modifier
-            .fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         MifosScaffold(
             topBarTitle = R.string.feature_profile_edit_profile,
@@ -198,14 +196,13 @@ private fun EditProfileScreenContent(
                     imageUri = uri
                 }
 
-            val galleryLauncher =
-                rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.GetContent(),
-                ) { uri: Uri? ->
-                    uri?.let {
-                        imageUri = uri
-                    }
+            val galleryLauncher = rememberLauncherForActivityResult(
+                contract = ActivityResultContracts.GetContent(),
+            ) { uri: Uri? ->
+                uri?.let {
+                    imageUri = uri
                 }
+            }
 
             if (showBottomSheet) {
                 MifosBottomSheet(
@@ -254,6 +251,9 @@ private fun EditProfileScreenContent(
                 value = username,
                 onValueChange = { username = it },
                 label = stringResource(id = R.string.feature_profile_username),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
             )
         }
 
@@ -262,6 +262,9 @@ private fun EditProfileScreenContent(
                 value = email,
                 onValueChange = { email = it },
                 label = stringResource(id = R.string.feature_profile_email),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
             )
         }
 
@@ -270,6 +273,9 @@ private fun EditProfileScreenContent(
                 value = vpa,
                 onValueChange = { vpa = it },
                 label = stringResource(id = R.string.feature_profile_vpa),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
             )
         }
 
@@ -278,6 +284,9 @@ private fun EditProfileScreenContent(
                 value = mobile,
                 onValueChange = { mobile = it },
                 label = stringResource(id = R.string.feature_profile_mobile),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
             )
         }
 
@@ -287,8 +296,13 @@ private fun EditProfileScreenContent(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
                     .height(54.dp),
-                color = MifosBlue,
-                text = { Text(text = stringResource(id = R.string.feature_profile_save)) },
+                color = MaterialTheme.colorScheme.primary,
+                text = {
+                    Text(
+                        text = stringResource(id = R.string.feature_profile_save),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    )
+                },
                 onClick = {
                     if (isDataSaveNecessary(email, editProfileUiState.email)) {
                         updateEmail(email)
@@ -380,8 +394,12 @@ private fun ImagePickerOption(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(imageVector = icon, contentDescription = null)
-            Text(text = label)
+            Icon(
+                imageVector = icon,
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onSurface,
+            )
+            Text(text = label, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }
@@ -420,25 +438,23 @@ private fun createImageFile(context: Context): File {
 
 internal class EditProfilePreviewProvider : PreviewParameterProvider<EditProfileUiState> {
     override val values: Sequence<EditProfileUiState>
-        get() =
-            sequenceOf(
-                EditProfileUiState.Loading,
-                EditProfileUiState.Success(),
-                EditProfileUiState.Success(
-                    name = "John Doe",
-                    username = "John",
-                    email = "john@mifos.org",
-                    vpa = "vpa",
-                    mobile = "+1 55557772901",
-                ),
-            )
+        get() = sequenceOf(
+            EditProfileUiState.Loading,
+            EditProfileUiState.Success(),
+            EditProfileUiState.Success(
+                name = "John Doe",
+                username = "John",
+                email = "john@mifos.org",
+                vpa = "vpa",
+                mobile = "+1 55557772901",
+            ),
+        )
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 private fun EditProfileScreenPreview(
-    @PreviewParameter(EditProfilePreviewProvider::class)
-    editProfileUiState: EditProfileUiState,
+    @PreviewParameter(EditProfilePreviewProvider::class) editProfileUiState: EditProfileUiState,
 ) {
     MifosTheme {
         EditProfileScreen(
