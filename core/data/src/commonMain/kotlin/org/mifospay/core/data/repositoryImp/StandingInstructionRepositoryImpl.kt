@@ -12,8 +12,8 @@ package org.mifospay.core.data.repositoryImp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
+import org.mifospay.core.common.DataState
+import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.StandingInstructionRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.GenericResponse
@@ -28,42 +28,42 @@ class StandingInstructionRepositoryImpl(
 ) : StandingInstructionRepository {
     override suspend fun getAllStandingInstructions(
         clientId: Long,
-    ): Flow<Result<Page<StandingInstruction>>> {
+    ): Flow<DataState<Page<StandingInstruction>>> {
         return apiManager.standingInstructionApi
             .getAllStandingInstructions(clientId)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun getStandingInstruction(
         instructionId: Long,
-    ): Flow<Result<StandingInstruction>> {
+    ): Flow<DataState<StandingInstruction>> {
         return apiManager.standingInstructionApi
             .getStandingInstruction(instructionId)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun createStandingInstruction(
         payload: StandingInstructionPayload,
-    ): Flow<Result<SDIResponse>> {
+    ): Flow<DataState<SDIResponse>> {
         return apiManager.standingInstructionApi
             .createStandingInstruction(payload)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun updateStandingInstruction(
         instructionId: Long,
         payload: StandingInstructionPayload,
-    ): Flow<Result<GenericResponse>> {
+    ): Flow<DataState<GenericResponse>> {
         return apiManager.standingInstructionApi
             .updateStandingInstruction(instructionId, payload, "update")
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun deleteStandingInstruction(
         instructionId: Long,
-    ): Flow<Result<GenericResponse>> {
+    ): Flow<DataState<GenericResponse>> {
         return apiManager.standingInstructionApi
             .deleteStandingInstruction(instructionId, "delete")
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 }

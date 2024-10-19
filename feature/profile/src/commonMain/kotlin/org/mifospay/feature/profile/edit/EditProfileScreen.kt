@@ -109,8 +109,8 @@ private fun EditProfileScreenContent(
             modifier = modifier
                 .padding(paddingValues)
                 .fillMaxSize(),
-            contentPadding = PaddingValues(top = 30.dp, bottom = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(20.dp),
+            contentPadding = PaddingValues(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item {
@@ -178,7 +178,6 @@ private fun EditProfileScreenContent(
                 MifosButton(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 20.dp)
                         .height(54.dp),
                     color = MifosBlue,
                     text = { Text(text = stringResource(Res.string.feature_profile_save)) },

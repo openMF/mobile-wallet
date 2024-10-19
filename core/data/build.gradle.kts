@@ -31,12 +31,12 @@ kotlin {
             api(projects.core.model)
             implementation(projects.core.network)
             implementation(projects.core.analytics)
+            implementation(libs.kotlinx.serialization.json)
         }
 
         commonTest.dependencies {
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.test)
-            implementation(libs.kotlinx.serialization.json)
         }
 
         androidMain.dependencies {

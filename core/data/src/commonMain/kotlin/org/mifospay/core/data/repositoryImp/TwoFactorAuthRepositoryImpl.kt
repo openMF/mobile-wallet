@@ -12,8 +12,8 @@ package org.mifospay.core.data.repositoryImp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
+import org.mifospay.core.common.DataState
+import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.TwoFactorAuthRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.twofactor.AccessToken
@@ -23,17 +23,17 @@ class TwoFactorAuthRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : TwoFactorAuthRepository {
-    override suspend fun deliveryMethods(): Flow<Result<List<DeliveryMethod>>> {
-        return apiManager.twoFactorAuthApi.deliveryMethods().asResult().flowOn(ioDispatcher)
+    override suspend fun deliveryMethods(): Flow<DataState<List<DeliveryMethod>>> {
+        return apiManager.twoFactorAuthApi.deliveryMethods().asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun requestOTP(deliveryMethod: String): Flow<Result<String>> {
+    override suspend fun requestOTP(deliveryMethod: String): Flow<DataState<String>> {
         return apiManager.twoFactorAuthApi
             .requestOTP(deliveryMethod)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun validateToken(token: String): Flow<Result<AccessToken>> {
-        return apiManager.twoFactorAuthApi.validateToken(token).asResult().flowOn(ioDispatcher)
+    override suspend fun validateToken(token: String): Flow<DataState<AccessToken>> {
+        return apiManager.twoFactorAuthApi.validateToken(token).asDataStateFlow().flowOn(ioDispatcher)
     }
 }

@@ -56,10 +56,10 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
-import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
+import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -157,7 +157,7 @@ private fun SignupScreenContent(
             .padding(horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        MfOutlinedTextField(
+        MifosOutlinedTextField(
             value = state.firstNameInput,
             label = stringResource(Res.string.feature_auth_first_name),
             modifier = Modifier.fillMaxWidth(),
@@ -167,7 +167,7 @@ private fun SignupScreenContent(
             isError = state.firstNameInput.isEmpty(),
         )
 
-        MfOutlinedTextField(
+        MifosOutlinedTextField(
             value = state.lastNameInput,
             label = stringResource(Res.string.feature_auth_last_name),
             modifier = Modifier.fillMaxWidth(),
@@ -177,7 +177,7 @@ private fun SignupScreenContent(
             isError = state.lastNameInput.isEmpty(),
         )
 
-        MfOutlinedTextField(
+        MifosOutlinedTextField(
             value = state.userNameInput,
             label = stringResource(Res.string.feature_auth_username),
             modifier = Modifier.fillMaxWidth(),
@@ -187,7 +187,7 @@ private fun SignupScreenContent(
             isError = state.userNameInput.isEmpty(),
         )
 
-        MfOutlinedTextField(
+        MifosOutlinedTextField(
             value = state.emailInput,
             label = stringResource(Res.string.feature_auth_email),
             modifier = Modifier.fillMaxWidth(),
@@ -197,7 +197,7 @@ private fun SignupScreenContent(
             isError = state.emailInput.isEmpty(),
         )
 
-        MfOutlinedTextField(
+        MifosOutlinedTextField(
             value = state.mobileNumberInput,
             label = stringResource(Res.string.feature_auth_mobile_no),
             modifier = Modifier.fillMaxWidth(),
@@ -235,7 +235,7 @@ private fun SignupScreenContent(
             showPasswordChange = { showPassword = !showPassword },
         )
 
-        MfOutlinedTextField(
+        MifosOutlinedTextField(
             value = state.addressLine1Input,
             label = stringResource(Res.string.feature_auth_address_line_1),
             modifier = Modifier.fillMaxWidth(),
@@ -245,7 +245,7 @@ private fun SignupScreenContent(
             isError = state.addressLine1Input.isEmpty(),
         )
 
-        MfOutlinedTextField(
+        MifosOutlinedTextField(
             value = state.addressLine2Input,
             modifier = Modifier.fillMaxWidth(),
             label = stringResource(Res.string.feature_auth_address_line_2),
@@ -255,7 +255,7 @@ private fun SignupScreenContent(
             isError = state.addressLine2Input.isEmpty(),
         )
 
-        MfOutlinedTextField(
+        MifosOutlinedTextField(
             value = state.pinCodeInput,
             label = stringResource(Res.string.feature_auth_pin_code),
             modifier = Modifier.fillMaxWidth(),
@@ -270,7 +270,7 @@ private fun SignupScreenContent(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            MfOutlinedTextField(
+            MifosOutlinedTextField(
                 value = state.countryInput,
                 label = stringResource(Res.string.feature_auth_country),
                 onValueChange = {
@@ -280,7 +280,7 @@ private fun SignupScreenContent(
                 isError = state.countryInput.isEmpty(),
             )
 
-            MfOutlinedTextField(
+            MifosOutlinedTextField(
                 value = state.stateInput,
                 label = stringResource(Res.string.feature_auth_state),
                 onValueChange = {

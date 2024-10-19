@@ -13,8 +13,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
+import org.mifospay.core.common.DataState
+import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.model.savingsaccount.Transaction
@@ -29,16 +29,16 @@ class AccountRepositoryImpl(
     override fun getTransaction(
         accountId: Long,
         transactionId: Long,
-    ): Flow<Result<Transaction>> {
+    ): Flow<DataState<Transaction>> {
         return apiManager.accountTransfersApi
             .getTransaction(accountId, transactionId)
             .map { it.toModel() }
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override fun getAccountTransfer(transferId: Long): Flow<Result<TransferDetail>> {
+    override fun getAccountTransfer(transferId: Long): Flow<DataState<TransferDetail>> {
         return apiManager.accountTransfersApi
             .getAccountTransfer(transferId.toInt())
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 }

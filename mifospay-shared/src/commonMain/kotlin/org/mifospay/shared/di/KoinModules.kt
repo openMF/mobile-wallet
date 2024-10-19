@@ -21,6 +21,7 @@ import org.mifospay.core.datastore.di.PreferencesModule
 import org.mifospay.core.domain.di.DomainModule
 import org.mifospay.core.network.di.LocalModule
 import org.mifospay.core.network.di.NetworkModule
+import org.mifospay.feature.accounts.di.AccountsModule
 import org.mifospay.feature.auth.di.AuthModule
 import org.mifospay.feature.editpassword.di.EditPasswordModule
 import org.mifospay.feature.faq.di.FaqModule
@@ -60,6 +61,7 @@ object KoinModules {
             ProfileModule,
             HistoryModule,
             PaymentsModule,
+            AccountsModule,
         )
     }
     private val LibraryModule = module {

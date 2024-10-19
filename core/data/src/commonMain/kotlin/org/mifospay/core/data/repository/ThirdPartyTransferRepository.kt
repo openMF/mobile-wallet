@@ -10,13 +10,13 @@
 package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.Result
+import org.mifospay.core.common.DataState
 import org.mifospay.core.network.model.entity.TPTResponse
 import org.mifospay.core.network.model.entity.payload.TransferPayload
 import org.mifospay.core.network.model.entity.templates.account.AccountOptionsTemplate
 
 interface ThirdPartyTransferRepository {
-    suspend fun getTransferTemplate(): Flow<Result<AccountOptionsTemplate>>
+    suspend fun getTransferTemplate(): Flow<DataState<AccountOptionsTemplate>>
 
-    suspend fun makeTransfer(payload: TransferPayload): Flow<Result<TPTResponse>>
+    suspend fun makeTransfer(payload: TransferPayload): Flow<DataState<TPTResponse>>
 }

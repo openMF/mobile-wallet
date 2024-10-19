@@ -14,7 +14,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import org.mifospay.core.common.Result
+import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransferDetail
@@ -55,19 +55,19 @@ internal class SpecificTransactionsViewModel(
 
     private fun handleTransactionReceive(action: STAction.Internal.TransactionReceive) {
         when (action.result) {
-            is Result.Loading -> {
+            is DataState.Loading -> {
                 mutableStateFlow.update {
                     it.copy(viewState = STState.ViewState.Loading)
                 }
             }
 
-            is Result.Error -> {
+            is DataState.Error -> {
                 mutableStateFlow.update {
                     it.copy(viewState = Error(action.result.exception.message.toString()))
                 }
             }
 
-            is Result.Success -> {
+            is DataState.Success -> {
                 handleTransferDetailReceive(action.result.data)
             }
         }
@@ -76,21 +76,21 @@ internal class SpecificTransactionsViewModel(
     private fun handleTransferDetailReceive(transaction: Transaction) {
         transaction.transferId?.let { transferId ->
             accountRepository.getAccountTransfer(transferId)
-                .onEach { result: Result<TransferDetail> ->
+                .onEach { result: DataState<TransferDetail> ->
                     when (result) {
-                        is Result.Error -> {
+                        is DataState.Error -> {
                             mutableStateFlow.update {
                                 it.copy(viewState = Error(result.exception.message.toString()))
                             }
                         }
 
-                        is Result.Loading -> {
+                        is DataState.Loading -> {
                             mutableStateFlow.update {
                                 it.copy(viewState = STState.ViewState.Loading)
                             }
                         }
 
-                        is Result.Success -> {
+                        is DataState.Success -> {
                             mutableStateFlow.update {
                                 it.copy(viewState = Content(transaction, result.data))
                             }
@@ -128,6 +128,6 @@ internal sealed interface STAction {
     data class ViewTransaction(val transferId: Long) : STAction
 
     sealed interface Internal : STAction {
-        data class TransactionReceive(val result: Result<Transaction>) : Internal
+        data class TransactionReceive(val result: DataState<Transaction>) : Internal
     }
 }

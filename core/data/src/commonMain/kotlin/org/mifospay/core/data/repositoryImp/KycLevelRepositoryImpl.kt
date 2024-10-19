@@ -12,8 +12,8 @@ package org.mifospay.core.data.repositoryImp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
+import org.mifospay.core.common.DataState
+import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.KycLevelRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.GenericResponse
@@ -25,27 +25,27 @@ class KycLevelRepositoryImpl(
 ) : KycLevelRepository {
     override suspend fun fetchKYCLevel1Details(
         clientId: Int,
-    ): Flow<Result<List<KYCLevel1Details>>> {
+    ): Flow<DataState<List<KYCLevel1Details>>> {
         return apiManager.kycLevel1Api
             .fetchKYCLevel1Details(clientId)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun addKYCLevel1Details(
         clientId: Int,
         kycLevel1Details: KYCLevel1Details,
-    ): Flow<Result<GenericResponse>> {
+    ): Flow<DataState<GenericResponse>> {
         return apiManager.kycLevel1Api
             .addKYCLevel1Details(clientId, kycLevel1Details)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
     override suspend fun updateKYCLevel1Details(
         clientId: Int,
         kycLevel1Details: KYCLevel1Details,
-    ): Flow<Result<GenericResponse>> {
+    ): Flow<DataState<GenericResponse>> {
         return apiManager.kycLevel1Api
             .updateKYCLevel1Details(clientId, kycLevel1Details)
-            .asResult().flowOn(ioDispatcher)
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 }

@@ -33,6 +33,7 @@ import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.common.DateHelper
 import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.savingsaccount.TransferDetail
+import org.mifospay.core.ui.AvatarBox
 
 @Composable
 internal fun TransactionDetail(

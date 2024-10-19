@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.stateIn
-import org.mifospay.core.common.Result
+import org.mifospay.core.common.DataState
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.user.UserInfo
@@ -55,42 +55,55 @@ class UserPreferencesRepositoryImpl(
     override val authToken: String?
         get() = preferenceManager.getAuthToken()
 
-    override suspend fun updateToken(token: String): Result<Unit> {
+    override val defaultAccount: Long?
+        get() = preferenceManager.getDefaultAccount()
+
+    override suspend fun updateDefaultAccount(accountId: Long): DataState<Unit> {
+        return try {
+            val result = preferenceManager.updateDefaultAccount(accountId)
+
+            DataState.Success(result)
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
+    }
+
+    override suspend fun updateToken(token: String): DataState<Unit> {
         return try {
             val result = preferenceManager.updateAuthToken(token)
 
-            Result.Success(result)
+            DataState.Success(result)
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 
-    override suspend fun updateClientInfo(client: Client): Result<Unit> {
+    override suspend fun updateClientInfo(client: Client): DataState<Unit> {
         return try {
             val result = preferenceManager.updateClientInfo(client)
 
-            Result.Success(result)
+            DataState.Success(result)
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 
-    override suspend fun updateClientProfile(client: UpdatedClient): Result<Unit> {
+    override suspend fun updateClientProfile(client: UpdatedClient): DataState<Unit> {
         return try {
             val result = preferenceManager.updateClientProfile(client)
-            Result.Success(result)
+            DataState.Success(result)
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 
-    override suspend fun updateUserInfo(user: UserInfo): Result<Unit> {
+    override suspend fun updateUserInfo(user: UserInfo): DataState<Unit> {
         return try {
             val result = preferenceManager.updateUserInfo(user)
 
-            Result.Success(result)
+            DataState.Success(result)
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 

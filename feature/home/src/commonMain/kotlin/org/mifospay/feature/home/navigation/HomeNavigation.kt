@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import org.mifospay.feature.home.HomeRoute
+import org.mifospay.feature.home.HomeScreen
 
 const val HOME_ROUTE = "home_route"
 
@@ -24,13 +24,15 @@ fun NavGraphBuilder.homeScreen(
     onRequest: (String) -> Unit,
     onPay: () -> Unit,
     navigateToTransactionDetail: (Long, Long) -> Unit,
+    navigateToAccountDetail: (Long) -> Unit,
 ) {
     composable(route = HOME_ROUTE) {
-        HomeRoute(
+        HomeScreen(
             onRequest = onRequest,
             onPay = onPay,
             onNavigateBack = onNavigateBack,
             navigateToTransactionDetail = navigateToTransactionDetail,
+            navigateToAccountDetail = navigateToAccountDetail,
         )
     }
 }

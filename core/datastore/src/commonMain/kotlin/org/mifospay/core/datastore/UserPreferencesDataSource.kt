@@ -110,17 +110,30 @@ class UserPreferencesDataSource(
     }
 
     fun updateAuthToken(token: String) {
-        settings.putString("authToken", token)
+        settings.putString(AUTH_TOKEN, token)
     }
 
     fun getAuthToken(): String? {
-        return settings.getString("authToken", "").ifEmpty { null }
+        return settings.getString(AUTH_TOKEN, "").ifEmpty { null }
+    }
+
+    fun getDefaultAccount(): Long? {
+        return settings.getLong(DEFAULT_ACCOUNT, 0).takeIf { it != 0L }
+    }
+
+    fun updateDefaultAccount(accountId: Long) {
+        settings.putLong(DEFAULT_ACCOUNT, accountId)
     }
 
     suspend fun clearInfo() {
         withContext(dispatcher) {
             settings.clear()
         }
+    }
+
+    companion object {
+        const val AUTH_TOKEN = "authToken"
+        const val DEFAULT_ACCOUNT = "default_account"
     }
 }
 

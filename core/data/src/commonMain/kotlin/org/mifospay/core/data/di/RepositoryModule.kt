@@ -9,6 +9,7 @@
  */
 package org.mifospay.core.data.di
 
+import kotlinx.serialization.json.Json
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.mifospay.core.common.MifosDispatchers
@@ -19,6 +20,7 @@ import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.DocumentRepository
 import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.data.repository.KycLevelRepository
+import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.repository.NotificationRepository
 import org.mifospay.core.data.repository.RegistrationRepository
 import org.mifospay.core.data.repository.RunReportRepository
@@ -37,6 +39,7 @@ import org.mifospay.core.data.repositoryImp.ClientRepositoryImpl
 import org.mifospay.core.data.repositoryImp.DocumentRepositoryImpl
 import org.mifospay.core.data.repositoryImp.InvoiceRepositoryImpl
 import org.mifospay.core.data.repositoryImp.KycLevelRepositoryImpl
+import org.mifospay.core.data.repositoryImp.LocalAssetRepositoryImpl
 import org.mifospay.core.data.repositoryImp.NotificationRepositoryImpl
 import org.mifospay.core.data.repositoryImp.RegistrationRepositoryImpl
 import org.mifospay.core.data.repositoryImp.RunReportRepositoryImpl
@@ -55,6 +58,8 @@ private val ioDispatcher = named(MifosDispatchers.IO.name)
 private val unconfined = named(MifosDispatchers.Unconfined.name)
 
 val RepositoryModule = module {
+    single<Json> { Json { ignoreUnknownKeys = true } }
+
     single<AccountRepository> { AccountRepositoryImpl(get(), get(ioDispatcher)) }
     single<AuthenticationRepository> {
         AuthenticationRepositoryImpl(get(), get(ioDispatcher))
@@ -65,7 +70,6 @@ val RepositoryModule = module {
             apiManager = get(),
             fineractApiManager = get(),
             ioDispatcher = get(ioDispatcher),
-            unconfinedDispatcher = get(unconfined),
         )
     }
     single<DocumentRepository> { DocumentRepositoryImpl(get(), get(ioDispatcher)) }
@@ -91,4 +95,11 @@ val RepositoryModule = module {
     single<PlatformDependentDataModule> { getPlatformDataModule }
     single<NetworkMonitor> { getPlatformDataModule.networkMonitor }
     single<TimeZoneMonitor> { getPlatformDataModule.timeZoneMonitor }
+    single<LocalAssetRepository> {
+        LocalAssetRepositoryImpl(
+            ioDispatcher = get(qualifier = ioDispatcher),
+            unconfinedDispatcher = get(unconfined),
+            networkJson = get(),
+        )
+    }
 }

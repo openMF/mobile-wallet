@@ -10,21 +10,20 @@
 package org.mifospay.feature.history
 
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-import org.mifospay.core.common.Result
+import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.utils.BaseViewModel
+import org.mifospay.feature.history.HistoryAction.Internal.TransactionsLoaded
 
 class HistoryViewModel(
     private val preferencesRepository: UserPreferencesRepository,
-    private val repository: SelfServiceRepository,
+    repository: SelfServiceRepository,
 ) : BaseViewModel<HistoryState, HistoryEvent, HistoryAction>(
     initialState = run {
         val clientId = requireNotNull(preferencesRepository.clientId.value)
@@ -35,9 +34,10 @@ class HistoryViewModel(
         )
     },
 ) {
-
     init {
-        trySendAction(HistoryAction.LoadTransactions)
+        repository.getAccountsTransactions(state.clientId).onEach {
+            sendAction(TransactionsLoaded(it))
+        }.launchIn(viewModelScope)
     }
 
     override fun handleAction(action: HistoryAction) {
@@ -48,48 +48,8 @@ class HistoryViewModel(
                 sendEvent(HistoryEvent.OnTransactionDetail(action.transferId))
             }
 
-            HistoryAction.LoadTransactions -> loadAccounts(state.clientId)
+            is TransactionsLoaded -> handleTransactionLoaded(action)
         }
-    }
-
-    private fun loadAccounts(clientId: Long) {
-        viewModelScope.launch {
-            mutableStateFlow.update { it.copy(viewState = HistoryState.ViewState.Loading) }
-            when (val result = repository.getSelfAccounts(clientId)) {
-                is Result.Error -> {
-                    mutableStateFlow.update {
-                        it.copy(viewState = HistoryState.ViewState.Error("No accounts found"))
-                    }
-                }
-
-                is Result.Loading -> {
-                    mutableStateFlow.update { it.copy(viewState = HistoryState.ViewState.Loading) }
-                }
-
-                is Result.Success -> {
-                    loadTransactions(result.data.first().id)
-                }
-            }
-        }
-    }
-
-    private fun loadTransactions(accountId: Long) {
-        repository.getSelfAccountTransactions(accountId).onEach { result ->
-            mutableStateFlow.update { currentState ->
-                currentState.copy(
-                    transactions = result,
-                    viewState = if (result.isEmpty()) {
-                        HistoryState.ViewState.Empty
-                    } else {
-                        HistoryState.ViewState.Content(result)
-                    },
-                )
-            }
-        }.catch {
-            mutableStateFlow.update {
-                it.copy(viewState = HistoryState.ViewState.Error("Failed to load transactions"))
-            }
-        }.launchIn(viewModelScope)
     }
 
     private fun applyFilter(filter: TransactionType) {
@@ -110,6 +70,36 @@ class HistoryViewModel(
                     HistoryState.ViewState.Content(filteredTransactions)
                 },
             )
+        }
+    }
+
+    private fun handleTransactionLoaded(action: TransactionsLoaded) {
+        when (action.result) {
+            is DataState.Loading -> {
+                mutableStateFlow.update {
+                    it.copy(viewState = HistoryState.ViewState.Loading)
+                }
+            }
+
+            is DataState.Error -> {
+                val message = action.result.exception.message.toString()
+                mutableStateFlow.update {
+                    it.copy(viewState = HistoryState.ViewState.Error(message))
+                }
+            }
+
+            is DataState.Success -> {
+                mutableStateFlow.update {
+                    it.copy(
+                        transactions = action.result.data,
+                        viewState = if (action.result.data.isEmpty()) {
+                            HistoryState.ViewState.Empty
+                        } else {
+                            HistoryState.ViewState.Content(action.result.data)
+                        },
+                    )
+                }
+            }
         }
     }
 }
@@ -133,8 +123,10 @@ sealed interface HistoryEvent {
 }
 
 sealed interface HistoryAction {
-    data object LoadTransactions : HistoryAction
-
     data class SetFilter(val filter: TransactionType) : HistoryAction
     data class ViewTransaction(val transferId: Long) : HistoryAction
+
+    sealed interface Internal : HistoryAction {
+        data class TransactionsLoaded(val result: DataState<List<Transaction>>) : Internal
+    }
 }

@@ -19,8 +19,9 @@ fun ClientAccountsEntity.toAccount(): List<Account> {
             number = it.accountNo,
             id = it.id,
             balance = it.accountBalance,
-            currency = it.currency.toModel(),
-            productId = it.productId.toLong(),
+            currency = it.currency,
+            productId = it.productId,
+            status = it.status,
         )
     }
 }

@@ -12,8 +12,8 @@ package org.mifospay.core.data.repositoryImp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import org.mifospay.core.common.Result
-import org.mifospay.core.common.asResult
+import org.mifospay.core.common.DataState
+import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.InvoiceRepository
 import org.mifospay.core.network.FineractApiManager
 import org.mifospay.core.network.model.GenericResponse
@@ -23,19 +23,19 @@ class InvoiceRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : InvoiceRepository {
-    override suspend fun getInvoice(clientId: Int, invoiceId: Int): Flow<Result<Invoice>> {
-        return apiManager.invoiceApi.getInvoice(clientId, invoiceId).asResult().flowOn(ioDispatcher)
+    override suspend fun getInvoice(clientId: Int, invoiceId: Int): Flow<DataState<Invoice>> {
+        return apiManager.invoiceApi.getInvoice(clientId, invoiceId).asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun getInvoices(clientId: Int): Flow<Result<List<Invoice>>> {
-        return apiManager.invoiceApi.getInvoices(clientId).asResult().flowOn(ioDispatcher)
+    override suspend fun getInvoices(clientId: Int): Flow<DataState<List<Invoice>>> {
+        return apiManager.invoiceApi.getInvoices(clientId).asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun createInvoice(clientId: Int, invoice: Invoice): Result<Unit> {
+    override suspend fun createInvoice(clientId: Int, invoice: Invoice): DataState<Unit> {
         return try {
-            Result.Success(apiManager.invoiceApi.addInvoice(clientId, invoice))
+            DataState.Success(apiManager.invoiceApi.addInvoice(clientId, invoice))
         } catch (e: Exception) {
-            Result.Error(e)
+            DataState.Error(e)
         }
     }
 
@@ -43,18 +43,18 @@ class InvoiceRepositoryImpl(
         clientId: Int,
         invoiceId: Int,
         invoice: Invoice,
-    ): Flow<Result<GenericResponse>> {
+    ): Flow<DataState<GenericResponse>> {
         return apiManager.invoiceApi
-            .updateInvoice(clientId, invoiceId, invoice).asResult()
+            .updateInvoice(clientId, invoiceId, invoice).asDataStateFlow()
             .flowOn(ioDispatcher)
     }
 
     override suspend fun deleteInvoice(
         clientId: Int,
         invoiceId: Int,
-    ): Flow<Result<GenericResponse>> {
+    ): Flow<DataState<GenericResponse>> {
         return apiManager.invoiceApi
-            .deleteInvoice(clientId, invoiceId).asResult()
+            .deleteInvoice(clientId, invoiceId).asDataStateFlow()
             .flowOn(ioDispatcher)
     }
 }

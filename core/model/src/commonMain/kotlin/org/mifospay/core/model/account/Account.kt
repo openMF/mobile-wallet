@@ -12,6 +12,7 @@ package org.mifospay.core.model.account
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 import org.mifospay.core.model.savingsaccount.Currency
+import org.mifospay.core.model.savingsaccount.Status
 
 @Parcelize
 data class Account(
@@ -22,4 +23,5 @@ data class Account(
     val id: Long = 0L,
     val productId: Long = 0L,
     val currency: Currency,
+    val status: Status,
 ) : Parcelable
