@@ -38,6 +38,9 @@ import org.mifospay.feature.history.navigation.specificTransactionsScreen
 import org.mifospay.feature.history.navigation.transactionDetailNavigation
 import org.mifospay.feature.home.navigation.HOME_ROUTE
 import org.mifospay.feature.home.navigation.homeScreen
+import org.mifospay.feature.invoices.InvoiceScreen
+import org.mifospay.feature.invoices.navigation.invoiceDetailScreen
+import org.mifospay.feature.invoices.navigation.navigateToInvoiceDetail
 import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
@@ -67,6 +70,9 @@ internal fun MifosNavHost(
         TabContent(PaymentsScreenContents.SI.name) {
         },
         TabContent(PaymentsScreenContents.INVOICES.name) {
+            InvoiceScreen(
+                navigateToInvoiceDetailScreen = navController::navigateToInvoiceDetail,
+            )
         },
     )
 
@@ -160,6 +166,10 @@ internal fun MifosNavHost(
 
         addEditSavingAccountScreen(
             navigateBack = navController::navigateUp,
+        )
+
+        invoiceDetailScreen(
+            onNavigateBack = navController::navigateUp,
         )
     }
 }

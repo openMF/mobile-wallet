@@ -12,14 +12,14 @@
     <string name="feature_invoices_invoice">Invoice</string>
     <string name="feature_invoices_loading">Loading</string>
     <string name="feature_invoices_invoice_details">Invoice details</string>
-    <string name="feature_invoices_merchant_id">Merchant ID</string>
-    <string name="feature_invoices_consumer_id">Consumer ID</string>
+    <string name="feature_invoices_merchant_id">Consumer ID</string>
+    <string name="feature_invoices_consumer_id">Consumer Name</string>
     <string name="feature_invoices_amount">Amount</string>
-    <string name="feature_invoices_items_bought">items bought</string>
-    <string name="feature_invoices_status">status</string>
+    <string name="feature_invoices_items_bought">Items Bought</string>
+    <string name="feature_invoices_status">Status</string>
     <string name="feature_invoices_transaction_id">Transaction ID : </string>
     <string name="feature_invoices_unique_receipt_link">Unique Receipt Link : </string>
-    <string name="feature_invoices_date">date</string>
+    <string name="feature_invoices_date">Date</string>
     <string name="feature_invoices_payment_options_will_be_fetched_from_upi">Payment Options (will be fetched from
         UPI)
     </string>
