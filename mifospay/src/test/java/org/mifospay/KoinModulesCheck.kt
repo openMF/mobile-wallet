@@ -48,6 +48,7 @@ class KoinModulesCheck : AutoCloseKoinTest() {
                 SelfServiceApiManager::class,
                 KtorAuthenticationService::class,
                 SavedStateHandle::class,
+                Context::class,
             ),
         )
         koinModules.coreDataStoreModules.verify(
