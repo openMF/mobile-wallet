@@ -23,6 +23,8 @@ fun MifosScaffold(
     backPress: () -> Unit,
     modifier: Modifier = Modifier,
     topBarTitle: Int? = null,
+    titleColor: Color? = MaterialTheme.colorScheme.onSurface,
+    iconTint: Color? = null,
     floatingActionButtonContent: FloatingActionButtonContent? = null,
     snackbarHost: @Composable () -> Unit = {},
     scaffoldContent: @Composable (PaddingValues) -> Unit = {},
@@ -35,6 +37,8 @@ fun MifosScaffold(
                     topBarTitle = topBarTitle,
                     backPress = backPress,
                     actions = actions,
+                    titleColor = titleColor,
+                    iconTint = iconTint,
                 )
             }
         },

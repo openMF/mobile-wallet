@@ -16,7 +16,7 @@ import org.mifospay.feature.request.money.ShowQrViewModel
 
 val RequestMoneyModule = module {
     single {
-        GenerateQr()
+        GenerateQr(get())
     }
 
     viewModel {

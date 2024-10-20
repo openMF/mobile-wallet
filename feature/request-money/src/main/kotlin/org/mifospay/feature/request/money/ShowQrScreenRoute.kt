@@ -17,10 +17,10 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.view.WindowManager
 import androidx.annotation.VisibleForTesting
+import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -50,13 +51,13 @@ internal fun ShowQrScreenRoute(
     viewModel: ShowQrViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.showQrUiState.collectAsStateWithLifecycle()
-    val vpaId by viewModel.vpaId.collectAsStateWithLifecycle()
+//    val vpaId by viewModel.vpaId.collectAsStateWithLifecycle()
 
     UpdateBrightness()
 
     ShowQrScreen(
         uiState = uiState,
-        vpaId = vpaId,
+//        vpaId = vpaId,
         backPress = backPress,
         generateQR = viewModel::generateQr,
         modifier = modifier,
@@ -67,7 +68,7 @@ internal fun ShowQrScreenRoute(
 @VisibleForTesting
 internal fun ShowQrScreen(
     uiState: ShowQrUiState,
-    vpaId: String,
+//    vpaId: String,
     backPress: () -> Unit,
     generateQR: (RequestQrData) -> Unit,
     modifier: Modifier = Modifier,
@@ -81,6 +82,8 @@ internal fun ShowQrScreen(
     MifosScaffold(
         topBarTitle = R.string.feature_request_money_request,
         backPress = backPress,
+        titleColor = Color.White,
+        iconTint = Color.White,
         scaffoldContent = { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
                 when (uiState) {
@@ -103,10 +106,16 @@ internal fun ShowQrScreen(
                         } else {
                             qrBitmap = uiState.qrDataBitmap
                             ShowQrContent(
-                                qrDataString = vpaId,
-                                amount = amount,
+//                                qrDataString = vpaId,
+//                                amount = amount,
                                 qrDataBitmap = uiState.qrDataBitmap,
                                 showAmountDialog = { amountDialogState = true },
+                                onShare = {
+                                    qrBitmap?.let {
+                                        val uri = ImageUtils.saveImage(context = context, bitmap = it)
+                                        shareQr(context, uri = uri)
+                                    }
+                                },
                             )
                         }
                     }
@@ -123,17 +132,7 @@ internal fun ShowQrScreen(
                 }
             }
         },
-        actions = {
-            IconButton(
-                onClick = {
-                    qrBitmap?.let {
-                        val uri = ImageUtils.saveImage(context = context, bitmap = it)
-                        shareQr(context, uri = uri)
-                    }
-                },
-            ) { Icon(MifosIcons.Share, null) }
-        },
-        modifier = modifier,
+        modifier = modifier.background(getScaffoldBackgroundColor()),
     )
 
     if (amountDialogState) {
@@ -201,6 +200,15 @@ internal class ShowQrUiStateProvider :
         )
 }
 
+@Composable
+private fun getScaffoldBackgroundColor(): Color {
+    return if (isSystemInDarkTheme()) {
+        Color(0xFF0673BA)
+    } else {
+        MaterialTheme.colorScheme.primary
+    }
+}
+
 @Preview(showSystemUi = true)
 @Composable
 private fun ShowQrScreenPreview(
@@ -209,7 +217,7 @@ private fun ShowQrScreenPreview(
 ) {
     ShowQrScreen(
         uiState = uiState,
-        vpaId = "",
+//        vpaId = "",
         backPress = {},
         generateQR = {},
     )
