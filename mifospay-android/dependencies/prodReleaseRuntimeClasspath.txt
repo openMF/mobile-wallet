@@ -15,6 +15,7 @@
 :feature:finance
 :feature:history
 :feature:home
+:feature:invoices
 :feature:payments
 :feature:profile
 :feature:settings

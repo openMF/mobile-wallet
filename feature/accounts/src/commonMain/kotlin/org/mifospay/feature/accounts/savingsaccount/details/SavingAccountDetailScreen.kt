@@ -319,9 +319,7 @@ private fun SavingAccountSummaryCard(
 
 @Composable
 private inline fun RowBlock(
-    crossinline content:
-    @Composable()
-    (RowScope.() -> Unit),
+    crossinline content: @Composable (RowScope.() -> Unit),
 ) {
     Box {
         Row(

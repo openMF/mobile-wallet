@@ -58,10 +58,12 @@ fun AvatarBox(
 fun AvatarBox(
     icon: ImageVector,
     size: Int = 40,
+    modifier: Modifier = Modifier,
     backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+    contentColor: Color = contentColorFor(backgroundColor),
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(size.dp)
             .clip(CircleShape)
             .background(backgroundColor),
@@ -70,7 +72,7 @@ fun AvatarBox(
         Icon(
             imageVector = icon,
             contentDescription = "Avatar",
-            tint = contentColorFor(backgroundColor),
+            tint = contentColor,
         )
     }
 }

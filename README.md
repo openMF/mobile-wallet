@@ -37,10 +37,10 @@ that can be used as a dependency in any other wallet based project. It is develo
 | :feature:home                 | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:profile              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:settings             | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:payments             | Done              | ✅                 | ✅                 | ✅                 | ✅                 | ❔                      |
-| :feature:finance              | Done              | ✅                 | ✅                 | ✅                 | ✅                 | ❔                      |
-| :feature:account              | Done              | ✅                 | ✅                 | ✅                 | ✅                 | ❔                      |
-| :feature:invoices             | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
+| :feature:payments             | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
+| :feature:finance              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
+| :feature:account              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
+| :feature:invoices             | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:kyc                  | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 | :feature:make-transfer        | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 | :feature:merchants            | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
