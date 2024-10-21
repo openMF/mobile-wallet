@@ -15,10 +15,10 @@ import android.content.Intent
 import android.content.Intent.createChooser
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import android.view.WindowManager
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
@@ -41,6 +41,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.feature.request.money.util.ImageUtils
 
@@ -51,13 +52,11 @@ internal fun ShowQrScreenRoute(
     viewModel: ShowQrViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.showQrUiState.collectAsStateWithLifecycle()
-//    val vpaId by viewModel.vpaId.collectAsStateWithLifecycle()
 
     UpdateBrightness()
 
     ShowQrScreen(
         uiState = uiState,
-//        vpaId = vpaId,
         backPress = backPress,
         generateQR = viewModel::generateQr,
         modifier = modifier,
@@ -68,7 +67,6 @@ internal fun ShowQrScreenRoute(
 @VisibleForTesting
 internal fun ShowQrScreen(
     uiState: ShowQrUiState,
-//    vpaId: String,
     backPress: () -> Unit,
     generateQR: (RequestQrData) -> Unit,
     modifier: Modifier = Modifier,
@@ -106,12 +104,11 @@ internal fun ShowQrScreen(
                         } else {
                             qrBitmap = uiState.qrDataBitmap
                             ShowQrContent(
-//                                qrDataString = vpaId,
-//                                amount = amount,
                                 qrDataBitmap = uiState.qrDataBitmap,
                                 showAmountDialog = { amountDialogState = true },
                                 onShare = {
                                     qrBitmap?.let {
+                                        Log.d("yesyesyes", it.toString())
                                         val uri = ImageUtils.saveImage(context = context, bitmap = it)
                                         shareQr(context, uri = uri)
                                     }
@@ -132,7 +129,7 @@ internal fun ShowQrScreen(
                 }
             }
         },
-        modifier = modifier.background(getScaffoldBackgroundColor()),
+        modifier = modifier.background(MifosBlue),
     )
 
     if (amountDialogState) {
@@ -200,15 +197,6 @@ internal class ShowQrUiStateProvider :
         )
 }
 
-@Composable
-private fun getScaffoldBackgroundColor(): Color {
-    return if (isSystemInDarkTheme()) {
-        Color(0xFF0673BA)
-    } else {
-        MaterialTheme.colorScheme.primary
-    }
-}
-
 @Preview(showSystemUi = true)
 @Composable
 private fun ShowQrScreenPreview(
@@ -217,7 +205,6 @@ private fun ShowQrScreenPreview(
 ) {
     ShowQrScreen(
         uiState = uiState,
-//        vpaId = "",
         backPress = {},
         generateQR = {},
     )

@@ -33,13 +33,11 @@ fun MifosTopBar(
 ) {
     CenterAlignedTopAppBar(
         title = {
-            if (titleColor != null) {
-                Text(
-                    text = stringResource(id = topBarTitle),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = titleColor,
-                )
-            }
+            Text(
+                text = stringResource(id = topBarTitle),
+                style = MaterialTheme.typography.titleMedium,
+                color = titleColor ?: MaterialTheme.colorScheme.onSurface,
+            )
         },
         navigationIcon = {
             IconBox(

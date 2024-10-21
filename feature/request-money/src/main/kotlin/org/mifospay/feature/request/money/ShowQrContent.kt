@@ -13,7 +13,6 @@ import android.graphics.Bitmap
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -37,21 +36,20 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
+import org.mifospay.core.designsystem.theme.MifosBlue
 
 @Composable
 internal fun ShowQrContent(
     qrDataBitmap: Bitmap,
-//    qrDataString: String, // this parameter is not used in new figma design
     showAmountDialog: () -> Unit,
     modifier: Modifier = Modifier,
-//    amount: String? = null, // this parameter is not used in new figma design
     onShare: () -> Unit,
 ) {
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(
-                getColor(),
+                MifosBlue,
             )
             .padding(25.dp),
     ) {
@@ -76,7 +74,7 @@ internal fun ShowQrContent(
             ) {
                 Text(
                     text = stringResource(id = R.string.feature_request_money_title),
-                    color = getColor(),
+                    color = MifosBlue,
                     style = MaterialTheme.typography.titleLarge,
                     fontWeight = FontWeight.SemiBold,
                 )
@@ -99,7 +97,7 @@ internal fun ShowQrContent(
                 ) {
                     Text(
                         text = stringResource(id = R.string.feature_request_money_set_amount),
-                        color = getColor(),
+                        color = MifosBlue,
                     )
                 }
                 MifosOutlinedButton(
@@ -119,14 +117,5 @@ internal fun ShowQrContent(
                 }
             }
         }
-    }
-}
-
-@Composable
-private fun getColor(): Color {
-    return if (isSystemInDarkTheme()) {
-        Color(0xFF0673BA)
-    } else {
-        MaterialTheme.colorScheme.primary
     }
 }

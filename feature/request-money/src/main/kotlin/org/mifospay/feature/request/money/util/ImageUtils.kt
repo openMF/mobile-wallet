@@ -14,7 +14,6 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.util.Log
 import androidx.core.content.FileProvider
-import org.mifospay.feature.request.money.BuildConfig
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -32,7 +31,7 @@ object ImageUtils {
             stream.close()
             uri = FileProvider.getUriForFile(
                 context,
-                BuildConfig.LIBRARY_PACKAGE_NAME + ".provider", file,
+                context.packageName + ".provider", file,
             )
         } catch (e: IOException) {
             Log.d("Error", e.message.toString())
