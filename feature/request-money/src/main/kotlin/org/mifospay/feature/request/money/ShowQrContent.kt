@@ -17,11 +17,11 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -37,7 +37,6 @@ import coil.compose.AsyncImage
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.theme.MifosBlue
-
 @Composable
 internal fun ShowQrContent(
     qrDataBitmap: Bitmap,
@@ -68,8 +67,7 @@ internal fun ShowQrContent(
                         BorderStroke(2.dp, MaterialTheme.colorScheme.primary),
                         RoundedCornerShape(21.dp),
                     )
-                    .padding(vertical = 15.dp)
-                    .aspectRatio(1f),
+                    .padding(vertical = 15.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
@@ -81,7 +79,7 @@ internal fun ShowQrContent(
                 AsyncImage(
                     model = qrDataBitmap,
                     contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.size(335.dp, 300.dp),
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
