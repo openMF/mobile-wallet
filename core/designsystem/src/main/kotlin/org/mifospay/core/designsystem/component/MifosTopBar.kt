@@ -28,18 +28,22 @@ fun MifosTopBar(
     backPress: () -> Unit,
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {},
+    titleColor: Color? = null,
+    iconTint: Color? = null,
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
                 text = stringResource(id = topBarTitle),
                 style = MaterialTheme.typography.titleMedium,
+                color = titleColor ?: MaterialTheme.colorScheme.onSurface,
             )
         },
         navigationIcon = {
             IconBox(
                 icon = MifosIcons.ArrowBack2,
                 onClick = backPress,
+                tint = iconTint,
             )
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

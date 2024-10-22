@@ -12,6 +12,8 @@
     <string name="feature_request_money_enter_valid_amount">Please enter a valid amount</string>
     <string name="feature_request_money_enter_currency">Enter Currency</string>
     <string name="feature_request_money_set_amount">Set Amount</string>
+    <string name="feature_request_money_title">Mifos Pay</string>
+    <string name="feature_request_money_share">Share</string>
     <string name="feature_request_money_currency">Set Currency</string>
     <string name="feature_request_money_cancel">Cancel</string>
     <string name="feature_request_money_confirm">Confirm</string>

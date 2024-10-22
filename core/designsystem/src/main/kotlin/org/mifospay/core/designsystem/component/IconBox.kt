@@ -17,6 +17,7 @@ import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,6 +29,7 @@ fun IconBox(
     icon: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    tint: Color? = null,
 ) {
     OutlinedIconButton(
         onClick = onClick,
@@ -35,10 +37,18 @@ fun IconBox(
         shape = RoundedCornerShape(12.dp),
         border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = icon.name,
-        )
+        if (tint != null) {
+            Icon(
+                imageVector = icon,
+                contentDescription = icon.name,
+                tint = tint,
+            )
+        } else {
+            Icon(
+                imageVector = icon,
+                contentDescription = icon.name,
+            )
+        }
     }
 }
 
