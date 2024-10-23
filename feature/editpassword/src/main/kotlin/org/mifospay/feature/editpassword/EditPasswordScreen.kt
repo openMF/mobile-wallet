@@ -165,7 +165,7 @@ private fun EditPasswordScreen(
 
                 MfPasswordTextField(
                     password = confirmNewPassword,
-                    label = stringResource(id = R.string.feature_editpassword_confirm_new_password),
+                    label = stringResource(id = R.string.feature_editpassword_confirm_password),
                     isError = newPassword != confirmNewPassword && confirmNewPassword.isNotEmpty(),
                     isPasswordVisible = isConfirmNewPasswordVisible,
                     onTogglePasswordVisibility = {

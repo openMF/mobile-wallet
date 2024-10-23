@@ -23,12 +23,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -230,95 +232,92 @@ private fun EditProfileScreenContent(
         },
     )
 
-    LazyColumn(
+    Column(
         modifier = modifier
             .padding(contentPadding)
-            .fillMaxSize(),
-        contentPadding = PaddingValues(top = 30.dp, bottom = 10.dp),
-        verticalArrangement = Arrangement.spacedBy(20.dp),
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        item {
-            EditProfileScreenImage(
-                imageUri = imageUri,
-                onCameraIconClick = { showBottomSheet = true },
-                modifier = Modifier.padding(bottom = 5.dp),
-            )
-        }
+        EditProfileScreenImage(
+            imageUri = imageUri,
+            onCameraIconClick = { showBottomSheet = true },
+            modifier = Modifier.padding(bottom = 20.dp),
+        )
 
-        item {
-            MifosTextField(
-                value = username,
-                onValueChange = { username = it },
-                label = stringResource(id = R.string.feature_profile_username),
-            )
-        }
+        Spacer(modifier = Modifier.height(10.dp))
 
-        item {
-            MifosTextField(
-                value = email,
-                onValueChange = { email = it },
-                label = stringResource(id = R.string.feature_profile_email),
-            )
-        }
+        MifosTextField(
+            value = username,
+            onValueChange = { username = it },
+            label = stringResource(id = R.string.feature_profile_username),
+        )
 
-        item {
-            MifosTextField(
-                value = vpa,
-                onValueChange = { vpa = it },
-                label = stringResource(id = R.string.feature_profile_vpa),
-            )
-        }
+        Spacer(modifier = Modifier.height(10.dp))
 
-        item {
-            MifosTextField(
-                value = mobile,
-                onValueChange = { mobile = it },
-                label = stringResource(id = R.string.feature_profile_mobile),
-            )
-        }
+        MifosTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = stringResource(id = R.string.feature_profile_email),
+        )
 
-        item {
-            MifosButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-                    .height(54.dp),
-                color = MaterialTheme.colorScheme.primary,
-                text = {
-                    Text(
-                        text = stringResource(id = R.string.feature_profile_save),
-                        color = MaterialTheme.colorScheme.onPrimaryContainer,
-                    )
-                },
-                onClick = {
-                    if (isDataSaveNecessary(email, editProfileUiState.email)) {
-                        updateEmail(email)
-                    }
-                    if (isDataSaveNecessary(mobile, editProfileUiState.mobile)) {
-                        updateMobile(mobile)
-                    }
-                    if (updateSuccess) {
-                        // if user details is successfully saved then go back to Profile Activity
-                        // same behaviour as onBackPress, hence reused the callback
+        Spacer(modifier = Modifier.height(10.dp))
+
+        MifosTextField(
+            value = vpa,
+            onValueChange = { vpa = it },
+            label = stringResource(id = R.string.feature_profile_vpa),
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        MifosTextField(
+            value = mobile,
+            onValueChange = { mobile = it },
+            label = stringResource(id = R.string.feature_profile_mobile),
+        )
+
+        Spacer(modifier = Modifier.height(10.dp))
+
+        MifosButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .height(54.dp),
+            color = MaterialTheme.colorScheme.primary,
+            text = {
+                Text(
+                    text = stringResource(id = R.string.feature_profile_save),
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                )
+            },
+            onClick = {
+                if (isDataSaveNecessary(email, editProfileUiState.email)) {
+                    updateEmail(email)
+                }
+                if (isDataSaveNecessary(mobile, editProfileUiState.mobile)) {
+                    updateMobile(mobile)
+                }
+                if (updateSuccess) {
+                    // if user details is successfully saved then go back to Profile Activity
+                    // same behaviour as onBackPress, hence reused the callback
+                    Toast.makeText(
+                        context,
+                        context.getString(R.string.feature_profile_updated_sucessfully),
+                        Toast.LENGTH_SHORT,
+                    ).show()
+                    onBackClick.invoke()
+                } else {
+                    scope.launch {
                         Toast.makeText(
                             context,
-                            context.getString(R.string.feature_profile_updated_sucessfully),
+                            context.getString(R.string.feature_profile_failed_to_save_changes),
                             Toast.LENGTH_SHORT,
                         ).show()
-                        onBackClick.invoke()
-                    } else {
-                        scope.launch {
-                            Toast.makeText(
-                                context,
-                                context.getString(R.string.feature_profile_failed_to_save_changes),
-                                Toast.LENGTH_SHORT,
-                            ).show()
-                        }
                     }
-                },
-            )
-        }
+                }
+            },
+        )
     }
 }
 
