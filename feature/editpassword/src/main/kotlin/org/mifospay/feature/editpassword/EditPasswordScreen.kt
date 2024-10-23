@@ -11,10 +11,14 @@ package org.mifospay.feature.editpassword
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -27,7 +31,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -78,7 +81,7 @@ private fun EditPasswordScreen(
     var currentPassword by rememberSaveable { mutableStateOf("") }
     var newPassword by rememberSaveable { mutableStateOf("") }
     var confirmNewPassword by rememberSaveable { mutableStateOf("") }
-    var isConfirmPasswordVisible by rememberSaveable { mutableStateOf(false) }
+    var isCurrentPasswordVisible by rememberSaveable { mutableStateOf(false) }
     var isNewPasswordVisible by rememberSaveable { mutableStateOf(false) }
     var isConfirmNewPasswordVisible by rememberSaveable { mutableStateOf(false) }
 
@@ -118,21 +121,26 @@ private fun EditPasswordScreen(
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(paddingValues),
+                    .padding(paddingValues)
+                    .padding(top = 20.dp)
+                    .verticalScroll(rememberScrollState()),
             ) {
                 MfPasswordTextField(
                     password = currentPassword,
                     label = stringResource(R.string.feature_editpassword_current_password),
                     isError = false,
-                    isPasswordVisible = isConfirmPasswordVisible,
+                    isPasswordVisible = isCurrentPasswordVisible,
                     onTogglePasswordVisibility = {
-                        isConfirmPasswordVisible = !isConfirmPasswordVisible
+                        isCurrentPasswordVisible = !isCurrentPasswordVisible
                     },
                     onPasswordChange = { currentPassword = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp),
                 )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
                 MfPasswordTextField(
                     password = newPassword,
 
@@ -152,6 +160,9 @@ private fun EditPasswordScreen(
                         null
                     },
                 )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
                 MfPasswordTextField(
                     password = confirmNewPassword,
                     label = stringResource(id = R.string.feature_editpassword_confirm_new_password),
@@ -175,31 +186,42 @@ private fun EditPasswordScreen(
                     },
                 )
 
-                Row(
+                Spacer(modifier = Modifier.weight(1f))
+
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(top = 20.dp, start = 16.dp, end = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically,
+                        .padding(horizontal = 20.dp),
                 ) {
                     MifosButton(
-                        onClick = { onCancelChanges.invoke() },
                         modifier = Modifier
-                            .weight(1f)
-                            .padding(8.dp),
-                        contentPadding = PaddingValues(16.dp),
-                        content = { Text(text = stringResource(id = R.string.feature_editpassword_cancel)) },
-                    )
-                    MifosButton(
-                        modifier = Modifier
-                            .weight(1f)
-                            .padding(8.dp),
+                            .fillMaxWidth()
+                            .height(55.dp),
                         onClick = {
                             onSave.invoke(currentPassword, newPassword, confirmNewPassword)
                         },
                         contentPadding = PaddingValues(16.dp),
                         content = { Text(text = stringResource(id = R.string.feature_editpassword_save)) },
                     )
+
+                    Spacer(modifier = Modifier.height(10.dp))
+
+                    MifosButton(
+                        onClick = { onCancelChanges.invoke() },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(55.dp),
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        content = {
+                            Text(
+                                text = stringResource(id = R.string.feature_editpassword_cancel),
+                                color = MaterialTheme.colorScheme.primary,
+                            )
+                        },
+                    )
                 }
+
+                Spacer(modifier = Modifier.height(10.dp))
             }
         },
     )

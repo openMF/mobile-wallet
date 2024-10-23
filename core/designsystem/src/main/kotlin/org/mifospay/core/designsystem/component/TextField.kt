@@ -25,6 +25,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.outlined.Visibility
+import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -109,25 +111,26 @@ fun MfPasswordTextField(
     modifier: Modifier = Modifier,
     errorMessage: String? = null,
 ) {
-    OutlinedTextField(
+    MifosTextField(
         modifier = modifier,
         value = password,
         onValueChange = onPasswordChange,
-        label = { Text(label) },
+        label = label,
         isError = isError,
-        visualTransformation = if (isPasswordVisible) {
-            VisualTransformation.None
-        } else {
-            PasswordVisualTransformation()
-        },
-        supportingText = {
-            errorMessage?.let { Text(text = it) }
-        },
+        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        supportingText = errorMessage ?: "",
         trailingIcon = {
             IconButton(onClick = onTogglePasswordVisibility) {
                 Icon(
-                    if (isPasswordVisible) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                    if (isPasswordVisible) Icons.Outlined.Visibility else Icons.Outlined.VisibilityOff,
                     contentDescription = "Show password",
+                    tint = if (isError) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.onSurface.copy(
+                            .2f,
+                        )
+                    },
                 )
             }
         },
@@ -191,8 +194,10 @@ fun MifosTextField(
     modifier: Modifier = Modifier
         .fillMaxWidth()
         .padding(horizontal = 20.dp),
+    isError: Boolean = false,
     enabled: Boolean = true,
     readOnly: Boolean = false,
+    supportingText: String = "",
     textStyle: TextStyle = LocalTextStyle.current,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -203,17 +208,17 @@ fun MifosTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
-    indicatorColor: Color? = null,
 ) {
     var isFocused by rememberSaveable { mutableStateOf(false) }
 
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
-        textStyle = textStyle,
+        textStyle = textStyle.copy(
+            color = MaterialTheme.colorScheme.onSurface,
+        ),
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 10.dp)
             .onFocusChanged { focusState ->
                 isFocused = focusState.isFocused
             }
@@ -255,28 +260,29 @@ fun MifosTextField(
                         trailingIcon()
                     }
                 }
-                indicatorColor?.let { color ->
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = if (isFocused) {
-                            color
-                        } else {
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
-                        },
-                    )
-                } ?: run {
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = if (isFocused) {
+
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = if (isError) {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        if (isFocused) {
                             MaterialTheme.colorScheme.primary
                         } else {
-                            MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f)
-                        },
-                    )
-                }
+                            MaterialTheme.colorScheme.onSurface.copy(
+                                alpha = 0.2f,
+                            )
+                        }
+                    },
+                )
+
+                Text(
+                    text = supportingText,
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                )
             }
         },
-
     )
 }
 

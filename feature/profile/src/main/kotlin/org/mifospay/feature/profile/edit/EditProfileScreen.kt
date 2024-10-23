@@ -251,9 +251,6 @@ private fun EditProfileScreenContent(
                 value = username,
                 onValueChange = { username = it },
                 label = stringResource(id = R.string.feature_profile_username),
-                textStyle = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurface,
-                ),
             )
         }
 
@@ -262,9 +259,6 @@ private fun EditProfileScreenContent(
                 value = email,
                 onValueChange = { email = it },
                 label = stringResource(id = R.string.feature_profile_email),
-                textStyle = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurface,
-                ),
             )
         }
 
@@ -273,9 +267,6 @@ private fun EditProfileScreenContent(
                 value = vpa,
                 onValueChange = { vpa = it },
                 label = stringResource(id = R.string.feature_profile_vpa),
-                textStyle = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurface,
-                ),
             )
         }
 
@@ -284,9 +275,6 @@ private fun EditProfileScreenContent(
                 value = mobile,
                 onValueChange = { mobile = it },
                 label = stringResource(id = R.string.feature_profile_mobile),
-                textStyle = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurface,
-                ),
             )
         }
 
