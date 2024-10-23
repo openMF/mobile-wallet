@@ -211,10 +211,6 @@ internal fun SendMoneyScreen(
                         modifier = Modifier.padding(end = 8.dp),
                     )
                 },
-                indicatorColor = MaterialTheme.colorScheme.primary,
-                textStyle = MaterialTheme.typography.bodyLarge.copy(
-                    color = MaterialTheme.colorScheme.onSurface,
-                ),
             )
 
             when (sendMethodType) {
@@ -240,10 +236,6 @@ internal fun SendMoneyScreen(
                                 )
                             }
                         },
-                        indicatorColor = MaterialTheme.colorScheme.primary,
-                        textStyle = MaterialTheme.typography.bodyLarge.copy(
-                            color = MaterialTheme.colorScheme.onSurface,
-                        ),
                     )
                 }
 
