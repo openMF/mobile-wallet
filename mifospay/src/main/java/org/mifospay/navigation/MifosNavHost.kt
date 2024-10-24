@@ -244,9 +244,9 @@ internal fun MifosNavHost(
             )
             invoiceDetailScreen(
                 onBackPress = navController::popBackStack,
-                navigateToReceiptScreen = { uri ->
-                    navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + uri))
-                },
+//                navigateToReceiptScreen = { uri ->
+//                    navController.navigateToReceipt(Uri.parse(Constants.RECEIPT_DOMAIN + uri))
+//                },
             )
             receiptScreen(
                 openPassCodeActivity = {

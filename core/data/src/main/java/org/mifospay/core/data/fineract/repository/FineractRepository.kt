@@ -16,7 +16,6 @@ import com.mifospay.core.model.domain.twofactor.AccessToken
 import com.mifospay.core.model.domain.twofactor.DeliveryMethod
 import com.mifospay.core.model.domain.user.NewUser
 import com.mifospay.core.model.domain.user.User
-import com.mifospay.core.model.entity.Invoice
 import com.mifospay.core.model.entity.Page
 import com.mifospay.core.model.entity.SearchedEntity
 import com.mifospay.core.model.entity.TPTResponse
@@ -30,6 +29,8 @@ import com.mifospay.core.model.entity.beneficary.BeneficiaryPayload
 import com.mifospay.core.model.entity.beneficary.BeneficiaryUpdatePayload
 import com.mifospay.core.model.entity.client.Client
 import com.mifospay.core.model.entity.client.ClientAccounts
+import com.mifospay.core.model.entity.invoice.Invoice
+import com.mifospay.core.model.entity.invoice.InvoiceEntity
 import com.mifospay.core.model.entity.kyc.KYCLevel1Details
 import com.mifospay.core.model.entity.payload.StandingInstructionPayload
 import com.mifospay.core.model.entity.payload.TransferPayload
@@ -206,24 +207,30 @@ class FineractRepository(
         )
     }
 
-    fun addInvoice(clientId: String, invoice: Invoice?): Observable<GenericResponse> {
-        return fineractApiManager.invoiceApi.addInvoice(clientId, invoice)
+    fun addInvoice(clientId: Long, invoice: InvoiceEntity?): Observable<Unit> {
+        return Observable.fromCallable {
+            fineractApiManager.invoiceApi.addInvoice(clientId, invoice)
+        }
     }
 
-    fun fetchInvoices(clientId: String): Observable<List<Invoice>> {
+    fun fetchInvoices(clientId: Long): Observable<List<Invoice>> {
         return fineractApiManager.invoiceApi.getInvoices(clientId)
     }
 
-    fun fetchInvoice(clientId: String, invoiceId: String): Observable<List<Invoice>> {
+    fun fetchInvoice(clientId: Long, invoiceId: Long): Observable<List<Invoice>> {
         return fineractApiManager.invoiceApi.getInvoice(clientId, invoiceId)
     }
 
-    fun editInvoice(clientId: String, invoice: Invoice): Observable<GenericResponse> {
-        return fineractApiManager.invoiceApi.updateInvoice(clientId, invoice.id, invoice)
+    fun editInvoice(clientId: Long, invoice: Invoice): Observable<Unit> {
+        return Observable.fromCallable {
+            fineractApiManager.invoiceApi.updateInvoice(clientId, invoice.id, invoice)
+        }
     }
 
-    fun deleteInvoice(clientId: String, invoiceId: Int): Observable<GenericResponse> {
-        return fineractApiManager.invoiceApi.deleteInvoice(clientId, invoiceId)
+    fun deleteInvoice(clientId: Long, invoiceId: Long): Observable<Unit> {
+        return Observable.fromCallable {
+            fineractApiManager.invoiceApi.deleteInvoice(clientId, invoiceId)
+        }
     }
 
     val users: Observable<List<UserWithRole>>

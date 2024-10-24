@@ -11,7 +11,7 @@ package org.mifospay.feature.invoices
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import com.mifospay.core.model.entity.Invoice
+import com.mifospay.core.model.entity.invoice.Invoice
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import org.mifospay.common.Constants.INVOICE_DOMAIN

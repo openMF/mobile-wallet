@@ -10,7 +10,7 @@
 package org.mifospay.core.data.domain.usecase.invoice
 
 import android.util.Log
-import com.mifospay.core.model.entity.Invoice
+import com.mifospay.core.model.entity.invoice.Invoice
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import rx.Subscriber
@@ -28,7 +28,7 @@ class FetchInvoices(
     ) : UseCase.ResponseValue
 
     override fun executeUseCase(requestValues: RequestValues) {
-        mFineractRepository.fetchInvoices(requestValues.clientId)
+        mFineractRepository.fetchInvoices(requestValues.clientId.toLong())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(
@@ -40,6 +40,7 @@ class FetchInvoices(
                     }
 
                     override fun onNext(invoices: List<Invoice>) {
+                        Log.d("invoice@@@", invoices.toString())
                         useCaseCallback.onSuccess(ResponseValue(invoices))
                     }
                 },
