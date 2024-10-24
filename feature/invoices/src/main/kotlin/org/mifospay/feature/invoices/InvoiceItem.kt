@@ -9,134 +9,95 @@
  */
 package org.mifospay.feature.invoices
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Card
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import org.mifospay.core.designsystem.theme.grey
-import org.mifospay.invoices.R
+import com.mifospay.core.model.entity.invoice.Invoice
+import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.ui.AvatarBox
 
 @Composable
 internal fun InvoiceItem(
-    invoiceTitle: String,
-    invoiceAmount: String,
-    invoiceStatus: String,
-    invoiceDate: String,
-    invoiceId: String,
-    invoiceStatusIcon: Long,
-    onClick: (String) -> Unit,
+    invoice: Invoice,
+    onClick: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Card(
+    OutlinedCard(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(4.dp)
-            .clickable { onClick(invoiceId) },
-        elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(Color.White),
+            .fillMaxWidth(),
+        onClick = {
+            onClick(invoice.invoiceId)
+        },
+        shape = RoundedCornerShape(8.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = Color.Transparent,
+        ),
     ) {
-        Column {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(10.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Icon(
-                    painter = painterResource(
-                        id = if (invoiceStatusIcon == 0L) {
-                            R.drawable.feature_invoices_ic_remove_circle_outline_black_24dp
-                        } else {
-                            R.drawable.feature_invoices_ic_check_round_black_24dp
-                        },
-                    ),
-                    contentDescription = "Invoice Status",
-                    modifier = Modifier
-                        .size(64.dp)
-                        .padding(5.dp),
-                    tint = if (invoiceStatusIcon == 0L) Color.Yellow else Color.Blue,
+        ListItem(
+            headlineContent = {
+                Text(text = invoice.title)
+            },
+            supportingContent = {
+                Text(text = "${invoice.date} | ${invoice.consumerName}")
+            },
+            leadingContent = {
+                AvatarBox(
+                    icon = if (invoice.status == 1L) {
+                        MifosIcons.CheckCircle
+                    } else {
+                        MifosIcons.CheckCircle2
+                    },
+                    contentColor = if (invoice.status == 1L) {
+                        MaterialTheme.colorScheme.primary
+                    } else {
+                        MaterialTheme.colorScheme.error
+                    },
                 )
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(end = 10.dp),
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = invoiceTitle,
-                            color = Color.Black,
-                            modifier = Modifier.weight(1f),
-                        )
-                        Text(
-                            text = invoiceAmount,
-                            color = Color.Black,
-                            textAlign = TextAlign.End,
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
-                    Text(
-                        text = invoiceStatus,
-                        color = grey,
-                        modifier = Modifier.padding(top = 1.dp),
-                    )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                    ) {
-                        Text(
-                            text = invoiceDate,
-                            color = grey,
-                            modifier = Modifier.weight(1f),
-                        )
-                        Text(
-                            text = invoiceId,
-                            color = grey,
-                            textAlign = TextAlign.End,
-                            modifier = Modifier.weight(1f),
-                        )
-                    }
-                    Spacer(
-                        modifier = Modifier
-                            .padding(top = 10.dp)
-                            .fillMaxWidth()
-                            .height(1.dp)
-                            .background(Color.Gray),
-                    )
-                }
-            }
-        }
+            },
+            trailingContent = {
+                Text(
+                    text = invoice.amount.toString(),
+                    fontWeight = FontWeight.SemiBold,
+                    style = MaterialTheme.typography.titleSmall,
+                )
+            },
+            colors = ListItemDefaults.colors(
+                containerColor = Color.Transparent,
+            ),
+        )
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun PreviewInvoiceItem() {
     InvoiceItem(
-        invoiceTitle = "Logo for Richard",
-        invoiceAmount = "$3000",
-        invoiceStatus = "Pending",
-        invoiceDate = "12/3/4",
-        invoiceId = "Invoice id:12345",
-        invoiceStatusIcon = 0L,
+        invoice = Invoice(
+            id = 1L,
+            clientId = 2L,
+            consumerId = "CUST001",
+            consumerName = "John Doe",
+            amount = 1500.750000,
+            itemsBought = "Laptop, Mouse, Keyboard",
+            status = 1L,
+            transactionId = "TRX12345",
+            invoiceId = 1L,
+            title = "Invoice for Computer Accessories",
+            date = "19 October 2024",
+            createdAt = listOf(System.currentTimeMillis()),
+            updatedAt = listOf(System.currentTimeMillis()),
+        ),
         onClick = {},
     )
 }

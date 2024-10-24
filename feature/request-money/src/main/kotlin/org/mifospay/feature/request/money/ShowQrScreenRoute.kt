@@ -15,12 +15,12 @@ import android.content.Intent
 import android.content.Intent.createChooser
 import android.graphics.Bitmap
 import android.net.Uri
+import android.util.Log
 import android.view.WindowManager
 import androidx.annotation.VisibleForTesting
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -29,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,6 +41,7 @@ import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.feature.request.money.util.ImageUtils
 
@@ -50,13 +52,11 @@ internal fun ShowQrScreenRoute(
     viewModel: ShowQrViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.showQrUiState.collectAsStateWithLifecycle()
-    val vpaId by viewModel.vpaId.collectAsStateWithLifecycle()
 
     UpdateBrightness()
 
     ShowQrScreen(
         uiState = uiState,
-        vpaId = vpaId,
         backPress = backPress,
         generateQR = viewModel::generateQr,
         modifier = modifier,
@@ -67,7 +67,6 @@ internal fun ShowQrScreenRoute(
 @VisibleForTesting
 internal fun ShowQrScreen(
     uiState: ShowQrUiState,
-    vpaId: String,
     backPress: () -> Unit,
     generateQR: (RequestQrData) -> Unit,
     modifier: Modifier = Modifier,
@@ -81,6 +80,8 @@ internal fun ShowQrScreen(
     MifosScaffold(
         topBarTitle = R.string.feature_request_money_request,
         backPress = backPress,
+        titleColor = Color.White,
+        iconTint = Color.White,
         scaffoldContent = { paddingValues ->
             Box(modifier = Modifier.padding(paddingValues)) {
                 when (uiState) {
@@ -103,10 +104,15 @@ internal fun ShowQrScreen(
                         } else {
                             qrBitmap = uiState.qrDataBitmap
                             ShowQrContent(
-                                qrDataString = vpaId,
-                                amount = amount,
                                 qrDataBitmap = uiState.qrDataBitmap,
                                 showAmountDialog = { amountDialogState = true },
+                                onShare = {
+                                    qrBitmap?.let {
+                                        Log.d("yesyesyes", it.toString())
+                                        val uri = ImageUtils.saveImage(context = context, bitmap = it)
+                                        shareQr(context, uri = uri)
+                                    }
+                                },
                             )
                         }
                     }
@@ -123,17 +129,7 @@ internal fun ShowQrScreen(
                 }
             }
         },
-        actions = {
-            IconButton(
-                onClick = {
-                    qrBitmap?.let {
-                        val uri = ImageUtils.saveImage(context = context, bitmap = it)
-                        shareQr(context, uri = uri)
-                    }
-                },
-            ) { Icon(MifosIcons.Share, null) }
-        },
-        modifier = modifier,
+        modifier = modifier.background(MifosBlue),
     )
 
     if (amountDialogState) {
@@ -209,7 +205,6 @@ private fun ShowQrScreenPreview(
 ) {
     ShowQrScreen(
         uiState = uiState,
-        vpaId = "",
         backPress = {},
         generateQR = {},
     )

@@ -25,7 +25,6 @@ fun NavController.navigateToInvoiceDetail(invoiceData: String) {
 }
 
 fun NavGraphBuilder.invoiceDetailScreen(
-    navigateToReceiptScreen: (String) -> Unit,
     onBackPress: () -> Unit,
 ) {
     composable(
@@ -36,7 +35,6 @@ fun NavGraphBuilder.invoiceDetailScreen(
     ) {
         InvoiceDetailScreen(
             onBackPress = onBackPress,
-            navigateToReceiptScreen = navigateToReceiptScreen,
         )
     }
 }

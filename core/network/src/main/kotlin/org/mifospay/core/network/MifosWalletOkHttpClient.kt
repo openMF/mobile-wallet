@@ -20,7 +20,12 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-class MifosWalletOkHttpClient(private val preferences: PreferencesHelper) {
+class MifosWalletOkHttpClient(
+    private val preferences: PreferencesHelper,
+    private val username: String? = null,
+    private val password: String? = null,
+    private val isTesting: Boolean = false,
+) {
     // Create a trust manager that does not validate certificate chains
     val mifosOkHttpClient: OkHttpClient
         // Interceptor :> Full Body Logger and ApiRequest Header
@@ -78,7 +83,11 @@ class MifosWalletOkHttpClient(private val preferences: PreferencesHelper) {
 
             // Interceptor :> Full Body Logger and ApiRequest Header
             builder.addInterceptor(logger)
-            builder.addInterceptor(org.mifospay.core.network.ApiInterceptor(preferences))
+            if (isTesting && username != null && password != null) {
+                builder.addInterceptor(TestingApiInterceptor(username, password))
+            } else {
+                builder.addInterceptor(ApiInterceptor(preferences))
+            }
             return builder.build()
         }
 }

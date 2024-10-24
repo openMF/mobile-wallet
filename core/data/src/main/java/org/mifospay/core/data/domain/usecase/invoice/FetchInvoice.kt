@@ -11,7 +11,7 @@ package org.mifospay.core.data.domain.usecase.invoice
 
 import android.net.Uri
 import android.util.Log
-import com.mifospay.core.model.entity.Invoice
+import com.mifospay.core.model.entity.invoice.Invoice
 import org.mifospay.core.data.base.UseCase
 import org.mifospay.core.data.fineract.repository.FineractRepository
 import org.mifospay.core.data.util.Constants
@@ -27,13 +27,12 @@ class FetchInvoice(
     class ResponseValue(
         val invoices: List<Invoice?>,
     ) : UseCase.ResponseValue
-
     override fun executeUseCase(requestValues: RequestValues) {
         val paymentLink = requestValues.uniquePaymentLink
         try {
             val params = paymentLink?.pathSegments
-            val clientId = params?.get(0) // "clientId"
-            val invoiceId = params?.get(1) // "invoiceId"
+            val clientId = params?.get(0)?.toLong() // "clientId"
+            val invoiceId = params?.get(1)?.toLong() // "invoiceId
             if (clientId != null && invoiceId != null) {
                 mFineractRepository.fetchInvoice(clientId, invoiceId)
                     .observeOn(AndroidSchedulers.mainThread())

@@ -13,7 +13,7 @@ import org.koin.core.qualifier.named
 
 val SelfServiceApi = named("SelfServiceApi")
 val FineractApi = named("FineractApi")
-
+val Testing = named("Testing")
 val FineractAuthenticationService = named("FineractAuthenticationService")
 val FineractClientService = named("FineractClientService")
 val FineractSavingsAccountsService = named("FineractSavingsAccountsService")

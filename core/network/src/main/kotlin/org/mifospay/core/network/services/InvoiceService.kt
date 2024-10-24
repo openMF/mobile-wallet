@@ -9,9 +9,9 @@
  */
 package org.mifospay.core.network.services
 
-import com.mifospay.core.model.entity.Invoice
+import com.mifospay.core.model.entity.invoice.Invoice
+import com.mifospay.core.model.entity.invoice.InvoiceEntity
 import org.mifospay.core.network.ApiEndPoints
-import org.mifospay.core.network.GenericResponse
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
@@ -24,31 +24,31 @@ import rx.Observable
  * Created by ankur on 07/June/2018
  */
 interface InvoiceService {
-    @POST(ApiEndPoints.DATATABLES + "/invoices/{clientId}")
+    @POST(ApiEndPoints.DATATABLES + "/invoice/{clientId}")
     fun addInvoice(
-        @Path("clientId") clientId: String,
-        @Body invoice: Invoice?,
-    ): Observable<GenericResponse>
+        @Path("clientId") clientId: Long,
+        @Body invoice: InvoiceEntity?,
+    )
 
-    @GET(ApiEndPoints.DATATABLES + "/invoices/{clientId}")
-    fun getInvoices(@Path("clientId") clientId: String): Observable<List<Invoice>>
+    @GET(ApiEndPoints.DATATABLES + "/invoice/{clientId}")
+    fun getInvoices(@Path("clientId") clientId: Long): Observable<List<Invoice>>
 
-    @GET(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
+    @GET(ApiEndPoints.DATATABLES + "/invoice/{clientId}/{invoiceId}")
     fun getInvoice(
-        @Path("clientId") clientId: String,
-        @Path("invoiceId") invoiceId: String,
+        @Path("clientId") clientId: Long,
+        @Path("invoiceId") invoiceId: Long,
     ): Observable<List<Invoice>>
 
-    @DELETE(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
+    @DELETE(ApiEndPoints.DATATABLES + "/invoice/{clientId}/{invoiceId}")
     fun deleteInvoice(
-        @Path("clientId") clientId: String,
-        @Path("invoiceId") invoiceId: Int,
-    ): Observable<GenericResponse>
+        @Path("clientId") clientId: Long,
+        @Path("invoiceId") invoiceId: Long,
+    )
 
-    @PUT(ApiEndPoints.DATATABLES + "/invoices/{clientId}/{invoiceId}")
+    @PUT(ApiEndPoints.DATATABLES + "/invoice/{clientId}/{invoiceId}")
     fun updateInvoice(
-        @Path("clientId") clientId: String,
+        @Path("clientId") clientId: Long,
         @Path("invoiceId") invoiceId: Long,
         @Body invoice: Invoice?,
-    ): Observable<GenericResponse>
+    )
 }

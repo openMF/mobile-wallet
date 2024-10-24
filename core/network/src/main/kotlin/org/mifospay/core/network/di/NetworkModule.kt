@@ -77,6 +77,20 @@ val NetworkModule = module {
             .build()
     }
 
+    // This can be removed as it for testing purpose
+    single(Testing) {
+        val preferencesHelper: PreferencesHelper = get()
+        Retrofit.Builder()
+            .baseUrl(BaseURL().url)
+            .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+            .client(
+                MifosWalletOkHttpClient(preferencesHelper, "mifos", "password", true)
+                    .mifosOkHttpClient,
+            )
+            .build()
+    }
+
     single {
         FineractApiManager(
             authenticationService = get(FineractAuthenticationService),
