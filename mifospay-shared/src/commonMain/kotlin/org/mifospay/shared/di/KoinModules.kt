@@ -28,6 +28,7 @@ import org.mifospay.feature.faq.di.FaqModule
 import org.mifospay.feature.history.di.HistoryModule
 import org.mifospay.feature.home.di.HomeModule
 import org.mifospay.feature.invoices.di.InvoicesModule
+import org.mifospay.feature.kyc.di.KYCModule
 import org.mifospay.feature.payments.di.PaymentsModule
 import org.mifospay.feature.profile.di.ProfileModule
 import org.mifospay.feature.settings.di.SettingsModule
@@ -64,6 +65,7 @@ object KoinModules {
             PaymentsModule,
             AccountsModule,
             InvoicesModule,
+            KYCModule,
         )
     }
     private val LibraryModule = module {

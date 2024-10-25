@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import androidx.navigation.navOptions
 import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.beneficiary.addEditBeneficiaryScreen
@@ -29,6 +30,7 @@ import org.mifospay.feature.editpassword.navigation.navigateToEditPassword
 import org.mifospay.feature.faq.navigation.faqScreen
 import org.mifospay.feature.faq.navigation.navigateToFAQ
 import org.mifospay.feature.finance.FinanceScreenContents
+import org.mifospay.feature.finance.navigation.FINANCE_ROUTE
 import org.mifospay.feature.finance.navigation.financeScreen
 import org.mifospay.feature.history.HistoryScreen
 import org.mifospay.feature.history.navigation.historyNavigation
@@ -41,6 +43,13 @@ import org.mifospay.feature.home.navigation.homeScreen
 import org.mifospay.feature.invoices.InvoiceScreen
 import org.mifospay.feature.invoices.navigation.invoiceDetailScreen
 import org.mifospay.feature.invoices.navigation.navigateToInvoiceDetail
+import org.mifospay.feature.kyc.KYCScreen
+import org.mifospay.feature.kyc.navigation.kycLevel1Screen
+import org.mifospay.feature.kyc.navigation.kycLevel2Screen
+import org.mifospay.feature.kyc.navigation.kycLevel3Screen
+import org.mifospay.feature.kyc.navigation.navigateToKYCLevel1
+import org.mifospay.feature.kyc.navigation.navigateToKYCLevel2
+import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
 import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
@@ -95,9 +104,11 @@ internal fun MifosNavHost(
             }
         },
         TabContent(FinanceScreenContents.KYC.name) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("KYC Screen || TODO", modifier = Modifier.align(Alignment.Center))
-            }
+            KYCScreen(
+                onLevel1Clicked = navController::navigateToKYCLevel1,
+                onLevel2Clicked = navController::navigateToKYCLevel2,
+                onLevel3Clicked = navController::navigateToKYCLevel3,
+            )
         },
     )
 
@@ -170,6 +181,34 @@ internal fun MifosNavHost(
 
         invoiceDetailScreen(
             onNavigateBack = navController::navigateUp,
+        )
+
+        kycLevel1Screen(
+            navigateBack = navController::navigateUp,
+            navigateToKycLevel2 = {
+                navController.navigateToKYCLevel2(
+                    navOptions {
+                        restoreState = true
+                        popUpTo(FINANCE_ROUTE)
+                    },
+                )
+            },
+        )
+
+        kycLevel2Screen(
+            navigateBack = navController::navigateUp,
+            navigateToLevel3 = {
+                navController.navigateToKYCLevel3(
+                    navOptions {
+                        restoreState = true
+                        popUpTo(FINANCE_ROUTE)
+                    },
+                )
+            },
+        )
+
+        kycLevel3Screen(
+            navigateBack = navController::navigateUp,
         )
     }
 }

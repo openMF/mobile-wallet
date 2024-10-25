@@ -32,7 +32,7 @@
     <string name="feature_kyc_address_line_1">Address Line 1</string>
     <string name="feature_kyc_address_line_2">Address Line 2</string>
     <string name="feature_kyc_phone_number">Phone Number</string>
-    <string name="feature_kyc_select_dob">Select Date of Birth</string>
+    <string name="feature_kyc_select_dob">Date of Birth</string>
     <string name="feature_kyc_submit">Submit</string>
     <string name="feature_kyc_approve_permission">Please approve storage permissions</string>
     <string name="feature_kyc_browse">Browse</string>

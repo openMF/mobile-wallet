@@ -11,19 +11,18 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
-import org.mifospay.core.network.model.GenericResponse
-import org.mifospay.core.network.model.entity.kyc.KYCLevel1Details
+import org.mifospay.core.model.kyc.KYCLevel1Details
 
 interface KycLevelRepository {
-    suspend fun fetchKYCLevel1Details(clientId: Int): Flow<DataState<List<KYCLevel1Details>>>
+    fun fetchKYCLevel1Details(clientId: Long): Flow<DataState<KYCLevel1Details?>>
 
     suspend fun addKYCLevel1Details(
-        clientId: Int,
+        clientId: Long,
         kycLevel1Details: KYCLevel1Details,
-    ): Flow<DataState<GenericResponse>>
+    ): DataState<String>
 
     suspend fun updateKYCLevel1Details(
-        clientId: Int,
+        clientId: Long,
         kycLevel1Details: KYCLevel1Details,
-    ): Flow<DataState<GenericResponse>>
+    ): DataState<String>
 }

@@ -73,6 +73,7 @@ fun AvatarBox(
             imageVector = icon,
             contentDescription = "Avatar",
             tint = contentColor,
+            modifier = Modifier.size((size / 2).dp),
         )
     }
 }

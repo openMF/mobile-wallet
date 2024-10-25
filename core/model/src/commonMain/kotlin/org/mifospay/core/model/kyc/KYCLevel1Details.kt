@@ -7,17 +7,20 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.network.model.entity.kyc
+package org.mifospay.core.model.kyc
 
 import kotlinx.serialization.Serializable
+import org.mifospay.core.common.Parcelable
+import org.mifospay.core.common.Parcelize
 
 @Serializable
+@Parcelize
 data class KYCLevel1Details(
-    val firstName: String? = null,
-    val lastName: String? = null,
-    val addressLine1: String? = null,
-    val addressLine2: String? = null,
-    val mobileNo: String? = null,
-    val dob: String? = null,
-    val currentLevel: String = "",
-)
+    val firstName: String,
+    val lastName: String,
+    val addressLine1: String,
+    val addressLine2: String,
+    val mobileNo: String,
+    val dob: String,
+    val currentLevel: String,
+) : Parcelable

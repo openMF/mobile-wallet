@@ -9,6 +9,7 @@
  */
 package org.mifospay.core.network.services
 
+import de.jensklingenberg.ktorfit.http.Body
 import de.jensklingenberg.ktorfit.http.DELETE
 import de.jensklingenberg.ktorfit.http.GET
 import de.jensklingenberg.ktorfit.http.Multipart
@@ -16,6 +17,7 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Part
 import de.jensklingenberg.ktorfit.http.Path
+import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.http.content.PartData
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.network.model.entity.noncore.Document
@@ -45,6 +47,13 @@ interface DocumentService {
         @Part("description") description: String,
         @Part typedFile: PartData,
     ): Flow<Unit>
+
+    @POST("{entityType}/{entityId}/" + ApiEndPoints.DOCUMENTS)
+    suspend fun createDocumentFile(
+        @Path("entityType") entityType: String,
+        @Path("entityId") entityId: Long,
+        @Body file: MultiPartFormDataContent,
+    ): Unit
 
     /**
      * This Service is for downloading the Document with EntityType and EntityId and Document Id

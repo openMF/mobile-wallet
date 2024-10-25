@@ -25,6 +25,14 @@ interface DocumentRepository {
         fileName: PartData.FileItem,
     ): Flow<DataState<Unit>>
 
+    suspend fun createDocument(
+        entityType: String,
+        entityId: Long,
+        name: String,
+        description: String,
+        file: ByteArray,
+    ): DataState<String>
+
     suspend fun downloadDocument(entityType: String, entityId: Int, documentId: Int): Flow<DataState<Document>>
 
     suspend fun deleteDocument(entityType: String, entityId: Int, documentId: Int): Flow<DataState<Unit>>

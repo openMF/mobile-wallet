@@ -9,10 +9,15 @@
  */
 package org.mifospay.core.data.repositoryImp
 
+import io.ktor.client.request.forms.MultiPartFormDataContent
+import io.ktor.client.request.forms.formData
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import io.ktor.http.content.PartData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.DocumentRepository
@@ -23,7 +28,10 @@ class DocumentRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : DocumentRepository {
-    override suspend fun getDocuments(entityType: String, entityId: Int): Flow<DataState<List<Document>>> {
+    override suspend fun getDocuments(
+        entityType: String,
+        entityId: Int,
+    ): Flow<DataState<List<Document>>> {
         return apiManager.documentApi
             .getDocuments(entityType, entityId)
             .asDataStateFlow().flowOn(ioDispatcher)
@@ -39,6 +47,46 @@ class DocumentRepositoryImpl(
         return apiManager.documentApi
             .createDocument(entityType, entityId, name, description, fileName)
             .asDataStateFlow().flowOn(ioDispatcher)
+    }
+
+    override suspend fun createDocument(
+        entityType: String,
+        entityId: Long,
+        name: String,
+        description: String,
+        file: ByteArray,
+    ): DataState<String> {
+        return try {
+            val formData = MultiPartFormDataContent(
+                formData {
+                    // File part
+                    append(
+                        "file",
+                        file,
+                        Headers.build {
+                            append(HttpHeaders.ContentType, "multipart/form-data")
+                            append(HttpHeaders.ContentDisposition, "filename=\"$name\"")
+                        },
+                    )
+
+                    // Name and description fields
+                    append("name", name)
+                    append("description", description)
+                },
+            )
+
+            withContext(ioDispatcher) {
+                apiManager.documentApi.createDocumentFile(
+                    entityType = entityType,
+                    entityId = entityId,
+                    file = formData,
+                )
+            }
+
+            DataState.Success("Document Uploaded Successfully")
+        } catch (e: Exception) {
+            DataState.Error(e)
+        }
     }
 
     override suspend fun downloadDocument(

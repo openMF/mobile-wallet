@@ -41,7 +41,7 @@ that can be used as a dependency in any other wallet based project. It is develo
 | :feature:finance              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
 | :feature:account              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
 | :feature:invoices             | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:kyc                  | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
+| :feature:kyc                  | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:make-transfer        | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 | :feature:merchants            | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 | :feature:notification         | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      |

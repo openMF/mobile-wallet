@@ -15,24 +15,23 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.network.model.GenericResponse
-import org.mifospay.core.network.model.entity.kyc.KYCLevel1Details
+import org.mifospay.core.model.kyc.KYCLevel1Details
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface KYCLevel1Service {
 
     @GET(ApiEndPoints.DATATABLES + "/kyc_level1_details/{clientId}")
-    suspend fun fetchKYCLevel1Details(@Path("clientId") clientId: Int): Flow<List<KYCLevel1Details>>
+    fun fetchKYCLevel1Details(@Path("clientId") clientId: Long): Flow<List<KYCLevel1Details>>
 
     @POST(ApiEndPoints.DATATABLES + "/kyc_level1_details/{clientId}")
     suspend fun addKYCLevel1Details(
-        @Path("clientId") clientId: Int,
+        @Path("clientId") clientId: Long,
         @Body kycLevel1Details: KYCLevel1Details,
-    ): Flow<GenericResponse>
+    ): Unit
 
     @PUT(ApiEndPoints.DATATABLES + "/kyc_level1_details/{clientId}/")
     suspend fun updateKYCLevel1Details(
-        @Path("clientId") clientId: Int,
+        @Path("clientId") clientId: Long,
         @Body kycLevel1Details: KYCLevel1Details,
-    ): Flow<GenericResponse>
+    ): Unit
 }

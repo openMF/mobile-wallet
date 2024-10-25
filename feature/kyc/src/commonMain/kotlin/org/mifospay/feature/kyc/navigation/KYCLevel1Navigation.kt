@@ -11,7 +11,7 @@ package org.mifospay.feature.kyc.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
+import org.mifospay.core.ui.composableWithPushTransitions
 import org.mifospay.feature.kyc.KYCLevel1Screen
 
 const val KYC_LEVEL_1_ROUTE = "kyc_level_1_route"
@@ -21,10 +21,12 @@ fun NavController.navigateToKYCLevel1() {
 }
 
 fun NavGraphBuilder.kycLevel1Screen(
+    navigateBack: () -> Unit,
     navigateToKycLevel2: () -> Unit,
 ) {
-    composable(route = KYC_LEVEL_1_ROUTE) {
+    composableWithPushTransitions(route = KYC_LEVEL_1_ROUTE) {
         KYCLevel1Screen(
+            navigateBack = navigateBack,
             navigateToKycLevel2 = navigateToKycLevel2,
         )
     }

@@ -11,6 +11,7 @@ package org.mifospay.core.common
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.Month
@@ -174,7 +175,10 @@ object DateHelper {
     }
 
     fun getDateAsStringFromLong(timeInMillis: Long): String {
-        return fullMonthFormat.parse(timeInMillis.toString()).toString()
+        val instant = Instant.fromEpochMilliseconds(timeInMillis)
+            .toLocalDateTime(TimeZone.currentSystemDefault())
+
+        return instant.format(shortMonthFormat)
     }
 
     val currentDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())

@@ -46,6 +46,7 @@ kotlin {
             api(projects.feature.finance)
             api(projects.feature.accounts)
             api(projects.feature.invoices)
+            api(projects.feature.kyc)
         }
 
         desktopMain.dependencies {
