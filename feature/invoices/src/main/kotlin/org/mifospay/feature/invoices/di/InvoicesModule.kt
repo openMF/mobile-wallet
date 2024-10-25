@@ -9,6 +9,7 @@
  */
 package org.mifospay.feature.invoices.di
 
+import androidx.lifecycle.SavedStateHandle
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import org.mifospay.feature.invoices.InvoiceDetailViewModel
@@ -16,12 +17,11 @@ import org.mifospay.feature.invoices.InvoicesViewModel
 
 val InvoicesModule = module {
 
-    viewModel {
+    viewModel { (savedStateHandle: SavedStateHandle) ->
         InvoiceDetailViewModel(
             mUseCaseHandler = get(),
-            mPreferencesHelper = get(),
             fetchInvoiceUseCase = get(),
-            savedStateHandle = get(),
+            savedStateHandle = savedStateHandle,
         )
     }
 
