@@ -7,13 +7,12 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.network.model
+package org.mifospay.feature.notification.di
 
-import kotlinx.serialization.Serializable
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.module
+import org.mifospay.feature.notification.NotificationViewModel
 
-@Serializable
-data class NotificationPayload(
-    val title: String? = null,
-    val body: String? = null,
-    val timestamp: String? = null,
-)
+val NotificationModule = module {
+    viewModelOf(::NotificationViewModel)
+}

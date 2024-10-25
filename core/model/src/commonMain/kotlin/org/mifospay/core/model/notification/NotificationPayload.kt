@@ -7,12 +7,15 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.data.repository
+package org.mifospay.core.model.notification
 
-import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.common.DataState
-import org.mifospay.core.model.notification.Notification
+import kotlinx.serialization.Serializable
+import org.mifospay.core.common.Parcelable
+import org.mifospay.core.common.Parcelize
 
-interface NotificationRepository {
-    fun fetchNotifications(): Flow<DataState<List<Notification>>>
-}
+@Serializable
+@Parcelize
+data class NotificationPayload(
+    val totalFilteredRecords: Long,
+    val pageItems: List<Notification>,
+) : Parcelable

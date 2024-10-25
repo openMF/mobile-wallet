@@ -50,6 +50,7 @@ import org.mifospay.feature.kyc.navigation.kycLevel3Screen
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel1
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel2
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
+import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
@@ -208,6 +209,10 @@ internal fun MifosNavHost(
         )
 
         kycLevel3Screen(
+            navigateBack = navController::navigateUp,
+        )
+
+        notificationScreen(
             navigateBack = navController::navigateUp,
         )
     }

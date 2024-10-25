@@ -181,6 +181,147 @@ object DateHelper {
         return instant.format(shortMonthFormat)
     }
 
+    /**
+     * Handles the specific format "yyyy-MM-dd HH:mm:ss.SSSSSS"
+     * For example "2024-09-19 05:41:18.558995"
+     * Possible outputs depending on current date:
+     * "Today at 05:41"
+     * "Tomorrow at 05:41"
+     */
+    fun String.toFormattedDateTime(): String {
+        // Parse the datetime string
+        val dateTime = try {
+            // Split into date and time parts
+            val (datePart, timePart) = this.split(" ")
+            // Remove microseconds from time part
+            val simplifiedTime = timePart.split(".")[0]
+            // Combine date and simplified time
+            val isoString = "${datePart}T$simplifiedTime"
+            // Parse to LocalDateTime
+            LocalDateTime.parse(isoString)
+        } catch (e: Exception) {
+            return this // Return original string if parsing fails
+        }
+
+        val timeZone = TimeZone.currentSystemDefault()
+        val now = Clock.System.now()
+        val nowDateTime = now.toLocalDateTime(timeZone)
+
+        return when {
+            // Same year
+            nowDateTime.year == dateTime.year -> {
+                when {
+                    // Same month
+                    nowDateTime.monthNumber == dateTime.monthNumber -> {
+                        when {
+                            // Tomorrow
+                            dateTime.dayOfMonth - nowDateTime.dayOfMonth == 1 -> {
+                                "Tomorrow at ${dateTime.format()}"
+                            }
+                            // Today
+                            dateTime.dayOfMonth == nowDateTime.dayOfMonth -> {
+                                "Today at ${dateTime.format()}"
+                            }
+                            // Yesterday
+                            nowDateTime.dayOfMonth - dateTime.dayOfMonth == 1 -> {
+                                "Yesterday at ${dateTime.format()}"
+                            }
+                            // Same month but different day
+                            else -> {
+                                "${
+                                    dateTime.month.name.lowercase().capitalize()
+                                } ${dateTime.dayOfMonth}, ${dateTime.format()}"
+                            }
+                        }
+                    }
+                    // Different month, same year
+                    else -> {
+                        "${
+                            dateTime.month.name.lowercase().capitalize()
+                        } ${dateTime.dayOfMonth}, ${dateTime.format()}"
+                    }
+                }
+            }
+            // Different year
+            else -> {
+                "${
+                    dateTime.month.name.lowercase().capitalize()
+                } ${dateTime.dayOfMonth} ${dateTime.year}, ${dateTime.format()}"
+            }
+        }
+    }
+
+    /**
+     * Input timestamp string in milliseconds
+     * Example timestamp "1698278400000"
+     * Output examples:
+     * "Today at 12:00"
+     * "Tomorrow at 15:30"
+     */
+    fun String.toPrettyDate(): String {
+        val timestamp = this.toLong()
+        val instant = Instant.fromEpochMilliseconds(timestamp)
+        val timeZone = TimeZone.currentSystemDefault()
+        val nowDateTime = Clock.System.now().toLocalDateTime(timeZone)
+        val neededDateTime = instant.toLocalDateTime(timeZone)
+
+        return when {
+            // Same year
+            nowDateTime.year == neededDateTime.year -> {
+                when {
+                    // Same month
+                    nowDateTime.monthNumber == neededDateTime.monthNumber -> {
+                        when {
+                            // Tomorrow
+                            neededDateTime.dayOfMonth - nowDateTime.dayOfMonth == 1 -> {
+                                val time = neededDateTime.format()
+                                "Tomorrow at $time"
+                            }
+                            // Today
+                            neededDateTime.dayOfMonth == nowDateTime.dayOfMonth -> {
+                                val time = neededDateTime.format()
+                                "Today at $time"
+                            }
+                            // Yesterday
+                            nowDateTime.dayOfMonth - neededDateTime.dayOfMonth == 1 -> {
+                                val time = neededDateTime.format()
+                                "Yesterday at $time"
+                            }
+                            // Same month but different day
+                            else -> {
+                                "${
+                                    neededDateTime.month.name.lowercase().capitalize()
+                                } ${neededDateTime.dayOfMonth}, ${neededDateTime.format()}"
+                            }
+                        }
+                    }
+                    // Different month, same year
+                    else -> {
+                        "${
+                            neededDateTime.month.name.lowercase().capitalize()
+                        } ${neededDateTime.dayOfMonth}, ${neededDateTime.format()}"
+                    }
+                }
+            }
+            // Different year
+            else -> {
+                "${
+                    neededDateTime.month.name.lowercase().capitalize()
+                } ${neededDateTime.dayOfMonth} ${neededDateTime.year}, ${neededDateTime.format()}"
+            }
+        }
+    }
+
+    // Helper function to format time
+    private fun LocalDateTime.format(): String {
+        return "${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}"
+    }
+
+    // Extension to capitalize first letter
+    private fun String.capitalize() = replaceFirstChar {
+        if (it.isLowerCase()) it.titlecase() else it.toString()
+    }
+
     val currentDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
     /*

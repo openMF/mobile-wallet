@@ -12,21 +12,21 @@ package org.mifospay.core.data.repositoryImp
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.NotificationRepository
+import org.mifospay.core.model.notification.Notification
 import org.mifospay.core.network.FineractApiManager
-import org.mifospay.core.network.model.NotificationPayload
 
 class NotificationRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : NotificationRepository {
-    override suspend fun fetchNotifications(
-        clientId: Long,
-    ): Flow<DataState<List<NotificationPayload>>> {
+    override fun fetchNotifications(): Flow<DataState<List<Notification>>> {
         return apiManager.notificationApi
-            .fetchNotifications(clientId)
+            .fetchNotifications(true)
+            .map { it.pageItems }
             .asDataStateFlow().flowOn(ioDispatcher)
     }
 }

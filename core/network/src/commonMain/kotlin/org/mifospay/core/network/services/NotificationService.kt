@@ -10,12 +10,11 @@
 package org.mifospay.core.network.services
 
 import de.jensklingenberg.ktorfit.http.GET
-import de.jensklingenberg.ktorfit.http.Path
+import de.jensklingenberg.ktorfit.http.Query
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.network.model.NotificationPayload
-import org.mifospay.core.network.utils.ApiEndPoints
+import org.mifospay.core.model.notification.NotificationPayload
 
 interface NotificationService {
-    @GET(ApiEndPoints.DATATABLES + "/notifications/{clientId}")
-    suspend fun fetchNotifications(@Path("clientId") clientId: Long): Flow<List<NotificationPayload>>
+    @GET("notifications/")
+    fun fetchNotifications(@Query("isRead") isRead: Boolean): Flow<NotificationPayload>
 }

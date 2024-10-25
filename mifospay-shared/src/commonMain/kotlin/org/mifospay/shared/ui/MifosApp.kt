@@ -9,6 +9,7 @@
  */
 package org.mifospay.shared.ui
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -59,6 +60,7 @@ import org.mifospay.core.designsystem.component.MifosNavigationRail
 import org.mifospay.core.designsystem.component.MifosNavigationRailItem
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.LocalGradientColors
+import org.mifospay.feature.notification.navigateToNotification
 import org.mifospay.feature.profile.navigation.navigateToEditProfile
 import org.mifospay.feature.settings.navigation.navigateToSettings
 import org.mifospay.shared.navigation.MifosNavHost
@@ -149,6 +151,9 @@ internal fun MifosApp(
                                 onNavigateToEditProfile = {
                                     appState.navController.navigateToEditProfile()
                                 },
+                                onNavigateToNotification = {
+                                    appState.navController.navigateToNotification()
+                                },
                                 destination = destination,
                             )
                         }
@@ -172,6 +177,7 @@ private fun MifosAppBar(
     onNavigateToFaq: () -> Unit,
     onNavigateToSettings: () -> Unit,
     onNavigateToEditProfile: () -> Unit,
+    onNavigateToNotification: () -> Unit,
     destination: TopLevelDestination?,
     modifier: Modifier = Modifier,
 ) {
@@ -181,10 +187,19 @@ private fun MifosAppBar(
             Box {
                 when (destination) {
                     TopLevelDestination.HOME -> {
-                        IconBox(
-                            icon = MifosIcons.SettingsOutlined,
-                            onClick = onNavigateToSettings,
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(4.dp),
+                        ) {
+                            IconBox(
+                                icon = MifosIcons.OutlinedNotifications,
+                                onClick = onNavigateToNotification,
+                            )
+
+                            IconBox(
+                                icon = MifosIcons.SettingsOutlined,
+                                onClick = onNavigateToSettings,
+                            )
+                        }
                     }
 
                     TopLevelDestination.PROFILE -> {
