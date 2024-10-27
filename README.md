@@ -46,7 +46,7 @@ that can be used as a dependency in any other wallet based project. It is develo
 | :feature:merchants            | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 | :feature:notification         | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
 | :feature:qr                   | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
-| :feature:receipt              | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
+| :feature:receipt              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:request-money        | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 | :feature:saved-cards          | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:search               | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 

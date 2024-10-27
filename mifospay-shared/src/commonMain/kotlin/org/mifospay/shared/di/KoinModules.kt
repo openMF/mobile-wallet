@@ -32,6 +32,7 @@ import org.mifospay.feature.kyc.di.KYCModule
 import org.mifospay.feature.notification.di.NotificationModule
 import org.mifospay.feature.payments.di.PaymentsModule
 import org.mifospay.feature.profile.di.ProfileModule
+import org.mifospay.feature.receipt.di.ReceiptModule
 import org.mifospay.feature.savedcards.di.SavedCardsModule
 import org.mifospay.feature.settings.di.SettingsModule
 import org.mifospay.shared.MifosPayViewModel
@@ -70,6 +71,7 @@ object KoinModules {
             KYCModule,
             NotificationModule,
             SavedCardsModule,
+            ReceiptModule,
         )
     }
     private val LibraryModule = module {

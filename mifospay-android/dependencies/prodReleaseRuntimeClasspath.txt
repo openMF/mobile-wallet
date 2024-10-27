@@ -20,6 +20,7 @@
 :feature:notification
 :feature:payments
 :feature:profile
+:feature:receipt
 :feature:savedcards
 :feature:settings
 :libs:country-code-picker

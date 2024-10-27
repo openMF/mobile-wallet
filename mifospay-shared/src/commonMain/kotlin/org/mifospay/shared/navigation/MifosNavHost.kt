@@ -55,6 +55,7 @@ import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.profile.navigation.profileNavGraph
+import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.savedcards.CardsScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.createOrUpdate.navigateToCardAddEdit
@@ -228,6 +229,10 @@ internal fun MifosNavHost(
 
         addEditCardScreen(
             navigateBack = navController::navigateUp,
+        )
+
+        receiptScreen(
+            onBackClick = navController::navigateUp,
         )
     }
 }
