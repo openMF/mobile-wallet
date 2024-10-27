@@ -60,7 +60,6 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
@@ -147,7 +146,6 @@ internal fun SavingAccountDetailScreen(
                         subTitle = state.message,
                         modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.onSurface,
-                        iconImageVector = MifosIcons.Info,
                     )
                 }
 

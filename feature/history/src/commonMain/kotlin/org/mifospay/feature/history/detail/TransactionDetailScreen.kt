@@ -102,7 +102,6 @@ internal fun TransactionDetailScreenContent(
                         subTitle = stringResource(Res.string.feature_history_error),
                         modifier = Modifier.align(Alignment.Center),
                         iconTint = MaterialTheme.colorScheme.primary,
-                        iconImageVector = MifosIcons.Info,
                     )
                 }
 

@@ -46,7 +46,6 @@ import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.model.notification.Notification
 import org.mifospay.core.ui.EmptyContentScreen
@@ -91,7 +90,6 @@ internal fun NotificationScreen(
                         subTitle = stringResource(Res.string.feature_notification_unexpected_error_subtitle),
                         modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.primary,
-                        iconImageVector = MifosIcons.RoundedInfo,
                     )
                 }
 
@@ -110,7 +108,6 @@ internal fun NotificationScreen(
                             subTitle = stringResource(Res.string.feature_notification_there_is_nothing_to_show),
                             modifier = Modifier,
                             iconTint = MaterialTheme.colorScheme.onSurface,
-                            iconImageVector = MifosIcons.RoundedInfo,
                         )
                     } else {
                         NotificationScreenContent(state = uiState)

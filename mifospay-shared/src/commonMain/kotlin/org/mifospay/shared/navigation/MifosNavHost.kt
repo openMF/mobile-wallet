@@ -55,6 +55,11 @@ import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.profile.navigation.profileNavGraph
+import org.mifospay.feature.savedcards.CardsScreen
+import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
+import org.mifospay.feature.savedcards.createOrUpdate.navigateToCardAddEdit
+import org.mifospay.feature.savedcards.details.cardDetailRoute
+import org.mifospay.feature.savedcards.details.navigateToCardDetails
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.shared.ui.MifosAppState
 
@@ -95,9 +100,10 @@ internal fun MifosNavHost(
             )
         },
         TabContent(FinanceScreenContents.CARDS.name) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Cards Screen || TODO", modifier = Modifier.align(Alignment.Center))
-            }
+            CardsScreen(
+                navigateToViewDetail = navController::navigateToCardDetails,
+                navigateToAddEdit = navController::navigateToCardAddEdit,
+            )
         },
         TabContent(FinanceScreenContents.MERCHANTS.name) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -213,6 +219,14 @@ internal fun MifosNavHost(
         )
 
         notificationScreen(
+            navigateBack = navController::navigateUp,
+        )
+
+        cardDetailRoute(
+            navigateBack = navController::navigateUp,
+        )
+
+        addEditCardScreen(
             navigateBack = navController::navigateUp,
         )
     }

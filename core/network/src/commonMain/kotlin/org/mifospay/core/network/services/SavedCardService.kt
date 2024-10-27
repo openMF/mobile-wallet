@@ -16,30 +16,37 @@ import de.jensklingenberg.ktorfit.http.POST
 import de.jensklingenberg.ktorfit.http.PUT
 import de.jensklingenberg.ktorfit.http.Path
 import kotlinx.coroutines.flow.Flow
-import org.mifospay.core.network.model.GenericResponse
-import org.mifospay.core.network.model.entity.savedcards.Card
+import org.mifospay.core.model.savedcards.CardPayload
+import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.network.utils.ApiEndPoints
 
 interface SavedCardService {
-    @POST(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}")
-    suspend fun addSavedCard(
-        @Path("clientId") clientId: Int,
-        @Body card: Card,
-    ): Flow<GenericResponse>
 
     @GET(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}")
-    suspend fun getSavedCards(@Path("clientId") clientId: Int): Flow<List<Card>>
+    fun getSavedCards(@Path("clientId") clientId: Long): Flow<List<SavedCard>>
 
-    @DELETE(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}/{cardId}")
-    suspend fun deleteCard(
-        @Path("clientId") clientId: Int,
-        @Path("cardId") cardId: Int,
-    ): Flow<GenericResponse>
+    @GET(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}/{cardId}")
+    fun getSavedCard(
+        @Path("clientId") clientId: Long,
+        @Path("cardId") cardId: Long,
+    ): Flow<List<SavedCard>>
+
+    @POST(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}")
+    suspend fun addSavedCard(
+        @Path("clientId") clientId: Long,
+        @Body card: CardPayload,
+    ): Unit
 
     @PUT(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}/{cardId}")
     suspend fun updateCard(
-        @Path("clientId") clientId: Int,
-        @Path("cardId") cardId: Int,
-        @Body card: Card,
-    ): Flow<GenericResponse>
+        @Path("clientId") clientId: Long,
+        @Path("cardId") cardId: Long,
+        @Body card: CardPayload,
+    ): Unit
+
+    @DELETE(ApiEndPoints.DATATABLES + "/saved_cards/{clientId}/{cardId}")
+    suspend fun deleteCard(
+        @Path("clientId") clientId: Long,
+        @Path("cardId") cardId: Long,
+    ): Unit
 }

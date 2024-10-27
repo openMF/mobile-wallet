@@ -11,6 +11,7 @@ package org.mifospay.core.model.notification
 
 import kotlinx.serialization.Serializable
 import org.mifospay.core.common.DateHelper.toFormattedDateTime
+import org.mifospay.core.common.IgnoredOnParcel
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 
@@ -27,5 +28,6 @@ data class Notification(
     val isSystemGenerated: Boolean,
     val createdAt: String,
 ) : Parcelable {
+    @IgnoredOnParcel
     val formattedDate = createdAt.toFormattedDateTime()
 }

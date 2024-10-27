@@ -36,7 +36,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.icon.MifosIcons.Info
 import org.mifospay.core.model.datatables.invoice.Invoice
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utils.EventsEffect
@@ -105,7 +104,6 @@ private fun InvoiceScreen(
                         subTitle = stringResource(Res.string.feature_invoices_unexpected_error_subtitle),
                         modifier = Modifier,
                         iconTint = Color.Black,
-                        iconImageVector = Info,
                     )
                 }
 

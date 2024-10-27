@@ -98,7 +98,6 @@ internal fun ShowQrScreen(
                                 subTitle = stringResource(R.string.feature_request_money_there_is_nothing_to_show),
                                 modifier = Modifier,
                                 iconTint = MaterialTheme.colorScheme.onSurface,
-                                iconImageVector = MifosIcons.Info,
                             )
                         } else {
                             qrBitmap = uiState.qrDataBitmap
@@ -117,7 +116,6 @@ internal fun ShowQrScreen(
                             subTitle = stringResource(id = R.string.feature_request_money_unexpected_error_subtitle),
                             modifier = Modifier,
                             iconTint = MaterialTheme.colorScheme.onSurface,
-                            iconImageVector = MifosIcons.Info,
                         )
                     }
                 }

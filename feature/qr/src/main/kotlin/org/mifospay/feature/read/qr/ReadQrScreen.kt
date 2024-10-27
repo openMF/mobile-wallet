@@ -139,7 +139,6 @@ internal fun ReadQrScreen(
                                         subTitle = stringResource(id = R.string.feature_qr_unexpected_error_subtitle),
                                         modifier = Modifier,
                                         iconTint = MaterialTheme.colorScheme.onSurface,
-                                        iconImageVector = MifosIcons.Info,
                                     )
                                 }
                             }

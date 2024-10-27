@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="1072dp"
+    android:height="699dp"
+    android:viewportWidth="1072"
+    android:viewportHeight="699">
+  <group>
+    <clip-path
+        android:pathData="M68,26.5L1004,26.5A37.5,37.5 0,0 1,1041.5 64L1041.5,627A37.5,37.5 0,0 1,1004 664.5L68,664.5A37.5,37.5 0,0 1,30.5 627L30.5,64A37.5,37.5 0,0 1,68 26.5z"/>
+    <path
+        android:pathData="M68,26.5L1004,26.5A37.5,37.5 0,0 1,1041.5 64L1041.5,627A37.5,37.5 0,0 1,1004 664.5L68,664.5A37.5,37.5 0,0 1,30.5 627L30.5,64A37.5,37.5 0,0 1,68 26.5z"
+        android:fillColor="#310099"/>
+    <path
+        android:pathData="M289.3,267.4m-350,0a350,350 0,1 1,700 0a350,350 0,1 1,-700 0"
+        android:fillColor="#4100CC"/>
+    <path
+        android:pathData="M239.3,217.4m-300,0a300,300 0,1 1,600 0a300,300 0,1 1,-600 0"
+        android:fillColor="#5200FF"/>
+    <path
+        android:pathData="M189.3,167.4m-250,0a250,250 0,1 1,500 0a250,250 0,1 1,-500 0"
+        android:fillColor="#7433FF"/>
+    <path
+        android:pathData="M139.3,117.4m-200,0a200,200 0,1 1,400 0a200,200 0,1 1,-400 0"
+        android:fillColor="#9766FF"/>
+    <path
+        android:pathData="M89.3,67.4m-150,0a150,150 0,1 1,300 0a150,150 0,1 1,-300 0"
+        android:fillColor="#BA99FF"/>
+  </group>
+</vector>

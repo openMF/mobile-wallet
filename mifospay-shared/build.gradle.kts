@@ -48,6 +48,7 @@ kotlin {
             api(projects.feature.invoices)
             api(projects.feature.kyc)
             api(projects.feature.notification)
+            api(projects.feature.savedcards)
         }
 
         desktopMain.dependencies {

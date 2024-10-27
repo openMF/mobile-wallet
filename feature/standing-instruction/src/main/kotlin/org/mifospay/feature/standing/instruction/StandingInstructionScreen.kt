@@ -80,7 +80,6 @@ internal fun StandingInstructionScreen(
                     subTitle = stringResource(id = R.string.feature_standing_instruction_empty_standing_instructions),
                     modifier = Modifier,
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = MifosIcons.Info,
                 )
             }
 
@@ -90,7 +89,6 @@ internal fun StandingInstructionScreen(
                     subTitle = stringResource(id = R.string.feature_standing_instruction_error_fetching_si_list),
                     modifier = Modifier,
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = MifosIcons.RoundedInfo,
                 )
             }
 

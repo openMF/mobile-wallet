@@ -25,6 +25,7 @@ cameraViewVersion = "1.3.4"
 coil = "3.0.0-alpha10"
 compileSdk = "34"
 compose-plugin = "1.7.0-rc01"
+constraintLayout = "0.4.0"
 coreKtxVersion = "1.13.1"
 credentialsVersion = "1.3.0"
 datastore = "1.1.1"
@@ -175,6 +176,7 @@ coil-svg = { group = "io.coil-kt.coil3", name = "coil-svg", version.ref = "coil"
 
 compose-gradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
 
+constraint-layout = { group = "tech.annexflow.compose", name="constraintlayout-compose-multiplatform", version.ref = "constraintLayout" }
 datastore = { group = "androidx.datastore", name = "datastore-core-okio", version.ref = "datastore" }
 
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }

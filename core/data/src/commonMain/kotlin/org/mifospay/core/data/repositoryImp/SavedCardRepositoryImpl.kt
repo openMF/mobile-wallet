@@ -11,37 +11,76 @@ package org.mifospay.core.data.repositoryImp
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.SavedCardRepository
+import org.mifospay.core.model.savedcards.CardPayload
+import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.network.FineractApiManager
-import org.mifospay.core.network.model.GenericResponse
-import org.mifospay.core.network.model.entity.savedcards.Card
 
 class SavedCardRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : SavedCardRepository {
-    override suspend fun getSavedCards(clientId: Int): Flow<DataState<List<Card>>> {
-        return apiManager.savedCardApi.getSavedCards(clientId).asDataStateFlow().flowOn(ioDispatcher)
+    override fun getSavedCards(clientId: Long): Flow<DataState<List<SavedCard>>> {
+        return apiManager.savedCardApi
+            .getSavedCards(clientId)
+            .catch { DataState.Error(it, null) }
+            .onStart { DataState.Loading }
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun addSavedCard(clientId: Int, card: Card): Flow<DataState<GenericResponse>> {
-        return apiManager.savedCardApi.addSavedCard(clientId, card).asDataStateFlow().flowOn(ioDispatcher)
+    override fun getSavedCard(clientId: Long, cardId: Long): Flow<DataState<SavedCard>> {
+        return apiManager.savedCardApi
+            .getSavedCard(clientId, cardId)
+            .catch { DataState.Error(it, null) }
+            .onStart { DataState.Loading }
+            .map { it.first() }
+            .asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun deleteCard(clientId: Int, cardId: Int): Flow<DataState<GenericResponse>> {
-        return apiManager.savedCardApi.deleteCard(clientId, cardId).asDataStateFlow().flowOn(ioDispatcher)
+    override suspend fun addSavedCard(clientId: Long, card: CardPayload): DataState<String> {
+        return try {
+            withContext(ioDispatcher) {
+                apiManager.savedCardApi.addSavedCard(clientId, card)
+            }
+
+            DataState.Success("Card added successfully")
+        } catch (e: Exception) {
+            DataState.Error(e, null)
+        }
+    }
+
+    override suspend fun deleteCard(clientId: Long, cardId: Long): DataState<String> {
+        return try {
+            withContext(ioDispatcher) {
+                apiManager.savedCardApi.deleteCard(clientId, cardId)
+            }
+
+            DataState.Success("Card deleted successfully")
+        } catch (e: Exception) {
+            DataState.Error(e, null)
+        }
     }
 
     override suspend fun updateCard(
-        clientId: Int,
-        cardId: Int,
-        card: Card,
-    ): Flow<DataState<GenericResponse>> {
-        return apiManager.savedCardApi
-            .updateCard(clientId, cardId, card)
-            .asDataStateFlow().flowOn(ioDispatcher)
+        clientId: Long,
+        cardId: Long,
+        card: CardPayload,
+    ): DataState<String> {
+        return try {
+            withContext(ioDispatcher) {
+                apiManager.savedCardApi.updateCard(clientId, cardId, card)
+            }
+
+            DataState.Success("Card updated successfully")
+        } catch (e: Exception) {
+            DataState.Error(e, null)
+        }
     }
 }

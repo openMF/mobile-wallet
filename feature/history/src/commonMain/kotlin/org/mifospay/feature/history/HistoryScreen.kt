@@ -30,7 +30,6 @@ import mobile_wallet.feature.history.generated.resources.feature_history_loading
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
-import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.utils.EventsEffect
@@ -86,7 +85,6 @@ internal fun HistoryScreenContent(
                     subTitle = stringResource(Res.string.feature_history_error),
                     modifier = Modifier.align(Alignment.Center),
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = MifosIcons.Info,
                 )
             }
 
@@ -96,7 +94,6 @@ internal fun HistoryScreenContent(
                     subTitle = stringResource(Res.string.feature_history_empty),
                     modifier = Modifier.fillMaxSize().align(Alignment.Center),
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = MifosIcons.Info,
                 )
             }
 

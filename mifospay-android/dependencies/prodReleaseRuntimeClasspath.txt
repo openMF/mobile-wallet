@@ -20,6 +20,7 @@
 :feature:notification
 :feature:payments
 :feature:profile
+:feature:savedcards
 :feature:settings
 :libs:country-code-picker
 :libs:mifos-passcode
@@ -393,3 +394,5 @@ org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.7.2
 org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.2
 org.jetbrains:annotations:23.0.0
 org.slf4j:slf4j-api:2.0.16
+tech.annexflow.compose:constraintlayout-compose-multiplatform-android:0.4.0
+tech.annexflow.compose:constraintlayout-compose-multiplatform:0.4.0

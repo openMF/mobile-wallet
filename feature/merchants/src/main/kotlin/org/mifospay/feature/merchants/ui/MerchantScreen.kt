@@ -94,7 +94,6 @@ internal fun MerchantScreen(
                         subTitle = stringResource(id = R.string.feature_merchants_empty_no_merchants_subtitle),
                         modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.primary,
-                        iconImageVector = MifosIcons.Info,
                     )
                 }
 
@@ -104,7 +103,6 @@ internal fun MerchantScreen(
                         subTitle = stringResource(id = R.string.feature_merchants_unexpected_error_subtitle),
                         modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.primary,
-                        iconImageVector = MifosIcons.Info,
                     )
                 }
 

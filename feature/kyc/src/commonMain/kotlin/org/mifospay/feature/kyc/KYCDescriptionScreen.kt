@@ -96,7 +96,6 @@ private fun KYCDescriptionScreen(
                     subTitle = stringResource(Res.string.feature_kyc_unexpected_error_subtitle),
                     modifier = Modifier,
                     iconTint = MaterialTheme.colorScheme.primary,
-                    iconImageVector = MifosIcons.Info,
                 )
             }
 

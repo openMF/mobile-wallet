@@ -69,7 +69,6 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
-import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.model.utils.Locale
 import org.mifospay.core.model.utils.filterLocales
 import org.mifospay.core.ui.EmptyContentScreen
@@ -172,7 +171,6 @@ internal fun AddEditSavingAccountScreenContent(
                         subTitle = state.viewState.message,
                         modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.onSurface,
-                        iconImageVector = MifosIcons.Info,
                     )
                 }
 

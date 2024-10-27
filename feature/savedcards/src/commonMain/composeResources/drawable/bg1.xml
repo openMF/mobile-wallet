@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="1072dp"
+    android:height="699dp"
+    android:viewportWidth="1072"
+    android:viewportHeight="699">
+  <group>
+    <clip-path
+        android:pathData="M67.7,26.1L1003.7,26.1A37.5,37.5 0,0 1,1041.2 63.6L1041.2,626.6A37.5,37.5 0,0 1,1003.7 664.1L67.7,664.1A37.5,37.5 0,0 1,30.2 626.6L30.2,63.6A37.5,37.5 0,0 1,67.7 26.1z"/>
+    <path
+        android:pathData="M67.7,26.1L1003.7,26.1A37.5,37.5 0,0 1,1041.2 63.6L1041.2,626.6A37.5,37.5 0,0 1,1003.7 664.1L67.7,664.1A37.5,37.5 0,0 1,30.2 626.6L30.2,63.6A37.5,37.5 0,0 1,67.7 26.1z"
+        android:fillColor="#ffffff"/>
+    <path
+        android:pathData="M414,225.9C495.5,215.9 580.9,238.8 645.9,276.9C709.6,314.1 739.3,372.7 763.3,430.3C786.9,487.3 803,546.7 781.8,604.2C759.9,663.3 712,716.6 644.5,751.8C577.9,786.5 495.2,792.4 414,795.9C327.9,799.5 236.8,806.2 163.6,772.1C87.9,737 37.4,676 16.8,611.3C-2.9,549.6 12.2,483 54,427.7C91.4,378.3 170.7,361.7 231.5,327.6C293.7,292.7 337.2,235.3 414,225.9Z"
+        android:fillColor="#9BCFFF"
+        android:fillType="evenOdd"/>
+    <path
+        android:pathData="M-122.1,203.5C-107.5,142.1 -12.7,101.8 30.4,45.1C91.8,-35.4 51,-152.7 182.9,-196.8C310.5,-239.5 472.2,-183.2 605.9,-147.3C725.8,-115.1 830.4,-67.6 902.3,-3.6C971.4,57.9 985.4,130.6 999.8,203.5C1016.2,286.5 1088.7,386 991.5,447.9C892.7,510.8 707.1,459.7 564.5,480.7C436.5,499.6 334.1,581.1 205.5,563.7C76.5,546.1 8.6,464.5 -53,396.8C-107.3,337.1 -137.9,270.3 -122.1,203.5Z"
+        android:fillColor="#FFE99B"
+        android:fillType="evenOdd"/>
+    <path
+        android:pathData="M967.3,664.7C862,678.7 755.2,739.5 658.6,703.7C560.8,667.5 503.1,575.1 496.8,490.4C490.9,411.8 597.2,359 627.3,283.9C658,207.6 602.5,110.5 672.7,52.5C743.5,-6.2 868,-19 967.3,2.5C1059.4,22.5 1103.3,100.6 1163.3,158.9C1206.6,200.9 1235.8,246.1 1267.5,294C1307.2,353.8 1383.6,406.8 1371.9,473.6C1359.8,542.2 1283.9,594.8 1208.3,630.6C1136.6,664.4 1049.8,653.7 967.3,664.7Z"
+        android:fillColor="#FF9B9B"
+        android:fillType="evenOdd"/>
+  </group>
+</vector>

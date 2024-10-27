@@ -146,7 +146,6 @@ internal fun MerchantTransferScreen(
                             subTitle = stringResource(id = R.string.feature_merchants_no_transactions_found),
                             modifier = Modifier,
                             iconTint = MaterialTheme.colorScheme.onSurface,
-                            iconImageVector = MifosIcons.Info,
                         )
                     }
 

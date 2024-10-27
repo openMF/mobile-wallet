@@ -32,9 +32,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import mobile_wallet.core.ui.generated.resources.Res
+import mobile_wallet.core.ui.generated.resources.artwork
 import mobile_wallet.core.ui.generated.resources.core_ui_money_in
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 
@@ -91,6 +93,74 @@ fun EmptyContentScreen(
 fun EmptyContentScreen(
     title: String,
     subTitle: String,
+    btnText: String,
+    btnIcon: ImageVector,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    imageContent: @Composable () -> Unit,
+) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxSize()
+                .testTag("mifos:empty"),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            imageContent()
+
+            Spacer(modifier = Modifier.height(48.dp))
+
+            Text(
+                text = title,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 24.dp),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold,
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(
+                text = subTitle,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 24.dp, end = 24.dp),
+                textAlign = TextAlign.Center,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+
+            Spacer(modifier = Modifier.height(48.dp))
+
+            MifosButton(
+                text = {
+                    Text(text = btnText)
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = btnIcon,
+                        contentDescription = "BtnIcon",
+                    )
+                },
+                onClick = onClick,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
+}
+
+@Composable
+fun EmptyContentScreen(
+    title: String,
+    subTitle: String,
     iconDrawable: DrawableResource,
     modifier: Modifier = Modifier,
     iconTint: Color = MaterialTheme.colorScheme.surfaceTint,
@@ -115,8 +185,34 @@ fun EmptyContentScreen(
     title: String,
     subTitle: String,
     modifier: Modifier = Modifier,
+    drawableResource: DrawableResource = Res.drawable.artwork,
     iconTint: Color = MaterialTheme.colorScheme.surfaceTint,
-    iconImageVector: ImageVector = MifosIcons.Search,
+) {
+    EmptyContentScreen(
+        title = title,
+        subTitle = subTitle,
+        imageContent = {
+            Image(
+                modifier = Modifier.size(200.dp),
+                painter = painterResource(drawableResource),
+                colorFilter = if (iconTint != Color.Unspecified) ColorFilter.tint(iconTint) else null,
+                contentDescription = null,
+            )
+        },
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun EmptyContentScreen(
+    title: String,
+    subTitle: String,
+    btnText: String,
+    btnIcon: ImageVector,
+    modifier: Modifier = Modifier,
+    icon: ImageVector = MifosIcons.Info,
+    iconTint: Color = MaterialTheme.colorScheme.surfaceTint,
+    onClick: () -> Unit,
 ) {
     EmptyContentScreen(
         title = title,
@@ -124,11 +220,14 @@ fun EmptyContentScreen(
         imageContent = {
             Icon(
                 modifier = Modifier.size(64.dp),
-                imageVector = iconImageVector,
-                contentDescription = null,
+                imageVector = icon,
                 tint = iconTint,
+                contentDescription = null,
             )
         },
+        btnText = btnText,
+        btnIcon = btnIcon,
+        onClick = onClick,
         modifier = modifier,
     )
 }
@@ -156,7 +255,6 @@ fun EmptyContentScreenImageVectorPreview() {
             subTitle = "Please check you connection or try again",
             modifier = Modifier,
             iconTint = MaterialTheme.colorScheme.primary,
-            iconImageVector = MifosIcons.Search,
         )
     }
 }

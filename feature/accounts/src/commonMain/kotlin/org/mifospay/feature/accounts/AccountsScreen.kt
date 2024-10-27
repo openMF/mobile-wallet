@@ -182,7 +182,6 @@ internal fun AccountsScreenContent(
                         subTitle = stringResource(Res.string.feature_accounts_unexpected_error_subtitle),
                         modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.onSurface,
-                        iconImageVector = MifosIcons.Info,
                     )
                 }
 

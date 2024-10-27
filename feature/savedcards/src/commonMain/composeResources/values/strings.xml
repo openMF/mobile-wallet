@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_savedcards_delete_card">Delete Card</string>
+    <string name="feature_savedcards_yes">Yes</string>
+    <string name="feature_savedcards_no">No</string>
+    <string name="feature_savedcards_confirm_delete_card">Are you sure you want to delete this card?</string>
+    <string name="feature_savedcards_card_added_successfully">Card Added Successfully</string>
+    <string name="feature_savedcards_card_updated_successfully">Card Updated Successfully</string>
+    <string name="feature_savedcards_card_deleted_successfully">Card Deleted Successfully</string>
+    <string name="feature_savedcards_loading">Loading</string>
+    <string name="feature_savedcards_error_oops">Oops!</string>
+    <string name="feature_savedcards_subtitle">An unexpected error occurred. Please try again.</string>
+    <string name="feature_savedcards_add_cards">Add New Card</string>
+    <string name="feature_savedcards_search">Search</string>
+    <string name="feature_savedcards_close">Close</string>
+    <string name="feature_savedcards_edit_clicked">Edit Clicked</string>
+    <string name="feature_savedcards_card_number">Card Number: </string>
+    <string name="feature_savedcards_edit_card">Edit Card</string>
+    <string name="feature_savedcards_cancel">Cancel</string>
+    <string name="feature_savedcards_all_fields_required">All Fields Required</string>
+    <string name="feature_savedcards_invalid_credit_card">Invalid Credit Card Number</string>
+    <string name="feature_savedcards_expiry_date_length_error">Expiry date should be 4 digits</string>
+    <string name="feature_savedcards_invalid_expiry_date">Invalid Expiry Date</string>
+    <string name="feature_savedcards_cvv_length_error">CVV length should be 3 digits</string>
+    <string name="feature_savedcards_first_name">First Name</string>
+    <string name="feature_savedcards_last_name">Last Name</string>
+    <string name="feature_savedcards_credit_card_number">Credit Card Number</string>
+    <string name="feature_savedcards_expiry_date">Expiry Date</string>
+    <string name="feature_savedcards_mm_yy">MM/YY</string>
+    <string name="feature_savedcards_cvv">CVV</string>
+    <string name="feature_savedcards_add">ADD</string>
+</resources>

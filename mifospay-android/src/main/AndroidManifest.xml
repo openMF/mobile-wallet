@@ -43,7 +43,7 @@
             android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.MifosSplash"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
