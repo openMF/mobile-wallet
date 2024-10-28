@@ -9,15 +9,24 @@
  */
 package org.mifospay.core.common
 
+import kotlinx.cinterop.BetaInteropApi
 import kotlinx.cinterop.ExperimentalForeignApi
-import kotlinx.cinterop.refTo
+import kotlinx.cinterop.allocArrayOf
+import kotlinx.cinterop.memScoped
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import platform.Foundation.NSData
+import platform.Foundation.create
+import platform.Foundation.writeToFile
 
 // iOS implementation
+@BetaInteropApi
 @OptIn(ExperimentalForeignApi::class)
 actual fun createPlatformFileUtils(): FileUtils = object : FileUtils {
-    override suspend fun writeInputStreamDataToFile(inputStream: ByteArray, filePath: String): Boolean =
+    override suspend fun writeInputStreamDataToFile(
+        inputStream: ByteArray,
+        filePath: String,
+    ): Boolean =
         withContext(Dispatchers.Default) {
             try {
                 val nsData = inputStream.toNSData()
@@ -29,5 +38,8 @@ actual fun createPlatformFileUtils(): FileUtils = object : FileUtils {
             }
         }
 
-    private fun ByteArray.toNSData(): NSData = NSData.create(bytes = this.refTo(0), length = this.size.toULong())
+    @BetaInteropApi
+    fun ByteArray.toNSData(): NSData = memScoped {
+        NSData.create(bytes = allocArrayOf(this@toNSData), length = this@toNSData.size.toULong())
+    }
 }
