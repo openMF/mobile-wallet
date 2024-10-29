@@ -35,6 +35,7 @@ import org.mifospay.feature.profile.di.ProfileModule
 import org.mifospay.feature.receipt.di.ReceiptModule
 import org.mifospay.feature.savedcards.di.SavedCardsModule
 import org.mifospay.feature.settings.di.SettingsModule
+import org.mifospay.feature.standing.instruction.di.StandingInstructionModule
 import org.mifospay.shared.MifosPayViewModel
 
 object KoinModules {
@@ -72,6 +73,7 @@ object KoinModules {
             NotificationModule,
             SavedCardsModule,
             ReceiptModule,
+            StandingInstructionModule,
         )
     }
     private val LibraryModule = module {

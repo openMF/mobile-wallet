@@ -23,6 +23,7 @@
 :feature:receipt
 :feature:savedcards
 :feature:settings
+:feature:standing-instruction
 :libs:country-code-picker
 :libs:mifos-passcode
 :mifospay-shared

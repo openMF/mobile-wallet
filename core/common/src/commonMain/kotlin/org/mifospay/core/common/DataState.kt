@@ -28,7 +28,9 @@ sealed class DataState<out T> {
     data class Error<T>(
         val exception: Throwable,
         override val data: T? = null,
-    ) : DataState<T>()
+    ) : DataState<T>() {
+        val message = exception.message.toString()
+    }
 }
 
 fun <T> Flow<T>.asDataStateFlow(): Flow<DataState<T>> =

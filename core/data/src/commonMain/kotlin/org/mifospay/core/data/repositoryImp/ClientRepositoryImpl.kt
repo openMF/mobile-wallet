@@ -100,7 +100,7 @@ class ClientRepositoryImpl(
         clientId: Long,
         accountType: String,
     ): Flow<DataState<List<Account>>> {
-        return apiManager.clientsApi
+        return fineractApiManager.clientsApi
             .getAccounts(clientId, accountType)
             .map { it.toAccount() }
             .asDataStateFlow().flowOn(ioDispatcher)

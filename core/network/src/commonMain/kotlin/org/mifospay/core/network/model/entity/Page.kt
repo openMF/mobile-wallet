@@ -14,5 +14,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Page<T>(
     val totalFilteredRecords: Int = 0,
-    val pageItems: MutableList<T> = ArrayList(),
+    val pageItems: List<T> = emptyList(),
 )

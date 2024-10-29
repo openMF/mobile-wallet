@@ -62,6 +62,11 @@ import org.mifospay.feature.savedcards.createOrUpdate.navigateToCardAddEdit
 import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.savedcards.details.navigateToCardDetails
 import org.mifospay.feature.settings.navigation.settingsScreen
+import org.mifospay.feature.standing.instruction.StandingInstructionsScreen
+import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
+import org.mifospay.feature.standing.instruction.createOrUpdate.navigateToSIAddEdit
+import org.mifospay.feature.standing.instruction.details.navigateSIDetails
+import org.mifospay.feature.standing.instruction.details.siDetailsScreen
 import org.mifospay.shared.ui.MifosAppState
 
 @Composable
@@ -84,6 +89,10 @@ internal fun MifosNavHost(
             )
         },
         TabContent(PaymentsScreenContents.SI.name) {
+            StandingInstructionsScreen(
+                onAddEditSI = navController::navigateToSIAddEdit,
+                onShowSIDetails = navController::navigateSIDetails,
+            )
         },
         TabContent(PaymentsScreenContents.INVOICES.name) {
             InvoiceScreen(
@@ -234,5 +243,11 @@ internal fun MifosNavHost(
         receiptScreen(
             onBackClick = navController::navigateUp,
         )
+
+        addEditSIScreen(
+            navigateBack = navController::navigateUp,
+        )
+
+        siDetailsScreen(navigateBack = navController::navigateUp)
     }
 }

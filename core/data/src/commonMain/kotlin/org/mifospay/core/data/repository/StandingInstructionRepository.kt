@@ -11,27 +11,32 @@ package org.mifospay.core.data.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
-import org.mifospay.core.network.model.GenericResponse
-import org.mifospay.core.network.model.entity.Page
-import org.mifospay.core.network.model.entity.payload.StandingInstructionPayload
-import org.mifospay.core.network.model.entity.standinginstruction.SDIResponse
-import org.mifospay.core.network.model.entity.standinginstruction.StandingInstruction
+import org.mifospay.core.model.standinginstruction.SITemplate
+import org.mifospay.core.model.standinginstruction.SIUpdatePayload
+import org.mifospay.core.model.standinginstruction.StandingInstruction
+import org.mifospay.core.model.standinginstruction.StandingInstructionPayload
 
 interface StandingInstructionRepository {
-    suspend fun getAllStandingInstructions(
-        clientId: Long,
-    ): Flow<DataState<Page<StandingInstruction>>>
+    fun getStandingInstructionTemplate(
+        fromOfficeId: Long,
+        fromClientId: Long,
+        fromAccountType: Long,
+    ): Flow<DataState<SITemplate>>
 
-    suspend fun getStandingInstruction(instructionId: Long): Flow<DataState<StandingInstruction>>
+    fun getAllStandingInstructions(
+        clientId: Long,
+    ): Flow<DataState<List<StandingInstruction>>>
+
+    fun getStandingInstruction(instructionId: Long): Flow<DataState<StandingInstruction>>
 
     suspend fun createStandingInstruction(
         payload: StandingInstructionPayload,
-    ): Flow<DataState<SDIResponse>>
+    ): DataState<String>
 
     suspend fun updateStandingInstruction(
         instructionId: Long,
-        payload: StandingInstructionPayload,
-    ): Flow<DataState<GenericResponse>>
+        payload: SIUpdatePayload,
+    ): DataState<String>
 
-    suspend fun deleteStandingInstruction(instructionId: Long): Flow<DataState<GenericResponse>>
+    suspend fun deleteStandingInstruction(instructionId: Long): DataState<String>
 }

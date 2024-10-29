@@ -51,7 +51,7 @@ that can be used as a dependency in any other wallet based project. It is develo
 | :feature:saved-cards          | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:search               | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 | :feature:send-money           | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
-| :feature:standing-instruction | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
+| :feature:standing-instruction | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:upi-setup            | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 | lint                          | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 

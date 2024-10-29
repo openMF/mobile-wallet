@@ -7,12 +7,19 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.network.model.entity.standinginstruction
+package org.mifospay.core.model.standinginstruction
 
 import kotlinx.serialization.Serializable
+import org.mifospay.core.common.Parcelable
+import org.mifospay.core.common.Parcelize
 
 @Serializable
-data class SDIResponse(
-    val clientId: Int,
-    val resourceId: String?,
-)
+@Parcelize
+data class SIUpdatePayload(
+    val priority: Long,
+    val status: Long,
+    val locale: String,
+    val validFrom: String,
+    val validTill: String,
+    val dateFormat: String,
+) : Parcelable

@@ -186,8 +186,8 @@ fun MifosCustomTextField(
         errorContainerColor = Color.Transparent,
         focusedIndicatorColor = MaterialTheme.colorScheme.primary,
         unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
-        focusedTrailingIconColor = NewUi.onSurface.copy(0.15f),
-        unfocusedTrailingIconColor = NewUi.onSurface.copy(0.15f),
+        focusedTrailingIconColor = NewUi.onSurface.copy(0.5f),
+        unfocusedTrailingIconColor = NewUi.onSurface.copy(0.5f),
     )
     BasicTextField(
         value = value,

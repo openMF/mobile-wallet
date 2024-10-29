@@ -10,25 +10,18 @@
 package org.mifospay.core.common
 
 import kotlinx.datetime.Clock
-import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.Month
 import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.format
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
-import kotlinx.datetime.minus
-import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import kotlin.time.Duration.Companion.days
 
 @OptIn(FormatStringsInDatetimeFormats::class)
 object DateHelper {
-    private const val LOG_TAG = "DateHelper"
-
     /*
      * This is the full month format for the date picker.
      * "dd MM yyyy" is the format of the date picker.
@@ -40,6 +33,8 @@ object DateHelper {
      * "dd-MM-yyyy" is the format of the date picker.
      */
     const val SHORT_MONTH = "dd-MM-yyyy"
+
+    const val MONTH_FORMAT = "dd MMMM"
 
     private val fullMonthFormat = LocalDateTime.Format {
         byUnicodePattern(FULL_MONTH)
@@ -87,7 +82,7 @@ object DateHelper {
         return finalFormat.format(pickerFormat.parse(dateString))
     }
 
-    fun getFormatConverter(
+    private fun getFormatConverter(
         currentFormat: String,
         requiredFormat: String,
         dateString: String,
@@ -98,8 +93,17 @@ object DateHelper {
         return pickerFormat.parse(dateString).format(finalFormat)
     }
 
-    fun formatTransferDate(dateArray: List<Int>, pattern: String = "dd MM yyyy"): String {
-        val localDate = LocalDate(dateArray[0], Month(dateArray[1]), dateArray[2])
+    /**
+     * Gets the date string in the format "dd-MM-yyyy" from an array of integers representing the year, month, and day.
+     *
+     * @param dateComponents An array of three integers representing the year, month, and day, e.g. [2024, 11, 10]
+     * @return The date string in the format "dd-MM-yyyy", e.g. "10-11-2024"
+     */
+    fun formatTransferDate(dateComponents: List<Int>, pattern: String = SHORT_MONTH): String {
+        require(dateComponents.size == 3) { "dateComponents must have exactly 3 elements" }
+        val (year, month, day) = dateComponents
+
+        val localDate = LocalDate(year, Month(month), day)
         return localDate.format(pattern)
     }
 
@@ -120,65 +124,76 @@ object DateHelper {
      * @return string representation of the month like Jan or Feb..etc
      */
     private fun getMonthName(month: Int): String {
-        var monthName = ""
-        when (month) {
-            1 -> monthName = "Jan"
-            2 -> monthName = "Feb"
-            3 -> monthName = "Mar"
-            4 -> monthName = "Apr"
-            5 -> monthName = "May"
-            6 -> monthName = "Jun"
-            7 -> monthName = "Jul"
-            8 -> monthName = "Aug"
-            9 -> monthName = "Sep"
-            10 -> monthName = "Oct"
-            11 -> monthName = "Nov"
-            12 -> monthName = "Dec"
-        }
-        return monthName
-    }
-
-    private fun getDateAsLongFromString(dateStr: String, pattern: String): Long {
-        return try {
-            // Create a DateTimeFormatter with the given pattern
-            val formatter = LocalDateTime.Format { byUnicodePattern(pattern) }
-
-            // Parse the string to a LocalDateTime
-            val localDateTime = LocalDateTime.parse(dateStr, formatter)
-
-            // Convert LocalDateTime to Instant (assuming the date is in the system's time zone)
-            val instant = localDateTime.toInstant(TimeZone.currentSystemDefault())
-
-            // Convert Instant to milliseconds since epoch
-            instant.toEpochMilliseconds()
-        } catch (e: Exception) {
-            0L
+        return when (month) {
+            1 -> "Jan"
+            2 -> "Feb"
+            3 -> "Mar"
+            4 -> "Apr"
+            5 -> "May"
+            6 -> "Jun"
+            7 -> "Jul"
+            8 -> "Aug"
+            9 -> "Sep"
+            10 -> "Oct"
+            11 -> "Nov"
+            12 -> "Dec"
+            else -> throw IllegalArgumentException("Month should be between 1 and 12")
         }
     }
 
-    fun getDateAsLongFromList(integersOfDate: List<Int>): Long {
-        val dateStr = getDateAsString(integersOfDate)
-        return getDateAsLongFromString(dateStr, FULL_MONTH)
-    }
-
-    fun subtractWeeks(number: Int): Long {
-        val now = Clock.System.now()
-        val subtracted = now.minus(number.times(7).days)
-        return subtracted.toEpochMilliseconds()
-    }
-
-    fun subtractMonths(number: Int): Long {
-        val now = Clock.System.now()
-        val currentDate = now.toLocalDateTime(TimeZone.currentSystemDefault()).date
-        val subtractedDate = currentDate.minus(number, DateTimeUnit.MONTH)
-        return subtractedDate.atStartOfDayIn(TimeZone.currentSystemDefault()).toEpochMilliseconds()
-    }
-
+    /**
+     * Input timestamp string in milliseconds
+     * Example timestamp "1698278400000"
+     * Output examples: "dd-MM-yyyy" - "14-04-2016"
+     */
     fun getDateAsStringFromLong(timeInMillis: Long): String {
         val instant = Instant.fromEpochMilliseconds(timeInMillis)
             .toLocalDateTime(TimeZone.currentSystemDefault())
 
         return instant.format(shortMonthFormat)
+    }
+
+    /**
+     * Input timestamp string in milliseconds
+     * Example timestamp "1698278400000"
+     * Output examples: "14 April"
+     */
+    fun getMonthAsStringFromLong(timeInMillis: Long): String {
+        val instant = Instant.fromEpochMilliseconds(timeInMillis)
+            .toLocalDateTime(TimeZone.currentSystemDefault())
+
+        val monthName = instant.month.name.lowercase().capitalize()
+
+        return "${instant.dayOfMonth} $monthName"
+    }
+
+    /**
+     * Gets the date string in the format "day month year" from an array of integers representing the day and month.
+     *
+     * @param integersOfDate An array of two integers representing the day and month, e.g. [11, 10]
+     * @return The date string in the format "day month year", e.g. "11 October"
+     */
+    fun getDateMonthString(integersOfDate: List<Int>): String {
+        require(integersOfDate.size == 2) { "integersOfDate must have exactly 2 elements" }
+        val (day, month) = integersOfDate
+
+        val monthName = when (month) {
+            1 -> "January"
+            2 -> "February"
+            3 -> "March"
+            4 -> "April"
+            5 -> "May"
+            6 -> "June"
+            7 -> "July"
+            8 -> "August"
+            9 -> "September"
+            10 -> "October"
+            11 -> "November"
+            12 -> "December"
+            else -> throw IllegalArgumentException("Invalid month value: $month")
+        }
+
+        return "$day $monthName"
     }
 
     /**
@@ -324,13 +339,13 @@ object DateHelper {
 
     val currentDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
 
-    /*
+    /**
      * This is the full date format for the date picker.
      * "dd MM yyyy" is the format of the date picker.
      */
     val formattedFullDate = currentDate.format(fullMonthFormat)
 
-    /*
+    /**
      * This is the short date format for the date picker.
      * "dd-MM-yyyy" is the format of the date picker.
      */

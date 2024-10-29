@@ -50,6 +50,7 @@ kotlin {
             api(projects.feature.notification)
             api(projects.feature.savedcards)
             api(projects.feature.receipt)
+            api(projects.feature.standingInstruction)
         }
 
         desktopMain.dependencies {

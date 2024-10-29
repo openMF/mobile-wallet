@@ -32,5 +32,7 @@
     <string name="feature_standing_instruction_to">To:</string>
     <string name="feature_standing_instruction_from">From:</string>
     <string name="feature_standing_instruction_status">Status:</string>
+    <string name="feature_standing_instruction_delete">Delete Standing Instruction</string>
+    <string name="feature_standing_instruction_delete_message">Are you sure you want to delete this Standing Instruction?</string>
 
 </resources>

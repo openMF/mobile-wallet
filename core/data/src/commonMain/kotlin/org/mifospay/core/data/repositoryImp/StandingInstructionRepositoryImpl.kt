@@ -11,30 +11,45 @@ package org.mifospay.core.data.repositoryImp
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.asDataStateFlow
 import org.mifospay.core.data.repository.StandingInstructionRepository
+import org.mifospay.core.model.standinginstruction.SITemplate
+import org.mifospay.core.model.standinginstruction.SIUpdatePayload
+import org.mifospay.core.model.standinginstruction.StandingInstruction
+import org.mifospay.core.model.standinginstruction.StandingInstructionPayload
 import org.mifospay.core.network.FineractApiManager
-import org.mifospay.core.network.model.GenericResponse
-import org.mifospay.core.network.model.entity.Page
-import org.mifospay.core.network.model.entity.payload.StandingInstructionPayload
-import org.mifospay.core.network.model.entity.standinginstruction.SDIResponse
-import org.mifospay.core.network.model.entity.standinginstruction.StandingInstruction
 
 class StandingInstructionRepositoryImpl(
     private val apiManager: FineractApiManager,
     private val ioDispatcher: CoroutineDispatcher,
 ) : StandingInstructionRepository {
-    override suspend fun getAllStandingInstructions(
-        clientId: Long,
-    ): Flow<DataState<Page<StandingInstruction>>> {
+    override fun getStandingInstructionTemplate(
+        fromOfficeId: Long,
+        fromClientId: Long,
+        fromAccountType: Long,
+    ): Flow<DataState<SITemplate>> {
         return apiManager.standingInstructionApi
-            .getAllStandingInstructions(clientId)
+            .getStandingInstructionTemplate(fromOfficeId, fromClientId, fromAccountType)
+            .catch { DataState.Error(it, null) }
             .asDataStateFlow().flowOn(ioDispatcher)
     }
 
-    override suspend fun getStandingInstruction(
+    override fun getAllStandingInstructions(
+        clientId: Long,
+    ): Flow<DataState<List<StandingInstruction>>> {
+        return apiManager.standingInstructionApi
+            .getAllStandingInstructions(clientId)
+            .catch { DataState.Error(it, null) }
+            .map { it.pageItems }
+            .asDataStateFlow().flowOn(ioDispatcher)
+    }
+
+    override fun getStandingInstruction(
         instructionId: Long,
     ): Flow<DataState<StandingInstruction>> {
         return apiManager.standingInstructionApi
@@ -44,26 +59,51 @@ class StandingInstructionRepositoryImpl(
 
     override suspend fun createStandingInstruction(
         payload: StandingInstructionPayload,
-    ): Flow<DataState<SDIResponse>> {
-        return apiManager.standingInstructionApi
-            .createStandingInstruction(payload)
-            .asDataStateFlow().flowOn(ioDispatcher)
+    ): DataState<String> {
+        return try {
+            withContext(ioDispatcher) {
+                apiManager.standingInstructionApi.createStandingInstruction(payload)
+            }
+
+            DataState.Success("Standing Instruction created successfully")
+        } catch (e: Exception) {
+            DataState.Error(e, null)
+        }
     }
 
     override suspend fun updateStandingInstruction(
         instructionId: Long,
-        payload: StandingInstructionPayload,
-    ): Flow<DataState<GenericResponse>> {
-        return apiManager.standingInstructionApi
-            .updateStandingInstruction(instructionId, payload, "update")
-            .asDataStateFlow().flowOn(ioDispatcher)
+        payload: SIUpdatePayload,
+    ): DataState<String> {
+        return try {
+            withContext(ioDispatcher) {
+                apiManager.standingInstructionApi.updateStandingInstruction(
+                    instructionId = instructionId,
+                    payload = payload,
+                    command = "update",
+                )
+            }
+
+            DataState.Success("Standing Instruction updated successfully")
+        } catch (e: Exception) {
+            DataState.Error(e, null)
+        }
     }
 
     override suspend fun deleteStandingInstruction(
         instructionId: Long,
-    ): Flow<DataState<GenericResponse>> {
-        return apiManager.standingInstructionApi
-            .deleteStandingInstruction(instructionId, "delete")
-            .asDataStateFlow().flowOn(ioDispatcher)
+    ): DataState<String> {
+        return try {
+            withContext(ioDispatcher) {
+                apiManager.standingInstructionApi.deleteStandingInstruction(
+                    instructionId = instructionId,
+                    command = "delete",
+                )
+            }
+
+            DataState.Success("Standing Instruction deleted successfully")
+        } catch (e: Exception) {
+            DataState.Error(e, null)
+        }
     }
 }
