@@ -22,10 +22,7 @@ Development | Chat |
 
 Mifos boasts an active and vibrant contributor community, Please join us on [slack](https://join.slack.com/t/mifos/shared_invite/zt-2f4nr6tk3-ZJlHMi1lc0R19FFEHxdvng). Once you've joined the mifos slack community, please join the `#mobile-wallet` channel to engage with mobile-wallet development. If you encounter any difficulties joining our Slack channel, please don't hesitate to open an issue. This will allow us to assist you promptly or send you an invitation.
 
-
-## How to Contribute
-
-Click here to (https://github.com/openMF/mobile-wallet/wiki/How-to-Contribute)
+### [How to Contribute](https://github.com/openMF/mobile-wallet/wiki/How-to-Contribute)
 
 ### Branch Policy
 
