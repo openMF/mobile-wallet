@@ -26,6 +26,7 @@ Mifos boasts an active and vibrant contributor community, Please join us on [sla
 
 ### Branch Policy
 
+
 We have the following branches :
 
  * **dev**
