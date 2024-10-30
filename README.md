@@ -28,7 +28,6 @@ Mifos boasts an active and vibrant contributor community, Please join us on [sla
 
 ### [Demo credentials](https://github.com/openMF/mobile-wallet/wiki/Demo-credentials)
 
-   
 ### Development Setup
 
 Before you begin, you should have already downloaded the Android Studio SDK and set it up correctly. You can find a guide on how to do this here: [Setting up Android Studio](http://developer.android.com/sdk/installing/index.html?pkg=studio).
