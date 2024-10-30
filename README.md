@@ -26,12 +26,8 @@ Mifos boasts an active and vibrant contributor community, Please join us on [sla
 
 ### [Branch Policy](https://github.com/openMF/mobile-wallet/wiki/Branch-Policy)
 
-### Demo credentials
-Fineract Instance: demo.mifos.io
+### [Demo credentials](https://github.com/openMF/mobile-wallet/wiki/Demo-credentials)
 
-Username: `venus`
-
-Password: `Venus2023#`
    
 ### Development Setup
 
