@@ -89,6 +89,7 @@ android {
 dependencies {
     implementation(projects.mifospayShared)
     implementation(projects.core.data)
+    implementation(projects.core.ui)
 
     // Compose
     implementation(libs.androidx.core.ktx)

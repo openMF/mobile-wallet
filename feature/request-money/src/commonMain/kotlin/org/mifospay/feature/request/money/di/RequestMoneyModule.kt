@@ -7,14 +7,12 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.data.repository
+package org.mifospay.feature.request.money.di
 
-import kotlinx.coroutines.flow.StateFlow
-import org.mifospay.core.model.utils.CurrencyCode
-import org.mifospay.core.model.utils.Locale
+import org.koin.core.module.dsl.viewModelOf
+import org.koin.dsl.module
+import org.mifospay.feature.request.money.ShowQrViewModel
 
-interface LocalAssetRepository {
-    val localeList: StateFlow<List<Locale>>
-
-    val currencyList: StateFlow<List<CurrencyCode>>
+val RequestMoneyModule = module {
+    viewModelOf(::ShowQrViewModel)
 }

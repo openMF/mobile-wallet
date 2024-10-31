@@ -14,6 +14,8 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -70,12 +72,12 @@ import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.utils.Locale
 import org.mifospay.core.model.utils.filterLocales
 import org.mifospay.core.ui.AvatarBox
+import org.mifospay.core.ui.DropdownBox
+import org.mifospay.core.ui.DropdownBoxItem
 import org.mifospay.core.ui.EmptyContentScreen
+import org.mifospay.core.ui.ExposedDropdownBox
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.utils.EventsEffect
-import org.mifospay.feature.standing.instruction.components.DropdownBox
-import org.mifospay.feature.standing.instruction.components.DropdownBoxItem
-import org.mifospay.feature.standing.instruction.components.RowBlock
 
 @Composable
 internal fun AddEditSIScreen(
@@ -271,7 +273,7 @@ private fun AddEditSIScreenContent(
             item(key = "FromAccount") {
                 var accountExpanded by remember { mutableStateOf(false) }
 
-                DropdownBox(
+                ExposedDropdownBox(
                     expanded = accountExpanded,
                     label = "From Account",
                     value = state.fromAccountNumber,
@@ -321,7 +323,7 @@ private fun AddEditSIScreenContent(
             item(key = "ToClient") {
                 var toClientExpanded by remember { mutableStateOf(false) }
 
-                DropdownBox(
+                ExposedDropdownBox(
                     expanded = toClientExpanded,
                     label = "To Client",
                     value = state.toClientName,
@@ -362,7 +364,7 @@ private fun AddEditSIScreenContent(
                     toAccounts.find { it.id == state.payload.toAccountId }?.number ?: ""
                 }
 
-                DropdownBox(
+                ExposedDropdownBox(
                     expanded = accountExpanded,
                     label = "To Account",
                     value = accountNumber,
@@ -422,7 +424,7 @@ private fun AddEditSIScreenContent(
             item(key = "TransferType") {
                 var transferType by remember { mutableStateOf(false) }
 
-                DropdownBox(
+                ExposedDropdownBox(
                     expanded = transferType,
                     label = "Transfer Type",
                     value = state.transferType,
@@ -450,7 +452,7 @@ private fun AddEditSIScreenContent(
             item(key = "InstructionType") {
                 var instructionTypeExpanded by remember { mutableStateOf(false) }
 
-                DropdownBox(
+                ExposedDropdownBox(
                     expanded = instructionTypeExpanded,
                     label = "Instruction Type",
                     value = state.instructionType,
@@ -479,7 +481,7 @@ private fun AddEditSIScreenContent(
         item(key = "Priority") {
             var priorityExpanded by remember { mutableStateOf(false) }
 
-            DropdownBox(
+            ExposedDropdownBox(
                 expanded = priorityExpanded,
                 label = "Priority",
                 value = state.priority,
@@ -507,7 +509,7 @@ private fun AddEditSIScreenContent(
         item(key = "Status") {
             var statusExpanded by remember { mutableStateOf(false) }
 
-            DropdownBox(
+            ExposedDropdownBox(
                 expanded = statusExpanded,
                 label = "Status",
                 value = state.status,
@@ -536,7 +538,7 @@ private fun AddEditSIScreenContent(
             item(key = "RecurrenceType") {
                 var recTypeExpanded by remember { mutableStateOf(false) }
 
-                DropdownBox(
+                ExposedDropdownBox(
                     expanded = recTypeExpanded,
                     label = "Recurrence Type",
                     value = state.recurrenceType,
@@ -565,7 +567,7 @@ private fun AddEditSIScreenContent(
                 item(key = "Recurrence Frequency") {
                     var recFreqExpanded by remember { mutableStateOf(false) }
 
-                    DropdownBox(
+                    ExposedDropdownBox(
                         expanded = recFreqExpanded,
                         label = "Recurrence Frequency",
                         value = state.recurrenceFrequency,
@@ -843,5 +845,19 @@ private fun AddEditSIScreenContent(
                 modifier = Modifier.fillMaxWidth(),
             )
         }
+    }
+}
+
+@Composable
+inline fun RowBlock(
+    crossinline content: @Composable (RowScope.() -> Unit),
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        content()
     }
 }

@@ -56,6 +56,8 @@ import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.profile.navigation.profileNavGraph
 import org.mifospay.feature.receipt.navigation.receiptScreen
+import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
+import org.mifospay.feature.request.money.navigation.showQrScreen
 import org.mifospay.feature.savedcards.CardsScreen
 import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.createOrUpdate.navigateToCardAddEdit
@@ -137,7 +139,9 @@ internal fun MifosNavHost(
     ) {
         homeScreen(
             onNavigateBack = navController::popBackStack,
-            onRequest = {},
+            onRequest = {
+                navController.navigateToShowQrScreen()
+            },
             onPay = {},
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
@@ -249,5 +253,9 @@ internal fun MifosNavHost(
         )
 
         siDetailsScreen(navigateBack = navController::navigateUp)
+
+        showQrScreen(
+            navigateBack = navController::navigateUp,
+        )
     }
 }

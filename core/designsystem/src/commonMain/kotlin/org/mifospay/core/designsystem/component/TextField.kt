@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -111,6 +112,8 @@ fun MifosTextField(
     showClearIcon: Boolean = true,
     readOnly: Boolean = false,
     clearIcon: ImageVector = MifosIcons.Close,
+    isError: Boolean = false,
+    errorText: String? = null,
     onClickClearIcon: () -> Unit = { onValueChange("") },
     textStyle: TextStyle = LocalTextStyle.current,
     visualTransformation: VisualTransformation = VisualTransformation.None,
@@ -140,6 +143,8 @@ fun MifosTextField(
         singleLine = singleLine,
         maxLines = maxLines,
         minLines = minLines,
+        leadingIcon = leadingIcon,
+        isError = isError,
         trailingIcon = @Composable {
             if (showClearIcon && isFocused) {
                 ClearIconButton(
@@ -151,7 +156,16 @@ fun MifosTextField(
                 trailingIcon?.invoke()
             }
         },
-        leadingIcon = leadingIcon,
+        supportingText = errorText?.let {
+            {
+                Text(
+                    modifier = Modifier.testTag("errorTag"),
+                    text = it,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
+        },
     )
 }
 

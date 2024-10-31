@@ -21,6 +21,7 @@
 :feature:payments
 :feature:profile
 :feature:receipt
+:feature:request-money
 :feature:savedcards
 :feature:settings
 :feature:standing-instruction
@@ -236,6 +237,7 @@ com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava
 com.google.j2objc:j2objc-annotations:1.3
 com.google.protobuf:protobuf-javalite:4.26.0
 com.google.protobuf:protobuf-kotlin-lite:4.26.0
+com.google.zxing:core:3.5.3
 com.russhwolf:multiplatform-settings-android:1.2.0
 com.russhwolf:multiplatform-settings-coroutines-android:1.2.0
 com.russhwolf:multiplatform-settings-coroutines:1.2.0
@@ -269,6 +271,10 @@ io.coil-kt.coil3:coil-network-ktor3:3.0.0-alpha10
 io.coil-kt.coil3:coil-svg-android:3.0.0-alpha10
 io.coil-kt.coil3:coil-svg:3.0.0-alpha10
 io.coil-kt.coil3:coil:3.0.0-alpha10
+io.github.alexzhirkevich:qrose-android:1.0.1
+io.github.alexzhirkevich:qrose-core-android:1.0.1
+io.github.alexzhirkevich:qrose-core:1.0.1
+io.github.alexzhirkevich:qrose:1.0.1
 io.github.vinceglb:filekit-compose-android:0.8.7
 io.github.vinceglb:filekit-compose:0.8.7
 io.github.vinceglb:filekit-core-android:0.8.7

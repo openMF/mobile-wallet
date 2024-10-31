@@ -7,14 +7,15 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.data.repository
+package org.mifospay.core.ui.utils
 
-import kotlinx.coroutines.flow.StateFlow
-import org.mifospay.core.model.utils.CurrencyCode
-import org.mifospay.core.model.utils.Locale
+import androidx.compose.ui.graphics.ImageBitmap
 
-interface LocalAssetRepository {
-    val localeList: StateFlow<List<Locale>>
+expect object ShareUtils {
 
-    val currencyList: StateFlow<List<CurrencyCode>>
+    fun shareText(text: String)
+
+    suspend fun shareImage(title: String, image: ImageBitmap)
+
+    suspend fun shareImage(title: String, byte: ByteArray)
 }

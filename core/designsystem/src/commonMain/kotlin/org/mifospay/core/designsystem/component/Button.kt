@@ -80,7 +80,7 @@ fun MifosButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.height(48.dp),
         enabled = enabled,
         colors = colors,
         shape = shape,
@@ -144,14 +144,15 @@ fun MifosOutlinedButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     shape: Shape = ButtonDefaults.outlinedShape,
-    border: BorderStroke? = ButtonDefaults.outlinedButtonBorder,
+    border: BorderStroke? = ButtonDefaults.outlinedButtonBorder(enabled),
     colors: ButtonColors = ButtonDefaults.outlinedButtonColors(),
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
     content: @Composable RowScope.() -> Unit = {},
 ) {
     OutlinedButton(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier
+            .height(48.dp),
         enabled = enabled,
         shape = shape,
         colors = colors,
@@ -181,7 +182,7 @@ fun MifosOutlinedButton(
 ) {
     MifosOutlinedButton(
         onClick = onClick,
-        modifier = modifier,
+        modifier = modifier.height(48.dp),
         enabled = enabled,
         contentPadding = if (leadingIcon != null) {
             ButtonDefaults.ButtonWithIconContentPadding

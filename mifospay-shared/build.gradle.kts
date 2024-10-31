@@ -51,6 +51,7 @@ kotlin {
             api(projects.feature.savedcards)
             api(projects.feature.receipt)
             api(projects.feature.standingInstruction)
+            api(projects.feature.requestMoney)
         }
 
         desktopMain.dependencies {

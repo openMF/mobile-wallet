@@ -20,7 +20,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import org.mifospay.core.data.repository.LocalAssetRepository
+import org.mifospay.core.data.util.SAMPLE_CURRENCY
 import org.mifospay.core.data.util.SAMPLE_LOCALE
+import org.mifospay.core.model.utils.CurrencyCode
 import org.mifospay.core.model.utils.Locale
 
 class LocalAssetRepositoryImpl(
@@ -39,6 +41,21 @@ class LocalAssetRepositoryImpl(
             emit(data)
         }.catch {
             Logger.e(it) { "Error while fetching locale list" }
+        }.stateIn(
+            scope = coroutineScope,
+            initialValue = emptyList(),
+            started = SharingStarted.Eagerly,
+        )
+
+    override val currencyList: StateFlow<List<CurrencyCode>>
+        get() = flow {
+            val data = withContext(ioDispatcher) {
+                networkJson.decodeFromString<List<CurrencyCode>>(SAMPLE_CURRENCY)
+            }
+
+            emit(data)
+        }.catch {
+            Logger.e(it) { "Error while fetching currency list" }
         }.stateIn(
             scope = coroutineScope,
             initialValue = emptyList(),

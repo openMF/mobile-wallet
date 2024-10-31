@@ -72,6 +72,7 @@ playServicesAuthVersion = "21.2.0"
 playServicesCodeScanner = "16.1.0"
 protobuf = "4.26.0"
 protobufPlugin = "0.9.4"
+qroseVersion = "1.0.1"
 retrofitKotlinxSerializationJson = "1.0.0"
 retrofitVersion = "2.11.0"
 roborazzi = "1.26.0"
@@ -181,6 +182,7 @@ datastore = { group = "androidx.datastore", name = "datastore-core-okio", versio
 
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+qrose = { group = "io.github.alexzhirkevich", name="qrose", version.ref = "qroseVersion" }
 twitter-detekt-compose = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "twitter-detekt-compose" }
 
 filekit-core = { group = "io.github.vinceglb", name = "filekit-core", version.ref = "fileKit" }
