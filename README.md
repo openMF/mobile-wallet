@@ -36,6 +36,7 @@ Mifos boasts an active and vibrant contributor community, Please join us on [sla
 
 ### [**Making a Pull Request**](https://github.com/openMF/mobile-wallet/wiki/Making-a-Pull-Request)
 
+
 ### **Squashing Your Commits**
 
 It is common for pull requests to undergo multiple rounds of review before being merged. To keep the Git history clean and organized, you should always squash your commits before finalizing the merge. Here's how you can do it:
