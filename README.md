@@ -40,33 +40,7 @@ Mifos boasts an active and vibrant contributor community, Please join us on [sla
 ### [**Squashing Your Commits**](https://github.com/openMF/mobile-wallet/wiki/Squashing-Your-Commits)
 
 
-### **Solving Merge Conflicts**
-
-In some cases, your pull request might encounter merge conflicts when the changes cannot be automatically merged with the main branch. To resolve merge conflicts:
-
-1. Update your local branch with the latest changes from the main repository:
-    
-    ```bash
-    git fetch upstream
-    git checkout your-branch-name
-    git rebase upstream/master
-    ```
-    
-2. Git will pause when encountering conflicts. Open the affected files, resolve the conflicts manually, and save the changes.
-3. After resolving all conflicts, stage the changes and continue with the rebase:
-    
-    ```bash
-    git add .
-    git rebase --continue
-    ```
-    
-4. Finally, force push the changes to your forked repository:
-    
-    ```
-    git push --force origin your-branch-name
-    ```
-    
-Your pull request will be updated with the resolved conflicts, and the reviewers can proceed with the review process. Again, don’t forget to squash your commits.
+### [**Solving Merge Conflicts**](https://github.com/openMF/mobile-wallet/wiki/Solving-Merge-Conflicts)
 
 ### Conclusion
 By following these contribution guidelines, you're all set to start contributing to the Mobile Wallet (Mifos Pay) project. We appreciate your efforts and look forward to your valuable contributions. Happy coding!
