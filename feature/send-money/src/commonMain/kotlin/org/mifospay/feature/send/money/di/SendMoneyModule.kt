@@ -9,16 +9,10 @@
  */
 package org.mifospay.feature.send.money.di
 
-import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import org.mifospay.feature.send.money.SendPaymentViewModel
+import org.mifospay.feature.send.money.SendMoneyViewModel
 
 val SendMoneyModule = module {
-    viewModel {
-        SendPaymentViewModel(
-            useCaseHandler = get(),
-            localRepository = get(),
-            fetchAccount = get(),
-        )
-    }
+    viewModelOf(::SendMoneyViewModel)
 }

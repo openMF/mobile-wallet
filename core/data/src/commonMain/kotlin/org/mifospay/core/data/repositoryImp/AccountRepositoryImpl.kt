@@ -11,6 +11,7 @@ package org.mifospay.core.data.repositoryImp
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import org.mifospay.core.common.DataState
@@ -19,6 +20,7 @@ import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransferDetail
+import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.network.FineractApiManager
 
 class AccountRepositoryImpl(
@@ -39,6 +41,13 @@ class AccountRepositoryImpl(
     override fun getAccountTransfer(transferId: Long): Flow<DataState<TransferDetail>> {
         return apiManager.accountTransfersApi
             .getAccountTransfer(transferId.toInt())
+            .asDataStateFlow().flowOn(ioDispatcher)
+    }
+
+    override fun searchAccounts(query: String): Flow<DataState<List<AccountResult>>> {
+        return apiManager.accountTransfersApi
+            .searchAccounts(query, "savings")
+            .catch { DataState.Error(it, null) }
             .asDataStateFlow().flowOn(ioDispatcher)
     }
 }

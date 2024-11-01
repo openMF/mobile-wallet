@@ -23,6 +23,7 @@
 :feature:receipt
 :feature:request-money
 :feature:savedcards
+:feature:send-money
 :feature:settings
 :feature:standing-instruction
 :libs:country-code-picker

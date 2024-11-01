@@ -46,6 +46,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Notifications
+import androidx.compose.material.icons.outlined.QrCodeScanner
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Visibility
@@ -123,4 +124,5 @@ object MifosIcons {
     val Person = Icons.Filled.Person
     val Badge = Icons.Filled.Badge
     val DataInfo = Icons.Filled.Description
+    val Scan = Icons.Outlined.QrCodeScanner
 }

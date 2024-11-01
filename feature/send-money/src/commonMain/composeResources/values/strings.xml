@@ -12,7 +12,7 @@
     <string name="feature_send_money_insufficient_balance">Insufficient balance</string>
     <string name="feature_send_money_error_fetching_balance">Error fetching balance</string>
     <string name="feature_send_money_not_allowed">Self Account transfer is not allowed</string>
-    <string name="feature_send_money_send">Send</string>
+    <string name="feature_send_money_send">Send Money</string>
     <string name="feature_send_money_select_transfer_method">Select transfer method</string>
     <string name="feature_send_money_vpa">VPA</string>
     <string name="feature_send_money_mobile">Mobile number</string>

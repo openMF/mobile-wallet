@@ -13,9 +13,12 @@ import kotlinx.coroutines.flow.Flow
 import org.mifospay.core.common.DataState
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransferDetail
+import org.mifospay.core.model.search.AccountResult
 
 interface AccountRepository {
     fun getTransaction(accountId: Long, transactionId: Long): Flow<DataState<Transaction>>
 
     fun getAccountTransfer(transferId: Long): Flow<DataState<TransferDetail>>
+
+    fun searchAccounts(query: String): Flow<DataState<List<AccountResult>>>
 }

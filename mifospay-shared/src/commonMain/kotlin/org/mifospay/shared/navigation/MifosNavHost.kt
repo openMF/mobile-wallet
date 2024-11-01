@@ -63,6 +63,9 @@ import org.mifospay.feature.savedcards.createOrUpdate.addEditCardScreen
 import org.mifospay.feature.savedcards.createOrUpdate.navigateToCardAddEdit
 import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.savedcards.details.navigateToCardDetails
+import org.mifospay.feature.send.money.SendMoneyScreen
+import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
+import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
 import org.mifospay.feature.standing.instruction.StandingInstructionsScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
@@ -81,6 +84,10 @@ internal fun MifosNavHost(
 
     val paymentsTabContents = listOf(
         TabContent(PaymentsScreenContents.SEND.name) {
+            SendMoneyScreen(
+                onBackClick = {},
+                showTopBar = false,
+            )
         },
         TabContent(PaymentsScreenContents.REQUEST.name) {
             RequestScreen(showQr = {})
@@ -142,7 +149,7 @@ internal fun MifosNavHost(
             onRequest = {
                 navController.navigateToShowQrScreen()
             },
-            onPay = {},
+            onPay = navController::navigateToSendMoneyScreen,
             navigateToTransactionDetail = navController::navigateToSpecificTransaction,
             navigateToAccountDetail = navController::navigateToSavingAccountDetails,
         )
@@ -256,6 +263,11 @@ internal fun MifosNavHost(
 
         showQrScreen(
             navigateBack = navController::navigateUp,
+        )
+
+        sendMoneyScreen(
+            proceedWithMakeTransferFlow = { _, _ -> },
+            onBackClick = navController::navigateUp,
         )
     }
 }

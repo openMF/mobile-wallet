@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import org.mifospay.feature.send.money.SendScreenRoute
+import org.mifospay.feature.send.money.SendMoneyScreen
 
 const val SEND_MONEY_ROUTE = "send_money_route"
 
@@ -26,10 +26,8 @@ fun NavGraphBuilder.sendMoneyScreen(
     onBackClick: () -> Unit,
 ) {
     composable(route = SEND_MONEY_ROUTE) {
-        SendScreenRoute(
-            showToolBar = true,
+        SendMoneyScreen(
             onBackClick = onBackClick,
-            proceedWithMakeTransferFlow = proceedWithMakeTransferFlow,
         )
     }
 }

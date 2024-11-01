@@ -15,3 +15,15 @@ package org.mifospay.core.common.utils
  * This just checks if the string contains the "@" symbol.
  */
 fun String.isValidEmail(): Boolean = contains("@")
+
+fun maskString(input: String, maskChar: Char = '*'): String {
+    if (input.length <= 3) return input
+
+    val visibleCount = 3
+    val maskLength = input.length - visibleCount
+
+    return buildString {
+        append(maskChar.toString().repeat(maskLength))
+        append(input.takeLast(visibleCount))
+    }
+}
