@@ -14,10 +14,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.asDataStateFlow
+import org.mifospay.core.data.mapper.toAccount
 import org.mifospay.core.data.mapper.toModel
 import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.data.util.Constants
+import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.account.AccountTransferPayload
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.model.search.AccountResult
@@ -49,5 +54,24 @@ class AccountRepositoryImpl(
             .searchAccounts(query, "savings")
             .catch { DataState.Error(it, null) }
             .asDataStateFlow().flowOn(ioDispatcher)
+    }
+
+    override fun getSelfAccounts(clientId: Long): Flow<DataState<List<Account>>> {
+        return apiManager.clientsApi
+            .getAccounts(clientId, Constants.SAVINGS)
+            .map { it.toAccount() }
+            .asDataStateFlow().flowOn(ioDispatcher)
+    }
+
+    override suspend fun makeTransfer(payload: AccountTransferPayload): DataState<String> {
+        return try {
+            withContext(ioDispatcher) {
+                apiManager.accountTransfersApi.makeTransfer(payload)
+            }
+
+            DataState.Success("Transaction Successful")
+        } catch (e: Exception) {
+            DataState.Error(e, null)
+        }
     }
 }

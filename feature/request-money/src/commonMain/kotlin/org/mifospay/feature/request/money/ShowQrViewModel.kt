@@ -57,9 +57,11 @@ class ShowQrViewModel(
 ) : BaseViewModel<ShowQrState, ShowQrEvent, ShowQrAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val client = requireNotNull(repository.client.value)
+        val defaultAccountId = requireNotNull(repository.defaultAccount)
 
         ShowQrState(
             client = client,
+            defaultAccountId = defaultAccountId,
             viewState = ShowQrState.ViewState.Loading,
         )
     },
@@ -176,13 +178,16 @@ class ShowQrViewModel(
 data class ShowQrState(
     val client: Client,
 
+    val defaultAccountId: Long,
+
     @IgnoredOnParcel
     val viewState: ViewState,
 
     val qrData: PaymentQrData = PaymentQrData(
-        name = client.displayName,
-        vpaId = client.externalId.ifEmpty { client.mobileNo },
+        clientId = client.id,
+        clientName = client.displayName,
         accountNo = client.accountNo,
+        accountId = defaultAccountId,
         currency = "USD",
         amount = "",
     ),

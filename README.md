@@ -42,15 +42,14 @@ that can be used as a dependency in any other wallet based project. It is develo
 | :feature:account              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
 | :feature:invoices             | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:kyc                  | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:make-transfer        | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
+| :feature:make-transfer        | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:merchants            | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 | :feature:notification         | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
 | :feature:qr                   | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 | :feature:receipt              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:request-money        | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:saved-cards          | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:search               | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
-| :feature:send-money           | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
+| :feature:saved-cards          | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
+| :feature:send-money           | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:standing-instruction | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:upi-setup            | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
 | lint                          | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 

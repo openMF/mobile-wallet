@@ -10,6 +10,7 @@
 package org.mifospay.core.domain
 
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.data.repository.ClientRepository
@@ -23,7 +24,11 @@ class LoginUseCase(
     private val ioDispatcher: CoroutineDispatcher,
 ) {
     suspend operator fun invoke(username: String, password: String): DataState<UserInfo> {
-        return when (val result = repository.authenticate(username, password)) {
+        val result = withContext(ioDispatcher) {
+            repository.authenticate(username, password)
+        }
+
+        return when (result) {
             is DataState.Loading -> DataState.Loading
             is DataState.Error -> DataState.Error(Exception("Invalid credentials"))
             is DataState.Success -> {
@@ -36,8 +41,10 @@ class LoginUseCase(
     }
 
     private suspend fun updateUserInfo(userInfo: UserInfo): DataState<UserInfo> {
-        val updateResult =
+        val updateResult = withContext(ioDispatcher) {
             userPreferencesRepository.updateToken(userInfo.base64EncodedAuthenticationKey)
+        }
+
         return when (updateResult) {
             is DataState.Success -> updateClientInfo(userInfo)
             is DataState.Error -> DataState.Error(Exception("Something went wrong"))
@@ -46,10 +53,16 @@ class LoginUseCase(
     }
 
     private suspend fun updateClientInfo(userInfo: UserInfo): DataState<UserInfo> {
-        return when (val clientInfo = clientRepository.getClient(userInfo.clients.first())) {
+        val clientInfo = withContext(ioDispatcher) {
+            clientRepository.getClient(userInfo.clients.first())
+        }
+
+        return when (clientInfo) {
             is DataState.Success -> {
-                userPreferencesRepository.updateClientInfo(clientInfo.data)
-                userPreferencesRepository.updateUserInfo(userInfo)
+                withContext(ioDispatcher) {
+                    userPreferencesRepository.updateClientInfo(clientInfo.data)
+                    userPreferencesRepository.updateUserInfo(userInfo)
+                }
 
                 DataState.Success(userInfo)
             }

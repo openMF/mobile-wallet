@@ -14,17 +14,33 @@ import org.mifospay.core.common.Parcelize
 
 /**
  * Parcelable data class representing the UPI payment request details
- * @property name Payee name
- * @property vpaId Virtual Payment Address (VPA) of the payee
+ * @property clientName Payee name
+ * @property clientId Virtual Payment Address (VPA) of the payee
  * @property accountNo Account number
  * @property currency Currency code
  * @property amount Payment amount as a string
  */
 @Parcelize
 data class PaymentQrData(
-    val name: String,
-    val vpaId: String,
+    val clientId: Long,
+    val clientName: String,
     val accountNo: String,
-    val currency: String,
     val amount: String,
-) : Parcelable
+    val accountId: Long,
+    val currency: String = DEFAULT_CURRENCY,
+    val officeId: Long = OFFICE_ID,
+    val accountTypeId: Long = ACCOUNT_TYPE_ID,
+) : Parcelable {
+
+    /**
+     * Companion object containing constants for default values
+     * currently Savings Account to Savings Account Transaction are allowed
+     */
+    companion object {
+        const val DEFAULT_CURRENCY = "USD"
+        const val OFFICE_ID: Long = 1
+
+        // WALLET
+        const val ACCOUNT_TYPE_ID: Long = 2
+    }
+}

@@ -9,9 +9,9 @@
  */
 package org.mifospay.core.data.util
 
-import io.ktor.utils.io.core.toByteArray
+import io.ktor.util.decodeBase64String
+import io.ktor.util.encodeBase64
 import org.mifospay.core.model.utils.PaymentQrData
-import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
 
 /**
@@ -39,47 +39,51 @@ object UpiQrCodeProcessor {
         // Build UPI string
         val requestPaymentString = buildString {
             append("upi://pay")
-            append("?pa=${paymentQrData.vpaId}")
-
-            // Add amount if not empty
-            if (paymentQrData.amount.isNotEmpty()) {
-                append("&am=${paymentQrData.amount}")
-            }
-
-            append("&pn=${paymentQrData.name}")
-            append("&ac=${paymentQrData.accountNo}")
+            append("?ci=${paymentQrData.clientId}")
+            append("&am=${paymentQrData.amount}")
+            append("&cn=${paymentQrData.clientName}")
+            append("&an=${paymentQrData.accountNo}")
+            append("&ai=${paymentQrData.accountId}")
             append("&cu=${paymentQrData.currency}")
+            append("&oi=${paymentQrData.officeId}")
+            append("&pi=${paymentQrData.accountTypeId}")
             append("&mode=02")
             append("&s=000000")
         }
 
-        return Base64.encode(requestPaymentString.toByteArray())
+        return requestPaymentString.encodeBase64()
     }
 
     /**
      * Decodes a Base64 encoded UPI payment string
      * @param encodedString Base64 encoded UPI payment string
-     * @return Decoded RequestQrData object
+     * @return Decoded PaymentQrData object
      * @throws IllegalArgumentException for invalid encoded string
      */
     fun decodeUpiString(encodedString: String): PaymentQrData {
         // Decode the Base64 string
-        val decodedString = try {
-            Base64.decode(encodedString).toString()
-        } catch (e: Exception) {
-            throw IllegalArgumentException("Invalid Base64 encoded string")
-        }
+        val decodedString = encodedString.decodeBase64String()
 
         // Extract parameters
         val params = parseUpiString(decodedString)
 
-        // Create RequestQrData
+        // Create PaymentQrData
         val requestQrData = PaymentQrData(
-            vpaId = params["pa"] ?: throw IllegalArgumentException("Missing VPA"),
-            name = params["pn"] ?: throw IllegalArgumentException("Missing payee name"),
-            accountNo = params["ac"] ?: throw IllegalArgumentException("Missing account number"),
-            currency = params["cu"] ?: throw IllegalArgumentException("Missing currency"),
+            clientId = params["ci"]?.toLongOrNull()
+                ?: throw IllegalArgumentException("Missing client ID"),
+            clientName = params["cn"]
+                ?: throw IllegalArgumentException("Missing client name"),
+            accountNo = params["an"]
+                ?: throw IllegalArgumentException("Missing account number"),
             amount = params["am"] ?: "",
+            accountId = params["ai"]?.toLongOrNull()
+                ?: throw IllegalArgumentException("Missing account ID"),
+            currency = params["cu"]
+                ?: PaymentQrData.DEFAULT_CURRENCY,
+            officeId = params["oi"]?.toLongOrNull()
+                ?: PaymentQrData.OFFICE_ID,
+            accountTypeId = params["pi"]?.toLongOrNull()
+                ?: PaymentQrData.ACCOUNT_TYPE_ID,
         )
 
         // Validate the created object
@@ -89,22 +93,18 @@ object UpiQrCodeProcessor {
     }
 
     /**
-     * Validates the RequestQrData
+     * Validates the PaymentQrData
      * @param data UPI payment request details to validate
      * @throws IllegalArgumentException for any validation failures
      */
     private fun validate(data: PaymentQrData) {
-        // VPA validation
-//        require(VPA_PATTERN.matches(data.vpaId)) {
-//            "Invalid VPA format. Must be in username@provider format"
-//        }
-
         // Name validation
-        require(data.name.isNotBlank()) {
-            "Payee name cannot be empty"
+        require(data.clientName.isNotBlank()) {
+            "Client name cannot be empty"
         }
-        require(data.name.length <= 50) {
-            "Payee name too long (max 50 characters)"
+
+        require(data.clientName.length <= 50) {
+            "Client name too long (max 50 characters)"
         }
 
         // Account number validation

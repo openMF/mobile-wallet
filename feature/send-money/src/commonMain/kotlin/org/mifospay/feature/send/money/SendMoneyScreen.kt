@@ -60,7 +60,11 @@ import mobile_wallet.feature.send_money.generated.resources.feature_send_money_s
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.utils.maskString
+import org.mifospay.core.designsystem.component.BasicDialogState
+import org.mifospay.core.designsystem.component.LoadingDialogState
+import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
+import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
@@ -76,6 +80,7 @@ import org.mifospay.core.ui.utils.EventsEffect
 @Composable
 fun SendMoneyScreen(
     onBackClick: () -> Unit,
+    navigateToTransferScreen: (String) -> Unit,
     showTopBar: Boolean = true,
     modifier: Modifier = Modifier,
     viewModel: SendMoneyViewModel = koinViewModel(),
@@ -86,8 +91,19 @@ fun SendMoneyScreen(
     EventsEffect(viewModel) { event ->
         when (event) {
             SendMoneyEvent.OnNavigateBack -> onBackClick.invoke()
+
+            is SendMoneyEvent.NavigateToTransferScreen -> {
+                navigateToTransferScreen(event.data)
+            }
         }
     }
+
+    SendMoneyDialogs(
+        dialogState = state.dialogState,
+        onDismissRequest = remember(viewModel) {
+            { viewModel.trySendAction(SendMoneyAction.DismissDialog) }
+        },
+    )
 
     SendMoneyScreen(
         state = state,
@@ -461,4 +477,25 @@ private fun AccountCard(
                 onClick(account)
             },
     )
+}
+
+@Composable
+private fun SendMoneyDialogs(
+    dialogState: SendMoneyState.DialogState?,
+    onDismissRequest: () -> Unit,
+) {
+    when (dialogState) {
+        is SendMoneyState.DialogState.Error -> MifosBasicDialog(
+            visibilityState = BasicDialogState.Shown(
+                message = dialogState.message,
+            ),
+            onDismissRequest = onDismissRequest,
+        )
+
+        is SendMoneyState.DialogState.Loading -> MifosLoadingDialog(
+            visibilityState = LoadingDialogState.Shown,
+        )
+
+        null -> Unit
+    }
 }

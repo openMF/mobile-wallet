@@ -34,6 +34,8 @@ import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.QrCode2
+import androidx.compose.material.icons.filled.RadioButtonChecked
+import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
@@ -125,4 +127,6 @@ object MifosIcons {
     val Badge = Icons.Filled.Badge
     val DataInfo = Icons.Filled.Description
     val Scan = Icons.Outlined.QrCodeScanner
+    val RadioButtonUnchecked = Icons.Default.RadioButtonUnchecked
+    val RadioButtonChecked = Icons.Filled.RadioButtonChecked
 }

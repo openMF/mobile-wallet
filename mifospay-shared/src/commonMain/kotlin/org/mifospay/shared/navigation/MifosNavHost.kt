@@ -50,6 +50,10 @@ import org.mifospay.feature.kyc.navigation.kycLevel3Screen
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel1
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel2
 import org.mifospay.feature.kyc.navigation.navigateToKYCLevel3
+import org.mifospay.feature.make.transfer.navigation.navigateToTransferScreen
+import org.mifospay.feature.make.transfer.navigation.transferScreen
+import org.mifospay.feature.make.transfer.success.navigateTransferSuccess
+import org.mifospay.feature.make.transfer.success.transferSuccessScreen
 import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
@@ -64,6 +68,7 @@ import org.mifospay.feature.savedcards.createOrUpdate.navigateToCardAddEdit
 import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.savedcards.details.navigateToCardDetails
 import org.mifospay.feature.send.money.SendMoneyScreen
+import org.mifospay.feature.send.money.navigation.SEND_MONEY_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
@@ -85,7 +90,8 @@ internal fun MifosNavHost(
     val paymentsTabContents = listOf(
         TabContent(PaymentsScreenContents.SEND.name) {
             SendMoneyScreen(
-                onBackClick = {},
+                onBackClick = navController::navigateUp,
+                navigateToTransferScreen = navController::navigateToTransferScreen,
                 showTopBar = false,
             )
         },
@@ -266,8 +272,33 @@ internal fun MifosNavHost(
         )
 
         sendMoneyScreen(
-            proceedWithMakeTransferFlow = { _, _ -> },
-            onBackClick = navController::navigateUp,
+            navigateToTransferScreen = navController::navigateToTransferScreen,
+            onBackClick = navController::popBackStack,
+        )
+
+        transferScreen(
+            navigateBack = navController::popBackStack,
+            onTransferSuccess = {
+                navController.navigateTransferSuccess(
+                    navOptions {
+                        popUpTo(SEND_MONEY_ROUTE) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    },
+                )
+            },
+        )
+
+        transferSuccessScreen(
+            navigateBack = {
+                navController.navigate(HOME_ROUTE) {
+                    popUpTo(HOME_ROUTE) {
+                        inclusive = false
+                    }
+                    launchSingleTop = true
+                }
+            },
         )
     }
 }

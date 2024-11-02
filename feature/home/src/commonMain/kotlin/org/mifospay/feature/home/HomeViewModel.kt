@@ -52,6 +52,11 @@ class HomeViewModel(
             is DataState.Loading -> ViewState.Loading
 
             is DataState.Success -> {
+                if (state.defaultAccountId == null && result.data.accounts.isNotEmpty()) {
+                    val accountId = result.data.accounts.first().id
+                    preferencesRepository.updateDefaultAccount(accountId)
+                }
+
                 ViewState.Content(
                     accounts = result.data.accounts,
                     transactions = result.data.transactions,

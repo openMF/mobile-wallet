@@ -53,6 +53,7 @@ kotlin {
             api(projects.feature.standingInstruction)
             api(projects.feature.requestMoney)
             api(projects.feature.sendMoney)
+            api(projects.feature.makeTransfer)
         }
 
         desktopMain.dependencies {

@@ -17,6 +17,7 @@
 :feature:home
 :feature:invoices
 :feature:kyc
+:feature:make-transfer
 :feature:notification
 :feature:payments
 :feature:profile

@@ -75,7 +75,6 @@ include(":feature:payments")
 include(":feature:request-money")
 include(":feature:upi-setup")
 include(":feature:qr")
-include(":feature:search")
 
 include(":lint")
 

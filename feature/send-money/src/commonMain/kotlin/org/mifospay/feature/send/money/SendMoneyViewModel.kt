@@ -24,12 +24,16 @@ import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.IgnoredOnParcel
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.data.util.UpiQrCodeProcessor
 import org.mifospay.core.model.search.AccountResult
+import org.mifospay.core.model.utils.PaymentQrData
+import org.mifospay.core.ui.utility.DialogState
 import org.mifospay.core.ui.utils.BaseViewModel
 
 private const val KEY_STATE = "send_payment_state"
@@ -96,9 +100,6 @@ class SendMoneyViewModel(
                 sendEvent(SendMoneyEvent.OnNavigateBack)
             }
 
-            SendMoneyAction.OnProceedClicked -> {
-            }
-
             SendMoneyAction.OnClickScan -> {
             }
 
@@ -107,6 +108,42 @@ class SendMoneyViewModel(
                     it.copy(selectedAccount = null)
                 }
             }
+
+            SendMoneyAction.DismissDialog -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = null)
+                }
+            }
+
+            SendMoneyAction.OnProceedClicked -> validateTransferFlow()
+        }
+    }
+
+    private fun validateTransferFlow() = when {
+        state.amount.isBlank() -> updateErrorState("Amount cannot be empty")
+
+        state.amount.toDoubleOrNull() == null -> updateErrorState("Invalid amount")
+
+        state.selectedAccount == null -> updateErrorState("Account cannot be empty")
+
+        else -> initiateTransfer()
+    }
+
+    private fun initiateTransfer() {
+        viewModelScope.launch {
+            mutableStateFlow.update {
+                it.copy(dialogState = null)
+            }
+
+            val paymentString = UpiQrCodeProcessor.encodeUpiString(state.paymentQrData)
+
+            sendEvent(SendMoneyEvent.NavigateToTransferScreen(paymentString))
+        }
+    }
+
+    private fun updateErrorState(message: String) {
+        mutableStateFlow.update {
+            it.copy(dialogState = SendMoneyState.DialogState.Error(message))
         }
     }
 }
@@ -116,6 +153,7 @@ data class SendMoneyState(
     val amount: String = "",
     val accountNumber: String = "",
     val selectedAccount: AccountResult? = null,
+    val dialogState: DialogState? = null,
 ) : Parcelable {
     @IgnoredOnParcel
     val amountIsValid: Boolean
@@ -126,6 +164,24 @@ data class SendMoneyState(
     @IgnoredOnParcel
     val isProceedEnabled: Boolean
         get() = selectedAccount != null && amountIsValid
+
+    @IgnoredOnParcel
+    val paymentQrData: PaymentQrData
+        get() = PaymentQrData(
+            clientId = selectedAccount?.parentId ?: 0,
+            clientName = selectedAccount?.parentName ?: "",
+            accountNo = selectedAccount?.entityAccountNo ?: "",
+            accountId = selectedAccount?.entityId ?: 0,
+            amount = amount,
+        )
+
+    sealed interface DialogState : Parcelable {
+        @Parcelize
+        data object Loading : DialogState
+
+        @Parcelize
+        data class Error(val message: String) : DialogState
+    }
 }
 
 sealed interface ViewState {
@@ -138,6 +194,7 @@ sealed interface ViewState {
 
 sealed interface SendMoneyEvent {
     data object OnNavigateBack : SendMoneyEvent
+    data class NavigateToTransferScreen(val data: String) : SendMoneyEvent
 }
 
 sealed interface SendMoneyAction {
@@ -150,7 +207,10 @@ sealed interface SendMoneyAction {
     data class AccountNumberChanged(val accountNumber: String) : SendMoneyAction
 
     data class SelectAccount(val account: AccountResult) : SendMoneyAction
+
     data object DeselectAccount : SendMoneyAction
+
+    data object DismissDialog : SendMoneyAction
 
     data object OnProceedClicked : SendMoneyAction
 }

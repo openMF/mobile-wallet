@@ -16,7 +16,7 @@
                android:shape="oval"
                android:useLevel="false">
 
-            <solid android:color="@color/feature_make_transfer_primaryDarkBlue"/>
+            <solid android:color="#FFFFFF"/>
 
         </shape>
 
