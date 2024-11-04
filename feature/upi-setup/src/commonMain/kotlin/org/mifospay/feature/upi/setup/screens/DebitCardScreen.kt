@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.upiSetup.screens
+package org.mifospay.feature.upi.setup.screens
 
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
@@ -21,15 +21,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.androidx.compose.koinViewModel
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.VerifyStepHeader
-import org.mifospay.feature.upiSetup.viewmodel.DebitCardUiState
-import org.mifospay.feature.upiSetup.viewmodel.DebitCardViewModel
+import org.mifospay.feature.upi.setup.viewmodel.DebitCardUiState
+import org.mifospay.feature.upi.setup.viewmodel.DebitCardViewModel
 
 @Composable
 internal fun DebitCardScreen(

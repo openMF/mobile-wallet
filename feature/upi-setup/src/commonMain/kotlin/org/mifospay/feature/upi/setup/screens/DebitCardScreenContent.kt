@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.upiSetup.screens
+package org.mifospay.feature.upi.setup.screens
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -34,8 +34,8 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.ExpiryDateInput
 
@@ -138,7 +138,7 @@ private fun formatCardNumber(text: AnnotatedString): TransformedText {
     return TransformedText(AnnotatedString(out), creditCardOffsetTranslator)
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun DebitCardScreenContentsPreview() {
     MifosTheme {

@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.upiSetup.screens
+package org.mifospay.feature.upi.setup.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,14 +20,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import mobile_wallet.feature.upi_setup.generated.resources.Res
+import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_enter_otp
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.OtpTextField
 import org.mifospay.core.ui.VerifyStepHeader
-import org.mifospay.feature.upi_setup.R
 
 @Composable
 internal fun OtpScreen(
@@ -71,7 +72,7 @@ private fun OtpScreenContent(
 ) {
     Column(modifier) {
         Text(
-            text = stringResource(id = R.string.feature_upi_setup_enter_otp),
+            text = stringResource(Res.string.feature_upi_setup_enter_otp),
             color = MaterialTheme.colorScheme.onSurface,
             fontSize = 18.sp,
             style = MaterialTheme.typography.headlineMedium,

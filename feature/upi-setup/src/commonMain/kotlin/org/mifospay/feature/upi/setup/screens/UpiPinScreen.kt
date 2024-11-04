@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.upiSetup.screens
+package org.mifospay.feature.upi.setup.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,19 +33,23 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import mobile_wallet.feature.upi_setup.generated.resources.Res
+import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_enter_upi_pin
+import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_invalid_upi_pin
+import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_reenter_upi
+import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_upi_pin_setup
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.ui.VerifyStepHeader
-import org.mifospay.feature.upi_setup.R
 
 @Composable
 internal fun UpiPinScreen(
@@ -73,7 +77,7 @@ internal fun UpiPinScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             VerifyStepHeader(
-                stringResource(id = R.string.feature_upi_setup_upi_pin_setup),
+                stringResource(Res.string.feature_upi_setup_upi_pin_setup),
                 verificationStatus,
             )
             if (contentVisibility) UpiPinScreenContent(correctlySettingUpi)
@@ -95,9 +99,9 @@ private fun UpiPinScreenContent(
     Text(
         modifier = modifier,
         text = if (steps1.intValue == 0) {
-            stringResource(id = R.string.feature_upi_setup_enter_upi_pin)
+            stringResource(Res.string.feature_upi_setup_enter_upi_pin)
         } else {
-            stringResource(id = R.string.feature_upi_setup_reenter_upi)
+            stringResource(Res.string.feature_upi_setup_reenter_upi)
         },
         color = MaterialTheme.colorScheme.onSurface,
         fontSize = 18.sp,
@@ -162,7 +166,7 @@ private fun UpiPinScreenContent(
                     } else {
                         showSnackbar(
                             snackbarHostState,
-                            R.string.feature_upi_setup_invalid_upi_pin.toString(),
+                            Res.string.feature_upi_setup_invalid_upi_pin.toString(),
                         )
                     }
                 },

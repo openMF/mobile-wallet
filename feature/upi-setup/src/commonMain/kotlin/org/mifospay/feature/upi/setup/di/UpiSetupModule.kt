@@ -7,20 +7,14 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.upiSetup.di
+package org.mifospay.feature.upi.setup.di
 
-import org.koin.core.module.dsl.viewModel
+import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.module
-import org.mifospay.feature.upiSetup.viewmodel.DebitCardViewModel
-import org.mifospay.feature.upiSetup.viewmodel.SetUpUpiViewModal
+import org.mifospay.feature.upi.setup.viewmodel.DebitCardViewModel
+import org.mifospay.feature.upi.setup.viewmodel.SetUpUpiViewModal
 
 val UpiSetupModule = module {
-
-    viewModel {
-        DebitCardViewModel()
-    }
-
-    viewModel {
-        SetUpUpiViewModal()
-    }
+    viewModelOf(::DebitCardViewModel)
+    viewModelOf(::SetUpUpiViewModal)
 }

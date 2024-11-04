@@ -78,6 +78,7 @@ import org.mifospay.feature.standing.instruction.createOrUpdate.addEditSIScreen
 import org.mifospay.feature.standing.instruction.createOrUpdate.navigateToSIAddEdit
 import org.mifospay.feature.standing.instruction.details.navigateSIDetails
 import org.mifospay.feature.standing.instruction.details.siDetailsScreen
+import org.mifospay.feature.upi.setup.navigation.setupUpiPinScreen
 import org.mifospay.shared.ui.MifosAppState
 
 @Composable
@@ -319,6 +320,10 @@ internal fun MifosNavHost(
         merchantTransferScreen(
             proceedWithMakeTransferFlow = { _, _ -> },
             onBackPressed = navController::navigateUp,
+        )
+
+        setupUpiPinScreen(
+            navigateBack = navController::navigateUp
         )
     }
 }

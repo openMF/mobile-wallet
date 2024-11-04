@@ -56,6 +56,7 @@ kotlin {
             api(projects.feature.makeTransfer)
             api(projects.feature.qr)
             api(projects.feature.merchants)
+            api(projects.feature.upiSetup)
         }
 
         desktopMain.dependencies {

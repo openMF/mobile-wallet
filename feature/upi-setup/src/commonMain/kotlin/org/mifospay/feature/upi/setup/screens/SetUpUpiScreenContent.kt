@@ -7,9 +7,8 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.upiSetup.screens
+package org.mifospay.feature.upi.setup.screens
 
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,8 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.common.Constants
 import org.mifospay.core.designsystem.theme.MifosTheme
 
@@ -58,7 +56,6 @@ private fun SettingAndForgotUpi(
     var upiPinScreenVerified by rememberSaveable { mutableStateOf(false) }
     var realOtp by rememberSaveable { mutableStateOf("") }
 
-    val context = LocalContext.current
 
     Column(modifier) {
         DebitCardScreen(
@@ -71,7 +68,7 @@ private fun SettingAndForgotUpi(
                 debitCardScreenVisible = false
             },
             onDebitCardVerificationFailed = {
-                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+
             },
         )
         OtpScreen(

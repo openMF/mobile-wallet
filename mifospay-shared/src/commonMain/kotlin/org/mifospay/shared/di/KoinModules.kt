@@ -41,6 +41,7 @@ import org.mifospay.feature.savedcards.di.SavedCardsModule
 import org.mifospay.feature.send.money.di.SendMoneyModule
 import org.mifospay.feature.settings.di.SettingsModule
 import org.mifospay.feature.standing.instruction.di.StandingInstructionModule
+import org.mifospay.feature.upi.setup.di.UpiSetupModule
 import org.mifospay.shared.MifosPayViewModel
 
 object KoinModules {
@@ -84,6 +85,7 @@ object KoinModules {
             MakeTransferModule,
             QrModule,
             MerchantsModule,
+            UpiSetupModule
         )
     }
     private val LibraryModule = module {

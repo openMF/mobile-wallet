@@ -7,11 +7,8 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.upiSetup.screens
+package org.mifospay.feature.upi.setup.screens
 
-import android.app.Activity
-import android.content.Intent
-import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,15 +22,15 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import com.mifospay.core.model.domain.BankAccountDetails
-import org.koin.androidx.compose.koinViewModel
+import mobile_wallet.feature.upi_setup.generated.resources.Res
+import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_back
+import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.Constants
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.feature.upiSetup.viewmodel.SetUpUpiViewModal
-import org.mifospay.feature.upi_setup.R
+import org.mifospay.core.model.bank.BankAccountDetails
+import org.mifospay.feature.upi.setup.viewmodel.SetUpUpiViewModal
 
 @Composable
 internal fun SetupUpiPinScreenRoute(
@@ -69,7 +66,6 @@ internal fun SetupUpiPinScreen(
     onBackPress: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -90,7 +86,7 @@ internal fun SetupUpiPinScreen(
                     ) {
                         Icon(
                             MifosIcons.ArrowBack,
-                            contentDescription = stringResource(id = R.string.feature_upi_setup_back),
+                            contentDescription = stringResource(Res.string.feature_upi_setup_back),
                         )
                     }
                 },
@@ -108,19 +104,6 @@ internal fun SetupUpiPinScreen(
                     otpText = otpText,
                     correctlySettingUpi = {
                         setupUpiPin(it)
-                        bankAccountDetails.isUpiEnabled = true
-                        bankAccountDetails.upiPin = it
-                        Toast.makeText(
-                            context,
-                            Constants.UPI_PIN_SETUP_COMPLETED_SUCCESSFULLY,
-                            Toast.LENGTH_SHORT,
-                        ).show()
-                        val intent = Intent().apply {
-                            putExtra(Constants.UPDATED_BANK_ACCOUNT, bankAccountDetails)
-                            putExtra(Constants.INDEX, index)
-                        }
-                        (context as? Activity)?.setResult(Activity.RESULT_OK, intent)
-                        (context as? Activity)?.finish()
                     },
                 )
             }
@@ -169,10 +152,13 @@ fun PreviewForgetUpi() {
 
 fun getBankAccountDetails(): BankAccountDetails {
     return BankAccountDetails(
-        "SBI",
-        "Ankur Sharma",
-        "New Delhi",
-        "XXXXXXXX9990XXX " + " ",
-        "Savings",
+        accountNo = "SBI",
+        bankName = "Ankur Sharma",
+        accountHolderName = "New Delhi",
+        branch = "XXXXXXXX9990XXX " + " ",
+        ifsc = "Savings",
+        type = "Debit",
+        isUpiEnabled = false,
+        upiPin = "0000",
     )
 }
