@@ -218,8 +218,8 @@ internal fun AccountsScreenContent(
         onClickDeleteBeneficiary = {
             onAction(AccountAction.DeleteBeneficiary(it))
         },
-        onAccountClicked = {
-            onAction(AccountAction.SetDefaultAccount(it))
+        onAccountClicked = { accId, accNo ->
+            onAction(AccountAction.SetDefaultAccount(accId, accNo))
         },
         onClickEditAccount = {
             onAction(AccountAction.EditSavingsAccount(it))
@@ -235,7 +235,7 @@ private fun AccountsList(
     defaultAccountId: Long?,
     accounts: List<Account>,
     beneficiaryList: List<Beneficiary>,
-    onAccountClicked: (Long) -> Unit,
+    onAccountClicked: (Long, String) -> Unit,
     onAddTPTBeneficiary: () -> Unit,
     onClickEditBeneficiary: (Beneficiary) -> Unit,
     onClickDeleteBeneficiary: (Long) -> Unit,
@@ -337,7 +337,7 @@ private fun AccountItem(
     account: Account,
     isDefault: Boolean,
     modifier: Modifier = Modifier,
-    onClick: (Long) -> Unit,
+    onClick: (Long, String) -> Unit,
     onClickEditAccount: (Long) -> Unit,
     onClickViewAccount: (Long) -> Unit,
 ) {
@@ -396,7 +396,7 @@ private fun AccountItem(
             }
         },
         onContentClick = if (account.status.active) {
-            { onClick(account.id) }
+            { onClick(account.id, account.number) }
         } else {
             null
         },

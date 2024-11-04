@@ -33,12 +33,15 @@ import org.mifospay.core.data.repository.AccountRepository
 import org.mifospay.core.data.util.UpiQrCodeProcessor
 import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.model.utils.PaymentQrData
-import org.mifospay.core.ui.utility.DialogState
+import org.mifospay.core.model.utils.toAccount
 import org.mifospay.core.ui.utils.BaseViewModel
+import org.mifospay.feature.send.money.SendMoneyAction.HandleRequestData
+import org.mifospay.feature.send.money.SendMoneyState.DialogState.Error
 
 private const val KEY_STATE = "send_payment_state"
 
 class SendMoneyViewModel(
+    private val scanner: QrScanner,
     repository: AccountRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SendMoneyState, SendMoneyEvent, SendMoneyAction>(
@@ -74,6 +77,10 @@ class SendMoneyViewModel(
         stateFlow.onEach {
             savedStateHandle[KEY_STATE] = it
         }.launchIn(viewModelScope)
+
+        savedStateHandle.get<String>("requestData")?.let {
+            trySendAction(HandleRequestData(it))
+        }
     }
 
     override fun handleAction(action: SendMoneyAction) {
@@ -101,6 +108,13 @@ class SendMoneyViewModel(
             }
 
             SendMoneyAction.OnClickScan -> {
+                scanner.startScanning().onEach { data ->
+                    data?.let { result ->
+                        sendAction(HandleRequestData(result))
+                    }
+                }.launchIn(viewModelScope)
+                // Using Play Service Code Scanner until Qr Scan module is stable
+                // sendEvent(SendMoneyEvent.NavigateToScanQrScreen)
             }
 
             is SendMoneyAction.DeselectAccount -> {
@@ -116,6 +130,8 @@ class SendMoneyViewModel(
             }
 
             SendMoneyAction.OnProceedClicked -> validateTransferFlow()
+
+            is HandleRequestData -> handleRequestData(action)
         }
     }
 
@@ -143,7 +159,27 @@ class SendMoneyViewModel(
 
     private fun updateErrorState(message: String) {
         mutableStateFlow.update {
-            it.copy(dialogState = SendMoneyState.DialogState.Error(message))
+            it.copy(dialogState = Error(message))
+        }
+    }
+
+    private fun handleRequestData(action: HandleRequestData) {
+        viewModelScope.launch {
+            try {
+                val requestData = UpiQrCodeProcessor.decodeUpiString(action.requestData)
+
+                mutableStateFlow.update { state ->
+                    state.copy(
+                        amount = requestData.amount,
+                        accountNumber = requestData.accountNo,
+                        selectedAccount = requestData.toAccount(),
+                    )
+                }
+            } catch (e: Exception) {
+                mutableStateFlow.update {
+                    it.copy(dialogState = Error("Requesting payment QR but found - ${action.requestData}"))
+                }
+            }
         }
     }
 }
@@ -195,6 +231,7 @@ sealed interface ViewState {
 sealed interface SendMoneyEvent {
     data object OnNavigateBack : SendMoneyEvent
     data class NavigateToTransferScreen(val data: String) : SendMoneyEvent
+    data object NavigateToScanQrScreen : SendMoneyEvent
 }
 
 sealed interface SendMoneyAction {
@@ -213,4 +250,6 @@ sealed interface SendMoneyAction {
     data object DismissDialog : SendMoneyAction
 
     data object OnProceedClicked : SendMoneyAction
+
+    data class HandleRequestData(val requestData: String) : SendMoneyAction
 }

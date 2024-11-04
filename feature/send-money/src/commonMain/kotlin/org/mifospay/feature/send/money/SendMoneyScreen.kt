@@ -81,6 +81,7 @@ import org.mifospay.core.ui.utils.EventsEffect
 fun SendMoneyScreen(
     onBackClick: () -> Unit,
     navigateToTransferScreen: (String) -> Unit,
+    navigateToScanQrScreen: () -> Unit,
     showTopBar: Boolean = true,
     modifier: Modifier = Modifier,
     viewModel: SendMoneyViewModel = koinViewModel(),
@@ -95,6 +96,8 @@ fun SendMoneyScreen(
             is SendMoneyEvent.NavigateToTransferScreen -> {
                 navigateToTransferScreen(event.data)
             }
+
+            is SendMoneyEvent.NavigateToScanQrScreen -> navigateToScanQrScreen.invoke()
         }
     }
 

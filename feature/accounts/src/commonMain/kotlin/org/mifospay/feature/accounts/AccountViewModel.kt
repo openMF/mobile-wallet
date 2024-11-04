@@ -26,6 +26,7 @@ import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.ui.utils.BaseViewModel
 import org.mifospay.feature.accounts.AccountAction.Internal.BeneficiaryDeleteResultReceived
@@ -42,7 +43,7 @@ class AccountViewModel(
 ) : BaseViewModel<AccountState, AccountEvent, AccountAction>(
     initialState = run {
         val clientId = requireNotNull(userRepository.clientId.value)
-        val defaultAccount = userRepository.defaultAccount
+        val defaultAccount = userRepository.defaultAccountId.value
 
         AccountState(
             clientId = clientId,
@@ -125,7 +126,12 @@ class AccountViewModel(
 
     private fun handleSetDefaultAccount(action: AccountAction.SetDefaultAccount) {
         viewModelScope.launch {
-            userRepository.updateDefaultAccount(action.accountId)
+            userRepository.updateDefaultAccount(
+                DefaultAccount(
+                    accountId = action.accountId,
+                    accountNo = action.accountNo,
+                ),
+            )
         }
 
         mutableStateFlow.update { it.copy(defaultAccountId = action.accountId) }
@@ -225,7 +231,7 @@ sealed interface AccountAction {
     data object CreateSavingsAccount : AccountAction
     data class EditSavingsAccount(val accountId: Long) : AccountAction
     data class ViewAccountDetails(val accountId: Long) : AccountAction
-    data class SetDefaultAccount(val accountId: Long) : AccountAction
+    data class SetDefaultAccount(val accountId: Long, val accountNo: String) : AccountAction
 
     data object DismissDialog : AccountAction
 

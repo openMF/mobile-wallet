@@ -54,6 +54,8 @@ kotlin {
             api(projects.feature.requestMoney)
             api(projects.feature.sendMoney)
             api(projects.feature.makeTransfer)
+            api(projects.feature.qr)
+            api(projects.feature.merchants)
         }
 
         desktopMain.dependencies {

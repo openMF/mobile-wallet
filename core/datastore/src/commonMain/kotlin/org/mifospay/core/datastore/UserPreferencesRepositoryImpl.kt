@@ -15,8 +15,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import org.mifospay.core.common.DataState
+import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.user.UserInfo
@@ -55,12 +57,24 @@ class UserPreferencesRepositoryImpl(
     override val authToken: String?
         get() = preferenceManager.getAuthToken()
 
-    override val defaultAccount: Long?
-        get() = preferenceManager.getDefaultAccount()
+    override val defaultAccount: StateFlow<DefaultAccount?>
+        get() = preferenceManager.defaultAccount.stateIn(
+            scope = unconfinedScope,
+            initialValue = null,
+            started = SharingStarted.Eagerly,
+        )
 
-    override suspend fun updateDefaultAccount(accountId: Long): DataState<Unit> {
+    override val defaultAccountId: StateFlow<Long?>
+        get() = preferenceManager.defaultAccount
+            .map { it?.accountId }.stateIn(
+                scope = unconfinedScope,
+                initialValue = null,
+                started = SharingStarted.Eagerly,
+            )
+
+    override suspend fun updateDefaultAccount(account: DefaultAccount): DataState<Unit> {
         return try {
-            val result = preferenceManager.updateDefaultAccount(accountId)
+            val result = preferenceManager.updateDefaultAccount(account)
 
             DataState.Success(result)
         } catch (e: Exception) {

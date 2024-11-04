@@ -1,5 +1,5 @@
 [versions]
-accompanistPagerVersion = "0.34.0"
+accompanist = "0.34.0"
 activityVersion = "1.9.2"
 androidDesugarJdkLibs = "2.1.2"
 androidGradlePlugin = "8.5.2"
@@ -41,6 +41,7 @@ gmsPlugin = "4.4.2"
 googleOss = "17.1.0"
 googleOssPlugin = "0.10.6"
 googleidVersion = "1.1.1"
+guavaVersion = "33.3.1-android"
 junitVersion = "4.13.2"
 kermit = "2.0.4"
 koin = "4.0.0-RC2"
@@ -70,6 +71,7 @@ okHttp3Version = "4.12.0"
 okioVersion = "3.9.1"
 playServicesAuthVersion = "21.2.0"
 playServicesCodeScanner = "16.1.0"
+mlkit="17.3.0"
 protobuf = "4.26.0"
 protobufPlugin = "0.9.4"
 qroseVersion = "1.0.1"
@@ -102,7 +104,8 @@ jbCoreBundle = "1.0.1"
 jbSavedState = "1.2.2"
 
 [libraries]
-accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanistPagerVersion" }
+accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
 android-desugarJdkLibs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "androidDesugarJdkLibs" }
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -114,6 +117,7 @@ androidx-activity-ktx = { group = "androidx.activity", name = "activity-ktx", ve
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidxBrowser" }
 
+androidx-camera-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "cameraViewVersion" }
 androidx-camera-lifecycle = { group = "androidx.camera", name = "camera-lifecycle", version.ref = "cameraLifecycleVersion" }
 androidx-camera-view = { group = "androidx.camera", name = "camera-view", version.ref = "cameraViewVersion" }
 
@@ -182,6 +186,7 @@ datastore = { group = "androidx.datastore", name = "datastore-core-okio", versio
 
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 detekt-gradlePlugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
+guava = { module = "com.google.guava:guava", version.ref = "guavaVersion" }
 qrose = { group = "io.github.alexzhirkevich", name="qrose", version.ref = "qroseVersion" }
 twitter-detekt-compose = { group = "com.twitter.compose.rules", name = "detekt", version.ref = "twitter-detekt-compose" }
 
@@ -200,6 +205,7 @@ google-oss-licenses = { group = "com.google.android.gms", name = "play-services-
 google-oss-licenses-plugin = { group = "com.google.android.gms", name = "oss-licenses-plugin", version.ref = "googleOssPlugin" }
 google-play-services-code-scanner = { group = "com.google.android.gms", name = "play-services-code-scanner", version.ref = "playServicesCodeScanner" }
 googleid = { group = "com.google.android.libraries.identity.googleid", name = "googleid", version.ref = "googleidVersion" }
+mlkit-barcode-scanning = { module = "com.google.mlkit:barcode-scanning", version.ref = "mlkit" }
 
 # jb Compose
 jb-kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }

@@ -21,8 +21,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
+import org.mifospay.core.datastore.UserPreferencesDataSource.Companion.DEFAULT_ACCOUNT
 import org.mifospay.core.datastore.proto.ClientPreferences
 import org.mifospay.core.datastore.proto.UserInfoPreferences
+import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient
 import org.mifospay.core.model.user.UserInfo
@@ -57,6 +59,17 @@ class UserPreferencesDataSource(
         ),
     )
 
+    private val _defaultAccount = MutableStateFlow(
+        settings.decodeValue(
+            key = DEFAULT_ACCOUNT,
+            serializer = DefaultAccount.serializer(),
+            defaultValue = settings.decodeValueOrNull(
+                key = DEFAULT_ACCOUNT,
+                serializer = DefaultAccount.serializer(),
+            ) ?: DefaultAccount.DEFAULT,
+        ),
+    )
+
     val token = _userInfo.map {
         it.base64EncodedAuthenticationKey
     }
@@ -65,6 +78,8 @@ class UserPreferencesDataSource(
     val clientInfo = _clientInfo.map(ClientPreferences::toClientInfo)
 
     val clientId = _clientInfo.map { it.id }
+
+    val defaultAccount = _defaultAccount.map { it.takeIf { it.accountId != 0L } }
 
     suspend fun updateClientInfo(client: Client) {
         withContext(dispatcher) {
@@ -109,20 +124,18 @@ class UserPreferencesDataSource(
         }
     }
 
+    fun updateDefaultAccount(account: DefaultAccount) {
+        settings.putDefaultAccount(account)
+
+        _defaultAccount.value = account
+    }
+
     fun updateAuthToken(token: String) {
         settings.putString(AUTH_TOKEN, token)
     }
 
     fun getAuthToken(): String? {
         return settings.getString(AUTH_TOKEN, "").ifEmpty { null }
-    }
-
-    fun getDefaultAccount(): Long? {
-        return settings.getLong(DEFAULT_ACCOUNT, 0).takeIf { it != 0L }
-    }
-
-    fun updateDefaultAccount(accountId: Long) {
-        settings.putLong(DEFAULT_ACCOUNT, accountId)
     }
 
     suspend fun clearInfo() {
@@ -150,5 +163,13 @@ private fun Settings.putUserInfoPreference(preference: UserInfoPreferences) {
         key = USER_INFO_KEY,
         serializer = UserInfoPreferences.serializer(),
         value = preference,
+    )
+}
+
+private fun Settings.putDefaultAccount(account: DefaultAccount) {
+    encodeValue(
+        key = DEFAULT_ACCOUNT,
+        serializer = DefaultAccount.serializer(),
+        value = account,
     )
 }

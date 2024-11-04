@@ -9,11 +9,7 @@
  */
 package org.mifospay.shared.navigation
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.navOptions
@@ -54,11 +50,16 @@ import org.mifospay.feature.make.transfer.navigation.navigateToTransferScreen
 import org.mifospay.feature.make.transfer.navigation.transferScreen
 import org.mifospay.feature.make.transfer.success.navigateTransferSuccess
 import org.mifospay.feature.make.transfer.success.transferSuccessScreen
+import org.mifospay.feature.merchants.navigation.merchantTransferScreen
+import org.mifospay.feature.merchants.ui.MerchantScreen
 import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
 import org.mifospay.feature.payments.paymentsScreen
 import org.mifospay.feature.profile.navigation.profileNavGraph
+import org.mifospay.feature.qr.navigation.SCAN_QR_ROUTE
+import org.mifospay.feature.qr.navigation.navigateToScanQr
+import org.mifospay.feature.qr.navigation.scanQrScreen
 import org.mifospay.feature.receipt.navigation.receiptScreen
 import org.mifospay.feature.request.money.navigation.navigateToShowQrScreen
 import org.mifospay.feature.request.money.navigation.showQrScreen
@@ -68,7 +69,7 @@ import org.mifospay.feature.savedcards.createOrUpdate.navigateToCardAddEdit
 import org.mifospay.feature.savedcards.details.cardDetailRoute
 import org.mifospay.feature.savedcards.details.navigateToCardDetails
 import org.mifospay.feature.send.money.SendMoneyScreen
-import org.mifospay.feature.send.money.navigation.SEND_MONEY_ROUTE
+import org.mifospay.feature.send.money.navigation.SEND_MONEY_BASE_ROUTE
 import org.mifospay.feature.send.money.navigation.navigateToSendMoneyScreen
 import org.mifospay.feature.send.money.navigation.sendMoneyScreen
 import org.mifospay.feature.settings.navigation.settingsScreen
@@ -92,6 +93,7 @@ internal fun MifosNavHost(
             SendMoneyScreen(
                 onBackClick = navController::navigateUp,
                 navigateToTransferScreen = navController::navigateToTransferScreen,
+                navigateToScanQrScreen = navController::navigateToScanQr,
                 showTopBar = false,
             )
         },
@@ -131,9 +133,7 @@ internal fun MifosNavHost(
             )
         },
         TabContent(FinanceScreenContents.MERCHANTS.name) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text("Merchants Screen || TODO", modifier = Modifier.align(Alignment.Center))
-            }
+            MerchantScreen()
         },
         TabContent(FinanceScreenContents.KYC.name) {
             KYCScreen(
@@ -272,8 +272,9 @@ internal fun MifosNavHost(
         )
 
         sendMoneyScreen(
-            navigateToTransferScreen = navController::navigateToTransferScreen,
             onBackClick = navController::popBackStack,
+            navigateToTransferScreen = navController::navigateToTransferScreen,
+            navigateToScanQrScreen = navController::navigateToScanQr,
         )
 
         transferScreen(
@@ -281,7 +282,7 @@ internal fun MifosNavHost(
             onTransferSuccess = {
                 navController.navigateTransferSuccess(
                     navOptions {
-                        popUpTo(SEND_MONEY_ROUTE) {
+                        popUpTo(SEND_MONEY_BASE_ROUTE) {
                             inclusive = true
                         }
                         launchSingleTop = true
@@ -299,6 +300,25 @@ internal fun MifosNavHost(
                     launchSingleTop = true
                 }
             },
+        )
+
+        scanQrScreen(
+            navigateBack = navController::popBackStack,
+            navigateToSendScreen = {
+                navController.navigateToSendMoneyScreen(
+                    requestData = it,
+                    navOptions = navOptions {
+                        popUpTo(SCAN_QR_ROUTE) {
+                            inclusive = true
+                        }
+                    },
+                )
+            },
+        )
+
+        merchantTransferScreen(
+            proceedWithMakeTransferFlow = { _, _ -> },
+            onBackPressed = navController::navigateUp,
         )
     }
 }

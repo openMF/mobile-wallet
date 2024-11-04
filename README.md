@@ -43,9 +43,9 @@ that can be used as a dependency in any other wallet based project. It is develo
 | :feature:invoices             | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:kyc                  | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:make-transfer        | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:merchants            | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
+| :feature:merchants            | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:notification         | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
-| :feature:qr                   | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
+| :feature:qr                   | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:receipt              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:request-money        | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
 | :feature:saved-cards          | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |

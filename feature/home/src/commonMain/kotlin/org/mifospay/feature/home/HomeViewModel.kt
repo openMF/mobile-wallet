@@ -22,6 +22,7 @@ import org.mifospay.core.common.Parcelize
 import org.mifospay.core.data.repository.SelfServiceRepository
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -35,10 +36,11 @@ class HomeViewModel(
 ) : BaseViewModel<HomeState, HomeEvent, HomeAction>(
     initialState = run {
         val client = requireNotNull(preferencesRepository.client.value)
-        val defaultAccountId = preferencesRepository.defaultAccount
+        val defaultAccount = preferencesRepository.defaultAccountId.value
+
         HomeState(
             client = client,
-            defaultAccountId = defaultAccountId,
+            defaultAccountId = defaultAccount,
         )
     },
 ) {
@@ -54,7 +56,9 @@ class HomeViewModel(
             is DataState.Success -> {
                 if (state.defaultAccountId == null && result.data.accounts.isNotEmpty()) {
                     val accountId = result.data.accounts.first().id
-                    preferencesRepository.updateDefaultAccount(accountId)
+                    val accountNo = result.data.accounts.first().number
+
+                    sendAction(HomeAction.MarkAsDefault(accountId, accountNo))
                 }
 
                 ViewState.Content(
@@ -113,7 +117,12 @@ class HomeViewModel(
 
             is HomeAction.MarkAsDefault -> {
                 viewModelScope.launch {
-                    val result = preferencesRepository.updateDefaultAccount(action.accountId)
+                    val result = preferencesRepository.updateDefaultAccount(
+                        DefaultAccount(
+                            accountId = action.accountId,
+                            accountNo = action.accountNo,
+                        ),
+                    )
 
                     when (result) {
                         is DataState.Loading -> {}
@@ -183,7 +192,7 @@ sealed interface HomeAction {
     data object OnDismissDialog : HomeAction
     data object OnNavigateBack : HomeAction
 
-    data class MarkAsDefault(val accountId: Long) : HomeAction
+    data class MarkAsDefault(val accountId: Long, val accountNo: String) : HomeAction
     data class AccountDetailsClicked(val accountId: Long) : HomeAction
     data class TransactionClicked(val accountId: Long, val transactionId: Long) : HomeAction
 }

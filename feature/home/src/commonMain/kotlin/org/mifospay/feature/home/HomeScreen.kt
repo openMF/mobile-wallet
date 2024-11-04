@@ -234,8 +234,8 @@ private fun HomeScreenContent(
                     onClick = {
                         onAction(HomeAction.AccountDetailsClicked(it))
                     },
-                    onMarkAsDefault = {
-                        onAction(HomeAction.MarkAsDefault(it))
+                    onMarkAsDefault = { accId, accNo ->
+                        onAction(HomeAction.MarkAsDefault(accId, accNo))
                     },
                 )
             }
@@ -292,7 +292,7 @@ private fun AccountList(
     accounts: List<Account>,
     defaultAccountId: Long?,
     modifier: Modifier = Modifier,
-    onMarkAsDefault: (Long) -> Unit,
+    onMarkAsDefault: (Long, String) -> Unit,
     onClick: (Long) -> Unit,
 ) {
     val pagerState = rememberPagerState { accounts.size }
@@ -314,7 +314,7 @@ private fun AccountList(
 private fun AccountCard(
     account: Account,
     defaultAccountId: Long?,
-    onMarkAsDefault: (Long) -> Unit,
+    onMarkAsDefault: (Long, String) -> Unit,
     modifier: Modifier = Modifier,
     onClick: (Long) -> Unit,
 ) {
@@ -375,7 +375,7 @@ private fun AccountCard(
                     } else {
                         CardDropdownBox(
                             onClickDefault = {
-                                onMarkAsDefault(account.id)
+                                onMarkAsDefault(account.id, account.number)
                             },
                         )
                     }

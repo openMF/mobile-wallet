@@ -45,7 +45,7 @@ internal class MakeTransferViewModel(
 ) : BaseViewModel<MakeTransferState, MakeTransferEvent, MakeTransferAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val fromClientId = requireNotNull(repository.clientId.value)
-        val defaultAccountId = requireNotNull(repository.defaultAccount)
+        val defaultAccountId = requireNotNull(repository.defaultAccountId.value)
         val paymentData = requireNotNull(savedStateHandle.get<String>(TRANSFER_ARG))
         val clientData = UpiQrCodeProcessor.decodeUpiString(paymentData)
 

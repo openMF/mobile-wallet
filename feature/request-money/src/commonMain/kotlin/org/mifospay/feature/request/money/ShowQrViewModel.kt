@@ -43,6 +43,7 @@ import org.mifospay.core.common.Parcelize
 import org.mifospay.core.data.repository.LocalAssetRepository
 import org.mifospay.core.data.util.UpiQrCodeProcessor
 import org.mifospay.core.datastore.UserPreferencesRepository
+import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.ui.utils.BaseViewModel
@@ -57,11 +58,11 @@ class ShowQrViewModel(
 ) : BaseViewModel<ShowQrState, ShowQrEvent, ShowQrAction>(
     initialState = savedStateHandle[KEY_STATE] ?: run {
         val client = requireNotNull(repository.client.value)
-        val defaultAccountId = requireNotNull(repository.defaultAccount)
+        val defaultAccount = requireNotNull(repository.defaultAccount.value)
 
         ShowQrState(
             client = client,
-            defaultAccountId = defaultAccountId,
+            defaultAccount = defaultAccount,
             viewState = ShowQrState.ViewState.Loading,
         )
     },
@@ -178,7 +179,7 @@ class ShowQrViewModel(
 data class ShowQrState(
     val client: Client,
 
-    val defaultAccountId: Long,
+    val defaultAccount: DefaultAccount,
 
     @IgnoredOnParcel
     val viewState: ViewState,
@@ -186,8 +187,8 @@ data class ShowQrState(
     val qrData: PaymentQrData = PaymentQrData(
         clientId = client.id,
         clientName = client.displayName,
-        accountNo = client.accountNo,
-        accountId = defaultAccountId,
+        accountNo = defaultAccount.accountNo,
+        accountId = defaultAccount.accountId,
         currency = "USD",
         amount = "",
     ),

@@ -11,6 +11,7 @@ package org.mifospay.core.model.utils
 
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
+import org.mifospay.core.model.search.AccountResult
 
 /**
  * Parcelable data class representing the UPI payment request details
@@ -43,4 +44,18 @@ data class PaymentQrData(
         // WALLET
         const val ACCOUNT_TYPE_ID: Long = 2
     }
+}
+
+fun PaymentQrData.toAccount(): AccountResult {
+    return AccountResult(
+        entityId = accountId,
+        entityAccountNo = accountNo,
+        entityExternalId = "",
+        entityName = "WALLET",
+        entityType = "SAVING",
+        parentId = clientId,
+        parentName = clientName,
+        parentType = "client",
+        subEntityType = "depositAccountType.savingsDeposit",
+    )
 }
