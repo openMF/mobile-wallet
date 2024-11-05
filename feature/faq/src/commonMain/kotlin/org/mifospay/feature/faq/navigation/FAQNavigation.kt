@@ -12,7 +12,7 @@ package org.mifospay.feature.faq.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.faq.FaqScreenRoute
 
 const val FAQ_ROUTE = "faq_route"
@@ -24,7 +24,7 @@ fun NavController.navigateToFAQ(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.faqScreen(
     navigateBack: () -> Unit,
 ) {
-    composable(route = FAQ_ROUTE) {
+    composableWithSlideTransitions(route = FAQ_ROUTE) {
         FaqScreenRoute(
             navigateBack = navigateBack,
         )

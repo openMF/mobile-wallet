@@ -85,7 +85,7 @@ object KoinModules {
             MakeTransferModule,
             QrModule,
             MerchantsModule,
-            UpiSetupModule
+            UpiSetupModule,
         )
     }
     private val LibraryModule = module {

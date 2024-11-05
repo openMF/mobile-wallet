@@ -39,7 +39,7 @@ fun NavGraphBuilder.setupUpiPinScreen(
             ifsc = null,
             type = null,
             isUpiEnabled = false,
-            upiPin = null
+            upiPin = null,
         )
         val index = backStackEntry.arguments?.getInt(Constants.INDEX) ?: 0
         val type = backStackEntry.arguments?.getString(Constants.TYPE) ?: ""

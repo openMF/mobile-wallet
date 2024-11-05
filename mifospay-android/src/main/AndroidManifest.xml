@@ -65,14 +65,6 @@
                 android:resource="@xml/provider_paths" />
         </provider>
 
-        <service
-            android:name=".data.firebase.api.services.MifosPayMessagingService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
-
         <!-- Disable collection of AD_ID for all build variants -->
         <meta-data
             android:name="google_analytics_adid_collection_enabled"

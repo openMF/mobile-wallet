@@ -20,12 +20,6 @@ class KMPKoinConventionPlugin : Plugin<Project> {
 
                 add("commonMainImplementation", libs.findLibrary("koin.annotations").get())
                 add("kspCommonMainMetadata", libs.findLibrary("koin.ksp.compiler").get())
-//                add("kspAndroid", libs.findLibrary("koin.ksp.compiler").get())
-//                add("kspWasmJs", libs.findLibrary("koin.ksp.compiler").get())
-//                add("kspJvm", libs.findLibrary("koin.ksp.compiler").get())
-//                add("kspIosX64", libs.findLibrary("koin.ksp.compiler").get())
-//                add("kspIosArm64", libs.findLibrary("koin.ksp.compiler").get())
-//                add("kspIosSimulatorArm64", libs.findLibrary("koin.ksp.compiler").get())
 
                 add("commonTestImplementation", libs.findLibrary("koin.test").get())
             }

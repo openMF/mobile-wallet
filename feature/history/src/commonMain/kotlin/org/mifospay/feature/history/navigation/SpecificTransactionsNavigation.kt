@@ -14,8 +14,8 @@ package org.mifospay.feature.history.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.history.transactions.SpecificTransactionsScreen
 
 const val SPECIFIC_TRANSACTIONS_BASE_ROUTE = "specific_transactions_route"
@@ -30,7 +30,7 @@ fun NavGraphBuilder.specificTransactionsScreen(
     navigateBack: () -> Unit,
     viewTransactionDetail: (Long) -> Unit,
 ) {
-    composable(
+    composableWithSlideTransitions(
         route = SPECIFIC_TRANSACTIONS_ROUTE,
         arguments = listOf(
             navArgument(ACCOUNT_ARG) { type = NavType.LongType },

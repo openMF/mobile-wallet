@@ -51,6 +51,7 @@ import org.mifospay.feature.profile.components.ProfileImage
 internal fun ProfileScreen(
     onEditProfile: () -> Unit,
     onLinkBackAccount: () -> Unit,
+    showQrCode: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProfileViewModel = koinViewModel(),
 ) {
@@ -61,9 +62,7 @@ internal fun ProfileScreen(
         when (event) {
             ProfileEvent.OnEditProfile -> onEditProfile.invoke()
             ProfileEvent.OnLinkBankAccount -> onLinkBackAccount.invoke()
-            ProfileEvent.ShowQRCode -> {
-                // TODO: Show QR code
-            }
+            ProfileEvent.ShowQRCode -> showQrCode.invoke()
         }
     }
 

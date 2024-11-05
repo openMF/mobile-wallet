@@ -12,8 +12,8 @@ package org.mifospay.feature.history.navigation
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.history.detail.TransactionDetailScreen
 
 const val TRANSACTION_DETAIL_ROUTE = "transaction_detail"
@@ -24,7 +24,7 @@ private const val BASE_ROUTE = "$TRANSACTION_DETAIL_ROUTE&$TRANSFER_ID={$TRANSFE
 fun NavGraphBuilder.transactionDetailNavigation(
     navigateBack: () -> Unit,
 ) {
-    composable(
+    composableWithSlideTransitions(
         route = BASE_ROUTE,
         arguments = listOf(
             navArgument(TRANSFER_ID) { type = NavType.LongType },

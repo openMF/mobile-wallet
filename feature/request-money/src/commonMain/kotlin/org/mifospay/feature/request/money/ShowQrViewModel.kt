@@ -182,7 +182,7 @@ data class ShowQrState(
     val defaultAccount: DefaultAccount,
 
     @IgnoredOnParcel
-    val viewState: ViewState,
+    val viewState: ViewState = ViewState.Loading,
 
     val qrData: PaymentQrData = PaymentQrData(
         clientId = client.id,

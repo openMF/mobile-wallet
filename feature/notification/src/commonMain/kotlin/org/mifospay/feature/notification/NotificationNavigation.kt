@@ -12,14 +12,14 @@ package org.mifospay.feature.notification
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import org.mifospay.core.ui.composableWithSlideTransitions
 
 const val NOTIFICATION_ROUTE = "notification_route"
 
 fun NavGraphBuilder.notificationScreen(
     navigateBack: () -> Unit,
 ) {
-    composable(NOTIFICATION_ROUTE) {
+    composableWithSlideTransitions(NOTIFICATION_ROUTE) {
         NotificationScreen(
             navigateBack = navigateBack,
         )

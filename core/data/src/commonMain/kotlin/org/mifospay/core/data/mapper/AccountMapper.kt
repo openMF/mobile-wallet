@@ -10,10 +10,15 @@
 package org.mifospay.core.data.mapper
 
 import org.mifospay.core.model.account.Account
+import org.mifospay.core.model.savingsaccount.SavingAccountEntity
 import org.mifospay.core.network.model.entity.client.ClientAccountsEntity
 
 fun ClientAccountsEntity.toAccount(): List<Account> {
-    return this.savingsAccounts.map {
+    return this.savingsAccounts.toAccount()
+}
+
+fun List<SavingAccountEntity>.toAccount(): List<Account> {
+    return map {
         Account(
             name = it.productName,
             number = it.accountNo,

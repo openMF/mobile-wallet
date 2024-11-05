@@ -12,8 +12,8 @@ package org.mifospay.feature.profile.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import org.mifospay.core.ui.composableWithPushTransitions
 import org.mifospay.feature.profile.ProfileScreen
 
 private const val PROFILE_NAVIGATION = "profile_navigation"
@@ -25,11 +25,13 @@ fun NavController.navigateToProfile(navOptions: NavOptions) =
 internal fun NavGraphBuilder.profileScreen(
     onEditProfile: () -> Unit,
     onLinkBankAccount: () -> Unit,
+    showQrCode: () -> Unit,
 ) {
-    composable(route = PROFILE_ROUTE) {
+    composableWithPushTransitions(route = PROFILE_ROUTE) {
         ProfileScreen(
             onEditProfile = onEditProfile,
             onLinkBackAccount = onLinkBankAccount,
+            showQrCode = showQrCode,
         )
     }
 }
@@ -37,6 +39,7 @@ internal fun NavGraphBuilder.profileScreen(
 fun NavGraphBuilder.profileNavGraph(
     navController: NavController,
     onLinkBankAccount: () -> Unit,
+    showQrCode: () -> Unit,
 ) {
     navigation(
         route = PROFILE_NAVIGATION,
@@ -45,6 +48,7 @@ fun NavGraphBuilder.profileNavGraph(
         profileScreen(
             onEditProfile = navController::navigateToEditProfile,
             onLinkBankAccount = onLinkBankAccount,
+            showQrCode = showQrCode,
         )
 
         editProfileScreen(

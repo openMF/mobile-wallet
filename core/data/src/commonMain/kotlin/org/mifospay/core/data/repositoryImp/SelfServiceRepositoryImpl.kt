@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.runningFold
+import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.flow.zip
 import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
@@ -129,6 +129,7 @@ class SelfServiceRepositoryImpl(
         }.flowOn(dispatcher)
     }
 
+    // TODO:: Optimize below functions
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getActiveAccountsWithTransactions(
         clientId: Long,
@@ -136,8 +137,8 @@ class SelfServiceRepositoryImpl(
     ): Flow<DataState<AccountsWithTransactions>> {
         val accounts = apiManager.clientsApi
             .getAccounts(clientId, Constants.SAVINGS)
+            .map { entity -> entity.savingsAccounts.filter { it.status.active } }
             .map { it.toAccount() }
-            .map { list -> list.filter { it.status.active } }
             .flowOn(dispatcher)
 
         val transactions = accounts
@@ -148,13 +149,13 @@ class SelfServiceRepositoryImpl(
 
         return accounts.combine(transactions) { accountList, transaction ->
             AccountsWithTransactions(accountList, transaction)
-        }.map { DataState.Success(it) }
+        }.map { DataState.Success(it) }.flowOn(dispatcher)
     }
 
     override fun getTransactions(accountId: List<Long>, limit: Int?): Flow<List<Transaction>> {
         return accountId.asFlow().flatMapMerge { clientId ->
             getSelfAccountTransactions(clientId)
-        }.runningFold(emptyList()) { acc, transactions ->
+        }.scan(emptyList()) { acc, transactions ->
             acc + transactions.sortedByDescending { it.date }.let { sortedList ->
                 limit?.let { sortedList.take(it) } ?: sortedList
             }

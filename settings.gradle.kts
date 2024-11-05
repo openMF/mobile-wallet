@@ -76,9 +76,4 @@ include(":feature:request-money")
 include(":feature:upi-setup")
 include(":feature:qr")
 
-include(":lint")
-
-include(":libs:country-code-picker")
-include(":libs:pullrefresh")
-include(":libs:material3-navigation")
 include(":libs:mifos-passcode")

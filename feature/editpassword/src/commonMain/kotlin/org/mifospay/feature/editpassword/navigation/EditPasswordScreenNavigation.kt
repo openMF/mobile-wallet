@@ -11,7 +11,7 @@ package org.mifospay.feature.editpassword.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
+import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.editpassword.EditPasswordScreen
 
 const val EDIT_PASSWORD_ROUTE = "edit_password_route"
@@ -20,7 +20,7 @@ fun NavGraphBuilder.editPasswordScreen(
     navigateBack: () -> Unit,
     onLogOut: () -> Unit,
 ) {
-    composable(route = EDIT_PASSWORD_ROUTE) {
+    composableWithSlideTransitions(route = EDIT_PASSWORD_ROUTE) {
         EditPasswordScreen(
             navigateBack = navigateBack,
             onLogout = onLogOut,

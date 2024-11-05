@@ -42,7 +42,7 @@ class TransferViewModel(
     override fun handleAction(action: TransferAction) {
         when (action) {
             is TransferAction.ShowQR -> {
-                sendEvent(TransferEvent.OnShowQR(action.externalId))
+                sendEvent(TransferEvent.OnShowQR)
             }
 
             is TransferAction.CopyTextToClipboard -> {
@@ -60,10 +60,10 @@ data class TransferState(
 
 sealed interface TransferEvent {
     data class OnCopyTextToClipboard(val text: String) : TransferEvent
-    data class OnShowQR(val externalId: String) : TransferEvent
+    data object OnShowQR : TransferEvent
 }
 
 sealed interface TransferAction {
     data class CopyTextToClipboard(val text: String) : TransferAction
-    data class ShowQR(val externalId: String) : TransferAction
+    data object ShowQR : TransferAction
 }

@@ -58,7 +58,13 @@ fun ProfileImage(
             .size(150.dp),
         contentAlignment = Alignment.Center,
     ) {
-        val image = bitmap?.let { Base64.decode(it) }
+        val image = bitmap?.let {
+            try {
+                Base64.decode(it)
+            } catch (e: Exception) {
+                byteArrayOf()
+            }
+        }
 
         AsyncImage(
             model = ImageRequest.Builder(context)
@@ -91,7 +97,11 @@ fun EditableProfileImage(
 
     LaunchedEffect(serverImage) {
         if (serverImage != null) {
-            bytes = Base64.decode(serverImage)
+            bytes = try {
+                Base64.decode(serverImage)
+            } catch (e: Exception) {
+                null
+            }
         }
     }
 

@@ -12,7 +12,7 @@ package org.mifospay.feature.qr.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.qr.ScanQrCodeScreen
 
 const val SCAN_QR_ROUTE = "read_qr_route"
@@ -24,7 +24,7 @@ fun NavGraphBuilder.scanQrScreen(
     navigateBack: () -> Unit,
     navigateToSendScreen: (String) -> Unit,
 ) {
-    composable(route = SCAN_QR_ROUTE) {
+    composableWithSlideTransitions(route = SCAN_QR_ROUTE) {
         ScanQrCodeScreen(
             navigateBack = navigateBack,
             navigateToSendScreen = navigateToSendScreen,

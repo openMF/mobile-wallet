@@ -17,6 +17,7 @@ import org.mifospay.core.ui.utility.TabContent
 import org.mifospay.feature.accounts.AccountsScreen
 import org.mifospay.feature.accounts.beneficiary.addEditBeneficiaryScreen
 import org.mifospay.feature.accounts.beneficiary.navigateToBeneficiaryAddEdit
+import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
 import org.mifospay.feature.accounts.savingsaccount.addEditSavingAccountScreen
 import org.mifospay.feature.accounts.savingsaccount.details.navigateToSavingAccountDetails
 import org.mifospay.feature.accounts.savingsaccount.details.savingAccountDetailRoute
@@ -52,6 +53,7 @@ import org.mifospay.feature.make.transfer.success.navigateTransferSuccess
 import org.mifospay.feature.make.transfer.success.transferSuccessScreen
 import org.mifospay.feature.merchants.navigation.merchantTransferScreen
 import org.mifospay.feature.merchants.ui.MerchantScreen
+import org.mifospay.feature.notification.navigateToNotification
 import org.mifospay.feature.notification.notificationScreen
 import org.mifospay.feature.payments.PaymentsScreenContents
 import org.mifospay.feature.payments.RequestScreen
@@ -99,7 +101,9 @@ internal fun MifosNavHost(
             )
         },
         TabContent(PaymentsScreenContents.REQUEST.name) {
-            RequestScreen(showQr = {})
+            RequestScreen(
+                showQr = navController::navigateToShowQrScreen,
+            )
         },
         TabContent(PaymentsScreenContents.HISTORY.name) {
             HistoryScreen(
@@ -167,7 +171,7 @@ internal fun MifosNavHost(
             onChangePasscode = {},
             navigateToEditPasswordScreen = navController::navigateToEditPassword,
             navigateToFaqScreen = navController::navigateToFAQ,
-            navigateToNotificationScreen = {},
+            navigateToNotificationScreen = navController::navigateToNotification,
         )
 
         faqScreen(
@@ -181,7 +185,10 @@ internal fun MifosNavHost(
 
         profileNavGraph(
             navController = navController,
-            onLinkBankAccount = {},
+            onLinkBankAccount = {
+                navController.navigateToSavingAccountAddEdit(SavingsAddEditType.AddItem)
+            },
+            showQrCode = navController::navigateToShowQrScreen,
         )
 
         historyNavigation(
@@ -323,7 +330,7 @@ internal fun MifosNavHost(
         )
 
         setupUpiPinScreen(
-            navigateBack = navController::navigateUp
+            navigateBack = navController::navigateUp,
         )
     }
 }

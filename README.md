@@ -14,45 +14,44 @@ that can be used as a dependency in any other wallet based project. It is develo
 
 ## KMP Status for modules
 
-| Module                        | Progress          | Desktop supported | Android supported | iOS supported     | Web supported(JS) | Web supported(WASM-JS) | 
-|-------------------------------|-------------------|-------------------|-------------------|-------------------|-------------------|------------------------| 
-| mifospay-android              | In progress       | ✔️                | ✔️                | ✔️                | ✔️                | ❔                      | 
-| mifospay-desktop              | In progress       | ✔️                | ✔️                | ✔️                | ✔️                | ❔                      | 
-| mifospay-web                  | In progress       | ✔️                | ✔️                | ✔️                | ✔️                | ❔                      | 
-| mifospay-ios                  | No implementation | No implementation | No implementation | No implementation | No implementation | No implementation      | 
-| :core:analytics               | Done              | ❌                 | ✔️                | ❌                 | ❌                 | ❌                      | 
-| :core:common                  | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :core:data                    | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :core:datastore               | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :core:datastore-proto         | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :core:designsystem            | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :core:domain                  | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :core:model                   | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :core:network                 | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :core:ui                      | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:auth                 | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:editpassword         | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:faq                  | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:history              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:home                 | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:profile              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:settings             | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:payments             | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
-| :feature:finance              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
-| :feature:account              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
-| :feature:invoices             | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:kyc                  | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:make-transfer        | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:merchants            | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:notification         | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
-| :feature:qr                   | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:receipt              | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:request-money        | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:saved-cards          | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      |
-| :feature:send-money           | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:standing-instruction | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| :feature:upi-setup            | Done              | ✅                 | ✅                 | ❔                 | ✅                 | ❔                      | 
-| lint                          | Not started       | ❌                 | ❌                 | ❌                 | ❌                 | ❌                      | 
+| Module                        | Progress | Desktop supported | Android supported | iOS supported | Web supported(JS) | Web supported(WASM-JS)  | 
+|-------------------------------|----------|-------------------|-------------------|---------------|-------------------|-------------------------| 
+| mifospay-android              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ❔                       | 
+| mifospay-desktop              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ❔                       | 
+| mifospay-web                  | Done     | ✅                 | ✅                 | ❔             | ✅                 | ❔                       |
+| mifospay-ios                  | NO OP    | ❌                 | ❌                 | ❌             | ❌                 | ❌                       |
+| :core:analytics               | Done     | ❌                 | ✔️                | ❔             | ❌                 | ❔                       |
+| :core:common                  | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:data                    | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:datastore               | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:datastore-proto         | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:designsystem            | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:domain                  | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:model                   | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:network                 | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:ui                      | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:auth                 | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:editpassword         | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:faq                  | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:history              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:home                 | Done     | ✅                 | ✅                 | ❔             | ✅                 | ❌                       | 
+| :feature:profile              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:settings             | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:payments             | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |
+| :feature:finance              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |
+| :feature:account              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |
+| :feature:invoices             | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:kyc                  | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:make-transfer        | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:merchants            | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:notification         | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |
+| :feature:qr                   | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:receipt              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:request-money        | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:saved-cards          | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |
+| :feature:send-money           | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:standing-instruction | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:upi-setup            | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |  
 
 ✅: Functioning properly  
 ❔: Not yet tested, but expected to work  

@@ -36,8 +36,6 @@ kotlin {
         }
 
         androidMain.dependencies {
-            implementation(projects.libs.countryCodePicker)
-
             // Credentials Manager
             implementation(libs.androidx.credentials)
             // optional - needed for credentials support from play services, for devices running

@@ -12,7 +12,7 @@ package org.mifospay.feature.request.money.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import androidx.navigation.compose.composable
+import org.mifospay.core.ui.composableWithPushTransitions
 import org.mifospay.feature.request.money.ShowQrScreen
 
 const val SHOW_QR_ROUTE = "show_qr_route"
@@ -20,7 +20,7 @@ const val SHOW_QR_ROUTE = "show_qr_route"
 fun NavGraphBuilder.showQrScreen(
     navigateBack: () -> Unit,
 ) {
-    composable(
+    composableWithPushTransitions(
         route = SHOW_QR_ROUTE,
     ) {
         ShowQrScreen(

@@ -56,7 +56,6 @@ private fun SettingAndForgotUpi(
     var upiPinScreenVerified by rememberSaveable { mutableStateOf(false) }
     var realOtp by rememberSaveable { mutableStateOf("") }
 
-
     Column(modifier) {
         DebitCardScreen(
             verificationStatus = debitCardVerified,
@@ -68,7 +67,6 @@ private fun SettingAndForgotUpi(
                 debitCardScreenVisible = false
             },
             onDebitCardVerificationFailed = {
-
             },
         )
         OtpScreen(

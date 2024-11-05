@@ -22,8 +22,6 @@ import kotlinx.serialization.json.Json
 
 actual val ktorHttpClient: HttpClient
     get() = HttpClient(OkHttp) {
-        expectSuccess = true
-
         install(HttpTimeout) {
             socketTimeoutMillis = 60_000
             requestTimeoutMillis = 60_000

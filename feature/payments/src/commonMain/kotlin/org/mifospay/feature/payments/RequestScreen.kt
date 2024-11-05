@@ -45,7 +45,7 @@ import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
 fun RequestScreen(
-    showQr: (String) -> Unit,
+    showQr: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TransferViewModel = koinViewModel(),
 ) {
@@ -54,7 +54,7 @@ fun RequestScreen(
 
     EventsEffect(viewModel) { event ->
         when (event) {
-            is TransferEvent.OnShowQR -> showQr.invoke(event.externalId)
+            is TransferEvent.OnShowQR -> showQr.invoke()
 
             is TransferEvent.OnCopyTextToClipboard -> {
                 clipboard.setText(AnnotatedString(event.text))
@@ -114,7 +114,7 @@ private fun RequestScreenContent(
 
                 FilledTonalIconButton(
                     onClick = {
-                        onAction(TransferAction.ShowQR(state.externalId))
+                        onAction(TransferAction.ShowQR)
                     },
                 ) {
                     Icon(

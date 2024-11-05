@@ -24,7 +24,6 @@ plugins {
     alias(libs.plugins.mifospay.android.application)
     alias(libs.plugins.mifospay.android.application.compose)
     alias(libs.plugins.mifospay.android.application.flavors)
-    alias(libs.plugins.mifospay.android.application.firebase)
     alias(libs.plugins.roborazzi)
     id("com.google.android.gms.oss-licenses-plugin")
     id("com.google.devtools.ksp")
