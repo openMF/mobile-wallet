@@ -11,12 +11,15 @@
 
 package org.mifospay.core.designsystem.component
 
+import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -24,14 +27,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
-import org.jetbrains.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MifosTopAppBar(
-    titleRes: String,
+    @StringRes titleRes: Int,
     modifier: Modifier = Modifier,
     navigationIcon: ImageVector? = null,
     navigationIconContentDescription: String? = null,
@@ -42,7 +46,7 @@ fun MifosTopAppBar(
     onActionClick: (() -> Unit)? = null,
 ) {
     CenterAlignedTopAppBar(
-        title = { Text(text = titleRes) },
+        title = { Text(text = stringResource(id = titleRes)) },
         navigationIcon = {
             navigationIcon?.let {
                 IconButton(onClick = onNavigationClick!!) {
@@ -70,15 +74,38 @@ fun MifosTopAppBar(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MifosTopAppBar(
+    @StringRes titleRes: Int,
+    modifier: Modifier = Modifier,
+    actions:
+    @Composable()
+    (RowScope.() -> Unit) = {},
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(
+        containerColor = Color.Transparent,
+    ),
+) {
+    TopAppBar(
+        title = { Text(text = stringResource(id = titleRes)) },
+        actions = actions,
+        colors = colors,
+        modifier = modifier.testTag("mifosTopAppBar"),
+    )
+}
+
 @Composable
 fun MifosNavigationTopAppBar(
-    titleRes: String,
+    @StringRes titleRes: Int,
     onNavigationClick: (() -> Unit)?,
 ) {
     MifosTopAppBar(
         titleRes = titleRes,
         navigationIcon = MifosIcons.Back,
-        navigationIconContentDescription = titleRes,
+        navigationIconContentDescription =
+        stringResource(
+            id = titleRes,
+        ),
         colors =
         TopAppBarDefaults.centerAlignedTopAppBarColors(
             containerColor = Color.Transparent,
@@ -88,12 +115,12 @@ fun MifosNavigationTopAppBar(
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview
+@Preview("Top App Bar")
 @Composable
 private fun MifosTopAppBarPreview() {
     MifosTheme {
         MifosTopAppBar(
-            titleRes = "Demo Preview",
+            titleRes = android.R.string.untitled,
             navigationIcon = MifosIcons.Search,
             navigationIconContentDescription = "Navigation icon",
             actionIcon = MifosIcons.MoreVert,

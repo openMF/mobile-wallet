@@ -9,6 +9,7 @@
  */
 package org.mifospay.feature.merchants.ui
 
+import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,7 +18,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -41,34 +41,25 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import mobile_wallet.feature.merchants.generated.resources.Res
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_amount
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_credits
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_debits
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_error_oops
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_loading
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_merchant_transaction
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_no_transactions_found
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_other
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_submit
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_transaction_date
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_transaction_id
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_transfer_money_to_this_merchant
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_unexpected_error_subtitle
-import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameter
-import org.jetbrains.compose.ui.tooling.preview.PreviewParameterProvider
-import org.koin.compose.viewmodel.koinViewModel
+import com.mifospay.core.model.domain.Transaction
+import com.mifospay.core.model.domain.TransactionType
+import com.mifospay.core.model.domain.client.Client
+import com.mifospay.core.model.entity.accounts.savings.SavingAccount
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
+import org.mifospay.core.designsystem.component.MfOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosBottomSheet
 import org.mifospay.core.designsystem.component.MifosButton
-import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.ElectricViolet
@@ -76,13 +67,11 @@ import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.creditTextColor
 import org.mifospay.core.designsystem.theme.debitTextColor
 import org.mifospay.core.designsystem.theme.otherTextColor
-import org.mifospay.core.model.savingsaccount.Currency
-import org.mifospay.core.model.savingsaccount.Transaction
-import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.feature.merchants.MerchantTransferUiState
 import org.mifospay.feature.merchants.MerchantTransferViewModel
+import org.mifospay.feature.merchants.R
 
 @Composable
 internal fun MerchantTransferScreenRoute(
@@ -92,13 +81,23 @@ internal fun MerchantTransferScreenRoute(
     viewModel: MerchantTransferViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val merchantName by viewModel.merchantName.collectAsStateWithLifecycle()
+    val merchantVPA by viewModel.merchantVPA.collectAsStateWithLifecycle()
 
     MerchantTransferScreen(
         uiState = uiState,
-        merchantName = "New User",
-        merchantVPA = "Sample VPA",
+        merchantName = merchantName,
+        merchantVPA = merchantVPA,
         onBackPressed = onBackPressed,
-        checkBalanceAvailability = { vpa, transferAmount -> },
+        checkBalanceAvailability = { vpa, transferAmount ->
+            viewModel.checkBalanceAvailability(
+                proceedWithMakeTransferFlow = { externalId, amount ->
+                    proceedWithMakeTransferFlow.invoke(externalId, amount.toString())
+                },
+                externalId = vpa,
+                transferAmount = transferAmount.toDoubleOrNull() ?: 0.0,
+            )
+        },
         modifier = modifier,
     )
 }
@@ -115,22 +114,20 @@ internal fun MerchantTransferScreen(
 ) {
     var showBottomSheet by remember { mutableStateOf(true) }
     var amount by rememberSaveable { mutableStateOf("") }
+    val context = LocalContext.current
 
     MifosScaffold(
         modifier = modifier,
-        topBarTitle = stringResource(Res.string.feature_merchants_merchant_transaction),
+        topBarTitle = R.string.feature_merchants_merchant_transaction,
         backPress = onBackPressed,
-        content = { paddingValues ->
+        scaffoldContent = { paddingValues ->
             Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-                contentAlignment = Alignment.Center,
+                modifier = Modifier.padding(paddingValues),
             ) {
                 when (uiState) {
                     is MerchantTransferUiState.Loading -> {
                         MfLoadingWheel(
-                            contentDesc = stringResource(Res.string.feature_merchants_loading),
+                            contentDesc = stringResource(R.string.feature_merchants_loading),
                             backgroundColor = MaterialTheme.colorScheme.surface,
                         )
                     }
@@ -138,17 +135,18 @@ internal fun MerchantTransferScreen(
                     is MerchantTransferUiState.Error -> {
                         ErrorScreenContent(
                             modifier = Modifier,
-                            title = stringResource(Res.string.feature_merchants_error_oops),
-                            subTitle = stringResource(Res.string.feature_merchants_unexpected_error_subtitle),
+                            title = stringResource(id = R.string.feature_merchants_error_oops),
+                            subTitle = stringResource(id = R.string.feature_merchants_unexpected_error_subtitle),
                         )
                     }
 
                     is MerchantTransferUiState.Empty -> {
                         EmptyContentScreen(
-                            title = stringResource(Res.string.feature_merchants_error_oops),
-                            subTitle = stringResource(Res.string.feature_merchants_no_transactions_found),
+                            title = stringResource(id = R.string.feature_merchants_error_oops),
+                            subTitle = stringResource(id = R.string.feature_merchants_no_transactions_found),
                             modifier = Modifier,
                             iconTint = MaterialTheme.colorScheme.onSurface,
+                            iconImageVector = MifosIcons.Info,
                         )
                     }
 
@@ -156,7 +154,14 @@ internal fun MerchantTransferScreen(
                         TransactionList(uiState.transactionsList)
                     }
 
-                    is MerchantTransferUiState.InsufficientBalance -> {}
+                    is MerchantTransferUiState.InsufficientBalance -> {
+                        Toast
+                            .makeText(
+                                context,
+                                stringResource(id = R.string.feature_merchants_insufficient_balance),
+                                Toast.LENGTH_SHORT,
+                            ).show()
+                    }
                 }
 
                 if (showBottomSheet) {
@@ -182,7 +187,7 @@ private fun TransactionList(
     LazyColumn(modifier) {
         items(
             items = transactions,
-            key = { it.transactionId },
+            key = { it.transactionId ?: it.transferId },
         ) { transaction ->
             SpecificTransactionItem(transaction)
             HorizontalDivider()
@@ -210,7 +215,7 @@ private fun MerchantBottomSheet(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Text(
-                    text = stringResource(Res.string.feature_merchants_transfer_money_to_this_merchant),
+                    text = stringResource(R.string.feature_merchants_transfer_money_to_this_merchant),
                     color = ElectricViolet,
                     style = MaterialTheme.typography.bodyMedium,
                 )
@@ -222,9 +227,9 @@ private fun MerchantBottomSheet(
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
-                MifosOutlinedTextField(
+                MfOutlinedTextField(
                     value = amount,
-                    label = stringResource(Res.string.feature_merchants_amount),
+                    label = stringResource(id = R.string.feature_merchants_amount),
                     onValueChange = onAmountChange,
                     modifier = Modifier.fillMaxWidth(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
@@ -241,7 +246,7 @@ private fun MerchantBottomSheet(
                     modifier = Modifier.width(155.dp),
                 ) {
                     Text(
-                        stringResource(Res.string.feature_merchants_submit),
+                        stringResource(id = R.string.feature_merchants_submit),
                         color = Color.White,
                     )
                 }
@@ -312,14 +317,14 @@ private fun SpecificTransactionItem(
     Column(modifier = modifier.padding(horizontal = 12.dp)) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             SpecificTransactionAccountInfo(
-                amount = transaction.amount.toString(),
-                accountNo = transaction.accountNo,
+                account = transaction.transferDetail.fromAccount,
+                client = transaction.transferDetail.fromClient,
                 modifier = Modifier.weight(1f),
             )
             Icon(imageVector = MifosIcons.SendRightTilted, contentDescription = null)
             SpecificTransactionAccountInfo(
-                amount = transaction.amount.toString(),
-                accountNo = transaction.accountNo,
+                account = transaction.transferDetail.toAccount,
+                client = transaction.transferDetail.toClient,
                 modifier = Modifier.weight(1f),
             )
         }
@@ -331,20 +336,20 @@ private fun SpecificTransactionItem(
         ) {
             Column {
                 Text(
-                    text = stringResource(Res.string.feature_merchants_transaction_id) + transaction.transactionId,
+                    text = stringResource(id = R.string.feature_merchants_transaction_id) + transaction.transactionId,
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.primary,
                 )
                 Text(
-                    text = stringResource(Res.string.feature_merchants_transaction_date) + transaction.date,
+                    text = stringResource(id = R.string.feature_merchants_transaction_date) + transaction.date,
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
                     text =
                     when (transaction.transactionType) {
-                        TransactionType.DEBIT -> stringResource(Res.string.feature_merchants_debits)
-                        TransactionType.CREDIT -> stringResource(Res.string.feature_merchants_credits)
-                        TransactionType.OTHER -> stringResource(Res.string.feature_merchants_other)
+                        TransactionType.DEBIT -> stringResource(id = R.string.feature_merchants_debits)
+                        TransactionType.CREDIT -> stringResource(id = R.string.feature_merchants_credits)
+                        TransactionType.OTHER -> stringResource(id = R.string.feature_merchants_other)
                     },
                     style = MaterialTheme.typography.bodyLarge,
                 )
@@ -366,25 +371,25 @@ private fun SpecificTransactionItem(
 
 @Composable
 private fun SpecificTransactionAccountInfo(
-    amount: String,
-    accountNo: String,
+    account: SavingAccount,
+    client: Client,
     modifier: Modifier = Modifier,
     accountClicked: (String) -> Unit = {},
 ) {
     Column(
         modifier =
         modifier.clickable {
-            accountClicked(accountNo)
+            accountClicked(account.accountNo)
         },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Icon(imageVector = MifosIcons.AccountCircle, contentDescription = null)
         Text(
-            text = accountNo,
+            text = client.displayName,
             style = MaterialTheme.typography.titleSmall,
         )
         Text(
-            text = amount,
+            text = account.accountNo,
             style = MaterialTheme.typography.bodyMedium,
         )
     }
@@ -394,7 +399,7 @@ internal class MerchantTransferUiStateProvider : PreviewParameterProvider<Mercha
     override val values: Sequence<MerchantTransferUiState>
         get() =
             sequenceOf(
-                MerchantTransferUiState.Success(arrayListOf()),
+                MerchantTransferUiState.Success(arrayListOf(Transaction())),
                 MerchantTransferUiState.Error,
                 MerchantTransferUiState.Loading,
                 MerchantTransferUiState.Empty,
@@ -402,7 +407,7 @@ internal class MerchantTransferUiStateProvider : PreviewParameterProvider<Mercha
             )
 }
 
-@Preview
+@Preview(showSystemUi = true)
 @Composable
 private fun Preview(
     @PreviewParameter(MerchantTransferUiStateProvider::class)
@@ -423,28 +428,7 @@ private fun Preview(
 @Composable
 private fun TransactionItemPreview() {
     MifosTheme {
-        SpecificTransactionItem(
-            transaction = Transaction(
-                accountId = 2447,
-                amount = 28.29,
-                date = "pellentesque",
-                currency = Currency(
-                    code = "persecuti",
-                    name = "Bradford Davidson",
-                    decimalPlaces = 9112,
-                    inMultiplesOf = 1440,
-                    displaySymbol = "audire",
-                    nameCode = "Alison Bowers",
-                    displayLabel = "prodesset",
-                ),
-                transactionType = TransactionType.OTHER,
-                transactionId = 6078,
-                accountNo = "nascetur",
-                transferId = null,
-                originalTransactionId = 8388,
-                paymentDetailId = null,
-            ),
-        )
+        SpecificTransactionItem(Transaction())
     }
 }
 

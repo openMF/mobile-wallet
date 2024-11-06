@@ -8,22 +8,12 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 plugins {
-    alias(libs.plugins.mifospay.cmp.feature)
-    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.mifospay.android.feature)
+    alias(libs.plugins.mifospay.android.library.compose)
 }
 
 android {
-    namespace = "org.mifospay.feature.upi.setup"
+    namespace = "org.mifospay.feature.upi_setup"
 }
 
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            implementation(compose.ui)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-        }
-    }
-}
+dependencies { }

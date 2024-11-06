@@ -19,6 +19,7 @@ import androidx.tracing.trace
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.callbackFlow
@@ -30,10 +31,19 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toKotlinTimeZone
 import java.time.ZoneId
 
+/**
+ * Utility for reporting current timezone the device has set.
+ * It always emits at least once with default setting and then for each TZ change.
+ */
+
+interface TimeZoneMonitor {
+    val currentTimeZone: Flow<TimeZone>
+}
+
 internal class TimeZoneBroadcastMonitor(
     private val context: Context,
     appScope: CoroutineScope,
-    ioDispatcher: CoroutineDispatcher,
+    private val ioDispatcher: CoroutineDispatcher,
 ) : TimeZoneMonitor {
 
     override val currentTimeZone: SharedFlow<TimeZone> =

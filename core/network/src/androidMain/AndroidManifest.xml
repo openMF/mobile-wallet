@@ -8,6 +8,7 @@
 
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.INTERNET" />
-</manifest>
+<resources>
+    <string name="feature_home_loading">Loading</string>
+    <string name="start_sending_your_money_tax_free">Start sending money tax free!</string>
+</resources>

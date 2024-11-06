@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -23,43 +22,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun AvatarBox(
-    name: String,
-    size: Int = 40,
-    backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
-) {
-    val initials = name.split(" ")
-        .mapNotNull { it.firstOrNull()?.toString() }
-        .take(2)
-        .joinToString("")
-        .uppercase()
-
-    Box(
-        modifier = Modifier
-            .size(size.dp)
-            .clip(CircleShape)
-            .background(backgroundColor),
-        contentAlignment = Alignment.Center,
-    ) {
-        Text(
-            text = initials,
-            color = contentColorFor(backgroundColor),
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.SemiBold,
-        )
-    }
-}
-
-@Composable
-fun AvatarBox(
     icon: ImageVector,
-    size: Int = 40,
     modifier: Modifier = Modifier,
-    backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+    size: Int = 40,
+    backgroundColor: Color = MaterialTheme.colorScheme.onPrimary,
     contentColor: Color = contentColorFor(backgroundColor),
 ) {
     Box(
@@ -73,7 +43,6 @@ fun AvatarBox(
             imageVector = icon,
             contentDescription = "Avatar",
             tint = contentColor,
-            modifier = Modifier.size((size / 2).dp),
         )
     }
 }

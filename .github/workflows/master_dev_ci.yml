@@ -75,7 +75,7 @@ jobs:
       - name: Check Dependency Guard
         id: dependencyguard_verify
         continue-on-error: true
-        run: ./gradlew :mifospay-android:dependencyGuard
+        run: ./gradlew dependencyGuard
 
       - name: Prevent updating Dependency Guard baselines if this is a fork
         id: checkfork_dependencyguard
@@ -88,7 +88,7 @@ jobs:
         id: dependencyguard_baseline
         if: steps.dependencyguard_verify.outcome == 'failure' && github.event_name == 'pull_request'
         run: |
-          ./gradlew :mifospay-android:dependencyGuardBaseline
+          ./gradlew dependencyGuardBaseline
 
       - name: Push new Dependency Guard baselines if available
         uses: stefanzweifel/git-auto-commit-action@v5
@@ -109,8 +109,7 @@ jobs:
           java-version: 17
       - name: Run tests
         run: |
-          ./gradlew :mifospay-android:testDemoDebug
-#          ./gradlew testDemoDebug :lint:test :mifospay-android:lintProdRelease :lint:lint
+          ./gradlew testDemoDebug :lint:test :mifospay:lintProdRelease :lint:lint
       - name: Upload reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -131,12 +130,12 @@ jobs:
           java-version: 17
 
       - name: Build APKs
-        run: ./gradlew :mifospay-android:assembleDemoDebug
+        run: ./gradlew :mifospay:assembleDemoDebug
 
       - name: Check badging
         # This step is allowed to fail, as it's not critical for the build
         continue-on-error: true
-        run: ./gradlew :mifospay-android:checkProdReleaseBadging
+        run: ./gradlew :mifospay:checkProdReleaseBadging
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4

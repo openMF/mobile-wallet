@@ -15,7 +15,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
-import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,20 +27,27 @@ fun MifosTab(
     selected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    selectedColor: Color = MaterialTheme.colorScheme.primary,
-    unselectedColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    selectedContentColor: Color = MaterialTheme.colorScheme.primary,
+    unselectedContentColor: Color = MaterialTheme.colorScheme.primaryContainer,
 ) {
     Tab(
         text = {
-            Text(text = text)
+            Text(
+                text = text,
+                color = if (selected) {
+                    MaterialTheme.colorScheme.onPrimary
+                } else {
+                    MaterialTheme.colorScheme.onSurface
+                },
+            )
         },
         selected = selected,
-        onClick = onClick,
-        selectedContentColor = contentColorFor(selectedColor),
-        unselectedContentColor = contentColorFor(unselectedColor),
         modifier = modifier
             .clip(RoundedCornerShape(25.dp))
-            .background(if (selected) selectedColor else unselectedColor)
+            .background(if (selected) selectedContentColor else unselectedContentColor)
             .padding(horizontal = 20.dp),
+        selectedContentColor = selectedContentColor,
+        unselectedContentColor = unselectedContentColor,
+        onClick = onClick,
     )
 }

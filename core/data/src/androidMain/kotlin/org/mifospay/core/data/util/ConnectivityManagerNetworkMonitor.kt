@@ -16,17 +16,16 @@ import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.net.NetworkRequest.Builder
+import android.os.Build.VERSION
+import android.os.Build.VERSION_CODES
 import androidx.core.content.getSystemService
-import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.flow.flowOn
 
 internal class ConnectivityManagerNetworkMonitor(
     private val context: Context,
-    ioDispatcher: CoroutineDispatcher,
 ) : NetworkMonitor {
     override val isOnline: Flow<Boolean> = callbackFlow {
         val connectivityManager = context.getSystemService<ConnectivityManager>()
@@ -54,10 +53,12 @@ internal class ConnectivityManagerNetworkMonitor(
                 channel.trySend(networks.isNotEmpty())
             }
         }
+
         val request = Builder()
             .addCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             .build()
         connectivityManager.registerNetworkCallback(request, callback)
+
         /**
          * Sends the latest connectivity status to the underlying channel.
          */
@@ -67,10 +68,15 @@ internal class ConnectivityManagerNetworkMonitor(
             connectivityManager.unregisterNetworkCallback(callback)
         }
     }
-        .flowOn(ioDispatcher)
         .conflate()
 
-    private fun ConnectivityManager.isCurrentlyConnected() = activeNetwork
-        ?.let(::getNetworkCapabilities)
-        ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+    @Suppress("DEPRECATION")
+    private fun ConnectivityManager.isCurrentlyConnected() = when {
+        VERSION.SDK_INT >= VERSION_CODES.M ->
+            activeNetwork
+                ?.let(::getNetworkCapabilities)
+                ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+
+        else -> activeNetworkInfo?.isConnected
+    } ?: false
 }

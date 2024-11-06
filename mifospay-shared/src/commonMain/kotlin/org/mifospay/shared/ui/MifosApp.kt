@@ -7,21 +7,30 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.shared.ui
+package org.mifospay.ui
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -30,27 +39,29 @@ import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
-import mobile_wallet.mifospay_shared.generated.resources.Res
-import mobile_wallet.mifospay_shared.generated.resources.not_connected
-import org.jetbrains.compose.resources.stringResource
-import org.mifospay.core.data.util.NetworkMonitor
-import org.mifospay.core.data.util.TimeZoneMonitor
+import org.mifospay.R
 import org.mifospay.core.designsystem.component.IconBox
 import org.mifospay.core.designsystem.component.MifosBackground
 import org.mifospay.core.designsystem.component.MifosGradientBackground
@@ -58,37 +69,37 @@ import org.mifospay.core.designsystem.component.MifosNavigationBar
 import org.mifospay.core.designsystem.component.MifosNavigationBarItem
 import org.mifospay.core.designsystem.component.MifosNavigationRail
 import org.mifospay.core.designsystem.component.MifosNavigationRailItem
+import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.LocalGradientColors
-import org.mifospay.feature.notification.navigateToNotification
+import org.mifospay.feature.faq.navigation.navigateToFAQ
 import org.mifospay.feature.profile.navigation.navigateToEditProfile
 import org.mifospay.feature.settings.navigation.navigateToSettings
-import org.mifospay.shared.navigation.MifosNavHost
-import org.mifospay.shared.utils.TopLevelDestination
+import org.mifospay.navigation.MifosNavHost
+import org.mifospay.navigation.TopLevelDestination
 
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalComposeUiApi::class,
+)
 @Composable
-internal fun MifosApp(
-    networkMonitor: NetworkMonitor,
-    timeZoneMonitor: TimeZoneMonitor,
+fun MifosApp(
+    appState: MifosAppState,
     onClickLogout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showHomeMenuOption by rememberSaveable { mutableStateOf(false) }
+
     MifosBackground(modifier) {
         MifosGradientBackground(
             gradientColors = LocalGradientColors.current,
         ) {
-            val appState = rememberMifosAppState(
-                networkMonitor = networkMonitor,
-                timeZoneMonitor = timeZoneMonitor,
-            )
-
             val snackbarHostState = remember { SnackbarHostState() }
-            val destination = appState.currentTopLevelDestination
 
             val isOffline by appState.isOffline.collectAsStateWithLifecycle()
 
             // If user is not connected to the internet show a snack bar to inform them.
-            val notConnectedMessage = stringResource(Res.string.not_connected)
+            val notConnectedMessage = stringResource(R.string.not_connected)
             LaunchedEffect(isOffline) {
                 if (isOffline) {
                     snackbarHostState.showSnackbar(
@@ -98,13 +109,59 @@ internal fun MifosApp(
                 }
             }
 
+            if (showHomeMenuOption) {
+                AnimatedVisibility(true) {
+                    Box(
+                        modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .wrapContentSize(Alignment.TopEnd)
+                            .padding(end = 24.dp)
+                            .background(color = MaterialTheme.colorScheme.surface),
+                    ) {
+                        DropdownMenu(
+                            modifier = Modifier.background(color = MaterialTheme.colorScheme.surface),
+                            expanded = showHomeMenuOption,
+                            onDismissRequest = { showHomeMenuOption = false },
+                        ) {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        stringResource(id = R.string.faq),
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                    )
+                                },
+                                onClick = {
+                                    showHomeMenuOption = false
+                                    appState.navController.navigateToFAQ()
+                                },
+                            )
+                            DropdownMenuItem(
+                                text = {
+                                    Text(
+                                        stringResource(id = R.string.feature_profile_settings),
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                    )
+                                },
+                                onClick = {
+                                    showHomeMenuOption = false
+                                    appState.navController.navigateToSettings()
+                                },
+                            )
+                        }
+                    }
+                }
+            }
+
             Scaffold(
-                modifier = Modifier,
-                containerColor = Color.Transparent,
+                modifier = Modifier.semantics {
+                    testTagsAsResourceId = true
+                },
+                containerColor = MaterialTheme.colorScheme.surface,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 bottomBar = {
-                    if (appState.shouldShowBottomBar && destination != null) {
+                    if (appState.shouldShowBottomBar) {
                         MifosBottomBar(
                             destinations = appState.topLevelDestinations,
                             destinationsWithUnreadResources = emptySet(),
@@ -126,35 +183,47 @@ internal fun MifosApp(
                             ),
                         ),
                 ) {
-                    if (appState.shouldShowNavRail && destination != null) {
+                    if (appState.shouldShowNavRail) {
                         MifosNavRail(
                             destinations = appState.topLevelDestinations,
                             destinationsWithUnreadResources = emptySet(),
                             onNavigateToDestination = appState::navigateToTopLevelDestination,
                             currentDestination = appState.currentDestination,
                             modifier = Modifier
-                                .testTag("NiaNavRail")
+                                .testTag("MifosNavRail")
                                 .safeDrawingPadding(),
                         )
                     }
 
                     Column(Modifier.fillMaxSize()) {
                         // Show the top app bar on top level destinations.
+                        val destination = appState.currentTopLevelDestination
                         if (destination != null) {
-                            MifosAppBar(
-                                title = stringResource(destination.titleText),
-                                onClickLogout = onClickLogout,
-                                onNavigateToFaq = {},
-                                onNavigateToSettings = {
-                                    appState.navController.navigateToSettings()
+                            MifosTopAppBar(
+                                titleRes = destination.titleTextId,
+                                actions = {
+                                    when (destination) {
+                                        TopLevelDestination.HOME -> {
+                                            IconBox(
+                                                icon = MifosIcons.SettingsOutlined,
+                                                onClick = {
+                                                    appState.navController.navigateToSettings()
+                                                },
+                                            )
+                                        }
+
+                                        TopLevelDestination.PROFILE -> {
+                                            IconBox(
+                                                icon = MifosIcons.Edit2,
+                                                onClick = {
+                                                    appState.navController.navigateToEditProfile()
+                                                },
+                                            )
+                                        }
+
+                                        else -> {}
+                                    }
                                 },
-                                onNavigateToEditProfile = {
-                                    appState.navController.navigateToEditProfile()
-                                },
-                                onNavigateToNotification = {
-                                    appState.navController.navigateToNotification()
-                                },
-                                destination = destination,
                             )
                         }
 
@@ -167,57 +236,6 @@ internal fun MifosApp(
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun MifosAppBar(
-    title: String,
-    onClickLogout: () -> Unit,
-    onNavigateToFaq: () -> Unit,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToEditProfile: () -> Unit,
-    onNavigateToNotification: () -> Unit,
-    destination: TopLevelDestination?,
-    modifier: Modifier = Modifier,
-) {
-    TopAppBar(
-        title = { Text(text = title) },
-        actions = {
-            Box {
-                when (destination) {
-                    TopLevelDestination.HOME -> {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        ) {
-                            IconBox(
-                                icon = MifosIcons.OutlinedNotifications,
-                                onClick = onNavigateToNotification,
-                            )
-
-                            IconBox(
-                                icon = MifosIcons.SettingsOutlined,
-                                onClick = onNavigateToSettings,
-                            )
-                        }
-                    }
-
-                    TopLevelDestination.PROFILE -> {
-                        IconBox(
-                            icon = MifosIcons.Edit2,
-                            onClick = onNavigateToEditProfile,
-                        )
-                    }
-
-                    else -> {}
-                }
-            }
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent,
-        ),
-        modifier = modifier.testTag("mifosTopAppBar"),
-    )
 }
 
 @Composable
@@ -248,7 +266,7 @@ private fun MifosNavRail(
                         contentDescription = null,
                     )
                 },
-                label = { Text(stringResource(destination.iconText)) },
+                label = { Text(stringResource(destination.iconTextId)) },
             )
         }
     }
@@ -275,16 +293,26 @@ private fun MifosBottomBar(
                     Icon(
                         imageVector = destination.unselectedIcon,
                         contentDescription = null,
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f),
                     )
                 },
                 modifier = if (hasUnread) Modifier.notificationDot() else Modifier,
                 selectedIcon = {
-                    Icon(
-                        imageVector = destination.selectedIcon,
-                        contentDescription = null,
-                    )
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = destination.selectedIcon,
+                            contentDescription = null,
+                        )
+                        Spacer(
+                            modifier = Modifier
+                                .padding(top = 31.dp)
+                                .height(4.dp)
+                                .width(11.dp)
+                                .clip(RoundedCornerShape(100))
+                                .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)),
+                        )
+                    }
                 },
-                label = { Text(stringResource(destination.iconText)) },
             )
         }
     }

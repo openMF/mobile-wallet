@@ -7,23 +7,24 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.shared.ui
+package org.mifospay.ui
 
-import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
-import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.util.trace
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import androidx.tracing.trace
+import com.mifos.library.material3.navigation.BottomSheetNavigator
+import com.mifos.library.material3.navigation.rememberBottomSheetNavigator
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
@@ -31,6 +32,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.datetime.TimeZone
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
+import org.mifospay.core.ui.TrackDisposableJank
 import org.mifospay.feature.finance.navigation.FINANCE_ROUTE
 import org.mifospay.feature.finance.navigation.navigateToFinance
 import org.mifospay.feature.home.navigation.HOME_ROUTE
@@ -39,19 +41,22 @@ import org.mifospay.feature.payments.PAYMENTS_ROUTE
 import org.mifospay.feature.payments.navigateToPayments
 import org.mifospay.feature.profile.navigation.PROFILE_ROUTE
 import org.mifospay.feature.profile.navigation.navigateToProfile
-import org.mifospay.shared.utils.TopLevelDestination
+import org.mifospay.navigation.MifosNavGraph
+import org.mifospay.navigation.TopLevelDestination
 
-@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-internal fun rememberMifosAppState(
+fun rememberMifosAppState(
+    windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
     timeZoneMonitor: TimeZoneMonitor,
-    windowSizeClass: WindowSizeClass = calculateWindowSizeClass(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    navController: NavHostController = rememberNavController(),
+    bottomSheetNavigator: BottomSheetNavigator = rememberBottomSheetNavigator(),
+    navController: NavHostController = rememberNavController(bottomSheetNavigator),
 ): MifosAppState {
+    NavigationTrackingSideEffect(navController)
     return remember(
         navController,
+        bottomSheetNavigator,
         coroutineScope,
         windowSizeClass,
         networkMonitor,
@@ -59,6 +64,7 @@ internal fun rememberMifosAppState(
     ) {
         MifosAppState(
             navController = navController,
+            bottomSheetNavigator = bottomSheetNavigator,
             coroutineScope = coroutineScope,
             windowSizeClass = windowSizeClass,
             networkMonitor = networkMonitor,
@@ -68,8 +74,9 @@ internal fun rememberMifosAppState(
 }
 
 @Stable
-internal class MifosAppState(
+class MifosAppState(
     val navController: NavHostController,
+    val bottomSheetNavigator: BottomSheetNavigator,
     coroutineScope: CoroutineScope,
     val windowSizeClass: WindowSizeClass,
     networkMonitor: NetworkMonitor,
@@ -102,6 +109,10 @@ internal class MifosAppState(
             initialValue = false,
         )
 
+    /**
+     * Map of top level destinations to be used in the TopBar, BottomBar and NavRail. The key is the
+     * route.
+     */
     val topLevelDestinations: List<TopLevelDestination> = TopLevelDestination.entries
 
     val currentTimeZone = timeZoneMonitor.currentTimeZone
@@ -111,6 +122,13 @@ internal class MifosAppState(
             TimeZone.currentSystemDefault(),
         )
 
+    /**
+     * UI logic for navigating to a top level destination in the app. Top level destinations have
+     * only one copy of the destination of the back stack, and save and restore state whenever you
+     * navigate to and from it.
+     *
+     * @param topLevelDestination: The destination the app needs to navigate to.
+     */
     fun navigateToTopLevelDestination(topLevelDestination: TopLevelDestination) {
         trace("Navigation: ${topLevelDestination.name}") {
             val topLevelNavOptions = navOptions {
@@ -135,4 +153,40 @@ internal class MifosAppState(
             }
         }
     }
+}
+
+/**
+ * Stores information about navigation events to be used with JankStats
+ */
+@Composable
+private fun NavigationTrackingSideEffect(navController: NavHostController) {
+    TrackDisposableJank(navController) { metricsHolder ->
+        val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
+            metricsHolder.state?.putState("Navigation", destination.route.toString())
+        }
+
+        navController.addOnDestinationChangedListener(listener)
+
+        onDispose {
+            navController.removeOnDestinationChangedListener(listener)
+        }
+    }
+}
+
+fun NavController.navigateToMainGraph() {
+    val options = navOptions {
+        // Pop up to the start destination of the graph to
+        // avoid building up a large stack of destinations
+        // on the back stack as users select items
+        popUpTo(graph.findStartDestination().id) {
+            saveState = false
+        }
+        // Avoid multiple copies of the same destination when
+        // reselecting the same item
+        launchSingleTop = true
+        // Restore state when reselecting a previously selected item
+        restoreState = false
+    }
+
+    navigate(MifosNavGraph.MAIN_GRAPH, options)
 }

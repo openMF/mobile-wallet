@@ -9,6 +9,7 @@
  */
 package org.mifospay.feature.merchants.ui
 
+import android.widget.Toast
 import androidx.annotation.VisibleForTesting
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,37 +30,25 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import mobile_wallet.feature.merchants.generated.resources.Res
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_close
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_empty_no_merchants_subtitle
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_empty_no_merchants_title
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_error_oops
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_loading
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_search
-import mobile_wallet.feature.merchants.generated.resources.feature_merchants_unexpected_error_subtitle
-import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.viewmodel.koinViewModel
+import com.mifos.library.pullrefresh.PullRefreshIndicator
+import com.mifos.library.pullrefresh.pullRefresh
+import com.mifos.library.pullrefresh.rememberPullRefreshState
+import com.mifospay.core.model.entity.accounts.savings.SavingsWithAssociations
+import org.koin.androidx.compose.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
-import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.component.rememberMifosPullToRefreshState
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.model.savingsaccount.Currency
-import org.mifospay.core.model.savingsaccount.DepositType
-import org.mifospay.core.model.savingsaccount.InterestPeriod
-import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
-import org.mifospay.core.model.savingsaccount.Status
-import org.mifospay.core.model.savingsaccount.SubStatus
-import org.mifospay.core.model.savingsaccount.Summary
-import org.mifospay.core.model.savingsaccount.Timeline
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.feature.merchants.MerchantUiState
 import org.mifospay.feature.merchants.MerchantViewModel
+import org.mifospay.feature.merchants.R
 import org.mifospay.feature.merchants.navigation.navigateToMerchantTransferScreen
 
 @Composable
@@ -91,43 +80,37 @@ internal fun MerchantScreen(
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val pullRefreshState = rememberMifosPullToRefreshState(
-        isRefreshing = isRefreshing,
-        onRefresh = onRefresh,
-    )
+    val pullRefreshState = rememberPullRefreshState(isRefreshing, onRefresh)
 
-    MifosScaffold(
-        modifier = modifier.fillMaxSize(),
-        pullToRefreshState = pullRefreshState,
+    Box(
+        modifier = modifier
+            .pullRefresh(pullRefreshState),
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it),
-            contentAlignment = Alignment.Center,
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             when (merchantUiState) {
                 MerchantUiState.Empty -> {
                     EmptyContentScreen(
-                        title = stringResource(Res.string.feature_merchants_empty_no_merchants_title),
-                        subTitle = stringResource(Res.string.feature_merchants_empty_no_merchants_subtitle),
+                        title = stringResource(id = R.string.feature_merchants_empty_no_merchants_title),
+                        subTitle = stringResource(id = R.string.feature_merchants_empty_no_merchants_subtitle),
                         modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.primary,
+                        iconImageVector = MifosIcons.Info,
                     )
                 }
 
                 is MerchantUiState.Error -> {
                     EmptyContentScreen(
-                        title = stringResource(Res.string.feature_merchants_error_oops),
-                        subTitle = stringResource(Res.string.feature_merchants_unexpected_error_subtitle),
+                        title = stringResource(id = R.string.feature_merchants_error_oops),
+                        subTitle = stringResource(id = R.string.feature_merchants_unexpected_error_subtitle),
                         modifier = Modifier,
                         iconTint = MaterialTheme.colorScheme.primary,
+                        iconImageVector = MifosIcons.Info,
                     )
                 }
 
                 MerchantUiState.Loading -> {
                     MfLoadingWheel(
-                        contentDesc = stringResource(Res.string.feature_merchants_loading),
+                        contentDesc = stringResource(R.string.feature_merchants_loading),
                         backgroundColor = MaterialTheme.colorScheme.surface,
                     )
                 }
@@ -140,12 +123,17 @@ internal fun MerchantScreen(
                 }
             }
         }
+        PullRefreshIndicator(
+            refreshing = isRefreshing,
+            state = pullRefreshState,
+            modifier = Modifier.align(Alignment.TopCenter),
+        )
     }
 }
 
 @Composable
 private fun MerchantScreenContent(
-    merchantList: List<SavingsWithAssociationsEntity>,
+    merchantList: List<SavingsWithAssociations>,
     updateQuery: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -168,9 +156,10 @@ private fun MerchantScreenContent(
 
 @Composable
 private fun MerchantList(
-    merchantList: List<SavingsWithAssociationsEntity>,
+    merchantList: List<SavingsWithAssociations>,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
     val clipboardManager = LocalClipboardManager.current
     val navController = rememberNavController()
 
@@ -184,7 +173,7 @@ private fun MerchantList(
                 savingsWithAssociations = merchantList[index],
                 onMerchantClicked = {
                     navController.navigateToMerchantTransferScreen(
-                        merchantVPA = merchantList[index].accountNo,
+                        merchantVPA = merchantList[index].externalId,
                         merchantName = merchantList[index].clientName,
                         merchantAccountNumber = merchantList[index].accountNo.toString(),
                     )
@@ -196,6 +185,11 @@ private fun MerchantList(
                 },
                 onMerchantLongPressed = {
                     clipboardManager.setText(AnnotatedString(it ?: ""))
+                    Toast.makeText(
+                        context,
+                        R.string.feature_merchants_vpa_copy_success,
+                        Toast.LENGTH_LONG,
+                    ).show()
                 },
             )
         }
@@ -221,12 +215,12 @@ private fun SearchBarScreen(
         active = false,
         onActiveChange = { },
         placeholder = {
-            Text(text = stringResource(Res.string.feature_merchants_search))
+            Text(text = stringResource(R.string.feature_merchants_search))
         },
         leadingIcon = {
             Icon(
                 imageVector = MifosIcons.Search,
-                contentDescription = stringResource(Res.string.feature_merchants_search),
+                contentDescription = stringResource(R.string.feature_merchants_search),
             )
         },
         trailingIcon = {
@@ -235,14 +229,14 @@ private fun SearchBarScreen(
             ) {
                 Icon(
                     imageVector = MifosIcons.Close,
-                    contentDescription = stringResource(Res.string.feature_merchants_close),
+                    contentDescription = stringResource(R.string.feature_merchants_close),
                 )
             }
         },
     ) {}
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MerchantLoadingPreview() {
     MifosTheme {
@@ -257,7 +251,7 @@ private fun MerchantLoadingPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MerchantListPreview() {
     MifosTheme {
@@ -272,7 +266,7 @@ private fun MerchantListPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MerchantErrorPreview() {
     MifosTheme {
@@ -287,7 +281,7 @@ private fun MerchantErrorPreview() {
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun MerchantEmptyPreview() {
     MifosTheme {
@@ -303,99 +297,29 @@ private fun MerchantEmptyPreview() {
 }
 
 val sampleMerchantList = List(10) {
-    SavingsWithAssociationsEntity(
+    SavingsWithAssociations(
         id = 1L,
         accountNo = "123456789",
-        depositType = DepositType(
-            id = 9994,
-            code = "iriure",
-            value = "liber",
-        ),
+        depositType = null,
+        externalId = "EXT987654",
         clientId = 101,
         clientName = "Alice Bob",
         savingsProductId = 2001,
         savingsProductName = "Premium Savings Account",
         fieldOfficerId = 501,
-        status = Status(
-            id = 1403,
-            code = "ornatus",
-            value = "iaculis",
-            submittedAndPendingApproval = false,
-            approved = false,
-            rejected = false,
-            withdrawnByApplicant = false,
-            active = false,
-            closed = false,
-            prematureClosed = false,
-            transferInProgress = false,
-            transferOnHold = false,
-            matured = false,
-        ),
-        timeline = Timeline(
-            submittedOnDate = listOf(),
-            submittedByUsername = "Lemuel Solomon",
-            submittedByFirstname = "Vivian Henson",
-            submittedByLastname = "Amalia Booker",
-            approvedOnDate = listOf(),
-            approvedByUsername = "Helga Randall",
-            approvedByFirstname = "Terri Ochoa",
-            approvedByLastname = "Sheryl Cain",
-            activatedOnDate = listOf(),
-            activatedByUsername = "Lela Johnston",
-            activatedByFirstname = "Raymundo Foley",
-            activatedByLastname = "Deanne Sosa",
-        ),
-        currency = Currency(
-            code = "USD",
-            name = "Lessie Lindsey",
-            decimalPlaces = 7322,
-            inMultiplesOf = 5447,
-            displaySymbol = "ut",
-            nameCode = "Angelina Walls",
-            displayLabel = "iisque",
-        ),
+        status = null,
+        timeline = null,
+        currency = null,
         nominalAnnualInterestRate = 3.5,
+        minRequiredOpeningBalance = 500.0,
+        lockinPeriodFrequency = 12.0,
         withdrawalFeeForTransfers = true,
         allowOverdraft = false,
         enforceMinRequiredBalance = false,
         withHoldTax = true,
         lastActiveTransactionDate = listOf(2024, 3, 24),
-        summary = Summary(
-            currency = Currency(
-                code = "USD",
-                name = "Kennith Gray",
-                decimalPlaces = 6021,
-                inMultiplesOf = 4636,
-                displaySymbol = "efficiantur",
-                nameCode = "Gerardo Deleon",
-                displayLabel = "mollis",
-            ),
-            totalDeposits = 18.19,
-            totalWithdrawals = 20.21,
-            totalInterestPosted = 6052,
-            accountBalance = 22.23,
-            totalOverdraftInterestDerived = 2232,
-            interestNotPosted = 5113,
-            availableBalance = 24.25,
-        ),
+        dormancyTrackingActive = true,
+        summary = null,
         transactions = listOf(),
-        subStatus = SubStatus(
-            id = 2838,
-            code = "nobis",
-            value = "mi",
-            none = false,
-            inactive = false,
-            dormant = false,
-            escheat = false,
-            block = false,
-            blockCredit = false,
-            blockDebit = false,
-        ),
-        interestCompoundingPeriodType = InterestPeriod(),
-        interestPostingPeriodType = InterestPeriod(),
-        interestCalculationType = InterestPeriod(),
-        interestCalculationDaysInYearType = InterestPeriod(),
-        lienAllowed = false,
-        isDormancyTrackingActive = false,
     )
 }

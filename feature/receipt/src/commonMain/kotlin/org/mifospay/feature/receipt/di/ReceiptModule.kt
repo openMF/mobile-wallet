@@ -7,12 +7,13 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.receipt.di
-
-import org.koin.core.module.dsl.viewModelOf
-import org.koin.dsl.module
-import org.mifospay.feature.receipt.ReceiptViewModel
-
-val ReceiptModule = module {
-    viewModelOf(::ReceiptViewModel)
+plugins {
+    alias(libs.plugins.mifospay.android.feature)
+    alias(libs.plugins.mifospay.android.library.compose)
 }
+
+android {
+    namespace = "org.mifospay.feature.search"
+}
+
+dependencies { }

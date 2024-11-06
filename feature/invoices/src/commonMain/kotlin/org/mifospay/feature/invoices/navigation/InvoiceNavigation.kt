@@ -9,31 +9,32 @@
  */
 package org.mifospay.feature.invoices.navigation
 
+import android.net.Uri
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
+import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import org.mifospay.core.ui.composableWithPushTransitions
-import org.mifospay.feature.invoices.details.InvoiceDetailScreen
+import org.mifospay.feature.invoices.InvoiceDetailScreen
 
 const val INVOICE_ROUTE = "invoice_route"
-const val INVOICE_DATA_ARG = "invoiceId"
+const val INVOICE_DATA_ARG = "invoiceData"
 
-fun NavController.navigateToInvoiceDetail(invoiceId: Long) {
-    this.navigate("$INVOICE_ROUTE/$invoiceId")
+fun NavController.navigateToInvoiceDetail(invoiceData: String) {
+    this.navigate("$INVOICE_ROUTE/${Uri.encode(invoiceData)}")
 }
 
 fun NavGraphBuilder.invoiceDetailScreen(
-    onNavigateBack: () -> Unit,
+    onBackPress: () -> Unit,
 ) {
-    composableWithPushTransitions(
+    composable(
         route = "$INVOICE_ROUTE/{$INVOICE_DATA_ARG}",
         arguments = listOf(
-            navArgument(INVOICE_DATA_ARG) { type = NavType.LongType },
+            navArgument(INVOICE_DATA_ARG) { type = NavType.StringType },
         ),
     ) {
         InvoiceDetailScreen(
-            navigateBack = onNavigateBack,
+            onBackPress = onBackPress,
         )
     }
 }

@@ -7,10 +7,10 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.upi.setup.viewmodel
+package org.mifospay.feature.upiSetup.viewmodel
 
 import androidx.lifecycle.ViewModel
-import org.mifospay.core.model.bank.BankAccountDetails
+import com.mifospay.core.model.domain.BankAccountDetails
 
 @Suppress("UnusedParameter")
 class SetUpUpiViewModal : ViewModel() {

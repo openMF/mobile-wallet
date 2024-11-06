@@ -12,7 +12,7 @@ package org.mifospay.feature.settings.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
-import org.mifospay.core.ui.composableWithSlideTransitions
+import androidx.navigation.compose.composable
 import org.mifospay.feature.settings.SettingsScreenRoute
 
 const val SETTINGS_ROUTE = "settings_route"
@@ -23,20 +23,18 @@ fun NavController.navigateToSettings(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.settingsScreen(
     onBackPress: () -> Unit,
+    navigateToEditPasswordScreen: () -> Unit,
     onLogout: () -> Unit,
     onChangePasscode: () -> Unit,
-    navigateToEditPasswordScreen: () -> Unit,
     navigateToFaqScreen: () -> Unit,
-    navigateToNotificationScreen: () -> Unit,
 ) {
-    composableWithSlideTransitions(route = SETTINGS_ROUTE) {
+    composable(route = SETTINGS_ROUTE) {
         SettingsScreenRoute(
             backPress = onBackPress,
-            onEditPassword = navigateToEditPasswordScreen,
+            navigateToEditPasswordScreen = navigateToEditPasswordScreen,
             onLogout = onLogout,
             onChangePasscode = onChangePasscode,
             navigateToFaqScreen = navigateToFaqScreen,
-            navigateToNotificationScreen = navigateToNotificationScreen,
         )
     }
 }

@@ -8,23 +8,15 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 plugins {
-    alias(libs.plugins.mifospay.cmp.feature)
-    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.mifospay.android.feature)
+    alias(libs.plugins.mifospay.android.library.compose)
 }
 
 android {
-    namespace = "org.mifospay.feature.receipt"
+    namespace = "org.mifospay.receipt"
 }
 
-kotlin {
-    sourceSets {
-        commonMain.dependencies {
-            implementation(compose.ui)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.squareup.okio)
-        }
-    }
+dependencies {
+    // TODO:: this should be removed
+    implementation(libs.squareup.okhttp)
 }

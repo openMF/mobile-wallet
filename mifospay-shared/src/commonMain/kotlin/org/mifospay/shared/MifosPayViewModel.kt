@@ -7,28 +7,29 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.shared
+package org.mifospay
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mifospay.core.model.UserData
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import org.mifospay.core.datastore.UserPreferencesRepository
-import org.mifospay.core.model.user.UserInfo
-import proto.org.mifos.library.passcode.data.PasscodeManager
+import org.mifos.library.passcode.data.PasscodeManager
+import org.mifospay.core.data.repository.auth.UserDataRepository
 
-class MifosPayViewModel(
-    private val userDataRepository: UserPreferencesRepository,
+class MainActivityViewModel(
+    private val userDataRepository: UserDataRepository,
     private val passcodeManager: PasscodeManager,
 ) : ViewModel() {
-    val uiState: StateFlow<MainUiState> = userDataRepository.userInfo.map {
-        MainUiState.Success(it)
+
+    val uiState: StateFlow<MainActivityUiState> = userDataRepository.userData.map {
+        MainActivityUiState.Success(it)
     }.stateIn(
         scope = viewModelScope,
-        initialValue = MainUiState.Loading,
+        initialValue = MainActivityUiState.Loading,
         started = SharingStarted.WhileSubscribed(5_000),
     )
 
@@ -40,7 +41,7 @@ class MifosPayViewModel(
     }
 }
 
-sealed interface MainUiState {
-    data object Loading : MainUiState
-    data class Success(val userData: UserInfo) : MainUiState
+sealed interface MainActivityUiState {
+    data object Loading : MainActivityUiState
+    data class Success(val userData: UserData) : MainActivityUiState
 }
