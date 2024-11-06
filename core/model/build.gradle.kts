@@ -8,7 +8,7 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 plugins {
-    alias(libs.plugins.mifospay.android.library)
+    alias(libs.plugins.mifospay.kmp.library)
     alias(libs.plugins.kotlin.parcelize)
     id("kotlinx-serialization")
 }
@@ -17,10 +17,11 @@ android {
     namespace = "org.mifospay.core.model"
 }
 
-dependencies {
-    api(libs.kotlinx.datetime)
-
-    // For Serialized name
-    implementation(libs.squareup.retrofit.converter.gson)
-    implementation(libs.kotlinx.serialization.json)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(projects.core.common)
+            implementation(libs.kotlinx.serialization.json)
+        }
+    }
 }

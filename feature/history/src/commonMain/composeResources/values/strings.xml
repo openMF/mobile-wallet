@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_history_transaction_id">Transaction ID : </string>
+    <string name="feature_history_transaction_date">Transaction Date : </string>
+    <string name="feature_history_other">Other</string>
+    <string name="feature_history_pan_id">PAN ID</string>
+    <string name="feature_history_view_Receipt">View Receipt</string>
+    <string name="feature_history_error_oops">Oops!</string>
+    <string name="feature_history_empty">Your transaction history is empty</string>
+    <string name="feature_history_error">An unexpected error occurred. Please try again.</string>
+    <string name="feature_history_all">All</string>
+    <string name="feature_history_credits">Credits</string>
+    <string name="feature_history_debits">Debits</string>
+    <string name="feature_history_loading">Loading</string>
+    <string name="feature_history_no_transactions_found">No transactions found</string>
+    <string name="feature_history_specific_transactions_history">Specific Transactions History</string>
+
+</resources>

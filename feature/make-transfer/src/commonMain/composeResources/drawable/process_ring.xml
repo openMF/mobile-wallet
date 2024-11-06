@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="315dp"
+    android:height="338dp"
+    android:viewportWidth="315"
+    android:viewportHeight="338">
+  <path
+      android:pathData="M96.96,20.02m-19.99,0a19.99,19.99 0,1 1,39.98 0a19.99,19.99 0,1 1,-39.98 0"
+      android:strokeAlpha="0.5"
+      android:fillColor="#F7A300"
+      android:fillAlpha="0.5"/>
+  <path
+      android:pathData="M186.93,303.85m-33.98,0a33.98,33.98 0,1 1,67.97 0a33.98,33.98 0,1 1,-67.97 0"
+      android:strokeAlpha="0.5"
+      android:fillColor="#7B61FF"
+      android:fillAlpha="0.5"/>
+  <path
+      android:pathData="M30.01,139.96m-29.99,0a29.99,29.99 0,1 1,59.97 0a29.99,29.99 0,1 1,-59.97 0"
+      android:strokeAlpha="0.9"
+      android:fillColor="#0080F7"
+      android:fillAlpha="0.9"/>
+  <path
+      android:pathData="M290.87,217.91m-23.99,0a23.99,23.99 0,1 1,47.98 0a23.99,23.99 0,1 1,-47.98 0"
+      android:strokeAlpha="0.65"
+      android:fillColor="#FFF50E"
+      android:fillAlpha="0.65"/>
+  <path
+      android:pathData="M253.07,49.59m0.4,29.98a29.99,29.99 134.23,1 1,-0.81 -59.97a29.99,29.99 134.23,1 1,0.81 59.97"
+      android:strokeAlpha="0.65"
+      android:fillColor="#C60707"
+      android:fillAlpha="0.65"/>
+  <path
+      android:pathData="M49.05,272.23m0.32,23.99a23.99,23.99 134.23,1 1,-0.64 -47.97a23.99,23.99 134.23,1 1,0.64 47.97"
+      android:strokeAlpha="0.85"
+      android:fillColor="#8DE301"
+      android:fillAlpha="0.85"/>
+  <path
+      android:pathData="M33.89,161.94C33.89,230.45 89.42,285.99 157.94,285.99C226.45,285.99 281.99,230.45 281.99,161.94C281.99,93.42 226.45,37.89 157.94,37.89C89.42,37.89 33.89,93.42 33.89,161.94Z"
+      android:fillColor="#8DE301"/>
+  <path
+      android:pathData="M144.14,210.69C142.19,212.64 139.03,212.64 137.07,210.69L91.51,165.12C89.56,163.17 89.56,160.01 91.51,158.05L101.98,147.58C103.93,145.63 107.1,145.63 109.05,147.58L140.61,179.14L207.24,112.5C209.19,110.55 212.35,110.55 214.31,112.5L224.79,122.97C226.74,124.92 226.74,128.09 224.79,130.04L144.14,210.69Z"
+      android:fillColor="#ffffff"/>
+</vector>

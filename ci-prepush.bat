@@ -12,11 +12,9 @@ echo Starting all checks and tests...
 call :run_gradle_task "check -p build-logic"
 call :run_gradle_task "spotlessApply --no-configuration-cache"
 call :run_gradle_task "dependencyGuardBaseline"
-call :run_gradle_task "formatVersionCatalog"
 call :run_gradle_task "detekt"
-call :run_gradle_task "testDemoDebug :lint:test :mifospay:lintProdRelease :lint:lint"
-call :run_gradle_task "build"
-call :run_gradle_task "updateProdReleaseBadging"
+call :run_gradle_task ":mifospay-android:build"
+call :run_gradle_task ":mifospay-android:updateProdReleaseBadging"
 
 echo All checks and tests completed successfully.
 exit /b 0

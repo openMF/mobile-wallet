@@ -34,9 +34,14 @@ extensions.configure<org.ajoberstar.reckon.gradle.ReckonExtension> {
 rootProject.name = "mobile-wallet"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
-include(":mifospay")
+
+include(":mifospay-shared")
+include(":mifospay-android")
+include(":mifospay-desktop")
+include(":mifospay-web")
 
 include(":core:data")
+include(":core:domain")
 include(":core:datastore")
 include(":core:designsystem")
 include(":core:ui")
@@ -46,8 +51,6 @@ include(":core:network")
 include(":core:model")
 include(":core:datastore-proto")
 include(":core:analytics")
-
-include(":lint")
 
 include(":feature:home")
 include(":feature:history")
@@ -72,12 +75,5 @@ include(":feature:payments")
 include(":feature:request-money")
 include(":feature:upi-setup")
 include(":feature:qr")
-include(":feature:search")
 
-include(":libs:country-code-picker")
-include(":libs:pullrefresh")
-include(":libs:material3-navigation")
 include(":libs:mifos-passcode")
-
-include(":shared")
-include(":desktop")

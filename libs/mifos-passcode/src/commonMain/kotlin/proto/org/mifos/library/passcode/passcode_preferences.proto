@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+option java_package = "org.mifos.library.passcode.proto";
+option java_multiple_files = true;
+
+message PasscodePreferences {
+  string passcode = 1;
+}

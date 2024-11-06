@@ -7,9 +7,21 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
+
+/*
+ * Copyright 2024 Mifos Initiative
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at https://mozilla.org/MPL/2.0/.
+ *
+ * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+ */
 plugins {
-    alias(libs.plugins.mifospay.android.library)
-    alias(libs.plugins.mifospay.android.library.compose)
+    alias(libs.plugins.mifospay.kmp.library)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -19,20 +31,36 @@ android {
     namespace = "org.mifospay.core.designsystem"
 }
 
-dependencies {
-    lintPublish(projects.lint)
+kotlin {
+    sourceSets {
+        androidMain.dependencies {
+            implementation(libs.androidx.compose.ui.tooling.preview)
+            implementation(libs.androidx.activity.compose)
+            implementation(projects.core.model)
+        }
+        androidInstrumentedTest.dependencies {
+            implementation(libs.androidx.compose.ui.test)
+        }
+        androidUnitTest.dependencies {
+            implementation(libs.androidx.compose.ui.test)
+        }
+        commonMain.dependencies {
+            implementation(libs.coil.kt.compose)
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
+            implementation(compose.ui)
+            implementation(compose.uiUtil)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            api(libs.back.handler)
+            api(libs.window.size)
+        }
+    }
+}
 
-    implementation(projects.core.model)
-
-    api(libs.androidx.compose.ui)
-    api(libs.androidx.compose.foundation)
-    api(libs.androidx.compose.foundation.layout)
-    api(libs.androidx.compose.material.iconsExtended)
-    api(libs.androidx.compose.material3)
-    api(libs.androidx.compose.runtime)
-    api(libs.androidx.compose.ui.util)
-    api(libs.androidx.activity.compose)
-
-    testImplementation(libs.androidx.compose.ui.test)
-    androidTestImplementation(libs.androidx.compose.ui.test)
+compose.resources {
+    publicResClass = true
+    generateResClass = always
 }

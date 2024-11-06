@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<resources>
+    <string name="feature_kyc_complete_kyc">Complete the KYC process</string>
+    <string name="feature_kyc_level_1">Level 1</string>
+    <string name="feature_kyc_level_2">Level 2</string>
+    <string name="feature_kyc_level_3">Level 3</string>
+    <string name="feature_kyc_content_description_placeholder">Placeholder</string>
+    <string name="feature_kyc_error_oops">Oops!</string>
+    <string name="feature_kyc_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>
+    <string name="feature_kyc_loading">Loading</string>
+    <string name="feature_kyc_level">Level</string>
+    <string name="feature_kyc_completion">Completed</string>
+    <string name="feature_kyc_check">Checked</string>
+    <string name="feature_kyc_error_kyc_details">Couldn\'t fetch KYC details. Please try again.</string>
+    <string name="feature_kyc_submitting">Submitting</string>
+    <string name="feature_kyc_error_adding_KYC_Level_1_details">Error adding KYC Level 1 details.</string>
+    <string name="feature_kyc_error_adding_KYC_Level_2_details">Error adding KYC Level 2 details.</string>
+    <string name="feature_kyc_successkyc1">KYC Level 1 details added.</string>
+    <string name="feature_kyc_successkyc2">KYC Level 2 details added.</string>
+    <string name="feature_kyc_date_format">dd-MM-yyyy</string>
+    <string name="feature_kyc_first_name">First Name</string>
+    <string name="feature_kyc_last_name">Last Name</string>
+    <string name="feature_kyc_address_line_1">Address Line 1</string>
+    <string name="feature_kyc_address_line_2">Address Line 2</string>
+    <string name="feature_kyc_phone_number">Phone Number</string>
+    <string name="feature_kyc_select_dob">Date of Birth</string>
+    <string name="feature_kyc_submit">Submit</string>
+    <string name="feature_kyc_approve_permission">Please approve storage permissions</string>
+    <string name="feature_kyc_browse">Browse</string>
+    <string name="feature_kyc_file_name">File Name: </string>
+    <string name="feature_kyc_approve">Approve</string>
+    <string name="feature_kyc_id_type">ID Type</string>
+    <string name="feature_kyc_pan_id">PAN ID</string>
+</resources>

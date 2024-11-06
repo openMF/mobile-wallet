@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Copyright 2024 Mifos Initiative
+
+    This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
+    If a copy of the MPL was not distributed with this file,
+    You can obtain one at https://mozilla.org/MPL/2.0/.
+
+    See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="34dp"
+    android:height="35dp"
+    android:viewportWidth="34"
+    android:viewportHeight="35">
+  <group>
+    <clip-path
+        android:pathData="M17.029,0.978l16.971,16.971l-16.971,16.971l-16.971,-16.971z"/>
+    <path
+        android:pathData="M8.094,19.616C6.922,20.789 4.886,20.653 3.546,19.313C2.206,17.973 2.07,15.937 3.243,14.764C4.415,13.592 6.451,13.728 7.791,15.068C9.131,16.408 9.267,18.444 8.094,19.616ZM13.182,27.837C17.99,22.396 17.409,13.595 11.824,7.456C11.494,7.093 10.961,7.046 10.657,7.35L9.064,8.943C8.785,9.222 8.797,9.702 9.097,10.038C13.092,14.516 13.524,20.875 10.086,24.866C9.828,25.165 9.88,25.648 10.199,25.966L12.02,27.787C12.366,28.134 12.898,28.158 13.182,27.837ZM18.637,33.31C26.069,25.242 25.215,11.844 16.594,2.663C16.263,2.311 15.738,2.269 15.438,2.569L13.845,4.162C13.559,4.448 13.585,4.94 13.9,5.278C20.882,12.78 21.608,23.679 15.569,30.312C15.297,30.611 15.336,31.104 15.663,31.43L17.484,33.251C17.826,33.593 18.35,33.622 18.637,33.31Z"
+        android:fillColor="#ffffff"/>
+  </group>
+</vector>

@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+option java_package = "org.mifospay.core.datastore.proto";
+option java_multiple_files = true;
+
+message Role {
+    string id = 1;
+    string name = 2;
+    string description = 3;
+    bool disabled = 4;
+}

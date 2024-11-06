@@ -8,18 +8,28 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 plugins {
-    alias(libs.plugins.mifospay.android.feature)
-    alias(libs.plugins.mifospay.android.library.compose)
+    alias(libs.plugins.mifospay.cmp.feature)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
     namespace = "org.mifospay.feature.request.money"
-    buildFeatures {
-        buildConfig = true
+}
+
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(compose.ui)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.coil.kt.compose)
+            implementation(libs.qrose)
+        }
     }
 }
 
 dependencies {
     implementation(libs.zxing)
-    implementation(libs.coil.kt.compose)
 }

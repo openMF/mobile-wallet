@@ -6,16 +6,67 @@ Mobile Wallet is an Android-based framework for mobile wallets based on top of <
 <a href='https://github.com/openMF/mobile-wallet/wiki/Architecture'>clean architecture</a> and contains a core library module
 that can be used as a dependency in any other wallet based project. It is developed at <a href='https://mifos.org/'>MIFOS</a> together with a global community.
 
+# Run the project
+![Screenshot 2024-10-19 005524](https://github.com/user-attachments/assets/8023c529-1215-4c4b-b212-630f0233223f)
+- To run the android-app select the `mifospay-android` run configuration and click run.
+- To run the desktop-app select the `mifospay-desktop` run configuration and click run.
+- To run the web-app-js select the `mifospay-web-js` run configuration and click run.
+
+## KMP Status for modules
+
+| Module                        | Progress | Desktop supported | Android supported | iOS supported | Web supported(JS) | Web supported(WASM-JS)  | 
+|-------------------------------|----------|-------------------|-------------------|---------------|-------------------|-------------------------| 
+| mifospay-android              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ❔                       | 
+| mifospay-desktop              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ❔                       | 
+| mifospay-web                  | Done     | ✅                 | ✅                 | ❔             | ✅                 | ❔                       |
+| mifospay-ios                  | NO OP    | ❌                 | ❌                 | ❌             | ❌                 | ❌                       |
+| :core:analytics               | Done     | ❌                 | ✔️                | ❔             | ❌                 | ❔                       |
+| :core:common                  | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:data                    | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:datastore               | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:datastore-proto         | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:designsystem            | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:domain                  | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:model                   | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:network                 | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :core:ui                      | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:auth                 | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:editpassword         | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:faq                  | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:history              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:home                 | Done     | ✅                 | ✅                 | ❔             | ✅                 | ❌                       | 
+| :feature:profile              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:settings             | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:payments             | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |
+| :feature:finance              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |
+| :feature:account              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |
+| :feature:invoices             | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:kyc                  | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:make-transfer        | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:merchants            | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:notification         | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |
+| :feature:qr                   | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:receipt              | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:request-money        | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:saved-cards          | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |
+| :feature:send-money           | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:standing-instruction | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       | 
+| :feature:upi-setup            | Done     | ✅                 | ✅                 | ❔             | ✅                 | ✅                       |  
+
+✅: Functioning properly  
+❔: Not yet tested, but expected to work  
+✔️: Successfully compiled  
+❌: Not functioning, requires further attention
+
 ## Notice
 
 :warning: We are fully committed to implement [Jetpack Compose](https://developer.android.com/jetpack/compose) and moving ourself to support 
-`kotlin multi-platform`. **If you are sending any PR regarding `XML changes` we will `not` consider at this moment but converting XML to jetpack compose are most welcome.** If you sending any PR regarding logical changes in Activity/Fragment you are most welcome. 
+`kotlin multi-platform`. **If you are sending any PR regarding `XML changes` we will `not` consider at this moment but converting XML to jetpack compose are most welcome.** If you sending any PR regarding logical changes in Activity/Fragment you are most welcome.
 
 
-
-Development | Chat |
-|-----------------|-----------------|
-![Mobile-Wallet CI[Master/Dev]](https://github.com/openMF/mobile-wallet/workflows/Mobile-Wallet%20CI%5BMaster/Dev%5D/badge.svg?branch=dev) | [![Join the chat at https://mifos.slack.com/](https://img.shields.io/badge/Join%20Our%20Community-Slack-blue)](https://mifos.slack.com/) |
+| Development                                                                                                                                | Chat                                                                                                                                     |
+|--------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| ![Mobile-Wallet CI[Master/Dev]](https://github.com/openMF/mobile-wallet/workflows/Mobile-Wallet%20CI%5BMaster/Dev%5D/badge.svg?branch=dev) | [![Join the chat at https://mifos.slack.com/](https://img.shields.io/badge/Join%20Our%20Community-Slack-blue)](https://mifos.slack.com/) |
 
 
 ## Join Us on Slack

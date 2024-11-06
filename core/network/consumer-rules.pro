@@ -1,0 +1,2 @@
+-keep class io.ktor.** { *; }
+-keep class kotlinx.serialization.** { *; }

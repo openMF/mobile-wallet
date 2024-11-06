@@ -1,0 +1,1 @@
+To run in desktop mode, choose the `mifospay-desktop` profile and click run.
