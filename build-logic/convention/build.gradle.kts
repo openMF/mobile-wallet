@@ -23,11 +23,8 @@ dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.android.tools.common)
     compileOnly(libs.compose.gradlePlugin)
-    compileOnly(libs.firebase.crashlytics.gradlePlugin)
-    compileOnly(libs.firebase.performance.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
-    compileOnly(libs.room.gradlePlugin)
     compileOnly(libs.detekt.gradlePlugin)
     compileOnly(libs.ktlint.gradlePlugin)
     compileOnly(libs.spotless.gradle)
@@ -43,6 +40,7 @@ tasks {
 
 gradlePlugin {
     plugins {
+        // Android Plugins
         register("androidApplicationCompose") {
             id = "mifospay.android.application.compose"
             implementationClass = "AndroidApplicationComposeConventionPlugin"
@@ -51,46 +49,28 @@ gradlePlugin {
             id = "mifospay.android.application"
             implementationClass = "AndroidApplicationConventionPlugin"
         }
-        register("androidLibraryCompose") {
-            id = "mifospay.android.library.compose"
-            implementationClass = "AndroidLibraryComposeConventionPlugin"
-        }
-        register("androidLibrary") {
-            id = "mifospay.android.library"
-            implementationClass = "AndroidLibraryConventionPlugin"
-        }
-        register("androidFeature") {
-            id = "mifospay.android.feature"
-            implementationClass = "AndroidFeatureConventionPlugin"
-        }
-        register("androidTest") {
-            id = "mifospay.android.test"
-            implementationClass = "AndroidTestConventionPlugin"
-        }
-        register("androidRoom") {
-            id = "mifospay.android.room"
-            implementationClass = "AndroidRoomConventionPlugin"
-        }
-        register("androidFirebase") {
-            id = "mifospay.android.application.firebase"
-            implementationClass = "AndroidApplicationFirebaseConventionPlugin"
-        }
-        register("androidLint") {
-            id = "mifospay.android.lint"
-            implementationClass = "AndroidLintConventionPlugin"
-        }
-        register("jvmLibrary") {
-            id = "mifospay.jvm.library"
-            implementationClass = "JvmLibraryConventionPlugin"
-        }
+
         register("androidFlavors") {
             id = "mifospay.android.application.flavors"
             implementationClass = "AndroidApplicationFlavorsConventionPlugin"
         }
-        register("androidKoin") {
-            id = "mifospay.android.koin"
-            implementationClass = "AndroidKoinConventionPlugin"
+
+        // KMP & CMP Plugins
+        register("cmpFeature") {
+            id = "mifospay.cmp.feature"
+            implementationClass = "CMPFeatureConventionPlugin"
         }
+
+        register("kmpKoin") {
+            id = "mifospay.kmp.koin"
+            implementationClass = "KMPKoinConventionPlugin"
+        }
+        register("kmpLibrary") {
+            id = "mifospay.kmp.library"
+            implementationClass = "KMPLibraryConventionPlugin"
+        }
+
+        // Static Analysis & Formatting Plugins
         register("detekt") {
             id = "mifos.detekt.plugin"
             implementationClass = "MifosDetektConventionPlugin"

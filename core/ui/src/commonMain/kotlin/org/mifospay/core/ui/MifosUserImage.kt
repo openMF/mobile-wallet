@@ -9,7 +9,6 @@
  */
 package org.mifospay.core.ui
 
-import android.graphics.Bitmap
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.shape.CircleShape
@@ -17,42 +16,29 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
-import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.component.MifosTextUserImage
 
 @Composable
 fun MifosUserImage(
     modifier: Modifier = Modifier,
-    bitmap: Bitmap? = null,
+    bitmap: ImageBitmap? = null,
+    username: String? = null,
 ) {
     if (bitmap == null) {
-        Image(
-            modifier = modifier
-                .clip(CircleShape),
-            painter = painterResource(id = R.drawable.core_ui_ic_dp_placeholder),
-            contentDescription = "Empty profile Image",
-            contentScale = ContentScale.Fit,
+        MifosTextUserImage(
+            text = username?.firstOrNull()?.toString() ?: "J",
+            modifier = modifier,
         )
     } else {
         Image(
             modifier = modifier
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.primary),
-            bitmap = bitmap.asImageBitmap(),
+            bitmap = bitmap,
             contentDescription = "Profile Image",
             contentScale = ContentScale.Crop,
         )
-    }
-}
-
-@DevicePreviews
-@Composable
-private fun MifosUserImagePreview(
-    modifier: Modifier = Modifier,
-) {
-    MifosTheme {
-        MifosUserImage(modifier)
     }
 }

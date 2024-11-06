@@ -11,17 +11,7 @@ package org.mifospay.core.network.di
 
 import org.koin.core.qualifier.named
 
-val SelfServiceApi = named("SelfServiceApi")
-val FineractApi = named("FineractApi")
-val Testing = named("Testing")
-val FineractAuthenticationService = named("FineractAuthenticationService")
-val FineractClientService = named("FineractClientService")
-val FineractSavingsAccountsService = named("FineractSavingsAccountsService")
-val FineractRegistrationService = named("FineractRegistrationService")
-val FineractThirdPartyTransferService = named("FineractThirdPartyTransferService")
-
-val SelfServiceAuthenticationService = named("SelfServiceAuthenticationService")
-val SelfServiceClientService = named("SelfServiceClientService")
-val SelfServiceSavingsAccountsService = named("SelfServiceSavingsAccountsService")
-val SelfServiceRegistrationService = named("SelfServiceRegistrationService")
-val SelfServiceThirdPartyTransferService = named("SelfServiceThirdPartyTransferService")
+val SelfClient = named("SelfClient")
+val BaseClient = named("BaseClient")
+val KtorClient = named("KtorClient")
+val KtorBaseClient = named("KtorBaseClient")

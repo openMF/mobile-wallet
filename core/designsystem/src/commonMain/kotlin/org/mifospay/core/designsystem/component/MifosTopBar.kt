@@ -18,32 +18,27 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import org.mifospay.core.designsystem.icon.MifosIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MifosTopBar(
-    topBarTitle: Int,
+    topBarTitle: String,
     backPress: () -> Unit,
     modifier: Modifier = Modifier,
     actions: @Composable RowScope.() -> Unit = {},
-    titleColor: Color? = null,
-    iconTint: Color? = null,
 ) {
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = stringResource(id = topBarTitle),
+                text = topBarTitle,
                 style = MaterialTheme.typography.titleMedium,
-                color = titleColor ?: MaterialTheme.colorScheme.onSurface,
             )
         },
         navigationIcon = {
             IconBox(
                 icon = MifosIcons.ArrowBack2,
                 onClick = backPress,
-                tint = iconTint,
             )
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

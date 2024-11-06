@@ -24,6 +24,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
 
@@ -85,7 +86,7 @@ fun MifosNavigationBar(
 ) {
     NavigationBar(
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.onPrimary,
+        containerColor = MaterialTheme.colorScheme.background,
         contentColor = MifosNavigationDefaults.navigationContentColor(),
         tonalElevation = 0.dp,
         content = content,
@@ -159,22 +160,24 @@ fun MifosNavigationRail(
     )
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun MifosNavigationBarPreview() {
     val items = listOf("Home", "Payments", "Finance", "Profile")
-    val icons = listOf(
-        MifosIcons.Home,
-        MifosIcons.Payment,
-        MifosIcons.Finance,
-        MifosIcons.Profile,
-    )
-    val selectedIcons = listOf(
-        MifosIcons.HomeBoarder,
-        MifosIcons.Payment,
-        MifosIcons.Finance,
-        MifosIcons.ProfileBoarder,
-    )
+    val icons =
+        listOf(
+            MifosIcons.Home,
+            MifosIcons.Payment,
+            MifosIcons.Finance,
+            MifosIcons.Profile,
+        )
+    val selectedIcons =
+        listOf(
+            MifosIcons.HomeBoarder,
+            MifosIcons.Payment,
+            MifosIcons.Finance,
+            MifosIcons.ProfileBoarder,
+        )
 
     MifosTheme {
         MifosNavigationBar {
@@ -201,22 +204,24 @@ fun MifosNavigationBarPreview() {
     }
 }
 
-@ThemePreviews
+@Preview
 @Composable
 fun MifosNavigationRailPreview() {
     val items = listOf("Home", "Payments", "Finance", "Profile")
-    val icons = listOf(
-        MifosIcons.Home,
-        MifosIcons.Payment,
-        MifosIcons.Finance,
-        MifosIcons.Profile,
-    )
-    val selectedIcons = listOf(
-        MifosIcons.HomeBoarder,
-        MifosIcons.Payment,
-        MifosIcons.Finance,
-        MifosIcons.ProfileBoarder,
-    )
+    val icons =
+        listOf(
+            MifosIcons.Home,
+            MifosIcons.Payment,
+            MifosIcons.Finance,
+            MifosIcons.Profile,
+        )
+    val selectedIcons =
+        listOf(
+            MifosIcons.HomeBoarder,
+            MifosIcons.Payment,
+            MifosIcons.Finance,
+            MifosIcons.ProfileBoarder,
+        )
 
     MifosTheme {
         MifosNavigationRail {
@@ -251,8 +256,8 @@ object MifosNavigationDefaults {
     fun navigationContentColor() = MaterialTheme.colorScheme.onSurfaceVariant
 
     @Composable
-    fun navigationSelectedItemColor() = MaterialTheme.colorScheme.onSurface
+    fun navigationSelectedItemColor() = MaterialTheme.colorScheme.onPrimaryContainer
 
     @Composable
-    fun navigationIndicatorColor() = MaterialTheme.colorScheme.onPrimary
+    fun navigationIndicatorColor() = MaterialTheme.colorScheme.primaryContainer
 }

@@ -8,9 +8,8 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 plugins {
-    alias(libs.plugins.mifospay.android.library)
+    alias(libs.plugins.mifospay.kmp.library)
 }
-
 
 android {
     namespace = "org.mifospay.core.datastore"
@@ -24,13 +23,25 @@ android {
     }
 }
 
-dependencies {
-    api(libs.kotlinx.datetime)
-    api(libs.androidx.dataStore.core)
-    api(projects.core.datastoreProto)
-    api(projects.core.common)
-    api(projects.core.model)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.serialization)
+            implementation(libs.multiplatform.settings.coroutines)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.core)
+            implementation(projects.core.model)
+            implementation(projects.core.common)
+            implementation(projects.core.datastoreProto)
+        }
 
-    implementation(libs.squareup.retrofit.converter.gson)
-    implementation(libs.koin.android)
+        commonTest.dependencies {
+            implementation(libs.multiplatform.settings.test)
+        }
+
+        desktopMain.dependencies {
+            implementation(libs.kotlinx.coroutines.swing)
+        }
+    }
 }

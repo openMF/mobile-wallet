@@ -8,17 +8,23 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 plugins {
-    alias(libs.plugins.mifospay.android.library)
-    alias(libs.plugins.mifospay.android.library.compose)
+    alias(libs.plugins.mifospay.kmp.library)
+    alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
     namespace = "org.mifospay.core.analytics"
 }
 
-dependencies {
-    implementation(libs.androidx.compose.runtime)
-
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.analytics)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(compose.runtime)
+        }
+        androidMain.dependencies {
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.analytics)
+        }
+    }
 }

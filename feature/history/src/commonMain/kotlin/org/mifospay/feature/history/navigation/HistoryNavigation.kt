@@ -7,22 +7,26 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.profile.navigation
+package org.mifospay.feature.history.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
-import org.mifospay.feature.profile.ProfileRoute
+import org.mifospay.feature.history.HistoryScreen
 
-const val PROFILE_ROUTE = "profile_route"
+const val HISTORY_ROUTE = "history_route"
 
-fun NavController.navigateToProfile(navOptions: NavOptions) = navigate(PROFILE_ROUTE, navOptions)
-
-fun NavGraphBuilder.profileScreen(
-    onEditProfile: () -> Unit,
+fun NavGraphBuilder.historyNavigation(
+    viewTransactionDetail: (Long) -> Unit,
 ) {
-    composable(route = PROFILE_ROUTE) {
-        ProfileRoute(onLinkAccount = onEditProfile)
+    composable(HISTORY_ROUTE) {
+        HistoryScreen(
+            viewTransferDetail = viewTransactionDetail,
+        )
     }
+}
+
+fun NavController.navigateToHistory(navOptions: NavOptions? = null) {
+    navigate(HISTORY_ROUTE, navOptions)
 }

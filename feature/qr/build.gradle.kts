@@ -8,18 +8,52 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 plugins {
-    alias(libs.plugins.mifospay.android.feature)
-    alias(libs.plugins.mifospay.android.library.compose)
+    alias(libs.plugins.mifospay.cmp.feature)
+    alias(libs.plugins.kotlin.parcelize)
 }
 
 android {
     namespace = "org.mifospay.feature.qr"
+
+    defaultConfig {
+        consumerProguardFiles("consumer-rules.pro")
+    }
 }
 
-dependencies {
-    implementation(libs.zxing)
-    implementation(libs.androidx.camera.view)
-    implementation(libs.androidx.camera.lifecycle)
-    // TODO:: this should be removed
-    implementation("com.google.guava:guava:27.0.1-android")
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(compose.ui)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
+            implementation(libs.coil.kt.compose)
+            implementation(libs.filekit.core)
+            implementation(libs.filekit.compose)
+        }
+
+        androidMain.dependencies {
+            implementation(libs.androidx.camera.view)
+            implementation(libs.androidx.camera.camera2)
+            implementation(libs.androidx.camera.lifecycle)
+            implementation(libs.accompanist.permissions)
+            implementation(libs.mlkit.barcode.scanning)
+            implementation(libs.guava)
+        }
+
+        nativeMain.dependencies {
+            implementation(libs.moko.permission.compose)
+        }
+    }
+}
+
+compose.desktop {
+    application {
+        nativeDistributions {
+            linux {
+                modules("jdk.security.auth")
+            }
+        }
+    }
 }

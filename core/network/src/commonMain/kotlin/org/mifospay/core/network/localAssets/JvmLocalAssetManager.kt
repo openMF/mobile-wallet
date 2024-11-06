@@ -7,36 +7,10 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay
+package org.mifospay.core.network.localAssets
 
-import android.app.Application
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
-import org.koin.core.logger.Level
-import org.mifospay.di.KoinModules
-
-class MifosPayApp : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        val koinModules = KoinModules()
-
-        startKoin {
-            printLogger(Level.ERROR)
-            androidContext(this@MifosPayApp)
-            modules(
-                listOf(
-                    koinModules.dataModules,
-                    koinModules.mifosPayModule,
-                    koinModules
-                        .coreDataStoreModules,
-                    koinModules.featureModules,
-                    koinModules.networkModules,
-                    koinModules
-                        .analyticsModules,
-                    koinModules.commonModules,
-                    koinModules.libsModule,
-                ),
-            )
-        }
+internal object JvmLocalAssetManager : LocalAssetManager {
+    override fun open(fileName: String): String {
+        return ""
     }
 }

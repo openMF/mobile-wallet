@@ -32,20 +32,20 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import org.koin.androidx.compose.koinViewModel
+import kotlinx.coroutines.launch
+import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 import org.mifos.library.passcode.component.MifosIcon
 import org.mifos.library.passcode.component.PasscodeForgotButton
 import org.mifos.library.passcode.component.PasscodeHeader
@@ -55,10 +55,11 @@ import org.mifos.library.passcode.component.PasscodeSkipButton
 import org.mifos.library.passcode.component.PasscodeToolbar
 import org.mifos.library.passcode.theme.blueTint
 import org.mifos.library.passcode.utility.Constants.PASSCODE_LENGTH
-import org.mifos.library.passcode.utility.PreferenceManager
 import org.mifos.library.passcode.utility.ShakeAnimation.performShakeAnimation
-import org.mifos.library.passcode.utility.VibrationFeedback.vibrateFeedback
+import org.mifos.library.passcode.viewmodels.PasscodeAction
+import org.mifos.library.passcode.viewmodels.PasscodeEvent
 import org.mifos.library.passcode.viewmodels.PasscodeViewModel
+import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
 internal fun PasscodeScreen(
@@ -69,29 +70,25 @@ internal fun PasscodeScreen(
     modifier: Modifier = Modifier,
     viewModel: PasscodeViewModel = koinViewModel(),
 ) {
-    val context = LocalContext.current
-    val preferenceManager = remember { PreferenceManager(context) }
-
-    val activeStep by viewModel.activeStep.collectAsStateWithLifecycle()
-    val filledDots by viewModel.filledDots.collectAsStateWithLifecycle()
-    val passcodeVisible by viewModel.passcodeVisible.collectAsStateWithLifecycle()
-    val currentPasscode by viewModel.currentPasscodeInput.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     val xShake = remember { Animatable(initialValue = 0.0F) }
     var passcodeRejectedDialogVisible by remember { mutableStateOf(false) }
 
-    LaunchedEffect(key1 = viewModel.onPasscodeConfirmed) {
-        viewModel.onPasscodeConfirmed.collect {
-            onPasscodeConfirm(it)
-        }
-    }
+    EventsEffect(viewModel) { event ->
+        when (event) {
+            is PasscodeEvent.PasscodeConfirmed -> {
+                onPasscodeConfirm(event.passcode)
+            }
 
-    LaunchedEffect(key1 = viewModel.onPasscodeRejected) {
-        viewModel.onPasscodeRejected.collect {
-            passcodeRejectedDialogVisible = true
-            vibrateFeedback(context)
-            performShakeAnimation(xShake)
-            onPasscodeRejected()
+            is PasscodeEvent.PasscodeRejected -> {
+                passcodeRejectedDialogVisible = true
+                scope.launch {
+                    performShakeAnimation(xShake)
+                }
+                onPasscodeRejected()
+            }
         }
     }
 
@@ -106,10 +103,10 @@ internal fun PasscodeScreen(
                 .padding(paddingValues),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            PasscodeToolbar(activeStep = activeStep, preferenceManager.hasPasscode)
+            PasscodeToolbar(activeStep = state.activeStep, state.hasPasscode)
 
             PasscodeSkipButton(
-                hasPassCode = preferenceManager.hasPasscode,
+                hasPassCode = state.hasPasscode,
                 onSkipButton = onSkipButton,
             )
 
@@ -122,15 +119,19 @@ internal fun PasscodeScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 PasscodeHeader(
-                    activeStep = activeStep,
-                    isPasscodeAlreadySet = preferenceManager.hasPasscode,
+                    activeStep = state.activeStep,
+                    isPasscodeAlreadySet = state.hasPasscode,
                 )
                 PasscodeView(
-                    restart = { viewModel.restart() },
-                    togglePasscodeVisibility = { viewModel.togglePasscodeVisibility() },
-                    filledDots = filledDots,
-                    passcodeVisible = passcodeVisible,
-                    currentPasscode = currentPasscode,
+                    restart = remember(viewModel) {
+                        { viewModel.trySendAction(PasscodeAction.Restart) }
+                    },
+                    togglePasscodeVisibility = remember(viewModel) {
+                        { viewModel.trySendAction(PasscodeAction.TogglePasscodeVisibility) }
+                    },
+                    filledDots = state.filledDots,
+                    passcodeVisible = state.passcodeVisible,
+                    currentPasscode = state.currentPasscodeInput,
                     passcodeRejectedDialogVisible = passcodeRejectedDialogVisible,
                     onDismissDialog = { passcodeRejectedDialogVisible = false },
                     xShake = xShake,
@@ -140,16 +141,21 @@ internal fun PasscodeScreen(
             Spacer(modifier = Modifier.height(6.dp))
 
             PasscodeKeys(
-                enterKey = viewModel::enterKey,
-                deleteKey = viewModel::deleteKey,
-                deleteAllKeys = viewModel::deleteAllKeys,
-                modifier = Modifier.padding(horizontal = 12.dp),
+                enterKey = remember(viewModel) {
+                    { viewModel.trySendAction(PasscodeAction.EnterKey(it)) }
+                },
+                deleteKey = remember(viewModel) {
+                    { viewModel.trySendAction(PasscodeAction.DeleteKey) }
+                },
+                deleteAllKeys = remember(viewModel) {
+                    { viewModel.trySendAction(PasscodeAction.DeleteAllKeys) }
+                },
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             PasscodeForgotButton(
-                hasPassCode = preferenceManager.hasPasscode,
+                hasPassCode = state.hasPasscode,
                 onForgotButton = onForgotButton,
             )
         }
@@ -230,7 +236,7 @@ private fun PasscodeView(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 private fun PasscodeScreenPreview() {
     PasscodeScreen(

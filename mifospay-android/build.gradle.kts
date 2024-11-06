@@ -24,7 +24,6 @@ plugins {
     alias(libs.plugins.mifospay.android.application)
     alias(libs.plugins.mifospay.android.application.compose)
     alias(libs.plugins.mifospay.android.application.flavors)
-    alias(libs.plugins.mifospay.android.application.firebase)
     alias(libs.plugins.roborazzi)
     id("com.google.android.gms.oss-licenses-plugin")
     id("com.google.devtools.ksp")
@@ -87,38 +86,9 @@ android {
 }
 
 dependencies {
-    implementation(projects.shared)
-
+    implementation(projects.mifospayShared)
     implementation(projects.core.data)
     implementation(projects.core.ui)
-    implementation(projects.core.designsystem)
-
-    implementation(projects.feature.receipt)
-    implementation(projects.feature.profile)
-    implementation(projects.feature.auth)
-    implementation(projects.feature.makeTransfer)
-    implementation(projects.feature.faq)
-    implementation(projects.feature.editpassword)
-    implementation(projects.feature.notification)
-    implementation(projects.feature.requestMoney)
-    implementation(projects.feature.upiSetup)
-    implementation(projects.feature.settings)
-    implementation(projects.feature.savedcards)
-    implementation(projects.feature.qr)
-    implementation(projects.feature.invoices)
-    implementation(projects.feature.merchants)
-    implementation(projects.feature.history)
-    implementation(projects.feature.kyc)
-    implementation(projects.feature.home)
-    implementation(projects.feature.accounts)
-    implementation(projects.feature.finance)
-    implementation(projects.feature.payments)
-    implementation(projects.feature.sendMoney)
-    implementation(projects.feature.standingInstruction)
-    implementation(projects.feature.search)
-
-    implementation(projects.libs.mifosPasscode)
-    implementation(projects.libs.material3Navigation)
 
     // Compose
     implementation(libs.androidx.core.ktx)
@@ -126,13 +96,11 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.activity.ktx)
     implementation(libs.androidx.core.splashscreen)
-
+    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.compose.material3.adaptive)
     implementation(libs.androidx.compose.material3.adaptive.layout)
     implementation(libs.androidx.compose.material3.adaptive.navigation)
-    implementation(libs.androidx.compose.material3.windowSizeClass)
     implementation(libs.androidx.compose.runtime.tracing)
-
 
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
@@ -146,9 +114,13 @@ dependencies {
     implementation(libs.androidx.profileinstaller)
     implementation(libs.androidx.tracing.ktx)
 
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
+
     runtimeOnly(libs.androidx.compose.runtime)
     debugImplementation(libs.androidx.compose.ui.tooling)
-
 
     testImplementation(libs.junit)
     testImplementation(libs.androidx.compose.ui.test)
@@ -156,9 +128,6 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(libs.androidx.test.ext.junit)
-
-    implementation(libs.koin.android)
-    implementation(libs.ktor.client.core)
 
     testImplementation(kotlin("test"))
     testImplementation(libs.koin.test)

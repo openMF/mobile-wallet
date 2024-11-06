@@ -8,39 +8,61 @@
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
 plugins {
-    alias(libs.plugins.mifospay.android.library)
-    alias(libs.plugins.mifospay.android.library.compose)
-    id("com.google.devtools.ksp")
+    alias(libs.plugins.mifospay.cmp.feature)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.protobuf)
 }
 
 android {
     namespace = "com.mifos.library.passcode"
 }
 
-dependencies {
-    implementation(libs.androidx.core.ktx)
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            implementation(compose.ui)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.materialIconsExtended)
+            implementation(compose.components.resources)
+            implementation(compose.components.uiToolingPreview)
 
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.foundation.layout)
-    implementation(libs.androidx.compose.material.iconsExtended)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.androidx.compose.ui.util)
+            implementation(libs.koin.compose.viewmodel)
+            implementation(libs.koin.compose)
 
-    implementation(libs.androidx.lifecycle.runtimeCompose)
-    implementation(libs.androidx.lifecycle.viewModelCompose)
-    implementation(libs.androidx.navigation.compose)
+            implementation(libs.jb.kotlin.stdlib)
+            implementation(libs.kotlin.reflect)
 
-    implementation(platform(libs.koin.bom))
-    implementation(libs.koin.core)
-    implementation(libs.koin.android)
-    implementation(libs.koin.androidx.navigation)
-    implementation(libs.koin.androidx.compose)
-    implementation(libs.koin.core.viewmodel)
+            api(libs.protobuf.kotlin.lite)
+            implementation(libs.kotlinx.serialization.core)
 
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.serialization)
+            implementation(libs.multiplatform.settings.coroutines)
 
-    testImplementation(libs.koin.test)
-    testImplementation(libs.koin.test.junit4)
-    testImplementation(libs.koin.test.junit5)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.core)
+        }
 
+        desktopMain.dependencies {
+            implementation(libs.kotlinx.coroutines.swing)
+        }
+    }
+}
+
+// Setup protobuf configuration, generating lite Java and Kotlin classes
+protobuf {
+    protoc {
+        artifact = libs.protobuf.protoc.get().toString()
+    }
+    generateProtoTasks {
+        all().forEach { task ->
+            task.builtins {
+                register("kotlin") {
+                    option("lite")
+                }
+            }
+        }
+    }
 }
