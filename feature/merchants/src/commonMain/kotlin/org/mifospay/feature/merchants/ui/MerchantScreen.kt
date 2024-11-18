@@ -21,6 +21,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.SearchBarDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -212,34 +213,48 @@ private fun SearchBarScreen(
     modifier: Modifier = Modifier,
 ) {
     SearchBar(
+        inputField = {
+            SearchBarDefaults.InputField(
+                query = query,
+                onQueryChange = onQueryChange,
+                onSearch = onSearch,
+                expanded = false,
+                onExpandedChange = {},
+                enabled = true,
+                placeholder = {
+                    Text(text = stringResource(Res.string.feature_merchants_search))
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = MifosIcons.Search,
+                        contentDescription = stringResource(Res.string.feature_merchants_search),
+                    )
+                },
+                trailingIcon = {
+                    IconButton(
+                        onClick = onClearQuery,
+                    ) {
+                        Icon(
+                            imageVector = MifosIcons.Close,
+                            contentDescription = stringResource(Res.string.feature_merchants_close),
+                        )
+                    }
+                },
+                interactionSource = null,
+            )
+        },
+        expanded = false,
+        onExpandedChange = {},
         modifier = modifier
             .fillMaxWidth()
             .padding(vertical = 16.dp, horizontal = 16.dp),
-        query = query,
-        onQueryChange = onQueryChange,
-        onSearch = onSearch,
-        active = false,
-        onActiveChange = { },
-        placeholder = {
-            Text(text = stringResource(Res.string.feature_merchants_search))
-        },
-        leadingIcon = {
-            Icon(
-                imageVector = MifosIcons.Search,
-                contentDescription = stringResource(Res.string.feature_merchants_search),
-            )
-        },
-        trailingIcon = {
-            IconButton(
-                onClick = onClearQuery,
-            ) {
-                Icon(
-                    imageVector = MifosIcons.Close,
-                    contentDescription = stringResource(Res.string.feature_merchants_close),
-                )
-            }
-        },
-    ) {}
+        shape = SearchBarDefaults.inputFieldShape,
+        colors = SearchBarDefaults.colors(),
+        tonalElevation = SearchBarDefaults.TonalElevation,
+        shadowElevation = SearchBarDefaults.ShadowElevation,
+        windowInsets = SearchBarDefaults.windowInsets,
+        content = {},
+    )
 }
 
 @Preview

@@ -35,13 +35,3 @@ kotlin {
         }
     }
 }
-
-compose.desktop {
-    application {
-        nativeDistributions {
-            linux {
-                modules("jdk.security.auth")
-            }
-        }
-    }
-}

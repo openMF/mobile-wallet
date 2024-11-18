@@ -10,6 +10,7 @@
 package org.mifospay.feature.auth.login
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -21,8 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,6 +30,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -50,6 +50,7 @@ import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
+import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.core.designsystem.theme.grey
 import org.mifospay.core.designsystem.theme.styleNormal18sp
@@ -64,9 +65,10 @@ internal fun LoginScreen(
     modifier: Modifier = Modifier,
     viewModel: LoginViewModel = koinViewModel(),
 ) {
-    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -88,18 +90,34 @@ internal fun LoginScreen(
         },
     )
 
-    Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+    LoginScreen(
+        state = state,
+        snackbarHostState = snackbarHostState,
+        modifier = modifier,
+        onAction = remember(viewModel) {
+            { viewModel.trySendAction(it) }
+        },
+    )
+}
+
+@Composable
+private fun LoginScreen(
+    state: LoginState,
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
+    onAction: (LoginAction) -> Unit,
+) {
+    MifosScaffold(
+        snackbarHostState = snackbarHostState,
         modifier = modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
         LoginScreenContent(
             state = state,
-            onEvent = remember(viewModel) {
-                { viewModel.trySendAction(it) }
-            },
-            modifier = modifier.padding(paddingValues),
-            navigateToSignupScreen = navigateToSignupScreen,
+            onAction = onAction,
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues),
         )
     }
 }
@@ -128,9 +146,8 @@ private fun LoginDialogs(
 @Composable
 private fun LoginScreenContent(
     state: LoginState,
-    onEvent: (LoginAction) -> Unit,
     modifier: Modifier = Modifier,
-    navigateToSignupScreen: () -> Unit,
+    onAction: (LoginAction) -> Unit,
 ) {
     Column(
         modifier = modifier
@@ -156,7 +173,7 @@ private fun LoginScreenContent(
             label = stringResource(Res.string.feature_auth_username),
             value = state.username,
             onValueChange = {
-                onEvent(LoginAction.UsernameChanged(it))
+                onAction(LoginAction.UsernameChanged(it))
             },
             modifier = Modifier.fillMaxWidth(),
         )
@@ -165,12 +182,12 @@ private fun LoginScreenContent(
             label = stringResource(Res.string.feature_auth_password),
             value = state.password,
             onValueChange = {
-                onEvent(LoginAction.PasswordChanged(it))
+                onAction(LoginAction.PasswordChanged(it))
             },
             modifier = Modifier.fillMaxWidth(),
             showPassword = state.isPasswordVisible,
             showPasswordChange = {
-                onEvent(LoginAction.TogglePasswordVisibility)
+                onAction(LoginAction.TogglePasswordVisibility)
             },
         )
         val isLoginButtonEnabled = state.username.isNotEmpty() && state.password.isNotEmpty()
@@ -180,7 +197,7 @@ private fun LoginScreenContent(
                 .padding(top = 16.dp),
             enabled = isLoginButtonEnabled,
             onClick = {
-                onEvent(LoginAction.LoginClicked)
+                onAction(LoginAction.LoginClicked)
             },
             contentPadding = PaddingValues(12.dp),
         ) {
@@ -191,7 +208,11 @@ private fun LoginScreenContent(
             )
         }
 
-        SignupButton { navigateToSignupScreen() }
+        SignupButton(
+            navigateToSignupScreen = {
+                onAction(LoginAction.SignupClicked)
+            },
+        )
     }
 }
 
@@ -211,11 +232,16 @@ private fun SignupButton(
             color = MaterialTheme.colorScheme.onSurface,
         )
         Text(
-            modifier = Modifier.clickable {
+            modifier = Modifier.clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+            ) {
                 navigateToSignupScreen()
             },
             text = stringResource(Res.string.feature_auth_sign_up),
-            style = MaterialTheme.typography.titleMedium.copy(
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.primary,
+            style = MaterialTheme.typography.labelLarge.copy(
                 textDecoration = TextDecoration.Underline,
             ),
         )
@@ -226,10 +252,10 @@ private fun SignupButton(
 @Composable
 private fun LoanScreenPreview() {
     MifosTheme {
-        LoginScreenContent(
+        LoginScreen(
             state = LoginState(dialogState = null),
-            onEvent = {},
-            navigateToSignupScreen = {},
+            snackbarHostState = remember { SnackbarHostState() },
+            onAction = {},
         )
     }
 }

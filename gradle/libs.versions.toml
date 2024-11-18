@@ -2,26 +2,26 @@
 accompanist = "0.34.0"
 
 # Android
-androidDesugarJdkLibs = "2.1.2"
-androidGradlePlugin = "8.5.2"
-androidTools = "31.5.2"
+androidDesugarJdkLibs = "2.1.3"
+androidGradlePlugin = "8.7.2"
+androidTools = "31.7.2"
 
 # AndroidX Dependencies
 androidx-test-ext-junit = "1.2.1"
 androidxActivity = "1.9.3"
 androidxBrowser = "1.8.0"
-androidxComposeBom = "2024.10.01"
+androidxComposeBom = "2024.11.00"
 androidxComposeCompiler = "1.5.15"
 androidxComposeMaterial3Adaptive = "1.0.0"
 androidxComposeRuntimeTracing = "1.7.5"
 androidxCoreSplashscreen = "1.0.1"
 androidxLifecycle = "2.8.7"
 androidxMetrics = "1.0.0-beta01"
-androidxNavigation = "2.8.3"
+androidxNavigation = "2.8.4"
 androidxProfileinstaller = "1.4.1"
 androidxTracing = "1.3.0-alpha02"
 appcompatVersion = "1.7.0"
-coreKtxVersion = "1.13.1"
+coreKtxVersion = "1.15.0"
 
 # KotlinX Dependencies
 lifecycleExtensionsVersion = "2.2.0"
@@ -65,28 +65,27 @@ versionCatalogLinterVersion = "1.0.3"
 fineractSdk = "1.0.3"
 
 # Firebase
-firebaseBom = "33.5.1"
+firebaseBom = "33.6.0"
 firebaseCrashlyticsPlugin = "3.0.2"
 firebasePerfPlugin = "1.4.2"
 
 # Kotlin KMP Dependencies
-kotlin = "2.0.20"
+kotlin = "2.0.21"
 kotlinInject = "0.7.2"
 kotlinxCoroutines = "1.9.0"
 kotlinxDatetime = "0.6.1"
 kotlinxImmutable = "0.3.8"
-kotlinxSerializationJson = "1.7.2"
-ksp = "2.0.20-1.0.25"
+kotlinxSerializationJson = "1.7.3"
+ksp = "2.0.21-1.0.27"
 
 # Ktor & Ktorfit
-ktorVersion = "3.0.0-rc-1"
-ktorfit = "2.1.0"
-ktorfitKsp = "2.1.0-1.0.25"
+ktorVersion = "3.0.1"
+ktorfit = "2.2.0"
+ktorfitKsp = "2.2.0-1.0.27"
 
 # Koin CMP Dependencies
-koin = "4.0.0-RC2"
+koin = "4.0.0"
 koinAnnotationsVersion = "1.4.0-RC4"
-koinComposeMultiplatform = "1.2.0-Beta4"
 
 # CMP Libraries
 compose-plugin = "1.7.0-rc01"
@@ -232,9 +231,9 @@ koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compos
 koin-androidx-navigation = { group = "io.insert-koin", name = "koin-androidx-navigation", version.ref = "koin" }
 koin-annotations = { group = "io.insert-koin", name = "koin-annotations", version.ref = "koinAnnotationsVersion" }
 koin-bom = { group = "io.insert-koin", name = "koin-bom", version.ref = "koin" }
-koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koinComposeMultiplatform" }
-koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koinComposeMultiplatform" }
-koin-compose-navigation = { group = "io.insert-koin", name = "koin-compose-viewmodel-navigation", version.ref = "koinComposeMultiplatform" }
+koin-compose = { group = "io.insert-koin", name = "koin-compose", version.ref = "koin" }
+koin-compose-viewmodel = { group = "io.insert-koin", name = "koin-compose-viewmodel", version.ref = "koin" }
+koin-compose-navigation = { group = "io.insert-koin", name = "koin-compose-viewmodel-navigation", version.ref = "koin" }
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
 koin-core-viewmodel = { group = "io.insert-koin", name = "koin-core-viewmodel", version.ref = "koin" }
 koin-ksp-compiler = { group = "io.insert-koin", name = "koin-ksp-compiler", version.ref = "koinAnnotationsVersion" }
@@ -278,9 +277,9 @@ ktor-client-winhttp = { group = "io.ktor", name = "ktor-client-winhttp", version
 ktor-serialization-kotlinx-json = { group = "io.ktor", name = "ktor-serialization-kotlinx-json", version.ref = "ktorVersion" }
 ktor-server-auth = { group = "io.ktor", name = "ktor-server-auth", version.ref = "ktorVersion" }
 
-ktorfit-converters-flow = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-converters-flow", version.ref = "ktorfit" }
 ktorfit-ksp = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-ksp", version.ref = "ktorfitKsp" }
-ktorfit-lib = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib-ktor-3.0.0-beta-2", version.ref = "ktorfit" }
+ktorfit-converters-flow = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-converters-flow", version.ref = "ktorfit" }
+ktorfit-lib = { group = "de.jensklingenberg.ktorfit", name = "ktorfit-lib", version.ref = "ktorfit" }
 
 coil-core = { group = "io.coil-kt.coil3", name = "coil-core", version.ref = "coil" }
 coil-kt = { group = "io.coil-kt.coil3", name = "coil", version.ref = "coil" }

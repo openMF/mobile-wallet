@@ -41,7 +41,7 @@ runs:
       id: version-generator
       shell: bash
       run: |
-        mkdir -p ./app/build/outputs/
+        mkdir -p ./mifospay-android/build/outputs/
         
         echo "Previous Release Tag:"
         echo "${{ steps.latest-release-tag.outputs.result }}"
@@ -49,8 +49,8 @@ runs:
         echo "Full Changelog:"
         CHANGELOG="${{ steps.generate-notes.outputs.result }}"
         echo -e "$CHANGELOG"
-        printf "$CHANGELOG" > ./mifospay/build/outputs/changelogGithub
+        printf "$CHANGELOG" > ./mifospay-android/build/outputs/changelogGithub
 
         echo "Beta Changelog:"
         git log --format="* %s" HEAD^..HEAD
-        git log --format="* %s" HEAD^..HEAD > ./mifospay/build/outputs/changelogBeta
+        git log --format="* %s" HEAD^..HEAD > ./mifospay-android/build/outputs/changelogBeta

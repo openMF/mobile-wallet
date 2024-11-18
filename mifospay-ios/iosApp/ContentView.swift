@@ -1,20 +1,17 @@
-//
-//  ContentView.swift
-//  mifospay-ios
-//
-//  Created by Apple on 14/08/24.
-//
-
+import UIKit
 import SwiftUI
-import shared
+import ComposeApp
+
+struct ComposeView: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        MifosViewControllerKt.MifosViewController()
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+}
 
 struct ContentView: View {
     var body: some View {
-        Text(Greeting().greet())
-        .padding()
+        ComposeView().ignoresSafeArea(.all)
     }
-}
-
-#Preview {
-    ContentView()
 }

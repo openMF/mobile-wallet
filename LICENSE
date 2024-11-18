@@ -1,0 +1,117 @@
+Copyright 2024 Mifos Initiative
+
+Mozilla Public License Version 2.0 (MPL-2.0)
+
+1. Definitions
+
+1.1. "Contributor"
+    means each individual or legal entity that creates, contributes to the
+    creation of, or owns Covered Software.
+
+1.2. "Contributor Version"
+    means the combination of the Contributions of others (if any) used by
+    a Contributor and that particular Contributor's Contribution.
+
+1.3. "Contribution"
+    means Covered Software of a particular Contributor.
+
+1.4. "Covered Software"
+    means Source Code Form to which the initial Contributor has attached
+    the notice in Exhibit A, the Executable Form of such Source Code Form,
+    and Modifications of such Source Code Form, in each case including
+    portions thereof.
+
+1.5. "Executable Form"
+    means any form of the work other than Source Code Form.
+
+1.6. "Non-Commercial Use"
+    means any use of the work that is not primarily intended for or directed
+    towards commercial advantage or monetary compensation.
+
+1.7. "Source Code Form"
+    means the form of the work preferred for making modifications.
+
+1.8. "You" (or "Your")
+    means an individual or a legal entity exercising rights under this License.
+    For legal entities, "You" includes any entity that controls, is controlled
+    by, or is under common control with You. For purposes of this definition,
+    "control" means (a) the power, direct or indirect, to cause the direction
+    or management of such entity, whether by contract or otherwise, or (b)
+    ownership of more than fifty percent (50%) of the outstanding shares or
+    beneficial ownership of such entity.
+
+2. License Grants and Conditions
+
+2.1. Grants
+
+Each Contributor hereby grants You a world-wide, royalty-free, non-exclusive
+license:
+
+(a) under intellectual property rights (other than patent or trademark)
+Licensable by such Contributor to use, reproduce, make available, modify,
+display, perform, distribute, and otherwise exploit its Contributions, either
+on an unmodified basis, with Modifications, or as part of a Larger Work; and
+
+(b) under Patent Claims of such Contributor to make, use, sell, offer for
+sale, have made, import, and otherwise transfer either its Contributions or
+its Contributor Version.
+
+2.2. Non-Commercial Use
+
+You are not permitted to use the Covered Software for commercial purposes
+without the prior written permission of RW MobiMedia UK Limited. This
+includes, but is not limited to, selling the software, incorporating the
+software into a product for sale, or offering services involving the
+software. Commercial distribution of the software or its derivatives is
+prohibited, including uploading the software to the Apple App Store, Google
+Play Store, or any other commercial app marketplace, unless authorised by RW
+MobiMedia UK Limited.
+
+2.3. Attribution
+
+You must give appropriate credit to RW MobiMedia UK Limited and any open-source
+contributors, provide a link to the license, and indicate if changes were made.
+Attribution must be displayed in a prominent manner in any distributed or published
+form of the software, including but not limited to the about page of an application
+or documentation files. You may do so in any reasonable manner, but not in any way
+that suggests RW MobiMedia UK Limited or any contributors endorse you or your use.
+
+2.4. Modifications
+
+If You create Modifications, and such Modifications are not Covered Software,
+You agree to release the Modifications under this License or a Compatible
+License.
+
+3. Compliance with Laws
+
+You must comply with all applicable laws regarding use of the software.
+
+4. Disclaimer of Warranty
+
+Covered Software is provided under this License on an "as is" basis, without
+warranty of any kind, either expressed, implied, or statutory, including,
+without limitation, warranties that the Covered Software is free of defects,
+merchantable, fit for a particular purpose or non-infringing.
+
+5. Limitation of Liability
+
+To the extent permitted by applicable law, no Contributor will be liable to
+You for any damages, including direct, indirect, special, incidental, or
+consequential damages arising out of or related to this License or the use or
+inability to use the Covered Software (including but not limited to loss of
+goodwill, work stoppage, computer failure or malfunction, or any and all
+other commercial damages or losses), even if such Contributor has been
+advised of the possibility of such damages.
+
+6. Termination
+
+The rights granted under this License will terminate automatically if You
+fail to comply with any of its terms. Upon termination, You must cease all
+use of the Covered Software and destroy all copies of it.
+
+7. Miscellaneous
+
+This License represents the complete agreement concerning subject matter
+hereof. If any provision of this License is held to be unenforceable, such
+provision shall be reformed only to the extent necessary to make it
+enforceable.

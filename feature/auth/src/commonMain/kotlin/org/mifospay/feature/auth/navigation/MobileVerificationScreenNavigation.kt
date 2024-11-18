@@ -13,7 +13,7 @@ package org.mifospay.feature.auth.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
+import org.mifospay.core.ui.composableWithSlideTransitions
 import org.mifospay.feature.auth.mobileVerify.MobileVerificationScreen
 
 const val MOBILE_VERIFICATION_ROUTE = "mobile_verification_route"
@@ -22,7 +22,7 @@ fun NavGraphBuilder.mobileVerificationScreen(
     onNavigateBack: () -> Unit,
     onOtpVerificationSuccess: (String) -> Unit,
 ) {
-    composable(
+    composableWithSlideTransitions(
         route = MOBILE_VERIFICATION_ROUTE,
     ) {
         MobileVerificationScreen(

@@ -21,7 +21,7 @@ kotlin {
         withJava()
     }
 
-    jvmToolchain(21)
+    jvmToolchain(17)
 
     sourceSets {
         val desktopMain by getting {
@@ -42,22 +42,74 @@ kotlin {
     }
 }
 
+fun String.formatToValidVersion(): String {
+    // Remove any text after '-' or '+'
+    val cleanVersion = this.split(Regex("[-+]")).first()
+
+    // Split version numbers
+    val parts = cleanVersion.split(".")
+
+    return when {
+        // If starts with 0, change to 1
+        parts[0] == "0" -> {
+            val newParts = parts.toMutableList()
+            newParts[0] = "1"
+            // Take only up to 3 parts (MAJOR.MINOR.PATCH)
+            newParts.take(3).joinToString(".")
+        }
+        // If valid, take only up to 3 parts
+        else -> parts.take(3).joinToString(".")
+    }
+}
+
+val Project.dynamicVersion
+    get() = project.version.toString().formatToValidVersion()
+
+val productName = "MifosWallet"
+val productNameSpace = "org.mifos.pay"
+
 compose.desktop {
     application {
         mainClass = "MainKt"
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.mifospay.desktop"
-            packageVersion = "1.0.0"
-            windows {
-                // a version for all Windows distributables
-                packageVersion = "1.0.0"
-                // a version only for the msi package
-                msiPackageVersion = "1.0.0"
-                // a version only for the exe package
-                exePackageVersion = "1.0.0"
-                menu = true
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Exe, TargetFormat.Deb)
+            packageName = productName
+            packageVersion = project.dynamicVersion
+            description = "Mifos Wallet Desktop Application"
+            copyright = "© 2024 Mifos Initiative. All rights reserved."
+            vendor = "Mifos Initiative"
+            licenseFile.set(project.file("../LICENSE"))
+            includeAllModules = true
+
+            macOS {
+                bundleID = productNameSpace
+                dockName = productName
+                iconFile.set(project.file("icons/ic_launcher.icns"))
+                notarization {
+                    val providers = project.providers
+                    appleID.set(providers.environmentVariable("NOTARIZATION_APPLE_ID"))
+                    password.set(providers.environmentVariable("NOTARIZATION_PASSWORD"))
+                    teamID.set(providers.environmentVariable("NOTARIZATION_TEAM_ID"))
+                }
             }
+
+            windows {
+                menuGroup = productName
+                shortcut = true
+                dirChooser = true
+                perUserInstall = true
+                iconFile.set(project.file("icons/ic_launcher.ico"))
+            }
+
+            linux {
+                modules("jdk.security.auth")
+                iconFile.set(project.file("icons/ic_launcher.png"))
+            }
+        }
+        buildTypes.release.proguard {
+            configurationFiles.from(file("compose-desktop.pro"))
+            obfuscate.set(true)
+            optimize.set(true)
         }
     }
 }

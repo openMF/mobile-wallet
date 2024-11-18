@@ -29,8 +29,6 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
-            implementation(libs.koin.compose.viewmodel)
-            implementation(libs.koin.compose)
             implementation(libs.jb.kotlin.stdlib)
             implementation(libs.kotlin.reflect)
         }
