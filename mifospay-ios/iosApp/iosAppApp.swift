@@ -1,10 +1,3 @@
-//
-//  iosAppApp.swift
-//  mifospay-ios
-//
-//  Created by Apple on 14/08/24.
-//
-
 import SwiftUI
 
 @main

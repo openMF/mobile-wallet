@@ -5,7 +5,7 @@ platform :android do
   lane :deploy_internal do
     supply(
       track: 'internal',
-      aab: 'app/build/outputs/bundle/prod/app-prod-release.aab',
+      aab: 'mifospay-android/build/outputs/bundle/prodRelease/mifospay-android-prod-release.aab',
       skip_upload_metadata: true,
       skip_upload_images: true,
       skip_upload_screenshots: true,
@@ -40,7 +40,7 @@ platform :android do
         client_id: ENV["AMAZON_APPSTORE_CLIENT_ID"],
         client_secret: ENV["AMAZON_APPSTORE_CLIENT_SECRET"],
         app_id: ENV["AMAZON_APPSTORE_APP_ID"],
-        apk_path: "app/build/outputs/apk/prod/release/app-prod-release.apk",
+        apk_path: "mifospay-android/build/outputs/apk/prod/release/mifospay-android-prod-release.apk",
         upload_apk: true,
         changelogs_path:  "fastlane/metadata/android/en-US/changelogs/",
         upload_changelogs: true,

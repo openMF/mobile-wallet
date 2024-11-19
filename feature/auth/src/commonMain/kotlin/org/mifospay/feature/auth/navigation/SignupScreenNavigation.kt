@@ -14,8 +14,8 @@ package org.mifospay.feature.auth.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
-import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import org.mifospay.core.ui.composableWithPushTransitions
 import org.mifospay.feature.auth.signup.SignupScreen
 
 const val SIGNUP_ROUTE = "signup_route"
@@ -24,7 +24,7 @@ fun NavGraphBuilder.signupScreen(
     onNavigateBack: () -> Unit,
     onNavigateToLogin: (String) -> Unit,
 ) {
-    composable(
+    composableWithPushTransitions(
         route = "$SIGNUP_ROUTE?savingsProductId={savingsProductId}" +
             "&mobileNumber={mobileNumber}&businessName={businessName}",
         arguments = listOf(

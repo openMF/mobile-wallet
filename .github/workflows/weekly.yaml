@@ -2,10 +2,8 @@ name: Tag Weekly Release
 
 on:
   workflow_dispatch:
-#    This is a weekly cron job that runs every Sunday at 4:00 AM UTC
-#    Turning off for now
-#  schedule:
-#    - cron: '0 4 * * 0'
+  schedule:
+    - cron: '0 4 */2 * 0'
 jobs:
   tag:
     name: Tag Weekly Release
@@ -33,9 +31,9 @@ jobs:
             github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'onPush.yml',
-              ref: 'master',
+              workflow_id: 'internal_or_beta_release.yml',
+              ref: 'dev',
               inputs: {
-                "beta": "true",
+                "release_type": "beta",
               },
             })

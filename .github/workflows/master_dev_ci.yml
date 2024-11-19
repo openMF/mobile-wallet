@@ -2,7 +2,7 @@ name: Mobile-Wallet CI[Master/Dev]
 
 on:
   push:
-    branches: [ dev, master, payment_hub ]
+    branches: [ dev ]
   pull_request:
 
 concurrency:
@@ -60,6 +60,8 @@ jobs:
           name: detekt-reports
           path: |
             **/build/reports/detekt/detekt.md
+
+
 
 
   dependency_guard:
@@ -120,6 +122,8 @@ jobs:
             **/build/reports/lint-results-*.html
             **/build/test-results/test*UnitTest/**.xml
 
+
+
   build:
     needs: [ checks, dependency_guard, tests_and_lint ]
     runs-on: ubuntu-latest
@@ -144,3 +148,47 @@ jobs:
           name: APKs
           path: '**/build/outputs/apk/**/*.apk'
 
+  build_desktop_app:
+    needs: [ checks, dependency_guard, tests_and_lint ]
+    strategy:
+      matrix:
+        os:
+          - windows-latest
+          - ubuntu-latest
+          - macos-latest
+
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Build Desktop App
+        run: ./gradlew packageDistributionForCurrentOS
+
+      - name: Upload Windows Apps
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-App
+          path: |
+            ./mifospay-desktop/build/compose/binaries/main/exe/*.exe
+            ./mifospay-desktop/build/compose/binaries/main/msi/*.msi
+
+      - name: Upload Linux App
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-App
+          path: './mifospay-desktop/build/compose/binaries/main/deb/*.deb'
+
+      - name: Upload MacOS App
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows-App
+          path: './mifospay-desktop/build/compose/binaries/main/dmg/*.dmg'

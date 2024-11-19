@@ -1,62 +1,120 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in /home/naman/sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.kts.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
-
-# Add any project specific keep options here:
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
-
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
-
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+-ignorewarnings
 
 # Rules for: uCrop - Image Cropping Library for Android
 -dontwarn com.yalantis.ucrop**
+-dontwarn java.lang.management.ManagementFactory
 -keep class com.yalantis.ucrop** { *; }
 -keep interface com.yalantis.ucrop** { *; }
 
--dontwarn com.sun.tools.javac.code.Symbol$ClassSymbol
--dontwarn com.sun.tools.javac.code.Symbol$PackageSymbol
--dontwarn com.sun.tools.javac.code.Symbol
--dontwarn com.sun.tools.javac.tree.TreeScanner
--dontwarn com.sun.tools.javac.util.Name
--dontwarn javax.lang.model.SourceVersion
--dontwarn javax.lang.model.element.Element
--dontwarn javax.lang.model.element.Modifier
--dontwarn javax.lang.model.type.TypeMirror
--dontwarn javax.lang.model.type.TypeVisitor
--dontwarn javax.lang.model.util.SimpleTypeVisitor7
--dontwarn groovy.lang.GroovyObject
--dontwarn groovy.lang.MetaClass
--dontwarn java.lang.management.ManagementFactory
--dontwarn javax.management.InstanceNotFoundException
--dontwarn javax.management.MBeanRegistrationException
--dontwarn javax.management.MBeanServer
--dontwarn javax.management.MalformedObjectNameException
--dontwarn javax.management.ObjectInstance
--dontwarn javax.management.ObjectName
--dontwarn javax.naming.Context
--dontwarn javax.naming.InitialContext
--dontwarn javax.naming.NamingException
--dontwarn javax.servlet.ServletContainerInitializer
--dontwarn org.codehaus.groovy.reflection.ClassInfo
--dontwarn org.codehaus.groovy.runtime.BytecodeInterface8
--dontwarn org.codehaus.groovy.runtime.ScriptBytecodeAdapter
--dontwarn org.codehaus.groovy.runtime.callsite.CallSite
--dontwarn org.codehaus.groovy.runtime.callsite.CallSiteArray
--dontwarn org.codehaus.janino.ClassBodyEvaluator
--dontwarn sun.reflect.Reflection
+# Proguard Kotlin Example https://github.com/Guardsquare/proguard/blob/master/examples/application-kotlin/proguard.pro
+
+-keepattributes *Annotation*
+
+-keep class kotlin.Metadata { *; }
+
+# Kotlin
+
+-keep class kotlin.reflect.jvm.internal.** { *; }
+-keep class kotlin.text.RegexOption { *; }
+
+-keep class kotlin.** { *; }
+-keep class org.jetbrains.skia.** { *; }
+-keep class org.jetbrains.skiko.** { *; }
+
+-assumenosideeffects public class androidx.compose.runtime.ComposerKt {
+    void sourceInformation(androidx.compose.runtime.Composer,java.lang.String);
+    void sourceInformationMarkerStart(androidx.compose.runtime.Composer,int,java.lang.String);
+    void sourceInformationMarkerEnd(androidx.compose.runtime.Composer);
+    boolean isTraceInProgress();
+    void traceEventEnd();
+}
+
+# Kotlinx Coroutines Rules
+# https://github.com/Kotlin/kotlinx.coroutines/blob/master/kotlinx-coroutines-core/jvm/resources/META-INF/proguard/coroutines.pro
+
+-keepnames class kotlinx.coroutines.internal.MainDispatcherFactory {}
+-keepnames class kotlinx.coroutines.CoroutineExceptionHandler {}
+-keepclassmembers class kotlinx.coroutines.** {
+    volatile <fields>;
+}
+-keepclassmembers class kotlin.coroutines.SafeContinuation {
+    volatile <fields>;
+}
+-dontwarn java.lang.instrument.ClassFileTransformer
+-dontwarn sun.misc.SignalHandler
+-dontwarn java.lang.instrument.Instrumentation
+-dontwarn sun.misc.Signal
+-dontwarn java.lang.ClassValue
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+
+# https://github.com/Kotlin/kotlinx.coroutines/issues/2046
+-dontwarn android.annotation.SuppressLint
+
+# https://github.com/JetBrains/compose-jb/issues/2393
+-dontnote kotlin.coroutines.jvm.internal.**
+-dontnote kotlin.internal.**
+-dontnote kotlin.jvm.internal.**
+-dontnote kotlin.reflect.**
+-dontnote kotlinx.coroutines.debug.internal.**
+-dontnote kotlinx.coroutines.internal.**
+-keep class kotlin.coroutines.Continuation
+-keep class kotlinx.coroutines.CancellableContinuation
+-keep class kotlinx.coroutines.channels.Channel
+-keep class kotlinx.coroutines.CoroutineDispatcher
+-keep class kotlinx.coroutines.CoroutineScope
+# this is a weird one, but breaks build on some combinations of OS and JDK (reproduced on Windows 10 + Corretto 16)
+-dontwarn org.graalvm.compiler.core.aarch64.AArch64NodeMatchRules_MatchStatementSet*
+
+### kotlinx.serialization rules
+
+# Keep `Companion` object fields of serializable classes.
+# This avoids serializer lookup through `getDeclaredClasses` as done for named companion objects.
+-if @kotlinx.serialization.Serializable class **
+-keepclassmembers class <1> {
+    static <1>$Companion Companion;
+}
+
+# Keep `serializer()` on companion objects (both default and named) of serializable classes.
+-if @kotlinx.serialization.Serializable class ** {
+    static **$* *;
+}
+-keepclassmembers class <2>$<3> {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+# Keep `INSTANCE.serializer()` of serializable objects.
+-if @kotlinx.serialization.Serializable class ** {
+    public static ** INSTANCE;
+}
+-keepclassmembers class <1> {
+    public static <1> INSTANCE;
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+# @Serializable and @Polymorphic are used at runtime for polymorphic serialization.
+-keepattributes RuntimeVisibleAnnotations,AnnotationDefault
+
+# Don't print notes about potential mistakes or omissions in the configuration for kotlinx-serialization classes
+# See also https://github.com/Kotlin/kotlinx.serialization/issues/1900
+-dontnote kotlinx.serialization.**
+
+# Serialization core uses `java.lang.ClassValue` for caching inside these specified classes.
+# If there is no `java.lang.ClassValue` (for example, in Android), then R8/ProGuard will print a warning.
+# However, since in this case they will not be used, we can disable these warnings
+-dontwarn kotlinx.serialization.internal.ClassValueReferences
+
+# JSR 305 annotations are for embedding nullability information.
+-dontwarn javax.annotation.**
+
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keeppackagenames okhttp3.internal.publicsuffix.*
+-adaptresourcefilenames okhttp3/internal/publicsuffix/PublicSuffixDatabase.gz
+
+# Animal Sniffer compileOnly dependency to ensure APIs are compatible with older versions of Java.
+-dontwarn org.codehaus.mojo.animal_sniffer.*
+
+# OkHttp platform used only on JVM and when Conscrypt and other security providers are available.
+-dontwarn okhttp3.internal.platform.**
+-dontwarn org.conscrypt.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**
