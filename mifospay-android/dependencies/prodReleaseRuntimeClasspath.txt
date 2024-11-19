@@ -2,7 +2,6 @@
 :core:common
 :core:data
 :core:datastore
-:core:datastore-proto
 :core:designsystem
 :core:domain
 :core:model

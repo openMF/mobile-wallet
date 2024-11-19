@@ -9,9 +9,9 @@
  */
 package org.mifospay.core.datastore
 
-import org.mifospay.core.datastore.proto.ClientPreferences
-import org.mifospay.core.datastore.proto.RolePreferences
-import org.mifospay.core.datastore.proto.UserInfoPreferences
+import org.mifospay.core.datastore.model.ClientPreferences
+import org.mifospay.core.datastore.model.RolePreferences
+import org.mifospay.core.datastore.model.UserInfoPreferences
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.user.RoleInfo
 import org.mifospay.core.model.user.UserInfo

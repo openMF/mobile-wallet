@@ -68,6 +68,7 @@ fineractSdk = "1.0.3"
 firebaseBom = "33.6.0"
 firebaseCrashlyticsPlugin = "3.0.2"
 firebasePerfPlugin = "1.4.2"
+firebaseAppdistributionGradle = "5.0.0"
 
 # Kotlin KMP Dependencies
 kotlin = "2.0.21"
@@ -108,6 +109,11 @@ composeLifecycle = "2.8.2"
 composeNavigation = "2.8.0-alpha10"
 jbCoreBundle = "1.0.1"
 jbSavedState = "1.2.2"
+
+# Desktop Version
+packageName = "MifosWallet"
+packageNamespace = "org.mifospay.desktop"
+packageVersion = "1.0.0"
 
 [libraries]
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
@@ -348,6 +354,7 @@ mifos-spotless-plugin = { id = "mifos.spotless.plugin", version = "unspecified" 
 
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
+firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppdistributionGradle" }
 
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }

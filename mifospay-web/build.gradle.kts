@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
-import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -21,19 +20,9 @@ kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
         moduleName = "mifospay-wasm"
-        val projectPath: String = project.rootDir.path
         browser {
             commonWebpackConfig {
                 outputFileName = "mifospay-wasm.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        add(projectPath)
-                        add("$projectPath/mifospay-shared/")
-                        add("$projectPath/mifospay-web/")
-                        add("$projectPath/core/designsystem")
-                        add("$projectPath/core/ui")
-                    }
-                }
             }
         }
         binaries.executable()
@@ -46,11 +35,20 @@ kotlin {
             dependsOn(commonMain.get())
             dependencies {
                 implementation(projects.mifospayShared)
+                implementation(projects.core.common)
+                implementation(projects.core.data)
+                implementation(projects.core.model)
+                implementation(projects.core.datastore)
+
                 implementation(compose.runtime)
                 implementation(compose.ui)
                 implementation(compose.foundation)
                 implementation(compose.material3)
                 implementation(compose.components.resources)
+
+                implementation(libs.multiplatform.settings)
+                implementation(libs.multiplatform.settings.serialization)
+                implementation(libs.multiplatform.settings.coroutines)
             }
         }
 

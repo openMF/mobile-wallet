@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.datastore.proto
+package org.mifospay.core.datastore.model
 
 import kotlinx.serialization.Serializable
 

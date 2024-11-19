@@ -42,7 +42,7 @@ jobs:
         run: ./gradlew packageReleaseDistributionForCurrentOS
 
   app_build:
-    name: Github, Firebase, and Sentry Release
+    name: Github, Firebase Release
     needs: [ build_desktop_app ]
     runs-on: ubuntu-latest
     permissions:
@@ -76,6 +76,7 @@ jobs:
           keystore: ${{ secrets.ORIGINAL_KEYSTORE_FILE }}
           google-services: ${{ secrets.GOOGLESERVICES }}
           playstore-creds: ${{ secrets.PLAYSTORECREDS }}
+          firebase-creds: ${{ secrets.FIREBASECREDS }}
 
       - uses: ./.github/actions/create-release-notes
         name: Create Release Notes
@@ -121,6 +122,15 @@ jobs:
             ./mifospay-desktop/build/compose/binaries/main-release/msi/*.msi
             ./mifospay-desktop/build/compose/binaries/main-release/deb/*.deb
             ./mifospay-desktop/build/compose/binaries/main-release/dmg/*.dmg
+      
+
+      - name: ☁️ Deploy to Firebase
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ORIGINAL_KEYSTORE_FILE_PASSWORD }}
+          KEYSTORE_ALIAS: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS }}
+          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS_PASSWORD }}
+          VERSION_CODE: ${{ steps.rel_number.outputs.version-code }}
+        run: ./gradlew appDistributionUploadProdRelease --no-configuration-cache
 
       - name: Print `git status`
         run: git status
@@ -161,6 +171,7 @@ jobs:
           keystore: ${{ secrets.UPLOAD_KEYSTORE_FILE }}
           google-services: ${{ secrets.GOOGLESERVICES }}
           playstore-creds: ${{ secrets.PLAYSTORECREDS }}
+          firebase-creds: ${{ secrets.FIREBASECREDS }}
 
       - uses: ./.github/actions/create-release-notes
         name: Create Release Notes
@@ -176,6 +187,12 @@ jobs:
           VERSION_CODE: ${{ steps.rel_number.outputs.version-code }}
         run: |
           ./gradlew :mifospay-android:bundleRelease
+
+      - name: Archive Build
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-aabs
+          path: ./**/*.aab
 
       - name: Deploy to Playstore Internal
         run: bundle exec fastlane deploy_internal

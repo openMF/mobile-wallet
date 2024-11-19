@@ -10,6 +10,9 @@ inputs:
   playstore-creds:
     description: 'The playstore credentials to inflate'
     required: true
+  firebase-creds:
+    description: 'The firebase credentials to inflate'
+    required: true
 runs:
   using: 'composite'
   steps:
@@ -38,3 +41,10 @@ runs:
         CREDS: ${{ inputs.playstore-creds }}
       run: |
         echo $CREDS > mifospay-android/playStorePublishServiceCredentialsFile.json
+
+    - name: Inflate firebaseAppDistributionServiceCredentialsFile.json
+      shell: bash
+      env:
+        CREDS: ${{ inputs.firebase-creds }}
+      run: |
+        echo $CREDS > mifospay-android/firebaseAppDistributionServiceCredentialsFile.json

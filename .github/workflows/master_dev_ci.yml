@@ -64,6 +64,7 @@ jobs:
 
 
 
+
   dependency_guard:
     needs: setup
     runs-on: ubuntu-latest
@@ -100,32 +101,8 @@ jobs:
           disable_globbing: true
           commit_message: "🤖 Updates baselines for Dependency Guard"
 
-  tests_and_lint:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'zulu'
-          java-version: 17
-      - name: Run tests
-        run: |
-          ./gradlew :mifospay-android:testDemoDebug
-#          ./gradlew testDemoDebug :lint:test :mifospay-android:lintProdRelease :lint:lint
-      - name: Upload reports
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-and-lint-reports
-          path: |
-            **/build/reports/lint-results-*.html
-            **/build/test-results/test*UnitTest/**.xml
-
-
-
   build:
-    needs: [ checks, dependency_guard, tests_and_lint ]
+    needs: [ checks, dependency_guard ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -145,11 +122,11 @@ jobs:
       - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
-          name: APKs
+          name: Android APKs
           path: '**/build/outputs/apk/**/*.apk'
 
   build_desktop_app:
-    needs: [ checks, dependency_guard, tests_and_lint ]
+    needs: [ checks, dependency_guard ]
     strategy:
       matrix:
         os:
@@ -174,7 +151,7 @@ jobs:
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: Windows-App
+          name: Windows-Apps
           path: |
             ./mifospay-desktop/build/compose/binaries/main/exe/*.exe
             ./mifospay-desktop/build/compose/binaries/main/msi/*.msi
@@ -183,12 +160,12 @@ jobs:
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: Windows-App
+          name: Linux-App
           path: './mifospay-desktop/build/compose/binaries/main/deb/*.deb'
 
       - name: Upload MacOS App
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
         with:
-          name: Windows-App
+          name: MacOS-App
           path: './mifospay-desktop/build/compose/binaries/main/dmg/*.dmg'

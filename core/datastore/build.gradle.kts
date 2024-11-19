@@ -9,6 +9,7 @@
  */
 plugins {
     alias(libs.plugins.mifospay.kmp.library)
+    id("kotlinx-serialization")
 }
 
 android {
@@ -33,7 +34,6 @@ kotlin {
             implementation(libs.kotlinx.serialization.core)
             implementation(projects.core.model)
             implementation(projects.core.common)
-            implementation(projects.core.datastoreProto)
         }
 
         commonTest.dependencies {

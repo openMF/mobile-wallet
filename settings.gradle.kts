@@ -49,7 +49,6 @@ include(":core:common")
 include(":core:network")
 include(":core:network")
 include(":core:model")
-include(":core:datastore-proto")
 include(":core:analytics")
 
 include(":feature:home")

@@ -7,6 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
+import com.google.gms.googleservices.GoogleServicesPlugin.GoogleServicesPluginConfig
 import org.mifospay.MifosBuildType
 import org.mifospay.dynamicVersion
 
@@ -27,13 +28,15 @@ plugins {
     alias(libs.plugins.roborazzi)
     id("com.google.android.gms.oss-licenses-plugin")
     id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
+    alias(libs.plugins.firebase.appdistribution)
 }
 
 android {
-    namespace = "org.mifospay"
+    namespace = "org.mifospay.android"
 
     defaultConfig {
-        applicationId = "org.mifospay"
+        applicationId = "org.mifospay.android"
         versionName = project.dynamicVersion
         versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
         vectorDrawables.useSupportLibrary = true
@@ -139,4 +142,15 @@ dependencyGuard {
         modules = true
         tree = true
     }
+}
+
+firebaseAppDistribution {
+    serviceCredentialsFile = "mifospay-android/firebaseAppDistributionServiceCredentialsFile.json"
+    releaseNotesFile = "./mifospay-android/build/outputs/changelogBeta"
+    groups = "continuous-deployment"
+}
+
+// Disable to fix memory leak and be compatible with the configuration cache.
+configure<GoogleServicesPluginConfig> {
+    disableVersionCheck = true
 }

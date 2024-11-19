@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay
+package org.mifospay.android
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext

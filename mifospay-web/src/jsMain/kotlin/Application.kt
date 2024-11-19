@@ -2,6 +2,7 @@
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import kotlinx.browser.document
+import org.jetbrains.skiko.wasm.onWasmReady
 import org.mifospay.shared.MifosPaySharedApp
 import org.mifospay.shared.di.initKoin
 
@@ -9,7 +10,9 @@ import org.mifospay.shared.di.initKoin
 fun main() {
     initKoin()
 
-    ComposeViewport(document.body!!) {
-        MifosPaySharedApp()
+    onWasmReady {
+        ComposeViewport(document.body!!) {
+            MifosPaySharedApp()
+        }
     }
 }

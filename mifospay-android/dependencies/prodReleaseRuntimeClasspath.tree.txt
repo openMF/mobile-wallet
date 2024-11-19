@@ -957,16 +957,7 @@
 |    |    |    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.20 -> 2.0.21 (*)
 |    |    |    |    |         \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3 (*)
 |    |    |    |    \--- org.jetbrains.kotlin:kotlin-parcelize-runtime:2.0.21 (*)
-|    |    |    +--- project :core:common (*)
-|    |    |    \--- project :core:datastore-proto
-|    |    |         +--- com.google.protobuf:protobuf-kotlin-lite:4.26.0
-|    |    |         |    +--- com.google.protobuf:protobuf-javalite:4.26.0
-|    |    |         |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 2.0.21 (*)
-|    |    |         +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 (*)
-|    |    |         +--- io.insert-koin:koin-bom:4.0.0 (*)
-|    |    |         +--- io.insert-koin:koin-core:4.0.0 (*)
-|    |    |         +--- io.insert-koin:koin-annotations:1.4.0-RC4 (*)
-|    |    |         \--- org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3 (*)
+|    |    |    \--- project :core:common (*)
 |    |    +--- project :core:model (*)
 |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.0.21 (*)
 |    |    +--- io.insert-koin:koin-bom:4.0.0 (*)
@@ -1679,7 +1670,9 @@
 |    |    +--- io.insert-koin:koin-androidx-compose:4.0.0 (*)
 |    |    +--- io.insert-koin:koin-androidx-navigation:4.0.0 (*)
 |    |    +--- io.insert-koin:koin-core-viewmodel:4.0.0 (*)
-|    |    +--- com.google.protobuf:protobuf-kotlin-lite:4.26.0 (*)
+|    |    +--- com.google.protobuf:protobuf-kotlin-lite:4.26.0
+|    |    |    +--- com.google.protobuf:protobuf-javalite:4.26.0
+|    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:1.6.0 -> 2.0.21 (*)
 |    |    +--- io.insert-koin:koin-core:4.0.0 (*)
 |    |    +--- io.insert-koin:koin-annotations:1.4.0-RC4 (*)
 |    |    +--- project :core:ui (*)

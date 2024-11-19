@@ -34,11 +34,6 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
         }
 
-        commonTest.dependencies {
-            implementation(libs.multiplatform.settings)
-            implementation(libs.multiplatform.settings.test)
-        }
-
         androidMain.dependencies {
             implementation(libs.androidx.core.ktx)
             implementation(libs.androidx.tracing.ktx)

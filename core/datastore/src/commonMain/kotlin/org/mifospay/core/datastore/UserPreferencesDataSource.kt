@@ -22,8 +22,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
 import org.mifospay.core.datastore.UserPreferencesDataSource.Companion.DEFAULT_ACCOUNT
-import org.mifospay.core.datastore.proto.ClientPreferences
-import org.mifospay.core.datastore.proto.UserInfoPreferences
+import org.mifospay.core.datastore.model.ClientPreferences
+import org.mifospay.core.datastore.model.UserInfoPreferences
 import org.mifospay.core.model.account.DefaultAccount
 import org.mifospay.core.model.client.Client
 import org.mifospay.core.model.client.UpdatedClient

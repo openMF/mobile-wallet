@@ -26,6 +26,7 @@ jobs:
           keystore: ${{ secrets.ORIGINAL_KEYSTORE_FILE }}
           google-services: ${{ secrets.GOOGLESERVICES }}
           playstore-creds: ${{ secrets.PLAYSTORECREDS }}
+          firebase-creds: ${{ secrets.FIREBASECREDS }}
 
       - name: Promote Beta to Production Play Store
         run: bundle exec fastlane promote_to_production

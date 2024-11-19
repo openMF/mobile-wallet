@@ -21,7 +21,7 @@ jobs:
 
       - name: Tag Weekly Release
         env:
-          GITHUB_TOKEN: ${{ secrets.TAG_PUSH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: ./gradlew :reckonTagPush -Preckon.stage=final
 
       - name: Trigger Workflow
