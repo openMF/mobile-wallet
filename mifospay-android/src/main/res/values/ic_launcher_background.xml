@@ -8,13 +8,6 @@
 
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item android:drawable="@android:color/white" />
-    <item
-        android:width="200dp"
-        android:height="200dp"
-        android:drawable="@drawable/feature_receipt_mifospay_round_logo"
-        android:gravity="center" />
-
-</layer-list>
+<resources>
+    <color name="ic_launcher_background">#05589A</color>
+</resources>

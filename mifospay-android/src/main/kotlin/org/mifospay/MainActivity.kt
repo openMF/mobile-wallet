@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.android
+package org.mifospay
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

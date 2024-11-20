@@ -9,9 +9,10 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
+
     <style name="Theme.MifosSplash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">#FFFDFDF5</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/bg_splash_12</item>
+        <item name="windowSplashScreenBackground">#FFFEFEFE</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/mifospay_logo_filled</item>
         <item name="postSplashScreenTheme">@style/AppTheme</item>
         <item name="windowSplashScreenAnimationDuration">10</item>
     </style>

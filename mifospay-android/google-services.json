@@ -1,85 +1,62 @@
 {
   "project_info": {
-    "project_number": "581746068392",
-    "project_id": "mifos-wallet",
-    "storage_bucket": "mifos-wallet.firebasestorage.app"
+    "project_number": "project_number",
+    "firebase_url": "firebase_url",
+    "project_id": "project_id",
+    "storage_bucket": "storage_bucket"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:581746068392:android:923dc7e0ae51eab358ab9d",
+        "mobilesdk_app_id": "mobilesdk_app_id",
         "android_client_info": {
-          "package_name": "org.mifospay.android"
+          "package_name": "org.mifospay"
         }
       },
-      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD-ak7NSId25dSXr4cvgj7YVKh0f_4LhG0"
+          "current_key": "current_key"
         }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
+      ]
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:581746068392:android:923dc7e0ae51eab358ab9d",
+        "mobilesdk_app_id": "mobilesdk_app_id",
         "android_client_info": {
-          "package_name": "org.mifospay.android.demo.debug"
+          "package_name": "org.mifospay.demo.debug"
         }
       },
-      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD-ak7NSId25dSXr4cvgj7YVKh0f_4LhG0"
+          "current_key": "current_key"
         }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
+      ]
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:581746068392:android:923dc7e0ae51eab358ab9d",
+        "mobilesdk_app_id": "mobilesdk_app_id",
         "android_client_info": {
-          "package_name": "org.mifospay.android.debug"
+          "package_name": "org.mifospay.demo"
         }
       },
-      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD-ak7NSId25dSXr4cvgj7YVKh0f_4LhG0"
+          "current_key": "current_key"
         }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
+      ]
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:581746068392:android:923dc7e0ae51eab358ab9d",
+        "mobilesdk_app_id": "mobilesdk_app_id",
         "android_client_info": {
-          "package_name": "org.mifospay.android.demo"
+          "package_name": "org.mifospay.debug"
         }
       },
-      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD-ak7NSId25dSXr4cvgj7YVKh0f_4LhG0"
+          "current_key": "current_key"
         }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
+      ]
     }
   ],
   "configuration_version": "1"

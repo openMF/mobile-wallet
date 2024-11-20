@@ -33,10 +33,10 @@ plugins {
 }
 
 android {
-    namespace = "org.mifospay.android"
+    namespace = "org.mifospay"
 
     defaultConfig {
-        applicationId = "org.mifospay.android"
+        applicationId = "org.mifospay"
         versionName = project.dynamicVersion
         versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
         vectorDrawables.useSupportLibrary = true
@@ -147,7 +147,7 @@ dependencyGuard {
 firebaseAppDistribution {
     serviceCredentialsFile = "mifospay-android/firebaseAppDistributionServiceCredentialsFile.json"
     releaseNotesFile = "./mifospay-android/build/outputs/changelogBeta"
-    groups = "continuous-deployment"
+    groups = "mifos-wallet-testers"
 }
 
 // Disable to fix memory leak and be compatible with the configuration cache.

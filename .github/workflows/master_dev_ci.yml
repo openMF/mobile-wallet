@@ -65,6 +65,7 @@ jobs:
 
 
 
+
   dependency_guard:
     needs: setup
     runs-on: ubuntu-latest
@@ -113,11 +114,6 @@ jobs:
 
       - name: Build APKs
         run: ./gradlew :mifospay-android:assembleDemoDebug
-
-      - name: Check badging
-        # This step is allowed to fail, as it's not critical for the build
-        continue-on-error: true
-        run: ./gradlew :mifospay-android:checkProdReleaseBadging
 
       - name: Upload APKs
         uses: actions/upload-artifact@v4
