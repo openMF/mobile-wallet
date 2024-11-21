@@ -47,4 +47,4 @@ runs:
       env:
         CREDS: ${{ inputs.firebase-creds }}
       run: |
-        echo $CREDS > mifospay-android/firebaseAppDistributionServiceCredentialsFile.json
+        echo $FIREBASE_CREDS > mifospay-android/firebaseAppDistributionServiceCredentialsFile.json

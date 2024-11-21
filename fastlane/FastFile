@@ -34,4 +34,10 @@ platform :android do
     )
   end
 
+  desc "Check Version"
+  lane :check_version do
+      gradle(
+        task: "versionFile"
+      )
+  end
 end

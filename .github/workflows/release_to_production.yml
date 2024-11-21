@@ -42,4 +42,4 @@ jobs:
           firebase-creds: ${{ secrets.FIREBASECREDS }}
 
       - name: Promote Beta to Production Play Store
-        run: bundle exec fastlane promote_to_production
+        run: bundle exec fastlane check_version
