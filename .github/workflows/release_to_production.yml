@@ -2,11 +2,12 @@ name: Production Deploy
 
 on:
   workflow_dispatch:
-    publish_to_play_store:
-      required: false
-      default: false
-      description: Publish to Play Store?
-      type: boolean
+    inputs:
+      publish_to_play_store:
+        required: false
+        default: false
+        description: Publish to Play Store?
+        type: boolean
   release:
     types: [ released ]
 
