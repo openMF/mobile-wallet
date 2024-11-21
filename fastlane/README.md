@@ -39,6 +39,14 @@ Promote internal tracks to beta on Google Play
 
 Promote beta tracks to production on Google Play
 
+### android check_version
+
+```sh
+[bundle exec] fastlane android check_version
+```
+
+Check Version
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

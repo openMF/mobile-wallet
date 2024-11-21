@@ -45,6 +45,6 @@ runs:
     - name: Inflate firebaseAppDistributionServiceCredentialsFile.json
       shell: bash
       env:
-        CREDS: ${{ inputs.firebase-creds }}
+        $FIREBASE_CREDS: ${{ inputs.firebase-creds }}
       run: |
         echo $FIREBASE_CREDS > mifospay-android/firebaseAppDistributionServiceCredentialsFile.json
