@@ -1,12 +1,12 @@
 name: Publish Web App
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
+  pull_request:
     branches: [ "dev" ]
+    types: [ closed ]
   # Trigger on new releases
   release:
-    types: [ published ]
+    types: [ released ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 

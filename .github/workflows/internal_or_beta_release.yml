@@ -12,6 +12,12 @@ on:
           - internal
           - beta
 
+      publish_to_play_store:
+        required: false
+        default: false
+        description: Publish to Play Store?
+        type: boolean
+
 env:
   SUPPLY_UPLOAD_MAX_RETRIES: 5
 
@@ -58,9 +64,9 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - uses: ruby/setup-ruby@v1
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
-          ruby-version: '3.2'
           bundler-cache: true
 
       - name: Setup Gradle
@@ -137,6 +143,7 @@ jobs:
 
   play_publish:
     name: Play Publish
+    if: ${{ inputs.publish_to_play_store == true }}
     runs-on: ubuntu-latest
     concurrency:
       group: playstore_deploy
@@ -153,10 +160,16 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - uses: ruby/setup-ruby@v1
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
-          ruby-version: '3.2'
           bundler-cache: true
+
+      - name: Install Fastlane
+        run: |
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
