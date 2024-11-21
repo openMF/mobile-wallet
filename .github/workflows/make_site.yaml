@@ -6,7 +6,7 @@ on:
     branches: [ "dev" ]
   # Trigger on new releases
   release:
-    types: [ published ]
+    types: [ released ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 

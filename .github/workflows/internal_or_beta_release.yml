@@ -12,6 +12,12 @@ on:
           - internal
           - beta
 
+      publish_to_play_store:
+        required: false
+        default: false
+        description: Publish to Play Store?
+        type: boolean
+
 env:
   SUPPLY_UPLOAD_MAX_RETRIES: 5
 
@@ -137,6 +143,7 @@ jobs:
 
   play_publish:
     name: Play Publish
+    if: ${{ inputs.publish_to_play_store == true }}
     runs-on: ubuntu-latest
     concurrency:
       group: playstore_deploy
