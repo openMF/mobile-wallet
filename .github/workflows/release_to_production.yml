@@ -19,19 +19,28 @@ jobs:
     name: Play Publish Production
     if: ${{ inputs.publish_to_play_store == true }}
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
       - name: Configure Ruby
         uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
-          bundler-cache: true
+          bundler-cache: false
+
+      # Clear any existing gems
+      - name: Clean gems
+        run: |
+          gem uninstall --all --force
+          rm -rf vendor/bundle
+          rm -f Gemfile.lock
 
       - name: Install Fastlane
         run: |
-          gem install bundler:2.2.27
+          gem install bundler:2.5.18
           gem install fastlane
-          bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
       - uses: ./.github/actions/inflate-secrets
@@ -43,4 +52,10 @@ jobs:
           firebase-creds: ${{ secrets.FIREBASECREDS }}
 
       - name: Promote Beta to Production Play Store
-        run: bundle exec fastlane check_version
+        run: |
+          which ruby
+          ruby -v
+          which bundle
+          bundle -v
+          bundle exec which fastlane
+          bundle exec fastlane check_version

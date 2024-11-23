@@ -25,7 +25,7 @@ runs:
       shell: bash
       env:
         KEYSTORE: ${{ inputs.keystore }}
-      run: | 
+      run: |
         echo $KEYSTORE | base64 --decode > mifospay-android/release_keystore.keystore
 
     - name: Inflate google-services.json
@@ -40,11 +40,13 @@ runs:
       env:
         CREDS: ${{ inputs.playstore-creds }}
       run: |
+        # Create the file with appropriate permissions
+        touch mifospay-android/playStorePublishServiceCredentialsFile.json
         echo $CREDS > mifospay-android/playStorePublishServiceCredentialsFile.json
 
     - name: Inflate firebaseAppDistributionServiceCredentialsFile.json
       shell: bash
       env:
-        $FIREBASE_CREDS: ${{ inputs.firebase-creds }}
+        FIREBASE_CREDS: ${{ inputs.firebase-creds }}
       run: |
         echo $FIREBASE_CREDS > mifospay-android/firebaseAppDistributionServiceCredentialsFile.json
