@@ -1,9 +1,10 @@
 
 # Mobile Wallet Android App Images
 
+
 |                        Splash Screen                         |                        Login Screen                        |                       Create an Account                        |
 |:------------------------------------------------------------:|:----------------------------------------------------------:|:--------------------------------------------------------------:|
-| <img src="/docs/images/readme/android/1_splashScreen.jpg" /> | <img src="/docs/images/readme/android/2_loginScreen.jpg"/> | <img src="/docs/images/readme/android/3_createAnAccount.jpg"/> |
+| <img src="https://github.com/user-attachments/assets/e919ebf0-ec91-4ff4-9abf-40908c52b2fb" /> | <img src="/docs/images/readme/android/2_loginScreen.jpg"/> | <img src="/docs/images/readme/android/3_createAnAccount.jpg"/> |
 
 |                     Sign Up Screen                      |                        Create Passcode                        |                     Home Screen                     |
 |:-------------------------------------------------------:|:-------------------------------------------------------------:|:---------------------------------------------------:|
