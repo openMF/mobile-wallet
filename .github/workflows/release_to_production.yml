@@ -28,24 +28,12 @@ jobs:
       - name: Configure Ruby
         uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
-          bundler-cache: false
-
-      # Create and set permissions for vendor directory
-      - name: Set up vendor directory
-        run: |
-          mkdir -p vendor/bundle
-          chmod -R 777 vendor/bundle
-          sudo chown -R $USER:$USER vendor/bundle
+          bundler-cache: true
 
       - name: Install Bundler
         run: |
-          gem install bundler -v 2.5.18
-
-      # Install gems with explicit permissions
-      - name: Bundle Install
-        run: |
-          bundle config set --local path 'vendor/bundle'
-          bundle config set --local deployment 'true'
+          gem install bundler:2.2.27
+          bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
 
       - uses: ./.github/actions/inflate-secrets
@@ -55,13 +43,6 @@ jobs:
           google-services: ${{ secrets.GOOGLESERVICES }}
           playstore-creds: ${{ secrets.PLAYSTORECREDS }}
           firebase-creds: ${{ secrets.FIREBASECREDS }}
-
-      # Add permissions check before running fastlane
-      - name: Check Permissions
-        run: |
-          ls -la vendor/bundle
-          whoami
-          groups    
 
       - name: Promote Beta to Production Play Store
         run: |
