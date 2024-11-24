@@ -21,6 +21,14 @@ bin/
 gen/
 out/
 build/
+.externalNativeBuild
+.cxx
+iosApp/Podfile.lock
+iosApp/Pods/*
+iosApp/iosApp.xcworkspace/*
+iosApp/iosApp.xcodeproj/*
+!iosApp/iosApp.xcodeproj/project.pbxproj
+mifospay-shared/mifospay-shared.podspec
 
 # Eclipse project files
 .classpath
