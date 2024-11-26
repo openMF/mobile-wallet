@@ -39,13 +39,26 @@ Promote internal tracks to beta on Google Play
 
 Promote beta tracks to production on Google Play
 
-### android check_version
+----
+
+
+## iOS
+
+### ios build_ios
 
 ```sh
-[bundle exec] fastlane android check_version
+[bundle exec] fastlane ios build_ios
 ```
 
-Check Version
+Build iOS application
+
+### ios distribute_ios_app
+
+```sh
+[bundle exec] fastlane ios distribute_ios_app
+```
+
+Upload iOS application to Firebase App Distribution
 
 ----
 

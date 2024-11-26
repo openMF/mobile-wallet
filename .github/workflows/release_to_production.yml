@@ -42,9 +42,4 @@ jobs:
 
       - name: Promote Beta to Production Play Store
         run: |
-          which ruby
-          ruby -v
-          which bundle
-          bundle -v
-          bundle exec which fastlane
-          bundle exec fastlane check_version
+          bundle exec fastlane promote_to_production

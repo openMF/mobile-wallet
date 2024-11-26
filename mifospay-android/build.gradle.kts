@@ -145,8 +145,8 @@ dependencyGuard {
 }
 
 firebaseAppDistribution {
-    serviceCredentialsFile = "mifospay-android/firebaseAppDistributionServiceCredentialsFile.json"
-    releaseNotesFile = "./mifospay-android/build/outputs/changelogBeta"
+    serviceCredentialsFile = "firebaseAppDistributionServiceCredentialsFile.json"
+    releaseNotesFile = "build/outputs/changelogBeta"
     groups = "mifos-wallet-testers"
 }
 
