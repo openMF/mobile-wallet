@@ -51,7 +51,7 @@ jobs:
         if: ${{ matrix.os }} == 'macos-latest'
         uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
-          bundler-cache: true
+          bundler-cache: false
 
       - name: Install Fastlane
         if: ${{ matrix.os }} == 'macos-latest'
@@ -83,7 +83,7 @@ jobs:
       - name: Configure Ruby
         uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
-          bundler-cache: true
+          bundler-cache: false
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
@@ -179,7 +179,7 @@ jobs:
       - name: Configure Ruby
         uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
-          bundler-cache: true
+          bundler-cache: false
 
       - name: Install Fastlane
         run: |
@@ -214,7 +214,7 @@ jobs:
       - name: Configure Ruby
         uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
-          bundler-cache: true
+          bundler-cache: false
 
       - name: Install Fastlane
         run: |
