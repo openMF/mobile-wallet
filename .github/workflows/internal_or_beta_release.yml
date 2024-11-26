@@ -65,7 +65,7 @@ jobs:
 
   distribute_android_app:
     name: Github, Firebase Release
-    needs: [ build_desktop_app ]
+    needs: [ build_desktop_and_ios_app ]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -147,7 +147,6 @@ jobs:
       
 
       - name: ☁️ Deploy to Firebase
-        if: github.event.inputs.release_type == 'beta'
         env:
           KEYSTORE_PASSWORD: ${{ secrets.ORIGINAL_KEYSTORE_FILE_PASSWORD }}
           KEYSTORE_ALIAS: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS }}
@@ -161,7 +160,7 @@ jobs:
   distribute_ios_app:
     name: Build iOS App
     if: github.event.inputs.release_type == 'beta'
-    needs: [ app_build ]
+    needs: [ distribute_android_app ]
     runs-on: macos-latest
     permissions:
       contents: write
