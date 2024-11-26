@@ -41,10 +41,10 @@ platform :ios do
     desc "Build iOS application"
     lane :build_ios do
         build_ios_app(
-            project: "../mifospay-ios/iosApp.xcodeproj/project.pbxproj",
+            project: "mifospay-ios/iosApp.xcodeproj/project.pbxproj",
             # Set configuration to debug for now
             configuration: "Debug",
-            output_directory: "../mifospay-ios/",
+            output_directory: "mifospay-ios/",
             output_name: "mifospay-ios-app"
         )
     end
@@ -52,18 +52,18 @@ platform :ios do
     desc "Upload iOS application to Firebase App Distribution"
     lane :distribute_ios_app do
         increment_build_number(
-          xcodeproj: "../mifospay-ios/iosApp.xcodeproj/project.pbxproj"
+          xcodeproj: "mifospay-ios/iosApp.xcodeproj/project.pbxproj"
         )
 
         build_ios_app(
-            project: "../mifospay-ios/iosApp.xcodeproj/project.pbxproj",
+            project: "mifospay-ios/iosApp.xcodeproj/project.pbxproj",
             # Set configuration to debug for now
             configuration: "Debug",
         )
         release = firebase_app_distribution(
             app: "1:728434912738:ios:86a7badfaed88b841a1dbb",
-            service_credentials_file: "../mifospay-android/firebaseAppDistributionServiceCredentialsFile.json",
-            release_notes_file: "../mifospay-android/build/outputs/changelogBeta",
+            service_credentials_file: "mifospay-android/firebaseAppDistributionServiceCredentialsFile.json",
+            release_notes_file: "mifospay-android/build/outputs/changelogBeta",
             groups: "mifos-wallet-testers"
         )
 
