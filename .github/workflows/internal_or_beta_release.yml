@@ -48,13 +48,13 @@ jobs:
         run: ./gradlew packageReleaseDistributionForCurrentOS
 
       - name: Configure Ruby
-        if: ${{ matrix.os }} == 'macos-latest'
+        if: matrix.os == 'macos-latest'
         uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
           bundler-cache: true
 
       - name: Install Fastlane
-        if: ${{ matrix.os }} == 'macos-latest'
+        if: matrix.os == 'macos-latest'
         run: |
           gem install bundler:2.2.27
           bundle install --jobs 4 --retry 3
@@ -62,7 +62,7 @@ jobs:
           bundle exec fastlane add_plugin increment_build_number
 
       - name: Build iOS App
-        if: ${{ matrix.os }} == 'macos-latest'
+        if: matrix.os == 'macos-latest'
         continue-on-error: true
         run: bundle exec fastlane ios build_ios
 
@@ -82,11 +82,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: Configure Ruby
-        uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
-        with:
-          bundler-cache: true
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
