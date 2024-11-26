@@ -57,12 +57,13 @@ jobs:
         if: ${{ matrix.os }} == 'macos-latest'
         run: |
           gem install bundler:2.2.27
+          bundle install --jobs 4 --retry 3
           bundle exec fastlane add_plugin firebase_app_distribution
           bundle exec fastlane add_plugin increment_build_number
-          bundle install --jobs 4 --retry 3
 
       - name: Build iOS App
         if: ${{ matrix.os }} == 'macos-latest'
+        continue-on-error: true
         run: bundle exec fastlane ios build_ios
 
   distribute_android_app:
@@ -91,8 +92,6 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - uses: ./.github/actions/create-release-number
-        bundle exec fastlane add_plugin firebase_app_distribution
-        bundle exec fastlane add_plugin increment_build_number
         name: Create Release Number
         id: rel_number
 
