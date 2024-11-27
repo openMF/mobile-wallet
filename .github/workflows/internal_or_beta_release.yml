@@ -18,6 +18,12 @@ on:
         description: Publish to Play Store?
         type: boolean
 
+      publish_ios:
+        required: false
+        default: false
+        description: Publish to Firebase iOS App Distribution?
+        type: boolean
+
 env:
   SUPPLY_UPLOAD_MAX_RETRIES: 5
 
@@ -142,7 +148,7 @@ jobs:
             ./mifospay-desktop/build/compose/binaries/main-release/msi/*.msi
             ./mifospay-desktop/build/compose/binaries/main-release/deb/*.deb
             ./mifospay-desktop/build/compose/binaries/main-release/dmg/*.dmg
-      
+
 
       - name: ☁️ Deploy to Firebase
         env:
@@ -157,7 +163,7 @@ jobs:
 
   distribute_ios_app:
     name: Build iOS App
-    if: github.event.inputs.release_type == 'beta'
+    if: ${{ github.event.inputs.release_type == 'beta' && github.event.inputs.publish_ios == true }}
     needs: [ distribute_android_app ]
     runs-on: macos-latest
     permissions:

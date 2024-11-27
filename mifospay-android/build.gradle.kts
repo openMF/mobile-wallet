@@ -86,6 +86,12 @@ android {
             isIncludeAndroidResources = true
         }
     }
+
+    firebaseAppDistribution {
+        serviceCredentialsFile = "mifospay-android/firebaseAppDistributionServiceCredentialsFile.json"
+        releaseNotesFile = "mifospay-android/build/outputs/changelogBeta"
+        groups = "mifos-wallet-testers"
+    }
 }
 
 dependencies {
@@ -142,12 +148,6 @@ dependencyGuard {
         modules = true
         tree = true
     }
-}
-
-firebaseAppDistribution {
-    serviceCredentialsFile = "firebaseAppDistributionServiceCredentialsFile.json"
-    releaseNotesFile = "build/outputs/changelogBeta"
-    groups = "mifos-wallet-testers"
 }
 
 // Disable to fix memory leak and be compatible with the configuration cache.
