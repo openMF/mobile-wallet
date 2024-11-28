@@ -94,6 +94,7 @@ jobs:
             ./mifospay-android/build/outputs/apk/demo/release/mifospay-android-demo-release.apk
             ./mifospay-android/build/outputs/apk/prod/release/mifospay-android-prod-release.apk
 
+
   distribute_android_on_firebase:
     name: Deploy Android App On Firebase
     needs: [ build_android, generate_release_info ]
@@ -129,13 +130,10 @@ jobs:
         with:
           name: beta-changelog
 
-      - name: Display structure of downloaded files
-        run: ls -R
-
       - name: Move APK to build directory
         run: |
           mkdir -p ./mifospay-android/build/outputs/apk/prod/release/
-          mv android-app/mifospay-android-prod-release.apk ./mifospay-android/build/outputs/apk/prod/release/
+          mv mifospay-android-prod-release.apk ./mifospay-android/build/outputs/apk/prod/release/
           mv changelogBeta ./mifospay-android/build/outputs/
 
 
@@ -264,6 +262,7 @@ jobs:
           bundle exec fastlane add_plugin firebase_app_distribution
           bundle exec fastlane add_plugin increment_build_number
 
+
       - name: Download iOS App
         uses: actions/download-artifact@v4
         with:
@@ -276,8 +275,9 @@ jobs:
 
       - name: Move APK to build directory
         run: |
-          mv ios-app/*.ipa ./mifospay-ios/
-          mv beta-changelog/changelogBeta ./mifospay-android/build/outputs/
+          mv *.ipa ./mifospay-ios/
+          mv changelogBeta ./mifospay-android/build/outputs/
+
 
 
       - name: Upload iOS App to Firebase Distribution
@@ -385,6 +385,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
@@ -423,6 +424,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: web-app
+          path: ./web-app-content
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
@@ -430,7 +432,7 @@ jobs:
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'web-app/*'
+          path: 'web-app-content/*'
 
       - name: Deploy to GitHub Pages
         id: deployment
@@ -489,11 +491,15 @@ jobs:
 
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
+        with:
+          path: ./all-artifacts
+          merge-multiple: true
 
       - name: Archive Web Build
         shell: pwsh
         run: |
           Compress-Archive -Path 'web-app/*' -DestinationPath 'web-app.zip'
+
 
       - name: Download Git Changelog
         uses: actions/download-artifact@v4
@@ -508,7 +514,5 @@ jobs:
           draft: false
           prerelease: true
           files: |
-            android-app/*
-            desktop-app-*/*
+            all-artifacts/*
             web-app.zip
-            ios-app/*
