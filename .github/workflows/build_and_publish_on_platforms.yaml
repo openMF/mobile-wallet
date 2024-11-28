@@ -83,13 +83,16 @@ jobs:
           ./gradlew :mifospay-android:assembleRelease
 
 
+
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
           name: android-app
           retention-days: 1
           compression-level: 9
-          path: ./**/*.apk
+          path: |
+            ./mifospay-android/build/outputs/apk/demo/release/mifospay-android-demo-release.apk
+            ./mifospay-android/build/outputs/apk/prod/release/mifospay-android-prod-release.apk
 
   distribute_android_on_firebase:
     name: Deploy Android App On Firebase
@@ -126,11 +129,15 @@ jobs:
         with:
           name: beta-changelog
 
+      - name: Display structure of downloaded files
+        run: ls -R
+
       - name: Move APK to build directory
         run: |
           mkdir -p ./mifospay-android/build/outputs/apk/prod/release/
-          mv android-app/*.apk ./mifospay-android/build/outputs/apk/prod/release/
+          mv android-app/mifospay-android-prod-release.apk ./mifospay-android/build/outputs/apk/prod/release/
           mv changelogBeta ./mifospay-android/build/outputs/
+
 
       - name: ☁️ Deploy to Firebase
         env:
@@ -271,7 +278,7 @@ jobs:
         run: |
           mv ios-app/*.ipa ./mifospay-ios/
           mv beta-changelog/changelogBeta ./mifospay-android/build/outputs/
-      
+
 
       - name: Upload iOS App to Firebase Distribution
         run: bundle exec fastlane ios deploy_on_firebase
@@ -364,6 +371,9 @@ jobs:
         with:
           pattern: desktop-app-*
           path: desktop-apps
+
+      - name: Display structure of downloaded files
+        run: ls -R
 
       # Distribute on Desktop Store,
       # print downloaded desktop artifacts
