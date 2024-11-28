@@ -23,14 +23,21 @@ on:
         description: Distribute Desktop Apps On App Store
       distribute_web:
         type: boolean
-        default: false
+        default: true
         description: Distribute Web App
 
 permissions:
   contents: write
 
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   build_android:
+    name: Build Android Application
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -80,6 +87,7 @@ jobs:
           path: ./**/*.apk
 
   distribute_android_on_firebase:
+    name: Deploy Android App On Firebase
     needs: [ build_android, generate_release_info ]
     runs-on: ubuntu-latest
     steps:
@@ -128,6 +136,7 @@ jobs:
         run: ./gradlew appDistributionUploadProdRelease --no-configuration-cache
 
   distribute_android_on_playstore:
+    name: Distribute Android App On Play Store
     needs: [ build_android, generate_release_info ]
     if: inputs.distribute_android
     runs-on: macos-latest
@@ -188,6 +197,7 @@ jobs:
         run: bundle exec fastlane promote_to_beta
 
   build_ios:
+    name: Build iOS App
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -221,7 +231,7 @@ jobs:
           path: mifospay-ios/mifospay-ios-app.ipa
 
   distribute_ios_app_to_firebase:
-    name: Build iOS App
+    name: Distribute iOS App On Firebase
     needs: [ build_ios ]
     runs-on: macos-latest
     permissions:
@@ -254,6 +264,7 @@ jobs:
 
   distribute_ios_app_to_app_center:
     needs: [ build_ios ]
+    name: Distribute iOS App On App Center
     if: inputs.distribute_ios || inputs.release_type == 'internal'
     runs-on: macos-latest
     steps:
@@ -272,6 +283,7 @@ jobs:
       # Distribute on App Store
 
   build_desktop:
+    name: Build Desktop App
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
@@ -282,6 +294,9 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Build Desktop App
         env:
@@ -320,6 +335,7 @@ jobs:
           path: './mifospay-desktop/build/compose/binaries/main-release/dmg/*.dmg'
 
   distribute_desktop:
+    name: Distribute Desktop App
     needs: [ build_desktop ]
     if: inputs.distribute_desktop || inputs.release_type == 'beta'
     runs-on: ubuntu-latest
@@ -335,6 +351,7 @@ jobs:
       # Distribute on Desktop Store,
 
   build_web:
+    name: Build Web Application
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -354,30 +371,40 @@ jobs:
       - name: Build Web(JS) App
         run: ./gradlew jsBrowserDistribution
 
-      - name: Archive Web Build
-        shell: pwsh
-        run: |
-          Compress-Archive -Path './mifospay-web/build/dist/js/productionExecutable/*' -DestinationPath 'web-app.zip'
-
       - name: Upload Web Artifact
         uses: actions/upload-artifact@v4
         with:
           name: web-app
-          path: 'web-app.zip'
+          path: './mifospay-web/build/dist/js/productionExecutable/*'
 
   distribute_web:
+    name: Publish Web App
     needs: [ build_web ]
-    if: inputs.distribute_web || inputs.release_type == 'internal'
+    if: inputs.distribute_web
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
 
       - name: Download Web Artifact
         uses: actions/download-artifact@v4
         with:
           name: web-app
 
-      # Deploy to Web Hosting
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload static files as artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'web-app/'
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
 
   generate_release_info:
     runs-on: ubuntu-latest
@@ -388,6 +415,14 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - uses: ./.github/actions/create-release-number
         name: Create Release Number
@@ -411,7 +446,8 @@ jobs:
           name: beta-changelog
           path: './mifospay-android/build/outputs/changelogBeta'
 
-  release:
+  github_release:
+    name: Create Github Release
     needs: [ build_android, build_desktop, build_web, build_ios ]
     if: inputs.release_type == 'beta'
     runs-on: ubuntu-latest
@@ -422,6 +458,11 @@ jobs:
 
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
+
+      - name: Archive Web Build
+        shell: pwsh
+        run: |
+          Compress-Archive -Path 'web-app/*' -DestinationPath 'web-app.zip'
 
       - name: Download Git Changelog
         uses: actions/download-artifact@v4
@@ -438,5 +479,5 @@ jobs:
           files: |
             android-app/*
             desktop-app-*/*
-            web-app/*
+            web-app.zip
             ios-app/*
