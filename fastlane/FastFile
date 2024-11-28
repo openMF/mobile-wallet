@@ -50,7 +50,7 @@ platform :ios do
     end
 
     desc "Upload iOS application to Firebase App Distribution"
-    lane :distribute_ios_app do
+    lane :deploy_on_firebase do
         increment_build_number(
           xcodeproj: "mifospay-ios/iosApp.xcodeproj/project.pbxproj"
         )

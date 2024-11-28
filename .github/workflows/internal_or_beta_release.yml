@@ -28,7 +28,7 @@ env:
   SUPPLY_UPLOAD_MAX_RETRIES: 5
 
 jobs:
-  build_desktop_and_ios_app:
+  build_desktop_app:
     strategy:
       matrix:
         os:
@@ -53,24 +53,28 @@ jobs:
           NOTARIZATION_TEAM_ID: ${{ secrets.NOTARIZATION_TEAM_ID }}
         run: ./gradlew packageReleaseDistributionForCurrentOS
 
-      - name: Configure Ruby
-        if: matrix.os == 'macos-latest'
-        uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
+      - name: Upload Windows Apps
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v4
         with:
-          bundler-cache: true
+          name: desktop-app-${{ matrix.os }}
+          path: |
+            ./mifospay-desktop/build/compose/binaries/main-release/exe/*.exe
+            ./mifospay-desktop/build/compose/binaries/main-release/msi/*.msi
 
-      - name: Install Fastlane
-        if: matrix.os == 'macos-latest'
-        run: |
-          gem install bundler:2.2.27
-          bundle install --jobs 4 --retry 3
-          bundle exec fastlane add_plugin firebase_app_distribution
-          bundle exec fastlane add_plugin increment_build_number
+      - name: Upload Linux App
+        if: matrix.os == 'ubuntu-latest'
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-app-${{ matrix.os }}
+          path: './mifospay-desktop/build/compose/binaries/main-release/deb/*.deb'
 
-      - name: Build iOS App
+      - name: Upload MacOS App
         if: matrix.os == 'macos-latest'
-        continue-on-error: true
-        run: bundle exec fastlane ios build_ios
+        uses: actions/upload-artifact@v4
+        with:
+          name: desktop-app-${{ matrix.os }}
+          path: './mifospay-desktop/build/compose/binaries/main-release/dmg/*.dmg'
 
   distribute_android_app:
     name: Github, Firebase Release
@@ -132,6 +136,12 @@ jobs:
         run: |
           echo $VERSION_CODE > ./mifospay-android/build/outputs/version_code.txt
 
+      - name: Download Desktop Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: desktop-app-*
+          path: desktop-apps
+
       - name: Create Github Pre-Release
         if: github.event.inputs.release_type == 'beta'
         uses: softprops/action-gh-release@v2.0.8
@@ -144,10 +154,7 @@ jobs:
             ./mifospay-android/build/outputs/apk/demo/release/mifospay-android-demo-release.apk
             ./mifospay-android/build/outputs/apk/prod/release/mifospay-android-prod-release.apk
             ./mifospay-android/build/outputs/version_code.txt
-            ./mifospay-desktop/build/compose/binaries/main-release/exe/*.exe
-            ./mifospay-desktop/build/compose/binaries/main-release/msi/*.msi
-            ./mifospay-desktop/build/compose/binaries/main-release/deb/*.deb
-            ./mifospay-desktop/build/compose/binaries/main-release/dmg/*.dmg
+            desktop-apps/*
 
 
       - name: ☁️ Deploy to Firebase
@@ -193,7 +200,7 @@ jobs:
           bundle exec fastlane add_plugin increment_build_number
 
       - name: Upload iOS App to Firebase Distribution
-        run: bundle exec fastlane ios distribute_ios_app
+        run: bundle exec fastlane ios deploy_on_firebase
 
       - name: Print `git status`
         run: git status
