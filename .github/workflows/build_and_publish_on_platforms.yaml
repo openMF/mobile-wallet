@@ -25,6 +25,11 @@ on:
         type: boolean
         default: true
         description: Distribute Web App
+      # turning off iOS build for now
+      build_ios:
+        type: boolean
+        default: false
+        description: Build iOS App
 
 permissions:
   contents: write
@@ -124,7 +129,7 @@ jobs:
       - name: Move APK to build directory
         run: |
           mkdir -p ./mifospay-android/build/outputs/apk/prod/release/
-          mv ./*.apk ./mifospay-android/build/outputs/apk/prod/release/
+          mv android-app/*.apk ./mifospay-android/build/outputs/apk/prod/release/
           mv changelogBeta ./mifospay-android/build/outputs/
 
       - name: ☁️ Deploy to Firebase
@@ -196,8 +201,10 @@ jobs:
         if: github.event.inputs.release_type == 'beta'
         run: bundle exec fastlane promote_to_beta
 
+  # Disabled iOS build for now
   build_ios:
     name: Build iOS App
+    if: inputs.build_ios
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -219,7 +226,6 @@ jobs:
           bundle exec fastlane add_plugin increment_build_number
 
       - name: Build iOS App
-        continue-on-error: true
         run: bundle exec fastlane ios build_ios
 
       - name: Upload iOS Artifact
@@ -232,7 +238,7 @@ jobs:
 
   distribute_ios_app_to_firebase:
     name: Distribute iOS App On Firebase
-    needs: [ build_ios ]
+    needs: [ build_ios, generate_release_info ]
     runs-on: macos-latest
     permissions:
       contents: write
@@ -251,10 +257,21 @@ jobs:
           bundle exec fastlane add_plugin firebase_app_distribution
           bundle exec fastlane add_plugin increment_build_number
 
+      - name: Download iOS App
+        uses: actions/download-artifact@v4
+        with:
+          name: ios-app
+
       - name: Download Beta Changelog
         uses: actions/download-artifact@v4
         with:
           name: beta-changelog
+
+      - name: Move APK to build directory
+        run: |
+          mv ios-app/*.ipa ./mifospay-ios/
+          mv beta-changelog/changelogBeta ./mifospay-android/build/outputs/
+      
 
       - name: Upload iOS App to Firebase Distribution
         run: bundle exec fastlane ios deploy_on_firebase
@@ -263,9 +280,9 @@ jobs:
         run: git status
 
   distribute_ios_app_to_app_center:
-    needs: [ build_ios ]
+    needs: [ build_ios, generate_release_info ]
     name: Distribute iOS App On App Center
-    if: inputs.distribute_ios || inputs.release_type == 'internal'
+    if: inputs.distribute_ios
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -337,7 +354,7 @@ jobs:
   distribute_desktop:
     name: Distribute Desktop App
     needs: [ build_desktop ]
-    if: inputs.distribute_desktop || inputs.release_type == 'beta'
+    if: inputs.distribute_desktop
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -349,6 +366,9 @@ jobs:
           path: desktop-apps
 
       # Distribute on Desktop Store,
+      # print downloaded desktop artifacts
+      - name: Print `git status`
+        run: git status
 
   build_web:
     name: Build Web Application
@@ -400,13 +420,14 @@ jobs:
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'web-app/'
+          path: 'web-app/*'
 
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
   generate_release_info:
+    name: Generate Release Info
     runs-on: ubuntu-latest
     outputs:
       version: ${{ steps.rel_number.outputs.version }}
@@ -448,7 +469,7 @@ jobs:
 
   github_release:
     name: Create Github Release
-    needs: [ build_android, build_desktop, build_web, build_ios ]
+    needs: [ build_android, build_desktop, build_web, build_ios, generate_release_info ]
     if: inputs.release_type == 'beta'
     runs-on: ubuntu-latest
     steps:
