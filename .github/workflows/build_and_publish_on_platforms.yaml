@@ -1,4 +1,4 @@
-name: Multi-Platform App Build and Distribution
+name: Multi-Platform App Build and Publish
 on:
   workflow_dispatch:
     inputs:
@@ -9,22 +9,22 @@ on:
           - beta
         default: internal
         description: Release Type
-      distribute_android:
+      publish_android:
         type: boolean
         default: false
-        description: Distribute Android App On Play Store
-      distribute_ios:
+        description: Publish Android App On Play Store
+      publish_ios:
         type: boolean
         default: false
-        description: Distribute iOS App On App Store
-      distribute_desktop:
+        description: Publish iOS App On App Store
+      publish_desktop:
         type: boolean
         default: false
-        description: Distribute Desktop Apps On App Store
-      distribute_web:
+        description: Publish Desktop Apps On App Store
+      publish_web:
         type: boolean
         default: true
-        description: Distribute Web App
+        description: Publish Web App
       # turning off iOS build for now
       build_ios:
         type: boolean
@@ -95,7 +95,7 @@ jobs:
             ./mifospay-android/build/outputs/apk/prod/release/mifospay-android-prod-release.apk
 
 
-  distribute_android_on_firebase:
+  publish_android_on_firebase:
     name: Deploy Android App On Firebase
     needs: [ build_android, generate_release_info ]
     runs-on: ubuntu-latest
@@ -133,8 +133,8 @@ jobs:
       - name: Move APK to build directory
         run: |
           mkdir -p ./mifospay-android/build/outputs/apk/prod/release/
-          mv mifospay-android-prod-release.apk ./mifospay-android/build/outputs/apk/prod/release/
-          mv changelogBeta ./mifospay-android/build/outputs/
+          mv ./mifospay-android-prod-release.apk ./mifospay-android/build/outputs/apk/prod/release/
+          mv ./changelogBeta ./mifospay-android/build/outputs/
 
 
       - name: ☁️ Deploy to Firebase
@@ -145,10 +145,10 @@ jobs:
           VERSION_CODE: ${{ needs.generate_release_info.outputs.version_code }}
         run: ./gradlew appDistributionUploadProdRelease --no-configuration-cache
 
-  distribute_android_on_playstore:
-    name: Distribute Android App On Play Store
+  publish_android_on_playstore:
+    name: Publish Android App On Play Store
     needs: [ build_android, generate_release_info ]
-    if: inputs.distribute_android
+    if: inputs.publish_android
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -241,8 +241,8 @@ jobs:
           compression-level: 9
           path: mifospay-ios/mifospay-ios-app.ipa
 
-  distribute_ios_app_to_firebase:
-    name: Distribute iOS App On Firebase
+  publish_ios_app_to_firebase:
+    name: Publish iOS App On Firebase
     needs: [ build_ios, generate_release_info ]
     runs-on: macos-latest
     permissions:
@@ -286,10 +286,10 @@ jobs:
       - name: Print `git status`
         run: git status
 
-  distribute_ios_app_to_app_center:
+  publish_ios_app_to_app_center:
     needs: [ build_ios, generate_release_info ]
-    name: Distribute iOS App On App Center
-    if: inputs.distribute_ios
+    name: Publish iOS App On App Center
+    if: inputs.publish_ios
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
@@ -304,7 +304,7 @@ jobs:
         with:
           name: git-changelog
 
-      # Distribute on App Store
+      # Publish on App Store
 
   build_desktop:
     name: Build Desktop App
@@ -358,10 +358,10 @@ jobs:
           compression-level: 9
           path: './mifospay-desktop/build/compose/binaries/main-release/dmg/*.dmg'
 
-  distribute_desktop:
-    name: Distribute Desktop App
+  publish_desktop:
+    name: Publish Desktop App
     needs: [ build_desktop ]
-    if: inputs.distribute_desktop
+    if: inputs.publish_desktop
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -375,7 +375,7 @@ jobs:
       - name: Display structure of downloaded files
         run: ls -R
 
-      # Distribute on Desktop Store,
+      # Publish on Desktop Store,
       # print downloaded desktop artifacts
       - name: Print `git status`
         run: git status
@@ -408,10 +408,10 @@ jobs:
           name: web-app
           path: './mifospay-web/build/dist/js/productionExecutable/*'
 
-  distribute_web:
+  publish_web:
     name: Publish Web App
     needs: [ build_web ]
-    if: inputs.distribute_web
+    if: inputs.publish_web
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -432,7 +432,7 @@ jobs:
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'web-app-content/*'
+          path: './web-app-content/*'
 
       - name: Deploy to GitHub Pages
         id: deployment
