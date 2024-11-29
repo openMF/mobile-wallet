@@ -124,6 +124,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: android-app
+          path: ./android-artifacts  # Specify a specific path to download
+
+      - name: List downloaded artifacts
+        run: |
+          ls -R ./android-artifacts  # List all downloaded files
 
       - name: Download Beta Changelog
         uses: actions/download-artifact@v4
@@ -133,7 +138,7 @@ jobs:
       - name: Move APK to build directory
         run: |
           mkdir -p ./mifospay-android/build/outputs/apk/prod/release/
-          mv ./mifospay-android-prod-release.apk ./mifospay-android/build/outputs/apk/prod/release/
+          mv ./android-artifacts/mifospay-android-prod-release.apk ./mifospay-android/build/outputs/apk/prod/release/
           mv ./changelogBeta ./mifospay-android/build/outputs/
 
 
@@ -372,9 +377,6 @@ jobs:
           pattern: desktop-app-*
           path: desktop-apps
 
-      - name: Display structure of downloaded files
-        run: ls -R
-
       # Publish on Desktop Store,
       # print downloaded desktop artifacts
       - name: Print `git status`
@@ -406,7 +408,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: web-app
-          path: './mifospay-web/build/dist/js/productionExecutable/*'
+          path: './mifospay-web/build/dist/js/productionExecutable'
 
   publish_web:
     name: Publish Web App
@@ -426,13 +428,16 @@ jobs:
           name: web-app
           path: ./web-app-content
 
+      - name: Display structure of downloaded files
+        run: ls -R ./web-app-content
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: './web-app-content/*'
+          path: './web-app-content'
 
       - name: Deploy to GitHub Pages
         id: deployment
