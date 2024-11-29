@@ -122,7 +122,6 @@ jobs:
             ./mifospay-android/build/outputs/apk/demo/release/mifospay-android-demo-release.apk
             ./mifospay-android/build/outputs/apk/prod/release/mifospay-android-prod-release.apk
 
-
   # Firebase Distribution Job for Android
   # Handles deployment to Firebase App Distribution for testing
   publish_android_on_firebase:
@@ -158,7 +157,6 @@ jobs:
           bundle install --jobs 4 --retry 3
           bundle exec fastlane add_plugin firebase_app_distribution
           bundle exec fastlane add_plugin increment_build_number
-
 
       # Prepare necessary secrets
       - uses: ./.github/actions/inflate-secrets
