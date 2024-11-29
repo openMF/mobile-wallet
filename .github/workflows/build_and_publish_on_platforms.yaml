@@ -84,6 +84,7 @@ jobs:
 
 
 
+
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -93,6 +94,11 @@ jobs:
           path: |
             ./mifospay-android/build/outputs/apk/demo/release/mifospay-android-demo-release.apk
             ./mifospay-android/build/outputs/apk/prod/release/mifospay-android-prod-release.apk
+
+
+
+
+
 
 
   publish_android_on_firebase:
@@ -211,7 +217,6 @@ jobs:
         if: github.event.inputs.release_type == 'beta'
         run: bundle exec fastlane promote_to_beta
 
-  # Disabled iOS build for now
   build_ios:
     name: Build iOS App
     runs-on: macos-latest
@@ -512,8 +517,13 @@ jobs:
       - name: Archive Web Build
         shell: pwsh
         run: |
-          Compress-Archive -Path 'web-app/*' -DestinationPath 'web-app.zip'
-
+          Compress-Archive -Path './all-artifacts/web-app/*' -DestinationPath './all-artifacts/mifospay-web-app.zip'
+          
+      # Rename Ubuntu desktop artifact
+      - name: Rename Ubuntu Desktop Artifact
+        run: |
+          mv ./all-artifacts/desktop-app-ubuntu-latest/mifoswallet_1.0.0_amd64.deb ./all-artifacts/desktop-app-ubuntu-latest/MifosWallet-1.0.0.deb
+          
 
       - name: Download Git Changelog
         uses: actions/download-artifact@v4
@@ -524,9 +534,14 @@ jobs:
         uses: softprops/action-gh-release@v2.0.8
         with:
           tag_name: ${{ needs.generate_release_info.outputs.version }}
-          body_path: ./changelogGithub
+          body_path: ./all-artifacts/git-changelog/changelogGithub
           draft: false
           prerelease: true
           files: |
-            ./all-artifacts/
-            ./web-app.zip
+            ./all-artifacts/android-app/prod/release/mifospay-android-prod-release.apk
+            ./all-artifacts/android-app/prod/release/mifospay-android-demo-release.apk
+            ./all-artifacts/desktop-app-windows-latest/MifosWallet-1.0.0.exe
+            ./all-artifacts/desktop-app-windows-latest/msi/MifosWallet-1.0.0.msi
+            ./all-artifacts/desktop-app-macos-latest/MifosWallet-1.0.0.dmg
+            ./all-artifacts/desktop-app-ubuntu-latest/MifosWallet-1.0.0.deb
+            ./all-artifacts/mifospay-web-app.zip
