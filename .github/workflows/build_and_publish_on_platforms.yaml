@@ -505,7 +505,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: ./all-artifacts
-          merge-multiple: true
 
       - name: Display structure of downloaded files
         run: ls -R ./all-artifacts
@@ -529,5 +528,5 @@ jobs:
           draft: false
           prerelease: true
           files: |
-            ./all-artifacts/*
+            ./all-artifacts/
             ./web-app.zip
