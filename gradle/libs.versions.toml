@@ -68,7 +68,6 @@ fineractSdk = "1.0.3"
 firebaseBom = "33.6.0"
 firebaseCrashlyticsPlugin = "3.0.2"
 firebasePerfPlugin = "1.4.2"
-firebaseAppdistributionGradle = "5.0.0"
 
 # Kotlin KMP Dependencies
 kotlin = "2.0.21"
@@ -354,7 +353,6 @@ mifos-spotless-plugin = { id = "mifos.spotless.plugin", version = "unspecified" 
 
 firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "firebaseCrashlyticsPlugin" }
 firebase-perf = { id = "com.google.firebase.firebase-perf", version.ref = "firebasePerfPlugin" }
-firebase-appdistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppdistributionGradle" }
 
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }

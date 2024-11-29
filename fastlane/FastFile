@@ -34,6 +34,18 @@ platform :android do
     )
   end
 
+  desc "Upload Android application to Firebase App Distribution"
+  lane :deploy_on_firebase do
+    release = firebase_app_distribution(
+        app: "1:728434912738:android:0490c291986f0a691a1dbb",
+        service_credentials_file: "mifospay-android/firebaseAppDistributionServiceCredentialsFile.json",
+        release_notes_file: "mifospay-android/build/outputs/changelogBeta",
+        android_artifact_type: "APK",
+        android_artifact_path: "mifospay-android/build/outputs/apk/prod/release/mifospay-android-prod-release.apk",
+        groups: "mifos-wallet-testers"
+    )
+  end
+
 end
 
 

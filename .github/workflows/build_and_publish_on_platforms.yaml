@@ -82,9 +82,6 @@ jobs:
         run: |
           ./gradlew :mifospay-android:assembleRelease
 
-
-
-
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -94,11 +91,6 @@ jobs:
           path: |
             ./mifospay-android/build/outputs/apk/demo/release/mifospay-android-demo-release.apk
             ./mifospay-android/build/outputs/apk/prod/release/mifospay-android-prod-release.apk
-
-
-
-
-
 
 
   publish_android_on_firebase:
@@ -117,6 +109,19 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
+
+      - name: Configure Ruby
+        uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
+        with:
+          bundler-cache: true
+
+      - name: Install Fastlane
+        run: |
+          gem install bundler:2.2.27
+          bundle install --jobs 4 --retry 3
+          bundle exec fastlane add_plugin firebase_app_distribution
+          bundle exec fastlane add_plugin increment_build_number
+
 
       - uses: ./.github/actions/inflate-secrets
         name: Inflate Secrets
@@ -150,11 +155,8 @@ jobs:
 
       - name: ☁️ Deploy to Firebase
         env:
-          KEYSTORE_PASSWORD: ${{ secrets.ORIGINAL_KEYSTORE_FILE_PASSWORD }}
-          KEYSTORE_ALIAS: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS }}
-          KEYSTORE_ALIAS_PASSWORD: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS_PASSWORD }}
           VERSION_CODE: ${{ needs.generate_release_info.outputs.version_code }}
-        run: ./gradlew appDistributionUploadProdRelease --no-configuration-cache
+        run: bundle exec fastlane android deploy_on_firebase
 
   publish_android_on_playstore:
     name: Publish Android App On Play Store
@@ -518,12 +520,12 @@ jobs:
         shell: pwsh
         run: |
           Compress-Archive -Path './all-artifacts/web-app/*' -DestinationPath './all-artifacts/mifospay-web-app.zip'
-          
+
       # Rename Ubuntu desktop artifact
       - name: Rename Ubuntu Desktop Artifact
         run: |
           mv ./all-artifacts/desktop-app-ubuntu-latest/mifoswallet_1.0.0-1_amd64.deb ./all-artifacts/desktop-app-ubuntu-latest/MifosWallet-1.0.0.deb
-          
+
 
       - name: Download Git Changelog
         uses: actions/download-artifact@v4
@@ -539,8 +541,8 @@ jobs:
           prerelease: true
           files: |
             ./all-artifacts/android-app/prod/release/mifospay-android-prod-release.apk
-            ./all-artifacts/android-app/prod/release/mifospay-android-demo-release.apk
-            ./all-artifacts/desktop-app-windows-latest/MifosWallet-1.0.0.exe
+            ./all-artifacts/android-app/demo/release/mifospay-android-demo-release.apk
+            ./all-artifacts/desktop-app-windows-latest/exe/MifosWallet-1.0.0.exe
             ./all-artifacts/desktop-app-windows-latest/msi/MifosWallet-1.0.0.msi
             ./all-artifacts/desktop-app-macos-latest/MifosWallet-1.0.0.dmg
             ./all-artifacts/desktop-app-ubuntu-latest/MifosWallet-1.0.0.deb

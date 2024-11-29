@@ -29,7 +29,6 @@ plugins {
     id("com.google.android.gms.oss-licenses-plugin")
     id("com.google.devtools.ksp")
     id("com.google.gms.google-services")
-    alias(libs.plugins.firebase.appdistribution)
 }
 
 android {
@@ -85,12 +84,6 @@ android {
         unitTests {
             isIncludeAndroidResources = true
         }
-    }
-
-    firebaseAppDistribution {
-        serviceCredentialsFile = "mifospay-android/firebaseAppDistributionServiceCredentialsFile.json"
-        releaseNotesFile = "mifospay-android/build/outputs/changelogBeta"
-        groups = "mifos-wallet-testers"
     }
 }
 

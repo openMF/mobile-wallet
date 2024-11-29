@@ -39,6 +39,14 @@ Promote internal tracks to beta on Google Play
 
 Promote beta tracks to production on Google Play
 
+### android deploy_on_firebase
+
+```sh
+[bundle exec] fastlane android deploy_on_firebase
+```
+
+Upload Android application to Firebase App Distribution
+
 ----
 
 
@@ -52,10 +60,10 @@ Promote beta tracks to production on Google Play
 
 Build iOS application
 
-### ios distribute_ios_app
+### ios deploy_on_firebase
 
 ```sh
-[bundle exec] fastlane ios distribute_ios_app
+[bundle exec] fastlane ios deploy_on_firebase
 ```
 
 Upload iOS application to Firebase App Distribution
