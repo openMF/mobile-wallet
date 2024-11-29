@@ -522,7 +522,7 @@ jobs:
       # Rename Ubuntu desktop artifact
       - name: Rename Ubuntu Desktop Artifact
         run: |
-          mv ./all-artifacts/desktop-app-ubuntu-latest/mifoswallet_1.0.0_amd64.deb ./all-artifacts/desktop-app-ubuntu-latest/MifosWallet-1.0.0.deb
+          mv ./all-artifacts/desktop-app-ubuntu-latest/mifoswallet_1.0.0-1_amd64.deb ./all-artifacts/desktop-app-ubuntu-latest/MifosWallet-1.0.0.deb
           
 
       - name: Download Git Changelog
