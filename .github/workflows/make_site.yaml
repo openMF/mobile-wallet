@@ -1,46 +1,63 @@
+# Workflow to build and deploy the web application to GitHub Pages
 name: Publish Web App
 
+# Trigger conditions for the workflow
 on:
+  # Trigger on pull request close events to the dev branch
   pull_request:
     branches: [ "dev" ]
     types: [ closed ]
-  # Allows you to run this workflow manually from the Actions tab
+  # Manual trigger option from GitHub Actions UI
   workflow_dispatch:
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# Concurrency settings to manage multiple workflow runs
+# This ensures orderly deployment to production environment
 concurrency:
   group: "pages"
+  # Don't cancel running deployments to ensure production stability
   cancel-in-progress: false
 
 jobs:
+  # Main job to build and deploy the web application
   build_web_app:
+    # Configure deployment environment and URL
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    # Use Windows runner for build environment
     runs-on: windows-latest
+    # Required permissions for GitHub Pages deployment
     permissions:
-      contents: read
-      pages: write
-      id-token: write
+      contents: read  # Read repository contents
+      pages: write    # Write to GitHub Pages
+      id-token: write # Write authentication tokens
+
     steps:
+      # Step 1: Check out the repository code
       - uses: actions/checkout@v4
+      
+      # Step 2: Set up Java development environment
       - uses: actions/setup-java@v4
         with:
-          distribution: 'zulu'
-          java-version: 17
+          distribution: 'zulu'  # Use Zulu distribution of OpenJDK
+          java-version: 17      # Use Java 17 version
 
+      # Step 3: Build the Kotlin/JS web application
       - name: Build Web(JS) App
         run: ./gradlew jsBrowserDistribution
 
+      # Step 4: Configure GitHub Pages settings
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # Step 5: Upload the built web application as an artifact
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
         with:
+          # Path to the built web application files
           path: './mifospay-web/build/dist/js/productionExecutable/'
 
+      # Step 6: Deploy the artifact to GitHub Pages
       - name: Deploy to GitHub Pages
-        id: deployment
+        id: deployment  # ID used for environment URL output
         uses: actions/deploy-pages@v4

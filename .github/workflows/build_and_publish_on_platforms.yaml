@@ -1,62 +1,89 @@
+# Workflow name indicating its purpose
 name: Multi-Platform App Build and Publish
+
+# Trigger configuration
 on:
+  # Manual trigger through GitHub Actions UI with configurable inputs
   workflow_dispatch:
     inputs:
+      # Release channel selection (internal/beta)
       release_type:
         type: choice
         options:
-          - internal
-          - beta
+          - internal  # For internal testing purposes
+          - beta      # For beta testing with external testers
         default: internal
         description: Release Type
+      
+      # Toggle for Android Play Store publishing
       publish_android:
         type: boolean
         default: false
         description: Publish Android App On Play Store
+      
+      # Toggle for iOS App Store publishing
       publish_ios:
         type: boolean
         default: false
         description: Publish iOS App On App Store
+      
+      # Toggle for Desktop app publishing (Windows/macOS/Linux)
       publish_desktop:
         type: boolean
         default: false
         description: Publish Desktop Apps On App Store
+      
+      # Toggle for Web app deployment
       publish_web:
         type: boolean
         default: true
         description: Publish Web App
-      # turning off iOS build for now
+      
+      # Toggle for iOS build process
+      # Separated from publishing to allow building without deployment
       build_ios:
         type: boolean
         default: false
         description: Build iOS App
 
+# Repository-level permissions configuration
 permissions:
+  # Grant read/write access to repository contents for deployment
   contents: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# Concurrency management configuration
+# Controls how multiple workflow runs are handled
 concurrency:
+  # Uses "pages" group to coordinate with GitHub Pages deployments
   group: "pages"
+  # When false, new runs are queued instead of cancelling running ones
+  # This ensures deployment stability and ordered releases
   cancel-in-progress: false
 
+# Job definitions for different platforms
 jobs:
+  # Android Build Job
+  # Handles compilation and APK generation for Android platform
   build_android:
     name: Build Android Application
     runs-on: ubuntu-latest
     steps:
+      # Check out repository code
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Setup Java development environment
       - name: Set up JDK 17
         uses: actions/setup-java@v4.2.2
         with:
           distribution: 'temurin'
           java-version: '17'
 
+      # Configure Gradle build tool
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      # Cache Gradle dependencies to speed up builds
       - uses: actions/cache@v3
         with:
           path: |
@@ -65,6 +92,7 @@ jobs:
             ~/.konan
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
+      # Decrypt and prepare required secrets for signing
       - uses: ./.github/actions/inflate-secrets
         name: Inflate Secrets
         with:
@@ -73,6 +101,7 @@ jobs:
           playstore-creds: ${{ secrets.PLAYSTORECREDS }}
           firebase-creds: ${{ secrets.FIREBASECREDS }}
 
+      # Build signed release APK
       - name: Build Release
         env:
           KEYSTORE_PASSWORD: ${{ secrets.ORIGINAL_KEYSTORE_FILE_PASSWORD }}
@@ -82,6 +111,7 @@ jobs:
         run: |
           ./gradlew :mifospay-android:assembleRelease
 
+      # Save built APKs as artifacts
       - name: Upload Android Artifact
         uses: actions/upload-artifact@v4
         with:
@@ -92,29 +122,35 @@ jobs:
             ./mifospay-android/build/outputs/apk/demo/release/mifospay-android-demo-release.apk
             ./mifospay-android/build/outputs/apk/prod/release/mifospay-android-prod-release.apk
 
-
+  # Firebase Distribution Job for Android
+  # Handles deployment to Firebase App Distribution for testing
   publish_android_on_firebase:
     name: Deploy Android App On Firebase
     needs: [ build_android, generate_release_info ]
     runs-on: ubuntu-latest
     steps:
+      # Basic setup steps
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Setup Java environment
       - name: Set up JDK 17
         uses: actions/setup-java@v4.2.2
         with:
           distribution: 'temurin'
           java-version: '17'
 
+      # Configure Gradle
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      # Setup Ruby for Fastlane automation
       - name: Configure Ruby
         uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
           bundler-cache: true
 
+      # Install Fastlane and required plugins for deployment automation
       - name: Install Fastlane
         run: |
           gem install bundler:2.2.27
@@ -122,7 +158,7 @@ jobs:
           bundle exec fastlane add_plugin firebase_app_distribution
           bundle exec fastlane add_plugin increment_build_number
 
-
+      # Prepare necessary secrets
       - uses: ./.github/actions/inflate-secrets
         name: Inflate Secrets
         with:
@@ -131,21 +167,25 @@ jobs:
           playstore-creds: ${{ secrets.PLAYSTORECREDS }}
           firebase-creds: ${{ secrets.FIREBASECREDS }}
 
+      # Retrieve built Android artifacts
       - name: Download Android Artifact
         uses: actions/download-artifact@v4
         with:
           name: android-app
-          path: ./android-artifacts  # Specify a specific path to download
+          path: ./android-artifacts
 
+      # Debug: List downloaded artifacts
       - name: List downloaded artifacts
         run: |
-          ls -R ./android-artifacts  # List all downloaded files
+          ls -R ./android-artifacts
 
+      # Get changelog for Firebase distribution
       - name: Download Beta Changelog
         uses: actions/download-artifact@v4
         with:
           name: beta-changelog
 
+      # Organize files for Firebase deployment
       - name: Move APK to build directory
         run: |
           mkdir -p ./mifospay-android/build/outputs/apk/prod/release/
@@ -153,32 +193,39 @@ jobs:
           mv ./changelogBeta ./mifospay-android/build/outputs/
 
 
+      # Deploy to Firebase App Distribution
       - name: ☁️ Deploy to Firebase
         env:
           VERSION_CODE: ${{ needs.generate_release_info.outputs.version_code }}
         run: bundle exec fastlane android deploy_on_firebase
 
+  # Play Store Publishing Job
+  # Handles deployment to Google Play Store
   publish_android_on_playstore:
     name: Publish Android App On Play Store
     needs: [ build_android, generate_release_info ]
     if: inputs.publish_android
     runs-on: macos-latest
     steps:
+      # Checkout with full history for versioning
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      # Setup Java environment
       - name: Set up JDK 17
         uses: actions/setup-java@v4.2.2
         with:
           distribution: 'temurin'
           java-version: '17'
 
+      # Setup Ruby for Fastlane
       - name: Configure Ruby
         uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
           bundler-cache: true
 
+      # Install Fastlane and plugins for Play Store deployment
       - name: Install Fastlane
         run: |
           gem install bundler:2.2.27
@@ -186,9 +233,11 @@ jobs:
           bundle exec fastlane add_plugin firebase_app_distribution
           bundle exec fastlane add_plugin increment_build_number
 
+      # Setup Gradle build tool
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      # Prepare necessary secrets
       - uses: ./.github/actions/inflate-secrets
         name: Inflate Secrets
         with:
@@ -197,6 +246,7 @@ jobs:
           playstore-creds: ${{ secrets.PLAYSTORECREDS }}
           firebase-creds: ${{ secrets.FIREBASECREDS }}
 
+      # Build Android App Bundle for Play Store
       - name: Build Release
         env:
           KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_FILE_PASSWORD }}
@@ -206,19 +256,24 @@ jobs:
         run: |
           ./gradlew :mifospay-android:bundleRelease
 
+      # Save AAB files as artifacts
       - name: Archive Build
         uses: actions/upload-artifact@v4
         with:
           name: release-aabs
           path: ./**/*.aab
 
+      # Deploy to Play Store Internal testing track
       - name: Deploy to Playstore Internal
         run: bundle exec fastlane deploy_internal
 
+      # Promote to beta if specified
       - name: Promote Internal to Beta
         if: github.event.inputs.release_type == 'beta'
         run: bundle exec fastlane promote_to_beta
 
+  # iOS Build Job
+  # Handles compilation and IPA generation for iOS platform
   build_ios:
     name: Build iOS App
     runs-on: macos-latest
@@ -229,11 +284,13 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
+      # Setup Ruby for Fastlane
       - name: Configure Ruby
         uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
           bundler-cache: true
 
+      # Install Fastlane and plugins for iOS automation
       - name: Install Fastlane
         run: |
           gem install bundler:2.2.27
@@ -242,10 +299,12 @@ jobs:
           bundle exec fastlane add_plugin increment_build_number
 
 
+      # Build iOS app if enabled
       - name: Build iOS App
         if: inputs.build_ios
         run: bundle exec fastlane ios build_ios
 
+      # Save IPA as artifact
       - name: Upload iOS Artifact
         if: inputs.build_ios
         uses: actions/upload-artifact@v4
@@ -255,6 +314,8 @@ jobs:
           compression-level: 9
           path: mifospay-ios/mifospay-ios-app.ipa
 
+  # Firebase Distribution Job for iOS
+  # Handles deployment to Firebase App Distribution for iOS testing
   publish_ios_app_to_firebase:
     name: Publish iOS App On Firebase
     if: inputs.publish_ios
@@ -265,11 +326,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Setup Ruby for Fastlane
       - name: Configure Ruby
         uses: ruby/setup-ruby@a2bbe5b1b236842c1cb7dd11e8e3b51e0a616acc # v1.202.0
         with:
           bundler-cache: true
 
+      # Install Fastlane and plugins
       - name: Install Fastlane
         run: |
           gem install bundler:2.2.27
@@ -278,29 +341,35 @@ jobs:
           bundle exec fastlane add_plugin increment_build_number
 
 
+      # Get iOS app artifact
       - name: Download iOS App
         uses: actions/download-artifact@v4
         with:
           name: ios-app
 
+      # Get changelog for Firebase distribution
       - name: Download Beta Changelog
         uses: actions/download-artifact@v4
         with:
           name: beta-changelog
 
+      # Organize files for Firebase deployment
       - name: Move APK to build directory
         run: |
           mv *.ipa ./mifospay-ios/
           mv changelogBeta ./mifospay-android/build/outputs/
 
 
-
+      # Deploy to Firebase App Distribution
       - name: Upload iOS App to Firebase Distribution
         run: bundle exec fastlane ios deploy_on_firebase
 
+      # Debug: Show git status
       - name: Print `git status`
         run: git status
 
+  # App Center Publishing Job for iOS
+  # Handles deployment to App Center for iOS distribution
   publish_ios_app_to_app_center:
     needs: [ build_ios, generate_release_info ]
     name: Publish iOS App On App Center
@@ -309,18 +378,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Get iOS app artifact
       - name: Download iOS Artifact
         uses: actions/download-artifact@v4
         with:
           name: ios-app
 
+      # Get changelog for App Center
       - name: Download Changelog
         uses: actions/download-artifact@v4
         with:
           name: git-changelog
 
-      # Publish on App Store
+      # TODO: Implement App Store publishing
 
+  # Desktop Build Job
+  # Handles compilation for Windows, macOS, and Linux platforms
   build_desktop:
     name: Build Desktop App
     strategy:
@@ -334,9 +407,11 @@ jobs:
           java-version: 17
           distribution: 'temurin'
 
+      # Setup Gradle build tool
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      # Build desktop app for current OS
       - name: Build Desktop App
         env:
           NOTARIZATION_APPLE_ID: ${{ secrets.NOTARIZATION_APPLE_ID }}
@@ -344,6 +419,7 @@ jobs:
           NOTARIZATION_TEAM_ID: ${{ secrets.NOTARIZATION_TEAM_ID }}
         run: ./gradlew packageReleaseDistributionForCurrentOS
 
+      # Save Windows artifacts (EXE and MSI)
       - name: Upload Windows Apps
         if: matrix.os == 'windows-latest'
         uses: actions/upload-artifact@v4
@@ -355,6 +431,7 @@ jobs:
             ./mifospay-desktop/build/compose/binaries/main-release/exe/*.exe
             ./mifospay-desktop/build/compose/binaries/main-release/msi/*.msi
 
+      # Save Linux artifact (DEB)
       - name: Upload Linux App
         if: matrix.os == 'ubuntu-latest'
         uses: actions/upload-artifact@v4
@@ -364,6 +441,7 @@ jobs:
           compression-level: 9
           path: './mifospay-desktop/build/compose/binaries/main-release/deb/*.deb'
 
+      # Save macOS artifact (DMG)
       - name: Upload MacOS App
         if: matrix.os == 'macos-latest'
         uses: actions/upload-artifact@v4
@@ -373,6 +451,8 @@ jobs:
           compression-level: 9
           path: './mifospay-desktop/build/compose/binaries/main-release/dmg/*.dmg'
 
+  # Desktop Publishing Job
+  # Handles publishing desktop apps to various stores
   publish_desktop:
     name: Publish Desktop App
     needs: [ build_desktop ]
@@ -381,28 +461,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Get all desktop artifacts
       - name: Download Desktop Artifacts
         uses: actions/download-artifact@v4
         with:
           pattern: desktop-app-*
           path: desktop-apps
 
-      # Publish on Desktop Store,
-      # print downloaded desktop artifacts
+      # TODO: Implement desktop store publishing
+      # Debug: Show git status
       - name: Print `git status`
         run: git status
 
+  # Web Build Job
+  # Handles compilation of web application using Kotlin/JS
   build_web:
     name: Build Web Application
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
 
+      # Setup Java environment
       - uses: actions/setup-java@v4
         with:
           distribution: 'zulu'
           java-version: 17
 
+      # Cache Gradle dependencies
       - uses: actions/cache@v3
         with:
           path: |
@@ -411,15 +496,19 @@ jobs:
             ~/.konan
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
 
+      # Build web app using Kotlin/JS
       - name: Build Web(JS) App
         run: ./gradlew jsBrowserDistribution
 
+      # Save web app as artifact
       - name: Upload Web Artifact
         uses: actions/upload-artifact@v4
         with:
           name: web-app
           path: './mifospay-web/build/dist/js/productionExecutable'
 
+  # Web Publishing Job
+  # Handles deployment to GitHub Pages
   publish_web:
     name: Publish Web App
     needs: [ build_web ]
@@ -438,6 +527,7 @@ jobs:
           distribution: 'zulu'
           java-version: 17
 
+      # Get web app artifact
       - name: Download Web Artifact
         uses: actions/download-artifact@v4
         with:
@@ -445,18 +535,23 @@ jobs:
           path: ./web-app-content
 
 
+      # Configure GitHub Pages
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
+      # Upload web app to GitHub Pages
       - name: Upload static files as artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: './web-app-content'
 
+      # Deploy to GitHub Pages
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
 
+  # Release Info Generation Job
+  # Creates version numbers and release notes
   generate_release_info:
     name: Generate Release Info
     runs-on: ubuntu-latest
@@ -468,36 +563,44 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Setup Java environment
       - uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: 'temurin'
 
+      # Configure Gradle
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      # Generate version number
       - uses: ./.github/actions/create-release-number
         name: Create Release Number
         id: rel_number
 
+      # Create release notes
       - uses: ./.github/actions/create-release-notes
         name: Create Release Notes
         with:
           tag-name: ${{ steps.rel_number.outputs.version }}
           gh-token: ${{ secrets.GITHUB_TOKEN }}
 
+      # Save GitHub changelog
       - name: Upload GitHub Changelog
         uses: actions/upload-artifact@v4
         with:
           name: git-changelog
           path: './mifospay-android/build/outputs/changelogGithub'
 
+      # Save beta changelog
       - name: Upload Beta Changelog
         uses: actions/upload-artifact@v4
         with:
           name: beta-changelog
           path: './mifospay-android/build/outputs/changelogBeta'
 
+  # GitHub Release Job
+  # Creates GitHub release with all built artifacts
   github_release:
     name: Create Github Release
     needs: [ build_android, build_desktop, build_web, build_ios, generate_release_info ]
@@ -508,30 +611,35 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Get all build artifacts
       - name: Download All Artifacts
         uses: actions/download-artifact@v4
         with:
           path: ./all-artifacts
 
+      # Debug: Show downloaded files
       - name: Display structure of downloaded files
         run: ls -R ./all-artifacts
 
+      # Create ZIP archive of web app
       - name: Archive Web Build
         shell: pwsh
         run: |
           Compress-Archive -Path './all-artifacts/web-app/*' -DestinationPath './all-artifacts/mifospay-web-app.zip'
 
-      # Rename Ubuntu desktop artifact
+      # Rename Ubuntu desktop artifact for consistency
       - name: Rename Ubuntu Desktop Artifact
         run: |
           mv ./all-artifacts/desktop-app-ubuntu-latest/mifoswallet_1.0.0-1_amd64.deb ./all-artifacts/desktop-app-ubuntu-latest/MifosWallet-1.0.0.deb
 
 
+      # Get changelog for release
       - name: Download Git Changelog
         uses: actions/download-artifact@v4
         with:
           name: git-changelog
 
+      # Create GitHub pre-release with all artifacts
       - name: Create Github Pre-Release
         uses: softprops/action-gh-release@v2.0.8
         with:
