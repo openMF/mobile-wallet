@@ -45,7 +45,7 @@ jobs:
             github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'build_and_publish_on_platforms.yml',
+              workflow_id: 'build_and_publish_on_platforms.yaml',
               ref: 'dev',
               inputs: {
                 "release_type": "beta",
