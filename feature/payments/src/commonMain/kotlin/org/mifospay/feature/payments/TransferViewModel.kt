@@ -34,9 +34,9 @@ class TransferViewModel(
     },
 ) {
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY] = it }
-            .launchIn(viewModelScope)
+//        stateFlow
+//            .onEach { savedStateHandle[KEY] = it }
+//            .launchIn(viewModelScope)
     }
 
     override fun handleAction(action: TransferAction) {

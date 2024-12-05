@@ -51,9 +51,9 @@ internal class EditProfileViewModel(
     },
 ) {
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY] = it }
-            .launchIn(viewModelScope)
+//        stateFlow
+//            .onEach { savedStateHandle[KEY] = it }
+//            .launchIn(viewModelScope)
 
         trySendAction(LoadClientImage(state.clientId))
     }

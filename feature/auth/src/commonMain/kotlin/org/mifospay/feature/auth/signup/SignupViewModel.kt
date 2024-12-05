@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.IgnoredOnParcel
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 import org.mifospay.core.common.utils.isValidEmail
@@ -48,9 +49,9 @@ class SignupViewModel(
     private var passwordStrengthJob: Job = Job().apply { complete() }
 
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
+//        stateFlow
+//            .onEach { savedStateHandle[KEY_STATE] = it }
+//            .launchIn(viewModelScope)
 
         savedStateHandle.get<String>("mobileNumber")?.let {
             viewModelScope.launch {
@@ -511,6 +512,7 @@ data class SignUpState(
     val dialogState: SignUpDialog? = null,
     val passwordStrengthState: PasswordStrengthState = PasswordStrengthState.NONE,
 ) : Parcelable {
+    @IgnoredOnParcel
     val isPasswordStrong: Boolean
         get() = when (passwordStrengthState) {
             PasswordStrengthState.NONE,
@@ -525,25 +527,9 @@ data class SignUpState(
             -> true
         }
 
+    @IgnoredOnParcel
     val isPasswordMatch: Boolean
         get() = passwordInput == confirmPasswordInput
-
-    val isSubmitEnabled: Boolean
-        get() = firstNameInput.isNotEmpty() &&
-            lastNameInput.isNotEmpty() &&
-            emailInput.isNotEmpty() &&
-            userNameInput.isNotEmpty() &&
-            addressLine1Input.isNotEmpty() &&
-            addressLine2Input.isNotEmpty() &&
-            pinCodeInput.isNotEmpty() &&
-            mobileNumberInput.isNotEmpty() &&
-            passwordInput.isNotEmpty() &&
-            confirmPasswordInput.isNotEmpty() &&
-            stateInput.isNotEmpty() &&
-            countryInput.isNotEmpty() &&
-            passwordInput.length >= MIN_PASSWORD_LENGTH &&
-            isPasswordStrong && isPasswordMatch &&
-            savingsProductId != 0
 }
 
 sealed interface SignUpDialog : Parcelable {

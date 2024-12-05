@@ -53,9 +53,9 @@ internal class AddEditCardViewModel(
 ) {
 
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY] = it }
-            .launchIn(viewModelScope)
+//        stateFlow
+//            .onEach { savedStateHandle[KEY] = it }
+//            .launchIn(viewModelScope)
 
         if (state.type is CardAddEditType.EditItem) {
             repository.getSavedCard(state.clientId, state.type.savedCardId!!).onEach {

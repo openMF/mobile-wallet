@@ -62,9 +62,9 @@ internal class AddEditSavingViewModel(
     )
 
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY] = it }
-            .launchIn(viewModelScope)
+//        stateFlow
+//            .onEach { savedStateHandle[KEY] = it }
+//            .launchIn(viewModelScope)
 
         repository.getSavingAccountTemplate(state.clientId).onEach {
             sendAction(HandleSavingTemplateResult(it))

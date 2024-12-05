@@ -63,11 +63,11 @@ class KYCDescriptionViewModel(
         initialValue = KYCDescriptionUiState.Loading,
     )
 
-    init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-    }
+//    init {
+//        stateFlow
+//            .onEach { savedStateHandle[KEY_STATE] = it }
+//            .launchIn(viewModelScope)
+//    }
 
     override fun handleAction(action: KycAction) {
         when (action) {

@@ -31,9 +31,9 @@ internal class SIDetailViewModel(
 ) {
 
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
+//        stateFlow
+//            .onEach { savedStateHandle[KEY_STATE] = it }
+//            .launchIn(viewModelScope)
 
         val instructionId = requireNotNull(savedStateHandle.get<Long>("instructionId"))
 

@@ -72,9 +72,9 @@ internal class AddEditSIViewModel(
     val toClientAccounts = _toClientAccounts.asStateFlow()
 
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
+//        stateFlow
+//            .onEach { savedStateHandle[KEY_STATE] = it }
+//            .launchIn(viewModelScope)
 
         repository.getStandingInstructionTemplate(
             fromOfficeId = state.client.officeId,

@@ -78,11 +78,11 @@ internal class MakeTransferViewModel(
             initialValue = ViewState.Loading,
         )
 
-    init {
-        stateFlow.onEach { state ->
-            savedStateHandle[KEY_STATE] = state
-        }.launchIn(viewModelScope)
-    }
+//    init {
+//        stateFlow.onEach { state ->
+//            savedStateHandle[KEY_STATE] = state
+//        }.launchIn(viewModelScope)
+//    }
 
     override fun handleAction(action: MakeTransferAction) {
         when (action) {

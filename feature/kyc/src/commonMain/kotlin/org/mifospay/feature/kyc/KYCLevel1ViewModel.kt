@@ -45,9 +45,9 @@ internal class KYCLevel1ViewModel(
 ) {
 
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
+//        stateFlow
+//            .onEach { savedStateHandle[KEY_STATE] = it }
+//            .launchIn(viewModelScope)
 
         kycLevelRepository.fetchKYCLevel1Details(state.clientId)
             .takeUntilResultSuccess()

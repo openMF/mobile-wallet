@@ -39,11 +39,11 @@ class InvoicesViewModel(
         InvoiceState(clientId = clientId)
     },
 ) {
-    init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-    }
+//    init {
+//        stateFlow
+//            .onEach { savedStateHandle[KEY_STATE] = it }
+//            .launchIn(viewModelScope)
+//    }
 
     val invoiceUiState = invoiceRepository.getInvoices(state.clientId).mapLatest { result ->
         when (result) {

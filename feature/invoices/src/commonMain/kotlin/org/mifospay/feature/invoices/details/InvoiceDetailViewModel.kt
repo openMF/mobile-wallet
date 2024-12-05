@@ -45,9 +45,9 @@ internal class InvoiceDetailViewModel(
 ) {
 
     init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
+//        stateFlow
+//            .onEach { savedStateHandle[KEY_STATE] = it }
+//            .launchIn(viewModelScope)
 
         repository.getInvoice(state.clientId, state.invoiceId).onEach {
             sendAction(InvoiceDetailResultReceived(it))

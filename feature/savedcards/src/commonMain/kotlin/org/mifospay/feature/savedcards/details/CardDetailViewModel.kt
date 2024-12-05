@@ -57,11 +57,11 @@ internal class CardDetailViewModel(
             initialValue = ViewState.Loading,
         )
 
-    init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-    }
+//    init {
+//        stateFlow
+//            .onEach { savedStateHandle[KEY_STATE] = it }
+//            .launchIn(viewModelScope)
+//    }
 
     override fun handleAction(action: CardDetailAction) {
         when (action) {

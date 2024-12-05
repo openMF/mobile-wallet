@@ -32,9 +32,9 @@ class MobileVerificationViewModel(
     initialState = savedStateHandle[KEY_STATE] ?: MobileVerificationState.VerifyPhoneState(),
 ) {
 
-    init {
-        stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
-    }
+//    init {
+//        stateFlow.onEach { savedStateHandle[KEY_STATE] = it }.launchIn(viewModelScope)
+//    }
 
     override fun handleAction(action: MobileVerificationAction) {
         when (action) {

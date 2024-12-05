@@ -73,11 +73,11 @@ internal class AddEditBeneficiaryViewModel(
         started = SharingStarted.WhileSubscribed(5_000),
     )
 
-    init {
-        stateFlow
-            .onEach { savedStateHandle[KEY] = it }
-            .launchIn(viewModelScope)
-    }
+//    init {
+//        stateFlow
+//            .onEach { savedStateHandle[KEY] = it }
+//            .launchIn(viewModelScope)
+//    }
 
     override fun handleAction(action: AEBAction) {
         when (action) {

@@ -74,9 +74,9 @@ class ShowQrViewModel(
     )
 
     init {
-        stateFlow.onEach {
-            savedStateHandle[KEY_STATE] = it
-        }.launchIn(viewModelScope)
+//        stateFlow.onEach {
+//            savedStateHandle[KEY_STATE] = it
+//        }.launchIn(viewModelScope)
 
         viewModelScope.launch {
             sendAction(ShowQrAction.Internal.GenerateQr)

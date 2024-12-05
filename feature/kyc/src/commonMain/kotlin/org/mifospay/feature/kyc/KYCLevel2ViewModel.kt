@@ -43,11 +43,11 @@ internal class KYCLevel2ViewModel(
     },
 ) {
 
-    init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-    }
+//    init {
+//        stateFlow
+//            .onEach { savedStateHandle[KEY_STATE] = it }
+//            .launchIn(viewModelScope)
+//    }
 
     override fun handleAction(action: KycLevel2Action) {
         when (action) {

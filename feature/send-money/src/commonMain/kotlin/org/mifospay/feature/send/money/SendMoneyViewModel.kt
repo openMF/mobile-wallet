@@ -74,9 +74,9 @@ class SendMoneyViewModel(
         )
 
     init {
-        stateFlow.onEach {
-            savedStateHandle[KEY_STATE] = it
-        }.launchIn(viewModelScope)
+//        stateFlow.onEach {
+//            savedStateHandle[KEY_STATE] = it
+//        }.launchIn(viewModelScope)
 
         savedStateHandle.get<String>("requestData")?.let {
             trySendAction(HandleRequestData(it))

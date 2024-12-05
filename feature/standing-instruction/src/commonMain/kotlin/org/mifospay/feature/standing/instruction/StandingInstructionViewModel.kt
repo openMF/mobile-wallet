@@ -67,11 +67,11 @@ class StandingInstructionViewModel(
         initialValue = SIViewState.Loading,
     )
 
-    init {
-        stateFlow
-            .onEach { savedStateHandle[KEY_STATE] = it }
-            .launchIn(viewModelScope)
-    }
+//    init {
+//        stateFlow
+//            .onEach { savedStateHandle[KEY_STATE] = it }
+//            .launchIn(viewModelScope)
+//    }
 
     override fun handleAction(action: SIAction) {
         when (action) {
