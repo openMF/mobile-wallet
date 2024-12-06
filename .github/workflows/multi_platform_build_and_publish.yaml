@@ -6,8 +6,8 @@ on:
       release_type:
         type: choice
         options:
-          - internal  # For internal testing purposes
-          - beta      # For beta testing with external testers
+          - internal
+          - beta
         default: internal
         description: Release Type
 
@@ -15,6 +15,26 @@ on:
         type: boolean
         default: false
         description: Publish Android App On Play Store
+
+      publish_ios:
+        type: boolean
+        default: false
+        description: Publish iOS App On App Store
+
+      publish_desktop:
+        type: boolean
+        default: false
+        description: Publish Desktop Apps On App Store
+
+      publish_web:
+        type: boolean
+        default: true
+        description: Publish Web App
+
+      build_ios:
+        type: boolean
+        default: false
+        description: Build iOS App
 
 permissions:
   contents: write
@@ -25,10 +45,17 @@ concurrency:
 
 jobs:
   multi_platform_build_and_publish:
-    name: Build Android Application
+    name: Multi-Platform Build and Publish
     uses: niyajali/mifos-mobile-github-actions/.github/workflows/multi_platform_build_and_publish.yaml@main
     secrets: inherit
     with:
       release_type: ${{ inputs.release_type }}
-      publish_android: ${{ inputs.publish_android }}
       android_package_name: 'mifospay-android'
+      ios_package_name: 'mifospay-ios'
+      desktop_package_name: 'mifospay-desktop'
+      web_package_name: 'mifospay-web'
+      publish_android: ${{ inputs.publish_android }}
+      build_ios: ${{ inputs.build_ios }}
+      publish_ios: ${{ inputs.publish_ios }}
+      publish_desktop: ${{ inputs.publish_desktop }}
+      publish_web: ${{ inputs.publish_web }}
