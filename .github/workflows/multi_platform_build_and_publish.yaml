@@ -42,7 +42,7 @@ permissions:
   pages: write
 
 concurrency:
-  group: "pages"
+  group: "reusable"
   cancel-in-progress: false
 
 jobs:
