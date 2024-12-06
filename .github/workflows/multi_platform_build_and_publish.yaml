@@ -38,9 +38,11 @@ on:
 
 permissions:
   contents: write
+  id-token: write
+  pages: write
 
 concurrency:
-  group: "reusable"
+  group: "pages"
   cancel-in-progress: false
 
 jobs:
