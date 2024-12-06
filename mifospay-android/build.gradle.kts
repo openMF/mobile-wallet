@@ -36,7 +36,7 @@ android {
 
     defaultConfig {
         applicationId = "org.mifospay"
-        versionName = project.dynamicVersion
+        versionName = System.getenv("VERSION") ?: project.dynamicVersion
         versionCode = System.getenv("VERSION_CODE")?.toIntOrNull() ?: 1
         vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
