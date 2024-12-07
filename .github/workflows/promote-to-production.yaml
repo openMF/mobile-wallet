@@ -18,6 +18,9 @@ concurrency:
   group: "production-deploy"
   cancel-in-progress: false
 
+permissions:
+  contents: write
+
 jobs:
   # Job to promote app from beta to production in Play Store
   play_promote_production:
