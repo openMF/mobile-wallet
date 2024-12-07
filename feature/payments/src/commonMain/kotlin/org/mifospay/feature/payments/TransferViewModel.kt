@@ -10,9 +10,6 @@
 package org.mifospay.feature.payments
 
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 import org.mifospay.core.datastore.UserPreferencesRepository
