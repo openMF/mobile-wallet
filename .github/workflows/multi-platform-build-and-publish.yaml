@@ -11,6 +11,11 @@ on:
         default: internal
         description: Release Type
 
+      target_branch:
+        type: string
+        default: 'dev'
+        description: 'Target branch for release'
+
       publish_android:
         type: boolean
         default: false
@@ -48,14 +53,15 @@ concurrency:
 jobs:
   multi_platform_build_and_publish:
     name: Multi-Platform Build and Publish
-    uses: niyajali/mifos-mobile-github-actions/.github/workflows/multi_platform_build_and_publish.yaml@main
+    uses: niyajali/mifos-mobile-github-actions/.github/workflows/multi-platform-build-and-publish.yaml@main
     secrets: inherit
     with:
-      release_type: ${{ inputs.release_type }}
       android_package_name: 'mifospay-android'
       ios_package_name: 'mifospay-ios'
       desktop_package_name: 'mifospay-desktop'
       web_package_name: 'mifospay-web'
+      release_type: ${{ inputs.release_type }}
+      target_branch: ${{ inputs.target_branch }}
       publish_android: ${{ inputs.publish_android }}
       build_ios: ${{ inputs.build_ios }}
       publish_ios: ${{ inputs.publish_ios }}
