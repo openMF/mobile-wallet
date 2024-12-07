@@ -19,7 +19,7 @@ concurrency:
 jobs:
   tag:
     name: Tag Weekly Release
-    uses: niyajali/mifos-mobile-github-actions/.github/workflows/tag-weekly-release.yaml@main
+    uses: openMF/mifos-mobile-github-actions/.github/workflows/tag-weekly-release.yaml@main
     secrets: inherit
     with:
       target_branch: 'dev'

@@ -22,7 +22,7 @@ permissions:
 jobs:
   build_and_deploy_web:
     name: Build And Deploy Web App
-    uses: niyajali/mifos-mobile-github-actions/.github/workflows/build-and-deploy-site.yaml@main
+    uses: openMF/mifos-mobile-github-actions/.github/workflows/build-and-deploy-site.yaml@main
     secrets: inherit
     with:
       web_package_name: 'mifospay-web'

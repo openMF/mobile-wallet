@@ -16,5 +16,5 @@ concurrency:
 jobs:
   monthly_release:
     name: Tag Monthly Release
-    uses: niyajali/mifos-mobile-github-actions/.github/workflows/monthly-version-tag.yaml@main
+    uses: openMF/mifos-mobile-github-actions/.github/workflows/monthly-version-tag.yaml@main
     secrets: inherit

@@ -53,7 +53,7 @@ concurrency:
 jobs:
   multi_platform_build_and_publish:
     name: Multi-Platform Build and Publish
-    uses: niyajali/mifos-mobile-github-actions/.github/workflows/multi-platform-build-and-publish.yaml@main
+    uses: openMF/mifos-mobile-github-actions/.github/workflows/multi-platform-build-and-publish.yaml@main
     secrets: inherit
     with:
       android_package_name: 'mifospay-android'
