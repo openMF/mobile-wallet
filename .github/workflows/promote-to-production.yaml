@@ -28,3 +28,5 @@ jobs:
     uses: niyajali/mifos-mobile-github-actions/.github/workflows/promote-to-production.yaml@main
     if: ${{ inputs.publish_to_play_store == true }}
     secrets: inherit
+    with:
+      android_package_name: 'mifospay-android'
