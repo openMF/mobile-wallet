@@ -1,9 +1,10 @@
+![Frame 9 (2)](https://github.com/user-attachments/assets/4d53ff45-5348-41a5-98cd-a3dbabb52703)
 
 <div align="center">
 
 # Mobile Wallet
 Mobile Wallet is a Kotlin Multiplatform(KMP) based project built on top of Apache <a href='https://github.com/openMF/mobile-wallet/wiki/Fineract-backend'>Fineract</a> API.
-Followed by recommended architecture and design patterns, the application is developed using the latest technologies and frameworks/library like Jetpack Compose, Ktor, Ktorfit, and Koin etc. The application is designed to be cross-platform, supporting Android, iOS, Desktop, and Web platforms.
+Following recommended architecture and design patterns, the application is developed using the latest technologies and frameworks/libraries, such as Jetpack Compose, Ktor, Ktorfit, and Koin. It is designed to be cross-platform, supporting Android, iOS, Desktop, and Web platforms.
 
 ![Kotlin](https://img.shields.io/badge/Kotlin-7f52ff?style=flat-square&logo=kotlin&logoColor=white)
 ![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin%20Multiplatform-4c8d3f?style=flat-square&logo=kotlin&logoColor=white)
@@ -23,7 +24,8 @@ Followed by recommended architecture and design patterns, the application is dev
 <div align="center"><a name="readme-top"></a></div>
 
 ### Run the Project
-![Screenshot](https://github.com/user-attachments/assets/8023c529-1215-4c4b-b212-630f0233223f)
+![Screenshot (154)](https://github.com/user-attachments/assets/761063ed-83f8-4443-b58f-2b68a4c74c5d)
+
 - **Android App**: Select the `mifospay-android` run configuration and click **Run**.
 - **Desktop App**: Select the `mifospay-desktop` run configuration and click **Run**.
 - **Web App (JavaScript)**: Select the `mifospasy-web-js` run configuration and click **Run**.
