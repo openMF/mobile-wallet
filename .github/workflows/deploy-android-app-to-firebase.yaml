@@ -2,6 +2,8 @@ name: Publish Android App on Firebase
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
 
 jobs:
   publish_android_app_on_firebase:
@@ -11,7 +13,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Publish Android App on Firebase
-        uses: openMF/KMP-android-firebase-publish-action@v1.0.0
+        uses: openMF/KMP-android-firebase-publish-action@v1.0.1
         with:
           android_package_name: 'mifospay-android'
 
