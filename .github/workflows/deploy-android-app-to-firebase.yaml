@@ -2,18 +2,20 @@ name: Publish Android App on Firebase
 on:
   workflow_dispatch:
 
-permissions:
-  contents: write
 
 jobs:
   publish_android_app_on_firebase:
     runs-on: macos-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Publish Android App on Firebase
-        uses: openMF/KMP-android-firebase-publish-action@v1.0.1
+        uses: openMF/KMP-android-firebase-publish-action@v1.0.2
         with:
           android_package_name: 'mifospay-android'
 
