@@ -1,0 +1,29 @@
+name: Publish Web App
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+permissions:
+  contents: read  # Read repository contents
+  pages: write    # Write to GitHub Pages
+  id-token: write # Write authentication tokens
+
+jobs:
+  build_web_app:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build & Publish Web App
+        uses: openMF/KMP-web-publish-action@v1.0.0
+        id: deployment
+        with:
+          web_package_name: 'mifospay-web'

@@ -1,0 +1,31 @@
+name: Publish Android App on Firebase
+on:
+  workflow_dispatch:
+
+
+jobs:
+  publish_android_app_on_firebase:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Publish Android App on Firebase
+        uses: openMF/KMP-android-firebase-publish-action@v1.0.0
+        with:
+          android_package_name: 'mifospay-android'
+
+          keystore_file: ${{ secrets.ORIGINAL_KEYSTORE_FILE }}
+          keystore_password: ${{ secrets.ORIGINAL_KEYSTORE_FILE_PASSWORD }}
+          key_alias: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS }}
+          key_password: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS_PASSWORD }}
+
+          google_services: ${{ secrets.GOOGLESERVICES }}
+          firebase_creds: ${{ secrets.FIREBASECREDS }}
+
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          target_branch: 'dev'
+
+
+
+
