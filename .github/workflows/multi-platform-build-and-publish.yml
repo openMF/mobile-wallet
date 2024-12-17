@@ -114,7 +114,6 @@ jobs:
   multi_platform_build_and_publish:
     name: Multi-Platform Build and Publish
     uses: openMF/mifos-mobile-github-actions/.github/workflows/multi-platform-build-and-publish.yaml@main
-    secrets: inherit
     with:
       release_type: ${{ inputs.release_type }}
       target_branch: ${{ inputs.target_branch }}
@@ -127,3 +126,34 @@ jobs:
       publish_ios: ${{ inputs.publish_ios }}
       publish_desktop: ${{ inputs.publish_desktop }}
       publish_web: ${{ inputs.publish_web }}
+    secrets:
+      original_keystore_file: ${{ secrets.ORIGINAL_KEYSTORE_FILE }}
+      original_keystore_file_password: ${{ secrets.ORIGINAL_KEYSTORE_FILE_PASSWORD }}
+      original_keystore_alias: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS }}
+      original_keystore_alias_password: ${{ secrets.ORIGINAL_KEYSTORE_ALIAS_PASSWORD }}
+
+      upload_keystore_file: ${{ secrets.UPLOAD_KEYSTORE_FILE }}
+      upload_keystore_file_password: ${{ secrets.UPLOAD_KEYSTORE_FILE_PASSWORD }}
+      upload_keystore_alias: ${{ secrets.UPLOAD_KEYSTORE_ALIAS }}
+      upload_keystore_alias_password: ${{ secrets.UPLOAD_KEYSTORE_ALIAS_PASSWORD }}
+
+      notarization_apple_id: ${{ secrets.NOTARIZATION_APPLE_ID }}
+      notarization_password: ${{ secrets.NOTARIZATION_PASSWORD }}
+      notarization_team_id: ${{ secrets.NOTARIZATION_TEAM_ID }}
+
+      windows_signing_key: ${{ secrets.WINDOWS_SIGNING_KEY }}
+      windows_signing_password: ${{ secrets.WINDOWS_SIGNING_PASSWORD }}
+      windows_signing_certificate: ${{ secrets.WINDOWS_SIGNING_CERTIFICATE }}
+
+      macos_signing_key: ${{ secrets.MACOS_SIGNING_KEY }}
+      macos_signing_password: ${{ secrets.MACOS_SIGNING_PASSWORD }}
+      macos_signing_certificate: ${{ secrets.MACOS_SIGNING_CERTIFICATE }}
+
+      linux_signing_key: ${{ secrets.LINUX_SIGNING_KEY }}
+      linux_signing_password: ${{ secrets.LINUX_SIGNING_PASSWORD }}
+      linux_signing_certificate: ${{ secrets.LINUX_SIGNING_CERTIFICATE }}
+
+      google_services: ${{ secrets.GOOGLESERVICES }}
+      firebase_creds: ${{ secrets.FIREBASECREDS }}
+      playstore_creds: ${{ secrets.PLAYSTORECREDS }}
+      token: ${{ secrets.GITHUB_TOKEN }}
