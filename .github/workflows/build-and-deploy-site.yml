@@ -42,9 +42,6 @@ name: Build And Deploy Web App
 
 # Trigger conditions for the workflow
 on:
-  pull_request:
-    branches: [ "dev" ]
-    types: [ closed ]
   workflow_dispatch:
 
 # Concurrency settings to manage multiple workflow runs

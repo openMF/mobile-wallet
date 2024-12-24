@@ -44,8 +44,6 @@
 # - publish_android: Enable/disable Android Play Store publishing
 # - build_ios: Enable/disable iOS build
 # - publish_ios: Enable/disable iOS App Store publishing
-# - publish_desktop: Enable/disable desktop app publishing
-# - publish_web: Enable/disable web app deployment (default: true)
 
 # USAGE:
 # 1. Ensure all required secrets are configured
@@ -81,6 +79,11 @@ on:
         default: false
         description: Publish Android App On Play Store
 
+      build_ios:
+        type: boolean
+        default: false
+        description: Build iOS App
+
       publish_ios:
         type: boolean
         default: false
@@ -107,6 +110,7 @@ jobs:
       desktop_package_name: 'mifospay-desktop' # <-- Change this to your desktop package name
       web_package_name: 'mifospay-web'   # <-- Change this to your web package name
       publish_android: ${{ inputs.publish_android }}
+      build_ios: ${{ inputs.build_ios }}
       publish_ios: ${{ inputs.publish_ios }}
     secrets:
       original_keystore_file: ${{ secrets.ORIGINAL_KEYSTORE_FILE }}
