@@ -71,3 +71,4 @@ playStorePublishServiceCredentialsFile.json
 # Ruby stuff we don't care about
 .bundle/
 vendor/
+secrets/

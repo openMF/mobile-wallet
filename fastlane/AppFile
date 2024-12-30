@@ -1,2 +1,2 @@
-json_key_file("mifospay-android/playStorePublishServiceCredentialsFile.json")
+json_key_file("secrets/playStorePublishServiceCredentialsFile.json")
 package_name("org.mifospay") # e.g. org.mifospay.demo

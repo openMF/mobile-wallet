@@ -1,0 +1,1 @@
+The Mobile Wallet project is a Kotlin Multiplatform (KMP) initiative that leverages the Apache Fineract API. The application has been meticulously crafted using cutting-edge technologies and frameworks/libraries by adhering to recommended architecture and design patterns.

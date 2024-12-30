@@ -67,7 +67,7 @@ on:
   schedule:
     # Runs at 04:00 UTC every Sunday
     # Cron syntax: minute hour day-of-month month day-of-week
-    - cron: '0 4 */2 * 0'
+    - cron: '0 4 * * 0'
 
 concurrency:
   group: "weekly-release"

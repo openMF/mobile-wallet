@@ -56,12 +56,6 @@ name: Promote Release to Play Store
 # 2. Automatic trigger when a GitHub release is published
 on:
   workflow_dispatch:
-    inputs:
-      publish_to_play_store:
-        required: false
-        default: false
-        description: Publish to Play Store?
-        type: boolean
   release:
     types: [ released ]
 
@@ -77,8 +71,5 @@ jobs:
   play_promote_production:
     name: Promote Beta to Production Play Store
     uses: openMF/mifos-mobile-github-actions/.github/workflows/promote-to-production.yaml@main
-    if: ${{ inputs.publish_to_play_store == true }}
     secrets:
       playstore_creds: ${{ secrets.PLAYSTORECREDS }}
-    with:
-      android_package_name: 'mifospay-android'
