@@ -39,9 +39,7 @@ platform :android do
     generateVersion = generateVersion()
 
     # Generate Release Note
-    releaseNotes = generateReleaseNotes(
-      repoName: "mobile-wallet-testing",
-    )
+    releaseNotes = generateReleaseNotes()
 
     # Write the generated release notes to default.txt
     buildConfigPath = "metadata/android/en-GB/changelogs/default.txt"
@@ -64,9 +62,7 @@ platform :android do
     options[:groups] ||= "mifos-wallet-testers"
 
     # Generate Release Note
-    releaseNotes = generateReleaseNotes(
-      repoName: "mobile-wallet-testing",
-    )
+    releaseNotes = generateReleaseNotes()
 
     firebase_app_distribution(
       app: "1:64530857057:android:f8d67b786db1b844",
@@ -211,9 +207,7 @@ platform :ios do
 
     increment_version()
     build_ios()
-    releaseNotes = generateReleaseNotes(
-      repoName: "mobile-wallet-testing",
-    )
+    releaseNotes = generateReleaseNotes()
     release = firebase_app_distribution(
       app: "1:728434912738:ios:86a7badfaed88b841a1dbb",
       service_credentials_file: options[:serviceCredsFile],
@@ -224,7 +218,7 @@ platform :ios do
   end
 
   desc "Generate release notes"
-  lane :generateReleaseNotes do |options|
+  lane :generateReleaseNotes do
     branchName = `git rev-parse --abbrev-ref HEAD`.chomp()
     releaseNotes = changelog_from_git_commits(
       commits_count: 1,
