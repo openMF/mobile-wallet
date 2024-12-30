@@ -4,9 +4,8 @@
 
 ### Android
 
-https://github.com/user-attachments/assets/40c2da0b-776f-4378-9873-4701afe3fa96
-
-https://github.com/user-attachments/assets/7ca2db8b-cdfc-4a72-bc0a-9113d597c17b
+| ![Screenshot (101)](https://github.com/user-attachments/assets/40c2da0b-776f-4378-9873-4701afe3fa96) | ![Screenshot (102)](https://github.com/user-attachments/assets/7ca2db8b-cdfc-4a72-bc0a-9113d597c17b) |
+|------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
 
 ### Desktop
 
