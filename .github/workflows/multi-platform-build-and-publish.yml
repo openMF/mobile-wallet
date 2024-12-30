@@ -74,11 +74,6 @@ on:
         default: 'dev'
         description: 'Target branch for release'
 
-      publish_android:
-        type: boolean
-        default: false
-        description: Publish Android App On Play Store
-
       build_ios:
         type: boolean
         default: false
@@ -110,7 +105,6 @@ jobs:
       desktop_package_name: 'mifospay-desktop' # <-- Change this to your desktop package name
       web_package_name: 'mifospay-web'   # <-- Change this to your web package name
       tester_groups: 'mobile-wallet-testing' # <-- Change this to your Firebase tester group
-      publish_android: ${{ inputs.publish_android }}
       build_ios: ${{ inputs.build_ios }}
       publish_ios: ${{ inputs.publish_ios }}
     secrets:
