@@ -71,7 +71,7 @@ on:
 
       target_branch:
         type: string
-        default: 'dev'
+        default: 'development'
         description: 'Target branch for release'
 
       build_ios:
@@ -104,7 +104,7 @@ jobs:
       ios_package_name: 'mifospay-ios' # <-- Change this to your ios package name
       desktop_package_name: 'mifospay-desktop' # <-- Change this to your desktop package name
       web_package_name: 'mifospay-web'   # <-- Change this to your web package name
-      tester_groups: 'mobile-wallet-testing' # <-- Change this to your Firebase tester group
+      tester_groups: 'mifos-mobile-testers' # <-- Change this to your Firebase tester group
       build_ios: ${{ inputs.build_ios }}
       publish_ios: ${{ inputs.publish_ios }}
     secrets:
