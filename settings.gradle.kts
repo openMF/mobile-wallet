@@ -76,3 +76,4 @@ include(":feature:upi-setup")
 include(":feature:qr")
 
 include(":libs:mifos-passcode")
+include(":core:network:networkclienttest")

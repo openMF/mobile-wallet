@@ -77,4 +77,9 @@ dependencies {
     add("kspIosX64", libs.ktorfit.ksp)
     add("kspIosArm64", libs.ktorfit.ksp)
     add("kspIosSimulatorArm64", libs.ktorfit.ksp)
+    testImplementation ("org.jetbrains.kotlin:kotlin-test:1.8.21")
+    testImplementation ("org.jetbrains.kotlin:kotlin-test-junit:1.8.21")
+    testImplementation ("io.mockk:mockk:1.13.4")  // Mocking library
+    testImplementation ("androidx.test.ext:junit:1.1.5")  // JUnit for Android
+    testImplementation ("androidx.test:core:1.4.0") // For Android testing support
 }
