@@ -15,9 +15,11 @@ Following recommended architecture and design patterns, the application is devel
 ![badge-desktop](http://img.shields.io/badge/platform-desktop-DB413D.svg?style=flat)
 ![badge-js](http://img.shields.io/badge/platform-web-FDD835.svg?style=flat)
 
-
 [![PR Checks](https://github.com/openMF/mobile-wallet/actions/workflows/pr-check.yml/badge.svg)](https://github.com/openMF/mobile-wallet/actions/workflows/pr-check.yml)
 [![Join the chat at https://mifos.slack.com/](https://img.shields.io/badge/Join%20Our%20Community-Slack-blue)](https://mifos.slack.com/)
+[![Join Zoom Meeting](https://img.shields.io/badge/Join%20Zoom%20Meeting-blue?style=flat&logo=zoom)](https://us02web.zoom.us/meeting/register/PIZxFF_3Qi2H056amyjj2Q#/registration)
+
+
 
 </div>
 
@@ -41,6 +43,10 @@ Following recommended architecture and design patterns, the application is devel
 
 ### Join Us on Slack
 Mifos boasts an active and vibrant contributor community, Please join us on [slack](https://join.slack.com/t/mifos/shared_invite/zt-2f4nr6tk3-ZJlHMi1lc0R19FFEHxdvng). Once you've joined the mifos slack community, please join the `#mobile-wallet` channel to engage with mobile-wallet development. If you encounter any difficulties joining our Slack channel, please don't hesitate to open an issue. This will allow us to assist you promptly or send you an invitation.
+
+### Join Us on Zoom
+We also host regular community calls. Please register for the upcoming Zoom meeting using the link below:  
+[**Join the Zoom Meeting**](https://us02web.zoom.us/meeting/register/PIZxFF_3Qi2H056amyjj2Q#/registration)
 
 ### How to Contribute
 Thank you for your interest in contributing to the Mobile Wallet project by Mifos! We welcome all contributions and encourage you to follow these guidelines to ensure a smooth and efficient collaboration process.
