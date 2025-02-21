@@ -25,7 +25,7 @@ Following recommended architecture and design patterns, the application is devel
 
 > \[!Note]
 > **We're moving towards to Jira for issue tracking. Please use [Jira](https://mifosforge.jira.com/jira/software/c/projects/MIFOSAC/issues/) for issue tracking.**
-> **And Join our [slack](https://join.slack.com/t/mifos/shared_invite/zt-2wvi9t82t-DuSBdqdQVOY9fsqsLjkKPA) community channel `android-client` to discuss all things about Android Client development. Please keep discussions focused and avoid cross-posting across channels.**
+> **And Join our [slack](https://mifosforge.jira.com/jira/software/c/projects/MW/boards/66) community channel `mobile-wallet` to discuss all things about Android Client development. Please keep discussions focused and avoid cross-posting across channels.**
 > **Please join our daily Mobile Stand-Up on [Zoom](https://us02web.zoom.us/meeting/register/PIZxFF_3Qi2H056amyjj2Q#/registration).**
 
 <div align="center"><a name="readme-top"></a></div>
