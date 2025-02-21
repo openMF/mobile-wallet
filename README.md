@@ -17,9 +17,16 @@ Following recommended architecture and design patterns, the application is devel
 
 
 [![PR Checks](https://github.com/openMF/mobile-wallet/actions/workflows/pr-check.yml/badge.svg)](https://github.com/openMF/mobile-wallet/actions/workflows/pr-check.yml)
-[![Join the chat at https://mifos.slack.com/](https://img.shields.io/badge/Join%20Our%20Community-Slack-blue)](https://mifos.slack.com/)
+[![Slack](https://img.shields.io/badge/Slack-4A154B?style=flat-square&logo=slack&logoColor=white)](https://join.slack.com/t/mifos/shared_invite/zt-2wvi9t82t-DuSBdqdQVOY9fsqsLjkKPA)
+[![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=flat-square&logo=jira&logoColor=white)](https://mifosforge.jira.com/jira/software/c/projects/MIFOSAC/issues/?filter=allissues&jql=project%20%3D%20%22MM%22%20ORDER%20BY%20created%20DESC)
+[![Zoom](https://img.shields.io/badge/Zoom-2D8CFF?style=flat-square&logo=zoom&logoColor=white)](https://us02web.zoom.us/meeting/register/PIZxFF_3Qi2H056amyjj2Q#/registration)
 
 </div>
+
+> \[!Note]
+> **We're moving towards to Jira for issue tracking. Please use [Jira](https://mifosforge.jira.com/jira/software/c/projects/MIFOSAC/issues/) for issue tracking.**
+> **And Join our [slack](https://join.slack.com/t/mifos/shared_invite/zt-2wvi9t82t-DuSBdqdQVOY9fsqsLjkKPA) community channel `android-client` to discuss all things about Android Client development. Please keep discussions focused and avoid cross-posting across channels.**
+> **Please join our daily Mobile Stand-Up on [Zoom](https://us02web.zoom.us/meeting/register/PIZxFF_3Qi2H056amyjj2Q#/registration).**
 
 <div align="center"><a name="readme-top"></a></div>
 
