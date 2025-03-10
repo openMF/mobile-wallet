@@ -182,7 +182,7 @@ private fun MifosAppBar(
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        title = { Text(text = title) },
+        title = { Text(text = title, color = Color.Black) },
         actions = {
             Box {
                 when (destination) {

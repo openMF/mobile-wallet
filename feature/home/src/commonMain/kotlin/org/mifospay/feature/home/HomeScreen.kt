@@ -62,6 +62,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -161,6 +162,7 @@ internal fun HomeScreen(
 }
 
 @Composable
+@Preview
 fun HomeScreenContent(
     viewState: ViewState,
     defaultAccountId: Long?,
@@ -527,7 +529,7 @@ private fun MifosSendMoneyFreeCard(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = MaterialTheme.colorScheme.background,
         ),
     ) {
         Row(
@@ -547,7 +549,6 @@ private fun MifosSendMoneyFreeCard(
                 )
                 Text(
                     text = stringResource(Res.string.feature_home_desc),
-                    color = NewUi.onSurface,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight(300),
                 )
