@@ -75,6 +75,14 @@ import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.utils.EventsEffect
 
+/**
+ * Composable function for the Add/Edit Saving Account screen.
+ * 
+ * @param navigateBack Callback to navigate back to the previous screen.
+ * @param modifier Optional modifier for the screen.
+ * @param viewModel ViewModel for managing the state of the screen.
+ */
+ 
 @Composable
 internal fun AddEditSavingAccountScreen(
     navigateBack: () -> Unit,
@@ -87,6 +95,7 @@ internal fun AddEditSavingAccountScreen(
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
     val localeList by viewModel.localeList.collectAsStateWithLifecycle()
 
+    // Handle events from the ViewModel
     EventsEffect(viewModel) { event ->
         when (event) {
             is AESEvent.OnNavigateBack -> navigateBack.invoke()
@@ -98,6 +107,7 @@ internal fun AddEditSavingAccountScreen(
         }
     }
 
+    // Display dialogs based on the current dialog state
     SavingAccountDialogs(
         dialogState = state.dialogState,
         onDismissRequest = remember(viewModel) {
@@ -105,6 +115,7 @@ internal fun AddEditSavingAccountScreen(
         },
     )
 
+    // Display the main content of the Add/Edit Saving Account screen
     AddEditSavingAccountScreenContent(
         state = state,
         localeList = localeList,
@@ -116,6 +127,12 @@ internal fun AddEditSavingAccountScreen(
     )
 }
 
+/**
+ * Displays dialogs based on the current dialog state.
+ * 
+ * @param dialogState The current state of the dialog.
+ * @param onDismissRequest Callback for dismissing the dialog.
+ */
 @Composable
 private fun SavingAccountDialogs(
     dialogState: AESState.DialogState?,
@@ -137,6 +154,15 @@ private fun SavingAccountDialogs(
     }
 }
 
+/**
+ * Displays the content of the Add/Edit Saving Account screen.
+ * 
+ * @param state The current state of the screen.
+ * @param localeList The list of available locales.
+ * @param snackbarHostState State for showing snackbar messages.
+ * @param modifier Optional modifier for the content.
+ * @param onAction Callback for handling user actions.
+ */
 @Composable
 internal fun AddEditSavingAccountScreenContent(
     state: AESState,
@@ -188,6 +214,17 @@ internal fun AddEditSavingAccountScreenContent(
     }
 }
 
+/**
+ * Displays the content of the Add/Edit Saving Account screen.
+ * 
+ * @param btnText The text for the action button (Save/Update).
+ * @param isInEditMode Whether the screen is in edit mode.
+ * @param state The current content state of the screen.
+ * @param localeList The list of available locales.
+ * @param modifier Optional modifier for the content.
+ * @param lazyListState State for the lazy list.
+ * @param onAction Callback for handling user actions.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AddEditSavingAccountScreenContent(
@@ -507,6 +544,14 @@ internal fun AddEditSavingAccountScreenContent(
     }
 }
 
+/**
+ * Displays a custom checkbox with a label.
+ * 
+ * @param modifier Optional modifier for the checkbox.
+ * @param text The label text for the checkbox.
+ * @param checked Whether the checkbox is checked.
+ * @param onCheckedChange Callback for handling checkbox state changes.
+ */
 @Composable
 private fun CustomCheckbox(
     modifier: Modifier = Modifier,

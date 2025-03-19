@@ -12,16 +12,30 @@ package org.mifospay.feature.accounts.savingsaccount
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 
+/**
+ * Sealed class representing the type of operation for adding or editing a savings account.
+ */
 sealed class SavingsAddEditType : Parcelable {
 
+    /**
+     * The ID of the savings account being edited, if applicable.
+     */
     abstract val savingsAccountId: Long?
 
+    /**
+     * Represents the action of adding a new savings account.
+     */
     @Parcelize
     data object AddItem : SavingsAddEditType() {
         override val savingsAccountId: Long?
             get() = null
     }
 
+    /**
+     * Represents the action of editing an existing savings account.
+     * 
+     * @property savingsAccountId The ID of the savings account to be edited.
+     */
     @Parcelize
     data class EditItem(
         override val savingsAccountId: Long,

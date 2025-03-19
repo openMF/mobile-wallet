@@ -82,6 +82,20 @@ import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
 
+
+
+/**
+ * Displays the accounts screen with a list of savings accounts and beneficiaries.
+ * 
+ * @param onViewSavingAccountDetails Callback for viewing details of a savings account
+ * @param onAddEditSavingsAccount Callback for adding or editing a savings account
+ * @param onAddOrEditBeneficiary Callback for adding or editing a beneficiary
+ * @param modifier Optional modifier for the screen
+ * @param viewModel AccountViewModel instance for state management
+ */
+
+
+
 @Composable
 fun AccountsScreen(
     onViewSavingAccountDetails: (Long) -> Unit,
@@ -133,6 +147,18 @@ fun AccountsScreen(
         modifier = modifier,
     )
 }
+
+
+/**
+ * Displays the content of the accounts screen based on the current state.
+ * 
+ * @param defaultAccountId The ID of the default account
+ * @param state The current state of the account
+ * @param onAction Callback for handling user actions
+ * @param snackbarHostState State for showing snackbar messages
+ * @param modifier Optional modifier for the content
+ */
+
 
 @Composable
 internal fun AccountsScreenContent(
@@ -197,6 +223,18 @@ internal fun AccountsScreenContent(
     }
 }
 
+
+/**
+ * Displays the content of the accounts screen based on the current state.
+ * 
+ * @param defaultAccountId The ID of the default account
+ * @param state The current state of the account
+ * @param onAction Callback for handling user actions
+ * @param snackbarHostState State for showing snackbar messages
+ * @param modifier Optional modifier for the content
+ */
+
+
 @Composable
 internal fun AccountsScreenContent(
     defaultAccountId: Long?,
@@ -229,6 +267,21 @@ internal fun AccountsScreenContent(
         },
     )
 }
+/**
+ * Displays a list of accounts and beneficiaries.
+ * 
+ * @param defaultAccountId The ID of the default account
+ * @param accounts The list of accounts to display
+ * @param beneficiaryList The list of beneficiaries to display
+ * @param onAccountClicked Callback for handling account clicks
+ * @param onAddTPTBeneficiary Callback for adding a beneficiary
+ * @param onClickEditBeneficiary Callback for editing a beneficiary
+ * @param onClickDeleteBeneficiary Callback for deleting a beneficiary
+ * @param onClickEditAccount Callback for editing an account
+ * @param onClickViewAccount Callback for viewing account details
+ * @param modifier Optional modifier for the list
+ * @param lazyListState State for the lazy list
+ */
 
 @Composable
 private fun AccountsList(
@@ -331,6 +384,19 @@ private fun AccountsList(
         }
     }
 }
+
+
+/**
+ * Displays an individual account item in the list.
+ * 
+ * @param account The account to display
+ * @param isDefault Whether this account is the default account
+ * @param modifier Optional modifier for the item
+ * @param onClick Callback for handling account clicks
+ * @param onClickEditAccount Callback for handling edit account clicks
+ * @param onClickViewAccount Callback for handling view account clicks
+ */
+
 
 @Composable
 private fun AccountItem(
@@ -462,6 +528,18 @@ private fun AccountItem(
     }
 }
 
+
+/**
+ * Displays an individual beneficiary item in the list.
+ * 
+ * @param beneficiary The beneficiary to display
+ * @param modifier Optional modifier for the item
+ * @param onClickEdit Callback for handling edit beneficiary clicks
+ * @param onClickDelete Callback for handling delete beneficiary clicks
+ */
+
+
+
 @Composable
 private fun BeneficiaryItem(
     beneficiary: Beneficiary,
@@ -529,6 +607,16 @@ private fun BeneficiaryItem(
     }
 }
 
+
+
+/**
+ * Displays dialogs based on the current dialog state.
+ * 
+ * @param dialogState The current state of the dialog
+ * @param onDismissRequest Callback for dismissing the dialog
+ */
+
+
 @Composable
 private fun AccountDialogs(
     dialogState: AccountState.DialogState?,
@@ -589,6 +677,14 @@ private fun SavingAccountStatusCard(
         }
     }
 }
+
+/**
+ * Displays a chip for the account status.
+ * 
+ * @param label The label for the chip
+ */
+@Composable
+
 
 @Composable
 private fun StatusChip(label: String) {

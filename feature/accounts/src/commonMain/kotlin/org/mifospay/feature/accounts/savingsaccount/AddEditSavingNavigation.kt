@@ -29,6 +29,12 @@ private const val ADD_EDIT_ITEM_ROUTE: String =
         "/{$ADD_EDIT_ITEM_TYPE}" +
         "?$EDIT_ITEM_ID={$EDIT_ITEM_ID}"
 
+/**
+ * Data class representing the arguments for adding or editing a savings account.
+ * 
+ * @property savingsAddEditType The type of operation (add or edit) for the savings account.
+ */
+
 data class SavingAccountAddEditArgs(
     val savingsAddEditType: SavingsAddEditType,
 ) {
@@ -46,6 +52,14 @@ data class SavingAccountAddEditArgs(
     )
 }
 
+
+/**
+ * Adds the edit saving account screen to the navigation graph.
+ * 
+ * @param navigateBack Callback to navigate back to the previous screen.
+ */
+
+
 fun NavGraphBuilder.addEditSavingAccountScreen(
     navigateBack: () -> Unit,
 ) {
@@ -61,6 +75,13 @@ fun NavGraphBuilder.addEditSavingAccountScreen(
     }
 }
 
+/**
+ * Navigates to the add/edit saving account screen.
+ * 
+ * @param addEditType The type of operation (add or edit) for the savings account.
+ * @param navOptions Optional navigation options.
+ */
+
 fun NavController.navigateToSavingAccountAddEdit(
     addEditType: SavingsAddEditType,
     navOptions: NavOptions? = null,
@@ -72,11 +93,26 @@ fun NavController.navigateToSavingAccountAddEdit(
     )
 }
 
+
+/**
+ * Converts the savings add/edit type to a string representation.
+ * 
+ * @return The string representation of the savings add/edit type.
+ */
+
+
 private fun SavingsAddEditType.toTypeString(): String =
     when (this) {
         is SavingsAddEditType.AddItem -> ADD_TYPE
         is SavingsAddEditType.EditItem -> EDIT_TYPE
     }
+
+
+/**
+ * Converts the savings add/edit type to its ID or null if it's an add operation.
+ * 
+ * @return The ID of the savings account or null.
+ */
 
 private fun SavingsAddEditType.toIdOrNull(): String? =
     when (this) {

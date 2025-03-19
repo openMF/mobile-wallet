@@ -20,6 +20,12 @@ private const val ACCOUNT_ID = "accountId"
 
 private const val BASE_ROUTE = "$ROUTE?$ACCOUNT_ID={$ACCOUNT_ID}"
 
+/**
+ * Adds the saving account detail screen to the navigation graph.
+ * 
+ * @param navigateBack Callback to navigate back to the previous screen.
+ * @param onViewTransaction Callback to view a specific transaction.
+ */
 fun NavGraphBuilder.savingAccountDetailRoute(
     navigateBack: () -> Unit,
     onViewTransaction: (Long, Long) -> Unit,
@@ -37,6 +43,11 @@ fun NavGraphBuilder.savingAccountDetailRoute(
     }
 }
 
+/**
+ * Navigates to the saving account details screen.
+ * 
+ * @param accountId The ID of the savings account to view.
+ */
 fun NavController.navigateToSavingAccountDetails(accountId: Long) {
     navigate("$ROUTE?$ACCOUNT_ID=$accountId")
 }

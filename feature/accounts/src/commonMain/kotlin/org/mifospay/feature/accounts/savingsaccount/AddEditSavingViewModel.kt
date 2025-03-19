@@ -37,10 +37,18 @@ import org.mifospay.feature.accounts.savingsaccount.AESState.DialogState.Error a
 
 private const val KEY = "add_edit_saving_state"
 
+/**
+ * ViewModel for managing the creation and editing of savings accounts.
+ * 
+ * @param repository Repository for savings account operations
+ * @param userRepository Repository for user preferences
+ * @param localAssetRepository Repository for local asset data
+ * @param savedStateHandle Handle for saving and restoring state
+ */
 internal class AddEditSavingViewModel(
     private val repository: SavingsAccountRepository,
     private val userRepository: UserPreferencesRepository,
-    localAssetRepository: LocalAssetRepository,
+    private val localAssetRepository: LocalAssetRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<AESState, AESEvent, AESAction>(
     initialState = savedStateHandle[KEY] ?: run {
@@ -61,16 +69,20 @@ internal class AddEditSavingViewModel(
         initialValue = emptyList(),
     )
 
+    /**
+     * Initializes the ViewModel and fetches saving account templates.
+     */
     init {
-//        stateFlow
-//            .onEach { savedStateHandle[KEY] = it }
-//            .launchIn(viewModelScope)
-
         repository.getSavingAccountTemplate(state.clientId).onEach {
             sendAction(HandleSavingTemplateResult(it))
         }.launchIn(viewModelScope)
     }
 
+    /**
+     * Handles user actions related to savings accounts.
+     * 
+     * @param action The action to handle
+     */
     override fun handleAction(action: AESAction) {
         when (action) {
             is AESAction.ExternalIdChanged -> {
@@ -151,6 +163,9 @@ internal class AddEditSavingViewModel(
         }
     }
 
+    /**
+     * Initiates the process to create or update a savings account.
+     */
     private fun initiateCreateOrUpdateSavingAccount() {
         onContent { content ->
             when (state.type) {
@@ -253,6 +268,11 @@ internal class AddEditSavingViewModel(
         }
     }
 
+    /**
+     * Handles the result of fetching saving account templates.
+     * 
+     * @param action The action containing the result
+     */
     private fun handleSavingTemplateResult(action: HandleSavingTemplateResult) {
         when (action.result) {
             is DataState.Loading -> {
@@ -275,6 +295,11 @@ internal class AddEditSavingViewModel(
         }
     }
 
+    /**
+     * Handles the result of a saving account creation or update.
+     * 
+     * @param action The action containing the result
+     */
     private fun handleSavingAddEditResult(action: HandleSavingAddEditResult) {
         when (action.result) {
             is DataState.Loading -> {
@@ -300,12 +325,22 @@ internal class AddEditSavingViewModel(
         }
     }
 
+    /**
+     * Updates the content of the current state.
+     * 
+     * @param block The function to apply to the current content
+     */
     private inline fun onContent(
         crossinline block: (AESState.ViewState.Content) -> Unit,
     ) {
         (state.viewState as? AESState.ViewState.Content)?.let(block)
     }
 
+    /**
+     * Updates the content of the current state.
+     * 
+     * @param block The function to apply to the current content
+     */
     private inline fun updateContent(
         crossinline block: (
             AESState.ViewState.Content,
@@ -319,6 +354,14 @@ internal class AddEditSavingViewModel(
     }
 }
 
+/**
+ * Data class representing the state of the add/edit savings account screen.
+ * 
+ * @property clientId The ID of the client
+ * @property type The type of savings account operation (add/edit)
+ * @property viewState The current view state
+ * @property dialogState The current state of any dialog being shown
+ */
 @Parcelize
 internal data class AESState(
     val clientId: Long,
@@ -397,11 +440,17 @@ internal data class AESState(
     }
 }
 
+/**
+ * Sealed interface representing events related to add/edit savings accounts.
+ */
 internal sealed interface AESEvent {
     data object OnNavigateBack : AESEvent
     data class ShowToast(val message: String) : AESEvent
 }
 
+/**
+ * Sealed interface representing actions related to add/edit savings accounts.
+ */
 internal sealed interface AESAction {
     data class ProductChanged(val productId: Long) : AESAction
     data class ExternalIdChanged(val externalId: String) : AESAction

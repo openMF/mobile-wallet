@@ -7,6 +7,44 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
+
+/**
+ * LoginScreen Component
+ * 
+ * This screen handles user authentication in the Mifos Pay application.
+ * It provides a user interface for users to enter their credentials and log in.
+ * 
+ * Features:
+ * - Username/password login
+ * - Biometric authentication
+ * - "Remember me" functionality
+ * - Forgot password option
+ * - Social login options
+ * 
+ * Components:
+ * - LoginForm: Main login form with input fields
+ * - LoginButton: Submit button for login
+ * - BiometricButton: Option for biometric login
+ * - SocialLoginButtons: Social media login options
+ * 
+ * State Management:
+ * - Uses LoginViewModel for state management
+ * - Handles loading states
+ * - Manages error states
+ * - Controls form validation
+ * 
+ * Navigation:
+ * - Navigates to Home screen on successful login
+ * - Navigates to ForgotPassword screen
+ * - Navigates to SignUp screen for new users
+ * 
+ * Security:
+ * - Implements secure credential handling
+ * - Supports biometric authentication
+ * - Handles session management
+ * - Manages secure token storage
+ */
+
 package org.mifospay.feature.auth.login
 
 import androidx.compose.foundation.clickable
@@ -58,6 +96,17 @@ import org.mifospay.core.ui.MifosPasswordField
 import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
+/**
+ * Main LoginScreen composable function
+ * 
+ * Handles the overall login screen layout and state management.
+ * 
+ * @param onNavigateBack Callback for navigating back
+ * @param navigateToPasscodeScreen Callback for navigating to passcode screen
+ * @param navigateToSignupScreen Callback for navigating to signup screen
+ * @param modifier Optional modifier for the screen
+ * @param viewModel LoginViewModel instance for state management
+ */
 internal fun LoginScreen(
     onNavigateBack: () -> Unit,
     navigateToPasscodeScreen: () -> Unit,
@@ -101,6 +150,16 @@ internal fun LoginScreen(
 }
 
 @Composable
+/**
+ * Secondary LoginScreen composable function
+ * 
+ * Handles the actual UI layout and content of the login screen.
+ * 
+ * @param state Current login state
+ * @param snackbarHostState State for showing snackbar messages
+ * @param modifier Optional modifier for the screen
+ * @param onAction Callback for handling user actions
+ */
 private fun LoginScreen(
     state: LoginState,
     snackbarHostState: SnackbarHostState,
@@ -123,6 +182,14 @@ private fun LoginScreen(
 }
 
 @Composable
+/**
+ * Handles the display of various dialogs in the login screen
+ * 
+ * Shows error and loading dialogs based on the current dialog state
+ * 
+ * @param dialogState Current state of the dialog to display
+ * @param onDismissRequest Callback for dismissing the dialog
+ */
 private fun LoginDialogs(
     dialogState: LoginState.DialogState?,
     onDismissRequest: () -> Unit,
@@ -144,6 +211,16 @@ private fun LoginDialogs(
 }
 
 @Composable
+/**
+ * Main content of the login screen
+ * 
+ * Displays the login form with username and password fields,
+ * login button, and signup option
+ * 
+ * @param state Current login state
+ * @param modifier Optional modifier for the content
+ * @param onAction Callback for handling user actions
+ */
 private fun LoginScreenContent(
     state: LoginState,
     modifier: Modifier = Modifier,
@@ -217,6 +294,13 @@ private fun LoginScreenContent(
 }
 
 @Composable
+/**
+ * Signup button component
+ * 
+ * Displays the "Don't have an account?" text with a clickable signup link
+ * 
+ * @param navigateToSignupScreen Callback for navigating to signup screen
+ */
 private fun SignupButton(
     navigateToSignupScreen: () -> Unit,
 ) {
@@ -227,7 +311,7 @@ private fun SignupButton(
         horizontalArrangement = Arrangement.Center,
     ) {
         Text(
-            text = "Don’t have an account yet? ",
+            text = "Don't have an account yet? ",
             style = MaterialTheme.typography.labelLarge,
             color = MaterialTheme.colorScheme.onSurface,
         )
@@ -250,6 +334,11 @@ private fun SignupButton(
 
 @Preview
 @Composable
+/**
+ * Preview function for the LoginScreen
+ * 
+ * Used for previewing the login screen in Android Studio
+ */
 private fun LoanScreenPreview() {
     MifosTheme {
         LoginScreen(

@@ -72,6 +72,14 @@ import org.mifospay.core.ui.MifosDivider
 import org.mifospay.core.ui.TransactionHistoryCard
 import org.mifospay.core.ui.utils.EventsEffect
 
+/**
+ * Composable function for the Saving Account Detail screen.
+ * 
+ * @param navigateBack Callback to navigate back to the previous screen.
+ * @param onViewTransaction Callback to view a specific transaction.
+ * @param modifier Optional modifier for the screen.
+ * @param viewModel ViewModel for managing the state of the screen.
+ */
 @Composable
 internal fun SavingAccountDetailScreen(
     navigateBack: () -> Unit,
@@ -84,22 +92,22 @@ internal fun SavingAccountDetailScreen(
 
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
 
+    // Handle events from the ViewModel
     EventsEffect(viewModel) { event ->
         when (event) {
             is SADEvent.NavigateBack -> navigateBack.invoke()
-
             is SADEvent.ShowToast -> {
                 scope.launch {
                     snackbarHostState.showSnackbar(event.message)
                 }
             }
-
             is SADEvent.OnViewTransaction -> {
                 onViewTransaction(event.clientId, event.accountId)
             }
         }
     }
 
+    // Display the main content of the Saving Account Detail screen
     SavingAccountDetailScreen(
         state = state.viewState,
         snackbarHostState = snackbarHostState,
@@ -110,6 +118,14 @@ internal fun SavingAccountDetailScreen(
     )
 }
 
+/**
+ * Displays the content of the Saving Account Detail screen.
+ * 
+ * @param state The current state of the screen.
+ * @param snackbarHostState State for showing snackbar messages.
+ * @param modifier Optional modifier for the content.
+ * @param onAction Callback for handling user actions.
+ */
 @Composable
 @VisibleForTesting
 internal fun SavingAccountDetailScreen(
@@ -139,7 +155,6 @@ internal fun SavingAccountDetailScreen(
                         backgroundColor = MaterialTheme.colorScheme.surface,
                     )
                 }
-
                 is SADState.ViewState.Error -> {
                     EmptyContentScreen(
                         title = stringResource(Res.string.feature_accounts_error_oops),
@@ -148,7 +163,6 @@ internal fun SavingAccountDetailScreen(
                         iconTint = MaterialTheme.colorScheme.onSurface,
                     )
                 }
-
                 is SADState.ViewState.Content -> {
                     SavingAccountDetailScreenContent(
                         state = state,
@@ -160,6 +174,13 @@ internal fun SavingAccountDetailScreen(
     }
 }
 
+/**
+ * Displays the content of the Saving Account Detail screen.
+ * 
+ * @param state The current content state of the screen.
+ * @param modifier Optional modifier for the content.
+ * @param onAction Callback for handling user actions.
+ */
 @Composable
 private fun SavingAccountDetailScreenContent(
     state: SADState.ViewState.Content,
