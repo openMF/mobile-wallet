@@ -466,9 +466,11 @@ fun CardDropdownBox(
         ) {
             DropdownMenuItem(
                 text = {
-                    Text("Mark as Default",
-                        color = MaterialTheme.colorScheme.surface)
-                   },
+                    Text(
+                        "Mark as Default",
+                        color = MaterialTheme.colorScheme.surface,
+                    )
+                },
                 onClick = {
                     onClickDefault()
                     showDropdown = false

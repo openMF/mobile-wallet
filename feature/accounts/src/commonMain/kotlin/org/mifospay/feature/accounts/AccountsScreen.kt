@@ -407,7 +407,7 @@ private fun AccountItem(
             shape = it,
             colors = CardDefaults.outlinedCardColors(
                 containerColor = MaterialTheme.colorScheme.primaryContainer,
-                contentColor = MaterialTheme.colorScheme.onBackground
+                contentColor = MaterialTheme.colorScheme.onBackground,
             ),
         ) {
             ListItem(

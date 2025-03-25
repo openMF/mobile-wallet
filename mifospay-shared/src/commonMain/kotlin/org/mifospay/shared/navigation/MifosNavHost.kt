@@ -154,7 +154,7 @@ internal fun MifosNavHost(
         startDestination = HOME_ROUTE,
         navController = navController,
         modifier = modifier,
-    ){
+    ) {
         homeScreen(
             onNavigateBack = navController::popBackStack,
             onRequest = {

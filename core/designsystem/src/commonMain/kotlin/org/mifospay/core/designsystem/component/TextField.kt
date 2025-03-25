@@ -353,7 +353,6 @@ fun MifosCustomTextField(
     }
 }
 
-
 @Composable
 private fun ClearIconButton(
     showClearIcon: Boolean,

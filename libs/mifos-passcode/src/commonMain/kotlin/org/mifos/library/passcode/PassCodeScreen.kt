@@ -96,7 +96,7 @@ internal fun PasscodeScreen(
     Scaffold(
         modifier = modifier
             .fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background
+        containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
         Column(
             modifier = Modifier

@@ -240,97 +240,103 @@ private fun SavingAccountSummaryCard(
             RowBlock {
                 Text(
                     text = "Account Balance",
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = summary.formatAmount(summary.accountBalance),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Deposits",
-                    color = MaterialTheme.colorScheme.onSurface
+                Text(
+                    text = "Total Deposits",
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = summary.formatAmount(summary.totalDeposits),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Withdrawals",
-                    color = MaterialTheme.colorScheme.onSurface
+                Text(
+                    text = "Total Withdrawals",
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = summary.formatAmount(summary.totalWithdrawals),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Available Balance",
-                    color = MaterialTheme.colorScheme.onSurface
+                Text(
+                    text = "Available Balance",
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = summary.formatAmount(summary.availableBalance),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Interest Posted",
-                    color = MaterialTheme.colorScheme.onSurface
+                Text(
+                    text = "Total Interest Posted",
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = summary.totalInterestPosted.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Overdraft",
-                    color = MaterialTheme.colorScheme.onSurface
+                Text(
+                    text = "Total Overdraft",
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = summary.totalOverdraftInterestDerived.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Interest Not Posted",
-                    color = MaterialTheme.colorScheme.onSurface
+                Text(
+                    text = "Interest Not Posted",
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
                 Text(
                     text = summary.interestNotPosted.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
-                    color = MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
         }

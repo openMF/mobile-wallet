@@ -118,7 +118,7 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.NavigateToNotificationSettings)
                 },
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
 
             SettingsCardItem(
@@ -127,7 +127,7 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.NavigateToFaqScreen)
                 },
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
 
             SettingsCardItem(
@@ -136,7 +136,7 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.ChangePassword)
                 },
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
 
             SettingsCardItem(
@@ -145,7 +145,7 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.ChangePasscode)
                 },
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
 
             SettingsCardItem(
@@ -154,7 +154,7 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.Logout)
                 },
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
 
             SettingsCardItem(

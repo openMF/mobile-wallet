@@ -126,7 +126,7 @@ internal fun MifosApp(
                                 WindowInsetsSides.Horizontal,
                             ),
                         ),
-                ){
+                ) {
                     if (appState.shouldShowNavRail && destination != null) {
                         MifosNavRail(
                             destinations = appState.topLevelDestinations,

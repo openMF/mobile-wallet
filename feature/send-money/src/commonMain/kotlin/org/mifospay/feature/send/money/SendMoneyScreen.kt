@@ -242,9 +242,7 @@ private fun SendMoneyBottomBar(
                 onClick = onClickProceed,
                 enabled = showDetails,
                 modifier = Modifier.fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-
-                )
+                colors = ButtonDefaults.buttonColors(),
             ) {
                 Text(text = "Proceed")
             }

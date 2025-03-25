@@ -11,17 +11,16 @@ package org.mifospay.feature.qr
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.provider.Settings
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
-import androidx.core.net.toUri
 
 /**
  * Original source: https://github.com/kalinjul/EasyQRScan
