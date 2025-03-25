@@ -21,6 +21,7 @@ import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
+import androidx.core.net.toUri
 
 /**
  * Original source: https://github.com/kalinjul/EasyQRScan
@@ -55,8 +56,8 @@ class AccompanistPermissionWrapper(
 
     override fun goToSettings() {
         val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-        intent.data = Uri.parse("package:" + context.packageName)
-        ContextCompat.startActivity(context, intent, null)
+        intent.data = ("package:" + context.packageName).toUri()
+        ContextCompat.startActivities(context, arrayOf(intent), null)
     }
 }
 

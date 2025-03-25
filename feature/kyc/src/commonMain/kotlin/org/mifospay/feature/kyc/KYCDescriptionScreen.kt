@@ -170,8 +170,9 @@ private fun KYCLevelCard(
             onClick = onClick,
             shape = RoundedCornerShape(4.dp),
             colors = CardDefaults.outlinedCardColors(
-                containerColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onBackground,
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
             ),
             border = CardDefaults.outlinedCardBorder(true),
             modifier = Modifier.weight(2.5f, false),

@@ -222,7 +222,7 @@ private fun SavingAccountSummaryCard(
         modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
     ) {
         Column(
@@ -238,77 +238,99 @@ private fun SavingAccountSummaryCard(
             MifosDivider()
 
             RowBlock {
-                Text(text = "Account Balance")
+                Text(
+                    text = "Account Balance",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Text(
                     text = summary.formatAmount(summary.accountBalance),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Deposits")
+                Text(text = "Total Deposits",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Text(
                     text = summary.formatAmount(summary.totalDeposits),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Withdrawals")
+                Text(text = "Total Withdrawals",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Text(
                     text = summary.formatAmount(summary.totalWithdrawals),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Available Balance")
+                Text(text = "Available Balance",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Text(
                     text = summary.formatAmount(summary.availableBalance),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Interest Posted")
+                Text(text = "Total Interest Posted",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Text(
                     text = summary.totalInterestPosted.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Total Overdraft")
+                Text(text = "Total Overdraft",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Text(
                     text = summary.totalOverdraftInterestDerived.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
 
             MifosDivider()
 
             RowBlock {
-                Text(text = "Interest Not Posted")
+                Text(text = "Interest Not Posted",
+                    color = MaterialTheme.colorScheme.onSurface
+                )
                 Text(
                     text = summary.interestNotPosted.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }

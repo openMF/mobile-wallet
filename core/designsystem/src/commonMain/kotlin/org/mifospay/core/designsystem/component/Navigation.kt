@@ -86,7 +86,7 @@ fun MifosNavigationBar(
 ) {
     NavigationBar(
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         contentColor = MifosNavigationDefaults.navigationContentColor(),
         tonalElevation = 0.dp,
         content = content,
@@ -153,7 +153,7 @@ fun MifosNavigationRail(
 ) {
     NavigationRail(
         modifier = modifier,
-        containerColor = Color.Transparent,
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
         contentColor = MifosNavigationDefaults.navigationContentColor(),
         header = header,
         content = content,

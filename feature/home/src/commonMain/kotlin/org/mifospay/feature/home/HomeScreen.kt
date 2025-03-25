@@ -62,6 +62,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -370,7 +371,7 @@ private fun AccountCard(
                     if (it) {
                         MifosSmallChip(
                             label = "Default",
-                            containerColor = MaterialTheme.colorScheme.primary,
+                            contentColor = MaterialTheme.colorScheme.onBackground,
                         )
                     } else {
                         CardDropdownBox(
@@ -448,7 +449,8 @@ fun CardDropdownBox(
                 showDropdown = !showDropdown
             },
             colors = IconButtonDefaults.iconButtonColors(
-                contentColor = MaterialTheme.colorScheme.surface,
+                containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onBackground,
             ),
         ) {
             Icon(
@@ -460,9 +462,13 @@ fun CardDropdownBox(
         DropdownMenu(
             expanded = showDropdown,
             onDismissRequest = { showDropdown = false },
+            containerColor = MaterialTheme.colorScheme.background,
         ) {
             DropdownMenuItem(
-                text = { Text("Mark as Default") },
+                text = {
+                    Text("Mark as Default",
+                        color = MaterialTheme.colorScheme.surface)
+                   },
                 onClick = {
                     onClickDefault()
                     showDropdown = false
@@ -527,7 +533,7 @@ private fun MifosSendMoneyFreeCard(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
     ) {
         Row(
@@ -547,7 +553,7 @@ private fun MifosSendMoneyFreeCard(
                 )
                 Text(
                     text = stringResource(Res.string.feature_home_desc),
-                    color = NewUi.onSurface,
+                    color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight(300),
                 )
@@ -574,7 +580,7 @@ private fun PaymentButton(
         modifier = modifier,
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(
-            containerColor = MaterialTheme.colorScheme.surface,
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
             contentColor = MaterialTheme.colorScheme.onSurface,
         ),
     ) {

@@ -29,6 +29,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -100,7 +101,7 @@ internal fun MifosApp(
 
             Scaffold(
                 modifier = Modifier,
-                containerColor = Color.Transparent,
+                containerColor = MaterialTheme.colorScheme.background,
                 contentColor = MaterialTheme.colorScheme.onBackground,
                 snackbarHost = { SnackbarHost(snackbarHostState) },
                 bottomBar = {
@@ -115,7 +116,7 @@ internal fun MifosApp(
                     }
                 },
             ) { padding ->
-                Row(
+                Surface(
                     Modifier
                         .fillMaxSize()
                         .padding(padding)
@@ -125,7 +126,7 @@ internal fun MifosApp(
                                 WindowInsetsSides.Horizontal,
                             ),
                         ),
-                ) {
+                ){
                     if (appState.shouldShowNavRail && destination != null) {
                         MifosNavRail(
                             destinations = appState.topLevelDestinations,

@@ -78,6 +78,8 @@ fun MifosPasswordField(
                 Text(
                     text = hint,
                     style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme
+                        .onBackground
                 )
             }
         },

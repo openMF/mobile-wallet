@@ -34,6 +34,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -203,7 +204,7 @@ private fun SendMoneyBottomBar(
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
-        color = NewUi.tertiaryContainer,
+        color = MaterialTheme.colorScheme.surfaceVariant,
         tonalElevation = 2.dp,
         shadowElevation = 2.dp,
     ) {
@@ -241,6 +242,9 @@ private fun SendMoneyBottomBar(
                 onClick = onClickProceed,
                 enabled = showDetails,
                 modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+
+                )
             ) {
                 Text(text = "Proceed")
             }
@@ -349,7 +353,7 @@ private fun SendMoneyCard(
         modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = NewUi.containerColor,
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
         shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
     ) {

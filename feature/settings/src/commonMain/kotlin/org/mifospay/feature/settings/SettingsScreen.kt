@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -117,6 +118,7 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.NavigateToNotificationSettings)
                 },
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             SettingsCardItem(
@@ -125,6 +127,7 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.NavigateToFaqScreen)
                 },
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             SettingsCardItem(
@@ -133,6 +136,7 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.ChangePassword)
                 },
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             SettingsCardItem(
@@ -141,6 +145,7 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.ChangePasscode)
                 },
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             SettingsCardItem(
@@ -149,6 +154,7 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.Logout)
                 },
+                color = MaterialTheme.colorScheme.onBackground
             )
 
             SettingsCardItem(

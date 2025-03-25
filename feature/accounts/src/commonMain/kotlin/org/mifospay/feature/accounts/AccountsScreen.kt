@@ -326,6 +326,7 @@ private fun AccountsList(
                     },
                     onClick = onAddTPTBeneficiary,
                     modifier = Modifier.align(Alignment.Center),
+
                 )
             }
         }
@@ -357,7 +358,7 @@ private fun AccountItem(
             Card(
                 modifier = Modifier.matchParentSize(),
                 colors = CardDefaults.cardColors(
-                    contentColor = MaterialTheme.colorScheme.onSecondary,
+                    contentColor = MaterialTheme.colorScheme.primary,
                     containerColor = Color.Transparent,
                 ),
                 shape = shape,
@@ -405,7 +406,8 @@ private fun AccountItem(
             modifier = modifier.fillMaxWidth(),
             shape = it,
             colors = CardDefaults.outlinedCardColors(
-                containerColor = Color.Transparent,
+                containerColor = MaterialTheme.colorScheme.primaryContainer,
+                contentColor = MaterialTheme.colorScheme.onBackground
             ),
         ) {
             ListItem(
@@ -433,13 +435,14 @@ private fun AccountItem(
                                 onClick = {},
                                 shape = RoundedCornerShape(4.dp),
                                 colors = CardDefaults.outlinedCardColors(
-                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                    containerColor = MaterialTheme.colorScheme.inversePrimary,
                                 ),
                             ) {
                                 Text(
                                     text = "Default",
                                     style = MaterialTheme.typography.bodySmall,
                                     modifier = Modifier.padding(4.dp),
+                                    color = MaterialTheme.colorScheme.onBackground,
                                 )
                             }
                         }

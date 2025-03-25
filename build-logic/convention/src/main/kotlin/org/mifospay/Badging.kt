@@ -97,7 +97,9 @@ fun Project.configureBadgingTasks(
     // Registers a callback to be called, when a new variant is configured
     componentsExtension.onVariants { variant ->
         // Registers a new task to verify the app bundle.
-        val capitalizedVariantName = variant.name.capitalized()
+        val capitalizedVariantName = variant.name.toString().replaceFirstChar { firstChar ->
+            if (firstChar.isLowerCase()) firstChar.titlecase() else firstChar.toString()
+        }
         val generateBadgingTaskName = "generate${capitalizedVariantName}Badging"
         val generateBadging =
             tasks.register<GenerateBadgingTask>(generateBadgingTaskName) {
