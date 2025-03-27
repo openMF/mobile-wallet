@@ -75,7 +75,6 @@ val md_theme_dark_outlineVariant = Color(0xFF514347)
 val md_theme_dark_scrim = Color(0xFF000000)
 val md_theme_dark_Container = Color(0xFF242424)
 
-
 // colors
 val black = Color(0xFF000000)
 val grey = Color(0xFF757074)
