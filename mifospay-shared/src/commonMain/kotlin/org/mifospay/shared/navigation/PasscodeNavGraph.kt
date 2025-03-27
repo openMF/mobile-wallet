@@ -48,7 +48,7 @@ fun NavController.navigateToMainGraph() {
         // Pop up to the start destination of the graph to
         // avoid building up a large stack of destinations
         // on the back stack as users select items
-        popUpTo(graph.findStartDestination().id) {
+        popUpTo(graph.findStartDestination().route!!) {
             saveState = false
         }
         // Avoid multiple copies of the same destination when

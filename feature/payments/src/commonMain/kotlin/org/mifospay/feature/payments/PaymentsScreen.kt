@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.ui.MifosScrollableTabRow
 import org.mifospay.core.ui.utility.TabContent
@@ -33,9 +35,15 @@ fun PaymentsRoute(
 private fun PaymentScreenContent(
     tabContents: List<TabContent>,
     modifier: Modifier = Modifier,
-) {
+){
     val pagerState = rememberPagerState(pageCount = { tabContents.size })
+    val localKeyboard = LocalSoftwareKeyboardController.current
 
+    LaunchedEffect(
+        pagerState.currentPage
+    ) {
+        localKeyboard?.hide()
+    }
     Column(
         modifier = modifier
             .fillMaxSize(),
