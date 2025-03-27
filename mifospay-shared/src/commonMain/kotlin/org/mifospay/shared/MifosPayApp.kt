@@ -62,7 +62,7 @@ private fun MifosPayApp(
             onClickLogout = {
                 viewModel.logOut()
                 navController.navigate(LOGIN_GRAPH) {
-                    popUpTo(navController.graph.startDestinationRoute!!) {
+                    popUpTo(navController.graph.id) {
                         inclusive = true
                     }
                 }

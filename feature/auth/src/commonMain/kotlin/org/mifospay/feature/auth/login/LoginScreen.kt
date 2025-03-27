@@ -170,6 +170,7 @@ private fun LoginScreenContent(
         )
         Spacer(modifier = Modifier.padding(top = 32.dp))
         MifosOutlinedTextField(
+            singleLine = true,
             label = stringResource(Res.string.feature_auth_username),
             value = state.username,
             onValueChange = {

@@ -35,12 +35,12 @@ fun PaymentsRoute(
 private fun PaymentScreenContent(
     tabContents: List<TabContent>,
     modifier: Modifier = Modifier,
-){
+) {
     val pagerState = rememberPagerState(pageCount = { tabContents.size })
     val localKeyboard = LocalSoftwareKeyboardController.current
 
     LaunchedEffect(
-        pagerState.currentPage
+        pagerState.currentPage,
     ) {
         localKeyboard?.hide()
     }

@@ -10,11 +10,11 @@
 package org.mifospay.shared.navigation
 
 import androidx.navigation.NavController
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
 import org.mifos.library.passcode.PASSCODE_SCREEN
+import org.mifos.library.passcode.navigateToPasscodeScreen
 import org.mifos.library.passcode.passcodeRoute
 
 internal fun NavGraphBuilder.passcodeNavGraph(navController: NavController) {
@@ -37,7 +37,7 @@ internal fun NavGraphBuilder.passcodeNavGraph(navController: NavController) {
             },
             onPasscodeRejected = {
                 navController.popBackStack()
-                navController.navigateToMainGraph()
+                navController.navigateToPasscodeScreen()
             },
         )
     }
@@ -48,7 +48,7 @@ fun NavController.navigateToMainGraph() {
         // Pop up to the start destination of the graph to
         // avoid building up a large stack of destinations
         // on the back stack as users select items
-        popUpTo(graph.findStartDestination().route!!) {
+        popUpTo(graph.id) {
             saveState = false
         }
         // Avoid multiple copies of the same destination when
