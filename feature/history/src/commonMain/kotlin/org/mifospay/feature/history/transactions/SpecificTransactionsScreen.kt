@@ -9,11 +9,13 @@
  */
 package org.mifospay.feature.history.transactions
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -64,7 +66,7 @@ internal fun SpecificTransactionsScreenContent(
     modifier: Modifier = Modifier,
 ) {
     MifosScaffold(
-        modifier = modifier,
+        modifier = modifier.background(MaterialTheme.colorScheme.background),
         topBarTitle = stringResource(Res.string.feature_history_specific_transactions_history),
         backPress = {
             onAction(STAction.NavigateBack)

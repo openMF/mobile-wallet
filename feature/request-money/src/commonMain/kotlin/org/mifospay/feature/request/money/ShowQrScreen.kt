@@ -105,7 +105,7 @@ internal fun ShowQrScreen(
     onAction: (ShowQrAction) -> Unit,
 ) {
     MifosScaffold(
-        modifier = modifier,
+        modifier = modifier.background(MaterialTheme.colorScheme.background),
         topBarTitle = "Request Money",
         backPress = {
             onAction(ShowQrAction.NavigateBack)

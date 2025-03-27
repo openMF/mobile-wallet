@@ -182,7 +182,7 @@ private fun MifosAppBar(
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
-        title = { Text(text = title) },
+        title = { Text(text = title)},
         actions = {
             Box {
                 when (destination) {
@@ -214,7 +214,7 @@ private fun MifosAppBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent,
+            containerColor = MaterialTheme.colorScheme.background,
         ),
         modifier = modifier.testTag("mifosTopAppBar"),
     )

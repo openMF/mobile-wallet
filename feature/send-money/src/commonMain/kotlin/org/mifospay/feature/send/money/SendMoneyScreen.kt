@@ -17,6 +17,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -130,7 +131,7 @@ private fun SendMoneyScreen(
     onAction: (SendMoneyAction) -> Unit,
 ) {
     MifosScaffold(
-        modifier = modifier,
+        modifier = modifier.background(MaterialTheme.colorScheme.background),
         topBar = {
             AnimatedVisibility(
                 visible = showTopBar,
@@ -203,7 +204,7 @@ private fun SendMoneyBottomBar(
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
-        color = NewUi.tertiaryContainer,
+        color = MaterialTheme.colorScheme.surface,
         tonalElevation = 2.dp,
         shadowElevation = 2.dp,
     ) {
@@ -349,7 +350,7 @@ private fun SendMoneyCard(
         modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = NewUi.containerColor,
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
     ) {

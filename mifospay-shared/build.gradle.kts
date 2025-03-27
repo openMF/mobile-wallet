@@ -98,6 +98,9 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 }
+dependencies {
+    implementation(libs.androidx.material3.android)
+}
 
 compose.resources {
     publicResClass = true
