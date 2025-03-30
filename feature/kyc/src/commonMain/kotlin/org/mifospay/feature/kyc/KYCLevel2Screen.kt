@@ -20,6 +20,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedCard
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -32,8 +33,9 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.ImageLoader
@@ -156,6 +158,9 @@ private fun KYCLevel2ScreenContent(
             onClickClearIcon = {
                 onAction(KycLevel2Action.NameChanged(""))
             },
+            textStyle = TextStyle(
+                color = MaterialTheme.colorScheme.onSurface,
+            ),
         )
 
         MifosTextField(
@@ -167,6 +172,9 @@ private fun KYCLevel2ScreenContent(
             onClickClearIcon = {
                 onAction(KycLevel2Action.DescriptionChanged(""))
             },
+            textStyle = TextStyle(
+                color = MaterialTheme.colorScheme.onSurface,
+            ),
         )
 
         MifosButton(
@@ -235,8 +243,16 @@ private fun DocumentPicker(
             .fillMaxWidth()
             .height(200.dp),
         shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.outlinedCardColors(
-            containerColor = Color.Transparent,
+        border = CardDefaults.outlinedCardBorder(
+            enabled = true,
+        ).copy(
+            width = 1.dp,
+            brush = Brush.sweepGradient(
+                colors = listOf(
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.secondary,
+                ),
+            ),
         ),
         onClick = filePicker::launch,
     ) {
@@ -258,6 +274,7 @@ private fun DocumentPicker(
                         AvatarBox(
                             icon = MifosIcons.Add,
                             size = 120,
+                            contentColor = MaterialTheme.colorScheme.secondary,
                         )
                     }
 
@@ -266,6 +283,7 @@ private fun DocumentPicker(
                             AvatarBox(
                                 icon = MifosIcons.Add,
                                 size = 120,
+                                contentColor = MaterialTheme.colorScheme.secondary,
                             )
                         } else {
                             Text(

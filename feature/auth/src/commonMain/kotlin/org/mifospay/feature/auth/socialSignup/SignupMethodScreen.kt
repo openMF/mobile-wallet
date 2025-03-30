@@ -10,7 +10,6 @@
 package org.mifospay.feature.auth.socialSignup
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,7 +26,6 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.auth.generated.resources.Res
 import mobile_wallet.feature.auth.generated.resources.feature_auth_create_an_account
@@ -37,6 +35,7 @@ import mobile_wallet.feature.auth.generated.resources.feature_auth_sign_up_as_me
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.data.util.Constants.WALLET_ACCOUNT_SAVINGS_PRODUCT_ID
+import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopAppBar
@@ -76,15 +75,17 @@ private fun SignupMethodScreenContent(
             )
         },
     ) {
-        SignupMethodScreenContent(
-            modifier = Modifier.padding(it),
-            onSignUpAsMerchant = {
-                navigateToSignupScreen(WALLET_ACCOUNT_SAVINGS_PRODUCT_ID)
-            },
-            onSignupAsCustomer = {
-                navigateToSignupScreen(WALLET_ACCOUNT_SAVINGS_PRODUCT_ID)
-            },
-        )
+        MifosGradientBackground {
+            SignupMethodScreenContent(
+                modifier = Modifier.padding(it),
+                onSignUpAsMerchant = {
+                    navigateToSignupScreen(WALLET_ACCOUNT_SAVINGS_PRODUCT_ID)
+                },
+                onSignupAsCustomer = {
+                    navigateToSignupScreen(WALLET_ACCOUNT_SAVINGS_PRODUCT_ID)
+                },
+            )
+        }
     }
 }
 
@@ -96,8 +97,7 @@ private fun SignupMethodScreenContent(
 ) {
     Column(
         modifier = modifier
-            .fillMaxSize()
-            .background(color = MaterialTheme.colorScheme.surface),
+            .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Text(
@@ -108,7 +108,10 @@ private fun SignupMethodScreenContent(
         MifosOutlinedButton(
             modifier = Modifier.padding(top = 48.dp),
             onClick = onSignUpAsMerchant,
-            border = BorderStroke(1.dp, Color.LightGray),
+            border = BorderStroke(
+                1.dp,
+                MaterialTheme.colorScheme.primary,
+            ),
             shape = RoundedCornerShape(4.dp),
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary,
@@ -149,7 +152,10 @@ private fun SignupMethodScreenContent(
         MifosOutlinedButton(
             modifier = Modifier.padding(top = 24.dp),
             onClick = onSignupAsCustomer,
-            border = BorderStroke(1.dp, Color.LightGray),
+            border = BorderStroke(
+                1.dp,
+                MaterialTheme.colorScheme.primary,
+            ),
             shape = RoundedCornerShape(4.dp),
             colors = ButtonDefaults.outlinedButtonColors(
                 contentColor = MaterialTheme.colorScheme.primary,

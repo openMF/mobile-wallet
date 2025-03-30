@@ -48,11 +48,11 @@ import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
+import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.grey
 import org.mifospay.core.designsystem.theme.styleNormal18sp
 import org.mifospay.core.ui.MifosPasswordField
 import org.mifospay.core.ui.utils.EventsEffect
@@ -110,15 +110,16 @@ private fun LoginScreen(
     MifosScaffold(
         snackbarHostState = snackbarHostState,
         modifier = modifier.fillMaxSize(),
-        containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
-        LoginScreenContent(
-            state = state,
-            onAction = onAction,
-            modifier = modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-        )
+        MifosGradientBackground {
+            LoginScreenContent(
+                state = state,
+                onAction = onAction,
+                modifier = modifier
+                    .fillMaxSize()
+                    .padding(paddingValues),
+            )
+        }
     }
 }
 
@@ -166,7 +167,8 @@ private fun LoginScreenContent(
             modifier = Modifier
                 .padding(top = 24.dp),
             text = stringResource(Res.string.feature_auth_welcome_back),
-            style = styleNormal18sp.copy(color = grey),
+            style = styleNormal18sp,
+            color = MaterialTheme.colorScheme.onSurface,
         )
         Spacer(modifier = Modifier.padding(top = 32.dp))
         MifosOutlinedTextField(

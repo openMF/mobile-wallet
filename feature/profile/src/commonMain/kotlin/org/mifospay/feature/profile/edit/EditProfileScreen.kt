@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -27,6 +28,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
@@ -47,7 +49,6 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
-import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.profile.components.EditableProfileImage
 
@@ -129,6 +130,9 @@ private fun EditProfileScreenContent(
                         onAction(EditProfileAction.FirstNameInputChange(it))
                     },
                     label = stringResource(Res.string.feature_profile_firstname),
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
 
@@ -139,6 +143,9 @@ private fun EditProfileScreenContent(
                         onAction(EditProfileAction.LastNameInputChange(it))
                     },
                     label = stringResource(Res.string.feature_profile_lastname),
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
 
@@ -149,6 +156,9 @@ private fun EditProfileScreenContent(
                         onAction(EditProfileAction.EmailInputChange(it))
                     },
                     label = stringResource(Res.string.feature_profile_email),
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
 
@@ -159,6 +169,9 @@ private fun EditProfileScreenContent(
                         onAction(EditProfileAction.ExternalIdInputChange(it))
                     },
                     label = stringResource(Res.string.feature_profile_vpa),
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
 
@@ -169,6 +182,9 @@ private fun EditProfileScreenContent(
                         onAction(EditProfileAction.PhoneNumberInputChange(it))
                     },
                     label = stringResource(Res.string.feature_profile_mobile),
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
 
@@ -179,8 +195,12 @@ private fun EditProfileScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(54.dp),
-                    color = MifosBlue,
-                    text = { Text(text = stringResource(Res.string.feature_profile_save)) },
+                    text = {
+                        Text(
+                            text = stringResource(Res.string.feature_profile_save),
+                            color = MaterialTheme.colorScheme.onPrimary,
+                        )
+                    },
                     onClick = {
                         onAction(EditProfileAction.UpdateProfile)
                     },

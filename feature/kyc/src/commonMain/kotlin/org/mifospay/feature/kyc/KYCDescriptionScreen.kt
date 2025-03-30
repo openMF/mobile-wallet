@@ -171,9 +171,9 @@ private fun KYCLevelCard(
             shape = RoundedCornerShape(4.dp),
             colors = CardDefaults.outlinedCardColors(
                 containerColor = Color.Transparent,
-                disabledContainerColor = Color.Transparent,
+                disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
             ),
-            border = CardDefaults.outlinedCardBorder(true),
+            border = CardDefaults.outlinedCardBorder(enabled = true),
             modifier = Modifier.weight(2.5f, false),
         ) {
             ListItem(
@@ -181,14 +181,18 @@ private fun KYCLevelCard(
                     Text(text = title)
                 },
                 leadingContent = {
-                    AvatarBox(icon = icon)
+                    AvatarBox(
+                        icon = icon,
+                        backgroundColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.secondaryContainer,
+                    )
                 },
                 trailingContent = {
                     if (completed) {
                         Icon(
                             imageVector = MifosIcons.OutlinedDoneAll,
                             contentDescription = stringResource(Res.string.feature_kyc_check),
-                            tint = MaterialTheme.colorScheme.primary,
+                            tint = MaterialTheme.colorScheme.secondary,
                         )
                     }
                 },

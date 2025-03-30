@@ -168,6 +168,8 @@ internal fun CardsScreen(
                     onClick = {
                         onAction(CardAction.AddNewCard)
                     },
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary,
                 ) {
                     Icon(imageVector = MifosIcons.Add, "Add")
                 }
@@ -206,7 +208,7 @@ internal fun CardsScreen(
                         title = stringResource(Res.string.feature_savedcards_error_oops),
                         subTitle = stringResource(Res.string.feature_savedcards_subtitle),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.onSurface,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 

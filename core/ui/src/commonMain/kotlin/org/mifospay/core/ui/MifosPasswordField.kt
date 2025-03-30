@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -84,6 +86,9 @@ fun MifosPasswordField(
         trailingIcon = {
             IconButton(
                 onClick = { showPasswordChange.invoke(!showPassword) },
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                ),
             ) {
                 val imageVector = if (showPassword) {
                     MifosIcons.OutlinedVisibilityOff
@@ -98,6 +103,9 @@ fun MifosPasswordField(
                 )
             }
         },
+        textStyle = TextStyle(
+            color = MaterialTheme.colorScheme.onSurface,
+        ),
     )
     if (autoFocus) {
         LaunchedEffect(Unit) { focusRequester.requestFocus() }

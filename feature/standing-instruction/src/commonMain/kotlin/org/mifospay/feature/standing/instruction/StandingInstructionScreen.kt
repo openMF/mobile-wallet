@@ -166,6 +166,8 @@ internal fun StandingInstructionScreen(
                     onClick = {
                         onAction(SIAction.AddNewSI)
                     },
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    contentColor = MaterialTheme.colorScheme.onSecondary,
                 ) {
                     Icon(imageVector = MifosIcons.Add, "Add")
                 }
@@ -265,8 +267,8 @@ private fun SIItem(
         modifier = modifier,
         state = state,
         shape = RoundedCornerShape(8.dp),
-        backgroundCardStartColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        backgroundCardEndColor = MaterialTheme.colorScheme.primary,
+        backgroundCardStartColor = MaterialTheme.colorScheme.tertiary,
+        backgroundCardEndColor = MaterialTheme.colorScheme.secondary,
         backgroundStartActionLabel = null,
         backgroundEndActionLabel = "Edit",
         card = { shape, content ->

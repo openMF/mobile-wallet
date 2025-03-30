@@ -22,7 +22,6 @@ import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -86,7 +85,7 @@ fun MifosNavigationBar(
 ) {
     NavigationBar(
         modifier = modifier,
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MifosNavigationDefaults.navigationContentColor(),
         tonalElevation = 0.dp,
         content = content,
@@ -153,7 +152,7 @@ fun MifosNavigationRail(
 ) {
     NavigationRail(
         modifier = modifier,
-        containerColor = Color.Transparent,
+        containerColor = MaterialTheme.colorScheme.surface,
         contentColor = MifosNavigationDefaults.navigationContentColor(),
         header = header,
         content = content,

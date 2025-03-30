@@ -152,7 +152,12 @@ private fun ProfileScreenContent(
                 .fillMaxWidth()
                 .height(54.dp),
             color = MaterialTheme.colorScheme.primary,
-            text = { Text(text = stringResource(Res.string.feature_profile_personal_qr_code)) },
+            text = {
+                Text(
+                    text = stringResource(Res.string.feature_profile_personal_qr_code),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
+            },
             onClick = {
                 onAction(ProfileAction.ShowPersonalQRCode)
             },
@@ -169,7 +174,12 @@ private fun ProfileScreenContent(
                 .fillMaxWidth()
                 .height(55.dp),
             color = MaterialTheme.colorScheme.primary,
-            text = { Text(text = stringResource(Res.string.feature_profile_link_bank_account)) },
+            text = {
+                Text(
+                    text = stringResource(Res.string.feature_profile_link_bank_account),
+                    color = MaterialTheme.colorScheme.onPrimary,
+                )
+            },
             onClick = {
                 onAction(ProfileAction.NavigateToLinkBankAccount)
             },

@@ -49,6 +49,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -218,6 +219,9 @@ internal fun AddEditSavingAccountScreenContent(
                 label = "Client Name",
                 onValueChange = {},
                 readOnly = true,
+                textStyle = TextStyle(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
             )
         }
 
@@ -245,6 +249,9 @@ internal fun AddEditSavingAccountScreenContent(
                             expanded = productToggled,
                         )
                     },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                     modifier = Modifier
                         .fillMaxWidth()
                         .onGloballyPositioned { coordinates ->
@@ -277,7 +284,10 @@ internal fun AddEditSavingAccountScreenContent(
                                 productToggled = false
                             },
                             text = {
-                                Text(text = product.name)
+                                Text(
+                                    text = product.name,
+                                    color = MaterialTheme.colorScheme.onSurface,
+                                )
                             },
                         )
 
@@ -305,6 +315,9 @@ internal fun AddEditSavingAccountScreenContent(
                         onAction(AESAction.ExternalIdChanged(""))
                     },
                     modifier = Modifier,
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
 
@@ -321,6 +334,9 @@ internal fun AddEditSavingAccountScreenContent(
                         readOnly = true,
                         showClearIcon = false,
                         modifier = Modifier.weight(1.5f),
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
                     )
 
                     MifosTextField(
@@ -330,6 +346,9 @@ internal fun AddEditSavingAccountScreenContent(
                         readOnly = true,
                         showClearIcon = false,
                         modifier = Modifier.weight(1.5f),
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
                     )
                 }
             }
@@ -358,6 +377,9 @@ internal fun AddEditSavingAccountScreenContent(
                                 expanded = localeToggled,
                             )
                         },
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
                         modifier = Modifier
                             .fillMaxWidth()
                             .onGloballyPositioned { coordinates ->
@@ -390,12 +412,17 @@ internal fun AddEditSavingAccountScreenContent(
                                     localeToggled = false
                                 },
                                 text = {
-                                    Text(text = locale.countryName)
+                                    Text(
+                                        text = locale.countryName,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                    )
                                 },
                             )
 
                             if (index != filteredLocalList.size - 1) {
-                                MifosDivider()
+                                MifosDivider(
+                                    color = MaterialTheme.colorScheme.outlineVariant,
+                                )
                             }
                         }
                     }
@@ -413,6 +440,9 @@ internal fun AddEditSavingAccountScreenContent(
                     onClickClearIcon = {
                         onAction(AESAction.NominalAnnualInterestRateChanged(""))
                     },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
 
@@ -439,6 +469,9 @@ internal fun AddEditSavingAccountScreenContent(
                             onAction(AESAction.OverdraftLimitChanged(""))
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
                     )
                 }
             }
@@ -466,6 +499,9 @@ internal fun AddEditSavingAccountScreenContent(
                             onAction(AESAction.MinRequiredOpeningBalanceChanged(""))
                         },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
                     )
                 }
             }
@@ -496,12 +532,16 @@ internal fun AddEditSavingAccountScreenContent(
         item("CreateOrUpdateSavingAccount") {
             MifosButton(
                 text = {
-                    Text(text = btnText)
+                    Text(
+                        text = btnText,
+                        color = MaterialTheme.colorScheme.onPrimary,
+                    )
                 },
                 onClick = {
                     onAction(AESAction.CreateOrUpdateSavingAccount)
                 },
                 modifier = Modifier.fillMaxWidth(),
+                color = MaterialTheme.colorScheme.primary,
             )
         }
     }

@@ -44,7 +44,6 @@ import mobile_wallet.feature.history.generated.resources.arrow_outward
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import org.mifospay.core.common.CurrencyFormatter
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.designsystem.theme.green
 import org.mifospay.core.designsystem.theme.red
 import org.mifospay.core.model.savingsaccount.Transaction
@@ -80,7 +79,7 @@ internal fun TransactionList(
                         .fillMaxWidth()
                         .padding(horizontal = 20.dp),
                     thickness = 1.dp,
-                    color = NewUi.onSurface.copy(alpha = 0.05f),
+                    color = MaterialTheme.colorScheme.outlineVariant,
                 )
             }
         }

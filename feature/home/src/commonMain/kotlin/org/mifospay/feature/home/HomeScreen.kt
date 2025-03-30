@@ -492,8 +492,11 @@ private fun PayRequestScreen(
                 Icon(
                     modifier = Modifier
                         .size(26.dp),
-                    imageVector = vectorResource(Res.drawable.arrow_backward),
+                    imageVector = vectorResource(
+                        Res.drawable.arrow_backward,
+                    ),
                     contentDescription = "request money",
+                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             },
         )
@@ -513,6 +516,7 @@ private fun PayRequestScreen(
                         .graphicsLayer(rotationZ = 180f),
                     imageVector = vectorResource(Res.drawable.arrow_backward),
                     contentDescription = "Send money",
+                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             },
         )
@@ -541,13 +545,13 @@ private fun MifosSendMoneyFreeCard(
             ) {
                 Text(
                     text = stringResource(Res.string.start_sending_your_money_tax_free),
-                    color = NewUi.primaryColor,
+                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight(500),
                     style = MaterialTheme.typography.bodyLarge,
                 )
                 Text(
                     text = stringResource(Res.string.feature_home_desc),
-                    color = NewUi.onSurface,
+                    color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight(300),
                 )

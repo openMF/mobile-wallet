@@ -22,6 +22,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -62,6 +63,7 @@ fun MifosOutlinedTextField(
     clearIcon: ImageVector = MifosIcons.Close,
     onClickClearIcon: () -> Unit = { onValueChange("") },
     onKeyboardActions: (() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
@@ -106,6 +108,7 @@ fun MifosOutlinedTextField(
         textStyle = LocalDensity.current.run {
             TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
         },
+        placeholder = placeholder,
     )
 }
 
@@ -129,6 +132,7 @@ fun MifosTextField(
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
+    placeholder: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -168,6 +172,7 @@ fun MifosTextField(
                 }
             }
         },
+        placeholder = placeholder,
         supportingText = errorText?.let {
             {
                 Text(
@@ -201,12 +206,14 @@ fun MifosCustomTextField(
     isError: Boolean = false,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+    placeholder: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
 ) {
     val colors = TextFieldDefaults.colors().copy(
-        cursorColor = MaterialTheme.colorScheme.primary,
+        focusedTextColor = MaterialTheme.colorScheme.primary,
+        cursorColor = MaterialTheme.colorScheme.onSurface,
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
         errorContainerColor = Color.Transparent,
@@ -246,6 +253,7 @@ fun MifosCustomTextField(
                     modifier = Modifier.padding(bottom = 10.dp),
                 )
             },
+            placeholder = placeholder,
             trailingIcon = trailingIcon,
             leadingIcon = leadingIcon,
             supportingText = supportingText,
@@ -287,6 +295,7 @@ fun MifosCustomTextField(
     isError: Boolean = false,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+    placeholder: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
@@ -337,6 +346,7 @@ fun MifosCustomTextField(
             supportingText = supportingText,
             colors = colors,
             isError = isError,
+            placeholder = placeholder,
             contentPadding = PaddingValues(bottom = 10.dp),
             container = {
                 TextFieldDefaults.Container(
@@ -359,6 +369,8 @@ private fun ClearIconButton(
     clearIcon: ImageVector,
     onClickClearIcon: () -> Unit,
     modifier: Modifier = Modifier,
+    containerColor: Color = Color.Unspecified,
+    contentColor: Color = MaterialTheme.colorScheme.primary,
 ) {
     AnimatedVisibility(
         visible = showClearIcon,
@@ -369,6 +381,10 @@ private fun ClearIconButton(
             modifier = Modifier.semantics {
                 contentDescription = "clearIcon"
             },
+            colors = IconButtonDefaults.iconButtonColors(
+                containerColor = containerColor,
+                contentColor = contentColor,
+            ),
         ) {
             Icon(
                 imageVector = clearIcon,

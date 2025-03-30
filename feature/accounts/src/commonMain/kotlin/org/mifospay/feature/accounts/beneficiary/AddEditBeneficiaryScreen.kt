@@ -23,6 +23,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
@@ -39,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
@@ -128,6 +130,9 @@ internal fun AddEditBeneficiaryScreenContent(
                     onValueChange = {
                         onAction(AEBAction.ChangeName(it))
                     },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
 
@@ -141,6 +146,9 @@ internal fun AddEditBeneficiaryScreenContent(
                     onValueChange = {
                         onAction(AEBAction.ChangeAccountNumber(it))
                     },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
 
@@ -156,6 +164,9 @@ internal fun AddEditBeneficiaryScreenContent(
                     },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
+                    ),
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
                     ),
                 )
             }
@@ -197,6 +208,9 @@ internal fun AddEditBeneficiaryScreenContent(
                                 textFieldSize = coordinates.size.toSize()
                             }
                             .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+                        textStyle = TextStyle(
+                            color = MaterialTheme.colorScheme.onSurface,
+                        ),
                     )
 
                     DropdownMenu(
@@ -223,7 +237,10 @@ internal fun AddEditBeneficiaryScreenContent(
                                     localeToggled = false
                                 },
                                 text = {
-                                    Text(text = locale.countryName)
+                                    Text(
+                                        text = locale.countryName,
+                                        color = MaterialTheme.colorScheme.onSurface,
+                                    )
                                 },
                             )
 
@@ -244,6 +261,9 @@ internal fun AddEditBeneficiaryScreenContent(
                     onValueChange = {
                         onAction(AEBAction.ChangeOfficeName(it))
                     },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
 
@@ -256,6 +276,9 @@ internal fun AddEditBeneficiaryScreenContent(
                     onValueChange = {
                         onAction(AEBAction.ChangeAccountType(it.toInt()))
                     },
+                    textStyle = TextStyle(
+                        color = MaterialTheme.colorScheme.onSurface,
+                    ),
                 )
             }
 

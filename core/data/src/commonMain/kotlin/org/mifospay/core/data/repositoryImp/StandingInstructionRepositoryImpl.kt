@@ -54,6 +54,7 @@ class StandingInstructionRepositoryImpl(
     ): Flow<DataState<StandingInstruction>> {
         return apiManager.standingInstructionApi
             .getStandingInstruction(instructionId)
+            .catch { DataState.Error(it, null) }
             .asDataStateFlow().flowOn(ioDispatcher)
     }
 

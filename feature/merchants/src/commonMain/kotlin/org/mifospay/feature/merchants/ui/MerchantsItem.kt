@@ -75,6 +75,7 @@ internal fun MerchantsItem(
                         text = savingsWithAssociations.accountNo,
                         modifier = Modifier.padding(top = 4.dp),
                         style = styleMedium16sp.copy(mifosText),
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -82,6 +83,7 @@ internal fun MerchantsItem(
         HorizontalDivider(
             thickness = 1.dp,
             modifier = Modifier.padding(8.dp),
+            color = MaterialTheme.colorScheme.outlineVariant,
         )
     }
 }

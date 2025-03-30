@@ -50,6 +50,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -64,6 +65,7 @@ import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
+import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -129,65 +131,67 @@ private fun SendMoneyScreen(
     lazyListState: LazyListState = rememberLazyListState(),
     onAction: (SendMoneyAction) -> Unit,
 ) {
-    MifosScaffold(
-        modifier = modifier,
-        topBar = {
-            AnimatedVisibility(
-                visible = showTopBar,
+    MifosGradientBackground {
+        MifosScaffold(
+            modifier = modifier,
+            topBar = {
+                AnimatedVisibility(
+                    visible = showTopBar,
+                ) {
+                    MifosTopBar(
+                        topBarTitle = stringResource(Res.string.feature_send_money_send),
+                        backPress = {
+                            onAction(SendMoneyAction.NavigateBack)
+                        },
+                        actions = {
+                            IconButton(
+                                onClick = {
+                                    onAction(SendMoneyAction.OnClickScan)
+                                },
+                            ) {
+                                Icon(
+                                    imageVector = MifosIcons.Scan,
+                                    contentDescription = "Scan QR",
+                                )
+                            }
+                        },
+                    )
+                }
+            },
+            bottomBar = {
+                SendMoneyBottomBar(
+                    showDetails = state.isProceedEnabled,
+                    selectedAccount = state.selectedAccount,
+                    onDeselect = {
+                        onAction(SendMoneyAction.DeselectAccount)
+                    },
+                    onClickProceed = {
+                        onAction(SendMoneyAction.OnProceedClicked)
+                    },
+                )
+            },
+        ) { paddingValues ->
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(paddingValues),
+                state = lazyListState,
+                contentPadding = PaddingValues(bottom = 12.dp),
             ) {
-                MifosTopBar(
-                    topBarTitle = stringResource(Res.string.feature_send_money_send),
-                    backPress = {
-                        onAction(SendMoneyAction.NavigateBack)
-                    },
-                    actions = {
-                        IconButton(
-                            onClick = {
-                                onAction(SendMoneyAction.OnClickScan)
-                            },
-                        ) {
-                            Icon(
-                                imageVector = MifosIcons.Scan,
-                                contentDescription = "Scan QR",
-                            )
-                        }
-                    },
-                )
-            }
-        },
-        bottomBar = {
-            SendMoneyBottomBar(
-                showDetails = state.isProceedEnabled,
-                selectedAccount = state.selectedAccount,
-                onDeselect = {
-                    onAction(SendMoneyAction.DeselectAccount)
-                },
-                onClickProceed = {
-                    onAction(SendMoneyAction.OnProceedClicked)
-                },
-            )
-        },
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(paddingValues),
-            state = lazyListState,
-            contentPadding = PaddingValues(bottom = 12.dp),
-        ) {
-            stickyHeader {
-                SendMoneyCard(
-                    state = state,
-                    onAction = onAction,
-                    modifier = Modifier.padding(bottom = 8.dp),
-                )
-            }
+                stickyHeader {
+                    SendMoneyCard(
+                        state = state,
+                        onAction = onAction,
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    )
+                }
 
-            accountListContent(
-                state = accountState,
-                onAction = onAction,
-                selected = { state.selectedAccount == it },
-            )
+                accountListContent(
+                    state = accountState,
+                    onAction = onAction,
+                    selected = { state.selectedAccount == it },
+                )
+            }
         }
     }
 }
@@ -203,9 +207,7 @@ private fun SendMoneyBottomBar(
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(topStart = 8.dp, topEnd = 8.dp),
-        color = NewUi.tertiaryContainer,
-        tonalElevation = 2.dp,
-        shadowElevation = 2.dp,
+        color = MaterialTheme.colorScheme.surface,
     ) {
         Column(
             modifier = Modifier
@@ -349,7 +351,7 @@ private fun SendMoneyCard(
         modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = NewUi.containerColor,
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
         shape = RoundedCornerShape(bottomStart = 12.dp, bottomEnd = 12.dp),
     ) {
@@ -368,6 +370,9 @@ private fun SendMoneyCard(
                 onValueChange = remember(onAction) {
                     { onAction(SendMoneyAction.AmountChanged(it)) }
                 },
+                textStyle = TextStyle(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
             )
 
             MifosTextField(
@@ -376,6 +381,9 @@ private fun SendMoneyCard(
                 onValueChange = remember(onAction) {
                     { onAction(SendMoneyAction.AccountNumberChanged(it)) }
                 },
+                textStyle = TextStyle(
+                    color = MaterialTheme.colorScheme.onSurface,
+                ),
             )
         }
     }
