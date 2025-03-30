@@ -67,11 +67,10 @@ class MainActivity : ComponentActivity() {
         ShareUtils.setActivityProvider { return@setActivityProvider this }
 
         setContent {
-                MifosPaySharedApp(
-                    networkMonitor = networkMonitor,
-                    timeZoneMonitor = timeZoneMonitor,
-                )
-
+            MifosPaySharedApp(
+                networkMonitor = networkMonitor,
+                timeZoneMonitor = timeZoneMonitor,
+            )
         }
     }
 }
