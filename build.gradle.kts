@@ -33,6 +33,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.wire) apply false
     alias(libs.plugins.ktorfit) apply false
+    alias(libs.plugins.dokka)
 }
 
 object DynamicVersion {

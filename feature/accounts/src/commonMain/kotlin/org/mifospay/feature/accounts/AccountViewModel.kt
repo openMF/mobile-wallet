@@ -34,7 +34,6 @@ import org.mifospay.feature.accounts.AccountAction.Internal.DeleteBeneficiary
 import org.mifospay.feature.accounts.AccountEvent.OnAddEditSavingsAccount
 import org.mifospay.feature.accounts.beneficiary.BeneficiaryAddEditType
 import org.mifospay.feature.accounts.savingsaccount.SavingsAddEditType
-
 @OptIn(ExperimentalCoroutinesApi::class)
 class AccountViewModel(
     private val userRepository: UserPreferencesRepository,
@@ -51,6 +50,9 @@ class AccountViewModel(
         )
     },
 ) {
+    /**
+     * Exposes the account and beneficiary list as a [StateFlow] of [AccountState.ViewState].
+     */
     val accountState = repository.getAccountAndBeneficiaryList(state.clientId)
         .mapLatest {
             when (it) {
@@ -67,6 +69,9 @@ class AccountViewModel(
             initialValue = AccountState.ViewState.Loading,
         )
 
+    /**
+     * Handles [AccountAction] and triggers corresponding [AccountEvent] or state updates.
+     */
     override fun handleAction(action: AccountAction) {
         when (action) {
             is AccountAction.CreateSavingsAccount -> {
@@ -124,6 +129,9 @@ class AccountViewModel(
         }
     }
 
+    /**
+     * Handles updating the default account in [userRepository].
+     */
     private fun handleSetDefaultAccount(action: AccountAction.SetDefaultAccount) {
         viewModelScope.launch {
             userRepository.updateDefaultAccount(
@@ -138,6 +146,9 @@ class AccountViewModel(
         sendEvent(AccountEvent.ShowToast("Default account updated"))
     }
 
+    /**
+     * Sends a delete request for the given beneficiary ID and shows a loading dialog.
+     */
     private fun handleDeleteBeneficiary(action: DeleteBeneficiary) {
         mutableStateFlow.update { it.copy(dialogState = AccountState.DialogState.Loading) }
 
@@ -148,6 +159,9 @@ class AccountViewModel(
         }
     }
 
+    /**
+     * Handles the result of deleting a beneficiary and updates dialog state accordingly.
+     */
     private fun handleBeneficiaryDeleteResult(action: BeneficiaryDeleteResultReceived) {
         when (action.result) {
             is DataState.Success -> {
@@ -175,14 +189,25 @@ class AccountViewModel(
     }
 }
 
+/**
+ * Represents the state of the account screen.
+ */
 data class AccountState(
     val clientId: Long,
     val defaultAccountId: Long? = null,
     val dialogState: DialogState? = null,
 ) {
+    /**
+     * Defines various dialog UI states.
+     */
     sealed interface DialogState {
+        /** Represents a loading dialog. */
         data object Loading : DialogState
+
+        /** Represents an error dialog with a message. */
         data class Error(val message: String) : DialogState
+
+        /** Dialog shown before deleting a beneficiary. */
         data class DeleteBeneficiary(
             val title: StringResource,
             val message: StringResource,
@@ -190,21 +215,26 @@ data class AccountState(
         ) : DialogState
     }
 
+    /**
+     * UI state representing the screen's visual content.
+     */
     sealed interface ViewState {
         val hasFab: Boolean
-
         val isPullToRefreshEnabled: Boolean
 
+        /** Loading view state. */
         data object Loading : ViewState {
             override val hasFab: Boolean get() = false
             override val isPullToRefreshEnabled: Boolean get() = false
         }
 
+        /** Error view state with a message. */
         data class Error(val message: String) : ViewState {
             override val hasFab: Boolean get() = false
             override val isPullToRefreshEnabled: Boolean get() = false
         }
 
+        /** Content view state with account and beneficiary info. */
         data class Content(
             val accounts: List<Account>,
             val beneficiaries: List<Beneficiary>,
@@ -215,26 +245,32 @@ data class AccountState(
     }
 }
 
+/**
+ * Events that can be sent by [AccountViewModel] to update the UI.
+ */
 sealed interface AccountEvent {
     data class OnAddEditSavingsAccount(val type: SavingsAddEditType) : AccountEvent
     data class OnNavigateToAccountDetail(val accountId: Long) : AccountEvent
     data class OnAddOrEditTPTBeneficiary(val type: BeneficiaryAddEditType) : AccountEvent
-
     data class ShowToast(val message: String) : AccountEvent
 }
 
+/**
+ * Actions that can be triggered from the UI to be handled by [AccountViewModel].
+ */
 sealed interface AccountAction {
     data object AddTPTBeneficiary : AccountAction
     data class EditBeneficiary(val beneficiary: Beneficiary) : AccountAction
     data class DeleteBeneficiary(val beneficiaryId: Long) : AccountAction
-
     data object CreateSavingsAccount : AccountAction
     data class EditSavingsAccount(val accountId: Long) : AccountAction
     data class ViewAccountDetails(val accountId: Long) : AccountAction
     data class SetDefaultAccount(val accountId: Long, val accountNo: String) : AccountAction
-
     data object DismissDialog : AccountAction
 
+    /**
+     * Internal-only actions used within the view model.
+     */
     sealed interface Internal : AccountAction {
         data class DeleteBeneficiary(val beneficiaryId: Long) : Internal
         data class BeneficiaryDeleteResultReceived(val result: DataState<String>) : Internal
