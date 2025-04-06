@@ -31,7 +31,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.common.DateHelper
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.savingsaccount.TransferDetail
 import org.mifospay.core.ui.AvatarBox
 
@@ -64,7 +63,6 @@ internal fun TransactionDetail(
 
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
-                color = NewUi.onSurface.copy(0.15f),
             )
 
             Row(
@@ -147,7 +145,6 @@ internal fun TransactionDetail(
 
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
-                color = NewUi.onSurface.copy(0.15f),
             )
 
             Text(

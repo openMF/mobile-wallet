@@ -71,7 +71,6 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.search.AccountResult
 import org.mifospay.core.ui.AvatarBox
 import org.mifospay.core.ui.EmptyContentScreen
@@ -466,7 +465,7 @@ private fun AccountCard(
         leadingContent = {
             AvatarBox(
                 icon = MifosIcons.Bank,
-                backgroundColor = NewUi.tertiaryContainer,
+                backgroundColor = MaterialTheme.colorScheme.tertiary,
             )
         },
         colors = ListItemDefaults.colors(

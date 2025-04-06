@@ -203,7 +203,6 @@ private fun LoginScreenContent(
             Text(
                 text = stringResource(Res.string.feature_auth_login).uppercase(),
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onPrimary,
             )
         }
 

@@ -68,7 +68,6 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.StatusChipColor
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.savingsaccount.Status
@@ -597,17 +596,61 @@ private fun SavingAccountStatusCard(
 @Composable
 private fun StatusChip(label: String) {
     val color = when (label) {
-        "Pending Approval" -> StatusChipColor.pendingApproval
-        "Approved" -> StatusChipColor.approved
-        "Rejected" -> StatusChipColor.rejected
-        "Withdrawn" -> StatusChipColor.withdrawn
-        "Active" -> StatusChipColor.active
-        "Closed" -> StatusChipColor.closed
-        "Prematurely Closed" -> StatusChipColor.prematurelyClosed
-        "Transfer in Progress" -> StatusChipColor.transferInProgress
-        "Transfer on Hold" -> StatusChipColor.transferOnHold
-        "Matured" -> StatusChipColor.matured
-        else -> StatusChipColor.other
+        "Pending Approval" -> MaterialTheme.colorScheme.primaryContainer.copy(
+            red = 1f,
+            green = 0.976f,
+            blue = 0.77f,
+        )
+        "Approved" -> MaterialTheme.colorScheme.tertiaryContainer.copy(
+            red = 0.78f,
+            green = 0.90f,
+            blue = 0.79f,
+        )
+        "Rejected" -> MaterialTheme.colorScheme.tertiaryContainer.copy(
+            red = 1f,
+            green = 0.8f,
+            blue = 0.82f,
+        )
+        "Withdrawn" -> MaterialTheme.colorScheme.tertiaryContainer.copy(
+            red = 0.88f,
+            green = 0.75f,
+            blue = 0.91f,
+        )
+        "Active" -> MaterialTheme.colorScheme.primaryContainer.copy(
+            red = 0.73f,
+            green = 0.87f,
+            blue = 0.98f,
+        )
+        "Closed" -> MaterialTheme.colorScheme.surfaceVariant.copy(
+            red = 0.81f,
+            green = 0.85f,
+            blue = 0.86f,
+        )
+        "Prematurely Closed" -> MaterialTheme.colorScheme.surfaceContainer.copy(
+            red = 0.84f,
+            green = 0.8f,
+            blue = 0.78f,
+        )
+        "Transfer in Progress" -> MaterialTheme.colorScheme.primaryContainer.copy(
+            red = 1f,
+            green = 0.88f,
+            blue = 0.7f,
+        )
+        "Transfer on Hold" -> MaterialTheme.colorScheme.primaryContainer.copy(
+            red = 0.94f,
+            green = 0.96f,
+            blue = 0.77f,
+        )
+        "Matured" -> MaterialTheme.colorScheme.primaryContainer.copy(
+            red = 0.7f,
+            green = 0.87f,
+            blue = 0.86f,
+        )
+        else -> MaterialTheme.colorScheme.surface.copy(
+            red = 0.94f,
+            green = 0.94f,
+            blue = 0.94f,
+        )
     }
 
     MifosSmallChip(

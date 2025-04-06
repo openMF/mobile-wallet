@@ -43,8 +43,6 @@ import mobile_wallet.feature.history.generated.resources.arrow_outward
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import org.mifospay.core.common.CurrencyFormatter
-import org.mifospay.core.designsystem.theme.green
-import org.mifospay.core.designsystem.theme.red
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.feature.history.HistoryAction
@@ -151,8 +149,16 @@ internal fun TransactionItem(
                         else -> Modifier.graphicsLayer(rotationZ = 180f).size(16.dp)
                     },
                     tint = when (transaction.transactionType) {
-                        TransactionType.CREDIT -> green
-                        TransactionType.DEBIT -> red
+                        TransactionType.CREDIT -> MaterialTheme.colorScheme.onTertiaryContainer.copy(
+                            red = 0f,
+                            green = 0.51f,
+                            blue = 0.21f,
+                        )
+                        TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
+                            red = 0.8f,
+                            green = 0f,
+                            blue = 0f,
+                        )
                         else -> Color.Black
                     },
                     contentDescription = null,
@@ -169,8 +175,16 @@ internal fun TransactionItem(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Normal,
                         color = when (transaction.transactionType) {
-                            TransactionType.DEBIT -> red
-                            TransactionType.CREDIT -> green
+                            TransactionType.CREDIT -> MaterialTheme.colorScheme.onTertiaryContainer.copy(
+                                red = 0f,
+                                green = 0.51f,
+                                blue = 0.21f,
+                            )
+                            TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
+                                red = 0.8f,
+                                green = 0f,
+                                blue = 0f,
+                            )
                             else -> Color.Black
                         },
                         textAlign = TextAlign.End,

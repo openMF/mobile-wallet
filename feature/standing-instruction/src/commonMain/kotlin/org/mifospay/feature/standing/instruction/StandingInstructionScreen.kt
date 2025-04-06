@@ -66,7 +66,6 @@ import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.SIPriorityColor
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.RevealDirection
@@ -311,11 +310,32 @@ private fun SIItem(
         onContentClick = { onClick(item.id) },
     ) {
         val priorityColor = when (item.priority.id) {
-            1L -> SIPriorityColor.low
-            2L -> SIPriorityColor.medium
-            3L -> SIPriorityColor.high
-            4L -> SIPriorityColor.urgent
-            else -> SIPriorityColor.unknown
+            1L -> MaterialTheme.colorScheme.error.copy(
+                red = 1f,
+                green = 0.27f,
+                blue = 0.27f,
+            )
+            2L -> MaterialTheme.colorScheme.primaryContainer.copy(
+                red = 1f,
+                green = 0.53f,
+                blue = 0f,
+            )
+            3L -> MaterialTheme.colorScheme.primaryContainer.copy(
+                red = 1f,
+                green = 0.73f,
+                blue = 0.2f,
+            )
+
+            4L -> MaterialTheme.colorScheme.secondaryContainer.copy(
+                red = 0.6f,
+                green = 0.8f,
+                blue = 0f,
+            )
+            else -> MaterialTheme.colorScheme.outlineVariant.copy(
+                red = 0.5f,
+                green = 0.5f,
+                blue = 0.5f,
+            )
         }
 
         Box(

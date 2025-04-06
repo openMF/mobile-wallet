@@ -10,7 +10,10 @@
 package org.mifospay.core.designsystem.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Tab
@@ -30,6 +33,7 @@ fun MifosTab(
     modifier: Modifier = Modifier,
     selectedColor: Color = MaterialTheme.colorScheme.primary,
     unselectedColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    unselectedBorderColor: Color = Color.Unspecified,
 ) {
     Tab(
         text = {
@@ -40,8 +44,14 @@ fun MifosTab(
         selectedContentColor = contentColorFor(selectedColor),
         unselectedContentColor = contentColorFor(unselectedColor),
         modifier = modifier
+            .height(40.dp)
+            .padding(horizontal = 4.dp)
             .clip(RoundedCornerShape(25.dp))
             .background(if (selected) selectedColor else unselectedColor)
-            .padding(horizontal = 20.dp),
+            .border(
+                width = 1.dp,
+                color = if (!selected) unselectedBorderColor else Color.Transparent,
+                shape = RoundedCornerShape(25.dp),
+            ),
     )
 }

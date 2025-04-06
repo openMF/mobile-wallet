@@ -106,7 +106,7 @@ fun MifosBasicDialog(
                     modifier = Modifier.testTag("AlertContentText"),
                 )
             },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            containerColor = MaterialTheme.colorScheme.surface,
             modifier = Modifier.semantics {
                 testTag = "AlertPopup"
             },

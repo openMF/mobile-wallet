@@ -47,7 +47,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
@@ -183,7 +182,7 @@ private fun CardDetailScreenContent(
 private fun CardDetail(
     savedCard: SavedCard,
     modifier: Modifier = Modifier,
-    containerColor: Color = NewUi.containerColor,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
 ) {
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),

@@ -128,9 +128,6 @@ internal fun AddEditBeneficiaryScreenContent(
                     onValueChange = {
                         onAction(AEBAction.ChangeName(it))
                     },
-//                    textStyle = TextStyle(
-//                        color = MaterialTheme.colorScheme.onSurface,
-//                    ),
                 )
             }
 
@@ -144,9 +141,6 @@ internal fun AddEditBeneficiaryScreenContent(
                     onValueChange = {
                         onAction(AEBAction.ChangeAccountNumber(it))
                     },
-//                    textStyle = TextStyle(
-//                        color = MaterialTheme.colorScheme.onSurface,
-//                    ),
                 )
             }
 
@@ -163,9 +157,6 @@ internal fun AddEditBeneficiaryScreenContent(
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Number,
                     ),
-//                    textStyle = TextStyle(
-//                        color = MaterialTheme.colorScheme.onSurface,
-//                    ),
                 )
             }
 
@@ -206,9 +197,6 @@ internal fun AddEditBeneficiaryScreenContent(
                                 textFieldSize = coordinates.size.toSize()
                             }
                             .menuAnchor(MenuAnchorType.PrimaryNotEditable),
-//                        textStyle = TextStyle(
-//                            color = MaterialTheme.colorScheme.onSurface,
-//                        ),
                     )
 
                     DropdownMenu(
@@ -258,9 +246,6 @@ internal fun AddEditBeneficiaryScreenContent(
                     onValueChange = {
                         onAction(AEBAction.ChangeOfficeName(it))
                     },
-//                    textStyle = TextStyle(
-//                        color = MaterialTheme.colorScheme.onSurface,
-//                    ),
                 )
             }
 
@@ -273,9 +258,6 @@ internal fun AddEditBeneficiaryScreenContent(
                     onValueChange = {
                         onAction(AEBAction.ChangeAccountType(it.toInt()))
                     },
-//                    textStyle = TextStyle(
-//                        color = MaterialTheme.colorScheme.onSurface,
-//                    ),
                 )
             }
 

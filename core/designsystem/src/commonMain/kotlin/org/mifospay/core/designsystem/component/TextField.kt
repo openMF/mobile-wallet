@@ -45,7 +45,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
 
 @Composable
 fun MifosOutlinedTextField(
@@ -217,8 +216,8 @@ fun MifosCustomTextField(
         errorContainerColor = Color.Transparent,
         focusedIndicatorColor = MaterialTheme.colorScheme.primary,
         unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
-        focusedTrailingIconColor = NewUi.onSurface.copy(0.5f),
-        unfocusedTrailingIconColor = NewUi.onSurface.copy(0.5f),
+        focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.15f),
+        unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.15f),
     )
     BasicTextField(
         value = value,
@@ -304,8 +303,8 @@ fun MifosCustomTextField(
         errorContainerColor = Color.Transparent,
         focusedIndicatorColor = MaterialTheme.colorScheme.primary,
         unfocusedIndicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
-        focusedTrailingIconColor = NewUi.onSurface.copy(0.15f),
-        unfocusedTrailingIconColor = NewUi.onSurface.copy(0.15f),
+        focusedTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.15f),
+        unfocusedTrailingIconColor = MaterialTheme.colorScheme.onSurface.copy(0.15f),
     )
     BasicTextField(
         value = value,
