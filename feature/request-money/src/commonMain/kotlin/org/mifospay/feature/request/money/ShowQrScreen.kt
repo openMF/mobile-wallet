@@ -9,7 +9,6 @@
  */
 package org.mifospay.feature.request.money
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -183,10 +182,6 @@ private fun ShowQrScreenContent(
                     onAction(ShowQrAction.ShareQrCode(bytes))
                 },
                 modifier = Modifier.fillMaxWidth(),
-                border = BorderStroke(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                ),
             ) {
                 Text(text = "Share")
             }

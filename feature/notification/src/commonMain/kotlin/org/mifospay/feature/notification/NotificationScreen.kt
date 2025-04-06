@@ -89,7 +89,7 @@ internal fun NotificationScreen(
                         title = stringResource(Res.string.feature_notification_error_oops),
                         subTitle = stringResource(Res.string.feature_notification_unexpected_error_subtitle),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.primary,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 
@@ -107,7 +107,6 @@ internal fun NotificationScreen(
                             title = stringResource(Res.string.feature_notification_nothing_to_notify),
                             subTitle = stringResource(Res.string.feature_notification_there_is_nothing_to_show),
                             modifier = Modifier,
-                            iconTint = MaterialTheme.colorScheme.onSurface,
                         )
                     } else {
                         NotificationScreenContent(state = uiState)

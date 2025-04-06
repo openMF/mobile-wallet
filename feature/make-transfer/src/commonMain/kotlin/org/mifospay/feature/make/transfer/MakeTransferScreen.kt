@@ -208,6 +208,7 @@ private fun AccountListState(
                         EmptyContentScreen(
                             title = "Oops!",
                             subTitle = "No accounts found!",
+                            iconTint = MaterialTheme.colorScheme.error,
                         )
                     }
 

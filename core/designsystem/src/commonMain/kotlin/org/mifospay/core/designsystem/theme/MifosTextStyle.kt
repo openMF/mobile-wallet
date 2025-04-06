@@ -21,7 +21,6 @@ val styleMedium16sp =
         fontSize = 16.sp,
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Medium,
-        color = black,
     )
 
 val styleNormal18sp =
@@ -29,7 +28,6 @@ val styleNormal18sp =
         fontSize = 18.sp,
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Normal,
-        color = black,
     )
 
 val styleMedium30sp =
@@ -37,7 +35,6 @@ val styleMedium30sp =
         fontSize = 30.sp,
         fontFamily = FontFamily.SansSerif,
         fontWeight = FontWeight.Medium,
-        color = black,
     )
 
 val styleMifosTopBar =

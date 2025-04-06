@@ -37,7 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -133,9 +132,9 @@ private fun KYCLevel1ScreenContent(
                     onValueChange = {
                         onAction(KycLevel1Action.FirstNameChanged(it))
                     },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                    ),
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 
@@ -146,9 +145,9 @@ private fun KYCLevel1ScreenContent(
                     onValueChange = {
                         onAction(KycLevel1Action.LastNameChanged(it))
                     },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                    ),
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 
@@ -160,9 +159,9 @@ private fun KYCLevel1ScreenContent(
                     onValueChange = {
                         onAction(KycLevel1Action.MobileNoChanged(it))
                     },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                    ),
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 
@@ -173,9 +172,9 @@ private fun KYCLevel1ScreenContent(
                     onValueChange = {
                         onAction(KycLevel1Action.AddressLine1Changed(it))
                     },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                    ),
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 
@@ -186,9 +185,9 @@ private fun KYCLevel1ScreenContent(
                     onValueChange = {
                         onAction(KycLevel1Action.AddressLine2Changed(it))
                     },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                    ),
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 
@@ -252,9 +251,9 @@ private fun KYCLevel1ScreenContent(
                         }
                     },
                     onValueChange = {},
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                    ),
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 

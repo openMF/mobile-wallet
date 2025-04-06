@@ -94,7 +94,6 @@ private fun InvoiceScreen(
                         title = stringResource(Res.string.feature_invoices_error_oops),
                         subTitle = stringResource(Res.string.feature_invoices_error_no_invoices_found),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.secondary,
                     )
                 }
 

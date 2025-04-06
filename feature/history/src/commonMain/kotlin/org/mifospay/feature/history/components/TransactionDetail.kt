@@ -79,7 +79,6 @@ internal fun TransactionDetail(
 
             HorizontalDivider(
                 modifier = Modifier.fillMaxWidth(),
-                color = NewUi.onSurface.copy(0.15f),
             )
 
             Text(
@@ -102,7 +101,9 @@ internal fun TransactionDetail(
                         Text(text = detail.toAccount.accountNo)
                     },
                     leadingContent = {
-                        AvatarBox(name = detail.toClient.displayName)
+                        AvatarBox(
+                            name = detail.toClient.displayName,
+                        )
                     },
                     trailingContent = {
                         val amount = CurrencyFormatter.format(

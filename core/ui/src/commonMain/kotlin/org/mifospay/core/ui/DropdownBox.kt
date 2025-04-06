@@ -17,7 +17,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +28,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.compose.ui.window.PopupProperties
@@ -78,9 +76,9 @@ fun DropdownBox(
                     textFieldSize = coordinates.size.toSize()
                 }
                 .menuAnchor(MenuAnchorType.PrimaryNotEditable),
-            textStyle = TextStyle(
-                color = MaterialTheme.colorScheme.onSurface,
-            ),
+//            textStyle = TextStyle(
+//                color = MaterialTheme.colorScheme.onSurface,
+//            ),
         )
 
         DropdownMenu(

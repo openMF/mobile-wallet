@@ -9,7 +9,6 @@
  */
 package org.mifospay.feature.request.money
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,7 +29,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.request_money.generated.resources.Res
@@ -67,7 +65,6 @@ internal fun SetAmountDialog(
         content = {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surface,
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
@@ -76,7 +73,6 @@ internal fun SetAmountDialog(
                     Text(
                         text = stringResource(Res.string.feature_request_money_set_amount),
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
 
                     val amountValidator by remember(amount) {
@@ -112,9 +108,6 @@ internal fun SetAmountDialog(
                         modifier = Modifier.fillMaxWidth(),
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number,
-                        ),
-                        textStyle = TextStyle(
-                            color = MaterialTheme.colorScheme.onSurface,
                         ),
                     )
 
@@ -170,10 +163,6 @@ internal fun SetAmountDialog(
                             onClick = {
                                 onAction(ShowQrAction.DismissDialog)
                             },
-                            border = BorderStroke(
-                                width = 1.dp,
-                                color = MaterialTheme.colorScheme.onPrimary,
-                            ),
                         ) {
                             Text(text = stringResource(Res.string.feature_request_money_cancel))
                         }
@@ -207,7 +196,7 @@ private fun CurrencyDropdownItem(
         headlineContent = {
             Text(
                 text = currency.countryName,
-                color = MaterialTheme.colorScheme.onSurface,
+//                color = MaterialTheme.colorScheme.onSurface,
             )
         },
         leadingContent = {

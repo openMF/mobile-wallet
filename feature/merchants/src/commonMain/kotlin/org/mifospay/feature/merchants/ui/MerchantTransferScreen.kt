@@ -80,7 +80,6 @@ import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.feature.merchants.MerchantTransferUiState
 import org.mifospay.feature.merchants.MerchantTransferViewModel
 
@@ -136,10 +135,11 @@ internal fun MerchantTransferScreen(
                     }
 
                     is MerchantTransferUiState.Error -> {
-                        ErrorScreenContent(
+                        EmptyContentScreen(
                             modifier = Modifier,
                             title = stringResource(Res.string.feature_merchants_error_oops),
                             subTitle = stringResource(Res.string.feature_merchants_unexpected_error_subtitle),
+                            iconTint = MaterialTheme.colorScheme.error,
                         )
                     }
 
@@ -148,7 +148,6 @@ internal fun MerchantTransferScreen(
                             title = stringResource(Res.string.feature_merchants_error_oops),
                             subTitle = stringResource(Res.string.feature_merchants_no_transactions_found),
                             modifier = Modifier,
-                            iconTint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
 

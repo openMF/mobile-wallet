@@ -35,7 +35,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.ImageLoader
@@ -158,9 +157,9 @@ private fun KYCLevel2ScreenContent(
             onClickClearIcon = {
                 onAction(KycLevel2Action.NameChanged(""))
             },
-            textStyle = TextStyle(
-                color = MaterialTheme.colorScheme.onSurface,
-            ),
+//            textStyle = TextStyle(
+//                color = MaterialTheme.colorScheme.onSurface,
+//            ),
         )
 
         MifosTextField(
@@ -172,9 +171,9 @@ private fun KYCLevel2ScreenContent(
             onClickClearIcon = {
                 onAction(KycLevel2Action.DescriptionChanged(""))
             },
-            textStyle = TextStyle(
-                color = MaterialTheme.colorScheme.onSurface,
-            ),
+//            textStyle = TextStyle(
+//                color = MaterialTheme.colorScheme.onSurface,
+//            ),
         )
 
         MifosButton(

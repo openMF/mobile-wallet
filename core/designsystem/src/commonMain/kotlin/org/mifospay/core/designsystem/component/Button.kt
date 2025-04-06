@@ -53,7 +53,6 @@ fun MifosButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    color: Color = MaterialTheme.colorScheme.primary,
     disabledColor: Color = MaterialTheme.colorScheme.surfaceContainerHighest,
     content: @Composable RowScope.() -> Unit = {},
 ) {
@@ -63,7 +62,6 @@ fun MifosButton(
             .height(48.dp),
         enabled = enabled,
         colors = ButtonDefaults.buttonColors(
-            containerColor = color,
             disabledContainerColor = disabledColor,
         ),
         contentPadding = contentPadding,
@@ -110,14 +108,12 @@ fun MifosButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    color: Color = MaterialTheme.colorScheme.primary,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     MifosButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        color = color,
         contentPadding = if (leadingIcon != null) {
             ButtonDefaults.ButtonWithIconContentPadding
         } else {

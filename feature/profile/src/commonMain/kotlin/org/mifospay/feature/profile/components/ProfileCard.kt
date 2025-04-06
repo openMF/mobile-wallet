@@ -42,9 +42,7 @@ fun ProfileDetailsCard(
     Card(
         modifier = modifier
             .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp,
-        ),
+        elevation = CardDefaults.cardElevation(),
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
@@ -101,9 +99,6 @@ fun ProfileItem(
             fontWeight = FontWeight(400),
         )
         Spacer(modifier = Modifier.height(4.dp))
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = MaterialTheme.colorScheme.outlineVariant,
-        )
+        HorizontalDivider()
     }
 }

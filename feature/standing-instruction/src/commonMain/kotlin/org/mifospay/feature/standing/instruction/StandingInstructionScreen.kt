@@ -66,6 +66,7 @@ import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.designsystem.theme.SIPriorityColor
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.RevealDirection
@@ -166,8 +167,6 @@ internal fun StandingInstructionScreen(
                     onClick = {
                         onAction(SIAction.AddNewSI)
                     },
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    contentColor = MaterialTheme.colorScheme.onSecondary,
                 ) {
                     Icon(imageVector = MifosIcons.Add, "Add")
                 }
@@ -190,7 +189,7 @@ internal fun StandingInstructionScreen(
                         title = stringResource(Res.string.feature_standing_instruction_error_oops),
                         subTitle = stringResource(Res.string.feature_standing_instruction_error_fetching_si_list),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.onSurface,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 
@@ -312,11 +311,11 @@ private fun SIItem(
         onContentClick = { onClick(item.id) },
     ) {
         val priorityColor = when (item.priority.id) {
-            1L -> Color(0xFFFF4444)
-            2L -> Color(0xFFFF8800)
-            3L -> Color(0xFFFFBB33)
-            4L -> Color(0xFF99CC00)
-            else -> Color.Gray
+            1L -> SIPriorityColor.low
+            2L -> SIPriorityColor.medium
+            3L -> SIPriorityColor.high
+            4L -> SIPriorityColor.urgent
+            else -> SIPriorityColor.unknown
         }
 
         Box(
@@ -341,6 +340,7 @@ private fun SIItem(
                 shape = it,
                 colors = CardDefaults.outlinedCardColors(
                     containerColor = Color.Transparent,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
                 ),
             ) {
                 ListItem(

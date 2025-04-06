@@ -95,7 +95,7 @@ private fun KYCDescriptionScreen(
                     title = stringResource(Res.string.feature_kyc_error_oops),
                     subTitle = stringResource(Res.string.feature_kyc_unexpected_error_subtitle),
                     modifier = Modifier,
-                    iconTint = MaterialTheme.colorScheme.primary,
+                    iconTint = MaterialTheme.colorScheme.error,
                 )
             }
 
@@ -183,8 +183,7 @@ private fun KYCLevelCard(
                 leadingContent = {
                     AvatarBox(
                         icon = icon,
-                        backgroundColor = MaterialTheme.colorScheme.secondary,
-                        contentColor = MaterialTheme.colorScheme.secondaryContainer,
+                        backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
                     )
                 },
                 trailingContent = {
@@ -192,7 +191,6 @@ private fun KYCLevelCard(
                         Icon(
                             imageVector = MifosIcons.OutlinedDoneAll,
                             contentDescription = stringResource(Res.string.feature_kyc_check),
-                            tint = MaterialTheme.colorScheme.secondary,
                         )
                     }
                 },

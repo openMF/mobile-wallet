@@ -168,8 +168,6 @@ internal fun CardsScreen(
                     onClick = {
                         onAction(CardAction.AddNewCard)
                     },
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    contentColor = MaterialTheme.colorScheme.onSecondary,
                 ) {
                     Icon(imageVector = MifosIcons.Add, "Add")
                 }
@@ -186,7 +184,6 @@ internal fun CardsScreen(
                 is ViewState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(Res.string.feature_savedcards_loading),
-                        backgroundColor = MaterialTheme.colorScheme.surface,
                     )
                 }
 
@@ -305,7 +302,8 @@ private fun SavedCardItem(
                             onClickEdit(savedCard.id)
                         },
                         colors = IconButtonDefaults.filledTonalIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         ),
                     ) {
                         Icon(
@@ -320,6 +318,7 @@ private fun SavedCardItem(
                         },
                         colors = IconButtonDefaults.filledTonalIconButtonColors(
                             containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.error,
                         ),
                     ) {
                         Icon(

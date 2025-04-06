@@ -68,7 +68,6 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.designsystem.theme.StatusChipColor
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.beneficiary.Beneficiary
@@ -157,8 +156,6 @@ internal fun AccountsScreenContent(
                     onClick = {
                         onAction(AccountAction.CreateSavingsAccount)
                     },
-                    containerColor = MaterialTheme.colorScheme.secondary,
-                    contentColor = MaterialTheme.colorScheme.onSecondary,
                 ) {
                     Icon(imageVector = MifosIcons.Add, "Add")
                 }
@@ -175,7 +172,6 @@ internal fun AccountsScreenContent(
                 is AccountState.ViewState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(Res.string.feature_accounts_loading),
-                        backgroundColor = MaterialTheme.colorScheme.surface,
                     )
                 }
 
@@ -184,7 +180,7 @@ internal fun AccountsScreenContent(
                         title = stringResource(Res.string.feature_accounts_error_oops),
                         subTitle = stringResource(Res.string.feature_accounts_unexpected_error_subtitle),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.secondary,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 
@@ -258,7 +254,6 @@ private fun AccountsList(
             Text(
                 text = "Savings Account",
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurface,
             )
         }
 
@@ -279,8 +274,6 @@ private fun AccountsList(
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant,
             )
         }
 
@@ -288,7 +281,6 @@ private fun AccountsList(
             Text(
                 text = "Beneficiaries",
                 style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.onSurface,
             )
         }
 
@@ -308,8 +300,6 @@ private fun AccountsList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
-                thickness = 1.dp,
-                color = NewUi.onSurface.copy(alpha = 0.05f),
             )
         }
 
@@ -323,14 +313,12 @@ private fun AccountsList(
                     text = {
                         Text(
                             text = "Add Beneficiary",
-                            color = MaterialTheme.colorScheme.onPrimary,
                         )
                     },
                     leadingIcon = {
                         Icon(
                             imageVector = MifosIcons.Add,
                             contentDescription = "add",
-                            tint = MaterialTheme.colorScheme.onPrimary,
                         )
                     },
                     onClick = onAddTPTBeneficiary,
@@ -430,7 +418,6 @@ private fun AccountItem(
                     AvatarBox(
                         icon = MifosIcons.Bank,
                         backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
                     )
                 },
                 trailingContent = {
@@ -452,7 +439,6 @@ private fun AccountItem(
                                     text = "Default",
                                     style = MaterialTheme.typography.bodySmall,
                                     modifier = Modifier.padding(4.dp),
-                                    color = MaterialTheme.colorScheme.onTertiary,
                                 )
                             }
                         }
@@ -487,6 +473,7 @@ private fun BeneficiaryItem(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.outlinedCardColors(
             containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onSurface,
         ),
     ) {
         ListItem(

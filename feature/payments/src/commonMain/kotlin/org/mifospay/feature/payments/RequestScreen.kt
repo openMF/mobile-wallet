@@ -109,7 +109,6 @@ private fun RequestScreenContent(
                     Text(
                         text = state.externalId,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
@@ -117,13 +116,10 @@ private fun RequestScreenContent(
                     onClick = {
                         onAction(TransferAction.ShowQR)
                     },
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        MaterialTheme.colorScheme.tertiaryContainer,
-                    ),
+                    colors = IconButtonDefaults.filledIconButtonColors(),
                 ) {
                     Icon(
                         imageVector = MifosIcons.QrCode,
-                        tint = MaterialTheme.colorScheme.tertiary,
                         contentDescription = stringResource(Res.string.feature_payments_show_code),
                     )
                 }
@@ -147,7 +143,6 @@ private fun RequestScreenContent(
                     Text(
                         text = state.mobileNo,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
@@ -155,13 +150,10 @@ private fun RequestScreenContent(
                     onClick = {
                         onAction(TransferAction.CopyTextToClipboard(state.mobileNo))
                     },
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        MaterialTheme.colorScheme.tertiaryContainer,
-                    ),
+                    colors = IconButtonDefaults.filledIconButtonColors(),
                 ) {
                     Icon(
                         imageVector = vectorResource(Res.drawable.baseline_content_copy),
-                        tint = MaterialTheme.colorScheme.tertiary,
                         contentDescription = "Copy Text",
                     )
                 }

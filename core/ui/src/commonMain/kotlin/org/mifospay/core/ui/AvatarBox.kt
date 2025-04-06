@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 fun AvatarBox(
     name: String,
     size: Int = 40,
-    backgroundColor: Color = MaterialTheme.colorScheme.surfaceContainer,
+    backgroundColor: Color = MaterialTheme.colorScheme.secondaryContainer,
 ) {
     val initials = name.split(" ")
         .mapNotNull { it.firstOrNull()?.toString() }

@@ -113,7 +113,6 @@ internal fun MerchantScreen(
                         title = stringResource(Res.string.feature_merchants_empty_no_merchants_title),
                         subTitle = stringResource(Res.string.feature_merchants_empty_no_merchants_subtitle),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.secondary,
                     )
                 }
 

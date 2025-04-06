@@ -57,7 +57,6 @@ fun TransactionHistoryCard(
             ) {
                 Text(
                     text = "Transaction History",
-                    color = MaterialTheme.colorScheme.primary,
                     fontWeight = FontWeight(500),
                 )
 
@@ -69,7 +68,6 @@ fun TransactionHistoryCard(
                     ) {
                         Text(
                             text = "See All",
-                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight(300),
                         )
@@ -87,7 +85,6 @@ fun TransactionHistoryCard(
                 if (i != transactions.size - 1) {
                     MifosDivider(
                         modifier = Modifier.padding(horizontal = 6.dp),
-                        color = MaterialTheme.colorScheme.outlineVariant,
                     )
                 }
             }
@@ -96,7 +93,6 @@ fun TransactionHistoryCard(
                 Text(
                     text = "No transactions found",
                     modifier = Modifier.padding(12.dp),
-                    color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight(300),
                 )

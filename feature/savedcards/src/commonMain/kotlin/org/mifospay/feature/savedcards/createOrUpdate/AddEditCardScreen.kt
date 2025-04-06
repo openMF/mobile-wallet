@@ -27,7 +27,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -42,7 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
@@ -198,7 +196,6 @@ private fun AddEditCardScreenContent(
                     capitalization = KeyboardCapitalization.Characters,
                     keyboardType = KeyboardType.Text,
                 ),
-
             )
         }
 
@@ -211,9 +208,9 @@ private fun AddEditCardScreenContent(
                     capitalization = KeyboardCapitalization.Characters,
                     keyboardType = KeyboardType.Text,
                 ),
-                textStyle = TextStyle(
-                    color = MaterialTheme.colorScheme.onSurface,
-                ),
+//                textStyle = TextStyle(
+//                    color = MaterialTheme.colorScheme.onSurface,
+//                ),
             )
         }
 
@@ -238,9 +235,9 @@ private fun AddEditCardScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .onFocusChanged { isFocused = it.isFocused },
-                textStyle = TextStyle(
-                    color = MaterialTheme.colorScheme.onSurface,
-                ),
+//                textStyle = TextStyle(
+//                    color = MaterialTheme.colorScheme.onSurface,
+//                ),
             )
         }
 
@@ -262,9 +259,9 @@ private fun AddEditCardScreenContent(
                             onAction(AECardAction.ExpiryDateChanged(newValue))
                         }
                     },
-                    textStyle = TextStyle(
-                        color = MaterialTheme.colorScheme.onSurface,
-                    ),
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
 
                 MifosPasswordField(

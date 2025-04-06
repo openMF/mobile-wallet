@@ -77,7 +77,6 @@ internal fun TransferSuccessScreen(
                 Text(
                     text = "Your payment has been successfully done.",
                     style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.tertiary,
                 )
             }
         }

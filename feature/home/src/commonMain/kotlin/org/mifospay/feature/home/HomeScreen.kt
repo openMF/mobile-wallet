@@ -182,7 +182,6 @@ fun HomeScreenContent(
                 is ViewState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(Res.string.feature_home_loading),
-                        backgroundColor = MaterialTheme.colorScheme.surface,
                     )
                 }
 
@@ -496,7 +495,6 @@ private fun PayRequestScreen(
                         Res.drawable.arrow_backward,
                     ),
                     contentDescription = "request money",
-                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             },
         )
@@ -516,7 +514,6 @@ private fun PayRequestScreen(
                         .graphicsLayer(rotationZ = 180f),
                     imageVector = vectorResource(Res.drawable.arrow_backward),
                     contentDescription = "Send money",
-                    tint = MaterialTheme.colorScheme.onSurface,
                 )
             },
         )
@@ -551,7 +548,6 @@ private fun MifosSendMoneyFreeCard(
                 )
                 Text(
                     text = stringResource(Res.string.feature_home_desc),
-                    color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight(300),
                 )

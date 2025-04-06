@@ -51,7 +51,6 @@ import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
@@ -118,7 +117,6 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.NavigateToNotificationSettings)
                 },
-                color = MaterialTheme.colorScheme.onSurface,
             )
 
             SettingsCardItem(
@@ -127,7 +125,6 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.NavigateToFaqScreen)
                 },
-                color = MaterialTheme.colorScheme.onSurface,
             )
 
             SettingsCardItem(
@@ -136,7 +133,6 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.ChangePassword)
                 },
-                color = MaterialTheme.colorScheme.onSurface,
             )
 
             SettingsCardItem(
@@ -145,7 +141,6 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.ChangePasscode)
                 },
-                color = MaterialTheme.colorScheme.onSurface,
             )
 
             SettingsCardItem(
@@ -154,7 +149,6 @@ private fun SettingsScreenContent(
                 onClick = {
                     onAction(SettingsAction.Logout)
                 },
-                color = MaterialTheme.colorScheme.onSurface,
             )
 
             SettingsCardItem(
@@ -174,7 +168,7 @@ private fun SettingsCardItem(
     title: String,
     icon: ImageVector,
     modifier: Modifier = Modifier,
-    color: Color = NewUi.onSurface,
+    color: Color = MaterialTheme.colorScheme.onSurface,
     onClick: () -> Unit,
 ) {
     ListItem(

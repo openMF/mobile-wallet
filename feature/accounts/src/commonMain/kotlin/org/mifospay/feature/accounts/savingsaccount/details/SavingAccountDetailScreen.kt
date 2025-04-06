@@ -145,7 +145,7 @@ internal fun SavingAccountDetailScreen(
                         title = stringResource(Res.string.feature_accounts_error_oops),
                         subTitle = state.message,
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.onSurface,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 

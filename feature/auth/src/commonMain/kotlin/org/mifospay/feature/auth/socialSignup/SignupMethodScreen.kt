@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -113,9 +112,6 @@ private fun SignupMethodScreenContent(
                 MaterialTheme.colorScheme.primary,
             ),
             shape = RoundedCornerShape(4.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colorScheme.primary,
-            ),
         ) {
             Text(
                 text = stringResource(Res.string.feature_auth_sign_up_as_merchant).uppercase(),
@@ -157,9 +153,6 @@ private fun SignupMethodScreenContent(
                 MaterialTheme.colorScheme.primary,
             ),
             shape = RoundedCornerShape(4.dp),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colorScheme.primary,
-            ),
         ) {
             Text(
                 text = stringResource(Res.string.feature_auth_sign_up_as_customer).uppercase(),

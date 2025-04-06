@@ -50,7 +50,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -370,9 +369,9 @@ private fun SendMoneyCard(
                 onValueChange = remember(onAction) {
                     { onAction(SendMoneyAction.AmountChanged(it)) }
                 },
-                textStyle = TextStyle(
-                    color = MaterialTheme.colorScheme.onSurface,
-                ),
+//                textStyle = TextStyle(
+//                    color = MaterialTheme.colorScheme.onSurface,
+//                ),
             )
 
             MifosTextField(
@@ -381,9 +380,9 @@ private fun SendMoneyCard(
                 onValueChange = remember(onAction) {
                     { onAction(SendMoneyAction.AccountNumberChanged(it)) }
                 },
-                textStyle = TextStyle(
-                    color = MaterialTheme.colorScheme.onSurface,
-                ),
+//                textStyle = TextStyle(
+//                    color = MaterialTheme.colorScheme.onSurface,
+//                ),
             )
         }
     }
@@ -412,6 +411,7 @@ private fun LazyListScope.accountListContent(
                     title = "Oops!",
                     subTitle = "Something went wrong!",
                     modifier = Modifier.fillParentMaxSize(),
+                    iconTint = MaterialTheme.colorScheme.error,
                 )
             }
         }

@@ -343,7 +343,6 @@ private fun SignupScreenContent(
             MifosButton(
                 modifier = Modifier
                     .fillMaxWidth(),
-                color = MaterialTheme.colorScheme.primary,
                 enabled = true,
                 onClick = {
                     onAction(SignUpAction.SubmitClick)

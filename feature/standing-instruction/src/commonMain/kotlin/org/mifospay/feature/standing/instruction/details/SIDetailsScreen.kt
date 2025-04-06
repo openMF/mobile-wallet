@@ -100,6 +100,7 @@ internal fun SIDetailsScreen(
                     EmptyContentScreen(
                         title = stringResource(Res.string.feature_standing_instruction_error_oops),
                         subTitle = state.viewState.message,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 
@@ -160,12 +161,10 @@ private fun SIDetailsCard(
                 RowBlock {
                     Text(
                         text = "Instruction Name",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = item.name,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
@@ -178,19 +177,16 @@ private fun SIDetailsCard(
                 RowBlock {
                     Text(
                         text = "Instruction Amount",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = amount,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
                 RowBlock {
                     Text(
                         text = "Status",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(text = item.status.value, fontWeight = FontWeight.SemiBold)
                 }
@@ -198,19 +194,16 @@ private fun SIDetailsCard(
                 RowBlock {
                     Text(
                         text = "Transfer Type",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = item.transferType.value,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
                 RowBlock {
                     Text(
                         text = "Priority",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
 
                     PriorityChip(
@@ -221,7 +214,6 @@ private fun SIDetailsCard(
                 RowBlock {
                     Text(
                         text = "Instruction Type",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     InstructionTypeChip(
                         type = item.instructionType,
@@ -231,7 +223,6 @@ private fun SIDetailsCard(
                 RowBlock {
                     Text(
                         text = "Recurrence Frequency",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
 
                     FrequencyChip(
@@ -247,12 +238,10 @@ private fun SIDetailsCard(
 
                     Text(
                         text = "Valid From",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = validFrom,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
@@ -263,12 +252,10 @@ private fun SIDetailsCard(
 
                     Text(
                         text = "Valid Till",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = validTill,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
@@ -279,12 +266,10 @@ private fun SIDetailsCard(
                     RowBlock(false) {
                         Text(
                             text = "Recurrence On Month Day",
-                            color = MaterialTheme.colorScheme.onSurface,
                         )
                         Text(
                             text = recurrenceOnMonthDay,
                             fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.onSurface,
                         )
                     }
                 }
@@ -296,6 +281,7 @@ private fun SIDetailsCard(
                 .fillMaxWidth(),
             colors = CardDefaults.elevatedCardColors(
                 containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface,
             ),
         ) {
             Column(
@@ -306,48 +292,40 @@ private fun SIDetailsCard(
                 RowBlock {
                     Text(
                         text = "From Office",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = item.fromOffice.name,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
                 RowBlock {
                     Text(
                         text = "From Client",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = item.fromClient.displayName,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
                 RowBlock {
                     Text(
                         text = "From Account Type",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = item.fromAccountType.value,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
                 RowBlock(false) {
                     Text(
                         text = "From Account",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = item.fromAccount.accountNo,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -358,6 +336,7 @@ private fun SIDetailsCard(
                 .fillMaxWidth(),
             colors = CardDefaults.elevatedCardColors(
                 containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface,
             ),
         ) {
             Column(
@@ -368,48 +347,40 @@ private fun SIDetailsCard(
                 RowBlock {
                     Text(
                         text = "To Office",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = item.toOffice.name,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
                 RowBlock {
                     Text(
                         text = "To Client",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = item.toClient.displayName,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
                 RowBlock {
                     Text(
                         text = "To Account Type",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = item.toAccountType.value,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
                 RowBlock(false) {
                     Text(
                         text = "To Account",
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                     Text(
                         text = item.toAccount.accountNo,
                         fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }

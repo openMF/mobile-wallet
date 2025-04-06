@@ -179,7 +179,7 @@ internal fun AddEditSIScreen(
                         title = stringResource(Res.string.feature_standing_instruction_error_oops),
                         subTitle = state.viewState.message,
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.onSurface,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 

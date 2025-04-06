@@ -52,7 +52,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.IconBox
-import org.mifospay.core.designsystem.component.MifosBackground
 import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosNavigationBar
 import org.mifospay.core.designsystem.component.MifosNavigationBarItem
@@ -73,96 +72,94 @@ internal fun MifosApp(
     onClickLogout: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    MifosBackground(modifier) {
-        MifosGradientBackground(
-            gradientColors = LocalGradientColors.current,
-        ) {
-            val appState = rememberMifosAppState(
-                networkMonitor = networkMonitor,
-                timeZoneMonitor = timeZoneMonitor,
-            )
+    MifosGradientBackground(
+        gradientColors = LocalGradientColors.current,
+    ) {
+        val appState = rememberMifosAppState(
+            networkMonitor = networkMonitor,
+            timeZoneMonitor = timeZoneMonitor,
+        )
 
-            val snackbarHostState = remember { SnackbarHostState() }
-            val destination = appState.currentTopLevelDestination
+        val snackbarHostState = remember { SnackbarHostState() }
+        val destination = appState.currentTopLevelDestination
 
-            val isOffline by appState.isOffline.collectAsStateWithLifecycle()
+        val isOffline by appState.isOffline.collectAsStateWithLifecycle()
 
-            // If user is not connected to the internet show a snack bar to inform them.
-            val notConnectedMessage = stringResource(Res.string.not_connected)
-            LaunchedEffect(isOffline) {
-                if (isOffline) {
-                    snackbarHostState.showSnackbar(
-                        message = notConnectedMessage,
-                        duration = Indefinite,
+        // If user is not connected to the internet show a snack bar to inform them.
+        val notConnectedMessage = stringResource(Res.string.not_connected)
+        LaunchedEffect(isOffline) {
+            if (isOffline) {
+                snackbarHostState.showSnackbar(
+                    message = notConnectedMessage,
+                    duration = Indefinite,
+                )
+            }
+        }
+
+        Scaffold(
+            modifier = Modifier,
+            containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+            bottomBar = {
+                if (appState.shouldShowBottomBar && destination != null) {
+                    MifosBottomBar(
+                        destinations = appState.topLevelDestinations,
+                        destinationsWithUnreadResources = emptySet(),
+                        onNavigateToDestination = appState::navigateToTopLevelDestination,
+                        currentDestination = appState.currentDestination,
+                        modifier = Modifier.testTag("NiaBottomBar"),
                     )
                 }
-            }
-
-            Scaffold(
-                modifier = Modifier,
-                containerColor = Color.Transparent,
-                contentColor = MaterialTheme.colorScheme.onBackground,
-                snackbarHost = { SnackbarHost(snackbarHostState) },
-                bottomBar = {
-                    if (appState.shouldShowBottomBar && destination != null) {
-                        MifosBottomBar(
-                            destinations = appState.topLevelDestinations,
-                            destinationsWithUnreadResources = emptySet(),
-                            onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination,
-                            modifier = Modifier.testTag("NiaBottomBar"),
-                        )
-                    }
-                },
-            ) { padding ->
-                Row(
-                    Modifier
-                        .fillMaxSize()
-                        .padding(padding)
-                        .consumeWindowInsets(padding)
-                        .windowInsetsPadding(
-                            WindowInsets.safeDrawing.only(
-                                WindowInsetsSides.Horizontal,
-                            ),
+            },
+        ) { padding ->
+            Row(
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding)
+                    .consumeWindowInsets(padding)
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(
+                            WindowInsetsSides.Horizontal,
                         ),
-                ) {
-                    if (appState.shouldShowNavRail && destination != null) {
-                        MifosNavRail(
-                            destinations = appState.topLevelDestinations,
-                            destinationsWithUnreadResources = emptySet(),
-                            onNavigateToDestination = appState::navigateToTopLevelDestination,
-                            currentDestination = appState.currentDestination,
-                            modifier = Modifier
-                                .testTag("NiaNavRail")
-                                .safeDrawingPadding(),
-                        )
-                    }
+                    ),
+            ) {
+                if (appState.shouldShowNavRail && destination != null) {
+                    MifosNavRail(
+                        destinations = appState.topLevelDestinations,
+                        destinationsWithUnreadResources = emptySet(),
+                        onNavigateToDestination = appState::navigateToTopLevelDestination,
+                        currentDestination = appState.currentDestination,
+                        modifier = Modifier
+                            .testTag("NiaNavRail")
+                            .safeDrawingPadding(),
+                    )
+                }
 
-                    Column(Modifier.fillMaxSize()) {
-                        // Show the top app bar on top level destinations.
-                        if (destination != null) {
-                            MifosAppBar(
-                                title = stringResource(destination.titleText),
-                                onClickLogout = onClickLogout,
-                                onNavigateToFaq = {},
-                                onNavigateToSettings = {
-                                    appState.navController.navigateToSettings()
-                                },
-                                onNavigateToEditProfile = {
-                                    appState.navController.navigateToEditProfile()
-                                },
-                                onNavigateToNotification = {
-                                    appState.navController.navigateToNotification()
-                                },
-                                destination = destination,
-                            )
-                        }
-
-                        MifosNavHost(
-                            appState = appState,
+                Column(Modifier.fillMaxSize()) {
+                    // Show the top app bar on top level destinations.
+                    if (destination != null) {
+                        MifosAppBar(
+                            title = stringResource(destination.titleText),
                             onClickLogout = onClickLogout,
+                            onNavigateToFaq = {},
+                            onNavigateToSettings = {
+                                appState.navController.navigateToSettings()
+                            },
+                            onNavigateToEditProfile = {
+                                appState.navController.navigateToEditProfile()
+                            },
+                            onNavigateToNotification = {
+                                appState.navController.navigateToNotification()
+                            },
+                            destination = destination,
                         )
                     }
+
+                    MifosNavHost(
+                        appState = appState,
+                        onClickLogout = onClickLogout,
+                    )
                 }
             }
         }

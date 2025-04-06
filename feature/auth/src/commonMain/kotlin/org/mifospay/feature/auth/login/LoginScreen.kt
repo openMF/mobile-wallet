@@ -48,7 +48,6 @@ import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosButton
-import org.mifospay.core.designsystem.component.MifosGradientBackground
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
@@ -110,16 +109,15 @@ private fun LoginScreen(
     MifosScaffold(
         snackbarHostState = snackbarHostState,
         modifier = modifier.fillMaxSize(),
+        containerColor = MaterialTheme.colorScheme.background,
     ) { paddingValues ->
-        MifosGradientBackground {
-            LoginScreenContent(
-                state = state,
-                onAction = onAction,
-                modifier = modifier
-                    .fillMaxSize()
-                    .padding(paddingValues),
-            )
-        }
+        LoginScreenContent(
+            state = state,
+            onAction = onAction,
+            modifier = modifier
+                .fillMaxSize()
+                .padding(paddingValues),
+        )
     }
 }
 
@@ -168,7 +166,6 @@ private fun LoginScreenContent(
                 .padding(top = 24.dp),
             text = stringResource(Res.string.feature_auth_welcome_back),
             style = styleNormal18sp,
-            color = MaterialTheme.colorScheme.onSurface,
         )
         Spacer(modifier = Modifier.padding(top = 32.dp))
         MifosOutlinedTextField(
@@ -231,7 +228,6 @@ private fun SignupButton(
         Text(
             text = "Don’t have an account yet? ",
             style = MaterialTheme.typography.labelLarge,
-            color = MaterialTheme.colorScheme.onSurface,
         )
         Text(
             modifier = Modifier.clickable(

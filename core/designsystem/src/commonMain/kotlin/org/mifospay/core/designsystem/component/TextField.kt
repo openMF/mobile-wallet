@@ -37,7 +37,6 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.TextStyle
@@ -45,7 +44,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.NewUi
 
@@ -106,7 +104,7 @@ fun MifosOutlinedTextField(
         keyboardOptions = keyboardOptions,
         interactionSource = interactionSource,
         textStyle = LocalDensity.current.run {
-            TextStyle(fontSize = 18.sp, color = MaterialTheme.colorScheme.onSurface)
+            TextStyle(color = MaterialTheme.colorScheme.onSurface)
         },
         placeholder = placeholder,
     )
@@ -125,11 +123,10 @@ fun MifosTextField(
     isError: Boolean = false,
     errorText: String? = null,
     onClickClearIcon: () -> Unit = { onValueChange("") },
-    textStyle: TextStyle = LocalTextStyle.current,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     singleLine: Boolean = true,
-    maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
+    maxLines: Int = if (singleLine) 1 else Int.Companion.MAX_VALUE,
     minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     placeholder: @Composable (() -> Unit)? = null,
@@ -144,7 +141,6 @@ fun MifosTextField(
         value = value,
         label = label,
         onValueChange = onValueChange,
-        textStyle = textStyle,
         modifier = modifier.fillMaxWidth(),
         enabled = enabled,
         readOnly = readOnly,
@@ -176,12 +172,13 @@ fun MifosTextField(
         supportingText = errorText?.let {
             {
                 Text(
-                    modifier = Modifier.testTag("errorTag"),
                     text = it,
-                    style = MaterialTheme.typography.labelSmall,
                     color = MaterialTheme.colorScheme.error,
                 )
             }
+        },
+        textStyle = LocalDensity.current.run {
+            TextStyle(color = MaterialTheme.colorScheme.onSurface)
         },
     )
 }
@@ -211,8 +208,9 @@ fun MifosCustomTextField(
     leadingIcon: @Composable (() -> Unit)? = null,
     supportingText: @Composable (() -> Unit)? = null,
 ) {
-    val colors = TextFieldDefaults.colors().copy(
-        focusedTextColor = MaterialTheme.colorScheme.primary,
+    val colors = TextFieldDefaults.colors(
+        focusedLabelColor = MaterialTheme.colorScheme.primary,
+        unfocusedLabelColor = MaterialTheme.colorScheme.primary,
         cursorColor = MaterialTheme.colorScheme.onSurface,
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
@@ -248,7 +246,6 @@ fun MifosCustomTextField(
             label = {
                 Text(
                     text = label,
-                    color = MaterialTheme.colorScheme.primary,
                     style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier.padding(bottom = 10.dp),
                 )
