@@ -12,6 +12,8 @@ plugins {
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.dokka)
+    alias(libs.plugins.mifospay.feature.library)
+
 }
 
 android {
@@ -47,21 +49,3 @@ kotlin {
     }
 }
 
-tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
-    // Output format (HTML by default)
-    outputDirectory.set(layout.buildDirectory.dir("dokka"))
-
-    // Module name in documentation
-    moduleName.set("feature")
-
-    // Documentation format
-    dokkaSourceSets {
-        configureEach {
-            sourceLink {
-                localDirectory.set(file("src"))
-                remoteUrl.set(uri("https://github.com/openMF/mobile-wallet.git").toURL())
-                remoteLineSuffix.set("#L")
-            }
-        }
-    }
-}
