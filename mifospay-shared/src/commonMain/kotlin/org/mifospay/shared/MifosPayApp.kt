@@ -23,7 +23,6 @@ import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
 import org.mifospay.shared.navigation.MifosNavGraph.PASSCODE_GRAPH
 import org.mifospay.shared.navigation.RootNavGraph
-import androidx.navigation.NavController
 
 @Composable
 fun MifosPaySharedApp(
