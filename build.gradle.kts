@@ -33,7 +33,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.wire) apply false
     alias(libs.plugins.ktorfit) apply false
-    alias(libs.plugins.dokka)
+    alias(libs.plugins.dokka) apply false
 }
 
 object DynamicVersion {
@@ -58,7 +58,6 @@ tasks.register("printModulePaths") {
         }
     }
 }
-
 // Configuration for CMP module dependency graph
 moduleGraphAssert {
     configurations += setOf("commonMainImplementation", "commonMainApi")
@@ -67,4 +66,22 @@ moduleGraphAssert {
     configurations += setOf("jsMainImplementation", "jsMainApi")
     configurations += setOf("nativeMainImplementation", "nativeMainApi")
     configurations += setOf("wasmJsMainImplementation", "wasmJsMainApi")
+}
+
+subprojects {
+    plugins.withId("org.jetbrains.dokka") {
+        tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
+            outputDirectory.set(layout.buildDirectory.dir("dokka"))
+            dokkaSourceSets {
+                configureEach {
+                    if (name == "commonMain" || name == "androidMain" || name == "desktopMain" || name == "jsMain" || name == "nativeMain") {
+                        includeNonPublic.set(true)
+                        skipDeprecated.set(true)
+                        reportUndocumented.set(true)
+                        jdkVersion.set(8)
+                    }
+                }
+            }
+        }
+    }
 }

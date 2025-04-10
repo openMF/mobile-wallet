@@ -11,6 +11,7 @@ plugins {
     alias(libs.plugins.mifospay.kmp.library)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.dokka)
 }
 
 android {

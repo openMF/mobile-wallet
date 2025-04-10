@@ -13,11 +13,13 @@ class KMPLibraryConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
+                apply(KMPLibraryPlugin::class.java)
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.multiplatform")
                 apply("mifospay.kmp.koin")
                 apply("mifos.detekt.plugin")
                 apply("mifos.spotless.plugin")
+                apply("org.jetbrains.dokka")
             }
 
             configureKotlinMultiplatform()

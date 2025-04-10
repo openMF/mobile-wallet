@@ -12,6 +12,8 @@ class CMPFeatureConventionPlugin : Plugin<Project> {
                 apply("mifospay.kmp.koin")
                 apply("org.jetbrains.kotlin.plugin.compose")
                 apply("org.jetbrains.compose")
+                apply("org.jetbrains.dokka")
+                apply(KMPLibraryPlugin::class.java)
             }
 
             dependencies {
