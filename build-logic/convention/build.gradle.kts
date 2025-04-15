@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
+
 plugins {
     `kotlin-dsl`
-    alias(libs.plugins.dokka)
 }
 
 group = "org.mifospay.buildlogic"
@@ -30,7 +30,7 @@ dependencies {
     compileOnly(libs.ktlint.gradlePlugin)
     compileOnly(libs.spotless.gradle)
     implementation(libs.truth)
-    implementation(libs.dokka.gradle.plugin)
+    compileOnly(libs.dokka.gradle.plugin)
 }
 
 tasks {
@@ -92,10 +92,6 @@ gradlePlugin {
             id = "mifos.git.hooks"
             implementationClass = "MifosGitHooksConventionPlugin"
             description = "Installs git hooks for the project"
-        }
-        register("featureLibrary") {
-            id = "mifospay.feature.library"
-            implementationClass = "FeatureLibraryPlugin"
         }
     }
 }

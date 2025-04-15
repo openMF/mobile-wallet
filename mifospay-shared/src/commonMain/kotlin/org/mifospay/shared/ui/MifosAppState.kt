@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.util.trace
 import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -116,7 +117,7 @@ internal class MifosAppState(
                 // Pop up to the start destination of the graph to
                 // avoid building up a large stack of destinations
                 // on the back stack as users select items
-                popUpTo(HOME_ROUTE) {
+                popUpTo(navController.graph.findStartDestination().route ?: "") {
                     saveState = true
                 }
                 // Avoid multiple copies of the same destination when

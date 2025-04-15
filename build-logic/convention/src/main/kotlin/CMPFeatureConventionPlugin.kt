@@ -2,6 +2,7 @@
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.dependencies
+import org.mifospay.configureFeatureDocumentation
 import org.mifospay.libs
 
 class CMPFeatureConventionPlugin : Plugin<Project> {
@@ -13,8 +14,8 @@ class CMPFeatureConventionPlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.plugin.compose")
                 apply("org.jetbrains.compose")
                 apply("org.jetbrains.dokka")
-                apply(KMPLibraryPlugin::class.java)
             }
+            configureFeatureDocumentation()
 
             dependencies {
                 add("commonMainImplementation", project(":core:ui"))

@@ -11,9 +11,6 @@ plugins {
     alias(libs.plugins.mifospay.cmp.feature)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.kotlin.serialization)
-    alias(libs.plugins.dokka)
-    alias(libs.plugins.mifospay.feature.library)
-
 }
 
 android {

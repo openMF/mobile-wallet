@@ -4,6 +4,7 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.mifospay.configureFeatureDocumentation
 import org.mifospay.configureFlavors
 import org.mifospay.configureKotlinAndroid
 import org.mifospay.configureKotlinMultiplatform
@@ -13,7 +14,6 @@ class KMPLibraryConventionPlugin: Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
-                apply(KMPLibraryPlugin::class.java)
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.multiplatform")
                 apply("mifospay.kmp.koin")
@@ -21,7 +21,7 @@ class KMPLibraryConventionPlugin: Plugin<Project> {
                 apply("mifos.spotless.plugin")
                 apply("org.jetbrains.dokka")
             }
-
+            configureFeatureDocumentation()
             configureKotlinMultiplatform()
 
             extensions.configure<LibraryExtension> {

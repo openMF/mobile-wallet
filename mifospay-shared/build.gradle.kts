@@ -1,3 +1,5 @@
+import org.jetbrains.dokka.gradle.DokkaTask
+
 /*
  * Copyright 2024 Mifos Initiative
  *
@@ -69,6 +71,8 @@ kotlin {
             implementation(projects.feature.qr)
             implementation(projects.feature.merchants)
             implementation(projects.feature.upiSetup)
+            implementation(libs.kotlinx.coroutines.core.v173)
+
         }
 
         desktopMain.dependencies {
@@ -103,3 +107,4 @@ compose.resources {
     publicResClass = true
     generateResClass = always
 }
+

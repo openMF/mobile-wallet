@@ -10,6 +10,7 @@
 package org.mifospay.shared.navigation
 
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.navOptions
 import androidx.navigation.navigation
@@ -47,7 +48,7 @@ fun NavController.navigateToMainGraph() {
         // Pop up to the start destination of the graph to
         // avoid building up a large stack of destinations
         // on the back stack as users select items
-        popUpTo(MifosNavGraph.MAIN_GRAPH) {
+        popUpTo(graph.findStartDestination().route ?: "") {
             saveState = false
         }
         // Avoid multiple copies of the same destination when

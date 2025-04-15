@@ -1,3 +1,5 @@
+import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     dependencies {
@@ -68,20 +70,11 @@ moduleGraphAssert {
     configurations += setOf("wasmJsMainImplementation", "wasmJsMainApi")
 }
 
-subprojects {
-    plugins.withId("org.jetbrains.dokka") {
-        tasks.withType<org.jetbrains.dokka.gradle.DokkaTask>().configureEach {
-            outputDirectory.set(layout.buildDirectory.dir("dokka"))
-            dokkaSourceSets {
-                configureEach {
-                    if (name == "commonMain" || name == "androidMain" || name == "desktopMain" || name == "jsMain" || name == "nativeMain") {
-                        includeNonPublic.set(true)
-                        skipDeprecated.set(true)
-                        reportUndocumented.set(true)
-                        jdkVersion.set(8)
-                    }
-                }
-            }
-        }
-    }
+// root build.gradle.kts
+tasks.register<DokkaMultiModuleTask>("dokkaHtmlMultiModule") {
+    outputDirectory.set(buildDir.resolve("dokka"))
+
+    // Automatically collect all dokkaHtml tasks from subprojects
+    addChildTasks(subprojects, "dokkaHtml")
 }
+
