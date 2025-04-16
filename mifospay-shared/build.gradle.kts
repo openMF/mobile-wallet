@@ -69,8 +69,6 @@ kotlin {
             implementation(projects.feature.qr)
             implementation(projects.feature.merchants)
             implementation(projects.feature.upiSetup)
-            implementation(libs.kotlinx.coroutines.core.v173)
-
         }
 
         desktopMain.dependencies {

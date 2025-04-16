@@ -72,7 +72,7 @@ moduleGraphAssert {
 
 // root build.gradle.kts
 tasks.register<DokkaMultiModuleTask>("dokkaHtmlMultiModule") {
-    outputDirectory.set(buildDir.resolve("dokka"))
+    outputDirectory.set(buildDir.resolve("docs"))
 
     // Automatically collect all dokkaHtml tasks from subprojects
     addChildTasks(subprojects, "dokkaHtml")
