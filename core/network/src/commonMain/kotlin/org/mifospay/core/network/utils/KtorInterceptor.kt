@@ -81,7 +81,6 @@ class KtorInterceptorRe(
 
             scope.receivePipeline.intercept(HttpResponsePipeline.After) { response ->
                 if (response.status == HttpStatusCode.Unauthorized) {
-                    plugin.repository.logOut()
                     GlobalAuthManager.markUnauthorized()
                 }
                 proceedWith(subject)

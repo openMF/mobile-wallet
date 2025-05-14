@@ -10,36 +10,16 @@
 package org.mifospay.feature.auth
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import org.mifospay.core.common.GlobalAuthManager
-import org.mifospay.core.data.util.Constants.UNAUTHORIZED_ERROR
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
 
 @Composable
 fun AuthErrorDialog(
-    onLogout: () -> Unit,
+    dialogState: BasicDialogState,
+    onDismiss: () -> Unit,
 ) {
-    val dialogState = remember { mutableStateOf<BasicDialogState>(BasicDialogState.Hidden) }
-
-    LaunchedEffect(Unit) {
-        GlobalAuthManager.isUnauthorized.collect { unauthorized ->
-            if (unauthorized) {
-                dialogState.value = BasicDialogState.Shown(
-                    title = "Unauthorized 401",
-                    message = UNAUTHORIZED_ERROR,
-                )
-            }
-        }
-    }
-
     MifosBasicDialog(
-        visibilityState = dialogState.value,
-        onDismissRequest = {
-            dialogState.value = BasicDialogState.Hidden
-            onLogout()
-        },
+        visibilityState = dialogState,
+        onDismissRequest = onDismiss
     )
 }

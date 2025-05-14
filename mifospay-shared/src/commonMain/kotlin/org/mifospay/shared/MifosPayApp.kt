@@ -10,7 +10,10 @@
 package org.mifospay.shared
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
@@ -19,12 +22,14 @@ import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.common.GlobalAuthManager
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
+import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.feature.auth.AuthErrorDialog
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
 import org.mifospay.shared.navigation.MifosNavGraph.PASSCODE_GRAPH
 import org.mifospay.shared.navigation.RootNavGraph
+import org.mifospay.core.common.Constants.UNAUTHORIZED_ERROR
 
 @Composable
 fun MifosPaySharedApp(
@@ -45,15 +50,32 @@ private fun MifosPayApp(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navController = rememberNavController()
 
-    AuthErrorDialog {
-        viewModel.logOut()
-        navController.navigate(LOGIN_GRAPH) {
-            popUpTo(navController.graph.id) {
-                inclusive = true
-            }
+    val dialogState = remember { mutableStateOf<BasicDialogState>(BasicDialogState.Hidden) }
+    val isUnauthorized by GlobalAuthManager.isUnauthorized.collectAsStateWithLifecycle()
+
+    LaunchedEffect(isUnauthorized) {
+            if (isUnauthorized) {
+                dialogState.value = BasicDialogState.Shown(
+                    title = UNAUTHORIZED_ERROR,
+                    message = "Your session has expired. Please log in again."
+                )
         }
-        GlobalAuthManager.reset()
     }
+
+    AuthErrorDialog(
+        dialogState = dialogState.value,
+        onDismiss = {
+            dialogState.value = BasicDialogState.Hidden
+            viewModel.logOut()
+            navController.navigate(LOGIN_GRAPH) {
+                popUpTo(navController.graph.id) {
+                    inclusive = true
+                }
+            }
+            GlobalAuthManager.reset()
+        }
+    )
+
     val navDestination = when (uiState) {
         is MainUiState.Loading -> LOGIN_GRAPH
         is Success -> if ((uiState as Success).userData.authenticated) {
