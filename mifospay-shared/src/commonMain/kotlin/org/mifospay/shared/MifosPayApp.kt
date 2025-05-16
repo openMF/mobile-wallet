@@ -19,6 +19,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifospay.core.common.Constants.UNAUTHORIZED_ERROR
 import org.mifospay.core.common.GlobalAuthManager
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
@@ -29,7 +30,6 @@ import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
 import org.mifospay.shared.navigation.MifosNavGraph.PASSCODE_GRAPH
 import org.mifospay.shared.navigation.RootNavGraph
-import org.mifospay.core.common.Constants.UNAUTHORIZED_ERROR
 
 @Composable
 fun MifosPaySharedApp(
@@ -54,11 +54,11 @@ private fun MifosPayApp(
     val isUnauthorized by GlobalAuthManager.isUnauthorized.collectAsStateWithLifecycle()
 
     LaunchedEffect(isUnauthorized) {
-            if (isUnauthorized) {
-                dialogState.value = BasicDialogState.Shown(
-                    title = UNAUTHORIZED_ERROR,
-                    message = "Your session has expired. Please log in again."
-                )
+        if (isUnauthorized) {
+            dialogState.value = BasicDialogState.Shown(
+                title = UNAUTHORIZED_ERROR,
+                message = "Your session has expired. Please log in again.",
+            )
         }
     }
 
@@ -73,7 +73,7 @@ private fun MifosPayApp(
                 }
             }
             GlobalAuthManager.reset()
-        }
+        },
     )
 
     val navDestination = when (uiState) {

@@ -41,6 +41,13 @@ class KtorInterceptor(
                     }
                 }
             }
+
+            scope.responsePipeline.intercept(HttpResponsePipeline.After) {
+                if (context.response.status == HttpStatusCode.Unauthorized) {
+                    GlobalAuthManager.markUnauthorized()
+                }
+                proceedWith(subject)
+            }
         }
 
         override fun prepare(block: Config.() -> Unit): KtorInterceptor {
@@ -79,8 +86,8 @@ class KtorInterceptorRe(
                 }
             }
 
-            scope.receivePipeline.intercept(HttpResponsePipeline.After) { response ->
-                if (response.status == HttpStatusCode.Unauthorized) {
+            scope.responsePipeline.intercept(HttpResponsePipeline.After) {
+                if (context.response.status == HttpStatusCode.Unauthorized) {
                     GlobalAuthManager.markUnauthorized()
                 }
                 proceedWith(subject)

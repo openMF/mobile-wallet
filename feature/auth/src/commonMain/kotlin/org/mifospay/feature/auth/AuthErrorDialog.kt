@@ -20,6 +20,6 @@ fun AuthErrorDialog(
 ) {
     MifosBasicDialog(
         visibilityState = dialogState,
-        onDismissRequest = onDismiss
+        onDismissRequest = onDismiss,
     )
 }
