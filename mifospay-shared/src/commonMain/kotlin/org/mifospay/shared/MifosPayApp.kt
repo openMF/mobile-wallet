@@ -24,8 +24,8 @@ import org.mifospay.core.common.GlobalAuthManager
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 import org.mifospay.core.designsystem.component.BasicDialogState
+import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.feature.auth.AuthErrorDialog
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
 import org.mifospay.shared.navigation.MifosNavGraph.PASSCODE_GRAPH
@@ -62,9 +62,9 @@ private fun MifosPayApp(
         }
     }
 
-    AuthErrorDialog(
-        dialogState = dialogState.value,
-        onDismiss = {
+    MifosBasicDialog(
+        visibilityState = dialogState.value,
+        onConfirm = {
             dialogState.value = BasicDialogState.Hidden
             viewModel.logOut()
             navController.navigate(LOGIN_GRAPH) {
@@ -74,6 +74,7 @@ private fun MifosPayApp(
             }
             GlobalAuthManager.reset()
         },
+        onDismissRequest = {},
     )
 
     val navDestination = when (uiState) {
