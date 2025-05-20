@@ -22,7 +22,7 @@ fun MifosDialogBox(
     title: String,
     showDialogState: Boolean,
     confirmButtonText: String,
-    dismissButtonText: String,
+    dismissButtonText: String? = null,
     onConfirm: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -48,8 +48,10 @@ fun MifosDialogBox(
                 }
             },
             dismissButton = {
-                TextButton(onClick = onDismiss) {
-                    Text(text = dismissButtonText)
+                if (!dismissButtonText.isNullOrBlank()) {
+                    TextButton(onClick = onDismiss) {
+                        Text(text = dismissButtonText)
+                    }
                 }
             },
         )

@@ -19,12 +19,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
-import org.mifospay.core.common.Constants.UNAUTHORIZED_ERROR
 import org.mifospay.core.common.GlobalAuthManager
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
-import org.mifospay.core.designsystem.component.BasicDialogState
-import org.mifospay.core.designsystem.component.MifosBasicDialog
+import org.mifospay.core.designsystem.component.MifosDialogBox
 import org.mifospay.core.designsystem.theme.MifosTheme
 import org.mifospay.shared.MainUiState.Success
 import org.mifospay.shared.navigation.MifosNavGraph.LOGIN_GRAPH
@@ -50,32 +48,34 @@ private fun MifosPayApp(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val navController = rememberNavController()
 
-    val dialogState = remember { mutableStateOf<BasicDialogState>(BasicDialogState.Hidden) }
+    var showErrorDialog = remember { mutableStateOf<Boolean>(false) }
     val isUnauthorized by GlobalAuthManager.isUnauthorized.collectAsStateWithLifecycle()
 
     LaunchedEffect(isUnauthorized) {
         if (isUnauthorized) {
-            dialogState.value = BasicDialogState.Shown(
-                title = UNAUTHORIZED_ERROR,
-                message = "Your session has expired. Please log in again.",
-            )
+            showErrorDialog.value = true
         }
     }
 
-    MifosBasicDialog(
-        visibilityState = dialogState.value,
-        onConfirm = {
-            dialogState.value = BasicDialogState.Hidden
-            viewModel.logOut()
-            navController.navigate(LOGIN_GRAPH) {
-                popUpTo(navController.graph.id) {
-                    inclusive = true
+    if (showErrorDialog.value) {
+        MifosDialogBox(
+            title = "Unauthorized User",
+            showDialogState = showErrorDialog.value,
+            confirmButtonText = "Ok",
+            onConfirm = {
+                showErrorDialog.value = false
+                viewModel.logOut()
+                navController.navigate(LOGIN_GRAPH) {
+                    popUpTo(navController.graph.id) {
+                        inclusive = true
+                    }
                 }
-            }
-            GlobalAuthManager.reset()
-        },
-        onDismissRequest = {},
-    )
+                GlobalAuthManager.reset()
+            },
+            onDismiss = {},
+            message = "Please login again to continue",
+        )
+    }
 
     val navDestination = when (uiState) {
         is MainUiState.Loading -> LOGIN_GRAPH
