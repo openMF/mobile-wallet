@@ -13,10 +13,10 @@ import kotlin.math.log2
 import kotlin.math.pow
 
 object PasswordChecker {
-    private const val MIN_PASSWORD_LENGTH = 8
-    private const val STRONG_PASSWORD_LENGTH = 12
+    private const val MIN_PASSWORD_LENGTH = 12
+    private const val STRONG_PASSWORD_LENGTH = 16
     private const val MIN_ENTROPY_BITS = 60.0
-    private const val MAX_PASSWORD_LENGTH = 128
+    private const val MAX_PASSWORD_LENGTH = 50
 
     fun getPasswordStrengthResult(password: String): PasswordStrengthResult {
         when {
@@ -33,6 +33,10 @@ object PasswordChecker {
         return PasswordStrengthResult.Success(result)
     }
 
+    fun hasSpaceOrConsecutiveRepetitions(password: String): Boolean {
+        return Regex("(.)\\1").containsMatchIn(password) || password.contains(" ")
+    }
+
     fun getPasswordStrength(password: String): PasswordStrength {
         val length = password.length
         val hasUpperCase = password.any { it.isUpperCase() }
@@ -47,12 +51,14 @@ object PasswordChecker {
         return when {
             length < MIN_PASSWORD_LENGTH -> PasswordStrength.LEVEL_0
             numTypesPresent == 1 -> PasswordStrength.LEVEL_1
-            numTypesPresent == 2 -> PasswordStrength.LEVEL_2
-            numTypesPresent == 3 && length >= STRONG_PASSWORD_LENGTH -> PasswordStrength.LEVEL_4
+            numTypesPresent == 2 || numTypesPresent == 3 ||
+                hasSpaceOrConsecutiveRepetitions(password) -> PasswordStrength.LEVEL_2
             numTypesPresent == 4 && length >= STRONG_PASSWORD_LENGTH &&
                 entropyBits >= MIN_ENTROPY_BITS -> PasswordStrength.LEVEL_5
+            numTypesPresent == 4 && length >= STRONG_PASSWORD_LENGTH -> PasswordStrength.LEVEL_4
+            numTypesPresent == 4 && length < STRONG_PASSWORD_LENGTH -> PasswordStrength.LEVEL_3
 
-            else -> PasswordStrength.LEVEL_3
+            else -> PasswordStrength.LEVEL_2
         }
     }
 
@@ -81,6 +87,12 @@ object PasswordChecker {
         }
         if (password.length < STRONG_PASSWORD_LENGTH) {
             feedback.add("For a stronger password, use at least $STRONG_PASSWORD_LENGTH characters.")
+        }
+        if (Regex("(.)\\1").containsMatchIn(password)) {
+            feedback.add("Remove consecutive repeating characters.")
+        }
+        if (password.contains(" ")) {
+            feedback.add("Remove spaces.")
         }
 
         return feedback

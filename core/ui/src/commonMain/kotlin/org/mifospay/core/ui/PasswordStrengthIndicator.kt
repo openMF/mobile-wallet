@@ -138,7 +138,7 @@ private fun MinimumCharacterCount(
         } else {
             MaterialTheme.colorScheme.surfaceDim
         },
-        label = "minmumCharacterCountColor",
+        label = "minimumCharacterCountColor",
     )
     Row(
         modifier = modifier,

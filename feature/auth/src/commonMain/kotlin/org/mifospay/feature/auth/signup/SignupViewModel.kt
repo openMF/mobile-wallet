@@ -34,7 +34,8 @@ import org.mifospay.core.ui.utils.PasswordStrengthResult
 import org.mifospay.feature.auth.signup.SignUpAction.Internal.ReceivePasswordStrengthResult
 
 private const val KEY_STATE = "signup_state"
-private const val MIN_PASSWORD_LENGTH = 8
+private const val MIN_PASSWORD_LENGTH = 12
+private const val MAX_PASSWORD_LENGTH = 50
 
 class SignupViewModel(
     private val userRepository: UserRepository,
@@ -288,6 +289,16 @@ class SignupViewModel(
             }
         }
 
+        state.passwordInput.length > MAX_PASSWORD_LENGTH -> {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = SignUpDialog.Error(
+                        "Password must be less than $MAX_PASSWORD_LENGTH characters long.",
+                    ),
+                )
+            }
+        }
+
         !state.isPasswordMatch -> {
             mutableStateFlow.update {
                 it.copy(dialogState = SignUpDialog.Error("Passwords do not match."))
@@ -296,7 +307,17 @@ class SignupViewModel(
 
         !state.isPasswordStrong -> {
             mutableStateFlow.update {
-                it.copy(dialogState = SignUpDialog.Error("Password is weak."))
+                it.copy(
+                    dialogState = SignUpDialog.Error(
+                        "Please ensure password contains :" +
+                            "\n- At least one uppercase character" +
+                            "\n- At least one lowercase character" +
+                            "\n- At least one numeric digit" +
+                            "\n- At least one special character" +
+                            "\n- No spaces" +
+                            "\n- No consecutive repeating characters",
+                    ),
+                )
             }
         }
 
@@ -347,50 +368,62 @@ class SignupViewModel(
             it.copy(dialogState = SignUpDialog.Loading)
         }
 
-        // 0. Unique Mobile Number (checked in MOBILE VERIFICATION ACTIVITY)
-        // 1. Check for unique external id and username
+        // 1. Check for unique external id, username and mobile no.
         // 2. Create user
         // 3. Create Client
         // 4. Update User and connect client with user
-        checkForUsernameExists(state.userNameInput)
+
+        val fieldsToCheck = listOf(
+            Pair("username", state.userNameInput),
+            Pair("mobileNo", state.mobileNumberInput),
+        )
+        checkUniqueFields(fieldsToCheck)
     }
 
-    private fun checkForUsernameExists(username: String) {
+    private fun checkUniqueFields(fields: List<Pair<String, String>>) {
         viewModelScope.launch {
-            val result = searchRepository.searchResources(
-                username,
-                Constants.CLIENTS,
-                false,
+            val errorMessages = mutableListOf<String>()
+
+            val fieldNamesMap = mapOf(
+                "username" to "Username",
+                "mobileNo" to "Mobile Number",
             )
 
-            when (result) {
-                is DataState.Error -> {
-                    val message = result.exception.message.toString()
-                    mutableStateFlow.update {
-                        it.copy(dialogState = SignUpDialog.Error(message))
+            for ((fieldName, fieldValue) in fields) {
+                val result = searchRepository.searchResources(
+                    fieldValue,
+                    Constants.CLIENTS,
+                    false,
+                )
+
+                when (result) {
+                    is DataState.Error -> {
+                        errorMessages.add(result.exception.message.toString())
                     }
-                }
 
-                is DataState.Success -> {
-                    if (result.data.isEmpty()) {
-                        // Username is unique
-                        val newUser = NewUser(
-                            state.userNameInput,
-                            state.firstNameInput,
-                            state.lastNameInput,
-                            state.emailInput,
-                            state.passwordInput,
-                        )
-
-                        createUser(newUser)
-                    } else {
-                        mutableStateFlow.update {
-                            it.copy(dialogState = SignUpDialog.Error("Username already exists."))
+                    is DataState.Success -> {
+                        if (result.data.isNotEmpty()) { // result contains instances with same Username or Mobile No.
+                            errorMessages.add("${fieldNamesMap[fieldName] ?: fieldName} already exists.")
                         }
                     }
-                }
 
-                is DataState.Loading -> Unit
+                    is DataState.Loading -> Unit
+                }
+            }
+
+            if (errorMessages.isNotEmpty()) {
+                mutableStateFlow.update {
+                    it.copy(dialogState = SignUpDialog.Error(errorMessages.joinToString("\n")))
+                }
+            } else {
+                val newUser = NewUser(
+                    state.userNameInput,
+                    state.firstNameInput,
+                    state.lastNameInput,
+                    state.emailInput,
+                    state.passwordInput,
+                )
+                createUser(newUser)
             }
         }
     }
