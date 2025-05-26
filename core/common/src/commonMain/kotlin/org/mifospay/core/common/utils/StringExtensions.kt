@@ -31,3 +31,11 @@ fun maskString(input: String, maskChar: Char = '*'): String {
 fun String.capitalizeWords(): String = split(" ").joinToString(" ") { it ->
     it.replaceFirstChar { if (it.isLowerCase()) it.titlecase() else it.toString() }
 }
+
+fun String.hasSpaces(): Boolean {
+    return this.contains(" ")
+}
+
+fun String.hasConsecutiveRepetitions(): Boolean {
+    return Regex("(.)\\1").containsMatchIn(this)
+}

@@ -9,6 +9,8 @@
  */
 package org.mifospay.core.ui.utils
 
+import org.mifospay.core.common.utils.hasConsecutiveRepetitions
+import org.mifospay.core.common.utils.hasSpaces
 import kotlin.math.log2
 import kotlin.math.pow
 
@@ -19,27 +21,20 @@ object PasswordChecker {
     private const val MAX_PASSWORD_LENGTH = 50
 
     fun getPasswordStrengthResult(password: String): PasswordStrengthResult {
-        when {
-            password.isEmpty() -> return PasswordStrengthResult.Error("Password cannot be empty.")
-            password.length > MAX_PASSWORD_LENGTH -> {
-                return PasswordStrengthResult.Error(
-                    "Password is too long. Maximum length is $MAX_PASSWORD_LENGTH characters.",
-                )
-            }
-            hasSpaceOrConsecutiveRepetitions(password) -> {
-                return PasswordStrengthResult.Error(
-                    "Password must not contain spaces or repeating characters.",
-                )
-            }
+        val errors = buildList {
+            if (password.isEmpty()) add("- Password cannot be empty.")
+            if (password.length > MAX_PASSWORD_LENGTH) add("- Password is too long. Maximum length is $MAX_PASSWORD_LENGTH characters.")
+            if (password.hasSpaces()) add("- Password must not contain spaces.")
+            if (password.hasConsecutiveRepetitions()) add("- Password must not contain consecutive repetitive characters.")
+        }
+
+        if (errors.isNotEmpty()) {
+            return PasswordStrengthResult.Error(errors.joinToString("\n"))
         }
 
         val result = getPasswordStrength(password)
 
         return PasswordStrengthResult.Success(result)
-    }
-
-    fun hasSpaceOrConsecutiveRepetitions(password: String): Boolean {
-        return Regex("(.)\\1").containsMatchIn(password) || password.contains(" ")
     }
 
     private fun getPasswordStrength(password: String): PasswordStrength {
@@ -91,10 +86,10 @@ object PasswordChecker {
         if (password.length < STRONG_PASSWORD_LENGTH) {
             feedback.add("For a stronger password, use at least $STRONG_PASSWORD_LENGTH characters.")
         }
-        if (Regex("(.)\\1").containsMatchIn(password)) {
+        if (password.hasConsecutiveRepetitions()) {
             feedback.add("Remove consecutive repeating characters.")
         }
-        if (password.contains(" ")) {
+        if (password.hasSpaces()) {
             feedback.add("Remove spaces.")
         }
 
