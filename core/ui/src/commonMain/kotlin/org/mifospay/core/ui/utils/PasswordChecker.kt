@@ -14,8 +14,8 @@ import kotlin.math.pow
 
 object PasswordChecker {
     private const val MIN_PASSWORD_LENGTH = 12
-    private const val STRONG_PASSWORD_LENGTH = 16
-    private const val MIN_ENTROPY_BITS = 60.0
+    private const val STRONG_PASSWORD_LENGTH = 15
+    private const val MIN_ENTROPY_BITS = 100.0
     private const val MAX_PASSWORD_LENGTH = 50
 
     fun getPasswordStrengthResult(password: String): PasswordStrengthResult {
@@ -24,6 +24,11 @@ object PasswordChecker {
             password.length > MAX_PASSWORD_LENGTH -> {
                 return PasswordStrengthResult.Error(
                     "Password is too long. Maximum length is $MAX_PASSWORD_LENGTH characters.",
+                )
+            }
+            hasSpaceOrConsecutiveRepetitions(password) -> {
+                return PasswordStrengthResult.Error(
+                    "Password must not contain spaces or repeating characters.",
                 )
             }
         }
@@ -37,7 +42,7 @@ object PasswordChecker {
         return Regex("(.)\\1").containsMatchIn(password) || password.contains(" ")
     }
 
-    fun getPasswordStrength(password: String): PasswordStrength {
+    private fun getPasswordStrength(password: String): PasswordStrength {
         val length = password.length
         val hasUpperCase = password.any { it.isUpperCase() }
         val hasLowerCase = password.any { it.isLowerCase() }
@@ -51,14 +56,12 @@ object PasswordChecker {
         return when {
             length < MIN_PASSWORD_LENGTH -> PasswordStrength.LEVEL_0
             numTypesPresent == 1 -> PasswordStrength.LEVEL_1
-            numTypesPresent == 2 || numTypesPresent == 3 ||
-                hasSpaceOrConsecutiveRepetitions(password) -> PasswordStrength.LEVEL_2
+            numTypesPresent == 2 || numTypesPresent == 3 -> PasswordStrength.LEVEL_2
             numTypesPresent == 4 && length >= STRONG_PASSWORD_LENGTH &&
                 entropyBits >= MIN_ENTROPY_BITS -> PasswordStrength.LEVEL_5
             numTypesPresent == 4 && length >= STRONG_PASSWORD_LENGTH -> PasswordStrength.LEVEL_4
-            numTypesPresent == 4 && length < STRONG_PASSWORD_LENGTH -> PasswordStrength.LEVEL_3
 
-            else -> PasswordStrength.LEVEL_2
+            else -> PasswordStrength.LEVEL_3
         }
     }
 

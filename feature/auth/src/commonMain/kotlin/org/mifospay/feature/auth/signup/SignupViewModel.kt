@@ -12,6 +12,8 @@ package org.mifospay.feature.auth.signup
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifospay.core.common.DataState
@@ -173,7 +175,7 @@ class SignupViewModel(
 
     private fun handlePasswordInput(action: SignUpAction.PasswordInputChange) {
         // Update input:
-        mutableStateFlow.update { it.copy(passwordInput = action.password) }
+        mutableStateFlow.update { it.copy(passwordInput = action.password, passwordError = null) }
         // Update password strength:
         passwordStrengthJob.cancel()
         if (action.password.isEmpty()) {
@@ -204,7 +206,11 @@ class SignupViewModel(
                 }
             }
 
-            is PasswordStrengthResult.Error -> {}
+            is PasswordStrengthResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(passwordError = result.message.toString(), passwordStrengthState = PasswordStrengthState.NONE)
+                }
+            }
         }
     }
 
@@ -306,18 +312,14 @@ class SignupViewModel(
         }
 
         !state.isPasswordStrong -> {
+            val errorMessage = state.passwordError?.takeIf { it.isNotBlank() }
+                ?: "Please ensure password contains :" +
+                "\n- At least one uppercase character" +
+                "\n- At least one lowercase character" +
+                "\n- At least one numeric digit" +
+                "\n- At least one special character"
             mutableStateFlow.update {
-                it.copy(
-                    dialogState = SignUpDialog.Error(
-                        "Please ensure password contains :" +
-                            "\n- At least one uppercase character" +
-                            "\n- At least one lowercase character" +
-                            "\n- At least one numeric digit" +
-                            "\n- At least one special character" +
-                            "\n- No spaces" +
-                            "\n- No consecutive repeating characters",
-                    ),
-                )
+                it.copy(dialogState = SignUpDialog.Error(errorMessage))
             }
         }
 
@@ -368,46 +370,31 @@ class SignupViewModel(
             it.copy(dialogState = SignUpDialog.Loading)
         }
 
-        // 1. Check for unique external id, username and mobile no.
-        // 2. Create user
-        // 3. Create Client
-        // 4. Update User and connect client with user
-
-        val fieldsToCheck = listOf(
-            Pair("username", state.userNameInput),
-            Pair("mobileNo", state.mobileNumberInput),
+        val fieldsToCheck = mapOf(
+            "Username" to state.userNameInput,
+            "Mobile Number" to state.mobileNumberInput,
         )
         checkUniqueFields(fieldsToCheck)
     }
 
-    private fun checkUniqueFields(fields: List<Pair<String, String>>) {
+    private fun checkUniqueFields(fields: Map<String, String>) {
         viewModelScope.launch {
-            val errorMessages = mutableListOf<String>()
+            val results = fields.map { (label, value) ->
+                async {
+                    val result = searchRepository.searchResources(value, Constants.CLIENTS, false)
+                    label to result
+                }
+            }.awaitAll()
 
-            val fieldNamesMap = mapOf(
-                "username" to "Username",
-                "mobileNo" to "Mobile Number",
-            )
-
-            for ((fieldName, fieldValue) in fields) {
-                val result = searchRepository.searchResources(
-                    fieldValue,
-                    Constants.CLIENTS,
-                    false,
-                )
-
+            val errorMessages = results.mapNotNull { (label, result) ->
                 when (result) {
-                    is DataState.Error -> {
-                        errorMessages.add(result.exception.message.toString())
-                    }
-
                     is DataState.Success -> {
-                        if (result.data.isNotEmpty()) { // result contains instances with same Username or Mobile No.
-                            errorMessages.add("${fieldNamesMap[fieldName] ?: fieldName} already exists.")
-                        }
+                        if (result.data.isNotEmpty()) "$label already exists." else null
                     }
-
-                    is DataState.Loading -> Unit
+                    is DataState.Error ->
+                        result.exception.message
+                            ?: "Error checking $label."
+                    else -> null
                 }
             }
 
@@ -542,6 +529,7 @@ data class SignUpState(
     val businessNameInput: String = "",
     val dialogState: SignUpDialog? = null,
     val passwordStrengthState: PasswordStrengthState = PasswordStrengthState.NONE,
+    val passwordError: String? = null,
 ) : Parcelable {
     @IgnoredOnParcel
     val isPasswordStrong: Boolean
