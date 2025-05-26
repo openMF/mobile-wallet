@@ -9,23 +9,27 @@
  */
 package org.mifospay.core.ui.utils
 
+import org.mifospay.core.common.utils.hasConsecutiveRepetitions
+import org.mifospay.core.common.utils.hasSpaces
 import kotlin.math.log2
 import kotlin.math.pow
 
 object PasswordChecker {
-    private const val MIN_PASSWORD_LENGTH = 8
-    private const val STRONG_PASSWORD_LENGTH = 12
-    private const val MIN_ENTROPY_BITS = 60.0
-    private const val MAX_PASSWORD_LENGTH = 128
+    private const val MIN_PASSWORD_LENGTH = 12
+    private const val STRONG_PASSWORD_LENGTH = 15
+    private const val MIN_ENTROPY_BITS = 100.0
+    private const val MAX_PASSWORD_LENGTH = 50
 
     fun getPasswordStrengthResult(password: String): PasswordStrengthResult {
-        when {
-            password.isEmpty() -> return PasswordStrengthResult.Error("Password cannot be empty.")
-            password.length > MAX_PASSWORD_LENGTH -> {
-                return PasswordStrengthResult.Error(
-                    "Password is too long. Maximum length is $MAX_PASSWORD_LENGTH characters.",
-                )
-            }
+        val errors = buildList {
+            if (password.isEmpty()) add("Password cannot be empty.")
+            if (password.length > MAX_PASSWORD_LENGTH) add("Password is too long. Maximum length is $MAX_PASSWORD_LENGTH characters.")
+            if (password.hasSpaces()) add("Password must not contain spaces.")
+            if (password.hasConsecutiveRepetitions()) add("Password must not contain consecutive repetitive characters.")
+        }
+
+        if (errors.isNotEmpty()) {
+            return PasswordStrengthResult.Error(errors.joinToString("\n"))
         }
 
         val result = getPasswordStrength(password)
@@ -33,7 +37,7 @@ object PasswordChecker {
         return PasswordStrengthResult.Success(result)
     }
 
-    fun getPasswordStrength(password: String): PasswordStrength {
+    private fun getPasswordStrength(password: String): PasswordStrength {
         val length = password.length
         val hasUpperCase = password.any { it.isUpperCase() }
         val hasLowerCase = password.any { it.isLowerCase() }
@@ -47,10 +51,10 @@ object PasswordChecker {
         return when {
             length < MIN_PASSWORD_LENGTH -> PasswordStrength.LEVEL_0
             numTypesPresent == 1 -> PasswordStrength.LEVEL_1
-            numTypesPresent == 2 -> PasswordStrength.LEVEL_2
-            numTypesPresent == 3 && length >= STRONG_PASSWORD_LENGTH -> PasswordStrength.LEVEL_4
+            numTypesPresent == 2 || numTypesPresent == 3 -> PasswordStrength.LEVEL_2
             numTypesPresent == 4 && length >= STRONG_PASSWORD_LENGTH &&
                 entropyBits >= MIN_ENTROPY_BITS -> PasswordStrength.LEVEL_5
+            numTypesPresent == 4 && length >= STRONG_PASSWORD_LENGTH -> PasswordStrength.LEVEL_4
 
             else -> PasswordStrength.LEVEL_3
         }
@@ -81,6 +85,12 @@ object PasswordChecker {
         }
         if (password.length < STRONG_PASSWORD_LENGTH) {
             feedback.add("For a stronger password, use at least $STRONG_PASSWORD_LENGTH characters.")
+        }
+        if (password.hasConsecutiveRepetitions()) {
+            feedback.add("Remove consecutive repeating characters.")
+        }
+        if (password.hasSpaces()) {
+            feedback.add("Remove spaces.")
         }
 
         return feedback

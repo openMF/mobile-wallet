@@ -12,6 +12,8 @@ package org.mifospay.feature.auth.signup
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifospay.core.common.DataState
@@ -34,7 +36,8 @@ import org.mifospay.core.ui.utils.PasswordStrengthResult
 import org.mifospay.feature.auth.signup.SignUpAction.Internal.ReceivePasswordStrengthResult
 
 private const val KEY_STATE = "signup_state"
-private const val MIN_PASSWORD_LENGTH = 8
+private const val MIN_PASSWORD_LENGTH = 12
+private const val MAX_PASSWORD_LENGTH = 50
 
 class SignupViewModel(
     private val userRepository: UserRepository,
@@ -172,7 +175,7 @@ class SignupViewModel(
 
     private fun handlePasswordInput(action: SignUpAction.PasswordInputChange) {
         // Update input:
-        mutableStateFlow.update { it.copy(passwordInput = action.password) }
+        mutableStateFlow.update { it.copy(passwordInput = action.password, passwordError = null) }
         // Update password strength:
         passwordStrengthJob.cancel()
         if (action.password.isEmpty()) {
@@ -203,7 +206,11 @@ class SignupViewModel(
                 }
             }
 
-            is PasswordStrengthResult.Error -> {}
+            is PasswordStrengthResult.Error -> {
+                mutableStateFlow.update {
+                    it.copy(passwordError = result.message.toString(), passwordStrengthState = PasswordStrengthState.NONE)
+                }
+            }
         }
     }
 
@@ -288,6 +295,16 @@ class SignupViewModel(
             }
         }
 
+        state.passwordInput.length > MAX_PASSWORD_LENGTH -> {
+            mutableStateFlow.update {
+                it.copy(
+                    dialogState = SignUpDialog.Error(
+                        "Password must be less than $MAX_PASSWORD_LENGTH characters long.",
+                    ),
+                )
+            }
+        }
+
         !state.isPasswordMatch -> {
             mutableStateFlow.update {
                 it.copy(dialogState = SignUpDialog.Error("Passwords do not match."))
@@ -295,8 +312,14 @@ class SignupViewModel(
         }
 
         !state.isPasswordStrong -> {
+            val errorMessage = state.passwordError?.takeIf { it.isNotBlank() }
+                ?: "Please ensure password contains :" +
+                "\n- At least one uppercase character" +
+                "\n- At least one lowercase character" +
+                "\n- At least one numeric digit" +
+                "\n- At least one special character"
             mutableStateFlow.update {
-                it.copy(dialogState = SignUpDialog.Error("Password is weak."))
+                it.copy(dialogState = SignUpDialog.Error(errorMessage.lines().joinToString("\n") { "- $it" }))
             }
         }
 
@@ -347,50 +370,47 @@ class SignupViewModel(
             it.copy(dialogState = SignUpDialog.Loading)
         }
 
-        // 0. Unique Mobile Number (checked in MOBILE VERIFICATION ACTIVITY)
-        // 1. Check for unique external id and username
-        // 2. Create user
-        // 3. Create Client
-        // 4. Update User and connect client with user
-        checkForUsernameExists(state.userNameInput)
+        val fieldsToCheck = mapOf(
+            "Username" to state.userNameInput,
+            "Mobile Number" to state.mobileNumberInput,
+        )
+        checkUniqueFields(fieldsToCheck)
     }
 
-    private fun checkForUsernameExists(username: String) {
+    private fun checkUniqueFields(fields: Map<String, String>) {
         viewModelScope.launch {
-            val result = searchRepository.searchResources(
-                username,
-                Constants.CLIENTS,
-                false,
-            )
-
-            when (result) {
-                is DataState.Error -> {
-                    val message = result.exception.message.toString()
-                    mutableStateFlow.update {
-                        it.copy(dialogState = SignUpDialog.Error(message))
-                    }
+            val results = fields.map { (label, value) ->
+                async {
+                    val result = searchRepository.searchResources(value, Constants.CLIENTS, false)
+                    label to result
                 }
+            }.awaitAll()
 
-                is DataState.Success -> {
-                    if (result.data.isEmpty()) {
-                        // Username is unique
-                        val newUser = NewUser(
-                            state.userNameInput,
-                            state.firstNameInput,
-                            state.lastNameInput,
-                            state.emailInput,
-                            state.passwordInput,
-                        )
-
-                        createUser(newUser)
-                    } else {
-                        mutableStateFlow.update {
-                            it.copy(dialogState = SignUpDialog.Error("Username already exists."))
-                        }
+            val errorMessages = results.mapNotNull { (label, result) ->
+                when (result) {
+                    is DataState.Success -> {
+                        if (result.data.isNotEmpty()) "$label already exists." else null
                     }
+                    is DataState.Error ->
+                        result.exception.message
+                            ?: "Error checking $label."
+                    else -> null
                 }
+            }
 
-                is DataState.Loading -> Unit
+            if (errorMessages.isNotEmpty()) {
+                mutableStateFlow.update {
+                    it.copy(dialogState = SignUpDialog.Error(errorMessages.joinToString("\n")))
+                }
+            } else {
+                val newUser = NewUser(
+                    state.userNameInput,
+                    state.firstNameInput,
+                    state.lastNameInput,
+                    state.emailInput,
+                    state.passwordInput,
+                )
+                createUser(newUser)
             }
         }
     }
@@ -509,6 +529,7 @@ data class SignUpState(
     val businessNameInput: String = "",
     val dialogState: SignUpDialog? = null,
     val passwordStrengthState: PasswordStrengthState = PasswordStrengthState.NONE,
+    val passwordError: String? = null,
 ) : Parcelable {
     @IgnoredOnParcel
     val isPasswordStrong: Boolean
