@@ -22,10 +22,10 @@ object PasswordChecker {
 
     fun getPasswordStrengthResult(password: String): PasswordStrengthResult {
         val errors = buildList {
-            if (password.isEmpty()) add("- Password cannot be empty.")
-            if (password.length > MAX_PASSWORD_LENGTH) add("- Password is too long. Maximum length is $MAX_PASSWORD_LENGTH characters.")
-            if (password.hasSpaces()) add("- Password must not contain spaces.")
-            if (password.hasConsecutiveRepetitions()) add("- Password must not contain consecutive repetitive characters.")
+            if (password.isEmpty()) add("Password cannot be empty.")
+            if (password.length > MAX_PASSWORD_LENGTH) add("Password is too long. Maximum length is $MAX_PASSWORD_LENGTH characters.")
+            if (password.hasSpaces()) add("Password must not contain spaces.")
+            if (password.hasConsecutiveRepetitions()) add("Password must not contain consecutive repetitive characters.")
         }
 
         if (errors.isNotEmpty()) {

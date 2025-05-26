@@ -319,7 +319,7 @@ class SignupViewModel(
                 "\n- At least one numeric digit" +
                 "\n- At least one special character"
             mutableStateFlow.update {
-                it.copy(dialogState = SignUpDialog.Error(errorMessage))
+                it.copy(dialogState = SignUpDialog.Error(errorMessage.lines().joinToString("\n") { "- $it" }))
             }
         }
 
