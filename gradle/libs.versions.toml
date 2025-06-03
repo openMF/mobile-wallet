@@ -37,7 +37,10 @@ mlkit="17.3.0"
 # Testing Dependencies
 espresso-core = "3.6.1"
 junitVersion = "4.13.2"
+kotestVersion = "5.9.1"
+mokkeryVersion = "2.7.2"
 truth = "1.4.4"
+turbineVersion = "1.1.0"
 roborazzi = "1.26.0"
 zxingVersion = "3.5.3"
 
@@ -210,6 +213,7 @@ protobuf-kotlin-lite = { group = "com.google.protobuf", name = "protobuf-kotlin-
 protobuf-protoc = { group = "com.google.protobuf", name = "protoc", version.ref = "protobuf" }
 
 truth = { group = "com.google.truth", name = "truth", version.ref = "truth" }
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbineVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 
 zxing = { group = "com.google.zxing", name = "core", version.ref = "zxingVersion" }
@@ -230,6 +234,11 @@ jb-bundle = { module = "org.jetbrains.androidx.core:core-bundle", version.ref = 
 jb-savedstate = { module = "org.jetbrains.androidx.savedstate:savedstate", version.ref = "jbSavedState" }
 jb-composeNavigation = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "composeNavigation" }
 jb-navigation = { module = "org.jetbrains.androidx.navigation:navigation-common", version.ref = "composeNavigation" }
+
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotestVersion" }
+kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotestVersion" }
+kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotestVersion" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotestVersion" }
 
 koin-android = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 koin-androidx-compose = { group = "io.insert-koin", name = "koin-androidx-compose", version.ref = "koin" }

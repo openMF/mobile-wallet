@@ -9,6 +9,7 @@
  */
 plugins {
     alias(libs.plugins.mifospay.cmp.feature)
+    id("dev.mokkery") version "2.7.2"
 }
 
 android {
@@ -41,5 +42,19 @@ kotlin {
 
             implementation(libs.play.services.auth)
         }
+
+        commonTest.dependencies {
+            implementation(kotlin("test-common"))
+            implementation(kotlin("test-annotations-common"))
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.turbine)
+            implementation(libs.kotest.framework.engine)
+
+//            implementation(libs.resource.test)
+//            implementation(libs.ktor.client.mock)
+
+            implementation(libs.koin.test)
+        }
+
     }
 }
