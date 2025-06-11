@@ -74,9 +74,10 @@ fun MifosOutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = label,
+        isError = isError && isFocused,
         readOnly = readOnly,
         supportingText = {
-            if (isError) {
+            if (isError && isFocused) {
                 Text(text = errorMessage)
             }
         },

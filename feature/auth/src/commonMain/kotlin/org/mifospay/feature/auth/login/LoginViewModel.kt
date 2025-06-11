@@ -77,10 +77,8 @@ class LoginViewModel(
     private fun handleLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
         when (action.loginResult) {
             is DataState.Error -> {
-                val message = action.loginResult.exception.message ?: ""
-
                 mutableStateFlow.update {
-                    it.copy(dialogState = LoginState.DialogState.Error(message))
+                    it.copy(dialogState = LoginState.DialogState.Error(action.loginResult.message))
                 }
             }
 

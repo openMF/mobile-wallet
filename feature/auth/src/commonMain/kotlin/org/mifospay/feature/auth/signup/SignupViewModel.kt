@@ -11,13 +11,13 @@ package org.mifospay.feature.auth.signup
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.mifospay.core.common.DataState
-import org.mifospay.core.common.IgnoredOnParcel
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 import org.mifospay.core.common.utils.isValidEmail
@@ -36,8 +36,6 @@ import org.mifospay.core.ui.utils.PasswordStrengthResult
 import org.mifospay.feature.auth.signup.SignUpAction.Internal.ReceivePasswordStrengthResult
 
 private const val KEY_STATE = "signup_state"
-private const val MIN_PASSWORD_LENGTH = 12
-private const val MAX_PASSWORD_LENGTH = 50
 
 class SignupViewModel(
     private val userRepository: UserRepository,
@@ -165,6 +163,12 @@ class SignupViewModel(
                 }
             }
 
+            is SignUpAction.HintDialogOpen -> {
+                mutableStateFlow.update {
+                    it.copy(dialogState = SignUpDialog.Error(action.message))
+                }
+            }
+
             is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
 
             is SignUpAction.Internal.ReceiveRegisterResult -> handleSignUpResult(action)
@@ -175,7 +179,12 @@ class SignupViewModel(
 
     private fun handlePasswordInput(action: SignUpAction.PasswordInputChange) {
         // Update input:
-        mutableStateFlow.update { it.copy(passwordInput = action.password, passwordError = null) }
+        mutableStateFlow.update {
+            it.copy(
+                passwordInput = action.password,
+                passwordFeedback = PasswordChecker.getPasswordFeedback(action.password),
+            )
+        }
         // Update password strength:
         passwordStrengthJob.cancel()
         if (action.password.isEmpty()) {
@@ -206,11 +215,7 @@ class SignupViewModel(
                 }
             }
 
-            is PasswordStrengthResult.Error -> {
-                mutableStateFlow.update {
-                    it.copy(passwordError = result.message.toString(), passwordStrengthState = PasswordStrengthState.NONE)
-                }
-            }
+            is PasswordStrengthResult.Error -> {}
         }
     }
 
@@ -230,8 +235,6 @@ class SignupViewModel(
             DataState.Loading -> {
                 mutableStateFlow.update { it.copy(dialogState = SignUpDialog.Loading) }
             }
-
-            else -> {}
         }
     }
 
@@ -244,6 +247,7 @@ class SignupViewModel(
         }
 
         state.firstNameInput.isEmpty() -> {
+            Logger.d("Tag- firstname")
             mutableStateFlow.update {
                 it.copy(dialogState = SignUpDialog.Error("Please enter your first name."))
             }
@@ -285,41 +289,35 @@ class SignupViewModel(
             }
         }
 
-        state.passwordInput.length < MIN_PASSWORD_LENGTH -> {
+        state.passwordInput.isEmpty() -> {
             mutableStateFlow.update {
                 it.copy(
                     dialogState = SignUpDialog.Error(
-                        "Password must be at least $MIN_PASSWORD_LENGTH characters long.",
+                        message = "The password field cannot be empty.",
                     ),
                 )
             }
         }
 
-        state.passwordInput.length > MAX_PASSWORD_LENGTH -> {
+        state.passwordFeedback.isNotEmpty() -> {
+            mutableStateFlow.update {
+                it.copy(dialogState = SignUpDialog.Error(state.passwordFeedback))
+            }
+        }
+
+        state.confirmPasswordInput.isEmpty() -> {
             mutableStateFlow.update {
                 it.copy(
                     dialogState = SignUpDialog.Error(
-                        "Password must be less than $MAX_PASSWORD_LENGTH characters long.",
+                        message = "The confirm password field cannot be empty.",
                     ),
                 )
             }
         }
 
-        !state.isPasswordMatch -> {
+        state.passwordInput != state.confirmPasswordInput -> {
             mutableStateFlow.update {
                 it.copy(dialogState = SignUpDialog.Error("Passwords do not match."))
-            }
-        }
-
-        !state.isPasswordStrong -> {
-            val errorMessage = state.passwordError?.takeIf { it.isNotBlank() }
-                ?: "Please ensure password contains :" +
-                "\n- At least one uppercase character" +
-                "\n- At least one lowercase character" +
-                "\n- At least one numeric digit" +
-                "\n- At least one special character"
-            mutableStateFlow.update {
-                it.copy(dialogState = SignUpDialog.Error(errorMessage.lines().joinToString("\n") { "- $it" }))
             }
         }
 
@@ -338,12 +336,6 @@ class SignupViewModel(
         state.pinCodeInput.isEmpty() -> {
             mutableStateFlow.update {
                 it.copy(dialogState = SignUpDialog.Error("Please enter your pin code."))
-            }
-        }
-
-        state.pinCodeInput.length < 6 -> {
-            mutableStateFlow.update {
-                it.copy(dialogState = SignUpDialog.Error("Pin code must be 6 digits long."))
             }
         }
 
@@ -388,13 +380,13 @@ class SignupViewModel(
 
             val errorMessages = results.mapNotNull { (label, result) ->
                 when (result) {
+                    is DataState.Loading -> {}
                     is DataState.Success -> {
                         if (result.data.isNotEmpty()) "$label already exists." else null
                     }
+
                     is DataState.Error ->
-                        result.exception.message
-                            ?: "Error checking $label."
-                    else -> null
+                        "Unable to check if $label is unique. Please try again later."
                 }
             }
 
@@ -529,27 +521,8 @@ data class SignUpState(
     val businessNameInput: String = "",
     val dialogState: SignUpDialog? = null,
     val passwordStrengthState: PasswordStrengthState = PasswordStrengthState.NONE,
-    val passwordError: String? = null,
-) : Parcelable {
-    @IgnoredOnParcel
-    val isPasswordStrong: Boolean
-        get() = when (passwordStrengthState) {
-            PasswordStrengthState.NONE,
-            PasswordStrengthState.WEAK_1,
-            PasswordStrengthState.WEAK_2,
-            PasswordStrengthState.WEAK_3,
-            -> false
-
-            PasswordStrengthState.GOOD,
-            PasswordStrengthState.STRONG,
-            PasswordStrengthState.VERY_STRONG,
-            -> true
-        }
-
-    @IgnoredOnParcel
-    val isPasswordMatch: Boolean
-        get() = passwordInput == confirmPasswordInput
-}
+    val passwordFeedback: String = "",
+) : Parcelable
 
 sealed interface SignUpDialog : Parcelable {
     @Parcelize
@@ -584,6 +557,7 @@ sealed interface SignUpAction {
     data object SubmitClick : SignUpAction
     data object CloseClick : SignUpAction
     data object ErrorDialogDismiss : SignUpAction
+    data class HintDialogOpen(val message: String) : SignUpAction
 
     sealed class Internal : SignUpAction {
         data class ReceiveRegisterResult(

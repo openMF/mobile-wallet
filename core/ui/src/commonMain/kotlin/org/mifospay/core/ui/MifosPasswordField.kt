@@ -9,8 +9,15 @@
  */
 package org.mifospay.core.ui
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -23,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -33,6 +41,11 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.unit.dp
+import mobile_wallet.core.ui.generated.resources.Res
+import mobile_wallet.core.ui.generated.resources.core_ui_hint_icon_description
+import mobile_wallet.core.ui.generated.resources.core_ui_view_password_rules
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosCustomTextField
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -48,14 +61,19 @@ fun MifosPasswordField(
     modifier: Modifier = Modifier,
     readOnly: Boolean = false,
     singleLine: Boolean = true,
-    hint: String? = null,
+    hintMessage: String? = null,
+    onHintClick: (() -> Unit)? = null,
     showPasswordTestTag: String? = null,
     autoFocus: Boolean = false,
+    isError: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Password,
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val focusRequester = remember { FocusRequester() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+
     MifosCustomTextField(
         modifier = modifier
             .tabNavigation()
@@ -74,13 +92,45 @@ fun MifosPasswordField(
             keyboardType = keyboardType,
             imeAction = imeAction,
         ),
+        isError = isError && isFocused,
         keyboardActions = keyboardActions,
-        supportingText = hint?.let {
-            {
-                Text(
-                    text = hint,
-                    style = MaterialTheme.typography.bodySmall,
-                )
+        supportingText = {
+            // Supporting text section shows either an error message or a help hint depending on context
+            if (hintMessage != null && isFocused) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(5.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    if (onHintClick != null) {
+                        // If a hint click handler is available:
+                        // - Show the error message when `isError` is true
+                        // - Otherwise, show a help hint for password rules
+                        // - Always display the help icon button to show password rules
+                        Text(
+                            text = if (isError) hintMessage else stringResource(Res.string.core_ui_view_password_rules),
+                            style = MaterialTheme.typography.bodySmall,
+                        )
+                        FilledIconButton(
+                            onClick = onHintClick,
+                            modifier = Modifier.size(24.dp),
+                        ) {
+                            Icon(
+                                imageVector = MifosIcons.QuestionMark,
+                                contentDescription = stringResource(Res.string.core_ui_hint_icon_description),
+                                modifier = Modifier.size(14.dp),
+                            )
+                        }
+                    } else {
+                        // If there's no hint icon to show, just display the error text if needed
+                        if (isError) {
+                            Text(
+                                text = hintMessage,
+                                style = MaterialTheme.typography.bodySmall,
+                            )
+                        }
+                    }
+                }
             }
         },
         trailingIcon = {
@@ -106,6 +156,7 @@ fun MifosPasswordField(
         textStyle = TextStyle(
             color = MaterialTheme.colorScheme.onSurface,
         ),
+        interactionSource = interactionSource,
     )
     if (autoFocus) {
         LaunchedEffect(Unit) { focusRequester.requestFocus() }
@@ -138,7 +189,7 @@ fun MifosPasswordField(
         onValueChange = onValueChange,
         readOnly = readOnly,
         singleLine = singleLine,
-        hint = hint,
+        hintMessage = hint,
         showPasswordTestTag = showPasswordTestTag,
         autoFocus = autoFocus,
         keyboardType = keyboardType,

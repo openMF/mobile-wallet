@@ -49,10 +49,23 @@ import mobile_wallet.feature.auth.generated.resources.feature_auth_complete_your
 import mobile_wallet.feature.auth.generated.resources.feature_auth_confirm_password
 import mobile_wallet.feature.auth.generated.resources.feature_auth_country
 import mobile_wallet.feature.auth.generated.resources.feature_auth_email
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line_1_empty
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line_2_empty
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_confirm_password_empty
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_country_empty
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_email_empty
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_first_name_empty
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_last_name_empty
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_mobile_empty
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_password_empty
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_pin_code_empty
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_state_empty
+import mobile_wallet.feature.auth.generated.resources.feature_auth_error_username_empty
 import mobile_wallet.feature.auth.generated.resources.feature_auth_first_name
 import mobile_wallet.feature.auth.generated.resources.feature_auth_last_name
 import mobile_wallet.feature.auth.generated.resources.feature_auth_mobile_no
 import mobile_wallet.feature.auth.generated.resources.feature_auth_password
+import mobile_wallet.feature.auth.generated.resources.feature_auth_password_requirements
 import mobile_wallet.feature.auth.generated.resources.feature_auth_pin_code
 import mobile_wallet.feature.auth.generated.resources.feature_auth_state
 import mobile_wallet.feature.auth.generated.resources.feature_auth_username
@@ -171,6 +184,7 @@ private fun SignupScreenContent(
                 onValueChange = {
                     onAction(SignUpAction.FirstNameInputChange(it))
                 },
+                errorMessage = stringResource(Res.string.feature_auth_error_first_name_empty),
             )
         }
 
@@ -186,6 +200,7 @@ private fun SignupScreenContent(
                 onValueChange = {
                     onAction(SignUpAction.LastNameInputChange(it))
                 },
+                errorMessage = stringResource(Res.string.feature_auth_error_last_name_empty),
             )
         }
 
@@ -201,6 +216,7 @@ private fun SignupScreenContent(
                 onValueChange = {
                     onAction(SignUpAction.UserNameInputChange(it))
                 },
+                errorMessage = stringResource(Res.string.feature_auth_error_username_empty),
             )
         }
 
@@ -216,6 +232,7 @@ private fun SignupScreenContent(
                 onValueChange = {
                     onAction(SignUpAction.EmailInputChange(it))
                 },
+                errorMessage = stringResource(Res.string.feature_auth_error_email_empty),
             )
         }
 
@@ -231,12 +248,15 @@ private fun SignupScreenContent(
                 onValueChange = {
                     onAction(SignUpAction.MobileNumberInputChange(it))
                 },
+                errorMessage = stringResource(Res.string.feature_auth_error_mobile_empty),
             )
         }
 
         item {
             Column {
                 var showPassword by rememberSaveable { mutableStateOf(false) }
+                val passwordRequirements =
+                    stringResource(Res.string.feature_auth_password_requirements)
 
                 MifosPasswordField(
                     value = state.passwordInput,
@@ -247,6 +267,15 @@ private fun SignupScreenContent(
                     },
                     showPassword = showPassword,
                     showPasswordChange = { showPassword = !showPassword },
+                    hintMessage = stringResource(Res.string.feature_auth_error_password_empty),
+                    onHintClick = {
+                        onAction(
+                            SignUpAction.HintDialogOpen(
+                                message = passwordRequirements,
+                            ),
+                        )
+                    },
+                    isError = state.passwordInput.isEmpty(),
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 PasswordStrengthIndicator(
@@ -269,6 +298,8 @@ private fun SignupScreenContent(
                 },
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = !showPassword },
+                isError = state.confirmPasswordInput.isEmpty(),
+                hintMessage = stringResource(Res.string.feature_auth_error_confirm_password_empty),
             )
         }
 
@@ -281,6 +312,7 @@ private fun SignupScreenContent(
                 onValueChange = {
                     onAction(SignUpAction.AddressLine1InputChange(it))
                 },
+                errorMessage = stringResource(Res.string.feature_auth_error_address_line_1_empty),
             )
         }
 
@@ -293,6 +325,7 @@ private fun SignupScreenContent(
                 onValueChange = {
                     onAction(SignUpAction.AddressLine2InputChange(it))
                 },
+                errorMessage = stringResource(Res.string.feature_auth_error_address_line_2_empty),
             )
         }
 
@@ -308,6 +341,7 @@ private fun SignupScreenContent(
                 onValueChange = {
                     onAction(SignUpAction.PinCodeInputChange(it))
                 },
+                errorMessage = stringResource(Res.string.feature_auth_error_pin_code_empty),
             )
         }
 
@@ -325,6 +359,7 @@ private fun SignupScreenContent(
                     },
                     modifier = Modifier.weight(1.5f),
                     isError = state.countryInput.isEmpty(),
+                    errorMessage = stringResource(Res.string.feature_auth_error_country_empty),
                 )
 
                 MifosOutlinedTextField(
@@ -335,6 +370,7 @@ private fun SignupScreenContent(
                     },
                     modifier = Modifier.weight(1.5f),
                     isError = state.stateInput.isEmpty(),
+                    errorMessage = stringResource(Res.string.feature_auth_error_state_empty),
                 )
             }
         }
