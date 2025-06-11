@@ -247,7 +247,6 @@ class SignupViewModel(
         }
 
         state.firstNameInput.isEmpty() -> {
-            Logger.d("Tag- firstname")
             mutableStateFlow.update {
                 it.copy(dialogState = SignUpDialog.Error("Please enter your first name."))
             }
