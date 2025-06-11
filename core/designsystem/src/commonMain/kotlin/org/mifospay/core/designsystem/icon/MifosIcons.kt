@@ -132,6 +132,5 @@ object MifosIcons {
     val Scan = Icons.Outlined.QrCodeScanner
     val RadioButtonUnchecked = Icons.Default.RadioButtonUnchecked
     val RadioButtonChecked = Icons.Filled.RadioButtonChecked
-//    val QuestionMark = Icons.Rounded.QuestionMark
     val QuestionMark = Icons.Rounded.QuestionMark
 }
