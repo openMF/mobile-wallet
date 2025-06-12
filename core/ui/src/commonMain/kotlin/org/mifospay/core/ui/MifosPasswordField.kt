@@ -97,9 +97,9 @@ fun MifosPasswordField(
                 ),
             ) {
                 val imageVector = if (showPassword) {
-                    MifosIcons.OutlinedVisibilityOff
-                } else {
                     MifosIcons.OutlinedVisibility
+                } else {
+                    MifosIcons.OutlinedVisibilityOff
                 }
 
                 Icon(

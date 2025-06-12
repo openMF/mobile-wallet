@@ -29,7 +29,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -109,10 +108,6 @@ internal fun SignupScreen(
                 }
             }
         }
-    }
-
-    LaunchedEffect(Unit) {
-        viewModel.trySendAction(SignUpAction.LoadCountries)
     }
 
     SignUpDialogs(
@@ -371,11 +366,6 @@ private fun SignupScreenContent(
                     expanded = isCountryDropdownExpanded,
                     label = stringResource(Res.string.feature_auth_country),
                     value = selectedCountry,
-                    onValueChange = {
-                        onAction(SignUpAction.CountryInputChange(it))
-                        // Clear state when country changes
-                        onAction(SignUpAction.StateInputChange(""))
-                    },
                     onExpandChange = { isCountryDropdownExpanded = it },
                     isError = selectedCountry.isEmpty(),
                     errorText = stringResource(Res.string.feature_auth_error_country_empty),
@@ -386,8 +376,6 @@ private fun SignupScreenContent(
                             text = country,
                             onClick = {
                                 onAction(SignUpAction.CountryInputChange(country))
-                                // Clear state when country changes
-                                onAction(SignUpAction.StateInputChange(""))
                                 isCountryDropdownExpanded = false
                             },
                         )
@@ -399,9 +387,6 @@ private fun SignupScreenContent(
                     expanded = isStateDropdownExpanded,
                     label = stringResource(Res.string.feature_auth_state),
                     value = selectedState,
-                    onValueChange = {
-                        onAction(SignUpAction.StateInputChange(it))
-                    },
                     onExpandChange = { isStateDropdownExpanded = it },
                     isError = selectedState.isEmpty(),
                     errorText = stringResource(Res.string.feature_auth_error_state_empty),

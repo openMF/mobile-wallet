@@ -11,6 +11,8 @@ plugins {
     alias(libs.plugins.mifospay.kmp.library)
     alias(libs.plugins.kotlin.parcelize)
     id("kotlinx-serialization")
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.jetbrainsCompose)
 }
 
 android {
@@ -32,6 +34,8 @@ kotlin {
             implementation(projects.core.network)
             implementation(projects.core.analytics)
             implementation(libs.kotlinx.serialization.json)
+            implementation(libs.jb.composeRuntime)
+            implementation(compose.components.resources)
         }
 
         androidMain.dependencies {

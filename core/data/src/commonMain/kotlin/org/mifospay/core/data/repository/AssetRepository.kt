@@ -7,17 +7,10 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.feature.auth.signup
+package org.mifospay.core.data.repository
 
-import kotlinx.serialization.Serializable
+import org.mifospay.core.common.DataState
 
-@Serializable
-internal data class Country(
-    val name: String,
-    val states: List<State>,
-)
-
-@Serializable
-internal data class State(
-    val name: String,
-)
+interface AssetRepository {
+    suspend fun getCountriesWithStates(): DataState<Map<String, List<String>>>
+}

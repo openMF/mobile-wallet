@@ -14,6 +14,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.mifospay.core.common.MifosDispatchers
 import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.data.repository.AssetRepository
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.data.repository.BeneficiaryRepository
 import org.mifospay.core.data.repository.ClientRepository
@@ -33,6 +34,7 @@ import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.repository.TwoFactorAuthRepository
 import org.mifospay.core.data.repository.UserRepository
 import org.mifospay.core.data.repositoryImp.AccountRepositoryImpl
+import org.mifospay.core.data.repositoryImp.AssetRepositoryImpl
 import org.mifospay.core.data.repositoryImp.AuthenticationRepositoryImpl
 import org.mifospay.core.data.repositoryImp.BeneficiaryRepositoryImpl
 import org.mifospay.core.data.repositoryImp.ClientRepositoryImpl
@@ -60,6 +62,7 @@ private val unconfined = named(MifosDispatchers.Unconfined.name)
 val RepositoryModule = module {
     single<Json> { Json { ignoreUnknownKeys = true } }
 
+    single<AssetRepository> { AssetRepositoryImpl() }
     single<AccountRepository> { AccountRepositoryImpl(get(), get(ioDispatcher)) }
     single<AuthenticationRepository> {
         AuthenticationRepositoryImpl(get(), get(ioDispatcher))

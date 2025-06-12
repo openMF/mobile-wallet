@@ -12,19 +12,19 @@ package org.mifospay.feature.auth.signup
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import co.touchlab.kermit.Logger
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import mobile_wallet.feature.auth.generated.resources.Res
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 import org.mifospay.core.common.utils.isValidEmail
+import org.mifospay.core.data.repository.AssetRepository
 import org.mifospay.core.data.repository.ClientRepository
 import org.mifospay.core.data.repository.SearchRepository
 import org.mifospay.core.data.repository.UserRepository
@@ -45,6 +45,7 @@ class SignupViewModel(
     private val userRepository: UserRepository,
     private val searchRepository: SearchRepository,
     private val clientRepository: ClientRepository,
+    private val assetRepository: AssetRepository,
     savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<SignUpState, SignUpEvent, SignUpAction>(
     initialState = savedStateHandle[KEY_STATE] ?: SignUpState(),
@@ -73,6 +74,8 @@ class SignupViewModel(
                 trySendAction(SignUpAction.BusinessNameInputChange(it))
             }
         }
+
+        loadCountriesFromJson()
     }
 
     override fun handleAction(action: SignUpAction) {
@@ -186,7 +189,7 @@ class SignupViewModel(
         mutableStateFlow.update {
             it.copy(
                 passwordInput = action.password,
-                passwordFeedback = PasswordChecker.getPasswordFeedback(action.password),
+                passwordFeedback = PasswordChecker.getPasswordFeedback(action.password).toPersistentList(),
             )
         }
         // Update password strength:
@@ -505,29 +508,16 @@ class SignupViewModel(
         }
     }
 
-    @OptIn(ExperimentalResourceApi::class)
     private fun loadCountriesFromJson() {
-        Logger.d("Tag-viewmodel loadCountriesFromJson called")
         viewModelScope.launch {
-            try {
-                val json = Json {
-                    // This will skip unexpected fields
-                    ignoreUnknownKeys = true
-                }
-                val bytes = Res.readBytes("files/countries.json")
-                val jsonString = bytes.decodeToString()
-                val parsed = json.decodeFromString<List<Country>>(jsonString)
-                val mapped = parsed.associate {
-                    it.name to it.states.map { s -> s.name }.ifEmpty { listOf("N/A") }
-                }
+            when (val mapped = assetRepository.getCountriesWithStates()) {
+                is DataState.Success ->
+                    mutableStateFlow.update {
+                        it.copy(countriesWithStates = mapped.data)
+                    }
 
-                Logger.d("Tag-viewmodel mapped: ${mapped.size}")
-
-                mutableStateFlow.update {
-                    it.copy(countriesWithStates = mapped)
-                }
-            } catch (e: Exception) {
-                Logger.d("Failed to load countries.json: ${e.message}")
+                is DataState.Error -> Logger.d("Failed to load countries.json: ${mapped.exception.message}")
+                is DataState.Loading -> {}
             }
         }
     }
@@ -551,7 +541,7 @@ data class SignUpState(
     val businessNameInput: String = "",
     val dialogState: SignUpDialog? = null,
     val passwordStrengthState: PasswordStrengthState = PasswordStrengthState.NONE,
-    val passwordFeedback: List<String> = emptyList(),
+    val passwordFeedback: ImmutableList<String> = persistentListOf(),
     val countriesWithStates: Map<String, List<String>> = emptyMap(),
 ) : Parcelable
 
