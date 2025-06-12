@@ -34,7 +34,6 @@ import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.QrCode2
-import androidx.compose.material.icons.filled.QuestionMark
 import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material.icons.filled.Share
@@ -50,7 +49,6 @@ import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.QrCodeScanner
-import androidx.compose.material.icons.outlined.QuestionMark
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.Share
 import androidx.compose.material.icons.outlined.Visibility
@@ -64,7 +62,6 @@ import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material.icons.rounded.QrCode
-import androidx.compose.material.icons.rounded.QuestionMark
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.SwapHoriz
@@ -132,5 +129,4 @@ object MifosIcons {
     val Scan = Icons.Outlined.QrCodeScanner
     val RadioButtonUnchecked = Icons.Default.RadioButtonUnchecked
     val RadioButtonChecked = Icons.Filled.RadioButtonChecked
-    val QuestionMark = Icons.Rounded.QuestionMark
 }

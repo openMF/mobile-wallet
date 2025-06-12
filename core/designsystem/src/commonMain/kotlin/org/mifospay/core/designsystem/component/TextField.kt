@@ -152,7 +152,7 @@ fun MifosTextField(
         maxLines = maxLines,
         minLines = minLines,
         leadingIcon = leadingIcon,
-        isError = isError,
+        isError = isError && isFocused,
         trailingIcon = @Composable {
             AnimatedContent(
                 targetState = showClearIcon && isFocused && showIcon,
@@ -169,10 +169,10 @@ fun MifosTextField(
             }
         },
         placeholder = placeholder,
-        supportingText = errorText?.let {
-            {
+        supportingText = {
+            if (isError && isFocused && errorText != null) {
                 Text(
-                    text = it,
+                    text = errorText,
                     color = MaterialTheme.colorScheme.error,
                 )
             }

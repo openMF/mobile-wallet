@@ -11,11 +11,16 @@ package org.mifospay.feature.auth.signup
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import co.touchlab.kermit.Logger
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import mobile_wallet.feature.auth.generated.resources.Res
+import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.mifospay.core.common.DataState
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
@@ -148,7 +153,11 @@ class SignupViewModel(
 
             is SignUpAction.CountryInputChange -> {
                 mutableStateFlow.update {
-                    it.copy(countryInput = action.country)
+                    it.copy(
+                        countryInput = action.country,
+                        // reset state when country changes
+                        stateInput = "",
+                    )
                 }
             }
 
@@ -162,17 +171,13 @@ class SignupViewModel(
                 }
             }
 
-            is SignUpAction.HintDialogOpen -> {
-                mutableStateFlow.update {
-                    it.copy(dialogState = SignUpDialog.Error(action.message))
-                }
-            }
-
             is ReceivePasswordStrengthResult -> handlePasswordStrengthResult(action)
 
             is SignUpAction.Internal.ReceiveRegisterResult -> handleSignUpResult(action)
 
             is SignUpAction.SubmitClick -> handleSubmitClick()
+
+            is SignUpAction.LoadCountries -> loadCountriesFromJson()
         }
     }
 
@@ -299,7 +304,7 @@ class SignupViewModel(
 
         state.passwordFeedback.isNotEmpty() -> {
             mutableStateFlow.update {
-                it.copy(dialogState = SignUpDialog.Error(state.passwordFeedback))
+                it.copy(dialogState = SignUpDialog.Error(state.passwordFeedback.toString()))
             }
         }
 
@@ -499,6 +504,33 @@ class SignupViewModel(
             clientRepository.deleteClient(clientId)
         }
     }
+
+    @OptIn(ExperimentalResourceApi::class)
+    private fun loadCountriesFromJson() {
+        Logger.d("Tag-viewmodel loadCountriesFromJson called")
+        viewModelScope.launch {
+            try {
+                val json = Json {
+                    // This will skip unexpected fields
+                    ignoreUnknownKeys = true
+                }
+                val bytes = Res.readBytes("files/countries.json")
+                val jsonString = bytes.decodeToString()
+                val parsed = json.decodeFromString<List<Country>>(jsonString)
+                val mapped = parsed.associate {
+                    it.name to it.states.map { s -> s.name }.ifEmpty { listOf("N/A") }
+                }
+
+                Logger.d("Tag-viewmodel mapped: ${mapped.size}")
+
+                mutableStateFlow.update {
+                    it.copy(countriesWithStates = mapped)
+                }
+            } catch (e: Exception) {
+                Logger.d("Failed to load countries.json: ${e.message}")
+            }
+        }
+    }
 }
 
 @Parcelize
@@ -519,7 +551,8 @@ data class SignUpState(
     val businessNameInput: String = "",
     val dialogState: SignUpDialog? = null,
     val passwordStrengthState: PasswordStrengthState = PasswordStrengthState.NONE,
-    val passwordFeedback: String = "",
+    val passwordFeedback: List<String> = emptyList(),
+    val countriesWithStates: Map<String, List<String>> = emptyMap(),
 ) : Parcelable
 
 sealed interface SignUpDialog : Parcelable {
@@ -555,7 +588,7 @@ sealed interface SignUpAction {
     data object SubmitClick : SignUpAction
     data object CloseClick : SignUpAction
     data object ErrorDialogDismiss : SignUpAction
-    data class HintDialogOpen(val message: String) : SignUpAction
+    data object LoadCountries : SignUpAction
 
     sealed class Internal : SignUpAction {
         data class ReceiveRegisterResult(

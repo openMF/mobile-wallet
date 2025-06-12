@@ -9,6 +9,8 @@
  */
 package org.mifospay.feature.auth.signup
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -27,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,7 +60,6 @@ import mobile_wallet.feature.auth.generated.resources.feature_auth_error_email_e
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_first_name_empty
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_last_name_empty
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_mobile_empty
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_password_empty
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_pin_code_empty
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_state_empty
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_username_empty
@@ -65,7 +67,6 @@ import mobile_wallet.feature.auth.generated.resources.feature_auth_first_name
 import mobile_wallet.feature.auth.generated.resources.feature_auth_last_name
 import mobile_wallet.feature.auth.generated.resources.feature_auth_mobile_no
 import mobile_wallet.feature.auth.generated.resources.feature_auth_password
-import mobile_wallet.feature.auth.generated.resources.feature_auth_password_requirements
 import mobile_wallet.feature.auth.generated.resources.feature_auth_pin_code
 import mobile_wallet.feature.auth.generated.resources.feature_auth_state
 import mobile_wallet.feature.auth.generated.resources.feature_auth_username
@@ -80,8 +81,10 @@ import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTopAppBar
 import org.mifospay.core.designsystem.icon.MifosIcons
+import org.mifospay.core.ui.CombinedPasswordErrorCard
+import org.mifospay.core.ui.DropdownBoxItem
+import org.mifospay.core.ui.ExposedDropdownBox
 import org.mifospay.core.ui.MifosPasswordField
-import org.mifospay.core.ui.PasswordStrengthIndicator
 import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
@@ -106,6 +109,10 @@ internal fun SignupScreen(
                 }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.trySendAction(SignUpAction.LoadCountries)
     }
 
     SignUpDialogs(
@@ -255,8 +262,8 @@ private fun SignupScreenContent(
         item {
             Column {
                 var showPassword by rememberSaveable { mutableStateOf(false) }
-                val passwordRequirements =
-                    stringResource(Res.string.feature_auth_password_requirements)
+                val interactionSource = remember { MutableInteractionSource() }
+                val isFocused by interactionSource.collectIsFocusedAsState()
 
                 MifosPasswordField(
                     value = state.passwordInput,
@@ -267,27 +274,25 @@ private fun SignupScreenContent(
                     },
                     showPassword = showPassword,
                     showPasswordChange = { showPassword = !showPassword },
-                    hintMessage = stringResource(Res.string.feature_auth_error_password_empty),
-                    onHintClick = {
-                        onAction(
-                            SignUpAction.HintDialogOpen(
-                                message = passwordRequirements,
-                            ),
-                        )
-                    },
                     isError = state.passwordInput.isEmpty(),
+                    interactionSource = interactionSource,
+                    isFocused = isFocused,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
-                PasswordStrengthIndicator(
+                CombinedPasswordErrorCard(
                     modifier = Modifier.fillMaxWidth(),
-                    state = state.passwordStrengthState,
+                    errors = state.passwordFeedback,
+                    passwordStrengthState = state.passwordStrengthState,
                     currentCharacterCount = state.passwordInput.length,
+                    isPasswordFieldFocused = isFocused,
                 )
             }
         }
 
         item {
             var showPassword by rememberSaveable { mutableStateOf(false) }
+            val interactionSource = remember { MutableInteractionSource() }
+            val isFocused by interactionSource.collectIsFocusedAsState()
 
             MifosPasswordField(
                 value = state.confirmPasswordInput,
@@ -299,7 +304,9 @@ private fun SignupScreenContent(
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = !showPassword },
                 isError = state.confirmPasswordInput.isEmpty(),
-                hintMessage = stringResource(Res.string.feature_auth_error_confirm_password_empty),
+                hint = stringResource(Res.string.feature_auth_error_confirm_password_empty),
+                interactionSource = interactionSource,
+                isFocused = isFocused,
             )
         }
 
@@ -351,27 +358,65 @@ private fun SignupScreenContent(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                MifosOutlinedTextField(
-                    value = state.countryInput,
+                var isCountryDropdownExpanded by remember { mutableStateOf(false) }
+                var isStateDropdownExpanded by remember { mutableStateOf(false) }
+
+                val selectedCountry = state.countryInput
+                val selectedState = state.stateInput
+                val statesForSelectedCountry =
+                    state.countriesWithStates[selectedCountry] ?: emptyList()
+
+                // Country Dropdown
+                ExposedDropdownBox(
+                    expanded = isCountryDropdownExpanded,
                     label = stringResource(Res.string.feature_auth_country),
+                    value = selectedCountry,
                     onValueChange = {
                         onAction(SignUpAction.CountryInputChange(it))
+                        // Clear state when country changes
+                        onAction(SignUpAction.StateInputChange(""))
                     },
+                    onExpandChange = { isCountryDropdownExpanded = it },
+                    isError = selectedCountry.isEmpty(),
+                    errorText = stringResource(Res.string.feature_auth_error_country_empty),
                     modifier = Modifier.weight(1.5f),
-                    isError = state.countryInput.isEmpty(),
-                    errorMessage = stringResource(Res.string.feature_auth_error_country_empty),
-                )
+                ) {
+                    state.countriesWithStates.keys.forEach { country ->
+                        DropdownBoxItem(
+                            text = country,
+                            onClick = {
+                                onAction(SignUpAction.CountryInputChange(country))
+                                // Clear state when country changes
+                                onAction(SignUpAction.StateInputChange(""))
+                                isCountryDropdownExpanded = false
+                            },
+                        )
+                    }
+                }
 
-                MifosOutlinedTextField(
-                    value = state.stateInput,
+                // State Dropdown
+                ExposedDropdownBox(
+                    expanded = isStateDropdownExpanded,
                     label = stringResource(Res.string.feature_auth_state),
+                    value = selectedState,
                     onValueChange = {
                         onAction(SignUpAction.StateInputChange(it))
                     },
+                    onExpandChange = { isStateDropdownExpanded = it },
+                    isError = selectedState.isEmpty(),
+                    errorText = stringResource(Res.string.feature_auth_error_state_empty),
                     modifier = Modifier.weight(1.5f),
-                    isError = state.stateInput.isEmpty(),
-                    errorMessage = stringResource(Res.string.feature_auth_error_state_empty),
-                )
+                ) {
+                    statesForSelectedCountry.forEach { stateName ->
+                        DropdownBoxItem(
+                            text = stateName,
+                            onClick = {
+                                onAction(SignUpAction.StateInputChange(stateName))
+                                isStateDropdownExpanded = false
+                            },
+                        )
+                    }
+                }
             }
         }
 

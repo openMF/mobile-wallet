@@ -12,6 +12,6 @@
     <string name="core_ui_retry">Retry</string>
     <string name="core_ui_error_occurred">Error Occurred!</string>
     <string name="core_ui_try_again">Please check your connection or try again</string>
-    <string name="core_ui_view_password_rules">View password rules</string>
-    <string name="core_ui_hint_icon_description">Tap to see password requirements</string>
+    <string name="core_ui_password_requirements">Password Requirements</string>
+    <string name="core_ui_error_icon_description">Error</string>
 </resources>

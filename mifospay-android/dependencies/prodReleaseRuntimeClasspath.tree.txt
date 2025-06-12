@@ -1656,6 +1656,7 @@
 |    |    +--- org.jetbrains.kotlin:kotlin-stdlib:2.1.0 (*)
 |    |    +--- org.jetbrains.kotlin:kotlin-reflect:2.1.0
 |    |    |    \--- org.jetbrains.kotlin:kotlin-stdlib:2.1.0 (*)
+|    |    +--- org.jetbrains.kotlinx:kotlinx-serialization-json:1.7.3 (*)
 |    |    \--- org.jetbrains.kotlin:kotlin-parcelize-runtime:2.1.0 (*)
 |    +--- project :libs:mifos-passcode
 |    |    +--- androidx.lifecycle:lifecycle-runtime-compose:2.8.7 (*)

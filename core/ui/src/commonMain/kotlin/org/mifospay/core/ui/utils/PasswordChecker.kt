@@ -53,35 +53,35 @@ object PasswordChecker {
         return log2(charPool.toDouble().pow(password.length))
     }
 
-    fun getPasswordFeedback(password: String): String {
-        val feedback = StringBuilder()
+    fun getPasswordFeedback(password: String): List<String> {
+        val feedback = mutableListOf<String>()
 
         if (password.length < MIN_PASSWORD_LENGTH) {
-            feedback.append("- The password must be at least $MIN_PASSWORD_LENGTH characters long.\n")
+            feedback.add("The password must be at least $MIN_PASSWORD_LENGTH characters long.")
         }
         if (password.length > MAX_PASSWORD_LENGTH) {
-            feedback.append("- The password must not exceed $MAX_PASSWORD_LENGTH characters.\n")
+            feedback.add("The password must not exceed $MAX_PASSWORD_LENGTH characters.")
         }
         if (!password.any { it.isUpperCase() }) {
-            feedback.append("- Include at least one uppercase letter.\n")
+            feedback.add("Include at least one uppercase letter.")
         }
         if (!password.any { it.isLowerCase() }) {
-            feedback.append("- Include at least one lowercase letter.\n")
+            feedback.add("Include at least one lowercase letter.")
         }
         if (!password.any { it.isDigit() }) {
-            feedback.append("- Include at least one number.\n")
+            feedback.add("Include at least one number.")
         }
         if (!password.any { !it.isLetterOrDigit() }) {
-            feedback.append("- Include at least one special character.\n")
+            feedback.add("Include at least one special character.")
         }
         if (password.hasConsecutiveRepetitions()) {
-            feedback.append("- Avoid using consecutive repeated characters.\n")
+            feedback.add("Avoid using consecutive repeated characters.")
         }
         if (password.hasSpaces()) {
-            feedback.append("- Do not include spaces in the password.\n")
+            feedback.add("Do not include spaces in the password.")
         }
 
-        return feedback.toString()
+        return feedback
     }
 }
 
