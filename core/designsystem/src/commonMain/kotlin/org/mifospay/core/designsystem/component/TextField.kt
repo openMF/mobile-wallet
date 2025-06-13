@@ -53,7 +53,7 @@ fun MifosOutlinedTextField(
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     isError: Boolean = false,
-    errorMessage: String = "",
+    errorMessage: String? = null,
     singleLine: Boolean = false,
     showClearIcon: Boolean = true,
     readOnly: Boolean = false,
@@ -74,10 +74,10 @@ fun MifosOutlinedTextField(
         value = value,
         onValueChange = onValueChange,
         label = label,
-        isError = isError && isFocused,
+        isError = isError,
         readOnly = readOnly,
-        supportingText = {
-            if (isError && isFocused) {
+        supportingText = errorMessage?.let {
+            {
                 Text(text = errorMessage)
             }
         },
@@ -152,7 +152,7 @@ fun MifosTextField(
         maxLines = maxLines,
         minLines = minLines,
         leadingIcon = leadingIcon,
-        isError = isError && isFocused,
+        isError = isError,
         trailingIcon = @Composable {
             AnimatedContent(
                 targetState = showClearIcon && isFocused && showIcon,
@@ -169,10 +169,10 @@ fun MifosTextField(
             }
         },
         placeholder = placeholder,
-        supportingText = {
-            if (isError && isFocused && errorText != null) {
+        supportingText = errorText?.let {
+            {
                 Text(
-                    text = errorText,
+                    text = it,
                     color = MaterialTheme.colorScheme.error,
                 )
             }

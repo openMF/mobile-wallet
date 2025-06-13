@@ -51,17 +51,6 @@ import mobile_wallet.feature.auth.generated.resources.feature_auth_complete_your
 import mobile_wallet.feature.auth.generated.resources.feature_auth_confirm_password
 import mobile_wallet.feature.auth.generated.resources.feature_auth_country
 import mobile_wallet.feature.auth.generated.resources.feature_auth_email
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line_1_empty
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_address_line_2_empty
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_confirm_password_empty
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_country_empty
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_email_empty
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_first_name_empty
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_last_name_empty
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_mobile_empty
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_pin_code_empty
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_state_empty
-import mobile_wallet.feature.auth.generated.resources.feature_auth_error_username_empty
 import mobile_wallet.feature.auth.generated.resources.feature_auth_first_name
 import mobile_wallet.feature.auth.generated.resources.feature_auth_last_name
 import mobile_wallet.feature.auth.generated.resources.feature_auth_mobile_no
@@ -179,14 +168,12 @@ private fun SignupScreenContent(
                 value = state.firstNameInput,
                 label = stringResource(Res.string.feature_auth_first_name),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.firstNameInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
                 ),
                 onValueChange = {
                     onAction(SignUpAction.FirstNameInputChange(it))
                 },
-                errorMessage = stringResource(Res.string.feature_auth_error_first_name_empty),
             )
         }
 
@@ -195,14 +182,12 @@ private fun SignupScreenContent(
                 value = state.lastNameInput,
                 label = stringResource(Res.string.feature_auth_last_name),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.lastNameInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.Words,
                 ),
                 onValueChange = {
                     onAction(SignUpAction.LastNameInputChange(it))
                 },
-                errorMessage = stringResource(Res.string.feature_auth_error_last_name_empty),
             )
         }
 
@@ -211,14 +196,12 @@ private fun SignupScreenContent(
                 value = state.userNameInput,
                 label = stringResource(Res.string.feature_auth_username),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.userNameInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     capitalization = KeyboardCapitalization.None,
                 ),
                 onValueChange = {
                     onAction(SignUpAction.UserNameInputChange(it))
                 },
-                errorMessage = stringResource(Res.string.feature_auth_error_username_empty),
             )
         }
 
@@ -227,14 +210,12 @@ private fun SignupScreenContent(
                 value = state.emailInput,
                 label = stringResource(Res.string.feature_auth_email),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.emailInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Email,
                 ),
                 onValueChange = {
                     onAction(SignUpAction.EmailInputChange(it))
                 },
-                errorMessage = stringResource(Res.string.feature_auth_error_email_empty),
             )
         }
 
@@ -243,14 +224,12 @@ private fun SignupScreenContent(
                 value = state.mobileNumberInput,
                 label = stringResource(Res.string.feature_auth_mobile_no),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.mobileNumberInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Phone,
                 ),
                 onValueChange = {
                     onAction(SignUpAction.MobileNumberInputChange(it))
                 },
-                errorMessage = stringResource(Res.string.feature_auth_error_mobile_empty),
             )
         }
 
@@ -269,9 +248,7 @@ private fun SignupScreenContent(
                     },
                     showPassword = showPassword,
                     showPasswordChange = { showPassword = !showPassword },
-                    isError = state.passwordInput.isEmpty(),
                     interactionSource = interactionSource,
-                    isFocused = isFocused,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 CombinedPasswordErrorCard(
@@ -286,8 +263,6 @@ private fun SignupScreenContent(
 
         item {
             var showPassword by rememberSaveable { mutableStateOf(false) }
-            val interactionSource = remember { MutableInteractionSource() }
-            val isFocused by interactionSource.collectIsFocusedAsState()
 
             MifosPasswordField(
                 value = state.confirmPasswordInput,
@@ -298,10 +273,6 @@ private fun SignupScreenContent(
                 },
                 showPassword = showPassword,
                 showPasswordChange = { showPassword = !showPassword },
-                isError = state.confirmPasswordInput.isEmpty(),
-                hint = stringResource(Res.string.feature_auth_error_confirm_password_empty),
-                interactionSource = interactionSource,
-                isFocused = isFocused,
             )
         }
 
@@ -310,11 +281,9 @@ private fun SignupScreenContent(
                 value = state.addressLine1Input,
                 label = stringResource(Res.string.feature_auth_address_line_1),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.addressLine1Input.isEmpty(),
                 onValueChange = {
                     onAction(SignUpAction.AddressLine1InputChange(it))
                 },
-                errorMessage = stringResource(Res.string.feature_auth_error_address_line_1_empty),
             )
         }
 
@@ -323,11 +292,9 @@ private fun SignupScreenContent(
                 value = state.addressLine2Input,
                 modifier = Modifier.fillMaxWidth(),
                 label = stringResource(Res.string.feature_auth_address_line_2),
-                isError = state.addressLine2Input.isEmpty(),
                 onValueChange = {
                     onAction(SignUpAction.AddressLine2InputChange(it))
                 },
-                errorMessage = stringResource(Res.string.feature_auth_error_address_line_2_empty),
             )
         }
 
@@ -336,14 +303,12 @@ private fun SignupScreenContent(
                 value = state.pinCodeInput,
                 label = stringResource(Res.string.feature_auth_pin_code),
                 modifier = Modifier.fillMaxWidth(),
-                isError = state.pinCodeInput.isEmpty(),
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                 ),
                 onValueChange = {
                     onAction(SignUpAction.PinCodeInputChange(it))
                 },
-                errorMessage = stringResource(Res.string.feature_auth_error_pin_code_empty),
             )
         }
 
@@ -367,8 +332,6 @@ private fun SignupScreenContent(
                     label = stringResource(Res.string.feature_auth_country),
                     value = selectedCountry,
                     onExpandChange = { isCountryDropdownExpanded = it },
-                    isError = selectedCountry.isEmpty(),
-                    errorText = stringResource(Res.string.feature_auth_error_country_empty),
                     modifier = Modifier.weight(1.5f),
                 ) {
                     state.countriesWithStates.keys.forEach { country ->
@@ -388,8 +351,6 @@ private fun SignupScreenContent(
                     label = stringResource(Res.string.feature_auth_state),
                     value = selectedState,
                     onExpandChange = { isStateDropdownExpanded = it },
-                    isError = selectedState.isEmpty(),
-                    errorText = stringResource(Res.string.feature_auth_error_state_empty),
                     modifier = Modifier.weight(1.5f),
                 ) {
                     statesForSelectedCountry.forEach { stateName ->

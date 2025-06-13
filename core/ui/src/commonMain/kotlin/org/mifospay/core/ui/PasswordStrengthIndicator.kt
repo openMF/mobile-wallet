@@ -108,7 +108,7 @@ fun CombinedPasswordErrorCard(
         PasswordStrengthState.VERY_STRONG -> "Very Strong"
     }
 
-    AnimatedVisibility(visible = isPasswordFieldFocused || hasErrors) {
+    AnimatedVisibility(visible = hasErrors || isPasswordFieldFocused) {
         Card(
             modifier = modifier
                 .fillMaxWidth()

@@ -57,7 +57,6 @@ fun MifosPasswordField(
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-    isFocused: Boolean = false,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -79,10 +78,10 @@ fun MifosPasswordField(
             keyboardType = keyboardType,
             imeAction = imeAction,
         ),
-        isError = isError && isFocused,
+        isError = isError,
         keyboardActions = keyboardActions,
-        supportingText = {
-            if (hint != null && isFocused && isError) {
+        supportingText = hint?.let {
+            {
                 Text(
                     text = hint,
                     style = MaterialTheme.typography.bodySmall,

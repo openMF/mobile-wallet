@@ -55,22 +55,4 @@
     <string name="feature_auth_verify_phone">Verify Phone</string>
     <string name="feature_auth_verify_otp">Verify Otp</string>
 
-    <!-- Validation Errors (General & SupportingText/Dialogs) -->
-    <string name="feature_auth_error_savings_account_missing">Please select a savings account before continuing.</string>
-    <string name="feature_auth_error_first_name_empty">First name is required.</string>
-    <string name="feature_auth_error_last_name_empty">Last name is required.</string>
-    <string name="feature_auth_error_username_empty">Username cannot be empty.</string>
-    <string name="feature_auth_error_email_empty">Email address is required.</string>
-    <string name="feature_auth_error_email_invalid">Please enter a valid email address.</string>
-    <string name="feature_auth_error_mobile_empty">Mobile number is required.</string>
-    <string name="feature_auth_error_mobile_invalid">Mobile number must be 10 digits.</string>
-    <string name="feature_auth_error_password_empty">Password is required.</string>
-    <string name="feature_auth_error_confirm_password_empty">Please confirm your password.</string>
-    <string name="feature_auth_error_passwords_do_not_match">Passwords do not match.</string>
-    <string name="feature_auth_error_address_line_1_empty">Address Line 1 cannot be empty.</string>
-    <string name="feature_auth_error_address_line_2_empty">Address Line 2 cannot be empty.</string>
-    <string name="feature_auth_error_pin_code_empty">Pin Code is required.</string>
-    <string name="feature_auth_error_country_empty">Country field is required.</string>
-    <string name="feature_auth_error_state_empty">State field is required.</string>
-
 </resources>
