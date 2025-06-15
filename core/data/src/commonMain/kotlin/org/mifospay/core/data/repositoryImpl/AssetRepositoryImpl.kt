@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.data.repositoryImp
+package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.serialization.json.Json
 import mobile_wallet.core.data.generated.resources.Res
@@ -23,9 +23,9 @@ class AssetRepositoryImpl : AssetRepository {
             val json = Json { ignoreUnknownKeys = true }
             val bytes = Res.readBytes("files/countries.json")
             val jsonString = bytes.decodeToString()
-            val parsed = json.decodeFromString<List<Country>>(jsonString)
+            val countries = json.decodeFromString<List<Country>>(jsonString)
             DataState.Success(
-                parsed.associate { country ->
+                countries.associate { country ->
                     country.name to country.states.map { it.name }.ifEmpty { listOf("N/A") }
                 },
             )

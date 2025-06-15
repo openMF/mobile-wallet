@@ -510,13 +510,13 @@ class SignupViewModel(
 
     private fun loadCountriesFromJson() {
         viewModelScope.launch {
-            when (val mapped = assetRepository.getCountriesWithStates()) {
+            when (val countriesWithStatesResult = assetRepository.getCountriesWithStates()) {
                 is DataState.Success ->
                     mutableStateFlow.update {
-                        it.copy(countriesWithStates = mapped.data)
+                        it.copy(countriesWithStates = countriesWithStatesResult.data)
                     }
 
-                is DataState.Error -> Logger.d("Failed to load countries.json: ${mapped.exception.message}")
+                is DataState.Error -> Logger.d("Failed to load countries.json: ${countriesWithStatesResult.exception.message}")
                 is DataState.Loading -> {}
             }
         }
