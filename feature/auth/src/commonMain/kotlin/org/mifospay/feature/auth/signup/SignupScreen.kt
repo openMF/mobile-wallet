@@ -405,12 +405,12 @@ private fun SignUpDialogs(
 
         is DialogMessage.StringMessage -> MifosBasicDialog(
             visibilityState = BasicDialogState.Shown(dialogMessage.message),
-            onDismissRequest = onDismissRequest
+            onDismissRequest = onDismissRequest,
         )
 
         is DialogMessage.ResourceMessage -> MifosBasicDialog(
             visibilityState = BasicDialogState.Shown(stringResource(dialogMessage.message)),
-            onDismissRequest = onDismissRequest
+            onDismissRequest = onDismissRequest,
         )
 
         is DialogMessage.None -> Unit
