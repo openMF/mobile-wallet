@@ -26,7 +26,7 @@ class AssetRepositoryImpl : AssetRepository {
             val countries = json.decodeFromString<List<Country>>(jsonString)
             DataState.Success(
                 countries.associate { country ->
-                    country.name to country.states.map { it.name }.ifEmpty { listOf("N/A") }
+                    country.name to country.states.map { it.name }
                 },
             )
         } catch (e: Exception) {

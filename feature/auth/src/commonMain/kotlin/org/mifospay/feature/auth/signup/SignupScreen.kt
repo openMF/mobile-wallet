@@ -60,6 +60,8 @@ import mobile_wallet.feature.auth.generated.resources.feature_auth_state
 import mobile_wallet.feature.auth.generated.resources.feature_auth_username
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
+import org.mifospay.core.common.dialogManager.DialogManager
+import org.mifospay.core.common.dialogManager.DialogMessage
 import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MifosBasicDialog
@@ -86,6 +88,7 @@ internal fun SignupScreen(
     val snackbarHostState = remember { SnackbarHostState() }
 
     val state by viewModel.stateFlow.collectAsStateWithLifecycle()
+    val dialogMessage by DialogManager.dialogMessage.collectAsStateWithLifecycle()
 
     EventsEffect(viewModel) { event ->
         when (event) {
@@ -100,7 +103,7 @@ internal fun SignupScreen(
     }
 
     SignUpDialogs(
-        dialogState = state.dialogState,
+        dialogMessage = dialogMessage,
         onDismissRequest = remember(viewModel) {
             { viewModel.trySendAction(SignUpAction.ErrorDialogDismiss) }
         },
@@ -321,16 +324,11 @@ private fun SignupScreenContent(
                 var isCountryDropdownExpanded by remember { mutableStateOf(false) }
                 var isStateDropdownExpanded by remember { mutableStateOf(false) }
 
-                val selectedCountry = state.countryInput
-                val selectedState = state.stateInput
-                val statesForSelectedCountry =
-                    state.countriesWithStates[selectedCountry] ?: emptyList()
-
                 // Country Dropdown
                 ExposedDropdownBox(
                     expanded = isCountryDropdownExpanded,
                     label = stringResource(Res.string.feature_auth_country),
-                    value = selectedCountry,
+                    value = state.countryInput,
                     onExpandChange = { isCountryDropdownExpanded = it },
                     modifier = Modifier.weight(1.5f),
                 ) {
@@ -346,21 +344,32 @@ private fun SignupScreenContent(
                 }
 
                 // State Dropdown
-                ExposedDropdownBox(
-                    expanded = isStateDropdownExpanded,
-                    label = stringResource(Res.string.feature_auth_state),
-                    value = selectedState,
-                    onExpandChange = { isStateDropdownExpanded = it },
-                    modifier = Modifier.weight(1.5f),
-                ) {
-                    statesForSelectedCountry.forEach { stateName ->
-                        DropdownBoxItem(
-                            text = stateName,
-                            onClick = {
-                                onAction(SignUpAction.StateInputChange(stateName))
-                                isStateDropdownExpanded = false
-                            },
-                        )
+                if (state.statesForSelectedCountry.isNullOrEmpty()) {
+                    MifosOutlinedTextField(
+                        value = state.stateInput,
+                        label = stringResource(Res.string.feature_auth_state),
+                        onValueChange = {
+                            onAction(SignUpAction.StateInputChange(it))
+                        },
+                        modifier = Modifier.weight(1.5f),
+                    )
+                } else {
+                    ExposedDropdownBox(
+                        expanded = isStateDropdownExpanded,
+                        label = stringResource(Res.string.feature_auth_state),
+                        value = state.stateInput,
+                        onExpandChange = { isStateDropdownExpanded = it },
+                        modifier = Modifier.weight(1.5f),
+                    ) {
+                        state.statesForSelectedCountry.forEach { stateName ->
+                            DropdownBoxItem(
+                                text = stateName,
+                                onClick = {
+                                    onAction(SignUpAction.StateInputChange(stateName))
+                                    isStateDropdownExpanded = false
+                                },
+                            )
+                        }
                     }
                 }
             }
@@ -386,21 +395,24 @@ private fun SignupScreenContent(
 
 @Composable
 private fun SignUpDialogs(
-    dialogState: SignUpDialog?,
+    dialogMessage: DialogMessage,
     onDismissRequest: () -> Unit,
 ) {
-    when (dialogState) {
-        is SignUpDialog.Error -> MifosBasicDialog(
-            visibilityState = BasicDialogState.Shown(
-                message = dialogState.message,
-            ),
-            onDismissRequest = onDismissRequest,
-        )
-
-        is SignUpDialog.Loading -> MifosLoadingDialog(
+    when (dialogMessage) {
+        is DialogMessage.Loading -> MifosLoadingDialog(
             visibilityState = LoadingDialogState.Shown,
         )
 
-        null -> Unit
+        is DialogMessage.StringMessage -> MifosBasicDialog(
+            visibilityState = BasicDialogState.Shown(dialogMessage.message),
+            onDismissRequest = onDismissRequest
+        )
+
+        is DialogMessage.ResourceMessage -> MifosBasicDialog(
+            visibilityState = BasicDialogState.Shown(stringResource(dialogMessage.message)),
+            onDismissRequest = onDismissRequest
+        )
+
+        is DialogMessage.None -> Unit
     }
 }
