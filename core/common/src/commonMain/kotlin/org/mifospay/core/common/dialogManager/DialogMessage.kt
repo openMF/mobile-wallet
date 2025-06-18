@@ -50,7 +50,7 @@ sealed interface DialogMessage {
          * Uses [StringMessage] if the exception has a non-blank message,
          * otherwise falls back to a generic error.
          *
-         * @return [StringMessage] or [ResourceMessage] based on content.
+         * @return [StringMessage] based on content.
          *
          * ### Example:
          * ```

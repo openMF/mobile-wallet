@@ -53,6 +53,8 @@ object PasswordChecker {
         return log2(charPool.toDouble().pow(password.length))
     }
 
+    // TODO: Move password feedback messages to string.xml — currently not possible as SignUpState uses Parcelable
+    //  and cannot hold List<StringResource>; revisit when SavedStateHandle usage is decoupled from state.
     fun getPasswordFeedback(password: String): List<String> {
         val feedback = mutableListOf<String>()
 

@@ -51,7 +51,9 @@ import androidx.compose.ui.unit.dp
 import mobile_wallet.core.ui.generated.resources.Res
 import mobile_wallet.core.ui.generated.resources.core_ui_error_icon_description
 import mobile_wallet.core.ui.generated.resources.core_ui_password_requirements
+import mobile_wallet.core.ui.generated.resources.core_ui_password_strength_labels
 import org.jetbrains.compose.resources.StringResource
+import org.jetbrains.compose.resources.stringArrayResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
@@ -98,15 +100,8 @@ fun CombinedPasswordErrorCard(
         label = "Indicator Color State",
     )
 
-    val strengthLabel = when (passwordStrengthState) {
-        PasswordStrengthState.NONE -> ""
-        PasswordStrengthState.WEAK_1 -> "Weak"
-        PasswordStrengthState.WEAK_2 -> "Weak"
-        PasswordStrengthState.WEAK_3 -> "Weak"
-        PasswordStrengthState.GOOD -> "Good"
-        PasswordStrengthState.STRONG -> "Strong"
-        PasswordStrengthState.VERY_STRONG -> "Very Strong"
-    }
+    val strengthLabels = stringArrayResource(resource = Res.array.core_ui_password_strength_labels)
+    val strengthLabel = strengthLabels[passwordStrengthState.ordinal]
 
     AnimatedVisibility(visible = hasErrors || isPasswordFieldFocused) {
         Card(
@@ -186,7 +181,7 @@ fun CombinedPasswordErrorCard(
                                 Text(
                                     text = strengthLabel,
                                     style = MaterialTheme.typography.labelSmall,
-                                    color = Color.White,
+                                    color = MaterialTheme.colorScheme.onPrimary,
                                     fontWeight = FontWeight.Medium,
                                 )
                             }
@@ -296,15 +291,10 @@ fun PasswordStrengthIndicator(
         targetValue = indicatorColor,
         label = "Indicator Color State",
     )
-    val label = when (state) {
-        PasswordStrengthState.NONE -> ""
-        PasswordStrengthState.WEAK_1 -> "Weak"
-        PasswordStrengthState.WEAK_2 -> "Weak"
-        PasswordStrengthState.WEAK_3 -> "Weak"
-        PasswordStrengthState.GOOD -> "Good"
-        PasswordStrengthState.STRONG -> "Strong"
-        PasswordStrengthState.VERY_STRONG -> "Very Strong"
-    }
+
+    val strengthLabels = stringArrayResource(resource = Res.array.core_ui_password_strength_labels)
+    val strengthLabel = strengthLabels[state.ordinal]
+
     Column(
         modifier = modifier,
     ) {
@@ -340,7 +330,7 @@ fun PasswordStrengthIndicator(
                 )
             }
             Text(
-                text = label,
+                text = strengthLabel,
                 style = MaterialTheme.typography.labelSmall,
                 color = indicatorColor,
             )

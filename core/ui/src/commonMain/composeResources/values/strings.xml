@@ -14,4 +14,15 @@
     <string name="core_ui_try_again">Please check your connection or try again</string>
     <string name="core_ui_password_requirements">Password Requirements</string>
     <string name="core_ui_error_icon_description">Error</string>
+
+    <!-- Password Strength Levels -->
+    <string-array name="core_ui_password_strength_labels">
+        <item /> <!-- NONE -->
+        <item>Weak</item> <!-- WEAK_1 -->
+        <item>Weak</item> <!-- WEAK_2 -->
+        <item>Weak</item> <!-- WEAK_3 -->
+        <item>Good</item> <!-- GOOD -->
+        <item>Strong</item> <!-- STRONG -->
+        <item>Very Strong</item> <!-- VERY_STRONG -->
+    </string-array>
 </resources>

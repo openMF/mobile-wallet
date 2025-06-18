@@ -38,6 +38,7 @@ import mobile_wallet.feature.auth.generated.resources.feature_auth_error_select_
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_state_required
 import mobile_wallet.feature.auth.generated.resources.feature_auth_error_username_required
 import org.mifospay.core.common.DataState
+import org.mifospay.core.common.IgnoredOnParcel
 import org.mifospay.core.common.Parcelable
 import org.mifospay.core.common.Parcelize
 import org.mifospay.core.common.dialogManager.DialogManager
@@ -505,6 +506,7 @@ data class SignUpState(
     val passwordFeedback: ImmutableList<String> = persistentListOf(),
     val countriesWithStates: Map<String, List<String>> = emptyMap(),
 ) : Parcelable {
+    @IgnoredOnParcel
     val statesForSelectedCountry =
         countriesWithStates[countryInput]
 }
