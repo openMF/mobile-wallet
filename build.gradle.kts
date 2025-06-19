@@ -1,3 +1,5 @@
+import org.jetbrains.dokka.gradle.DokkaMultiModuleTask
+
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
     dependencies {
@@ -33,6 +35,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform) apply false
     alias(libs.plugins.wire) apply false
     alias(libs.plugins.ktorfit) apply false
+    alias(libs.plugins.dokka) apply false
 }
 
 object DynamicVersion {
@@ -57,7 +60,6 @@ tasks.register("printModulePaths") {
         }
     }
 }
-
 // Configuration for CMP module dependency graph
 moduleGraphAssert {
     configurations += setOf("commonMainImplementation", "commonMainApi")
@@ -67,3 +69,12 @@ moduleGraphAssert {
     configurations += setOf("nativeMainImplementation", "nativeMainApi")
     configurations += setOf("wasmJsMainImplementation", "wasmJsMainApi")
 }
+
+// root build.gradle.kts
+tasks.register<DokkaMultiModuleTask>("dokkaHtmlMultiModule") {
+    outputDirectory.set(buildDir.resolve("docs"))
+
+    // Automatically collect all dokkaHtml tasks from subprojects
+    addChildTasks(subprojects, "dokkaHtml")
+}
+

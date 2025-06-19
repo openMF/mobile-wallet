@@ -24,6 +24,7 @@ appcompatVersion = "1.7.0"
 coreKtxVersion = "1.15.0"
 
 # KotlinX Dependencies
+dokkaGradlePlugin = "2.0.0"
 lifecycleExtensionsVersion = "2.2.0"
 lifecycleVersion = "2.8.7"
 
@@ -178,6 +179,7 @@ androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profi
 androidx-test-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-test-ext-junit" }
 androidx-tracing-ktx = { group = "androidx.tracing", name = "tracing-ktx", version.ref = "androidxTracing" }
 
+dokka-gradle-plugin = { module = "org.jetbrains.dokka:dokka-gradle-plugin", version.ref = "dokkaGradlePlugin" }
 ktlint-gradlePlugin = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint" }
 detekt-formatting = { group = "io.gitlab.arturbosch.detekt", name = "detekt-formatting", version.ref = "detekt" }
 spotless-gradle = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotlessVersion" }
@@ -366,3 +368,4 @@ ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotlessVersion" }
 version-catalog-linter = { id = "io.github.pemistahl.version-catalog-linter", version.ref = "versionCatalogLinterVersion" }
 
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokkaGradlePlugin" }

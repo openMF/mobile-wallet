@@ -23,6 +23,12 @@ import org.mifospay.core.ui.utils.BaseViewModel
 
 private const val KEY_STATE = "state"
 
+/**
+ * ViewModel responsible for managing login-related UI state and actions.
+ *
+ * @param loginUseCase Use case that performs the login operation.
+ * @param savedStateHandle Provides access to saved state.
+ */
 class LoginViewModel(
     private val loginUseCase: LoginUseCase,
     savedStateHandle: SavedStateHandle,
@@ -36,6 +42,11 @@ class LoginViewModel(
         }
     }
 
+    /**
+     * Handles incoming actions from the UI.
+     *
+     * @param action The [LoginAction] to process.
+     */
     override fun handleAction(action: LoginAction) {
         when (action) {
             is LoginAction.UsernameChanged -> {
@@ -74,6 +85,11 @@ class LoginViewModel(
         }
     }
 
+    /**
+     * Handles the result of the login attempt.
+     *
+     * @param action The internal login result action.
+     */
     private fun handleLoginResult(action: LoginAction.Internal.ReceiveLoginResult) {
         when (action.loginResult) {
             is DataState.Error -> {
@@ -97,6 +113,12 @@ class LoginViewModel(
         }
     }
 
+    /**
+     * Initiates the login process.
+     *
+     * @param username The user's username.
+     * @param password The user's password.
+     */
     private fun loginUser(
         username: String,
         password: String,
@@ -112,6 +134,14 @@ class LoginViewModel(
     }
 }
 
+/**
+ * Represents the UI state of the login screen.
+ *
+ * @property username The entered username.
+ * @property password The entered password (excluded from parceling).
+ * @property isPasswordVisible Indicates whether the password is visible.
+ * @property dialogState Represents loading or error dialog state.
+ */
 @Parcelize
 data class LoginState(
     val username: String = "",
@@ -120,31 +150,96 @@ data class LoginState(
     val isPasswordVisible: Boolean = false,
     val dialogState: DialogState?,
 ) : Parcelable {
+
+    /**
+     * Represents dialog states shown on the login screen.
+     */
     sealed class DialogState : Parcelable {
+        /**
+         * Represents an error dialog.
+         * @param message The error message to display.
+         */
         @Parcelize
         data class Error(val message: String) : DialogState()
 
+        /**
+         * Represents a loading dialog.
+         */
         @Parcelize
         data object Loading : DialogState()
     }
 }
 
+/**
+ * Defines one-time events to be triggered from the login screen.
+ */
 sealed class LoginEvent {
+    /**
+     * Event to navigate back from the login screen.
+     */
     data object NavigateBack : LoginEvent()
+
+    /**
+     * Event to navigate to the signup screen.
+     */
     data object NavigateToSignup : LoginEvent()
+
+    /**
+     * Event to navigate to the passcode screen after successful login.
+     */
     data object NavigateToPasscodeScreen : LoginEvent()
+
+    /**
+     * Event to show a toast message.
+     *
+     * @param message The message to display.
+     */
     data class ShowToast(val message: String) : LoginEvent()
 }
 
+/**
+ * Represents all user interactions and internal actions on the login screen.
+ */
 sealed class LoginAction {
+    /**
+     * Action for when the username is changed.
+     */
     data class UsernameChanged(val username: String) : LoginAction()
+
+    /**
+     * Action for when the password is changed.
+     */
     data class PasswordChanged(val password: String) : LoginAction()
+
+    /**
+     * Action to toggle password visibility.
+     */
     data object TogglePasswordVisibility : LoginAction()
+
+    /**
+     * Action to dismiss the error dialog.
+     */
     data object ErrorDialogDismiss : LoginAction()
+
+    /**
+     * Action for when the login button is clicked.
+     */
     data object LoginClicked : LoginAction()
+
+    /**
+     * Action for when the signup button is clicked.
+     */
     data object SignupClicked : LoginAction()
 
+    /**
+     * Internal actions used within the ViewModel.
+     */
     sealed class Internal : LoginAction() {
+        /**
+         * Result from the login use case.
+         *
+         * @param loginResult The result of the login attempt.
+         */
         data class ReceiveLoginResult(
             val loginResult: DataState<UserInfo>,
         ) : Internal()

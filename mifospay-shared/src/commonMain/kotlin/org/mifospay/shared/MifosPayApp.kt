@@ -16,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.rememberNavController
 import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
@@ -96,7 +97,7 @@ private fun MifosPayApp(
             onClickLogout = {
                 viewModel.logOut()
                 navController.navigate(LOGIN_GRAPH) {
-                    popUpTo(navController.graph.id) {
+                    popUpTo(navController.graph.findStartDestination().route ?: "") {
                         inclusive = true
                     }
                 }

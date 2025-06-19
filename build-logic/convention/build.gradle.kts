@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
+
 plugins {
     `kotlin-dsl`
 }
@@ -29,6 +30,7 @@ dependencies {
     compileOnly(libs.ktlint.gradlePlugin)
     compileOnly(libs.spotless.gradle)
     implementation(libs.truth)
+    compileOnly(libs.dokka.gradle.plugin)
 }
 
 tasks {
