@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -160,7 +159,6 @@ internal fun EditPasswordScreenContent(
             MifosButton(
                 modifier = Modifier
                     .fillMaxWidth(),
-                color = MaterialTheme.colorScheme.primary,
                 enabled = true,
                 onClick = {
                     onAction(EditPasswordAction.SubmitClick)

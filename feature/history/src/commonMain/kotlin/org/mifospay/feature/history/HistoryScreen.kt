@@ -84,7 +84,7 @@ internal fun HistoryScreenContent(
                     title = stringResource(Res.string.feature_history_error_oops),
                     subTitle = stringResource(Res.string.feature_history_error),
                     modifier = Modifier.align(Alignment.Center),
-                    iconTint = MaterialTheme.colorScheme.primary,
+                    iconTint = MaterialTheme.colorScheme.error,
                 )
             }
 
@@ -93,7 +93,6 @@ internal fun HistoryScreenContent(
                     title = stringResource(Res.string.feature_history_error_oops),
                     subTitle = stringResource(Res.string.feature_history_empty),
                     modifier = Modifier.fillMaxSize().align(Alignment.Center),
-                    iconTint = MaterialTheme.colorScheme.primary,
                 )
             }
 

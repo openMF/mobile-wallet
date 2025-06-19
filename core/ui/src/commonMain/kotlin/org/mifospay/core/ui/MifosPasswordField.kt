@@ -9,10 +9,12 @@
  */
 package org.mifospay.core.ui
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +29,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -47,13 +50,16 @@ fun MifosPasswordField(
     readOnly: Boolean = false,
     singleLine: Boolean = true,
     hint: String? = null,
+    isError: Boolean = false,
     showPasswordTestTag: String? = null,
     autoFocus: Boolean = false,
     keyboardType: KeyboardType = KeyboardType.Password,
     imeAction: ImeAction = ImeAction.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val focusRequester = remember { FocusRequester() }
+
     MifosCustomTextField(
         modifier = modifier
             .tabNavigation()
@@ -72,6 +78,7 @@ fun MifosPasswordField(
             keyboardType = keyboardType,
             imeAction = imeAction,
         ),
+        isError = isError,
         keyboardActions = keyboardActions,
         supportingText = hint?.let {
             {
@@ -84,11 +91,14 @@ fun MifosPasswordField(
         trailingIcon = {
             IconButton(
                 onClick = { showPasswordChange.invoke(!showPassword) },
+                colors = IconButtonDefaults.iconButtonColors(
+                    contentColor = MaterialTheme.colorScheme.primary,
+                ),
             ) {
                 val imageVector = if (showPassword) {
-                    MifosIcons.OutlinedVisibilityOff
-                } else {
                     MifosIcons.OutlinedVisibility
+                } else {
+                    MifosIcons.OutlinedVisibilityOff
                 }
 
                 Icon(
@@ -98,6 +108,10 @@ fun MifosPasswordField(
                 )
             }
         },
+        textStyle = TextStyle(
+            color = MaterialTheme.colorScheme.onSurface,
+        ),
+        interactionSource = interactionSource,
     )
     if (autoFocus) {
         LaunchedEffect(Unit) { focusRequester.requestFocus() }

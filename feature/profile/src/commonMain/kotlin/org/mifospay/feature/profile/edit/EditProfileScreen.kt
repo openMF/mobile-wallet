@@ -47,7 +47,6 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
-import org.mifospay.core.designsystem.theme.MifosBlue
 import org.mifospay.core.ui.utils.EventsEffect
 import org.mifospay.feature.profile.components.EditableProfileImage
 
@@ -179,8 +178,11 @@ private fun EditProfileScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(54.dp),
-                    color = MifosBlue,
-                    text = { Text(text = stringResource(Res.string.feature_profile_save)) },
+                    text = {
+                        Text(
+                            text = stringResource(Res.string.feature_profile_save),
+                        )
+                    },
                     onClick = {
                         onAction(EditProfileAction.UpdateProfile)
                     },

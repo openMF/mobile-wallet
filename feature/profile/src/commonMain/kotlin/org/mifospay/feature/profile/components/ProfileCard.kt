@@ -23,6 +23,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import mobile_wallet.feature.profile.generated.resources.Res
@@ -41,12 +42,11 @@ fun ProfileDetailsCard(
     Card(
         modifier = modifier
             .fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp,
-        ),
+        elevation = CardDefaults.cardElevation(),
         shape = RoundedCornerShape(15.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimary,
         ),
     ) {
         Column(
@@ -79,6 +79,8 @@ fun ProfileDetailsCard(
 fun ProfileItem(
     label: String,
     value: String,
+    labelColor: Color = MaterialTheme.colorScheme.primary,
+    textColor: Color = MaterialTheme.colorScheme.onSurface,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -86,20 +88,17 @@ fun ProfileItem(
     ) {
         Text(
             text = label,
-            color = MaterialTheme.colorScheme.primary,
+            color = labelColor,
             style = MaterialTheme.typography.labelLarge,
         )
         Spacer(modifier = Modifier.height(10.dp))
         Text(
             text = value,
-            color = MaterialTheme.colorScheme.onSurface,
+            color = textColor,
             style = MaterialTheme.typography.labelLarge,
             fontWeight = FontWeight(400),
         )
         Spacer(modifier = Modifier.height(4.dp))
-        HorizontalDivider(
-            thickness = 1.dp,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
-        )
+        HorizontalDivider()
     }
 }

@@ -53,7 +53,7 @@ fun MifosButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     contentPadding: PaddingValues = ButtonDefaults.ContentPadding,
-    color: Color = MaterialTheme.colorScheme.primary,
+    disabledColor: Color = MaterialTheme.colorScheme.surfaceContainerHighest,
     content: @Composable RowScope.() -> Unit = {},
 ) {
     Button(
@@ -61,7 +61,9 @@ fun MifosButton(
         modifier = modifier
             .height(48.dp),
         enabled = enabled,
-        colors = ButtonDefaults.buttonColors(containerColor = color),
+        colors = ButtonDefaults.buttonColors(
+            disabledContainerColor = disabledColor,
+        ),
         contentPadding = contentPadding,
         content = content,
     )
@@ -106,14 +108,12 @@ fun MifosButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    color: Color = MaterialTheme.colorScheme.primary,
     leadingIcon: @Composable (() -> Unit)? = null,
 ) {
     MifosButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        color = color,
         contentPadding = if (leadingIcon != null) {
             ButtonDefaults.ButtonWithIconContentPadding
         } else {
@@ -179,6 +179,7 @@ fun MifosOutlinedButton(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     leadingIcon: @Composable (() -> Unit)? = null,
+    colors: ButtonColors = ButtonDefaults.outlinedButtonColors(),
 ) {
     MifosOutlinedButton(
         onClick = onClick,
@@ -189,6 +190,7 @@ fun MifosOutlinedButton(
         } else {
             ButtonDefaults.ContentPadding
         },
+        colors = colors,
     ) {
         MifosButtonContent(
             text = text,
@@ -211,15 +213,16 @@ fun MifosTextButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
+    colors: ButtonColors = ButtonDefaults.textButtonColors(
+        contentColor = MaterialTheme.colorScheme.onBackground,
+    ),
     content: @Composable RowScope.() -> Unit = {},
 ) {
     TextButton(
         onClick = onClick,
         modifier = modifier,
         enabled = enabled,
-        colors = ButtonDefaults.textButtonColors(
-            contentColor = MaterialTheme.colorScheme.onBackground,
-        ),
+        colors = colors,
         content = content,
     )
 }

@@ -45,7 +45,9 @@ fun KYCLevel3ScreenContent(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            Text(text = "KYC Level 3")
+            Text(
+                text = "KYC Level 3",
+            )
         }
     }
 }

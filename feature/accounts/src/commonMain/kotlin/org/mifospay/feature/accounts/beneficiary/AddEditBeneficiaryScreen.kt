@@ -223,7 +223,9 @@ internal fun AddEditBeneficiaryScreenContent(
                                     localeToggled = false
                                 },
                                 text = {
-                                    Text(text = locale.countryName)
+                                    Text(
+                                        text = locale.countryName,
+                                    )
                                 },
                             )
 

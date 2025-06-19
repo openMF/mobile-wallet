@@ -30,7 +30,6 @@ import mobile_wallet.feature.merchants.generated.resources.feature_merchants_ic_
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.component.MifosCard
-import org.mifospay.core.designsystem.theme.mifosText
 import org.mifospay.core.designsystem.theme.styleMedium16sp
 import org.mifospay.core.model.savingsaccount.SavingsWithAssociationsEntity
 
@@ -74,7 +73,8 @@ internal fun MerchantsItem(
                     Text(
                         text = savingsWithAssociations.accountNo,
                         modifier = Modifier.padding(top = 4.dp),
-                        style = styleMedium16sp.copy(mifosText),
+                        style = styleMedium16sp,
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
             }
@@ -82,6 +82,7 @@ internal fun MerchantsItem(
         HorizontalDivider(
             thickness = 1.dp,
             modifier = Modifier.padding(8.dp),
+            color = MaterialTheme.colorScheme.outlineVariant,
         )
     }
 }

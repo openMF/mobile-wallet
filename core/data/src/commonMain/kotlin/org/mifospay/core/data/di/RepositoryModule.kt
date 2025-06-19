@@ -14,6 +14,7 @@ import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.mifospay.core.common.MifosDispatchers
 import org.mifospay.core.data.repository.AccountRepository
+import org.mifospay.core.data.repository.AssetRepository
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.data.repository.BeneficiaryRepository
 import org.mifospay.core.data.repository.ClientRepository
@@ -32,25 +33,26 @@ import org.mifospay.core.data.repository.StandingInstructionRepository
 import org.mifospay.core.data.repository.ThirdPartyTransferRepository
 import org.mifospay.core.data.repository.TwoFactorAuthRepository
 import org.mifospay.core.data.repository.UserRepository
-import org.mifospay.core.data.repositoryImp.AccountRepositoryImpl
-import org.mifospay.core.data.repositoryImp.AuthenticationRepositoryImpl
-import org.mifospay.core.data.repositoryImp.BeneficiaryRepositoryImpl
-import org.mifospay.core.data.repositoryImp.ClientRepositoryImpl
-import org.mifospay.core.data.repositoryImp.DocumentRepositoryImpl
-import org.mifospay.core.data.repositoryImp.InvoiceRepositoryImpl
-import org.mifospay.core.data.repositoryImp.KycLevelRepositoryImpl
-import org.mifospay.core.data.repositoryImp.LocalAssetRepositoryImpl
-import org.mifospay.core.data.repositoryImp.NotificationRepositoryImpl
-import org.mifospay.core.data.repositoryImp.RegistrationRepositoryImpl
-import org.mifospay.core.data.repositoryImp.RunReportRepositoryImpl
-import org.mifospay.core.data.repositoryImp.SavedCardRepositoryImpl
-import org.mifospay.core.data.repositoryImp.SavingsAccountRepositoryImpl
-import org.mifospay.core.data.repositoryImp.SearchRepositoryImpl
-import org.mifospay.core.data.repositoryImp.SelfServiceRepositoryImpl
-import org.mifospay.core.data.repositoryImp.StandingInstructionRepositoryImpl
-import org.mifospay.core.data.repositoryImp.ThirdPartyTransferRepositoryImpl
-import org.mifospay.core.data.repositoryImp.TwoFactorAuthRepositoryImpl
-import org.mifospay.core.data.repositoryImp.UserRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.AccountRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.AssetRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.AuthenticationRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.BeneficiaryRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.ClientRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.DocumentRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.InvoiceRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.KycLevelRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.LocalAssetRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.NotificationRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.RegistrationRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.RunReportRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.SavedCardRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.SavingsAccountRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.SearchRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.SelfServiceRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.StandingInstructionRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.ThirdPartyTransferRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.TwoFactorAuthRepositoryImpl
+import org.mifospay.core.data.repositoryImpl.UserRepositoryImpl
 import org.mifospay.core.data.util.NetworkMonitor
 import org.mifospay.core.data.util.TimeZoneMonitor
 
@@ -60,6 +62,7 @@ private val unconfined = named(MifosDispatchers.Unconfined.name)
 val RepositoryModule = module {
     single<Json> { Json { ignoreUnknownKeys = true } }
 
+    single<AssetRepository> { AssetRepositoryImpl() }
     single<AccountRepository> { AccountRepositoryImpl(get(), get(ioDispatcher)) }
     single<AuthenticationRepository> {
         AuthenticationRepositoryImpl(get(), get(ioDispatcher))

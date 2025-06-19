@@ -180,7 +180,6 @@ fun PhoneNoVerifyContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp, vertical = 16.dp),
-            color = MaterialTheme.colorScheme.primary,
             enabled = state.isPhoneNoValid,
             onClick = {
                 onEvent(MobileVerificationAction.VerifyPhoneBtnClicked)
@@ -232,7 +231,6 @@ fun OtpVerifyContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 32.dp, vertical = 16.dp),
-            color = MaterialTheme.colorScheme.primary,
             enabled = state.isOtpValid,
             onClick = {
                 onEvent(MobileVerificationAction.VerifyOtpBtnClicked)

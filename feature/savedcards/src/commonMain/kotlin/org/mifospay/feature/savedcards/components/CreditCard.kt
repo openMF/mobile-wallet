@@ -352,6 +352,8 @@ private fun CreditCardBackground(baseColor: Color) {
 private fun CreditCardLabelAndText(
     label: String,
     text: String,
+    labelColor: Color = Color.White,
+    textColor: Color = Color.White,
 ) {
     Column(
         modifier = Modifier
@@ -365,7 +367,7 @@ private fun CreditCardLabelAndText(
                 fontSize = 12.sp,
                 letterSpacing = 1.sp,
             ),
-            color = Color.White,
+            color = labelColor,
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
@@ -375,7 +377,7 @@ private fun CreditCardLabelAndText(
                 fontSize = 16.sp,
                 letterSpacing = 1.sp,
             ),
-            color = Color.White,
+            color = textColor,
         )
     }
 }
@@ -428,6 +430,7 @@ internal fun CreditCard(
             DisplayCardNumberInput(
                 cardNumber = cardNumber,
                 maskStyle = maskStyle,
+                textColor = Color.White,
             )
             // Positioned to corner top left
             SpaceWrapper(
@@ -436,7 +439,10 @@ internal fun CreditCard(
                 top = true,
                 left = true,
             ) {
-                CreditCardLabelAndText(label = "card holder", text = fullName)
+                CreditCardLabelAndText(
+                    label = "card holder",
+                    text = fullName,
+                )
             }
             // Positioned to corner bottom left
             SpaceWrapper(

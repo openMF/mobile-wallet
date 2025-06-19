@@ -51,7 +51,6 @@ import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.component.MifosTextField
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.utils.PaymentQrData
 import org.mifospay.core.ui.AvatarBox
@@ -172,7 +171,7 @@ private fun AccountListState(
         shadowElevation = 2.dp,
         tonalElevation = 2.dp,
         shape = RoundedCornerShape(topStart = 12.dp, topEnd = 12.dp),
-        color = NewUi.containerColor,
+        color = MaterialTheme.colorScheme.background,
     ) {
         Column(
             modifier = Modifier
@@ -208,6 +207,7 @@ private fun AccountListState(
                         EmptyContentScreen(
                             title = "Oops!",
                             subTitle = "No accounts found!",
+                            iconTint = MaterialTheme.colorScheme.error,
                         )
                     }
 

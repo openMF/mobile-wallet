@@ -49,7 +49,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MifosTopBar
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
@@ -113,8 +112,6 @@ private fun FaqScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 20.dp),
-                        thickness = 1.dp,
-                        color = NewUi.onSurface.copy(alpha = 0.05f),
                     )
                 }
             }
@@ -148,7 +145,6 @@ private fun FaqItemScreen(
             Row {
                 Text(
                     text = stringResource(faq.question),
-                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.W500,
                     modifier = Modifier
                         .fillMaxWidth()
@@ -158,7 +154,6 @@ private fun FaqItemScreen(
                 Icon(
                     imageVector = MifosIcons.KeyboardArrowDown,
                     contentDescription = "drop down",
-                    tint = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier
                         .scale(1f, if (isExpanded) -1f else 1f),
                 )
@@ -179,7 +174,6 @@ private fun FaqItemScreen(
                     Text(
                         text = stringResource(faq.answer),
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(top = 4.dp)

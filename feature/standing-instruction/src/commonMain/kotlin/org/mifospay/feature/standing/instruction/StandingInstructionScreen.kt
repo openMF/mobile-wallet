@@ -188,7 +188,7 @@ internal fun StandingInstructionScreen(
                         title = stringResource(Res.string.feature_standing_instruction_error_oops),
                         subTitle = stringResource(Res.string.feature_standing_instruction_error_fetching_si_list),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.onSurface,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 
@@ -265,8 +265,8 @@ private fun SIItem(
         modifier = modifier,
         state = state,
         shape = RoundedCornerShape(8.dp),
-        backgroundCardStartColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        backgroundCardEndColor = MaterialTheme.colorScheme.primary,
+        backgroundCardStartColor = MaterialTheme.colorScheme.tertiary,
+        backgroundCardEndColor = MaterialTheme.colorScheme.secondary,
         backgroundStartActionLabel = null,
         backgroundEndActionLabel = "Edit",
         card = { shape, content ->
@@ -310,11 +310,32 @@ private fun SIItem(
         onContentClick = { onClick(item.id) },
     ) {
         val priorityColor = when (item.priority.id) {
-            1L -> Color(0xFFFF4444)
-            2L -> Color(0xFFFF8800)
-            3L -> Color(0xFFFFBB33)
-            4L -> Color(0xFF99CC00)
-            else -> Color.Gray
+            1L -> MaterialTheme.colorScheme.error.copy(
+                red = 1f,
+                green = 0.27f,
+                blue = 0.27f,
+            )
+            2L -> MaterialTheme.colorScheme.primaryContainer.copy(
+                red = 1f,
+                green = 0.53f,
+                blue = 0f,
+            )
+            3L -> MaterialTheme.colorScheme.primaryContainer.copy(
+                red = 1f,
+                green = 0.73f,
+                blue = 0.2f,
+            )
+
+            4L -> MaterialTheme.colorScheme.secondaryContainer.copy(
+                red = 0.6f,
+                green = 0.8f,
+                blue = 0f,
+            )
+            else -> MaterialTheme.colorScheme.outlineVariant.copy(
+                red = 0.5f,
+                green = 0.5f,
+                blue = 0.5f,
+            )
         }
 
         Box(
@@ -339,6 +360,7 @@ private fun SIItem(
                 shape = it,
                 colors = CardDefaults.outlinedCardColors(
                     containerColor = Color.Transparent,
+                    contentColor = MaterialTheme.colorScheme.onSurface,
                 ),
             ) {
                 ListItem(

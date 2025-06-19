@@ -40,6 +40,7 @@ fun MifosScaffold(
     backPress: () -> Unit,
     modifier: Modifier = Modifier,
     topBarTitle: String? = null,
+    containerColor: Color = Color.Transparent,
     floatingActionButtonContent: FloatingActionButtonContent? = null,
     pullToRefreshState: MifosPullToRefreshState = rememberMifosPullToRefreshState(),
     snackbarHost: @Composable () -> Unit = {},
@@ -66,7 +67,7 @@ fun MifosScaffold(
             }
         },
         snackbarHost = snackbarHost,
-        containerColor = Color.Transparent,
+        containerColor = containerColor,
         content = { paddingValues ->
             val internalPullToRefreshState = rememberPullToRefreshState()
             Box(
@@ -106,7 +107,7 @@ fun MifosScaffold(
     pullToRefreshState: MifosPullToRefreshState = rememberMifosPullToRefreshState(),
     floatingActionButtonPosition: FabPosition = FabPosition.End,
     containerColor: Color = Color.Transparent,
-    contentColor: Color = MaterialTheme.colorScheme.onSurface,
+    contentColor: Color = MaterialTheme.colorScheme.onBackground,
     contentWindowInsets: WindowInsets = ScaffoldDefaults.contentWindowInsets,
     content: @Composable (PaddingValues) -> Unit,
 ) {

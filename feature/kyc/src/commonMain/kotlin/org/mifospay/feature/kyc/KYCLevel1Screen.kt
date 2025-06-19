@@ -22,6 +22,8 @@ import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -130,6 +132,9 @@ private fun KYCLevel1ScreenContent(
                     onValueChange = {
                         onAction(KycLevel1Action.FirstNameChanged(it))
                     },
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 
@@ -140,6 +145,9 @@ private fun KYCLevel1ScreenContent(
                     onValueChange = {
                         onAction(KycLevel1Action.LastNameChanged(it))
                     },
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 
@@ -151,6 +159,9 @@ private fun KYCLevel1ScreenContent(
                     onValueChange = {
                         onAction(KycLevel1Action.MobileNoChanged(it))
                     },
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 
@@ -161,6 +172,9 @@ private fun KYCLevel1ScreenContent(
                     onValueChange = {
                         onAction(KycLevel1Action.AddressLine1Changed(it))
                     },
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 
@@ -171,6 +185,9 @@ private fun KYCLevel1ScreenContent(
                     onValueChange = {
                         onAction(KycLevel1Action.AddressLine2Changed(it))
                     },
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 
@@ -222,6 +239,10 @@ private fun KYCLevel1ScreenContent(
                             onClick = {
                                 showDialog = true
                             },
+                            colors = IconButtonDefaults.iconButtonColors(
+                                containerColor = MaterialTheme.colorScheme.tertiary,
+                                contentColor = MaterialTheme.colorScheme.tertiaryContainer,
+                            ),
                         ) {
                             Icon(
                                 imageVector = MifosIcons.CalenderMonth,
@@ -230,6 +251,9 @@ private fun KYCLevel1ScreenContent(
                         }
                     },
                     onValueChange = {},
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
             }
 

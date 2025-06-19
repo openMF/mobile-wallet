@@ -31,6 +31,7 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.jb.kotlin.stdlib)
             implementation(libs.kotlin.reflect)
+            implementation(libs.kotlinx.serialization.json)
         }
 
         androidMain.dependencies {

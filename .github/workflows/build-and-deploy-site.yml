@@ -32,7 +32,7 @@
 # 5. Upload built artifacts
 # 6. Deploy to GitHub Pages
 
-# https://github.com/openMF/mifos-mobile-github-actions/blob/main/.github/workflows/build-and-deploy-site.yaml
+# https://github.com/openMF/mifos-x-actionhub/blob/main/.github/workflows/build-and-deploy-site.yaml
 
 # ##############################################################################
 #                 DON'T EDIT THIS FILE UNLESS NECESSARY                        #
@@ -59,7 +59,7 @@ permissions:
 jobs:
   build_and_deploy_web:
     name: Build And Deploy Web App
-    uses: openMF/mifos-mobile-github-actions/.github/workflows/build-and-deploy-site.yaml@main
+    uses: openMF/mifos-x-actionhub/.github/workflows/build-and-deploy-site.yaml@v1.0.0
     secrets: inherit
     with:
       web_package_name: 'mifospay-web' # <-- Change with your web package name

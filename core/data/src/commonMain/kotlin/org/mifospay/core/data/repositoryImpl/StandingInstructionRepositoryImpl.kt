@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.data.repositoryImp
+package org.mifospay.core.data.repositoryImpl
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
@@ -54,6 +54,7 @@ class StandingInstructionRepositoryImpl(
     ): Flow<DataState<StandingInstruction>> {
         return apiManager.standingInstructionApi
             .getStandingInstruction(instructionId)
+            .catch { DataState.Error(it, null) }
             .asDataStateFlow().flowOn(ioDispatcher)
     }
 

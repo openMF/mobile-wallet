@@ -71,16 +71,11 @@ import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.ElectricViolet
 import org.mifospay.core.designsystem.theme.MifosTheme
-import org.mifospay.core.designsystem.theme.creditTextColor
-import org.mifospay.core.designsystem.theme.debitTextColor
-import org.mifospay.core.designsystem.theme.otherTextColor
 import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.core.ui.EmptyContentScreen
-import org.mifospay.core.ui.ErrorScreenContent
 import org.mifospay.feature.merchants.MerchantTransferUiState
 import org.mifospay.feature.merchants.MerchantTransferViewModel
 
@@ -136,10 +131,11 @@ internal fun MerchantTransferScreen(
                     }
 
                     is MerchantTransferUiState.Error -> {
-                        ErrorScreenContent(
+                        EmptyContentScreen(
                             modifier = Modifier,
                             title = stringResource(Res.string.feature_merchants_error_oops),
                             subTitle = stringResource(Res.string.feature_merchants_unexpected_error_subtitle),
+                            iconTint = MaterialTheme.colorScheme.error,
                         )
                     }
 
@@ -148,7 +144,6 @@ internal fun MerchantTransferScreen(
                             title = stringResource(Res.string.feature_merchants_error_oops),
                             subTitle = stringResource(Res.string.feature_merchants_no_transactions_found),
                             modifier = Modifier,
-                            iconTint = MaterialTheme.colorScheme.onSurface,
                         )
                     }
 
@@ -211,7 +206,11 @@ private fun MerchantBottomSheet(
             ) {
                 Text(
                     text = stringResource(Res.string.feature_merchants_transfer_money_to_this_merchant),
-                    color = ElectricViolet,
+                    color = MaterialTheme.colorScheme.tertiaryContainer.copy(
+                        red = 0.38f,
+                        green = 0f,
+                        blue = 0.93f,
+                    ),
                     style = MaterialTheme.typography.bodyMedium,
                 )
                 Spacer(modifier = Modifier.height(24.dp))
@@ -355,9 +354,21 @@ private fun SpecificTransactionItem(
                 style = MaterialTheme.typography.displaySmall,
                 color =
                 when (transaction.transactionType) {
-                    TransactionType.DEBIT -> debitTextColor
-                    TransactionType.CREDIT -> creditTextColor
-                    TransactionType.OTHER -> otherTextColor
+                    TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
+                        red = 0.8f,
+                        green = 0f,
+                        blue = 0f,
+                    )
+                    TransactionType.CREDIT -> MaterialTheme.colorScheme.onTertiaryContainer.copy(
+                        red = 0f,
+                        green = 0.51f,
+                        blue = 0.21f,
+                    )
+                    TransactionType.OTHER -> MaterialTheme.colorScheme.primaryContainer.copy(
+                        red = 1f,
+                        green = 1f,
+                        blue = 0f,
+                    )
                 },
             )
         }

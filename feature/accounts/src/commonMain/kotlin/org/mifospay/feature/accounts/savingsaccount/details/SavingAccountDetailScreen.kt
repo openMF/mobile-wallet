@@ -145,7 +145,7 @@ internal fun SavingAccountDetailScreen(
                         title = stringResource(Res.string.feature_accounts_error_oops),
                         subTitle = state.message,
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.onSurface,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 
@@ -222,7 +222,7 @@ private fun SavingAccountSummaryCard(
         modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
     ) {
         Column(
@@ -230,7 +230,7 @@ private fun SavingAccountSummaryCard(
         ) {
             Text(
                 text = "Account Summary",
-                color = NewUi.primaryColor,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight(500),
                 modifier = Modifier.padding(8.dp),
             )
@@ -243,6 +243,7 @@ private fun SavingAccountSummaryCard(
                     text = summary.formatAmount(summary.accountBalance),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
@@ -254,6 +255,7 @@ private fun SavingAccountSummaryCard(
                     text = summary.formatAmount(summary.totalDeposits),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
@@ -265,6 +267,7 @@ private fun SavingAccountSummaryCard(
                     text = summary.formatAmount(summary.totalWithdrawals),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
@@ -276,6 +279,7 @@ private fun SavingAccountSummaryCard(
                     text = summary.formatAmount(summary.availableBalance),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
@@ -287,6 +291,7 @@ private fun SavingAccountSummaryCard(
                     text = summary.totalInterestPosted.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
@@ -298,6 +303,7 @@ private fun SavingAccountSummaryCard(
                     text = summary.totalOverdraftInterestDerived.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
 
@@ -309,6 +315,7 @@ private fun SavingAccountSummaryCard(
                     text = summary.interestNotPosted.toString(),
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
         }
@@ -338,18 +345,17 @@ private fun SavingAccountCard(
     status: Status,
     modifier: Modifier = Modifier,
 ) {
-    val brush = remember {
-        Brush.linearGradient(
-            colors = listOf(NewUi.walletColor1, NewUi.walletColor2),
-        )
-    }
-
     Box(
         modifier = modifier
             .fillMaxWidth()
             .height(200.dp)
             .background(
-                brush = brush,
+                brush = Brush.linearGradient(
+                    colors = listOf(
+                        NewUi.walletColor1,
+                        NewUi.walletColor2,
+                    ),
+                ),
                 shape = RoundedCornerShape(16.dp),
             ),
     ) {

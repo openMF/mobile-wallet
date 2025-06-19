@@ -9,7 +9,7 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
-    <string name="feature_merchants_empty_no_merchants_title">You haven\'t added any merchant yet</string>
+    <string name="feature_merchants_empty_no_merchants_title">You haven't added any merchant yet</string>
     <string name="feature_merchants_empty_no_merchants_subtitle">Every added merchant will be visible here</string>
     <string name="feature_merchants_error_oops">Oops!</string>
     <string name="feature_merchants_unexpected_error_subtitle">An unexpected error occurred. Please try again.</string>

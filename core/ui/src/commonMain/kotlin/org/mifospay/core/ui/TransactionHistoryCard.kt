@@ -24,10 +24,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.savingsaccount.Transaction
 
 @Composable
@@ -43,7 +41,7 @@ fun TransactionHistoryCard(
         modifier = modifier
             .fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White,
+            containerColor = MaterialTheme.colorScheme.surface,
         ),
     ) {
         Column(
@@ -59,7 +57,6 @@ fun TransactionHistoryCard(
             ) {
                 Text(
                     text = "Transaction History",
-                    color = NewUi.primaryColor,
                     fontWeight = FontWeight(500),
                 )
 
@@ -71,7 +68,6 @@ fun TransactionHistoryCard(
                     ) {
                         Text(
                             text = "See All",
-                            color = MaterialTheme.colorScheme.onSurface,
                             style = MaterialTheme.typography.bodySmall,
                             fontWeight = FontWeight(300),
                         )
@@ -87,7 +83,9 @@ fun TransactionHistoryCard(
                 )
 
                 if (i != transactions.size - 1) {
-                    MifosDivider(modifier = Modifier.padding(horizontal = 6.dp))
+                    MifosDivider(
+                        modifier = Modifier.padding(horizontal = 6.dp),
+                    )
                 }
             }
 
@@ -95,7 +93,6 @@ fun TransactionHistoryCard(
                 Text(
                     text = "No transactions found",
                     modifier = Modifier.padding(12.dp),
-                    color = MaterialTheme.colorScheme.onSurface,
                     style = MaterialTheme.typography.bodySmall,
                     fontWeight = FontWeight(300),
                 )

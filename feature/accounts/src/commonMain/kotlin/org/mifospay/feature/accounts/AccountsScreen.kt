@@ -64,11 +64,10 @@ import org.mifospay.core.designsystem.component.BasicDialogState
 import org.mifospay.core.designsystem.component.LoadingDialogState
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosBasicDialog
+import org.mifospay.core.designsystem.component.MifosButton
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
-import org.mifospay.core.designsystem.component.MifosOutlinedButton
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.beneficiary.Beneficiary
 import org.mifospay.core.model.savingsaccount.Status
@@ -172,7 +171,6 @@ internal fun AccountsScreenContent(
                 is AccountState.ViewState.Loading -> {
                     MfLoadingWheel(
                         contentDesc = stringResource(Res.string.feature_accounts_loading),
-                        backgroundColor = MaterialTheme.colorScheme.surface,
                     )
                 }
 
@@ -181,7 +179,7 @@ internal fun AccountsScreenContent(
                         title = stringResource(Res.string.feature_accounts_error_oops),
                         subTitle = stringResource(Res.string.feature_accounts_unexpected_error_subtitle),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.onSurface,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 
@@ -275,8 +273,6 @@ private fun AccountsList(
             HorizontalDivider(
                 modifier = Modifier
                     .fillMaxWidth(),
-                thickness = 1.dp,
-                color = NewUi.onSurface.copy(alpha = 0.05f),
             )
         }
 
@@ -303,8 +299,6 @@ private fun AccountsList(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
-                thickness = 1.dp,
-                color = NewUi.onSurface.copy(alpha = 0.05f),
             )
         }
 
@@ -314,9 +308,11 @@ private fun AccountsList(
                     .fillMaxWidth(),
                 contentAlignment = Alignment.Center,
             ) {
-                MifosOutlinedButton(
+                MifosButton(
                     text = {
-                        Text(text = "Add Beneficiary")
+                        Text(
+                            text = "Add Beneficiary",
+                        )
                     },
                     leadingIcon = {
                         Icon(
@@ -345,12 +341,13 @@ private fun AccountItem(
         maxRevealDp = if (account.status.submittedAndPendingApproval) 105.dp else 75.dp,
         directions = setOf(RevealDirection.EndToStart),
     )
+
     RevealSwipe(
         modifier = modifier,
         state = state,
         shape = RoundedCornerShape(8.dp),
-        backgroundCardStartColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-        backgroundCardEndColor = MaterialTheme.colorScheme.primary,
+        backgroundCardStartColor = MaterialTheme.colorScheme.tertiary,
+        backgroundCardEndColor = MaterialTheme.colorScheme.secondary,
         backgroundStartActionLabel = null,
         backgroundEndActionLabel = "Edit",
         card = { shape, content ->
@@ -406,6 +403,7 @@ private fun AccountItem(
             shape = it,
             colors = CardDefaults.outlinedCardColors(
                 containerColor = Color.Transparent,
+                contentColor = MaterialTheme.colorScheme.onSurface,
             ),
         ) {
             ListItem(
@@ -418,7 +416,7 @@ private fun AccountItem(
                 leadingContent = {
                     AvatarBox(
                         icon = MifosIcons.Bank,
-                        backgroundColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                        backgroundColor = MaterialTheme.colorScheme.secondaryContainer,
                     )
                 },
                 trailingContent = {
@@ -433,7 +431,7 @@ private fun AccountItem(
                                 onClick = {},
                                 shape = RoundedCornerShape(4.dp),
                                 colors = CardDefaults.outlinedCardColors(
-                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                                    containerColor = MaterialTheme.colorScheme.tertiary,
                                 ),
                             ) {
                                 Text(
@@ -474,6 +472,7 @@ private fun BeneficiaryItem(
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.outlinedCardColors(
             containerColor = Color.Transparent,
+            contentColor = MaterialTheme.colorScheme.onSurface,
         ),
     ) {
         ListItem(
@@ -486,6 +485,8 @@ private fun BeneficiaryItem(
             leadingContent = {
                 AvatarBox(
                     icon = MifosIcons.AccountCircle,
+                    backgroundColor = MaterialTheme.colorScheme.tertiaryContainer,
+                    contentColor = MaterialTheme.colorScheme.tertiary,
                 )
             },
             trailingContent = {
@@ -498,7 +499,8 @@ private fun BeneficiaryItem(
                             onClickEdit(beneficiary)
                         },
                         colors = IconButtonDefaults.filledTonalIconButtonColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                            containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                         ),
                     ) {
                         Icon(
@@ -513,6 +515,7 @@ private fun BeneficiaryItem(
                         },
                         colors = IconButtonDefaults.filledTonalIconButtonColors(
                             containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.error,
                         ),
                     ) {
                         Icon(
@@ -593,21 +596,66 @@ private fun SavingAccountStatusCard(
 @Composable
 private fun StatusChip(label: String) {
     val color = when (label) {
-        "Pending Approval" -> Color(0xFFFFF9C4)
-        "Approved" -> Color(0xFFC8E6C9)
-        "Rejected" -> Color(0xFFFFCDD2)
-        "Withdrawn" -> Color(0xFFE1BEE7)
-        "Active" -> Color(0xFFBBDEFB)
-        "Closed" -> Color(0xFFCFD8DC)
-        "Prematurely Closed" -> Color(0xFFD7CCC8)
-        "Transfer in Progress" -> Color(0xFFFFE0B2)
-        "Transfer on Hold" -> Color(0xFFF0F4C3)
-        "Matured" -> Color(0xFFB2DFDB)
-        else -> Color(0xFFEFEFEF)
+        "Pending Approval" -> MaterialTheme.colorScheme.primaryContainer.copy(
+            red = 1f,
+            green = 0.976f,
+            blue = 0.77f,
+        )
+        "Approved" -> MaterialTheme.colorScheme.tertiaryContainer.copy(
+            red = 0.78f,
+            green = 0.90f,
+            blue = 0.79f,
+        )
+        "Rejected" -> MaterialTheme.colorScheme.tertiaryContainer.copy(
+            red = 1f,
+            green = 0.8f,
+            blue = 0.82f,
+        )
+        "Withdrawn" -> MaterialTheme.colorScheme.tertiaryContainer.copy(
+            red = 0.88f,
+            green = 0.75f,
+            blue = 0.91f,
+        )
+        "Active" -> MaterialTheme.colorScheme.primaryContainer.copy(
+            red = 0.73f,
+            green = 0.87f,
+            blue = 0.98f,
+        )
+        "Closed" -> MaterialTheme.colorScheme.surfaceVariant.copy(
+            red = 0.81f,
+            green = 0.85f,
+            blue = 0.86f,
+        )
+        "Prematurely Closed" -> MaterialTheme.colorScheme.surfaceContainer.copy(
+            red = 0.84f,
+            green = 0.8f,
+            blue = 0.78f,
+        )
+        "Transfer in Progress" -> MaterialTheme.colorScheme.primaryContainer.copy(
+            red = 1f,
+            green = 0.88f,
+            blue = 0.7f,
+        )
+        "Transfer on Hold" -> MaterialTheme.colorScheme.primaryContainer.copy(
+            red = 0.94f,
+            green = 0.96f,
+            blue = 0.77f,
+        )
+        "Matured" -> MaterialTheme.colorScheme.primaryContainer.copy(
+            red = 0.7f,
+            green = 0.87f,
+            blue = 0.86f,
+        )
+        else -> MaterialTheme.colorScheme.surface.copy(
+            red = 0.94f,
+            green = 0.94f,
+            blue = 0.94f,
+        )
     }
 
     MifosSmallChip(
         label = label,
         containerColor = color,
+        contentColor = Color.Black,
     )
 }

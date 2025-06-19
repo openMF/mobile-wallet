@@ -20,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -50,7 +51,6 @@ import org.mifospay.core.designsystem.component.MifosBasicDialog
 import org.mifospay.core.designsystem.component.MifosLoadingDialog
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.ui.utils.EventsEffect
 
 @Composable
@@ -168,7 +168,7 @@ private fun SettingsCardItem(
     title: String,
     icon: ImageVector,
     modifier: Modifier = Modifier,
-    color: Color = NewUi.onSurface,
+    color: Color = MaterialTheme.colorScheme.onSurface,
     onClick: () -> Unit,
 ) {
     ListItem(

@@ -211,7 +211,7 @@ fun EmptyContentScreen(
     btnIcon: ImageVector,
     modifier: Modifier = Modifier,
     icon: ImageVector = MifosIcons.Info,
-    iconTint: Color = MaterialTheme.colorScheme.surfaceTint,
+    iconTint: Color = MaterialTheme.colorScheme.primary,
     onClick: () -> Unit,
 ) {
     EmptyContentScreen(

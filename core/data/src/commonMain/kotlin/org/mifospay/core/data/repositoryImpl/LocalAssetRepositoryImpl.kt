@@ -7,7 +7,7 @@
  *
  * See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
  */
-package org.mifospay.core.data.repositoryImp
+package org.mifospay.core.data.repositoryImpl
 
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineDispatcher

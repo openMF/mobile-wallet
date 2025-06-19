@@ -9,10 +9,8 @@
  */
 package org.mifospay.core.designsystem.component
 
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedIconButton
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -33,7 +31,6 @@ fun IconBox(
         onClick = onClick,
         modifier = modifier,
         shape = RoundedCornerShape(12.dp),
-        border = BorderStroke(2.dp, MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)),
     ) {
         Icon(
             imageVector = icon,

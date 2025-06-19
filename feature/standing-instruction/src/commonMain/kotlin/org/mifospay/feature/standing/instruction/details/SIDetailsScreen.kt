@@ -21,7 +21,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -98,6 +100,7 @@ internal fun SIDetailsScreen(
                     EmptyContentScreen(
                         title = stringResource(Res.string.feature_standing_instruction_error_oops),
                         subTitle = state.viewState.message,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 
@@ -146,6 +149,9 @@ private fun SIDetailsCard(
         ElevatedCard(
             modifier = Modifier
                 .fillMaxWidth(),
+            colors = CardDefaults.elevatedCardColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+            ),
         ) {
             Column(
                 modifier = Modifier
@@ -153,8 +159,13 @@ private fun SIDetailsCard(
                     .padding(8.dp),
             ) {
                 RowBlock {
-                    Text(text = "Instruction Name")
-                    Text(text = item.name, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "Instruction Name",
+                    )
+                    Text(
+                        text = item.name,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 val amount = CurrencyFormatter.format(
@@ -164,22 +175,36 @@ private fun SIDetailsCard(
                 )
 
                 RowBlock {
-                    Text(text = "Instruction Amount")
-                    Text(text = amount, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "Instruction Amount",
+                    )
+                    Text(
+                        text = amount,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock {
-                    Text(text = "Status")
+                    Text(
+                        text = "Status",
+                    )
                     Text(text = item.status.value, fontWeight = FontWeight.SemiBold)
                 }
 
                 RowBlock {
-                    Text(text = "Transfer Type")
-                    Text(text = item.transferType.value, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "Transfer Type",
+                    )
+                    Text(
+                        text = item.transferType.value,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock {
-                    Text(text = "Priority")
+                    Text(
+                        text = "Priority",
+                    )
 
                     PriorityChip(
                         priority = item.priority,
@@ -187,14 +212,18 @@ private fun SIDetailsCard(
                 }
 
                 RowBlock {
-                    Text(text = "Instruction Type")
+                    Text(
+                        text = "Instruction Type",
+                    )
                     InstructionTypeChip(
                         type = item.instructionType,
                     )
                 }
 
                 RowBlock {
-                    Text(text = "Recurrence Frequency")
+                    Text(
+                        text = "Recurrence Frequency",
+                    )
 
                     FrequencyChip(
                         option = item.recurrenceFrequency,
@@ -203,10 +232,17 @@ private fun SIDetailsCard(
                 }
 
                 RowBlock {
-                    val validFrom = DateHelper.getDateAsString(item.validFrom)
+                    val validFrom = DateHelper.getDateAsString(
+                        item.validFrom,
+                    )
 
-                    Text(text = "Valid From")
-                    Text(text = validFrom, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "Valid From",
+                    )
+                    Text(
+                        text = validFrom,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock(
@@ -214,8 +250,13 @@ private fun SIDetailsCard(
                 ) {
                     val validTill = DateHelper.getDateAsString(item.validTill)
 
-                    Text(text = "Valid Till")
-                    Text(text = validTill, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "Valid Till",
+                    )
+                    Text(
+                        text = validTill,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 if (item.recurrenceOnMonthDay.isNotEmpty()) {
@@ -223,8 +264,13 @@ private fun SIDetailsCard(
                         DateHelper.getDateMonthString(item.recurrenceOnMonthDay)
 
                     RowBlock(false) {
-                        Text(text = "Recurrence On Month Day")
-                        Text(text = recurrenceOnMonthDay, fontWeight = FontWeight.SemiBold)
+                        Text(
+                            text = "Recurrence On Month Day",
+                        )
+                        Text(
+                            text = recurrenceOnMonthDay,
+                            fontWeight = FontWeight.SemiBold,
+                        )
                     }
                 }
             }
@@ -233,6 +279,10 @@ private fun SIDetailsCard(
         ElevatedCard(
             modifier = Modifier
                 .fillMaxWidth(),
+            colors = CardDefaults.elevatedCardColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+            ),
         ) {
             Column(
                 modifier = Modifier
@@ -240,23 +290,43 @@ private fun SIDetailsCard(
                     .padding(8.dp),
             ) {
                 RowBlock {
-                    Text(text = "From Office")
-                    Text(text = item.fromOffice.name, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "From Office",
+                    )
+                    Text(
+                        text = item.fromOffice.name,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock {
-                    Text(text = "From Client")
-                    Text(text = item.fromClient.displayName, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "From Client",
+                    )
+                    Text(
+                        text = item.fromClient.displayName,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock {
-                    Text(text = "From Account Type")
-                    Text(text = item.fromAccountType.value, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "From Account Type",
+                    )
+                    Text(
+                        text = item.fromAccountType.value,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock(false) {
-                    Text(text = "From Account")
-                    Text(text = item.fromAccount.accountNo, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "From Account",
+                    )
+                    Text(
+                        text = item.fromAccount.accountNo,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
             }
         }
@@ -264,6 +334,10 @@ private fun SIDetailsCard(
         ElevatedCard(
             modifier = Modifier
                 .fillMaxWidth(),
+            colors = CardDefaults.elevatedCardColors(
+                containerColor = MaterialTheme.colorScheme.surface,
+                contentColor = MaterialTheme.colorScheme.onSurface,
+            ),
         ) {
             Column(
                 modifier = Modifier
@@ -271,23 +345,43 @@ private fun SIDetailsCard(
                     .padding(8.dp),
             ) {
                 RowBlock {
-                    Text(text = "To Office")
-                    Text(text = item.toOffice.name, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "To Office",
+                    )
+                    Text(
+                        text = item.toOffice.name,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock {
-                    Text(text = "To Client")
-                    Text(text = item.toClient.displayName, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "To Client",
+                    )
+                    Text(
+                        text = item.toClient.displayName,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock {
-                    Text(text = "To Account Type")
-                    Text(text = item.toAccountType.value, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "To Account Type",
+                    )
+                    Text(
+                        text = item.toAccountType.value,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
 
                 RowBlock(false) {
-                    Text(text = "To Account")
-                    Text(text = item.toAccount.accountNo, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = "To Account",
+                    )
+                    Text(
+                        text = item.toAccount.accountNo,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
             }
         }

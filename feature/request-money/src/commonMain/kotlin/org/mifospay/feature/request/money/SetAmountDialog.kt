@@ -65,7 +65,6 @@ internal fun SetAmountDialog(
         content = {
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = MaterialTheme.colorScheme.surface,
             ) {
                 Column(
                     modifier = Modifier.padding(16.dp),
@@ -74,7 +73,6 @@ internal fun SetAmountDialog(
                     Text(
                         text = stringResource(Res.string.feature_request_money_set_amount),
                         style = MaterialTheme.typography.titleMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
 
                     val amountValidator by remember(amount) {
@@ -196,7 +194,10 @@ private fun CurrencyDropdownItem(
 ) {
     ListItem(
         headlineContent = {
-            Text(text = currency.countryName)
+            Text(
+                text = currency.countryName,
+//                color = MaterialTheme.colorScheme.onSurface,
+            )
         },
         leadingContent = {
             AvatarBox(
@@ -204,7 +205,10 @@ private fun CurrencyDropdownItem(
             )
         },
         trailingContent = {
-            Text(text = currency.currencyCode)
+            Text(
+                text = currency.currencyCode,
+                color = MaterialTheme.colorScheme.onSurface,
+            )
         },
         modifier = modifier
             .fillMaxWidth()

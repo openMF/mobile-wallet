@@ -47,7 +47,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
-import org.mifospay.core.designsystem.theme.NewUi
 import org.mifospay.core.model.savedcards.SavedCard
 import org.mifospay.core.ui.EmptyContentScreen
 import org.mifospay.core.ui.MifosDivider
@@ -111,7 +110,7 @@ internal fun CardDetailScreen(
                         title = stringResource(Res.string.feature_savedcards_error_oops),
                         subTitle = stringResource(Res.string.feature_savedcards_subtitle),
                         modifier = Modifier,
-                        iconTint = MaterialTheme.colorScheme.onSurface,
+                        iconTint = MaterialTheme.colorScheme.error,
                     )
                 }
 
@@ -173,6 +172,7 @@ private fun CardDetailScreenContent(
         item {
             CardDetail(
                 savedCard = state.savedCard,
+                containerColor = MaterialTheme.colorScheme.surface,
             )
         }
     }
@@ -182,7 +182,7 @@ private fun CardDetailScreenContent(
 private fun CardDetail(
     savedCard: SavedCard,
     modifier: Modifier = Modifier,
-    containerColor: Color = NewUi.containerColor,
+    containerColor: Color = MaterialTheme.colorScheme.surface,
 ) {
     ElevatedCard(
         modifier = modifier.fillMaxWidth(),
@@ -200,17 +200,17 @@ private fun CardDetail(
                 label = "Card Holder",
                 text = savedCard.fullName,
             )
-            MifosDivider()
+            MifosDivider(color = MaterialTheme.colorScheme.outlineVariant)
             CreditCardLabelAndText(
                 label = "Card Number",
                 text = savedCard.cardNumber.maskCreditCardNumber(),
             )
-            MifosDivider()
+            MifosDivider(color = MaterialTheme.colorScheme.outlineVariant)
             CreditCardLabelAndText(
                 label = "Expiry Date",
                 text = savedCard.formattedExpiryDate,
             )
-            MifosDivider()
+            MifosDivider(color = MaterialTheme.colorScheme.outlineVariant)
             CreditCardLabelAndText(
                 label = "CVV",
                 text = savedCard.maskedCvv,
@@ -223,6 +223,8 @@ private fun CardDetail(
 private fun CreditCardLabelAndText(
     label: String,
     text: String,
+    labelColor: Color = MaterialTheme.colorScheme.primary,
+    textColor: Color = MaterialTheme.colorScheme.onSurface,
 ) {
     Column(
         modifier = Modifier
@@ -232,7 +234,7 @@ private fun CreditCardLabelAndText(
         Text(
             text = label.uppercase(),
             style = MaterialTheme.typography.labelSmall,
-            color = Color.Black,
+            color = labelColor,
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
@@ -242,7 +244,7 @@ private fun CreditCardLabelAndText(
                 fontSize = 16.sp,
                 letterSpacing = 1.sp,
             ),
-            color = Color.Black,
+            color = textColor,
         )
     }
 }

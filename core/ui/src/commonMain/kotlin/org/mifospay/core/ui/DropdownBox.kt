@@ -76,6 +76,9 @@ fun DropdownBox(
                     textFieldSize = coordinates.size.toSize()
                 }
                 .menuAnchor(MenuAnchorType.PrimaryNotEditable),
+//            textStyle = TextStyle(
+//                color = MaterialTheme.colorScheme.onSurface,
+//            ),
         )
 
         DropdownMenu(

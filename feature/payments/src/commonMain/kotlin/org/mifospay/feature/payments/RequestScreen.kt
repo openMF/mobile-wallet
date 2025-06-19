@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -108,7 +109,6 @@ private fun RequestScreenContent(
                     Text(
                         text = state.externalId,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
@@ -116,10 +116,10 @@ private fun RequestScreenContent(
                     onClick = {
                         onAction(TransferAction.ShowQR)
                     },
+                    colors = IconButtonDefaults.filledIconButtonColors(),
                 ) {
                     Icon(
                         imageVector = MifosIcons.QrCode,
-                        tint = MaterialTheme.colorScheme.onSurface,
                         contentDescription = stringResource(Res.string.feature_payments_show_code),
                     )
                 }
@@ -127,7 +127,7 @@ private fun RequestScreenContent(
 
             HorizontalDivider(
                 thickness = 1.dp,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.05f),
+                color = MaterialTheme.colorScheme.outlineVariant,
             )
 
             Row(
@@ -143,7 +143,6 @@ private fun RequestScreenContent(
                     Text(
                         text = state.mobileNo,
                         style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 }
 
@@ -151,10 +150,10 @@ private fun RequestScreenContent(
                     onClick = {
                         onAction(TransferAction.CopyTextToClipboard(state.mobileNo))
                     },
+                    colors = IconButtonDefaults.filledIconButtonColors(),
                 ) {
                     Icon(
                         imageVector = vectorResource(Res.drawable.baseline_content_copy),
-                        tint = MaterialTheme.colorScheme.onSurface,
                         contentDescription = "Copy Text",
                     )
                 }

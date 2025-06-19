@@ -208,6 +208,9 @@ private fun AddEditCardScreenContent(
                     capitalization = KeyboardCapitalization.Characters,
                     keyboardType = KeyboardType.Text,
                 ),
+//                textStyle = TextStyle(
+//                    color = MaterialTheme.colorScheme.onSurface,
+//                ),
             )
         }
 
@@ -232,6 +235,9 @@ private fun AddEditCardScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .onFocusChanged { isFocused = it.isFocused },
+//                textStyle = TextStyle(
+//                    color = MaterialTheme.colorScheme.onSurface,
+//                ),
             )
         }
 
@@ -253,6 +259,9 @@ private fun AddEditCardScreenContent(
                             onAction(AECardAction.ExpiryDateChanged(newValue))
                         }
                     },
+//                    textStyle = TextStyle(
+//                        color = MaterialTheme.colorScheme.onSurface,
+//                    ),
                 )
 
                 MifosPasswordField(

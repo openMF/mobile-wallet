@@ -29,9 +29,10 @@ fun MifosScrollableTabRow(
     tabContents: List<TabContent>,
     pagerState: PagerState,
     modifier: Modifier = Modifier,
-    containerColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    containerColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
     selectedContentColor: Color = MaterialTheme.colorScheme.primary,
-    unselectedContentColor: Color = MaterialTheme.colorScheme.primaryContainer,
+    unselectedContentColor: Color = MaterialTheme.colorScheme.surfaceContainerLow,
+    unselectedBorderColor: Color = MaterialTheme.colorScheme.primary,
     edgePadding: Dp = 8.dp,
 ) {
     val scope = rememberCoroutineScope()
@@ -50,6 +51,7 @@ fun MifosScrollableTabRow(
                 selected = pagerState.currentPage == index,
                 selectedColor = selectedContentColor,
                 unselectedColor = unselectedContentColor,
+                unselectedBorderColor = unselectedBorderColor,
                 onClick = {
                     scope.launch {
                         pagerState.animateScrollToPage(index)
