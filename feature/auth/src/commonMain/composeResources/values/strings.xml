@@ -9,6 +9,7 @@
     See https://github.com/openMF/mobile-wallet/blob/master/LICENSE.md
 -->
 <resources>
+    <!-- General Auth -->
     <string name="feature_auth_login">Login</string>
     <string name="feature_auth_welcome_back">Welcome back!</string>
     <string name="feature_auth_sign_up">Sign up.</string>
@@ -24,6 +25,8 @@
     <string name="feature_auth_validate_email">Please enter a valid email address</string>
     <string name="feature_auth_all_fields_are_mandatory">All fields are mandatory.</string>
     <string name="feature_auth_complete_your_registration">Complete your registration</string>
+
+    <!-- Labels -->
     <string name="feature_auth_first_name">First Name</string>
     <string name="feature_auth_last_name">Last Name</string>
     <string name="feature_auth_email">E-mail</string>
@@ -35,14 +38,14 @@
     <string name="feature_auth_state">State</string>
     <string name="feature_auth_country">Country</string>
     <string name="feature_auth_mobile_no">Mobile No</string>
+    <string name="feature_auth_phone_number">Phone Number</string>
     <string name="feature_auth_complete">Complete</string>
-    <string name="feature_auth_please_wait">Please wait…</string>
-    <string name="feature_auth_mandatory">Mandatory field</string>
-    <string name="feature_auth_password_cannot_be_empty">Password cannot be empty</string>
-    <string name="feature_auth_password_must_be_least_6_characters">Password must be at least 6 characters</string>
-    <string name="feature_auth_confirm_password_cannot_empty">Confirm password cannot be empty</string>
-    <string name="feature_auth_passwords_do_not_match">Passwords do not match</string>
+
+<!--    Password-->
     <string name="feature_auth_password_strength">Password Strength:</string>
+    <string name="feature_auth_password_requirements">Please ensure password contains :\n- At least one uppercase character\n- At least one lowercase character\n- At least one numeric digit\n- At least one special character\n- With no space or consecutive repeating</string>
+
+    <!-- OTP Flow -->
     <string name="feature_auth_enter_mobile_number">Enter Mobile Number</string>
     <string name="feature_auth_enter_otp">Enter OTP</string>
     <string name="feature_auth_enter_mobile_number_description">It should be currently activated on your device
@@ -51,5 +54,23 @@
     <string name="feature_auth_enter_otp_received">Enter otp received on your registered device</string>
     <string name="feature_auth_verify_phone">Verify Phone</string>
     <string name="feature_auth_verify_otp">Verify Otp</string>
-    <string name="feature_auth_phone_number">Phone Number</string>
+
+    <!-- Sign-up Validation Errors -->
+    <string name="feature_auth_error_select_savings_account">Please select a savings account.</string>
+    <string name="feature_auth_error_first_name_required">Please enter your first name.</string>
+    <string name="feature_auth_error_last_name_required">Please enter your last name.</string>
+    <string name="feature_auth_error_username_required">Please enter your username.</string>
+    <string name="feature_auth_error_email_required">Please enter your email.</string>
+    <string name="feature_auth_error_email_invalid">Please enter a valid email.</string>
+    <string name="feature_auth_error_mobile_required">Please enter your mobile number.</string>
+    <string name="feature_auth_error_mobile_invalid">Mobile number must be 10 digits long.</string>
+    <string name="feature_auth_error_password_required">The password field cannot be empty.</string>
+    <string name="feature_auth_error_password_invalid">Your password does not meet requirements.</string>
+    <string name="feature_auth_error_confirm_password_required">The confirm password field cannot be empty.</string>
+    <string name="feature_auth_error_passwords_mismatch">Passwords do not match.</string>
+    <string name="feature_auth_error_address_line1_required">Please enter your address line 1.</string>
+    <string name="feature_auth_error_address_line2_required">Please enter your address line 2.</string>
+    <string name="feature_auth_error_pincode_required">Please enter your pin code.</string>
+    <string name="feature_auth_error_country_required">Please enter your country.</string>
+    <string name="feature_auth_error_state_required">Please enter your state.</string>
 </resources>

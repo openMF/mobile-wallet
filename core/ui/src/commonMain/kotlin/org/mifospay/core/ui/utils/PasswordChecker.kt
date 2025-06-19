@@ -21,20 +21,7 @@ object PasswordChecker {
     private const val MAX_PASSWORD_LENGTH = 50
 
     fun getPasswordStrengthResult(password: String): PasswordStrengthResult {
-        val errors = buildList {
-            if (password.isEmpty()) add("Password cannot be empty.")
-            if (password.length > MAX_PASSWORD_LENGTH) add("Password is too long. Maximum length is $MAX_PASSWORD_LENGTH characters.")
-            if (password.hasSpaces()) add("Password must not contain spaces.")
-            if (password.hasConsecutiveRepetitions()) add("Password must not contain consecutive repetitive characters.")
-        }
-
-        if (errors.isNotEmpty()) {
-            return PasswordStrengthResult.Error(errors.joinToString("\n"))
-        }
-
-        val result = getPasswordStrength(password)
-
-        return PasswordStrengthResult.Success(result)
+        return PasswordStrengthResult.Success(getPasswordStrength(password))
     }
 
     private fun getPasswordStrength(password: String): PasswordStrength {
@@ -51,9 +38,10 @@ object PasswordChecker {
         return when {
             length < MIN_PASSWORD_LENGTH -> PasswordStrength.LEVEL_0
             numTypesPresent == 1 -> PasswordStrength.LEVEL_1
-            numTypesPresent == 2 || numTypesPresent == 3 -> PasswordStrength.LEVEL_2
+            numTypesPresent == 2 -> PasswordStrength.LEVEL_2
             numTypesPresent == 4 && length >= STRONG_PASSWORD_LENGTH &&
                 entropyBits >= MIN_ENTROPY_BITS -> PasswordStrength.LEVEL_5
+
             numTypesPresent == 4 && length >= STRONG_PASSWORD_LENGTH -> PasswordStrength.LEVEL_4
 
             else -> PasswordStrength.LEVEL_3
@@ -65,11 +53,16 @@ object PasswordChecker {
         return log2(charPool.toDouble().pow(password.length))
     }
 
+    // TODO: Move password feedback messages to string.xml — currently not possible as SignUpState uses Parcelable
+    //  and cannot hold List<StringResource>; revisit when SavedStateHandle usage is decoupled from state.
     fun getPasswordFeedback(password: String): List<String> {
         val feedback = mutableListOf<String>()
 
         if (password.length < MIN_PASSWORD_LENGTH) {
-            feedback.add("Password should be at least $MIN_PASSWORD_LENGTH characters long.")
+            feedback.add("The password must be at least $MIN_PASSWORD_LENGTH characters long.")
+        }
+        if (password.length > MAX_PASSWORD_LENGTH) {
+            feedback.add("The password must not exceed $MAX_PASSWORD_LENGTH characters.")
         }
         if (!password.any { it.isUpperCase() }) {
             feedback.add("Include at least one uppercase letter.")
@@ -83,14 +76,11 @@ object PasswordChecker {
         if (!password.any { !it.isLetterOrDigit() }) {
             feedback.add("Include at least one special character.")
         }
-        if (password.length < STRONG_PASSWORD_LENGTH) {
-            feedback.add("For a stronger password, use at least $STRONG_PASSWORD_LENGTH characters.")
-        }
         if (password.hasConsecutiveRepetitions()) {
-            feedback.add("Remove consecutive repeating characters.")
+            feedback.add("Avoid using consecutive repeated characters.")
         }
         if (password.hasSpaces()) {
-            feedback.add("Remove spaces.")
+            feedback.add("Do not include spaces in the password.")
         }
 
         return feedback
