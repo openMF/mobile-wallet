@@ -1,3 +1,5 @@
+import org.jetbrains.compose.ExperimentalComposeLibrary
+
 /*
  * Copyright 2024 Mifos Initiative
  *
@@ -49,11 +51,9 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.turbine)
             implementation(libs.kotest.framework.engine)
-
-//            implementation(libs.resource.test)
-//            implementation(libs.ktor.client.mock)
-
             implementation(libs.koin.test)
+            @OptIn(ExperimentalComposeLibrary::class)
+            implementation(compose.uiTest)
         }
 
     }

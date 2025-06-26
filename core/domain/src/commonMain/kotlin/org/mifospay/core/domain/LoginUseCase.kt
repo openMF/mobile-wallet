@@ -14,6 +14,7 @@ import kotlinx.coroutines.withContext
 import org.mifospay.core.common.DataState
 import org.mifospay.core.data.repository.AuthenticationRepository
 import org.mifospay.core.data.repository.ClientRepository
+import org.mifospay.core.data.util.Constants.INVALID_CREDENTIALS
 import org.mifospay.core.datastore.UserPreferencesRepository
 import org.mifospay.core.model.user.UserInfo
 
@@ -30,7 +31,7 @@ class LoginUseCase(
 
         return when (result) {
             is DataState.Loading -> DataState.Loading
-            is DataState.Error -> DataState.Error(Exception("Invalid credentials"))
+            is DataState.Error -> DataState.Error(Exception(INVALID_CREDENTIALS))
             is DataState.Success -> {
                 if (result.data.clients.isEmpty()) {
                     return DataState.Error(Exception("No clients found"))
