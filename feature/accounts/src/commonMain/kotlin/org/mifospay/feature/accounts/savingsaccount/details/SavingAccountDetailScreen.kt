@@ -45,7 +45,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -61,6 +60,17 @@ import org.mifospay.core.common.CurrencyFormatter
 import org.mifospay.core.designsystem.component.MfLoadingWheel
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.theme.NewUi
+import org.mifospay.core.designsystem.theme.statusChipActive
+import org.mifospay.core.designsystem.theme.statusChipApproved
+import org.mifospay.core.designsystem.theme.statusChipClosed
+import org.mifospay.core.designsystem.theme.statusChipDefault
+import org.mifospay.core.designsystem.theme.statusChipMatured
+import org.mifospay.core.designsystem.theme.statusChipPendingApproval
+import org.mifospay.core.designsystem.theme.statusChipPrematurelyClosed
+import org.mifospay.core.designsystem.theme.statusChipRejected
+import org.mifospay.core.designsystem.theme.statusChipTransferInProgress
+import org.mifospay.core.designsystem.theme.statusChipTransferOnHold
+import org.mifospay.core.designsystem.theme.statusChipWithdrawn
 import org.mifospay.core.model.account.Account
 import org.mifospay.core.model.savingsaccount.SavingAccountDetail
 import org.mifospay.core.model.savingsaccount.Status
@@ -477,17 +487,17 @@ private fun SavingAccountStatusCard(
 @Composable
 private fun StatusChip(label: String) {
     val color = when (label) {
-        "Pending Approval" -> Color(0xFFFFF9C4)
-        "Approved" -> Color(0xFFC8E6C9)
-        "Rejected" -> Color(0xFFFFCDD2)
-        "Withdrawn" -> Color(0xFFE1BEE7)
-        "Active" -> Color(0xFFBBDEFB)
-        "Closed" -> Color(0xFFCFD8DC)
-        "Prematurely Closed" -> Color(0xFFD7CCC8)
-        "Transfer in Progress" -> Color(0xFFFFE0B2)
-        "Transfer on Hold" -> Color(0xFFF0F4C3)
-        "Matured" -> Color(0xFFB2DFDB)
-        else -> Color(0xFFEFEFEF)
+        "Pending Approval" -> MaterialTheme.colorScheme.statusChipPendingApproval
+        "Approved" -> MaterialTheme.colorScheme.statusChipApproved
+        "Rejected" -> MaterialTheme.colorScheme.statusChipRejected
+        "Withdrawn" -> MaterialTheme.colorScheme.statusChipWithdrawn
+        "Active" -> MaterialTheme.colorScheme.statusChipActive
+        "Closed" -> MaterialTheme.colorScheme.statusChipClosed
+        "Prematurely Closed" -> MaterialTheme.colorScheme.statusChipPrematurelyClosed
+        "Transfer in Progress" -> MaterialTheme.colorScheme.statusChipTransferInProgress
+        "Transfer on Hold" -> MaterialTheme.colorScheme.statusChipTransferOnHold
+        "Matured" -> MaterialTheme.colorScheme.statusChipMatured
+        else -> MaterialTheme.colorScheme.statusChipDefault
     }
 
     SuggestionChip(

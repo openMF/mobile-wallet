@@ -19,7 +19,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -58,7 +57,7 @@ fun VerifyStepHeader(
                 Icon(
                     imageVector = MifosIcons.Check,
                     contentDescription = null,
-                    tint = if (isVerified) MaterialTheme.colorScheme.onSurface else Color.Gray,
+                    tint = if (isVerified) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.outline,
                     modifier = Modifier.size(24.dp),
                 )
             }
@@ -77,5 +76,7 @@ fun VerifyStepHeaderVerifiedPreview() {
 @Preview
 @Composable
 fun VerifyStepHeaderUnverifiedPreview() {
-    VerifyStepHeader(text = "Enter OTP ", isVerified = false)
+    MifosTheme {
+        VerifyStepHeader(text = "Enter OTP ", isVerified = false)
+    }
 }

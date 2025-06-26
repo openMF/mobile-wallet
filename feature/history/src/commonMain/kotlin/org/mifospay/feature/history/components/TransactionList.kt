@@ -43,6 +43,7 @@ import mobile_wallet.feature.history.generated.resources.arrow_outward
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.vectorResource
 import org.mifospay.core.common.CurrencyFormatter
+import org.mifospay.core.designsystem.theme.black
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 import org.mifospay.feature.history.HistoryAction
@@ -154,12 +155,14 @@ internal fun TransactionItem(
                             green = 0.51f,
                             blue = 0.21f,
                         )
+
                         TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
                             red = 0.8f,
                             green = 0f,
                             blue = 0f,
                         )
-                        else -> Color.Black
+
+                        else -> MaterialTheme.colorScheme.black
                     },
                     contentDescription = null,
                 )
@@ -180,12 +183,14 @@ internal fun TransactionItem(
                                 green = 0.51f,
                                 blue = 0.21f,
                             )
+
                             TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
                                 red = 0.8f,
                                 green = 0f,
                                 blue = 0f,
                             )
-                            else -> Color.Black
+
+                            else -> MaterialTheme.colorScheme.black
                         },
                         textAlign = TextAlign.End,
                     ),

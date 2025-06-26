@@ -34,6 +34,7 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,21 +52,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.times
 import org.jetbrains.compose.resources.painterResource
+import org.mifospay.core.designsystem.theme.white
 import org.mifospay.feature.savedcards.createOrUpdate.AECardState
 import org.mifospay.feature.savedcards.utils.CardMaskStyle
 import org.mifospay.feature.savedcards.utils.CardType
+import org.mifospay.feature.savedcards.utils.creditCardColors
 
 @Composable
 internal fun CreditCard(
     card: AECardState,
     modifier: Modifier = Modifier,
-    baseColor: Color = Color(0xFF1252C8),
+    baseColor: Color = creditCardColors.first(),
     bankCardAspectRatio: Float = 1.586f,
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(bankCardAspectRatio),
+        modifier = modifier.fillMaxWidth().aspectRatio(bankCardAspectRatio),
         elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
     ) {
         Box {
@@ -82,7 +83,10 @@ internal fun CreditCard(
                 top = true,
                 left = true,
             ) {
-                CreditCardLabelAndText(label = "card holder", text = card.fullName)
+                CreditCardLabelAndText(
+                    label = "card holder",
+                    text = card.fullName,
+                )
             }
             // Positioned to corner bottom left
             SpaceWrapper(
@@ -97,7 +101,10 @@ internal fun CreditCard(
                         text = card.expiryDateFormatted,
                     )
                     Spacer(modifier = Modifier.width(16.dp))
-                    CreditCardLabelAndText(label = "cvv", text = card.maskedCVV)
+                    CreditCardLabelAndText(
+                        label = "cvv",
+                        text = card.maskedCVV,
+                    )
                 }
             }
             // Positioned to corner bottom right
@@ -130,8 +137,8 @@ private fun AnimatedCardNumberInput(
     cardNumber: String,
     cardType: CardType = CardType.detectCardType(cardNumber),
     maskStyle: CardMaskStyle = CardMaskStyle.ALL_EXCEPT_LAST_FOUR,
-    textColor: Color = Color.White,
-    dotColor: Color = Color.White,
+    textColor: Color = MaterialTheme.colorScheme.white,
+    dotColor: Color = MaterialTheme.colorScheme.white,
     modifier: Modifier = Modifier,
 ) {
     val groups = remember(cardNumber, cardType) {
@@ -163,9 +170,7 @@ private fun AnimatedCardNumberInput(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 32.dp),
+        modifier = modifier.fillMaxSize().padding(horizontal = 32.dp),
         contentAlignment = Alignment.Center,
     ) {
         Row(
@@ -199,8 +204,8 @@ private fun AnimatedCVVInput(
     cvv: String,
     cardType: CardType = CardType.UNKNOWN,
     isVisible: Boolean = false,
-    textColor: Color = Color.White,
-    dotColor: Color = Color.White,
+    textColor: Color = MaterialTheme.colorScheme.white,
+    dotColor: Color = MaterialTheme.colorScheme.white,
     modifier: Modifier = Modifier,
 ) {
     val paddedCVV = remember(cvv, cardType) {
@@ -208,8 +213,7 @@ private fun AnimatedCVVInput(
     }
 
     Column(
-        modifier = Modifier
-            .wrapContentSize(),
+        modifier = Modifier.wrapContentSize(),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
@@ -218,7 +222,7 @@ private fun AnimatedCVVInput(
                 fontWeight = FontWeight.W300,
                 fontSize = 12.sp,
                 letterSpacing = 1.sp,
-                color = Color.White,
+                color = MaterialTheme.colorScheme.white,
             ),
         )
 
@@ -298,8 +302,7 @@ private fun DigitTransition(
     ) { show -> if (show) 0f else -8f }
 
     Canvas(
-        modifier = Modifier
-            .offset(x = (CardConfig.dotRadius.value * 2 + CardConfig.spaceBetweenDots.value) * index.dp)
+        modifier = Modifier.offset(x = (CardConfig.dotRadius.value * 2 + CardConfig.spaceBetweenDots.value) * index.dp)
             .graphicsLayer(alpha = dotAlpha),
     ) {
         drawCircle(
@@ -314,12 +317,10 @@ private fun DigitTransition(
             text = digit.toString(),
             color = textColor,
             style = TextStyle(fontSize = 20.sp),
-            modifier = Modifier
-                .offset(
-                    x = (CardConfig.dotRadius.value * 2 + CardConfig.spaceBetweenDots.value) * index.dp,
-                    y = slideOffset.dp,
-                )
-                .graphicsLayer(alpha = textAlpha),
+            modifier = Modifier.offset(
+                x = (CardConfig.dotRadius.value * 2 + CardConfig.spaceBetweenDots.value) * index.dp,
+                y = slideOffset.dp,
+            ).graphicsLayer(alpha = textAlpha),
         )
     }
 }
@@ -330,9 +331,7 @@ private fun CreditCardBackground(baseColor: Color) {
     val colorSaturation50 = baseColor.setSaturation(0.5f)
     // Drawing Shapes with Canvas
     Canvas(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(baseColor),
+        modifier = Modifier.fillMaxSize().background(baseColor),
     ) {
         // Drawing Circles
         drawCircle(
@@ -352,12 +351,11 @@ private fun CreditCardBackground(baseColor: Color) {
 private fun CreditCardLabelAndText(
     label: String,
     text: String,
-    labelColor: Color = Color.White,
-    textColor: Color = Color.White,
+    labelColor: Color = MaterialTheme.colorScheme.white,
+    textColor: Color = MaterialTheme.colorScheme.white,
 ) {
     Column(
-        modifier = Modifier
-            .wrapContentSize(),
+        modifier = Modifier.wrapContentSize(),
         verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
@@ -394,8 +392,7 @@ private fun SpaceWrapper(
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
-            .then(if (top) Modifier.padding(top = space) else Modifier)
+        modifier = modifier.then(if (top) Modifier.padding(top = space) else Modifier)
             .then(if (right) Modifier.padding(end = space) else Modifier)
             .then(if (bottom) Modifier.padding(bottom = space) else Modifier)
             .then(if (left) Modifier.padding(start = space) else Modifier),
@@ -413,14 +410,12 @@ internal fun CreditCard(
     maskStyle: CardMaskStyle = CardMaskStyle.SHOW_FIRST_LAST_FOUR,
     modifier: Modifier = Modifier,
     cardType: CardType = CardType.detectCardType(cardNumber),
-    baseColor: Color = Color(0xFF1252C8),
+    baseColor: Color = creditCardColors.first(),
     bankCardAspectRatio: Float = 1.586f,
     onClick: () -> Unit,
 ) {
     Card(
-        modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(bankCardAspectRatio),
+        modifier = modifier.fillMaxWidth().aspectRatio(bankCardAspectRatio),
         elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
         onClick = onClick,
     ) {
@@ -430,7 +425,6 @@ internal fun CreditCard(
             DisplayCardNumberInput(
                 cardNumber = cardNumber,
                 maskStyle = maskStyle,
-                textColor = Color.White,
             )
             // Positioned to corner top left
             SpaceWrapper(
@@ -452,9 +446,15 @@ internal fun CreditCard(
                 left = true,
             ) {
                 Row {
-                    CreditCardLabelAndText(label = "expires", text = expiryDate)
+                    CreditCardLabelAndText(
+                        label = "expires",
+                        text = expiryDate,
+                    )
                     Spacer(modifier = Modifier.width(16.dp))
-                    CreditCardLabelAndText(label = "cvv", text = cvv)
+                    CreditCardLabelAndText(
+                        label = "cvv",
+                        text = cvv,
+                    )
                 }
             }
             // Positioned to corner bottom right
@@ -487,8 +487,8 @@ private fun DisplayCardNumberInput(
     cardNumber: String,
     cardType: CardType = CardType.detectCardType(cardNumber),
     maskStyle: CardMaskStyle = CardMaskStyle.ALL_EXCEPT_LAST_FOUR,
-    textColor: Color = Color.White,
-    dotColor: Color = Color.White,
+    textColor: Color = MaterialTheme.colorScheme.white,
+    dotColor: Color = MaterialTheme.colorScheme.white,
     modifier: Modifier = Modifier,
 ) {
     val groups = remember(cardNumber, cardType) {
@@ -524,9 +524,7 @@ private fun DisplayCardNumberInput(
     }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(horizontal = 32.dp),
+        modifier = modifier.fillMaxSize().padding(horizontal = 32.dp),
         contentAlignment = Alignment.Center,
     ) {
         Row(
@@ -585,12 +583,10 @@ private fun DisplayCardNumber(
                 } else {
                     // Show dot or bullet for masked digits
                     Box(
-                        modifier = Modifier
-                            .size(8.dp)
-                            .background(
-                                color = dotColor,
-                                shape = CircleShape,
-                            ),
+                        modifier = Modifier.size(8.dp).background(
+                            color = dotColor,
+                            shape = CircleShape,
+                        ),
                     )
                 }
             }

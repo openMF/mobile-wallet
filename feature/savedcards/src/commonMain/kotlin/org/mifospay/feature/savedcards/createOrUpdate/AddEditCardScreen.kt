@@ -27,6 +27,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -328,7 +329,7 @@ fun ColorSelector(
     isSelected: Boolean,
     onColorSelected: () -> Unit,
 ) {
-    val borderColor = if (isSelected) Color.Black else Color.Transparent
+    val borderColor = if (isSelected) MaterialTheme.colorScheme.onSurface else Color.Transparent
     val borderWidth = if (isSelected) 2.dp else 0.dp
 
     Box(

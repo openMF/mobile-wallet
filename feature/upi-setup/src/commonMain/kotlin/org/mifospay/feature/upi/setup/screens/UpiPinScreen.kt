@@ -32,7 +32,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -49,6 +48,8 @@ import mobile_wallet.feature.upi_setup.generated.resources.feature_upi_setup_upi
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.darkGray
+import org.mifospay.core.designsystem.theme.lightGray
 import org.mifospay.core.ui.VerifyStepHeader
 
 @Composable
@@ -218,9 +219,9 @@ private fun UpiPinCharView(
         text = char,
         style = MaterialTheme.typography.headlineSmall,
         color = if (isFocused) {
-            Color.DarkGray
+            MaterialTheme.colorScheme.darkGray
         } else {
-            Color.LightGray
+            MaterialTheme.colorScheme.lightGray
         },
         textAlign = TextAlign.Center,
     )
@@ -229,7 +230,7 @@ private fun UpiPinCharView(
 @Preview
 @Composable
 private fun UpiScreenPreview() {
-    MifosTheme {
+    MifosTheme(darkTheme = true) {
         UpiPinScreen({}, verificationStatus = false, contentVisibility = true)
     }
 }

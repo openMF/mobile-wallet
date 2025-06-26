@@ -26,7 +26,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
@@ -37,6 +36,8 @@ import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.darkGray
+import org.mifospay.core.designsystem.theme.lightGray
 import org.mifospay.core.ui.ExpiryDateInput
 
 @Composable
@@ -74,8 +75,8 @@ internal fun DebitCardScreenContent(
             ),
             visualTransformation = ::formatCardNumber,
             colors = OutlinedTextFieldDefaults.colors(
-                focusedBorderColor = Color.DarkGray,
-                unfocusedBorderColor = Color.LightGray,
+                focusedBorderColor = MaterialTheme.colorScheme.darkGray,
+                unfocusedBorderColor = MaterialTheme.colorScheme.lightGray,
                 cursorColor = MaterialTheme.colorScheme.onSurface,
             ),
         )

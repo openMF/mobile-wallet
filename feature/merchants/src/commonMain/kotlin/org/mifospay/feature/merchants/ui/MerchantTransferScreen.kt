@@ -40,7 +40,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -72,6 +71,10 @@ import org.mifospay.core.designsystem.component.MifosOutlinedTextField
 import org.mifospay.core.designsystem.component.MifosScaffold
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.gray
+import org.mifospay.core.designsystem.theme.transactionTypeCredit
+import org.mifospay.core.designsystem.theme.transactionTypeDebit
+import org.mifospay.core.designsystem.theme.transactionTypeOther
 import org.mifospay.core.model.savingsaccount.Currency
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
@@ -241,7 +244,7 @@ private fun MerchantBottomSheet(
                 ) {
                     Text(
                         stringResource(Res.string.feature_merchants_submit),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimary,
                     )
                 }
             }
@@ -272,7 +275,7 @@ private fun MerchantInfo(
         Text(
             text = merchantVPA,
             style = MaterialTheme.typography.labelMedium,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.gray,
         )
     }
 }
@@ -354,21 +357,11 @@ private fun SpecificTransactionItem(
                 style = MaterialTheme.typography.displaySmall,
                 color =
                 when (transaction.transactionType) {
-                    TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
-                        red = 0.8f,
-                        green = 0f,
-                        blue = 0f,
-                    )
-                    TransactionType.CREDIT -> MaterialTheme.colorScheme.onTertiaryContainer.copy(
-                        red = 0f,
-                        green = 0.51f,
-                        blue = 0.21f,
-                    )
-                    TransactionType.OTHER -> MaterialTheme.colorScheme.primaryContainer.copy(
-                        red = 1f,
-                        green = 1f,
-                        blue = 0f,
-                    )
+                    TransactionType.DEBIT -> MaterialTheme.colorScheme.transactionTypeDebit
+
+                    TransactionType.CREDIT -> MaterialTheme.colorScheme.transactionTypeCredit
+
+                    TransactionType.OTHER -> MaterialTheme.colorScheme.transactionTypeOther
                 },
             )
         }

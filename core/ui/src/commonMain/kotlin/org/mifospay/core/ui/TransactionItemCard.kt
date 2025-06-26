@@ -35,6 +35,9 @@ import mobile_wallet.core.ui.generated.resources.core_ui_money_in
 import mobile_wallet.core.ui.generated.resources.core_ui_money_out
 import org.jetbrains.compose.resources.painterResource
 import org.mifospay.core.common.CurrencyFormatter
+import org.mifospay.core.designsystem.theme.black
+import org.mifospay.core.designsystem.theme.transactionTypeCredit
+import org.mifospay.core.designsystem.theme.transactionTypeDebit
 import org.mifospay.core.model.savingsaccount.Transaction
 import org.mifospay.core.model.savingsaccount.TransactionType
 
@@ -73,7 +76,7 @@ fun TransactionItemCard(
                     style = TextStyle(
                         fontSize = 10.sp,
                         fontWeight = FontWeight(400),
-                        color = Color(0x66000000),
+                        color = MaterialTheme.colorScheme.onSurface,
                     ),
                 )
             }
@@ -94,17 +97,9 @@ fun TransactionItemCard(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.Normal,
                     color = when (transaction.transactionType) {
-                        TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
-                            red = 0.8f,
-                            green = 0f,
-                            blue = 0f,
-                        )
-                        TransactionType.CREDIT -> MaterialTheme.colorScheme.onTertiaryContainer.copy(
-                            red = 0f,
-                            green = 0.51f,
-                            blue = 0.21f,
-                        )
-                        else -> Color.Black
+                        TransactionType.DEBIT -> MaterialTheme.colorScheme.transactionTypeDebit
+                        TransactionType.CREDIT -> MaterialTheme.colorScheme.transactionTypeCredit
+                        else -> MaterialTheme.colorScheme.black
                     },
                     textAlign = TextAlign.End,
                 ),
@@ -190,17 +185,9 @@ fun TransactionItem(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Normal,
                         color = when (transaction.transactionType) {
-                            TransactionType.CREDIT -> MaterialTheme.colorScheme.onTertiaryContainer.copy(
-                                red = 0f,
-                                green = 0.51f,
-                                blue = 0.21f,
-                            )
-                            TransactionType.DEBIT -> MaterialTheme.colorScheme.error.copy(
-                                red = 0.8f,
-                                green = 0f,
-                                blue = 0f,
-                            )
-                            else -> Color.Black
+                            TransactionType.CREDIT -> MaterialTheme.colorScheme.transactionTypeCredit
+                            TransactionType.DEBIT -> MaterialTheme.colorScheme.transactionTypeDebit
+                            else -> MaterialTheme.colorScheme.black
                         },
                         textAlign = TextAlign.End,
                     ),

@@ -42,7 +42,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.testTag
@@ -58,6 +57,9 @@ import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.mifospay.core.designsystem.icon.MifosIcons
 import org.mifospay.core.designsystem.theme.MifosTheme
+import org.mifospay.core.designsystem.theme.strongPassword
+import org.mifospay.core.designsystem.theme.veryStrongPassword
+import org.mifospay.core.designsystem.theme.weakPassword
 
 @Suppress("LongMethod", "CyclomaticComplexMethod")
 @Composable
@@ -89,10 +91,10 @@ fun CombinedPasswordErrorCard(
         PasswordStrengthState.NONE -> MaterialTheme.colorScheme.error
         PasswordStrengthState.WEAK_1 -> MaterialTheme.colorScheme.error
         PasswordStrengthState.WEAK_2 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.WEAK_3 -> weakColor
+        PasswordStrengthState.WEAK_3 -> MaterialTheme.colorScheme.weakPassword
         PasswordStrengthState.GOOD -> MaterialTheme.colorScheme.primary
-        PasswordStrengthState.STRONG -> strongColor
-        PasswordStrengthState.VERY_STRONG -> Color.Magenta
+        PasswordStrengthState.STRONG -> MaterialTheme.colorScheme.strongPassword
+        PasswordStrengthState.VERY_STRONG -> MaterialTheme.colorScheme.veryStrongPassword
     }
 
     val animatedIndicatorColor by animateColorAsState(
@@ -282,10 +284,10 @@ fun PasswordStrengthIndicator(
         PasswordStrengthState.NONE -> MaterialTheme.colorScheme.error
         PasswordStrengthState.WEAK_1 -> MaterialTheme.colorScheme.error
         PasswordStrengthState.WEAK_2 -> MaterialTheme.colorScheme.error
-        PasswordStrengthState.WEAK_3 -> weakColor
+        PasswordStrengthState.WEAK_3 -> MaterialTheme.colorScheme.weakPassword
         PasswordStrengthState.GOOD -> MaterialTheme.colorScheme.primary
-        PasswordStrengthState.STRONG -> strongColor
-        PasswordStrengthState.VERY_STRONG -> Color.Magenta
+        PasswordStrengthState.STRONG -> MaterialTheme.colorScheme.strongPassword
+        PasswordStrengthState.VERY_STRONG -> MaterialTheme.colorScheme.veryStrongPassword
     }
     val animatedIndicatorColor by animateColorAsState(
         targetValue = indicatorColor,
@@ -346,7 +348,7 @@ private fun MinimumCharacterCount(
 ) {
     val characterCountColor by animateColorAsState(
         targetValue = if (minimumRequirementMet) {
-            strongColor
+            MaterialTheme.colorScheme.strongPassword
         } else {
             MaterialTheme.colorScheme.surfaceDim
         },
@@ -389,9 +391,6 @@ enum class PasswordStrengthState {
     STRONG,
     VERY_STRONG,
 }
-
-private val strongColor = Color(0xFF41B06D)
-private val weakColor = Color(0xFF8B6609)
 
 @Preview
 @Composable

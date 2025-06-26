@@ -16,8 +16,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import org.mifospay.core.designsystem.theme.SIChipDefaultPriorityBackground
+import org.mifospay.core.designsystem.theme.SIChipDefaultPriorityContent
+import org.mifospay.core.designsystem.theme.SIChipHighPriorityBackground
+import org.mifospay.core.designsystem.theme.SIChipHighPriorityContent
+import org.mifospay.core.designsystem.theme.SIChipLowPriorityBackground
+import org.mifospay.core.designsystem.theme.SIChipLowPriorityContent
 import org.mifospay.core.model.standinginstruction.StandingInstruction
 
 @Composable
@@ -26,9 +31,9 @@ fun InstructionTypeChip(
     modifier: Modifier = Modifier,
 ) {
     val (backgroundColor, contentColor) = when (type.id) {
-        1L -> Color(0xFFE3F2FD) to Color(0xFF1565C0)
-        2L -> Color(0xFFF3E5F5) to Color(0xFF7B1FA2)
-        else -> Color(0xFFF5F5F5) to Color(0xFF616161)
+        1L -> MaterialTheme.colorScheme.SIChipHighPriorityBackground to MaterialTheme.colorScheme.SIChipHighPriorityContent
+        2L -> MaterialTheme.colorScheme.SIChipLowPriorityBackground to MaterialTheme.colorScheme.SIChipLowPriorityContent
+        else -> MaterialTheme.colorScheme.SIChipDefaultPriorityBackground to MaterialTheme.colorScheme.SIChipDefaultPriorityContent
     }
 
     Surface(

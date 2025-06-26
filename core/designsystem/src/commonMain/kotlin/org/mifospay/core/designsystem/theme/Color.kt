@@ -9,6 +9,9 @@
  */
 package org.mifospay.core.designsystem.theme
 
+import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
 // val md_theme_light_primary = Color(0xFF0673BA) // primary
@@ -164,6 +167,180 @@ val surfaceContainerLowDark = Color(0xFF181C20)
 val surfaceContainerDark = Color(0xFF1C2025)
 val surfaceContainerHighDark = Color(0xFF272A2F)
 val surfaceContainerHighestDark = Color(0xFF32353A)
+
+// Extension for Basic Colors
+val ColorScheme.white: Color
+    @Composable
+    get() = Color.White
+
+val ColorScheme.black: Color
+    @Composable
+    get() = Color.Black
+
+val ColorScheme.darkGray: Color
+    @Composable
+    get() = Color.DarkGray
+
+val ColorScheme.lightGray: Color
+    @Composable
+    get() = Color.LightGray
+
+val ColorScheme.gray: Color
+    @Composable
+    get() = Color.Gray
+
+// Extension Colors for PasswordStrengthIndicator
+val ColorScheme.veryStrongPassword: Color
+    @Composable
+    get() = Color.Magenta
+
+val ColorScheme.strongPassword: Color
+    @Composable
+    get() = Color(0xFF41B06D)
+
+val ColorScheme.weakPassword: Color
+    @Composable
+    get() = Color(0xFF8B6609)
+
+// Extension Colors for PriorityChips
+val ColorScheme.veryHighPriority: Color
+    @Composable
+    get() = Color(0xFFFF4444)
+
+val ColorScheme.highPriority: Color
+    @Composable
+    get() = Color(0xFFFF8800)
+
+val ColorScheme.mediumPriority: Color
+    @Composable
+    get() = Color(0xFFFFBB33)
+
+val ColorScheme.lowPriority: Color
+    @Composable
+    get() = Color(0xFF99CC00)
+
+// Extension Colors for SavingAccountsStatusChips
+val ColorScheme.statusChipPendingApproval: Color @Composable get() = Color(0xFFFFF9C4)
+val ColorScheme.statusChipApproved: Color @Composable get() = Color(0xFFC8E6C9)
+val ColorScheme.statusChipRejected: Color @Composable get() = Color(0xFFFFCDD2)
+val ColorScheme.statusChipWithdrawn: Color @Composable get() = Color(0xFFE1BEE7)
+val ColorScheme.statusChipActive: Color @Composable get() = Color(0xFFBBDEFB)
+val ColorScheme.statusChipClosed: Color @Composable get() = Color(0xFFCFD8DC)
+val ColorScheme.statusChipPrematurelyClosed: Color @Composable get() = Color(0xFFD7CCC8)
+val ColorScheme.statusChipTransferInProgress: Color @Composable get() = Color(0xFFFFE0B2)
+val ColorScheme.statusChipTransferOnHold: Color @Composable get() = Color(0xFFF0F4C3)
+val ColorScheme.statusChipMatured: Color @Composable get() = Color(0xFFB2DFDB)
+val ColorScheme.statusChipDefault: Color @Composable get() = Color(0xFFEFEFEF)
+
+// Extension Colors for InstructionTypeChip
+val ColorScheme.SIChipHighPriorityBackground: Color @Composable get() = Color(0xFFE3F2FD)
+val ColorScheme.SIChipHighPriorityContent: Color @Composable get() = Color(0xFF1565C0)
+val ColorScheme.SIChipLowPriorityBackground: Color @Composable get() = Color(0xFFF3E5F5)
+val ColorScheme.SIChipLowPriorityContent: Color @Composable get() = Color(0xFF7B1FA2)
+val ColorScheme.SIChipDefaultPriorityBackground: Color @Composable get() = Color(0xFFF5F5F5)
+val ColorScheme.SIChipDefaultPriorityContent: Color @Composable get() = Color(0xFF616161)
+
+// Extension Colors for TransactionItem
+val ColorScheme.transactionTypeCredit: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.onTertiaryContainer.copy(
+        red = 0f,
+        green = 0.51f,
+        blue = 0.21f,
+    )
+val ColorScheme.transactionTypeDebit: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.error.copy(
+        red = 0.8f,
+        green = 0f,
+        blue = 0f,
+    )
+val ColorScheme.transactionTypeOther: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.primaryContainer.copy(
+        red = 1f,
+        green = 1f,
+        blue = 0f,
+    )
+
+// Extension Colors for Accounts
+val ColorScheme.pendingApprovalAccount: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.primaryContainer.copy(
+        red = 1f,
+        green = 0.976f,
+        blue = 0.77f,
+    )
+val ColorScheme.approvedAccount: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.tertiaryContainer.copy(
+        red = 0.78f,
+        green = 0.90f,
+        blue = 0.79f,
+    )
+val ColorScheme.rejectedAccount: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.tertiaryContainer.copy(
+        red = 1f,
+        green = 0.8f,
+        blue = 0.82f,
+    )
+val ColorScheme.withdrawnAccount: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.tertiaryContainer.copy(
+        red = 0.88f,
+        green = 0.75f,
+        blue = 0.91f,
+    )
+val ColorScheme.activeAccount: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.primaryContainer.copy(
+        red = 0.73f,
+        green = 0.87f,
+        blue = 0.98f,
+    )
+val ColorScheme.closedAccount: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.surfaceVariant.copy(
+        red = 0.81f,
+        green = 0.85f,
+        blue = 0.86f,
+    )
+val ColorScheme.prematurelyClosedAccount: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.surfaceContainer.copy(
+        red = 0.84f,
+        green = 0.8f,
+        blue = 0.78f,
+    )
+val ColorScheme.transferInProgressAccount: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.primaryContainer.copy(
+        red = 1f,
+        green = 0.88f,
+        blue = 0.7f,
+    )
+val ColorScheme.transferOnHoldAccount: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.primaryContainer.copy(
+        red = 0.94f,
+        green = 0.96f,
+        blue = 0.77f,
+    )
+val ColorScheme.maturedAccount: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.primaryContainer.copy(
+        red = 0.7f,
+        green = 0.87f,
+        blue = 0.86f,
+    )
+val ColorScheme.defaultAccount: Color
+    @Composable
+    get() = MaterialTheme.colorScheme.surface.copy(
+        red = 0.94f,
+        green = 0.94f,
+        blue = 0.94f,
+    )
 
 // New UI Colors
 object NewUi {
